@@ -9,14 +9,13 @@
 </head>
 <body>
 
+<form action="abc.htm">
 
-
-<button class="btn btn-sm btn-primary" style="color: black" >
+<button type="submit" class="btn btn-sm btn-primary" style="color: black" >
 button
-<i class="fa-solid fa-archway"></i>
-<i class="fa-solid fa-audio-description"></i>
-</button>
 
+</button>
+</form>
 <input type="text" class="form-control" id="startdate" style="width: 10%;" readonly="readonly" >
 
 <script type="text/javascript">

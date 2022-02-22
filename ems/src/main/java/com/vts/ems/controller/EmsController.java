@@ -9,15 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-public class EmsController {
-	    @RequestMapping(value = {"/login","/"}, method = RequestMethod.GET)
-	    public String login(HttpServletRequest req,HttpSession ses) {
-	 
-
-	        
-	    	
-	 
-	        return "static/login";
-	    }
+public class EmsController 
+{	
+	@RequestMapping(value = {"/login","/"}, method = RequestMethod.GET)
+	public String login(HttpServletRequest req,HttpSession ses) {
+		return "static/login";
+	}
 
 }
