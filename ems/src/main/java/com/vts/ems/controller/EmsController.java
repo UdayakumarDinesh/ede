@@ -13,7 +13,7 @@ public class EmsController
 {	
 	@RequestMapping(value = {"/login","/"}, method = RequestMethod.GET)
 	public String login(HttpServletRequest req,HttpSession ses) {
-		return "static/login";
+		return "static/maindashboard";
 	}
 
 }
