@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -18,8 +17,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.vts.ems.modal.AuditStamping;
 import com.vts.ems.modal.Employee;
+import com.vts.ems.model.AuditStamping;
 
 @Transactional
 @Repository

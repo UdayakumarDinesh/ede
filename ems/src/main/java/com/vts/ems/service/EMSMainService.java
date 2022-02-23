@@ -1,7 +1,7 @@
 package com.vts.ems.service;
 
-import com.vts.ems.modal.AuditStamping;
 import com.vts.ems.modal.Employee;
+import com.vts.ems.model.AuditStamping;
 
 public interface EMSMainService {
 	

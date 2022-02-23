@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.DateTimeFormatUtil;
-import com.vts.ems.modal.AuditStamping;
+import com.vts.ems.model.AuditStamping;
 import com.vts.ems.service.EMSMainService;
 
 

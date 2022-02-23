@@ -1,4 +1,4 @@
-package com.vts.ems.modal;
+package com.vts.ems.model;
 
 
 import java.sql.Date;

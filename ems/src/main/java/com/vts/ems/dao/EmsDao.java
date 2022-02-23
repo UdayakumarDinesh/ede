@@ -1,7 +1,11 @@
 package com.vts.ems.dao;
 
+<<<<<<< HEAD
 import com.vts.ems.modal.AuditStamping;
 import com.vts.ems.modal.Employee;
+=======
+import com.vts.ems.model.AuditStamping;
+>>>>>>> branch 'master' of https://dineshvedts@bitbucket.org/susant-vedts/ems.git
 
 public interface EmsDao
 {

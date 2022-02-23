@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.dao.EmsDao;
-import com.vts.ems.modal.AuditStamping;
 import com.vts.ems.modal.Employee;
+import com.vts.ems.model.AuditStamping;
 @Service
 public class EMSMainServiceImpl implements EMSMainService 
 {
