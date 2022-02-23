@@ -237,14 +237,14 @@ body{
                404
             </h2>
             <h4 data-text="Opps! Page not found">
-               Opps! Page not found
+               Oops! Page not found
             </h4>
             <p>
                Sorry, the page you're looking for doesn't exist. Return home and try again 
             </p>
             <div class="btns">
-               <a href="#">Return Home</a>
-              <!--  <a href="">report problem</a> -->
+               <a href="MainDashBoard.htm">Return Home</a>
+              
             </div>
          </div>
       </div>

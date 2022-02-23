@@ -1,7 +1,5 @@
 package com.vts.ems.login;
 
-
-
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.DateTimeFormatUtil;
-import com.vts.ems.dao.EmsDao;
 import com.vts.ems.modal.AuditStamping;
+import com.vts.ems.service.EMSMainService;
 
 
 @Service
@@ -35,11 +33,12 @@ public class LoginDetailsServiceImpl implements UserDetailsService
     private LoginRepository loginRepository;
 	
 	@Autowired
-	private EmsDao dao;
+	private EMSMainService emsService;
 	
 	@Override
 	@Transactional(readOnly = false)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
+	{
 		Login login = loginRepository.findByUsername(username);
         if(login != null && login.getIsActive()==1 && login.getPfms().equalsIgnoreCase("Y")) {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
@@ -71,7 +70,7 @@ public class LoginDetailsServiceImpl implements UserDetailsService
         stamping.setUsername(login.getUsername());
         stamping.setIpAddress(IpAddress);
         stamping.setLoginDateTime(sdf1.format(new Date()));
-        dao.LoginStampingInsert(stamping);
+        emsService.LoginStampingInsert(stamping);
      		}catch (Exception e) {
 				e.printStackTrace();
 			}

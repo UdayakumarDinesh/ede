@@ -18,6 +18,11 @@
 <!--BootStrap CSS  -->
 <link rel="stylesheet" href="./webjars/bootstrap/4.0.0/css/bootstrap.min.css" />
 
+<!-- ----------  Master.css  ---------- -->
+<spring:url value="/webresources/css/master.css" var="MasterCss" />     
+<link href="${MasterCss}" rel="stylesheet" />
+
+
 
 <!-- ----------  daterangepicker  ---------- -->
 <spring:url value="/webresources/addons/daterangepicker.min.js" var="daterangepickerjs" />  
@@ -25,9 +30,10 @@
 <spring:url value="/webresources/addons/daterangepicker.min.css" var="daterangepickerCss" />     
 <link href="${daterangepickerCss}" rel="stylesheet" />
 
-<!-- ----------  daterangepicker  ---------- -->
+<!-- ----------  fontawesome  ---------- -->
 <spring:url value="/webresources/fontawesome/css/all.css" var="fontawesome" />     
 <link href="${fontawesome}" rel="stylesheet" />
+
 
 </head>
 </html>

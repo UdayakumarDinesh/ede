@@ -9,6 +9,6 @@
 		<jsp:include page="../static/header.jsp"></jsp:include>
 	</head>
 	<body>
-		<h1>tharun</h1>
+		<h1></h1>
 	</body>
 </html>

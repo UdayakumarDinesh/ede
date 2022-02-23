@@ -1,16 +1,28 @@
-package com.vts.ems.conf;
+package com.vts.ems.config;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.vts.ems.login.CustomLogoutHandler;
@@ -46,18 +58,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 		  .antMatchers("/").permitAll()
 		  .antMatchers("/webjars/**").permitAll()
 		  .antMatchers("/resources/**").permitAll()
-		  .antMatchers("/view/**").permitAll()	 
+		  .antMatchers("/view/**").permitAll()	
+		  .anyRequest().authenticated().accessDecisionManager(adm())
 		  .and()
-		    .formLogin().loginPage("/login").defaultSuccessUrl("/welcome").failureUrl("/login?error")
+		    .formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error").permitAll(true)
 		    .usernameParameter("username").passwordParameter("password")
-		   
+		    .and()
+		    .logout().logoutSuccessUrl("/login?logout").addLogoutHandler(logoutSuccessHandler())
+
 		   .and()
 		   .exceptionHandling().accessDeniedPage("/accessdenied")
 		 
 		    
-//		    .and()
-//		    .csrf()
-		    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).invalidSessionUrl("/login").maximumSessions(1)
+		    .and()
+		    .csrf()
+		    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).invalidSessionUrl("/login")
 		   
 		    ;
 		  
@@ -79,6 +94,46 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 		public LogoutHandler  logoutSuccessHandler() {
 		return  new CustomLogoutHandler();
 		}
+		
+		@Bean
+		public AccessDecisionManager  adm() {
+			List<AccessDecisionVoter<? extends Object>> DecisionVoter= Arrays.asList(new RoleVoter(),new AuthenticatedVoter(),new WebExpressionVoter(),new RealTimeLockVoter());
+			
+		return  new UnanimousBased(DecisionVoter);
+		}
+		
+		class RealTimeLockVoter implements AccessDecisionVoter<Object>{
+
+			@Override
+			public boolean supports(ConfigAttribute attribute) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+
+			@Override
+			public boolean supports(Class<?> clazz) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+
+			@Override
+			public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+		
+				//System.out.println(authentication.getName());
+				
+			      
+			     
+
+				/*
+				 * if(url.equalsIgnoreCase("DemandInitiationList.htm")) { return ACCESS_GRANTED;
+				 * } }
+				 */
+				
+				return ACCESS_GRANTED;
+			}
+			
+		}
+		
 		
 		
 		

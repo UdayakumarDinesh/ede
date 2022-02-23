@@ -1,4 +1,4 @@
-package com.vts.ems.conf;
+package com.vts.ems.config;
 
 
 import org.springframework.context.annotation.Bean;

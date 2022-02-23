@@ -14,28 +14,24 @@ public class DateTimeFormatUtil
 {
 	private SimpleDateFormat regularDateFormat=new SimpleDateFormat("dd-MM-yyyy");
 	private SimpleDateFormat sqlDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat sqlDateAndTime=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	
-	private SimpleDateFormat dateMonthShortName=new SimpleDateFormat("dd-MMM-yyyy");
-	private SimpleDateFormat dateMonthFullName=new SimpleDateFormat("dd-MMMM-yyyy");
-	private SimpleDateFormat MonthNameAndYear=new SimpleDateFormat("MMM-yyyy");
 	
 	public SimpleDateFormat getMonthNameAndYear() {
-		return MonthNameAndYear;
+		return new SimpleDateFormat("MMM-yyyy");
 	}
 	public SimpleDateFormat getSqlDateFormat() {
 		return sqlDateFormat;
 	}
 	public SimpleDateFormat getSqlDateAndTimeFormat() {
-		return sqlDateAndTime;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 	public SimpleDateFormat getRegularDateFormat() {
 		return regularDateFormat;
 	}
 	public SimpleDateFormat getDateMonthShortName() {
-		return dateMonthShortName;
+		return new SimpleDateFormat("dd-MMM-yyyy");
 	}
 	public SimpleDateFormat getDateMonthFullName() {
-		return dateMonthFullName;
+		return new SimpleDateFormat("dd-MMMM-yyyy");
 	}
 	
 	
