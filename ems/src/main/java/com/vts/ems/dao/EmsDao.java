@@ -1,6 +1,6 @@
 package com.vts.ems.dao;
 
-import com.vts.ems.modal.AuditStamping;
+import com.vts.ems.model.AuditStamping;
 
 public interface EmsDao
 {

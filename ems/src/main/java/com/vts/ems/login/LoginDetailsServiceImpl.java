@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.dao.EmsDao;
-import com.vts.ems.modal.AuditStamping;
+import com.vts.ems.model.AuditStamping;
 
 
 @Service

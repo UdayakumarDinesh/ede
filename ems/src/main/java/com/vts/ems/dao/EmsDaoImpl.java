@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.vts.ems.modal.AuditStamping;
+import com.vts.ems.model.AuditStamping;
 
 @Transactional
 @Repository
