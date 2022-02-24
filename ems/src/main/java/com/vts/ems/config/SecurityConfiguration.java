@@ -1,4 +1,5 @@
 package com.vts.ems.config;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -27,114 +28,91 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.vts.ems.login.CustomLogoutHandler;
 
-
-
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter
-{
-	
-	 @Autowired
-	 private UserDetailsService userDetailsService;
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-	 
-	 @Override
-	 @Bean
-	 public AuthenticationManager authenticationManagerBean() throws Exception {
-	     return super.authenticationManagerBean();
-	 }
-	 
-	 @Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			 auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
-		}
-	 
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		  http.authorizeRequests()
+		http.authorizeRequests()
 
-		
-		  .antMatchers("/").permitAll()
-		  .antMatchers("/webjars/**").permitAll()
-		  .antMatchers("/resources/**").permitAll()
-		  .antMatchers("/view/**").permitAll()	
-		  .anyRequest().authenticated().accessDecisionManager(adm())
-		  .and()
-		    .formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error").permitAll(true)
-		    .usernameParameter("username").passwordParameter("password")
-		    .and()
-		    .logout().logoutSuccessUrl("/login?logout").addLogoutHandler(logoutSuccessHandler())
+				.antMatchers("/").hasAnyRole("USER", "ADMIN").antMatchers("/webjars/**").permitAll()
+				.antMatchers("/resources/**").permitAll().antMatchers("/view/**").permitAll()
 
-		   .and()
-		   .exceptionHandling().accessDeniedPage("/accessdenied")
-		 
-		    
-		    .and()
-		    .csrf()
-		    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).invalidSessionUrl("/login")
-		   
-		    ;
-		  
-		  
-		  
+				.anyRequest().authenticated().accessDecisionManager(adm())
+
+				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error")
+				.permitAll().usernameParameter("username").passwordParameter("password").and().logout()
+				.logoutSuccessUrl("/login?logout").addLogoutHandler(logoutSuccessHandler())
+
+				.and().exceptionHandling().accessDeniedPage("/accessdenied")
+
+				.and()
+
+				.csrf().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+				.invalidSessionUrl("/login")
+
+		;
+
 	}
-	 
 
-	
-	
-	
-		public PasswordEncoder passwordencoder(){
-	     return new BCryptPasswordEncoder();
-	    }
-		
-		
+	public PasswordEncoder passwordencoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-		@Bean
-		public LogoutHandler  logoutSuccessHandler() {
-		return  new CustomLogoutHandler();
+	@Bean
+	public LogoutHandler logoutSuccessHandler() {
+		return new CustomLogoutHandler();
+	}
+
+	@Bean
+	public AccessDecisionManager adm() {
+		List<AccessDecisionVoter<? extends Object>> DecisionVoter = Arrays.asList(new RoleVoter(),
+				new AuthenticatedVoter(), new WebExpressionVoter(), new RealTimeLockVoter());
+
+		return new UnanimousBased(DecisionVoter);
+	}
+
+	class RealTimeLockVoter implements AccessDecisionVoter<Object> {
+
+		@Override
+		public boolean supports(ConfigAttribute attribute) {
+			// TODO Auto-generated method stub
+			return true;
 		}
-		
-		@Bean
-		public AccessDecisionManager  adm() {
-			List<AccessDecisionVoter<? extends Object>> DecisionVoter= Arrays.asList(new RoleVoter(),new AuthenticatedVoter(),new WebExpressionVoter(),new RealTimeLockVoter());
-			
-		return  new UnanimousBased(DecisionVoter);
+
+		@Override
+		public boolean supports(Class<?> clazz) {
+			// TODO Auto-generated method stub
+			return true;
 		}
-		
-		class RealTimeLockVoter implements AccessDecisionVoter<Object>{
 
-			@Override
-			public boolean supports(ConfigAttribute attribute) {
-				// TODO Auto-generated method stub
-				return true;
-			}
+		@Override
+		public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
 
-			@Override
-			public boolean supports(Class<?> clazz) {
-				// TODO Auto-generated method stub
-				return true;
-			}
+			// System.out.println(authentication.getName());
+			/*
+			 * if(url.equalsIgnoreCase("DemandInitiationList.htm")) { return ACCESS_GRANTED;
+			 * } }
+			 */
 
-			@Override
-			public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-		
-				//System.out.println(authentication.getName());
-				
-			      
-			     
-
-				/*
-				 * if(url.equalsIgnoreCase("DemandInitiationList.htm")) { return ACCESS_GRANTED;
-				 * } }
-				 */
-				
-				return ACCESS_GRANTED;
-			}
-			
+			return ACCESS_GRANTED;
 		}
-		
-		
-		
-		
+
+	}
+
 }

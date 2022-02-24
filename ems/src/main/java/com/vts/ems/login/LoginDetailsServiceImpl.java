@@ -51,8 +51,7 @@ public class LoginDetailsServiceImpl implements UserDetailsService
      		 IpAddress = request.getRemoteAddr();
      		 
      		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
-     		{
-     			
+     		{     			
      			InetAddress ip = InetAddress.getLocalHost();
      			IpAddress= ip.getHostAddress();
      		}

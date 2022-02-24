@@ -1,3 +1,4 @@
+<%@page import="org.springframework.http.HttpStatus"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
@@ -231,10 +232,32 @@ body{
 </style>
    </head>
    <body>
+   
+   
+   <%
+    Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+	        String StstusCode = "---";
+	     if (status != null) 
+	     {
+	        Integer statusCode = Integer.valueOf(status.toString());
+	       
+	        if(statusCode == HttpStatus.NOT_FOUND.value()) {
+	        	StstusCode="404";
+	        }
+	        else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+	        	StstusCode="500";
+	        }/* else
+	        {
+	        	StstusCode="404";
+	        } */
+	     }
+	 %>
+   
+   
       <div id="error-page">
          <div class="content">
             <h2 class="header" data-text="404">
-               404
+				<%=StstusCode %>
             </h2>
             <h4 data-text="Opps! Page not found">
                Oops! Page not found
