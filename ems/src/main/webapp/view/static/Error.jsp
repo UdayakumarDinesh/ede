@@ -256,7 +256,7 @@ body{
    
       <div id="error-page">
          <div class="content">
-            <h2 class="header" data-text="404">
+            <h2 class="header" data-text="<%=StstusCode %>">
 				<%=StstusCode %>
             </h2>
             <h4 data-text="Opps! Page not found">

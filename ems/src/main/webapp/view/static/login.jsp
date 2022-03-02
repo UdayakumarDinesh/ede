@@ -28,14 +28,16 @@
 							<h2 class="heading-section ">EMS</h2>
 						</div>
 						
-						<div align="center" >
+						<div >
 							<form action="${contPath}/login" autocomplete="off" method="post" >
 							
 								<div class="form-group">
+									 <label for="username">Username</label>
 									<input type="text" class="form-control"  name="username" placeholder="username" required="required">
 								</div>
 								
 								<div class="form-group">
+									<label for="password">Password</label>
 									<input type="password" class="form-control" name="password" placeholder="password" required="required">
 								</div>
 								

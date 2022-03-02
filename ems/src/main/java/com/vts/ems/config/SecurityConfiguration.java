@@ -25,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.vts.ems.login.CustomLogoutHandler;
 
@@ -41,6 +42,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/").resourceChain(false);
+        registry.setOrder(1);
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
@@ -50,9 +57,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 
-				.antMatchers("/").hasAnyRole("USER", "ADMIN").antMatchers("/webjars/**").permitAll()
-				.antMatchers("/resources/**").permitAll().antMatchers("/view/**").permitAll()
-
+				.antMatchers("/").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/webresources/**").permitAll()
+				.antMatchers("/view/**").permitAll()
+				.antMatchers("/webjars/**").permitAll()
 				.anyRequest().authenticated().accessDecisionManager(adm())
 
 				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error")

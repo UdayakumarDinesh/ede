@@ -17,8 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.vts.ems.modal.Employee;
 import com.vts.ems.model.AuditStamping;
+import com.vts.ems.pis.model.Employee;
+
 
 @Transactional
 @Repository

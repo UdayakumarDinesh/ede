@@ -1,6 +1,5 @@
 package com.vts.ems.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @ComponentScan(basePackages = "com.vts.*")
 public class WebMvcConfigruation {
 
-	 @Bean
-	    public BCryptPasswordEncoder passwordencoder(){
-	     return new BCryptPasswordEncoder();
-	    }
-	 
-	 
+	@Bean
+	public BCryptPasswordEncoder passwordencoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 }

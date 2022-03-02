@@ -1,0 +1,18 @@
+.btn{
+		
+	padding: 4px 8px;
+}
+
+.add-btn
+{	
+	font-weight:600;
+	background: #084594;
+	color: #ffffff;
+}
+
+.edit-btn
+{	
+	font-weight:600;
+	background: #AE431E;
+	color: #ffffff;
+}

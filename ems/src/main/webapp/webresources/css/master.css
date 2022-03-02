@@ -2,5 +2,62 @@
   
 *{
 	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+}
+
+.breadcrumb
+{
+	margin-top: -5px;
+	padding: 5px 5px;
+	width: 100%;
+	background-color: transparent;
+	float: right;
 	
 }
+
+
+body,html {
+    height: 100%;
+}
+
+ .page-header{
+	
+	width: 100%;
+	border: 1px solid grey;
+}
+.card .card-body{
+	
+	width: 100% !important ;
+}
+
+.page
+{
+	padding: 0px;
+	
+}
+
+.page-top{
+	
+	height : 3rem;
+	
+}
+
+.card-header h5{
+	font-weight: 550;	
+}
+
+#myTable thead tr
+{
+text-align: center;
+}
+
+.c-body{
+	padding: 0px;
+}
+.mandatory {
+    color: red;
+}
+
+
+
+
