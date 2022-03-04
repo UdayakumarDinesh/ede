@@ -16,14 +16,19 @@
 <link rel="stylesheet" href="./webjars/bootstrap/4.0.0/css/bootstrap.min.css" />
 
 
-<!-- ----------  daterangepicker  ---------- -->
+<%-- <!-- ----------  daterangepicker  ---------- -->
 <spring:url value="/webresources/daterangepicker.min.js" var="daterangepickerjs" />  
 <script src="${daterangepickerjs}"></script>
+
 <spring:url value="/webresources/daterangepicker.css" var="daterangepickerCss" />     
 <link href="${daterangepickerCss}" rel="stylesheet" />
+
 <spring:url value="/webresources/moment.min.js" var="momentjs" />  
 <script src="${momentjs}"></script> 
 
+<spring:url value="/webresources/jquery.min.js" var="dpjquery" />  
+<script src="${dpjquery}"></script> 
+ --%>
 
 
  <!-- ----------  select picker  ---------- -->
@@ -60,6 +65,8 @@
 <!-- ----------  Master.css  ---------- -->
 <spring:url value="/webresources/css/buttons.css" var="ButtonsCss" />     
 <link href="${ButtonsCss}" rel="stylesheet" />
+
+
 
 
 </head>

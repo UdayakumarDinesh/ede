@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
+import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
@@ -21,5 +22,6 @@ public interface PisDao {
 	public List<PisCatClass> PisCatClassList() throws Exception;
 	public List<PisCategory> PisCategoryList() throws Exception;
 	public List<EmpStatus> EmpStatusList() throws Exception;
+	public long EmployeeAddSubmit(Employee emp) throws Exception;
 
 }

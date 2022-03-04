@@ -17,6 +17,10 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 	
+ <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> --> 
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
+ <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
 
 </head>
 <body>
@@ -61,7 +65,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 		<div class="card" >
 						
 			<div class="card-body">
-						
+				<form action="EmployeeAddSubmit.htm" method="post" autocomplete="off" >
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			    <div class="form-group">
 			        <div class="row">
 			
@@ -78,12 +83,9 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-4">
 			                <label>Name<span class="mandatory">*</span></label>
-			                <input name="empname" required="required" id="NameTextBox" style="text-transform:uppercase" value="" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onchange="return trim(this)" />
-			            </div>
-			
-			
-			            <div class="col-md-2">
-			
+			                <input name="empname" required="required" id="empname" style="text-transform:uppercase" value="" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onkeyup="return trim(this)" />
+			            </div>			
+			            <div class="col-md-2">			
 			                <label>Designation<span class="mandatory">*</span></label>
 			                <select class="form-control select2 " name="Designationid" required="required" data-live-search="true" >
 								<%if(desiglist!=null && desiglist.size()>0){
@@ -96,7 +98,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label class="text-nowrap  ">Cadre Name<span class="mandatory">*</span></label>
-			                <select name="cadrecode" id="CadreId" class="form-control select2">
+			                <select name="caderid" id="CadreId" class="form-control select2">
 								<%for( PisCadre cadre: piscaderlist){ %>
 									<option value="<%=cadre.getCadreId()%>"><%=cadre.getCadre()%></option>
 								<%} %>
@@ -108,7 +110,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <label>CAT CLASS<span class="mandatory">*</span></label>
 			                <select name="catcode" class="form-control select2" required data-live-search="true">
 								<%for( PisCatClass catclass: piscatclasslist){ %>
-									<option value="<%=catclass.getCat_class_id()%>"><%=catclass.getCat_name()%></option>
+									<option value="<%=catclass.getCat_id()%>"><%=catclass.getCat_name()%></option>
 								<%} %>
 			
 			                </select>
@@ -118,26 +120,25 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        </div>
 			    </div>
 			
-			
 			    <div class="form-group">
 			        <div class="row">
 			
 			            <div class="col-md-2">
 			                <label>DOB<span class="mandatory">*</span></label>
 			                
-			                <input type="text" class="form-control" value="<%=sdf1.format(sdf.parse(LocalDate.now().toString())) %>" data-date-format="dd/mm/yyyy"  id="dob" name="dob"  required="required" readonly="readonly" >
+			                <input type="date" class="form-control input-sm" value="" placeholder="dd-mm-yyyy"  id="dob" name="dob"  required="required"  >
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
-			                <input type="text" value="" class="form-control input-sm currentdate" placeholder="Date of appointment" name="doa" required maxlength="10">
+			                <input type="date" value="" class="form-control input-sm " placeholder="Date of appointment" name="doa" required maxlength="10">
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
-			                <input type="text" value="" class="form-control input-sm currentdate" placeholder="Date of Joining" name="doj" required maxlength="10">
+			                <input type="date" value="" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
 			            </div>
 			
 			
@@ -169,23 +170,20 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
-			
+							<input type="checkbox"   name="gq" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small">
 			            </div>
 			
 			
 			
 			        </div>
 			    </div>
-			    <!-- //DOB,DOA,DOJ,GENDER,BG,CATEGORY,QUATERS  -->
-			
-			
-			    <!-- ,CADRE,PAN,UID,PIN, -->
+			   
 			    <div class="form-group">
 			        <div class="row">
 			
 			            <div class="col-md-2">
 			                <label>Division <span class="mandatory">*</span></label>
-			                <select name="DivisionId" class="form-control input-sm select2" required data-live-search="true">
+			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
 								<%} %>			
@@ -207,22 +205,20 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label>UID<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" " placeholder=" Enter UID " required>
-			
+			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
 			
 			
 			            <div class=" col-md-2 ">
 			                <label>PIN DRONA:</label>
-			                <input type=" text " name="drona" value=" " class=" form-control input-sm " maxlength=" 10 "
-			                    placeholder=" Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder=" Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
 			
 			
 			            <div class=" col-md-2 ">
 			                <label>GPF/PRAN:</label>
-			                <input type=" text " name="gpf" value=" " class=" form-control input-sm " maxlength=" 12 "
+			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder=" Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
@@ -230,7 +226,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>Physically Handicap</label>
-			
+							<input type="checkbox"   name="ph" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small" checked>
 			
 			
 			            </div>
@@ -239,14 +235,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        </div>
 			    </div>
 			
-			
-			
 			    <div class=" form-group ">
 			        <div class=" row ">
 			
 			            <div class=" col-md-2 ">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
-			                <select name="ServiceStatus" class=" form-control input-sm select2  " required=" required "
+			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">
 			
 			                    <option value=" Confirmed ">Confirmed</option>
@@ -259,8 +253,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			
 			            <div class=" col-md-2 ">
-			                <label>Internal number<span class=" mandatory "></span></label>
-			                <input type=" text " name="internalNo" value=" " maxlength=" 4 " class=" form-control input-sm "
+			                <label>Internal number<span class="mandatory"></span></label>
+			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
 			                    placeholder=" Enter Internal Number " onblur=" checknegative(this) "
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
@@ -268,7 +262,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>Category<span class=" mandatory ">*</span></label>
-			                <select name="category" class=" form-control input-sm select2 " required data-live-search=" true ">
+			                <select name="category" class=" form-control input-sm select2 " required data-live-search="true">
 								<%for( PisCategory category: piscategorylist){ %>
 									<option value="<%=category.getCategory_id()%>"><%=category.getCategory_desc()%></option>
 								<%} %>				
@@ -278,7 +272,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label> Sub Category/Caste <span class=" mandatory "></span></label>
-			                <input type="text" id="subcategory1 " name="subcategory" value=" " maxlength=" 20 "
+			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
 			                    class=" form-control input-sm " placeholder=" Enter Sub Category ">
 			
 			            </div>
@@ -289,20 +283,16 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
-			                <input type=" text " id=" txtName " name="HomeTown" style=" text-transform:uppercase " value=" "
-			                    maxlength=" 240 " class=" form-control input-sm " placeholder=" Enter Home Town " required=" required "
+			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
+			                    maxlength=" 240 " class=" form-control input-sm " placeholder=" Enter Home Town " required="required"
 			                    onclick=" Validate() ">
 			            </div>
 			
 			
 			            <div class=" col-md-2 ">
 			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-			
+							<input type="checkbox"  name="MaritalStatus" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small">
 			            </div>
-			
-			
-			
-			
 			
 			        </div>
 			    </div>
@@ -312,8 +302,10 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>PayLevel<span class=" mandatory ">*</span></label>
-			                <select name="payLevel" class=" form-control input-sm selectpicker " data-live-search=" true ">
-			
+			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
+								<%for( PisPayLevel paylevel: paylevellist){ %>
+									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
+								<%} %>
 			
 			                </select>
 			            </div>
@@ -344,7 +336,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>Height</label>
-			                <input type="text" value=" " name="height" class=" form-control input-sm " maxlength=" 50 "
+			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="50"
 			                    placeholder=" Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
@@ -353,20 +345,19 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            <div class=" col-md-2 ">
 			                <label>Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder=" Enter Email " required=" required " onclick=" return trim(this) "
+			                    placeholder=" Enter Email " required="required" onclick=" return trim(this) "
 			                    onchange=" return trim(this) ">
 			            </div>
 			
 			            <div class=" col-md-2 ">
 			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                <input type="checkbox" name="ExMan"  data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small" >
 			            </div>
 			
 			
 			
 			        </div>
 			    </div>
-			
-			
 			
 			    <div class=" form-group ">
 			        <div class=" row ">
@@ -414,32 +405,37 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			        </div>
 			    </div>
+			
+				</form>
 			</div>
-					
 		</div>
 	
 	 </div>
 </div>
 <script type="text/javascript">
-	function trim(el) {
-		console.log(el);
+	 /* function trim(el) {
+		console.log(el.value);
 		el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
 		replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
 		replace(/\n +/, "\n"); // Removes spaces after newlines
+		console.log(el.value);
 		return;
-	}
-	/* 
-	  $( function() {
-		    $( "#dob" ).datepicker({
-		    	 dateFormat: 'dd-mm-yy',
-		    	
-		    });
-		  } ); */
+	} 
+	 */
+	 $('#empname').bind('keyup', function() {
+		  var c = this.selectionStart,
+		      r = /[^a-z]/gi,
+		      v = $(this).val();
+		  if(r.test(v)) {
+		    $(this).val(v.replace(r, ''));
+		    c--;
+		  }
+		  this.setSelectionRange(c, c);
+		}); 
+	
+	
 </script>
     
-
-
-
 
 </body>
 </html>

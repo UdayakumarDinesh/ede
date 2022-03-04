@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
+import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
@@ -200,6 +201,23 @@ public class PisDaoImpl implements PisDao
 		}
 		return pispaylevel;
 	}
+	
+	
+	@Override
+	public long EmployeeAddSubmit(Employee emp) throws Exception
+	{
+		logger.info(new Date() +"Inside EmployeeAddSubmit");
+		List<EmpStatus> pispaylevel= new ArrayList<EmpStatus>(); 
+		try {
+			manager.persist(emp);
+			manager.flush();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp.getEmpId();
+	}
+	
 	
 	
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
+import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
@@ -76,5 +77,11 @@ public class PisServiceImpl implements PisService
 	public List<EmpStatus> EmpStatusList() throws Exception
 	{
 		return dao.EmpStatusList();
+	}
+	
+	@Override
+	public long EmployeeAddSubmit(Employee emp) throws Exception
+	{
+		return dao.EmployeeAddSubmit(emp);
 	}
 }
