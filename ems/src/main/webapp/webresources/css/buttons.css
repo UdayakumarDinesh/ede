@@ -3,6 +3,11 @@
 	padding: 4px 8px;
 }
 
+.btn-sm:hover
+{
+		
+}
+
 .add-btn
 {	
 	font-weight:600;
@@ -16,3 +21,12 @@
 	background: #AE431E;
 	color: #ffffff;
 }
+
+
+.submit-btn
+{
+	font-weight:600;
+	background: #357C3C;
+	color: #ffffff;
+}
+

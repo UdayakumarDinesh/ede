@@ -126,21 +126,20 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            <div class="col-md-2">
 			                <label>DOB<span class="mandatory">*</span></label>
 			                
-			                <input type="date" class="form-control input-sm" value="" placeholder="dd-mm-yyyy"  id="dob" name="dob"  required="required"  >
+			                <input type="date" class="form-control input-sm" value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  >
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
-			                <input type="date" value="" class="form-control input-sm " placeholder="Date of appointment" name="doa" required maxlength="10">
+			                <input type="date" value="<%=LocalDate.now() %>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
-			                <input type="date" value="" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
+			                <input type="date" value="<%=LocalDate.now() %>" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
 			            </div>
-			
 			
 			            <div class="col-md-2">
 			                <label>Gender<span class="mandatory">*</span></label>
@@ -167,11 +166,13 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>
 			
-			
-			            <div class="col-md-2">
-			                <label>Availed Govt Quarters</label>
-							<input type="checkbox"   name="gq" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small">
+						<div class=" col-md-2 ">
+			                <label>Email<span class=" mandatory ">*</span></label>
+			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
+			                    placeholder="Enter Email " required="required" onclick=" return trim(this) "
+			                    onchange=" return trim(this) ">
 			            </div>
+			            
 			
 			
 			
@@ -180,7 +181,21 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			   
 			    <div class="form-group">
 			        <div class="row">
+			        
+						 <div class=" col-md-2 ">
+			                <label>Religion<span class=" mandatory ">*</span></label>
+			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
+			                    <option value=" Christian ">Christian</option>
+			                    <option value=" Hindu ">Hindu</option>
+			                    <option value=" Islam ">Islam</option>
+			                    <option value=" Jain ">Jain</option>
+			                    <option value=" Parsi ">Parsi </option>
+			                    <option value=" Sikh ">Sikh</option>
+			                    <option value=" Others ">Others</option>
 			
+			                </select>
+			            </div>
+			            
 			            <div class="col-md-2">
 			                <label>Division <span class="mandatory">*</span></label>
 			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
@@ -195,11 +210,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
-			
-			
 			                <input type="text" id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
-			
-			
 			            </div>
 			
 			
@@ -208,37 +219,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
 			
-			
-			            <div class=" col-md-2 ">
-			                <label>PIN DRONA:</label>
-			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder=" Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
-			
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>GPF/PRAN:</label>
-			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
-			                    placeholder=" Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
-			
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>Physically Handicap</label>
-							<input type="checkbox"   name="ph" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small" checked>
-			
-			
-			            </div>
-			
-			
-			        </div>
-			    </div>
-			
-			    <div class=" form-group ">
-			        <div class=" row ">
-			
-			            <div class=" col-md-2 ">
+						<div class=" col-md-2 ">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">
@@ -250,16 +231,38 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    <option value=" Contract ">Contract</option>
 			                </select>
 			            </div>
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder=" Enter Internal Number " onblur=" checknegative(this) "
-			                    onkeypress=" return isNumber(event) ">
+						 <div class=" col-md-2 ">
+			                <label>PunchCard No<span class=" mandatory ">*</span></label>
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo " id="PunchCard " value="" maxlength="4"
+			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
+			                    onkeyup=" checkpunchcard() " onblur=" checknegative(this) ">
 			            </div>
 			
+			           
 			
+			
+			        </div>
+			    </div>
+			
+			    <div class=" form-group ">
+			        <div class=" row ">
+			
+			           
+			
+			
+			           
+			
+						<div class=" col-md-2 ">
+			                <label>PayLevel<span class=" mandatory ">*</span></label>
+			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
+								<%for( PisPayLevel paylevel: paylevellist){ %>
+									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
+								<%} %>
+			
+			                </select>
+			            </div>
+			 			
+			            
 			            <div class=" col-md-2 ">
 			                <label>Category<span class=" mandatory ">*</span></label>
 			                <select name="category" class=" form-control input-sm select2 " required data-live-search="true">
@@ -271,12 +274,17 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			
 			            <div class=" col-md-2 ">
-			                <label> Sub Category/Caste <span class=" mandatory "></span></label>
+			                <label> Sub Category/Caste <span class=" mandatory ">*</span></label>
 			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
-			                    class=" form-control input-sm " placeholder=" Enter Sub Category ">
+			                    class=" form-control input-sm " placeholder="Enter Sub Category ">
 			
 			            </div>
-			
+							
+						<div class=" col-md-2 ">
+			                <label>SBI Account<span class=" mandatory ">*</span></label>
+			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
+			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
+			            </div>
 			
 			
 			
@@ -284,127 +292,154 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
-			                    maxlength=" 240 " class=" form-control input-sm " placeholder=" Enter Home Town " required="required"
+			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
 			                    onclick=" Validate() ">
 			            </div>
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-							<input type="checkbox"  name="MaritalStatus" data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small">
-			            </div>
-			
-			        </div>
-			    </div>
-			
-			    <div class=" form-group ">
-			        <div class=" row ">
-			
-			            <div class=" col-md-2 ">
-			                <label>PayLevel<span class=" mandatory ">*</span></label>
-			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
-								<%for( PisPayLevel paylevel: paylevellist){ %>
-									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
-								<%} %>
-			
-			                </select>
-			            </div>
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>SBI Account<span class=" mandatory ">*</span></label>
-			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
-			                    maxlength=" 11 " placeholder=" Enter Account Number " onblur=" checknegative(this) ">
-			            </div>
-			
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>Religion<span class=" mandatory ">*</span></label>
-			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			                    <option value=" Christian ">Christian</option>
-			                    <option value=" Hindu ">Hindu</option>
-			                    <option value=" Islam ">Islam</option>
-			                    <option value=" Jain ">Jain</option>
-			                    <option value=" Parsi ">Parsi </option>
-			                    <option value=" Sikh ">Sikh</option>
-			                    <option value=" Others ">Others</option>
-			
-			                </select>
-			            </div>
-			
-			
-			            <div class=" col-md-2 ">
+						
+						<div class=" col-md-2 ">
 			                <label>Height</label>
 			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="50"
-			                    placeholder=" Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                    placeholder="Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>Email<span class=" mandatory ">*</span></label>
-			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder=" Enter Email " required="required" onclick=" return trim(this) "
-			                    onchange=" return trim(this) ">
-			            </div>
-			
-			            <div class=" col-md-2 ">
-			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-			                <input type="checkbox" name="ExMan"  data-toggle="toggle"  data-on="Yes" data-off="No" data-onstyle="success" data-offstyle="danger" data-size="small" >
-			            </div>
-			
-			
+			            
 			
 			        </div>
 			    </div>
-			
+					    
+			    
+			    
 			    <div class=" form-group ">
 			        <div class=" row ">
+			        
+			        
+			            <div class=" col-md-2 ">
+			                <label>Internal number<span class="mandatory"></span></label>
+			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
+			                    onkeypress=" return isNumber(event) ">
+			            </div>
+			            
+						<div class="col-md-2">
+			                <label>Availed Govt Quarters</label>
+			                
+			                <select name="gq" class=" form-control input-sm select2 " >
+			                	<option value="N">No</option>
+								<option value="Y">YES</option>								
+			                </select>	
+			            </div>
+			            
+			             <div class=" col-md-2 ">
+			                <label>Physically Handicap</label>
+			                
+			                 <select name="ph" class=" form-control input-sm select2 " >
+			                 	<option value="N">No</option>
+								<option value="Y">YES</option>								
+			                </select>	
+
+			            </div>
+			            
+			           
+			            
+			            
+			            <div class=" col-md-2 ">
+			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
+			                	<option value="U">UnMarried</option>
+								<option value="M">Married</option>									
+			                </select>			                
+			            </div>
+			            
+			            
+			            <div class=" col-md-2 ">
+			                <label>PIN DRONA:</label>
+			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
+			            </div>
+			
 			
 			
 			            <div class=" col-md-2 ">
-			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo " id="PunchCard " value="" maxlength="4"
-			                    class=" form-control input-sm " placeholder=" Enter PunchCard " required="required"
-			                    onkeyup=" checkpunchcard() " onblur=" checknegative(this) ">
+			                <label>GPF/PRAN:</label>
+			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
+			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-			            <span id=" awailable "></span>
 			
+			            
+			            
+					</div>
+				</div>
+			            
+			            
+			    <div class=" form-group ">
+			        <div class=" row ">
 			
 			
 			            <div class=" col-md-4 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
-			                    placeholder=" Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
 			            <div class=" col-md-2 ">
 			                <label>Emp Status<span class=" mandatory ">*</span></label>
-			                <select id="Emptype" name="empstatus" class=" form-control input-sm select2 " required data-live-search="true">
-                   					<%for( EmpStatus status: empstatuslist){ %>
-									<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
-								<%} %>
+			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
+                   				<%-- <%for( EmpStatus status: empstatuslist){ %>
+								<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
+								<%} %> --%>
+								
+								<option value="1">PRESENT</option>
 			
 			                </select>
 			            </div>
 			
 			            <div class=" col-md-2 " id=" EmpHide ">
 			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
-			                <input type="text" name="EmpStatusDate" value="" maxlength="4" class=" form-control input-sm currentdate "
-			                    placeholder=" Enter EmpStatus Date " onblur=" checknegative(this) "
-			                    onkeypress=" return isNumber(event) ">
+			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="Enter EmpStatus Date ">
+			            </div>
+			            
+			             <!-- <div class=" col-md-2 ">
+			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                
+			                 <select name="ExMan" class=" form-control input-sm select2 " >
+			                	<option value="N">No</option>
+								<option value="Y">Yes</option>	
+								
+			                </select>	
+			                
 			            </div>
 			
 			            <div class=" col-md-2 ">
 			                <label>Per Pass No</label>
 			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
 			                    placeholder="Enter Permanent Pass No">
-			            </div>
-			
-			
+			            </div> -->
 			        </div>
 			    </div>
+			       
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    <div class="row" >
+			    	<div class="col-12" align="center">
+			    	<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>
+			    	</div>
+			    </div> 
 			
 				</form>
 			</div>
@@ -413,15 +448,19 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 	 </div>
 </div>
 <script type="text/javascript">
-	 /* function trim(el) {
-		console.log(el.value);
-		el.value = el.value.replace(/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
-		replace(/[ ]{2,}/gi, " "). // replaces multiple spaces with one space 
-		replace(/\n +/, "\n"); // Removes spaces after newlines
-		console.log(el.value);
-		return;
-	} 
-	 */
+/* $('#dob').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+	  */
+	 $('empstatus').select2("enable", false)
 	 $('#empname').bind('keyup', function() {
 		  var c = this.selectionStart,
 		      r = /[^a-z]/gi,

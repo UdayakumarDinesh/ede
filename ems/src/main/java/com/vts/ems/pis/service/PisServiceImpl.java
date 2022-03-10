@@ -1,5 +1,7 @@
 package com.vts.ems.pis.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
@@ -22,6 +25,8 @@ public class PisServiceImpl implements PisService
 {
 	private static final Logger logger = LogManager.getLogger(PisServiceImpl.class);
 
+	DateTimeFormatUtil util= new DateTimeFormatUtil();
+	SimpleDateFormat sdtf= util.getSqlDateAndTimeFormat();
 	@Autowired
 	private PisDao dao;
 	
@@ -82,6 +87,13 @@ public class PisServiceImpl implements PisService
 	@Override
 	public long EmployeeAddSubmit(Employee emp) throws Exception
 	{
+		emp.setCreatedDate(sdtf.format(new Date()));
 		return dao.EmployeeAddSubmit(emp);
+	}
+	
+	@Override
+	public Employee getEmployee(String empid) throws Exception
+	{
+		return dao.getEmployee(empid);
 	}
 }

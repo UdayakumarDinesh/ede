@@ -219,6 +219,25 @@ public class PisDaoImpl implements PisDao
 	}
 	
 	
+	@Override
+	public Employee getEmployee(String empid) throws Exception
+	{
+		logger.info(new Date() +"Inside PisCaderList");
+		Employee employee= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<Employee> cq= cb.createQuery(Employee.class);
+			Root<Employee> root= cq.from(Employee.class);					
+			Predicate p1=cb.equal(root.get("EmpId") , Long.parseLong(empid));
+			cq=cq.select(root).where(p1);
+			TypedQuery<Employee> allquery = manager.createQuery(cq);
+			employee= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return employee;
+	}
 	
 	
 }

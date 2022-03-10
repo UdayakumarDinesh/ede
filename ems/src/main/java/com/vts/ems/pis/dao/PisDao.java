@@ -23,5 +23,6 @@ public interface PisDao {
 	public List<PisCategory> PisCategoryList() throws Exception;
 	public List<EmpStatus> EmpStatusList() throws Exception;
 	public long EmployeeAddSubmit(Employee emp) throws Exception;
+	public Employee getEmployee(String empid) throws Exception;
 
 }

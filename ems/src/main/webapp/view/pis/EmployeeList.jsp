@@ -33,19 +33,20 @@
 			<div class="card" >
 				<div class="card-body " >
 				
-					<form action="#" method="post">
+					<form action="#" method="post" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
+										<td>Select</td>
 										<td>SNo</td>
 										<td>EmpNo</td>
 										<td>Name</td>
 										<td>Designation</td>
 										<td>Division</td>
 										<td>Group</td>
-										<td>Action</td>
+										<!-- <td>Action</td> -->
 									</tr>
 								</thead>
 								<tbody>
@@ -53,17 +54,18 @@
 									for(Object[] obj : EmployeeDetailsList){ 
 									slno++;%>
 										<tr>
+											<td style="text-align: center;"><input type="radio" name="empid" value="<%=obj[0] %>"> </td>
 											<td><%= slno%></td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											<td><%=obj[8] %></td>
 											<td><%=obj[5] %></td>
 											<td><%=obj[6] %></td>
-											<td>
-												<button type="submit" name="empid" value="<%=obj[0] %>" formaction="EmployeeDetails.htm" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="View Employee Details" > 
+											<%-- <td>
+												<button type="submit" name="empid" value="<%=obj[0] %>"  class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="View Employee Details" > 
 													<i class="  fa-solid fa-eye"></i>
 												</button>
-											</td>
+											</td> --%>
 										</tr>
 									<%} %>
 								</tbody>
@@ -74,8 +76,9 @@
 					
 					<div class="row text-center">
 						<div class="col-md-12">
-							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm">ADD </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="add">EDIT </button>
+							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" >VIEW </button>
 						</div>
 					</div>
 				</form>	
@@ -85,6 +88,57 @@
 	</div>
 
  </div>
+
+<script type="text/javascript">
+
+
+
+
+function Edit(myfrm){
+	
+	 var fields = $("input[name='empid']").serializeArray();
+
+	  if (fields.length === 0){
+		  alert("Please Select Atleast One Employee ");
+		  
+		  
+	event.preventDefault();
+	return false;
+	}
+	return true;
+	}
+	
+function Delete(myfrm){
+	
+
+	var fields = $("input[name='empid']").serializeArray();
+
+	  if (fields.length === 0){
+		  alert("Please Select Atleast One Employee");
+	 event.preventDefault();
+	return false;
+	}
+	  var cnf=confirm("Are You Sure To Delete!");
+	  
+
+	    
+	  
+	  if(cnf){
+	
+	return true;
+	
+	}
+	  else{
+		  event.preventDefault();
+			return false;
+			}
+	
+	}
+	
+
+
+</script>
+
 
 </body>
 </html>

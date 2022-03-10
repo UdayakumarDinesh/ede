@@ -49,9 +49,6 @@ public class PisController {
 		
 	}
 	
-	
-	
-	
 	@RequestMapping(value = "PisAdminEmpList.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String PisAdminEmpList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
@@ -128,6 +125,7 @@ public class PisController {
 			String empname = req.getParameter("empname");
 			String Designationid = req.getParameter("Designationid");
 			String caderid = req.getParameter("caderid");
+			String catcode = req.getParameter("catcode");
 			String dob = req.getParameter("dob");
 			String doa = req.getParameter("doa");
 			String doj = req.getParameter("doj");
@@ -158,6 +156,10 @@ public class PisController {
 			String EmpStatusDate = req.getParameter("EmpStatusDate");
 			String PermPassNo = req.getParameter("PermPassNo");
 			
+			System.out.println(ph);
+			
+			
+			
 			Employee emp= new Employee();
 			emp.setEmpName(empname);
 			emp.setDesignationId(Integer.parseInt(Designationid));
@@ -170,6 +172,7 @@ public class PisController {
 			emp.setGroupId(0);
 			emp.setDivisionId(Integer.parseInt(divisionid));
 			emp.setCadreId(Integer.parseInt(caderid));
+			emp.setCatId(catcode);
 			emp.setGender(gender);
 			emp.setBloodGroup(bloodgroup);
 			emp.setMaritalStatus(MaritalStatus);
@@ -200,10 +203,38 @@ public class PisController {
 			emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
 			
 			
+			service.EmployeeAddSubmit(emp);
 			
-			return "pis/EmployeeAdd";
+			
+			return "redirect:/PisAdminEmpList.htm";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside EmployeeAddSubmit.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	}	
+	
+	@RequestMapping(value = "EmployeeEdit.htm")
+	public String EmployeeEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);		
+		try {
+			
+			String empid=req.getParameter("empid");
+			
+			req.setAttribute("employee", service.getEmployee(empid));			
+			req.setAttribute("desiglist", service.DesigList());
+			req.setAttribute("piscategorylist", service.PisCategoryList());
+			req.setAttribute("piscatclasslist", service.PisCatClassList());
+			req.setAttribute("piscaderlist", service.PisCaderList());
+			req.setAttribute("empstatuslist", service.EmpStatusList());
+			req.setAttribute("paylevellist", service.PayLevelList());	
+			
+			req.setAttribute("divisionlist", service.DivisionList());			
+			return "pis/EmployeeEdit";
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside EmployeeAdd.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
