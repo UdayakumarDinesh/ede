@@ -161,7 +161,7 @@ public class PisController {
 			
 			
 			Employee emp= new Employee();
-			emp.setEmpName(empname);
+			emp.setEmpName(empname.trim());
 			emp.setDesignationId(Integer.parseInt(Designationid));
 			emp.setTitle(salutation);
 			emp.setDOB(sdf.parse(dob));

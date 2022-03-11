@@ -26,10 +26,7 @@
 <spring:url value="/webresources/moment.min.js" var="momentjs" />  
 <script src="${momentjs}"></script> 
 
-<%-- <spring:url value="/webresources/jquery.min.js" var="dpjquery" />  
-<script src="${dpjquery}"></script> 
- 
- --%>
+
 
  <!-- ----------  select picker  ---------- -->
 <spring:url value="/webresources/addons/selectpicker/select2.min.js" var="select2js" />  
