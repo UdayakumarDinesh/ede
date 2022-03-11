@@ -17,14 +17,18 @@
 
 
 <!-- ----------  daterangepicker  ---------- -->
+
+
+<spring:url value="/webresources/moment.min.js" var="momentjs" />  
+<script src="${momentjs}"></script> 
+
 <spring:url value="/webresources/daterangepicker.min.js" var="daterangepickerjs" />  
 <script src="${daterangepickerjs}"></script>
 
 <spring:url value="/webresources/daterangepicker.min.css" var="daterangepickerCss" />     
 <link href="${daterangepickerCss}" rel="stylesheet" />
 
-<spring:url value="/webresources/moment.min.js" var="momentjs" />  
-<script src="${momentjs}"></script> 
+
 
 
  <!-- ----------  select picker  ---------- -->
