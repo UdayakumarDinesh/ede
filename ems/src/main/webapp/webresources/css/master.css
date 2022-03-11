@@ -58,6 +58,15 @@ text-align: center;
     color: red;
 }
 
+.breadcrumb
+{
+	margin-top: 5px;
+}
 
+.breadcrumb .breadcrumb-item, .breadcrumb .breadcrumb-item a
+{
+	
+	font-size: 12px !important;
+}
 
 

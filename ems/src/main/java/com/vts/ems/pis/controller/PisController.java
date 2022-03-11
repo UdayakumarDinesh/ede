@@ -34,7 +34,6 @@ public class PisController {
 	@RequestMapping(value = "PisAdminDashboard.htm", method = RequestMethod.GET)
 	public String PisDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
-		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside PisAdminDashboard.htm "+Username);		
 		try {
 			
