@@ -27,7 +27,6 @@
 <script src="${momentjs}"></script> 
 
 
-
  <!-- ----------  select picker  ---------- -->
 <spring:url value="/webresources/addons/selectpicker/select2.min.js" var="select2js" />  
 <script src="${select2js}"></script> 
