@@ -22,7 +22,7 @@
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
-						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm">Home</a></li>
+						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Employee List</li>
 					</ol>
@@ -78,7 +78,16 @@
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
+
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button>
+
+							<button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button>
+							
+							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>
+							<button type="button" class="btn btn-sm submit-btn" name="action" value="view"  >SUBMIT </button>
+							<button type="button" class="btn btn-sm delete-btn" name="action" value="view"  >DELETE </button>
+							<button type="button" class="btn btn-sm print-btn" name="action" value="view"  >print </button> -->
+
 						</div>
 					</div>
 				</form>	
@@ -90,6 +99,7 @@
  </div>
 
 <script type="text/javascript">
+
 
 
 
@@ -106,6 +116,7 @@ function ViewEmp(myfrm){
 	}
 	return true;
 	}
+
 function Edit(myfrm){
 	
 	 var fields = $("input[name='empid']").serializeArray();
@@ -119,7 +130,7 @@ function Edit(myfrm){
 	}
 	return true;
 	}
-	
+
 function Delete(myfrm){
 	
 

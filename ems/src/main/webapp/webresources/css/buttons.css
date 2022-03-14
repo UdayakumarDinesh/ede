@@ -1,32 +1,58 @@
 .btn{
 		
 	padding: 4px 8px;
+	font-weight:600;
+	text-transform: uppercase;
 }
 
 .btn-sm:hover
 {
-		
+	filter: brightness(75%);
+	color: #ffffff;	
 }
 
 .add-btn
 {	
-	font-weight:600;
-	background: #084594;
 	color: #ffffff;
+	background: #084594;
 }
 
 .edit-btn
 {	
-	font-weight:600;
-	background: #AE431E;
 	color: #ffffff;
+	background: #AE431E;
 }
 
 
 .submit-btn
 {
-	font-weight:600;
-	background: #357C3C;
 	color: #ffffff;
+	background: #0B4619;
 }
+
+.view-btn
+{
+	color: #ffffff;
+	background: #2FA4FF;
+}
+
+.update-btn
+{
+	color: #ffffff;
+	background: #019267;
+}
+
+.delete-btn
+{
+	color: #ffffff;
+	background: #FC4F4F;
+}
+
+
+.print-btn
+{
+	color: #ffffff;
+	background: #051367;
+}
+
 

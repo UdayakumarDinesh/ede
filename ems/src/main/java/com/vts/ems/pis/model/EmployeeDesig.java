@@ -1,5 +1,6 @@
 package com.vts.ems.pis.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,5 +22,5 @@ public class EmployeeDesig {
 	private long DesigId;
 	private String DesigCode;
 	private String Designation;
-	private long DesigLimit;
+	private Long DesigLimit;
 }

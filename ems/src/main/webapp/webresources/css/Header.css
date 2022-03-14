@@ -174,10 +174,6 @@ i,span {
     margin-right: 10px; 
 }
 
-#sidebar ul li.active>a,a[aria-expanded="true"] {
-    color: #fff;
-    background: #005a96;
-}
 
 a[data-toggle="collapse"] {
     position: relative;

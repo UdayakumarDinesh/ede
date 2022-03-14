@@ -37,11 +37,22 @@
 									<a href="PisAdminDashboard.htm"
 										class="bg-dark list-group-item list-group-item-action">
 										<span class="d-flex w-100 justify-content-start align-items-center">
-											<i class="fa-solid fa-fw fa-address-card mr-3"></i>
+											<i class="fa-solid  fa-address-card mr-3"></i>
 											<span class="menu-collapsed" >Admin</span>
 										</span>
 									</a>
 								</li>
+								<li>
+									<a href="CHSSDashboard.htm"
+										class="bg-dark list-group-item list-group-item-action">
+										<span class="d-flex w-100 justify-content-start align-items-center">
+											<i class="fa-solid fa-hospital-user mr-3"></i>
+											<span class="menu-collapsed" >CHSS</span>
+										</span>
+									</a>
+								</li>
+								
+								
 							</ul>
 						</div>
 							
@@ -105,8 +116,7 @@
                                 $('.submenu-icon').toggleClass('d-none');
                                 $('.brand-name').toggleClass('d-none');
                                 $('#sidebar-container')
-                                    .toggleClass(
-                                        'sidebar-expanded sidebar-collapsed');
+                                    .toggleClass( 'sidebar-expanded sidebar-collapsed');
 
                                 // Treating d-flex/d-none on separators with title
                                 var SeparatorTitle = $('.sidebar-separator-title');

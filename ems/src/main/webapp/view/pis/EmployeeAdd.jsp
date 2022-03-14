@@ -15,12 +15,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<jsp:include page="../static/header.jsp"></jsp:include>
-	
- <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> --> 
-<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
- <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
+<jsp:include page="../static/header.jsp"></jsp:include> 
 
 </head>
 <body>
@@ -52,7 +47,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
-					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm">Home</a></li>
+					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li>
 					<li class="breadcrumb-item active " aria-current="page">Employee Add</li>
@@ -123,13 +118,17 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    <div class="form-group">
 			        <div class="row">
 			
-			            <div class="col-md-2">
-			                <label>DOB<span class="mandatory">*</span></label>
-			                
-			                <input type="date" class="form-control input-sm" value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  >
-			            </div>
 			
-			
+						 <div class="col-md-2">
+						 	<label>DOB<span class="mandatory">*</span></label>
+							<div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate"  value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							       <span class="fa fa-calendar"></span>
+							    </label>                    
+							</div>
+						 </div>
+		
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
 			                <input type="date" value="<%=LocalDate.now() %>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
@@ -447,19 +446,24 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 	
 	 </div>
 </div>
+
 <script type="text/javascript">
-/* $('#dob').daterangepicker({
+
+ $('#dob').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	
+	"minDate" :new Date(), 
+	"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
 		format : 'DD-MM-YYYY'
 	}
 });
-	  */
+	
+
+	  
 	 $('empstatus').select2("enable", false)
 	 $('#empname').bind('keyup', function() {
 		  var c = this.selectionStart,
