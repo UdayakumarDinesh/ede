@@ -218,6 +218,19 @@ public class PisDaoImpl implements PisDao
 		return emp.getEmpId();
 	}
 	
+	@Override
+	public long EmployeeEditSubmit(Employee emp) throws Exception
+	{
+		logger.info(new Date() +"Inside EmployeeEditSubmit");
+		try {
+			manager.merge(emp);
+			manager.flush();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp.getEmpId();
+	}
 	
 	@Override
 	public Employee getEmployee(String empid) throws Exception

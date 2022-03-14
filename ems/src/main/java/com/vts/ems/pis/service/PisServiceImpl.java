@@ -92,6 +92,49 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
+	public long EmployeeEditSubmit(Employee emp) throws Exception
+	{
+		System.out.println(emp.getEmpId());
+		Employee employee = dao.getEmployee(String.valueOf(emp.getEmpId()));
+	
+		employee.setEmpName(emp.getEmpName());
+		employee.setDesignationId(emp.getDesignationId());
+		employee.setTitle(emp.getTitle());
+		employee.setDOB(emp.getDOB());
+		employee.setDOA(emp.getDOA());
+		employee.setDOJL(emp.getDOJL());
+		employee.setCategoryId(emp.getCategoryId());
+		//employee.setGroupId(0);
+		employee.setDivisionId(emp.getDivisionId());
+		employee.setCadreId(emp.getCadreId());
+		employee.setCatId(emp.getCatId());
+		employee.setGender(emp.getGender());
+		employee.setBloodGroup(emp.getBloodGroup());
+		employee.setMaritalStatus(emp.getMaritalStatus());
+		employee.setReligion(emp.getReligion());
+		employee.setEmpStatus(emp.getEmpStatus());
+		employee.setGPFNo(emp.getGPFNo());
+		employee.setPAN(emp.getPAN());
+		employee.setPINNo(emp.getPINNo());
+		employee.setPunchCard(emp.getPunchCard());		
+		employee.setUID(emp.getUID());
+		employee.setQuarters(emp.getQuarters());
+		employee.setPH(emp.getPH());
+		employee.setEmail(emp.getEmail());
+		employee.setHomeTown(emp.getHomeTown());
+		employee.setServiceStatus(emp.getServiceStatus());
+		employee.setPayLevelId(emp.getPayLevelId());
+		employee.setSBIAccNo(emp.getSBIAccNo());
+		employee.setIdMark(emp.getIdMark());
+		employee.setHeight(emp.getHeight());
+		employee.setModifiedBy(emp.getModifiedBy());		
+		employee.setInternalNumber(emp.getInternalNumber());
+		employee.setSubCategary(emp.getSubCategary());
+		employee.setEmpStatusDate(emp.getEmpStatusDate());	
+		
+		return dao.EmployeeEditSubmit(employee);
+	}
+	@Override
 	public Employee getEmployee(String empid) throws Exception
 	{
 		return dao.getEmployee(empid);

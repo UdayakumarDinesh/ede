@@ -273,12 +273,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			
 			
-			            <div class=" col-md-2 ">
+			            <!-- <div class=" col-md-2 ">
 			                <label> Sub Category/Caste <span class=" mandatory ">*</span></label>
 			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
 			                    class=" form-control input-sm " placeholder="Enter Sub Category ">
 			
-			            </div>
+			            </div> -->
 							
 						<div class=" col-md-2 ">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
@@ -302,7 +302,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    placeholder="Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
-			            
+			               <div class=" col-md-2 ">
+			                <label>Internal number<span class="mandatory"></span></label>
+			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
+			                    onkeypress=" return isNumber(event) ">
+			            </div>
 			
 			        </div>
 			    </div>
@@ -313,12 +318,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        <div class=" row ">
 			        
 			        
-			            <div class=" col-md-2 ">
-			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
-			                    onkeypress=" return isNumber(event) ">
-			            </div>
+			         
 			            
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
@@ -351,10 +351,10 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			            
 			            
-			            <div class=" col-md-2 ">
+			            <!-- <div class=" col-md-2 ">
 			                <label>PIN DRONA:</label>
 			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
+			            </div> -->
 			
 			
 			
@@ -365,7 +365,11 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			
 			            
-			            
+			             <div class=" col-md-4 ">
+			                <label>Identification Mark</label>
+			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
+			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
+			            </div>
 					</div>
 				</div>
 			            
@@ -374,29 +378,25 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        <div class=" row ">
 			
 			
-			            <div class=" col-md-4 ">
-			                <label>Identification Mark</label>
-			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
-			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
+			           
 			
-			            <div class=" col-md-2 ">
+			           <%--  <div class=" col-md-2 ">
 			                <label>Emp Status<span class=" mandatory ">*</span></label>
 			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
-                   				<%-- <%for( EmpStatus status: empstatuslist){ %>
+                   				<%for( EmpStatus status: empstatuslist){ %>
 								<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
-								<%} %> --%>
+								<%} %>
 								
 								<option value="1">PRESENT</option>
 			
 			                </select>
-			            </div>
+			            </div> --%>
 			
-			            <div class=" col-md-2 " id=" EmpHide ">
+			          <%--   <div class=" col-md-2 " id=" EmpHide ">
 			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
 			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="Enter EmpStatus Date ">
 			            </div>
-			            
+			             --%>
 			             <!-- <div class=" col-md-2 ">
 			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 			                

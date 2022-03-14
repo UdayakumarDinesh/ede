@@ -23,6 +23,7 @@ public interface PisService {
 	public List<PisCadre> PisCaderList() throws Exception;
 	public List<EmpStatus> EmpStatusList() throws Exception;
 	public long EmployeeAddSubmit(Employee emp) throws Exception;
+	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public Employee getEmployee(String empid) throws Exception;
 
 }

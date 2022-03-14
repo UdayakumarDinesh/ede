@@ -78,7 +78,7 @@
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" >VIEW </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button>
 						</div>
 					</div>
 				</form>	
@@ -93,7 +93,19 @@
 
 
 
+function ViewEmp(myfrm){
+	
+	 var fields = $("input[name='empid']").serializeArray();
 
+	  if (fields.length === 0){
+		  alert("Please Select Atleast One Employee ");
+		  
+		  
+	event.preventDefault();
+	return false;
+	}
+	return true;
+	}
 function Edit(myfrm){
 	
 	 var fields = $("input[name='empid']").serializeArray();

@@ -41,7 +41,7 @@ List<PisPayLevel> paylevellist=(List<PisPayLevel>)request.getAttribute("paylevel
 List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("divisionlist");
 
 Employee employee=(Employee )request.getAttribute("employee");
-
+SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 
 %>
@@ -127,19 +127,19 @@ Employee employee=(Employee )request.getAttribute("employee");
 			            <div class="col-md-2">
 			                <label>DOB<span class="mandatory">*</span></label>
 			                
-			                <input type="date" class="form-control input-sm" value="<%=employee.getDOB() %>" placeholder=""  id="dob" name="dob"  required="required"  >
+			                <input type="date" style="width: 100%;" class="form-control input-sm" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOB().toString())) %><%}%>" placeholder=""  id="dob" name="dob"  required="required"  >
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
-			                <input type="date" value="<%=employee.getDOA() %>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
+			                <input type="date" style="width: 100%;" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOA().toString())) %><%}%>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
-			                <input type="date" value="<%=employee.getDOJL() %>" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
+			                <input type="date" style="width: 100%;" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOJL().toString())) %><%}%>" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
 			            </div>
 			
 			            <div class="col-md-2">
@@ -155,22 +155,22 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label class="text-nowrap">Blood Group<span class="mandatory">*</span></label>
 			                <select name="bloodgroup" class="form-control input-sm select2" required data-live-search="true">
 			
-			                    <option value="A-">A-</option>
-			                    <option value="A+">A+</option>
-			                    <option value="B-">B-</option>
-			                    <option value="B+">B+</option>
-			                    <option value="AB-">AB-</option>
-			                    <option value="AB+">AB+</option>
-			                    <option value="O-">O-</option>
-			                    <option value="O+">O+</option>
-			                    <option value="NOT">Not Available</option>
+			                    <option value="A-"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("A-")){%>selected<%}%>   >A-</option>
+			                    <option value="A+"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("A+")){%>selected<%}%>   >A+</option>
+			                    <option value="B-"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("B-")){%>selected<%}%>   >B-</option>
+			                    <option value="B+"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("B+")){%>selected<%}%>   >B+</option>
+			                    <option value="AB-" <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("AB-")){%>selected<%}%>  >AB-</option>
+			                    <option value="AB+" <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("AB+")){%>selected<%}%>  >AB+</option>
+			                    <option value="O-"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("O-")){%>selected<%}%>   >O-</option>
+			                    <option value="O+"  <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("O+")){%>selected<%}%>   >O+</option>
+			                    <option value="NOT" <%if(employee!=null&&employee.getBloodGroup().equalsIgnoreCase("NOT")){%>selected<%}%>  >Not Available</option>
 			                </select>
 			            </div>
 			
 						<div class=" col-md-2 ">
 			                <label>Email<span class=" mandatory ">*</span></label>
-			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder="Enter Email " required="required" onclick=" return trim(this) "
+			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
+			                  value="<%if(employee!=null&&employee.getEmail()!=null){%><%=employee.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
 			                    onchange=" return trim(this) ">
 			            </div>
 			            
@@ -186,13 +186,13 @@ Employee employee=(Employee )request.getAttribute("employee");
 						 <div class=" col-md-2 ">
 			                <label>Religion<span class=" mandatory ">*</span></label>
 			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			                    <option value=" Christian ">Christian</option>
-			                    <option value=" Hindu ">Hindu</option>
-			                    <option value=" Islam ">Islam</option>
-			                    <option value=" Jain ">Jain</option>
-			                    <option value=" Parsi ">Parsi </option>
-			                    <option value=" Sikh ">Sikh</option>
-			                    <option value=" Others ">Others</option>
+			                    <option value=" Christian " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
+			                    <option value=" Hindu " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
+			                    <option value=" Islam " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
+			                    <option value=" Jain "  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Jain")){%>selected<%}%>>Jain </option>
+			                    <option value=" Parsi " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Parsi")){%>selected<%}%>>Parsi </option>
+			                    <option value=" Sikh "  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Sikh")){%>selected<%}%>>Sikh</option>
+			                    <option value=" Others "<%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Others")){%>selected<%}%>>Others</option>
 			
 			                </select>
 			            </div>
@@ -201,7 +201,7 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label>Division <span class="mandatory">*</span></label>
 			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
-									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
+									<option value="<%=division.getDivisionId()%>"<%if(employee!=null&&division.getDivisionId()==employee.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>
 								<%} %>			
 			
 			                </select>
@@ -211,36 +211,34 @@ Employee employee=(Employee )request.getAttribute("employee");
 			
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
-			                <input type="text" id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
+			                <input type="text" id="PAN" name="pan" style="text-transform:uppercase" value="<%if(employee!=null){%><%=employee.getPAN()%><%}%>" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>UID<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
+			                <input id="UIDTextBox" type="text" name="uid" value="<%if(employee!=null){%><%=employee.getUID()%><%}%>" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
 			
 						<div class=" col-md-2 ">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
-			                    data-live-search=" true ">
-			
-			                    <option value=" Confirmed ">Confirmed</option>
-			                    <option value=" Probation ">Probation</option>
-			                    <option value=" Adhoc ">Adhoc</option>
-			                    <option value=" Temporary ">Temporary</option>
-			                    <option value=" Contract ">Contract</option>
+			                    data-live-search=" true ">		
+			                    <option value=" Confirmed " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Confirmed")){%>selected<%}%>>Confirmed</option>
+			                    <option value=" Probation " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Probation")){%>selected<%}%>>Probation</option>
+			                    <option value=" Adhoc "     <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Adhoc")){%>selected<%}%>>Adhoc</option>
+			                    <option value=" Temporary " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Temporary")){%>selected<%}%>>Temporary</option>
+			                    <option value=" Contract "  <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Contract")){%>selected<%}%>>Contract</option>
 			                </select>
 			            </div>
+			            
 						 <div class=" col-md-2 ">
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo " id="PunchCard " value="" maxlength="4"
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
 			                    onkeyup=" checkpunchcard() " onblur=" checknegative(this) ">
 			            </div>
-			
-			           
-			
+
 			
 			        </div>
 			    </div>
@@ -257,7 +255,7 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label>PayLevel<span class=" mandatory ">*</span></label>
 			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
 								<%for( PisPayLevel paylevel: paylevellist){ %>
-									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
+									<option value="<%=paylevel.getPayLevelId()%>"  <%if(paylevel.getPayLevelId()==employee.getPayLevelId()){%>selected<%}%>><%=paylevel.getPayLevel()%></option>
 								<%} %>
 			
 			                </select>
@@ -268,22 +266,22 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label>Category<span class=" mandatory ">*</span></label>
 			                <select name="category" class=" form-control input-sm select2 " required data-live-search="true">
 								<%for( PisCategory category: piscategorylist){ %>
-									<option value="<%=category.getCategory_id()%>"><%=category.getCategory_desc()%></option>
+									<option value="<%=category.getCategory_id()%>" <%if(category.getCategory_id()==employee.getCategoryId()){%> selected <%}%>><%=category.getCategory_desc()%></option>
 								<%} %>				
 			                </select>
 			            </div>
 			
 			
-			            <div class=" col-md-2 ">
+			            <!-- <div class=" col-md-2 ">
 			                <label> Sub Category/Caste <span class=" mandatory ">*</span></label>
 			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
 			                    class=" form-control input-sm " placeholder="Enter Sub Category ">
 			
-			            </div>
+			            </div> -->
 							
 						<div class=" col-md-2 ">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
-			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
+			                <input type="text" id="SBITextBox" value="<%if(employee!=null){%><%=employee.getSBIAccNo()%><%}%>" name="SBI" class=" form-control input-sm " required
 			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
 			            </div>
 			
@@ -292,14 +290,14 @@ Employee employee=(Employee )request.getAttribute("employee");
 			
 			            <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
-			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
+			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value="<%if(employee!=null){%><%=employee.getHomeTown()%><%} %>"
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
 			                    onclick=" Validate() ">
 			            </div>
 						
 						<div class=" col-md-2 ">
 			                <label>Height</label>
-			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="50"
+			                <input type="text" value="<%if(employee!=null){%><%=employee.getHeight()%><%}%>" name="height" class=" form-control input-sm " maxlength="50"
 			                    placeholder="Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
@@ -316,7 +314,7 @@ Employee employee=(Employee )request.getAttribute("employee");
 			        
 			            <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
+			                <input type="text" name="internalNo" value="<%if(employee!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
 			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
@@ -325,8 +323,8 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label>Availed Govt Quarters</label>
 			                
 			                <select name="gq" class=" form-control input-sm select2 " >
-			                	<option value="N">No</option>
-								<option value="Y">YES</option>								
+			                	<option value="N" <%if(employee!=null&&employee.getQuarters().equalsIgnoreCase("N")){%>selected<%}%>>No</option>
+								<option value="Y" <%if(employee!=null&&employee.getQuarters().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
 			                </select>	
 			            </div>
 			            
@@ -334,8 +332,8 @@ Employee employee=(Employee )request.getAttribute("employee");
 			                <label>Physically Handicap</label>
 			                
 			                 <select name="ph" class=" form-control input-sm select2 " >
-			                 	<option value="N">No</option>
-								<option value="Y">YES</option>								
+			                 	<option value="N" <%if(employee!=null&&employee.getPH().equalsIgnoreCase("N")){%>selected<%}%>>No</option>
+								<option value="Y" <%if(employee!=null&&employee.getPH().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
 			                </select>	
 
 			            </div>
@@ -346,22 +344,22 @@ Employee employee=(Employee )request.getAttribute("employee");
 			            <div class=" col-md-2 ">
 			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
-			                	<option value="U">UnMarried</option>
-								<option value="M">Married</option>									
+			                	<option value="U" <%if(employee!=null&&employee.getMaritalStatus().equalsIgnoreCase("U")){%>selected<%}%>>UnMarried</option>
+								<option value="M" <%if(employee!=null&&employee.getMaritalStatus().equalsIgnoreCase("M")){%>selected<%}%>>Married</option>									
 			                </select>			                
 			            </div>
 			            
 			            
-			            <div class=" col-md-2 ">
+			            <!-- <div class=" col-md-2 ">
 			                <label>PIN DRONA:</label>
 			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
+			            </div> -->
 			
 			
 			
 			            <div class=" col-md-2 ">
 			                <label>GPF/PRAN:</label>
-			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
+			                <input type="text" name="gpf" value="<%if(employee!=null){%><%=employee.getGPFNo()%><%}%>" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
@@ -377,7 +375,7 @@ Employee employee=(Employee )request.getAttribute("employee");
 			
 			            <div class=" col-md-4 ">
 			                <label>Identification Mark</label>
-			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
+			                <input type="text" value="<%if(employee!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
@@ -438,7 +436,8 @@ Employee employee=(Employee )request.getAttribute("employee");
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-			    	<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>
+								<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
+								<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			
