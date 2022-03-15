@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,11 @@ public class PisServiceImpl implements PisService
 	public long EmployeeAddSubmit(Employee emp) throws Exception
 	{
 		emp.setCreatedDate(sdtf.format(new Date()));
+		long empno = dao.getempno();
+		long intemp = empno + 1;
+		String empid2 = String.valueOf(intemp);
+		String empid = StringUtils.leftPad(empid2, 7, "0");
+		emp.setEmpNo(empid);
 		return dao.EmployeeAddSubmit(emp);
 	}
 	
@@ -132,11 +138,19 @@ public class PisServiceImpl implements PisService
 		employee.setSubCategary(emp.getSubCategary());
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
 		
+		
 		return dao.EmployeeEditSubmit(employee);
 	}
+	
+	
 	@Override
 	public Employee getEmployee(String empid) throws Exception
 	{
 		return dao.getEmployee(empid);
 	}
+	@Override
+	public int PunchcardList(String puchcard)throws Exception{
+		return dao.PunchcardList(puchcard);
+	}
+	
 }

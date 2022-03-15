@@ -122,9 +122,9 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 						 <div class="col-md-2">
 						 	<label>DOB<span class="mandatory">*</span></label>
 							<div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate"  value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  > 
 							    <label class="input-group-addon btn" for="testdate">
-							       <span class="fa fa-calendar"></span>
+							      
 							    </label>                    
 							</div>
 						 </div>
@@ -209,7 +209,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
-			                <input type="text" id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
 			            </div>
 			
 			
@@ -234,7 +234,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo " id="PunchCard " value="" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                    onkeyup=" checkpunchcard() " onblur=" checknegative(this) ">
+			                     onblur=" checknegative(this) ">
 			            </div>
 			
 			           
@@ -245,10 +245,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			    <div class=" form-group ">
 			        <div class=" row ">
-			
-			           
-			
-			
+
 			           
 			
 						<div class=" col-md-2 ">
@@ -284,9 +281,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
 			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
 			            </div>
-			
-			
-			
+
 			
 			            <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
@@ -315,10 +310,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    
 			    <div class=" form-group ">
 			        <div class=" row ">
-			        
-			        
-			         
-			            
+    
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
 			                
@@ -336,10 +328,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 								<option value="Y">YES</option>								
 			                </select>	
 
-			            </div>
-			            
-			           
-			            
+			            </div>      
 			            
 			            <div class=" col-md-2 ">
 			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -355,15 +344,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div> -->
 			
-			
-			
 			            <div class=" col-md-2 ">
 			                <label>GPF/PRAN:</label>
 			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-			
-			            
+			                
 			             <div class=" col-md-4 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
@@ -414,23 +400,6 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div> -->
 			        </div>
 			    </div>
-			       
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
 			    
 			    
 			    
@@ -453,7 +422,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	"minDate" :new Date(), 
+	//"minDate" :new Date(), 
 	"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
@@ -478,7 +447,83 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 	
 	
 </script>
-    
+    <script type="text/javascript">
+setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
+setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
+setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 
+
+function setPatternFilter(obj, pattern) {
+	  setInputFilter(obj, function(value) { return pattern.test(value); });
+	}
+
+function setInputFilter(obj, inputFilter) {
+	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+	    if (inputFilter(this.value)) {
+	      this.oldValue = this.value;
+	      this.oldSelectionStart = this.selectionStart;
+	      this.oldSelectionEnd = this.selectionEnd;
+	    } else if (this.hasOwnProperty("oldValue")) {
+	      this.value = this.oldValue;
+	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+	    }
+	  });
+	}
+function checknegative(str) {
+    if (parseFloat(document.getElementById(str.id).value) < 0) {
+        document.getElementById(str.id).value = "";
+        document.getElementById(str.id).focus();
+        alert('Negative Values Not allowed');
+        return false;
+    }
+}
+
+</script>
+<script type="text/javascript">
+$("#PunchcardTextBox").blur(function(){
+
+    var punchcard =$("#PunchcardTextBox").val();
+
+    if(punchcard.length>=4){
+
+         $.ajax({
+                   url:"requestbypunchajax",
+                   type:"GET",
+               	  data:{PunchCardNo:punchcard},
+                   dataType:'Json',
+                   success:function(data){
+                      var rr=data;
+                      var a = parseInt(rr) ;
+                            
+                      if (a == 1){
+                 	    
+                 		alert("Punch Card No. All ready Taken!");
+
+                     	}
+            }
+             });
+
+
+        }else{
+
+     	   $("#awailable").html(" ");
+
+            }
+      });
+
+
+$("#PAN").keypress(function(event){
+
+	console.log(event.target.value);
+    var regex = new RegExp("^[a-zA-Z0-9\b]+$");
+    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+       alert("Enter Valid PAN Number!");
+       $("#PAN").html("");
+       event.preventDefault();
+       return false;
+    }
+});
+</script>
 </body>
 </html>

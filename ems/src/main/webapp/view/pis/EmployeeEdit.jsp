@@ -52,14 +52,14 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Employee Add</h5>
+				<h5>Employee Edit</h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li>
-					<li class="breadcrumb-item active " aria-current="page">Employee Add</li>
+					<li class="breadcrumb-item active " aria-current="page">Employee Edit</li>
 				</ol>
 			</div>	
 		</div>
@@ -67,6 +67,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	
 	<div class="card-body" >
 		<div class="card" >
+						
 						
 			<div class="card-body">
 				<form action="EmployeeEditSubmit.htm" method="post" autocomplete="off" >
@@ -186,13 +187,13 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 						 <div class=" col-md-2 ">
 			                <label>Religion<span class=" mandatory ">*</span></label>
 			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			                    <option value=" Christian " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
-			                    <option value=" Hindu " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
-			                    <option value=" Islam " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
-			                    <option value=" Jain "  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Jain")){%>selected<%}%>>Jain </option>
-			                    <option value=" Parsi " <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Parsi")){%>selected<%}%>>Parsi </option>
-			                    <option value=" Sikh "  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Sikh")){%>selected<%}%>>Sikh</option>
-			                    <option value=" Others "<%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Others")){%>selected<%}%>>Others</option>
+			                    <option value="Christian" <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
+			                    <option value="Hindu" <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
+			                    <option value="Islam" <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
+			                    <option value="Jain"  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Jain")){%>selected<%}%>>Jain </option>
+			                    <option value="Parsi" <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Parsi")){%>selected<%}%>>Parsi </option>
+			                    <option value="Sikh"  <%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Sikh")){%>selected<%}%>>Sikh</option>
+			                    <option value="Others"<%if(employee!=null&&employee.getReligion().equalsIgnoreCase("Others")){%>selected<%}%>>Others</option>
 			
 			                </select>
 			            </div>
@@ -236,7 +237,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                    onkeyup=" checkpunchcard() " onblur=" checknegative(this) ">
+			                     onblur=" checknegative(this) ">
 			            </div>
 
 			
@@ -302,6 +303,12 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div>
 			
 			            
+			            <div class=" col-md-2 ">
+			                <label>Internal number<span class="mandatory"></span></label>
+			                <input type="text" name="internalNo" value="<%if(employee!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
+			                    onkeypress=" return isNumber(event) ">
+			            </div>
 			
 			        </div>
 			    </div>
@@ -312,12 +319,6 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			        <div class=" row ">
 			        
 			        
-			            <div class=" col-md-2 ">
-			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="<%if(employee!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
-			                    onkeypress=" return isNumber(event) ">
-			            </div>
 			            
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
@@ -363,7 +364,11 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
-			            
+			            <div class=" col-md-4 ">
+			                <label>Identification Mark</label>
+			                <input type="text" value="<%if(employee!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
+			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
+			            </div>
 			            
 					</div>
 				</div>
@@ -373,28 +378,24 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			        <div class=" row ">
 			
 			
-			            <div class=" col-md-4 ">
-			                <label>Identification Mark</label>
-			                <input type="text" value="<%if(employee!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
-			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
+			          
 			
-			            <div class=" col-md-2 ">
+			           <%--  <div class=" col-md-2 ">
 			                <label>Emp Status<span class=" mandatory ">*</span></label>
 			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
-                   				<%-- <%for( EmpStatus status: empstatuslist){ %>
+                   				<%for( EmpStatus status: empstatuslist){ %>
 								<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
-								<%} %> --%>
+								<%} %>
 								
 								<option value="1">PRESENT</option>
 			
 			                </select>
-			            </div>
+			            </div> --%>
 			
-			            <div class=" col-md-2 " id=" EmpHide ">
+			          <%--   <div class=" col-md-2 " id=" EmpHide ">
 			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
 			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="Enter EmpStatus Date ">
-			            </div>
+			            </div> --%>
 			            
 			             <!-- <div class=" col-md-2 ">
 			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -448,6 +449,46 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	 </div>
 </div>
 <script type="text/javascript">
+setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
+setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
+setPatternFilter($("#SBITextBox"), /^-?\d*$/);
+setPatternFilter($("#PAN"),^[a-zA-Z0-9_]*$);
+
+function setPatternFilter(obj, pattern) {
+	  setInputFilter(obj, function(value) { return pattern.test(value); });
+	}
+
+function setInputFilter(obj, inputFilter) {
+	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+	    if (inputFilter(this.value)) {
+	      this.oldValue = this.value;
+	      this.oldSelectionStart = this.selectionStart;
+	      this.oldSelectionEnd = this.selectionEnd;
+	    } else if (this.hasOwnProperty("oldValue")) {
+	      this.value = this.oldValue;
+	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+	    }
+	  });
+	}
+function checknegative(str) {
+    if (parseFloat(document.getElementById(str.id).value) < 0) {
+        document.getElementById(str.id).value = "";
+        document.getElementById(str.id).focus();
+        alert('Negative Values Not allowed');
+        return false;
+    }
+}
+
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+
 /* $('#dob').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -474,7 +515,39 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	
 	
 </script>
-    
+<script type="text/javascript">
+$("#PunchcardTextBox").blur(function(){
+
+    var punchcard =$("#PunchcardTextBox").val();
+
+    if(punchcard.length>=4){
+
+         $.ajax({
+                   url:"requestbypunchajax",
+                   type:"GET",
+               	  data:{PunchCardNo:punchcard},
+                   dataType:'Json',
+                   success:function(data){
+                      var rr=data;
+                      var a = parseInt(rr) ;
+                            
+                      if (a == 1){
+                 	    
+                 		alert("Punch Card No. All ready Taken!");
+
+                     	}
+            }
+             });
+
+
+        }else{
+
+     	   $("#awailable").html(" ");
+
+            }
+      });
+
+</script>
 
 </body>
 </html>

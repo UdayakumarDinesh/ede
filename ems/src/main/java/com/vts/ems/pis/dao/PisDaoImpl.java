@@ -231,6 +231,22 @@ public class PisDaoImpl implements PisDao
 		}
 		return emp.getEmpId();
 	}
+	@Override
+	public long getempno()throws Exception
+	{
+		logger.info(new Date() +"Inside EmployeeEditSubmit");
+		long result=0;
+		try {
+			Query query=manager.createNativeQuery("SELECT max(empno) FROM employee");
+			
+			 Object o = query.getSingleResult();
+			 result=Long.parseLong(o.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
 	
 	@Override
 	public Employee getEmployee(String empid) throws Exception
@@ -252,5 +268,17 @@ public class PisDaoImpl implements PisDao
 		return employee;
 	}
 	
+	@Override
+	public int PunchcardList(String Punchcard)throws Exception{
+		logger.info(new Date() +"Inside PunchcardList");
+		Query query=manager.createNativeQuery("SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard");
+		 query.setParameter("punchCard", Punchcard);
+		 Object o = query.getSingleResult();
+		 
+		 Integer value= Integer.parseInt(o.toString());
+		 int result= value;
+	
+		return result;
+	}
 	
 }

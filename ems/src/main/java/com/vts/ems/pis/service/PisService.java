@@ -25,5 +25,5 @@ public interface PisService {
 	public long EmployeeAddSubmit(Employee emp) throws Exception;
 	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public Employee getEmployee(String empid) throws Exception;
-
+	public int PunchcardList(String value)throws Exception;
 }

@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.service.PisService;
@@ -154,9 +158,6 @@ public class PisController {
 			String EmpStatusDate = req.getParameter("EmpStatusDate");
 			String PermPassNo = req.getParameter("PermPassNo");
 			
-			System.out.println(ph);
-			
-			
 			
 			Employee emp= new Employee();
 			emp.setEmpName(empname.trim());
@@ -198,7 +199,7 @@ public class PisController {
 			emp.setCreatedDate(new Date().toString());
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
+			//emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
 			
 			
 			service.EmployeeAddSubmit(emp);
@@ -288,7 +289,6 @@ public class PisController {
 			emp.setDOB(sdf.parse(dob));
 			emp.setDOA(sdf.parse(doa));
 			emp.setDOJL(sdf.parse(doj));
-//			emp.setCatId();
 			emp.setCategoryId(Integer.parseInt(category));
 			emp.setGroupId(0);
 			emp.setDivisionId(Integer.parseInt(divisionid));
@@ -302,10 +302,10 @@ public class PisController {
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-//			emp.setPRANNo();
 			emp.setPunchCard(PunchCardNo);
-			if(uid!=null && uid.trim().equalsIgnoreCase("")) {
-				emp.setUID(Integer.parseInt(uid));
+			System.out.println(uid);
+			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
+				emp.setUID(Long.parseLong(uid));
 			}
 			emp.setQuarters(gq);
 			emp.setPH(ph);
@@ -320,7 +320,7 @@ public class PisController {
 			emp.setModifiedBy(Username);		
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
+			//emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
 			emp.setEmpId(Integer.parseInt(EmpId));
 			
 			service.EmployeeEditSubmit(emp);
@@ -332,5 +332,24 @@ public class PisController {
 			e.printStackTrace();	
 			return "static/Error";
 		}
-	}	
+	}
+	
+	@RequestMapping(value="/requestbypunchajax",method=RequestMethod.GET)
+	public  @ResponseBody  String PunchRequestData(HttpServletRequest req,HttpServletResponse response,HttpSession ses) throws Exception {
+		String PunchCardNo = req.getParameter("PunchCardNo");
+		
+		int result=0;
+		try
+		{	  
+			result =service.PunchcardList(PunchCardNo);
+		}
+		catch (Exception e) {
+				e.printStackTrace(); 
+		}
+		  Gson json = new Gson();
+		  return json.toJson(result); 
+  }
+	
+	
+	
 }
