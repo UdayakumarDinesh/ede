@@ -12,45 +12,45 @@ import java.util.Locale;
 
 public class DateTimeFormatUtil 
 {
-	private SimpleDateFormat regularDateFormat=new SimpleDateFormat("dd-MM-yyyy");
-	private SimpleDateFormat sqlDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat regularDateFormat=new SimpleDateFormat("dd-MM-yyyy");
+	private static SimpleDateFormat sqlDateFormat=new SimpleDateFormat("yyyy-MM-dd");
 	
-	public SimpleDateFormat getMonthNameAndYear() {
+	public static  SimpleDateFormat getMonthNameAndYear() {
 		return new SimpleDateFormat("MMM-yyyy");
 	}
-	public SimpleDateFormat getSqlDateFormat() {
+	public static  SimpleDateFormat getSqlDateFormat() {
 		return sqlDateFormat;
 	}
-	public SimpleDateFormat getSqlDateAndTimeFormat() {
+	public static  SimpleDateFormat getSqlDateAndTimeFormat() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
-	public SimpleDateFormat getRegularDateFormat() {
+	public static  SimpleDateFormat getRegularDateFormat() {
 		return regularDateFormat;
 	}
-	public SimpleDateFormat getDateMonthShortName() {
+	public static  SimpleDateFormat getDateMonthShortName() {
 		return new SimpleDateFormat("dd-MMM-yyyy");
 	}
-	public SimpleDateFormat getDateMonthFullName() {
+	public static  SimpleDateFormat getDateMonthFullName() {
 		return new SimpleDateFormat("dd-MMMM-yyyy");
 	}
 	
 	
 	
 
-	public int getYearFromRegularDate(String datestring) 
+	public static  int getYearFromRegularDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getYear();
 	}
-	public int getYearFromSqlDate(String datestring) 
+	public static  int getYearFromSqlDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getYear();
 		
 	}
-	public int getYearFromSqlDateAndTime(String datetimestring)
+	public static  int getYearFromSqlDateAndTime(String datetimestring)
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime ldatetime=LocalDateTime.parse(datetimestring,formatter);
@@ -58,20 +58,20 @@ public class DateTimeFormatUtil
 		
 	}
 	
-	public int getMonthFromRegularDate(String datestring) 
+	public static  int getMonthFromRegularDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonthValue();
 	}
-	public int getMonthFromSqlDate(String datestring) 
+	public static  int getMonthFromSqlDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonthValue();
 		
 	}
-	public int getMonthFromSqlDateAndTime(String datetimestring)
+	public static  int getMonthFromSqlDateAndTime(String datetimestring)
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime ldatetime=LocalDateTime.parse(datetimestring,formatter);
@@ -79,20 +79,20 @@ public class DateTimeFormatUtil
 		
 	}
 	
-	public String getMonthValFromRegularDate(String datestring) 
+	public static  String getMonthValFromRegularDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonth().getDisplayName(TextStyle.SHORT,Locale.ENGLISH);
 	}
-	public String getMonthValFromSqlDate(String datestring) 
+	public static  String getMonthValFromSqlDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonth().getDisplayName(TextStyle.SHORT,Locale.ENGLISH);
 		
 	}
-	public String getMonthValFromSqlDateAndTime(String datetimestring)
+	public static  String getMonthValFromSqlDateAndTime(String datetimestring)
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime ldatetime=LocalDateTime.parse(datetimestring,formatter);
@@ -100,42 +100,42 @@ public class DateTimeFormatUtil
 	}
 	
 	
-	public String getCurrentYear()
+	public static  String getCurrentYear()
 	{		
 		return  String.valueOf(LocalDate.now().getYear());
 	}
 	
-	public String getCurrentMonthShortName()
+	public static  String getCurrentMonthShortName()
 	{
 		return new DateFormatSymbols().getShortMonths()[LocalDate.now().getMonthValue()];
 	}
 	
-	public String getCurrentMonthFullName()
+	public static  String getCurrentMonthFullName()
 	{
 		return new DateFormatSymbols().getMonths()[LocalDate.now().getMonthValue()];
 	}
 	
 	/*---------------------------------------------*/
 	
-	public String getFirstDayofCurrentMonthSqlFormat()
+	public static  String getFirstDayofCurrentMonthSqlFormat()
 	{
 		String firstday=LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).toString();
 		return firstday;
 	}
 	
-	public String getLastDayofCurrentMonthSqlFormat()
+	public static  String getLastDayofCurrentMonthSqlFormat()
 	{
 		String lastday=LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).toString();
 		return lastday;
 	}
 	
-	public String getFirstDayofCurrentMonthRegularFormat() throws Exception
+	public static  String getFirstDayofCurrentMonthRegularFormat() throws Exception
 	{
 		String firstday=regularDateFormat.format(sqlDateFormat.parse(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).toString()));
 		return firstday;
 	}
 	
-	public String getLastDayofCurrentMonthRegularFormat() throws Exception
+	public static  String getLastDayofCurrentMonthRegularFormat() throws Exception
 	{
 		String lastday=regularDateFormat.format(sqlDateFormat.parse(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).toString()));
 		return lastday;
@@ -143,55 +143,55 @@ public class DateTimeFormatUtil
 	
 	
 	
-	public String getFinancialYearStartDateSqlFormat()
+	public static  String getFinancialYearStartDateSqlFormat()
 	{
 		String firstday=LocalDate.now().getYear()+"-04-01";
 		return firstday;
 	}	
 	
-	public String getFinancialYearEndDateSqlFormat()
+	public static  String getFinancialYearEndDateSqlFormat()
 	{
 		String lastday=LocalDate.now().getYear()+"-03-31";
 		return lastday;
 	}
 	
-	public String getFinancialYearStartDateRegularFormat() throws Exception
+	public static  String getFinancialYearStartDateRegularFormat() throws Exception
 	{
 		String firstday="01-04-"+LocalDate.now().getYear();
 		return firstday;
 	}
 	
-	public String getFinancialYearEndDateRegularFormat() throws Exception
+	public static  String getFinancialYearEndDateRegularFormat() throws Exception
 	{
 		String lastday="31-03-"+LocalDate.now().getYear();
 		return lastday;
 	}
 	
-	public String getPreviousFinancialYearStartDateRegularFormat() throws Exception
+	public static  String getPreviousFinancialYearStartDateRegularFormat() throws Exception
 	{
 		String pfirstday="01-04-"+LocalDate.now().minusYears(1).getYear();
 		return pfirstday;
 	}
-	public String getPreviousFinancialYearStartDateSqlFormat()
+	public static  String getPreviousFinancialYearStartDateSqlFormat()
 	{
 		String pfirstday=LocalDate.now().minusYears(1).getYear()+"-04-01";
 		return pfirstday;
 	}	
 	
 	
-	public String getCurrentYearStartDateSqlFormat()
+	public static  String getCurrentYearStartDateSqlFormat()
 	{
 		String firstday=LocalDate.now().getYear()+"-01-01";
 		return firstday;
 	}	
 	
-	public String getCurrentYearStartDateRegularFormat()
+	public static  String getCurrentYearStartDateRegularFormat()
 	{
 		String pfirstday="01-01-"+LocalDate.now().getYear();
 		return pfirstday;
 	}	
 	
-	public String SqlToRegularDate (String sqldate) throws ParseException
+	public static  String SqlToRegularDate (String sqldate) throws ParseException
 	{
 		return regularDateFormat.format(sqlDateFormat.parse(sqldate));
 	}

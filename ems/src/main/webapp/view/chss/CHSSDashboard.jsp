@@ -35,6 +35,9 @@
 						<div class="col-md-3">
 							<button type="submit" class=" db-button " formaction="CHSSApply.htm" >CHSS Apply</button>
 						</div>
+						<div class="col-md-3">
+							<button type="submit" class=" db-button " formaction="CHSSAppliedList.htm" >CHSS List</button>
+						</div>
 					</div>
 				</div>
 			</div>		

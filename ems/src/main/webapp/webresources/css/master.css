@@ -69,4 +69,18 @@ text-align: center;
 	font-size: 12px !important;
 }
 
+.alert {
+	
+	padding: 4px; 
+	margin:-10px 10px 5px 10px ;
+	width: 80% !important;	
+}
+
+.table thead tr td , .table tbody tr td {
+
+padding-top: 7px !important;
+padding-bottom: 7px !important;
+
+}
+
 
