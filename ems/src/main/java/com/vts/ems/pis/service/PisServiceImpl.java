@@ -1,14 +1,27 @@
 package com.vts.ems.pis.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.pis.dao.PisDao;
@@ -31,6 +44,12 @@ public class PisServiceImpl implements PisService
 	@Autowired
 	private PisDao dao;
 	
+	@Value("${Image_uploadpath}")
+	private String uploadpath;
+	
+	
+	
+	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType,String Empid) throws Exception
 	{
@@ -42,6 +61,44 @@ public class PisServiceImpl implements PisService
 	{
 		return dao.EmployeeDetails(empid);
 	}
+	
+	@Override
+	public String getimage(String empid)throws Exception{
+		
+		
+		String result=null;
+		try {
+			String photoname=dao.PhotoPath(empid);
+			System.out.println(uploadpath+"\\"+photoname);
+			File f = new File(uploadpath+"\\"+photoname);
+			if(f.exists()) {
+				result=encodeFileToBase64Binary(f);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();		
+		}
+		
+		return result;
+	}
+	private static String encodeFileToBase64Binary(File file){
+        String encodedfile = null;
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+           encodedfile = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return encodedfile;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return encodedfile;
+        }
+
+        return encodedfile;
+    }
 	
 	@Override
 	public List<DivisionMaster> DivisionList() throws Exception
@@ -152,5 +209,46 @@ public class PisServiceImpl implements PisService
 	public int PunchcardList(String puchcard)throws Exception{
 		return dao.PunchcardList(puchcard);
 	}
+	@Override
+	public String PhotoPath(String EmpId) throws Exception {
+		
+		return dao.PhotoPath(EmpId);
+	}
 	
+
+	@Override
+	public int PhotoPathUpdate(String Path, String EmpId) throws Exception {
+		
+		return dao.PhotoPathUpdate(Path, EmpId);
+	}
+	 public static void saveFile(String uploadpath, String fileName, MultipartFile multipartFile) throws IOException 
+	    {
+	        Path uploadPath = Paths.get(uploadpath);
+	          
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream()) {
+	            Path filePath = uploadPath.resolve(fileName);
+	            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	        } catch (IOException ioe) {       
+	            throw new IOException("Could not save image file: " + fileName, ioe);
+	        }     
+	    }
+	@Override
+	public int saveEmpImage(MultipartFile file ,String empid ,String uploadpath)throws Exception{
+		int result =0;
+		try {
+			System.out.println("Save image in System"+empid);
+			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
+			 String fileName=empid+"."+OriginalFilename[1];
+			  result =dao.PhotoPathUpdate(fileName,empid);
+			 saveFile(uploadpath,fileName,file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

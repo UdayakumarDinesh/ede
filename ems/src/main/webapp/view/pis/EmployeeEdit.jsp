@@ -124,25 +124,38 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			    <div class="form-group">
 			        <div class="row">
+	
 			
-			            <div class="col-md-2">
-			                <label>DOB<span class="mandatory">*</span></label>
-			                
-			                <input type="date" style="width: 100%;" class="form-control input-sm" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOB().toString())) %><%}%>" placeholder=""  id="dob" name="dob"  required="required"  >
-			            </div>
-			
-			
+			 <div class="col-md-2">
+						 	<label>DOB<span class="mandatory">*</span></label>
+							<div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOB().toString())) %><%}%>" placeholder=""  id="dob" name="dob"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							      
+							    </label>                    
+							</div>
+						 </div>
+		
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
-			                <input type="date" style="width: 100%;" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOA().toString())) %><%}%>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
+			               <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOA().toString())) %><%}%>" placeholder=""  id="doa" name="doa"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							      
+							    </label>                    
+							</div>
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
-			                <input type="date" style="width: 100%;" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOJL().toString())) %><%}%>" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
+			                <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOJL().toString())) %><%}%>" placeholder=""  id="doj" name="doj"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							    </label>                    
+							</div>
 			            </div>
-			
+
 			            <div class="col-md-2">
 			                <label>Gender<span class="mandatory">*</span></label>
 			                <select name="gender" class="form-control input-sm" required>
@@ -489,18 +502,44 @@ function checknegative(str) {
 
 <script type="text/javascript">
 
-/* $('#dob').daterangepicker({
+ $('#dob').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	
+	//"minDate" :new Date(), 
+	"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
 		format : 'DD-MM-YYYY'
 	}
 });
-	  */
+ $('#doa').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		//"minDate" :new Date(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+ 
+ $('#doj').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		//"minDate" :new Date(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+ 
 	 $('empstatus').select2("enable", false)
 	 $('#empname').bind('keyup', function() {
 		  var c = this.selectionStart,
@@ -531,7 +570,7 @@ $("#PunchcardTextBox").blur(function(){
                       var rr=data;
                       var a = parseInt(rr) ;
                             
-                      if (a == 1){
+                      if (a > 1){
                  	    
                  		alert("Punch Card No. All ready Taken!");
 

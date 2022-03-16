@@ -39,14 +39,14 @@
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
-										<td>Select</td>
-										<td>SNo</td>
-										<td>EmpNo</td>
-										<td>Name</td>
-										<td>Designation</td>
-										<td>Division</td>
-										<td>Group</td>
-										<!-- <td>Action</td> -->
+										<th>Select</th>
+										<th>SNo</th>
+										<th>EmpNo</th>
+										<th>Name</th>
+										<th>Designation</th>
+										<th>Division</th>
+										<th>Group</th>
+										<!-- <th>Action</th> -->
 									</tr>
 								</thead>
 								<tbody>

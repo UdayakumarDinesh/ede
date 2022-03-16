@@ -2,6 +2,8 @@ package com.vts.ems.pis.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
@@ -26,4 +28,9 @@ public interface PisService {
 	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public Employee getEmployee(String empid) throws Exception;
 	public int PunchcardList(String value)throws Exception;
+	public String PhotoPath(String EmpId) throws Exception ;
+	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
+	public int saveEmpImage(MultipartFile file ,String empid,String uploadpath)throws Exception;
+	public String getimage(String empid)throws Exception;
+	
 }

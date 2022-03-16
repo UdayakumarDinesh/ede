@@ -27,4 +27,6 @@ public interface PisDao {
 	public Employee getEmployee(String empid) throws Exception;
 	public int PunchcardList(String value)throws Exception;
 	public long getempno()throws Exception;
+	public String PhotoPath(String empid)throws Exception;
+	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
 }

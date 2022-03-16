@@ -102,7 +102,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			
 			            <div class="col-md-2">
-			                <label>CAT CLASS<span class="mandatory">*</span></label>
+			                <label>CAT Class<span class="mandatory">*</span></label>
 			                <select name="catcode" class="form-control select2" required data-live-search="true">
 								<%for( PisCatClass catclass: piscatclasslist){ %>
 									<option value="<%=catclass.getCat_id()%>"><%=catclass.getCat_name()%></option>
@@ -131,13 +131,22 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 		
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
-			                <input type="date" value="<%=LocalDate.now() %>" class="form-control input-sm "  placeholder="Date of appointment" name="doa" required maxlength="10">
+			               <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doa" name="doa"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							      
+							    </label>                    
+							</div>
 			            </div>
 			
 			
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
-			                <input type="date" value="<%=LocalDate.now() %>" class="form-control input-sm " placeholder="Date of Joining" name="doj" required maxlength="10">
+			                <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doj" name="doj"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							    </label>                    
+							</div>
 			            </div>
 			
 			            <div class="col-md-2">
@@ -183,14 +192,14 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        
 						 <div class=" col-md-2 ">
 			                <label>Religion<span class=" mandatory ">*</span></label>
-			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			                    <option value=" Christian ">Christian</option>
-			                    <option value=" Hindu ">Hindu</option>
-			                    <option value=" Islam ">Islam</option>
-			                    <option value=" Jain ">Jain</option>
-			                    <option value=" Parsi ">Parsi </option>
-			                    <option value=" Sikh ">Sikh</option>
-			                    <option value=" Others ">Others</option>
+			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
+			                    <option value="Christian">Christian</option>
+			                    <option value="Hindu">Hindu</option>
+			                    <option value="Islam">Islam</option>
+			                    <option value="Jain">Jain</option>
+			                    <option value="Parsi">Parsi </option>
+			                    <option value="Sikh">Sikh</option>
+			                    <option value="Others">Others</option>
 			
 			                </select>
 			            </div>
@@ -223,16 +232,16 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">
 			
-			                    <option value=" Confirmed ">Confirmed</option>
-			                    <option value=" Probation ">Probation</option>
-			                    <option value=" Adhoc ">Adhoc</option>
-			                    <option value=" Temporary ">Temporary</option>
-			                    <option value=" Contract ">Contract</option>
+			                    <option value="Confirmed">Confirmed</option>
+			                    <option value="Probation">Probation</option>
+			                    <option value="Adhoc">Adhoc</option>
+			                    <option value="Temporary">Temporary</option>
+			                    <option value="Contract">Contract</option>
 			                </select>
 			            </div>
 						 <div class=" col-md-2 ">
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo " id="PunchCard " value="" maxlength="4"
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
 			                     onblur=" checknegative(this) ">
 			            </div>
@@ -430,7 +439,31 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 		format : 'DD-MM-YYYY'
 	}
 });
-	
+ $('#doa').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		//"minDate" :new Date(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+ 
+ $('#doj').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		//"minDate" :new Date(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
 
 	  
 	 $('empstatus').select2("enable", false)

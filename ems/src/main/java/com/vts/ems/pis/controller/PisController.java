@@ -1,21 +1,28 @@
 package com.vts.ems.pis.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
@@ -34,6 +41,9 @@ public class PisController {
 			
 	@Autowired
 	private PisService service;
+	
+	@Value("${Image_uploadpath}")
+	private String uploadpath;
 	
 	@RequestMapping(value = "PisAdminDashboard.htm", method = RequestMethod.GET)
 	public String PisDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
@@ -79,11 +89,16 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EmployeeDetails.htm "+Username);		
 		try {
-			String empid=req.getParameter("empid");
-			Object[] employeedetails = service.EmployeeDetails(empid);
 			
+			
+			
+			String empid=req.getParameter("empid");
+			System.out.println(empid);
+			Object[] employeedetails = service.EmployeeDetails(empid);	
+            String basevalue=service.getimage(empid);
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
+            req.setAttribute("basevalue", basevalue);
 			
 			return "pis/EmpBasicDetails";
 		}catch (Exception e) {
@@ -166,7 +181,6 @@ public class PisController {
 			emp.setDOB(sdf.parse(dob));
 			emp.setDOA(sdf.parse(doa));
 			emp.setDOJL(sdf.parse(doj));
-//			emp.setCatId();
 			emp.setCategoryId(Integer.parseInt(category));
 			emp.setGroupId(0);
 			emp.setDivisionId(Integer.parseInt(divisionid));
@@ -180,10 +194,9 @@ public class PisController {
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-//			emp.setPRANNo();
 			emp.setPunchCard(PunchCardNo);
-			if(uid!=null && uid.trim().equalsIgnoreCase("")) {
-				emp.setUID(Integer.parseInt(uid));
+			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
+				emp.setUID(Long.parseLong(uid));
 			}
 			emp.setQuarters(gq);
 			emp.setPH(ph);
@@ -199,7 +212,7 @@ public class PisController {
 			emp.setCreatedDate(new Date().toString());
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			//emp.setEmpStatusDate(rdf.parse(EmpStatusDate));
+			
 			
 			
 			service.EmployeeAddSubmit(emp);
@@ -217,7 +230,7 @@ public class PisController {
 	public String EmployeeEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);		
+		logger.info(new Date() +"Inside EmployeeEdit.htm "+Username);		
 		try {
 			
 			String empid=req.getParameter("empid");
@@ -233,7 +246,7 @@ public class PisController {
 			req.setAttribute("divisionlist", service.DivisionList());			
 			return "pis/EmployeeEdit";
 		}catch (Exception e) {
-			logger.error(new Date() +" Inside EmployeeAdd.htm "+Username, e);
+			logger.error(new Date() +" Inside EmployeeEdit.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
@@ -348,8 +361,37 @@ public class PisController {
 		}
 		  Gson json = new Gson();
 		  return json.toJson(result); 
-  }
-	
-	
+       }
+
+		@RequestMapping(value="PisImageUpload.htm",headers=("content-type=multipart/*") , method = RequestMethod.POST)
+		public String PisImageUpload(HttpSession ses,RedirectAttributes redir ,HttpServletRequest req, HttpServletResponse res,@RequestParam("photo1") MultipartFile file)throws Exception{
+			
+			int value=0;
+			String EmpId = (String)req.getParameter("employeeid");
+		try { 
+			System.out.println("EmpId    :"+EmpId);
+			String imagename= service.PhotoPath(EmpId);
+			File f = new File(uploadpath+"\\"+imagename);
+			if(f.exists()) {
+				f.delete();
+			}
+		 value= service.saveEmpImage(file,EmpId,uploadpath);
+		 Object[] employeedetails = service.EmployeeDetails(EmpId);	
+         String basevalue=service.getimage(EmpId);
+			req.setAttribute("empid", EmpId);
+			req.setAttribute("employeedetails", employeedetails);
+            req.setAttribute("basevalue", basevalue);
+        	if(value!=0) {
+    			req.setAttribute("result","Photo Upload SUCCESSFUL");
+    		}else {
+    			req.setAttribute("resultfail","Photo Upload UNSUCCESSFUL");
+    		}
+		 }catch(Exception e){
+			 e.printStackTrace();
+			 req.setAttribute("resultfail","Photo Upload UNSUCCESSFUL");
+		 }
+
+		return "pis/EmpBasicDetails";
+		}
 	
 }

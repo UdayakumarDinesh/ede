@@ -46,7 +46,7 @@ public class PisDaoImpl implements PisDao
 		return (List<Object[]>)query.getResultList();   
 	}
 	
-	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  e.Title,  e.dob,  e.DOJL,  e.DOA,  e.DOR,  e.gender,  e.BloodGroup,  e.maritalStatus,  e.Religion,  e.pan,  e.punchcard,  e.uid,  e.email,  e.designationid,  e.divisionid,  e.groupid,  e.SBIAccNo,  e.CategoryId,  ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,e.hometown, e.quarters  FROM  employee e,  division_master dm,  division_group dg,  employee_desig ed WHERE e.isactive = 1  AND e.designationid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid  AND empid = :empid ORDER BY e.srno DESC";
+	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  e.Title,  e.dob,  e.DOJL,  e.DOA,  e.DOR,  e.gender,  e.BloodGroup,  e.maritalStatus,  e.Religion,  e.pan,  e.punchcard,  e.uid,  e.email,  e.designationid,  e.divisionid,  e.groupid,  e.SBIAccNo,  e.CategoryId,  ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,e.hometown, e.quarters ,e.photo FROM  employee e,  division_master dm,  division_group dg,  employee_desig ed WHERE e.isactive = 1  AND e.designationid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid  AND empid = :empid ORDER BY e.srno DESC";
 	
 	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception
@@ -281,4 +281,23 @@ public class PisDaoImpl implements PisDao
 		return result;
 	}
 	
+	@Override
+	public String PhotoPath(String empid)throws Exception{
+		logger.info(new Date() +"Inside PunchcardList");
+		Query query=manager.createNativeQuery("select photo from employee where empid=:empid");
+		 query.setParameter("empid", empid);
+		 String EmpName=(String) query.getSingleResult();
+			return EmpName;
+	}
+	
+	@Override
+	public int PhotoPathUpdate(String Path, String EmpId) throws Exception{
+		logger.info(new Date() +"Inside PhotoPathUpdate");
+		Query query=manager.createNativeQuery("update employee set photo=:Path where empid=:EmpId");
+		 query.setParameter("Path", Path);
+		 query.setParameter("EmpId", EmpId);
+		 int count=(int) query.executeUpdate();
+	
+		return count;
+	}
 }
