@@ -35,12 +35,16 @@
 						<div class="col-md-3">
 							<button type="submit" class=" db-button " formaction="PisAdminEmpList.htm" >Employee Details</button>
 						</div>
+						<div class="col-md-3">
+							<button type="submit" class=" db-button " formaction="LoginMaster.htm" >Login Master</button>
+						</div>
 					</div>
 				</div>
 			</div>		
 		</form>
 		
 	</div>
+	
 
  </div>
 

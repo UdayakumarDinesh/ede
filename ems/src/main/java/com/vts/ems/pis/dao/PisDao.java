@@ -2,6 +2,7 @@ package com.vts.ems.pis.dao;
 
 import java.util.List;
 
+import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
@@ -29,4 +30,10 @@ public interface PisDao {
 	public long getempno()throws Exception;
 	public String PhotoPath(String empid)throws Exception;
 	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
+	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception;
+	public List<Object[]> getEmpList()throws Exception;
+	public List<Object[]> getLoginTypeList()throws Exception;
+	public int UserManagerDelete(String username , String empid)throws Exception;
+	public int UserNamePresentCount(String UserName)throws Exception;
+	public Long UserManagerAdd(Login login) throws Exception;
 }

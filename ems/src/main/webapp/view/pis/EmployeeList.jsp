@@ -6,7 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<style type="text/css">
+ #dis{
+ text-align: center;
+ 
+ }
+</style>
 </head>
 <body>
 
@@ -18,7 +23,7 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>ADMIN DASHBOARD</h5>
+				<h5>Employee List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
@@ -76,10 +81,11 @@
 					
 					<div class="row text-center">
 						<div class="col-md-12">
+						
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
 
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button>
+							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
 							<button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button>
 							
@@ -91,8 +97,22 @@
 						</div>
 					</div>
 				</form>	
+				<!-- <div  class="btn-group pull-right" id = "dis" style="margin-top:20px;" align="center">
+					<button type="submit" class="btn btnclr">Education</button>
+					<button type="submit" class="btn btnclr">Appointment</button>
+					<button type="submit" class="btn btnclr">Awards</button>
+					<button type="submit" class="btn btnclr">Property</button>
+					<button type="submit" class="btn btnclr">Address</button>
+					<button type="submit" class="btn btnclr">Publication</button>
+					<button type="submit" class="btn btnclr">Passport</button>
+					
+				</div> -->
 			</div>
-		</div>		
+
+				 
+
+
+			</div>		
 		
 	</div>
 
@@ -100,66 +120,53 @@
 
 <script type="text/javascript">
 
+	function ViewEmp(myfrm) {
 
+		var fields = $("input[name='empid']").serializeArray();
 
+		if (fields.length === 0) {
+			alert("Please Select Atleast One Employee ");
 
-function ViewEmp(myfrm){
-	
-	 var fields = $("input[name='empid']").serializeArray();
-
-	  if (fields.length === 0){
-		  alert("Please Select Atleast One Employee ");
-		  
-		  
-	event.preventDefault();
-	return false;
-	}
-	return true;
-	}
-
-function Edit(myfrm){
-	
-	 var fields = $("input[name='empid']").serializeArray();
-
-	  if (fields.length === 0){
-		  alert("Please Select Atleast One Employee ");
-		  
-		  
-	event.preventDefault();
-	return false;
-	}
-	return true;
-	}
-
-function Delete(myfrm){
-	
-
-	var fields = $("input[name='empid']").serializeArray();
-
-	  if (fields.length === 0){
-		  alert("Please Select Atleast One Employee");
-	 event.preventDefault();
-	return false;
-	}
-	  var cnf=confirm("Are You Sure To Delete!");
-	  
-
-	    
-	  
-	  if(cnf){
-	
-	return true;
-	
-	}
-	  else{
-		  event.preventDefault();
+			event.preventDefault();
 			return false;
-			}
-	
+		}
+		return true;
 	}
-	
 
+	function Edit(myfrm) {
 
+		var fields = $("input[name='empid']").serializeArray();
+
+		if (fields.length === 0) {
+			alert("Please Select Atleast One Employee ");
+
+			event.preventDefault();
+			return false;
+		}
+		return true;
+	}
+
+	function Delete(myfrm) {
+
+		var fields = $("input[name='empid']").serializeArray();
+
+		if (fields.length === 0) {
+			alert("Please Select Atleast One Employee");
+			event.preventDefault();
+			return false;
+		}
+		var cnf = confirm("Are You Sure To Delete!");
+
+		if (cnf) {
+
+			return true;
+
+		} else {
+			event.preventDefault();
+			return false;
+		}
+
+	}
 </script>
 
 

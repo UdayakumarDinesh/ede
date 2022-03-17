@@ -414,7 +414,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-			    	<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>
+			    	<button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Submit?');" name="action" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			

@@ -60,7 +60,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	String path=(String)request.getAttribute("basevalue");
 
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-	DateTimeFormatUtil rd = new DateTimeFormatUtil();
+	
 %>
  
                    
@@ -69,7 +69,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>ADMIN DASHBOARD </h5>
+				<h5>Employee View </h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
@@ -123,7 +123,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 		
 			 
 			  <div class="pic">
-			  <img src="./view/images/<%if(employeedetails[9].toString().equals("M")){ %>avatarmale.png"<%}else{ %>avatar.png"<%} %> class="img-responsive img-rounded" style=" width: 100%; height:124px; cursor: pointer;  " id="profileImage">
+			  <img src="./view/images/user.png" class="img-responsive img-rounded" style=" width: 100%; height:124px; cursor: pointer;  " id="profileImage">
 			  </div>
 			  <div class="p-image">
               <i class="fa fa-camera upload-button"></i>
@@ -154,7 +154,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 						<td><%=employeedetails[22]%></td>
 				     	<td><%=employeedetails[23]%>(<%=employeedetails[24] %>)</td>
-						<td><%=rd.SqlToRegularDate(employeedetails[5].toString())%></td>
+						<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%></td>
 					    <td><%=employeedetails[14]%></td>
 						<td><%=employeedetails[15]%></td>
 						</tr>
@@ -193,11 +193,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 						<tr>
 							<td> <b>DOJ</b> </td>
-							<td><%=rd.SqlToRegularDate(employeedetails[6].toString())%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[6].toString())%></td>
 							<td> <b>DOA</b> </td>
-							<td><%=rd.SqlToRegularDate(employeedetails[7].toString())%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[7].toString())%></td>
 							<td> <b>DOR</b> </td>
-							<td><%=rd.SqlToRegularDate(employeedetails[8].toString())%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString())%></td>
 						</tr>
 						
 						<tr>

@@ -195,6 +195,21 @@ public class DateTimeFormatUtil
 	{
 		return regularDateFormat.format(sqlDateFormat.parse(sqldate));
 	}
-	
+
+	public static java.sql.Date dateConversionSql(String sDate) {
+		java.sql.Date ddate = null;
+
+		SimpleDateFormat sdf4 = new SimpleDateFormat("dd-MM-yyyy");
+		try {
+			java.util.Date jdate = sdf4.parse(sDate);
+			long ms = jdate.getTime();
+			ddate = new java.sql.Date(ms);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return (ddate);
+	}
 	
 }

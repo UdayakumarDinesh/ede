@@ -24,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.DateTimeFormatUtil;
+import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
+import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
@@ -57,6 +59,12 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
+	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception
+	{
+		return dao.LoginMasterList(LoginType, Empid);
+	}
+	
+	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception
 	{
 		return dao.EmployeeDetails(empid);
@@ -69,7 +77,6 @@ public class PisServiceImpl implements PisService
 		String result=null;
 		try {
 			String photoname=dao.PhotoPath(empid);
-			System.out.println(uploadpath+"\\"+photoname);
 			File f = new File(uploadpath+"\\"+photoname);
 			if(f.exists()) {
 				result=encodeFileToBase64Binary(f);
@@ -157,7 +164,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public long EmployeeEditSubmit(Employee emp) throws Exception
 	{
-		System.out.println(emp.getEmpId());
+		
 		Employee employee = dao.getEmployee(String.valueOf(emp.getEmpId()));
 	
 		employee.setEmpName(emp.getEmpName());
@@ -166,8 +173,8 @@ public class PisServiceImpl implements PisService
 		employee.setDOB(emp.getDOB());
 		employee.setDOA(emp.getDOA());
 		employee.setDOJL(emp.getDOJL());
+		employee.setDOR(emp.getDOR());
 		employee.setCategoryId(emp.getCategoryId());
-		//employee.setGroupId(0);
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setCadreId(emp.getCadreId());
 		employee.setCatId(emp.getCatId());
@@ -240,7 +247,7 @@ public class PisServiceImpl implements PisService
 	public int saveEmpImage(MultipartFile file ,String empid ,String uploadpath)throws Exception{
 		int result =0;
 		try {
-			System.out.println("Save image in System"+empid);
+			
 			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
 			 String fileName=empid+"."+OriginalFilename[1];
 			  result =dao.PhotoPathUpdate(fileName,empid);
@@ -250,5 +257,37 @@ public class PisServiceImpl implements PisService
 		}
 		
 		return result;
+	}
+	@Override
+	public List<Object[]> getEmpList()throws Exception{
+			return dao.getEmpList();
+	}
+	@Override
+	public List<Object[]> getLoginTypeList()throws Exception{
+			return dao.getLoginTypeList();
+	}
+	@Override
+	public int UserManagerDelete(String username,String empid)throws Exception{
+		return dao.UserManagerDelete(username,empid);
+	}
+	@Override
+	public int UserNamePresentCount(String username)throws Exception{
+		return dao.UserNamePresentCount( username);
+	}
+	@Override
+	public Long UserManagerAdd(UserManageAdd useradd)throws Exception{
+		
+		Login login = new Login();
+		
+		login.setUsername(useradd.getUserName());
+		login.setPassword("$2y$12$QTTMcjGKiCVKNvNa242tVu8SPi0SytTAMpT3XRscxNXHHu1nY4Kui");
+		login.setEmpId(Long.parseLong(useradd.getEmpId()));
+		login.setLoginType(useradd.getLoginType());
+		login.setIsActive(1);		
+		login.setCreatedBy(useradd.getCreatedBy());
+		login.setCreatedDate(useradd.getCreatedDate());
+		
+		return dao.UserManagerAdd(login);
+		
 	}
 }

@@ -129,7 +129,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			 <div class="col-md-2">
 						 	<label>DOB<span class="mandatory">*</span></label>
 							<div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOB().toString())) %><%}%>" placeholder=""  id="dob" name="dob"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOB().toString())%><%}%>" placeholder=""  id="dob" name="dob"  required="required"  > 
 							    <label class="input-group-addon btn" for="testdate">
 							      
 							    </label>                    
@@ -139,7 +139,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
 			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOA().toString())) %><%}%>" placeholder=""  id="doa" name="doa"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOA().toString()) %><%}%>" placeholder=""  id="doa" name="doa"  required="required"  > 
 							    <label class="input-group-addon btn" for="testdate">
 							      
 							    </label>                    
@@ -150,7 +150,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            <div class="col-md-2">
 			                <label>DOJ<span class="mandatory">*</span></label>
 			                <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=dateconvertion.format(dateconvertion.parse(employee.getDOJL().toString())) %><%}%>" placeholder=""  id="doj" name="doj"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOJL().toString()) %><%}%>" placeholder=""  id="doj" name="doj"  required="required"  > 
 							    <label class="input-group-addon btn" for="testdate">
 							    </label>                    
 							</div>
@@ -259,11 +259,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			    <div class=" form-group ">
 			        <div class=" row ">
-			
-			           
-			
-			
-			           
+
 			
 						<div class=" col-md-2 ">
 			                <label>PayLevel<span class=" mandatory ">*</span></label>
@@ -298,16 +294,14 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <input type="text" id="SBITextBox" value="<%if(employee!=null){%><%=employee.getSBIAccNo()%><%}%>" name="SBI" class=" form-control input-sm " required
 			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
 			            </div>
+
 			
-			
-			
-			
-			            <div class=" col-md-2 ">
+			               <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value="<%if(employee!=null){%><%=employee.getHomeTown()%><%} %>"
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
 			                    onclick=" Validate() ">
-			            </div>
+			               </div>
 						
 						<div class=" col-md-2 ">
 			                <label>Height</label>
@@ -330,9 +324,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    
 			    <div class=" form-group ">
 			        <div class=" row ">
-			        
-			        
-			            
+
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
 			                
@@ -429,29 +421,12 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			        </div>
 			    </div>
 			       
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
-			    
+
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-								<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
-								<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>
+					<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
+					<button type="submit" class="btn btn-sm submit-btn" name="action" onclick="return  confirm('Are You Sure To Submit?')" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			
@@ -507,7 +482,7 @@ function checknegative(str) {
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	//"minDate" :new Date(), 
-	"startDate" : new Date(),
+	//"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -519,7 +494,7 @@ function checknegative(str) {
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		//"minDate" :new Date(), 
-		"startDate" : new Date(),
+		//"startDate" : new Date(),
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
@@ -532,7 +507,7 @@ function checknegative(str) {
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		//"minDate" :new Date(), 
-		"startDate" : new Date(),
+		//"startDate" : new Date(),
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
