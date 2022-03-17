@@ -40,21 +40,21 @@
 	
 	
 	<div class="card-body" >		
-		<% String ses=(String)request.getAttribute("result"); 
-   String ses1=(String)request.getAttribute("resultfail");
- %><%if(ses1!=null){
-	%>
-	
-	<div align="center">
-	<div class="alert alert-danger" role="alert">
-                     <%=ses1 %>
-                    </div></div>
-	<%}  if(ses!=null){ %>
-	<div align="center">
-	<div class="alert alert-success" role="alert" >
-                     <%=ses %>
-                   </div> </div>
-                    <%} %>
+			<div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
 		
 			<div class="card" >
 			
