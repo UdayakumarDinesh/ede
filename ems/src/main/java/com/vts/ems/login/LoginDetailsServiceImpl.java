@@ -25,7 +25,7 @@ import com.vts.ems.service.EMSMainService;
 @Service
 public class LoginDetailsServiceImpl implements UserDetailsService 
 {
-	private SimpleDateFormat sdf1 =new  DateTimeFormatUtil().getSqlDateAndTimeFormat();
+	private SimpleDateFormat sdf1 = DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	@Autowired
 	private HttpServletRequest request;
 	

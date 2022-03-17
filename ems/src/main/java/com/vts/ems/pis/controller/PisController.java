@@ -37,9 +37,8 @@ public class PisController {
 
 	private static final Logger logger = LogManager.getLogger(PisController.class);
 	
-	DateTimeFormatUtil util=new DateTimeFormatUtil();
-	SimpleDateFormat rdf= util.getRegularDateFormat();
-	SimpleDateFormat sdf= util.getSqlDateFormat();
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 			
 	@Autowired
 	private PisService service;
@@ -257,8 +256,12 @@ public class PisController {
 			
 			
 			
-			service.EmployeeAddSubmit(emp);
-			
+			Long value=service.EmployeeAddSubmit(emp);
+			if (value != 0) {
+				redir.addAttribute("result", "EMPLOYEE ADDED SUCCESSFUL");
+			} else {
+				redir.addAttribute("resultfail", "EMPLOYEE ADDED UNSUCCESSFUL");
+			}
 			
 			return "redirect:/PisAdminEmpList.htm";
 		}catch (Exception e) {
@@ -416,11 +419,16 @@ public class PisController {
 			emp.setSubCategary(subcategory);
 			emp.setEmpId(Integer.parseInt(EmpId));
 
-			service.EmployeeEditSubmit(emp);
-
+			long value =service.EmployeeEditSubmit(emp);
+			if (value != 0) {
+				redir.addAttribute("result", "EMPLOYEE EDITED SUCCESSFUL");
+			} else {
+				redir.addAttribute("resultfail", "EMPLOYEE EDITED UNSUCCESSFUL");
+			}
 			return "redirect:/PisAdminEmpList.htm";
 		} catch (Exception e) {
 			logger.error(new Date() + " Inside EmployeeEditSubmit.htm " + Username, e);
+			req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -495,6 +503,7 @@ public class PisController {
 		}
 	}
 	
+
 	@RequestMapping(value = "LoginMasterAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String LoginAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{   
@@ -508,7 +517,6 @@ public class PisController {
 						
 			return "pis/LoginAdd";
 		}else if("Edit".equalsIgnoreCase(Action)) {
-			
 			req.setAttribute("emplist", service.getEmpList());
 			req.setAttribute("loginlist", service.getLoginTypeList());
 			return "pis/LoginEdit";
@@ -523,6 +531,7 @@ public class PisController {
 		}
 		
 	}
+	
 	
 	@RequestMapping(value = "UserNamePresentCount.htm", method = RequestMethod.GET)
 	public @ResponseBody String UserNamePresentCount(HttpServletRequest req,HttpSession ses) throws Exception {

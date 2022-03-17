@@ -2,7 +2,6 @@ package com.vts.ems.pis.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -41,15 +40,12 @@ public class PisServiceImpl implements PisService
 {
 	private static final Logger logger = LogManager.getLogger(PisServiceImpl.class);
 
-	DateTimeFormatUtil util= new DateTimeFormatUtil();
-	SimpleDateFormat sdtf= util.getSqlDateAndTimeFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	@Autowired
 	private PisDao dao;
 	
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
-	
-	
 	
 	
 	@Override
@@ -71,9 +67,8 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
-	public String getimage(String empid)throws Exception{
-		
-		
+	public String getimage(String empid)throws Exception
+	{
 		String result=null;
 		try {
 			String photoname=dao.PhotoPath(empid);
@@ -87,26 +82,22 @@ public class PisServiceImpl implements PisService
 		
 		return result;
 	}
-	private static String encodeFileToBase64Binary(File file){
-        String encodedfile = null;
-        try {
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int)file.length()];
-            fileInputStreamReader.read(bytes);
-           encodedfile = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return encodedfile;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return encodedfile;
-        }
 
-        return encodedfile;
-    }
-	
+	private static String encodeFileToBase64Binary(File file) {
+		String encodedfile = null;
+		try {
+			FileInputStream fileInputStreamReader = new FileInputStream(file);
+			byte[] bytes = new byte[(int) file.length()];
+			fileInputStreamReader.read(bytes);
+			encodedfile = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(file));
+			fileInputStreamReader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return encodedfile;
+		}
+		return encodedfile;
+	}
+
 	@Override
 	public List<DivisionMaster> DivisionList() throws Exception
 	{

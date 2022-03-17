@@ -1,10 +1,13 @@
 package com.vts.ems.chss.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,12 +17,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
-import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.Dto.CHSSConsultationDto;
+import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.service.CHSSService;
 
 @Controller
@@ -190,6 +199,7 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			req.setAttribute("testmainlist", service.CHSSTestMainList());
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
@@ -306,7 +316,6 @@ public class CHSSController {
 		}
 	}
 	
-//	
 	
 	
 	@RequestMapping(value = "CHSSApplyEdit.htm", method = RequestMethod.POST )
@@ -345,5 +354,293 @@ public class CHSSController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "GetBillDataAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String GetBillDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetBillDataAjax.htm "+Username);
+		CHSSBill bill=null;
+		try {
+			String billid = req.getParameter("billid");
+			bill = service.getCHSSBill(billid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside GetBillDataAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(bill);
+	}
+	
+	@RequestMapping(value = "GetTestSubListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String GetTestSubListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetTestSubListAjax.htm "+Username);
+		List<CHSSTestSub> list=new ArrayList<CHSSTestSub>();
+		try {
+			String testmainid = req.getParameter("testmainid");
+			list = service.CHSSTestSubList(testmainid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside GetTestSubListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	
+	@RequestMapping(value = "ConsultationBillAdd.htm", method = RequestMethod.POST )
+	public String ConsultationBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConsultationBillAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			String[] consulttype=req.getParameterValues("consult-type");
+			String[] docname=req.getParameterValues("doc-name");
+			String[] docqualification=req.getParameterValues("doc-qualification");
+			String[] consdate=req.getParameterValues("cons-date");
+			String[] conscharge=req.getParameterValues("cons-charge");
+			
+			CHSSConsultationDto dto=new CHSSConsultationDto();
+			
+			dto.setBillId(billid);
+			dto.setConsultType(consulttype);
+			dto.setDocName(docname);
+			dto.setDocQualification(docqualification);
+			dto.setConsultDate(consdate);
+			dto.setConsultCharge(conscharge);
+			
+			dto.setCreatedBy(Username);
+			
+			long count= service.ConsultationBillAdd(dto);
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Details Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ConsultationBillAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "ChssConsultationListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ChssConsultationListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetChssConsultationList.htm "+Username);
+		List<CHSSConsultation> list=new ArrayList<CHSSConsultation>();
+		try {
+			String billid = req.getParameter("billid");
+			list = service.CHSSConsultationList(billid);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ChssConsultationListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "ConsultationBillEdit.htm", method = RequestMethod.POST )
+	public String ConsultationBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConsultationBillEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String consultationid = req.getParameter("consultationid"); 
+			
+			String consulttype = req.getParameter("consult-type-"+consultationid);
+			String docname = req.getParameter("doc-name-"+consultationid);
+			String docqualification = req.getParameter("doc-qualification-"+consultationid);
+			String consdate = req.getParameter("cons-date-"+consultationid);
+			String conscharge = req.getParameter("cons-charge-"+consultationid);
+			
+			CHSSConsultation consult= new CHSSConsultation();
+			consult.setConsultationId(Long.parseLong(consultationid));
+			consult.setConsultType(consulttype);
+			consult.setDocName(docname);
+			consult.setDocQualification(docqualification);
+			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
+			consult.setConsultCharge(Integer.parseInt(conscharge));
+			consult.setModifiedBy(Username);
+			
+			long count = service.ConsultationBillEdit(consult);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Data Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Data Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ConsultationBillEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "ConsultationBillDelete.htm", method = RequestMethod.POST )
+	public String ConsultationBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConsultationBillDelete.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String consultationid = req.getParameter("consultationid"); 
+						
+			long count = service.ConsultationBillDelete(consultationid, Username);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Data Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Data Delete Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ConsultationBillDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "MedicinesBillAdd.htm", method = RequestMethod.POST )
+	public String MedicinesBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedicinesBillAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			String[] medsname=req.getParameterValues("meds-name");
+			String[] medsdate=req.getParameterValues("meds-date");
+			String[] medscost=req.getParameterValues("meds-cost");
+			
+			CHSSMedicineDto dto=new CHSSMedicineDto();
+			
+			dto.setBillId(billid);
+			dto.setMedicineName(medsname);
+			dto.setMedicineDate(medsdate);
+			dto.setMedicineCost(medscost);
+			
+//			dto.setCreatedBy(Username);
+			
+			long count= service.MedicinesBillAdd(dto);
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Details Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedicinesBillAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "ChssMedicinesListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ChssMedicinesListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ChssMedicinesListAjax.htm "+Username);
+		List<CHSSMedicine> list=new ArrayList<CHSSMedicine>();
+		try {
+			String billid = req.getParameter("billid");
+			list = service.CHSSMedicineList(billid);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ChssMedicinesListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "MedicineBillEdit.htm", method = RequestMethod.POST )
+	public String MedicineBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedicineBillEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String medicineid = req.getParameter("medicineid"); 
+			
+			String medsname = req.getParameter("meds-name-"+medicineid);
+			String medsdate = req.getParameter("meds-date-"+medicineid);
+			String medscost = req.getParameter("meds-cost-"+medicineid);
+			
+			CHSSMedicine meds= new CHSSMedicine();
+			meds.setMedicineId(Long.parseLong(medicineid));
+			meds.setMedicineName(medsname);
+			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
+			meds.setMedicineCost(Integer.parseInt(medscost));
+			
+			
+			long count = service.MedicineBillEdit(meds);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Medicines Data Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Medicines Data Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedicineBillEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "MedicineBillDelete.htm", method = RequestMethod.POST )
+	public String MedicineBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedicineBillDelete.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String medicineid = req.getParameter("medicineid"); 
+						
+			long count = service.MedicineBillDelete(medicineid, Username);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Medicines Data Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Medicines Data Delete Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedicineBillDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 }

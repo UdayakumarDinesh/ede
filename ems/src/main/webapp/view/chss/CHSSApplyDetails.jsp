@@ -140,7 +140,7 @@
 										<td><input type="text" class="form-control items" name="centername" id="centername" value="" style="width:100%; "  maxlength="500" required="required"></td>
 										<td><input type="text" class="form-control items" name="billno" id="billno" value="" style="width:100%; "   maxlength="100" required="required"></td>
 										<td><input type="text" class="form-control billdate" name="billdate" id="billdate" value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-										<td><input type="number" class="form-control items " name="billamount" id="billamount" value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
+										<td><input type="number" class="form-control items " name="billamount" id="billamount" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 										<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 									</tr>
 								</tbody>							
@@ -187,6 +187,10 @@ var count=1;
 				format : 'DD-MM-YYYY'
 		}
 		});
+	  $('[data-toggle="tooltip"]').tooltip({
+			 trigger : 'hover',
+		});
+	  
 	});
 
 

@@ -116,7 +116,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			 </div>
 			 <div class="p-image1">
              <i class="fa fa-camera upload-button"></i>
-			 <input id="imageUpload1" type="file" name="photo1" accept=".png, .jpg, .jpeg"   capture style="display: none;" onchange="this.form.submit()">
+			 <input id="imageUpload1" type="file" name="photo1" accept=".png, .jpg, .jpeg"   style="display: none;" onchange="this.form.submit()">
 			 			 
 			 
 			 <%}else{%>
@@ -127,7 +127,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			  </div>
 			  <div class="p-image">
               <i class="fa fa-camera upload-button"></i>
-			  <input id="imageUpload" type="file" name="photo1" accept=".png, .jpg, .jpeg"   capture style="display: none;" onchange="this.form.submit()">
+			  <input id="imageUpload" type="file" name="photo1" accept=".png, .jpg, .jpeg"    style="display: none;" onchange="this.form.submit()">
 			  <%}%>
 			  </div>
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
