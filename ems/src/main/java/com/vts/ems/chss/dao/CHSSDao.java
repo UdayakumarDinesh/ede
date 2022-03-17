@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSTestMain;
+import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
 
@@ -23,5 +27,15 @@ public interface CHSSDao {
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception;
 	public long CHSSApplyEdit(CHSSApply apply) throws Exception;
+	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public long ConsultationBillAdd(CHSSConsultation consult) throws Exception;
+	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
+	public CHSSConsultation getCHSSConsultation(String consultationid) throws Exception;
+	public long ConsultationBillEdit(CHSSConsultation consult) throws Exception;
+	public long MedicinesBillAdd(CHSSMedicine medicine) throws Exception;
+	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception;
+	public CHSSMedicine getCHSSMedicine(String medicineid) throws Exception;
+	public long MedicineBillEdit(CHSSMedicine medicine) throws Exception;
 
 }

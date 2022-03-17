@@ -222,7 +222,7 @@ color: black;
 									        	<img class="card-img-top" src="view/images/user.png"  alt="USER" >
 									        </h2>
 									            <div class="card__apply">
-									                <span class="card__link"><h5><%=obj[1] %></h5></span>
+									               <h5> <span class="card__link"><%=obj[1] %></span></h5>
 									            </div>
 									            <span >(<%=obj[7] %>)</span>
 									        </div>

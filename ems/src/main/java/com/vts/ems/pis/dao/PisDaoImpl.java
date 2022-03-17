@@ -95,7 +95,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<EmployeeDesig> cq= cb.createQuery(EmployeeDesig.class);
-			Root<EmployeeDesig> root= cq.from(EmployeeDesig.class);
+			cq.from(EmployeeDesig.class);
 						
 			TypedQuery<EmployeeDesig> allquery = manager.createQuery(cq);
 			desiglist= allquery.getResultList();
@@ -115,7 +115,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<PisPayLevel> cq= cb.createQuery(PisPayLevel.class);
-			Root<PisPayLevel> root= cq.from(PisPayLevel.class);						
+			 cq.from(PisPayLevel.class);						
 			TypedQuery<PisPayLevel> allquery = manager.createQuery(cq);
 			pispaylevel= allquery.getResultList();
 			
@@ -134,7 +134,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<PisCadre> cq= cb.createQuery(PisCadre.class);
-			Root<PisCadre> root= cq.from(PisCadre.class);						
+			 cq.from(PisCadre.class);						
 			TypedQuery<PisCadre> allquery = manager.createQuery(cq);
 			pispaylevel= allquery.getResultList();
 			
@@ -153,7 +153,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<PisCatClass> cq= cb.createQuery(PisCatClass.class);
-			Root<PisCatClass> root= cq.from(PisCatClass.class);						
+			cq.from(PisCatClass.class);						
 			TypedQuery<PisCatClass> allquery = manager.createQuery(cq);
 			pispaylevel= allquery.getResultList();
 			
@@ -172,7 +172,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<PisCategory> cq= cb.createQuery(PisCategory.class);
-			Root<PisCategory> root= cq.from(PisCategory.class);						
+			cq.from(PisCategory.class);						
 			TypedQuery<PisCategory> allquery = manager.createQuery(cq);
 			pispaylevel= allquery.getResultList();
 			
@@ -192,7 +192,7 @@ public class PisDaoImpl implements PisDao
 			
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
 			CriteriaQuery<EmpStatus> cq= cb.createQuery(EmpStatus.class);
-			Root<EmpStatus> root= cq.from(EmpStatus.class);						
+			cq.from(EmpStatus.class);						
 			TypedQuery<EmpStatus> allquery = manager.createQuery(cq);
 			pispaylevel= allquery.getResultList();
 			
@@ -207,7 +207,6 @@ public class PisDaoImpl implements PisDao
 	public long EmployeeAddSubmit(Employee emp) throws Exception
 	{
 		logger.info(new Date() +"Inside EmployeeAddSubmit");
-		List<EmpStatus> pispaylevel= new ArrayList<EmpStatus>(); 
 		try {
 			manager.persist(emp);
 			manager.flush();

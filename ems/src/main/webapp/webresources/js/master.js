@@ -5,7 +5,12 @@ $(document).ready(function() {
 
     });
 
-    $('[data-toggle="tooltip"]').tooltip()
+   $('[data-toggle="tooltip"]').tooltip({
+		 trigger : 'hover',
+	});
+	$('[data-toggle="tooltip"]').on('click', function () {
+		$(this).tooltip('hide');
+	});
 
 
     $('.select2').select2();

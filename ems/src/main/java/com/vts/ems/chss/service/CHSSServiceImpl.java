@@ -11,9 +11,15 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
+import com.vts.ems.chss.Dto.CHSSConsultationDto;
+import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSTestMain;
+import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
 
@@ -140,6 +146,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
+	
 	@Override
 	public long CHSSBillEdit(CHSSBill bill) throws Exception
 	{
@@ -185,4 +192,137 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSApplyEdit(fetch);
 	}
 	
+	
+	
+	
+	@Override
+	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception
+	{
+		return dao.CHSSTestSubList(testmainid);
+	}
+	
+	@Override
+	public List<CHSSTestMain> CHSSTestMainList() throws Exception
+	{
+		return dao.CHSSTestMainList();
+	}
+	
+	@Override
+	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception
+	{
+		return dao.CHSSConsultationList(billid);
+	}
+	
+	@Override
+	public long ConsultationBillAdd(CHSSConsultationDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE ConsultationBillAdd");		
+		try {
+			
+			long count=0;
+			
+			for(int i=0 ; i<dto.getDocName().length ; i++)
+			{
+				CHSSConsultation consult = new CHSSConsultation();
+				
+				consult.setBillId(Long.parseLong(dto.getBillId()));
+				consult.setConsultType(dto.getConsultType()[i]);
+				consult.setDocName(dto.getDocName()[i]);
+				consult.setDocQualification(dto.getDocQualification()[i]);
+				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
+				consult.setConsultCharge(Integer.parseInt(dto.getConsultCharge()[i]));
+				
+				consult.setIsActive(1);
+				consult.setCreatedBy(dto.getCreatedBy());
+				consult.setCreatedDate(sdtf.format(new Date()));				
+				count = dao.ConsultationBillAdd(consult);
+			}
+						
+			return count;
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE ConsultationBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long ConsultationBillEdit(CHSSConsultation modal) throws Exception
+	{
+		CHSSConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
+		fetch.setConsultType(modal.getConsultType());
+		fetch.setDocName(modal.getDocName());
+		fetch.setDocQualification(modal.getDocQualification());
+		fetch.setConsultDate(modal.getConsultDate());
+		fetch.setConsultCharge(modal.getConsultCharge());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		return dao.ConsultationBillEdit(fetch);
+	}
+	
+	
+	@Override
+	public long ConsultationBillDelete(String consultationid, String modifiedby ) throws Exception
+	{
+		CHSSConsultation fetch = dao.getCHSSConsultation(consultationid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		return dao.ConsultationBillEdit(fetch);
+	}
+	
+	
+	@Override
+	public long MedicinesBillAdd(CHSSMedicineDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE MedicinesBillAdd");		
+		try {
+			
+			long count=0;
+			
+			for(int i=0 ; i<dto.getMedicineName().length ; i++)
+			{
+				CHSSMedicine  meds = new CHSSMedicine();
+				
+				meds.setBillId(Long.parseLong(dto.getBillId()));
+				meds.setMedicineName(dto.getMedicineName()[i]);
+				meds.setMedicineDate(sdf.format(rdf.parse(dto.getMedicineDate()[i])));
+				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
+				meds.setIsActive(1);
+				count = dao.MedicinesBillAdd(meds);
+			}
+						
+			return count;
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE MedicinesBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception
+	{
+		return dao.CHSSMedicineList(billid);
+	}
+	
+	@Override
+	public long MedicineBillEdit(CHSSMedicine modal) throws Exception
+	{
+		CHSSMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getMedicineId()));
+		fetch.setMedicineName(modal.getMedicineName());
+		fetch.setMedicineDate(modal.getMedicineDate());
+		fetch.setMedicineCost(modal.getMedicineCost());
+		return dao.MedicineBillEdit(fetch);
+	}
+	
+	@Override
+	public long MedicineBillDelete(String medicineid, String modifiedby ) throws Exception
+	{
+		CHSSMedicine fetch = dao.getCHSSMedicine(medicineid);
+		fetch.setIsActive(0);
+		return dao.MedicineBillEdit(fetch);
+	}
 }

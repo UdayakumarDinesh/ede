@@ -1,9 +1,6 @@
 package com.vts.ems.pis.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +31,8 @@ public class PisController {
 
 	private static final Logger logger = LogManager.getLogger(PisController.class);
 	
-	DateTimeFormatUtil util=new DateTimeFormatUtil();
-	SimpleDateFormat rdf= util.getRegularDateFormat();
-	SimpleDateFormat sdf= util.getSqlDateFormat();
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 			
 	@Autowired
 	private PisService service;
@@ -347,21 +342,20 @@ public class PisController {
 		}
 	}
 	
-	@RequestMapping(value="/requestbypunchajax",method=RequestMethod.GET)
-	public  @ResponseBody  String PunchRequestData(HttpServletRequest req,HttpServletResponse response,HttpSession ses) throws Exception {
+	@RequestMapping(value = "/requestbypunchajax", method = RequestMethod.GET)
+	public @ResponseBody String PunchRequestData(HttpServletRequest req, HttpServletResponse response, HttpSession ses)
+			throws Exception {
 		String PunchCardNo = req.getParameter("PunchCardNo");
-		
-		int result=0;
-		try
-		{	  
-			result =service.PunchcardList(PunchCardNo);
+
+		int result = 0;
+		try {
+			result = service.PunchcardList(PunchCardNo);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception e) {
-				e.printStackTrace(); 
-		}
-		  Gson json = new Gson();
-		  return json.toJson(result); 
-       }
+		Gson json = new Gson();
+		return json.toJson(result);
+	}
 
 		@RequestMapping(value="PisImageUpload.htm",headers=("content-type=multipart/*") , method = RequestMethod.POST)
 		public String PisImageUpload(HttpSession ses,RedirectAttributes redir ,HttpServletRequest req, HttpServletResponse res,@RequestParam("photo1") MultipartFile file)throws Exception{

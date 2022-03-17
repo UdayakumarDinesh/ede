@@ -79,7 +79,7 @@
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
 
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button>
+							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
 							<button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button>
 							

@@ -28,9 +28,8 @@
 
 <%
 
-DateTimeFormatUtil util =new DateTimeFormatUtil();
-SimpleDateFormat sdf= util.getSqlDateFormat();
-SimpleDateFormat sdf1=util.getRegularDateFormat();
+SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+SimpleDateFormat sdf1=DateTimeFormatUtil.getRegularDateFormat();
 
 List<EmployeeDesig> desiglist=(List<EmployeeDesig>)request.getAttribute("desiglist");
 List<PisCategory> piscategorylist=(List<PisCategory>)request.getAttribute("piscategorylist");

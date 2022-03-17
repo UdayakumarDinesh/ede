@@ -53,7 +53,6 @@ public class EmsController {
 	@RequestMapping(value = "MainDashBoard.htm", method = RequestMethod.GET)
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception {
 		logger.info(new Date() + "Inside MainDashBoard.htm ");
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 //    	String LoginType=(String)ses.getAttribute("LoginType");
 //    	String LoginId=String.valueOf(ses.getAttribute("LoginId"));
 //    	String EmpNo=(String)ses.getAttribute("EmpNo"); 

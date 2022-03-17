@@ -42,7 +42,6 @@ public class LoginController
     public String sessionExpired(Model model,HttpServletRequest req,HttpSession ses) {
     	logger.info(new Date() +"Inside sessionExpired ");
     	try {
-      	  String LogId = ((Long) ses.getAttribute("LoginId")).toString();
       	}
       	catch (Exception e) {
 				e.printStackTrace();
