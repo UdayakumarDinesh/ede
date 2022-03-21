@@ -1,4 +1,5 @@
 package com.vts.ems.chss.model;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -11,17 +12,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "chss_medicine")
-public class CHSSMedicine implements Serializable {
+@Entity(name = "chss_others")
+public class CHSSOthers implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long MedicineId;
+	private Long ChssOthersId;
 	private Long BillId;
-	private String MedicineName;
-	private Integer MedicineCost;
-	private String MedicineDate;
+	private String OtherItemName;
+	private Integer OtherItemCost;
 	private Integer IsActive;
 
 }

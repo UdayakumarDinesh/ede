@@ -22,8 +22,10 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSOthers;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
 
@@ -373,7 +375,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long MedicinesBillAdd(CHSSMedicine medicine) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultationBillAdd");
+		logger.info(new Date() +"Inside DAO MedicinesBillAdd");
 		manager.persist(medicine);
 		manager.flush();
 		
@@ -427,6 +429,114 @@ public class CHSSDaoImpl implements CHSSDao {
 			manager.flush();
 			
 			return medicine.getMedicineId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+
+	@Override
+	public long TestsBillAdd(CHSSTests test) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO TestsBillAdd");
+		manager.persist(test);
+		manager.flush();
+		
+		return test.getCHSSTestId();
+	}
+	
+	@Override
+	public List<CHSSTests> CHSSTestsList(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSMedicineList");
+		List<CHSSTests> list= new ArrayList<CHSSTests>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSTests> cq= cb.createQuery(CHSSTests.class);
+			
+			Root<CHSSTests> root=cq.from(CHSSTests.class);								
+			Predicate p1=cb.equal(root.get("BillId") , Long.parseLong(billid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSTests> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public long OtherBillAdd(CHSSOthers other) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO OtherBillAdd");
+		manager.persist(other);
+		manager.flush();
+		
+		return other.getChssOthersId();
+	}
+	@Override
+	public CHSSOthers getCHSSOther(String chssotherid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSOther");
+		try {
+			return manager.find(CHSSOthers.class, Long.parseLong(chssotherid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	@Override
+	public List<CHSSOthers> CHSSOthersList(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSOthersList");
+		List<CHSSOthers> list= new ArrayList<CHSSOthers>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSOthers> cq= cb.createQuery(CHSSOthers.class);
+			
+			Root<CHSSOthers> root=cq.from(CHSSOthers.class);								
+			Predicate p1=cb.equal(root.get("BillId") , Long.parseLong(billid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSOthers> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public long OthersBillEdit(CHSSOthers other) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MedicineBillEdit");
+		try {
+			manager.merge(other);
+			manager.flush();
+			
+			return other.getChssOthersId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;

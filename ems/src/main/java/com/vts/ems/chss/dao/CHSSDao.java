@@ -6,8 +6,10 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSOthers;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
 
@@ -37,5 +39,11 @@ public interface CHSSDao {
 	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception;
 	public CHSSMedicine getCHSSMedicine(String medicineid) throws Exception;
 	public long MedicineBillEdit(CHSSMedicine medicine) throws Exception;
+	public long TestsBillAdd(CHSSTests test) throws Exception;
+	public List<CHSSTests> CHSSTestsList(String billid) throws Exception;
+	public long OtherBillAdd(CHSSOthers other) throws Exception;
+	public List<CHSSOthers> CHSSOthersList(String billid) throws Exception;
+	public long OthersBillEdit(CHSSOthers other) throws Exception;
+	public CHSSOthers getCHSSOther(String chssotherid) throws Exception;
 
 }

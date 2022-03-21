@@ -136,7 +136,7 @@
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 										<thead>
 											<tr>
-												<th style="width:5%;" >SNo.</th>
+												<th style="width:5%;" >SN</th>
 												<th style="width:35%;" >Hospital / Medical / Diagnostics Centre Name</th>
 												<th style="width:20%;" >Bill / Receipt No.</th>
 												<th style="width:10%;" >Bill Date</th>
@@ -245,9 +245,9 @@
 			    	<div class="col-12">
 				    	<div class="nav nav-pills nav-justified" id="nav-tabs">
 				    		<a class="nav-item nav-link active" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  >Consultation</a>
-				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"  >Tests</a>
+				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others"  >Others</a>
+				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersData()" >Others</a>
 				    	</div>
 			    	</div>
 			    </div>
@@ -261,7 +261,7 @@
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:5%;" >SNo.</th>
+											<th style="width:5%;" >SN</th>
 											<th style="width:12%;"> Consultation </th>
 											<th style="width:30%;">Name of the Doctor</th>
 											<th style="width:15%;">Qualification</th>
@@ -285,7 +285,7 @@
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:5%;" >SNo.</th>
+											<th style="width:5%;" >SN</th>
 											<th style="width:15%;"> Consultation </th>
 											<th style="width:30%;">Name of the Doctor</th>
 											<th style="width:15%;">Qualification</th>
@@ -313,7 +313,7 @@
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" Onclick="return checkamount();">SUBMIT</button>	
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
 								
 								<input type="hidden" class="billid" name="billid" value="">
@@ -326,7 +326,72 @@
 <!-- ------------------------------------------------------- consultation --------------------------------------------------- -->
 <!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   	
 			   		<div class="tab-pane fade " id="nav-tests" role="tabpanel" aria-labelledby="nav-tests-tab">
-			   			Tests
+			   			<div class="col-md-12" >
+				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:35%;"> Category </th>
+											<th style="width:35%;">Test Name</th>
+											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:10%;" > Action </th>
+										</tr>
+									</thead>
+									<tbody id="tests-list-table">
+										
+
+									</tbody>
+								</table>
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+						</div>
+				   		<div class="col-md-12" >
+				    		<form action="TestsBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:35%;"> Category </th>
+											<th style="width:35%;">Test Name</th>
+											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-tests" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button>  </th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="tr_clone_tests" >
+											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
+											<td>
+												<select class="form-control test-type " id="test-type-1" style="width: 100%" name="test-type" required="required" onchange="getTestSubAdd(1)" >
+												
+													<option value="" selected="selected" disabled="disabled">Choose..</option>
+													<%for(CHSSTestMain testmain : testmainlist){ %>
+														<option value="<%=testmain.getTestMainId()%>"><%=testmain.getTestMainName()%></option>
+													<%} %>
+												</select>
+											</td>
+											<td>
+												<select class="form-control test-id " id="test-id-1" style="width: 100%"  name="test-id" required="required" >
+													<option value="" selected="selected" disabled="disabled">Choose..</option>
+												</select>
+											</td>
+											<td><input type="number" class="form-control items" name="tests-cost" id="tests-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+										</tr>
+									</tbody>							
+									
+								</table>
+								<div align="center">
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" >SUBMIT</button>	
+								</div>
+								
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						    </form>
+				    	</div>
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- Tests --------------------------------------------------- -->
@@ -334,11 +399,11 @@
 			   		<div class="tab-pane fade " id="nav-medicines" role="tabpanel" aria-labelledby="nav-medicines-tab">
 			   		
 				   		<div class="col-md-12" >
-				    		<form action="MedicineBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:5%;" >SNo.</th>
+											<th style="width:5%;" >SN</th>
 											<th style="width:45%;"> Medicine Name </th>
 											<th style="width:20%;">Date</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
@@ -360,7 +425,7 @@
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:5%;" >SNo.</th>
+											<th style="width:5%;" >SN</th>
 											<th style="width:45%;"> Medicine Name </th>
 											<th style="width:20%;">Date</th>
 											<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
@@ -379,7 +444,7 @@
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" Onclick="return checkamount();">SUBMIT</button>	
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
 								
 								<input type="hidden" class="billid" name="billid" value="">
@@ -391,12 +456,62 @@
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
-<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   		
+<!-- ------------------------------------------------------- others --------------------------------------------------- -->	
 			   		<div class="tab-pane fade " id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
-			   			Others
+			   			<div class="col-md-12" >
+				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:65%;"> Item Name </th>
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:10%;" > Action </th>
+										</tr>
+									</thead>
+									<tbody id="oths-list-table">
+										
+
+									</tbody>
+								</table>
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+						</div>
+				   		<div class="col-md-12" >
+				    		<form action="OtherBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:65%;"> Item Name </th>
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-oths" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="tr_clone_oths" >
+											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
+											<td><input type="text" class="form-control items" name="oths-name" id="oths-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+											<td><input type="number" class="form-control items " name="oths-cost" id="oths-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_oths"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+										</tr>
+									</tbody>							
+									
+								</table>
+								<div align="center">
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
+								</div>
+								
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						    </form>
+				    	</div>
 			   			
 			   		</div>
-<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   		
+<!-- ------------------------------------------------------- others --------------------------------------------------- -->			   		
 			   </div>
 			</div>
 		      
@@ -404,8 +519,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-
-
 
 function showBillDetails($billid)
 {
@@ -574,10 +687,279 @@ $('.cons-date').daterangepicker({
 });
 
 
+</script>
+
+<!-- ------------------------------------------------------- tests script --------------------------------------------------- -->
+
+<script type="text/javascript">
+
+var counttest=1;
+
+$("table").on('click','.tbl-row-add-tests' ,function() 
+{
+	
+   	var $tr = $('.tr_clone_tests').last('.tr_clone_tests');
+   
+   	var $clone = $tr.clone();
+   	$tr.after($clone);
+   	
+   
+   	$clone.find('.items').val('').end();
+	counttest++;
+   	$clone.find('.sno').html(counttest).end();
+   	$clone.find('.test-type').attr('id', 'test-type-'+counttest).end();
+   	$clone.find('.test-type').attr("onchange", "getTestSubAdd("+counttest+")").val("").end();
+	$clone.find('.test-id').attr('id', 'test-id-'+counttest).html('<option value="" selected="selected" disabled="disabled">Choose..</option>').end();
+	
+	 
+  	setTooltip();
+  
+});
+
+
+$("table").on('click','.tbl-row-rem_tests' ,function() {
+var cl=$('.tr_clone_tests').length;
+if(cl>1){
+          
+   var $tr = $(this).closest('.tr_clone_tests');
+   var $clone = $tr.remove();
+   $tr.after($clone);
+  
+}
+  
+});
+
+
+function getTestSubAdd(testrowid)
+{
+	var testmainid = $('#test-type-'+testrowid).val();
+	$.ajax({
+
+		type : "GET",
+		url : "GetTestSubListAjax.htm",
+		data : {
+				
+			testmainid : testmainid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var testsubs= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		var subtestsHTML = '<option value="" selected="selected" disabled="disabled">Choose..</option>';
+		for(var st=0;st<testsubs.length;st++)
+		{
+			var subtest = testsubs[st];			
+			subtestsHTML += '<option value="'+subtest.TestSubId+'" >';
+			subtestsHTML += subtest.TestName ;
+			subtestsHTML += '</option>';
+		}
+		
+		if(testsubs.length==0){
+			
+			 subtestsHTML +='<option value="" selected="selected" disabled="disabled">No Data</option> ';
+		}
+		
+		$('#test-id-'+testrowid).html(subtestsHTML);
+		/* $('#test-id-'+testrowid).select2(); */
+		setTooltip();
+
+		}
+	});
+}
+var $testsmainlist = null;
+function getTestsMainList()
+{
+	$.ajax({
+
+		type : "GET",
+		url : "GetTestMainListAjax.htm",
+		data : {
+			
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var testsmain= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		 $testsmainlist = testsmain;
+	
+		}
+	});	
+	
+}
+getTestsMainList();
+
+const getTestsSubList = async function(testmainid,testssublist) 
+{
+	/* var testssublist= null; */
+	$.ajax({
+	
+		type : "GET",
+		url : "GetTestSubListAjax.htm",
+		async : true,
+		data : {
+			testmainid : testmainid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var testsub= Object.keys(result).map(function(e){
+			return result[e]
+		})
+	
+		testssublist =  testsub;
+		console.log(testssublist );
+		}
+	});	
+	
+	return testssublist;
+}
+
+function getTestsData()
+{
+	var $billid = $('.billid').val();
+	
+	$.ajax({
+
+		type : "GET",
+		url : "ChssTestsListAjax.htm",
+		async : false,
+		data : {
+				
+			billid : $billid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var testVals= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		var testsHTMLStr = '';
+		
+		for(var t=0;t<testVals.length;t++)
+		{
+			
+			var test = testVals[t];
+			console.log(test);
+			testsHTMLStr +=	'<tr> ';
+			testsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (t+1) +'.</span> </td> ';
+			
+			
+			testsHTMLStr +=	'<td>';
+			testsHTMLStr +=	'	<select class="form-control" style="width: 100%" name="test-type-'+test.CHSSTestId+'" required="required" onchange="getTestSubEdit('+test.CHSSTestId+')" >';
+								for(var t=0;t<$testsmainlist.length;t++){
+									if(true){
+			testsHTMLStr +=	'		<option value="'+$testsmainlist[t].TestMainId+'"  >'+$testsmainlist[t].TestMainName+'</option>';
+									}
+								}
+			testsHTMLStr +=	'	</select>';
+			testsHTMLStr +=	'</td>';
+
+			var testssublist = null;
+			
+				$.ajax({
+				
+					type : "GET",
+					url : "GetTestSubListAjax.htm",
+					async : true,
+					data : {
+						testmainid : test.TestMainId,
+					},
+					datatype : 'json',
+					success : function(result) {
+					var result = JSON.parse(result);
+					var testsub= Object.keys(result).map(function(e){
+						return result[e]
+					})
+				
+					testssublist =  testsub;
+					/* funcname(test,testsHTMLStr,testssublist);
+					console.log(testssublist ); */
+					
+					testsHTMLStr +=	'<td>';
+					testsHTMLStr +=	'	<select class="form-control" style="width: 100%" name="test-type-'+test.CHSSTestId+'" required="required" onchange="getTestSubEdit('+test.CHSSTestId+')" >';
+										for(var i=0;i<testssublist.length;i++){
+											if(true){
+					testsHTMLStr +=	'		<option value="'+testssublist[i].TestSubId+'">'+testssublist[i].TestName+'</option>';
+											}
+										}
+					testsHTMLStr +=	'	</select>';
+					testsHTMLStr +=	'</td>';
+					
+					
+					testsHTMLStr +=	'	<td><input type="number" class="form-control items " name="tests-cost'+test.CHSSTestId+'"  value="'+test.TestCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+					testsHTMLStr +=	'	<td>';
+					testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testsid" value="'+test.CHSSTestId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+					testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testsid" value="'+test.CHSSTestId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+					testsHTMLStr +=	'	</td> ';
+					testsHTMLStr +=	'</tr> ';
+					}
+				});	
+				
+			
+		
+			
+			
+		}
+		
+		if(testVals.length==0){
+			
+			medsHTMLStr +=	'<tr><td colspan="7" style="text-align: center;"> No Record Found</td></tr> ';
+		}
+		
+		setTimeout(function() { 
+			$('#tests-list-table').html(testsHTMLStr)
+			}, 10);
+		
+		
+		setTooltip();
+		$('.meds-date').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			"maxDate" :new Date(), 
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+
+		}
+	});
+}
+
+function funcname(test,testsHTMLStr,testssublist){	
+	
+	
+	testsHTMLStr +=	'<td>';
+	testsHTMLStr +=	'	<select class="form-control" style="width: 100%" name="test-type-'+test.CHSSTestId+'" required="required" onchange="getTestSubEdit('+test.CHSSTestId+')" >';
+						for(var t=0;t<testssublist.length;t++){
+							if(true){
+	testsHTMLStr +=	'		<option value="'+testssublist[t].TestSubId+'"  >'+testssublist[t].TestName+'</option>';
+							}
+						}
+	testsHTMLStr +=	'	</select>';
+	testsHTMLStr +=	'</td>';
+	
+	
+	testsHTMLStr +=	'	<td><input type="number" class="form-control items " name="tests-cost'+test.CHSSTestId+'"  value="'+test.TestCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+	testsHTMLStr +=	'	<td>';
+	testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testsid" value="'+test.CHSSTestId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+	testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testsid" value="'+test.CHSSTestId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+	testsHTMLStr +=	'	</td> ';
+	testsHTMLStr +=	'</tr> ';
+	}
+
 
 
 </script>
-<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
+<!-- ------------------------------------------------------- tests script --------------------------------------------------- -->
+
+<!-- ------------------------------------------------------- medicines script--------------------------------------------------- -->
 <script type="text/javascript">
 
 var count=1;
@@ -664,7 +1046,6 @@ function getMedicinesData(){
 		for(var m=0;m<medsVals.length;m++)
 		{
 			var meds = medsVals[m];
-			console.log(meds);
 			medsHTMLStr +=	'<tr> ';
 			medsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
 			
@@ -709,8 +1090,96 @@ function getMedicinesData(){
 }
 
 </script>
-<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
+<!-- ------------------------------------------------------- medicines script --------------------------------------------------- -->
 
+<!-- ------------------------------------------------------- others script--------------------------------------------------- -->
+<script type="text/javascript">
+
+var otherscount=1;
+
+$("table").on('click','.tbl-row-add-oths' ,function() 
+{
+   	var $tr = $('.tr_clone_oths').last('.tr_clone_oths');
+   	var $clone = $tr.clone();
+   	$tr.after($clone);
+   	$clone.find(".items").val("").end();
+
+   	otherscount++;
+	
+	$clone.find(".sno").html(otherscount).end(); 
+	 
+   	setTooltip();
+  
+});
+
+
+$("table").on('click','.tbl-row-rem_oths' ,function() {
+var cl=$('.tr_clone_oths').length;
+if(cl>1){
+          
+   var $tr = $(this).closest('.tr_clone_oths');
+   var $clone = $tr.remove();
+   $tr.after($clone);
+  
+}
+  
+});
+
+function getOthersData(){
+	
+	var $billid = $('.billid').val();
+	
+	$.ajax({
+
+		type : "GET",
+		url : "ChssOtherListAjax.htm",
+		data : {
+				
+			billid : $billid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var othsVals= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		var othsHTMLStr = '';
+		for(var m=0;m<othsVals.length;m++)
+		{
+			var oths = othsVals[m];
+			othsHTMLStr +=	'<tr> ';
+			othsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
+			
+			othsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="oths-name-'+oths.ChssOthersId+'"  value="'+oths.OtherItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+			
+			let now = new Date(oths.MedicineDate);
+			var dateString = moment(now).format('DD-MM-YYYY');
+			
+			othsHTMLStr +=	'	<td><input type="number" class="form-control items " name="oths-cost-'+oths.ChssOthersId+'"  value="'+oths.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			othsHTMLStr +=	'	<td>';
+			othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+			othsHTMLStr +=	'	</td> ';
+			othsHTMLStr +=	'</tr> ';
+			
+		}
+		
+		if(othsVals.length==0){
+			
+			othsHTMLStr +=	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
+		}
+		
+		$('#oths-list-table').html(othsHTMLStr);
+		
+		setTooltip();
+	
+
+		}
+	});
+}
+
+</script>
+<!-- ------------------------------------------------------- others script --------------------------------------------------- -->
 <script type="text/javascript">
 
 
