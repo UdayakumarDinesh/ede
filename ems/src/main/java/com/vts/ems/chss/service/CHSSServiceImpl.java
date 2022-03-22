@@ -13,14 +13,14 @@ import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
-import com.vts.ems.chss.Dto.CHSSOthersDto;
+import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
-import com.vts.ems.chss.model.CHSSOthers;
+import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -377,71 +377,55 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
-	public long OtherBillAdd(CHSSOthersDto dto) throws Exception
+	public long MiscBillAdd(CHSSMiscDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE OtherBillAdd");		
+		logger.info(new Date() +"Inside SERVICE MiscBillAdd");		
 		try {
 			
 			long count=0;
 			
-			for(int i=0 ; i<dto.getOtherItemName().length ; i++)
+			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
 			{
-				CHSSOthers  meds = new CHSSOthers();
+				CHSSMisc  meds = new CHSSMisc();
 				
 				meds.setBillId(Long.parseLong(dto.getBillId()));
-				meds.setOtherItemName(dto.getOtherItemName()[i]);
-				meds.setOtherItemCost(Integer.parseInt(dto.getOtherItemCost()[i]));
+				meds.setMiscItemName(dto.getMiscItemName()[i]);
+				meds.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
 				meds.setIsActive(1);
-				count = dao.OtherBillAdd(meds);
+				count = dao.MiscBillAdd(meds);
 			}
 						
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE OtherBillAdd");
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
 			return 0;
 		}
 		
 	}
 	
 	@Override
-	public List<CHSSOthers> CHSSOtherList(String billid) throws Exception
+	public List<CHSSMisc> CHSSMiscList(String billid) throws Exception
 	{
-		return dao.CHSSOthersList(billid);
+		return dao.CHSSMiscList(billid);
 	}
 	
 	@Override
-	public long OtherBillEdit(CHSSOthers modal) throws Exception
+	public long MiscBillEdit(CHSSMisc modal) throws Exception
 	{
-		CHSSOthers fetch = dao.getCHSSOther(String.valueOf(modal.getChssOthersId()));
-		fetch.setOtherItemName(modal.getOtherItemName());
-		fetch.setOtherItemCost(modal.getOtherItemCost());
-		return dao.OthersBillEdit(fetch);
+		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
+		fetch.setMiscItemName(modal.getMiscItemName());
+		fetch.setMiscItemCost(modal.getMiscItemCost());
+		return dao.MiscBillEdit(fetch);
 	}
 	
 	@Override
-	public long OtherBillDelete(String chssotherid, String modifiedby ) throws Exception
+	public long MiscBillDelete(String chssMiscid, String modifiedby ) throws Exception
 	{
-		CHSSOthers fetch = dao.getCHSSOther(chssotherid);
+		CHSSMisc fetch = dao.getCHSSMisc(chssMiscid);
 		fetch.setIsActive(0);
-		return dao.OthersBillEdit(fetch);
+		return dao.MiscBillEdit(fetch);
 	}
 	
 }

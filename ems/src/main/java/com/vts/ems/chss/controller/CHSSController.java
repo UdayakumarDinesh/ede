@@ -25,12 +25,12 @@ import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
-import com.vts.ems.chss.Dto.CHSSOthersDto;
+import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
-import com.vts.ems.chss.model.CHSSOthers;
+import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -183,7 +183,7 @@ public class CHSSController {
 	
 	
 	@RequestMapping(value = "CHSSAppliedDetails.htm" )
-	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses)throws Exception
+	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -202,7 +202,10 @@ public class CHSSController {
 				Map md=model.asMap();
 				billid=(String)md.get("billid");
 			}	
-			
+			if(chssapplyid==null) {
+				redir.addAttribute("result", "Refresh Not Allowed");
+				return "redirect:/CHSSAppliedList.htm";
+			}
 						
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
 			req.setAttribute("chssapplydata", apply);
@@ -801,8 +804,8 @@ public class CHSSController {
 	
 	
 	
-	@RequestMapping(value = "OtherBillAdd.htm", method = RequestMethod.POST )
-	public String OtherBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "MiscBillAdd.htm", method = RequestMethod.POST )
+	public String MiscBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OtherBillAdd.htm "+Username);
@@ -810,17 +813,17 @@ public class CHSSController {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String billid = req.getParameter("billid");
 			
-			String[] othsname=req.getParameterValues("oths-name");
-			String[] othscost=req.getParameterValues("oths-cost");
+			String[] miscname=req.getParameterValues("misc-name");
+			String[] misccost=req.getParameterValues("misc-cost");
 			
-			CHSSOthersDto dto=new CHSSOthersDto();
+			CHSSMiscDto dto=new CHSSMiscDto();
 			
 			dto.setBillId(billid);
-			dto.setOtherItemName(othsname);
-			dto.setOtherItemCost(othscost);
+			dto.setMiscItemName(miscname);
+			dto.setMiscItemCost(misccost);
 			
 			
-			long count= service.OtherBillAdd(dto);
+			long count= service.MiscBillAdd(dto);
 			if (count > 0) {
 				redir.addAttribute("result", "Bill Item Details Added Successfully");
 			} else {
@@ -831,49 +834,49 @@ public class CHSSController {
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside OtherBillAdd.htm "+Username, e);
+			logger.error(new Date() +" Inside MiscBillAdd.htm "+Username, e);
 			return "static/Error";
 		}
 	}
 	
-	@RequestMapping(value = "ChssOtherListAjax.htm", method = RequestMethod.GET)
-	public @ResponseBody String ChssOtherListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	@RequestMapping(value = "ChssMiscListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ChssMiscListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside ChssOtherListAjax.htm "+Username);
-		List<CHSSOthers> list=new ArrayList<CHSSOthers>();
+		logger.info(new Date() +"Inside ChssMiscListAjax.htm "+Username);
+		List<CHSSMisc> list=new ArrayList<CHSSMisc>();
 		try {
 			String billid = req.getParameter("billid");
-			list = service.CHSSOtherList(billid);
+			list = service.CHSSMiscList(billid);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside ChssOtherListAjax.htm "+Username, e);
+			logger.error(new Date() +" Inside ChssMiscListAjax.htm "+Username, e);
 		}
 		Gson json = new Gson();
 		return json.toJson(list);
 	}
 	
-	@RequestMapping(value = "OtherBillEdit.htm", method = RequestMethod.POST )
-	public String OtherBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "MiscBillEdit.htm", method = RequestMethod.POST )
+	public String MiscBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside OtherBillEdit.htm "+Username);
+		logger.info(new Date() +"Inside MiscBillEdit.htm "+Username);
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String chssotherid = req.getParameter("chssotherid"); 
+			String chssmiscid = req.getParameter("chssmiscid"); 
 			
-			String medsname = req.getParameter("oths-name-"+chssotherid);
-			String othscost = req.getParameter("oths-cost-"+chssotherid);
+			String medsname = req.getParameter("misc-name-"+chssmiscid);
+			String micscost = req.getParameter("misc-cost-"+chssmiscid);
 			
-			CHSSOthers meds= new CHSSOthers();
-			meds.setChssOthersId(Long.parseLong(chssotherid));
-			meds.setOtherItemName(medsname);
-			meds.setOtherItemCost(Integer.parseInt(othscost));
+			CHSSMisc meds= new CHSSMisc();
+			meds.setChssMiscId(Long.parseLong(chssmiscid));
+			meds.setMiscItemName(medsname);
+			meds.setMiscItemCost(Integer.parseInt(micscost));
 			
 			
-			long count = service.OtherBillEdit(meds);
+			long count = service.MiscBillEdit(meds);
 			
 			
 			if (count > 0) {
@@ -887,22 +890,22 @@ public class CHSSController {
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside OtherBillEdit.htm "+Username, e);
+			logger.error(new Date() +" Inside MiscBillEdit.htm "+Username, e);
 			return "static/Error";
 		}
 	}
 	
-	@RequestMapping(value = "OtherBillDelete.htm", method = RequestMethod.POST )
-	public String OtherBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "MiscBillDelete.htm", method = RequestMethod.POST )
+	public String MiscBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside OtherBillDelete.htm "+Username);
+		logger.info(new Date() +"Inside MiscBillDelete.htm "+Username);
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
 			String chssotherid = req.getParameter("chssotherid"); 
 						
-			long count = service.OtherBillDelete(chssotherid, Username);
+			long count = service.MiscBillDelete(chssotherid, Username);
 			
 			
 			if (count > 0) {
@@ -916,7 +919,7 @@ public class CHSSController {
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside OtherBillDelete.htm "+Username, e);
+			logger.error(new Date() +" Inside MiscBillDelete.htm "+Username, e);
 			return "static/Error";
 		}
 	}

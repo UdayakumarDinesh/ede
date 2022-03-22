@@ -238,7 +238,7 @@
 				    	<span><b>Bill Date : </b><span id="modal-billdate" ></span></span>
 				    </div>
 				    <div class="col-3">
-				    	<span><b>Bill Amount : </b><span id="modal-billamount" ></span></span>
+				    	<span><b>Bill Amount : &#8377;  </b><span id="modal-billamount" ></span></span>
 				    </div>
 			    </div>
 			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -253,7 +253,8 @@
 				    		<a class="nav-item nav-link active" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  >Consultation</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersData()" >Others</a>
+				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="" >Others</a>
+				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
 			    	</div>
 			    </div>
@@ -462,31 +463,9 @@
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
-<!-- ------------------------------------------------------- others --------------------------------------------------- -->	
+<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
 			   		<div class="tab-pane fade " id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
-			   			<div class="col-md-12" >
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<th style="width:65%;"> Item Name </th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-										</tr>
-									</thead>
-									<tbody id="">
-										<tr>
-											<td>1</td>
-											<td><input type="text" class="form-control" name="oths-name"> </td>
-											<td><input type="number" class="form-control items " name="oths-cost" id="oths-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
-										</tr>
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
+			   		
 			   			<div class="col-md-12" >
 				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
@@ -503,14 +482,13 @@
 
 									</tbody>
 								</table>
-								<input type="hidden" name=others value="Y">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 						</div>
 				   		<div class="col-md-12" >
-				    		<form action="OtherBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    		<form action="OthersBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
@@ -541,7 +519,64 @@
 				    	</div>
 			   			
 			   		</div>
-<!-- ------------------------------------------------------- others --------------------------------------------------- -->			   		
+<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
+<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->	
+			   		<div class="tab-pane fade " id="nav-misc" role="tabpanel" aria-labelledby="nav-misc-tab">
+			   		
+			   			<div class="col-md-12" >
+				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:65%;"> Item Name </th>
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:10%;" > Action </th>
+										</tr>
+									</thead>
+									<tbody id="misc-list-table">
+										
+
+									</tbody>
+								</table>
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+						</div>
+				   		<div class="col-md-12" >
+				    		<form action="MiscBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:65%;"> Item Name </th>
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="tr_clone_misc" >
+											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
+											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+											<td><input type="number" class="form-control items " name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+										</tr>
+									</tbody>							
+									
+								</table>
+								<div align="center">
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
+								</div>
+								
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						    </form>
+				    	</div>
+			   			
+			   		</div>
+<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->			   		
 			   </div>
 			</div>
 		      
@@ -568,8 +603,13 @@ function showBillDetails($billid)
 		
 			$('#modal-billno').html(result[2]);
 			$('#modal-centername').html(result[3]);
-			$('#modal-billamount').html(result[5]);
 			$('#modal-billdate').html(result[4]);
+			if(result[5]!=null){
+				$('#modal-billamount').html(result[5]);
+			
+			}else{
+				$('#modal-billamount').html('0');
+			}
 			
 		}
 	});
@@ -1122,32 +1162,32 @@ function getMedicinesData(){
 </script>
 <!-- ------------------------------------------------------- medicines script --------------------------------------------------- -->
 
-<!-- ------------------------------------------------------- others script--------------------------------------------------- -->
+<!-- ------------------------------------------------------- Miscellaneous script--------------------------------------------------- -->
 <script type="text/javascript">
 
-var otherscount=1;
+var misccount=1;
 
-$("table").on('click','.tbl-row-add-oths' ,function() 
+$("table").on('click','.tbl-row-add-misc' ,function() 
 {
-   	var $tr = $('.tr_clone_oths').last('.tr_clone_oths');
+   	var $tr = $('.tr_clone_misc').last('.tr_clone_misc');
    	var $clone = $tr.clone();
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
 
-   	otherscount++;
+   	misccount++;
 	
-	$clone.find(".sno").html(otherscount).end(); 
+	$clone.find(".sno").html(misccount).end(); 
 	 
    	setTooltip();
   
 });
 
 
-$("table").on('click','.tbl-row-rem_oths' ,function() {
-var cl=$('.tr_clone_oths').length;
+$("table").on('click','.tbl-row-rem_misc' ,function() {
+var cl=$('.tr_clone_misc').length;
 if(cl>1){
           
-   var $tr = $(this).closest('.tr_clone_oths');
+   var $tr = $(this).closest('.tr_clone_misc');
    var $clone = $tr.remove();
    $tr.after($clone);
   
@@ -1155,14 +1195,14 @@ if(cl>1){
   
 });
 
-function getOthersData(){
+function getmiscData(){
 	
 	var $billid = $('.billid').val();
 	
 	$.ajax({
 
 		type : "GET",
-		url : "ChssOtherListAjax.htm",
+		url : "ChssMiscListAjax.htm",
 		data : {
 				
 			billid : $billid,
@@ -1170,39 +1210,39 @@ function getOthersData(){
 		datatype : 'json',
 		success : function(result) {
 		var result = JSON.parse(result);
-		var othsVals= Object.keys(result).map(function(e){
+		var miscVals= Object.keys(result).map(function(e){
 			return result[e]
 		})
-		var othsHTMLStr = '';
-		for(var m=0;m<othsVals.length;m++)
+		var miscHTMLStr = '';
+		for(var m=0;m<miscVals.length;m++)
 		{
-			var oths = othsVals[m];
-			if(oths.Others === 'Y')
-			{
-				othsHTMLStr +=	'<tr> ';
-				othsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
+			var misc = miscVals[m];
+			
+			
+				miscHTMLStr +=	'<tr> ';
+				miscHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
 				
-				othsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="oths-name-'+oths.ChssOthersId+'"  value="'+oths.OtherItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+				miscHTMLStr +=	' 	<td><input type="text" class="form-control items" name="misc-name-'+misc.ChssMiscId+'"  value="'+misc.MiscItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
 				
-				let now = new Date(oths.MedicineDate);
+				let now = new Date(misc.MedicineDate);
 				var dateString = moment(now).format('DD-MM-YYYY');
 				
-				othsHTMLStr +=	'	<td><input type="number" class="form-control items " name="oths-cost-'+oths.ChssOthersId+'"  value="'+oths.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
-				othsHTMLStr +=	'	<td>';
-				othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
-				othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
-				othsHTMLStr +=	'	</td> ';
-				othsHTMLStr +=	'</tr> ';
-			}
+				miscHTMLStr +=	'	<td><input type="number" class="form-control items " name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+				miscHTMLStr +=	'	<td>';
+				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+				miscHTMLStr +=	'	</td> ';
+				miscHTMLStr +=	'</tr> ';
+			
 			
 		}
 		
-		if(othsVals.length==0){
+		if(miscVals.length==0){
 			
-			othsHTMLStr +=	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
+			miscHTMLStr +=	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
 		}
 		
-		$('#oths-list-table').html(othsHTMLStr);
+		$('#misc-list-table').html(miscHTMLStr);
 		
 		setTooltip();
 	
@@ -1212,7 +1252,7 @@ function getOthersData(){
 }
 
 </script>
-<!-- ------------------------------------------------------- others script --------------------------------------------------- -->
+<!-- ------------------------------------------------------- Miscellaneous script --------------------------------------------------- -->
 <script type="text/javascript">
 
 

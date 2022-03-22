@@ -12,17 +12,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "chss_others")
-public class CHSSOthers implements Serializable {
+@Entity(name = "chss_misc")
+public class CHSSMisc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long ChssOthersId;
+	private Long ChssMiscId;
 	private Long BillId;
-	private String OtherItemName;
-	private Integer OtherItemCost;
-	private String Others;
+	private String MiscItemName;
+	private Integer MiscItemCost;
 	private Integer IsActive;
 
 }

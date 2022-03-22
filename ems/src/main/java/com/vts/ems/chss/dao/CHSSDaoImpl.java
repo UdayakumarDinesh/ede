@@ -22,7 +22,7 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
-import com.vts.ems.chss.model.CHSSOthers;
+import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -498,20 +498,20 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	@Override
-	public long OtherBillAdd(CHSSOthers other) throws Exception
+	public long MiscBillAdd(CHSSMisc other) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OtherBillAdd");
+		logger.info(new Date() +"Inside DAO MiscBillAdd");
 		manager.persist(other);
 		manager.flush();
 		
-		return other.getChssOthersId();
+		return other.getChssMiscId();
 	}
 	@Override
-	public CHSSOthers getCHSSOther(String chssotherid) throws Exception
+	public CHSSMisc getCHSSMisc(String miscid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSOther");
+		logger.info(new Date() +"Inside DAO getCHSSMisc");
 		try {
-			return manager.find(CHSSOthers.class, Long.parseLong(chssotherid));
+			return manager.find(CHSSMisc.class, Long.parseLong(miscid));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -520,22 +520,21 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	@Override
-	public List<CHSSOthers> CHSSOthersList(String billid) throws Exception
+	public List<CHSSMisc> CHSSMiscList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSOthersList");
-		List<CHSSOthers> list= new ArrayList<CHSSOthers>();
+		logger.info(new Date() +"Inside DAO CHSSMiscList");
+		List<CHSSMisc> list= new ArrayList<CHSSMisc>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
-			CriteriaQuery<CHSSOthers> cq= cb.createQuery(CHSSOthers.class);
+			CriteriaQuery<CHSSMisc> cq= cb.createQuery(CHSSMisc.class);
 			
-			Root<CHSSOthers> root=cq.from(CHSSOthers.class);								
+			Root<CHSSMisc> root=cq.from(CHSSMisc.class);								
 			Predicate p1=cb.equal(root.get("BillId") , Long.parseLong(billid));
 			Predicate p2=cb.equal(root.get("IsActive") , 1);
 			
 			cq=cq.select(root).where(p1,p2);
 			
-			
-			TypedQuery<CHSSOthers> allquery = manager.createQuery(cq);
+			TypedQuery<CHSSMisc> allquery = manager.createQuery(cq);
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
@@ -545,14 +544,14 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
-	public long OthersBillEdit(CHSSOthers other) throws Exception
+	public long MiscBillEdit(CHSSMisc misc) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedicineBillEdit");
+		logger.info(new Date() +"Inside DAO MiscBillEdit");
 		try {
-			manager.merge(other);
+			manager.merge(misc);
 			manager.flush();
 			
-			return other.getChssOthersId();
+			return misc.getChssMiscId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;

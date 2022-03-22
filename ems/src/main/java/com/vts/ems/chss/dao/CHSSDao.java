@@ -6,7 +6,7 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
-import com.vts.ems.chss.model.CHSSOthers;
+import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -41,10 +41,10 @@ public interface CHSSDao {
 	public long MedicineBillEdit(CHSSMedicine medicine) throws Exception;
 	public long TestsBillAdd(CHSSTests test) throws Exception;
 	public List<CHSSTests> CHSSTestsList(String billid) throws Exception;
-	public long OtherBillAdd(CHSSOthers other) throws Exception;
-	public List<CHSSOthers> CHSSOthersList(String billid) throws Exception;
-	public long OthersBillEdit(CHSSOthers other) throws Exception;
-	public CHSSOthers getCHSSOther(String chssotherid) throws Exception;
+	public long MiscBillAdd(CHSSMisc Misc) throws Exception;
+	public List<CHSSMisc> CHSSMiscList(String billid) throws Exception;
+	public long MiscBillEdit(CHSSMisc Misc) throws Exception;
+	public CHSSMisc getCHSSMisc(String chssMiscid) throws Exception;
 	public Object[] CHSSBill(String billid) throws Exception;
 
 }
