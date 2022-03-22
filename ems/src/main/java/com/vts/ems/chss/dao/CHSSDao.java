@@ -45,5 +45,6 @@ public interface CHSSDao {
 	public List<CHSSOthers> CHSSOthersList(String billid) throws Exception;
 	public long OthersBillEdit(CHSSOthers other) throws Exception;
 	public CHSSOthers getCHSSOther(String chssotherid) throws Exception;
+	public Object[] CHSSBill(String billid) throws Exception;
 
 }

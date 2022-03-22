@@ -130,7 +130,6 @@
 										<th style="width:35%;" >Hospital / Medical / Diagnostics Centre Name</th>
 										<th style="width:25%;" >Bill / Receipt No.</th>
 										<th style="width:10%;" >Bill Date</th>
-										<th style="width:15%; text-align: right;">Amount (&#8377;)</th>
 										<th style="width:5%;" > <button type="button" class="btn tbl-row-add" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 									</tr>
 								</thead>
@@ -140,7 +139,6 @@
 										<td><input type="text" class="form-control items" name="centername" id="centername" value="" style="width:100%; "  maxlength="500" required="required"></td>
 										<td><input type="text" class="form-control items" name="billno" id="billno" value="" style="width:100%; "   maxlength="100" required="required"></td>
 										<td><input type="text" class="form-control billdate" name="billdate" id="billdate" value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-										<td><input type="number" class="form-control items " name="billamount" id="billamount" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 										<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 									</tr>
 								</tbody>							

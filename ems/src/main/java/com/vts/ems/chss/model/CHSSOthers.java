@@ -22,6 +22,7 @@ public class CHSSOthers implements Serializable {
 	private Long BillId;
 	private String OtherItemName;
 	private Integer OtherItemCost;
+	private String Others;
 	private Integer IsActive;
 
 }

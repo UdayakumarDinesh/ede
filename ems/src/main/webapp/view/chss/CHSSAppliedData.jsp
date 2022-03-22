@@ -36,6 +36,8 @@
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	
 	List<CHSSTestMain> testmainlist = (List<CHSSTestMain>)request.getAttribute("testmainlist");
+	
+	String billid =(String)request.getAttribute("billid");
 %>
 
  <div class="col page card">
@@ -155,7 +157,11 @@
 												<td> <input type="text" class="form-control items" name="centername-<%=obj[0]%>"  id="centername-<%=obj[0]%>"  value="<%=obj[3] %>" style="width:100%; "  maxlength="500" required="required"></td>
 												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" id="billno-<%=obj[0]%>"  value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>"  id="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
-												<td> <input type="number" class="form-control items " name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
+												<%if(obj[5]!=null){ %>
+												<td> <input type="number" class="form-control items " name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" readonly="readonly"></td>
+												<%}else{ %>
+												<td> <input type="number" class="form-control items " name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" readonly="readonly"></td>
+												<%} %>
 												<td>
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">
 														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -200,8 +206,8 @@
 											<td style="width:35%;" ><input type="text" class="form-control items " name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
 											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-											<td style="width:15%;" ><input type="number" class="form-control items  " name="billamount"  value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
-											<td style="width:10%;" >
+											<!-- <td style="width:15%;" ><input type="number" class="form-control items  " name="billamount"  value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td> -->
+											<td style="width:25%;" >
 												<button type="submit"  class="btn btn-sm add-btn" Onclick="return confirm('Are You Sure To Add ?');" name="action" value="add" >ADD</button>
 											</td>										
 										</tr>
@@ -466,6 +472,29 @@
 											<th style="width:5%;" >SN</th>
 											<th style="width:65%;"> Item Name </th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+										</tr>
+									</thead>
+									<tbody id="">
+										<tr>
+											<td>1</td>
+											<td><input type="text" class="form-control" name="oths-name"> </td>
+											<td><input type="number" class="form-control items " name="oths-cost" id="oths-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+										</tr>
+									</tbody>
+								</table>
+								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+						</div>
+			   			<div class="col-md-12" >
+				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+									<thead>
+										<tr>
+											<th style="width:5%;" >SN</th>
+											<th style="width:65%;"> Item Name </th>
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
 									</thead>
@@ -474,6 +503,7 @@
 
 									</tbody>
 								</table>
+								<input type="hidden" name=others value="Y">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -536,10 +566,10 @@ function showBillDetails($billid)
 		success : function(result) {
 		var result = JSON.parse(result);
 		
-			$('#modal-billno').html(result.BillNo);
-			$('#modal-centername').html(result.CenterName);
-			$('#modal-billamount').html(result.BillAmount);
-			$('#modal-billdate').html(result.BillDate);
+			$('#modal-billno').html(result[2]);
+			$('#modal-centername').html(result[3]);
+			$('#modal-billamount').html(result[5]);
+			$('#modal-billdate').html(result[4]);
 			
 		}
 	});
@@ -1147,20 +1177,23 @@ function getOthersData(){
 		for(var m=0;m<othsVals.length;m++)
 		{
 			var oths = othsVals[m];
-			othsHTMLStr +=	'<tr> ';
-			othsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
-			
-			othsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="oths-name-'+oths.ChssOthersId+'"  value="'+oths.OtherItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
-			
-			let now = new Date(oths.MedicineDate);
-			var dateString = moment(now).format('DD-MM-YYYY');
-			
-			othsHTMLStr +=	'	<td><input type="number" class="form-control items " name="oths-cost-'+oths.ChssOthersId+'"  value="'+oths.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
-			othsHTMLStr +=	'	<td>';
-			othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
-			othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
-			othsHTMLStr +=	'	</td> ';
-			othsHTMLStr +=	'</tr> ';
+			if(oths.Others === 'Y')
+			{
+				othsHTMLStr +=	'<tr> ';
+				othsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
+				
+				othsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="oths-name-'+oths.ChssOthersId+'"  value="'+oths.OtherItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+				
+				let now = new Date(oths.MedicineDate);
+				var dateString = moment(now).format('DD-MM-YYYY');
+				
+				othsHTMLStr +=	'	<td><input type="number" class="form-control items " name="oths-cost-'+oths.ChssOthersId+'"  value="'+oths.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+				othsHTMLStr +=	'	<td>';
+				othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+				othsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+oths.ChssOthersId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+				othsHTMLStr +=	'	</td> ';
+				othsHTMLStr +=	'</tr> ';
+			}
 			
 		}
 		
@@ -1206,9 +1239,12 @@ function setTooltip()
 	});
 }
 
-<%if(chssbillslist.size()>0){%>
+
+
+
+<%-- <%if(chssbillslist.size()>0){%>
 	showBillDetails(<%=chssbillslist.get(0)[0]%>);
-<%}%>
+<%}%> --%>
 </script>
 </body>
 </html>

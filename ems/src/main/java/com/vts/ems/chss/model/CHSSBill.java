@@ -24,7 +24,7 @@ public class CHSSBill implements Serializable {
 	private String BillNo; 
 	private String CenterName;
 	private String BillDate;
-	private Integer BillAmount;
+//	private Integer BillAmount;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

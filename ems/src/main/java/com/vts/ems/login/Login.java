@@ -24,7 +24,7 @@ public class Login {
     private Set<Role> roles;
  
     @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     
     public Long getLoginId() {
 		return LoginId;

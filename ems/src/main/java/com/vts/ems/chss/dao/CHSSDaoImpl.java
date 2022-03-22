@@ -176,7 +176,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	{
 		logger.info(new Date() +"Inside DAO CHSSBillsList");
 		try {
-			Query query = manager.createNativeQuery(CHSSBILLSLIST);
+			Query query = manager.createNativeQuery("CALL chss_bills_list (:CHSSApplyId);");
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
@@ -210,6 +210,22 @@ public class CHSSDaoImpl implements CHSSDao {
 		logger.info(new Date() +"Inside DAO getCHSSBill");
 		try {
 			return manager.find(CHSSBill.class, Long.parseLong(billid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public Object[] CHSSBill(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSBill");
+		try {
+			Query query = manager.createNativeQuery("CALL chss_bill_data(:billid)");
+			query.setParameter("billid", billid);
+			return (Object[])query.getResultList().get(0);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

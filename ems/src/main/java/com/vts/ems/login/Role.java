@@ -26,7 +26,7 @@ public class Role {
 		Login = login;
 	}
 	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getRoleId() {
 		return RoleId;
 	}

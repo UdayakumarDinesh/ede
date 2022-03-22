@@ -49,6 +49,7 @@ public interface CHSSService {
 	public List<CHSSOthers> CHSSOtherList(String billid) throws Exception;
 	public long OtherBillEdit(CHSSOthers modal) throws Exception;
 	public long OtherBillDelete(String chssotherid, String modifiedby) throws Exception;
+	public Object[] CHSSBill(String billid) throws Exception;
 	
 	
 

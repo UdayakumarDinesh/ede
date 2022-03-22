@@ -11,5 +11,6 @@ public class CHSSOthersDto {
 	private String BillId;
 	private String[] OtherItemName;
 	private String[] OtherItemCost;
+	private String[] Others;
 	private String Isactive;
 }

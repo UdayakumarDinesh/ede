@@ -64,6 +64,13 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
+	public Object[] CHSSBill(String billid) throws Exception
+	{
+		return dao.CHSSBill(billid);
+	}
+	
+	
+	@Override
 	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception
 	{
 		logger.info(new Date() +"Inside SERVICE CHSSApplySubmit");		
@@ -106,11 +113,11 @@ public class CHSSServiceImpl implements CHSSService {
 				bill.setCenterName(dto.getCenterName()[i].trim());
 				bill.setBillNo(dto.getBillNo()[i]);
 				bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
-				bill.setBillAmount(Integer.parseInt(dto.getBillAmount()[i]));
+//				bill.setBillAmount(Integer.parseInt(dto.getBillAmount()[i]));
 				bill.setIsActive(1);
 				bill.setCreatedBy(dto.getCreatedBy());
 				bill.setCreatedDate(sdtf.format(new Date()));				
-				dao.CHSSBillAdd(bill);
+				applyid = dao.CHSSBillAdd(bill);
 			}
 						
 			return applyid;
@@ -160,7 +167,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setCenterName(bill.getCenterName());
 		fetch.setBillNo(bill.getBillNo());
 		fetch.setBillDate(bill.getBillDate());
-		fetch.setBillAmount(bill.getBillAmount());
+//		fetch.setBillAmount(bill.getBillAmount());
 		fetch.setModifiedBy(bill.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		

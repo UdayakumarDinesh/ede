@@ -29,6 +29,6 @@ public class CHSSApplyDto {
 	private String[] BillNo; 
 	private String[] CenterName;
 	private String[] BillDate;
-	private String[] BillAmount;
+//	private String[] BillAmount;
 	
 }

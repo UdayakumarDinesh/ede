@@ -126,7 +126,6 @@ public class CHSSController {
 			String[] centernames=req.getParameterValues("centername");
 			String[] billno=req.getParameterValues("billno");
 			String[] billdate=req.getParameterValues("billdate");
-			String[] billamount=req.getParameterValues("billamount");
 			
 			CHSSApplyDto dto=new CHSSApplyDto();
 			dto.setRelationId(relationid);
@@ -135,7 +134,7 @@ public class CHSSController {
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
-			dto.setBillAmount(billamount);
+
 			dto.setTreatTypeId(treatmenttype);
 			dto.setCHSSType("OPD");
 			dto.setCreatedBy(Username);
@@ -144,7 +143,6 @@ public class CHSSController {
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
-			dto.setBillAmount(billamount);
 			dto.setCreatedBy(Username);
 			
 			
@@ -197,7 +195,14 @@ public class CHSSController {
 			{
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
-			}		
+			}	
+			String billid = req.getParameter("billid");
+			if (billid == null) 
+			{
+				Map md=model.asMap();
+				billid=(String)md.get("billid");
+			}	
+			
 						
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
 			req.setAttribute("chssapplydata", apply);
@@ -205,6 +210,9 @@ public class CHSSController {
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			req.setAttribute("testmainlist", service.CHSSTestMainList());
+			
+			req.setAttribute("billid", billid);
+			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
@@ -231,14 +239,12 @@ public class CHSSController {
 			String centername = req.getParameter("centername-"+billid);
 			String billno = req.getParameter("billno-"+billid);
 			String billdate = req.getParameter("billdate-"+billid);
-			String billamount = req.getParameter("billamount-"+billid);
 			
 			CHSSBill bill = new CHSSBill();
 			bill.setBillId(Long.parseLong(billid));
 			bill.setCenterName(centername);
 			bill.setBillNo(billno);
 			bill.setBillDate(sdf.format(rdf.parse(billdate)));
-			bill.setBillAmount(Integer.parseInt(billamount));
 			bill.setModifiedBy(Username);
 			
 			long count = service.CHSSBillEdit(bill);
@@ -295,7 +301,6 @@ public class CHSSController {
 			String[] centernames=req.getParameterValues("centername");
 			String[] billno=req.getParameterValues("billno");
 			String[] billdate=req.getParameterValues("billdate");
-			String[] billamount=req.getParameterValues("billamount");
 			
 			CHSSApplyDto dto=new CHSSApplyDto();
 			
@@ -303,7 +308,6 @@ public class CHSSController {
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
-			dto.setBillAmount(billamount);
 			dto.setCreatedBy(Username);
 			
 			long count= service.CHSSApplySubmit(dto);
@@ -365,10 +369,10 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside GetBillDataAjax.htm "+Username);
-		CHSSBill bill=null;
+		Object[] bill=null;
 		try {
 			String billid = req.getParameter("billid");
-			bill = service.getCHSSBill(billid);
+			bill = service.CHSSBill(billid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside GetBillDataAjax.htm "+Username, e);
@@ -449,6 +453,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -510,6 +515,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -538,6 +544,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -567,8 +574,6 @@ public class CHSSController {
 			dto.setMedicineDate(medsdate);
 			dto.setMedicineCost(medscost);
 			
-//			dto.setCreatedBy(Username);
-			
 			long count= service.MedicinesBillAdd(dto);
 			if (count > 0) {
 				redir.addAttribute("result", "Consultation Details Added Successfully");
@@ -576,6 +581,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -633,6 +639,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -661,6 +668,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -697,6 +705,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Tests Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -818,6 +827,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Bill Item Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -873,6 +883,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -901,6 +912,7 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
