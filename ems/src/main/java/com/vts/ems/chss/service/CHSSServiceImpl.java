@@ -14,6 +14,7 @@ import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
+import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
@@ -21,6 +22,8 @@ import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
+import com.vts.ems.chss.model.CHSSOther;
+import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -387,13 +390,13 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
 			{
-				CHSSMisc  meds = new CHSSMisc();
+				CHSSMisc  misc = new CHSSMisc();
 				
-				meds.setBillId(Long.parseLong(dto.getBillId()));
-				meds.setMiscItemName(dto.getMiscItemName()[i]);
-				meds.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
-				meds.setIsActive(1);
-				count = dao.MiscBillAdd(meds);
+				misc.setBillId(Long.parseLong(dto.getBillId()));
+				misc.setMiscItemName(dto.getMiscItemName()[i]);
+				misc.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
+				misc.setIsActive(1);
+				count = dao.MiscBillAdd(misc);
 			}
 						
 			return count;
@@ -427,5 +430,64 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setIsActive(0);
 		return dao.MiscBillEdit(fetch);
 	}
+	
+	@Override
+	public List<CHSSOtherItems> OtherItemsList() throws Exception
+	{
+		return dao.OtherItemsList();
+	}
+	
+	@Override
+	public List<CHSSOther> CHSSOtherList(String billid) throws Exception
+	{
+		return dao.CHSSOtherList(billid);
+	}
+	
+	@Override
+	public long OtherBillAdd(CHSSOtherDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE OtherBillAdd");		
+		try {
+			
+			long count=0;
+			
+			for(int i=0 ; i<dto.getOtherItemId().length ; i++)
+			{
+				CHSSOther  other = new CHSSOther();
+				
+				other.setBillId(Long.parseLong(dto.getBillId()));
+				other.setOtherItemId(Integer.parseInt(dto.getOtherItemId()[i]));
+				other.setOtherItemCost(Integer.parseInt(dto.getOtherItemCost()[i]));
+				other.setIsActive(1);
+				count = dao.OtherBillAdd(other);
+			}
+						
+			return count;
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE OtherBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	
+	@Override
+	public long OtherBillEdit(CHSSOther modal) throws Exception
+	{
+		CHSSOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
+		fetch.setOtherItemId(modal.getOtherItemId());
+		fetch.setOtherItemCost(modal.getOtherItemCost());
+		return dao.OtherBillEdit(fetch);
+	}
+	
+	@Override
+	public long OtherBillDelete(String chssotherid, String modifiedby ) throws Exception
+	{
+		CHSSOther fetch = dao.getCHSSOther(chssotherid);
+		fetch.setIsActive(0);
+		return dao.OtherBillEdit(fetch);
+	}
+	
 	
 }

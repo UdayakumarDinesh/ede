@@ -6,12 +6,15 @@ import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
+import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
+import com.vts.ems.chss.model.CHSSOther;
+import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -50,6 +53,11 @@ public interface CHSSService {
 	public long MiscBillEdit(CHSSMisc modal) throws Exception;
 	public long MiscBillDelete(String chssotherid, String modifiedby) throws Exception;
 	public Object[] CHSSBill(String billid) throws Exception;
+	public List<CHSSOtherItems> OtherItemsList() throws Exception;
+	public List<CHSSOther> CHSSOtherList(String billid) throws Exception;
+	public long OtherBillAdd(CHSSOtherDto dto) throws Exception;
+	public long OtherBillEdit(CHSSOther modal) throws Exception;
+	public long OtherBillDelete(String chssotherid, String modifiedby) throws Exception;
 	
 	
 

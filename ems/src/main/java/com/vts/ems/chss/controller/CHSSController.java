@@ -26,11 +26,14 @@ import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
+import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
+import com.vts.ems.chss.model.CHSSOther;
+import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -213,7 +216,7 @@ public class CHSSController {
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			req.setAttribute("testmainlist", service.CHSSTestMainList());
-			
+			req.setAttribute("otheritemslist", service.OtherItemsList());
 			req.setAttribute("billid", billid);
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
@@ -923,5 +926,140 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	@RequestMapping(value = "GetOtherItemsListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String GetOtherItemsListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetOtherItemsListAjax.htm "+Username);
+		List<CHSSOtherItems> bill=new ArrayList<CHSSOtherItems>();
+		try {
+			bill = service.OtherItemsList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside GetOtherItemsListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(bill);
+	}
+	
+	@RequestMapping(value = "ChssOtherListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ChssOtherListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ChssOtherListAjax.htm "+Username);
+		List<CHSSOther> list=new ArrayList<CHSSOther>();
+		try {
+			String billid = req.getParameter("billid");
+			list = service.CHSSOtherList(billid);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ChssOtherListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "OtherBillAdd.htm", method = RequestMethod.POST )
+	public String OtherBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OtherBillAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			String[] otheritemid=req.getParameterValues("otheritemid");
+			String[] otheritemcost=req.getParameterValues("otheritemcost");
+			
+			CHSSOtherDto dto=new CHSSOtherDto();
+			
+			dto.setBillId(billid);
+			dto.setOtherItemId(otheritemid);
+			dto.setOtherItemCost(otheritemcost);
+			
+			long count= service.OtherBillAdd(dto);
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Item Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Item Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OtherBillAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "OtherBillEdit.htm", method = RequestMethod.POST )
+	public String OtherBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OtherBillEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String chssotherid = req.getParameter("chssotherid"); 
+			
+			String otheritemid = req.getParameter("otheritemid-"+chssotherid);
+			String otheritemcost = req.getParameter("otheritemcost-"+chssotherid);
+			
+			CHSSOther meds= new CHSSOther();
+			meds.setCHSSOtherId(Long.parseLong(chssotherid));
+			meds.setOtherItemId(Integer.parseInt(otheritemid));
+			meds.setOtherItemCost(Integer.parseInt(otheritemcost));
+			
+			
+			long count = service.OtherBillEdit(meds);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Item Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Item Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OtherBillEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "OtherBillDelete.htm", method = RequestMethod.POST )
+	public String OtherBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OtherBillDelete.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String chssotherid = req.getParameter("chssotherid"); 
+						
+			long count = service.OtherBillDelete(chssotherid, Username);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Item Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Item Delete Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OtherBillDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
 	
 }

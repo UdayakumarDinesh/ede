@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.chss.model.CHSSOtherItems"%>
 <%@page import="com.vts.ems.chss.model.CHSSTestMain"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.DateTimeFormatUtil"%>
@@ -20,6 +21,10 @@
 .table thead{
     background: #9AD0EC;
 }
+
+.filter-option-inner-inner{
+ 	font-weight: 500 !important;
+}
 </style>
 </head>
 <body>
@@ -30,12 +35,11 @@
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
-	List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist");
-	
+	List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist");	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
-	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	
-	List<CHSSTestMain> testmainlist = (List<CHSSTestMain>)request.getAttribute("testmainlist");
+	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
+	List<CHSSTestMain> testmainlist = (List<CHSSTestMain>)request.getAttribute("testmainlist");	
+	List<CHSSOtherItems> otheritemslist = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
 	
 	String billid =(String)request.getAttribute("billid");
 %>
@@ -112,7 +116,7 @@
 							<%} %>
 							<div class="col-3">
 								<b>Treatment Type : </b><br>
-								<select class="form-control select2" name="treatmenttype" required="required">
+								<select class="form-control select2" name="treatmenttype" required="required" data-live-search="true" >
 									<option value="" selected="selected" disabled="disabled">Choose..</option>
 									<%for(CHSSTreatType treattype : treattypelist ){ %>
 										<option value="<%=treattype.getTreatTypeId()%>" <%if(Integer.parseInt(chssapplydata[7].toString())==treattype.getTreatTypeId()){ %>selected<%} %> ><%=treattype.getTreatmentName() %></option>
@@ -253,7 +257,7 @@
 				    		<a class="nav-item nav-link active" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  >Consultation</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="" >Others</a>
+				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
 				    		<a class="nav-item nav-link " data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
 			    	</div>
@@ -371,7 +375,7 @@
 										<tr class="tr_clone_tests" >
 											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
 											<td>
-												<select class="form-control test-type " id="test-type-1" style="width: 100%" name="test-type" required="required" onchange="getTestSubAdd(1)" >
+												<select class="form-control test-type " style="width: 100%" name="test-type" required="required" onchange="getTestSubAdd(1)" >
 												
 													<option value="" selected="selected" disabled="disabled">Choose..</option>
 													<%for(CHSSTestMain testmain : testmainlist){ %>
@@ -380,11 +384,11 @@
 												</select>
 											</td>
 											<td>
-												<select class="form-control test-id " id="test-id-1" style="width: 100%"  name="test-id" required="required" >
+												<select class="form-control test-id "  style="width: 100%"  name="test-id" required="required" >
 													<option value="" selected="selected" disabled="disabled">Choose..</option>
 												</select>
 											</td>
-											<td><input type="number" class="form-control items" name="tests-cost" id="tests-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items" name="tests-cost"  value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -459,7 +463,6 @@
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
 				    	</div>
-				    		
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
@@ -477,9 +480,8 @@
 											<th style="width:10%;" > Action </th>
 										</tr>
 									</thead>
-									<tbody id="oths-list-table">
+									<tbody id="other-list-table">
 										
-
 									</tbody>
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
@@ -488,21 +490,27 @@
 							</form>
 						</div>
 				   		<div class="col-md-12" >
-				    		<form action="OthersBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				    		<form action="OtherBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:65%;"> Item Name </th>
+											<th style="width:65%;"> Item</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-oths" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-other" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr class="tr_clone_oths" >
+										<tr class="tr_clone_other" >
 											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
-											<td><input type="text" class="form-control items" name="oths-name" id="oths-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
-											<td><input type="number" class="form-control items " name="oths-cost" id="oths-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td>
+												<select class="form-control selectpicker " name="otheritemid" required="required" style="width: 100%" data-live-search="true"  >
+													<%for(int k=0 ;k<otheritemslist.size();k++){ %>
+														<option value="<%=otheritemslist.get(k).getOtherItemId() %>"><%=otheritemslist.get(k).getOtherItemName() %></option>
+													<%} %>
+												</select>
+											</td>
+											<td><input type="number" class="form-control items " name="otheritemcost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_oths"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -552,15 +560,15 @@
 											<th style="width:5%;" >SN</th>
 											<th style="width:65%;"> Item Name </th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-other" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody class="tr_other_add">
 										<tr class="tr_clone_misc" >
 											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
 											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td><input type="number" class="form-control items " name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_others"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
 									
@@ -583,6 +591,98 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+
+
+
+$('.billdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"maxDate" :new Date(), 
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+function setTooltip()
+{
+	$('[data-toggle="tooltip"]').tooltip({
+		 trigger : 'hover',
+	});
+	$('[data-toggle="tooltip"]').on('click', function () {
+		$(this).tooltip('hide');
+	});
+}
+
+
+</script>
+
+<script type="text/javascript">
+
+var count=1;
+
+$("table").on('click','.tbl-row-add-cons' ,function() 
+{
+   	var $tr = $('.tr_clone_cons').last('.tr_clone_cons');
+   	var $clone = $tr.clone();
+   	$tr.after($clone);
+   	$clone.find(".items").val("").end();
+
+	count++;
+	
+	$clone.find(".sno").html(count).end(); 
+	 
+  	$clone.find('.cons-date').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"maxDate" :new Date(),
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+	}
+	});
+  	
+  	setTooltip();
+  
+});
+
+
+$("table").on('click','.tbl-row-rem_cons' ,function() {
+var cl=$('.tr_clone_cons').length;
+if(cl>1){
+          
+   var $tr = $(this).closest('.tr_clone_cons');
+   var $clone = $tr.remove();
+   $tr.after($clone);
+  
+}
+  
+});
+
+$('.cons-date').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"maxDate" :new Date(), 
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+
+</script>
+
+<!-- ------------------------------------------------------- model/consultation script --------------------------------------------------- -->
+
 <script type="text/javascript">
 
 function showBillDetails($billid)
@@ -699,65 +799,7 @@ function showBillDetails($billid)
 
 </script>
 
-<script type="text/javascript">
-
-var count=1;
-
-$("table").on('click','.tbl-row-add-cons' ,function() 
-{
-   	var $tr = $('.tr_clone_cons').last('.tr_clone_cons');
-   	var $clone = $tr.clone();
-   	$tr.after($clone);
-   	$clone.find(".items").val("").end();
-
-	count++;
-	
-	$clone.find(".sno").html(count).end(); 
-	 
-  	$clone.find('.cons-date').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		"maxDate" :new Date(),
-		"startDate" : new Date(),
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-	}
-	});
-  	
-  	setTooltip();
-  
-});
-
-
-$("table").on('click','.tbl-row-rem_cons' ,function() {
-var cl=$('.tr_clone_cons').length;
-if(cl>1){
-          
-   var $tr = $(this).closest('.tr_clone_cons');
-   var $clone = $tr.remove();
-   $tr.after($clone);
-  
-}
-  
-});
-
-$('.cons-date').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"maxDate" :new Date(), 
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-
-</script>
+<!-- -------------------------------------------------------  model/consultation script --------------------------------------------------- -->
 
 <!-- ------------------------------------------------------- tests script --------------------------------------------------- -->
 
@@ -832,7 +874,6 @@ function getTestSubAdd(testrowid)
 		}
 		
 		$('#test-id-'+testrowid).html(subtestsHTML);
-		/* $('#test-id-'+testrowid).select2(); */
 		setTooltip();
 
 		}
@@ -1253,38 +1294,138 @@ function getmiscData(){
 
 </script>
 <!-- ------------------------------------------------------- Miscellaneous script --------------------------------------------------- -->
+
+<!-- ------------------------------------------------------- Others script --------------------------------------------------- -->
+
 <script type="text/javascript">
 
+var othercount =1;
+$("table").on('click','.tbl-row-add-other' ,function() 
+		{
+			
+		   	var $tr = $('.tr_clone_other').last('.tr_clone_other');
+		   	var $clone = $tr.clone();
+		    $tr.after($clone);
+		    $clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
+		    $clone.find('.selectpicker').selectpicker('render'); 
+		   			   			   	
+		   	$clone.find(".items").val("").end();  
+		 
+		   	
+		   	othercount++;
+			$clone.find(".sno").html(othercount).end(); 
+			
+		  	setTooltip();
+		  
+		});
 
 
-$('.billdate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"maxDate" :new Date(), 
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
+		$("table").on('click','.tbl-row-rem_other' ,function() {
+		var cl=$('.tr_clone_other').length;
+		if(cl>1){
+		          
+		   var $tr = $(this).closest('.tr_clone_other');
+		   var $clone = $tr.remove();
+		   $tr.after($clone);
+		  
+		}
+		  
+		});
 
-function setTooltip()
+$OtherItemsList = null;
+function getOtherItemsList()
 {
-	$('[data-toggle="tooltip"]').tooltip({
-		 trigger : 'hover',
-	});
-	$('[data-toggle="tooltip"]').on('click', function () {
-		$(this).tooltip('hide');
+	$.ajax({
+	
+		type : "GET",
+		url : "GetOtherItemsListAjax.htm",
+		data : {
+				
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		$OtherItemsList= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		console.log($OtherItemsList);
+		}
 	});
 }
+getOtherItemsList();
+function getOthersDetails()
+{
+	
+	var $billid=$(".billid").val();
+	
+	$.ajax({
+
+		type : "GET",
+		url : "ChssOtherListAjax.htm",
+		data : {
+				
+			billid : $billid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var otherVals= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		var otherHTMLStr = '';
+		for(var c=0;c<otherVals.length;c++)
+		{
+			var other = otherVals[c];
+			console.log(other);
+			otherHTMLStr +=	'<tr> ';
+			otherHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (c+1) +'.</span> </td> ';
+			otherHTMLStr +=	'	<td> ';
+			otherHTMLStr +=	'		<select class="form-control w-100 selectpicker" name="otheritemid-'+other.CHSSOtherId+'"  required="required" data-live-search="true"   > ';
+										for(var oi=0;oi<$OtherItemsList.length;oi++)
+										{								
+											if(other.OtherItemId === $OtherItemsList[oi].OtherItemId){
+			otherHTMLStr +=	'					<option value="'+$OtherItemsList[oi].OtherItemId+'" selected >'+$OtherItemsList[oi].OtherItemName+'</option> ';
+											}else{
+			otherHTMLStr +=	'					<option value="'+$OtherItemsList[oi].OtherItemId+'"  >'+$OtherItemsList[oi].OtherItemName+'</option> ';
+											}
+										}
+			
+			otherHTMLStr +=	'		</select> ';
+			otherHTMLStr +=	'	</td> ';
+			
+			otherHTMLStr +=	'	<td><input type="number" class="form-control items " name="otheritemcost-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			otherHTMLStr +=	'	<td>';
+			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+			otherHTMLStr +=	'	</td> ';
+			otherHTMLStr +=	'</tr> ';
+			
+		}
+		
+		if(otherVals.length==0){
+			
+			otherHTMLStr =	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
+		}
+		
+		$('#other-list-table').html(otherHTMLStr);
+		$('.selectpicker').selectpicker('render'); 
+		setTooltip(); 
+		
+
+		}
+	});
+	
+	
+	
+}
+
+<%if(chssbillslist.size()>0){%>
+showBillDetails(<%=chssbillslist.get(0)[0]%>);
+<%}%> 
 
 
-
-
-<%-- <%if(chssbillslist.size()>0){%>
-	showBillDetails(<%=chssbillslist.get(0)[0]%>);
-<%}%> --%>
 </script>
+
+<!-- ------------------------------------------------------- Others script --------------------------------------------------- -->
 </body>
 </html>
