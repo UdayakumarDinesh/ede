@@ -10,7 +10,7 @@ public class Role {
 	
 	 private Long RoleId;
 	 private String RoleName;
- private Set<Login> Login;
+	 private Set<Login> Login;
 	
 	public String getRoleName() {
 		return RoleName;
