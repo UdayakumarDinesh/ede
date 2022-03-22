@@ -41,6 +41,7 @@ public class PisServiceImpl implements PisService
 	private static final Logger logger = LogManager.getLogger(PisServiceImpl.class);
 
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	@Autowired
 	private PisDao dao;
 	
@@ -188,11 +189,12 @@ public class PisServiceImpl implements PisService
 		employee.setSBIAccNo(emp.getSBIAccNo());
 		employee.setIdMark(emp.getIdMark());
 		employee.setHeight(emp.getHeight());
-		employee.setModifiedBy(emp.getModifiedBy());		
+		employee.setModifiedBy(emp.getModifiedBy());
+		employee.setModifiedDate(emp.getModifiedDate());
 		employee.setInternalNumber(emp.getInternalNumber());
 		employee.setSubCategary(emp.getSubCategary());
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
-		
+		employee.setModifiedDate(sdtf.format(new Date()));
 		
 		return dao.EmployeeEditSubmit(employee);
 	}
@@ -253,13 +255,19 @@ public class PisServiceImpl implements PisService
 	public List<Object[]> getEmpList()throws Exception{
 			return dao.getEmpList();
 	}
+	
+	@Override
+	public Login getLoginEditData(String LoginId)throws Exception{
+		return dao.getLoginEditData(Long.parseLong(LoginId));
+	}
+	
 	@Override
 	public List<Object[]> getLoginTypeList()throws Exception{
 			return dao.getLoginTypeList();
 	}
 	@Override
-	public int UserManagerDelete(String username,String empid)throws Exception{
-		return dao.UserManagerDelete(username,empid);
+	public int UserManagerDelete(String username,String loginid)throws Exception{
+		return dao.UserManagerDelete(username,loginid);
 	}
 	@Override
 	public int UserNamePresentCount(String username)throws Exception{
@@ -281,4 +289,18 @@ public class PisServiceImpl implements PisService
 		return dao.UserManagerAdd(login);
 		
 	}
+	
+	@Override
+	public int UserMangerEdit(String empid , String loginid , String username)throws Exception
+	{
+		Login login = new Login();
+		login.setModifiedBy(username);
+		login.setEmpId(Long.parseLong(empid));
+		login.setLoginId(Long.parseLong(loginid));
+		login.setModifiedDate(sdf.format(new Date()));
+		
+		return dao.UserManagerEdit(login);
+	}
+	
+	
 }

@@ -33,7 +33,9 @@ public interface PisDao {
 	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception;
 	public List<Object[]> getEmpList()throws Exception;
 	public List<Object[]> getLoginTypeList()throws Exception;
-	public int UserManagerDelete(String username , String empid)throws Exception;
+	public int UserManagerDelete(String username , String loginid)throws Exception;
 	public int UserNamePresentCount(String UserName)throws Exception;
 	public Long UserManagerAdd(Login login) throws Exception;
+	public Login getLoginEditData(Long LoginId)throws Exception;
+	public int UserManagerEdit(Login login)throws Exception;
 }

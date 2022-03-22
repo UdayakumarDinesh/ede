@@ -30,6 +30,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
+						<li class="breadcrumb-item "><a href="LoginMaster.htm"> Login List </a></li>
 						<li class="breadcrumb-item active " aria-current="page">LoginType Add</li>
 					</ol>
 				</div>
@@ -64,7 +65,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 						</div>
 					</div>
 
-					<form name="myfrm" action="UserManagerAddSubmit.htm" method="POST">
+					<form name="myfrm" action="UserManagerEditSubmit.htm" method="POST">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table

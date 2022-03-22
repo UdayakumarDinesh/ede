@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.login.Login;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
@@ -36,7 +37,9 @@ public interface PisService {
 	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception;
 	public List<Object[]> getEmpList()throws Exception;
 	public List<Object[]> getLoginTypeList()throws Exception;
-	public int UserManagerDelete(String username,String empid)throws Exception;
+	public int UserManagerDelete(String username,String loginid)throws Exception;
 	public int UserNamePresentCount(String username)throws Exception;
 	public Long UserManagerAdd(UserManageAdd useradd)throws Exception;
+	public Login getLoginEditData(String LoginId)throws Exception;
+	public int UserMangerEdit(String empid , String loginid , String username)throws Exception;
 }

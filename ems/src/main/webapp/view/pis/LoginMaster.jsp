@@ -28,26 +28,27 @@
 				</div>
 			</div>
 		 </div>
-	<% String ses=(String)request.getAttribute("result"); 
-   String ses1=(String)request.getAttribute("resultfail");
- %><%if(ses1!=null){
-	%>
-	
+
+	<div class="card-body" >
 	<div align="center">
-	<div class="alert alert-danger" role="alert">
-                     <%=ses1 %>
-                    </div></div>
-	<%}  if(ses!=null){ %>
-	<div align="center">
-	<div class="alert alert-success" role="alert" >
-                     <%=ses %>
-                   </div> </div>
-                    <%} %>
-	<div class="card-body" >			
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>			
+		</div>
 			<div class="card" >
 				<div class="card-body " >
 				
-					<form action="LoginMasterAddEdit.htm" method="post" id="empForm">
+					<form action="LoginMasterAddEdit.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -66,7 +67,7 @@
 									for(Object[] obj : loginmatser){ 
 									slno++;%>
 										<tr>
-											<td style="text-align: center;"><input type="radio" name="empid" value="<%=obj[0] %>"> </td>
+											<td style="text-align: center;"><input type="radio" name="loginid" value="<%=obj[0]%>"> </td>
 											<td><%=obj[4] %></td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
@@ -83,7 +84,7 @@
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="Add"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="Edit"  Onclick="Edit(empForm)" >EDIT </button>
-                           <button type="button" class="btn btn-sm delete-btn" name="action" value="Delete" Onclick="Delete(myfrm)" >DELETE </button>
+                           <button type="button" class="btn btn-sm delete-btn" name="action" value="Delete" Onclick=" Delete(empForm)" >DELETE </button>
                            <!--  <button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button> -->
 						</div>
 					</div>
@@ -99,7 +100,7 @@
 
 	function Edit(myfrm) {
 
-		var fields = $("input[name='empid']").serializeArray();
+		var fields = $("input[name='loginid']").serializeArray();
 
 		if (fields.length === 0) {
 			alert("Please Select Atleast One Employee ");
@@ -112,7 +113,7 @@
 
 	function Delete(myfrm) { 
 		
-		var fields = $("input[name='empid']").serializeArray();
+		var fields = $("input[name='loginid']").serializeArray();
 
 		if (fields.length === 0) {
 			alert("Please Select Atleast One Employee");
@@ -122,10 +123,12 @@
 		var cnf = confirm("Are You Sure To Delete!");
 
 		if (cnf) {
-
+			console.log("delete ");
+			document.getElementById("empForm").submit();
 			return true;
 
 		} else {
+			console.log("!delete");
 			event.preventDefault();
 			return false;
 		}

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -418,7 +419,7 @@ public class PisController {
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
 			emp.setEmpId(Integer.parseInt(EmpId));
-
+			
 			long value =service.EmployeeEditSubmit(emp);
 			if (value != 0) {
 				redir.addAttribute("result", "EMPLOYEE EDITED SUCCESSFUL");
@@ -509,7 +510,7 @@ public class PisController {
 	{   
 		String Username = (String) ses.getAttribute("Username");
 		String Action =(String)req.getParameter("action");
-		String empid = (String)req.getParameter("empid");
+		String loginid = (String)req.getParameter("loginid");
 		
 		if("Add".equalsIgnoreCase(Action)){
 			req.setAttribute("emplist", service.getEmpList());
@@ -517,11 +518,14 @@ public class PisController {
 						
 			return "pis/LoginAdd";
 		}else if("Edit".equalsIgnoreCase(Action)) {
+			req.setAttribute("logineditdata", service.getLoginEditData(loginid));
 			req.setAttribute("emplist", service.getEmpList());
 			req.setAttribute("loginlist", service.getLoginTypeList());
+			
 			return "pis/LoginEdit";
 		}else {
-			int count = service.UserManagerDelete(Username,empid);
+			
+			int count = service.UserManagerDelete(Username,loginid);
 			if (count > 0) {
 				redir.addAttribute("result", "USER DELETE SUCCESSFULLY");
 			} else {
@@ -564,7 +568,6 @@ public class PisController {
     	  useradd.setUserName(req.getParameter("UserName"));
     	  useradd.setLoginType(req.getParameter("LoginType"));
     	  useradd.setEmpId(req.getParameter("Employee"));
-    	  useradd.setLoginType(req.getParameter(Username));
     	  useradd.setCreatedBy(Username);
     	  useradd.setCreatedDate(sdf.format(new Date()));
     	
@@ -588,5 +591,19 @@ public class PisController {
 		return "redirect:/LoginMaster.htm";
 	}
     
-   
+  
+   @RequestMapping(value = "UserManagerEditSubmit.htm", method = RequestMethod.POST)
+   public String UserManagerEditSubmit(HttpServletRequest req , HttpSession ses)throws Exception
+   {	String Username = (String) ses.getAttribute("Username");
+        logger.info(new Date() +"Inside UserManagerEditSubmit.htm "+Username);
+        try {
+			String Empid   = (String)req.getParameter("Employee");
+        	String LoginId = (String)req.getParameter("LoginType");
+        	
+        	//int count =service.UserMangerEdit(Empid , LoginId,Username);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	   return " ";
+   }
 }

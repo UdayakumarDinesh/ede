@@ -1,6 +1,7 @@
 package com.vts.ems.pis.dao;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpStatus;
@@ -34,6 +36,8 @@ import com.vts.ems.pis.model.PisPayLevel;
 public class PisDaoImpl implements PisDao {
 	private static final Logger logger = LogManager.getLogger(PisDaoImpl.class);
 
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	
 	@PersistenceContext
 	EntityManager manager;
 
@@ -325,14 +329,14 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final String DELETEUSERMANAGER="";
+	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	@Override
-	public int UserManagerDelete(String username , String empid)throws Exception{
+	public int UserManagerDelete(String username , String loginid)throws Exception{
 		logger.info(new Date() + "Inside UserManagerDelete");
 		Query query = manager.createNativeQuery(DELETEUSERMANAGER);
 		query.setParameter("modifiedby", username);
-		query.setParameter("empid", empid);
-		query.setParameter("modifieddate", new Date().toString());
+		query.setParameter("loginid", loginid);
+		query.setParameter("modifieddate", sdtf.format(new Date()));
 		query.setParameter("isactive", 0);
 		int count = (int) query.executeUpdate();
 		return count;
@@ -360,5 +364,25 @@ public class PisDaoImpl implements PisDao {
 			e.printStackTrace();
 		}
 		return login.getLoginId();
+	}
+	private static final String  LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
+	@Override
+	public Login getLoginEditData(Long LoginId)throws Exception{
+		logger.info(new Date() + "Inside UserManagerAdd()");
+		Login UserManagerEditData =null;
+		try {
+			Query query = manager.createQuery(LOGINEDITDATA);
+			query.setParameter("LoginId", LoginId);
+			 UserManagerEditData = (Login) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return UserManagerEditData;
+	}
+	
+	@Override
+	public int UserManagerEdit(Login login)throws Exception{
+		return 0;
 	}
 }
