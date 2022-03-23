@@ -664,7 +664,7 @@ public class PisController {
 
 			return "masters/FamilyMemberEdit";
 		} else {
-
+                                                                                        
 			String familyid = (String) req.getParameter("familyid");
 			int count = service.DeleteMeber(familyid, Username);
 			if (count > 0) {
