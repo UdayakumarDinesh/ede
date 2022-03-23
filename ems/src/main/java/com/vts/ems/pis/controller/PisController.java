@@ -7,17 +7,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.pis.dto.UserManageAdd;
+import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.service.PisService;
 
@@ -518,6 +520,8 @@ public class PisController {
 						
 			return "pis/LoginAdd";
 		}else if("Edit".equalsIgnoreCase(Action)) {
+			
+			
 			req.setAttribute("logineditdata", service.getLoginEditData(loginid));
 			req.setAttribute("emplist", service.getEmpList());
 			req.setAttribute("loginlist", service.getLoginTypeList());
@@ -593,17 +597,169 @@ public class PisController {
     
   
    @RequestMapping(value = "UserManagerEditSubmit.htm", method = RequestMethod.POST)
-   public String UserManagerEditSubmit(HttpServletRequest req , HttpSession ses)throws Exception
+   public String UserManagerEditSubmit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
    {	String Username = (String) ses.getAttribute("Username");
         logger.info(new Date() +"Inside UserManagerEditSubmit.htm "+Username);
         try {
-			String Empid   = (String)req.getParameter("Employee");
-        	String LoginId = (String)req.getParameter("LoginType");
+			String Empid     = (String)req.getParameter("Employee");
+        	String Logintype = (String)req.getParameter("LoginType");
+        	String Loginid   = (String)req.getParameter("loginid");
         	
-        	//int count =service.UserMangerEdit(Empid , LoginId,Username);
+        	int count =service.UserMangerEdit(Empid , Logintype,Username,Loginid);
+        	if(count>0) {
+        		redir.addAttribute("result", "USER EDIT SUCCESSFULLY");	
+    		} else {
+    			redir.addAttribute("resultfail", "USER EDIT UNSUCCESSFUL");
+        	}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	   return " ";
+	   return "redirect:/LoginMaster.htm";
    }
+   
+   @RequestMapping(value="FamilyMembersList.htm",method= {RequestMethod.POST,RequestMethod.GET})
+   public String FamilyMembersList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+   {	
+	   String Username = (String) ses.getAttribute("Username");
+        logger.info(new Date() +"Inside FamilyMembersList.htm "+Username);
+        String empid =null;
+        	
+        try {
+        	  empid = (String)req.getParameter("empid");
+        	if(empid==null)  {
+				Map md=model.asMap();
+				empid=(String)md.get("Employee");
+				
+			}
+			req.setAttribute("familymemberslist", service.getFamilyMembersList(empid));
+			req.setAttribute("Empdata", service.GetEmpData(empid));
+			
+		} catch (Exception e) {		
+			e.printStackTrace();
+			 return "redirect:/PisAdminEmpList.htm";
+		}
+        return "masters/FamilyMemberList";
+   }
+
+	@RequestMapping(value = "FamilyMemberAddEditDelete.htm", method = RequestMethod.GET)
+	public String FamilyMemberAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside FamilyMemberAddEditDelete.htm " + Username);
+		String empid = (String) req.getParameter("empid");
+		String Action = (String) req.getParameter("Action");
+
+		if ("ADD".equalsIgnoreCase(Action)) {
+			req.setAttribute("Empdata", service.GetEmpData(empid));
+			req.setAttribute("FamilyRelation", service.getFamilyRelation());
+			req.setAttribute("FamilyStatus", service.getFamilyStatus());
+			
+			return "masters/FamilyMemberAdd";
+		} else if ("EDIT".equalsIgnoreCase(Action)) {
+			String familyid = (String) req.getParameter("familyid");
+		
+			req.setAttribute("memberdetails", service.getMemberDetails(familyid));
+			req.setAttribute("Empdata", service.GetEmpData(empid));
+			req.setAttribute("FamilyRelation", service.getFamilyRelation());
+			req.setAttribute("FamilyStatus", service.getFamilyStatus());
+
+			return "masters/FamilyMemberEdit";
+		} else {
+                                                                                        
+			String familyid = (String) req.getParameter("familyid");
+			int count = service.DeleteMeber(familyid, Username);
+			if (count > 0) {
+				redir.addAttribute("result", "MEMBER DELETE SUCCESSFULLY");
+			} else {
+				redir.addAttribute("resultfail", "MEMBER DELETE UNSUCCESSFUL");
+			}
+			redir.addFlashAttribute("Employee", empid);
+			return "redirect:/FamilyMembersList.htm";
+		}
+
+	}
+   
+   @RequestMapping(value="AddFamilyDetails.htm" ,  method=RequestMethod.POST)  
+   public String familyDetailsAdd(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside familyDetailsAdd.htm "+Username);
+       
+       try {
+    	   String name = (String)req.getParameter("memberName");
+    	   String dob  = (String)req.getParameter("dob");
+    	   String relation = (String)req.getParameter("relation");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String empid = (String)req.getParameter("empid");
+    	   
+    	   
+    	   EmpFamilyDetails details = new EmpFamilyDetails();
+    	 
+    	   details.setMember_name(name);
+    	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+    	   details.setRelation_id(Integer.parseInt(relation));
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone);
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
+    	   details.setEmpid(empid);
+    	   details.setIsActive(1);
+    	   details.setCreatedBy(Username);
+    	   details.setCreatedDate(sdf.format(new Date()));
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+    	   }
+    	   Long result = service.AddFamilyDetails(details);
+    	   if(result>0){
+    		   redir.addAttribute("result", "MEMBER ADD SUCCESSFULLY");	
+   		   } else {
+   			redir.addAttribute("resultfail", "MEMBER ADD UNSUCCESSFUL");
+    	   }
+    	  
+    	   redir.addFlashAttribute("Employee", empid);
+	   } catch (Exception e) {
+	  	 e.printStackTrace();
+	  }
+       return "redirect:/FamilyMembersList.htm";
+   }
+   
+   
+//   @RequestMapping(value="MemberDelete.htm" , method=RequestMethod.GET)
+//   public String MemberDelete(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+//	   String Username = (String) ses.getAttribute("Username");
+//       logger.info(new Date() +"Inside familyDetailsAdd.htm "+Username);
+//       try {
+//    	   String empid = (String)req.getParameter("empid");
+//    	   String  familyid = (String) req.getParameter("familyid");
+//    	   
+//    	  int count  = service.DeleteMeber(familyid,Username);
+//    	  if(count>0){
+//   		   redir.addAttribute("result", "MEMBER DELETE SUCCESSFULLY");	
+//  		   } else {
+//  			redir.addAttribute("resultfail", "MEMBER DELETE UNSUCCESSFUL");
+//   	      }
+//   	   redir.addFlashAttribute("Employee", empid);  	  
+//	  } catch (Exception e) {
+//		e.printStackTrace();
+//	   }
+//       return "redirect:/FamilyMembersList.htm";
+//   }
+   
+   
+   
 }

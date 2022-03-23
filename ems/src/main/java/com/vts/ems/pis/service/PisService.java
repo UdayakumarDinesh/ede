@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
@@ -41,5 +42,12 @@ public interface PisService {
 	public int UserNamePresentCount(String username)throws Exception;
 	public Long UserManagerAdd(UserManageAdd useradd)throws Exception;
 	public Login getLoginEditData(String LoginId)throws Exception;
-	public int UserMangerEdit(String empid , String loginid , String username)throws Exception;
+	public int UserMangerEdit(String empid , String logintype , String username,String loginid)throws Exception;
+	public List<Object[]> getFamilyMembersList(String empid)throws Exception;
+	public Object[] GetEmpData(String empid)throws Exception;
+	public List<Object[]> getFamilyRelation()throws Exception;
+	public List<Object[]> getFamilyStatus()throws Exception;
+	public Long AddFamilyDetails(EmpFamilyDetails Details)throws Exception;
+	public int DeleteMeber(String familyid,String Username)throws Exception;
+	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception;
 }

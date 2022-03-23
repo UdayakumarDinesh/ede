@@ -42,7 +42,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 			<div class="card" >
 				<div class="card-body " align="center" >
 		 
-		 <form name="myfrm" action="UserManagerAddSubmit.htm" method="POST">
+		 <form name="myfrm" action="UserManagerEditSubmit.htm" method="POST">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table
@@ -54,7 +54,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 											<td><select class="form-control select2" name="LoginType" id="LoginType" data-container="body" data-live-search="true" required="required" style="font-size: 5px;">
 												
 												<%for(Object[] login :loginlist){ %>
-													<option value="<%=login[0]%>" <%if(loginEditdata.getLoginType()==login[0]){%> selected <%}%>><%=login[1]%></option>
+													<option value="<%=login[0]%>" <%if(loginEditdata.getLoginType().equalsIgnoreCase(login[0].toString())){%> selected <%}%>><%=login[1]%>   </option>
 													<%} %>
 											</select></td>
 										</tr>
@@ -66,7 +66,8 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 												data-live-search="true" style="font-size: 5px;">
 												
 												<%for(Object[] emp:emplist){ %>	
-											   <option value="<%=emp[0]%>"  <%if(loginEditdata.getEmpId()==emp[0]){%> selected <%}%>><%=emp[1]%></option>
+												
+											   <option value="<%=emp[0]%>"  <%if(loginEditdata.getEmpId().toString().equalsIgnoreCase(emp[0].toString())){%> selected <%}%>><%=emp[1]%> </option>
 												<%}%>
 											</select></td>
 										</tr>
@@ -83,6 +84,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 							</div>
 
 						</div>
+						<input type="hidden" name="loginid"	value="<%=loginEditdata.getLoginId()%>" />
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 					</form>
 					</div>

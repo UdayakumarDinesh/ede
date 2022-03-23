@@ -117,22 +117,27 @@
 							<button type="button" class="btn btn-sm print-btn" name="action" value="view"  >print </button> -->
 
 						</div>
+						 
 					</div>
-				</form>	
-				<!-- <div  class="btn-group pull-right" id = "dis" style="margin-top:20px;" align="center">
-					<button type="submit" class="btn btnclr">Education</button>
-					<button type="submit" class="btn btnclr">Appointment</button>
-					<button type="submit" class="btn btnclr">Awards</button>
-					<button type="submit" class="btn btnclr">Property</button>
-					<button type="submit" class="btn btnclr">Address</button>
-					<button type="submit" class="btn btnclr">Publication</button>
-					<button type="submit" class="btn btnclr">Passport</button>
 					
-				</div> -->
+					<div  class="row text-center" id = "dis" style="margin-top:20px;" align="center">
+					<div class="col-md-12">
+				 	<button type="submit" class="btn btnclr"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Appointment</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Awards</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Property</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Address</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)"> Publication</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Passport</button>
+					</div>
+				</div> 
+					
+					
+				</form>	
+				
+				
 			</div>
-
-				 
-
 
 			</div>		
 		
