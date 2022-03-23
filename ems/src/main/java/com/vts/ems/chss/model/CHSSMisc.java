@@ -23,5 +23,4 @@ public class CHSSMisc implements Serializable {
 	private String MiscItemName;
 	private Integer MiscItemCost;
 	private Integer IsActive;
-
 }
