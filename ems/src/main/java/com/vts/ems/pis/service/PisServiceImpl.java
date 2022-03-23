@@ -27,6 +27,7 @@ import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
@@ -291,16 +292,52 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
-	public int UserMangerEdit(String empid , String loginid , String username)throws Exception
+	public int UserMangerEdit(String empid , String loginttype , String username,String loginid)throws Exception
 	{
 		Login login = new Login();
 		login.setModifiedBy(username);
 		login.setEmpId(Long.parseLong(empid));
 		login.setLoginId(Long.parseLong(loginid));
 		login.setModifiedDate(sdf.format(new Date()));
-		
+		login.setLoginType(loginttype);
 		return dao.UserManagerEdit(login);
 	}
 	
+	@Override
+	public List<Object[]> getFamilyMembersList(String empid)throws Exception
+	{
+		return dao.getFamilyMembersList(empid);
+	}
 	
+	@Override
+	public Object[] GetEmpData(String empid)throws Exception{
+		return dao.GetEmpData(empid);
+	}
+	
+	@Override
+	public List<Object[]> getFamilyRelation()throws Exception{
+		return dao.getFamilyRelation();
+	}
+	
+	
+	@Override
+	public List<Object[]> getFamilyStatus()throws Exception{
+		return dao.getFamilyStatus();
+	}
+	
+	@Override
+	public Long AddFamilyDetails(EmpFamilyDetails Details)throws Exception{
+		return dao.AddFamilyDetails( Details);
+	}
+	
+	@Override
+	public int DeleteMeber(String familyid,String Username)throws Exception{
+		return dao.DeleteMeber(familyid,Username);
+		
+	}
+	
+	@Override
+	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception{
+		return dao.getMemberDetails(familyid);
+	}
 }

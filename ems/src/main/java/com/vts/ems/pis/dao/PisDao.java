@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
@@ -38,4 +39,11 @@ public interface PisDao {
 	public Long UserManagerAdd(Login login) throws Exception;
 	public Login getLoginEditData(Long LoginId)throws Exception;
 	public int UserManagerEdit(Login login)throws Exception;
+	public List<Object[]> getFamilyMembersList(String empid)throws Exception;
+	public Object[] GetEmpData(String empid)throws Exception;
+	public List<Object[]> getFamilyRelation()throws Exception;
+	public List<Object[]> getFamilyStatus()throws Exception;
+	public Long AddFamilyDetails(EmpFamilyDetails Details) throws Exception;
+	public int DeleteMeber(String familyid,String Username)throws Exception;
+	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception;
 }

@@ -123,12 +123,12 @@
 		var cnf = confirm("Are You Sure To Delete!");
 
 		if (cnf) {
-			console.log("delete ");
+			
 			document.getElementById("empForm").submit();
 			return true;
 
 		} else {
-			console.log("!delete");
+			
 			event.preventDefault();
 			return false;
 		}
