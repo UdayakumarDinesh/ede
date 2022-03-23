@@ -438,6 +438,22 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	
+	@Override
+	public CHSSTests getCHSSTest(String chsstestid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSTest");
+		try {
+			return manager.find(CHSSTests.class, Long.parseLong(chsstestid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	@Override
 	public long MedicineBillEdit(CHSSMedicine medicine) throws Exception
 	{
@@ -453,6 +469,8 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	
 	
 
 	@Override
@@ -491,7 +509,21 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	
+	@Override
+	public long TestBillEdit(CHSSTests test) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO TestBillEdit");
+		try {
+			manager.merge(test);
+			manager.flush();
+			
+			return test.getCHSSTestId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 	
 	

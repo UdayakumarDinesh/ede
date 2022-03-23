@@ -89,10 +89,10 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<button type="submit" class="btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 													<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 												</button>	
-												<button type="submit" class="btn" name="chssapplyid" value="" formaction="#" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="" formaction="#" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>										
 											</td>

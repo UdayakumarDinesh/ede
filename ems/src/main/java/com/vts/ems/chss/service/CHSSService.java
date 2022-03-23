@@ -58,6 +58,9 @@ public interface CHSSService {
 	public long OtherBillAdd(CHSSOtherDto dto) throws Exception;
 	public long OtherBillEdit(CHSSOther modal) throws Exception;
 	public long OtherBillDelete(String chssotherid, String modifiedby) throws Exception;
+	public long TestBillEdit(CHSSTests modal) throws Exception;
+	public long TestBillDelete(String chsstestid, String modifiedby) throws Exception;
+	
 	
 	
 

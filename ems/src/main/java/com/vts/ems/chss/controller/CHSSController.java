@@ -738,72 +738,73 @@ public class CHSSController {
 		return json.toJson(list);
 	}
 	
-//	@RequestMapping(value = "MedicineBillEdit.htm", method = RequestMethod.POST )
-//	public String MedicineBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
-//	{
-//		String Username = (String) ses.getAttribute("Username");
-//		logger.info(new Date() +"Inside MedicineBillEdit.htm "+Username);
-//		try {
-//			
-//			String chssapplyid = req.getParameter("chssapplyid");
-//			String medicineid = req.getParameter("medicineid"); 
-//			
-//			String medsname = req.getParameter("meds-name-"+medicineid);
-//			String medsdate = req.getParameter("meds-date-"+medicineid);
-//			String medscost = req.getParameter("meds-cost-"+medicineid);
-//			
-//			CHSSMedicine meds= new CHSSMedicine();
-//			meds.setMedicineId(Long.parseLong(medicineid));
-//			meds.setMedicineName(medsname);
-//			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
-//			meds.setMedicineCost(Integer.parseInt(medscost));
-//			
-//			
-//			long count = service.MedicineBillEdit(meds);
-//			
-//			
-//			if (count > 0) {
-//				redir.addAttribute("result", "Medicines Data Updated Successfully");
-//			} else {
-//				redir.addAttribute("resultfail", "Medicines Data Update Unsuccessful");	
-//			}	
-//			
-//			redir.addFlashAttribute("chssapplyid",chssapplyid);
-//			return "redirect:/CHSSAppliedDetails.htm";
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error(new Date() +" Inside MedicineBillEdit.htm "+Username, e);
-//			return "static/Error";
-//		}
-//	}
-//	
-//	@RequestMapping(value = "MedicineBillDelete.htm", method = RequestMethod.POST )
-//	public String MedicineBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
-//	{
-//		String Username = (String) ses.getAttribute("Username");
-//		logger.info(new Date() +"Inside MedicineBillDelete.htm "+Username);
-//		try {
-//			
-//			String chssapplyid = req.getParameter("chssapplyid");
-//			String medicineid = req.getParameter("medicineid"); 
-//						
-//			long count = service.MedicineBillDelete(medicineid, Username);
-//			
-//			
-//			if (count > 0) {
-//				redir.addAttribute("result", "Medicines Data Deleted Successfully");
-//			} else {
-//				redir.addAttribute("resultfail", "Medicines Data Delete Unsuccessful");	
-//			}	
-//			
-//			redir.addFlashAttribute("chssapplyid",chssapplyid);
-//			return "redirect:/CHSSAppliedDetails.htm";
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error(new Date() +" Inside MedicineBillDelete.htm "+Username, e);
-//			return "static/Error";
-//		}
-//	}
+	@RequestMapping(value = "TestBillEdit.htm", method = RequestMethod.POST )
+	public String TestBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside TestBillEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String testid = req.getParameter("testid"); 
+			
+			String testtype = req.getParameter("test-maintype-"+testid);
+			String testsubid = req.getParameter("test-subid-"+testid);
+			String testcost = req.getParameter("test-cost-"+testid);
+			
+			CHSSTests test= new CHSSTests();
+			test.setCHSSTestId(Long.parseLong(testid));
+			test.setTestMainId(Long.parseLong(testtype));
+			test.setTestSubId(Long.parseLong(testsubid));
+			test.setTestCost(Integer.parseInt(testcost));
+			
+			
+			long count = service.TestBillEdit(test);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Test Data Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Test Data Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside TestBillEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "TestBillDelete.htm", method = RequestMethod.POST )
+	public String TestBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside TestBillDelete.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String testid = req.getParameter("testid"); 
+						
+			long count = service.TestBillDelete(testid, Username);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Test Data Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Test Data Delete Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSAppliedDetails.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside TestBillDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 	
 	

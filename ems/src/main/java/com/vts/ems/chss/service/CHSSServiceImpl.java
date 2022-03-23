@@ -377,7 +377,23 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
+	@Override
+	public long TestBillEdit(CHSSTests modal) throws Exception
+	{
+		CHSSTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
+		fetch.setTestMainId(modal.getTestMainId());
+		fetch.setTestSubId(modal.getTestSubId());
+		fetch.setTestCost(modal.getTestCost());
+		return dao.TestBillEdit(fetch);
+	}
 	
+	@Override
+	public long TestBillDelete(String chsstestid, String modifiedby ) throws Exception
+	{
+		CHSSTests fetch = dao.getCHSSTest(chsstestid);
+		fetch.setIsActive(0);
+		return dao.TestBillEdit(fetch);
+	}
 	
 	
 	@Override
