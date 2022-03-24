@@ -95,6 +95,7 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSType(dto.getCHSSType());
 				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
+				System.out.println(apply.getNoEnclosures());
 				apply.setCHSSStatus(1);
 				apply.setIsActive(1);
 				apply.setCreatedBy(dto.getCreatedBy());
@@ -108,7 +109,7 @@ public class CHSSServiceImpl implements CHSSService {
 				applyid=Long.parseLong(dto.getCHSSApplyId());
 			}
 			
-			
+			long billid =0;
 			for(int i=0 ; i<dto.getCenterName().length && applyid>0 ; i++)
 			{
 				CHSSBill bill = new CHSSBill();
@@ -116,14 +117,22 @@ public class CHSSServiceImpl implements CHSSService {
 				bill.setCenterName(dto.getCenterName()[i].trim());
 				bill.setBillNo(dto.getBillNo()[i]);
 				bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
-//				bill.setBillAmount(Integer.parseInt(dto.getBillAmount()[i]));
 				bill.setIsActive(1);
 				bill.setCreatedBy(dto.getCreatedBy());
-				bill.setCreatedDate(sdtf.format(new Date()));				
-				applyid = dao.CHSSBillAdd(bill);
+				bill.setCreatedDate(sdtf.format(new Date()));
+				
+				billid = dao.CHSSBillAdd(bill);
 			}
+			
+			if(dto.getCHSSApplyId()==null) {
+				return applyid;
+			}
+			
+			return billid;
+			
+			
 						
-			return applyid;
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside SERVICE CHSSApplySubmit");
@@ -170,7 +179,6 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setCenterName(bill.getCenterName());
 		fetch.setBillNo(bill.getBillNo());
 		fetch.setBillDate(bill.getBillDate());
-//		fetch.setBillAmount(bill.getBillAmount());
 		fetch.setModifiedBy(bill.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -505,5 +513,35 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.OtherBillEdit(fetch);
 	}
 	
+	@Override
+	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception
+	{
+		return  dao.CHSSTestsDataList(CHSSApplyId);
+	}
+	
+	@Override
+	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception 
+	{
+		return  dao.CHSSMiscDataList(CHSSApplyId);
+	}
+
+	@Override
+	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception {
+		
+		return dao.CHSSConsultDataList(CHSSApplyId);
+	}
+
+	@Override
+	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception {
+		
+		return dao.CHSSMedicineDataList(CHSSApplyId);
+	}
+
+	@Override
+	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception {
+		
+		return dao.CHSSOtherDataList(CHSSApplyId);
+	}
+		
 	
 }

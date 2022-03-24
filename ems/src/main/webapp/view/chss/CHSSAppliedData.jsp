@@ -136,7 +136,7 @@ option {
 								</select>
 							</div>
 							<div class="col-2">
-								<b>No of Enclosures : </b> <br><input type="text" class="form-control numberonly" name="enclosurecount" value="<%=chssapplydata[7] %>" min="1" required="required" >
+								<b>No of Enclosures : </b> <br><input type="text" class="form-control numberonly" name="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
 							</div>
 							<div class="col-2">
 								<button type="submit" class="btn btn-sm update-btn" style="margin-top: 15px;" Onclick="return confirm ('Are You Sure To Update?');">UPDATE</button> 

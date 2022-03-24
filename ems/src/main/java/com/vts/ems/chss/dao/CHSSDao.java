@@ -55,5 +55,10 @@ public interface CHSSDao {
 	public CHSSOther getCHSSOther(String otherid) throws Exception;
 	public long TestBillEdit(CHSSTests test) throws Exception;
 	public CHSSTests getCHSSTest(String chsstestid) throws Exception;
+	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 
 }

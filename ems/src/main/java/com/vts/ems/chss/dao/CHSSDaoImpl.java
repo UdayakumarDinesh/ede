@@ -171,8 +171,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CHSSBILLSLIST = "SELECT  cb.BillId, cb.CHSSApplyId,cb. BillNo,cb.CenterName,cb.BillDate,cb.BillAmount  FROM chss_bill cb WHERE cb.isactive=1 and cb.CHSSApplyId = :CHSSApplyId";
-	
 	@Override
 	public List<Object[]> CHSSBillsList(String chssapplyid) throws Exception
 	{
@@ -682,4 +680,90 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	private static final String CHSSTESTSDATALIST = "SELECT   ct.CHSSTestId, ct.BillId,  ct.TestMainId,  ct.TestSubId,  ct.TestCost,ctm.TestMainName, cts.TestName, cb.BillNo,  cb.BillDate FROM  chss_tests ct,  chss_test_main ctm,  chss_test_sub cts,  chss_bill cb WHERE ct.isactive = 1  AND ct.TestMainId = ctm.TestMainId  AND ct.TestSubId = cts.TestSubId  AND cb.BillId = ct.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+	
+	@Override
+	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSTestsDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSTESTSDATALIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cb.BillNo,  cb.BillDate FROM  chss_consultation cc,   chss_bill cb WHERE cc.isactive = 1  AND cb.BillId = cc.BillId  AND cb.CHSSApplyId = :CHSSApplyId ";
+
+	@Override
+	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSCONSULTDATALIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String CHSSMEDICINEDATALIST = "SELECT   cm.MedicineId,   cm.BillId,  cm.MedicineName,  cm.MedicineDate,  cm.MedicineCost,  cb.BillNo,  cb.BillDate FROM   chss_medicine cm,  chss_bill cb WHERE cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+
+	@Override
+	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSMedicineDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSMEDICINEDATALIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String CHSSOTHERDATALIST = "SELECT co.CHSSOtherId,   co.BillId,  co.OtherItemId,  co.OtherItemCost,  coi.OtherItemName,  cb.BillNo,  cb.BillDate FROM chss_other co,chss_other_items coi, chss_bill cb WHERE co.isactive = 1 AND  co.OtherItemId = coi.OtherItemId AND cb.BillId = co.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+
+	@Override
+	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO CHSSOtherDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSOTHERDATALIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	private static final String CHSSMISCDATALIST = "SELECT  cm.ChssMiscId,  cm.BillId,  cm.MiscItemName,  cm.MiscItemCost,  cb.BillNo,  cb.BillDate FROM  chss_misc cm,  chss_bill cb WHERE cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId =:CHSSApplyId";
+
+	@Override
+	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO CHSSMiscDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSMISCDATALIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 }

@@ -38,6 +38,7 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
+import com.vts.ems.pis.model.Employee;
 
 @Controller
 public class CHSSController {
@@ -56,7 +57,6 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
 		try {
-			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -142,7 +142,7 @@ public class CHSSController {
 			dto.setCHSSType("OPD");
 			dto.setCreatedBy(Username);
 			dto.setNoEnclosures(noenclosures);
-			
+			System.out.println(noenclosures);
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
@@ -1058,6 +1058,37 @@ public class CHSSController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside OtherBillDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "CHSSForm.htm", method = RequestMethod.GET )
+	public String CHSSForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSForm.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
+			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			
+			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
+			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
+			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+			
+			req.setAttribute("chssapplydata", chssapplicationdata);
+			req.setAttribute("employee", employee);
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			
+			return "chss/CHSSForm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSForm.htm "+Username, e);
 			return "static/Error";
 		}
 	}
