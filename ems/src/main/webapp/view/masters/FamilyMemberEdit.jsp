@@ -80,7 +80,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                    <select class="form-control input-sm selectpicker" name="relation" required  data-live-search="true">
 		                      <option value="">Select Relation</option>
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
-		                        <%-- <option value="<%=relativeLs[0]%>" <%if(memberdata.getRelation_id() == relativeLs[0]){%>selected<%}%>><%=relativeLs[1]%></option> --%>
+		                         <option value="<%=relativeLs[0]%>" <%if(memberdata.getRelation_id() == Integer.parseInt(relativeLs[0].toString())){%>selected<%}%>><%=relativeLs[1]%></option> 
 		                        <%} %> 
 		                                     
 		                    </select>
@@ -90,7 +90,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		               <div class="col-md-4">
 		                <div class="form-group">
 		                    <label>Ben Id:<span class="mandatory">*</span></label>
-		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
+		                    <input  id="BenidTextBox" value="<%=memberdata.getCghs_ben_id()%>"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
 		                </div>
 		               </div> 
 		                 		        	       
@@ -108,8 +108,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                               <!-- <option value="none" selected disabled hidden>Select Status</option> -->
                               
                                <% for(Object[] statusLs:StatusList){ %> 
-		                        <option value="<%=statusLs[0]%>"><%=statusLs[1]%></option>
-		                        <%} %>
+		                       <%--  <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
+		                        <%} %> --%>
                             </select>
                             </div>  
                         </div>
