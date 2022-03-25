@@ -113,8 +113,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             </select>
                             </div>  
                         </div>
-                        
-                      
+                                              
                         <div class="col-4">
                          <div class="form-group">
                           <label>Status From<span class="mandatory">*</span></label>
