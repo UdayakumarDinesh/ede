@@ -58,6 +58,13 @@ public interface CHSSService {
 	public long OtherBillAdd(CHSSOtherDto dto) throws Exception;
 	public long OtherBillEdit(CHSSOther modal) throws Exception;
 	public long OtherBillDelete(String chssotherid, String modifiedby) throws Exception;
+	public long TestBillEdit(CHSSTests modal) throws Exception;
+	public long TestBillDelete(String chsstestid, String modifiedby) throws Exception;
+	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
+	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	
 	
 
