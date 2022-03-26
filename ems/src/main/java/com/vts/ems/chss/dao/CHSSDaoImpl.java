@@ -153,7 +153,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return apply;
 	}
 	
-	private static final String CHSSAPPLIEDDATA = "SELECT ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,  fd.member_name,  fd.relation_id,  fr.relation_name,ca.CHSSApplyDate FROM  chss_apply ca,  pis_emp_family_details fd,  pis_emp_family_relation fr,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'N'  AND ca.PatientId = fd.family_details_id  AND fd.relation_id = fr.relation_id  AND ca.CHSSApplyId = :CHSSApplyId UNION SELECT   ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,   e.EmpName,  '0' AS 'relation_id',  'SELF' AS 'relation_name' ,ca.CHSSApplyDate FROM chss_apply ca,  employee e,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'Y'  AND ca.PatientId = e.EmpId  AND ca.CHSSApplyId = :CHSSApplyId";
+	private static final String CHSSAPPLIEDDATA = "SELECT ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,  fd.member_name,  fd.relation_id,  fr.relation_name,ca.CHSSApplyDate, ca.chssapplyno, ca.ailment FROM  chss_apply ca,  pis_emp_family_details fd,  pis_emp_family_relation fr,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'N'  AND ca.PatientId = fd.family_details_id  AND fd.relation_id = fr.relation_id  AND ca.CHSSApplyId = :CHSSApplyId UNION SELECT   ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,   e.EmpName,  '0' AS 'relation_id',  'SELF' AS 'relation_name' ,ca.CHSSApplyDate, ca.chssapplyno, ca.ailment  FROM chss_apply ca,  employee e,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'Y'  AND ca.PatientId = e.EmpId  AND ca.CHSSApplyId = :CHSSApplyId";
 	
 	@Override
 	public Object[] CHSSAppliedData(String chssapplyid) throws Exception
@@ -187,7 +187,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String EMPCHSSLIST = "SELECT ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,  fd.member_name,  fd.relation_id,  fr.relation_name, ca.CHSSApplyDate FROM  chss_apply ca,  pis_emp_family_details fd,  pis_emp_family_relation fr,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'N'  AND ca.PatientId = fd.family_details_id  AND fd.relation_id = fr.relation_id  AND ca.EmpId=:empid UNION  SELECT   ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,   e.EmpName,  '0' AS 'relation_id',  'SELF' AS 'relation_name',ca.CHSSApplyDate FROM chss_apply ca,  employee e,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'Y'  AND ca.PatientId = e.EmpId  AND ca.EmpId = :empid";
+	private static final String EMPCHSSLIST = "SELECT ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,  fd.member_name,  fd.relation_id,  fr.relation_name, ca.CHSSApplyDate, ca.chssapplyno, ca.ailment FROM  chss_apply ca,  pis_emp_family_details fd,  pis_emp_family_relation fr,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'N'  AND ca.PatientId = fd.family_details_id  AND fd.relation_id = fr.relation_id  AND ca.EmpId=:empid UNION  SELECT   ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatus,   ct.TreatmentName,  ca.isactive,   e.EmpName,  '0' AS 'relation_id',  'SELF' AS 'relation_name',ca.CHSSApplyDate, ca.chssapplyno, ca.ailment FROM chss_apply ca,  employee e,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'Y'  AND ca.PatientId = e.EmpId  AND ca.EmpId = :empid";
 	
 	@Override
 	public List<Object[]> empCHSSList(String empid) throws Exception
@@ -766,4 +766,25 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	
+	private static final String CHSSAPPLYNOCOUNT = "SELECT COUNT(chssapplyid),'count' AS 'count' FROM chss_apply WHERE chssapplyno LIKE :finYear ";
+
+	@Override
+	public String CHSSApplyNoCount(String finYear) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO CHSSMiscDataList");
+		try {
+			Query query= manager.createNativeQuery(CHSSAPPLYNOCOUNT);
+			query.setParameter("finYear", finYear+"%");
+			Object[] result= (Object[])query.getSingleResult();
+			return result[0].toString();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
 }

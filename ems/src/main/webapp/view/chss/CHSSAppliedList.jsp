@@ -1,5 +1,5 @@
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.vts.ems.DateTimeFormatUtil"%>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.chss.model.CHSSTreatType"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.util.List"%>
@@ -62,16 +62,16 @@
 			<div class="card" >
 				<div class="card-body " >
 					
-					<form action="#" method="post" id="empForm">
+					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
+										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
-										<td style="padding-top:5px; padding-bottom: 5px;" >Treatment Type</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Relation</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Ailment</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">CHSS Type</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
@@ -83,17 +83,23 @@
 										slno++; %>
 										<tr>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[10] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[14] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 													<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 												</button>	
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="" formaction="#" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
+												</button>	
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+													<i style="color: #019267" class="fa-solid fa-download"></i>
+												</button>
+												<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  onclick="return CheckClaimAmount(<%=obj[0] %>)" data-toggle="tooltip" data-placement="top" title="Forward">
+													<i class="fa-solid fa-forward" style="color: #A63EC5"></i>
 												</button>										
 											</td>
 										</tr>
@@ -110,6 +116,49 @@
 		</div>
 	
 	 </div>
+	 <form action="#" method="post" id="form2">
+	 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	 	<input type="hidden" id="form2-chssapplyid" name="chssapplyid" value="">
+	 </form>
+	 
+<script type="text/javascript">
+
+
+
+function CheckClaimAmount($chssapplyid)
+{
+	$.ajax({
+
+		type : "GET",
+		url : "CHSSClaimFwdApproveAjax.htm",
+		data : {
+				
+			chssapplyid : $chssapplyid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+						
+			if(result===1 && confirm('Are You Sure To Forward?')){
+				$('#form2-chssapplyid').val($chssapplyid);
+				$('#form2').submit();
+				
+			}else
+			{
+				alert('Please Add Bill and Items To Forward ');
+				return false;	
+			}
+		
+		}
+	});
+	
+}
+
+
+
+
+
+</script>
 
 
 </body>

@@ -60,5 +60,6 @@ public interface CHSSDao {
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
+	public String CHSSApplyNoCount(String finYear) throws Exception;
 
 }

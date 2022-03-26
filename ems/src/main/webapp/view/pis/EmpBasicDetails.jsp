@@ -2,7 +2,7 @@
 <%@page import="org.apache.commons.io.FilenameUtils"%>
 <%@page import="org.apache.commons.io.FileUtils"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.vts.ems.DateTimeFormatUtil" %>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>

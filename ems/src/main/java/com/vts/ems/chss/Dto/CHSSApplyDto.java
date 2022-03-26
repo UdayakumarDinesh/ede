@@ -24,7 +24,7 @@ public class CHSSApplyDto {
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-	
+	private String Ailment;
 	
 	private String[] BillNo; 
 	private String[] CenterName;

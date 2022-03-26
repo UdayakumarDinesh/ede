@@ -107,8 +107,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             <select class="form-control input-sm" name="status" required="required">
                               <!-- <option value="none" selected disabled hidden>Select Status</option> -->
                               
-                               <% for(Object[] statusLs:StatusList){ %> 
-		                       <%--  <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
+                               <%--  <% for(Object[] statusLs:StatusList){ %> 
+		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
 		                        <%} %> --%>
                             </select>
                             </div>  

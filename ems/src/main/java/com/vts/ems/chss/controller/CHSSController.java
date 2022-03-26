@@ -1,5 +1,12 @@
 package com.vts.ems.chss.controller;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.vts.ems.DateTimeFormatUtil;
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
@@ -39,6 +46,8 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class CHSSController {
@@ -125,6 +134,7 @@ public class CHSSController {
 			String relationid=req.getParameter("relationid");
 			String treatmenttype=req.getParameter("treatmenttype");
 			String noenclosures=req.getParameter("enclosurecount");
+			String ailment = req.getParameter("ailment");
 			
 			String[] centernames=req.getParameterValues("centername");
 			String[] billno=req.getParameterValues("billno");
@@ -142,7 +152,7 @@ public class CHSSController {
 			dto.setCHSSType("OPD");
 			dto.setCreatedBy(Username);
 			dto.setNoEnclosures(noenclosures);
-			System.out.println(noenclosures);
+			dto.setAilment(ailment);
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
@@ -172,7 +182,6 @@ public class CHSSController {
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSAppliedList.htm "+Username);
 		try {
-			
 			
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId));
 			return "chss/CHSSAppliedList";
@@ -342,6 +351,7 @@ public class CHSSController {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
 			
+			String ailment = req.getParameter("ailment");
 			String enclosurecount = req.getParameter("enclosurecount");
 			String treatmenttype = req.getParameter("treatmenttype");
 			
@@ -350,7 +360,7 @@ public class CHSSController {
 			dto.setNoEnclosures(enclosurecount);
 			dto.setTreatTypeId(treatmenttype);
 			dto.setModifiedBy(Username);
-			
+			dto.setAilment(ailment);
 			long count = service.CHSSApplyEdit(dto);
 			
 			
@@ -1063,7 +1073,7 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value = "CHSSForm.htm", method = RequestMethod.GET )
+	@RequestMapping(value = "CHSSForm.htm", method = RequestMethod.POST )
 	public String CHSSForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
@@ -1083,6 +1093,7 @@ public class CHSSController {
 			
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
+			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			
 			return "chss/CHSSForm";
@@ -1091,6 +1102,112 @@ public class CHSSController {
 			logger.error(new Date() +" Inside CHSSForm.htm "+Username, e);
 			return "static/Error";
 		}
+	}
+	
+	
+	@RequestMapping(value = "CHSSFormEmpDownload.htm")
+	public void CHSSFormEmpDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside CHSSFormEmpDownload.htm "+UserId);
+		
+		try {	
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
+			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			
+			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
+			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
+			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+			req.setAttribute("chssapplydata", chssapplicationdata);
+			req.setAttribute("employee", employee);
+			
+			String filename="CHSS-Claim";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+			
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/chss/CHSSForm.jsp").forward(req, customResponse);
+			String html1 = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        File f=new File(path +File.separator+ filename+".pdf");
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+		}
+
+	}
+	
+	@RequestMapping(value = "CHSSClaimFwdApproveAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String CHSSClaimFwdApproveAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSClaimFwdApproveAjax.htm "+Username);
+		long allow=0;
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
+			long claimamount=0;
+			for(Object[] bill : claimdata) {
+				claimamount += Long.parseLong(bill[5].toString());
+			}
+			
+			if(claimamount>0) {
+				allow=1;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSClaimFwdApproveAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(allow);
+	}
+	
+	@RequestMapping(value = "CHSSClaimUserForward.htm", method = RequestMethod.GET)
+	public @ResponseBody String CHSSClaimUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSClaimUserForward.htm "+Username);
+		long allow=0;
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			return "";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSClaimUserForward.htm "+Username, e);
+			return "static/Error";
+		}
+		
 	}
 	
 	
