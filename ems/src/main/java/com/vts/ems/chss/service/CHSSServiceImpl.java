@@ -1,6 +1,7 @@
 package com.vts.ems.chss.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vts.ems.DateTimeFormatUtil;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
@@ -29,6 +29,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
 public class CHSSServiceImpl implements CHSSService {
@@ -95,12 +96,14 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSType(dto.getCHSSType());
 				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-				System.out.println(apply.getNoEnclosures());
+				apply.setAilment(dto.getAilment());
 				apply.setCHSSStatus(1);
 				apply.setIsActive(1);
 				apply.setCreatedBy(dto.getCreatedBy());
 				apply.setCreatedDate(sdtf.format(new Date()));
 				apply.setCHSSApplyDate(sdf.format(new Date()));
+				
+				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
 				
 				applyid=dao.CHSSApplyAdd(apply);
 				
@@ -139,6 +142,30 @@ public class CHSSServiceImpl implements CHSSService {
 			return 0;
 		}
 		
+	}
+	
+	public String GenerateCHSSClaimNo() throws Exception
+	{
+		LocalDate today= LocalDate.now();
+		String start ="";
+		String end="";
+		
+		int currentmonth= today.getMonthValue();
+		if(currentmonth<4) 
+		{
+			start = String.valueOf(today.getYear()-1).substring(2);
+			end =String.valueOf(today.getYear()).substring(2);
+		}
+		else
+		{
+			start=String.valueOf(today.getYear()).substring(2);
+			end =String.valueOf(today.getYear()+1).substring(2);
+		}				
+		
+		String applynocount=dao.CHSSApplyNoCount(start+end);
+		String CNo = start+end+"-"+(Long.parseLong(applynocount)+1);
+		
+		return CNo;
 	}
 	
 	@Override
@@ -208,6 +235,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
 		fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
+		fetch.setAilment(dto.getAilment());
 		fetch.setModifiedBy(dto.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 			

@@ -87,7 +87,7 @@
 									<b>Patient Name :</b> <br><%=familyMemberData[1] %>
 								</div>
 								
-								<div class="col-3">
+								<div class="col-2">
 									<b>Relation : </b><br><%=familyMemberData[7] %>
 									<input type="hidden" name="patientid" value="<%=familyMemberData[0]%>">
 									<input type="hidden" name="relationid" value="<%=familyMemberData[2]%>">
@@ -99,16 +99,16 @@
 									<b> Patient Name : </b><br><%=employee.getEmpName() %>
 								</div>
 								
-								<div class="col-3">
+								<div class="col-2">
 									<b>Relation : </b><br>SELF
 									<input type="hidden" name="patientid" value="<%=employee.getEmpId()%>">
 									<input type="hidden" name="relationid" value="0">
 								</div>
 								
 							<%} %>
-							<div class="col-3">
+							<div class="col-2">
 								<b>Treatment Type : </b><br>
-								<select class="form-control select2" name="treatmenttype" required="required">
+								<select class="form-control select2 w-100" name="treatmenttype" required="required" >
 									<option value="" selected="selected" disabled="disabled">Choose..</option>
 									<%for(CHSSTreatType treattype : treattypelist ){ %>
 										<option value="<%=treattype.getTreatTypeId()%>"><%=treattype.getTreatmentName() %></option>
@@ -116,7 +116,11 @@
 								</select>
 							</div>
 							<div class="col-3">
-								<b>No of Enclosures : </b> <br><input type="number" class="form-control" name="enclosurecount" value="" min="1" required="required" >
+								<b>Ailment/Disease/Accident : </b><br>
+								<input type="text" class="form-control w-100" name="ailment" value="" required="required" maxlength="255" >
+							</div>
+							<div class="col-2">
+								<b>No of ENCL : </b> <br><input type="number" class="form-control w-100" name="enclosurecount" value="" min="1" required="required" >
 							</div>
 							
 						</div>
@@ -159,6 +163,8 @@
 
 <script type="text/javascript">
 
+var threeMonthsAgo = moment().subtract(3, 'months');
+
 
 var count=1;
 
@@ -178,7 +184,7 @@ var count=1;
 			"linkedCalendars" : false,
 			"showCustomRangeLabel" : true,
 			"maxDate" :new Date(),
-			"startDate" : new Date(),
+			"minDate" : threeMonthsAgo,
 			"cancelClass" : "btn-default",
 			showDropdowns : true,
 			locale : {
@@ -210,6 +216,7 @@ var count=1;
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		"maxDate" :new Date(), 
+		"minDate" : threeMonthsAgo,
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
