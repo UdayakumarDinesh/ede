@@ -22,7 +22,42 @@
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
-
+<script type="text/javascript">
+function validateform(){
+	var x = confirm("Are you sure To Submit?");
+	
+	  if (x){
+		  var pan =$("#PAN").val();
+		  var uid =$("#UIDTextBox").val();
+		  var sbiAccount = $("#SBITextBox").val();
+		  var internalnum = $("#InternalNum").val();
+		  
+		if(pan.length<10){
+			 alert("Check PAN Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(uid.length<12){
+			 alert("Check UID Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(sbiAccount.length<11){
+			 alert("Check SBI Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(internalnum.length<4){
+			 alert("Check Internal Number!");
+		       event.preventDefault();
+		       return false;
+		}
+	      return true;
+	  
+	  }else{
+	 return false;}
+}
+</script>
 </head>
 <body>
 
@@ -245,13 +280,19 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                </select>
 			            </div>
 			            
-						 <div class=" col-md-2 ">
+						 <%-- <div class=" col-md-2 ">
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                     onblur=" checknegative(this) ">
-			            </div>
+			                     onblur="checknegative(this)">
+			            </div> --%>
 
+                        <div class=" col-md-2 ">
+			                <label>PunchCard No<span class=" mandatory ">*</span></label>
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
+			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
+			                     onblur="checknegative(this) ">
+			            </div>
 			
 			        </div>
 			    </div>
@@ -378,8 +419,8 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 				</div>
 			            
 			            
-			    <div class=" form-group ">
-			        <div class=" row ">
+			  <!--   <div class=" form-group ">
+			        <div class=" row "> -->
 			
 			
 			          
@@ -417,15 +458,15 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
 			                    placeholder="Enter Permanent Pass No">
 			            </div> -->
-			        </div>
-			    </div>
+			      <!--   </div>
+			    </div> -->
 			       
 
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
 					<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
-					<button type="submit" class="btn btn-sm submit-btn" name="action" onclick="return  confirm('Are You Sure To Submit?')" value="submit" >SUBMIT</button>
+					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="validateform();" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			
@@ -435,11 +476,15 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	
 	 </div>
 </div>
+
+
+
+
 <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
-setPatternFilter($("#PAN"),^[a-zA-Z0-9_]*$);
+setPatternFilter($("#PAN"),/^[a-zA-Z0-9_]*$/);
 
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });
@@ -469,13 +514,12 @@ function checknegative(str) {
 </script>
 
 
-
-
-
-
-
 <script type="text/javascript">
 
+
+$(document).ready(function () {
+	
+	
  $('#dob').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -488,11 +532,12 @@ function checknegative(str) {
 		format : 'DD-MM-YYYY'
 	}
 });
+
  $('#doa').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		//"minDate" :new Date(), 
+		"minDate" :  $('#dob').val(), 
 		//"startDate" : new Date(),
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
@@ -505,7 +550,7 @@ function checknegative(str) {
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		//"minDate" :new Date(), 
+		"minDate" :  $('#dob').val(), 
 		//"startDate" : new Date(),
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
@@ -514,17 +559,60 @@ function checknegative(str) {
 		}
 	});
  
+ 
+});
+
+
+$('#dob').on('change', function() { 
+    var datearray =  $('#dob').val();
+   
+    $('#doa').daterangepicker({
+		
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :datearray, 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+    
+	 $('#doj').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			"minDate" :datearray,  
+			"startDate" : new Date(),
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+  });
+ 
+
+
+
+
 	 $('empstatus').select2("enable", false)
-	 $('#empname').bind('keyup', function() {
-		  var c = this.selectionStart,
-		      r = /[^a-z]/gi,
-		      v = $(this).val();
-		  if(r.test(v)) {
-		    $(this).val(v.replace(r, ''));
-		    c--;
-		  }
-		  this.setSelectionRange(c, c);
-		}); 
+	 
+	 $('#empname').keypress(function (e) {
+	        var regex = new RegExp("^[a-zA-Z \s]+$");
+	        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+	        if (regex.test(str)) {
+	            return true;
+	        }
+	        else
+	        {
+	        e.preventDefault();
+	        alert('Please Enter Alphabate');
+	        return false;
+	        }
+	    });
 	
 	
 </script>
@@ -560,6 +648,19 @@ $("#PunchcardTextBox").blur(function(){
             }
       });
 
+
+
+
+
+function isNumber(evt)
+  {
+   evt = (evt) ? evt : window.event;
+   var charCode = (evt.which) ? evt.which : evt.keyCode;
+   if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    return false;
+  }
+   return true; 
+}
 </script>
 
 </body>

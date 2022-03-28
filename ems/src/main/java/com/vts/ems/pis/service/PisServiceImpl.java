@@ -340,4 +340,32 @@ public class PisServiceImpl implements PisService
 	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception{
 		return dao.getMemberDetails(familyid);
 	}
+	
+	@Override
+	public Long EditFamilyDetails(EmpFamilyDetails Details)throws Exception{
+		
+		EmpFamilyDetails member = dao.getMember(String.valueOf(Details.getFamily_details_id()));
+
+		member.setMember_name(Details.getMember_name());
+		member.setDob(Details.getDob());
+		member.setRelation_id(Details.getRelation_id());
+		member.setCghs_ben_id(Details.getCghs_ben_id());
+		member.setFamily_status_id(Details.getFamily_status_id());
+		member.setStatus_from(Details.getStatus_from());
+		member.setBlood_group(Details.getBlood_group());
+		member.setPH(Details.getPH());
+ 	    member.setMed_dep(Details.getMed_dep());
+ 	    member.setMed_dep_from(Details.getMed_dep_from());
+ 	    member.setLtc_dep(Details.getLtc_dep());
+        member.setLtc_dep_from(Details.getLtc_dep_from());
+ 	    member.setMar_unmarried(Details.getMar_unmarried());
+    	member.setEmp_unemp(Details.getEmp_unemp());
+     	member.setEmpid(Details.getEmpid());
+     	member.setModifiedBy(Details.getModifiedBy());
+ 	    member.setModifiedDate(Details.getModifiedDate());
+		member.setEmpStatus(Details.getEmpStatus());
+		member.setIsActive(1);
+		return dao.EditFamilyDetails( member);
+	}
+	
 }
