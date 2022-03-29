@@ -31,7 +31,8 @@ public class CHSSApply implements Serializable {
 	private Integer TreatTypeId;
 	private Integer NoEnclosures;
 	private String CHSSApplyDate;
-	private Integer CHSSStatus;
+	private Integer CHSSStatusId;
+	private String Remarks;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

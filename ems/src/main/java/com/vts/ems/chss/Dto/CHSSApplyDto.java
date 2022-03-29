@@ -19,6 +19,7 @@ public class CHSSApplyDto {
 	private String TreatTypeId;
 	private String NoEnclosures;
 	private String CHSSStatus;
+	private String Remarks;
 	private String IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

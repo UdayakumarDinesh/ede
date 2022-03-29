@@ -47,10 +47,10 @@ public class PisDaoImpl implements PisDao {
 	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard";
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
 	private static final String PHOTOUPDATE = "update employee set photo=:Path where empid=:EmpId";
-	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, a.Pfms , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
+	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
 	private static final String EMPLIST = "SELECT empid ,empname FROM employee WHERE isactive=1 ORDER BY srno";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
-	private static final String  LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
+	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate , empid=:empid WHERE loginid=:loginid";
 	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob , c.family_status FROM pis_emp_family_details a , pis_emp_family_relation b , pis_emp_family_status c WHERE a.family_status_id = c.family_status_id   AND a.relation_id = b.relation_id AND a.IsActive='1' AND a.empid=:empid";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";

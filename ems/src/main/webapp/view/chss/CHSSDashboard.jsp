@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<% String logintype = (String) session.getAttribute("LoginType"); %>
+
  <div class="col page">
 	<div class="card-header page-top">
 		<div class="row">
@@ -32,12 +34,17 @@
 			<div class="card" >
 				<div class="card-body " >
 					<div class="row" > 
-						<div class="col-md-3">
-							<button type="submit" class=" db-button " formaction="CHSSApply.htm" >CHSS Apply</button>
+						<div class="col-md-3 ">
+							<button type="submit" class=" db-button w-100" formaction="CHSSApply.htm" >CHSS Apply</button>
 						</div>
-						<div class="col-md-3">
-							<button type="submit" class=" db-button " formaction="CHSSAppliedList.htm" >CHSS List</button>
+						<div class="col-md-3 ">
+							<button type="submit" class=" db-button w-100" formaction="CHSSAppliedList.htm" >CHSS List</button>
 						</div>
+						<%if(logintype.equalsIgnoreCase("A") || logintype.equalsIgnoreCase("D") || logintype.equalsIgnoreCase("G") || logintype.equalsIgnoreCase("Y") || logintype.equalsIgnoreCase("Z")){ %>
+							<div class="col-md-3 ">
+								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
+							</div>
+						<%} %>
 					</div>
 				</div>
 			</div>		

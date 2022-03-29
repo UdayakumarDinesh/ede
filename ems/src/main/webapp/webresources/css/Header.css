@@ -19,12 +19,12 @@
 }    
          
    
-.form-control {
+/* .form-control {
   width: 80% ;
   height:50% ;  
   box-sizing: border-box;
 } 
-     
+  */    
 body {
     font-family: 'Poppins', sans-serif;
     background: #fff;
@@ -508,7 +508,7 @@ body{
 }
 #sidebar-container {
     min-height: 93vh;   
-    background-color: #750550;
+    background:linear-gradient(to bottom, #363795, #005C97);
     padding: 0;
 }
 
@@ -516,7 +516,8 @@ body{
 
 
 .navbar{
-	background-color: #750550;
+	/* background-color: #750550; */
+	background : linear-gradient(to right, #363795, #005C97);
 }
 
 

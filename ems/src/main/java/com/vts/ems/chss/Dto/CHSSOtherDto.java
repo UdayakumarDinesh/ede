@@ -10,4 +10,6 @@ public class CHSSOtherDto {
 	private String OtherItemId[];
 	private String OtherItemCost[];
 	
+	private String empid;
+	
 }

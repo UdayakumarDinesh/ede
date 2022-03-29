@@ -33,10 +33,10 @@
 				<div class="card-body " >
 					<div class="row" > 
 						<div class="col-md-3">
-							<button type="submit" class=" db-button " formaction="PisAdminEmpList.htm" >Employee Details</button>
+							<button type="submit" class=" db-button w-100" formaction="PisAdminEmpList.htm" >Employee Details</button>
 						</div>
 						<div class="col-md-3">
-							<button type="submit" class=" db-button " formaction="LoginMaster.htm" >Login Master</button>
+							<button type="submit" class=" db-button w-100" formaction="LoginMaster.htm" >Login Master</button>
 						</div>
 					</div>
 				</div>

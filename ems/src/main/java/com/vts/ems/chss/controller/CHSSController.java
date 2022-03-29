@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,14 +79,13 @@ public class CHSSController {
 	public String CHSSApplyhtm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		String EmpNo = (String) ses.getAttribute("EmpNo");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSApply.htm "+Username);
 		try {
 			
 			
 			req.setAttribute("employee", service.getEmployee(EmpId));
-			req.setAttribute("empfamilylist", service.familyDetailsList(EmpNo));
+			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			return "chss/CHSSApply";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -478,6 +478,9 @@ public class CHSSController {
 		}
 	}
 	
+	
+	
+	
 	@RequestMapping(value = "ChssConsultationListAjax.htm", method = RequestMethod.GET)
 	public @ResponseBody String ChssConsultationListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
@@ -582,13 +585,14 @@ public class CHSSController {
 			String[] medsname=req.getParameterValues("meds-name");
 			String[] medsdate=req.getParameterValues("meds-date");
 			String[] medscost=req.getParameterValues("meds-cost");
-			
+			String[] medsquantity=req.getParameterValues("meds-quantity");
 			CHSSMedicineDto dto=new CHSSMedicineDto();
 			
 			dto.setBillId(billid);
 			dto.setMedicineName(medsname);
 			dto.setMedicineDate(medsdate);
 			dto.setMedicineCost(medscost);
+			dto.setMedQuantity(medsquantity);
 			
 			long count= service.MedicinesBillAdd(dto);
 			if (count > 0) {
@@ -637,13 +641,14 @@ public class CHSSController {
 			String medsname = req.getParameter("meds-name-"+medicineid);
 			String medsdate = req.getParameter("meds-date-"+medicineid);
 			String medscost = req.getParameter("meds-cost-"+medicineid);
-			
+			String medsquantity = req.getParameter("meds-quantity-"+medicineid);
+
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
 			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
 			meds.setMedicineCost(Integer.parseInt(medscost));
-			
+			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			
 			long count = service.MedicineBillEdit(meds);
 			
@@ -822,7 +827,7 @@ public class CHSSController {
 	public String MiscBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside OtherBillAdd.htm "+Username);
+		logger.info(new Date() +"Inside MiscBillAdd.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String billid = req.getParameter("billid");
@@ -976,6 +981,7 @@ public class CHSSController {
 	public String OtherBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside OtherBillAdd.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -989,6 +995,7 @@ public class CHSSController {
 			dto.setBillId(billid);
 			dto.setOtherItemId(otheritemid);
 			dto.setOtherItemCost(otheritemcost);
+			dto.setEmpid(EmpId);
 			
 			long count= service.OtherBillAdd(dto);
 			if (count > 0) {
@@ -1119,9 +1126,10 @@ public class CHSSController {
 			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			
+			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
-			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("chssapplydata", chssapplicationdata);
@@ -1191,20 +1199,63 @@ public class CHSSController {
 		return json.toJson(allow);
 	}
 	
-	@RequestMapping(value = "CHSSClaimUserForward.htm", method = RequestMethod.GET)
-	public @ResponseBody String CHSSClaimUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
+	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CHSSClaimUserForward.htm "+Username);
-		long allow=0;
+		logger.info(new Date() +"Inside CHSSUserForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
+			String action = req.getParameter("claimaction");
 			
-			return "";
+			long count = service.CHSSUserForward(chssapplyid, Username, action);
+			if (count > 0) {
+				redir.addAttribute("result", "Claim application Forwarded Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim application Forwarding Unsuccessful");	
+			}	
+			return "redirect:/CHSSAppliedList.htm";
 		} catch (Exception e) {
 			
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSClaimUserForward.htm "+Username, e);
+			logger.error(new Date() +" Inside CHSSUserForward.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value = "CHSSApprovalsList.htm", method = RequestMethod.POST)
+	public String CHSSApprovalsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside CHSSApprovalsList.htm "+Username);
+		try {
+			String fromdate =req.getParameter("fromdate");
+			String todate =req.getParameter("todate");
+			
+			if(fromdate ==null || todate==null) 
+			{
+				LocalDate today= LocalDate.now();
+								
+				fromdate = today.minusMonths(1).withDayOfMonth(21).toString();
+				todate = today.minusDays(today.getDayOfMonth()).plusDays(20).toString();
+				
+			}else
+			{
+				fromdate = sdf.format(rdf.parse(fromdate));
+				todate = sdf.format(rdf.parse(todate));
+			}
+			
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType, fromdate, todate));
+			return "chss/CHSSApprovalList";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSApprovalsList.htm "+Username, e);
 			return "static/Error";
 		}
 		

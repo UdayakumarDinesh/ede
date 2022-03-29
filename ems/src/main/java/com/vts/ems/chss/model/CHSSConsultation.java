@@ -27,6 +27,7 @@ public class CHSSConsultation implements Serializable {
 	private String DocQualification;
 	private String ConsultDate;
 	private Integer ConsultCharge;
+	private Integer ConsultRemAmount;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

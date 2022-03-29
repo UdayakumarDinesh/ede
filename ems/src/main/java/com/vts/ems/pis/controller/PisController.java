@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -73,7 +74,7 @@ public class PisController {
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside PisAdminEmpList.htm "+Username);		
 		try {
-			List<Object[]> EmployeeDetailsList =null;
+			List<Object[]> EmployeeDetailsList =new ArrayList<Object[]>();
 			if(LoginType.equalsIgnoreCase("A")) 
 			{
 				EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);

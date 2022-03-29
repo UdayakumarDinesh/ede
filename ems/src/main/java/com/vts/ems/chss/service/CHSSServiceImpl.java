@@ -24,6 +24,7 @@ import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSPaybandRemlist;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -97,12 +98,12 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
 				apply.setAilment(dto.getAilment());
-				apply.setCHSSStatus(1);
+				apply.setCHSSStatusId(1);
 				apply.setIsActive(1);
 				apply.setCreatedBy(dto.getCreatedBy());
 				apply.setCreatedDate(sdtf.format(new Date()));
 				apply.setCHSSApplyDate(sdf.format(new Date()));
-				
+				apply.setRemarks(dto.getRemarks());
 				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
 				
 				applyid=dao.CHSSApplyAdd(apply);
@@ -187,7 +188,8 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<Object[]> empCHSSList(String empid) throws Exception
 	{
-		return dao.empCHSSList(empid);
+		List<Object[]> empCHSSList =  dao.empCHSSList(empid);
+		return empCHSSList;
 	}
 	@Override
 	public CHSSBill getCHSSBill(String billid) throws Exception
@@ -282,10 +284,13 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				consult.setConsultCharge(Integer.parseInt(dto.getConsultCharge()[i]));
 				
+				consult.setConsultRemAmount(getConsultEligibleAmount(consult.getConsultCharge(),consult.getDocQualification(),consult.getConsultType()));
+				
 				consult.setIsActive(1);
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));				
 				count = dao.ConsultationBillAdd(consult);
+					
 			}
 						
 			return count;
@@ -296,6 +301,76 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
+	
+	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) 
+	{
+		if(isfresh.equalsIgnoreCase("Fresh")) 
+		{
+			if(speciality.equalsIgnoreCase("Specialist")) 
+			{
+				if(applyamount>=350) {
+					return 350;
+				}else {
+					return applyamount;
+				}
+			}
+			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+			{
+				if(applyamount>=450) {
+					return 450;
+				}else {
+					return applyamount;
+				}
+			}
+			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+			{
+				if(applyamount>=100) {
+					return 100;
+				}else {
+					return applyamount;
+				}
+			}
+		}
+		else if(isfresh.equalsIgnoreCase("FollowUp")) 
+		{
+			if(speciality.equalsIgnoreCase("Specialist")) 
+			{
+				if(applyamount>=300) {
+					return 300;
+				}else {
+					return applyamount;
+				}
+			}
+			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+			{
+				if(applyamount>=350) {
+					return 350;
+				}else {
+					return applyamount;
+				}
+			}
+			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+			{
+				if(applyamount>=100) {
+					return 100;
+				}else {
+					return applyamount;
+				}
+			}
+		}else
+		{
+			if(applyamount>=300) {
+				return 300;
+			}else
+			{
+				return applyamount;
+			}
+		}
+		
+		return 0;
+	}
+	
+	
 	
 	@Override
 	public long ConsultationBillEdit(CHSSConsultation modal) throws Exception
@@ -308,9 +383,11 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
+		fetch.setConsultRemAmount(getConsultEligibleAmount(modal.getConsultCharge(),modal.getDocQualification(),modal.getConsultType()));
+
+		
 		return dao.ConsultationBillEdit(fetch);
 	}
-	
 	
 	@Override
 	public long ConsultationBillDelete(String consultationid, String modifiedby ) throws Exception
@@ -321,6 +398,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.ConsultationBillEdit(fetch);
 	}
+	
 	
 	
 	@Override
@@ -338,9 +416,12 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setBillId(Long.parseLong(dto.getBillId()));
 				meds.setMedicineName(dto.getMedicineName()[i]);
 				meds.setMedicineDate(sdf.format(rdf.parse(dto.getMedicineDate()[i])));
+				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
+				meds.setMedsRemAmount(Integer.parseInt(dto.getMedicineCost()[i]));
 				meds.setIsActive(1);
 				count = dao.MedicinesBillAdd(meds);
+				
 			}
 						
 			return count;
@@ -351,6 +432,9 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
+	
+	
+	
 	
 	@Override
 	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception
@@ -365,6 +449,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setMedicineName(modal.getMedicineName());
 		fetch.setMedicineDate(modal.getMedicineDate());
 		fetch.setMedicineCost(modal.getMedicineCost());
+		fetch.setMedQuantity(modal.getMedQuantity());
+		fetch.setMedsRemAmount(modal.getMedicineCost());
 		return dao.MedicineBillEdit(fetch);
 	}
 	
@@ -387,14 +473,15 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			for(int i=0 ; i<dto.getTestMainId().length; i++)
 			{
-				CHSSTests  meds = new CHSSTests();
+				CHSSTests  test = new CHSSTests();
 				
-				meds.setBillId(Long.parseLong(dto.getBillId()));
-				meds.setTestMainId(Long.parseLong(dto.getTestMainId()[i]));
-				meds.setTestSubId(Long.parseLong(dto.getTestSubId()[i]));
-				meds.setTestCost(Integer.parseInt(dto.getTestCost()[i]));
-				meds.setIsActive(1);
-				count = dao.TestsBillAdd(meds);
+				test.setBillId(Long.parseLong(dto.getBillId()));
+				test.setTestMainId(Long.parseLong(dto.getTestMainId()[i]));
+				test.setTestSubId(Long.parseLong(dto.getTestSubId()[i]));
+				test.setTestCost(Integer.parseInt(dto.getTestCost()[i]));
+				test.setIsActive(1);
+				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i]));
+				count = dao.TestsBillAdd(test);
 			}
 						
 			return count;
@@ -405,6 +492,23 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
+	
+	
+	public int getTestEligibleAmount(int applyamount,String testsubid) throws Exception 
+	{
+		int testsubamount = dao.getCHSSTestSub(testsubid).getTestRate();
+		
+		if(testsubamount<= applyamount)
+		{
+			return testsubamount;
+		}
+		else
+		{
+			return applyamount;
+		}
+	}
+	
+	
 	
 	@Override
 	public List<CHSSTests> CHSSTestsList(String billid) throws Exception
@@ -420,6 +524,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setTestMainId(modal.getTestMainId());
 		fetch.setTestSubId(modal.getTestSubId());
 		fetch.setTestCost(modal.getTestCost());
+		fetch.setTestRemAmount(getTestEligibleAmount(modal.getTestCost(),String.valueOf(modal.getTestSubId())));
 		return dao.TestBillEdit(fetch);
 	}
 	
@@ -437,9 +542,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		logger.info(new Date() +"Inside SERVICE MiscBillAdd");		
 		try {
-			
 			long count=0;
-			
 			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
 			{
 				CHSSMisc  misc = new CHSSMisc();
@@ -447,11 +550,12 @@ public class CHSSServiceImpl implements CHSSService {
 				misc.setBillId(Long.parseLong(dto.getBillId()));
 				misc.setMiscItemName(dto.getMiscItemName()[i]);
 				misc.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
+				misc.setMiscRemAmount(0);
 				misc.setIsActive(1);
 				count = dao.MiscBillAdd(misc);
 			}
-						
 			return count;
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
@@ -511,6 +615,9 @@ public class CHSSServiceImpl implements CHSSService {
 				other.setOtherItemId(Integer.parseInt(dto.getOtherItemId()[i]));
 				other.setOtherItemCost(Integer.parseInt(dto.getOtherItemCost()[i]));
 				other.setIsActive(1);
+				
+				other.setOtherRemAmount(getOtherItemRemAmount(dto.getEmpid(),dto.getOtherItemId()[i],Integer.parseInt(dto.getOtherItemCost()[i]) ));
+				
 				count = dao.OtherBillAdd(other);
 			}
 						
@@ -521,6 +628,41 @@ public class CHSSServiceImpl implements CHSSService {
 			return 0;
 		}
 		
+	}
+	
+	
+	public int getOtherItemRemAmount(String empid,String otheritemid,int itemcost) throws Exception
+	{
+		Employee emp =dao.getEmployee(empid);
+		CHSSPaybandRemlist remlist = dao.getCHSSPaybandRemlist(otheritemid);
+		int rembamt = 0;
+		if(emp.getPayLevelId()>=-1 && emp.getPayLevelId()<=6) 
+		{
+			rembamt = remlist.getLevel1();
+		}
+		else if(emp.getPayLevelId()>=7 && emp.getPayLevelId()<=10) 
+		{
+			rembamt = remlist.getLevel2();
+		}
+		else if(emp.getPayLevelId()>=11 && emp.getPayLevelId()<=14) 
+		{
+			rembamt = remlist.getLevel3();
+		}
+		else if(emp.getPayLevelId()>=15 && emp.getPayLevelId()<=18) 
+		{
+			rembamt = remlist.getLevel4();
+		}
+		
+		
+		if(itemcost<= rembamt)
+		{
+			return itemcost;
+		}
+		else
+		{
+			return rembamt;
+		}
+			
 	}
 	
 	
@@ -570,6 +712,67 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return dao.CHSSOtherDataList(CHSSApplyId);
 	}
-		
 	
+	
+	@Override
+	public long CHSSUserForward(String CHSSApplyId,String Username, String action) throws Exception {
+		
+		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
+		int claimstatus = claim.getCHSSStatusId();
+		if(action.equalsIgnoreCase("F")) 
+		{
+			if(claimstatus==1 || claimstatus==3 ) 
+			{
+				claim.setCHSSStatusId(2);
+			}
+			else if(claimstatus==2 || claimstatus==5 ) 
+			{
+				claim.setCHSSStatusId(4);
+			}
+			else if(claimstatus==4 || claimstatus==7 ) 
+			{
+				claim.setCHSSStatusId(6);
+			}
+			else if(claimstatus==6 || claimstatus==9 ) 
+			{
+				claim.setCHSSStatusId(8);
+			}
+			else if(claimstatus==8 ) 
+			{
+				claim.setCHSSStatusId(10);
+			}
+		}
+		
+		if(action.equalsIgnoreCase("R")) 
+		{
+			if(claimstatus==2 || claimstatus==5 ) 
+			{
+				claim.setCHSSStatusId(3);
+			}
+			else if(claimstatus==4 || claimstatus==7 ) 
+			{
+				claim.setCHSSStatusId(5);
+			}
+			else if(claimstatus==6 || claimstatus==9 ) 
+			{
+				claim.setCHSSStatusId(7);
+			}
+			else if(claimstatus==8 ) 
+			{
+				claim.setCHSSStatusId(9);
+			}
+		}
+		
+		claim.setModifiedBy(Username);
+		claim.setModifiedDate(sdf.format(new Date()));
+		
+		return dao.CHSSApplyEdit(claim);
+	}
+		
+	@Override
+	public List<Object[]> CHSSApproveClaimList(String logintype, String fromdate, String todate) throws Exception 
+	{
+		
+		return dao.CHSSApproveClaimList(logintype, fromdate, todate);
+	}
 }
