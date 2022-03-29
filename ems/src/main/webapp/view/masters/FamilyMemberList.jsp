@@ -97,13 +97,13 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 					<div  class="row text-center" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
 				 	<button type="submit" class="btn btnclr"  style="background-color: #750550; color:#fff;" name="family" value="family" disabled="disabled" >Family</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Appointment</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Awards</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Property</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Address</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)"> Publication</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Passport</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Education</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Appointment</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Awards</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Property</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Address</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" > Publication</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Passport</button>
 					</div>
 				</div> 
 					<input type="hidden" name="empid" value="<%=empdata[2]%>">
@@ -144,7 +144,7 @@ function Delete(myfrm) {
 	var cnf = confirm("Are You Sure To Delete!");
 
 	if (cnf) {
-		console.log("QQQQQQQQQQQQQ");
+		
 		document.getElementById("empForm").submit();
 		return true;
 

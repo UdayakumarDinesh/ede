@@ -75,7 +75,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 				       <div class="col-md-8">
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
-		                    <select class="form-control input-sm selectpicker" name="relation" required  data-live-search="true">
+		                    <select class="form-control input-sm " name="relation" required  data-live-search="true">
 		                      <option value="">Select Relation</option>
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
 		                        <option value="<%=relativeLs[0]%>"><%=relativeLs[1]%></option>
@@ -88,7 +88,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		               <div class="col-md-4">
 		                <div class="form-group">
 		                    <label>Ben Id:<span class="mandatory">*</span></label>
-		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
+		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9" required="required"  placeholder="Enter BenID" onclick="checkLength()">
 		                </div>
 		               </div> 
 		                 		        	       
@@ -239,13 +239,15 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">
+							 <div class="form-group">
 							<input type="hidden" name="empid" value="<%= empdata[2]%>">
 								<button type="submit" class="btn btn-sm submit-btn"
 									onclick="return confirm('Are You Sure To Submit?');"
 									name="action" value="submit">SUBMIT</button>
+									</div>
 							</div>
 						</div>
-						
+						<div><div class="col-12"></div></div>						
 			</form>
 		</div>
 		</div>
@@ -273,7 +275,6 @@ $("#EmpId").on("change",function(e){
 	   
 	 var EmpValue =$("#EmpId").val();
 	    
-	    console.log("sdfsd" +EmpValue);
 	 
 	    if(!(EmpValue=="N")){
 		
@@ -288,6 +289,7 @@ $("#EmpId").on("change",function(e){
  
 
 $(document).ready(function(){
+
 	   $("#EmpHide").hide();
 });
 </script>

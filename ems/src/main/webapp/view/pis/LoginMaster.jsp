@@ -82,7 +82,7 @@
 					
 					<div class="row text-center">
 						<div class="col-md-12">
-							<button type="submit" class="btn btn-sm add-btn" name="action" value="Add"   >ADD </button>
+							<button type="submit" class="btn btn-sm add-btn" name="action" value="Add"   >CREATE </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="Edit"  Onclick="Edit(empForm)" >EDIT </button>
                            <button type="button" class="btn btn-sm delete-btn" name="action" value="Delete" Onclick=" Delete(empForm)" >DELETE </button>
                            <!--  <button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button> -->

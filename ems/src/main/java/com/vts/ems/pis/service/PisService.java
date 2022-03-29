@@ -50,4 +50,5 @@ public interface PisService {
 	public Long AddFamilyDetails(EmpFamilyDetails Details)throws Exception;
 	public int DeleteMeber(String familyid,String Username)throws Exception;
 	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception;
+	public Long EditFamilyDetails(EmpFamilyDetails Details)throws Exception;
 }

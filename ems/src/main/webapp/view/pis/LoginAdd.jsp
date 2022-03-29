@@ -65,7 +65,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 						</div>
 					</div>
 
-					<form name="myfrm" action="UserManagerEditSubmit.htm" method="POST">
+					<form name="myfrm" action="UserManagerAddSubmit.htm" method="POST">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table

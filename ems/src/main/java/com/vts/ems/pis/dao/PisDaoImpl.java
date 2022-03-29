@@ -486,4 +486,37 @@ public class PisDaoImpl implements PisDao {
 		return memberEditData;
 	}
 	
+	
+	@Override
+	public EmpFamilyDetails getMember(String familyid) throws Exception {
+		logger.info(new Date() + "Inside PisCaderList()");
+		EmpFamilyDetails memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EmpFamilyDetails> cq = cb.createQuery(EmpFamilyDetails.class);
+			Root<EmpFamilyDetails> root = cq.from(EmpFamilyDetails.class);
+			Predicate p1 = cb.equal(root.get("family_details_id"), Long.parseLong(familyid));
+			cq = cq.select(root).where(p1);
+			TypedQuery<EmpFamilyDetails> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long EditFamilyDetails(EmpFamilyDetails Details) throws Exception {
+	
+		logger.info(new Date() + "Inside EditFamilyDetails()");
+		try {
+			manager.merge(Details);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Details.getFamily_details_id();
+	}
 }

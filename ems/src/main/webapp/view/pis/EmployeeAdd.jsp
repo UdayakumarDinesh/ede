@@ -16,7 +16,42 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include> 
-
+<script type="text/javascript">
+function validateform(){
+	var x = confirm("Are you sure To Submit?");
+	
+	  if (x){
+		  var pan =$("#PAN").val();
+		  var uid =$("#UIDTextBox").val();
+		  var sbiAccount = $("#SBITextBox").val();
+		  var internalnum = $("#InternalNum").val();
+		  
+		if(pan.length<10){
+			 alert("Check PAN Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(uid.length<12){
+			 alert("Check UID Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(sbiAccount.length<11){
+			 alert("Check SBI Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(internalnum.length<4){
+			 alert("Check Internal Number!");
+		       event.preventDefault();
+		       return false;
+		}
+	      return true;
+	  
+	  }else{
+	 return false;}
+}
+</script>
 </head>
 <body>
 
@@ -176,8 +211,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 						<div class=" col-md-2 ">
 			                <label>Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder="Enter Email " required="required" onclick=" return trim(this) "
-			                    onchange=" return trim(this) ">
+			                    placeholder="Enter Email " required="required" onclick=" return trim(this)"
+			                    onchange="return trim(this) ">
 			            </div>
 			            
 			
@@ -217,7 +252,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
-			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
 			            </div>
 			
 			
@@ -226,7 +261,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
 			
-						<div class=" col-md-2 ">
+						<div class="col-md-2">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">
@@ -242,7 +277,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                     onblur=" checknegative(this) ">
+			                     onblur="checknegative(this) ">
 			            </div>
 			
 			           
@@ -251,12 +286,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        </div>
 			    </div>
 			
-			    <div class=" form-group ">
-			        <div class=" row ">
+			    <div class="form-group">
+			        <div class="row">
 
 			           
 			
-						<div class=" col-md-2 ">
+						<div class="col-md-2">
 			                <label>PayLevel<span class=" mandatory ">*</span></label>
 			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
 								<%for( PisPayLevel paylevel: paylevellist){ %>
@@ -277,13 +312,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			
 			
-			            <!-- <div class=" col-md-2 ">
-			                <label> Sub Category/Caste <span class=" mandatory ">*</span></label>
-			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
-			                    class=" form-control input-sm " placeholder="Enter Sub Category ">
-			
-			            </div> -->
-							
+			           
 						<div class=" col-md-2 ">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
 			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
@@ -307,7 +336,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			               <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
 			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
+			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "   id="InternalNum"
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
 			
@@ -317,7 +346,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    
 			    
 			    <div class=" form-group ">
-			        <div class=" row ">
+			        <div class="row">
     
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
@@ -347,10 +376,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			            
 			            
-			            <!-- <div class=" col-md-2 ">
-			                <label>PIN DRONA:</label>
-			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div> -->
+
 			
 			            <div class=" col-md-2 ">
 			                <label>GPF/PRAN:</label>
@@ -367,8 +393,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 				</div>
 			            
 			            
-			    <div class=" form-group ">
-			        <div class=" row ">
+			    <!-- <div class=" form-group ">
+			        <div class=" row "> -->
 			
 			
 			           
@@ -406,14 +432,14 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
 			                    placeholder="Enter Permanent Pass No">
 			            </div> -->
-			        </div>
-			    </div>
+			     <!--    </div>
+			    </div> -->
 			    
 			    
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-			    	<button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Submit?');" name="action" value="submit" >SUBMIT</button>
+			    	<button type="submit" class="btn btn-sm submit-btn" Onclick="validateform();" name="action" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			
@@ -426,56 +452,103 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 
 <script type="text/javascript">
 
- $('#dob').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	//"minDate" :new Date(), 
-	"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
- $('#doa').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		//"minDate" :new Date(), 
-		"startDate" : new Date(),
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-		}
-	});
- 
- $('#doj').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		//"minDate" :new Date(), 
-		"startDate" : new Date(),
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-		}
-	});
 
 	  
+ $(document).ready(function () {
+	 
+	 $('#dob').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			//"minDate" :new Date(), 
+			"startDate" : new Date(),
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+		 
+	
+		    $('#doa').daterangepicker({
+				
+				"singleDatePicker" : true,
+				"linkedCalendars" : false,
+				"showCustomRangeLabel" : true,
+				"minDate" :$('#dob').val(), 
+				"startDate" : new Date(),
+				"cancelClass" : "btn-default",
+				showDropdowns : true,
+				locale : {
+					format : 'DD-MM-YYYY'
+				}
+			});
+		    
+			 $('#doj').daterangepicker({
+					"singleDatePicker" : true,
+					"linkedCalendars" : false,
+					"showCustomRangeLabel" : true,
+					"minDate"  : $('#dob').val(),  
+					"startDate" : new Date(),
+					"cancelClass" : "btn-default",
+					showDropdowns : true,
+					locale : {
+						format : 'DD-MM-YYYY'
+					}
+				});
+		
+		 
+
+	});
+ 
+ $('#dob').on('change', function() { 
+	    var datearray =  $('#dob').val();
+	   
+	    $('#doa').daterangepicker({
+			
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			"minDate" :datearray, 
+			"startDate" : new Date(),
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+	    
+		 $('#doj').daterangepicker({
+				"singleDatePicker" : true,
+				"linkedCalendars" : false,
+				"showCustomRangeLabel" : true,
+				"minDate" :datearray,  
+				"startDate" : new Date(),
+				"cancelClass" : "btn-default",
+				showDropdowns : true,
+				locale : {
+					format : 'DD-MM-YYYY'
+				}
+			});
+	  });
+ 
+ 
+ 
 	 $('empstatus').select2("enable", false)
-	 $('#empname').bind('keyup', function() {
-		  var c = this.selectionStart,
-		      r = /[^a-z]/gi,
-		      v = $(this).val();
-		  if(r.test(v)) {
-		    $(this).val(v.replace(r, ''));
-		    c--;
-		  }
-		  this.setSelectionRange(c, c);
-		}); 
+	
+		$('#empname').keypress(function (e) {
+	        var regex = new RegExp("^[a-zA-Z \s]+$");
+	        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+	        if (regex.test(str)) {
+	            return true;
+	        }
+	        else
+	        {
+	        e.preventDefault();
+	        alert('Please Enter Alphabate');
+	        return false;
+	        }
+	    });
 	
 	
 </script>
@@ -537,7 +610,7 @@ $("#PunchcardTextBox").blur(function(){
 
 
         }else{
-
+        	
      	   $("#awailable").html(" ");
 
             }
@@ -556,6 +629,30 @@ $("#PAN").keypress(function(event){
        return false;
     }
 });
+
+};
+
+function trim(el) {
+    el.value = el.value.
+       replace (/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+       replace (/[ ]{2,}/gi," ").       // replaces multiple spaces with one space 
+       replace (/\n +/,"\n");           // Removes spaces after newlines
+    return;
+}
+
+function isNumber(evt)
+  {
+   evt = (evt) ? evt : window.event;
+   var charCode = (evt.which) ? evt.which : evt.keyCode;
+   if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    return false;
+  }
+   return true; 
+}
+
+
+
+
 </script>
 </body>
 </html>

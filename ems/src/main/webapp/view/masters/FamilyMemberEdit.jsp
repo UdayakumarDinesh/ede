@@ -23,7 +23,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 			<div class="row">
 				<div class="col-5">
 					<h5>
-						Family Members Add<small><b>&nbsp;&nbsp;<%if(empdata!=null){%> <%=empdata[0]%>(<%=empdata[1]%>)
+						Family Members Edit<small><b>&nbsp;&nbsp;<%if(empdata!=null){%> <%=empdata[0]%>(<%=empdata[1]%>)
 						<%}%></b></small>
 					</h5>
 				</div>
@@ -32,7 +32,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 						<li class="breadcrumb-item active " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
-						<li class="breadcrumb-item active " aria-current="page">Family Add</li>
+						<li class="breadcrumb-item active " aria-current="page">Family Edit</li>
 					</ol>
 				</div>
 			</div>
@@ -42,7 +42,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		
 		<div class="row">
 		<div class="col-3"></div>
-		<form action="AddFamilyDetails.htm" method="POST">
+		<form action="EditFamilyDetails.htm" method="POST">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card"  > 
 		<div class="card-header">
@@ -61,7 +61,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="col-md-4">
 		                 <div class="form-group">
                             <label>Date Of Birth:<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getDob()%>" readonly="readonly" name="dob"required="required">
+                            <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getDob()%>" id="DOB" readonly="readonly" name="dob"required="required">
                         </div>
 		                
 		              </div>
@@ -73,14 +73,17 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                  
                 <!-- RELATIONSHIP & BENID-->
                 
-                 <div class="row">
+               	
+				
+				
+				 <div class="row">
 				       <div class="col-md-8">
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm selectpicker" name="relation" required  data-live-search="true">
 		                      <option value="">Select Relation</option>
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
-		                         <option value="<%=relativeLs[0]%>" <%if(memberdata.getRelation_id() == Integer.parseInt(relativeLs[0].toString())){%>selected<%}%>><%=relativeLs[1]%></option> 
+		                       <option value="<%=relativeLs[0]%>" <%if(memberdata.getRelation_id() == Integer.parseInt(relativeLs[0].toString())){%>selected<%}%>><%=relativeLs[1]%></option>
 		                        <%} %> 
 		                                     
 		                    </select>
@@ -95,6 +98,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		               </div> 
 		                 		        	       
 				</div>	
+				
+				
                 <!-- RELATIONSHIP & BENID-->
                 
                 
@@ -105,11 +110,17 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
                             <select class="form-control input-sm" name="status" required="required">
-                              <!-- <option value="none" selected disabled hidden>Select Status</option> -->
+                              <option value="none" selected disabled hidden>Select Status</option> 
                               
+
+                               <%for(Object[] statusLs:StatusList){ %> 
+		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt(statusLs[0].toString())){%>selected<%}%>><%=statusLs[1]%></option>
+		                       <%} %> 
+
                                <%--  <% for(Object[] statusLs:StatusList){ %> 
 		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
 		                        <%} %> --%>
+
                             </select>
                             </div>  
                         </div>
@@ -117,7 +128,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                         <div class="col-4">
                          <div class="form-group">
                           <label>Status From<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm mydate" name="statusDate" readonly="readonly" required="required" placeholder="Enter Date" />
+                            <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getStatus_from()%>" id="STATUSDATE" name="statusDate" readonly="readonly" required="required" placeholder="Enter Date" />
                          </div>
                         </div>
                    
@@ -126,15 +137,15 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             <label>BG:<span class="mandatory">*</span></label>
                             <select class="form-control input-sm" name="bloodgroup" required="required" style="width:70px; height: 30px;" >
                                 
-                                <option value="A-">A-</option>
-                                <option value="A+">A+</option>
-                                <option value="B-">B-</option>
-                                <option value="B+">B+</option>
-                                <option value="AB-">AB-</option>
-                               <option value="AB+">AB+</option>
-                               <option value="O-">O-</option>
-                               <option value="O+">O+</option>
-                               <option value="Not Available">Not Available</option>
+                                <option value="A-" <%if(memberdata.getBlood_group().equalsIgnoreCase("A-")){%> selected <%}%>>A-</option>
+                                <option value="A+" <%if(memberdata.getBlood_group().equalsIgnoreCase("A+")){%> selected <%}%>>A+</option>
+                                <option value="B-" <%if(memberdata.getBlood_group().equalsIgnoreCase("B-")){%> selected <%}%>>B-</option>
+                                <option value="B+" <%if(memberdata.getBlood_group().equalsIgnoreCase("B+")){%> selected <%}%>>B+</option>
+                                <option value="AB-" <%if(memberdata.getBlood_group().equalsIgnoreCase("AB-")){%> selected <%}%>>AB-</option>
+                               <option value="AB+" <%if(memberdata.getBlood_group().equalsIgnoreCase("AB+")){%> selected <%}%>>AB+</option>
+                               <option value="O-" <%if(memberdata.getBlood_group().equalsIgnoreCase("O-")){%> selected <%}%>>O-</option>
+                               <option value="O+" <%if(memberdata.getBlood_group().equalsIgnoreCase("O+")){%> selected <%}%>>O+</option>
+                               <option value="Not Available" <%if(memberdata.getBlood_group().equalsIgnoreCase("Not Available")){%> selected <%}%>>Not Available</option>
                             </select>
                         </div>
                     </div>
@@ -144,8 +155,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                        <div class="form-group">
 		                	<label>PH:<span class="mandatory">*</span></label>
 		                    <select name="PH" class="form-control input-sm" style="padding: 3px 6px; ">
-		                    <option value="N">No</option>
-		                    <option value="Y">Yes</option>
+		                    <option value="N" <%if(memberdata.getPH().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                    <option value="Y"  <%if(memberdata.getPH().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
 		                    </select>
 		                 </div>
                     </div>
@@ -165,13 +176,13 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                        <div class="input-group">
 		                          <span class="input-group-addon" style="padding: 3px 6px;">
 		                           <select name="medicaldep" class="form-control input-sm" style="width: 100%; height: 30px;">
-		                          <option value="N">No</option>
-		                          <option value="Y" >Yes</option>
+		                          <option value="N" <%if(memberdata.getMed_dep().equalsIgnoreCase("N")){%>selected<%}%> >No</option>
+		                          <option value="Y" <%if(memberdata.getMed_dep().equalsIgnoreCase("Y")){%>selected<%}%> >Yes</option>
 		                         
 		                          </select>
 		                            
 		                          </span>
-		                          <input type="text" class="form-control input-sm mydate" name="medicaldepdate" readonly="readonly" placeholder="Enter Date" required style="width: 85px">
+		                          <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getMed_dep_from()%>" id="MEDICALDEPDATE" name="medicaldepdate" readonly="readonly" placeholder="Enter Date" required style="width: 85px">
 		                        </div><!-- /input-group -->
 		                    </div> 
 		                </div><!-- / Medical -->
@@ -183,12 +194,12 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                        <div class="input-group">
 		                          <span class="input-group-addon" style="padding: 3px 6px;">
 		                          <select name="ltcdep" class="form-control input-sm" style="width: 100%; height: 30px;">
-		                          <option value="Y" >Yes</option>
-		                          <option value="N">No</option>
+		                          <option value="Y" <%if(memberdata.getLtc_dep().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
+		                          <option value="N" <%if(memberdata.getLtc_dep().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
 		                          </select>
 		                               
 		                          </span>
-		                         <input type="text" class="form-control input-sm mydate"  readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="LTC" name="LTC"  required="required"  >
+		                        <input type="text" class="form-control input-sm mydate"  readonly="readonly" value="<%=memberdata.getLtc_dep_from()%>" placeholder=""  id="LTC" name="LTC"  required="required"  >
 		                        </div><!-- /input-group -->
 		                    </div> 
 		                </div><!-- LTC Dependent -->
@@ -201,8 +212,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                        <div class="form-group">
 		                	<label>Married:<span class="mandatory">*</span></label>
 		                    <select name="married_unmarried" class="form-control input-sm" style="padding: 3px 6px; height: 30px;">
-		                    <option value="N">No</option>
-		                    <option value="Y">Yes</option>
+		                    <option value="N" <%if(memberdata.getMar_unmarried().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                    <option value="Y" <%if(memberdata.getMar_unmarried().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
 		                    </select>
 		                 </div>
                     </div>
@@ -210,10 +221,10 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                     
                      <div class="col-2">
                        <div class="form-group">
-		                	<label>Employed:<span class="mandatory">*</span></label>
+		                	<label>Employed: <%=memberdata.getEmp_unemp() %><span class="mandatory">*</span></label>
 		                    <select name="emp_unemp" id="EmpId" class="form-control input-sm" style="width:70px; height: 30px;">
-		                    <option value="N">No</option>
-		                    <option value="Y">Yes</option>       
+		                    <option value="N" <%if(memberdata.getEmp_unemp().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                    <option value="Y" <%if(memberdata.getEmp_unemp().equalsIgnoreCase("Y")){%> selected <%}%> >Yes</option>       
 		                    </select>
 		                 </div>
                     </div>
@@ -223,27 +234,32 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                
                 <!--// dependency ,Employed,Married-->
 				<div class="row">
-							 <div class="col-md-4" id = "EmpHide">
+				
+							 <div class="col-md-4" id ="EmpHide">
                          <div class="form-group">
-                          <label>Employed Status:<span class="mandatory">*</span></label>
+                          <label>Employed Status:  <span class="mandatory">*</span></label>
                             <select class="form-control input-sm" name="EmpStatus" required="required">
                               <!-- <option value="none" selected disabled hidden>Select Status</option> -->
-		                    <option value="Private">Private</option>
-		                    <option value="Central Goverment">Central Goverment.</option>
-		                    <option value="State Goverment">State Goverment</option>
-		                    <option value="PSU">PSU</option>
+		                    <option value="Private" <% if(memberdata.getEmpStatus()!=null){ if(memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}}%>>Private</option>
+		                    <option value="Central Goverment"  <% if(memberdata.getEmpStatus()!=null){ if(memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}}%>>Central Goverment.</option>
+		                    <option value="State Goverment" <%if(memberdata.getEmpStatus()!=null){  if(memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}}%>>State Goverment</option>
+		                    <option value="PSU" <%if(memberdata.getEmpStatus()!=null){  if(memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}}%>>PSU</option>
 		                      
                             </select>
                             </div>  
                         </div>
+                      
 				</div>
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">
-							<input type="hidden" name="empid" value="<%= empdata[2]%>">
+							 <div class="form-group">
+							 <input type="hidden" name="empid" value="<%=empdata[2]%>"> 
+							  <input type="hidden" name="familyid" value="<%=memberdata.getFamily_details_id()%>"> 
 								<button type="submit" class="btn btn-sm submit-btn"
 									onclick="return confirm('Are You Sure To Submit?');"
 									name="action" value="submit">SUBMIT</button>
+									</div>
 							</div>
 						</div>
 						
@@ -251,15 +267,29 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		</div>
 		</div>
 		</div>
+		
 		</div>
 </body>
 <script type="text/javascript">
-$('.mydate').daterangepicker({
+$('#LTC').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	//"minDate" :new Date(), 
-	"startDate" : new Date(),
+	//"startDate" : new Date(),
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+$('#MEDICALDEPDATE').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	//"minDate" :new Date(), 
+	//"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -268,13 +298,42 @@ $('.mydate').daterangepicker({
 });
 
 
+$('#STATUSDATE').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	//"minDate" :new Date(), 
+	//"startDate" : new Date(),
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+$('#DOB').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	//"minDate" :new Date(), 
+	//"startDate" : new Date(),
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+$(document).ready(function(){
+	
+	   $("#EmpHide").hide();
+});
 
 
 $("#EmpId").on("change",function(e){
-	   
-	 var EmpValue =$("#EmpId").val();
-	    
-	    console.log("sdfsd" +EmpValue);
+	 
+	 var EmpValue =$("#EmpId").val();	   
+
 	 
 	    if(!(EmpValue=="N")){
 		
@@ -288,9 +347,7 @@ $("#EmpId").on("change",function(e){
 });
  
 
-$(document).ready(function(){
-	   $("#EmpHide").hide();
-});
+
 </script>
 
 <script type="text/javascript">
@@ -325,3 +382,5 @@ function checknegative(str) {
 
 </script>
 </html>
+
+

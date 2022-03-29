@@ -740,26 +740,73 @@ public class PisController {
    }
    
    
-//   @RequestMapping(value="MemberDelete.htm" , method=RequestMethod.GET)
-//   public String MemberDelete(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
-//	   String Username = (String) ses.getAttribute("Username");
-//       logger.info(new Date() +"Inside familyDetailsAdd.htm "+Username);
-//       try {
-//    	   String empid = (String)req.getParameter("empid");
-//    	   String  familyid = (String) req.getParameter("familyid");
-//    	   
-//    	  int count  = service.DeleteMeber(familyid,Username);
-//    	  if(count>0){
-//   		   redir.addAttribute("result", "MEMBER DELETE SUCCESSFULLY");	
-//  		   } else {
-//  			redir.addAttribute("resultfail", "MEMBER DELETE UNSUCCESSFUL");
-//   	      }
-//   	   redir.addFlashAttribute("Employee", empid);  	  
-//	  } catch (Exception e) {
-//		e.printStackTrace();
-//	   }
-//       return "redirect:/FamilyMembersList.htm";
-//   }
+   @RequestMapping(value="EditFamilyDetails.htm" , method=RequestMethod.POST)
+   public String MemberDelete(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside EditFamilyDetails.htm "+Username);
+       try {
+    	   String name = (String)req.getParameter("memberName");
+    	   String dob  = (String)req.getParameter("dob");
+    	   String relation = (String)req.getParameter("relation");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String empid = (String)req.getParameter("empid");
+    	   String familyid= (String)req.getParameter("familyid");
+    	   
+    	   EmpFamilyDetails details = new EmpFamilyDetails();
+    	 
+    	   details.setMember_name(name);
+    	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+    	   details.setRelation_id(Integer.parseInt(relation));
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone);
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
+    	   details.setEmpid(empid);
+    	   details.setModifiedBy(Username);
+    	   details.setModifiedDate(sdf.format(new Date()));
+    	   
+    	   
+    	   
+    	   details.setFamily_details_id(Long.parseLong(familyid));
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+    	   }
+    	   Long result = service.EditFamilyDetails(details);
+    	   if(result>0){
+    		   redir.addAttribute("result", "MEMBER EDIT SUCCESSFULLY");	
+   		   } else {
+   			redir.addAttribute("resultfail", "MEMBER EDIT UNSUCCESSFUL");
+    	   }
+    	  
+    	   redir.addFlashAttribute("Employee", empid);
+    	   
+    	   
+    	   
+	      } catch (Exception e) {
+	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
+				req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
+				e.printStackTrace();
+				return "static/Error";
+	      }
+       return "redirect:/FamilyMembersList.htm";
+   }
    
    
    
