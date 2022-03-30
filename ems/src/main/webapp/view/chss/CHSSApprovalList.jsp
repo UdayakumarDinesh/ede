@@ -35,7 +35,7 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS List</li>
+						<li class="breadcrumb-item active " aria-current="page">CHSS Approval List</li>
 					</ol>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 													</button>	
 												<%} %>
 												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												
@@ -126,7 +126,8 @@
 													<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  onclick="return CheckClaimAmount(<%=obj[0] %>)"  data-toggle="tooltip" data-placement="top" title="Forward">
 														<i class="fa-solid fa-forward" style="color: #A63EC5"></i>
 													</button>
-												<%} %>										
+												<%} %>				
+												<input type="hidden" name="isapproval" value="Y">						
 											</td>
 										</tr>
 									<%} %>

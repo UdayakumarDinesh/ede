@@ -107,7 +107,8 @@
 													<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  onclick="return CheckClaimAmount(<%=obj[0] %>)"  data-toggle="tooltip" data-placement="top" title="Forward">
 														<i class="fa-solid fa-forward" style="color: #A63EC5"></i>
 													</button>
-												<%} %>										
+												<%} %>			
+												<input type="hidden" name="isapproval" value="Y">							
 											</td>
 										</tr>
 									<%} %>

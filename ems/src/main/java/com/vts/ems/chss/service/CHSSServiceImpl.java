@@ -717,7 +717,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public long CHSSUserForward(String CHSSApplyId,String Username, String action) throws Exception {
+	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks) throws Exception {
 		
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
@@ -765,6 +765,7 @@ public class CHSSServiceImpl implements CHSSService {
 			}
 		}
 		
+		claim.setRemarks(remarks);
 		claim.setModifiedBy(Username);
 		claim.setModifiedDate(sdf.format(new Date()));
 		
@@ -785,6 +786,38 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultRemAmount(modal.getConsultRemAmount());
 		
 		return dao.ConsultationBillEdit(fetch);
+	}
+	
+	@Override
+	public long TestRemAmountEdit(CHSSTests modal) throws Exception
+	{
+		CHSSTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
+		fetch.setTestRemAmount(modal.getTestRemAmount());
+		return dao.TestBillEdit(fetch);
+	}
+	
+	@Override
+	public long OtherRemAmountEdit(CHSSOther modal) throws Exception
+	{
+		CHSSOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
+		fetch.setOtherRemAmount(modal.getOtherRemAmount());
+		return dao.OtherBillEdit(fetch);
+	}
+	
+	@Override
+	public long MedRemAmountEdit(CHSSMedicine modal) throws Exception
+	{
+		CHSSMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getMedicineId()));
+		fetch.setMedsRemAmount(modal.getMedsRemAmount());
+		return dao.MedicineBillEdit(fetch);
+	}
+	
+	@Override
+	public long MiscRemAmountEdit(CHSSMisc modal) throws Exception
+	{
+		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
+		fetch.setMiscRemAmount(modal.getMiscRemAmount());
+		return dao.MiscBillEdit(fetch);
 	}
 	
 	

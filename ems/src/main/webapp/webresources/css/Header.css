@@ -587,21 +587,21 @@ body{
  font-size: 18px;
  border-radius: 5px;
  background: transparent;
- border : 0.1rem solid #9C0F48;
+ border : 0.1rem solid #005C97;
  min-width: 33.3%;
- color: #9C0F48;
+ color: #005C97;
 }
 
 .db-button:hover {	
 	color: white;
-	background: #9C0F48;	
-	border : 0.1rem solid #9C0F48;
+	background: #005C97;	
+	border : 0.1rem solid #005C97;
 }
 
 .db-button:active {	
-	color: #9C0F48;
+	color: #005C97;
 	background-color : transparent;
-	border : 0.1rem solid #9C0F48;
+	border : 0.1rem solid #005C97;
 }
 
 .breadcrumb-item a

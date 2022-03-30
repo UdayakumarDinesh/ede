@@ -175,14 +175,13 @@ public class CHSSDaoImpl implements CHSSDao {
 		return apply;
 	}
 	
-	private static final String CHSSAPPLIEDDATA = "SELECT ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatusid,   ct.TreatmentName,  ca.isactive,  fd.member_name,  fd.relation_id,  fr.relation_name,ca.CHSSApplyDate, ca.chssapplyno, ca.ailment FROM  chss_apply ca,  pis_emp_family_details fd,  pis_emp_family_relation fr,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'N'  AND ca.PatientId = fd.family_details_id  AND fd.relation_id = fr.relation_id  AND ca.CHSSApplyId = :CHSSApplyId UNION SELECT   ca.chssapplyid,  ca.EmpId,  ca.patientid,  ca.isself,  ca.FollowUp,  ca.chssnewid,  ca.chsstype,  ca.TreatTypeId,  ca.noenclosures,  ca.chssstatusid,   ct.TreatmentName,  ca.isactive,   e.EmpName,  '0' AS 'relation_id',  'SELF' AS 'relation_name' ,ca.CHSSApplyDate, ca.chssapplyno, ca.ailment  FROM chss_apply ca,  employee e,  chss_treattype ct WHERE ca.TreatTypeId = ct.TreatTypeId AND ca.IsSelf = 'Y'  AND ca.PatientId = e.EmpId  AND ca.CHSSApplyId = :CHSSApplyId";
 	
 	@Override
 	public Object[] CHSSAppliedData(String chssapplyid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO CHSSAppliedData");
 		try {
-			Query query = manager.createNativeQuery(CHSSAPPLIEDDATA);
+			Query query = manager.createNativeQuery("CALL chss_claim_data(:CHSSApplyId);");
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getSingleResult();
 		}catch (Exception e) {

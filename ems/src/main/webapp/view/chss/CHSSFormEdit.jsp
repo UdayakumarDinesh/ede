@@ -38,8 +38,8 @@ p {
 table{
 	align: left;
 	width: 100% !important;
-	/* margin-top: 10px; 
-	margin-bottom: 10px; */
+	margin-top: 10px; 
+	margin-bottom: 10px;
 	margin-left:10px;
 	border-collapse:collapse;
 	
@@ -98,6 +98,7 @@ th,td
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
+						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">CHSS List</li>
 					</ol>
 				</div>
@@ -123,19 +124,18 @@ th,td
 				
 			<div class="card" >
 				<div class="card-body " >
-
 					<div align="center">
 						<div align="center">
 							<div>
 								<div>
-									<h4>MEDICAL CLAIM</h4>
+									<h3 style="font-weight: 600;">MEDICAL CLAIM</h3>
 									<div align="right"> No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
 								</div>
 							
 								<table>	
 									<tbody>
 										<tr>
-											<th>Name:</th>
+											<th>Name</th>
 											<th>Emp No</th>
 											<th>Grade</th>
 										</tr>
@@ -274,10 +274,10 @@ th,td
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 65%;">Particulars</th>
-													<th class="right" style="width: 15%;">Amount Claimed</th>
-													<th class="right" style="width: 20%;">Reimbursable under CHSS</th>
+													<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
+													<th class="right" style="width: 20%;">Reimbursable under CHSS (&#8377;)</th>
 												</tr>
-												<%long itemstotal=0; %>
+												<%long itemstotal=0, totalremamount=0; %>
 												<% int i=1;
 												for(Object[] consult :ConsultDataList)
 												{%>
@@ -306,27 +306,30 @@ th,td
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
 														<td class="right">
-															<input type="number" class="numberonly" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
-															<button type="submit" class="btn btn-sm" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update>')">
+															<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+															<button type="submit" class="btn btn-sm"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>												
 														</td>
 													</tr>					
 												<%	i++;
 													itemstotal += Integer.parseInt(consult[6].toString());
+													totalremamount +=Integer.parseInt(consult[7].toString());
 												} %>
 													
 												
 										</form>
-								<form action="">
-									
+										<form action="TestRemAmountEdit.htm" method="post">
 											<% i=1;
 											for(Object[] test :TestsDataList)
 											{%>
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;"><b>Pathological/Investigations Test</b></td>
-														<td class="right"></td>
+														<td class="right">
+															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
+														</td>
 														<td class="right"></td>
 													</tr>
 													<tr>
@@ -340,15 +343,20 @@ th,td
 													<td><%=test[8] %></td>
 													<td colspan="3"><%=test[6] %></td>
 													<td class="right"><%=test[4] %></td>
-													<td class="right"></td>
+													<td class="right">
+														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+														<button type="submit" class="btn btn-sm"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+														</button>												
+													</td>
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(test[4].toString());
+											totalremamount +=Integer.parseInt(test[7].toString());
 											} %>
 												
-								</form>
-								<form action="">
-									
+									</form>
+									<form action="OtherRemAmountEdit.htm" method="post">
 											
 											<% i=1;
 											for(Object[] other : OtherDataList)
@@ -356,7 +364,10 @@ th,td
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;"><b>Others</b></td>
-														<td class="right"></td>
+														<td class="right">
+															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+														</td>
 														<td class="right"></td>
 													</tr>
 													<tr>
@@ -370,16 +381,20 @@ th,td
 													<td><%=other[6] %></td>
 													<td colspan="3"><%=other[4] %></td>
 													<td class="right"><%=other[3] %></td>
-													<td class="right"></td>
+													<td class="right">
+														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
+														<button type="submit" class="btn btn-sm"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+														</button>	
+													</td>
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(other[3].toString());
+											totalremamount +=Integer.parseInt(other[5].toString());
 											} %>
 												
-								</form>
-								<form action="">
-									
-											
+									</form>
+									<form action="MedRemAmountEdit.htm" method="post">
 											
 											<% i=1;
 											for(Object[] medicine : MedicineDataList)
@@ -387,7 +402,10 @@ th,td
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;"><b>Medicines</b></td>
-														<td class="right"></td>
+														<td class="right">
+															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+														</td>
 														<td class="right"></td>
 													</tr>
 													<tr>
@@ -403,15 +421,20 @@ th,td
 													<td colspan="2"><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
 													<td class="center"><%=rdf.format(sdf.parse(medicine[3].toString()))%></td>
 													<td class="right"><%=medicine[4] %></td>
-													<td class="right"></td>
+													<td class="right">
+														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
+														<button type="submit" class="btn btn-sm"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+														</button>
+													</td>
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(medicine[4].toString());
+											totalremamount +=Integer.parseInt(medicine[6].toString());
 											}%>
 											
-								</form>
-								<form action="">
-										
+									</form>
+									<form action="MiscRemAmountEdit.htm" method="post">
 											
 											<% i=1;
 											for(Object[] misc : MiscDataList)
@@ -419,7 +442,10 @@ th,td
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;"><b>Miscellaneous</b></td>
-														<td class="right"></td>
+														<td class="right">
+															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+														</td>
 														<td class="right"></td>
 													</tr>
 													<tr>
@@ -433,17 +459,23 @@ th,td
 													<td><%=misc[5] %></td>
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
-													<td class="right"></td>
+													<td class="right">
+														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="miscremamount-<%=misc[0]%>" style="direction: rtl;" value="<%=misc[6]%>">
+														<button type="submit" class="btn btn-sm"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+														</button>
+													</td>
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(misc[3].toString());
+											totalremamount +=Integer.parseInt(misc[4].toString());
 											}%>
 										
 										<tr>
 											<td colspan="3"></td>
-											<td>Total</td>
-											<td class="right"><%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
-											<td></td>	
+											<td class="right">Total</td>
+											<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
+											<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %></td>
 										</tr>
 												
 								</form>
@@ -458,11 +490,11 @@ th,td
 										</tr>
 										
 										<tr>
-											<td colspan="6">Admitted to Rs. ............................. (Rupees .....................................................................................................Only)</td>
+											<td colspan="6">Admitted to Rs. <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
 										</tr>
 										
 										<tr>
-											<td colspan="6" style="height: 50px;vertical-align:bottom">Finance & Accounts Dept.</td>
+											<td colspan="6" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
 										</tr>
 									</tbody>				
 								</table>
@@ -470,7 +502,22 @@ th,td
 						</div>
 					</div>
 
-
+					<form action="CHSSApprovalForward.htm" method="post">
+						<div class="row">
+							<div class="col-md-12">
+								Remarks : <br>
+								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" ></textarea>
+							</div>
+							<div class="col-md-12" align="center" style="margin-top: 5px;">
+								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Forward</button>
+								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+							</div>
+						</div>
+						
+						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+					</form>
 
 				
 
@@ -499,6 +546,27 @@ function  onlyNumbers() {
 $(document).ready( function() {
 	onlyNumbers();
 });   
+
+function remarkRequired(action)
+{
+	if(action === 'R'){
+		$('#remarks').attr('required', true);
+		if($('#remarks').val().trim()===''){
+			alert('please Fill Remarks to Return! ');
+			return false;
+		}else{
+			return confirm('Are You Sure To Return?');
+		}
+		
+	}else{
+		$('#remarks').attr('required', false);
+		
+		return confirm('Are You Sure To Forward?');
+		
+		
+	}
+	
+}
 
 
 </script>

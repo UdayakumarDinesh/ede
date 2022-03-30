@@ -1122,8 +1122,12 @@ public class CHSSController {
 		try {	
 			String chssapplyid = req.getParameter("chssapplyid");
 			
+			String isapproval = req.getParameter("isapproval");
+			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			
+			
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			
@@ -1134,6 +1138,8 @@ public class CHSSController {
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
+			
+			req.setAttribute("isapproval", isapproval);
 			
 			String filename="CHSS-Claim";
 			String path=req.getServletContext().getRealPath("/view/temp");
@@ -1207,8 +1213,8 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String action = req.getParameter("claimaction");
-			
-			long count = service.CHSSUserForward(chssapplyid, Username, action);
+			String remarks = req.getParameter("remarks");
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks);
 			if (count > 0) {
 				redir.addAttribute("result", "Claim application Forwarded Successfully");
 			} else {
@@ -1224,8 +1230,32 @@ public class CHSSController {
 		
 	}
 	
+	@RequestMapping(value = "CHSSApprovalForward.htm", method = RequestMethod.POST)
+	public String CHSSApprovalForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSApprovalForward.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String action = req.getParameter("claimaction");
+			String remarks = req.getParameter("remarks");
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks);
+			if (count > 0) {
+				redir.addAttribute("result", "Claim application Forwarded Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim application Forwarding Unsuccessful");	
+			}	
+			return "redirect:/CHSSApprovalsList.htm";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSApprovalForward.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 	
-	@RequestMapping(value = "CHSSApprovalsList.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "CHSSApprovalsList.htm" )
 	public String CHSSApprovalsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
@@ -1261,7 +1291,7 @@ public class CHSSController {
 		
 	}	
 	
-	@RequestMapping(value = "CHSSFormEdit.htm")
+	@RequestMapping(value = "CHSSFormEdit.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String CHSSFormEdit(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
@@ -1333,5 +1363,151 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	@RequestMapping(value = "TestRemAmountEdit.htm", method = RequestMethod.POST )
+	public String TestRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside TestRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String testid = req.getParameter("testid"); 
+			
+			String testremamount = req.getParameter("testremamount-"+testid);
+			
+			
+			CHSSTests test= new CHSSTests();
+			test.setCHSSTestId(Long.parseLong(testid));
+			test.setTestRemAmount(Integer.parseInt(testremamount));
+			
+			long count = service.TestRemAmountEdit(test);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside TestRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "OtherRemAmountEdit.htm", method = RequestMethod.POST )
+	public String OtherRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OtherRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String otherid = req.getParameter("otherid"); 
+			
+			String otheridremamount = req.getParameter("otherremamount-"+otherid);
+			
+			
+			CHSSOther other= new CHSSOther();
+			other.setCHSSOtherId(Long.parseLong(otherid));
+			other.setOtherRemAmount(Integer.parseInt(otheridremamount));
+			
+			long count = service.OtherRemAmountEdit(other);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OtherRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "MedRemAmountEdit.htm", method = RequestMethod.POST )
+	public String MedRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String medicineid = req.getParameter("medicineid"); 
+			
+			String medicineremamount = req.getParameter("medicineremamount-"+medicineid);
+			
+			
+			CHSSMedicine medicine= new CHSSMedicine();
+			medicine.setMedicineId(Long.parseLong(medicineid));
+			medicine.setMedsRemAmount(Integer.parseInt(medicineremamount));
+			
+			long count = service.MedRemAmountEdit(medicine);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "MiscRemAmountEdit.htm", method = RequestMethod.POST )
+	public String MiscRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MiscRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String miscid = req.getParameter("miscid"); 
+			
+			String miscremamount = req.getParameter("miscremamount-"+miscid);
+			
+			
+			CHSSMisc misc= new CHSSMisc();
+			misc.setChssMiscId(Long.parseLong(miscid));
+			misc.setMiscRemAmount(Integer.parseInt(miscremamount));
+			
+			long count = service.MiscRemAmountEdit(misc);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MiscRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
 	
 }

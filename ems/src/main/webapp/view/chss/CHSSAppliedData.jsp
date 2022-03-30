@@ -104,9 +104,22 @@ option {
 	
 			<div class="card" >
 				<div class="card-body " >
+				<%if(Integer.parseInt(chssapplydata[9].toString())>1){ %>
+					<div class="row">
+						<div class="col-md-12">
+							Remark : 
+							<%=chssapplydata[19] %>
+						</div>
+						<div class="col-md-12">
+							Remark : 
+							<%=chssapplydata[19] %>
+						</div>
+					</div>
+				<%} %>
+				
 					<form action="CHSSApplyEdit.htm" method="post" autocomplete="off"  >
 						
-						<div class="card" style="padding: 0.5rem 1rem;margin:-10px 0px 5px 0px;">
+						<div class="card" style="padding: 0.5rem 1rem;margin:5px 0px 5px 0px;">
 						<div class="row">
 							
 							<%if(isself.equalsIgnoreCase("N")){

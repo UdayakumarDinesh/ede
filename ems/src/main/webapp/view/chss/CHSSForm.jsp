@@ -127,7 +127,11 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	
-	String showremamount = (String)request.getAttribute("showremamount");
+	String isapproval = (String)request.getAttribute("isapproval");
+	boolean show = false;
+	if(isapproval!=null && isapproval.equalsIgnoreCase("Y")){
+		show = true;
+	}
 	
 %>
 
@@ -135,14 +139,14 @@ th,td
 	<div align="center">
 		<div>
 			<div>
-				<h4>MEDICAL CLAIM</h4>
+				<h3>MEDICAL CLAIM</h3>
 				<div align="right"> No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
 			</div>
 		
 			<table>	
 				<tbody>
 					<tr>
-						<th>Name:</th>
+						<th>Name</th>
 						<th>Emp No</th>
 						<th>Grade</th>
 					</tr>
@@ -277,10 +281,10 @@ th,td
 					<tr><td colspan="6" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr>  <!-- --------------- consultation -------------------- -->
 					<tr>
 						<th class="center" colspan="4" style="width: 70%;">Particulars</th>
-						<th class="right" style="width: 15%;">Amount Claimed</th>
-						<th class="right" style="width: 15%;">Reimbursable under CHSS</th>
+						<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
+						<th class="right" style="width: 15%;">Reimbursable under CHSS  (&#8377;)</th>
 					</tr>
-					<%long itemstotal=0; %>
+					<%long itemstotal=0,totalremamount=0; %>
 					<% int i=1;
 					for(Object[] consult :ConsultDataList)
 					{%>
@@ -305,10 +309,15 @@ th,td
 							<td><%=consult[3] %>&nbsp;(<%=consult[4] %>)</td>
 							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 							<td class="right"><%=consult[6] %></td>
-							<td class="right"></td>
+							<td class="right">
+								<%if(show){ %>
+									<%=consult[7] %>
+								<%} %>
+							</td>
 						</tr>					
 					<%	i++;
 						itemstotal += Integer.parseInt(consult[6].toString());
+						totalremamount +=Integer.parseInt(consult[7].toString());
 					} %>
 					
 					
@@ -333,10 +342,15 @@ th,td
 							<td><%=test[8] %></td>
 							<td colspan="3"><%=test[6] %></td>
 							<td class="right"><%=test[4] %></td>
-							<td class="right"></td>
+							<td class="right">
+								<%if(show){ %>
+									<%=test[7] %>
+								<%} %>
+							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(test[4].toString());
+					totalremamount +=Integer.parseInt(test[7].toString());
 					} %>
 					
 					
@@ -361,10 +375,15 @@ th,td
 							<td><%=other[6] %></td>
 							<td colspan="3"><%=other[4] %></td>
 							<td class="right"><%=other[3] %></td>
-							<td class="right"></td>
+							<td class="right">
+								<%if(show){ %>
+									<%=other[5] %>
+								<%} %>
+							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(other[3].toString());
+					totalremamount +=Integer.parseInt(other[5].toString());
 					} %>
 					
 					
@@ -391,10 +410,15 @@ th,td
 							<td colspan="2"><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
 							<td class="center"><%=rdf.format(sdf.parse(medicine[3].toString()))%></td>
 							<td class="right"><%=medicine[4] %></td>
-							<td class="right"></td>
+							<td class="right">
+								<%if(show){ %>
+									<%=medicine[6] %>
+								<%} %>
+							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(medicine[4].toString());
+					totalremamount +=Integer.parseInt(medicine[6].toString());
 					}%>
 					
 					
@@ -418,16 +442,25 @@ th,td
 							<td><%=misc[5] %></td>
 							<td colspan="3"><%=misc[2] %></td>
 							<td class="right"><%=misc[3] %></td>
-							<td class="right"></td>
+							<td class="right">
+								<%if(show){ %>
+									<%=misc[4] %>
+								<%} %>
+							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(misc[3].toString());
+					totalremamount +=Integer.parseInt(misc[4].toString());
 					}%>
 					<tr>
 						<td colspan="3"></td>
-						<td>Total</td>
-						<td class="right"><%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
-						<td></td>	
+						<td class="right">Total</td>
+						<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
+						<td class="right">
+							<%if(show){ %>
+								&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
+							<%} %>						
+						</td>	
 					</tr>
 					
 					<tr>
@@ -439,7 +472,12 @@ th,td
 					</tr>
 					
 					<tr>
-						<td colspan="6">Admitted to Rs. ............................. (Rupees .....................................................................................................Only)</td>
+						<%if(show){ %>
+								<td colspan="6">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
+						<%}else{ %>
+							<td colspan="6">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
+						<%} %>
+						
 					</tr>
 					
 					<tr>
