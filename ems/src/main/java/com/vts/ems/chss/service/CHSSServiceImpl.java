@@ -287,8 +287,8 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setConsultRemAmount(getConsultEligibleAmount(consult.getConsultCharge(),consult.getDocQualification(),consult.getConsultType()));
 				
 				consult.setIsActive(1);
-				consult.setCreatedBy(dto.getCreatedBy());
-				consult.setCreatedDate(sdtf.format(new Date()));				
+//				consult.setCreatedBy(dto.getCreatedBy());
+//				consult.setCreatedDate(sdtf.format(new Date()));				
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
@@ -381,8 +381,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setDocQualification(modal.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
-		fetch.setModifiedBy(modal.getModifiedBy());
-		fetch.setModifiedDate(sdtf.format(new Date()));
+//		fetch.setModifiedBy(modal.getModifiedBy());
+//		fetch.setModifiedDate(sdtf.format(new Date()));
 		fetch.setConsultRemAmount(getConsultEligibleAmount(modal.getConsultCharge(),modal.getDocQualification(),modal.getConsultType()));
 
 		
@@ -394,10 +394,12 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSConsultation fetch = dao.getCHSSConsultation(consultationid);
 		fetch.setIsActive(0);
-		fetch.setModifiedBy(modifiedby);
-		fetch.setModifiedDate(sdtf.format(new Date()));
+//		fetch.setModifiedBy(modifiedby);
+//		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.ConsultationBillEdit(fetch);
 	}
+	
+	
 	
 	
 	
@@ -775,4 +777,15 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return dao.CHSSApproveClaimList(logintype, fromdate, todate);
 	}
+	
+	@Override
+	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception
+	{
+		CHSSConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
+		fetch.setConsultRemAmount(modal.getConsultRemAmount());
+		
+		return dao.ConsultationBillEdit(fetch);
+	}
+	
+	
 }

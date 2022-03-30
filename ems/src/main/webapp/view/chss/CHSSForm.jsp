@@ -1,3 +1,5 @@
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
+<%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="com.vts.ems.utils.NFormatConvertion"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
@@ -122,7 +124,8 @@ th,td
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
-	NFormatConvertion nfc=new NFormatConvertion();
+	IndianRupeeFormat nfc=new IndianRupeeFormat();
+	AmountWordConveration awc = new AmountWordConveration();
 	
 	String showremamount = (String)request.getAttribute("showremamount");
 	
@@ -423,12 +426,12 @@ th,td
 					<tr>
 						<td colspan="3"></td>
 						<td>Total</td>
-						<td class="right"><%=nfc.convert(itemstotal) %></td>
+						<td class="right"><%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
 						<td></td>	
 					</tr>
 					
 					<tr>
-						<td colspan="6">(In words Rupees ............................................................................................................................................. Only)</td>
+						<td colspan="6">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
 					</tr>
 					
 					<tr>

@@ -534,7 +534,7 @@ body{
 #sidebar-container .list-group a {
     height: 47px;
     color: white;
-    background-color: #980F5A  !important;
+    background-color: transparent !important;
 }
 
 /* Submenu item*/

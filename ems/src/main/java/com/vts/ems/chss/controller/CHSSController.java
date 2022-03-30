@@ -460,7 +460,7 @@ public class CHSSController {
 			dto.setConsultDate(consdate);
 			dto.setConsultCharge(conscharge);
 			
-			dto.setCreatedBy(Username);
+//			dto.setCreatedBy(Username);
 			
 			long count= service.ConsultationBillAdd(dto);
 			if (count > 0) {
@@ -522,7 +522,7 @@ public class CHSSController {
 			consult.setDocQualification(docqualification);
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Integer.parseInt(conscharge));
-			consult.setModifiedBy(Username);
+//			consult.setModifiedBy(Username);
 			
 			long count = service.ConsultationBillEdit(consult);
 			
@@ -1259,7 +1259,79 @@ public class CHSSController {
 			return "static/Error";
 		}
 		
+	}	
+	
+	@RequestMapping(value = "CHSSFormEdit.htm")
+	public String CHSSFormEdit(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSFormEdit.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			if (chssapplyid == null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+			}	
+			
+			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
+			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			
+			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
+			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
+			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+			
+			req.setAttribute("chssapplydata", chssapplicationdata);
+			req.setAttribute("employee", employee);
+			
+			
+			
+			return "chss/CHSSFormEdit";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSFormEdit.htm "+Username, e);
+			return "static/Error";
+		}
 	}
 	
+	
+	@RequestMapping(value = "ConsultRemAmountEdit.htm", method = RequestMethod.POST )
+	public String ConsultRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConsultRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String consultationid = req.getParameter("consultationid"); 
+			
+			String consultremamount = req.getParameter("consultremamount-"+consultationid);
+			
+			
+			CHSSConsultation consult= new CHSSConsultation();
+			consult.setConsultationId(Long.parseLong(consultationid));
+			consult.setConsultRemAmount(Integer.parseInt(consultremamount));
+			
+			long count = service.ConsultRemAmountEdit(consult);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ConsultRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 }

@@ -67,6 +67,7 @@ public interface CHSSService {
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	public long CHSSUserForward(String CHSSApplyId, String Username, String action) throws Exception;
 	public List<Object[]> CHSSApproveClaimList(String logintype, String fromdate, String todate) throws Exception;
+	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception;
 	
 	
 

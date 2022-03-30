@@ -18,7 +18,7 @@
 
 </head>
 
-<body style="background-color:#980F5A;">
+<body style="/* background-color:#980F5A; */background: linear-gradient(to bottom, #363795, #005C97);">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12 " >
@@ -42,7 +42,7 @@
 								</div>
 								<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
 								<div class="form-group ">
-									<button type="submit" class="form-control btn btn-primary submit  " onmouseover ="this.style.backgroundColor = '#134d61' " onmouseout ="this.style.backgroundColor = '#08293c' "  style="border-radius: 20px; background-color: #08293c; border-color:#980F5A " ><b>Login</b></button>
+									<button type="submit" class="form-control btn btn-primary submit  " onmouseover ="this.style.backgroundColor = '#363795' " onmouseout ="this.style.backgroundColor = '#005C97' "  style="border-radius: 20px; background-color: #005C97;font-weight: 600" >Login</button>
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</div>						
 							</form>

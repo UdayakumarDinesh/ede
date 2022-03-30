@@ -15,8 +15,8 @@ public class CHSSConsultationDto {
 	private String[] ConsultDate;
 	private String[] ConsultCharge;
 	private String IsActive;
-	private String CreatedBy;
-	private String CreatedDate;
-	private String ModifiedBy;
-	private String ModifiedDate;
+//	private String CreatedBy;
+//	private String CreatedDate;
+//	private String ModifiedBy;
+//	private String ModifiedDate;
 }
