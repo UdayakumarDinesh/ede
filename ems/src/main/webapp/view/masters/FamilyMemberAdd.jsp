@@ -44,7 +44,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card"  > 
 		<div class="card-header">
-		<h5>Fill Member Details</h5>
+		<h5>Fill Family Member Details</h5>
 		</div>
 			<div class="card-body"  >
 			  <!-- NAME & Date Of Birth -->
@@ -93,11 +93,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		               </div> 
 		                 		        	       
 				</div>	
-                <!-- RELATIONSHIP & BENID-->
-                
-                
-                  
-               <!-- Status,Status From,BG,PH -->
+             
                 <div class="row">
                   <div class="col-4">
                          <div class="form-group">

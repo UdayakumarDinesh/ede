@@ -17,8 +17,9 @@
 </head>
 
 <body>
-            <% String Username=(String)session.getAttribute("Username"); String
-                EmpName=(String)session.getAttribute("EmpName"); %>
+            <% String Username = (String)session.getAttribute("Username");
+            String logintype   = (String)session.getAttribute("LoginType"); 
+            String EmpName=(String)session.getAttribute("EmpName");%>
 
 
                 <div class="wrapper">
@@ -33,7 +34,8 @@
 							</div>
 						</div>
 						<ul class="list-group">
-							<li>
+						<%if("A".equalsIgnoreCase(logintype)){%>
+							   <li>
 									<a href="PisAdminDashboard.htm"
 										class="bg-dark list-group-item list-group-item-action">
 										<span class="d-flex w-100 justify-content-start align-items-center">
@@ -42,6 +44,18 @@
 										</span>
 									</a>
 								</li>
+								<%}else{%>
+								<li>
+								
+									<a href="EmployeeDetails.htm"
+										class="bg-dark list-group-item list-group-item-action">
+										<span class="d-flex w-100 justify-content-start align-items-center">
+											<i class="fa-solid  fa-address-card mr-3"></i>
+											<span class="menu-collapsed" >Profile</span>
+										</span>
+									</a>
+								</li>
+								<%}%>
 								<li>
 									<a href="CHSSDashboard.htm"
 										class="bg-dark list-group-item list-group-item-action">

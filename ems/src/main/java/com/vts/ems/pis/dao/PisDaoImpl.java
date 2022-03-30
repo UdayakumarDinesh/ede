@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -55,10 +56,18 @@ public class PisDaoImpl implements PisDao {
 	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob , c.family_status FROM pis_emp_family_details a , pis_emp_family_relation b , pis_emp_family_status c WHERE a.family_status_id = c.family_status_id   AND a.relation_id = b.relation_id AND a.IsActive='1' AND a.empid=:empid";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
+	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid FROM employee a ,employee_desig b WHERE b.desigid=a.designationid AND  empid=:empid";
+	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1'";
+	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
+	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
+	private static final String  MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
+	
+	
+	
 	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType, String Empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeeDetailsList()");
+		logger.info(new Date() + "Inside DAO EmployeeDetailsList()");
 		Query query = manager.createNativeQuery(EMPLOYEEDETAILSLIST);
 		return (List<Object[]>) query.getResultList();
 	}
@@ -280,58 +289,98 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public int PunchcardList(String Punchcard) throws Exception {
+		
 		logger.info(new Date() + "Inside PunchcardList()");
-		Query query = manager.createNativeQuery(PUNCHCARD);
-		query.setParameter("punchCard", Punchcard);
-		Object o = query.getSingleResult();
+		
+		
+		try {
+			Query query = manager.createNativeQuery(PUNCHCARD);
+			query.setParameter("punchCard", Punchcard);
+			Object o = query.getSingleResult();
 
-		Integer value = Integer.parseInt(o.toString());
-		int result = value;
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
 
-		return result;
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
 
 	@Override
 	public String PhotoPath(String empid) throws Exception {
 		logger.info(new Date() + "Inside PunchcardList()");
-		Query query = manager.createNativeQuery(PHOTOPATH);
-		query.setParameter("empid", empid);
-		String EmpName = (String) query.getSingleResult();
-		return EmpName;
+		try {
+			Query query = manager.createNativeQuery(PHOTOPATH);
+			query.setParameter("empid", empid);
+			String EmpName = (String) query.getSingleResult();
+			return EmpName;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	@Override
 	public int PhotoPathUpdate(String Path, String EmpId) throws Exception {
 		logger.info(new Date() + "Inside PhotoPathUpdate()");
-		Query query = manager.createNativeQuery(PHOTOUPDATE);
-		query.setParameter("Path", Path);
-		query.setParameter("EmpId", EmpId);
-		int count = (int) query.executeUpdate();
+		try {
+			Query query = manager.createNativeQuery(PHOTOUPDATE);
+			query.setParameter("Path", Path);
+			query.setParameter("EmpId", EmpId);
+			int count = (int) query.executeUpdate();
 
-		return count;
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
 
 	@Override
 	public List<Object[]> LoginMasterList(String LoginType, String Empid) throws Exception {
 		logger.info(new Date() + "Inside LoginMasterList()");
-		Query query = manager.createNativeQuery(LOGINMASTER);
-		return (List<Object[]>) query.getResultList();
+		try {
+			Query query = manager.createNativeQuery(LOGINMASTER);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+				
+		}
+		
 	}
 
 	
 	@Override
 	public List<Object[]> getEmpList() throws Exception {
 		logger.info(new Date() + "Inside EmployeeList()");
-		Query query = manager.createNativeQuery(EMPLIST);
-		return (List<Object[]>) query.getResultList();
+		try {
+			Query query = manager.createNativeQuery(EMPLIST);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	
 	@Override
 	public List<Object[]> getLoginTypeList()throws Exception{
 		logger.info(new Date() + "Inside getLoginTypeList()");
-		Query query = manager.createNativeQuery(LOGINLIST);
-		return (List<Object[]>) query.getResultList();
+		try {
+			Query query = manager.createNativeQuery(LOGINLIST);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	
@@ -339,13 +388,20 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int UserManagerDelete(String username , String loginid)throws Exception{
 		logger.info(new Date() + "Inside UserManagerDelete()");
-		Query query = manager.createNativeQuery(DELETEUSERMANAGER);
-		query.setParameter("modifiedby", username);
-		query.setParameter("loginid", loginid);
-		query.setParameter("modifieddate", sdtf.format(new Date()));
-		query.setParameter("isactive", 0);
-		int count = (int) query.executeUpdate();
-		return count;
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEUSERMANAGER);
+			query.setParameter("modifiedby", username);
+			query.setParameter("loginid", loginid);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			query.setParameter("isactive", 0);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
 	
 	
@@ -354,10 +410,17 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int UserNamePresentCount(String UserName)throws Exception{
 		logger.info(new Date() + "Inside UserNamePresentCount()");
-		Query query = manager.createNativeQuery(USERNAMEPRESENTCOUNT);
-		query.setParameter("username", UserName);
-		BigInteger UserNamePresentCount = (BigInteger) query.getSingleResult();
-		return   UserNamePresentCount.intValue();
+		try {
+			Query query = manager.createNativeQuery(USERNAMEPRESENTCOUNT);
+			query.setParameter("username", UserName);
+			BigInteger UserNamePresentCount = (BigInteger) query.getSingleResult();
+			return   UserNamePresentCount.intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		
 	}
 	
 	@Override
@@ -393,26 +456,38 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int UserManagerEdit(Login login)throws Exception{
 		
-		logger.info(new Date() + "Inside UserManagerEdit()");
-		Query query = manager.createNativeQuery(EDITUSERMANAGER);
-		query.setParameter("modifiedby", login.getModifiedBy());
-		query.setParameter("logintype", login.getLoginType());
-		query.setParameter("modifieddate", login.getModifiedDate());
-		query.setParameter("empid", login.getEmpId());
-		query.setParameter("loginid", login.getLoginId());
-		int count = (int) query.executeUpdate();
-		return count;
+		logger.info(new Date() + "Inside UserManagerEdit()"); 
+		try {
+			Query query = manager.createNativeQuery(EDITUSERMANAGER);
+			query.setParameter("modifiedby", login.getModifiedBy());
+			query.setParameter("logintype", login.getLoginType());
+			query.setParameter("modifieddate", login.getModifiedDate());
+			query.setParameter("empid", login.getEmpId());
+			query.setParameter("loginid", login.getLoginId());
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+		}
+		
 		
 	}
 	
 	@Override
 	public List<Object[]> getFamilyMembersList(String empid)throws Exception{
 		logger.info(new Date() + "Inside getFamilyMembersList()");
-		Query query = manager.createNativeQuery(FAMILYLIST);
-		query.setParameter("empid", empid);
-		return (List<Object[]>) query.getResultList();
+		
+		try {
+			Query query = manager.createNativeQuery(FAMILYLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
-	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid FROM employee a ,employee_desig b WHERE b.desigid=a.designationid AND  empid=:empid";
 	
 	@Override
 	public Object[] GetEmpData(String empid)throws Exception{
@@ -427,20 +502,35 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1'";
+	
+	
 	@Override
 	public List<Object[]> getFamilyRelation()throws Exception{
 		logger.info(new Date() + "Inside getFamilyRelation()");
-		Query query = manager.createNativeQuery(FAMILYRELATION);	
-		return (List<Object[]>) query.getResultList();
+		
+		try {
+			Query query = manager.createNativeQuery(FAMILYRELATION);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
-	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
+	
+	
 	@Override
 	public List<Object[]> getFamilyStatus()throws Exception{
 		logger.info(new Date() + "Inside getFamilyStatus()");
-		Query query = manager.createNativeQuery(FAMILYSTATUS);	
-		return (List<Object[]>) query.getResultList();
+		try {
+			Query query = manager.createNativeQuery(FAMILYSTATUS);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	
@@ -457,20 +547,27 @@ public class PisDaoImpl implements PisDao {
 		}
 		return Details.getFamily_details_id();
 	}
-	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
+	
 	@Override
 	public int DeleteMeber(String familyid , String Username)throws Exception{
 		logger.info(new Date() + "Inside UserManagerDelete()");
-		Query query = manager.createNativeQuery(DELETEMEMBER);
 		
-		query.setParameter("modifiedby", Username);
-		query.setParameter("modifieddate",sdf.format(new Date()) );
-		query.setParameter("IsActive",0);
-		query.setParameter("familyid",familyid );
-		int count = (int) query.executeUpdate();
-		return count;
+		try {
+			Query query = manager.createNativeQuery(DELETEMEMBER);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("familyid",familyid );
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
-	private static final String  MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
+	
 	@Override
 	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception{
 		logger.info(new Date() + "Inside getMemberDetails()");
@@ -519,4 +616,137 @@ public class PisDaoImpl implements PisDao {
 		}
 		return Details.getFamily_details_id();
 	}
+	private static final String PERMNENTADDRESS="SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid";
+	@Override
+	public Object[] getPerAddress(String Empid)throws Exception{
+		logger.info(new Date() + "Inside GetPerAddress()");
+		try {
+			Query query = manager.createNativeQuery(PERMNENTADDRESS);
+			query.setParameter("empid", Empid);
+			Object[] result=(Object[]) query.getSingleResult();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	private static final String STATE="SELECT StateId,StateName FROM pis_states";
+	@Override
+	public List<Object[]> getStates()throws Exception{
+		logger.info(new Date() + "Inside GetStates()");
+		try {
+			Query query = manager.createNativeQuery(STATE);		
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
+	public Long AddPerAddress(AddressPer peraddress)throws Exception{
+		logger.info(new Date() + "Inside AddPerAddress()");
+		try {
+			manager.persist(peraddress);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return peraddress.getAddress_per_id();
+	}
+	private static final String PERADDRESS="FROM AddressPer WHERE empid=:empid";
+	@Override
+	public AddressPer getPerAddressData(String empid)throws Exception{
+		logger.info(new Date() + "Inside getMemberDetails()");
+		AddressPer addres=null;
+		try {
+			Query query = manager.createQuery(PERADDRESS);
+			query.setParameter("empid", empid);
+			addres = (AddressPer) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return addres;
+	}
+	
+	@Override
+	public AddressPer getPeraddress(String addressid) throws Exception {
+		logger.info(new Date() + "Inside getPeraddress()");
+		AddressPer memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<AddressPer> cq = cb.createQuery(AddressPer.class);
+			Root<AddressPer> root = cq.from(AddressPer.class);
+			Predicate p1 = cb.equal(root.get("address_per_id"), Long.parseLong(addressid));
+			cq = cq.select(root).where(p1);
+			TypedQuery<AddressPer> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long EditPerAddress(AddressPer address) throws Exception {
+	
+		logger.info(new Date() + "Inside EditPerAddress()");
+		try {
+			manager.merge(address);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return address.getAddress_per_id();
+	}
+	
+	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive='1'";
+	@Override
+	public List<Object[]> getResAddress(String empid)throws Exception{
+		logger.info(new Date() + "Inside GetStates()");
+		try {
+			Query query = manager.createNativeQuery(RESADDRESS);	
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	private static final String KINADDRESS="SELECT empid,address_kin_id,nextkin_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_kin  WHERE empid=:empid";
+	@Override
+	public Object[] getKinAddress(String Empid)throws Exception{
+		logger.info(new Date() + "Inside GetKinAddress()");
+		try {
+			Query query = manager.createNativeQuery(KINADDRESS);
+			query.setParameter("empid", Empid);
+			Object[] result=(Object[]) query.getSingleResult();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String EMEADDRESS="SELECT empid,address_emer_id,emer_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_emer  WHERE empid=:empid";
+	@Override
+	public Object[] getEmeAddress(String Empid)throws Exception{
+		logger.info(new Date() + "Inside GetEmeAddress()");
+		try {
+			Query query = manager.createNativeQuery(EMEADDRESS);
+			query.setParameter("empid", Empid);
+			Object[] result=(Object[]) query.getSingleResult();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
+	

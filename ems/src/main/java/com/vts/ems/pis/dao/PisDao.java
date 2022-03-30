@@ -3,6 +3,7 @@ package com.vts.ems.pis.dao;
 import java.util.List;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -48,4 +49,13 @@ public interface PisDao {
 	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception;
 	public Long EditFamilyDetails(EmpFamilyDetails Details) throws Exception;
 	public EmpFamilyDetails getMember(String familyid) throws Exception;
+	public Object[] getPerAddress(String Empid)throws Exception;
+	public List<Object[]> getStates ()throws Exception;
+	public Long AddPerAddress(AddressPer peraddress)throws Exception;
+	public AddressPer getPerAddressData(String empid)throws Exception;
+	public Long EditPerAddress(AddressPer address) throws Exception;
+	public AddressPer getPeraddress(String addressid) throws Exception ;
+	public List<Object[]> getResAddress(String empid)throws Exception;
+	public Object[]  getKinAddress(String empid)throws Exception;
+	public Object[]  getEmeAddress(String empid)throws Exception;
 }

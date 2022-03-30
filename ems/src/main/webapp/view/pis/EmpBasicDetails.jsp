@@ -163,9 +163,43 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			 </div>
 			</div>
 			
-			<div class="col-1"></div>
+			<div class="col-12">
 			
-			<div class="col-12"  >
+		<ul class="nav nav-tabs" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Basic Details</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Appointment</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Awards</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Family</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Property</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Publications</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-8" role="tab">Qualifications</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">Passport</a>
+	</li>
+</ul><!-- Tab panes -->
+<div class="tab-content">
+
+			
+			<div class="tab-pane active" id="tabs-1" role="tabpanel">
+		
+		
 			 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
@@ -225,7 +259,45 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 					</tbody>
 				</table>
-				</div>
+				
+	</div>
+	
+	<div class="tab-pane" id="tabs-2" role="tabpanel">
+		<p>Second Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-3" role="tabpanel">
+		<p>Third Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-4" role="tabpanel">
+		<p>Four Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-5" role="tabpanel">
+		<p>Five Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-6" role="tabpanel">
+		<p>Six Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-7" role="tabpanel">
+		<p>Seven Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-8" role="tabpanel">
+		<p>Eight Panel</p>
+	</div>
+	
+	<div class="tab-pane" id="tabs-9" role="tabpanel">
+		<p>Nine Panel</p>
+	</div>
+	
+	
+</div>
+				
+		</div>		
 				
 			</div>
 		</div>
