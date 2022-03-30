@@ -22,5 +22,6 @@ public class CHSSMisc implements Serializable {
 	private Long BillId;
 	private String MiscItemName;
 	private Integer MiscItemCost;
+	private Integer MiscRemAmount;
 	private Integer IsActive;
 }

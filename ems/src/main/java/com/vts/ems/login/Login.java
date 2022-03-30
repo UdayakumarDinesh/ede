@@ -15,7 +15,6 @@ public class Login {
     private Long EmpId;
     private Long FormRoleId;
     private String LoginType;
-    private String Pfms;
     private int IsActive;
     private String CreatedBy;
     private String CreatedDate;
@@ -75,12 +74,7 @@ public class Login {
 	}
 	
 	
-	public String getPfms() {
-		return Pfms;
-	}
-	public void setPfms(String pfms) {
-		Pfms = pfms;
-	}
+	
 	public int getIsActive() {
 		return IsActive;
 	}

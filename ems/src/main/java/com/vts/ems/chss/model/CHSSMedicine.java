@@ -21,7 +21,9 @@ public class CHSSMedicine implements Serializable {
 	private Long BillId;
 	private String MedicineName;
 	private Integer MedicineCost;
+	private Integer MedQuantity;
 	private String MedicineDate;
+	private Integer MedsRemAmount;
 	private Integer IsActive;
 
 }

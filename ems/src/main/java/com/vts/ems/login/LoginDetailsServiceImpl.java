@@ -40,7 +40,7 @@ public class LoginDetailsServiceImpl implements UserDetailsService
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
 		Login login = loginRepository.findByUsername(username);
-        if(login != null && login.getIsActive()==1 && login.getPfms().equalsIgnoreCase("Y")) {
+        if(login != null && login.getIsActive()==1) {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role : login.getRoles()){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));

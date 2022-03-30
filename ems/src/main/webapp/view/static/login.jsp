@@ -40,7 +40,7 @@
 									<label for="password">Password</label>
 									<input type="password" class="form-control" name="password" placeholder="password" required="required">
 								</div>
-								
+								<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
 								<div class="form-group ">
 									<button type="submit" class="form-control btn btn-primary submit  " onmouseover ="this.style.backgroundColor = '#134d61' " onmouseout ="this.style.backgroundColor = '#08293c' "  style="border-radius: 20px; background-color: #08293c; border-color:#980F5A " ><b>Login</b></button>
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

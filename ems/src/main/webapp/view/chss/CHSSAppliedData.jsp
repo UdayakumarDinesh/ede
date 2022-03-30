@@ -341,7 +341,14 @@ option {
 												</select>
 											</td>
 											<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
-											<td><input type="text" class="form-control items" name="doc-qualification" id="doc-qualification" value="" style="width:100%;"   maxlength="50" required="required"></td>
+											<td>
+												<!-- <input type="text" class="form-control items" name="doc-qualification" id="doc-qualification" value="" style="width:100%;"   maxlength="50" required="required"> -->
+												<select class="form-control w-100" name="doc-qualification" required="required" >
+													<option value="Specialist">Specialist</option>
+													<option value="Super Specialist">Super Specialist</option>
+													<option value="Dental Surgeons">Dental Surgeons</option>
+												</select>
+											</td>
 											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
 											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
@@ -440,8 +447,9 @@ option {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:45%;"> Medicine Name </th>
-											<th style="width:20%;">Date</th>
+											<th style="width:40%;"> Medicine Name </th>
+											<th style="width:10%;">Quantity(Purchased)</th>
+											<th style="width:15%;">Date</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
@@ -462,8 +470,9 @@ option {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:45%;"> Medicine Name </th>
-											<th style="width:20%;">Date</th>
+											<th style="width:40%;"> Medicine Name </th>
+											<th style="width:10%;">Quantity(Purchased)</th>
+											<th style="width:15%;">Date</th>
 											<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
@@ -472,6 +481,7 @@ option {
 										<tr class="tr_clone_meds" >
 											<td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td>
 											<td><input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<td><input type="text" class="form-control meds-date" name="meds-date" id="meds-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
@@ -1203,13 +1213,13 @@ function getMedicinesData(){
 			medsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
 			
 			medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name-'+meds.MedicineId+'" id="doc-name" value="'+meds.MedicineName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
-			
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.MedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			let now = new Date(meds.MedicineDate);
 			var dateString = moment(now).format('DD-MM-YYYY');
 			
 			medsHTMLStr +=	'	<td><input type="text" class="form-control meds-date" name="meds-date-'+meds.MedicineId+'" id="meds-date" value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.MedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.MedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td>';
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.MedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.MedicineId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';

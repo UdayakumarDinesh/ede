@@ -17,7 +17,9 @@
 <%
 	
 	
-	List<Object[]> empchsslist=(List<Object[]>)request.getAttribute("empchsslist");
+	List<Object[]> chssclaimlist=(List<Object[]>)request.getAttribute("chssclaimlist");
+	String fromdate=(String)request.getAttribute("fromdate");
+	String todate=(String)request.getAttribute("todate");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -61,32 +63,49 @@
 			<div class="card" >
 				<div class="card-body " >
 					
-					<form action="#" method="post" id="ClaimForm">
+					<form action="CHSSApprovalsList.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="row" style="width: 100%;">
+							<div class="col-md-5" ></div>
+							<label class="col-md-1" style="text-align : right;">From : </label>
+							<div class="col-md-2">
+								<input type="text"  class="form-control" name="fromdate" id="fromdate" value="<%=rdf.format(sdf.parse(fromdate))%> " style="height: 80%;" readonly>
+							</div>
+							
+							<label class="col-md-1" style="text-align : right;">To : </label>
+							<div class="col-md-2">
+								<input type="text"  class="form-control" name="todate" id="todate" value="<%=rdf.format(sdf.parse(todate))%> " style="height: 80%;" readonly>
+							</div>
+							<div class="col-md-1">
+								<button type="submit" class="btn btn-sm submit-btn">Submit</button>
+							</div>
+							
+						</div>
+						<br>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Employee</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Ailment</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
 								</thead>
 								<tbody>
 									<%long slno=0;
-									for(Object[] obj : empchsslist){ 
+									for(Object[] obj : chssclaimlist){ 
 										slno++; %>
 										<tr>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[18] %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3){ %>
@@ -131,36 +150,29 @@
 	 
 <script type="text/javascript">
 
-function CheckClaimAmount($chssapplyid)
-{
-	$.ajax({
+$('#fromdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"startDate" : new Date('<%=fromdate%>'),
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
 
-		type : "GET",
-		url : "CHSSClaimFwdApproveAjax.htm",
-		data : {
-				
-			chssapplyid : $chssapplyid,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-						
-			if(result===1){
-				if(confirm('Are You Sure To Forward?'))
-				{
-					$('#form2-chssapplyid').val($chssapplyid);
-					$('#form2').submit();
-				}
-			}else
-			{
-				alert('Please Add Bill and Items To Forward ');
-				return false;	
-			}
-		
-		}
-	});
-	
-}
+$('#todate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"startDate" :new Date('<%=todate%>'),
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
 
 </script>
 

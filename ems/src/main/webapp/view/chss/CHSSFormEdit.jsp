@@ -1,133 +1,77 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.vts.ems.utils.NFormatConvertion"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
+<%@page import="com.vts.ems.chss.model.CHSSTreatType"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*" %>
-	<!DOCTYPE html>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
-<%Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata"); %>
-	<head>
-<style type="text/css">
-		
-			.break {
-				page-break-after: always;
-			}
+<head>
+<meta charset="ISO-8859-1">
+<jsp:include page="../static/header.jsp"></jsp:include>
 
-			#pageborder {
-				position: fixed;
-				left: 0;
-				right: 0;
-				top: 0;
-				bottom: 0;
-				border: 2px solid black;
-			}
-
-			@page {
-				size: 790px 1120px;
-				margin-top: 49px;
-				margin-left: 72px;
-				margin-right: 39px;
-				margin-buttom: 49px;
-				border: 2px solid black;
-
-				@bottom-right {
-					content: "Page "counter(page) " of "counter(pages);
-					margin-bottom: 30px;
-					margin-right: 10px;
-				}
-
-				@top-right {
-					content: "Claim No: <%=chssapplydata[16]%>";
-					margin-top: 30px;
-					margin-right: 10px;
-				}
-
-				@top-left {
-					margin-top: 30px;
-					margin-left: 10px;
-					content: "";
-				}
-
-				@top-center {
-					margin-top: 30px;
-					content: "";
-
-				}
-
-				@bottom-center {
-					margin-bottom: 30px;
-					content: "";
-				}
-
-			}
-
-p {
-	text-align: justify;
-	text-justify: inter-word;
-}
-body
-{
-	font-size:14px !important;
-}
-div, table{
-	width: 650px !important;
-}
-
-table{
-	align: left;
-	width: 650px !important;
-	margin-top: 10px; 
-	margin-bottom: 10px;
-	margin-left:10px;
-	border-collapse:collapse;
-	
-}
-th,td
-{
-	text-align: left;
-	border: 1px solid black;
-	padding: 4px;
-}
-
-.center{
-
-	text-align: center;
-}
-
-.right
-{
-	text-align: right;
-}
-			
-			
-</style>
-		<meta charset="ISO-8859-1">
-		<title>Form</title>
-	</head>
-
+</head>
 <body>
 
 	
 <%
-	
+	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	List<Object[]> chssbillslist = (List<Object[]>)request.getAttribute("chssbillslist");
 	List<Object[]> ConsultDataList = (List<Object[]>)request.getAttribute("ConsultDataList");
 	List<Object[]> TestsDataList = (List<Object[]>)request.getAttribute("TestsDataList");
 	List<Object[]> MedicineDataList = (List<Object[]>)request.getAttribute("MedicineDataList");
 	List<Object[]> OtherDataList = (List<Object[]>)request.getAttribute("OtherDataList");
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
-	
-	
+
 	Employee employee = (Employee)request.getAttribute("employee");
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
-	NFormatConvertion nfc=new NFormatConvertion();
-	
-	String showremamount = (String)request.getAttribute("showremamount");
-	
-%>
 
+	NFormatConvertion nfc=new NFormatConvertion();
+%>
+ 
+ <div class="col page card">
+	<div class="card-header page-top">
+		<div class="row">
+			<div class="col-md-3">
+				<h5>CHSS List</h5>
+			</div>
+				<div class="col-md-9 ">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
+						<li class="breadcrumb-item active " aria-current="page">CHSS List</li>
+					</ol>
+				</div>
+			</div>
+	</div>	
+	<div class="card-body" >
+	
+	
+	
+	<div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
+				
+			<div class="card" >
+				<div class="card-body " >
 <div align="center">
 	<div align="center">
 		<div>
@@ -297,7 +241,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=consult[8] %></td>
+							<td><%=consult[7] %></td>
 							<td><%=consult[2] %></td>
 							<td><%=consult[3] %>&nbsp;(<%=consult[4] %>)</td>
 							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
@@ -327,7 +271,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=test[8] %></td>
+							<td><%=test[7] %></td>
 							<td colspan="3"><%=test[6] %></td>
 							<td class="right"><%=test[4] %></td>
 							<td class="right"></td>
@@ -355,7 +299,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=other[6] %></td>
+							<td><%=other[5] %></td>
 							<td colspan="3"><%=other[4] %></td>
 							<td class="right"><%=other[3] %></td>
 							<td class="right"></td>
@@ -384,7 +328,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=medicine[7] %></td>
+							<td><%=medicine[6] %></td>
 							<td colspan="2"><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
 							<td class="center"><%=rdf.format(sdf.parse(medicine[3].toString()))%></td>
 							<td class="right"><%=medicine[4] %></td>
@@ -412,7 +356,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=misc[5] %></td>
+							<td><%=misc[4] %></td>
 							<td colspan="3"><%=misc[2] %></td>
 							<td class="right"><%=misc[3] %></td>
 							<td class="right"></td>
@@ -447,6 +391,12 @@ th,td
 		</div>
 	</div>
 </div>
+</div>
+			</div>		
+			
+		</div>
+	
+	 </div>
 </body>
 
 </html>
