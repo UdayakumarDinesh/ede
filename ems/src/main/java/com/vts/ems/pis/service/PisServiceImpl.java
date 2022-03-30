@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -368,4 +369,43 @@ public class PisServiceImpl implements PisService
 		return dao.EditFamilyDetails( member);
 	}
 	
+	
+	@Override
+	public Object[]  getPerAddress(String empid)throws Exception{
+		return dao.getPerAddress(empid);
+	}
+	
+	@Override
+	public List<Object[]> getStates()throws Exception{
+		return dao.getStates();
+	}
+	
+	
+	@Override
+	public Long AddPerAddress(AddressPer peraddress)throws Exception{
+		return dao.AddPerAddress( peraddress);
+	}
+	
+	@Override
+	public AddressPer getPerAddressData(String empid)throws Exception{
+		return dao.getPerAddressData(empid);
+	}
+	
+	@Override
+	public Long EditPerAddress(AddressPer address)throws Exception{
+		return dao.EditPerAddress(address);
+	}
+	
+	@Override
+	public List<Object[]> getResAddress(String empid)throws Exception{
+		return dao.getResAddress(empid);
+	}
+	@Override
+	public Object[]  getKinAddress(String empid)throws Exception{
+		return dao.getPerAddress(empid);
+	}
+	@Override
+	public Object[]  getEmeAddress(String empid)throws Exception{
+		return dao.getEmeAddress(empid);
+	}
 }

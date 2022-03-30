@@ -41,7 +41,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 	     <div align="center">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
-		System.out.println(ses+"///////"+ses1);
+		
 		if(ses1!=null){ %>
 			<div class="alert alert-danger" role="alert">
 				<%=ses1 %>

@@ -127,7 +127,7 @@
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Appointment</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Awards</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Property</button>
-					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Address</button>
+					<button type="submit" class="btn btnclr" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)">Address</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)"> Publication</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Passport</button>
 					</div>
