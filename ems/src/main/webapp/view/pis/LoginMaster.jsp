@@ -7,7 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<script src="webresources/js/master.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -51,7 +51,7 @@
 					<form action="LoginMasterAddEdit.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
 								<thead>
 									<tr>
 										<th>Select</th>
@@ -133,6 +133,13 @@
 			return false;
 		}
 	}
+	
+	$("#myTable1").DataTable({
+	    "lengthMenu": [5, 10, 25, 50, 75, 100],
+	    "pagingType": "simple"
+
+	});
+
 </script>
 
 </html>

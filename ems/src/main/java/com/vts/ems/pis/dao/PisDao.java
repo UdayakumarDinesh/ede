@@ -3,7 +3,10 @@ package com.vts.ems.pis.dao;
 import java.util.List;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
+import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -54,8 +57,21 @@ public interface PisDao {
 	public Long AddPerAddress(AddressPer peraddress)throws Exception;
 	public AddressPer getPerAddressData(String empid)throws Exception;
 	public Long EditPerAddress(AddressPer address) throws Exception;
-	public AddressPer getPeraddress(String addressid) throws Exception ;
+	public AddressPer getPeraddress(long addressid) throws Exception ;
 	public List<Object[]> getResAddress(String empid)throws Exception;
 	public Object[]  getKinAddress(String empid)throws Exception;
 	public Object[]  getEmeAddress(String empid)throws Exception;
+	public Long AddResAddress(AddressRes resaddress)throws Exception;
+	public AddressRes getResAddressData(String addressid)throws Exception;
+	public Long EditResAddress(AddressRes address) throws Exception;
+	public int deleteResAdd(String addresid,String Username)throws Exception;
+	public Long AddNextAddress(AddressNextKin nextaddress)throws Exception;
+	public Long EditNextKinAddress(AddressNextKin address)throws Exception;
+	public AddressNextKin getNextKinaddress(long addressid) throws Exception;
+	public AddressNextKin getNextKinAddressData(String empid)throws Exception;
+	public Long AddEmecAddress(AddressEmec Emecaddress)throws Exception;
+	public AddressEmec getEmecaddress(long addressid) throws Exception;
+	public Long EditEmecAddress(AddressEmec address) throws Exception ;
+	public List<Object[]> ReqEmerAddajax(String Empid) throws Exception ;
+	public AddressEmec getEmecAddressData(String empid)throws Exception;
 }
