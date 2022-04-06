@@ -75,4 +75,5 @@ public interface PisService {
 	public List<Object[]> ReqEmerAddajax(String empid) throws Exception;
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
 	public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception;
+	public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception ;
 }

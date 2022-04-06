@@ -75,6 +75,7 @@ public interface PisDao {
 	public Long EditEmecAddress(AddressEmec address) throws Exception ;
 	public List<Object[]> ReqEmerAddajax(String Empid) throws Exception ;
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
-
+	public String OldPassword(String UserId) throws Exception;
 	public List<Object[]> AuditStampingList(String Username,LocalDate Fromdate,LocalDate Todate) throws Exception;
+	public int PasswordChange(String OldPassword, String NewPassword ,String UserName, String ModifiedDate,String username)throws Exception;
 }

@@ -53,7 +53,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
 	private static final String PHOTOUPDATE = "update employee set photo=:Path where empid=:EmpId";
 	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
-	private static final String EMPLIST = "SELECT empid ,empname FROM employee WHERE isactive=1 ORDER BY srno";
+	private static final String EMPLIST = "SELECT a.empid ,a.empname , b.loginid FROM employee a , login b WHERE a.isactive=1 AND a.empid=b.empid ORDER BY a.srno";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate , empid=:empid WHERE loginid=:loginid";
@@ -961,6 +961,30 @@ public class PisDaoImpl implements PisDao {
 		List<Object[]> AuditStampingList=(List<Object[]>) query.getResultList();
 
 		return AuditStampingList;
+	}
+	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
+	@Override
+	public String OldPassword(String UserId) throws Exception {
+		logger.info(new Date() +"Inside OldPassword");
+		Query query = manager.createNativeQuery(OLDPASSWORD);
+		query.setParameter("loginid", UserId);
+		
+		String OldPassword = (String) query.getSingleResult();
+		return   OldPassword;
+	}
+	private static final String PASSWORDUPDATECHANGE="update login set password=:newpassword,modifiedby=:modifiedby,modifieddate=:modifieddate where loginid=:loginid ";
+	@Override
+	public int PasswordChange(String OldPassword, String NewPassword ,String loginid, String ModifiedDate,String UserName)throws Exception {
+		
+		logger.info(new Date() +"Inside PasswordChange");
+		Query query = manager.createNativeQuery(PASSWORDUPDATECHANGE);
+		
+		query.setParameter("newpassword", NewPassword);
+		query.setParameter("loginid", loginid);
+		query.setParameter("modifiedby", UserName);
+		query.setParameter("modifieddate", ModifiedDate);
+		int PasswordChange = (int) query.executeUpdate();
+		return  PasswordChange;
 	}
 }
 	

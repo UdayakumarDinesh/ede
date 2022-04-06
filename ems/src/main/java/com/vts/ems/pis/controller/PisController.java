@@ -1325,29 +1325,32 @@ public class PisController {
 	@RequestMapping(value="AuditStamping.htm" , method=RequestMethod.GET)
 	 public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 		  String Username = (String) ses.getAttribute("Username");
-	       logger.info(new Date() +"Inside ReqEmerAddajax.htm "+Username); 
-	       
+	       logger.info(new Date() +"Inside AuditStamping.htm "+Username); 
+	       long LoginId = (long) ses.getAttribute("LoginId");
 	       try {
 	    	   String Usernameparam=req.getParameter("username");
 	   		
-				String Fromdate=req.getParameter("Fromdate");
-				String Todate=req.getParameter("Todate");
+				String Fromdate=req.getParameter("fromdate");
+				String Todate=req.getParameter("todate");
 	    	   List<Object[]> list=null;
-	    	   
+	    	  
 	    	   req.setAttribute("list", list);
 	    	   req.setAttribute("emplist", service.getEmpList());
 	    	   
 	    		if(Usernameparam == null) {
 					
-					req.setAttribute("auditstampinglist", service.AuditStampingList(Username,Fromdate, Todate));
+					req.setAttribute("auditstampinglist", service.AuditStampingList(String.valueOf(LoginId) ,Fromdate, Todate));
 					req.setAttribute("Fromdate", LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 					req.setAttribute("Todate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					req.setAttribute("loginid", String.valueOf(LoginId));
+					req.setAttribute("Username",(String) ses.getAttribute("EmpName"));
 				}
 			
 				else {
 				String[] userName=Usernameparam.split("-");	
 				req.setAttribute("auditstampinglist", service.AuditStampingList(userName[0],Fromdate, Todate));
-				req.setAttribute("Username", Usernameparam);
+				req.setAttribute("Username", userName[1]);
+				req.setAttribute("loginid", userName[0]);
 				req.setAttribute("Fromdate", Fromdate);
 				req.setAttribute("Todate", Todate);
 				}
@@ -1358,6 +1361,40 @@ public class PisController {
 	       return "Admin/AuditStamping";
 	}
 	
+	@RequestMapping(value = "PasswordChange.htm", method = RequestMethod.GET)
+	public String PasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
+
+		return "Admin/PasswordChange";
+	}
+	
+	@RequestMapping(value = "PasswordChanges.htm", method = RequestMethod.POST)
+	public String PasswordChangeSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		
+		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
+		try {
+				long LoginId = (long) ses.getAttribute("LoginId");  
+				String NewPassword =req.getParameter("NewPassword");
+				String OldPassword =req.getParameter("OldPassword");
+				int count  =  service.PasswordChange(OldPassword, NewPassword, String.valueOf(LoginId),Username);
+				
+				if (count > 0) 
+				{
+					redir.addAttribute("result", "Password Changed Successfully");
+				} 
+				else 
+				{
+					redir.addAttribute("resultfail", "Password Change Unsuccessfull ");
+				}
+				System.out.println(count);
+		}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
+		}
+
+		return "redirect:/PasswordChange.htm";
+		
+	}
 	
 	
 }

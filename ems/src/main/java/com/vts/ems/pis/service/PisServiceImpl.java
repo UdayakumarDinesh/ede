@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +56,8 @@ public class PisServiceImpl implements PisService
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
 	
+	@Autowired
+	BCryptPasswordEncoder encoder;
 	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType,String Empid) throws Exception
@@ -559,5 +562,23 @@ public class PisServiceImpl implements PisService
 		
 			return dao.AuditStampingList(Username,Fromdate,Todate);
 			
+		}
+		
+		@Override
+		public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception {
+
+			logger.info(new Date() +"Inside PasswordChange");
+			String actualoldpassword=dao.OldPassword(UserId);
+
+			if(encoder.matches(OldPassword, actualoldpassword)) {
+			
+			String oldpassword=encoder.encode(OldPassword);
+			String newpassword=encoder.encode(NewPassword);
+			
+			return dao.PasswordChange(oldpassword, newpassword, UserId, sdf.format(new Date()),username);
+			}else {
+				
+			}
+			return 0;
 		}
 }
