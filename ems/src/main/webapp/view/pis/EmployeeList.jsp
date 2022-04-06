@@ -9,8 +9,32 @@
 <style type="text/css">
  #dis{
  text-align: center;
- 
  }
+ 
+.btn-group button {
+  background-color: #344b8a; /* Green background */
+  border: 1px solid green; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #3e8e41;
+}
 </style>
 </head>
 <body>
@@ -120,7 +144,7 @@
 						 
 					</div>
 					
-					<div  class="row text-center" id = "dis" style="margin-top:20px;" align="center">
+					<div  class="btn-group" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
 				 	<button type="submit" class="btn btnclr"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>

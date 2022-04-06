@@ -74,4 +74,5 @@ public interface PisService {
 	public Long EditEmecAddress(AddressEmec address)throws Exception;
 	public List<Object[]> ReqEmerAddajax(String empid) throws Exception;
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
+	public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception;
 }

@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -532,4 +534,30 @@ public class PisServiceImpl implements PisService
 		
 		return dao.ReqEmerAddajax(empid);
 	}
+	
+	
+	
+	  @Override
+		public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception {
+			
+			 LocalDate Fromdate = null;
+			 LocalDate Todate = null;
+			 
+			 if(Fromdateparam == null || Todateparam == null) 
+			 { 
+				 Todate = LocalDate.now();
+				 Fromdate= Todate.minusMonths(1); 
+			 }
+			  
+			 else { 
+				 
+			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+			 Fromdate = LocalDate.parse(Fromdateparam,formatter);
+			 Todate = LocalDate.parse(Todateparam,formatter);
+			 
+			 }
+		
+			return dao.AuditStampingList(Username,Fromdate,Todate);
+			
+		}
 }

@@ -164,16 +164,17 @@
 							        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
 							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=Username%> &nbsp;&nbsp;&nbsp;!! </a>
 							
-							            <div class="dropdown-divider"></div>
 							
-							            <a class="dropdown-item" href="#" ><i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i>
-							                Change Password
-							            </a>
 							
 							            <div class="dropdown-divider"></div>
-							
-							            <a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog"
-							                    aria-hidden="true" style="color: #142850"></i> HELP </a>
+							 <a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true"></i> Audit Stamping </a>     
+							            <div class="dropdown-divider"></div>
+							 <a class="dropdown-item" href="#" ><i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i> Change Password </a>
+							            <div class="dropdown-divider"></div>
+							   <a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i> HELP </a>
+							                    
+							                
+							               
 							
 							            <div class="dropdown-divider"></div>
 							

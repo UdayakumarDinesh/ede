@@ -2,6 +2,7 @@ package com.vts.ems.pis.dao;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -945,6 +946,21 @@ public class PisDaoImpl implements PisDao {
 			e.printStackTrace();
 		}		
 		return addres;
+	}
+	
+
+	private static final String  AUDITSTAMPING="SELECT a.username,a.logindate, a.logindatetime,a.ipaddress, a.macaddress,(CASE WHEN a.logouttype='L' THEN 'Logout' ELSE 'Session Expired' END) AS logouttype,  a.logoutdatetime FROM audit_stamping a , login b WHERE a.LoginDate BETWEEN :fromdate AND :todate AND  a.username=b.username AND a.loginid=:loginid ORDER BY a.LoginDateTime DESC";
+	@Override
+	public List<Object[]> AuditStampingList(String loginid,LocalDate Fromdate,LocalDate Todate) throws Exception {
+		
+		Query query = manager.createNativeQuery(AUDITSTAMPING);
+		query.setParameter("loginid", loginid);
+		query.setParameter("fromdate", Fromdate);
+		query.setParameter("todate", Todate);
+		 
+		List<Object[]> AuditStampingList=(List<Object[]>) query.getResultList();
+
+		return AuditStampingList;
 	}
 }
 	

@@ -1321,4 +1321,43 @@ public class PisController {
 	    	return EmerAddress.toArray();
 
      }
+	
+	@RequestMapping(value="AuditStamping.htm" , method=RequestMethod.GET)
+	 public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		  String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ReqEmerAddajax.htm "+Username); 
+	       
+	       try {
+	    	   String Usernameparam=req.getParameter("username");
+	   		
+				String Fromdate=req.getParameter("Fromdate");
+				String Todate=req.getParameter("Todate");
+	    	   List<Object[]> list=null;
+	    	   
+	    	   req.setAttribute("list", list);
+	    	   req.setAttribute("emplist", service.getEmpList());
+	    	   
+	    		if(Usernameparam == null) {
+					
+					req.setAttribute("auditstampinglist", service.AuditStampingList(Username,Fromdate, Todate));
+					req.setAttribute("Fromdate", LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					req.setAttribute("Todate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+				}
+			
+				else {
+				String[] userName=Usernameparam.split("-");	
+				req.setAttribute("auditstampinglist", service.AuditStampingList(userName[0],Fromdate, Todate));
+				req.setAttribute("Username", Usernameparam);
+				req.setAttribute("Fromdate", Fromdate);
+				req.setAttribute("Todate", Todate);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+	       return "Admin/AuditStamping";
+	}
+	
+	
+	
 }

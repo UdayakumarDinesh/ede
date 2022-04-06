@@ -1,5 +1,6 @@
 package com.vts.ems.pis.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.login.Login;
@@ -74,4 +75,6 @@ public interface PisDao {
 	public Long EditEmecAddress(AddressEmec address) throws Exception ;
 	public List<Object[]> ReqEmerAddajax(String Empid) throws Exception ;
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
+
+	public List<Object[]> AuditStampingList(String Username,LocalDate Fromdate,LocalDate Todate) throws Exception;
 }

@@ -13,6 +13,31 @@
 .card{
     margin-bottom: 10px;
 }
+
+.btn-group button {
+  background-color: #1f2f59; /* Green background */
+  border: 1px solid blue; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: right; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: right; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #3e8e41;
+}
 </style>
 </head>
 <body>
@@ -222,6 +247,19 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<%}%>		
 					</div>
 					</div>
+					
+					<div class="btn-group">
+					<div class="col-md-12">
+				 	<button type="submit" class="btn btnclr"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Appointment</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Awards</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Property</button>
+					<button type="submit" class="btn btnclr" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)">Address</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)"> Publication</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Passport</button>
+					</div>
+				</div> 
 	</div>
 </div>
 <script src="webresources/js/master.js" type="text/javascript"></script>
