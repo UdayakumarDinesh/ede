@@ -139,8 +139,6 @@
 											<td></td>
 										</tr>
 									<%} %>
-									
-									
 								</tbody>
 							</table>
 							<input type="hidden" name="isapproval" value="N">
