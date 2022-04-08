@@ -111,13 +111,7 @@
 											</td>
 										</tr>
 									<%} %>
-									<%if(chssclaimlist.size()==0){ %>
-										<tr>
-											<td colspan="7" style="text-align: center;">
-												No Record Found
-											</td>
-										</tr>
-									<%} %>
+									
 								</tbody>
 							</table>
 							<input type="hidden" name="isapproval" value="Y">
