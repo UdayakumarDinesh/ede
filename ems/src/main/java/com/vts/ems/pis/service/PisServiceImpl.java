@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +21,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
+import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
+import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -50,6 +56,8 @@ public class PisServiceImpl implements PisService
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
 	
+	@Autowired
+	BCryptPasswordEncoder encoder;
 	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType,String Empid) throws Exception
@@ -393,7 +401,21 @@ public class PisServiceImpl implements PisService
 	
 	@Override
 	public Long EditPerAddress(AddressPer address)throws Exception{
-		return dao.EditPerAddress(address);
+		
+		AddressPer peraddress=dao.getPeraddress(address.getAddress_per_id());
+		   peraddress.setLandline(address.getLandline());
+	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
+	 	   peraddress.setMobile(address.getMobile());
+	 	   peraddress.setPin(address.getPin());
+	 	   peraddress.setState(address.getState());
+	 	   peraddress.setCity(address.getCity());
+	 	   peraddress.setAlt_mobile(address.getAlt_mobile());
+	 	   peraddress.setEmpid(address.getEmpid());
+	 	   peraddress.setPer_addr(address.getPer_addr());
+	 	   peraddress.setAddress_per_id(address.getAddress_per_id());
+		   peraddress.setModifiedBy(address.getModifiedBy());
+		   peraddress.setModifiedDate(address.getModifiedDate());
+		return dao.EditPerAddress(peraddress);
 	}
 	
 	@Override
@@ -402,10 +424,161 @@ public class PisServiceImpl implements PisService
 	}
 	@Override
 	public Object[]  getKinAddress(String empid)throws Exception{
-		return dao.getPerAddress(empid);
+		return dao.getKinAddress(empid);
 	}
 	@Override
 	public Object[]  getEmeAddress(String empid)throws Exception{
 		return dao.getEmeAddress(empid);
 	}
+	
+	@Override
+	public Long AddResAddress(AddressRes ressRes)throws Exception{
+		return dao.AddResAddress( ressRes);
+	}
+	@Override
+	public AddressRes getResAddressData(String addressid)throws Exception{
+		return dao.getResAddressData(addressid);
+	}
+	
+	@Override
+	public Long EditResAddress(AddressRes add)throws Exception{
+		
+		AddressRes address = dao.getResAddressData(Long.toString(add.getAddress_res_id()));
+		
+		address.setEmpid(add.getEmpid());
+		address.setRes_addr(add.getRes_addr());
+		address.setFrom_res_addr(add.getFrom_res_addr());
+		address.setMobile(add.getMobile());
+		address.setAlt_mobile(add.getAlt_mobile());
+		address.setLandline(add.getLandline());
+		address.setExt(add.getExt());
+		address.setEmailDrona(add.getEmailDrona());
+		address.setEmailOfficial(add.getEmailOfficial());
+		address.setEmailPersonal(add.getEmailPersonal());
+		address.setEmailOutlook(add.getEmailOutlook());
+		address.setQtrNo(add.getQtrNo());
+		address.setQtrType(add.getQtrType());
+		address.setQtrDetails(add.getQtrDetails());
+		address.setState(add.getState());
+		address.setCity(add.getCity());
+		address.setPin(add.getPin());
+		address.setModifiedBy(add.getModifiedBy());
+		address.setModifiedDate(add.getModifiedDate());
+		address.setAddress_res_id(add.getAddress_res_id());
+		
+		
+		return dao.EditResAddress(address);
+	}
+	
+	@Override
+	public int deleteResAdd(String addresid,String Username)throws Exception{
+		return dao.deleteResAdd(addresid,Username);
+		
+	}
+	
+	@Override
+	public Long AddNextAddress(AddressNextKin nextaddress)throws Exception{
+		return dao.AddNextAddress( nextaddress);
+	}
+	@Override
+	public Long EditNextKinAddress(AddressNextKin address)throws Exception{
+		
+		AddressNextKin peraddress=dao.getNextKinaddress(address.getAddress_kin_id());
+		   peraddress.setLandline(address.getLandline());
+	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
+	 	   peraddress.setMobile(address.getMobile());
+	 	   peraddress.setPin(address.getPin());
+	 	   peraddress.setState(address.getState());
+	 	   peraddress.setCity(address.getCity());
+	 	   peraddress.setAlt_mobile(address.getAlt_mobile());
+	 	   peraddress.setEmpid(address.getEmpid());
+	 	   peraddress.setNextkin_addr(address.getNextkin_addr());
+	 	   peraddress.setAddress_kin_id(address.getAddress_kin_id());
+		   peraddress.setModifiedBy(address.getModifiedBy());
+		   peraddress.setModifiedDate(address.getModifiedDate());
+		return dao.EditNextKinAddress(peraddress);
+	}
+	
+	@Override
+	public AddressNextKin getNextKinrAddressData(String empid)throws Exception{
+		return dao.getNextKinAddressData(empid);
+	}
+	
+	@Override
+	public AddressEmec getEmecAddressData(String empid)throws Exception{
+		return dao.getEmecAddressData(empid);
+	}
+	@Override
+	public Long AddEmecAddress(AddressEmec emecaddress)throws Exception{
+		return dao.AddEmecAddress( emecaddress);
+	}
+	
+	@Override
+	public Long EditEmecAddress(AddressEmec address)throws Exception{
+		
+		AddressEmec peraddress=dao.getEmecaddress(address.getAddress_emer_id());
+		   peraddress.setLandline(address.getLandline());
+	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
+	 	   peraddress.setMobile(address.getMobile());
+	 	   peraddress.setPin(address.getPin());
+	 	   peraddress.setState(address.getState());
+	 	   peraddress.setCity(address.getCity());
+	 	   peraddress.setAlt_mobile(address.getAlt_mobile());
+	 	   peraddress.setEmpid(address.getEmpid());
+	 	   peraddress.setEmer_addr(address.getEmer_addr());
+	 	   peraddress.setAddress_emer_id(address.getAddress_emer_id());
+		   peraddress.setModifiedBy(address.getModifiedBy());
+		   peraddress.setModifiedDate(address.getModifiedDate());
+		return dao.EditEmecAddress(peraddress);
+	}
+	
+	@Override
+	public List<Object[]> ReqEmerAddajax(String empid) throws Exception {
+		
+		return dao.ReqEmerAddajax(empid);
+	}
+	
+	
+	
+	  @Override
+		public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception {
+			
+			 LocalDate Fromdate = null;
+			 LocalDate Todate = null;
+			 
+			 if(Fromdateparam == null || Todateparam == null) 
+			 { 
+				 Todate = LocalDate.now();
+				 Fromdate= Todate.minusMonths(1); 
+			 }
+			  
+			 else { 
+				 
+			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+			 Fromdate = LocalDate.parse(Fromdateparam,formatter);
+			 Todate = LocalDate.parse(Todateparam,formatter);
+			 
+			 }
+		
+			return dao.AuditStampingList(Username,Fromdate,Todate);
+			
+		}
+		
+		@Override
+		public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception {
+
+			logger.info(new Date() +"Inside PasswordChange");
+			String actualoldpassword=dao.OldPassword(UserId);
+
+			if(encoder.matches(OldPassword, actualoldpassword)) {
+			
+			String oldpassword=encoder.encode(OldPassword);
+			String newpassword=encoder.encode(NewPassword);
+			
+			return dao.PasswordChange(oldpassword, newpassword, UserId, sdf.format(new Date()),username);
+			}else {
+				
+			}
+			return 0;
+		}
 }

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,7 +30,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.pis.dto.UserManageAdd;
+import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
+import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.service.PisService;
@@ -761,7 +765,7 @@ public class PisController {
    
    
    @RequestMapping(value="EditFamilyDetails.htm" , method=RequestMethod.POST)
-   public String MemberDelete(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+   public String MembereEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 	   String Username = (String) ses.getAttribute("Username");
        logger.info(new Date() +"Inside EditFamilyDetails.htm "+Username);
        try {
@@ -827,19 +831,24 @@ public class PisController {
    }
    
    @RequestMapping(value="Address.htm"  , method= {RequestMethod.GET,RequestMethod.POST})
-   public String AddressDashboard(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+   public String AddressDashboard(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+   {
 	
 	   String Username = (String) ses.getAttribute("Username");
        logger.info(new Date() +"Inside AddressDashboard.htm "+Username);
        String empid =null;
 	   try {
-		   
+		  
 		    empid = (String)req.getParameter("empid");
+		    
 		   if(empid==null) {
 			   Map md=model.asMap();
 				empid=(String)md.get("Employee");
+				if((String)md.get("Employee")==null) {
+					return "redirect:/PisAdminEmpList.htm";
+				}
 		   }
-		 
+		  	  
 		   Object[]  perAddress = (Object[])service.getPerAddress(empid);
 		   List<Object[]> resAddress = (List<Object[]>)service.getResAddress(empid);
 		   Object[] kinAddress = (Object[]) service.getKinAddress(empid);
@@ -906,14 +915,21 @@ public class PisController {
     	   String empid =(String)req.getParameter("empid");
     	   String perAdd=(String)req.getParameter("perAdd");
     	   
+    	
     	   AddressPer peraddress = new AddressPer();
-    	   peraddress.setLandline(landineNo);
-    	   peraddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   	if(landineNo!=null) {
+    	   	 peraddress.setLandline(landineNo);
+    	   }
+    	   if(altMobile!=null) {
+    		  peraddress.setAlt_mobile(altMobile);
+    	   }
+    	   if(fromPer!=null) {
+    		   peraddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   }   	  
     	   peraddress.setMobile(mobile);
     	   peraddress.setPin(cityPin);
     	   peraddress.setState(state);
-    	   peraddress.setCity(city);
-    	   peraddress.setAlt_mobile(altMobile);
+    	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
     	   
@@ -958,28 +974,427 @@ public class PisController {
 		String Action =(String)req.getParameter("Action");
 		String empid = (String)req.getParameter("empid");
 		
+		logger.info(new Date() +"Inside ResAddressAddEdit.htm "+Username); 
+		
 		if("ADD".equalsIgnoreCase(Action)){
-			List<Object[]> States = service.getStates();
-	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
-   		     req.setAttribute("States", States);
+			
+				 List<Object[]> States = service.getStates();
+				 req.setAttribute("Empdata", service.GetEmpData(empid));
+	   		     req.setAttribute("States", States);
 						
-			return "masters/AddEditResAddress";
+		  return "masters/AddEditResAddress";
 		}else if("EDIT".equalsIgnoreCase(Action)) {
-
 			
-			return "pis/LoginEdit";
-		}else {
+			  String Addressid = (String)req.getParameter("addressid"); 	
+			  AddressRes addres = service.getResAddressData(Addressid);
+			  List<Object[]> States = service.getStates();
+			  req.setAttribute("Empdata", service.GetEmpData(empid));
+			  req.setAttribute("addres", addres);
+			  req.setAttribute("States", States);
+			  
+		   return "masters/AddEditResAddress";
+		}else{
 			
-			int count =0; 
+			String addressid = (String)req.getParameter("addressid");
+					
+			int count =service.deleteResAdd(addressid,Username);
 			if (count > 0) {
 				redir.addAttribute("result", "RESIDENTIAL ADDRESS DELETE SUCCESSFULLY");
 			} else {
 				redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS DELETE UNSUCCESSFUL");
 			}
-			return "redirect:/LoginMaster.htm";
+			redir.addFlashAttribute("Employee", empid);
+			return "redirect:/Address.htm";
 		}
 		
 	}
-                                                                                          
+           
    
+   @RequestMapping(value="AddEditResAddressDetails.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+   public String AddResAddressDetails(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	  
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside AddResAddressDetails.htm "+Username);  
+       String Action = (String)request.getParameter("Action");
+	   try {
+		    String resAdd = request.getParameter("resAdd").trim().replaceAll(" +", " ");
+			String fromRes = request.getParameter("fromRes");
+			String mobile = request.getParameter("mobile").trim().replaceAll(" +", " ");
+			String altMobile = request.getParameter("altMobile").trim().replaceAll(" +", " ");
+			String landineNo = request.getParameter("landineNo").trim().replaceAll(" +", " ");
+			String extNo = request.getParameter("extNo").trim().replaceAll(" +", " ");
+			String eDrona = request.getParameter("eDrona").trim().replaceAll(" +", " ");
+			String eOfficial = request.getParameter("eOfficial").trim().replaceAll(" +", " ");
+			String ePersonal = request.getParameter("ePersonal").trim().replaceAll(" +", " ");
+			String eOutlook = request.getParameter("eOutlook").trim().replaceAll(" +", " ");
+			String qtrNo = request.getParameter("qtrNo").trim().replaceAll(" +", " ");
+			String qtrType = request.getParameter("qtrType").trim().replaceAll(" +", " ");
+			String qtrDetail = request.getParameter("qtrDetail").trim().replaceAll(" +", " ");
+			String state = request.getParameter("state").trim().replaceAll(" +", " ");
+			String city = request.getParameter("city").trim().replaceAll(" +", " ");
+			String pin = request.getParameter("cityPin").trim().replaceAll(" +", " ");
+			String empid= (String)request.getParameter("empid"); 
+			
+					
+			int pinInt = Integer.parseInt(pin);
+
+			long mobileInt = 1;
+			long altMobileInt = 1;
+			long landineNoInt = 1;
+			int extNoInt = 1;
+
+			if (!"".equalsIgnoreCase(mobile)) {
+				mobileInt = Long.parseLong(mobile);
+			}
+
+			if (!"".equalsIgnoreCase(altMobile)) {
+				altMobileInt = Long.parseLong(altMobile);
+			}
+			if (!"".equalsIgnoreCase(landineNo)) {
+				landineNoInt = Long.parseLong(landineNo);
+			}
+			if (!"".equalsIgnoreCase(extNo)) {
+				extNoInt = Integer.parseInt(extNo);
+			}
+			
+			AddressRes resadd= new AddressRes();
+			
+			resadd.setEmpid(empid);
+			resadd.setRes_addr(resAdd);
+			resadd.setFrom_res_addr(DateTimeFormatUtil.dateConversionSql(fromRes));
+			resadd.setMobile(mobile);
+			resadd.setAlt_mobile(altMobile);
+			resadd.setLandline(landineNo);
+			resadd.setExt(extNo);
+			resadd.setEmailDrona(eDrona);
+			resadd.setEmailOfficial(eOfficial);
+			resadd.setEmailPersonal(ePersonal);
+			resadd.setEmailOutlook(eOutlook);
+			resadd.setQtrNo(qtrNo);
+			resadd.setQtrType(qtrType);
+			resadd.setQtrDetails(qtrDetail);
+			resadd.setState(state);
+			resadd.setCity(city);
+			resadd.setPin(pin);
+		
+			
+		if("ADD".equalsIgnoreCase(Action)) {
+			resadd.setIsActive(1);
+			resadd.setCreatedBy(Username);
+			resadd.setCreatedDate(sdf.format(new Date()));
+        	  long result  =  service.AddResAddress(resadd); 
+        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "RESIDENTIAL ADDRESS ADD SUCCESSFULLY");	
+        		} else {
+        			 redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS ADD UNSUCCESSFUL");	
+        	    }
+        	    redir.addFlashAttribute("Employee", empid);
+		}else if ("EDIT".equalsIgnoreCase(Action)) {
+			String addressresid = (String)request.getParameter("addressresid");
+			resadd.setAddress_res_id(Long.parseLong(addressresid));
+			resadd.setModifiedBy(Username);
+			resadd.setModifiedDate(sdf.format(new Date()));
+        	  long result  =  service.EditResAddress(resadd); 
+        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "RESIDENTIAL ADDRESS EDIT SUCCESSFULLY");	
+        		} else {
+        			 redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS EDIT UNSUCCESSFUL");	
+        	    }
+        	    redir.addFlashAttribute("Employee", empid);
+		}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	   return "redirect:/Address.htm";
+   }
+   
+   
+ 
+   @RequestMapping(value = "KinAddressAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+  	public String NextkinAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+  	{   
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside AddEditPerAddress.htm "+Username);
+       try {
+
+    	   String Action = (String) req.getParameter("Action");
+    	   String empid =(String)req.getParameter("empid");
+    	   
+    	   	if("EDITNextKinAdd".equalsIgnoreCase(Action)) {
+    	   	
+    	   		AddressNextKin nextkinaddress = service.getNextKinrAddressData(empid);
+    	   		
+    	   		List<Object[]> States = service.getStates();
+    	   		 req.setAttribute("nextkinaddress", nextkinaddress);
+    	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
+ 	   		     req.setAttribute("States", States);
+    	   	      return "masters/AddEditNextKinAddress";
+           }else{
+    	   		List<Object[]> States = service.getStates();
+    	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
+    	   		req.setAttribute("States", States);
+    	   	 return "masters/AddEditNextKinAddress";
+    	   	}
+    	   	
+	    } catch (Exception e) {
+	 	    e.printStackTrace();
+	    }
+       
+       return "masters/AddEditNextKinAddress";
+  		
+  	}
+   
+   @RequestMapping(value = "NextKinAddAddressDetails.htm" , method= RequestMethod.POST)
+   public String AddNextKinAddressDetails(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside AddNextKinAddressDetails.htm "+Username);  
+       String Action = (String)req.getParameter("Action");
+       try {
+    	   String state =(String)req.getParameter("state");
+    	   String city  =(String)req.getParameter("city");
+    	   String cityPin =(String)req.getParameter("cityPin");
+    	   String mobile =(String)req.getParameter("mobile");
+    	   String altMobile =(String)req.getParameter("altMobile");
+    	   String landineNo =(String)req.getParameter("landineNo");
+    	   String fromPer =(String)req.getParameter("fromPer");
+    	   String empid =(String)req.getParameter("empid");
+    	   String nextKinAdd=(String)req.getParameter("nextKinAdd");
+    	   
+    	   AddressNextKin kinaddress = new AddressNextKin();
+    	   kinaddress.setLandline(landineNo);
+    	   kinaddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   kinaddress.setMobile(mobile);
+    	   kinaddress.setPin(cityPin);
+    	   kinaddress.setState(state);
+    	   kinaddress.setCity(city);
+    	   kinaddress.setAlt_mobile(altMobile);
+    	   kinaddress.setEmpid(empid);
+    	   kinaddress.setNextkin_addr(nextKinAdd);
+    	   
+    	   if("ADD".equalsIgnoreCase(Action)) {
+    		   kinaddress.setCreatedBy(Username);
+    		   kinaddress.setCreatedDate(sdf.format(new Date()));
+        	  long result  =  service.AddNextAddress(kinaddress); 
+        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "NEXT KIN ADDRESS ADD SUCCESSFULLY");	
+        		} else {
+        			 redir.addAttribute("resultfail", "NEXT KIN ADDRESS ADD UNSUCCESSFUL");	
+        	    }
+        	    redir.addFlashAttribute("Employee", empid);
+    	   }else if("EDIT".equalsIgnoreCase(Action)) {
+    		   String addressid = (String)req.getParameter("addressId");
+    		   kinaddress.setAddress_kin_id(Long.parseLong(addressid));
+    		   kinaddress.setModifiedBy(Username);
+    		   kinaddress.setModifiedDate(sdf.format(new Date()));
+        	   long result  =  service.EditNextKinAddress(kinaddress); 
+          	 
+	       	    if(result>0) {
+	       	    	 redir.addAttribute("result", "NEXT KIN ADDRESS EDIT SUCCESSFULLY");	
+	       		} else {
+	       			 redir.addAttribute("resultfail", "NEXT KIN ADDRESS EDIT UNSUCCESSFUL");	
+	       	    }
+	       	    redir.addFlashAttribute("Employee", empid);
+    	   }
+    	    
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+	  }  
+       return "redirect:/Address.htm";
+   }
+   
+
+   
+   @RequestMapping(value = "EmecAddressAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+  	public String EmecAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+  	{   
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside EmecAddressAddEdit.htm "+Username);
+       try {
+
+    	   String Action = (String) req.getParameter("Action");
+    	   String empid =(String)req.getParameter("empid");
+    	   
+    	   	if("EDITEmecAddress".equalsIgnoreCase(Action)) {
+    	   	System.out.println(empid +"Action     +"+Action);
+    	   	AddressEmec emecaddress = service.getEmecAddressData(empid);
+    	   		
+    	   		List<Object[]> States = service.getStates();
+    	   		 req.setAttribute("emecaddress", emecaddress);
+    	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
+ 	   		     req.setAttribute("States", States);
+    	   	      return "masters/AddEditEmecAddress";
+           }else{
+    	   		List<Object[]> States = service.getStates();
+    	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
+    	   		req.setAttribute("States", States);
+    	   	 return "masters/AddEditEmecAddress";
+    	   	}
+    	   	
+	    } catch (Exception e) {
+	 	    e.printStackTrace();
+	    }
+       
+       return "masters/AddEditNextKinAddress";
+  		
+  	}
+   
+   @RequestMapping(value = "EmecAddAddressDetails.htm" , method= RequestMethod.POST)
+   public String AddEmecAddressDetails(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside AddEmecAddressDetails.htm "+Username);  
+       String Action = (String)req.getParameter("Action");
+       try {
+    	   String state =(String)req.getParameter("state");
+    	   String city  =(String)req.getParameter("city");
+    	   String cityPin =(String)req.getParameter("cityPin");
+    	   String mobile =(String)req.getParameter("mobile");
+    	   String altMobile =(String)req.getParameter("altMobile");
+    	   String landineNo =(String)req.getParameter("landineNo");
+    	   String fromPer =(String)req.getParameter("fromPer");
+    	   String empid =(String)req.getParameter("empid");
+    	   String EmecAdd=(String)req.getParameter("EmecAdd");
+    	   
+    	   AddressEmec emecaddress = new AddressEmec();
+    	   emecaddress.setLandline(landineNo);
+    	   emecaddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   emecaddress.setMobile(mobile);
+    	   emecaddress.setPin(cityPin);
+    	   emecaddress.setState(state);
+    	   emecaddress.setCity(city);
+    	   emecaddress.setAlt_mobile(altMobile);
+    	   emecaddress.setEmpid(empid);
+    	   emecaddress.setEmer_addr(EmecAdd);
+    	   
+    	   if("ADD".equalsIgnoreCase(Action)) {
+    		   emecaddress.setCreatedBy(Username);
+    		   emecaddress.setCreatedDate(sdf.format(new Date()));
+        	  long result  =   service.AddEmecAddress(emecaddress); 
+        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "EMERGENCY ADDRESS ADD SUCCESSFULLY");	
+        		} else {
+        			 redir.addAttribute("resultfail", "EMERGENCY ADDRESS ADD UNSUCCESSFUL");	
+        	    }
+        	    redir.addFlashAttribute("Employee", empid);
+    	   }else if("EDIT".equalsIgnoreCase(Action)) {
+    		   String addressid = (String)req.getParameter("addressId");
+    		   emecaddress.setAddress_emer_id(Long.parseLong(addressid));
+    		   emecaddress.setModifiedBy(Username);
+    		   emecaddress.setModifiedDate(sdf.format(new Date()));
+        	   long result  = service.EditEmecAddress(emecaddress); 
+          	 
+	       	    if(result>0) {
+	       	    	 redir.addAttribute("result", "EMERGENCY ADDRESS EDIT SUCCESSFULLY");	
+	       		} else {
+	       			 redir.addAttribute("resultfail", "EMERGENCY ADDRESS EDIT UNSUCCESSFUL");	
+	       	    }
+	       	    redir.addFlashAttribute("Employee", empid);
+    	   }
+    	    
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+	  }  
+       return "redirect:/Address.htm";
+   }
+   
+   
+	@RequestMapping(value="ReqEmerAddajax.htm",method=RequestMethod.GET)
+	public  @ResponseBody Object[] ReqEmerAddajax(HttpServletRequest req,HttpServletResponse response,HttpSession ses) throws Exception {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ReqEmerAddajax.htm "+Username);  
+	       List<Object[]> EmerAddress=null;
+	       try { 
+	    	   
+	    	String empid= req.getParameter("EmerEmpid");
+	   	    ServletOutputStream out=response.getOutputStream();	
+	   		EmerAddress = service.ReqEmerAddajax(empid);	
+	   		
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+	    	return EmerAddress.toArray();
+
+     }
+	
+	@RequestMapping(value="AuditStamping.htm" , method=RequestMethod.GET)
+	 public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		  String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AuditStamping.htm "+Username); 
+	       long LoginId = (long) ses.getAttribute("LoginId");
+	       try {
+	    	   String Usernameparam=req.getParameter("username");
+	   		
+				String Fromdate=req.getParameter("fromdate");
+				String Todate=req.getParameter("todate");
+	    	   List<Object[]> list=null;
+	    	  
+	    	   req.setAttribute("list", list);
+	    	   req.setAttribute("emplist", service.getEmpList());
+	    	   
+	    		if(Usernameparam == null) {
+					
+					req.setAttribute("auditstampinglist", service.AuditStampingList(String.valueOf(LoginId) ,Fromdate, Todate));
+					req.setAttribute("Fromdate", LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					req.setAttribute("Todate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					req.setAttribute("loginid", String.valueOf(LoginId));
+					req.setAttribute("Username",(String) ses.getAttribute("EmpName"));
+				}
+			
+				else {
+				String[] userName=Usernameparam.split("-");	
+				req.setAttribute("auditstampinglist", service.AuditStampingList(userName[0],Fromdate, Todate));
+				req.setAttribute("Username", userName[1]);
+				req.setAttribute("loginid", userName[0]);
+				req.setAttribute("Fromdate", Fromdate);
+				req.setAttribute("Todate", Todate);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+	       return "Admin/AuditStamping";
+	}
+	
+	@RequestMapping(value = "PasswordChange.htm", method = RequestMethod.GET)
+	public String PasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
+
+		return "Admin/PasswordChange";
+	}
+	
+	@RequestMapping(value = "PasswordChanges.htm", method = RequestMethod.POST)
+	public String PasswordChangeSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		
+		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
+		try {
+				long LoginId = (long) ses.getAttribute("LoginId");  
+				String NewPassword =req.getParameter("NewPassword");
+				String OldPassword =req.getParameter("OldPassword");
+				int count  =  service.PasswordChange(OldPassword, NewPassword, String.valueOf(LoginId),Username);
+				
+				if (count > 0) 
+				{
+					redir.addAttribute("result", "Password Changed Successfully");
+				} 
+				else 
+				{
+					redir.addAttribute("resultfail", "Password Change Unsuccessfull ");
+				}
+				System.out.println(count);
+		}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
+		}
+
+		return "redirect:/PasswordChange.htm";
+		
+	}
+	
+	
 }

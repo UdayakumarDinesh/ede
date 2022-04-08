@@ -8,9 +8,35 @@
 <meta charset="ISO-8859-1">
 <title>Address List</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+
 <style type="text/css">
 .card{
     margin-bottom: 10px;
+}
+
+.btn-group button {
+  background-color: #1f2f59; /* Green background */
+  border: 1px solid blue; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: right; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: right; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #3e8e41;
 }
 </style>
 </head>
@@ -63,7 +89,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<h5>Permanent Address</h5>
 					<hr>
 					<%if(perAddress!=null){ %>
-					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable">
+					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable1">
 					<tbody>
 					    <tr align="center">
 							<th>Per.Address</th>
@@ -95,10 +121,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<%}%>		
 					</div>
 					</div>					
-					
-					
-					
-					
+	
 					<div class="card">					
 					<div class="card-body">
 							<h5>Residential Address List</h5>
@@ -106,7 +129,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<form action="ResAddressAddEdit.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2"> 
 					<thead>
 									
 					    <tr align="center">
@@ -121,7 +144,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					   <tbody>
 					   		<%for(Object[] obj : resAddress){ %>
 							<tr align="center">
-							<td style="text-align: center;"><input type="radio" name="empid" value="<%=obj[0]%>"> </td>					    
+							<td style="text-align: center;"><input type="radio" name="addressid" value="<%=obj[1]%>"> </td>					    
 						    <td><%=obj[2]%></td>
 							<td><%=obj[3]%></td>
 							<td><%=obj[4]%></td>
@@ -134,10 +157,10 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					</div>		
 						<div class="row text-center">
 						<div class="col-md-12">
-						
+						     <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-					    	<button type="button" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick=" Edit(empForm)" >DELETE </button>
+					    	<button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button>
 					    </div>
 					    </div>
 				</form>
@@ -153,7 +176,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<h5>Next kin Address</h5>
 					<hr>
 					<%if(kinAddress!=null){ %>
-					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable">
+					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable3">
 					<tbody>
 					    <tr align="center">
 							<th>NextKin.Address</th>
@@ -170,15 +193,15 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<td><%=kinAddress[8]%></td>	
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(kinAddress[3].toString())%></td>
 							<td style="padding-top:5px; padding-bottom: 5px;">
-							<form action="AddEditPerAddress.htm" method="GET">
+							<form action="KinAddressAddEdit.htm" method="GET">
 							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
-						<button type="submit" class="btn btn-sm" name="Action" value="EDITPerAddress"  data-toggle="tooltip" data-placement="top" title="Edit">
+						<button type="submit" class="btn btn-sm" name="Action" value="EDITNextKinAdd"  data-toggle="tooltip" data-placement="top" title="Edit">
 							<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>	</form></td>
 					   </tr>
 					</tbody>
 					</table>
 						<%}else{%>
-				<form action="AddEditPerAddress.htm" method="GET">
+				<form action="KinAddressAddEdit.htm" method="GET">
                      <button  type="submit" name="Action" value="AddAddress"  class="btn btn-sm add-btn" style="margin-bottom:12px;" > Add Next kin Address</button>
                      <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
                 </form>
@@ -192,7 +215,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<h5>Emergency Address</h5>
 					<hr>
 					<%if(EmeAddress!=null){ %>
-					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable">
+					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable4">
 					<tbody>
 					    <tr align="center">
 							<th>Emer.Address</th>
@@ -203,33 +226,47 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<th>Edit</th>
 					   </tr>
 					    <tr align="center">
-							<td><%=perAddress[2]%></td>
-							<td><%=perAddress[4]%></td>
-							<td><%=perAddress[7]%></td>
-							<td><%=perAddress[8]%></td>	
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(perAddress[3].toString())%></td>
+							<td><%=EmeAddress[2]%></td>
+							<td><%=EmeAddress[4]%></td>
+							<td><%=EmeAddress[7]%></td>
+							<td><%=EmeAddress[8]%></td>	
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(EmeAddress[3].toString())%></td>
 							<td style="padding-top:5px; padding-bottom: 5px;">
-							<form action="AddEditPerAddress.htm" method="GET">
+							<form action="EmecAddressAddEdit.htm" method="GET">
 							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
-						<button type="submit" class="btn btn-sm" name="Action" value="EDITPerAddress"  data-toggle="tooltip" data-placement="top" title="Edit">
+						<button type="submit" class="btn btn-sm" name="Action" value="EDITEmecAddress"  data-toggle="tooltip" data-placement="top" title="Edit">
 							<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>	</form></td>
 					   </tr>
 					</tbody>
 					</table>
 						<%}else{%>
-				<form action="##" method="GET">
+				<form action="EmecAddressAddEdit.htm" method="GET">
                      <button  type="submit" name="Action" value="AddAddress"  class="btn btn-sm add-btn" style="margin-bottom:12px;" > Add Emergency Address</button>
                      <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
                 </form>
 					<%}%>		
 					</div>
 					</div>
+					
+					<div class="btn-group">
+					<div class="col-md-12">
+				 	<button type="submit" class="btn btnclr"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Appointment</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Awards</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Property</button>
+					<button type="submit" class="btn btnclr" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)">Address</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)"> Publication</button>
+					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Passport</button>
+					</div>
+				</div> 
 	</div>
 </div>
+<script src="webresources/js/master.js" type="text/javascript"></script>
 <script type="text/javascript">
 function Edit(myfrm) {
 
-	var fields = $("input[name='empd']").serializeArray();
+	var fields = $("input[name='addressid']").serializeArray();
 
 	if (fields.length === 0) {
 		alert("Please Select Atleast One Employee ");
@@ -239,6 +276,38 @@ function Edit(myfrm) {
 	}
 	return true;
 }
+
+function Delete(myfrm) { 
+	
+	var fields = $("input[name='addressid']").serializeArray();
+
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Employee");
+		event.preventDefault();
+		return false;
+	}
+	var cnf = confirm("Are You Sure To Delete!");
+
+	if (cnf) {
+		
+		document.getElementById("empForm").submit();
+		return true;
+
+	} else {
+		
+		event.preventDefault();
+		return false;
+	}
+}
+</script>
+<script type="text/javascript">
+$("#myTable2").DataTable({
+    "lengthMenu": [5, 10, 25, 50, 75, 100],
+    "pagingType": "simple"
+
+});
+
+
 </script>
 </body>
 </html>

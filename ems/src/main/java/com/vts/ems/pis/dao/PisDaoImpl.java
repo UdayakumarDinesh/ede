@@ -2,6 +2,7 @@ package com.vts.ems.pis.dao;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
+import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -49,7 +53,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
 	private static final String PHOTOUPDATE = "update employee set photo=:Path where empid=:EmpId";
 	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
-	private static final String EMPLIST = "SELECT empid ,empname FROM employee WHERE isactive=1 ORDER BY srno";
+	private static final String EMPLIST = "SELECT a.empid ,a.empname , b.loginid FROM employee a , login b WHERE a.isactive=1 AND a.empid=b.empid ORDER BY a.srno";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate , empid=:empid WHERE loginid=:loginid";
@@ -672,14 +676,14 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	@Override
-	public AddressPer getPeraddress(String addressid) throws Exception {
+	public AddressPer getPeraddress(long addressid) throws Exception {
 		logger.info(new Date() + "Inside getPeraddress()");
 		AddressPer memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
 			CriteriaQuery<AddressPer> cq = cb.createQuery(AddressPer.class);
 			Root<AddressPer> root = cq.from(AddressPer.class);
-			Predicate p1 = cb.equal(root.get("address_per_id"), Long.parseLong(addressid));
+			Predicate p1 = cb.equal(root.get("address_per_id"), addressid);
 			cq = cq.select(root).where(p1);
 			TypedQuery<AddressPer> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
@@ -747,6 +751,240 @@ public class PisDaoImpl implements PisDao {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public Long AddResAddress(AddressRes resaddress)throws Exception{
+		logger.info(new Date() + "Inside AddPerAddress()");
+		try {
+			manager.persist(resaddress);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resaddress.getAddress_res_id();
+	}
+	
+	@Override
+	public AddressRes getResAddressData(String addressid) throws Exception {
+		logger.info(new Date() + "Inside getResAddressData()");
+		AddressRes memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<AddressRes> cq = cb.createQuery(AddressRes.class);
+			Root<AddressRes> root = cq.from(AddressRes.class);
+			Predicate p1 = cb.equal(root.get("address_res_id"), Long.parseLong(addressid));
+			cq = cq.select(root).where(p1);
+			TypedQuery<AddressRes> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long EditResAddress(AddressRes address) throws Exception {
+	
+		logger.info(new Date() + "Inside EditResAddress()");
+		try {
+			manager.merge(address);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return address.getAddress_res_id();
+	}
+	private static final String DELETERES="UPDATE pis_address_res  SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE address_res_id=:addressid";
+	@Override
+	public int deleteResAdd(String addressid , String Username)throws Exception{
+		logger.info(new Date() + "Inside deleteResAdd()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETERES);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("addressid",addressid);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
+	@Override
+	public Long AddNextAddress(AddressNextKin nextkinaddress)throws Exception{
+		logger.info(new Date() + "Inside AddNextAddress()");
+		try {
+			manager.persist(nextkinaddress);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nextkinaddress.getAddress_kin_id();
+	}
+	@Override
+	public AddressNextKin getNextKinaddress(long addressid) throws Exception {
+		logger.info(new Date() + "Inside getNextKinaddress()");
+		AddressNextKin memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<AddressNextKin> cq = cb.createQuery(AddressNextKin.class);
+			Root<AddressNextKin> root = cq.from(AddressNextKin.class);
+			Predicate p1 = cb.equal(root.get("address_kin_id"), addressid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<AddressNextKin> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long EditNextKinAddress(AddressNextKin address) throws Exception {
+	
+		logger.info(new Date() + "Inside EditNextKinAddress()");
+		try {
+			manager.merge(address);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return address.getAddress_kin_id();
+	}
+	private static final String NEXTKINADDRESS="FROM AddressNextKin WHERE empid=:empid";
+	@Override
+	public AddressNextKin getNextKinAddressData(String empid)throws Exception{
+		logger.info(new Date() + "Inside getMemberDetails()");
+		AddressNextKin addres=null;
+		try {
+			Query query = manager.createQuery(NEXTKINADDRESS);
+			query.setParameter("empid", empid);
+			addres = (AddressNextKin) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return addres;
+	}
+	@Override
+	public Long AddEmecAddress(AddressEmec Emecaddress)throws Exception{
+		logger.info(new Date() + "Inside AddEmecAddress()");
+		try {
+			manager.persist(Emecaddress);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Emecaddress.getAddress_emer_id();
+	}
+	
+	@Override
+	public AddressEmec getEmecaddress(long addressid) throws Exception {
+		logger.info(new Date() + "Inside getEmecaddress()");
+		AddressEmec memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<AddressEmec> cq = cb.createQuery(AddressEmec.class);
+			Root<AddressEmec> root = cq.from(AddressEmec.class);
+			Predicate p1 = cb.equal(root.get("address_emer_id"), addressid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<AddressEmec> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long EditEmecAddress(AddressEmec address) throws Exception {
+	
+		logger.info(new Date() + "Inside EditEmecAddress()");
+		try {
+			manager.merge(address);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return address.getAddress_emer_id();
+	}
+	
+	@Override
+	public List<Object[]> ReqEmerAddajax(String Empid) throws Exception {
+		
+		Query query=manager.createNativeQuery("SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid");
+		query.setParameter("empid", Empid);
+		List<Object[]> ModuleList=(List<Object[]>)query.getResultList();
+		return ModuleList;
+	}
+	
+	private static final String EMECADDRESS="FROM AddressEmec WHERE empid=:empid";
+	@Override
+	public AddressEmec getEmecAddressData(String empid)throws Exception{
+		logger.info(new Date() + "Inside getEmecAddressData()");
+		AddressEmec addres=null;
+		try {
+			Query query = manager.createQuery(EMECADDRESS);
+			query.setParameter("empid", empid);
+			addres = (AddressEmec) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return addres;
+	}
+	
+
+	private static final String  AUDITSTAMPING="SELECT a.username,a.logindate, a.logindatetime,a.ipaddress, a.macaddress,(CASE WHEN a.logouttype='L' THEN 'Logout' ELSE 'Session Expired' END) AS logouttype,  a.logoutdatetime FROM audit_stamping a , login b WHERE a.LoginDate BETWEEN :fromdate AND :todate AND  a.username=b.username AND a.loginid=:loginid ORDER BY a.LoginDateTime DESC";
+	@Override
+	public List<Object[]> AuditStampingList(String loginid,LocalDate Fromdate,LocalDate Todate) throws Exception {
+		
+		Query query = manager.createNativeQuery(AUDITSTAMPING);
+		query.setParameter("loginid", loginid);
+		query.setParameter("fromdate", Fromdate);
+		query.setParameter("todate", Todate);
+		 
+		List<Object[]> AuditStampingList=(List<Object[]>) query.getResultList();
+
+		return AuditStampingList;
+	}
+	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
+	@Override
+	public String OldPassword(String UserId) throws Exception {
+		logger.info(new Date() +"Inside OldPassword");
+		Query query = manager.createNativeQuery(OLDPASSWORD);
+		query.setParameter("loginid", UserId);
+		
+		String OldPassword = (String) query.getSingleResult();
+		return   OldPassword;
+	}
+	private static final String PASSWORDUPDATECHANGE="update login set password=:newpassword,modifiedby=:modifiedby,modifieddate=:modifieddate where loginid=:loginid ";
+	@Override
+	public int PasswordChange(String OldPassword, String NewPassword ,String loginid, String ModifiedDate,String UserName)throws Exception {
+		
+		logger.info(new Date() +"Inside PasswordChange");
+		Query query = manager.createNativeQuery(PASSWORDUPDATECHANGE);
+		
+		query.setParameter("newpassword", NewPassword);
+		query.setParameter("loginid", loginid);
+		query.setParameter("modifiedby", UserName);
+		query.setParameter("modifieddate", ModifiedDate);
+		int PasswordChange = (int) query.executeUpdate();
+		return  PasswordChange;
 	}
 }
 	

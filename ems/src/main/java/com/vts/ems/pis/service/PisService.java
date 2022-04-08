@@ -6,7 +6,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dto.UserManageAdd;
+import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
+import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
@@ -60,4 +63,17 @@ public interface PisService {
 	public List<Object[]> getResAddress(String empid)throws Exception;
 	public Object[]  getKinAddress(String empid)throws Exception;
 	public Object[]  getEmeAddress(String empid)throws Exception;
+	public Long AddResAddress(AddressRes ressRes)throws Exception;
+	public AddressRes getResAddressData(String addressid)throws Exception;
+	public Long EditResAddress(AddressRes address)throws Exception;
+	public int deleteResAdd(String addresid,String Username)throws Exception;
+	public Long AddNextAddress(AddressNextKin nextaddress)throws Exception;
+	public Long EditNextKinAddress(AddressNextKin address)throws Exception;
+	public AddressNextKin getNextKinrAddressData(String empid)throws Exception;
+	public Long AddEmecAddress(AddressEmec emecaddress)throws Exception;
+	public Long EditEmecAddress(AddressEmec address)throws Exception;
+	public List<Object[]> ReqEmerAddajax(String empid) throws Exception;
+	public AddressEmec getEmecAddressData(String empid)throws Exception;
+	public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception;
+	public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception ;
 }
