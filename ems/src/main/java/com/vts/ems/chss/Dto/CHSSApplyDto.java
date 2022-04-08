@@ -26,6 +26,7 @@ public class CHSSApplyDto {
 	private String ModifiedBy;
 	private String ModifiedDate;
 	private String Ailment;
+	private String ContingentId;
 	
 	private String[] BillNo; 
 	private String[] CenterName;

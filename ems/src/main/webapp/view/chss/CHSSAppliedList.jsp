@@ -89,7 +89,7 @@
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[18] %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3){ %>
+												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==9 || Integer.parseInt(obj[9].toString())==11 || Integer.parseInt(obj[9].toString())==13 || Integer.parseInt(obj[9].toString())==7){ %>
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 														<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 													</button>	
@@ -103,12 +103,12 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3){ %>
+												<%-- <%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 && false){ %>
 													<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  onclick="return CheckClaimAmount(<%=obj[0] %>)"  data-toggle="tooltip" data-placement="top" title="Forward">
 														<i class="fa-solid fa-forward" style="color: #A63EC5"></i>
 													</button>
-												<%} %>			
-												<input type="hidden" name="isapproval" value="Y">							
+												<%} %>		 --%>	
+												<input type="hidden" name="isapproval" value="N">							
 											</td>
 										</tr>
 									<%} %>

@@ -86,6 +86,8 @@ th,td
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
+	
+	String isapproval = (String)request.getAttribute("isapproval");
 %>
  
  <div class="col page card">
@@ -98,8 +100,12 @@ th,td
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
+						<%if(Integer.parseInt(chssapplydata[9].toString())<=7){ %>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS List</li>
+						<%}else{ %>
+						<li class="breadcrumb-item "><a href="CHSSBatchList.htm">CHSS Contingent List</a></li>
+						<%} %>
+						<li class="breadcrumb-item active " aria-current="page">Claim</li>
 					</ol>
 				</div>
 			</div>
@@ -124,6 +130,15 @@ th,td
 				
 			<div class="card" >
 				<div class="card-body " >
+					<div class="row">
+						<%if(Integer.parseInt(chssapplydata[9].toString())<=7){ %>
+						<div class="col-md-12">
+							<p> Remark : 
+							<%=chssapplydata[19] %></p>
+						</div>
+						<%} %>
+					</div>
+				
 					<div align="center">
 						<div align="center">
 							<div>
@@ -212,7 +227,7 @@ th,td
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
 										<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my Parents / Parents-in-Law Shri / Smt. ...........................................................are wholly dependent
+											&#8226; That my Parents / Parents-in-Law Shri / Smt. <%=chssapplydata[12] %> are wholly dependent
 											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 											month.
 											<br>
@@ -222,7 +237,7 @@ th,td
 											<br>
 										<%} %>
 										
-											&#8226; That the patient Shri / Smt. ........................................................... is not covered by the ESI Scheme / any
+											&#8226; That the patient Shri / Smt. <%=chssapplydata[12] %> is not covered by the ESI Scheme / any
 											other medical facility.
 											<br>
 											
@@ -241,7 +256,7 @@ th,td
 											&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.
 											<br>
-											&#8226; That my wife / husband Shri / Smt. ............................................. is an employee in STARC and that she / he is
+											&#8226; That my wife / husband Shri / Smt. <%=chssapplydata[12] %> is an employee in STARC and that she / he is
 											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -307,7 +322,7 @@ th,td
 														<td class="right"><%=consult[6] %></td>
 														<td class="right">
 															<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
-															<button type="submit" class="btn btn-sm"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
+															<button type="submit" class="btn btn-sm editbtn"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>												
 														</td>
@@ -345,7 +360,7 @@ th,td
 													<td class="right"><%=test[4] %></td>
 													<td class="right">
 														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
-														<button type="submit" class="btn btn-sm"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>												
 													</td>
@@ -383,7 +398,7 @@ th,td
 													<td class="right"><%=other[3] %></td>
 													<td class="right">
 														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
-														<button type="submit" class="btn btn-sm"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>	
 													</td>
@@ -423,7 +438,7 @@ th,td
 													<td class="right"><%=medicine[4] %></td>
 													<td class="right">
 														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
-														<button type="submit" class="btn btn-sm"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 													</td>
@@ -460,8 +475,8 @@ th,td
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
 													<td class="right">
-														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="miscremamount-<%=misc[0]%>" style="direction: rtl;" value="<%=misc[6]%>">
-														<button type="submit" class="btn btn-sm"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+														<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 													</td>
@@ -501,25 +516,27 @@ th,td
 							</div>
 						</div>
 					</div>
-
-					<form action="CHSSApprovalForward.htm" method="post">
+					<form action="CHSSUserForward.htm" method="post">
 						<div class="row">
 							<div class="col-md-12">
 								Remarks : <br>
 								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" ></textarea>
 							</div>
 							<div class="col-md-12" align="center" style="margin-top: 5px;">
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Forward</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								<%if(Integer.parseInt(chssapplydata[9].toString())<6){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Approve</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								<%}else{ %>
+									<button type="submit" class="btn btn-sm delete-btn" formaction="CHSSClaimsApprove.htm" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								<%} %>
 							</div>
 						</div>
-						
+						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 					</form>
 
-				
 
 				</div>
 			</div>		
@@ -552,7 +569,7 @@ function remarkRequired(action)
 	if(action === 'R'){
 		$('#remarks').attr('required', true);
 		if($('#remarks').val().trim()===''){
-			alert('please Fill Remarks to Return! ');
+			alert('Please Fill Remarks to Return! ');
 			return false;
 		}else{
 			return confirm('Are You Sure To Return?');
@@ -561,16 +578,20 @@ function remarkRequired(action)
 	}else{
 		$('#remarks').attr('required', false);
 		
-		return confirm('Are You Sure To Forward?');
-		
-		
+		return confirm('Are You Sure To Approve?');
 	}
 	
 }
 
 
-</script>
+<%if(Integer.parseInt(chssapplydata[9].toString())>6){ %>	 
+	 $( ".numberonly" ).prop( "disabled", true );
+	 $( ".editbtn" ).prop( "disabled", true );
 	 
+<%} %>
+
+</script>
+
 </body>
 
 </html>

@@ -40,9 +40,14 @@
 						<div class="col-md-3 ">
 							<button type="submit" class=" db-button w-100" formaction="CHSSAppliedList.htm" >CHSS List</button>
 						</div>
-						<%if(logintype.equalsIgnoreCase("A") || logintype.equalsIgnoreCase("D") || logintype.equalsIgnoreCase("G") || logintype.equalsIgnoreCase("Y") || logintype.equalsIgnoreCase("Z")){ %>
+						<%if( logintype.equalsIgnoreCase("K") || logintype.equalsIgnoreCase("V") ){ %>
 							<div class="col-md-3 ">
 								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
+							</div>
+						<%} %>						
+						<%if( logintype.equalsIgnoreCase("K") || logintype.equalsIgnoreCase("V") || logintype.equalsIgnoreCase("W") || logintype.equalsIgnoreCase("Z")){ %>
+							<div class="col-md-3 ">
+								<button type="submit" class=" db-button w-100" formaction="CHSSBatchList.htm" >CHSS Contingent</button>
 							</div>
 						<%} %>
 					</div>
