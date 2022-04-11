@@ -19,8 +19,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -834,12 +836,27 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 
 	@Override
-	public List<Object[]> CHSSApproveClaimList(String logintype, String fromdate, String todate) throws Exception 
+	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception 
 	{
 		logger.info(new Date() +"Inside DAO CHSSApproveClaimList");
 		try {
-			Query query= manager.createNativeQuery("CALL chss_claims (:logintype,:fromdate,:todate);");
+			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype);");
 			query.setParameter("logintype", logintype);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO CHSSClaimListRep");
+		try {
+			Query query= manager.createNativeQuery("CALL chss_claims_rep (:fromdate,:todate,:type);");
+			query.setParameter("type", type);
 			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
 			return (List<Object[]>)query.getResultList();
@@ -850,5 +867,163 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	@Override
+	public List<Object[]> CHSSBatchApproval(String logintype) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSBatchApproval");
+		try {
+			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype);");
+			query.setParameter("logintype", logintype);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
+	
+	@Override
+	public CHSSContingent getCHSSContingentNotApproved() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSContingentNotApproved");
+		CHSSContingent cont = null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSContingent> cq= cb.createQuery(CHSSContingent.class);
+			Root<CHSSContingent> root= cq.from(CHSSContingent.class);					
+			Predicate p1=cb.greaterThanOrEqualTo(root.get("ContingentStatusId"), 2);
+			Predicate p2=cb.equal(root.get("IsActive"), 1);
+			Predicate p3=cb.lessThanOrEqualTo(root.get("ContingentStatusId"), 14);
+			cq=cq.select(root).where(p1,p2,p3);
+			TypedQuery<CHSSContingent> allquery = manager.createQuery(cq);
+			cont= allquery.getResultList().get(0);
+			
+			return cont;
+		}catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private static final String CHSSCONTINGENTNOCOUNT = "SELECT COUNT(ContingentId),'count' AS 'count' FROM chss_contingent WHERE ContingentBillNo LIKE :finYear ";
+
+	@Override
+	public String CHSSContingentNoCount(String finYear) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO CHSSContingentNoCount");
+		try {
+			Query query= manager.createNativeQuery(CHSSCONTINGENTNOCOUNT);
+			query.setParameter("finYear", "CHSS"+finYear+"%");
+			Object[] result= (Object[])query.getSingleResult();
+			return result[0].toString();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public long ContingentAdd(CHSSContingent other) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ContingentAdd");
+		manager.persist(other);
+		manager.flush();
+		
+		return other.getContingentId();
+	}
+	
+	@Override
+	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSContingentEdit");
+		try {
+			manager.merge(contingent);
+			manager.flush();
+			
+			return contingent.getContingentId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public CHSSContingent getCHSSContingent(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSContingent");
+		try {
+			return manager.find(CHSSContingent.class, Long.parseLong(contingentid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	@Override
+	public long CHSSApplyTransactionAdd(CHSSApplyTransaction transaction ) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApplyEdit");
+		try {
+			manager.persist(transaction);
+			manager.flush();
+			
+			return transaction.getCHSSTransactionId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String GETCHSSCONTINGENTLIST  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE cc.isactive=1 AND cc.ContingentStatusId = cs.chssstatusid ORDER BY cc.ContingentStatusId ASC";
+	
+	@Override
+	public List<Object[]> getCHSSContingentList() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSContingentList");
+		
+		try {
+			Query query= manager.createNativeQuery(GETCHSSCONTINGENTLIST);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	private static final String CHSSCONTINGENTDATA  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE  cc.ContingentStatusId = cs.chssstatusid AND cc.contingentid= :contingentid ORDER BY cc.ContingentStatusId ASC";
+	@Override
+	public Object[] CHSSContingentData(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSContingentData");
+		
+		try {
+			Query query= manager.createNativeQuery(CHSSCONTINGENTDATA);
+			query.setParameter("contingentid", contingentid);
+			return (Object[])query.getResultList().get(0);
+			
+		}catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSContingentClaimList");
+		
+		try {
+			Query query= manager.createNativeQuery("CALL chss_contingent_claims (:contingentid);");
+			query.setParameter("contingentid", contingentid);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			return new ArrayList<Object[]>();
+		}
+	}
 }

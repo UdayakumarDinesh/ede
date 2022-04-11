@@ -18,8 +18,10 @@ import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -105,8 +107,16 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSApplyDate(sdf.format(new Date()));
 				apply.setRemarks(dto.getRemarks());
 				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
-				
+				apply.setContingentId(0L);
 				applyid=dao.CHSSApplyAdd(apply);
+				
+				CHSSApplyTransaction transac =new CHSSApplyTransaction();
+				transac.setCHSSApplyId(applyid);
+				transac.setCHSSStatusId(1);
+				transac.setRemark("");
+				transac.setActionBy(Long.parseLong(dto.getEmpId()));
+				transac.setActionDate(sdtf.format(new Date()));
+				dao.CHSSApplyTransactionAdd(transac);
 				
 			}else
 			{
@@ -164,7 +174,7 @@ public class CHSSServiceImpl implements CHSSService {
 		}				
 		
 		String applynocount=dao.CHSSApplyNoCount(start+end);
-		String CNo = start+end+"-"+(Long.parseLong(applynocount)+1);
+		String CNo = start+end+(Long.parseLong(applynocount)+1);
 		
 		return CNo;
 	}
@@ -717,13 +727,13 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks) throws Exception {
-		
+	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId) throws Exception 
+	{
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
 		if(action.equalsIgnoreCase("F")) 
 		{
-			if(claimstatus==1 || claimstatus==3 ) 
+			if(claimstatus==1 || claimstatus==3 || claimstatus==9 || claimstatus==11 || claimstatus==13 ) 
 			{
 				claim.setCHSSStatusId(2);
 			}
@@ -735,14 +745,19 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				claim.setCHSSStatusId(6);
 			}
-			else if(claimstatus==6 || claimstatus==9 ) 
+			else if(claimstatus==6 ) 
 			{
 				claim.setCHSSStatusId(8);
 			}
-			else if(claimstatus==8 ) 
+			else if(claimstatus==8  ) 
 			{
 				claim.setCHSSStatusId(10);
 			}
+			else if(claimstatus==10  ) 
+			{
+				claim.setCHSSStatusId(12);
+			}
+			
 		}
 		
 		if(action.equalsIgnoreCase("R")) 
@@ -759,9 +774,13 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				claim.setCHSSStatusId(7);
 			}
-			else if(claimstatus==8 ) 
+			else if(claimstatus==8 || claimstatus== 11 ) 
 			{
 				claim.setCHSSStatusId(9);
+			}
+			else if(claimstatus==10 || claimstatus== 13 ) 
+			{
+				claim.setCHSSStatusId(11);
 			}
 		}
 		
@@ -769,14 +788,22 @@ public class CHSSServiceImpl implements CHSSService {
 		claim.setModifiedBy(Username);
 		claim.setModifiedDate(sdf.format(new Date()));
 		
+		CHSSApplyTransaction transac =new CHSSApplyTransaction();
+		transac.setCHSSApplyId(claim.getCHSSApplyId());
+		transac.setCHSSStatusId(claim.getCHSSStatusId());
+		transac.setRemark("");
+		transac.setActionBy(Long.parseLong(EmpId));
+		transac.setActionDate(sdtf.format(new Date()));
+		dao.CHSSApplyTransactionAdd(transac);
+		
 		return dao.CHSSApplyEdit(claim);
 	}
 		
 	@Override
-	public List<Object[]> CHSSApproveClaimList(String logintype, String fromdate, String todate) throws Exception 
+	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception 
 	{
 		
-		return dao.CHSSApproveClaimList(logintype, fromdate, todate);
+		return dao.CHSSApproveClaimList(logintype);
 	}
 	
 	@Override
@@ -820,5 +847,181 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.MiscBillEdit(fetch);
 	}
 	
+	@Override
+	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception 
+	{
+		return dao.CHSSClaimListRep(type, fromdate, todate);
+	}
 	
+	@Override
+	public List<Object[]> CHSSBatchApproval(String logintype) throws Exception
+	{
+		return dao.CHSSBatchApproval(logintype);
+	}
+	
+	@Override
+	public CHSSContingent getCHSSContingent(String contingentid) throws Exception
+	{
+		return dao.getCHSSContingent(contingentid);
+	}
+	
+	@Override
+	public long CHSSClaimsApprove(String CHSSApplyId[],String Username, String action,String remarks,String logintype,String EmpId) throws Exception 
+	{
+		long continid=0, count=0;
+					
+			CHSSApply apply = dao.getCHSSApply(CHSSApplyId[0]);
+			
+			if(logintype.equalsIgnoreCase("Z") && action.equalsIgnoreCase("F")) 
+			{
+				CHSSContingent continnew =new CHSSContingent();
+				
+				continnew.setContingentBillNo(GenerateContingentNo());
+				continnew.setContingentDate(LocalDate.now().toString());
+				continnew.setClaimsCount(CHSSApplyId.length);
+	//			continnew.setBillsCount(0);
+				continnew.setContingentStatusId(14);
+				continnew.setRemarks(remarks);
+				continnew.setIsActive(1);
+				continnew.setCreatedBy(Username);
+				continnew.setCreatedDate(sdf.format(new Date()));
+				count = dao.ContingentAdd(continnew);
+			}
+			int setstatusid = 0 ;
+			
+				
+				int statusid = apply.getCHSSStatusId();
+				
+				if(action.equalsIgnoreCase("F")) 
+				{
+					if(statusid==5 ) 
+					{
+						 setstatusid = 4;
+					}
+					else if(statusid==4 || statusid==7 ) 
+					{
+						 setstatusid = 6;
+					}
+					else if(statusid==6 || statusid==9 ) 
+					{
+						 setstatusid = 8;
+					}
+					else if(statusid==8  || statusid==11) 
+					{
+						 setstatusid = 10;
+					}
+					else if(statusid==10  || statusid==13) 
+					{
+						 setstatusid = 12;
+					}
+					else if(statusid==12) 
+					{
+						 setstatusid = 14;
+					}
+					
+					
+				}
+				
+				if(action.equalsIgnoreCase("R")) 
+				{
+					if(statusid==2 || statusid==5 ) 
+					{
+						setstatusid = 3;
+					}
+					else if(statusid==4 || statusid==7 ) 
+					{
+						setstatusid = 5;
+					}
+					else if(statusid==6 || statusid==9 ) 
+					{
+						setstatusid = 7;
+					} 
+					else if(statusid==8 || statusid== 11 ) 
+					{
+						setstatusid = 9;
+					}
+					else if(statusid==10 || statusid== 13 ) 
+					{
+						setstatusid = 11;
+					}
+					else if(statusid==12 ) 
+					{
+						setstatusid = 13;
+					}
+					
+				}
+							
+		
+		for(String claimid  : CHSSApplyId)
+		{
+			CHSSApply claim = dao.getCHSSApply(claimid);
+			if(action.equalsIgnoreCase("R")) 
+			{
+				claim.setRemarks(remarks);
+			}
+			claim.setCHSSStatusId(setstatusid);
+			claim.setContingentId(count);
+			claim.setModifiedBy(Username);
+			claim.setModifiedDate(sdf.format(new Date()));
+			
+
+			CHSSApplyTransaction transac =new CHSSApplyTransaction();
+			transac.setCHSSApplyId(claim.getCHSSApplyId());
+			transac.setCHSSStatusId(claim.getCHSSStatusId());
+			transac.setRemark("");
+			transac.setActionBy(Long.parseLong(EmpId));
+			transac.setActionDate(sdtf.format(new Date()));
+			dao.CHSSApplyTransactionAdd(transac);
+			
+			continid= dao.CHSSApplyEdit(claim);
+		}
+		
+		return continid;
+		
+	}
+	
+	
+	public String GenerateContingentNo() throws Exception
+	{
+		LocalDate today= LocalDate.now();
+		String start ="";
+		String end="";
+		
+		int currentmonth= today.getMonthValue();
+		if(currentmonth<4) 
+		{
+			start = String.valueOf(today.getYear()-1).substring(2);
+			end =String.valueOf(today.getYear()).substring(2);
+		}
+		else
+		{
+			start=String.valueOf(today.getYear()).substring(2);
+			end =String.valueOf(today.getYear()+1).substring(2);
+		}				
+		
+		String applynocount=dao.CHSSContingentNoCount(start+end);
+		String CNo = "CHSS"+start+end+(Long.parseLong(applynocount)+1);
+		
+		return CNo;
+	}
+	
+	
+	@Override
+	public List<Object[]> getCHSSContingentList() throws Exception
+	{
+		return dao.getCHSSContingentList();
+	}
+	
+	@Override
+	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
+	{
+		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
+		
+		return claims;
+	}
+		
+	public Object[] CHSSContingentData(String contingentid) throws Exception
+	{
+		return dao.CHSSContingentData(contingentid);
+	}
 }

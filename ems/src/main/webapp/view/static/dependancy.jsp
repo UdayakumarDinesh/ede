@@ -19,13 +19,13 @@
 <!-- ----------  daterangepicker  ---------- -->
 
 
-<spring:url value="/webresources/moment.min.js" var="momentjs" />  
+<spring:url value="/webresources/addons/daterangepicker/moment.min.js" var="momentjs" />  
 <script src="${momentjs}"></script> 
 
-<spring:url value="/webresources/daterangepicker.min.js" var="daterangepickerjs" />  
+<spring:url value="/webresources/addons/daterangepicker/daterangepicker.min.js" var="daterangepickerjs" />  
 <script src="${daterangepickerjs}"></script>
 
-<spring:url value="/webresources/daterangepicker.min.css" var="daterangepickerCss" />     
+<spring:url value="/webresources/addons/daterangepicker/daterangepicker.min.css" var="daterangepickerCss" />     
 <link href="${daterangepickerCss}" rel="stylesheet" />
 
 

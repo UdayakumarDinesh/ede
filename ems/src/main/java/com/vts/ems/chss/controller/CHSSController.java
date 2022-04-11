@@ -37,8 +37,10 @@ import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
+import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -173,6 +175,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Bill(s) Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",String.valueOf(count));
+			redir.addFlashAttribute("billid",service.CHSSBillsList(String.valueOf(count)).get(0)[0].toString());
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1216,18 +1219,42 @@ public class CHSSController {
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSUserForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String action = req.getParameter("claimaction");
 			String remarks = req.getParameter("remarks");
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks);
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
 			if (count > 0) {
-				redir.addAttribute("result", "Claim application Forwarded Successfully");
+				redir.addAttribute("result", "Claim application Sent for Processing  Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Claim application Forwarding Unsuccessful");	
+				redir.addAttribute("resultfail", "Claim application Sent for Processing Unsuccessful");	
 			}	
+			CHSSApply claim = service.CHSSApplied(chssapplyid);
+			
+			if(claim.getCHSSStatusId()>2 )
+			{
+
+				if(action.equalsIgnoreCase("F")) {
+					if (count > 0) {
+						redir.addAttribute("result", "Claim application Forwarded Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Claim application Forwarding Unsuccessful");	
+					}	
+				}
+				if(action.equalsIgnoreCase("R")) {
+					if (count > 0) {
+						redir.addAttribute("result", "Claim application Returned Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Claim application Return Unsuccessful");	
+					}	
+				}
+				return "redirect:/CHSSApprovalsList.htm";
+			}
+			
 			return "redirect:/CHSSAppliedList.htm";
+			
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -1237,30 +1264,7 @@ public class CHSSController {
 		
 	}
 	
-	@RequestMapping(value = "CHSSApprovalForward.htm", method = RequestMethod.POST)
-	public String CHSSApprovalForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CHSSApprovalForward.htm "+Username);
-		try {
-			String chssapplyid = req.getParameter("chssapplyid");
-			String action = req.getParameter("claimaction");
-			String remarks = req.getParameter("remarks");
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks);
-			if (count > 0) {
-				redir.addAttribute("result", "Claim application Forwarded Successfully");
-			} else {
-				redir.addAttribute("resultfail", "Claim application Forwarding Unsuccessful");	
-			}	
-			return "redirect:/CHSSApprovalsList.htm";
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSApprovalForward.htm "+Username, e);
-			return "static/Error";
-		}
-		
-	}
+	
 	
 	@RequestMapping(value = "CHSSApprovalsList.htm" )
 	public String CHSSApprovalsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
@@ -1269,25 +1273,8 @@ public class CHSSController {
 		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSApprovalsList.htm "+Username);
 		try {
-			String fromdate =req.getParameter("fromdate");
-			String todate =req.getParameter("todate");
-			
-			if(fromdate ==null || todate==null) 
-			{
-				LocalDate today= LocalDate.now();
-								
-				fromdate = today.minusMonths(1).withDayOfMonth(21).toString();
-				todate = today.minusDays(today.getDayOfMonth()).plusDays(20).toString();
-				
-			}else
-			{
-				fromdate = sdf.format(rdf.parse(fromdate));
-				todate = sdf.format(rdf.parse(todate));
-			}
-			
-			req.setAttribute("fromdate", fromdate);
-			req.setAttribute("todate", todate);
-			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType, fromdate, todate));
+						
+			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType));
 			return "chss/CHSSApprovalList";
 		} catch (Exception e) {
 			
@@ -1323,9 +1310,7 @@ public class CHSSController {
 			
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
-			
-			
-			
+						
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1515,6 +1500,112 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	
+	@RequestMapping(value = "CHSSBatchList.htm" )
+	public String CHSSBatchApproval(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside CHSSBatchList.htm "+Username);
+		try {
+			
+			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType);
+			
+			req.setAttribute("chssclaimlist", claimslist);
+			
+			return "chss/CHSSContingentList";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSBatchList.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}	
+	
+	
+	
+	
+	@RequestMapping(value = "CHSSClaimsApprove.htm", method = RequestMethod.POST)
+	public String CHSSClaimsApprove(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSClaimsApprove.htm "+Username);
+		try {
+			String chssapplyid[] = req.getParameterValues("chssapplyidcb");
+			String action = req.getParameter("claimaction");
+			String remarks = req.getParameter("remarks");
+			
+			long count= service.CHSSClaimsApprove(chssapplyid, Username, action, remarks, LoginType,EmpId);
+//			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
+			
+			
+			if(action.equalsIgnoreCase("F")) {
+				if (count > 0) {
+					redir.addAttribute("result", "Claim application(s) Approved Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Claim application(s) Approved Unsuccessful");	
+				}	
+			}
+			if(action.equalsIgnoreCase("R")) {
+				if (count > 0) {
+					redir.addAttribute("result", "Claim application(s) Returned Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Claim application(s) Return Unsuccessful");	
+				}	
+			}
+			
+			return "redirect:/CHSSBatchList.htm";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSClaimsApprove.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value = "CHSSContingentList.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String CHSSContingentList(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSContingentList.htm "+Username);
+		try {
+			
+			req.setAttribute("ContingentList", service.getCHSSContingentList());
+						
+			return "chss/ContingentList";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSContingentList.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "ContingetBill.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingetBill(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ContingetBill.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			
+			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+						
+			return "chss/ContingetBill";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingetBill.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
 	
 	
 }

@@ -11,6 +11,7 @@ import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -65,13 +66,20 @@ public interface CHSSService {
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
-	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks) throws Exception;
-	public List<Object[]> CHSSApproveClaimList(String logintype, String fromdate, String todate) throws Exception;
+	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId) throws Exception;
+	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
 	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSTests modal) throws Exception;
 	public long OtherRemAmountEdit(CHSSOther modal) throws Exception;
 	public long MedRemAmountEdit(CHSSMedicine modal) throws Exception;
 	public long MiscRemAmountEdit(CHSSMisc modal) throws Exception;
+	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype) throws Exception;
+	public long CHSSClaimsApprove(String[] CHSSApplyId, String Username, String action, String remarks, String logintype,String EmpId)throws Exception;
+	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
+	public List<Object[]> getCHSSContingentList() throws Exception;
+	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
+	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	
 	
 

@@ -47,6 +47,11 @@ option {
   max-width: 80% !important;
 }
 
+p {
+	text-align: justify;
+	text-justify: inter-word;
+}
+
 </style>
 </head>
 <body>
@@ -107,19 +112,15 @@ option {
 				<%if(Integer.parseInt(chssapplydata[9].toString())>1){ %>
 					<div class="row">
 						<div class="col-md-12">
-							Remark : 
-							<%=chssapplydata[19] %>
-						</div>
-						<div class="col-md-12">
-							Remark : 
-							<%=chssapplydata[19] %>
+							<p>Remark : 
+							<%=chssapplydata[19] %></p>
 						</div>
 					</div>
 				<%} %>
 				
 					<form action="CHSSApplyEdit.htm" method="post" autocomplete="off"  >
 						
-						<div class="card" style="padding: 0.5rem 1rem;margin:5px 0px 5px 0px;">
+						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 						<div class="row">
 							
 							<%if(isself.equalsIgnoreCase("N")){
@@ -234,6 +235,8 @@ option {
 										
 									</table>
 								</div>
+								
+								
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							</form>
@@ -258,6 +261,27 @@ option {
 								</table>
 							</div>
 						</form>
+						
+						<form action="CHSSUserForward.htm" method="post" id="form2">
+						<div class="row">
+							<div class="col-md-12">
+								Remarks : <br>
+								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" required="required"></textarea>
+							</div>
+							<div class="col-md-12" align="center" style="margin-top: 5px;">
+								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount(<%=chssapplydata[0]%>)"  data-toggle="tooltip" data-placement="top" title="Forward">
+									<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Submit for Processing
+								</button>
+							</div>
+						</div>
+						<input type="hidden" name="claimaction" value="F">
+						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+					</form>
+						
+						
+					
 					
 				</div>
 			</div>		
@@ -363,7 +387,7 @@ option {
 												</select>
 											</td>
 											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -640,7 +664,47 @@ option {
 	</div>
 </div>
 
+	 
 <script type="text/javascript">
+
+function CheckClaimAmount($chssapplyid)
+{
+	$.ajax({
+
+		type : "GET",
+		url : "CHSSClaimFwdApproveAjax.htm",
+		data : {
+				
+			chssapplyid : $chssapplyid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+						
+			if(result===1){
+				if(confirm('Are You Sure To Forward?'))
+				{
+						$('#remarks').attr('required', true);
+						if($('#remarks').val().trim()===''){
+							alert('Please Fill Remarks to Submit! ');
+						}else{
+							
+								$('#form2').submit();
+							
+						}
+						
+				}
+			}else
+			{
+				alert('Please Add Bill and Items To Forward ');
+				return false;	
+			}
+		
+		}
+	});
+	
+}
+
 
 var threeMonthsAgo = moment().subtract(3, 'months');
 
@@ -826,7 +890,7 @@ function showBillDetails($billid)
 			
 			consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date" name="cons-date-'+consult.ConsultationId+'" id="cons-date" value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
-			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'" id="cons-charge" value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'" id="cons-charge" value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
 			consultHTMLStr +=	'	<td>';
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
