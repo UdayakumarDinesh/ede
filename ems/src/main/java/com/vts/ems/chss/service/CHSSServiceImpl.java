@@ -1015,10 +1015,11 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
 	{
-		return dao.CHSSContingentClaimList(contingentid);
+		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
+		
+		return claims;
 	}
 		
-	@Override
 	public Object[] CHSSContingentData(String contingentid) throws Exception
 	{
 		return dao.CHSSContingentData(contingentid);
