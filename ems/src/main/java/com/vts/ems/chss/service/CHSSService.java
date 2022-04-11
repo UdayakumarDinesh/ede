@@ -1,5 +1,7 @@
 package com.vts.ems.chss.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -78,7 +80,7 @@ public interface CHSSService {
 	public long CHSSClaimsApprove(String[] CHSSApplyId, String Username, String action, String remarks, String logintype,String EmpId)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList() throws Exception;
-	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
+	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	
 	

@@ -2,7 +2,9 @@ package com.vts.ems.chss.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -877,7 +879,8 @@ public class CHSSServiceImpl implements CHSSService {
 				CHSSContingent continnew =new CHSSContingent();
 				
 				continnew.setContingentBillNo(GenerateContingentNo());
-				continnew.setContingentDate(LocalDate.now().toString());
+				continnew.setContingentDate(LocalDate.now().toString()); 
+				continnew.setUptoDate(LocalDate.now().withDayOfMonth(20).minusMonths(1).toString());
 				continnew.setClaimsCount(CHSSApplyId.length);
 	//			continnew.setBillsCount(0);
 				continnew.setContingentStatusId(14);
@@ -1013,11 +1016,33 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
+	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception
 	{
 		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
 		
-		return claims;
+		HashMap<Long, ArrayList<Object[]>> sortedclaims  = new HashMap<Long, ArrayList<Object[]>>();
+		
+		if(claims.size()>0) 
+		{
+			ArrayList<Object[]> empclaims= new ArrayList<Object[]>();
+			Long empid = Long.parseLong(claims.get(0)[1].toString());
+			for(int i=0;i<claims.size();i++)
+			{				
+				empclaims.add(claims.get(i));
+				if(i<claims.size()-1 && empid!=Long.parseLong(claims.get(i+1)[1].toString()))
+				{
+					sortedclaims.put(empid, empclaims);
+					empid = Long.parseLong(claims.get(i+1)[1].toString());
+					empclaims= new ArrayList<Object[]>();
+				}else if(i==claims.size()-1)
+				{
+					sortedclaims.put(empid, empclaims);
+				}
+			}
+		}
+		
+		
+		return sortedclaims;
 	}
 		
 	public Object[] CHSSContingentData(String contingentid) throws Exception

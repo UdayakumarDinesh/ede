@@ -26,6 +26,7 @@ public class CHSSContingent implements Serializable{
 	private Integer BillsCount;
 	private Integer ContingentStatusId;
 	private String Remarks;
+	private String UptoDate;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

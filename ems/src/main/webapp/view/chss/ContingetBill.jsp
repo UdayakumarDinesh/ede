@@ -111,36 +111,75 @@ th,td
 	
 <%
 	
-	List<Object[]> ContingentList = (List<Object[]>)request.getAttribute("ContingentList");
+	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
 	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
+	
+
+	IndianRupeeFormat nfc=new IndianRupeeFormat();
+	AmountWordConveration awc = new AmountWordConveration();
+	
 %>
 
 <div align="center">
-	<%=ContingentList.size() %>
+	
+	<div style="text-align: left;">
+	<span style="font-size: 15px; font-weight:600; ">SITAR</span><br>
+	<span style="font-size: 15px; font-weight:600; ">Ref:</span><br>
+	
+	
+	</div>
+	
 	<table>
 		<tr>
 			<th style="text-align: center;" >SN</th>
-			<th>ClaimNo</th>
-			<th>Employee</th>
-			<th>Patient</th>
+			<th style="text-align: center;">Emp. No.</th>
+			<th style="text-align: center;">Name</th>
+			<th style="text-align: center;">Relation</th>
+			<th style="text-align: center;">No. of Bills</th>
 			<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-			<th class="right" style="width: 15%;">Reimbursable under CHSS  (&#8377;)</th>
+			<th class="right" style="width: 15%;">Amount Allowed (&#8377;)</th>
 		</tr>
 		
-		<%
+		<%long allowedamt=0,claimamt=0,billscount=0;
 		int i=0;
-		for(Object[] obj: ContingentList){
-			i++; %>
+		for (Map.Entry mapEle : ContingentList.entrySet()) 
+		{
+			int k=0;
+			ArrayList<Object[]> arrlist = (ArrayList<Object[]>)mapEle.getValue();
+          	for(Object[] obj :arrlist )
+          	{
+				i++; %>
 			<tr>
+				
 				<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%=i %></td>
-				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[25] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[26] %></td>
+				<%if(k==0){ %>
+					<td rowspan="<%=arrlist.size() %>" style="padding-top:5px; padding-bottom: 5px;"><%=obj[21] %></td>
+				
+					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
+				<%} %>
+				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[14] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
 											
 			</tr>
-		<%} %>
+		<%	k++;
+			claimamt += Integer.parseInt(obj[27].toString());
+			allowedamt +=Integer.parseInt(obj[28].toString());
+			billscount += Integer.parseInt(obj[22].toString());
+			} 
+		}%>
+		
+			<tr>
+						<td colspan="4" class="right">Total</td>
+						<td><%=billscount %></td>
+						<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
+						<td class="right">
+							
+								&#8377; <%=nfc.rupeeFormat(String.valueOf(allowedamt)) %>
+													
+						</td>	
+					</tr>
 	</table>
 </div>
 </body>
