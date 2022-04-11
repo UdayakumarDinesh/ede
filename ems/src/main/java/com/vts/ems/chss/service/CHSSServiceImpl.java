@@ -24,6 +24,7 @@ import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -314,72 +315,92 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) 
+	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) throws Exception 
 	{
+		CHSSDoctorRates rate  = dao.getDocterRate(speciality);
+		int allowedamt=0;
+		
 		if(isfresh.equalsIgnoreCase("Fresh")) 
 		{
-			if(speciality.equalsIgnoreCase("Specialist")) 
-			{
-				if(applyamount>=350) {
-					return 350;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-			{
-				if(applyamount>=450) {
-					return 450;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-			{
-				if(applyamount>=100) {
-					return 100;
-				}else {
-					return applyamount;
-				}
-			}
-		}
-		else if(isfresh.equalsIgnoreCase("FollowUp")) 
-		{
-			if(speciality.equalsIgnoreCase("Specialist")) 
-			{
-				if(applyamount>=300) {
-					return 300;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-			{
-				if(applyamount>=350) {
-					return 350;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-			{
-				if(applyamount>=100) {
-					return 100;
-				}else {
-					return applyamount;
-				}
-			}
+			allowedamt = rate.getConsultation_1();
 		}else
 		{
-			if(applyamount>=300) {
-				return 300;
-			}else
-			{
-				return applyamount;
-			}
+			allowedamt = rate.getConsultation_2();
 		}
 		
-		return 0;
+		
+		if(allowedamt<=applyamount) {
+			return allowedamt;
+		}else {
+			return applyamount;
+		}
+		
+		
+		
+//		if(isfresh.equalsIgnoreCase("Fresh")) 
+//		{
+//			if(speciality.equalsIgnoreCase("Specialist")) 
+//			{
+//				if(applyamount>=350) {
+//					return 350;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+//			{
+//				if(applyamount>=450) {
+//					return 450;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+//			{
+//				if(applyamount>=100) {
+//					return 100;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//		}
+//		else if(isfresh.equalsIgnoreCase("FollowUp")) 
+//		{
+//			if(speciality.equalsIgnoreCase("Specialist")) 
+//			{
+//				if(applyamount>=300) {
+//					return 300;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+//			{
+//				if(applyamount>=350) {
+//					return 350;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+//			{
+//				if(applyamount>=100) {
+//					return 100;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//		}else
+//		{
+//			if(applyamount>=300) {
+//				return 300;
+//			}else
+//			{
+//				return applyamount;
+//			}
+//		}
+//		
+
 	}
 	
 	
@@ -605,6 +626,12 @@ public class CHSSServiceImpl implements CHSSService {
 	public List<CHSSOtherItems> OtherItemsList() throws Exception
 	{
 		return dao.OtherItemsList();
+	}
+	
+	@Override
+	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception
+	{
+		return dao.getCHSSDoctorRates(treattypeid);
 	}
 	
 	@Override
@@ -966,7 +993,6 @@ public class CHSSServiceImpl implements CHSSService {
 			claim.setContingentId(count);
 			claim.setModifiedBy(Username);
 			claim.setModifiedDate(sdf.format(new Date()));
-			
 
 			CHSSApplyTransaction transac =new CHSSApplyTransaction();
 			transac.setCHSSApplyId(claim.getCHSSApplyId());

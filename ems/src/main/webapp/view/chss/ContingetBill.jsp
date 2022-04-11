@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="com.vts.ems.utils.NFormatConvertion"%>
@@ -122,10 +123,14 @@ th,td
 
 <div align="center">
 	
-	<div style="text-align: left;">
-	<span style="font-size: 15px; font-weight:600; ">SITAR</span><br>
-	<span style="font-size: 15px; font-weight:600; ">Ref:</span><br>
-	
+	<div style="text-align: left;margin: 5px 5px 5px 10px;">
+		<span style="font-size: 20px; font-weight:600; ">SITAR</span><br>
+		<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br>
+		<p>
+			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[8].toString()) %> during the month of 
+			<%=" "+LocalDate.parse(contingentdata[8].toString()).getMonth() %> - <%=" "+LocalDate.parse(contingentdata[8].toString()).getYear() %> for reimbrusement from the following
+			employees have been processed and admitted at CHSS rates.
+		</p>
 	
 	</div>
 	
@@ -158,7 +163,7 @@ th,td
 					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 				<%} %>
 				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[14] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
+				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
 											
@@ -171,15 +176,15 @@ th,td
 		}%>
 		
 			<tr>
-						<td colspan="4" class="right">Total</td>
-						<td><%=billscount %></td>
-						<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
-						<td class="right">
-							
-								&#8377; <%=nfc.rupeeFormat(String.valueOf(allowedamt)) %>
-													
-						</td>	
-					</tr>
+				<td colspan="4" class="right">Total</td>
+				<td class="center"><%=billscount %></td>
+				<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
+				<td class="right">
+					
+					&#8377; <%=nfc.rupeeFormat(String.valueOf(allowedamt)) %>
+												
+				</td>	
+			</tr>
 	</table>
 </div>
 </body>

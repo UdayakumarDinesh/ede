@@ -23,8 +23,6 @@
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
-				    <!-- <li class="breadcrumb-item"><a href="#">Library</a></li>
-				    <li class="breadcrumb-item active " aria-current="page">Data</li> -->
 				  </ol>
 				</nav>
 			</div>			
@@ -54,16 +52,7 @@
 							 <div class="col-md-3 ">
 								<button type="submit" class=" db-button w-100" formaction="<%=O[1]%>" ><%=O[0]%></button>
 							</div>
-							<%}}%>
-						
-						
-
-											
-						<%if( logintype.equalsIgnoreCase("K") || logintype.equalsIgnoreCase("V") || logintype.equalsIgnoreCase("W") || logintype.equalsIgnoreCase("Z")){ %>
-							<div class="col-md-3 ">
-								<button type="submit" class=" db-button w-100" formaction="CHSSBatchList.htm" >CHSS Contingent</button>
-							</div>
-						<%}%>
+						<%}}%>
 
 					</div>
 				</div>

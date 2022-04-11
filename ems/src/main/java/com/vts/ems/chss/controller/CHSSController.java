@@ -41,6 +41,7 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -236,6 +237,7 @@ public class CHSSController {
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			req.setAttribute("testmainlist", service.CHSSTestMainList());
 			req.setAttribute("otheritemslist", service.OtherItemsList());
+			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 			req.setAttribute("billid", billid);
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
@@ -1215,6 +1217,23 @@ public class CHSSController {
 		return json.toJson(allow);
 	}
 	
+	@RequestMapping(value = "CHSSDoctorRatesAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String CHSSDoctorRatesAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSDoctorRatesAjax.htm "+Username);
+		List<CHSSDoctorRates> docrates = new ArrayList<CHSSDoctorRates>();
+		try {
+			String treattypeid = req.getParameter("treattypeid");
+			docrates = service.getCHSSDoctorRates(treattypeid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSDoctorRatesAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(docrates);
+	}
+	
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
@@ -1606,6 +1625,57 @@ public class CHSSController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "ContingetBillDownload.htm")
+	public void ContingetBillDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside CHSSFormEmpDownload.htm "+UserId);
+		
+		try {	
+			String contingentid = req.getParameter("contingentid");
+			
+			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			
+			String filename="CHSSContingentList";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+			
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/chss/ContingetBill.jsp").forward(req, customResponse);
+			String html1 = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        File f=new File(path +File.separator+ filename+".pdf");
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+		}
+
+	}
 	
 	
 }
