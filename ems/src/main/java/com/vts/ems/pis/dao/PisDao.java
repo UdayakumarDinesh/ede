@@ -78,4 +78,9 @@ public interface PisDao {
 	public String OldPassword(String UserId) throws Exception;
 	public List<Object[]> AuditStampingList(String Username,LocalDate Fromdate,LocalDate Todate) throws Exception;
 	public int PasswordChange(String OldPassword, String NewPassword ,String UserName, String ModifiedDate,String username)throws Exception;
+	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception;
+	public Object[] EmployeeNextAddressDetails(String empid) throws Exception;
+	public Object[] EmployeePerAddressDetails(String empid) throws Exception;
+	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception;
+
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +7,7 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 </head>
 <body>
-
+<%List<Object[]> list = (List<Object[]>)request.getAttribute("dashboard"); %>
  <div class="col page">
 	<div class="card-header page-top">
 		<div class="row">
@@ -32,7 +32,7 @@
 			<div class="card" >
 				<div class="card-body " >
 					<div class="row" > 
-						<div class="col-md-3">
+						<!-- <div class="col-md-3">
 							<button type="submit" class=" db-button w-100" formaction="PisAdminEmpList.htm" >Employee Details</button>
 						</div>
 						<div class="col-md-3">
@@ -41,7 +41,15 @@
 						
 						<div class="col-md-3">
 							<button type="submit" class=" db-button w-100" formaction="##" >Role</button>
+						</div> -->
+						
+						<%if(list!=null){ for(Object[] o:list){%>
+						
+						<div class="col-md-3" style="margin-bottom: 20px;">
+							<button type="submit" class=" db-button w-100" formaction="<%=o[1] %>" ><%=o[0] %></button>
 						</div>
+						
+						<%}}%>
 					</div>
 				</div>
 			</div>		

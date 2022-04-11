@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"   import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,9 @@
 </head>
 <body>
 
-<% String logintype = (String) session.getAttribute("LoginType"); %>
+<% String logintype = (String) session.getAttribute("LoginType"); 
+	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
+%>
 
  <div class="col page">
 	<div class="card-header page-top">
@@ -34,7 +36,7 @@
 			<div class="card" >
 				<div class="card-body " >
 					<div class="row" > 
-						<div class="col-md-3 ">
+						<%-- <div class="col-md-3 ">
 							<button type="submit" class=" db-button w-100" formaction="CHSSApply.htm" >CHSS Apply</button>
 						</div>
 						<div class="col-md-3 ">
@@ -44,7 +46,16 @@
 							<div class="col-md-3 ">
 								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
 							</div>
-						<%} %>
+						<%} %> --%>
+						
+						
+						<%if(dashboard!=null){  for(Object[] O:dashboard){%>							
+							 <div class="col-md-3 ">
+								<button type="submit" class=" db-button w-100" formaction="<%=O[1]%>" ><%=O[0]%></button>
+							</div>
+							<%}}%>
+						
+						
 					</div>
 				</div>
 			</div>		

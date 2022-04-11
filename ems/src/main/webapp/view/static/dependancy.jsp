@@ -74,7 +74,12 @@
 <spring:url value="/webresources/css/buttons.css" var="ButtonsCss" />     
 <link href="${ButtonsCss}" rel="stylesheet" />
 
-
+ <!-- ----------  Toggle  ---------- -->
+ <spring:url value="/webresources/bootstrap-toggle.min.css" var="ToggleCss" />
+ <link href="${ToggleCss}" rel="stylesheet" />
+ <spring:url value="/webresources/bootstrap-toggle.min.js" var="Togglejs" />
+ <script src="${Togglejs}"></script> 
+         
 
 
 </head>

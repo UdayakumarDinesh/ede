@@ -581,4 +581,26 @@ public class PisServiceImpl implements PisService
 			}
 			return 0;
 		}
+		@Override
+		public Object[] EmployeeEmeAddressDetails(String empid) throws Exception
+		{
+			return dao.EmployeeEmeAddressDetails(empid);
+		}
+		@Override
+		public Object[] EmployeeNextAddressDetails(String empid) throws Exception
+		{
+			return dao.EmployeeNextAddressDetails(empid);
+		}
+		@Override
+		public Object[] EmployeePerAddressDetails(String empid) throws Exception
+		{
+			return dao.EmployeePerAddressDetails(empid);
+		}
+		@Override
+		public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception
+		{
+			return dao.EmployeeResAddressDetails(empid);
+		}
+		
+	
 }

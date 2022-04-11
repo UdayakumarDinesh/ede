@@ -49,8 +49,8 @@
 								</span>
 							</div>
 						</div>
-						<ul class="list-group">
-						<%if("A".equalsIgnoreCase(logintype)){%>
+						<ul class="list-group" id="module">
+					<%--  <%if("A".equalsIgnoreCase(logintype)){%>
 							   <li>
 									<a href="PisAdminDashboard.htm"
 										class="bg-dark list-group-item list-group-item-action">
@@ -80,9 +80,9 @@
 											<span class="menu-collapsed" >CHSS</span>
 										</span>
 									</a>
-								</li>
+								</li> 
 								
-								
+								 --%>
 							</ul>
 						</div>
 							
@@ -177,7 +177,7 @@
 							               
 							
 							            <div class="dropdown-divider"></div>
-							
+								<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
 							            <form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
 							                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							                <button class="dropdown-item " href="#" data-target="#logoutModal">
@@ -259,6 +259,47 @@
                 $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
             } 
     </script> 
+    
+    
+    
+    <script type="text/javascript">
+    
+	$(document).ready(function() {
+		
+		$('.selectdee').select2();
+		
+		$.ajax({
+			type : "GET",
+			url : "HeaderModuleList.htm",
+			
+			datatype : 'json',
+			success :  function(result){
+				
+				var result = JSON.parse(result);
+				var values = Object.keys(result).map(function(e){
+					return result[e]
+				})
+				var module= "";
+				var logintype= $('#logintype').val();
+				
+				console.log(values.length);
+				for(i=0; i<values.length;i++){
+
+					var name=values[i][1].replace(/ /g,'');
+
+					
+					module+='<li>  <a href="'+values[i][2]+'?formroleid='+values[i][0]+'" class="bg-dark list-group-item list-group-item-action" > <span class="d-flex w-100 justify-content-start align-items-center">  <span class="menu-collapsed" > </span></span><i class="'+values[i][4]+'"></i> '+name+'</a></li>';				
+					
+				}
+			
+				$('#module').html(module); 
+				
+			}	
+		})	
+	});
+    
+    
+    </script>
         </body>
 
         </html>

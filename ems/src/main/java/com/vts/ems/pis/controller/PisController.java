@@ -55,32 +55,18 @@ public class PisController {
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
 	
-	@RequestMapping(value = "PisAdminDashboard.htm", method = RequestMethod.GET)
-	public String PisDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside PisAdminDashboard.htm "+Username);		
-		try {
-			
-			
-			return "pis/PisDashboard";
-		}catch (Exception e) {
-			logger.error(new Date() +" Inside PisAdminDashboard.htm "+Username, e);
-			e.printStackTrace();	
-			return "static/Error";
-		}
-		
-	}
+
 	@RequestMapping(value = "PisUserDashboard.htm", method = RequestMethod.GET)
 	public String PisUserDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside PisAdminDashboard.htm "+Username);		
+		logger.info(new Date() +"Inside PisUserDashboard.htm "+Username);		
 		try {
 			String loginid = (String)ses.getAttribute("LoginId");
 			//Object[] userdetails = (Object[])service.getUserDeatails(loginid);
 			
 			return "pis/PisDashboard";
 		}catch (Exception e) {
-			logger.error(new Date() +" Inside PisAdminDashboard.htm "+Username, e);
+			logger.error(new Date() +" Inside PisUserDashboard.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
@@ -121,9 +107,22 @@ public class PisController {
 				empid=String.valueOf((Long)ses.getAttribute("EmpId"));
 			}
 			Object[] employeedetails = service.EmployeeDetails(empid);	
+			Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
+			Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
+			Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
+			List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
+			System.out.println(emeaddressdetails);
+			System.out.println(nextaddressdetails);
+			System.out.println(resaddressdetails.size());
+			System.out.println(peraddressdetails);
             String basevalue=service.getimage(empid);
+            
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
+			req.setAttribute("emeaddressdetails", emeaddressdetails);
+			req.setAttribute("nextaddressdetails", nextaddressdetails);
+			req.setAttribute("resaddressdetails", resaddressdetails);
+			req.setAttribute("peraddressdetails", peraddressdetails);
             req.setAttribute("basevalue", basevalue);
  
             
@@ -1396,5 +1395,7 @@ public class PisController {
 		
 	}
 	
+	
+
 	
 }

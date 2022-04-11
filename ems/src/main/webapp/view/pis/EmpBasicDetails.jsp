@@ -57,6 +57,10 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 <%
 	String empid = (String) request.getAttribute("empid");
 	Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
+	Object[] Emecdetails = (Object[]) request.getAttribute("emeaddressdetails");
+	Object[] Nextdetails = (Object[]) request.getAttribute("nextaddressdetails");
+	List<Object[]> Resdetails  = (List<Object[]>) request.getAttribute("resaddressdetails");
+	Object[] Perdetails  = (Object[]) request.getAttribute("peraddressdetails");
 	String path=(String)request.getAttribute("basevalue");
 
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -263,7 +267,180 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	</div>
 	
 	<div class="tab-pane" id="tabs-2" role="tabpanel">
-		<p>Second Panel</p>
+	<%if(Perdetails!=null){ %>
+		 <table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Permanent Address</b></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						
+						<tr>
+							<td > <b>Per Address</b> </td>
+							<td colspan="3"><%=Perdetails[6]%></td>
+							<td><b>City</b> </td>
+							<td><%=Perdetails[1]%></td>
+						</tr>
+						
+						
+						<tr>
+							<td> <b>Mobile</b> </td>
+						    <td><%=Perdetails[5]%></td>
+							<td> <b>State</b> </td>
+					    	<td><%=Perdetails[8]%></td>
+							<td> <b>From_Per_Address</b> </td>
+							<td><%=Perdetails[2]%></td>
+						</tr>
+						
+						<tr>
+							<td> <b>Alt_Mobile</b> </td>
+							<td><%=Perdetails[0]%></td>
+							<td> <b>Landline</b> </td>
+							<td><%=Perdetails[4]%></td>
+							<td> <b>Pin</b> </td>
+							<td><%=Perdetails[7]%></td>
+						</tr>
+						
+					
+					</tbody>
+				</table>
+				
+				<%}else{%>
+				<h3> Permanent Address Not Added!</h3>
+				<%} %>
+				<%if(Resdetails!=null&&Resdetails.size()!=0 ){ %>
+				 <table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Residential  Address</b></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						<%for(Object[] O:Resdetails){ %>
+						<tr>
+						<td > <b>Res Address</b> </td>
+							<td colspan="3"><%=O[5]%></td>
+							<td><b>City</b> </td>
+							<td><%=O[1]%></td>
+						</tr>
+						
+						
+						<tr>
+							<td> <b>Mobile</b> </td>
+							<td><%=O[4]%></td>
+							<td> <b>State</b> </td>
+							<td><%=O[7]%></td>
+							<td> <b>From_Res_Address</b> </td>
+							<td><%=O[2]%></td>
+						</tr>
+						
+						<tr>
+							<td> <b>Alt_Mobile</b> </td>
+							<td><%=O[0]%></td>
+							<td> <b>Landline</b> </td>
+							<td><%=O[3]%></td>
+							<td> <b>Pin</b> </td>
+							<td><%=O[6]%></td>
+						</tr>
+						
+					<%}%>
+					</tbody>
+				</table>
+				<%}else{ %>
+				<h3>Residential  Address Not Added!</h3>
+				<%}%>
+				<%if(Nextdetails!=null){ %>
+				 <table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Next kin Address</b></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						
+						<tr>
+							<td> <b>Hometown</b> </td>
+							<td>---</td>
+							<td> <b>City</b> </td>
+							<td>---</td>
+							<td> <b>Next kin Address</b> </td>
+							<td>---</td>
+						</tr>
+						
+						
+						<tr>
+							<td> <b>Mobile</b> </td>
+							<td>---</td>
+							<td> <b>State</b> </td>
+							<td>---</td>
+							<td> <b>From_Next_kin_Address</b> </td>
+							<td>---</td>
+						</tr>
+						
+						<tr>
+							<td> <b>Alt_Mobile</b> </td>
+							<td>---</td>
+							<td> <b>Landline</b> </td>
+							<td>---</td>
+							<td> <b>Pin</b> </td>
+							<td>---</td>
+						</tr>				
+					</tbody>
+				</table>
+				<%}else{%>			
+				<h3>Next kin Address Not Added!</h3>
+				<%}%>
+				
+				
+				<%if(Emecdetails!=null){ %>
+				<table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Emergency Address</b></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						
+						<tr>
+							<td> <b>Hometown</b> </td>
+							<td>---</td>
+							<td> <b>City</b> </td>
+							<td>---</td>
+							<td> <b>Emergency Address</b> </td>
+							<td>---</td>
+						</tr>
+						
+						
+						<tr>
+							<td> <b>Mobile</b> </td>
+							<td>---</td>
+							<td> <b>State</b> </td>
+							<td>---</td>
+							<td> <b>From_Emer_Address</b> </td>
+							<td>---</td>
+						</tr>
+						
+						<tr>
+							<td> <b>Alt_Mobile</b> </td>
+							<td>---</td>
+							<td> <b>Landline</b> </td>
+							<td>---</td>
+							<td> <b>Pin</b> </td>
+							<td>---</td>
+						</tr>
+						
+					
+					</tbody>
+				</table>
+				<%}else{ %>
+				<h4>Emergency Address Not Added!</h4>
+				
+				<%}%>
 	</div>
 	
 	<div class="tab-pane" id="tabs-3" role="tabpanel">

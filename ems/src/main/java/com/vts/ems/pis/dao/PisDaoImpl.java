@@ -986,5 +986,62 @@ public class PisDaoImpl implements PisDao {
 		int PasswordChange = (int) query.executeUpdate();
 		return  PasswordChange;
 	}
+	
+    private static final String NEXTKINADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , nextkin_addr , pin ,state FROM pis_address_kin WHERE empid =:empid";
+	@Override
+	public Object[] EmployeeNextAddressDetails(String empid) throws Exception {
+		logger.info(new Date() + "Inside EmployeeNextAddressDetails()");
+		try {
+			Query query = manager.createNativeQuery(NEXTKINADDRESSDETAILS);
+			query.setParameter("empid", empid);
+			return (Object[]) query.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String PERADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , per_addr , pin ,state FROM pis_address_per WHERE empid =:empid";
+	@Override
+	public Object[] EmployeePerAddressDetails(String empid) throws Exception {
+		logger.info(new Date() + "Inside EmployeePerAddressDetails()");
+		try {
+			Query query = manager.createNativeQuery(PERADDRESSDETAILS);
+			query.setParameter("empid", empid);
+			return (Object[]) query.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state FROM pis_address_res WHERE empid =:empid";
+	@Override
+	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception {
+		logger.info(new Date() + "Inside EmployeeResAddressDetails()");
+		try {
+			Query query = manager.createNativeQuery(RESADDRESSDETAILS);
+			query.setParameter("empid", empid);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String EMECADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , emer_addr , pin ,state FROM pis_address_emer WHERE empid =:empid";
+	@Override
+	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception {
+		logger.info(new Date() + "Inside EmployeeEmeAddressDetails()");
+		try {
+			Query query = manager.createNativeQuery(EMECADDRESSDETAILS);
+			query.setParameter("empid", empid);
+			return (Object[]) query.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
 	

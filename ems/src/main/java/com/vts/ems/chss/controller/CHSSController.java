@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
@@ -60,13 +61,19 @@ public class CHSSController {
 	
 	@Autowired
 	CHSSService service;
-	
+	@Autowired
+	AdminService adminservice;
 	@RequestMapping(value = "CHSSDashboard.htm" )
 	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
 		try {
+			String logintype = (String)ses.getAttribute("LoginType");
+			String formrole =(String)req.getParameter("formroleid");
+		
+			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList(formrole ,logintype); 
+			req.setAttribute("dashboard", chssdashboard);
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
 			e.printStackTrace();

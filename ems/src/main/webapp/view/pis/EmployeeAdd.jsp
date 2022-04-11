@@ -329,8 +329,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 						
 						<div class=" col-md-2 ">
 			                <label>Height</label>
-			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="50"
-			                    placeholder="Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="3"
+			                    placeholder="In centimeter" onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			
 			               <div class=" col-md-2 ">
@@ -439,7 +439,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-			    	<button type="submit" class="btn btn-sm submit-btn" Onclick="validateform();" name="action" value="submit" >SUBMIT</button>
+			    	<button type="submit" class="btn btn-sm submit-btn" Onclick="return validateform();" name="action" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			
@@ -556,7 +556,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
-
+setPatternFilter($("#InternalNum"), /^-?\d*$/);
 
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });

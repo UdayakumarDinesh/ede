@@ -50,11 +50,10 @@ NFormatConvertion nfc=new NFormatConvertion();
 		<div class="alert alert-success" role="alert">
 			<%=ses %>
 		</div>
-</div>
-
-
-
-	<%} %>
+  </div>
+	<%}%>
+	
+	
 <div class="container" style="margin-top: 10px;">
 	<div class="row" style="">
 

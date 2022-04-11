@@ -76,4 +76,8 @@ public interface PisService {
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
 	public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception;
 	public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception ;
+	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception;
+	public Object[] EmployeeNextAddressDetails(String empid) throws Exception;
+	public Object[] EmployeePerAddressDetails(String empid) throws Exception;
+	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception;
 }
