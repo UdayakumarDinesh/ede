@@ -601,6 +601,10 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.EmployeeResAddressDetails(empid);
 		}
-		
+		@Override
+		public List<Object[]> getFamilydetails(String empid) throws Exception
+		{
+			return dao.getFamilydetails(empid);
+		}
 	
 }

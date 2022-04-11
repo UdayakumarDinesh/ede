@@ -62,7 +62,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	List<Object[]> Resdetails  = (List<Object[]>) request.getAttribute("resaddressdetails");
 	Object[] Perdetails  = (Object[]) request.getAttribute("peraddressdetails");
 	String path=(String)request.getAttribute("basevalue");
-
+	List<Object[]> familydetails = (List<Object[]>) request.getAttribute("familydetails");
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 	
 %>
@@ -197,13 +197,15 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">Passport</a>
 	</li>
-</ul><!-- Tab panes -->
+</ul>
+
+<!-- Tab panes -->
 <div class="tab-content">
 
 			
 			<div class="tab-pane active" id="tabs-1" role="tabpanel">
 		
-		
+		<!-- -----------------------------------Basic Details--------------------------------------------- -->
 			 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
@@ -265,9 +267,12 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				</table>
 				
 	</div>
+	<!-------------------------------------   Basic Details   ---------------------------------------------->
 	
+	
+	<!------------------------------------- Permanent Address ---------------------------------------------->
 	<div class="tab-pane" id="tabs-2" role="tabpanel">
-	<%if(Perdetails!=null){ %>
+	<%if(Perdetails!=null){ %> 
 		 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
@@ -291,7 +296,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td> <b>State</b> </td>
 					    	<td><%=Perdetails[8]%></td>
 							<td> <b>From_Per_Address</b> </td>
-							<td><%=Perdetails[2]%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(Perdetails[2].toString())%></td>
 						</tr>
 						
 						<tr>
@@ -308,8 +313,24 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				</table>
 				
 				<%}else{%>
-				<h3> Permanent Address Not Added!</h3>
+				<table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Permanent Address</b></td>
+						</tr>
+			        	<tr></tr>
+						<tr></tr>
+						<tr></tr>
+			    <tr><td align="center"> <h5>Permanent Address Not Added!</h5> </td></tr>
+				</tbody>
+				</table>
 				<%} %>
+	       <!------------------------------ Permanent Address ------------------------------------------------>			
+				
+				
+				
+				
+            <!---------------------------------- Residential Address  ---------------------------------------->
 				<%if(Resdetails!=null&&Resdetails.size()!=0 ){ %>
 				 <table class="table table-striped table-bordered" >
 					<tbody>
@@ -320,6 +341,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr></tr>
 						<tr></tr>
 						<%for(Object[] O:Resdetails){ %>
+						<tr ><td colspan="4"></td><td></td><td></td>
+						</tr>
 						<tr>
 						<td > <b>Res Address</b> </td>
 							<td colspan="3"><%=O[5]%></td>
@@ -334,7 +357,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td> <b>State</b> </td>
 							<td><%=O[7]%></td>
 							<td> <b>From_Res_Address</b> </td>
-							<td><%=O[2]%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%></td>
 						</tr>
 						
 						<tr>
@@ -350,8 +373,22 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 					</tbody>
 				</table>
 				<%}else{ %>
-				<h3>Residential  Address Not Added!</h3>
+				 <table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Residential  Address</b></td>
+						</tr>
+			        	<tr></tr>
+						<tr></tr>
+						<tr></tr>
+			    <tr>	<td align="center"> <h5>Residential  Address Not Added!</h5> </td></tr>
+				</tbody>
+				</table>
 				<%}%>
+		<!---------------------------------- Residential Address  ------------------------------------->
+				
+				
+		<!---------------------------------- Next kin Address  ---------------------------------------->	
 				<%if(Nextdetails!=null){ %>
 				 <table class="table table-striped table-bordered" >
 					<tbody>
@@ -363,39 +400,49 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr></tr>
 						
 						<tr>
-							<td> <b>Hometown</b> </td>
-							<td>---</td>
-							<td> <b>City</b> </td>
-							<td>---</td>
-							<td> <b>Next kin Address</b> </td>
-							<td>---</td>
+						<td > <b>Next kin Address</b> </td>
+							<td colspan="3"><%=Nextdetails[6]%></td>
+							<td><b>City</b> </td>
+							<td><%=Nextdetails[1]%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-							<td>---</td>
+							<td><%=Nextdetails[5]%></td>
 							<td> <b>State</b> </td>
-							<td>---</td>
-							<td> <b>From_Next_kin_Address</b> </td>
-							<td>---</td>
+							<td><%=Nextdetails[8]%></td>
+							<td> <b>From_Res_Address</b> </td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(Nextdetails[2].toString())%></td>
 						</tr>
 						
 						<tr>
 							<td> <b>Alt_Mobile</b> </td>
-							<td>---</td>
+							<td><%=Nextdetails[0]%></td>
 							<td> <b>Landline</b> </td>
-							<td>---</td>
+							<td><%=Nextdetails[4]%></td>
 							<td> <b>Pin</b> </td>
-							<td>---</td>
-						</tr>				
+							<td><%=Nextdetails[7]%></td>
+						</tr>		
 					</tbody>
 				</table>
-				<%}else{%>			
-				<h3>Next kin Address Not Added!</h3>
+				<%}else{%>		
+				<table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Next kin  Address</b></td>
+						</tr>
+			        	<tr></tr>
+						<tr></tr>
+						<tr></tr>
+			    <tr>	<td align="center"> <h5>Next kin  Address Not Added!</h5> </td></tr>
+				</tbody>
+				</table>				
 				<%}%>
-				
-				
+			<!---------------------------------- Next kin Address  ---------------------------------------->	
+			
+			
+			<!---------------------------------- Emergency Address  ---------------------------------------->	
 				<%if(Emecdetails!=null){ %>
 				<table class="table table-striped table-bordered" >
 					<tbody>
@@ -406,45 +453,54 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr></tr>
 						<tr></tr>
 						
-						<tr>
-							<td> <b>Hometown</b> </td>
-							<td>---</td>
-							<td> <b>City</b> </td>
-							<td>---</td>
-							<td> <b>Emergency Address</b> </td>
-							<td>---</td>
+							<tr>
+						<td > <b>Emergency Address</b> </td>
+							<td colspan="3"><%=Emecdetails[6]%></td>
+							<td><b>City</b> </td>
+							<td><%=Emecdetails[1]%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-							<td>---</td>
+							<td><%=Emecdetails[5]%></td>
 							<td> <b>State</b> </td>
-							<td>---</td>
-							<td> <b>From_Emer_Address</b> </td>
-							<td>---</td>
+							<td><%=Emecdetails[8]%></td>
+							<td> <b>From_Emec_Address</b> </td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(Emecdetails[2].toString())%></td>
 						</tr>
 						
 						<tr>
 							<td> <b>Alt_Mobile</b> </td>
-							<td>---</td>
+							<td><%=Emecdetails[0]%></td>
 							<td> <b>Landline</b> </td>
-							<td>---</td>
+						    <td><%=Emecdetails[4]%></td>
 							<td> <b>Pin</b> </td>
-							<td>---</td>
-						</tr>
+							<td><%=Emecdetails[7]%></td>
+						</tr>	
 						
 					
 					</tbody>
 				</table>
-				<%}else{ %>
-				<h4>Emergency Address Not Added!</h4>
-				
+				<%}else{ %>				
+				<table class="table table-striped table-bordered" >
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Emergency Address</b></td>
+						</tr>
+			        	<tr></tr>
+						<tr></tr>
+						<tr></tr>
+			    <tr><td align="center"> <h5>Emergency Address Not Added!</h5> </td></tr>
+				</tbody>
+				</table>
 				<%}%>
+	<!---------------------------------- Emergency Address  ---------------------------------------->			
+				
 	</div>
 	
 	<div class="tab-pane" id="tabs-3" role="tabpanel">
-		<p>Third Panel</p>
+		
 	</div>
 	
 	<div class="tab-pane" id="tabs-4" role="tabpanel">
@@ -452,7 +508,43 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	</div>
 	
 	<div class="tab-pane" id="tabs-5" role="tabpanel">
-		<p>Five Panel</p>
+		<!---------------------------------- Family Details  ---------------------------------------->	
+				
+				<table class="table table-striped table-bordered" >
+				
+					<tbody>
+						<tr>
+							<td colspan="6" rowspan="3"> <b>Family Details</b></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						
+						
+						<tr>
+						<td><b>Member Name</b></td>
+						<td><b>Relation</b></td>
+						<td><b>Date Of Birth</b></td>
+				    	<td><b>Med Dep</b></td>
+				    	<td><b>Blood Group</b></td>
+						</tr>
+							
+						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
+						<tr>
+							<td><%=O[0]%></td>
+							<td><%=O[1]%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%></td>
+						    <td><%=O[3]%></td>
+							<td><%=O[4]%></td>
+						
+						</tr>	
+						
+					<%}} %>
+					</tbody>
+				</table>
+			
+	<!---------------------------------- Family Details  ---------------------------------------->	
 	</div>
 	
 	<div class="tab-pane" id="tabs-6" role="tabpanel">
@@ -494,3 +586,4 @@ $("#profileImage1").click(function(e) {
 
 </script>
 </html>
+

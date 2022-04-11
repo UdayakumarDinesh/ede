@@ -82,5 +82,6 @@ public interface PisDao {
 	public Object[] EmployeeNextAddressDetails(String empid) throws Exception;
 	public Object[] EmployeePerAddressDetails(String empid) throws Exception;
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception;
+	public List<Object[]> getFamilydetails(String empid) throws Exception;
 
 }

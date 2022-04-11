@@ -111,10 +111,9 @@ public class PisController {
 			Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
 			Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
 			List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
-			System.out.println(emeaddressdetails);
-			System.out.println(nextaddressdetails);
-			System.out.println(resaddressdetails.size());
-			System.out.println(peraddressdetails);
+			List<Object[]> familydetails = service.getFamilydetails(empid);
+			
+			
             String basevalue=service.getimage(empid);
             
 			req.setAttribute("empid", empid);
@@ -123,6 +122,7 @@ public class PisController {
 			req.setAttribute("nextaddressdetails", nextaddressdetails);
 			req.setAttribute("resaddressdetails", resaddressdetails);
 			req.setAttribute("peraddressdetails", peraddressdetails);
+			req.setAttribute("familydetails", familydetails);
             req.setAttribute("basevalue", basevalue);
  
             

@@ -1043,5 +1043,21 @@ public class PisDaoImpl implements PisDao {
 			return null;
 		}
 	}
+	
+	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND  a.empid=:empid";
+	@Override
+	public List<Object[]> getFamilydetails(String empid) throws Exception 
+	{
+		logger.info(new Date() + "Inside getFamilydetails()");
+		try {
+			Query query = manager.createNativeQuery(FAMILYDETAILS);
+			query.setParameter("empid", empid);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
 	
