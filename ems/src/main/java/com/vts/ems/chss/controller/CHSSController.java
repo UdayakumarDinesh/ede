@@ -72,9 +72,9 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
 		try {
 			String logintype = (String)ses.getAttribute("LoginType");
-			String formrole =(String)req.getParameter("formroleid");
+			
 		
-			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList(formrole ,logintype); 
+			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
 			req.setAttribute("dashboard", chssdashboard);
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
@@ -196,7 +196,7 @@ public class CHSSController {
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId));
 			return "chss/CHSSAppliedList";
 			
-		}catch (Exception e) {
+		 }catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSAppliedList.htm "+Username, e);
 			return "static/Error";
@@ -1605,7 +1605,23 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
-	
-	
+	@RequestMapping(value = "Chss-Status-details.htm" , method={RequestMethod.POST,RequestMethod.GET})
+	public String ChssStatusDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside Chss-Status-details.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			System.out.println(chssapplyid);
+			req.setAttribute("ChssStatisDetails", service.CHSSStatusDetails(chssapplyid));
+			
+						System.out.println(service.CHSSStatusDetails(chssapplyid).size());
+			return "chss/CHSSStatus";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside Chss-Status-details.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 }

@@ -1024,4 +1024,12 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.CHSSContingentData(contingentid);
 	}
+	
+	@Override
+	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
+	{
+		List<Object[]> claims = dao.CHSSStatusDetails(chssapplyid);
+		
+		return claims;
+	}
 }

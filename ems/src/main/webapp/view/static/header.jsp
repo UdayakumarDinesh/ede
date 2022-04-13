@@ -162,7 +162,7 @@
 							        </button>
 							
 							        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
-							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=Username%>  <i class="fas fa-grin-hearts"></i> !! </a>
+							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=Username%>!! </a>
 							
 							
 							

@@ -10,7 +10,18 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<style type="text/css">
+.a{
+	background-color: #d6e0f0;
+}
+	.font{
+		  font-family:'Muli', sans-serif !important;
+		  font-style: normal;
+		  font-size: 13px;
+		  font-weight: 400 !important;
+		 
+	}
+</style>
 </head>
 <body>
 
@@ -86,7 +97,9 @@
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[18] %></td>
+											
+											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
+											
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==9 || Integer.parseInt(obj[9].toString())==11 || Integer.parseInt(obj[9].toString())==13 || Integer.parseInt(obj[9].toString())==7){ %>
@@ -102,7 +115,9 @@
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
-												
+												<%-- <button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Status" 	onclick="window.open('Chss-Status-details.htm?chssapplyid=<%=obj[0]%>')" title="Click for Details.">
+													<i class='fas fa-stream'> </i>
+												</button> --%>
 												<%-- <%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 && false){ %>
 													<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>"  onclick="return CheckClaimAmount(<%=obj[0] %>)"  data-toggle="tooltip" data-placement="top" title="Forward">
 														<i class="fa-solid fa-forward" style="color: #A63EC5"></i>

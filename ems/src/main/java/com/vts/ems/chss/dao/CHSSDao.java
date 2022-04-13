@@ -78,5 +78,5 @@ public interface CHSSDao {
 	public List<Object[]> getCHSSContingentList() throws Exception;
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
-
+	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
 }

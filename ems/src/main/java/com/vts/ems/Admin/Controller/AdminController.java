@@ -60,9 +60,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			try {
 				
 				String logintype = (String)ses.getAttribute("LoginType");
-				String formrole =(String)req.getParameter("formroleid");
+				
 			
-				List<Object[]> admindashboard = service.HeaderSchedulesList(formrole ,logintype); 
+				List<Object[]> admindashboard = service.HeaderSchedulesList("1" ,logintype); 
 			
 				req.setAttribute("dashboard", admindashboard);
 				return "pis/PisDashboard";
