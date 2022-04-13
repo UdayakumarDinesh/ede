@@ -119,10 +119,10 @@
 								<b>Ailment/Disease/Accident : </b><br>
 								<input type="text" class="form-control w-100" name="ailment" value="" required="required" maxlength="255" >
 							</div>
-							<div class="col-2">
+							<!-- <div class="col-2">
 								<b>No of ENCL : </b> <br><input type="number" class="form-control w-100" name="enclosurecount" value="" min="1" required="required" >
-							</div>
-							
+							</div> -->
+							<input type="hidden" name="enclosurecount" value="0">
 						</div>
 						<br>
 						<div class="row">

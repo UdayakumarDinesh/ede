@@ -225,6 +225,14 @@ public class CHSSController {
 				Map md=model.asMap();
 				billid=(String)md.get("billid");
 			}	
+			
+			String tab = req.getParameter("tab");
+			if (tab == null) 
+			{
+				Map md=model.asMap();
+				tab=(String)md.get("tab");
+			}	
+			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
 				return "redirect:/CHSSAppliedList.htm";
@@ -235,10 +243,14 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-			req.setAttribute("testmainlist", service.CHSSTestMainList());
+			req.setAttribute("testmainlist", service.CHSSTestSubList(""));
 			req.setAttribute("otheritemslist", service.OtherItemsList());
 			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 			req.setAttribute("billid", billid);
+			req.setAttribute("tab", tab);
+			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
+			req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
+			
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
@@ -411,17 +423,17 @@ public class CHSSController {
 	
 	
 	
-	@RequestMapping(value = "GetTestMainListAjax.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "GetTestsListAjax.htm", method = RequestMethod.GET)
 	public @ResponseBody String GetTestMainListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetTestMainListAjax.htm "+Username);
-		List<CHSSTestMain> list=new ArrayList<CHSSTestMain>();
+		logger.info(new Date() +"Inside GetTestsListAjax.htm "+Username);
+		List<CHSSTestSub> list=new ArrayList<CHSSTestSub>();
 		try {
-			list = service.CHSSTestMainList();
+			list = service.CHSSTestSubList("");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside GetTestMainListAjax.htm "+Username, e);
+			logger.error(new Date() +" Inside GetTestsListAjax.htm "+Username, e);
 		}
 		Gson json = new Gson();
 		return json.toJson(list);
@@ -457,6 +469,7 @@ public class CHSSController {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String billid = req.getParameter("billid");
 			
+			
 			String[] consulttype=req.getParameterValues("consult-type");
 			String[] docname=req.getParameterValues("doc-name");
 			String[] docqualification=req.getParameterValues("doc-qualification");
@@ -482,6 +495,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","co");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -547,6 +561,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","co");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -576,6 +591,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","co");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -597,6 +613,7 @@ public class CHSSController {
 			String[] medsname=req.getParameterValues("meds-name");
 			String[] medsdate=req.getParameterValues("meds-date");
 			String[] medscost=req.getParameterValues("meds-cost");
+			String[] medspresquantity=req.getParameterValues("meds-presquantity");
 			String[] medsquantity=req.getParameterValues("meds-quantity");
 			CHSSMedicineDto dto=new CHSSMedicineDto();
 			
@@ -604,6 +621,7 @@ public class CHSSController {
 			dto.setMedicineName(medsname);
 			dto.setMedicineDate(medsdate);
 			dto.setMedicineCost(medscost);
+			dto.setPresQuantity(medspresquantity);
 			dto.setMedQuantity(medsquantity);
 			
 			long count= service.MedicinesBillAdd(dto);
@@ -614,6 +632,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","me");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -654,13 +673,16 @@ public class CHSSController {
 			String medsdate = req.getParameter("meds-date-"+medicineid);
 			String medscost = req.getParameter("meds-cost-"+medicineid);
 			String medsquantity = req.getParameter("meds-quantity-"+medicineid);
-
+			String medspresquantity = req.getParameter("meds-presquantity-"+medicineid);
+			
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
 			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
 			meds.setMedicineCost(Integer.parseInt(medscost));
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
+			meds.setPresQuantity(Integer.parseInt(medspresquantity));
+			
 			
 			long count = service.MedicineBillEdit(meds);
 			
@@ -673,6 +695,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","me");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -702,6 +725,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","me");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -739,6 +763,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","te");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -781,8 +806,8 @@ public class CHSSController {
 			
 			CHSSTests test= new CHSSTests();
 			test.setCHSSTestId(Long.parseLong(testid));
-			test.setTestMainId(Long.parseLong(testtype));
-			test.setTestSubId(Long.parseLong(testsubid));
+			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
+			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
 			test.setTestCost(Integer.parseInt(testcost));
 			
 			
@@ -797,6 +822,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","te");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -825,6 +851,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","te");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -862,6 +889,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","mi");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -918,6 +946,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","mi");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -947,6 +976,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","mi");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1017,6 +1047,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","ot");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1055,6 +1086,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","ot");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1083,6 +1115,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("tab","ot");
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1205,8 +1238,18 @@ public class CHSSController {
 				claimamount += Long.parseLong(bill[5].toString());
 			}
 			
-			if(claimamount>0) {
-				allow=1;
+			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
+			
+			if(claimamount>0  ) 
+			{
+				if(consultationcount<1) 
+				{
+					allow=-1;
+				}
+				else
+				{
+					allow=1;
+				}
 			}
 			
 		} catch (Exception e) {

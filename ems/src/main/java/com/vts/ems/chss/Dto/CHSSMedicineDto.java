@@ -12,6 +12,7 @@ public class CHSSMedicineDto {
 	private String[] MedicineName;
 	private String[] MedicineCost;
 	private String[] MedicineDate;
+	private String[] PresQuantity;
 	private String[] MedQuantity;
 	private String Isactive;
 }

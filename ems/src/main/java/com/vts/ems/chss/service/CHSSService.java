@@ -84,6 +84,8 @@ public interface CHSSService {
 	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
+	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
+	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	
 	
 

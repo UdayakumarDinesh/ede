@@ -239,7 +239,6 @@
                 });
 
             function SidebarCollapse() {
-                console.log('kjfbasjdfb');
                 $('.menu-collapsed').toggleClass('d-none');
                 $('.sidebar-submenu').toggleClass('d-none');
                 $('.submenu-icon').toggleClass('d-none');
@@ -282,7 +281,6 @@
 				var module= "";
 				var logintype= $('#logintype').val();
 				
-				console.log(values.length);
 				for(i=0; i<values.length;i++){
 
 					var name=values[i][1].replace(/ /g,'');

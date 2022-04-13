@@ -288,9 +288,9 @@ th,td
 												<tr><td colspan="6" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
-													<th class="center" colspan="4" style="width: 65%;">Particulars</th>
+													<th class="center" colspan="4" style="width: 70%;">Particulars</th>
 													<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-													<th class="right" style="width: 20%;">Reimbursable under CHSS (&#8377;)</th>
+													<th class="right" style="width: 15%;">Reimbursable under CHSS (&#8377;)</th>
 												</tr>
 												<%long itemstotal=0, totalremamount=0; %>
 												<% int i=1;
@@ -307,8 +307,8 @@ th,td
 														</tr>
 														<tr>
 															<th>Bill No</th>
-															<th>Type</th>
 															<th>Doctor</th>
+															<th>Type</th>
 															<th class="center">Date</th>
 															<th></th>
 															<th></th>
@@ -316,12 +316,12 @@ th,td
 													<%} %>
 													<tr>
 														<td><%=consult[8] %></td>
+														<td><%=consult[3] %></td>
 														<td><%=consult[2] %></td>
-														<td><%=consult[3] %>&nbsp;(<%=consult[4] %>)</td>
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
 														<td class="right">
-															<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+															<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
 															<button type="submit" class="btn btn-sm editbtn"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>												
@@ -359,7 +359,7 @@ th,td
 													<td colspan="3"><%=test[6] %></td>
 													<td class="right"><%=test[4] %></td>
 													<td class="right">
-														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>												
@@ -397,7 +397,7 @@ th,td
 													<td colspan="3"><%=other[4] %></td>
 													<td class="right"><%=other[3] %></td>
 													<td class="right">
-														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
+														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>	
@@ -425,19 +425,21 @@ th,td
 													</tr>
 													<tr>
 														<th>Bill No</th>
-														<th colspan="2">Medicine Name</th>
-														<th class="center">Date</th>
+														<th>Medicine Name</th>
+														<th style="width:5%;">Rx Qty.</th>
+														<th class="center" style="width:15%;">Date</th>
 														<th></th>
 														<th></th>
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=medicine[7] %></td>
-													<td colspan="2"><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
+													<td><%=medicine[8] %></td>
+													<td><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
+													<td><%=medicine[6] %></td>
 													<td class="center"><%=rdf.format(sdf.parse(medicine[3].toString()))%></td>
 													<td class="right"><%=medicine[4] %></td>
 													<td class="right">
-														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
+														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[7]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -445,7 +447,7 @@ th,td
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(medicine[4].toString());
-											totalremamount +=Integer.parseInt(medicine[6].toString());
+											totalremamount +=Integer.parseInt(medicine[7].toString());
 											}%>
 											
 									</form>
@@ -475,7 +477,7 @@ th,td
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
 													<td class="right">
-														<input type="number" class="numberonly" style="width: 80%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
