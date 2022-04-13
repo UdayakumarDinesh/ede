@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.chss.model.CHSSDoctorRates"%>
 <%@page import="com.vts.ems.chss.model.CHSSOtherItems"%>
 <%@page import="com.vts.ems.chss.model.CHSSTestMain"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -67,6 +68,8 @@ p {
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
 	List<CHSSTestMain> testmainlist = (List<CHSSTestMain>)request.getAttribute("testmainlist");	
 	List<CHSSOtherItems> otheritemslist = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
+	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
+	
 	
 	String billid =(String)request.getAttribute("billid");
 %>
@@ -252,7 +255,6 @@ p {
 											<td style="width:35%;" ><input type="text" class="form-control items " name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
 											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-											<!-- <td style="width:15%;" ><input type="text" class="form-control items  " name="billamount"  value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td> -->
 											<td style="width:25%;" >
 												<button type="submit"  class="btn btn-sm add-btn" Onclick="return confirm('Are You Sure To Add ?');" name="action" value="add" >ADD</button>
 											</td>										
@@ -381,9 +383,9 @@ p {
 											<td>
 												<!-- <input type="text" class="form-control items" name="doc-qualification" id="doc-qualification" value="" style="width:100%;"   maxlength="50" required="required"> -->
 												<select class="form-control w-100" name="doc-qualification" required="required" >
-													<option value="Specialist">Specialist</option>
-													<option value="Super Specialist">Super Specialist</option>
-													<option value="Dental Surgeons">Dental Surgeons</option>
+													<%for(CHSSDoctorRates rate:doctorrates ){ %>
+														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
+													<%} %>
 												</select>
 											</td>
 											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
@@ -682,7 +684,7 @@ function CheckClaimAmount($chssapplyid)
 		var result = JSON.parse(result);
 						
 			if(result===1){
-				if(confirm('Are You Sure To Forward?'))
+				if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
 				{
 						$('#remarks').attr('required', true);
 						if($('#remarks').val().trim()===''){
@@ -722,12 +724,6 @@ function  onlyNumbers() {
 
 }
 
-$(document).ready( function() {
-	onlyNumbers();
-});   
-
-
-
 $('.billdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -758,6 +754,29 @@ function setTooltip()
 
 <script type="text/javascript">
 
+
+var $docrateslist;
+function getdoctorrates(treattype)
+{
+	$.ajax({
+
+		type : "GET",
+		url : "CHSSDoctorRatesAjax.htm",
+		data : {
+				
+			treattypeid : treattype,
+		},
+		datatype : 'json',
+		success : function(result) {
+			var result = JSON.parse(result);
+			$docrateslist= Object.keys(result).map(function(e){
+				return result[e]
+			})
+			console.log ($docrateslist);
+		}
+	});
+
+}
 
 
 var count=1;
@@ -883,7 +902,27 @@ function showBillDetails($billid)
 			consultHTMLStr +=	'		</select> ';
 			consultHTMLStr +=	'	</td> ';
 			consultHTMLStr +=	' 	<td><input type="text" class="form-control items" name="doc-name-'+consult.ConsultationId+'" id="doc-name" value="'+consult.DocName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
-			consultHTMLStr +=	'	<td><input type="text" class="form-control items" name="doc-qualification-'+consult.ConsultationId+'" id="doc-qualification" value="'+consult.DocQualification+'" style="width:100%;"   maxlength="50" required="required"></td> ';
+			consultHTMLStr +=	'	<td>';
+			
+			
+			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" id="doc-qualification"  required="required" > ';
+			for(var u=0;u<$docrateslist.length;u++){
+				
+				if(Number(consult.DocQualification) === $docrateslist[u].DocRateId)
+				{
+					consultHTMLStr +=	'			<option value="'+$docrateslist[u].DocRateId+'" selected >'+$docrateslist[u].DocQualification+'</option>';
+				}else{
+					consultHTMLStr +=	'			<option value="'+$docrateslist[u].DocRateId+'"  >'+$docrateslist[u].DocQualification+'</option>';										
+				}
+				
+			}
+			
+			consultHTMLStr +=	'		</select> ';
+			
+			
+			
+			
+			consultHTMLStr +=	'	</td>';
 			
 			let now = new Date(consult.ConsultDate);
 			var dateString = moment(now).format('DD-MM-YYYY');
@@ -989,7 +1028,6 @@ function getTestSubAdd(testrowid)
 function getTestSubEdit(testrowid)
 {
 	var testmainid = $('#test-maintype-'+testrowid).val();
-	console.log(testmainid);
 	$.ajax({
 
 		type : "GET",
@@ -1004,7 +1042,6 @@ function getTestSubEdit(testrowid)
 		var testsubs= Object.keys(result).map(function(e){
 			return result[e]
 		})
-		console.log(testsubs);
 		var subtestsHTML = '<option value="" selected="selected" disabled="disabled">Choose..</option>';
 		for(var st=0;st<testsubs.length;st++)
 		{
@@ -1480,7 +1517,6 @@ function getOtherItemsList()
 		$OtherItemsList= Object.keys(result).map(function(e){
 			return result[e]
 		})
-		console.log($OtherItemsList);
 		}
 	});
 }
@@ -1508,7 +1544,6 @@ function getOthersDetails()
 		for(var c=0;c<otherVals.length;c++)
 		{
 			var other = otherVals[c];
-			console.log(other);
 			otherHTMLStr +=	'<tr> ';
 			otherHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (c+1) +'.</span> </td> ';
 			otherHTMLStr +=	'	<td> ';
@@ -1551,15 +1586,28 @@ function getOthersDetails()
 	
 }
 
-
-
-<%if(billid!=null && !billid.equalsIgnoreCase("null") && Long.parseLong(billid)>0 ){%>
-showBillDetails(<%=billid%>);
-<%}%> 
-
-
 </script>
 
 <!-- ------------------------------------------------------- Others script --------------------------------------------------- -->
+
+<script type="text/javascript">
+
+
+$(document).ready( function() {
+	onlyNumbers();
+	getdoctorrates(<%=chssapplydata[7]%>);
+
+	<%if(billid!=null && !billid.equalsIgnoreCase("null") && Long.parseLong(billid)>0 ){%>
+	showBillDetails(<%=billid%>);
+	<%}%> 
+
+});   
+
+
+
+
+
+
+</script>
 </body>
 </html>

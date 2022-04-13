@@ -7,6 +7,7 @@ import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -79,4 +80,7 @@ public interface CHSSDao {
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
+	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
+	public CHSSDoctorRates getDocterRate(String rateid) throws Exception;
+
 }

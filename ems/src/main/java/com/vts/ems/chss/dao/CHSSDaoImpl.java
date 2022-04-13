@@ -23,6 +23,7 @@ import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -186,6 +187,21 @@ public class CHSSDaoImpl implements CHSSDao {
 			Query query = manager.createNativeQuery("CALL chss_claim_data(:CHSSApplyId);");
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	@Override
+	public CHSSDoctorRates getDocterRate(String rateid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getDocterRate");
+		try {
+			return manager.find(CHSSDoctorRates.class, Integer.parseInt(rateid));
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -640,6 +656,31 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
+	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSDoctorRates");
+		List<CHSSDoctorRates> list= new ArrayList<CHSSDoctorRates>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSDoctorRates> cq= cb.createQuery(CHSSDoctorRates.class);
+			
+			Root<CHSSDoctorRates> root=cq.from(CHSSDoctorRates.class);	
+			
+			Predicate p1=cb.equal(root.get("IsActive") , 1);
+			Predicate p2=cb.equal(root.get("TreatTypeId") , Integer.parseInt(treattypeid));
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			TypedQuery<CHSSDoctorRates> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
 	public List<CHSSOtherItems> OtherItemsList() throws Exception
 	{
 		logger.info(new Date() +"Inside DAO OtherItemsList");
@@ -662,7 +703,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
-
+	
 	@Override
 	public List<CHSSOther> CHSSOtherList(String billid) throws Exception
 	{
@@ -996,7 +1037,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
-	private static final String CHSSCONTINGENTDATA  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE  cc.ContingentStatusId = cs.chssstatusid AND cc.contingentid= :contingentid ORDER BY cc.ContingentStatusId ASC";
+	private static final String CHSSCONTINGENTDATA  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus,cc.uptodate FROM chss_contingent cc , chss_status cs WHERE  cc.ContingentStatusId = cs.chssstatusid AND cc.contingentid= :contingentid ORDER BY cc.ContingentStatusId ASC";
 	@Override
 	public Object[] CHSSContingentData(String contingentid) throws Exception
 	{

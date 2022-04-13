@@ -2,7 +2,9 @@ package com.vts.ems.chss.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +24,7 @@ import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -312,72 +315,92 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) 
+	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) throws Exception 
 	{
+		CHSSDoctorRates rate  = dao.getDocterRate(speciality);
+		int allowedamt=0;
+		
 		if(isfresh.equalsIgnoreCase("Fresh")) 
 		{
-			if(speciality.equalsIgnoreCase("Specialist")) 
-			{
-				if(applyamount>=350) {
-					return 350;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-			{
-				if(applyamount>=450) {
-					return 450;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-			{
-				if(applyamount>=100) {
-					return 100;
-				}else {
-					return applyamount;
-				}
-			}
-		}
-		else if(isfresh.equalsIgnoreCase("FollowUp")) 
-		{
-			if(speciality.equalsIgnoreCase("Specialist")) 
-			{
-				if(applyamount>=300) {
-					return 300;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-			{
-				if(applyamount>=350) {
-					return 350;
-				}else {
-					return applyamount;
-				}
-			}
-			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-			{
-				if(applyamount>=100) {
-					return 100;
-				}else {
-					return applyamount;
-				}
-			}
+			allowedamt = rate.getConsultation_1();
 		}else
 		{
-			if(applyamount>=300) {
-				return 300;
-			}else
-			{
-				return applyamount;
-			}
+			allowedamt = rate.getConsultation_2();
 		}
 		
-		return 0;
+		
+		if(allowedamt<=applyamount) {
+			return allowedamt;
+		}else {
+			return applyamount;
+		}
+		
+		
+		
+//		if(isfresh.equalsIgnoreCase("Fresh")) 
+//		{
+//			if(speciality.equalsIgnoreCase("Specialist")) 
+//			{
+//				if(applyamount>=350) {
+//					return 350;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+//			{
+//				if(applyamount>=450) {
+//					return 450;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+//			{
+//				if(applyamount>=100) {
+//					return 100;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//		}
+//		else if(isfresh.equalsIgnoreCase("FollowUp")) 
+//		{
+//			if(speciality.equalsIgnoreCase("Specialist")) 
+//			{
+//				if(applyamount>=300) {
+//					return 300;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
+//			{
+//				if(applyamount>=350) {
+//					return 350;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
+//			{
+//				if(applyamount>=100) {
+//					return 100;
+//				}else {
+//					return applyamount;
+//				}
+//			}
+//		}else
+//		{
+//			if(applyamount>=300) {
+//				return 300;
+//			}else
+//			{
+//				return applyamount;
+//			}
+//		}
+//		
+
 	}
 	
 	
@@ -603,6 +626,12 @@ public class CHSSServiceImpl implements CHSSService {
 	public List<CHSSOtherItems> OtherItemsList() throws Exception
 	{
 		return dao.OtherItemsList();
+	}
+	
+	@Override
+	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception
+	{
+		return dao.getCHSSDoctorRates(treattypeid);
 	}
 	
 	@Override
@@ -877,7 +906,8 @@ public class CHSSServiceImpl implements CHSSService {
 				CHSSContingent continnew =new CHSSContingent();
 				
 				continnew.setContingentBillNo(GenerateContingentNo());
-				continnew.setContingentDate(LocalDate.now().toString());
+				continnew.setContingentDate(LocalDate.now().toString()); 
+				continnew.setUptoDate(LocalDate.now().withDayOfMonth(20).minusMonths(1).toString());
 				continnew.setClaimsCount(CHSSApplyId.length);
 	//			continnew.setBillsCount(0);
 				continnew.setContingentStatusId(14);
@@ -963,7 +993,6 @@ public class CHSSServiceImpl implements CHSSService {
 			claim.setContingentId(count);
 			claim.setModifiedBy(Username);
 			claim.setModifiedDate(sdf.format(new Date()));
-			
 
 			CHSSApplyTransaction transac =new CHSSApplyTransaction();
 			transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -1013,11 +1042,33 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
+	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception
 	{
 		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
 		
-		return claims;
+		HashMap<Long, ArrayList<Object[]>> sortedclaims  = new HashMap<Long, ArrayList<Object[]>>();
+		
+		if(claims.size()>0) 
+		{
+			ArrayList<Object[]> empclaims= new ArrayList<Object[]>();
+			Long empid = Long.parseLong(claims.get(0)[1].toString());
+			for(int i=0;i<claims.size();i++)
+			{				
+				empclaims.add(claims.get(i));
+				if(i<claims.size()-1 && empid!=Long.parseLong(claims.get(i+1)[1].toString()))
+				{
+					sortedclaims.put(empid, empclaims);
+					empid = Long.parseLong(claims.get(i+1)[1].toString());
+					empclaims= new ArrayList<Object[]>();
+				}else if(i==claims.size()-1)
+				{
+					sortedclaims.put(empid, empclaims);
+				}
+			}
+		}
+		
+		
+		return sortedclaims;
 	}
 		
 	public Object[] CHSSContingentData(String contingentid) throws Exception

@@ -1,5 +1,7 @@
 package com.vts.ems.chss.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -12,6 +14,7 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
@@ -78,9 +81,9 @@ public interface CHSSService {
 	public long CHSSClaimsApprove(String[] CHSSApplyId, String Username, String action, String remarks, String logintype,String EmpId)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList() throws Exception;
-	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
+	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
+	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	
-
 }
