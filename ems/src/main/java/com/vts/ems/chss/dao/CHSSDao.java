@@ -79,6 +79,7 @@ public interface CHSSDao {
 	public List<Object[]> getCHSSContingentList() throws Exception;
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
+	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	public CHSSDoctorRates getDocterRate(String rateid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
