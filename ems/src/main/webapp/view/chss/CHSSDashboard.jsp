@@ -67,6 +67,8 @@
 .main{
 	padding :0px 0px 1.5rem 0px ;
 	cursor: pointer;
+	 transition: transform .2s;
+	 
 }
 
 .profile-card-container{
@@ -86,10 +88,83 @@
 	  margin: 0px 20px;
 }
 
-.overflow{
-	overflow-y: scroll;
-	overflow-x: hidden;
-	
+.profile-card-container > .row {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  overflow-y : hidden;
+}
+.profile-card-container > .row > .col-md-2 {
+  display: inline-block;
+}
+
+.table thead tr{
+	background-color: #0e6fb6;
+	color: white;
+}
+
+.main:hover{
+	transform : scale(1.1);
+}
+
+
+
+
+.outer-wrapper {
+  max-width: 100vw;
+  overflow-x: scroll;
+  position: relative;
+  scrollbar-color: #d5ac68 #f1db9d;
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+}
+
+.pseduo-track {
+  background-color: #f1db9d;
+  height: 2px;
+  width: 100%;
+  position: relative;
+  top: -3px;
+  z-index: -10;
+}
+
+
+.outer-wrapper::-webkit-scrollbar {
+  height: 5px;
+}
+
+.outer-wrapper::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
+}
+
+.outer-wrapper::-webkit-scrollbar-thumb {
+  height: 5px;
+  background-color: #d5ac68;
+}
+
+.outer-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #f1db9d;
+}
+
+.outer-wrapper::-webkit-scrollbar:vertical {
+  display: none;
+}
+
+.inner-wrapper {
+  display: flex;
+  padding-bottom: 10px;
+}
+
+.pseudo-item {
+  height: 300px;
+  width: 369px;
+  margin-right: 59px;
+  flex-shrink: 0;
+  background-color: gray;
+}
+
+.pseudo-item:nth-of-type(2n) {
+  background-color: lightgray;
 }
 
 
@@ -161,11 +236,11 @@
  </div> 
  
  
- <div class="card profile-card-container" id="profile-card">
+ <div class="card profile-card-container" >
 
 	<div class="row" >
 		<div class="col-md-2">
-			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>')">
+			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>')" data-toggle="tooltip" data-placement="bottom" title="Apply">
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -185,7 +260,7 @@
 		
 		<%for(Object[] obj : empfamilylist){ %>
 		<div class="col-md-2">
-			<div class="main" onclick="submitform('N','<%=obj[0]%>')">
+			<div class="main" onclick="submitform('N','<%=obj[0]%>')" data-toggle="tooltip" data-placement="bottom" title="Apply"> 
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -205,66 +280,9 @@
 </div>
 
 
- 	 
- <%--   <div class="top-content">
-	    <div class="container-fluid">
-	        <div id="carousel-example" class="carousel slide" data-ride="carousel" data-interval="false">
-	            <div class="carousel-inner d-flex flex-row bd-highlight mb-3 w-100 mx-auto" role="listbox">
-	
-	            <div class="carousel-item p-2 bd-highlight active">
-	                    <div class="main">
-							<div class="a-box">
-								<div class="img-container">
-							    	<div class="img-inner">
-							      		<div class="inner-skew">
-							        		<img src="view/images/tharun.jpg">
-							      		</div>
-							    	</div>
-							  	</div>
-							  	<div class="text-container">
-							    	<h3>Tharun <span style="font-weight: 700;" >(SELF)</span></h3>
-							    	
-								</div>
-							</div>	
-						</div>
-	                </div>
-	               
-	           <%for(Object[] obj : empfamilylist){ %>
-	                <div class="carousel-item p-2 bd-highlight  ">
-	                    <div class="main">
-							<div class="a-box">
-								<div class="img-container">
-							    	<div class="img-inner">
-							      		<div class="inner-skew">
-							        		<img src="view/images/user.png">
-							      		</div>
-							    	</div>
-							  	</div>
-							  	<div class="text-container">
-							    	<h3><%=obj[1] %> <span style="font-weight: 700;" >(<%=obj[7] %>)</span></h3>
-							    	
-								</div>
-							</div>	
-						</div>
-	                </div>
-	               <%} %> 
-	            </div>
-	            <a class="carousel-control-prev" href="#carousel-example" role="button" data-slide="prev">
-	                <span class="" aria-hidden="true">
- 					<i class="fa-solid fa-angle-left"></i></span> 
-	                <span class="sr-only">Previous</span>
-	            </a>
-	            <a class="carousel-control-next" href="#carousel-example" role="button" data-slide="next">
-	                <span class="" aria-hidden="true">
-	                	<i class="fa-solid fa-angle-right"></i>
-	                </span>
-	                <span class="sr-only">Next</span>
-	            </a>
-	        </div>
-	    </div>
-	</div>   --%>
-
 </div>
+
+
 
 <br>
 
@@ -273,14 +291,16 @@
 		<form action="#" method="post" id="ClaimForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  > 
+				   			<table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
 								<thead>
 									<tr>
-										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Ailment</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Claim Amount</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amount</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
@@ -295,7 +315,8 @@
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											
+											<td style="padding-top:5px; padding-bottom: 5px;">-</td>
+											<td style="padding-top:5px; padding-bottom: 5px;">-</td>
 											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
 											
 											
@@ -325,6 +346,21 @@
 		</div>		
 
 
+  <div class="outer-wrapper">
+    <div class="inner-wrapper">
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+      <div class="pseudo-item"></div>
+    </div>
+  </div>
+
+
+
 <form action="CHSSApplyDetails.htm" method="post" id="myform" style="padding: 1rem">
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >
@@ -340,14 +376,7 @@ function submitform(value,patientid){
 	$('#myform').submit();
 }
 
-$('document').ready(function(){
-	
-	if(<%=empfamilylist.size()%> >5){
-		$('#profile-card').addClass('overflow');
 
-	}
-	
-})
 
 
 $('#carousel-example').on('slide.bs.carousel', function (e) {
