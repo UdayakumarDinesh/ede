@@ -937,26 +937,23 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public String GenerateContingentNo() throws Exception
 	{
-		LocalDate today= LocalDate.now();
-		String start ="";
-		String end="";
-		
-		int currentmonth= today.getMonthValue();
-		if(currentmonth<4) 
-		{
-			start = String.valueOf(today.getYear()-1).substring(2);
-			end =String.valueOf(today.getYear()).substring(2);
+		try {
+			String value="STARC/F&A/Med-Regular/";
+			int result = -1;
+		   
+		        Calendar cal = Calendar.getInstance();
+		        cal.setTime(new Date());
+		        result = cal.get(Calendar.YEAR);
+		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
+			value+=String.valueOf(result-1)+"-"+String.valueOf(result-2000)+"/"+month+"-"+result+"/";
+			 int data= dao.getdata(value);
+			
+			 value+=++data;
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		else
-		{
-			start=String.valueOf(today.getYear()).substring(2);
-			end =String.valueOf(today.getYear()+1).substring(2);
-		}				
-		
-		String applynocount=dao.CHSSContingentNoCount(start+end);
-		String CNo = "CHSS"+start+end+(Long.parseLong(applynocount)+1);
-		
-		return CNo;
 	}
 	
 	
@@ -1083,27 +1080,5 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return claims;
 	}
-	@Override
-	public String getresult()throws Exception
-	{
-		try {
-			String value="STARC/F&A/Med-Regular/";
-			int result = -1;
-		   
-		        Calendar cal = Calendar.getInstance();
-		        cal.setTime(new Date());
-		        result = cal.get(Calendar.YEAR);
-		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
-			value+=String.valueOf(result-1)+"-"+String.valueOf(result-2000)+"/"+month+"-"+result+"/";
-			 int data= dao.getdata(value);
-			
-			 value+=++data;
-			return value;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
 	
-	}
-
 }

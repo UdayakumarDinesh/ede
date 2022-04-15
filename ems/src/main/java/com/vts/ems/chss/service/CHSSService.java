@@ -87,7 +87,6 @@ public interface CHSSService {
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
-	public String getresult()throws Exception;
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
 	
