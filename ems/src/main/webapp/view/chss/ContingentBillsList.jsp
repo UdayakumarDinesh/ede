@@ -60,7 +60,13 @@
 				
 			<div class="card" >
 				<div class="card-body " >
-					
+				
+					<form action="ApprovedBiils.htm" method="POST" style="float: right;">
+								<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
+								<br>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+							
 					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
@@ -107,7 +113,8 @@
 								<button class="btn btn-sm" style="background-color: #FFD36E " >Generate Contingent Bill</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
-						</div>
+							</div>
+							
 					</div>
 					
 				</div>
