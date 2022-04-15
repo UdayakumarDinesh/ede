@@ -25,4 +25,5 @@ public interface AdminService {
 	public int AddOtherItem(CHSSOtherItems item)throws Exception;
 	public int EditItem(CHSSOtherItems item)throws Exception;
 	public Object[] getChssAprovalList()throws Exception;
+	public int UpdateApprovalAuth(String processing,String verification,String approving,String id,String userid)throws Exception;
 }

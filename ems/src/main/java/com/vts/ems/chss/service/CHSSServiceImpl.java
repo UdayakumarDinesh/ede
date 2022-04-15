@@ -1097,6 +1097,27 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return claims;
 	}
+	@Override
+	public String getresult()throws Exception
+	{
+		try {
+			String value="STARC/F&A/Med-Regular/";
+			int result = -1;
+		   
+		        Calendar cal = Calendar.getInstance();
+		        cal.setTime(new Date());
+		        result = cal.get(Calendar.YEAR);
+		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
+			value+=String.valueOf(result-1)+"-"+String.valueOf(result-2000)+"/"+month+"-"+result+"/";
+			 int data= dao.getdata(value);
+			
+			 value+=++data;
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	
+	}
 
 }

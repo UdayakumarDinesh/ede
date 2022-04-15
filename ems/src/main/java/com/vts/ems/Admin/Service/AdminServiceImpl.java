@@ -143,4 +143,10 @@ public class AdminServiceImpl implements AdminService{
 		
 		return result;
 	}
+	
+	@Override
+	public int UpdateApprovalAuth(String processing,String verification,String approving,String id,String userid)throws Exception{
+		return dao.UpdateApprovalAuth(processing,verification,approving,id,userid); 
+	}
+	
 }

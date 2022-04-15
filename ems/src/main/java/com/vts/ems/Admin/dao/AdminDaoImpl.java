@@ -1,6 +1,7 @@
 package com.vts.ems.Admin.dao;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
 @Repository
 public class AdminDaoImpl implements AdminDao{
 
 	private static final Logger logger = LogManager.getLogger(CHSSDaoImpl.class);
-	
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	@PersistenceContext
 	EntityManager manager;
 	
@@ -247,7 +249,7 @@ public class AdminDaoImpl implements AdminDao{
 		}		
 	}
 	
-	private static final String CHSSAPPROVAL="SELECT a.approveauthlistid ,a.processingofficer , a.verificationofficer, a.approvingofficer FROM chss_approve_auth a ,employee b WHERE b.empid =a.processingofficer  AND a.isactive='1'";
+	private static final String CHSSAPPROVAL="SELECT a.approveauthlistid ,a.processingofficer , a.verificationofficer, a.approvingofficer FROM chss_approve_auth a ,employee b WHERE a.processingofficer=b.empid AND a.isactive='1'";
 	@Override
 	public Object[]   getChssAprovalList() throws Exception
 	{
@@ -260,4 +262,27 @@ public class AdminDaoImpl implements AdminDao{
 				return null;
 			}	
     }
+	
+	private static final String APPROVALAUTH="UPDATE chss_approve_auth SET processingofficer=:processing , verificationofficer=:verification , approvingofficer=:approving , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE ApproveAuthListId=:id";
+	@Override
+	public int UpdateApprovalAuth(String processing,String verification,String approving,String id ,String userid)throws Exception
+	{
+         logger.info(new Date() + "Inside UpdateApprovalAuth()");
+		
+		try {
+			Query query = manager.createNativeQuery(APPROVALAUTH);
+			
+			query.setParameter("modifiedby", userid);
+			query.setParameter("modifieddate",sdtf.format(new Date()) );
+			query.setParameter("processing",processing);
+			query.setParameter("verification",verification );
+			query.setParameter("approving",approving);
+			query.setParameter("id",id);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

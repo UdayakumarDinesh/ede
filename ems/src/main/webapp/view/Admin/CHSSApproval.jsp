@@ -32,7 +32,7 @@ hr{
 <%
 Object[] approval = (Object[])request.getAttribute("ApprovalList");
 List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
-
+System.out.println(approval[0]+""+approval[1]);
 %>
 
 
@@ -77,7 +77,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 			
 					<div class="card-body">
         			
-        		  <form action="RtmddoSubmit.htm" method="POST" name="myfrm1" id="myfrm1"  onsubmit="return confirm('Are you sure to submit');"> 	 						
+        		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  onsubmit="return confirm('Are you sure to submit');"> 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                    <div class="row"> 
                 		<div class="col-md-1"></div>
@@ -87,7 +87,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                               		<select class="form-control select2" id="EmpId1" required="required" name="processing">
     									<option disabled="true"  selected="selected" value="">Select </option>
     									<% if(emplist!=null){ for(Object[] O:emplist){%>
-    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0]==approval[1]){ %>  selected="selected"<%}}%> ><%=O[1] %> </option>
+    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0].equals(approval[1])){ %>  selected <%}}%> ><%=O[1] %> </option>
     									<%} }%>
   									</select>
                         		</div>
@@ -98,7 +98,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                               		<select class="form-control select2" id="EmpId2" required="required" name="verification">
     									<option disabled="true"  selected="selected" value="">Select </option>
     										<% if(emplist!=null){ for(Object[] O:emplist){%>
-    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0]==approval[2]){ %>  selected="selected"<%}}%> ><%=O[1] %> </option>
+    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0].equals(approval[2])){ %>  selected<%}}%> ><%=O[1] %> </option>
     									<%} }%>
   									</select>
                         		</div>
@@ -109,7 +109,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                               		<select class="form-control select2" id="EmpId3" required="required" name="approving">
     									<option disabled="true"  selected="selected" value="">Select </option>
     										<% if(emplist!=null){ for(Object[] O:emplist){%>
-    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0]==approval[3]){ %>  selected="selected"<%}}%> ><%=O[1]%> </option>
+    									<option value="<%=O[0]%>" <%if(approval!=null&&emplist!=null){ if(O[0].equals(approval[3])){ %>  selected<%}}%> ><%=O[1]%> </option>
     									<%} }%>
   									</select>
                         		</div>
@@ -120,7 +120,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                         		<input type="hidden" name="AuthId" value="<%if(approval!=null){%><%=approval[0]%><%}%>"> 
                             		<label class="control-label"></label>
                             		<input type="hidden" name="type" value="AD"/>
-                                         <button class="btn btn-sm submit-btn" type="submit" style="margin-top: 2.15rem;">Submit</button> 
+                                         <button class="btn btn-sm submit-btn" type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;">Submit</button> 
                         		</div>
                     		</div>        		
                         </div>   
@@ -131,19 +131,6 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 		   	 </div>				
 	        </div>
 	        </div>
-	        <script type="text/javascript">
-	        function Edit(myfrm) {
-
-	        	var fields = $("input[name='ApprovalId']").serializeArray();
-
-	        	if (fields.length === 0) {
-	        		alert("Please Select Atleast One");
-
-	        		event.preventDefault();
-	        		return false;
-	        	}
-	        	return true;
-	        }
-	        </script>
+	    
 </body>
 </html>

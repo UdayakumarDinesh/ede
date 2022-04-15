@@ -84,5 +84,6 @@ public interface CHSSDao {
 	public CHSSDoctorRates getDocterRate(String rateid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
+	public int getdata(String bill)throws Exception;
 
 }
