@@ -273,6 +273,9 @@ public class CHSSController {
 	
 	
 	
+	
+	
+	
 	@RequestMapping(value = "CHSSBillEdit.htm", method = RequestMethod.POST )
 	public String CHSSBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -362,6 +365,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Bill Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",String.valueOf(count));
 			return "redirect:/CHSSAppliedDetails.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -617,7 +621,7 @@ public class CHSSController {
 			String billid = req.getParameter("billid");
 			
 			String[] medsname=req.getParameterValues("meds-name");
-			String[] medsdate=req.getParameterValues("meds-date");
+//			String[] medsdate=req.getParameterValues("meds-date");
 			String[] medscost=req.getParameterValues("meds-cost");
 			String[] medspresquantity=req.getParameterValues("meds-presquantity");
 			String[] medsquantity=req.getParameterValues("meds-quantity");
@@ -625,7 +629,7 @@ public class CHSSController {
 			
 			dto.setBillId(billid);
 			dto.setMedicineName(medsname);
-			dto.setMedicineDate(medsdate);
+//			dto.setMedicineDate(medsdate);
 			dto.setMedicineCost(medscost);
 			dto.setPresQuantity(medspresquantity);
 			dto.setMedQuantity(medsquantity);
@@ -676,7 +680,7 @@ public class CHSSController {
 			String medicineid = req.getParameter("medicineid"); 
 			
 			String medsname = req.getParameter("meds-name-"+medicineid);
-			String medsdate = req.getParameter("meds-date-"+medicineid);
+//			String medsdate = req.getParameter("meds-date-"+medicineid);
 			String medscost = req.getParameter("meds-cost-"+medicineid);
 			String medsquantity = req.getParameter("meds-quantity-"+medicineid);
 			String medspresquantity = req.getParameter("meds-presquantity-"+medicineid);
@@ -684,7 +688,7 @@ public class CHSSController {
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
-			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
+//			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
 			meds.setMedicineCost(Integer.parseInt(medscost));
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			meds.setPresQuantity(Integer.parseInt(medspresquantity));
@@ -1256,6 +1260,9 @@ public class CHSSController {
 				{
 					allow=1;
 				}
+			}else
+			{
+				allow=0;
 			}
 			
 		} catch (Exception e) {
@@ -1283,6 +1290,33 @@ public class CHSSController {
 		return json.toJson(docrates);
 	}
 	
+	@RequestMapping(value = "CHSSUserPreview.htm", method = RequestMethod.POST)
+	public String CHSSUserPreview(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSUserPreview.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String enclosurecount = req.getParameter("enclosurecount");
+			
+			CHSSApplyDto dto =new CHSSApplyDto();
+			dto.setCHSSApplyId(chssapplyid);
+			dto.setNoEnclosures(enclosurecount);
+			
+			service.CHSSApplyEncCountEdit(dto);
+			
+			redir.addAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSFormEdit.htm";
+			
+		} catch (Exception e) {
+					
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSUserPreview.htm "+Username, e);
+			return "static/Error";
+		}
+			
+	}
+	
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
@@ -1293,16 +1327,24 @@ public class CHSSController {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String action = req.getParameter("claimaction");
 			String remarks = req.getParameter("remarks");
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
-			if (count > 0) {
-				redir.addAttribute("result", "Claim application Sent for Processing  Successfully");
-			} else {
-				redir.addAttribute("resultfail", "Claim application Sent for Processing Unsuccessful");	
-			}	
-			CHSSApply claim = service.CHSSApplied(chssapplyid);
 			
-			if(claim.getCHSSStatusId()>2 )
+			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
+			int chssstatusid= claim1.getCHSSStatusId();
+			
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
+			
+			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
+				if (count > 0) {
+					redir.addAttribute("result", "Claim application Sent for Processing  Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Claim application Sent for Processing Unsuccessful");	
+				}	
+				
+			}
+			else if (chssstatusid == 2 || chssstatusid ==4 || chssstatusid >=5) 
+			{
+			 
 
 				if(action.equalsIgnoreCase("F")) {
 					if (count > 0) {
@@ -1318,9 +1360,15 @@ public class CHSSController {
 						redir.addAttribute("resultfail", "Claim application Return Unsuccessful");	
 					}	
 				}
-				return "redirect:/CHSSApprovalsList.htm";
-			}
-			
+				
+				if(chssstatusid>=6) 
+				{
+					return "redirect:/CHSSBatchList.htm";
+				}else
+				{
+					return "redirect:/CHSSApprovalsList.htm";
+				}
+			} 
 			return "redirect:/CHSSAppliedList.htm";
 			
 		} catch (Exception e) {
@@ -1577,25 +1625,101 @@ public class CHSSController {
 		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSBatchList.htm "+Username);
 		try {
+
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
 			
-			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType);
+			if(fromdate == null || todate == null) 
+			{
+				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
+				todate = LocalDate.now().withDayOfMonth(20).toString();
+			}else {
+				fromdate = sdf.format(rdf.parse(fromdate));
+				todate = sdf.format(rdf.parse(todate));				
+			}
 			
+		
+			
+			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType, fromdate, todate,"0");
 			req.setAttribute("chssclaimlist", claimslist);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
 			
-			return "chss/CHSSContingentList";
+			return "chss/CHSSBatchList";
 		} catch (Exception e) {
 			
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSBatchList.htm "+Username, e);
 			return "static/Error";
-		}
-		
+		}		
 	}	
 	
 	
+	@RequestMapping(value = "CHSSContingentGenerate.htm", method = RequestMethod.POST)
+	public String CHSSContingentGenerate(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSContingentGenerate.htm "+Username);
+		try {
+			String chssapplyid[] = req.getParameterValues("chssapplyidcb");
+			String action = req.getParameter("claimaction");
+			String billcontent = req.getParameter("billcontent");
+			
+			long count= service.ContingentGenerate(chssapplyid, Username, action, billcontent, LoginType,EmpId);
+//			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
+			
+			
+				if (count > 0) {
+					redir.addAttribute("result", "Contingent Bill Generated Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Contingent Bill Generation Unsuccessful");	
+				}	
+			redir.addFlashAttribute("contingentid",String.valueOf(count));
+			return "redirect:/ContingentBillData.htm";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSContingentGenerate.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 	
 	
-	@RequestMapping(value = "CHSSClaimsApprove.htm", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "ContingentBillData.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingentBillData(Model model,HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside ContingentBillData.htm "+Username);
+		try {
+			
+			String contingentid = req.getParameter("contingentid");
+			if (contingentid == null) 
+			{
+				Map md=model.asMap();
+				contingentid=(String)md.get("contingentid");
+			}	
+			
+			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			
+					
+			return "chss/ContingentBillView";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingentBillData.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value = "CHSSContingentApprove.htm", method = RequestMethod.POST)
 	public String CHSSClaimsApprove(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
@@ -1603,11 +1727,11 @@ public class CHSSController {
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSClaimsApprove.htm "+Username);
 		try {
-			String chssapplyid[] = req.getParameterValues("chssapplyidcb");
+			String contingentid = req.getParameter("contingentid");
 			String action = req.getParameter("claimaction");
 			String remarks = req.getParameter("remarks");
 			
-			long count= service.CHSSClaimsApprove(chssapplyid, Username, action, remarks, LoginType,EmpId);
+			long count= service.CHSSClaimsApprove(contingentid, Username, action, remarks, LoginType,EmpId);
 //			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
 			
 			
@@ -1646,7 +1770,7 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.getCHSSContingentList());
 						
-			return "chss/ContingentList";
+			return "chss/ContingentBillsList";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSContingentList.htm "+Username, e);

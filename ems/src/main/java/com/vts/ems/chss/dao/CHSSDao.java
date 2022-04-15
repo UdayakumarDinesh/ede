@@ -12,7 +12,6 @@ import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
-import com.vts.ems.chss.model.CHSSPaybandRemlist;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -67,10 +66,10 @@ public interface CHSSDao {
 	public String CHSSApplyNoCount(String finYear) throws Exception;
 	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
 	public CHSSTestSub getCHSSTestSub(String testsubid) throws Exception;
-	public CHSSPaybandRemlist getCHSSPaybandRemlist(String otheritemid) throws Exception;
+	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype) throws Exception;
-	public CHSSContingent getCHSSContingentNotApproved() throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
+	public CHSSContingent getCHSSContingentData(String ContingentId) throws Exception;
 	public String CHSSContingentNoCount(String finYear) throws Exception;
 	public long ContingentAdd(CHSSContingent other) throws Exception;
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception;
@@ -85,5 +84,7 @@ public interface CHSSDao {
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public int getdata(String bill)throws Exception;
+	public List<Object> ContingentApplyIds(String contingentid) throws Exception;
+
 
 }

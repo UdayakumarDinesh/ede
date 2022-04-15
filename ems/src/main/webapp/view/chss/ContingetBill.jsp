@@ -127,10 +127,10 @@ th,td
 		<span style="font-size: 20px; font-weight:600; ">SITAR</span><br>
 		<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br>
 		<p>
-			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[8].toString()) %> during the month of 
-			<%=" "+LocalDate.parse(contingentdata[8].toString()).getMonth() %> - <%=" "+LocalDate.parse(contingentdata[8].toString()).getYear() %> for reimbrusement from the following
-			employees have been processed and admitted at CHSS rates.
-		</p>
+								The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().withDayOfMonth(20).toString()) %> during the month of 
+								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
+								employees have been processed and admitted at CHSS rates.
+							</p>
 	
 	</div>
 	
@@ -186,7 +186,15 @@ th,td
 				</td>	
 			</tr>
 	</table>
+	<div style="text-align: left;margin: 5px 5px 5px 10px;">
+		<p>
+			<%=contingentdata[8] %>
+		</p>
+	</div>
+	
 </div>
+
+
 </body>
 
 </html>

@@ -185,7 +185,7 @@ p {
 							</div>
 							
 							<div class="col-1">
-								<button type="submit" class="btn btn-sm update-btn" style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');">UPDATE</button> 
+								<button type="submit" class="btn btn-sm " style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button> 
 							</div>
 						</div>
 						</div>
@@ -225,8 +225,7 @@ p {
 												<td> <input type="number" class="form-control items numberonly" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
 												<%} %>
 												<td>
-													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">
-														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 													</button>
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
@@ -279,15 +278,15 @@ p {
 							</div>
 						</form>
 						
-						<form action="CHSSUserForward.htm" method="post" id="form2">
+						<form action="CHSSUserPreview.htm" method="post" id="form2">
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
+									<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
 										<i class="fa-solid fa-eye"></i>
 									</button>
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
-										<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Submit for processing	
+										<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Preview	
 									</button>
 									
 								</div>
@@ -308,15 +307,15 @@ p {
 									          <div class="row">
 											    <div class="col-12">
 											    	<b>No of Enclosures : </b><br>
-													<input type="number" class="form-control numberonly w-100" name="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
+													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
 												</div>
-												<div class="col-md-12">
+												<!-- <div class="col-md-12">
 													<b> Remarks :</b> <br>
 													<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" required="required"></textarea>
-												</div>
+												</div> -->
 												 <div class="col-12 w-100" align="center">
 												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount(<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
 													Submit
 												</button>
 												</div>
@@ -333,9 +332,13 @@ p {
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 					</form>
+					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
 						
+					<input type="hidden" name="claimaction" value="F">
+							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-					
+					</form>
 					
 				</div>
 			</div>		
@@ -391,9 +394,9 @@ p {
 										<tr>
 											<th style="width:5%;" >SN</th>
 											<th style="width:12%;"> Consultation </th>
-											<th style="width:30%;">Name of the Doctor</th>
+											<th style="width:30%;">Doctor's Name</th>
 											<th style="width:15%;">Qualification</th>
-											<th style="width:15%;">Date</th>
+											<th style="width:15%;">Consult Date</th>
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:8%;" > Action </th>
 										</tr>
@@ -403,7 +406,6 @@ p {
 
 									</tbody>
 								</table>
-								<input type="hidden" class="tab" name="co" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -451,7 +453,6 @@ p {
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
-								<input type="hidden" class="tab" name="co" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -479,7 +480,6 @@ p {
 
 									</tbody>
 								</table>
-								<input type="hidden" class="tab" name="te" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -511,7 +511,7 @@ p {
 											</td>
 											<!-- <td style="max-width:35% !important;">
 												<select class="form-control test-id  select2 " style="width: 100%" data-size="auto" id="test-id_1"  name="test-id" required="required" data-live-search="true" data-container="body">
-													<option value="" selected="selected" disabled="disabled" >Choose..</option>
+										F			<option value="" selected="selected" disabled="disabled" >Choose..</option>
 												</select>
 											</td> -->
 											<td><input type="number" class="form-control items numberonly" name="tests-cost"  value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
@@ -523,7 +523,6 @@ p {
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="confirm('Are You Sure To Submit?');">SUBMIT</button>	
 								</div>
-								<input type="hidden" class="tab" name="te" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -540,10 +539,10 @@ p {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:40%;"> Medicine Name </th>
+											<th style="width:50%;"> Medicine Name </th>
 											<th style="width:10%;">Rx Qty.</th>
 											<th style="width:10%;">Pur Qty.</th>
-											<th style="width:10%;">Date</th>
+											<!-- <th style="width:10%;">Date</th> -->
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
@@ -553,7 +552,6 @@ p {
 
 									</tbody>
 								</table>
-								<input type="hidden" class="tab" name="me" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -565,10 +563,10 @@ p {
 									<thead>
 										<tr>
 											<!-- <th style="width:5%;" >SN</th> -->
-											<th style="width:40%;"> Medicine Name </th>
+											<th style="width:50%;"> Medicine Name </th>
 											<th style="width:10%;">Rx Qty.</th>
 											<th style="width:10%;">Pur Qty.</th>
-											<th style="width:10%;">Date</th>
+											<!-- <th style="width:10%;">Date</th> -->
 											<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
@@ -579,7 +577,7 @@ p {
 											<td><input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
-											<td><input type="text" class="form-control meds-date" name="meds-date" id="meds-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
+											<!-- <td><input type="text" class="form-control meds-date" name="meds-date" id="meds-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td> -->
 											<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
@@ -589,7 +587,6 @@ p {
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
-								<input type="hidden" class="tab" name="me" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -616,7 +613,6 @@ p {
 										
 									</tbody>
 								</table>
-								<input type="hidden" class="tab" name="ot" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -652,7 +648,6 @@ p {
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
-								<input type="hidden" class="tab" name="ot" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -680,7 +675,6 @@ p {
 
 									</tbody>
 								</table>
-								<input type="hidden" class="tab" name="mi" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -710,7 +704,6 @@ p {
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>	
 								</div>
-								<input type="hidden" class="tab" name="mi" value="">
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -731,8 +724,6 @@ p {
 <script type="text/javascript">
 
 var tab = '<%=tab%>';
-console.log(tab);
-console.log(typeof(tab));
 
 function showBillDetails($billid)
 {
@@ -811,23 +802,21 @@ function CheckClaimAmount($chssapplyid)
 		var result = JSON.parse(result);
 						
 			if(result===1){
-				if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
-				{
-						$('#remarks').attr('required', true);
-						if($('#remarks').val().trim()===''){
-							alert('Please Fill Remarks to Submit! ');
+				
+						if(Number($('#enclosurecount').val())<1){
+							alert('Total No. of Enclosures should not be zero !');
 						}else{
 							
-								$('#form2').submit();
+							$('#form2').submit();
 							
 						}
 						
-				}
+				
 			}else if(result===-1){
 				alert('Please Add Atleast one Consultation details.');
-			}
-			else{
-				alert('Please Add Bill and Items To Forward ');
+				return false;	
+			}else if(result===0){
+				alert('Total claim amount should not be zero !');
 				return false;	
 			}
 		
@@ -963,8 +952,6 @@ $('.cons-date').daterangepicker({
 function getConsultdata()
 {
 	var $billid = $('.billid').val();
-	
-	
 	
 	$.ajax({
 
@@ -1312,7 +1299,7 @@ $("table").on('click','.tbl-row-add-meds' ,function()
 
 	
 	 
-  	$clone.find('.meds-date').daterangepicker({
+/*   	$clone.find('.meds-date').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
@@ -1324,7 +1311,7 @@ $("table").on('click','.tbl-row-add-meds' ,function()
 		locale : {
 			format : 'DD-MM-YYYY'
 	}
-	});
+	}); */
   	
   	setTooltip();
   
@@ -1343,7 +1330,7 @@ if(cl>1){
   
 });
 
-$('.meds-date').daterangepicker({
+/* $('.meds-date').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
@@ -1355,7 +1342,7 @@ $('.meds-date').daterangepicker({
 	locale : {
 		format : 'DD-MM-YYYY'
 }
-});
+}); */
 
 
 
@@ -1387,11 +1374,11 @@ function getMedicinesData(){
 			medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name-'+meds.MedicineId+'" id="doc-name" value="'+meds.MedicineName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.MedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.MedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
-			let now = new Date(meds.MedicineDate);
+			/* let now = new Date(meds.MedicineDate);
 			var dateString = moment(now).format('DD-MM-YYYY');
 			
 			medsHTMLStr +=	'	<td><input type="text" class="form-control meds-date" name="meds-date-'+meds.MedicineId+'" id="meds-date" value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
-			
+			 */
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.MedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td>';
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.MedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 

@@ -87,7 +87,7 @@
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
@@ -101,7 +101,14 @@
 							</table>
 						</div>
 					</form>
-					
+					<div class="row" style="margin-top: 10px;">
+						<div class="col-12"  align="center" >
+							<form action="CHSSBatchList.htm" method="post">
+								<button class="btn btn-sm" style="background-color: #FFD36E " >Generate Contingent Bill</button>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							</form>
+						</div>
+					</div>
 					
 				</div>
 			</div>		
