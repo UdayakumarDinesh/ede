@@ -200,13 +200,13 @@
 		</div>
 	</div>	
 	<br>
-<%-- 	<div class="card-body" >
+ 	<div class="card-body" >
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="card" >
 				<div class="card-body " >
 					<div class="row" > 
-						<div class="col-md-3 ">
+						<%-- <div class="col-md-3 ">
 							<button type="submit" class=" db-button w-100" formaction="CHSSApply.htm" >CHSS Apply</button>
 						</div>
 						<div class="col-md-3 ">
@@ -217,7 +217,7 @@
 								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
 							</div>
 
-						<%} %>
+						<%} %> --%>
 						
 						
 						<%if(dashboard!=null){  for(Object[] O:dashboard){%>							
@@ -231,7 +231,7 @@
 			</div>		
 		</form>
 		
-	</div> --%>
+	</div> 
 
  </div> 
  
@@ -345,7 +345,7 @@
 				</div>
 		</div>		
 
-
+<!-- 
   <div class="outer-wrapper">
     <div class="inner-wrapper">
       <div class="pseudo-item"></div>
@@ -360,7 +360,7 @@
   </div>
 
 
-
+ -->
 <form action="CHSSApplyDetails.htm" method="post" id="myform" style="padding: 1rem">
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >

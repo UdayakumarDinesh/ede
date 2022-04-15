@@ -80,7 +80,7 @@ public interface CHSSService {
 	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
 	public long CHSSClaimsApprove(String contingentid, String Username, String action, String billcontent, String logintype,String EmpId)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
-	public List<Object[]> getCHSSContingentList() throws Exception;
+	public List<Object[]> getCHSSContingentList(String logintype) throws Exception;
 	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;

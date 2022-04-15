@@ -40,13 +40,11 @@ import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
-import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
-import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
@@ -1706,7 +1704,7 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			
+			req.setAttribute("logintype", LoginType);
 					
 			return "chss/ContingentBillView";
 		} catch (Exception e) {
@@ -1728,7 +1726,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSClaimsApprove.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
-			String action = req.getParameter("claimaction");
+			String action = req.getParameter("action");
 			String remarks = req.getParameter("remarks");
 			
 			long count= service.CHSSClaimsApprove(contingentid, Username, action, remarks, LoginType,EmpId);
@@ -1750,7 +1748,7 @@ public class CHSSController {
 				}	
 			}
 			
-			return "redirect:/CHSSBatchList.htm";
+			return "redirect:/CHSSContingentList.htm";
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -1761,19 +1759,20 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value = "CHSSContingentList.htm", method = {RequestMethod.POST,RequestMethod.GET})
-	public String CHSSContingentList(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "ContingentApprovals.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingentApprovals(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CHSSContingentList.htm "+Username);
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside ContingentApprovals.htm "+Username);
 		try {
 			
-			req.setAttribute("ContingentList", service.getCHSSContingentList());
+			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType));
 						
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSContingentList.htm "+Username, e);
+			logger.error(new Date() +" Inside ContingentApprovals.htm "+Username, e);
 			return "static/Error";
 		}
 	}

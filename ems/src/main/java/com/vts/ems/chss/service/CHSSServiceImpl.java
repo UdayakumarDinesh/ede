@@ -1035,9 +1035,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> getCHSSContingentList() throws Exception
+	public List<Object[]> getCHSSContingentList(String logintype) throws Exception
 	{
-		return dao.getCHSSContingentList();
+		return dao.getCHSSContingentList(logintype);
 	}
 	
 	@Override

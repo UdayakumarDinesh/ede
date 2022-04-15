@@ -960,25 +960,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	@Override
-	public CHSSContingent getCHSSContingentData( String ContingentId ) throws Exception
-	{
-		logger.info(new Date() +"Inside DAO getCHSSContingentData");
-		CHSSContingent cont = null;
-		try {
-			CriteriaBuilder cb= manager.getCriteriaBuilder();
-			CriteriaQuery<CHSSContingent> cq= cb.createQuery(CHSSContingent.class);
-			Root<CHSSContingent> root= cq.from(CHSSContingent.class);					
-			Predicate p1=cb.greaterThanOrEqualTo(root.get("ContingentId"), Long.parseLong(ContingentId));
-			cq=cq.select(root).where(p1);
-			TypedQuery<CHSSContingent> allquery = manager.createQuery(cq);
-			cont= allquery.getResultList().get(0);
-			
-			return cont;
-		}catch (Exception e) {
-			return null;
-		}
-	}
 	
 	private static final String CHSSCONTINGENTNOCOUNT = "SELECT COUNT(ContingentId),'count' AS 'count' FROM chss_contingent WHERE ContingentBillNo LIKE :finYear ";
 
@@ -1055,15 +1036,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String GETCHSSCONTINGENTLIST  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE cc.isactive=1 AND cc.ContingentStatusId = cs.chssstatusid ORDER BY cc.ContingentStatusId ASC";
+//	private static final String GETCHSSCONTINGENTLIST  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE cc.isactive=1 AND cc.ContingentStatusId = cs.chssstatusid ORDER BY cc.ContingentStatusId ASC";
 	
 	@Override
-	public List<Object[]> getCHSSContingentList() throws Exception
+	public List<Object[]> getCHSSContingentList(String logintype) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getCHSSContingentList");
 		
 		try {
-			Query query= manager.createNativeQuery(GETCHSSCONTINGENTLIST);
+			Query query= manager.createNativeQuery("call chss_contingent_bills_list(:logintype)");
+			query.setParameter("logintype", logintype);
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {

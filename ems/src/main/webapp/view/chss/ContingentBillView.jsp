@@ -79,6 +79,7 @@ th,td
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
 	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
 	
+	String logintype = (String)request.getAttribute("logintype");
 	int billstatus = Integer.parseInt(contingentdata[5].toString());
 
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
@@ -122,12 +123,11 @@ th,td
 	
 			<div class="card" >
 				<div class="card-body " >
-									
-										
+
 					<div align="center">
 						
 						<div style="text-align: left;margin: 5px 5px 5px 10px;">
-							<span style="font-size: 20px; font-weight:600; ">SITAR</span><br>
+							<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
 							<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br>
 							<p>
 								The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().withDayOfMonth(20).toString()) %> during the month of 
@@ -178,7 +178,7 @@ th,td
 								} 
 							}%>
 							
-								<tr>
+									<tr>
 									<td colspan="4" class="right">Total</td>
 									<td class="center"><%=billscount %></td>
 									<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
@@ -195,19 +195,24 @@ th,td
 								<%=contingentdata[8] %>
 							</p>
 						</div>
-						
-						
-						
-						
 					</div>
 					
-					<form action="#" method="post">
+					<form action="CHSSContingentApprove.htm" method="post">
 						<div class="row">
 							<div class="col-12" align="center">
-								<%if(billstatus==1 || billstatus==9){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" formaction>Forward</button>
-								<%}else if(true){ %>
-								
+								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  >Forward</button>
+								<%}else if( billstatus==9 && logintype.equalsIgnoreCase("K")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('F')" >Forward</button>
+								<%}else if((billstatus==8 || billstatus==11) && logintype.equalsIgnoreCase("V")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Recommend</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
+								<%}else if((billstatus==10 || billstatus==13) && logintype.equalsIgnoreCase("W")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Authorize</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
+								<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Approve</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
 								<%} %>
 							</div>	
 						</div>
@@ -222,7 +227,31 @@ th,td
 	</div>
 	
  </div>
-	 
+
+<script type="text/javascript">
+
+
+
+function remarkRequired(action)
+{
+	if(action === 'R'){
+		$('#remarks').attr('required', true);
+		if($('#remarks').val().trim()===''){
+			alert('Please Fill Remarks to Return! ');
+			return false;
+		}else{
+				return confirm('Are You Sure To Return?');
+		}
+		
+	}else{
+		$('#remarks').attr('required', false);
+		return confirm('Are You Sure To Approve?');
+	}
+	
+}
+
+
+</script>	 
 
 </body>
 

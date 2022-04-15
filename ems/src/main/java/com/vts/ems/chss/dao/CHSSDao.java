@@ -69,13 +69,12 @@ public interface CHSSDao {
 	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
 	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
-	public CHSSContingent getCHSSContingentData(String ContingentId) throws Exception;
 	public String CHSSContingentNoCount(String finYear) throws Exception;
 	public long ContingentAdd(CHSSContingent other) throws Exception;
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public long CHSSApplyTransactionAdd(CHSSApplyTransaction Transaction) throws Exception;
-	public List<Object[]> getCHSSContingentList() throws Exception;
+	public List<Object[]> getCHSSContingentList(String logintype) throws Exception;
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
