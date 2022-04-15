@@ -28,7 +28,6 @@ import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
-import com.vts.ems.chss.model.CHSSPaybandRemlist;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -100,17 +99,17 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	@Override
-	public CHSSPaybandRemlist getCHSSPaybandRemlist(String otheritemid) throws Exception
+	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getCHSSPaybandRemlist");
-		CHSSPaybandRemlist remamountlist= null;
+		CHSSOtherItems remamountlist= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
-			CriteriaQuery<CHSSPaybandRemlist> cq= cb.createQuery(CHSSPaybandRemlist.class);
-			Root<CHSSPaybandRemlist> root= cq.from(CHSSPaybandRemlist.class);					
+			CriteriaQuery<CHSSOtherItems> cq= cb.createQuery(CHSSOtherItems.class);
+			Root<CHSSOtherItems> root= cq.from(CHSSOtherItems.class);					
 			Predicate p1=cb.equal(root.get("OtherItemId") , Long.parseLong(otheritemid));
 			cq=cq.select(root).where(p1);
-			TypedQuery<CHSSPaybandRemlist> allquery = manager.createQuery(cq);
+			TypedQuery<CHSSOtherItems> allquery = manager.createQuery(cq);
 			remamountlist= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {

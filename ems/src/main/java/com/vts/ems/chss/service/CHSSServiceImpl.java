@@ -3,7 +3,6 @@ package com.vts.ems.chss.service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
-import com.vts.ems.chss.model.CHSSPaybandRemlist;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -696,23 +694,23 @@ public class CHSSServiceImpl implements CHSSService {
 	public int getOtherItemRemAmount(String empid,String otheritemid,int itemcost) throws Exception
 	{
 		Employee emp =dao.getEmployee(empid);
-		CHSSPaybandRemlist remlist = dao.getCHSSPaybandRemlist(otheritemid);
+		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
 		int rembamt = 0;
 		if(emp.getPayLevelId()>=-1 && emp.getPayLevelId()<=6) 
 		{
-			rembamt = remlist.getLevel1();
+			rembamt = remlist.getPayLevel1();
 		}
 		else if(emp.getPayLevelId()>=7 && emp.getPayLevelId()<=10) 
 		{
-			rembamt = remlist.getLevel2();
+			rembamt = remlist.getPayLevel2();
 		}
 		else if(emp.getPayLevelId()>=11 && emp.getPayLevelId()<=14) 
 		{
-			rembamt = remlist.getLevel3();
+			rembamt = remlist.getPayLevel3();
 		}
 		else if(emp.getPayLevelId()>=15 && emp.getPayLevelId()<=18) 
 		{
-			rembamt = remlist.getLevel4();
+			rembamt = remlist.getPayLevel4();
 		}
 		
 		
