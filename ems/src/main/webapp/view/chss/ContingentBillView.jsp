@@ -97,7 +97,7 @@ th,td
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>						
-						<li class="breadcrumb-item "><a href="CHSSContingentList.htm">CHSS Contingent List</a></li>
+						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Contingent Bill</li>
 					</ol>
 				</div>
@@ -195,15 +195,21 @@ th,td
 								<%=contingentdata[8] %>
 							</p>
 						</div>
+						
+						
+						<div class="col-md-12" align="left">
+								Remarks : <br>
+								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
+						</div>
 					</div>
 					
 					<form action="CHSSContingentApprove.htm" method="post">
 						<div class="row">
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  >Forward</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
 								<%}else if( billstatus==9 && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('F')" >Forward</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('F','Are You Sure To Forward')" >Forward</button>
 								<%}else if((billstatus==8 || billstatus==11) && logintype.equalsIgnoreCase("V")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Recommend</button>
 									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
@@ -245,7 +251,7 @@ function remarkRequired(action)
 		
 	}else{
 		$('#remarks').attr('required', false);
-		return confirm('Are You Sure To Approve?');
+		return confirm('Are You Sure To Submit?');
 	}
 	
 }

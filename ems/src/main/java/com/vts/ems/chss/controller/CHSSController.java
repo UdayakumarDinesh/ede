@@ -1748,7 +1748,7 @@ public class CHSSController {
 				}	
 			}
 			
-			return "redirect:/CHSSContingentList.htm";
+			return "redirect:/ContingentApprovals.htm";
 		} catch (Exception e) {
 			
 			e.printStackTrace();
