@@ -225,6 +225,40 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	private static final String CLAIMCONSULTATIONSCOUNT = "SELECT COUNT(cc.consultationid),'count' FROM chss_bill cb, chss_consultation cc WHERE cb.billid=cc.BillId AND cc.isactive=1 AND cb.chssapplyid=:CHSSApplyId";
+	
+	@Override
+	public Object[] claimConsultationsCount(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO claimConsultationsCount");
+		try {
+			Query query = manager.createNativeQuery(CLAIMCONSULTATIONSCOUNT);
+			query.setParameter("CHSSApplyId", chssapplyid);
+			return (Object[])query.getResultList().get(0);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	private static final String CLAIMMEDICINESCOUNT = "SELECT COUNT(medicineid),'count' FROM chss_bill cb, chss_medicine cm WHERE cb.billid=cm.BillId AND cm.isactive=1 AND cb.chssapplyid=:CHSSApplyId";
+	
+	@Override
+	public Object[] claimMedicinesCount(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO claimMedicinesCount");
+		try {
+			Query query = manager.createNativeQuery(CLAIMMEDICINESCOUNT);
+			query.setParameter("CHSSApplyId", chssapplyid);
+			return (Object[])query.getResultList().get(0);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
 	private static final String EMPCHSSLIST = "CALL chss_emp_claimlist(:empid)";
 	
@@ -361,10 +395,10 @@ public class CHSSDaoImpl implements CHSSDao {
 			CriteriaQuery<CHSSTestSub> cq= cb.createQuery(CHSSTestSub.class);
 			
 			Root<CHSSTestSub> root=cq.from(CHSSTestSub.class);								
-			Predicate p1=cb.equal(root.get("TestMainId") , Long.parseLong(testmainid));
+//			Predicate p1=cb.equal(root.get("TestMainId") , Long.parseLong(testmainid));
 			Predicate p2=cb.equal(root.get("IsActive") , 1);
 			
-			cq=cq.select(root).where(p1,p2);
+			cq=cq.select(root).where(p2);
 			
 			
 			TypedQuery<CHSSTestSub> allquery = manager.createQuery(cq);
@@ -769,7 +803,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSTESTSDATALIST = "SELECT   ct.CHSSTestId, ct.BillId,  ct.TestMainId,  ct.TestSubId,  ct.TestCost,ctm.TestMainName, cts.TestName,ct.`TestRemAmount` ,cb.BillNo,  cb.BillDate FROM  chss_tests ct,  chss_test_main ctm,  chss_test_sub cts,  chss_bill cb WHERE ct.isactive = 1  AND ct.TestMainId = ctm.TestMainId  AND ct.TestSubId = cts.TestSubId  AND cb.BillId = ct.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+	private static final String CHSSTESTSDATALIST = "SELECT   ct.CHSSTestId, ct.BillId,  ct.TestMainId,  ct.TestSubId,  ct.TestCost,ctm.TestMainName, cts.TestName,ct.`TestRemAmount` ,cb.BillNo,  cb.BillDate FROM  chss_tests ct,  chss_test_main ctm,  chss_test_sub cts,  chss_bill cb WHERE ct.isactive = 1 AND cb.isactive=1 AND ct.TestMainId = ctm.TestMainId  AND ct.TestSubId = cts.TestSubId  AND cb.BillId = ct.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
 	
 	@Override
 	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception
@@ -787,7 +821,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate  FROM  chss_consultation cc,   chss_bill cb WHERE cc.isactive = 1  AND cb.BillId = cc.BillId  AND cb.CHSSApplyId = :CHSSApplyId ";
+	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate  FROM  chss_consultation cc,   chss_bill cb WHERE cc.isactive = 1 AND cb.isactive=1 AND cb.BillId = cc.BillId  AND cb.CHSSApplyId = :CHSSApplyId ";
 
 	@Override
 	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception
@@ -804,7 +838,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSMEDICINEDATALIST = "SELECT   cm.MedicineId,   cm.BillId,  cm.MedicineName,  cm.MedicineDate,  cm.MedicineCost, cm.MedQuantity,cm.MedsRemAmount  ,cb.BillNo,  cb.BillDate FROM   chss_medicine cm,  chss_bill cb WHERE cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+	private static final String CHSSMEDICINEDATALIST = "SELECT   cm.MedicineId,   cm.BillId,  cm.MedicineName,  cm.MedicineDate,  cm.MedicineCost, cm.MedQuantity,cm.presQuantity,cm.MedsRemAmount ,cb.BillNo,  cb.BillDate FROM   chss_medicine cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
 
 	@Override
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception
@@ -821,7 +855,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSOTHERDATALIST = "SELECT co.CHSSOtherId,   co.BillId,  co.OtherItemId,  co.OtherItemCost,  coi.OtherItemName,co.OtherRemAmount  ,cb.BillNo,  cb.BillDate FROM chss_other co,chss_other_items coi, chss_bill cb WHERE co.isactive = 1 AND  co.OtherItemId = coi.OtherItemId AND cb.BillId = co.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+	private static final String CHSSOTHERDATALIST = "SELECT co.CHSSOtherId,   co.BillId,  co.OtherItemId,  co.OtherItemCost,  coi.OtherItemName,co.OtherRemAmount  ,cb.BillNo,  cb.BillDate FROM chss_other co,chss_other_items coi, chss_bill cb WHERE co.isactive = 1 AND cb.isactive=1 AND  co.OtherItemId = coi.OtherItemId AND cb.BillId = co.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
 
 	@Override
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception 
@@ -839,7 +873,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CHSSMISCDATALIST = "SELECT  cm.ChssMiscId,  cm.BillId,  cm.MiscItemName,  cm.MiscItemCost,cm.MiscRemAmount  ,cb.BillNo,  cb.BillDate FROM  chss_misc cm,  chss_bill cb WHERE cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId =:CHSSApplyId";
+	private static final String CHSSMISCDATALIST = "SELECT  cm.ChssMiscId,  cm.BillId,  cm.MiscItemName,  cm.MiscItemCost,cm.MiscRemAmount  ,cb.BillNo,  cb.BillDate FROM  chss_misc cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId =:CHSSApplyId";
 
 	@Override
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception 

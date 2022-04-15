@@ -211,6 +211,17 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.getCHSSBill(billid);
 	}
 	
+	@Override
+	public Object[] claimMedicinesCount(String chssapplyid) throws Exception
+	{
+		return dao.claimMedicinesCount(chssapplyid);
+	}
+	
+	@Override
+	public Object[] claimConsultationsCount(String chssapplyid) throws Exception
+	{
+		return dao.claimConsultationsCount(chssapplyid);
+	}
 	
 	
 	@Override
@@ -250,7 +261,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
 		fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
-		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
+//		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
 		fetch.setAilment(dto.getAilment());
 		fetch.setModifiedBy(dto.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
@@ -452,6 +463,7 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setBillId(Long.parseLong(dto.getBillId()));
 				meds.setMedicineName(dto.getMedicineName()[i]);
 				meds.setMedicineDate(sdf.format(rdf.parse(dto.getMedicineDate()[i])));
+				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
 				meds.setMedsRemAmount(Integer.parseInt(dto.getMedicineCost()[i]));
@@ -487,6 +499,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setMedicineCost(modal.getMedicineCost());
 		fetch.setMedQuantity(modal.getMedQuantity());
 		fetch.setMedsRemAmount(modal.getMedicineCost());
+		fetch.setPresQuantity(modal.getPresQuantity());
 		return dao.MedicineBillEdit(fetch);
 	}
 	
@@ -507,16 +520,16 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			long count=0;
 			
-			for(int i=0 ; i<dto.getTestMainId().length; i++)
+			for(int i=0 ; i<dto.getTestSubId().length; i++)
 			{
 				CHSSTests  test = new CHSSTests();
 				
 				test.setBillId(Long.parseLong(dto.getBillId()));
-				test.setTestMainId(Long.parseLong(dto.getTestMainId()[i]));
-				test.setTestSubId(Long.parseLong(dto.getTestSubId()[i]));
+				test.setTestMainId(Long.parseLong(dto.getTestSubId()[i].split("_")[0]));
+				test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
 				test.setTestCost(Integer.parseInt(dto.getTestCost()[i]));
 				test.setIsActive(1);
-				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i]));
+				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
 				count = dao.TestsBillAdd(test);
 			}
 						

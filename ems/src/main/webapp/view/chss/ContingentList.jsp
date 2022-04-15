@@ -68,7 +68,7 @@
 								<thead>
 									<tr>
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
-										<td style="padding-top:5px; padding-bottom: 5px;" >Cntingent No</td>
+										<td style="padding-top:5px; padding-bottom: 5px;" >Contingent No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">View</td>

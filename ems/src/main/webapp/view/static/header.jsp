@@ -239,7 +239,7 @@
                 });
 
             function SidebarCollapse() {
-               
+
                 $('.menu-collapsed').toggleClass('d-none');
                 $('.sidebar-submenu').toggleClass('d-none');
                 $('.submenu-icon').toggleClass('d-none');
@@ -281,7 +281,6 @@
 				})
 				var module= "";
 				var logintype= $('#logintype').val();
-				
 				
 				for(i=0; i<values.length;i++){
 

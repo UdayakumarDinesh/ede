@@ -295,9 +295,9 @@ th,td
 								<td class="right"></td>
 							</tr>
 							<tr>
-								<th>Bill No</th>
-								<th>Type</th>
+								<th style="width: 14% !important">Bill No</th>
 								<th>Doctor</th>
+								<th>Type</th>
 								<th class="center">Date</th>
 								<th></th>
 								<th></th>
@@ -305,8 +305,8 @@ th,td
 						<%} %>
 						<tr>
 							<td><%=consult[8] %></td>
+							<td><%=consult[3] %></td>
 							<td><%=consult[2] %></td>
-							<td><%=consult[3] %>&nbsp;(<%=consult[4] %>)</td>
 							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 							<td class="right"><%=consult[6] %></td>
 							<td class="right">
@@ -399,26 +399,28 @@ th,td
 							</tr>
 							<tr>
 								<th>Bill No</th>
-								<th colspan="2">Medicine Name</th>
-								<th class="center">Date</th>
+								<th>Medicine Name</th>
+								<th style="width:5%;">Rx Qty.</th>
+								<th class="center" style="width:15%;">Date</th>
 								<th></th>
 								<th></th>
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=medicine[7] %></td>
-							<td colspan="2"><%=medicine[2] %>&nbsp;(x&nbsp;<%=medicine[5] %>)</td>
+							<td><%=medicine[8] %></td>
+							<td><%=medicine[2] %>&nbsp;(X&nbsp;<%=medicine[5] %>)</td>
+							<td><%=medicine[6] %></td>
 							<td class="center"><%=rdf.format(sdf.parse(medicine[3].toString()))%></td>
 							<td class="right"><%=medicine[4] %></td>
 							<td class="right">
 								<%if(show){ %>
-									<%=medicine[6] %>
+									<%=medicine[7] %>
 								<%} %>
 							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(medicine[4].toString());
-					totalremamount +=Integer.parseInt(medicine[6].toString());
+					totalremamount +=Integer.parseInt(medicine[7].toString());
 					}%>
 					
 					
