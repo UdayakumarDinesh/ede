@@ -77,8 +77,8 @@ public interface CHSSService {
 	public long MedRemAmountEdit(CHSSMedicine modal) throws Exception;
 	public long MiscRemAmountEdit(CHSSMisc modal) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype) throws Exception;
-	public long CHSSClaimsApprove(String[] CHSSApplyId, String Username, String action, String remarks, String logintype,String EmpId)throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
+	public long CHSSClaimsApprove(String contingentid, String Username, String action, String billcontent, String logintype,String EmpId)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList() throws Exception;
 	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
@@ -87,5 +87,8 @@ public interface CHSSService {
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
+	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
+	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,
+			String EmpId) throws Exception;
 	
 }

@@ -15,25 +15,29 @@
 <body>
 
 <%
-	
-	
 	List<Object[]> chssclaimlist=(List<Object[]>)request.getAttribute("chssclaimlist");
+	
+	String fromdate = (String)request.getAttribute("fromdate");
+	String todate = (String)request.getAttribute("todate");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	long itemstotal=0,totalremamount=0; %>
+	long itemstotal=0,totalremamount=0;
+
+%>
  
  <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Approval List</h5>
+				<h5>CHSS Claims List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS Contingent List</li>
+						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>						
+						<li class="breadcrumb-item "><a href="CHSSContingentList.htm">CHSS Contingent List</a></li>
+						<li class="breadcrumb-item active " aria-current="page">Claims List</li>
 					</ol>
 				</div>
 			</div>
@@ -59,18 +63,28 @@
 				
 			<div class="card" >
 				<div class="card-body " >
-					<div class="row" >
-						
-							<div class="col-12"  align="right" >
-							<form action="CHSSContingentList.htm" method="get">
-								<button class="btn btn-sm" style="background-color: #FFD36E " >Contingent Lists</button>
-								</form>
-							</div>
-						
-					</div>
 					
-					
-					<form action="CHSSClaimsApprove.htm" method="post" id="ClaimForm">
+					<form action="CHSSBatchList.htm" method="post" >
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<div class="form-group row">
+								<div class="col-5"></div>
+								<label for="inputPassword" class="col-sm-1 col-form-label" style="padding-left: 45px; margin-right: 0px;">From :</label>
+								<div class="col-sm-2" style="padding:0px;">
+									<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"> 
+								</div>
+							    
+								<label for="inputPassword" class="col-sm-1 col-form-label" style="padding-left: 45px; margin-right: 0px;">To :</label>
+								<div class="col-sm-2" style="padding:0px;">
+									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"> 
+								</div>
+								<div class="col-sm-1">
+								
+									<button type="submit" class="btn btn-sm submit-btn" >submit</button>
+								</div>
+						</div>
+					</form>		 
+											
+					<form action="CHSSContingentGenerate.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<br>
@@ -84,9 +98,9 @@
 										<th style="padding-top:5px; padding-bottom: 5px;">Claim No</th>
 										<th style="padding-top:5px; padding-bottom: 5px;">Employee</th>
 										<th style="padding-top:5px; padding-bottom: 5px;">Patient Name</th>
-										<th style="padding-top:5px; padding-bottom: 5px;">Applied Date</th>
-										<th style="padding-top:5px; padding-bottom: 5px;width:10%;">Claim Amount (&#8377;)</th>
-										<th style="padding-top:5px; padding-bottom: 5px;width:10%;">Admissible Amount (&#8377;)</th>
+										<th style="padding-top:5px; padding-bottom: 5px;text-align: center ;">Applied Date</th>
+										<th style="padding-top:5px; padding-bottom: 5px;width:10%;text-align: right;">Claim Amount (&#8377;)</th>
+										<th style="padding-top:5px; padding-bottom: 5px;width:10%;text-align: right;">Admitted Amount (&#8377;)</th>
 										<th style="padding-top:5px; padding-bottom: 5px;width:10%;">Action</th>
 									</tr>
 								</thead>
@@ -110,14 +124,6 @@
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
-												
-												<%-- 
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-													<i style="color: #019267" class="fa-solid fa-download"></i>
-												</button>
-												
-												<input type="hidden" name="isapproval" value="Y">	
-												 --%>					
 											</td>
 										</tr>
 									<%
@@ -151,16 +157,17 @@
 							<input type="hidden" name="isapproval" value="N">
 						</div>
 						
-					<%if(chssclaimlist.size()>0){ %>
-					 	<!-- <div class="row">
-							<div class="col-md-12">
-								Remarks : <br>
-								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" ></textarea>
-							</div>
-						</div> -->
+						
+						
+					<%if(chssclaimlist.size()>0){ %>		
+						<div class="row">
+							<div class="col-12">
+								Content :
+								<textarea class="w-100 form-control" rows="4" cols="100" id="billcontent" name="billcontent" maxlength="3000"></textarea>
+							</div>						
+						</div>			 
 						<div class="col-md-12" align="center" style="margin-top: 5px;">
-							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " >Approve</button>
-							<!-- <button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button> -->
+							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " >Generate</button>
 						</div>
 					<%} %>
 					 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -173,6 +180,58 @@
 		</div>
 	
 	 </div>
+						
+<script type="text/javascript">
+					
+					
+	$('#fromdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"maxDate" :new Date(), 
+		"startDate" : new Date('<%=fromdate%>'),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});	
+	
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"maxDate" :new Date(), 		
+		"minDate" :new Date('<%=fromdate%>'),
+		"startDate" : new Date('<%=todate%>'),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	
+	
+	var fromDate=null;
+	$("#fromdate").change( function(){
+		fromDate = $("#fromdate").val();
+		
+		$('#todate').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			"maxDate" :new Date(), 		
+			"minDate" : fromDate,
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});	
+		
+	});						
+					
+</script>
 	
 	 
 <script type="text/javascript">
@@ -185,7 +244,7 @@ function checklength()
 		{
 			$('#ClaimForm').submit();
 		} */
-		return confirm('Are you sure to Approve ? ');
+		return confirm('Are you sure to Generate ? ');
 	}else
 	{
 		alert('Please Select Atleast One Claim!');
