@@ -1115,4 +1115,23 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+	private static final String BILLVALUE="SELECT COUNT(contingentid) FROM chss_contingent WHERE contingentbillno LIKE '=:bill%'";
+	@Override
+	public int getdata(String bill)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery("SELECT COUNT(contingentid) FROM chss_contingent WHERE contingentbillno LIKE '"+ bill +"%'");
+			
+			Object o = query.getSingleResult();
+
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
 }

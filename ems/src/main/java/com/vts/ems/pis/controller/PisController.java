@@ -1362,7 +1362,7 @@ public class PisController {
 	
 	@RequestMapping(value = "PasswordChange.htm", method = RequestMethod.GET)
 	public String PasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
-		//System.out.println(service.getresult());
+		
 		return "Admin/PasswordChange";
 	}
 	

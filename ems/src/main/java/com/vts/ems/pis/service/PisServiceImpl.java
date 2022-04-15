@@ -592,36 +592,24 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.EmployeeNextAddressDetails(empid);
 		}
+		
 		@Override
 		public Object[] EmployeePerAddressDetails(String empid) throws Exception
 		{
 			return dao.EmployeePerAddressDetails(empid);
 		}
+		
 		@Override
 		public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception
 		{
 			return dao.EmployeeResAddressDetails(empid);
 		}
+		
 		@Override
 		public List<Object[]> getFamilydetails(String empid) throws Exception
 		{
 			return dao.getFamilydetails(empid);
 		}
-		@Override
-		public String getresult()throws Exception{
-			
-			String value="STARC/F&A/Med-Regular/";
-			int result = -1;
-		   
-		        Calendar cal = Calendar.getInstance();
-		        cal.setTime(new Date());
-		        result = cal.get(Calendar.YEAR);
-		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
-		     //List<Object[]> data= dao.getdata();
-		     if(true) {
-		    	 
-		     }
-			value+=String.valueOf(result-1)+"-"+String.valueOf(result)+"/"+month+"-"+result;
-			return value;
-		}
+		
+	
 }

@@ -293,7 +293,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    }
 		    
 		    
-		    @RequestMapping(value = "ChssApproval.htm" ,method=RequestMethod.POST)
+		    @RequestMapping(value = "ChssApproval.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
 		    public String ChssApproval(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception{
 		    	String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside ChssApproval.htm "+UserId);
@@ -304,11 +304,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    			String verification = (String)req.getParameter("verification");
 		    			String approving = (String)req.getParameter("approving");
 		    			String id = (String)req.getParameter("AuthId");
-		    			//int result = service.UpdateApprovalAuth(processing,verification,approving,id); 
+		    		int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId); 
+		    		if (result != 0) {
+		    			redir.addAttribute("result", "APPROVAL AUTHORITY EDITED SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "APPROVAL AUTHORITY EDITED UNSUCCESSFUL");
+					}
+		    		return "redirect:/ChssApproval.htm";
 		    		}else {
-					Object[] approvallist=service.getChssAprovalList();					
-					req.setAttribute("ApprovalList", approvallist);
-					req.setAttribute("emplist", pisservice.getEmpList());
+								Object[] approvallist=service.getChssAprovalList();
+								req.setAttribute("ApprovalList", approvallist);
+								req.setAttribute("emplist", pisservice.getEmpList());
+				    	return "Admin/CHSSApproval";
 		    		}
 				} catch (Exception e) {
 					e.printStackTrace();
