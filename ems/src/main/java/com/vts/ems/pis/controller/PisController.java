@@ -71,7 +71,7 @@ public class PisController {
 			return "static/Error";
 		}
 		
-	}
+	} 
 	@RequestMapping(value = "PisAdminEmpList.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String PisAdminEmpList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
@@ -1362,7 +1362,7 @@ public class PisController {
 	
 	@RequestMapping(value = "PasswordChange.htm", method = RequestMethod.GET)
 	public String PasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
-
+		//System.out.println(service.getresult());
 		return "Admin/PasswordChange";
 	}
 	

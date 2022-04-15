@@ -89,7 +89,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	
 <% String ses=(String)request.getAttribute("result"); 
    String ses1=(String)request.getAttribute("resultfail");
- %><%if(ses1!=null){
+ %>
+	
+	
+	<div class="card-body" >
+	<%if(ses1!=null){
 	%>
 	
 	<div align="center">
@@ -102,16 +106,13 @@ border: 8px solid rgba(255, 255, 255, 0.7);
                      <%=ses %>
                    </div> </div>
                     <%} %>
-	
-	
-	<div class="card-body" >
 		<div class="card" >
 			<div class="card-body " >
 				<div class="row">
 <div class="col-md-2" style="padding-bottom: 10px;" >
 <div class="card" style="background-color: #ebf0f2;">
 <div class="card-body text-center"  >
-             <form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data"> 
+             <form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
 			<%if(employeedetails[29]!=null){ %>
 			
 			
@@ -120,9 +121,9 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			 </div>
 			 <div class="p-image1">
              <i class="fa fa-camera upload-button"></i>
-			 <input id="imageUpload1" type="file" name="photo1" accept=".png, .jpg, .jpeg"   style="display: none;" onchange="this.form.submit()">
+			 <input id="imageUpload1" type="file" name="photo1" accept=".png, .jpg, .jpeg"   style="display: none;" onchange="return checkPic1()">
 			 			 
-			 
+			
 			 <%}else{%>
 		
 			 
@@ -131,7 +132,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			  </div>
 			  <div class="p-image">
               <i class="fa fa-camera upload-button"></i>
-			  <input id="imageUpload" type="file" name="photo1" accept=".png, .jpg, .jpeg"    style="display: none;" onchange="this.form.submit()">
+			  <input id="imageUpload" type="file" name="photo1" accept=".png, .jpg, .jpeg"    style="display: none;" onchange="return checkPic2()">
 			  <%}%>
 			  </div>
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -176,16 +177,16 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
 	</li>
-	<li class="nav-item">
+	<!-- <li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Appointment</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Awards</a>
-	</li>
+	</li> -->
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Family</a>
 	</li>
-	<li class="nav-item">
+   <!--<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Property</a>
 	</li>
 	<li class="nav-item">
@@ -196,7 +197,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">Passport</a>
-	</li>
+	</li> -->
 </ul>
 
 <!-- Tab panes -->
@@ -574,7 +575,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
  </div>
 
 </body>
-<script src="webresources/js/alertDisappear.js" type="text/javascript"></script>
+<script src="webresources/js/master.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 $("#profileImage").click(function(e) {
@@ -584,6 +585,37 @@ $("#profileImage1").click(function(e) {
     $("#imageUpload1").click();
 });
 
+</script>
+
+<script type="text/javascript">
+function checkPic1(){
+	
+    var imgpath=document.getElementById('imageUpload1');
+    var value  = (imgpath.files[0].size/1024)/1024; 
+    if(value>2){
+    	 alert("Image Size Should Be less than 2MB!");
+    	 event.preventDefault();
+    	 return false;
+    }else{   	
+    	document.getElementById("myForm").submit();
+    	return true;
+    }  
+  }
+
+  
+function checkPic2(){
+
+    var imgpath1=document.getElementById('imageUpload');
+    var value1 = (imgpath1.files[0].size/1024)/1024;   
+    if(value1>2){
+    	 alert("Image Size Should Be less than 2MB!");
+    	 event.preventDefault();
+    	 return false;
+    }else{   	
+    	document.getElementById("myForm").submit();
+    	return true;
+    } 
+  }
 </script>
 </html>
 

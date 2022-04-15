@@ -35,7 +35,7 @@
 <body>
             <% String Username = (String)session.getAttribute("Username");
             String logintype   = (String)session.getAttribute("LoginType"); 
-            String EmpName=(String)session.getAttribute("EmpName");%>
+            String EmpName     = (String)session.getAttribute("EmpName");%>
 
 
                 <div class="wrapper">
@@ -162,7 +162,7 @@
 							        </button>
 							
 							        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
-							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=Username%>!! </a>
+							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
 							
 							
 							
@@ -239,6 +239,7 @@
                 });
 
             function SidebarCollapse() {
+
                 $('.menu-collapsed').toggleClass('d-none');
                 $('.sidebar-submenu').toggleClass('d-none');
                 $('.submenu-icon').toggleClass('d-none');
@@ -286,7 +287,7 @@
 					var name=values[i][1].replace(/ /g,'');
 
 					
-					module+='<li>  <a href="'+values[i][2]+'?formroleid='+values[i][0]+'" class="bg-dark list-group-item list-group-item-action" > <span class="d-flex w-100 justify-content-start align-items-center">  <span class="menu-collapsed" > </span></span><i class="'+values[i][4]+'"></i> '+name+'</a></li>';				
+					module+='<li>  <a href="'+values[i][2]+'" class="bg-dark list-group-item list-group-item-action" > <span class="d-flex w-100 justify-content-start align-items-center">  <span class="menu-collapsed" > </span></span><i class="'+values[i][4]+'"></i> '+name+'</a></li>';				
 					
 				}
 			

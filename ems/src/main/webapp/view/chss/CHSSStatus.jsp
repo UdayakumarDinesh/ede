@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>CHSS Status</title>
+<title>Claim Status</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 
 <style type="text/css">
@@ -67,7 +67,7 @@
     background: #25303B;
     color: rgba(255,255,255,0.5);
     border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 0 7px #25303B;
+    box-shadow: 0 0 0 7px #5c6166;
   }
   section#timeline article div.inner span.date span {
     display: block;
@@ -92,6 +92,7 @@
     border-radius: 6px 6px 0 0;
     position: relative;
     font-family: 'Muli',sans-serif;
+    height: 31px;
   }
   section#timeline article div.inner h2:after {
     content: '';
@@ -103,7 +104,10 @@
     -webkit-transform: rotate(-45deg);
   }
   section#timeline article div.inner p {
-    padding: 15px;
+    
+    padding-top:5px;
+    padding-left:15px;
+    padding-bottom:10px;
     margin: 0;
     font-size: 14px;
     background: #fff;
@@ -117,54 +121,17 @@
   section#timeline article:nth-child(2n+2) div.inner h2:after {
     left: -5px;
   }
-  section#timeline article:nth-child(1) div.inner h2 {
+  section#timeline article:nth-child(odd) div.inner h2 {
     background: #bd493e;
   }
-  section#timeline article:nth-child(1) div.inner h2:after {
+  section#timeline article:nth-child(odd) div.inner h2:after {
     background: #bd493e;
   }
-  section#timeline article:nth-child(2) div.inner h2 {
+  section#timeline article:nth-child(even) div.inner h2 {
     background: #9da61e;
   }
-  section#timeline article:nth-child(2) div.inner h2:after {
+  section#timeline article:nth-child(even) div.inner h2:after {
     background: #9da61e;
-  }
-  section#timeline article:nth-child(3) div.inner h2 {
-    background: #4e8c94;
-  }
-  section#timeline article:nth-child(3) div.inner h2:after {
-    background: #4e8c94;
-  }
-  section#timeline article:nth-child(4) div.inner h2 {
-    background: #41779e;
-  }
-  section#timeline article:nth-child(4) div.inner h2:after {
-    background: #41779e;
-  }
-  section#timeline article:nth-child(5) div.inner h2 {
-    background: #9b59b6;
-  }
-  section#timeline article:nth-child(5) div.inner h2:after {
-    background: #9b59b6;
-  }
-  
-    section#timeline article:nth-child(6) div.inner h2 {
-    background: #385440;
-  }
-  section#timeline article:nth-child(6) div.inner h2:after {
-    background: #385440;
-  }
-   section#timeline article:nth-child(7) div.inner h2 {
-    background: #4c6f70;
-  }
-  section#timeline article:nth-child(7) div.inner h2:after {
-    background: #4c6f70;
-  }
-  section#timeline article:nth-child(8) div.inner h2 {
-    background: #73511f;
-  }
-  section#timeline article:nth-child(8) div.inner h2:after {
-    background: #73511f;
   }
 /* timeline customization */
 
@@ -192,7 +159,7 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
 						<li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS Status</li>
+						<li class="breadcrumb-item active " aria-current="page">Claim Status</li>
 					</ol>
 				</div>
 			</div>
@@ -217,7 +184,7 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 			        <span class="year"><%=year.format(object[5]) %></span>
 			      </span>
 			      <h2><%=object[7] %> at <%=time.format(object[5]) %></h2> 
-				  <p>
+				  <p style="background-color:  #f0f2f5;">
 				  <span class="remarks_title">Action By : </span>
 				  				<%=object[2] %>, <%=object[3] %><br>
 				  	<%if(object[6]!= null){%>
@@ -230,15 +197,8 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 			    </div>
 			  </article>
 			  
-			<%count++;}
- 					%> 
-			  
-		
+			<%count++;}%> 		
 		</section>
-      
-
-
-
 </div>
 
 

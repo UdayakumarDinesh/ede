@@ -88,4 +88,5 @@ public interface CHSSService {
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	
+	
 }
