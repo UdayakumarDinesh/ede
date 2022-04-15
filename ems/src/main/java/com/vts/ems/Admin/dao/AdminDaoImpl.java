@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.dao.CHSSDaoImpl;
+import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSTestSub;
 @Transactional
 @Repository
 public class AdminDaoImpl implements AdminDao{
@@ -119,4 +121,143 @@ public class AdminDaoImpl implements AdminDao{
 		return (long) count;
 	}
 	
+	
+
+	private static final String OTHERITEM = "SELECT  otheritemid , otheritemname FROM chss_other_items";
+	@Override
+	public List<Object[]> OtherItems() throws Exception {
+		logger.info(new Date() +"Inside OtherItems");	
+		Query query = manager.createNativeQuery(OTHERITEM);
+		
+		List<Object[]> FormModuleList= query.getResultList();
+		return FormModuleList;
+	}
+	
+	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid";
+	@Override
+	public List<Object[]> ChssTestSub() throws Exception
+	{
+		 logger.info(new Date() +"Inside ChssTestMain");	
+		 Query query = manager.createNativeQuery(TESTMAIN);
+		 List<Object[]> FormModuleList= query.getResultList();
+	return FormModuleList;
+    } 
+	private static final String TESTSUB="SELECT testmainid ,testmainname ,testmaintype FROM chss_test_main";
+	@Override
+	public List<Object[]>ChssTestMain () throws Exception
+	{
+		 logger.info(new Date() +"Inside ChssTestSub");	
+		 Query query = manager.createNativeQuery(TESTSUB);
+		 List<Object[]> FormModuleList= query.getResultList();
+	return FormModuleList;
+    }
+	
+	@Override
+	public Long AddTestSub(CHSSTestSub TestSub)throws Exception
+	{
+		logger.info(new Date() + "Inside AddTestSub()");
+		try {
+			manager.persist(TestSub);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return TestSub.getTestSubId();
+	}
+	
+	private static final String GETTESTSUB="FROM CHSSTestSub WHERE TestSubId=:TestSubId";
+	
+	@Override
+	public CHSSTestSub testSub(String TestSubId)throws Exception
+	{
+		logger.info(new Date() + "Inside testSub()");
+		
+		try {
+			return manager.find(CHSSTestSub.class, Long.parseLong(TestSubId));		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
+		
+	}
+	
+	@Override
+	public CHSSTestSub getTestSub(long subid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getTestSub()");
+		try {
+			return manager.find(CHSSTestSub.class, subid);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
+	@Override
+	public long EditTestSub(CHSSTestSub test) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditTestSub()");
+		try {
+			manager.merge(test);
+			manager.flush();
+			
+			return test.getTestSubId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	@Override
+	public CHSSOtherItems getOtherItem(int itemid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getOtherItem()");
+		try {
+			return manager.find(CHSSOtherItems.class, itemid);			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	@Override
+	public int AddOtherItem(CHSSOtherItems item)throws Exception
+	{
+		logger.info(new Date() + "Inside AddOtherItem()");
+		try {
+			manager.persist(item);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return item.getOtherItemId();
+	}
+	@Override
+	public int EditItem(CHSSOtherItems item) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditItem()");
+		try {
+			manager.merge(item);
+			manager.flush();		
+			return item.getOtherItemId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	
+	private static final String CHSSAPPROVAL="SELECT a.approveauthlistid ,a.processingofficer , a.verificationofficer, a.approvingofficer FROM chss_approve_auth a ,employee b WHERE b.empid =a.processingofficer  AND a.isactive='1'";
+	@Override
+	public Object[]   getChssAprovalList() throws Exception
+	{
+		 logger.info(new Date() +"Inside getChssAprovalList()");	
+		 try {
+			 Query query = manager.createNativeQuery(CHSSAPPROVAL);
+				return (Object[]) query.getResultList().get(0);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}	
+    }
 }

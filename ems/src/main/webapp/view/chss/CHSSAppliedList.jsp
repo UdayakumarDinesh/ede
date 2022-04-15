@@ -19,7 +19,6 @@
 		  font-style: normal;
 		  font-size: 13px;
 		  font-weight: 400 !important;
-		 
 	}
 </style>
 </head>
@@ -97,8 +96,7 @@
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											
-											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
+											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>"   title="Click for Details." ><%=obj[18] %> </a></td>
 											
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
@@ -108,7 +106,7 @@
 													</button>	
 												<%} %>
 												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												

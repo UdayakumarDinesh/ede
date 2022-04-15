@@ -20,5 +20,13 @@ public class CHSSOtherItems implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer OtherItemId;
 	private String OtherItemName;
+	private Integer PayLevel1;
+	private Integer PayLevel2;
+	private Integer PayLevel3;
+	private Integer PayLevel4;
 	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

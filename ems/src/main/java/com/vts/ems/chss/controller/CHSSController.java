@@ -70,13 +70,19 @@ public class CHSSController {
 	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
+		
 		try {
 			String logintype = (String)ses.getAttribute("LoginType");
 			
 		
 			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
 			req.setAttribute("dashboard", chssdashboard);
+			req.setAttribute("employee", service.getEmployee(EmpId));
+			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
+			req.setAttribute("empchsslist", service.empCHSSList(EmpId));
+			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
 			e.printStackTrace();

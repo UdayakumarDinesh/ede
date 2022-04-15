@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -606,5 +607,21 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.getFamilydetails(empid);
 		}
-	
+		@Override
+		public String getresult()throws Exception{
+			
+			String value="STARC/F&A/Med-Regular/";
+			int result = -1;
+		   
+		        Calendar cal = Calendar.getInstance();
+		        cal.setTime(new Date());
+		        result = cal.get(Calendar.YEAR);
+		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
+		     //List<Object[]> data= dao.getdata();
+		     if(true) {
+		    	 
+		     }
+			value+=String.valueOf(result-1)+"-"+String.valueOf(result)+"/"+month+"-"+result;
+			return value;
+		}
 }

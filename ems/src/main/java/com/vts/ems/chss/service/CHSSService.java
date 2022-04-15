@@ -91,4 +91,5 @@ public interface CHSSService {
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,
 			String EmpId) throws Exception;
 	
+	
 }

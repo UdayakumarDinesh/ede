@@ -11,7 +11,7 @@
  text-align: center;
  }
  
-.btn-group button {
+.btn-group1 button {
   background-color: #344b8a; /* Green background */
   border: 1px solid green; /* Green border */
   color: white; /* White text */
@@ -21,18 +21,18 @@
 }
 
 /* Clear floats (clearfix hack) */
-.btn-group:after {
+.btn-group1:after {
   content: "";
   clear: both;
   display: table;
 }
 
-.btn-group button:not(:last-child) {
+.btn-group1 button:not(:last-child) {
   border-right: none; /* Prevent double borders */
 }
 
 /* Add a background color on hover */
-.btn-group button:hover {
+.btn-group1 button:hover {
   background-color: #3e8e41;
 }
 </style>
@@ -144,7 +144,7 @@
 						 
 					</div>
 					
-					<div  class="btn-group" id = "dis" style="margin-top:20px;" align="center">
+					<div  class="btn-group1" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
 				 	<button type="submit" class="btn btnclr"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)">Education</button>
