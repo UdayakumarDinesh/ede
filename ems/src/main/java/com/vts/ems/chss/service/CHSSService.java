@@ -86,4 +86,5 @@ public interface CHSSService {
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	
+	
 }
