@@ -1153,8 +1153,7 @@ public class CHSSController {
 			
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
-			
-			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			
 			return "chss/CHSSForm";
 		}catch (Exception e) {
@@ -1191,8 +1190,7 @@ public class CHSSController {
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
-			
-			req.setAttribute("isapproval", isapproval);
+			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			
 			String filename="CHSS-Claim";
 			String path=req.getServletContext().getRealPath("/view/temp");
@@ -1328,9 +1326,8 @@ public class CHSSController {
 			
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
-			
+			long contingentid=claim1.getContingentId();
 			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
-			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
 				if (count > 0) {
@@ -1359,14 +1356,20 @@ public class CHSSController {
 					}	
 				}
 				
-				if(chssstatusid>=6) 
+				
+				if((chssstatusid==6 || chssstatusid == 9 || chssstatusid == 11 || chssstatusid == 13) && contingentid>0 ) {
+					redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
+					return "redirect:/ContingentBillData.htm";
+				}
+				
+				if(chssstatusid>=6 ) 
 				{
 					return "redirect:/CHSSBatchList.htm";
 				}else
 				{
 					return "redirect:/CHSSApprovalsList.htm";
 				}
-			} 
+			}
 			return "redirect:/CHSSAppliedList.htm";
 			
 		} catch (Exception e) {
@@ -1695,13 +1698,13 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ContingentBillData.htm "+Username);
 		try {
 			
+			
 			String contingentid = req.getParameter("contingentid");
 			if (contingentid == null) 
 			{
 				Map md=model.asMap();
 				contingentid=(String)md.get("contingentid");
 			}	
-			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("logintype", LoginType);
@@ -1768,7 +1771,7 @@ public class CHSSController {
 		try {
 			
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType));
-						
+			req.setAttribute("logintype", LoginType);
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
 			e.printStackTrace();

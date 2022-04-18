@@ -785,6 +785,7 @@ public class CHSSServiceImpl implements CHSSService {
 			if(claimstatus==1 || claimstatus==3 ) 
 			{
 				claim.setCHSSStatusId(2);
+				claim.setCHSSApplyDate(LocalDate.now().toString());
 			}
 			else if(claimstatus==2 || claimstatus==5 ) 
 			{
@@ -798,7 +799,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		if(action.equalsIgnoreCase("R")) 
 		{
-			if(claimstatus==2 || claimstatus==5 || claimstatus==6 ) 
+			if(claimstatus==2 || claimstatus==5 || claimstatus==6 || claimstatus==9 ) 
 			{
 				claim.setCHSSStatusId(3);
 			}
@@ -897,7 +898,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSContingent continnew =new CHSSContingent();
 		long contingentid=0;
 		continnew.setContingentBillNo(GenerateContingentNo());
-		continnew.setContingentDate(LocalDate.now().toString()); 
+//		continnew.setContingentDate(LocalDate.now().toString()); 
 		continnew.setClaimsCount(CHSSApplyId.length);
 		continnew.setContingentStatusId(1);
 //		continnew.setRemarks(billcontent);
@@ -966,15 +967,16 @@ public class CHSSServiceImpl implements CHSSService {
 				
 		if(action.equalsIgnoreCase("F")) 
 		{
-			if(continstatus==1 || continstatus==9 ) 
+			if(continstatus==1  || continstatus==9 || continstatus==11 || continstatus==13 ) 
 			{
 				continstatus=8;
+				contingent.setContingentDate(LocalDate.now().toString());
 			}
-			else if(continstatus==8 || continstatus==11 ) 
+			else if(continstatus==8  ) 
 			{
 				continstatus=10;
 			}
-			else if(continstatus==10 || continstatus==13 ) 
+			else if(continstatus==10  ) 
 			{
 				continstatus=12;
 			}	
@@ -1000,7 +1002,7 @@ public class CHSSServiceImpl implements CHSSService {
 			}	
 		}
 					
-		
+		contingent.setRemarks(remarks);
 		contingent.setContingentStatusId(continstatus);
 		contingent.setModifiedBy(Username);
 		contingent.setModifiedDate(sdf.format(new Date()));
@@ -1044,23 +1046,29 @@ public class CHSSServiceImpl implements CHSSService {
 		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
 		
 		HashMap<Long, ArrayList<Object[]>> sortedclaims  = new HashMap<Long, ArrayList<Object[]>>();
-		
 		if(claims.size()>0) 
 		{
-			ArrayList<Object[]> empclaims= new ArrayList<Object[]>();
-			Long empid = Long.parseLong(claims.get(0)[1].toString());
+			ArrayList<String> empstrs = new ArrayList<String>();
 			for(int i=0;i<claims.size();i++)
-			{				
-				empclaims.add(claims.get(i));
-				if(i<claims.size()-1 && empid!=Long.parseLong(claims.get(i+1)[1].toString()))
-				{
-					sortedclaims.put(empid, empclaims);
-					empid = Long.parseLong(claims.get(i+1)[1].toString());
-					empclaims= new ArrayList<Object[]>();
-				}else if(i==claims.size()-1)
-				{
-					sortedclaims.put(empid, empclaims);
+			{
+				if(!empstrs.contains(claims.get(i)[1].toString())) {
+					empstrs.add(claims.get(i)[1].toString());
 				}
+			}
+			
+			ArrayList<Object[]> empclaims= new ArrayList<Object[]>();
+			for(String empstr:empstrs) 
+			{
+				for(int i=0;i<claims.size();i++)
+				{				
+					if(empstr.equalsIgnoreCase(claims.get(i)[1].toString()) )
+					{
+						empclaims.add(claims.get(i));
+						
+					}
+				}
+				sortedclaims.put(Long.parseLong(empstr), empclaims);
+				empclaims= new ArrayList<Object[]>();
 			}
 		}
 		

@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.chss.model.CHSSTreatType"%>
@@ -21,6 +22,7 @@
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	String logintype = (String)request.getAttribute("logintype");
 %>
  
  <div class="col page card">
@@ -62,10 +64,10 @@
 				<div class="card-body " >
 				
 					<form action="ApprovedBiils.htm" method="POST" style="float: right;">
-								<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
-								<br>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
+							<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
+							<br>
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					</form>
 							
 					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -87,7 +89,11 @@
 										<tr>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1] %></td>
+											<%if(obj[2]!=null){ %>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[2].toString()))%></td>
+											<%}else{ %>
+											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(LocalDate.now().toString()))%></td>
+											<%} %>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[7] %></td>
 											
 											
@@ -107,16 +113,18 @@
 							</table>
 						</div>
 					</form>
+					<%if(logintype.equalsIgnoreCase("K")){ %>
 					<div class="row" style="margin-top: 10px;">
+					
 						<div class="col-12"  align="center" >
 							<form action="CHSSBatchList.htm" method="post">
 								<button class="btn btn-sm" style="background-color: #FFD36E " >Generate Contingent Bill</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
-							</div>
+						</div>
 							
 					</div>
-					
+					<%} %>
 				</div>
 			</div>		
 			

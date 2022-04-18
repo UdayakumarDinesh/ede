@@ -342,7 +342,7 @@ th,td
 						<%} %>
 						<tr>
 							<td><%=test[8] %></td>
-							<td colspan="3"><%=test[6] %></td>
+							<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 							<td class="right"><%=test[4] %></td>
 							<td class="right">
 								<%if(show){ %>
@@ -374,11 +374,11 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=medicine[8] %></td>
+							<td><%=medicine[7] %></td>
 							<td><%=medicine[2] %></td>
-							<td><%=medicine[6] %></td>
-							<td><%=medicine[5] %></td> 
-							<td class="right"><%=medicine[4] %></td>
+							<td><%=medicine[5] %></td>
+							<td><%=medicine[4] %></td> 
+							<td class="right"><%=medicine[3] %></td>
 							<td class="right">
 								<%if(show){ %>
 									<%=medicine[7] %>
@@ -386,8 +386,8 @@ th,td
 							</td>
 						</tr>					
 					<%i++;
-					itemstotal += Integer.parseInt(medicine[4].toString());
-					totalremamount +=Integer.parseInt(medicine[7].toString());
+					itemstotal += Integer.parseInt(medicine[3].toString());
+					totalremamount +=Integer.parseInt(medicine[6].toString());
 					}%>
 					
 					

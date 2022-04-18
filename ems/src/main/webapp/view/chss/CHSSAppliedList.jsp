@@ -81,7 +81,7 @@
 										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Ailment</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Claim Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
@@ -106,7 +106,7 @@
 													</button>	
 												<%} %>
 												
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												

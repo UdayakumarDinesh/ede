@@ -20,6 +20,7 @@ public class CHSSTestSub implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long TestSubId;
 	private Long TestMainId;
+	private String TestCode;
 	private String TestName;
 	private Integer TestRate;
 	private Integer IsActive;
