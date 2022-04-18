@@ -25,6 +25,7 @@ import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -242,7 +243,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CLAIMMEDICINESCOUNT = "SELECT COUNT(medicineid),'count' FROM chss_bill cb, chss_medicine cm WHERE cb.billid=cm.BillId AND cm.isactive=1 AND cb.chssapplyid=:CHSSApplyId";
+	private static final String CLAIMMEDICINESCOUNT = "SELECT COUNT(chssmedicineid),'count' FROM chss_bill cb, chss_medicine cm WHERE cb.billid=cm.BillId AND cm.isactive=1 AND cb.chssapplyid=:CHSSApplyId";
 	
 	@Override
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception
@@ -492,7 +493,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		manager.persist(medicine);
 		manager.flush();
 		
-		return medicine.getMedicineId();
+		return medicine.getCHSSMedicineId();
 	}
 	
 	@Override
@@ -521,11 +522,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
-	public CHSSMedicine getCHSSMedicine(String medicineid) throws Exception
+	public CHSSMedicine getCHSSMedicine(String CHSSMedicineId) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getCHSSMedicine");
 		try {
-			return manager.find(CHSSMedicine.class, Long.parseLong(medicineid));
+			return manager.find(CHSSMedicine.class, Long.parseLong(CHSSMedicineId));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -557,7 +558,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			manager.merge(medicine);
 			manager.flush();
 			
-			return medicine.getMedicineId();
+			return medicine.getCHSSMedicineId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -837,7 +838,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSMEDICINEDATALIST = "SELECT   cm.MedicineId,   cm.BillId,  cm.MedicineName,  cm.MedicineCost, cm.MedQuantity,cm.presQuantity,cm.MedsRemAmount ,cb.BillNo,  cb.BillDate FROM   chss_medicine cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
+	private static final String CHSSMEDICINEDATALIST = "SELECT   cm.CHSSMedicineId,   cm.BillId,  cm.MedicineName,  cm.MedicineCost, cm.MedQuantity,cm.presQuantity,cm.MedsRemAmount ,cb.BillNo,  cb.BillDate FROM   chss_medicine cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = :CHSSApplyId";
 
 	@Override
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception
@@ -980,13 +981,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
-	public long ContingentAdd(CHSSContingent other) throws Exception
+	public long ContingentAdd(CHSSContingent contingent) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO ContingentAdd");
-		manager.persist(other);
+		manager.persist(contingent);
 		manager.flush();
 		
-		return other.getContingentId();
+		return contingent.getContingentId();
 	}
 	
 	@Override
@@ -1001,6 +1002,24 @@ public class CHSSDaoImpl implements CHSSDao {
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;
+		}
+		
+	}
+	
+	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType IN ('K','V','W','Z')  ";
+	@Override
+	public List<Object[]> CHSSApprovalAuthList() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
+		try {
+			
+			Query query= manager.createNativeQuery(CHSSAPPROVALAUTHLIST);
+			return (List<Object[]>)query.getResultList();
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
 		}
 		
 	}
@@ -1147,4 +1166,32 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+	
+	
+
+	@Override
+	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSMedicineList");
+		List<CHSSMedicinesList> list= new ArrayList<CHSSMedicinesList>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSMedicinesList> cq= cb.createQuery(CHSSMedicinesList.class);
+			
+			Root<CHSSMedicinesList> root=cq.from(CHSSMedicinesList.class);								
+			Predicate p1=cb.equal(root.get("TreatTypeId"), Long.parseLong(treattypeid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSMedicinesList> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 }

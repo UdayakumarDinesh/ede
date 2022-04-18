@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
+import com.vts.ems.chss.Dto.CHSSContingentDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSOtherDto;
@@ -16,6 +17,7 @@ import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -78,7 +80,7 @@ public interface CHSSService {
 	public long MiscRemAmountEdit(CHSSMisc modal) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
 	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
-	public long CHSSClaimsApprove(String contingentid, String Username, String action, String billcontent, String logintype,String EmpId)throws Exception;
+	public long CHSSClaimsApprove(CHSSContingentDto dto)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList(String logintype) throws Exception;
 	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
@@ -90,6 +92,8 @@ public interface CHSSService {
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
+	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
+	public List<Object[]> CHSSApprovalAuthList() throws Exception;
 
 	
 }

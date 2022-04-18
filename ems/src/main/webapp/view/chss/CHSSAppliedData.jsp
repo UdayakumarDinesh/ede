@@ -1,3 +1,6 @@
+<%@page import="com.vts.ems.chss.model.CHSSApply"%>
+<%@page import="com.vts.ems.chss.model.CHSSApproveAuthority"%>
+<%@page import="com.vts.ems.chss.model.CHSSMedicinesList"%>
 <%@page import="com.vts.ems.chss.model.CHSSTestSub"%>
 <%@page import="com.vts.ems.chss.model.CHSSDoctorRates"%>
 <%@page import="com.vts.ems.chss.model.CHSSOtherItems"%>
@@ -70,7 +73,7 @@ p {
 	List<CHSSTestSub> testmainlist = (List<CHSSTestSub>)request.getAttribute("testmainlist");	
 	List<CHSSOtherItems> otheritemslist = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
 	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
-	
+	List<CHSSMedicinesList> allowedmeds =(List<CHSSMedicinesList>)request.getAttribute("allowedmed");
 	
 	Object[] consultcount = (Object[])request.getAttribute("consultcount");
 	Object[] medicinecount = (Object[])request.getAttribute("medicinecount");
@@ -225,16 +228,15 @@ p {
 												<td> <input type="number" class="form-control items numberonly" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
 												<%} %>
 												<td>
-													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
+														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 													</button>
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
-													</button>
-													
+													</button>													
 													<button type="button"  class="btn btn-sm" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
 														<i class="fa-solid fa-file-lines"></i>
-													</button>
-													
+													</button>													
 												</td>										
 											
 											</tr>
@@ -574,7 +576,17 @@ p {
 									<tbody>
 										<tr class="tr_clone_meds" >
 											<!-- <td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td> -->
-											<td><input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+											<td>
+												<%if(Integer.parseInt(chssapplydata[7].toString())==1){ %>
+												<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required">
+												<%}else{ %>
+													<select class="form-control selectpicker " name="meds-name" required="required" style="width: 100%" data-live-search="true"  >
+														<%for(CHSSMedicinesList medicine : allowedmeds ){ %>
+															<option value="<%=medicine.getMedicineName()%>"><%=medicine.getMedicineName() %></option>
+														<%} %>
+													</select>
+												<%} %>
+											</td>
 											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<!-- <td><input type="text" class="form-control meds-date" name="meds-date" id="meds-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td> -->
@@ -721,6 +733,8 @@ p {
 
 <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
 
+<input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
+
 <script type="text/javascript">
 
 var tab = '<%=tab%>';
@@ -769,11 +783,42 @@ function showBillDetails($billid)
 	
 }
 
+var $medsAllowedList;
+
+function MedsAllowedList()
+{
+	
+	var $treattype = $('#treattypeid').val();
+	
+	if(Number($treattype)>1){
+		$.ajax({
+	
+			type : "GET",
+			url : "CHSSMedicinesListAjax.htm",
+			data : {
+					
+				treattypeid : $treattype,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				
+				$medsAllowedList = Object.keys(result).map(function(e){
+					return result[e]
+				})
+				
+				console.log( $medsAllowedList);
+				
+			}
+		});
+	}
+	
+}
 
 $(document).ready( function() {
 	onlyNumbers();
 	getdoctorrates(<%=chssapplydata[7]%>);
-
+	MedsAllowedList();
 	<%if(billid!=null && !billid.equalsIgnoreCase("null") && Long.parseLong(billid)>0 ){%>
 		showBillDetails(<%=billid%>);
 	<%}%> 
@@ -1297,22 +1342,6 @@ $("table").on('click','.tbl-row-add-meds' ,function()
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
 
-	
-	 
-/*   	$clone.find('.meds-date').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		"maxDate" :new Date(),
-		"minDate":threeMonthsAgo,
-		"startDate" : new Date(),
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-	}
-	}); */
-  	
   	setTooltip();
   
 });
@@ -1330,25 +1359,11 @@ if(cl>1){
   
 });
 
-/* $('.meds-date').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"maxDate" :new Date(),
-	"minDate":threeMonthsAgo,
-	"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-}
-}); */
-
-
-
 function getMedicinesData(){
 	
 	var $billid = $('.billid').val();
+	
+	var $treattype = $('#treattypeid').val();
 	
 	$.ajax({
 
@@ -1364,6 +1379,7 @@ function getMedicinesData(){
 		var medsVals= Object.keys(result).map(function(e){
 			return result[e]
 		})
+		console.log(medsVals);
 		var medsHTMLStr = '';
 		for(var m=0;m<medsVals.length;m++)
 		{
@@ -1371,18 +1387,33 @@ function getMedicinesData(){
 			medsHTMLStr +=	'<tr> ';
 			medsHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
 			
-			medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name-'+meds.MedicineId+'" id="doc-name" value="'+meds.MedicineName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.MedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.MedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
-			/* let now = new Date(meds.MedicineDate);
-			var dateString = moment(now).format('DD-MM-YYYY');
+			if(Number($treattype)==1)
+			{
+				medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name-'+meds.CHSSMedicineId+'" id="med-name" value="'+meds.MedicineName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+			}
+			else if(Number($treattype)>1)
+			{
+				medsHTMLStr +=	'	<td><select class="form-control w-100 selectpicker" name="meds-name-'+meds.CHSSMedicineId+'"  required="required" data-live-search="true"   > ';
+				medsHTMLStr +=	'		<option value="" disabled selected>Choose...</option> ';
+							for(var ml=0;ml<$medsAllowedList.length;ml++)
+							{								
+								console.log(meds.MedicineName === $medsAllowedList[ml].MedicineName);
+								if(meds.MedicineName === $medsAllowedList[ml].MedicineName){
+				medsHTMLStr +=	'		<option value="'+$medsAllowedList[ml].MedicineName+'" selected >'+$medsAllowedList[ml].MedicineName+'</option> ';
+								}else{
+				medsHTMLStr +=	'		<option value="'+$medsAllowedList[ml].MedicineName+'"  >'+$medsAllowedList[ml].MedicineName+'</option> ';
+								}
+							}			
+				medsHTMLStr +=	'	</select> </td>';
+			}
 			
-			medsHTMLStr +=	'	<td><input type="text" class="form-control meds-date" name="meds-date-'+meds.MedicineId+'" id="meds-date" value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
-			 */
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.MedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.CHSSMedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.CHSSMedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+			
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.CHSSMedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td>';
-			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.MedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
-			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.MedicineId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
 			medsHTMLStr +=	'	</td> ';
 			medsHTMLStr +=	'</tr> ';
 			
@@ -1410,7 +1441,7 @@ function getMedicinesData(){
 		});
 		
 		onlyNumbers();
-		
+		$('.selectpicker').selectpicker('render'); 
 		}
 	});
 }

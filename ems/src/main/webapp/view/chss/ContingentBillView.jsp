@@ -221,23 +221,33 @@ th,td
 								</tr>
 						</table>
 						
+						<%if(!logintype.equalsIgnoreCase("K")){ %>
 						<div>
 							<p>
 								<%=contingentdata[8] %>
 							</p>
 						</div>
-						
+						<%} %>
 						
 						
 					</div>
 					</form>	
 					<%if(billscount>0){ %>
 					<form action="CHSSContingentApprove.htm" method="post">
+					
 						<div class="row">
+							
+							<%if( logintype.equalsIgnoreCase("K") ){ %>
+								<div class="col-12">
+									Content :
+									<textarea class="w-100 form-control" rows="4" cols="100" id="billcontent" name="billcontent" maxlength="3000"><%=contingentdata[8] %></textarea>
+								</div>	
+							<%} %>
+							
 							<div class="col-md-12" align="left">
-										Remarks : <br>
-										<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
-									</div>
+								Remarks : <br>
+								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
+							</div>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
@@ -276,7 +286,7 @@ function remarkRequired(action)
 	if(action === 'R'){
 		$('#remarks').attr('required', true);
 		if($('#remarks').val().trim()===''){
-			alert('Please Fill Remarks to Return! ');
+			alert('Please Fill Remarks to Submit! ');
 			return false;
 		}else{
 				return confirm('Are You Sure To Submit?');

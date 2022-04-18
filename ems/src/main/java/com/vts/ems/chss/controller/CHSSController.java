@@ -33,6 +33,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
+import com.vts.ems.chss.Dto.CHSSContingentDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSOtherDto;
@@ -42,6 +43,7 @@ import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -254,6 +256,7 @@ public class CHSSController {
 			req.setAttribute("tab", tab);
 			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
 			req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
+			req.setAttribute("allowedmed", service.getCHSSMedicinesList(apply[7].toString()));
 			
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
@@ -268,10 +271,23 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
-	
-	
-	
-	
+
+	@RequestMapping(value = "CHSSMedicinesListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String CHSSMedicinesListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetTestSubListAjax.htm "+Username);
+		List<CHSSMedicinesList> list=new ArrayList<CHSSMedicinesList>();
+		try {
+			String treattypeid = req.getParameter("treattypeid");
+			list = service.getCHSSMedicinesList(treattypeid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSMedicinesListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
 	
 	
 	@RequestMapping(value = "CHSSBillEdit.htm", method = RequestMethod.POST )
@@ -684,7 +700,7 @@ public class CHSSController {
 			String medspresquantity = req.getParameter("meds-presquantity-"+medicineid);
 			
 			CHSSMedicine meds= new CHSSMedicine();
-			meds.setMedicineId(Long.parseLong(medicineid));
+			meds.setCHSSMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
 //			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
 			meds.setMedicineCost(Integer.parseInt(medscost));
@@ -1560,7 +1576,7 @@ public class CHSSController {
 			
 			
 			CHSSMedicine medicine= new CHSSMedicine();
-			medicine.setMedicineId(Long.parseLong(medicineid));
+			medicine.setCHSSMedicineId(Long.parseLong(medicineid));
 			medicine.setMedsRemAmount(Integer.parseInt(medicineremamount));
 			
 			long count = service.MedRemAmountEdit(medicine);
@@ -1726,13 +1742,26 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		
 		logger.info(new Date() +"Inside CHSSClaimsApprove.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
 			String action = req.getParameter("action");
 			String remarks = req.getParameter("remarks");
 			
-			long count= service.CHSSClaimsApprove(contingentid, Username, action, remarks, LoginType,EmpId);
+			String billcontent = req.getParameter("billcontent");
+			
+			CHSSContingentDto dto = new CHSSContingentDto();
+			dto.setContingentid(contingentid);
+			dto.setUsername(Username);
+			dto.setAction(action);
+			dto.setRemarks(remarks);
+			dto.setLogintype(LoginType);
+			dto.setEmpId(EmpId);
+			dto.setBillcontent(billcontent);
+			dto.setPO(billcontent);
+			
+			long count= service.CHSSClaimsApprove( dto);
 //			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
 			
 			
@@ -1791,6 +1820,7 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
 						
 			return "chss/ContingetBill";
 		}catch (Exception e) {
@@ -1833,6 +1863,8 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			
 			
 			String filename="CHSSContingentList";
 			String path=req.getServletContext().getRealPath("/view/temp");
