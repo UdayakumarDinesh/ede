@@ -1089,4 +1089,9 @@ public class CHSSServiceImpl implements CHSSService {
 		return claims;
 	}
 	
+	@Override
+	public List<Object[]> GetApprovedBills(String bill)throws Exception
+	{
+		return dao.GetApprovedBills(bill);
+	}
 }

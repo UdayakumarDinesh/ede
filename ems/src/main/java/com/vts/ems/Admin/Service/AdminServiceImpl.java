@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
+import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 @Service
@@ -138,7 +139,8 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
-	public Object[] getChssAprovalList()throws Exception{
+	public Object[] getChssAprovalList()throws Exception
+	{
 		Object[] result= dao.getChssAprovalList();
 		
 		return result;
@@ -149,4 +151,9 @@ public class AdminServiceImpl implements AdminService{
 		return dao.UpdateApprovalAuth(processing,verification,approving,id,userid); 
 	}
 	
+	@Override
+	public long AddApprovalAuthority(CHSSApproveAuthority approve)throws Exception
+	{
+		return dao.AddApprovalAuthority(approve);
+	}
 }

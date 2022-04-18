@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.controller.CHSSController;
+import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.pis.service.PisService;
@@ -304,12 +305,28 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    			String verification = (String)req.getParameter("verification");
 		    			String approving = (String)req.getParameter("approving");
 		    			String id = (String)req.getParameter("AuthId");
-		    		int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId); 
-		    		if (result != 0) {
-		    			redir.addAttribute("result", "APPROVAL AUTHORITY EDITED SUCCESSFUL");
-					} else {
-						redir.addAttribute("resultfail", "APPROVAL AUTHORITY EDITED UNSUCCESSFUL");
-					}
+		    			
+		    			if(!id.isEmpty()) {
+		    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId); 
+				    		if (result != 0) {
+				    			redir.addAttribute("result", "APPROVAL AUTHORITY EDITED SUCCESSFUL");
+							} else {
+								redir.addAttribute("resultfail", "APPROVAL AUTHORITY EDITED UNSUCCESSFUL");
+							}
+		    			}else {
+		    				CHSSApproveAuthority approve = new CHSSApproveAuthority();
+		    				approve.setPO(Long.parseLong(processing));
+		    				approve.setVO(Long.parseLong(verification));
+		    				approve.setAO(Long.parseLong(processing));
+		    				approve.setIsActive(1);
+		    				long result = service.AddApprovalAuthority(approve); 
+				    		if (result != 0) {
+				    			redir.addAttribute("result", "APPROVAL AUTHORITY ADDED SUCCESSFUL");
+							} else {
+								redir.addAttribute("resultfail", "APPROVAL AUTHORITY ADDED UNSUCCESSFUL");
+							}
+		    			}
+		    	
 		    		return "redirect:/ChssApproval.htm";
 		    		}else {
 								Object[] approvallist=service.getChssAprovalList();

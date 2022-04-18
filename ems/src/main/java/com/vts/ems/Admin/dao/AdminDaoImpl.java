@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.dao.CHSSDaoImpl;
+import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -249,21 +250,27 @@ public class AdminDaoImpl implements AdminDao{
 		}		
 	}
 	
-	private static final String CHSSAPPROVAL="SELECT a.approveauthlistid ,a.processingofficer , a.verificationofficer, a.approvingofficer FROM chss_approve_auth a ,employee b WHERE a.processingofficer=b.empid AND a.isactive='1'";
+	private static final String CHSSAPPROVAL="SELECT a.approveauthlistid ,a.po , a.vo, a.ao FROM chss_approve_auth a ,employee b, employee c ,employee d WHERE a.po=b.empid AND a.vo=c.empid AND a.ao=d.empid AND a.isactive='1'";
 	@Override
 	public Object[]   getChssAprovalList() throws Exception
 	{
 		 logger.info(new Date() +"Inside getChssAprovalList()");	
 		 try {
 			 Query query = manager.createNativeQuery(CHSSAPPROVAL);
-				return (Object[]) query.getResultList().get(0);
+			 
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}	
     }
 	
-	private static final String APPROVALAUTH="UPDATE chss_approve_auth SET processingofficer=:processing , verificationofficer=:verification , approvingofficer=:approving , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE ApproveAuthListId=:id";
+	private static final String APPROVALAUTH="UPDATE chss_approve_auth SET po=:processing , vo=:verification , ao=:approving , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE ApproveAuthListId=:id";
 	@Override
 	public int UpdateApprovalAuth(String processing,String verification,String approving,String id ,String userid)throws Exception
 	{
@@ -284,5 +291,19 @@ public class AdminDaoImpl implements AdminDao{
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	@Override
+	public long AddApprovalAuthority(CHSSApproveAuthority approva)throws Exception
+	{
+		logger.info(new Date() + "Inside AddApprovalAuthority()");
+		try {
+			manager.persist(approva);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return approva.getApproveAuthListId();
 	}
 }

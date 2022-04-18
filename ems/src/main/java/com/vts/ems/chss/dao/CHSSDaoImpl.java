@@ -1133,5 +1133,18 @@ public class CHSSDaoImpl implements CHSSDao {
 			return 0;
 		}
 	}
-	
+	@Override
+	public List<Object[]> GetApprovedBills(String bill)throws Exception
+	{
+          logger.info(new Date() +"Inside DAO GetApprovedBills()");
+		
+		try {
+			Query query= manager.createNativeQuery("CALL chss_contingent_bills_list(:bill)");
+			query.setParameter("bill", bill);
+			return (List<Object[]>)query.getResultList();		
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
 }

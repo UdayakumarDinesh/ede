@@ -1872,5 +1872,19 @@ public class CHSSController {
 
 	}
 	
+	@RequestMapping(value="ApprovedBiils.htm" , method=RequestMethod.POST)
+	public String ApprovedBiils(HttpSession ses,HttpServletRequest req , RedirectAttributes redir)throws Exception{
+		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ApprovedBiils.htm "+UserId);
+		try {
+			List<Object[]> approvedlist = service.GetApprovedBills("0");
+			req.setAttribute("ApprovedBiils", approvedlist);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+		}
+		return "chss/CHSSApprovedBills";
+	}
 	
 }

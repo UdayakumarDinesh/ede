@@ -84,6 +84,6 @@ public interface CHSSDao {
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public int getdata(String bill)throws Exception;
 	public List<Object> ContingentApplyIds(String contingentid) throws Exception;
-
+	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 
 }
