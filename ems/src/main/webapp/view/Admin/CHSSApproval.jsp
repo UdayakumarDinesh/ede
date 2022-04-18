@@ -32,7 +32,7 @@ hr{
 <%
 Object[] approval = (Object[])request.getAttribute("ApprovalList");
 List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
-System.out.println(approval[0]+""+approval[1]);
+
 %>
 
 
@@ -83,7 +83,7 @@ System.out.println(approval[0]+""+approval[1]);
                 		<div class="col-md-1"></div>
                     		<div class="col-md-3">
                         		<div class="form-group">
-                            		<label class="control-label">Processing Officer</label>
+                            		<label class="control-label">Processing Officer</label><span class="mandatory">*</span>
                               		<select class="form-control select2" id="EmpId1" required="required" name="processing">
     									<option disabled="true"  selected="selected" value="">Select </option>
     									<% if(emplist!=null){ for(Object[] O:emplist){%>
@@ -94,7 +94,7 @@ System.out.println(approval[0]+""+approval[1]);
                     		</div>
          					<div class="col-md-3">
                         		<div class="form-group">
-                            		<label class="control-label">Verification Officer</label>
+                            		<label class="control-label">Verification Officer</label><span class="mandatory">*</span>
                               		<select class="form-control select2" id="EmpId2" required="required" name="verification">
     									<option disabled="true"  selected="selected" value="">Select </option>
     										<% if(emplist!=null){ for(Object[] O:emplist){%>
@@ -105,7 +105,7 @@ System.out.println(approval[0]+""+approval[1]);
                     		</div>
                     		<div class="col-md-3">
                         		<div class="form-group">
-                            		<label class="control-label">Approving Officer</label>
+                            		<label class="control-label">Approving Officer</label><span class="mandatory">*</span>
                               		<select class="form-control select2" id="EmpId3" required="required" name="approving">
     									<option disabled="true"  selected="selected" value="">Select </option>
     										<% if(emplist!=null){ for(Object[] O:emplist){%>

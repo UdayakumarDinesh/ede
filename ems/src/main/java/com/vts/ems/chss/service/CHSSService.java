@@ -89,7 +89,7 @@ public interface CHSSService {
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
-	
+	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 
 	
 }
