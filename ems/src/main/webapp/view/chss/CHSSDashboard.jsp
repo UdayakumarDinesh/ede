@@ -353,10 +353,10 @@
 										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Ailment</td>
+										<!-- <td style="padding-top:5px; padding-bottom: 5px;">Ailment</td> -->
 										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Claim Amount</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amount</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Claim Amnt</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amnt</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
@@ -369,7 +369,7 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
+											<%-- <td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td> --%>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>

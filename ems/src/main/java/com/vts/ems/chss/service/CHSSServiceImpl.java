@@ -209,10 +209,6 @@ public class CHSSServiceImpl implements CHSSService {
 		LocalDate Fromdate= LocalDate.parse(FromDate,formatter);
 		LocalDate ToDate= LocalDate.parse(Todate, formatter);
 		
-		
-		System.out.println(empid + PatientId + IsSelf + Fromdate + ToDate);
-
-		
 		List<Object[]> empCHSSList =  dao.empCHSSList(empid,PatientId, Fromdate, ToDate, IsSelf);
 		return empCHSSList;
 	}
