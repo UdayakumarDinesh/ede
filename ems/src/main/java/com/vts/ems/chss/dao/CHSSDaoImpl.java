@@ -1,5 +1,6 @@
 package com.vts.ems.chss.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ";
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ORDER BY relation_id  ";
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -259,15 +260,19 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String EMPCHSSLIST = "CALL chss_emp_claimlist(:empid)";
+	private static final String EMPCHSSLIST = "CALL chss_emp_claims(:empid,:patientid,:fromdate,:todate,:isself)";
 	
 	@Override
-	public List<Object[]> empCHSSList(String empid) throws Exception
+	public List<Object[]> empCHSSList(String empid,String PatientId, LocalDate FromDate, LocalDate Todate, String IsSelf) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO empCHSSList");
 		try {
 			Query query = manager.createNativeQuery(EMPCHSSLIST);
 			query.setParameter("empid", empid);
+			query.setParameter("patientid", PatientId);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", Todate);
+			query.setParameter("isself", IsSelf);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();

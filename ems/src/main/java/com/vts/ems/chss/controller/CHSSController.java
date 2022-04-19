@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,6 +65,8 @@ public class CHSSController {
 	CHSSService service;
 	@Autowired
 	AdminService adminservice;
+	
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "CHSSDashboard.htm" )
 	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -73,13 +76,37 @@ public class CHSSController {
 		
 		try {
 			String logintype = (String)ses.getAttribute("LoginType");
+
+			SimpleDateFormat sf= new SimpleDateFormat("yyyy");
+			SimpleDateFormat sf1= new SimpleDateFormat("dd-MM-yyyy");
+	
+			String PatientId="0";
+			if(req.getParameter("patientidvalue")!=null) {
+				PatientId= req.getParameter("patientidvalue");
+			}
+			String IsSelf="Y";
+			if(req.getParameter("isselfvalue")!=null) {
+				IsSelf= req.getParameter("isselfvalue");
+			}
+			String FromDate="01-04-"+sf.format(new Date()) ;
+			if(req.getParameter("fromdate")!=null) {
+				FromDate= req.getParameter("fromdate");
+			}
+			String ToDate=sf1.format(new Date());
+			if(req.getParameter("todate")!=null) {
+				ToDate= req.getParameter("todate");
+			}
 			
-		
+			
+			
 			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
 			req.setAttribute("dashboard", chssdashboard);
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
-			req.setAttribute("empchsslist", service.empCHSSList(EmpId));
+			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
+			req.setAttribute("Fromdate", FromDate );
+			req.setAttribute("Todate", ToDate );;
+			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
 			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
@@ -198,7 +225,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSAppliedList.htm "+Username);
 		try {
 			
-			req.setAttribute("empchsslist", service.empCHSSList(EmpId));
+			//req.setAttribute("empchsslist", service.empCHSSList(EmpId));
 			return "chss/CHSSAppliedList";
 			
 		 }catch (Exception e) {

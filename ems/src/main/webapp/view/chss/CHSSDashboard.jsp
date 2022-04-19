@@ -56,7 +56,7 @@
 }
 
 .text-container h3 {
-  margin: 16px 0px 0px 0px;
+  margin: 16px 0px 3px 0px;
   font-size: 18px;
       font-family: 'Lato';
     text-transform: capitalize;
@@ -74,8 +74,9 @@
 .profile-card-container{
 	border-radius: 12px;
     background-color: white;
-    max-height: 16rem !important;
+    max-height: 20rem !important;
     padding: 0px 20px;
+    margin: 10px 20px 25px 20px;
 }
 
 .fa-angle-left, .fa-angle-right{
@@ -85,7 +86,12 @@
 }
 
 .table-card , .profile-card-container{
-	  margin: 0px 20px;
+	  border: none;
+	  box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
+}
+
+.table-card{
+	border-radius: 0px !important;
 }
 
 .profile-card-container > .row {
@@ -167,6 +173,23 @@
   background-color: lightgray;
 }
 
+.select2-container{
+	width:282px !important;
+}
+
+.custom-navbar{
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
+}
+
+.employee-details{
+	margin-bottom: 0px !important;
+	font-size: 12px;
+    color: #005C97;
+    font-weight: 600;
+    text-align: left;
+    padding: 0px 0px 0px 2rem;
+}
 
 </style>
 </head>
@@ -179,7 +202,12 @@
 	List<Object[]> empchsslist = (List<Object[]>)request.getAttribute("empchsslist");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-
+	String Fromdate=(String)request.getAttribute("Fromdate");
+	String Todate=(String)request.getAttribute("Todate");
+	String patientidvalue = "0";
+	if(request.getAttribute("patientidvalue")!=null){
+		patientidvalue=(String)request.getAttribute("patientidvalue");
+	}
 
 %>
 
@@ -199,14 +227,14 @@
 			</div>			
 		</div>
 	</div>	
-	<br>
- 	<div class="card-body" >
+
+ 	<%-- <div class="card-body" >
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="card" >
 				<div class="card-body " >
 					<div class="row" > 
-						<%-- <div class="col-md-3 ">
+						<div class="col-md-3 ">
 							<button type="submit" class=" db-button w-100" formaction="CHSSApply.htm" >CHSS Apply</button>
 						</div>
 						<div class="col-md-3 ">
@@ -217,7 +245,7 @@
 								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
 							</div>
 
-						<%} %> --%>
+						<%} %>
 						
 						
 						<%if(dashboard!=null){  for(Object[] O:dashboard){%>							
@@ -231,7 +259,7 @@
 			</div>		
 		</form>
 		
-	</div> 
+	</div>  --%>
 
  </div> 
  
@@ -251,6 +279,8 @@
 					</div>
 					<div class="text-container">
 						<h3><%=employee.getEmpName() %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
+						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
+						<p class="employee-details"> 	&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> 
 					</div>
 				</div>	
 			</div>
@@ -270,24 +300,50 @@
 						</div>
 					</div>
 					<div class="text-container">
-						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;text-transform: lowercase;" >(<%=obj[7] %>)</span></h3>
+						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;" >(<%=obj[7] %>)</span></h3>
+						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
+						<p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> 
 					</div>
 				</div>	
 			</div>  
 		</div>
 	 <%} %>
 	
-</div>
+	</div>
 
 
 </div>
 
 
 
-<br>
+	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
-<div class="card table-card" >
-	<div class="card-body " >				
+		<div class="col-md-4">
+		</div>
+		<label style="margin-left: 150px;  font-weight: 800">From Date: </label>
+		<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;"
+		<%if(Fromdate!=null){%> value="<%=(Fromdate) %>" <%} %> onchange="changeform()" >
+					  
+	
+		<label style="font-weight: 800">To Date: </label>
+		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
+					 	 <%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform()" >  
+					
+		<form class="form-inline my-2 my-lg-0">
+	    	<select class="form-control select2" id="empname" required="required" name="empname"  onchange="changeform()" >
+					<option value="0" <%if(patientidvalue.equalsIgnoreCase("0")){ %>selected<% } %> >All</option>
+					<option value="<%=employee.getEmpId()%>" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))){ %>selected<% } %> ><%=employee.getEmpName() %> (Self)</option>
+					<% for (Object[] obj : empfamilylist) {%>
+						<option value="<%=obj[0]%>" <%if(obj[0].toString().equalsIgnoreCase(patientidvalue)){ %>selected<% } %> ><%=obj[1]%> (<%=obj[7] %>)</option> 
+					<%} %>
+			</select>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    	</form>			
+
+	</div>
+
+<div class="card table-card dashboard-margin" >
+	<div class="card-body "  style="padding: 1rem !important;">				
 		<form action="#" method="post" id="ClaimForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
@@ -310,13 +366,13 @@
 									for(Object[] obj : empchsslist){ 
 										slno++; %>
 										<tr>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
+											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;">-</td>
-											<td style="padding-top:5px; padding-bottom: 5px;">-</td>
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
 											
 											
@@ -345,30 +401,35 @@
 				</div>
 		</div>		
 
-<!-- 
-  <div class="outer-wrapper">
-    <div class="inner-wrapper">
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-      <div class="pseudo-item"></div>
-    </div>
-  </div>
-
-
- -->
-<form action="CHSSApplyDetails.htm" method="post" id="myform" style="padding: 1rem">
+<form action="CHSSApplyDetails.htm" method="post" id="myform" >
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
+<form action="CHSSDashboard.htm" method="post" id="changeform" >
+	<input type="hidden" name="isselfvalue" id="isselfvalue" >
+	<input type="hidden" name="patientidvalue" id="patientidvalue" >
+	<input type="hidden" name="fromdate" id="fromdate" >
+	<input type="hidden" name="todate" id="todate" >
+	
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+
 
 <script>
+
+function changeform(){
+	$('#fromdate').val($('#datepicker1').val());
+	$('#todate').val($('#datepicker3').val());
+	$('#patientidvalue').val($('#empname').val());
+	if($('#empname').val()=='7'){
+		$('#isselfvalue').val('Y')		
+	}else{
+		$('#isselfvalue').val('N')		
+	}
+	$('#changeform').submit();
+}
 
 function submitform(value,patientid){
 	$('#isself').val(value)
@@ -376,35 +437,40 @@ function submitform(value,patientid){
 	$('#myform').submit();
 }
 
+$(document).ready(function(){
+	
+    $("#datepicker1").daterangepicker({
+        minDate: 0,
+        maxDate: 0,
+        numberOfMonths: 1,
+        autoclose: true,
+        "singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+        onSelect: function(selected) {
+        $("#datepicker3").datepicker("option","minDate", selected)
+        },
+        locale : {
+			format : 'DD-MM-YYYY'
+		}
+    });
 
+    $("#datepicker3").daterangepicker({
+        minDate: 0,
+        maxDate: 0, 
+        numberOfMonths: 1,
+        autoclose: true,
+        "singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+	    onSelect: function(selected) {
+	    $("#datepicker1").datepicker("option","maxDate", selected)
+        },
+        locale : {
+			format : 'DD-MM-YYYY'
+		}
+    }); 
 
-
-$('#carousel-example').on('slide.bs.carousel', function (e) {
-    /*
-        CC 2.0 License Iatek LLC 2018 - Attribution required
-    */
-    var $e = $(e.relatedTarget);
-    var idx = $e.index();
-    var itemsPerSlide = 6;
-    var totalItems = $('.carousel-item').length;
-    console.log(totalItems)
-    console.log(idx)
- 
-    if (idx >= totalItems-(itemsPerSlide-1)) {
-        var it = itemsPerSlide - (totalItems - idx);
-        
-        console.log(it)
-        
-        for (var i=0; i<it; i++) {
-            // append slides to end
-            if (e.direction=="left") {
-                $('.carousel-item').eq(i).appendTo('.carousel-inner');
-            }
-            else {
-                $('.carousel-item').eq(0).appendTo('.carousel-inner');
-            }
-        }
-    }
 });
 </script>
 </body>

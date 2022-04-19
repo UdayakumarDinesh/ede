@@ -2,6 +2,7 @@ package com.vts.ems.chss.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -199,9 +200,18 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSBillsList(chssapplyid);
 	}
 	@Override
-	public List<Object[]> empCHSSList(String empid) throws Exception
+	public List<Object[]> empCHSSList(String empid,String PatientId, String FromDate, String Todate, String IsSelf) throws Exception
 	{
-		List<Object[]> empCHSSList =  dao.empCHSSList(empid);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(FromDate,formatter);
+		LocalDate ToDate= LocalDate.parse(Todate, formatter);
+		
+		
+		System.out.println(empid + PatientId + IsSelf + Fromdate + ToDate);
+
+		
+		List<Object[]> empCHSSList =  dao.empCHSSList(empid,PatientId, Fromdate, ToDate, IsSelf);
 		return empCHSSList;
 	}
 	@Override

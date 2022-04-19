@@ -1,5 +1,7 @@
 package com.vts.ems.chss.dao;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSApply;
@@ -29,7 +31,7 @@ public interface CHSSDao {
 	public CHSSApply CHSSApplied(String chssapplyid) throws Exception;
 	public Object[] CHSSAppliedData(String chssapplyid) throws Exception;
 	public List<Object[]> CHSSBillsList(String chssapplyid) throws Exception;
-	public List<Object[]> empCHSSList(String empid) throws Exception;
+	public List<Object[]> empCHSSList(String empid,String PatientId, LocalDate FromDate, LocalDate Todate, String IsSelf) throws Exception;
 	public CHSSBill getCHSSBill(String billid) throws Exception;
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception;
