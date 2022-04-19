@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1166,7 +1168,7 @@ public class CHSSController {
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
-			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
@@ -1190,7 +1192,6 @@ public class CHSSController {
 		try {	
 			String chssapplyid = req.getParameter("chssapplyid");
 			
-			String isapproval = req.getParameter("isapproval");
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
@@ -1207,7 +1208,7 @@ public class CHSSController {
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
-			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			String filename="CHSS-Claim";
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
@@ -1821,7 +1822,7 @@ public class CHSSController {
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
-						
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			return "chss/ContingetBill";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1864,7 +1865,7 @@ public class CHSSController {
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
-			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			
 			String filename="CHSSContingentList";
 			String path=req.getServletContext().getRealPath("/view/temp");

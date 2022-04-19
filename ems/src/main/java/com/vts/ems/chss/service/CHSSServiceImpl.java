@@ -3,14 +3,17 @@ package com.vts.ems.chss.service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.internet.MimeMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -36,11 +39,15 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
 public class CHSSServiceImpl implements CHSSService {
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	private static final Logger logger = LogManager.getLogger(CHSSServiceImpl.class);
 	
@@ -177,9 +184,9 @@ public class CHSSServiceImpl implements CHSSService {
 			start=String.valueOf(today.getYear()).substring(2);
 			end =String.valueOf(today.getYear()+1).substring(2);
 		}				
-		
-		String applynocount=dao.CHSSApplyNoCount(start+end);
-		String CNo = start+end+(Long.parseLong(applynocount)+1);
+		String CNo = start+end+"/"+today.getMonth().toString().toUpperCase().substring(0,3)+"/";
+		String applynocount=dao.CHSSApplyNoCount(CNo);
+		CNo=CNo+(Long.parseLong(applynocount)+1);
 		
 		return CNo;
 	}
@@ -355,71 +362,6 @@ public class CHSSServiceImpl implements CHSSService {
 			return applyamount;
 		}
 		
-		
-		
-//		if(isfresh.equalsIgnoreCase("Fresh")) 
-//		{
-//			if(speciality.equalsIgnoreCase("Specialist")) 
-//			{
-//				if(applyamount>=350) {
-//					return 350;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-//			{
-//				if(applyamount>=450) {
-//					return 450;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-//			{
-//				if(applyamount>=100) {
-//					return 100;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//		}
-//		else if(isfresh.equalsIgnoreCase("FollowUp")) 
-//		{
-//			if(speciality.equalsIgnoreCase("Specialist")) 
-//			{
-//				if(applyamount>=300) {
-//					return 300;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//			else if(speciality.equalsIgnoreCase("Super Specialist")) 
-//			{
-//				if(applyamount>=350) {
-//					return 350;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//			else if(speciality.equalsIgnoreCase("Dental Surgeons")) 
-//			{
-//				if(applyamount>=100) {
-//					return 100;
-//				}else {
-//					return applyamount;
-//				}
-//			}
-//		}else
-//		{
-//			if(applyamount>=300) {
-//				return 300;
-//			}else
-//			{
-//				return applyamount;
-//			}
-//		}
-//		
 
 	}
 	
@@ -782,39 +724,90 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
+		EMSNotification notify = new EMSNotification();
+		String mailbody = "";
+		String Email="";
 		if(action.equalsIgnoreCase("F")) 
 		{
+			notify.setNotificationUrl("CHSSApprovalsList.htm");
+			notify.setNotificationMessage("Medical Claim Application Recieved");
+			
 			if(claimstatus==1 || claimstatus==3 ) 
 			{
+				
 				claim.setCHSSStatusId(2);
 				claim.setCHSSApplyDate(LocalDate.now().toString());
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("K");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
+				mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") Recieved for Verification";
+				
 			}
 			else if(claimstatus==2 || claimstatus==5 ) 
 			{
-				claim.setCHSSStatusId(4);
+				claim.setCHSSStatusId(4);	
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("V");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
+				
 			}
 			else if(claimstatus==4) 
 			{
 				claim.setCHSSStatusId(6);
-			}			
+				
+			}
+			
 		}
 		
 		if(action.equalsIgnoreCase("R")) 
 		{
+			notify.setNotificationMessage("Medical Claim Application Returned");
+			mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") is Returned";
+
 			if(claimstatus==2 || claimstatus==5 || claimstatus==6 || claimstatus==9 ) 
 			{
 				claim.setCHSSStatusId(3);
+			
+				notify.setEmpId(claim.getEmpId());
+				Employee emp= dao.getEmployee(claim.getEmpId().toString());				
+				if( emp.getEmail()!=null) { 	Email =  emp.getEmail();		}
+				notify.setNotificationUrl("CHSSAppliedList.htm");
+				
 			}
 			else if(claimstatus==4) 
 			{
 				claim.setCHSSStatusId(5);
+				Object[] notifyto = dao.CHSSApprovalAuth("K");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				notify.setNotificationUrl("CHSSApprovalsList.htm");
 			}		
+			
 			claim.setContingentId(0L);
 		}
 		
 		claim.setRemarks(remarks);
 		claim.setModifiedBy(Username);
 		claim.setModifiedDate(sdf.format(new Date()));
+		
+		
+		dao.NotificationAdd(notify);
 		
 		CHSSApplyTransaction transac =new CHSSApplyTransaction();
 		transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -824,13 +817,41 @@ public class CHSSServiceImpl implements CHSSService {
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.CHSSApplyTransactionAdd(transac);
 		
+		if(claim.getCHSSStatusId()!=6)
+		{
+		
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(Long.parseLong(EmpId));
+			notify.setIsActive(1);
+			notify.setCreatedBy(Username);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			dao.NotificationAdd(notify);
+		}
+		
+		
+		
+//		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
+//		{
+//			MimeMessage msg = javaMailSender.createMimeMessage();
+//			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+//			
+//			helper.setTo(Email);	
+//			helper.setSubject( "Test mail from ems application");
+//			helper.setText( mailbody , true);
+//			javaMailSender.send(msg); 
+//		}
+		
+		
+		
+		
+		
+		
 		return dao.CHSSApplyEdit(claim);
 	}
 		
 	@Override
 	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception 
 	{
-		
 		return dao.CHSSApproveClaimList(logintype);
 	}
 	
@@ -946,23 +967,40 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		try {
 			String value="STARC/F&A/Med-Regular/";
-			int result = -1;
-		   
-		        Calendar cal = Calendar.getInstance();
-		        cal.setTime(new Date());
-		        result = cal.get(Calendar.YEAR);
-		     String month=  LocalDate.now().getMonth().minus(1).toString();	 
-			value+=String.valueOf(result-1)+"-"+String.valueOf(result-2000)+"/"+month+"-"+result+"/";
-			 int data= dao.getdata(value);
+						
+			LocalDate today= LocalDate.now();
+			String start ="";
+			String end="";
+			int currentmonth= today.getMonthValue();
+			if(currentmonth<4) 
+			{
+				start = String.valueOf(today.getYear()-1);
+				end =String.valueOf(today.getYear()).substring(2);
+			}
+			else
+			{
+				start=String.valueOf(today.getYear());
+				end =String.valueOf(today.getYear()+1).substring(2);
+			}		
+			value = value+start+"-"+end+"/"+today.minusMonths(1).getMonth().toString().toUpperCase()+"-"+end;
 			
-			 value+=++data;
-			return value;
+			int count=dao.getdata(value);
+			
+			if(count==0) {
+				return value;
+			}else 
+			{
+				return  value+"/"+(count+1);
+			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return "";
 		}
 	}
 	
+
 	
 	@Override
 	public long CHSSClaimsApprove(CHSSContingentDto dto) throws Exception 
@@ -1120,4 +1158,5 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.CHSSApprovalAuthList();
 	}
+	
 }

@@ -17,6 +17,7 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 
 public interface CHSSDao {
@@ -88,5 +89,7 @@ public interface CHSSDao {
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
 	public List<Object[]> CHSSApprovalAuthList() throws Exception;
+	public Object[] CHSSApprovalAuth(String Logintype) throws Exception;
+	public long NotificationAdd(EMSNotification notification) throws Exception;
 
 }

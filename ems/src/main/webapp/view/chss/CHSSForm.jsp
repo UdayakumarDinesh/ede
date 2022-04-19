@@ -133,7 +133,7 @@ th,td
 		show = true;
 	} 
 	
-	
+	String LabLogo = (String)request.getAttribute("LabLogo");
 	
 %>
 
@@ -141,7 +141,7 @@ th,td
 	<div align="center">
 		<div>
 			<div>
-				<h3>MEDICAL CLAIM</h3>
+				<figure><img style="width: 2cm; height: 2cm"  src="data:image/png;base64,<%=LabLogo%>"></figure><h3>MEDICAL CLAIM</h3>
 				<div align="right"> No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
 			</div>
 		

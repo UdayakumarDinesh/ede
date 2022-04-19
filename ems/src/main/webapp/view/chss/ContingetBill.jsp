@@ -116,19 +116,22 @@ th,td
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
 	/* Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); */
 	List<Object[]> ApprovalAuth = (List<Object[]>)request.getAttribute("ApprovalAuth");
+	String LabLogo = (String)request.getAttribute("LabLogo");
 	
-	
-
+	if(contingentdata[2]==null){
+		contingentdata[2] = LocalDate.now().toString();
+	}
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	
 %>
 
 <div align="center">
-	
-	<div style="text-align: left;margin: 5px 5px 5px 10px;">
-		<span style="font-size: 20px; font-weight:600; ">SITAR</span> <br>
-		<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
+	<img style="width: 2cm; height: 2cm;margin: 10px;" align="middle"   src="data:image/png;base64,<%=LabLogo%>">
+	<div style="text-align: left ;margin: 0px 5px 5px 10px;">
+		
+		<br>
+		<span style="font-size: 15px; font-weight:600;text-align: left; ">Ref: <%=contingentdata[1] %></span><span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
 		<p>
 			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
 			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
@@ -177,9 +180,7 @@ th,td
 			billscount += Integer.parseInt(obj[22].toString());
 			} 
 		}%>
-
 	
-		
 			<tr>
 				<td colspan="4" class="right">Total</td>
 				<td class="center"><%=billscount %></td>

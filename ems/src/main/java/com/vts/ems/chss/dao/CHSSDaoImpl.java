@@ -33,6 +33,7 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 
 
@@ -1006,23 +1007,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType IN ('K','V','W','Z')  ";
-	@Override
-	public List<Object[]> CHSSApprovalAuthList() throws Exception
-	{
-		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
-		try {
-			
-			Query query= manager.createNativeQuery(CHSSAPPROVALAUTHLIST);
-			return (List<Object[]>)query.getResultList();
-			
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<Object[]>();
-		}
-		
-	}
+
 	
 	@Override
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception
@@ -1192,6 +1177,63 @@ public class CHSSDaoImpl implements CHSSDao {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType IN ('K','V','W','Z')  ";
+	@Override
+	public List<Object[]> CHSSApprovalAuthList() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
+		try {
+			
+			Query query= manager.createNativeQuery(CHSSAPPROVALAUTHLIST);
+			return (List<Object[]>)query.getResultList();
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
+	private static final String CHSSAPPROVALAUTH  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType  ";
+	@Override
+	public Object[] CHSSApprovalAuth(String Logintype) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApprovalAuth");
+		try {
+			
+			Query query= manager.createNativeQuery(CHSSAPPROVALAUTH);
+			query.setParameter("loginType", Logintype);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public long NotificationAdd(EMSNotification notification ) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO NotificationAdd");
+		try {
+			manager.persist(notification);
+			manager.flush();
+			
+			return notification.getNotificationId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
 	}
 	
 }
