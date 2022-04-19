@@ -104,8 +104,10 @@ th,td
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
 						<%if(chssstatusid==3 || chssstatusid==1){ %>
 						<li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li>
-						<%}else if(chssstatusid<=7){ %>
+						<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5  ){ %>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
+						<%}else if(chssstatusid==6 ||   chssstatusid==9 ||   chssstatusid==11 ||   chssstatusid==13){ %>
+						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Approval List</a></li>
 						<%}else{ %>
 						<li class="breadcrumb-item "><a href="CHSSBatchList.htm">CHSS Contingent List</a></li>
 						<%} %>
@@ -329,7 +331,7 @@ th,td
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
 														<td class="right">
-														<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>	 
+														<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
 															<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
 															<button type="submit" class="btn btn-sm editbtn"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -369,10 +371,10 @@ th,td
 												<%} %>
 												<tr>
 													<td><%=test[8] %></td>
-													<td colspan="3"><%=test[6] %></td>
+													<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 													<td class="right"><%=test[4] %></td>
 													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>	 
+													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
 														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -413,27 +415,27 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=medicine[8] %></td>
+													<td><%=medicine[7] %></td>
 													<td><%=medicine[2] %></td>
-													<td><%=medicine[6] %></td>
-													<td><%=medicine[5] %></td> 
-													<td class="right"><%=medicine[4] %></td>
+													<td><%=medicine[5] %></td>
+													<td><%=medicine[4] %></td> 
+													<td class="right"><%=medicine[3] %></td>
+													<td class="right">
+													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ){ %>	 
 													
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>	 
-													
-														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[7]%>">
+														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 													
 													<%}else if((chssstatusid>=6)){ %>
-															<%=medicine[7]%>			
+															<%=medicine[6]%>			
 													<%} %>
 													</td>
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(medicine[4].toString());
-											totalremamount +=Integer.parseInt(medicine[7].toString());
+											itemstotal += Integer.parseInt(medicine[3].toString());
+											totalremamount +=Integer.parseInt(medicine[6].toString());
 											}%>
 											
 									</form>
@@ -463,7 +465,7 @@ th,td
 													<td colspan="3"><%=other[4] %></td>
 													<td class="right"><%=other[3] %></td>
 													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>	 
+													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
 													
 														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
@@ -508,7 +510,7 @@ th,td
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
 													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>
+													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
 														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -531,7 +533,7 @@ th,td
 											<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
 											
 											<td class="right">
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>	 
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
 											&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
 											<%} %>
 											</td>
@@ -550,7 +552,7 @@ th,td
 										
 										<tr>
 											<td colspan="6">Admitted to Rs.
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
 											 <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
 											 <%} %>
 										</tr>
@@ -570,8 +572,10 @@ th,td
 								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 							</div>
 							<div class="col-md-12" align="center" style="margin-top: 5px;">
-								<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5){ %>
+								<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+									<%if( chssstatusid!=9){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Approve</button>
+									<%} %>
 									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 								<%} else if(chssstatusid==1){ %>
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >

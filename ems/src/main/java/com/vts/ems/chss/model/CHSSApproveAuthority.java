@@ -12,21 +12,20 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name="chss_test_sub")
-public class CHSSTestSub implements Serializable {
+@Entity(name = "chss_approve_auth")
+public class CHSSApproveAuthority implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long TestSubId;
-	private Long TestMainId;
-	private String TestCode;
-	private String TestName;
-	private Integer TestRate;
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
+	private Long ApproveAuthListId;
+	private Long PO; 
+	private Long VO; 
+	private Long AO;	
 	private Integer IsActive;
-	private String CreatedBy;
-	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-
+	
+	
 }

@@ -2,7 +2,13 @@
 		
 	padding: 4px 8px;
 	font-weight:600;
+	
+}
+
+.btn-sm
+{
 	text-transform: uppercase;
+	
 }
 
 .btn-sm:hover

@@ -2,6 +2,7 @@ package com.vts.ems.Admin.Service;
 
 import java.util.List;
 
+import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 
@@ -26,4 +27,5 @@ public interface AdminService {
 	public int EditItem(CHSSOtherItems item)throws Exception;
 	public Object[] getChssAprovalList()throws Exception;
 	public int UpdateApprovalAuth(String processing,String verification,String approving,String id,String userid)throws Exception;
+	public long AddApprovalAuthority(CHSSApproveAuthority approve)throws Exception;
 }

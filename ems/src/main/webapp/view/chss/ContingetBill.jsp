@@ -9,6 +9,7 @@
 	<!DOCTYPE html>
 <html>
 	<head>
+	<%Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); %>
 <style type="text/css">
 		
 			.break {
@@ -39,7 +40,7 @@
 				}
 
 				@top-right {
-					content: "";
+					content: "<%=contingentdata[1]%>";
 					margin-top: 30px;
 					margin-right: 10px;
 				}
@@ -113,7 +114,9 @@ th,td
 <%
 	
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
-	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
+	/* Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); */
+	List<Object[]> ApprovalAuth = (List<Object[]>)request.getAttribute("ApprovalAuth");
+	
 	
 
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
@@ -174,6 +177,8 @@ th,td
 			billscount += Integer.parseInt(obj[22].toString());
 			} 
 		}%>
+
+	
 		
 			<tr>
 				<td colspan="4" class="right">Total</td>
@@ -191,8 +196,68 @@ th,td
 			<%=contingentdata[8] %>
 		</p>
 	</div>
-	
-</div>
+	</div>
+		<div style="position: relative;margin-bottom: 0;page-break-inside: avoid !important;  page-break-before: auto !important;">
+			<table style="width: 100%;margin: 60px 5px 5px 10px;">
+				<tr>
+					<td style="border: 0px;">
+						<%for(Object[] auth : ApprovalAuth)
+						{
+							if(auth[3].toString().equalsIgnoreCase("K")){
+						%>
+								<%=auth[1] %><br>
+								<%=auth[2] %>
+							
+						<% }} %>
+					</td>
+					<td style="border: 0px;text-align: right;" >
+		
+						<%for(Object[] auth : ApprovalAuth)
+						{
+							if(auth[3].toString().equalsIgnoreCase("V")){
+						%>
+								<%=auth[1] %><br>
+								<%=auth[2] %>
+							
+						<% }} %>
+			
+					</td>
+				</tr>
+			</table>
+		
+		<table style="width: 100%;margin: 60px 5px 5px 10px;">
+			<tr>
+				<td style="border: 0px;">
+				<%for(Object[] auth : ApprovalAuth)
+				{
+					if(auth[3].toString().equalsIgnoreCase("W")){
+				%>
+						<%=auth[1] %><br>
+						<%=auth[2] %>
+					
+				<% }} %>
+				</td>
+			</tr>
+		</table>
+		
+		
+		<div align="center">
+			<span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
+				<span><b>
+					<%for(Object[] auth : ApprovalAuth)
+					{
+						if(auth[3].toString().equalsIgnoreCase("Z")){
+					%>
+							<%=auth[1] %><br>
+							CEO
+						
+					<% }} %></b>
+				</span>
+			
+			
+		</div>
+		
+	</div>
 
 
 </body>

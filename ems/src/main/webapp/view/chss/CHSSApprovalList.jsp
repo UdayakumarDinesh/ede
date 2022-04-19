@@ -76,7 +76,7 @@
 										<td style="padding-top:5px; padding-bottom: 5px;">Claim No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Employee</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Patient Name</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Claim Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>

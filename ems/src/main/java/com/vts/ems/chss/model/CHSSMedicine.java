@@ -17,7 +17,7 @@ public class CHSSMedicine implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long MedicineId;
+	private Long CHSSMedicineId;
 	private Long BillId;
 	private String MedicineName;
 	private Integer MedicineCost;

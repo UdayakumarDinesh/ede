@@ -11,6 +11,7 @@ import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -86,6 +87,8 @@ public interface CHSSDao {
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public int getdata(String bill)throws Exception;
 	public List<Object> ContingentApplyIds(String contingentid) throws Exception;
-
+	public List<Object[]> GetApprovedBills(String bill)throws Exception;
+	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
+	public List<Object[]> CHSSApprovalAuthList() throws Exception;
 
 }

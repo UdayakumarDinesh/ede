@@ -81,7 +81,11 @@ th,td
 	
 	String logintype = (String)request.getAttribute("logintype");
 	int billstatus = Integer.parseInt(contingentdata[5].toString());
-
+	if(contingentdata[2]==null){
+		contingentdata[2]=LocalDate.now().toString();
+	}
+	
+	
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	
@@ -120,11 +124,25 @@ th,td
 					</div>
 				<%} %>
 			</div>
-	
+		
+			
+		
 			<div class="card" >
 				<div class="card-body " >
-
-					<div align="center">
+					<%if(billstatus>=7 && contingentdata[6]!=null && !contingentdata[6].toString().trim().equalsIgnoreCase("")){ %>
+						<div class="col-md-12">
+							<span style="font-weight: 600;"> Remark : </span>
+							<%if(billstatus == 9 || billstatus == 11 || billstatus == 13  ){ %>
+								<span style="font-weight: 600; color: #D82148;"> <%=contingentdata[6] %> </span>					
+							<%}else{ %>    
+								<span style="font-weight: 600; color: #035397;"> <%=contingentdata[6] %> </span>			
+							<%} %>
+						</div>
+						<%} %>
+					<form action="#" method="post">
+						<input type="hidden" name="isapproval" value="Y">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div align="center">
 						
 						<div style="text-align: left;margin: 5px 5px 5px 10px;">
 							<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
@@ -146,6 +164,9 @@ th,td
 								<th style="text-align: center;">No. of Bills</th>
 								<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
 								<th class="right" style="width: 15%;">Amount Admitted (&#8377;)</th>
+								<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+								<th  style="width: 10%" >Form</th>
+								<%} %>
 							</tr>
 							
 							<%long allowedamt=0,claimamt=0,billscount=0;
@@ -169,7 +190,17 @@ th,td
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
-																
+									<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+									<td >
+									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<i class="fa-solid fa-eye"></i>
+									</button>	
+											
+									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+										<i style="color: #019267" class="fa-solid fa-download"></i>
+									</button>
+									</td>
+									<%} %>							
 								</tr>
 							<%	k++;
 								claimamt += Integer.parseInt(obj[27].toString());
@@ -190,46 +221,58 @@ th,td
 								</tr>
 						</table>
 						
+						<%if(!logintype.equalsIgnoreCase("K")){ %>
 						<div>
 							<p>
 								<%=contingentdata[8] %>
 							</p>
 						</div>
+						<%} %>
 						
 						
-						<div class="col-md-12" align="left">
-								Remarks : <br>
-								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-						</div>
 					</div>
-					
+					</form>	
+					<%if(billscount>0){ %>
 					<form action="CHSSContingentApprove.htm" method="post">
+					
 						<div class="row">
+							
+							<%if( logintype.equalsIgnoreCase("K") ){ %>
+								<div class="col-12">
+									Content :
+									<textarea class="w-100 form-control" rows="4" cols="100" id="billcontent" name="billcontent" maxlength="3000"><%=contingentdata[8] %></textarea>
+								</div>	
+							<%} %>
+							
+							<div class="col-md-12" align="left">
+								Remarks : <br>
+								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
+							</div>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
-								<%}else if( billstatus==9 && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('F','Are You Sure To Forward')" >Forward</button>
-								<%}else if((billstatus==8 || billstatus==11) && logintype.equalsIgnoreCase("V")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Recommend</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
-								<%}else if((billstatus==10 || billstatus==13) && logintype.equalsIgnoreCase("W")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Authorize</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
+								<%}else if( billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('R')" >Forward</button>
+								<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Recommend?');"  >Recommend</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
+								<%}else if((billstatus==10) && logintype.equalsIgnoreCase("W")){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Authorize?');"  >Authorize</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
 								<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" >Approve</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('F')" >Return</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
+									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
 								<%} %>
 							</div>	
 						</div>
 						<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
-										
+					<%} %>					
 
 				</div>
 			</div>		
-			
+		
 	</div>
 	
  </div>
@@ -243,10 +286,10 @@ function remarkRequired(action)
 	if(action === 'R'){
 		$('#remarks').attr('required', true);
 		if($('#remarks').val().trim()===''){
-			alert('Please Fill Remarks to Return! ');
+			alert('Please Fill Remarks to Submit! ');
 			return false;
 		}else{
-				return confirm('Are You Sure To Return?');
+				return confirm('Are You Sure To Submit?');
 		}
 		
 	}else{
