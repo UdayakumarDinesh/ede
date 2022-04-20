@@ -38,7 +38,7 @@ public interface CHSSService
 	public CHSSApply CHSSApplied(String chssapplyid) throws Exception;
 	public Object[] CHSSAppliedData(String chssapplyid) throws Exception;
 	public List<Object[]> CHSSBillsList(String chssapplyid) throws Exception;
-	public List<Object[]> empCHSSList(String empid) throws Exception;
+	public List<Object[]> empCHSSList(String empid,String PatientId, String FromDate, String Todate, String IsSelfs) throws Exception;
 	public CHSSBill getCHSSBill(String billid) throws Exception;
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception;

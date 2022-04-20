@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page import="java.time.LocalDate"%>
 
 <!DOCTYPE html>
 <html>
@@ -26,6 +27,28 @@
    	
 }
 
+.custom-button:hover{
+	color: white !important;
+	
+}
+
+.custom-button{
+	color: white !important;
+	
+}
+
+.bg-transparent{
+	    margin: 7px;
+    background-color: transparent;
+    text-transform: capitalize;
+    color: white;
+    font-weight: 100;
+    padding: 4px 7px;
+}
+
+.onclickbell{
+	    margin: 0px 0px 0px 35px;
+}
 
 
 </style>
@@ -33,14 +56,14 @@
 </head>
 
 <body>
-            <% String Username = (String)session.getAttribute("Username");
-            String logintype   = (String)session.getAttribute("LoginType"); 
-            String EmpName     = (String)session.getAttribute("EmpName");%>
+         
+	<% String Username = (String)session.getAttribute("Username");
+       String logintype   = (String)session.getAttribute("LoginType"); 
+       String EmpName     = (String)session.getAttribute("EmpName");%>
+      
+	<div class="wrapper">
 
-
-                <div class="wrapper">
-
-                    <div id="sidebar-container" class="sidebar-expanded  ">
+                  <%--  <div id="sidebar-container" class="sidebar-expanded  ">
 						<div class="navbar-brand ml-3 w-100" style="margin: 2.5px 0px;">
 							<div style="">
 								<span  style="font-size: 1.7rem; color: #ffff">
@@ -50,7 +73,7 @@
 							</div>
 						</div>
 						<ul class="list-group" id="module">
-					<%--  <%if("A".equalsIgnoreCase(logintype)){%>
+					 <%if("A".equalsIgnoreCase(logintype)){%>
 							   <li>
 									<a href="PisAdminDashboard.htm"
 										class="bg-dark list-group-item list-group-item-action">
@@ -82,53 +105,33 @@
 									</a>
 								</li> 
 								
-								 --%>
+								
 							</ul>
-						</div>
+						</div>  --%>
 							
 
-                    <div id="content" >
-                        <nav class="navbar navbar-expand-lg navbar-light  ">
-                          
-                            	
-                           <button type="button" id="sidebarCollapse" class="btn btn-sm sidebar-colapse" >
-                           <i class="fa fa-align-left"></i>
-                           </button>
-                             
-                            <%--  <div class="mr-auto" style="margin-left: 20px; color: white;">
-                                <span style="font-size: 20px"><%=EmpName %></span> 
-                             </div>
-                                
-                             <div class=" navbar-collapse" id="navbarSupportedContent">
-							    <ul class="navbar-nav ml-auto">
-									        
-							        <li class="nav-item dropdown">
-							            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-							                aria-haspopup="true" aria-expanded="false" style="color: white !important;">
-						                <%=Username %>&nbsp;
-							            </a>
-							            <div class="dropdown-menu dropdown-menu-right" style="margin-top: 8px;" aria-labelledby="navbarDropdown">
-							                <form action="${pageContext.request.contextPath}/logout" method="post">
-											<a class="dropdown-item  dd-item" onclick="parentNode.submit();" href="#">
-												<i class="fa-solid fa-right-from-bracket mr-3"></i>
-												Logout
-											</a>
-											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-										</form>
-							            </div>
-							        </li>
-								       
-							    </ul>
-								
-							</div> --%>
-							
-							
-							<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							 
-							     <div class="mr-auto" style="margin-left: 20px; color: white;">
-	                                <span style="font-size: 20px"><%=EmpName %></span> 
-	                             </div> 
-							    <form action="#" class="form-inline my-2 my-lg-0">
+		<div id="content" >
+        	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 1rem !important;">              
+            	<div class="container-fluid">
+
+					<a class="navbar-brand" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:40% ">
+						<img class="headerlogo" src="view/images/logo3.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
+						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
+						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
+					</a>
+
+					
+
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						
+						<div class="mr-auto" style="margin-left: 20px; color: white;">
+	                               <%--  <span style="font-size: 20px"><%=EmpName %></span>  --%>
+	                    </div> 
+	                    
+	                    <!-- Search Bar -->
+	                    
+						<!-- <form action="#" class="form-inline my-2 my-lg-0">
 							        <div class=" search rounded rounded-pill shadow-sm ">
 							            <div class="input-group">
 							                <input type="search" placeholder="Search" aria-describedby="button-addon1"
@@ -139,91 +142,87 @@
 							                </div>
 							            </div>
 							        </div>
-							    </form>
-							    <div class="btn-group ">
-							        <a class="nav-link  onclickbell" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							            <img alt="logo" src="view/images/alarm.png" >
-							            <span class="badge badge-danger badge-counter" id="NotificationCount"></span>
-							            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
-							        </a>
-							        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell"
-							            aria-labelledby="alertsDropdown">
-							            <h6 class="dropdown-header">Notifications</h6>
-							            <div id="Notification"></div>
-							            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-							        </div>
-							    </div>
-							    <div class="btn-group">
-							        <button type="button" class="btn btn-link btn-responsive"
-							            style="text-decoration: none !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							            <img alt="logo" src="view/images/myacc.png" style="">
-							            <span style="font-weight: 700;color: white;">&nbsp;<%=Username %></span><i class="fa fa-caret-down "
-							                aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
-							        </button>
+							    </form> -->
+						
 							
-							        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
-							            <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
-							
-							
-							
-							            <div class="dropdown-divider"></div>
-							 <a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true"></i> Audit Stamping </a>     
-							            <div class="dropdown-divider"></div>
-							 <a class="dropdown-item" href="PasswordChange.htm" ><i class="fa fa-key" aria-hidden="true"></i> Change Password </a>
-							            <div class="dropdown-divider"></div>
-							   <a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i> HELP </a>
-							                    
-							                
-							               
-							
-							            <div class="dropdown-divider"></div>
-								<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
-							            <form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
-							                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-							                <button class="dropdown-item " href="#" data-target="#logoutModal">
-							                    <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: red"></i>
-							                    &nbsp;&nbsp;Logout
-							                </button>
-							            </form>
-							        </div>
-							    </div>
-							
-							</div>
+							<ul class="navbar-nav ml-auto ">
+								
+								<li class="nav-item active">
+									<a class=" btn bg-transparent custom-button " href="MainDashBoard.htm" type="button" aria-haspopup="true" aria-expanded="false" style="background-color: transparent" ><i class="fa fa-home"	aria-hidden="true" ></i> Home</a> 	
+								</li>
 
-                        </nav>
+								<li class="nav-item dropdown">
+									<ul class="navbar-nav" id="module">
+				              		</ul>
+								</li>		
+							</ul>
+							
+							
+						<div class="btn-group ">
+	
+							<a class="nav-link  onclickbell" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					            <img alt="logo" src="view/images/alarm.png" >
+						            <span class="badge badge-danger badge-counter" id="NotificationCount"></span>
+						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
+					        </a>
+					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown">
+								<h6 class="dropdown-header">Notifications</h6>
+						        <div id="Notification"></div>
+						            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+						        </div>
+						    </div>
+							<div class="btn-group">
+						        <button type="button" class="btn btn-link btn-responsive" style="text-decoration: none !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    	<img alt="logo" src="view/images/myacc.png" style="">
+							            <span style="font-weight: 700;color: white;">&nbsp;<%=Username %></span>
+							            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
+							  	</button>
+							
+							    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
+							    	
+								    <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
+								    <div class="dropdown-divider"></div>
+								    
+								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true"></i> Audit Stamping </a>     
+								    <div class="dropdown-divider"></div>
+								 
+								 	<a class="dropdown-item" href="PasswordChange.htm" ><i class="fa fa-key" aria-hidden="true"></i> Change Password </a>
+								    <div class="dropdown-divider"></div>
+								   
+								   	<a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i> HELP </a>
+								  	<div class="dropdown-divider"></div>
+									
+									<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
+								            
+								    	<form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
+									        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								                <button class="dropdown-item " href="#" data-target="#logoutModal">
+								                    <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: red"></i>
+								                    &nbsp;&nbsp;Logout
+								                </button>
+								        </form>
+							        
+							    </div>
+							</div>
+						</div>
+					</div>
+			 </nav>
 
 
 <script type="text/javascript">
 
-   /*  $(document).ready(function() {
-            $.ajax({
-                type: "GET",
-                url: "NotificationList.htm",
+$(document).ready(function() {
+	
+	function english_ordinal_suffix(dt)
+	{
+	  return dt.getDate()+(dt.getDate() % 10 == 1 && dt.getDate() != 11 ? 'st' : (dt.getDate() % 10 == 2 && dt.getDate() != 12 ? 'nd' : (dt.getDate() % 10 == 3 && dt.getDate() != 13 ? 'rd' : 'th'))); 
+	}
+	
+	dt= new Date();
+	document.getElementById("p1").innerHTML = english_ordinal_suffix(dt);
+	
+});
 
-                datatype: 'json',
-                success: function(result) {
-
-                    var result = JSON.parse(result);
-                    var values = Object.keys(result).map(function(e) {
-                        return result[e]
-                    });
-                    var module = "";
-                    for (i = 0; i < values.length; i++) {
-
-                        module += "<a class='dropdown-item d-flex align-items-center' href='" + values[i][4] + "' style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-arrow-right' aria-hidden='true' style='color:green'></i></div> <div style='margin-left:20px'> " + values[i][3] + " </div> </a>";
-                        if (i > 4) {
-                            break;
-                        }
-
-                    }
-
-                    $('#Notification').html(module);
-                    $('#NotificationCount').html(values.length);
-
-                }
-            });
-    }); */
-    
     $('#NotificationCount').html(0);
             //Hide submenus
             $('#body-row .collapse').collapse('hide');
@@ -265,7 +264,7 @@
     <script type="text/javascript">
     
 	$(document).ready(function() {
-		
+
 		$('.selectdee').select2();
 		
 		$.ajax({
@@ -287,8 +286,9 @@
 					var name=values[i][1].replace(/ /g,'');
 
 					
-					module+='<li>  <a href="'+values[i][2]+'" class="bg-dark list-group-item list-group-item-action" > <span class="d-flex w-100 justify-content-start align-items-center">  <span class="menu-collapsed" > </span></span><i class="'+values[i][4]+'"></i> '+name+'</a></li>';				
+					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';				
 					
+
 				}
 			
 				$('#module').html(module); 
