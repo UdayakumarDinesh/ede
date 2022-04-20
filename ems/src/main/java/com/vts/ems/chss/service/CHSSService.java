@@ -27,7 +27,8 @@ import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.pis.model.Employee;
 
-public interface CHSSService {
+public interface CHSSService 
+{
 
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public Employee getEmployee(String empid) throws Exception;

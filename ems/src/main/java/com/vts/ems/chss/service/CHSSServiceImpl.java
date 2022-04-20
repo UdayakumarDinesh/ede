@@ -1009,8 +1009,23 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSContingent contingent = dao.getCHSSContingent(dto.getContingentid());
 		int continstatus = contingent.getContingentStatusId();
 				
+		
+		EMSNotification notify = new EMSNotification();
+		
+		notify.setNotificationUrl("ContingentApprovals.htm");
+		notify.setNotificationDate(LocalDate.now().toString());
+		notify.setNotificationBy(Long.parseLong(dto.getEmpId()));
+		notify.setIsActive(1);
+		notify.setCreatedBy(dto.getUsername());
+		notify.setCreatedDate(sdtf.format(new Date()));
+		
+//		Object[] notifyto = dao.CHSSApprovalAuth("V");
+		
+		
 		if(dto.getAction().equalsIgnoreCase("F")) 
 		{
+			
+			notify.setNotificationMessage("Medical Claim Contingent Bill Recieved");
 			if(continstatus==1  || continstatus==9 || continstatus==11 || continstatus==13 ) 
 			{
 				continstatus=8;
@@ -1021,25 +1036,64 @@ public class CHSSServiceImpl implements CHSSService {
 					contingent.setVO(0L);
 					contingent.setAO(0L);
 					contingent.setCEO(0L);
-					
 				}
+								
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("V");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+//					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
+				
 			}
 			else if(continstatus==8  ) 
 			{
 				continstatus=10;
+				
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("W");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+//					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
 			}
 			else if(continstatus==10  ) 
 			{
 				continstatus=12;
+				
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("Z");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+//					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
 			}	
 			else if(continstatus==12 ) 
 			{
 				continstatus=14;
-			}	
-		}
 				
-		if(dto.getAction().equalsIgnoreCase("R")) 
+				notify.setNotificationMessage("Medical Claim Contingent Bill Approved");
+				Object[] notifyto = dao.CHSSApprovalAuth("K");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+//					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
+			}	
+		}else if(dto.getAction().equalsIgnoreCase("R")) 
 		{
+			notify.setNotificationMessage("Medical Claims Contingent Bill Returned");
 			if(continstatus==8 || continstatus==11 ) 
 			{
 				continstatus=9;
@@ -1051,7 +1105,17 @@ public class CHSSServiceImpl implements CHSSService {
 			else if(continstatus==12 ) 
 			{
 				continstatus=13;
+				notify.setNotificationUrl("ApprovedBiils.htm");
 			}	
+			
+			Object[] notifyto = dao.CHSSApprovalAuth("K");
+			if(notifyto==null) {
+				notify.setEmpId(0L);
+			}else {
+				notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+//				if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+			}
+			
 		}
 					
 		contingent.setRemarks(dto.getRemarks());
@@ -1082,6 +1146,8 @@ public class CHSSServiceImpl implements CHSSService {
 			continid= dao.CHSSApplyEdit(claim);
 		}
 		
+		
+		dao.NotificationAdd(notify);
 		return continid;
 		
 	}
