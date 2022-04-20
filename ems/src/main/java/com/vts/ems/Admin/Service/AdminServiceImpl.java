@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 @Service
@@ -155,5 +156,52 @@ public class AdminServiceImpl implements AdminService{
 	public long AddApprovalAuthority(CHSSApproveAuthority approve)throws Exception
 	{
 		return dao.AddApprovalAuthority(approve);
+	}
+	@Override
+	public List<Object[]> getMedicineList()throws Exception
+	{
+		return dao.getMedicineList();
+	}
+	@Override
+	public List<Object[]> getMedicineListByTreatment(String treatmentname)throws Exception
+	{
+		
+		if("A".equalsIgnoreCase(treatmentname)) {
+			return dao.getMedicineList();
+		}else {
+			return dao.getMedicineListByTreatment(treatmentname);
+		}	
+	}
+	@Override
+	public List<Object[]> GetTreatmentType()throws Exception
+	{
+	return dao.GetTreatmentType();	
+	}
+	@Override
+	public int Checkduplicate(String medicinename)throws Exception{
+		return dao.Checkduplicate(medicinename);
+	}
+	@Override
+	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
+		return dao.getCHSSMedicine(medicineid);
+	}
+	
+	@Override
+	public Long AddMedicine(CHSSMedicineList medicine)throws Exception
+	{
+		return dao.AddMedicine(medicine);
+	}
+	
+	@Override
+	public Long EditMedicine(CHSSMedicineList medicine)throws Exception{
+		
+		
+		CHSSMedicineList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
+		
+		mlist.setMedicineId(medicine.getMedicineId());
+		mlist.setMedicineName(medicine.getMedicineName());
+		mlist.setTreatTypeId(medicine.getTreatTypeId());
+		
+		return dao.EditMedicine(mlist);
 	}
 }

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.pis.service.PisService;
@@ -341,6 +342,120 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	
 		    }
 		    
+		@RequestMapping(method= {RequestMethod.POST,RequestMethod.GET},value ="MedicineList.htm")
+		public String MedicineList(HttpServletRequest req , HttpSession ses )throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				String name  = (String)req.getParameter("tratementname");
+			
+				if(name!=null) {
+				
+					List<Object[]>  list = service.getMedicineListByTreatment(name);
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("MedicineList", list);
+					req.setAttribute("treat", name);
+				} else {
+					
+					List<Object[]>  list = service.getMedicineList();
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("MedicineList", list);
+					req.setAttribute("treat", name);
+				}
+			
+				return "Admin/CHSSMedicineList";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "Admin/CHSSMedicineList";
+			}
+			
+		}
+		@RequestMapping(value="ChssMedicine.htm", method= {RequestMethod.POST,RequestMethod.GET})
+		public String ADDEDITMedicine(HttpServletRequest req ,HttpSession ses ,RedirectAttributes redir)throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				
+				String action = (String)req.getParameter("Action");
+			
+				if("ADD".equalsIgnoreCase(action)){
+					
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					return "Admin/CHSSMedicineADDEDIT";
+					
+				}else if ("EDIT".equalsIgnoreCase(action)) {
+					
+					String medicineid = (String)req.getParameter("MedicineId");
+					CHSSMedicineList  medicinelist=service.getCHSSMedicine(Long.parseLong(medicineid));
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("medicinelist", medicinelist);
+					return "Admin/CHSSMedicineADDEDIT";
+					
+				}else if ("EDITMEDICINE".equalsIgnoreCase(action)) {
+					
+					String medicineId = (String)req.getParameter("medicineId");
+					String tratementname = (String)req.getParameter("tratementname");
+					String MedicineName  = (String)req.getParameter("MedicineName");
+					CHSSMedicineList  medicinelist = new CHSSMedicineList();
+					medicinelist.setMedicineId(Long.parseLong(medicineId));
+					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					long result =service.EditMedicine(medicinelist);;
+					if (result != 0) {
+		    			redir.addAttribute("result", "MEDICINE EDITED SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MEDICINE EDITED UNSUCCESSFUL");
+					}
+					return "redirect:/MedicineList.htm";
+					
+				}else if ("ADDMEDICINE".equalsIgnoreCase(action)) {
+					
+					String tratementname = (String)req.getParameter("tratementname");
+					String MedicineName  = (String)req.getParameter("MedicineName");
+					CHSSMedicineList  medicinelist = new CHSSMedicineList();
+					
+					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					medicinelist.setCategoryId(0l);
+					medicinelist.setIsAdmissible("Y");
+					medicinelist.setIsActive(1);
+					long result=service.AddMedicine(medicinelist);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MEDICINE ADDED SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MEDICINE ADDED UNSUCCESSFUL");
+					}
+					return "redirect:/MedicineList.htm";
+				}	
+				return "redirect:/MedicineList.htm";
+			}catch (Exception e){
+				e.printStackTrace();
+				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
+				return "redirect:/MedicineList.htm";
+			}
+		}
 		
-		    
+		@RequestMapping(value ="DuplicateMedicine.htm",method=RequestMethod.GET)
+		public @ResponseBody String CheckDuplicateMedicine(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			int count =0;
+			Gson json = new Gson();
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
+			try {
+				String Medicinename = (String)req.getParameter("MedicineName");
+				count = service.Checkduplicate( Medicinename);
+				
+				 return json.toJson(count);
+			}catch (Exception e){
+				e.printStackTrace();
+				 return json.toJson(count);
+			}
+		}
 }

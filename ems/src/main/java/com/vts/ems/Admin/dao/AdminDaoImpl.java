@@ -8,6 +8,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
 @Repository
@@ -305,5 +312,113 @@ public class AdminDaoImpl implements AdminDao{
 			e.printStackTrace();
 		}
 		return approva.getApproveAuthListId();
+	}
+	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid";
+	@Override
+	public List<Object[]>  getMedicineList()throws Exception
+	{
+		 logger.info(new Date() +"Inside GetMedicineList()");	
+		 try {
+			 Query query = manager.createNativeQuery(MEDICINELIST);
+			 List<Object[]> List= query.getResultList();
+			 return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.treattypeid =:treatmentid";
+	@Override
+	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception
+	{
+		 logger.info(new Date() +"Inside GetMedicineList()");	
+		 try {
+			 Query query = manager.createNativeQuery(MEDICINELISTBYTREATMENT);
+			 query.setParameter("treatmentid", treatmentname);
+			 List<Object[]> List= query.getResultList();
+			 return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String TREATMENTTYPE="SELECT treattypeid , treatmentname FROM chss_treattype";
+	@Override
+	public List<Object[]> GetTreatmentType()throws Exception
+	{
+		 logger.info(new Date() +"Inside GetTrateMentType()");	
+		 try {
+			 Query query = manager.createNativeQuery(TREATMENTTYPE);
+			 List<Object[]> List= query.getResultList();
+			 return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String CHECKMEDICINE="SELECT COUNT(medicineid) FROM chss_medicines_list WHERE medicinename=:medicinename";
+	@Override
+	public int Checkduplicate(String medicinename)throws Exception
+	{
+		 logger.info(new Date() +"Inside Checkduplicate()");	
+		 try {
+			Query query = manager.createNativeQuery(CHECKMEDICINE);
+			query.setParameter("medicinename", medicinename);
+			Object o = query.getSingleResult();
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+				return result;
+		  }catch (Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
+		logger.info(new Date() + "Inside getEmecaddress()");
+		CHSSMedicineList memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSMedicineList> cq = cb.createQuery(CHSSMedicineList.class);
+			Root<CHSSMedicineList> root = cq.from(CHSSMedicineList.class);
+			Predicate p1 = cb.equal(root.get("MedicineId"), medicineid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<CHSSMedicineList> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	
+	@Override
+	public Long AddMedicine(CHSSMedicineList medicine)throws Exception
+	{
+		logger.info(new Date() + "Inside AddMedicine()");
+		try {
+			manager.persist(medicine);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return medicine.getMedicineId();
+	}
+	
+	@Override
+	public Long EditMedicine(CHSSMedicineList item) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditMedicine()");
+		try {
+			manager.merge(item);
+			manager.flush();		
+			return item.getMedicineId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0l;
+		}		
 	}
 }

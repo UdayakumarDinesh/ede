@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 
@@ -30,4 +31,11 @@ public interface AdminDao {
 	public Object[] getChssAprovalList() throws Exception;
 	public int UpdateApprovalAuth(String processing,String verification,String approving,String id ,String userid)throws Exception;
 	public long AddApprovalAuthority(CHSSApproveAuthority approva)throws Exception;
+	public List<Object[]>  getMedicineList()throws Exception;
+	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception;
+	public List<Object[]> GetTreatmentType()throws Exception;
+	public int Checkduplicate(String medicinename)throws Exception;
+	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception ;
+	public Long AddMedicine(CHSSMedicineList medicine)throws Exception;
+	public Long EditMedicine(CHSSMedicineList item) throws Exception;
 }
