@@ -1122,6 +1122,7 @@ public class CHSSServiceImpl implements CHSSService {
 //				if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 			}
 			
+			
 		}
 					
 		contingent.setRemarks(dto.getRemarks());
