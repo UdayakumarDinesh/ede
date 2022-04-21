@@ -42,7 +42,7 @@ public interface AdminService {
 	public int DeleteRequestMsg(String requestid ,String id)throws Exception;
 	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception;
 	public long EmpRequestNotification(EMSNotification notification)throws Exception;
-	
+	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
 	
 	
 	

@@ -229,17 +229,36 @@ public class AdminServiceImpl implements AdminService{
 	public long EmpRequestNotification(EMSNotification notification)throws Exception
 	{
 		
-		Object[] adminlist =chssdao.CHSSApprovalAuth("A");
-		if(adminlist.length>0) {
+		List<Object[]> adminlist =dao.CHSSApprovalAuth2("A");
+		System.out.println(adminlist.size());
+		if(adminlist.size()>0) {
 			long id=0;
-			for(int i=0;i>adminlist.length;i++) {
-				notification.setEmpId(((Long)adminlist[0]).longValue());
-				id = dao.AddRequestMsgNotification(notification);
+			for(Object[] obj:adminlist) {
+				EMSNotification notifi = new EMSNotification ();
+				notifi.setCreatedBy(notification.getCreatedBy());
+				notifi.setCreatedDate(notification.getCreatedDate());
+				notifi.setIsActive(notification.getIsActive());
+				notifi.setNotificationBy(notification.getNotificationBy());
+				notifi.setNotificationDate(notification.getNotificationDate());
+				notifi.setNotificationMessage(notification.getNotificationMessage());
+				notifi.setNotificationValue(notification.getNotificationValue());
+				notifi.setNotificationUrl(notification.getNotificationUrl());
+				notifi.setEmpId(Long.parseLong(obj[0].toString()));
+				long result = dao.AddRequestMsgNotification(notifi);
+				if(result>0) {
+					id++;
+				}
 			}
 		return id;	
 		}else {
 			return 0l;
 		}
 		
+	}
+	
+	@Override
+	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
+	{
+		return dao.GethandlingOverList(fromdate,todate);
 	}
 }

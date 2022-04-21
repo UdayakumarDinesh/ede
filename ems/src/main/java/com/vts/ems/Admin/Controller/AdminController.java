@@ -351,8 +351,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			String UserId=(String)ses.getAttribute("Username");
 			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
 			try {
-				String name  = (String)req.getParameter("tratementname");
-			
+				String name  = (String)req.getParameter("tratementname");		
 				if(name!=null) {
 				
 					List<Object[]>  list = service.getMedicineListByTreatment(name);
@@ -405,10 +404,12 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String medicineId = (String)req.getParameter("medicineId");
 					String tratementname = (String)req.getParameter("tratementname");
 					String MedicineName  = (String)req.getParameter("MedicineName");
+					String IsAdmissible  = (String)req.getParameter("IsAdmissible");
 					CHSSMedicineList  medicinelist = new CHSSMedicineList();
 					medicinelist.setMedicineId(Long.parseLong(medicineId));
 					medicinelist.setMedicineName(MedicineName);
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					medicinelist.setIsAdmissible(IsAdmissible);
 					long result =service.EditMedicine(medicinelist);;
 					if (result != 0) {
 		    			redir.addAttribute("result", "MEDICINE EDITED SUCCESSFUL");
@@ -422,11 +423,14 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String tratementname = (String)req.getParameter("tratementname");
 					String MedicineName  = (String)req.getParameter("MedicineName");
 					CHSSMedicineList  medicinelist = new CHSSMedicineList();
-					
+					if(tratementname.equalsIgnoreCase("1")) {
+						medicinelist.setIsAdmissible("N");
+					}else {
+						medicinelist.setIsAdmissible("Y");
+					}
 					medicinelist.setMedicineName(MedicineName);
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setCategoryId(0l);
-					medicinelist.setIsAdmissible("Y");
 					medicinelist.setIsActive(1);
 					long result=service.AddMedicine(medicinelist);
 					if (result != 0) {
@@ -462,7 +466,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 		}
 		
-		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.GET})
+		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.POST})
 		public String EmpRequestMessage(HttpServletRequest req,HttpSession ses,RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
@@ -491,7 +495,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					notification.setNotificationMessage("Request Message from "+UserId);
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationUrl("");
+					notification.setIsActive(1);
 					long value= service.EmpRequestNotification(notification);
+					System.out.println("value   :"+value);
 					if (result != 0) {
 		    			redir.addAttribute("result", "MESSAGE SENT TO ADMIN SUCCESSFULY");
 					} else {
@@ -520,6 +526,22 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				
 			}
 			return "Admin/EmpRequestMsg";
+		}
+		
+		@RequestMapping(value ="HandlingOver.htm",method= {RequestMethod.GET,RequestMethod.POST})
+		public String HadlingOver(HttpServletRequest req , HttpSession ses)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside HadlingOver.htm "+UserId);
+			try {
+				String fromdate = (String) req.getParameter("fromdate");
+				String todate= (String) req.getParameter("todate");
+				List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate,todate);
+				return "Admin/HandlingOver";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "";
 		}
 		
 }

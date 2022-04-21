@@ -44,5 +44,6 @@ public interface AdminDao {
 	public int DeleteRequestMsg(String requestid ,String id)throws Exception;
 	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception;
 	public long AddRequestMsgNotification(EMSNotification notification)throws Exception;
-	
+	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception;
+	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
 }

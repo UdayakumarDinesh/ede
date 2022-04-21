@@ -8,6 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>CHSS Medicine </title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+
 </head>
 <body>
 
@@ -55,21 +56,22 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 									
 										<tr>
 											<th><label>Treatment Name <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2" name="tratementname" id="tratementname" data-container="body" data-live-search="true" required="required" style="font-size: 5px;">
+											<td><select class="form-control select2"  name="tratementname" id="tratementname" data-container="body" data-live-search="true" onchange="SetIsAdmissible();" required="required" style="font-size: 25px;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-												<%if(main!=null&&main.size()>0){for(Object[] O:main){ 
-												if(!O[0].toString().equalsIgnoreCase("1")){%>
+												<%if(main!=null&&main.size()>0){for(Object[] O:main){ %>
+												
 												<option value="<%=O[0]%>" <%if(list!=null){if(list.getTreatTypeId()==Long.parseLong(O[0].toString())){%> selected <%}}%>> <%=O[1]%></option>
-												<%}}}%>
+												<%}}%>
 											    </select></td>
-										</tr>
-										<tr>
+										</tr>								
+											<tr>
 											<th><label>Medicine Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Medicine Name" type="text" id="MedicineName" name="MedicineName" value="<%if(list!=null){ %><%=list.getMedicineName()%><%} %>"
 												required="required" maxlength="255" style="font-size: 15px;"
 												></td>
 										</tr>
+									
 								</thead>
 								</table>
 							</div>
@@ -129,6 +131,9 @@ function checkDuplicate()
 			}
 		});	
 }
+
+
+
 </script>
 
 <script type="text/javascript">

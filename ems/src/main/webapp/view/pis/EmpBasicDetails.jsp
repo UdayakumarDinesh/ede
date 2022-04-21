@@ -165,7 +165,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<td><%=employeedetails[15]%></td>
 						
 						</tr>
-				<!-- 	<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
+						<%if(!"A".equalsIgnoreCase(LoginType)){ %>
+					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
 					<form action="EmpRequestMsg.htm" method="GET">
 					<div class="row" >
 					    	<div class="col-11" align="right">
@@ -173,7 +174,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 					    	</div>  	
 			    	</div> 
 			    	</form>
-			       </td></tr> -->
+			       </td></tr> <%}%>
 					</tbody>
 				</table>
 			 </div>
@@ -271,7 +272,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td> <b>SBI AccNo.</b> </td>
 							<td><%=employeedetails[20] %></td>
 							<td> <b>Blood Group</b> </td>
-							<td><%=employeedetails[10] %></td>
+							<td><%if(employeedetails[10]!=null){%><%=employeedetails[10] %><%}else{%>--<%}%></td>
 							<td> <b>Home Town</b> </td>
 							<td><%=employeedetails[27] %></td>
 						</tr>

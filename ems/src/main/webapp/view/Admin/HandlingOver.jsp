@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
+     <%@page import="java.time.LocalDate"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Medicine List</title>
+<title>Handling Over</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+
 </head>
 <body>
 <%
 List<Object[]> medicine = (List<Object[]>)request.getAttribute("MedicineList");
-List<Object[]> main =(List<Object[]>)request.getAttribute("treatment");
+
 String treat = (String)request.getAttribute("treat");
 
 %>
@@ -22,14 +24,14 @@ String treat = (String)request.getAttribute("treat");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Medicine List</h5>
+				<h5>CHSS HandlingOver List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
 						
-						<li class="breadcrumb-item active " aria-current="page">CHSS Medicine List</li>
+						<li class="breadcrumb-item active " aria-current="page">CHSS HandlingOver List</li>
 					</ol>
 				</div>
 			</div>
@@ -56,23 +58,51 @@ String treat = (String)request.getAttribute("treat");
 		
 			<div class="card" >
 			
-				<div class="card-body " >
-				<div class="row">
-				<div class="col-3"></div>
-				<div class="col-2" ><h5>Treatment Name :</h5></div>
+				<div class="card-body">
+			 	
+				
 				<form action="MedicineList.htm" method="GET">
-				        <div class="col-3" style="margin-left:-30px;" >
-				        
-	                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
-							<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> 
-									<%if(main!=null&&main.size()>0){for(Object[] O:main){%>
-												<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
-												<%}}%>
-						</select>
-				        </div>
+				
+				<div class="row" style="padding-bottom: 10px;">
+				<div class="col-2"></div>
+					  <div class="col-2" align="right"><h4 style=" margin-left:-20%; " >FromDate :<span class="mandatory">*</span></h4></div>
+				       <div class="col-2" align="right">
+							    <input type="text" style="width: 70%;"  class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  > 
+							           <label class="input-group-addon btn" for="testdate">
+							      
+							    </label>              
+						 </div>
+						  <div class="col-2"><h4>ToDate  :<span class="mandatory">*</span></h4></div>
+						  <div class="col-3">						
+							    <input type="text" style="width: 50%; margin-left:-40%;" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="dob" name="dob"  required="required"  > 							
+						 		 <label class="input-group-addon btn" for="testdate">
+							      
+							    </label>    
+						 </div>
+						 
+						 
+						 </div>
+						 
 			   </form>
-			   </div>
-					<form action="ChssMedicine.htm" method="POST" id="empForm">
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+					<form action="##" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<div class="table-responsive">
@@ -81,21 +111,22 @@ String treat = (String)request.getAttribute("treat");
 								<thead>
 									<tr>
 										<th>Select</th>
-										<th>Treatment Name</th>
-										<th> Medicine Name </th>
+										<th>From-Employee</th>
+										<th>To-Employee</th>
+										<th>FromDate</th>
+										<th>ToDate</th>
 									</tr>
 								</thead>
 								<tbody>
-									<%	if(medicine!=null){
-									for(Object[] obj : medicine){ 
-									%>
+									
 										<tr>
-											<td style="text-align: center;"><input type="radio" name="MedicineId" value="<%=obj[0] %>"> </td>
-											<td><%=obj[1] %></td>
-											<td><%=obj[2] %></td>
-											
+											<td style="text-align: center;"><input type="radio" name="MedicineId" value=""> </td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 										</tr>
-									 <%} }%> 
+									
 								</tbody>
 							</table>
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
@@ -103,12 +134,8 @@ String treat = (String)request.getAttribute("treat");
 					
 					
 					<div class="row text-center">
-						<div class="col-md-12">
-						
-						
+						<div class="col-md-12">						
 						<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD" >ADD</button>
-						<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-								
 					    </div>						 
 					</div>
 					
@@ -117,19 +144,5 @@ String treat = (String)request.getAttribute("treat");
 		   	 </div>				
 	        </div>
 	        </div>
-	        <script type="text/javascript">
-	        function Edit(myfrm) {
-
-	        	var fields = $("input[name='MedicineId']").serializeArray();
-
-	        	if (fields.length === 0) {
-	        		alert("Please Select Atleast One ");
-
-	        		event.preventDefault();
-	        		return false;
-	        	}
-	        	return true;
-	        }
-	        </script>
 </body>
 </html>

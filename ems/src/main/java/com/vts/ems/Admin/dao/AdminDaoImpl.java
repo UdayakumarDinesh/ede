@@ -489,4 +489,43 @@ public class AdminDaoImpl implements AdminDao{
 		return notification.getNotificationId();
 	}
 	
+	
+	private static final String CHSSAPPROVALAUTH2  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType  ";
+	@Override
+	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApprovalAuth2()");
+		try {
+			
+			Query query= manager.createNativeQuery(CHSSAPPROVALAUTH2);
+			query.setParameter("loginType", Logintype);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	private static final String HANDLINGOVERLIST="";
+	@Override
+	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GethandlingOverList()");
+		try {
+			
+			Query query= manager.createNativeQuery(HANDLINGOVERLIST);
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
