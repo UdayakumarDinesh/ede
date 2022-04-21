@@ -1345,7 +1345,7 @@ public class CHSSController {
 			
 			service.CHSSApplyEncCountEdit(dto);
 			
-			redir.addAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			return "redirect:/CHSSFormEdit.htm";
 			
 		} catch (Exception e) {
@@ -1932,7 +1932,7 @@ public class CHSSController {
 
 	}
 	
-	@RequestMapping(value="ApprovedBiils.htm" , method=RequestMethod.POST)
+	@RequestMapping(value="ApprovedBiils.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String ApprovedBiils(HttpSession ses,HttpServletRequest req , RedirectAttributes redir)throws Exception{
 		
 		String UserId = (String) ses.getAttribute("Username");

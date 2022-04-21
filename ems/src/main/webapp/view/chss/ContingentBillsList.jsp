@@ -29,7 +29,7 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS List</h5>
+				<h5>CHSS Contingent Approval List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">

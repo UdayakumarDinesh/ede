@@ -141,10 +141,10 @@ th,td
 	<div align="center">
 		<div>
 			<div>
-				<figure><img style="width: 2cm; height: 2cm"  src="data:image/png;base64,<%=LabLogo%>"></figure><h3>MEDICAL CLAIM</h3>
-				<div align="right"> No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
+				<%-- <span><img style="width: 2cm; height: 2cm"  src="data:image/png;base64,<%=LabLogo%>"></span> --%>
+				
 			</div>
-		
+			<div style="text-align:right; "><span><h3 style="text-align:center; " >MEDICAL CLAIM</h3> </span>  No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
 			<table>	
 				<tbody>
 					<tr>

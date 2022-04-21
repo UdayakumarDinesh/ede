@@ -43,7 +43,7 @@
       			<div class="header-right clearfix">
         			<div class="float-element">
         				<a class="" href="" target="_blank">
-        					<img  class ="drdologo" src="view/images/logo3.png" alt=""></a>
+        					<img  class ="drdologo" src="view/images/lablogo.png" alt=""></a>
         			</div>
       			</div>
      			<div class="logo">

@@ -789,7 +789,7 @@ public class CHSSServiceImpl implements CHSSService {
 				notify.setEmpId(claim.getEmpId());
 				Employee emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp.getEmail()!=null) { 	Email =  emp.getEmail();		}
-				notify.setNotificationUrl("CHSSAppliedList.htm");
+				notify.setNotificationUrl("CHSSDashboard.htm");
 				
 			}
 			else if(claimstatus==4) 
@@ -813,7 +813,6 @@ public class CHSSServiceImpl implements CHSSService {
 		claim.setModifiedDate(sdf.format(new Date()));
 		
 		
-		dao.NotificationAdd(notify);
 		
 		CHSSApplyTransaction transac =new CHSSApplyTransaction();
 		transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -823,7 +822,7 @@ public class CHSSServiceImpl implements CHSSService {
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.CHSSApplyTransactionAdd(transac);
 		
-		if(claim.getCHSSStatusId()!=6)
+		if(claim.getCHSSStatusId()!=6 && notify.getEmpId()>0)
 		{
 		
 			notify.setNotificationDate(LocalDate.now().toString());
@@ -846,10 +845,6 @@ public class CHSSServiceImpl implements CHSSService {
 //			helper.setText( mailbody , true);
 //			javaMailSender.send(msg); 
 //		}
-		
-		
-		
-		
 		
 		
 		return dao.CHSSApplyEdit(claim);
@@ -1088,6 +1083,7 @@ public class CHSSServiceImpl implements CHSSService {
 				continstatus=14;
 				
 				notify.setNotificationMessage("Medical Claim Contingent Bill Approved");
+				notify.setNotificationUrl("ApprovedBiils.htm");
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
 					notify.setEmpId(0L);
@@ -1153,8 +1149,9 @@ public class CHSSServiceImpl implements CHSSService {
 			continid= dao.CHSSApplyEdit(claim);
 		}
 		
-		
-		dao.NotificationAdd(notify);
+		if(notify.getEmpId()>0) {
+			dao.NotificationAdd(notify);
+		}
 		return continid;
 		
 	}

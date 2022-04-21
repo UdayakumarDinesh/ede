@@ -115,7 +115,7 @@
             	<div class="container-fluid">
 
 					<a class="navbar-brand" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:40% ">
-						<img class="headerlogo" src="view/images/logo3.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
+						<img class="headerlogo" src="view/images/lablogo.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
 						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
 						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
 					</a>
@@ -165,12 +165,26 @@
 						            <span class="badge badge-danger badge-counter" id="NotificationCount"></span>
 						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
 					        </a>
-					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown">
-								<h6 class="dropdown-header">Notifications</h6>
-						        <div id="Notification"></div>
-						            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown" style="width:400px;padding: 0px;margin-top: 6px; ">
+								<span class="dropdown-header" style="background-color: #0E6FB6;height: 40px;font-size: 16px;color: #ffffff;"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
+								
+						        <div id="Notification">
+						        </div>
+						        
+						            <a class="dropdown-item text-center small text-gray-500" href="#" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
 						        </div>
 						    </div>
+						    
+						    
+						    
+						    
+						    
+						    
+						    
+						    
+						    
+						    
+						    
 							<div class="btn-group">
 						        <button type="button" class="btn btn-link btn-responsive" style="text-decoration: none !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    	<img alt="logo" src="view/images/myacc.png" style="">
@@ -281,14 +295,10 @@ $(document).ready(function() {
 				var module= "";
 				var logintype= $('#logintype').val();
 				
-				for(i=0; i<values.length;i++){
-
+				for(i=0; i<values.length;i++)
+				{
 					var name=values[i][1].replace(/ /g,'');
-
-					
 					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';				
-					
-
 				}
 			
 				$('#module').html(module); 
@@ -297,6 +307,80 @@ $(document).ready(function() {
 		})	
 	});
     
+	
+	$(document).ready(function(){
+		
+		$.ajax({
+			type : "GET",
+			url : "NotificationList.htm",
+			
+			datatype : 'json',
+			success : function(result) {
+				
+				var result = JSON.parse(result);
+				var values = Object.keys(result).map(function(e) {
+					  return result[e]
+					});
+				var module = "";
+				for (i = 0; i < values.length; i++) {
+					
+					
+				
+					module+="<a class='dropdown-item d-flex align-items-center' id='"+values[i].NotificationId+"'  onclick='RemNotification("+values[i].NotificationId+")' href='"+values[i].NotificationUrl+"'  style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-arrow-right' aria-hidden='true' style='color:green'></i></div> <div style='margin-left:20px'> " +values[i].NotificationMessage+" </div> </a>";
+					if(i>4){
+						break;
+					}
+			   
+				}
+			
+				if(values.length==0){
+					
+					var info="No Notifications !";
+					var empty="";
+					 empty+="<a class='dropdown-item d-flex align-items-center' href=# style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-comment-o' aria-hidden='true' style='color:green;font-weight:800'></i></div> <div style='margin-left:20px'>" +info+" </div> </a>";
+
+					$('#Notification').html(empty); 
+					$('.showall').hide();
+					$('#NotificationCount').addClass('badge-success');
+				}
+				
+				if(values.length>0){
+	 			
+					$('#Notification').html(module);
+					$('.showall').show();
+					
+				
+				}
+				
+				
+				
+				$('#NotificationCount').html(values.length); 
+			}
+		});
+		
+	});
+
+	function RemNotification(notifyid){
+		
+		var notificationid=notifyid;
+		
+		$.ajax({
+			type : "GET",
+			url : "NotificationUpdate.htm",
+			data : {
+					notificationid : notificationid,
+					
+				},
+			datatype : 'json',
+			success : function(result) {
+				
+			}
+		});
+		
+		
+	}
+
+
     
     </script>
         </body>

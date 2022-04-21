@@ -1,6 +1,8 @@
 package com.vts.ems.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,9 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
 
@@ -61,5 +66,66 @@ public class EmsController {
 
 		return "static/maindashboard";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "NotificationList.htm" , method = RequestMethod.GET)
+	public @ResponseBody String NotificationList(HttpServletRequest request ,HttpSession ses) throws Exception {
+			
+		List<EMSNotification> notificationlist= new ArrayList<EMSNotification>();
+		 
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NotificationList.htm "+UserId);		
+		try {
+		
+			Long EmpId= ((Long) ses.getAttribute("EmpId"));
+			
+		    notificationlist = service.NotificationList(EmpId);
+		    
+		    
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside NotificationList.htm "+UserId, e);
+		}
+		 
+		Gson json = new Gson();  
+		return json.toJson(notificationlist);
+		
+		
+	}
+	
+	
+	@RequestMapping(value = "NotificationUpdate.htm" , method = RequestMethod.GET)
+	public @ResponseBody String NotificationUpdate(HttpServletRequest request ,HttpSession ses) throws Exception {
+		Gson json = new Gson();
+		int count=0;
+		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NotificationUpdate.htm "+UserId);		
+		try {
+			String NotificationId=request.getParameter("notificationid");
+			
+			count= service.NotificationUpdate(NotificationId);
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside NotificationUpdate.htm "+UserId, e);
+		}
+			return json.toJson(count);
+			
+		
+	}
+	
+	
+	
+	
 
 }

@@ -9,7 +9,7 @@
 	<!DOCTYPE html>
 <html>
 	<head>
-	<%Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); %>
+	<% Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); %>
 <style type="text/css">
 		
 			.break {
@@ -126,19 +126,28 @@ th,td
 	
 %>
 
-<div align="center">
-	<img style="width: 2cm; height: 2cm;margin: 10px;" align="middle"   src="data:image/png;base64,<%=LabLogo%>">
-	<div style="text-align: left ;margin: 0px 5px 5px 10px;">
-		
-		<br>
-		<span style="font-size: 15px; font-weight:600;text-align: left; ">Ref: <%=contingentdata[1] %></span><span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
+<div align="center" style="margin-top: -10px" >
+	<table style="margin-bottom: 10px;margin-top: 0px">
+		<tr>
+			<td style="width: 80px; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 75px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
+			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0"> </td>
+		</tr>
+	</table>
+	<table style="margin-bottom: 10px;margin-top: -65px;">
+		<tr>
+			<td style="width: 80px; height: 75px;border: 0;margin-bottom: 10px;"></td>
+			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0;">STARC <br><br> Ref: <%=contingentdata[1] %>  </td>
+			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;"><b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></b>  </td>
+		</tr>
+	</table>
+	<div style="text-align: left ;margin: 0px 5px 0px 10px;">
 		<p>
 			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
 			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
 			employees have been processed and admitted at CHSS rates.
 		</p>
-					
 	</div>
+	
 	
 	<table>
 		<tr>

@@ -265,6 +265,26 @@
  
  
  <div class="card profile-card-container" >
+ 	<div>
+ 	<form action="#" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+ 					<div class="row"> 
+						
+						<%if(dashboard!=null)
+						{ 
+							for(Object[] obj:dashboard)
+							{
+								if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))){
+							 %>							
+							 <div class="col-md-3" >
+								<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
+							</div>
+							<%} }
+						}%>
+						
+					</div>
+				</form>
+	</div> 	
 
 	<div class="row" >
 		<div class="col-md-2">
@@ -273,7 +293,11 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<img src="view/images/tharun.jpg">
+								<%-- <%if(employee.getPhoto()!=null && !employee.getPhoto().trim().equals("") ){ %>
+								<img src="<%=employee.getPhoto()%>">
+								<%}else{ %> --%>
+								<img src="view/images/tharun.jpg" alt="Photo Not Found">
+								<%-- <%} %> --%>
 							</div>
 						</div>
 					</div>
@@ -295,7 +319,9 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
+								
 								<img src="view/images/user.png">
+								
 							</div>
 						</div>
 					</div>
@@ -377,7 +403,7 @@
 											
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==9 || Integer.parseInt(obj[9].toString())==11 || Integer.parseInt(obj[9].toString())==13 || Integer.parseInt(obj[9].toString())==7){ %>
+												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 														<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 													</button>	
@@ -397,6 +423,7 @@
 								</tbody>
 							</table>
 						</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 				</div>
 		</div>		
