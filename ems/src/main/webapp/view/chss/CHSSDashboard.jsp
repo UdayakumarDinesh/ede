@@ -426,7 +426,7 @@
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			</form>
 		</div>
-	</div>		
+	</div>
 
 <form action="CHSSApplyDetails.htm" method="post" id="myform" >
 	<input type="hidden" name="isself" id="isself" >
