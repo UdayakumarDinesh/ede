@@ -311,6 +311,20 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                </select>
 			            </div>
 			 			
+			 			<div class=" col-md-2 ">
+			                <label>Basic Pay<span class=" mandatory ">*</span></label>
+			                <input type="text" id="basicpaybox" 
+			                <%if(employee.getBasicPay()!=null ){ %>
+			                
+			                value="<%=employee.getBasicPay() %>" 
+			                <%}else{ %>
+			                
+			                 value="0" 
+			                <%} %>
+			                
+			                name="basicpay" class=" form-control input-sm " maxlength="12"
+			                    placeholder="Basic Pay" required="required">
+			            </div>
 			            
 			            <div class=" col-md-2 ">
 			                <label>Category<span class=" mandatory ">*</span></label>
@@ -343,12 +357,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                    onclick=" Validate() ">
 			               </div>
 						
-						<div class=" col-md-2 ">
-			                <label>Height</label>
-			                <input type="text" value="<%if(employee!=null){%><%=employee.getHeight()%><%}%>" name="height" class=" form-control input-sm " maxlength="50"
-			                    placeholder="Enter Height " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
-			
+						
 			            
 			            <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
@@ -485,6 +494,7 @@ setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#PAN"),/^[a-zA-Z0-9_]*$/);
+setPatternFilter($("#basicpaybox"), /^-?\d*$/);
 
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });

@@ -63,6 +63,7 @@ public class Employee {
 	private long SrNo;	
 	private String IdMark;
 	private String Height;
+	private Long BasicPay;
 	private Date EmpStatusDate;
 	private int IsActive;
 	private String CreatedBy;

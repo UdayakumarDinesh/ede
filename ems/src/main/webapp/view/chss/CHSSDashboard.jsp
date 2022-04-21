@@ -265,8 +265,23 @@
  
  
  <div class="card profile-card-container" >
+ <div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
  	<div>
- 	<form action="#" method="post">
+ 	<form action="#" method="post" style="margin-top: 5px;">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
  					<div class="row"> 
 						

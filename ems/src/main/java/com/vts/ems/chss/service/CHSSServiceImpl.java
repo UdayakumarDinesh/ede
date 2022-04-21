@@ -422,7 +422,7 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
-				meds.setMedsRemAmount(Integer.parseInt(dto.getMedicineCost()[i]));
+				meds.setMedsRemAmount(0);
 				meds.setIsActive(1);
 				count = dao.MedicinesBillAdd(meds);
 				
@@ -646,6 +646,18 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		Employee emp =dao.getEmployee(empid);
 		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
+		long basicpay=0;
+		if(emp.getBasicPay()!=null) {
+			 basicpay=emp.getBasicPay();
+		}
+		
+		
+		if(basicpay<=476000) {
+			
+		}
+		
+		
+		
 		int rembamt = 0;
 		if(emp.getPayLevelId()>=-1 && emp.getPayLevelId()<=6) 
 		{

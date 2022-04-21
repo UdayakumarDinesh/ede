@@ -853,10 +853,8 @@ function CheckClaimAmount($chssapplyid)
 						}else{
 							
 							$('#form2').submit();
-							
-						}
+						}	
 						
-				
 			}else if(result===-1){
 				alert('Please Add Atleast one Consultation details.');
 				return false;	

@@ -187,7 +187,7 @@ public class PisController {
 			String payLevel = req.getParameter("payLevel");
 			String SBI = req.getParameter("SBI");
 			String religion = req.getParameter("religion");
-			String height = req.getParameter("height");
+			String basicpay = req.getParameter("basicpay");
 			String email = req.getParameter("email");
 			String ExMan = req.getParameter("ExMan");
 			String PunchCardNo = req.getParameter("PunchCardNo");
@@ -274,7 +274,8 @@ public class PisController {
 			emp.setPayLevelId(Integer.parseInt(payLevel));
 			emp.setSBIAccNo(SBI);
 			emp.setIdMark(idMark);
-			emp.setHeight(height);
+			emp.setHeight("0");
+			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setCreatedBy(Username);
 			emp.setCreatedDate(new Date().toString());
@@ -352,7 +353,7 @@ public class PisController {
 			String payLevel = req.getParameter("payLevel");
 			String SBI = req.getParameter("SBI");
 			String religion = req.getParameter("religion");
-			String height = req.getParameter("height");
+			String basicpay = req.getParameter("basicpay");
 			String email = req.getParameter("email");
 			String ExMan = req.getParameter("ExMan");
 			String PunchCardNo = req.getParameter("PunchCardNo");
@@ -439,7 +440,8 @@ public class PisController {
 			emp.setPayLevelId(Integer.parseInt(payLevel));
 			emp.setSBIAccNo(SBI);
 			emp.setIdMark(idMark);
-			emp.setHeight(height);
+			emp.setHeight("0");
+			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setModifiedBy(Username);
 			emp.setInternalNumber(internalNo);
