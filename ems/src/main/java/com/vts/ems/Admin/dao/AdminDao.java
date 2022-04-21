@@ -3,9 +3,12 @@ package com.vts.ems.Admin.dao;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.model.EMSNotification;
 
 public interface AdminDao {
 
@@ -30,4 +33,16 @@ public interface AdminDao {
 	public Object[] getChssAprovalList() throws Exception;
 	public int UpdateApprovalAuth(String processing,String verification,String approving,String id ,String userid)throws Exception;
 	public long AddApprovalAuthority(CHSSApproveAuthority approva)throws Exception;
+	public List<Object[]>  getMedicineList()throws Exception;
+	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception;
+	public List<Object[]> GetTreatmentType()throws Exception;
+	public int Checkduplicate(String medicinename)throws Exception;
+	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception ;
+	public Long AddMedicine(CHSSMedicineList medicine)throws Exception;
+	public Long EditMedicine(CHSSMedicineList item) throws Exception;
+	public List<Object[]> GetRequestMessageList(String empid)throws Exception;
+	public int DeleteRequestMsg(String requestid ,String id)throws Exception;
+	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception;
+	public long AddRequestMsgNotification(EMSNotification notification)throws Exception;
+	
 }

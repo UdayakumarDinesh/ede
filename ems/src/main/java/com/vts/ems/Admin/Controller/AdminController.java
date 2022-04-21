@@ -18,10 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
+import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -250,6 +253,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						item.setPayLevel3(Integer.parseInt(paylevel3));
 						item.setPayLevel4(Integer.parseInt(paylevel4));
 						item.setCreatedBy(UserId);
+						item.setCreatedDate(sdtf.format(new Date()));
 						item.setOtherItemName(itemname);
 						item.setIsActive(1);
 						int result = service.AddOtherItem(item);
@@ -341,6 +345,181 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	
 		    }
 		    
+		@RequestMapping(method= {RequestMethod.POST,RequestMethod.GET},value ="MedicineList.htm")
+		public String MedicineList(HttpServletRequest req , HttpSession ses )throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				String name  = (String)req.getParameter("tratementname");
+			
+				if(name!=null) {
+				
+					List<Object[]>  list = service.getMedicineListByTreatment(name);
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("MedicineList", list);
+					req.setAttribute("treat", name);
+				} else {
+					
+					List<Object[]>  list = service.getMedicineList();
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("MedicineList", list);
+					req.setAttribute("treat", name);
+				}
+			
+				return "Admin/CHSSMedicineList";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "Admin/CHSSMedicineList";
+			}
+			
+		}
+		@RequestMapping(value="ChssMedicine.htm", method= {RequestMethod.POST,RequestMethod.GET})
+		public String ADDEDITMedicine(HttpServletRequest req ,HttpSession ses ,RedirectAttributes redir)throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				
+				String action = (String)req.getParameter("Action");
+			
+				if("ADD".equalsIgnoreCase(action)){
+					
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					return "Admin/CHSSMedicineADDEDIT";
+					
+				}else if ("EDIT".equalsIgnoreCase(action)) {
+					
+					String medicineid = (String)req.getParameter("MedicineId");
+					CHSSMedicineList  medicinelist=service.getCHSSMedicine(Long.parseLong(medicineid));
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("medicinelist", medicinelist);
+					return "Admin/CHSSMedicineADDEDIT";
+					
+				}else if ("EDITMEDICINE".equalsIgnoreCase(action)) {
+					
+					String medicineId = (String)req.getParameter("medicineId");
+					String tratementname = (String)req.getParameter("tratementname");
+					String MedicineName  = (String)req.getParameter("MedicineName");
+					CHSSMedicineList  medicinelist = new CHSSMedicineList();
+					medicinelist.setMedicineId(Long.parseLong(medicineId));
+					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					long result =service.EditMedicine(medicinelist);;
+					if (result != 0) {
+		    			redir.addAttribute("result", "MEDICINE EDITED SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MEDICINE EDITED UNSUCCESSFUL");
+					}
+					return "redirect:/MedicineList.htm";
+					
+				}else if ("ADDMEDICINE".equalsIgnoreCase(action)) {
+					
+					String tratementname = (String)req.getParameter("tratementname");
+					String MedicineName  = (String)req.getParameter("MedicineName");
+					CHSSMedicineList  medicinelist = new CHSSMedicineList();
+					
+					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					medicinelist.setCategoryId(0l);
+					medicinelist.setIsAdmissible("Y");
+					medicinelist.setIsActive(1);
+					long result=service.AddMedicine(medicinelist);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MEDICINE ADDED SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MEDICINE ADDED UNSUCCESSFUL");
+					}
+					return "redirect:/MedicineList.htm";
+				}	
+				return "redirect:/MedicineList.htm";
+			}catch (Exception e){
+				e.printStackTrace();
+				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
+				return "redirect:/MedicineList.htm";
+			}
+		}
 		
-		    
+		@RequestMapping(value ="DuplicateMedicine.htm",method=RequestMethod.GET)
+		public @ResponseBody String CheckDuplicateMedicine(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			int count =0;
+			Gson json = new Gson();
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
+			try {
+				String Medicinename = (String)req.getParameter("MedicineName");
+				count = service.Checkduplicate( Medicinename);
+				
+				 return json.toJson(count);
+			}catch (Exception e){
+				e.printStackTrace();
+				 return json.toJson(count);
+			}
+		}
+		
+		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.GET})
+		public String EmpRequestMessage(HttpServletRequest req,HttpSession ses,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			long EmpId = (long)ses.getAttribute("EmpId");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				
+				String action = (String)req.getParameter("Action");
+				System.out.println(action);
+				
+				if("MESSAGE".equalsIgnoreCase(action)) {
+					
+					String messgae = (String)req.getParameter("message");
+					EmployeeRequest reqMsg = new EmployeeRequest();
+					reqMsg.setRequestMessage(messgae);
+					reqMsg.setEmpId(EmpId);
+					reqMsg.setCreatedBy(UserId);
+					reqMsg.setCreatedDate(messgae);
+					reqMsg.setCreatedDate(sdtf.format(new Date()));
+					reqMsg.setIsActive(1);
+					long result = service.AddRequestMsg(reqMsg);
+					EMSNotification notification = new EMSNotification(); 
+					notification.setCreatedBy(UserId);
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(EmpId);
+					notification.setNotificationMessage("Request Message from "+UserId);
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("");
+					long value= service.EmpRequestNotification(notification);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MESSAGE SENT TO ADMIN SUCCESSFULY");
+					} else {
+						redir.addAttribute("resultfail", "MESSAGE SENT TO ADMIN UNSUCCESSFUL");
+					}
+					return "redirect:/EmpRequestMsg.htm";
+					
+				}else if ("Delete".equalsIgnoreCase(action)){
+					
+					String requestid = (String)req.getParameter("RequestId");
+					int result = service.DeleteRequestMsg(requestid ,UserId);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MESSAGE DELETE SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MESSAGE DELETE UNSUCCESSFUL");
+					}
+					return "redirect:/EmpRequestMsg.htm";
+				}else {
+					List<Object[]> Reqlist = service.GetRequestMessageList(Long.toString(EmpId));
+					req.setAttribute("msglist", Reqlist);				
+				}
+			
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+				
+			}
+			return "Admin/EmpRequestMsg";
+		}
+		
 }

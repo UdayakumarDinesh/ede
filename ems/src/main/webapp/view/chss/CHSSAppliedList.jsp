@@ -94,9 +94,21 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;" ><%=obj[17] %> <%=obj[9] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>"   title="Click for Details." ><%=obj[18] %> </a></td>
+											<td 
+											<%if("7".equals(obj[9].toString())||"9".equals(obj[9].toString()) ||"11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>  
+										    style="padding-top:5px; padding-bottom:5px; color:#d1312c;"				
+											<%}else if("1".equals(obj[9].toString())){%>
+											 style="padding-top:5px; padding-bottom:5px;  color:#2db714;"     
+											<%}else if("3".equals(obj[9].toString())||"12".equals(obj[9].toString())||"6".equals(obj[9].toString())){%>
+											style="padding-top:5px; padding-bottom:5px;  color:#83bd62;"
+											<%}else if("10".equals(obj[9].toString())||"4".equals(obj[9].toString())||"2".equals(obj[9].toString())){%>
+												style="padding-top:5px; padding-bottom:5px;  color:#149694;"
+											<%}else{ %>
+											style="padding-top:5px; padding-bottom: 5px;  color:#0b4980;"
+											<%} %>
+											 class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>"   title="Click for Details." ><%=obj[18] %> </a></td>
 											
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">

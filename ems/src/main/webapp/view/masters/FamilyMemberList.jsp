@@ -95,7 +95,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 						</div>
 						 
 					</div>
-					<div  class="row text-center" id = "dis" style="margin-top:20px;" align="center">
+				<!-- 	<div  class="row text-center" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
 				 	<button type="submit" class="btn btnclr"  style="background-color: #750550; color:#fff;" name="family" value="family" disabled="disabled" >Family</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Education</button>
@@ -106,7 +106,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" > Publication</button>
 					<button type="submit" class="btn btnclr" Onclick="Edit(empForm)" disabled="disabled" >Passport</button>
 					</div>
-				</div> 
+				</div> --> 
 					<input type="hidden" name="empid" value="<%=empdata[2]%>">
 	     		</form>
 	     

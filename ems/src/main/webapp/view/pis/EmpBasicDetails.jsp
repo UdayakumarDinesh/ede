@@ -64,7 +64,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	String path=(String)request.getAttribute("basevalue");
 	List<Object[]> familydetails = (List<Object[]>) request.getAttribute("familydetails");
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-	
+	String LoginType = (String) session.getAttribute("LoginType");
 %>
  
                    
@@ -78,8 +78,9 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+					<%if("A".equalsIgnoreCase(LoginType)){ %>
 					<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li>
+					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li><%}%>
 					<li class="breadcrumb-item active " aria-current="page">Employee info</li>
 				</ol>
 			</div>	
@@ -109,10 +110,10 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 		<div class="card" >
 			<div class="card-body " >
 				<div class="row">
-<div class="col-md-2" style="padding-bottom: 10px;" >
-<div class="card" style="background-color: #ebf0f2;">
-<div class="card-body text-center"  >
-             <form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
+			<div class="col-md-2" style="padding-bottom: 10px;" >
+			<div class="card" style="background-color: #ebf0f2;">
+			<div class="card-body text-center"  >
+			 <form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
 			<%if(employeedetails[29]!=null){ %>
 			
 			
@@ -162,7 +163,17 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%></td>
 					    <td><%=employeedetails[14]%></td>
 						<td><%=employeedetails[15]%></td>
+						
 						</tr>
+				<!-- 	<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
+					<form action="EmpRequestMsg.htm" method="GET">
+					<div class="row" >
+					    	<div class="col-11" align="right">
+					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
+					    	</div>  	
+			    	</div> 
+			    	</form>
+			       </td></tr> -->
 					</tbody>
 				</table>
 			 </div>

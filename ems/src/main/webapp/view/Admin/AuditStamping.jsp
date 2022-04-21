@@ -64,7 +64,7 @@ String ListName=(String)request.getAttribute("Username");
 	<form class="form-inline " method="GET" action="AuditStamping.htm">
 				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 				
-				   <label style="margin-left: 70px; margin-right: 10px; color: white;">User Name: <span class="mandatory" style="color: red;">*</span></label>
+				   <label style="margin-left: 70px; margin-right: 10px; color: black;">User Name: <span class="mandatory" style="color: red;">*</span></label>
 			
 			
 					<select class="form-control form-control select2" name="username" style="margin-left: 12px;" required="required" id="username" >
@@ -76,13 +76,13 @@ String ListName=(String)request.getAttribute("Username");
 					<%}%>
 					</select>
 					
-					<label style="margin-left: 30px; margin-right: 20px;color: white; ">From Date: <span class="mandatory" style="color: red;">*</span></label>
+					<label style="margin-left: 30px; margin-right: 20px;color: black; ">From Date: <span class="mandatory" style="color: red;">*</span></label>
 					
 					
 					<input type="text" class="form-control input-sm fromdate" style="width: 140px;" readonly="readonly" value="<%if(Fromdate!=null){%><%=Fromdate%><%}%>"   id="fromdate" name="fromdate"  required="required"  > 
 				
 				
-					<label style="margin-left: 10px; margin-right: 20px; color: white;">To Date: <span class="mandatory" style="color: red;">*</span></label>
+					<label style="margin-left: 10px; margin-right: 20px; color: black;">To Date: <span class="mandatory" style="color: red;">*</span></label>
 					
 					
 					<input type="text" class="form-control input-sm todate" style="width: 140px;" readonly="readonly" value="<%if(Todate!=null){%><%=Todate%><%}%>"  id="todate" name="todate"  required="required" > 			

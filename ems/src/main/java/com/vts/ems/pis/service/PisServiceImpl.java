@@ -364,6 +364,7 @@ public class PisServiceImpl implements PisService
 		member.setStatus_from(Details.getStatus_from());
 		member.setBlood_group(Details.getBlood_group());
 		member.setPH(Details.getPH());
+		member.setGender(Details.getGender());
  	    member.setMed_dep(Details.getMed_dep());
  	    member.setMed_dep_from(Details.getMed_dep_from());
  	    member.setLtc_dep(Details.getLtc_dep());

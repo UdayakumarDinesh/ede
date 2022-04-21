@@ -36,6 +36,7 @@ public class EmpFamilyDetails implements Serializable {
 	private String remarks;
 	private String labempid;
 	private String PH;
+	private String Gender;
 	private String cghs_ben_id;
 	private String emp_unemp;
 	private String mar_unmarried;
