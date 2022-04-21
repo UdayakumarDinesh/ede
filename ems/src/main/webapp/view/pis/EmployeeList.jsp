@@ -146,14 +146,14 @@
 					
 					<div  class="btn-group1" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
-				 	<button type="submit" class="btn btnclr"  style="margin-left: 5px;"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Education</button>
+				 	<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)">Family</button>
+			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Education</button>
 					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Appointment</button>
 					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Awards</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Property</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)">Address</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)"> Publication</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Passport</button>
+					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Property</button> -->
+					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)">Address</button>
+			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)"> Publication</button>
+					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Passport</button> -->
 					</div>
 				</div> 
 					

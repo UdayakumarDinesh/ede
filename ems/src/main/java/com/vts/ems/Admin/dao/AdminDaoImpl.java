@@ -19,12 +19,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.pis.model.AddressEmec;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
 @Repository
@@ -307,11 +308,12 @@ public class AdminDaoImpl implements AdminDao{
 		try {
 			manager.persist(approva);
 			manager.flush();
-
+			return approva.getApproveAuthListId();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return 0l;
 		}
-		return approva.getApproveAuthListId();
+		
 	}
 	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid";
 	@Override
@@ -387,11 +389,12 @@ public class AdminDaoImpl implements AdminDao{
 			cq = cq.select(root).where(p1);
 			TypedQuery<CHSSMedicineList> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
-
+			return memeber;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return memeber;
+	
 	}
 	
 	@Override
@@ -401,11 +404,12 @@ public class AdminDaoImpl implements AdminDao{
 		try {
 			manager.persist(medicine);
 			manager.flush();
-
+			return medicine.getMedicineId();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return 0l;
 		}
-		return medicine.getMedicineId();
+		
 	}
 	
 	@Override
@@ -421,4 +425,68 @@ public class AdminDaoImpl implements AdminDao{
 			return 0l;
 		}		
 	}
+	
+	private static final String REQUESTMSGLIST = "SELECT emprequestid, requestmessage ,responsemessage FROM ems_emp_request WHERE empid=:empid and isactive='1'";
+	@Override
+	public List<Object[]> GetRequestMessageList(String empid) throws Exception {
+		logger.info(new Date() +"Inside GetRequestMessageList()");	
+		try {
+			Query query = manager.createNativeQuery(REQUESTMSGLIST);
+			query.setParameter("empid", empid);
+			List<Object[]> MsgList= query.getResultList();
+			return MsgList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
+	private static final String DELETEREQUESTMSG="UPDATE ems_emp_request SET IsActive=:isactive ,ModifiedBy=:modifiedby ,ModifiedDate=:modifieddate WHERE EmpRequestId=:requestid";
+	@Override
+	public int DeleteRequestMsg(String requestid ,String modifiedby)throws Exception
+	{
+         logger.info(new Date() + "Inside DeleteRequestMsg()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEREQUESTMSG);			
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate",sdtf.format(new Date()) );			
+			query.setParameter("isactive","0");
+			query.setParameter("requestid",requestid);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception
+	{
+		logger.info(new Date() + "Inside AddRequestMsg()");
+		try {
+			manager.persist(reqmsg);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reqmsg.getEmpRequestId();
+	}
+	
+	@Override
+	public long AddRequestMsgNotification(EMSNotification notification)throws Exception
+	{
+		logger.info(new Date() + "Inside AdDRequestMsgNotification()");
+		try {
+			manager.persist(notification);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return notification.getNotificationId();
+	}
+	
 }

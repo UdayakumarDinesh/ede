@@ -72,14 +72,27 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                 <!-- RELATIONSHIP & BENID-->
                 
                  <div class="row">
-				       <div class="col-md-8">
+				       <div class="col-md-4">
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
-		                    <select class="form-control input-sm " name="relation" required  data-live-search="true">
+		                    <select class="form-control input-sm select2" name="relation" required  data-live-search="true">
 		                      <option value="">Select Relation</option>
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
 		                        <option value="<%=relativeLs[0]%>"><%=relativeLs[1]%></option>
 		                        <%} %> 
+		                                     
+		                    </select>
+		                </div>
+		              </div>
+		              
+		              <div class="col-md-4">
+		                <div class="form-group">
+		                	<label>Gender:<span class="mandatory">*</span></label>
+		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
+		                      <option value="">Select Gender</option>
+		                      
+		                        <option value="M">Male</option>
+		                       <option value="F">Female</option>
 		                                     
 		                    </select>
 		                </div>
@@ -98,7 +111,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                   <div class="col-4">
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
-                            <select class="form-control input-sm" name="status" required="required">
+                            <select class="form-control input-sm select2" name="status" required="required">
                               <!-- <option value="none" selected disabled hidden>Select Status</option> -->
                               
                                <% for(Object[] statusLs:StatusList){ %> 
@@ -119,7 +132,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                 <div class="col-2">
                         <div class="form-group">
                             <label>BG:<span class="mandatory">*</span></label>
-                            <select class="form-control input-sm" name="bloodgroup" required="required" style="width:70px; height: 30px;" >
+                            <select class="form-control input-sm " name="bloodgroup" required="required" style="width:70px; height: 30px;" >
                                 
                                 <option value="A-">A-</option>
                                 <option value="A+">A+</option>
@@ -138,7 +151,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                 <div class="col-2">
                        <div class="form-group">
 		                	<label>PH:<span class="mandatory">*</span></label>
-		                    <select name="PH" class="form-control input-sm" style="padding: 3px 6px; ">
+		                    <select name="PH" class="form-control input-sm" style="width: 70px;height: 30px;">
 		                    <option value="N">No</option>
 		                    <option value="Y">Yes</option>
 		                    </select>
@@ -195,7 +208,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                    <div class="col-2">
                        <div class="form-group">
 		                	<label>Married:<span class="mandatory">*</span></label>
-		                    <select name="married_unmarried" class="form-control input-sm" style="padding: 3px 6px; height: 30px;">
+		                    <select name="married_unmarried" class="form-control input-sm" style="width:70px; height: 30px;">
 		                    <option value="N">No</option>
 		                    <option value="Y">Yes</option>
 		                    </select>

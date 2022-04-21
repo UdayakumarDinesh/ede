@@ -1006,7 +1006,11 @@ public class PisDaoImpl implements PisDao {
 		try {
 			Query query = manager.createNativeQuery(NEXTKINADDRESSDETAILS);
 			query.setParameter("empid", empid);
-			return (Object[]) query.getResultList().get(0);
+			 List<Object[]> list  =(List<Object[]> )query.getResultList();			
+				if(list.size()>0) {
+					return list.get(0);				
+				}
+				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -1020,7 +1024,11 @@ public class PisDaoImpl implements PisDao {
 		try {
 			Query query = manager.createNativeQuery(PERADDRESSDETAILS);
 			query.setParameter("empid", empid);
-			return (Object[]) query.getResultList().get(0);
+	       List<Object[]> list  =(List<Object[]> )query.getResultList();			
+			if(list.size()>0) {
+				return list.get(0);				
+			}
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

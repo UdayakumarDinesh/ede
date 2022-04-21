@@ -18,11 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
+import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -251,6 +253,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						item.setPayLevel3(Integer.parseInt(paylevel3));
 						item.setPayLevel4(Integer.parseInt(paylevel4));
 						item.setCreatedBy(UserId);
+						item.setCreatedDate(sdtf.format(new Date()));
 						item.setOtherItemName(itemname);
 						item.setIsActive(1);
 						int result = service.AddOtherItem(item);
@@ -458,4 +461,65 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				 return json.toJson(count);
 			}
 		}
+		
+		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.GET})
+		public String EmpRequestMessage(HttpServletRequest req,HttpSession ses,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			long EmpId = (long)ses.getAttribute("EmpId");
+			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			try {
+				
+				String action = (String)req.getParameter("Action");
+				System.out.println(action);
+				
+				if("MESSAGE".equalsIgnoreCase(action)) {
+					
+					String messgae = (String)req.getParameter("message");
+					EmployeeRequest reqMsg = new EmployeeRequest();
+					reqMsg.setRequestMessage(messgae);
+					reqMsg.setEmpId(EmpId);
+					reqMsg.setCreatedBy(UserId);
+					reqMsg.setCreatedDate(messgae);
+					reqMsg.setCreatedDate(sdtf.format(new Date()));
+					reqMsg.setIsActive(1);
+					long result = service.AddRequestMsg(reqMsg);
+					EMSNotification notification = new EMSNotification(); 
+					notification.setCreatedBy(UserId);
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(EmpId);
+					notification.setNotificationMessage("Request Message from "+UserId);
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("");
+					long value= service.EmpRequestNotification(notification);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MESSAGE SENT TO ADMIN SUCCESSFULY");
+					} else {
+						redir.addAttribute("resultfail", "MESSAGE SENT TO ADMIN UNSUCCESSFUL");
+					}
+					return "redirect:/EmpRequestMsg.htm";
+					
+				}else if ("Delete".equalsIgnoreCase(action)){
+					
+					String requestid = (String)req.getParameter("RequestId");
+					int result = service.DeleteRequestMsg(requestid ,UserId);
+					if (result != 0) {
+		    			redir.addAttribute("result", "MESSAGE DELETE SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "MESSAGE DELETE UNSUCCESSFUL");
+					}
+					return "redirect:/EmpRequestMsg.htm";
+				}else {
+					List<Object[]> Reqlist = service.GetRequestMessageList(Long.toString(EmpId));
+					req.setAttribute("msglist", Reqlist);				
+				}
+			
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+				
+			}
+			return "Admin/EmpRequestMsg";
+		}
+		
 }

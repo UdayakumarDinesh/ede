@@ -722,6 +722,7 @@ public class PisController {
     	   String LTC = (String)req.getParameter("LTC");
     	   String marriagestatus = (String)req.getParameter("married_unmarried");
     	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String gender = (String)req.getParameter("Gender");
     	   String empid = (String)req.getParameter("empid");
     	   
     	   
@@ -735,6 +736,7 @@ public class PisController {
     	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
     	   details.setBlood_group(bloodgroup);
     	   details.setPH(Phone);
+    	   details.setGender(gender);
     	   details.setMed_dep(medicaldep);
     	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
     	   details.setLtc_dep(ltcdep);
@@ -783,8 +785,8 @@ public class PisController {
     	   String marriagestatus = (String)req.getParameter("married_unmarried");
     	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String empid = (String)req.getParameter("empid");
-    	   String familyid= (String)req.getParameter("familyid");
-    	   
+    	   String familyid = (String)req.getParameter("familyid");
+    	   String gender   = (String)req.getParameter("Gender");
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
     	   details.setMember_name(name);
@@ -795,6 +797,7 @@ public class PisController {
     	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
     	   details.setBlood_group(bloodgroup);
     	   details.setPH(Phone);
+    	   details.setGender(gender);
     	   details.setMed_dep(medicaldep);
     	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
     	   details.setLtc_dep(ltcdep);
