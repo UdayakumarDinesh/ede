@@ -1,7 +1,9 @@
 package com.vts.ems.dao;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.model.AuditStamping;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 
 
@@ -64,7 +67,7 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Employee EmployeeInfo(long EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside EmployeeInfo");
+		logger.info(new Date() +"Inside DAO EmployeeInfo");
 		try {
 			Employee emloyee = null;
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -85,7 +88,7 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Object[] EmployeeData(String EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside EmployeeData");
+		logger.info(new Date() +"Inside DAO EmployeeData");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEDATA);
 			query.setParameter("empid", EmpId);				
@@ -96,5 +99,42 @@ public class EmsDaoImpl implements EmsDao
 			return null;
 		}
 	}
+	
+	
+	@Override
+	public List<EMSNotification> NotificationList(long EmpId)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO NotificationList");
+		try {
+			List<EMSNotification> notylist = null;
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EMSNotification> cq= cb.createQuery(EMSNotification.class);
+			Root<EMSNotification> root= cq.from(EMSNotification.class);
+			Predicate p1 = cb.equal(root.get("EmpId"), EmpId);			
+			Predicate p2 = cb.equal(root.get("IsActive"), 1);			
+			cq=cq.select(root).where(p1,p2);
+			TypedQuery<EMSNotification> allQuery = manager.createQuery(cq);
+			notylist = allQuery.getResultList();
+			return notylist;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<EMSNotification>();
+		}
+	}
+	
+	private static final String NOTIFICATIONUPDATE="update ems_notification set isactive='0' where notificationid=:notificationid ";
+	@Override
+	public int NotificationUpdate(String NotificationId) throws Exception
+	{
+		
+		logger.info(new Date() +"Inside DAO NotificationUpdate");	
+		Query query = manager.createNativeQuery(NOTIFICATIONUPDATE);
+		
+		query.setParameter("notificationid", NotificationId);
+		
+		int count= (int)query.executeUpdate();
+		return count;
+	}
+	
 	
 }

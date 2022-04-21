@@ -93,3 +93,10 @@ hr{
 .dashboard-margin{
 	margin: 0px 20px !important;
 }
+
+#myTable
+{
+	max-width: 100% !important;	
+}
+
+

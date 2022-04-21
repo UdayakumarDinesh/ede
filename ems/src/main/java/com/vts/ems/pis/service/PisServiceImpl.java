@@ -200,6 +200,7 @@ public class PisServiceImpl implements PisService
 		employee.setSBIAccNo(emp.getSBIAccNo());
 		employee.setIdMark(emp.getIdMark());
 		employee.setHeight(emp.getHeight());
+		employee.setBasicPay(emp.getBasicPay());
 		employee.setModifiedBy(emp.getModifiedBy());
 		employee.setModifiedDate(emp.getModifiedDate());
 		employee.setInternalNumber(emp.getInternalNumber());

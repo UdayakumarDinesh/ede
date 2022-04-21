@@ -265,6 +265,41 @@
  
  
  <div class="card profile-card-container" >
+ <div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
+ 	<div>
+ 	<form action="#" method="post" style="margin-top: 5px;">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+ 					<div class="row"> 
+						
+						<%if(dashboard!=null)
+						{ 
+							for(Object[] obj:dashboard)
+							{
+								if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))){
+							 %>							
+							 <div class="col-md-3" >
+								<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
+							</div>
+							<%} }
+						}%>
+						
+					</div>
+				</form>
+	</div> 	
 
 	<div class="row" >
 		<div class="col-md-2">
@@ -273,7 +308,11 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<img src="view/images/tharun.jpg">
+								<%-- <%if(employee.getPhoto()!=null && !employee.getPhoto().trim().equals("") ){ %>
+								<img src="<%=employee.getPhoto()%>">
+								<%}else{ %> --%>
+								<img src="view/images/tharun.jpg" alt="Photo Not Found">
+								<%-- <%} %> --%>
 							</div>
 						</div>
 					</div>
@@ -295,7 +334,9 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
+								
 								<img src="view/images/user.png">
+								
 							</div>
 						</div>
 					</div>
@@ -310,7 +351,6 @@
 	 <%} %>
 	
 	</div>
-
 
 </div>
 
@@ -346,66 +386,68 @@
 	<div class="card-body "  style="padding: 1rem !important;">				
 		<form action="#" method="post" id="ClaimForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
-								<thead>
-									<tr>
-										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
-										<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
-										<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
-										<!-- <td style="padding-top:5px; padding-bottom: 5px;">Ailment</td> -->
-										<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Claim Amnt</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amnt</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
-									</tr>
-								</thead>
-								<tbody>
-									<%long slno=0;
-									for(Object[] obj : empchsslist){ 
-										slno++; %>
-										<tr>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-											<%-- <td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td> --%>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
+						<thead>
+							<tr>
+								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
+								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
+								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
+								<!-- <td style="padding-top:5px; padding-bottom: 5px;">Ailment</td> -->
+								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amnt</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amnt</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
+							</tr>
+						</thead>
+						<tbody>
+							<%long slno=0;
+							for(Object[] obj : empchsslist){ 
+								slno++; %>
+								<tr>
+									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
+									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
+									<%-- <td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td> --%>
+									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
+									
 											
+									<td style="padding-top:5px; padding-bottom: 5px;">
+										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
+											</button>	
+										<%} %>
 											
-											<td style="padding-top:5px; padding-bottom: 5px;">
-												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==9 || Integer.parseInt(obj[9].toString())==11 || Integer.parseInt(obj[9].toString())==13 || Integer.parseInt(obj[9].toString())==7){ %>
-													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-														<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
-													</button>	
-												<%} %>
-												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-													<i class="fa-solid fa-eye"></i>
-												</button>	
-												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-													<i style="color: #019267" class="fa-solid fa-download"></i>
-												</button>
-												<input type="hidden" name="isapproval" value="N">							
-											</td>
-										</tr>
-									<%} %>
-								</tbody>
-							</table>
-						</div>
-					</form>
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+											<i class="fa-solid fa-eye"></i>
+										</button>	
+											
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<i style="color: #019267" class="fa-solid fa-download"></i>
+										</button>
+										<input type="hidden" name="isapproval" value="N">							
+									</td>
+								</tr>
+							<%} %>
+						</tbody>
+					</table>
 				</div>
-		</div>		
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			</form>
+		</div>
+	</div>
 
 <form action="CHSSApplyDetails.htm" method="post" id="myform" >
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+
 
 <form action="CHSSDashboard.htm" method="post" id="changeform" >
 	<input type="hidden" name="isselfvalue" id="isselfvalue" >

@@ -270,7 +270,7 @@ public class CHSSController {
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSAppliedList.htm";
+				return "redirect:/CHSSDashboard.htm";
 			}
 						
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
@@ -1288,18 +1288,12 @@ public class CHSSController {
 				claimamount += Long.parseLong(bill[5].toString());
 			}
 			
-			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
+//			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
 			
 			if(claimamount>0  ) 
 			{
-				if(consultationcount<1) 
-				{
-					allow=-1;
-				}
-				else
-				{
-					allow=1;
-				}
+				allow=1;
+				
 			}else
 			{
 				allow=0;
@@ -1345,7 +1339,7 @@ public class CHSSController {
 			
 			service.CHSSApplyEncCountEdit(dto);
 			
-			redir.addAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			return "redirect:/CHSSFormEdit.htm";
 			
 		} catch (Exception e) {
@@ -1414,7 +1408,7 @@ public class CHSSController {
 					return "redirect:/CHSSApprovalsList.htm";
 				}
 			}
-			return "redirect:/CHSSAppliedList.htm";
+			return "redirect:/CHSSDashboard.htm";
 			
 		} catch (Exception e) {
 			
@@ -1932,7 +1926,7 @@ public class CHSSController {
 
 	}
 	
-	@RequestMapping(value="ApprovedBiils.htm" , method=RequestMethod.POST)
+	@RequestMapping(value="ApprovedBiils.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String ApprovedBiils(HttpSession ses,HttpServletRequest req , RedirectAttributes redir)throws Exception{
 		
 		String UserId = (String) ses.getAttribute("Username");

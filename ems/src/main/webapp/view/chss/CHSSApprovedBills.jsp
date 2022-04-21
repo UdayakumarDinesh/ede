@@ -67,10 +67,8 @@
 									<tr>
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Remarks</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">View</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
 								</thead>
 								<tbody>
@@ -81,15 +79,15 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[2].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[7] %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="##" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
-											
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+													<i style="color: #019267" class="fa-solid fa-download"></i>
+												</button>
 												
 											</td>
 										</tr>

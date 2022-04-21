@@ -301,6 +301,12 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>
 			 			
+			 			<div class=" col-md-2 ">
+			                <label>Basic Pay<span class=" mandatory ">*</span></label>
+			                <input type="text" id="basicpaybox" value="" name="basicpay" class=" form-control input-sm " maxlength="12"
+			                    placeholder="Basic Pay" required="required">
+			            </div>
+			 			
 			            
 			            <div class=" col-md-2 ">
 			                <label>Category<span class=" mandatory ">*</span></label>
@@ -327,11 +333,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    onclick=" Validate() ">
 			            </div>
 						
-						<div class=" col-md-2 ">
-			                <label>Height</label>
-			                <input type="text" value="" name="height" class=" form-control input-sm " maxlength="3"
-			                    placeholder="In centimeter" onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
+						
 			
 			               <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
@@ -557,6 +559,7 @@ setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#InternalNum"), /^-?\d*$/);
+setPatternFilter($("#basicpaybox"), /^-?\d*$/);
 
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });

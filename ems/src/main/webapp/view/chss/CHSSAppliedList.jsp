@@ -112,7 +112,7 @@
 											
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==9 || Integer.parseInt(obj[9].toString())==11 || Integer.parseInt(obj[9].toString())==13 || Integer.parseInt(obj[9].toString())==7){ %>
+												<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 														<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 													</button>	
