@@ -154,7 +154,7 @@ th,td
 							<div>
 								<div>
 									<h3 style="font-weight: 600;">MEDICAL CLAIM</h3>
-									<div align="right"> No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
+									<div align="left"> <span>Claim No : <b><%=chssapplydata[16] %> </b></span><span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span></div>
 								</div>
 							
 								<table>	
@@ -308,7 +308,14 @@ th,td
 												{%>
 													<%if(i==1){ %>
 														<tr>
-															<td colspan="4" style="text-align: center;"><b>Consultation charges</b></td>
+															<td colspan="4" style="text-align: center;">
+																<b>Consultation charges </b>
+																<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">
+																	<i class="fa-solid fa-clock-rotate-left"></i>
+																 </button>
+																 <%} %>
+															</td>
 															<td class="right"> 
 																<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
@@ -355,7 +362,14 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;"><b>Pathological/Investigations Test</b></td>
+														<td colspan="4" style="text-align: center;">
+															<b>Pathological/Investigations Test</b> 
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
+																	<i class="fa-solid fa-clock-rotate-left"></i>
+																 </button>
+															 <%} %>
+														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
@@ -398,7 +412,14 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;"><b>Medicines</b></td>
+														<td colspan="4" style="text-align: center;">
+															<b>Medicines</b>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
+																	<i class="fa-solid fa-clock-rotate-left"></i>
+																 </button>
+															 <%} %>
+														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -446,7 +467,14 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;"><b>Others</b></td>
+														<td colspan="4" style="text-align: center;">
+															<b>Others</b>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
+																	<i class="fa-solid fa-clock-rotate-left"></i>
+																 </button>
+															 <%} %>
+														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -491,7 +519,14 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;"><b>Miscellaneous</b></td>
+														<td colspan="4" style="text-align: center;">
+															<b>Miscellaneous</b>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
+																	<i class="fa-solid fa-clock-rotate-left"></i>
+																 </button>
+															 <%} %>
+														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -611,6 +646,366 @@ th,td
 		</div>
 	
 	 </div>
+	 
+	 
+ <div class="modal fade my-history-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
+		<div class="modal-content" >
+			<div class="modal-header" style="background: #F5C6A5 ">
+				<div> <h4 id="m-header"></h4> </div>
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+			    </button>
+		    </div>
+			<div class="modal-body" style="min-height: 30rem;">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover table-condensed  info shadow-nohover" id="modal-history-table" style="max-width: 99% !important;">
+								<thead><tr><td></td></tr></thead>
+								<tbody><tr><td></td></tr></tbody>								
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		      
+		</div>
+	</div>
+</div>
+	 
+	
+	 
+	 
+	 
+	 
+<script type="text/javascript">
+$("#modal-history-table").DataTable({
+    "lengthMenu": [10, 25, 50, 75, 100],
+    "pagingType": "simple",
+    "language": {
+	      "emptyTable": "No Record Found"
+	    }
+
+});
+var $chssapplyid = <%=chssapplydata[0]%>;
+
+function ShowHistory(itemid)
+{
+	
+	
+	if(itemid==1)
+	{
+		$('#m-header').html('Consultations History');
+		$.ajax({
+
+			type : "GET",
+			url : "ConsultationHistoryAjax.htm",
+			data : {
+					
+				chssapplyid : $chssapplyid,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				var $consulthistorylist = Object.keys(result).map(function(e){
+					return result[e]
+				})	
+				var $TblStr = '';
+
+				$TblStr+=	'<thead><tr>';
+				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Type</th>';
+				$TblStr+=		'<th>Doctor Name</th>';
+				/* $TblStr+=		'<th>Qualification</th>'; */
+				$TblStr+=		'<th style="text-align:right;width: 10%; ">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;width: 10%; ">Admitted (&#8377;)</th>';
+				$TblStr+=	'</tr></thead>';
+				$TblStr+=	'<tbody>';
+				
+				for(var cons=0;cons< $consulthistorylist.length;cons++)
+				{
+					$TblStr+=	'<tr>';
+					$TblStr+=		'<td style="width:15%;">'+$consulthistorylist[cons][1]+'</td>';
+					$TblStr+=		'<td  style="width:10%;" >'+$consulthistorylist[cons][3]+'</td>';
+					$TblStr+=		'<td>'+$consulthistorylist[cons][4]+'</td>';
+					/* $TblStr+=		'<td>'+$consulthistorylist[i][7]+'</td>'; */
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$consulthistorylist[cons][7]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$consulthistorylist[cons][8]+'</td>';
+					$TblStr+=	'</tr>';
+				}
+				
+				
+				$TblStr+=	'</tbody>';
+				$("#modal-history-table").DataTable().clear().destroy();
+				$('#modal-history-table').html($TblStr);
+				$("#modal-history-table").DataTable({
+			        "lengthMenu": [10, 25, 50, 75, 100],
+			        "pagingType": "simple",
+			        "language": {
+					      "emptyTable": "No Record Found"
+					    }
+
+			    });
+				$('.my-history-modal').modal('toggle');
+			}
+		});
+		
+		
+		
+		
+	}else if(itemid==2){
+		$('#m-header').html('Tests History');	
+		
+		$.ajax({
+
+			type : "GET",
+			url : "TestsHistoryAjax.htm",
+			data : {
+					
+				chssapplyid : $chssapplyid,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				var $testshistorylist = Object.keys(result).map(function(e){
+					return result[e]
+				})	
+				var $TblStr = '';
+
+				$TblStr+=	'<thead><tr>';
+				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Test</th>';
+				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
+				$TblStr+=	'</tr></thead>';
+				$TblStr+=	'<tbody>';
+				
+				for(var t=0;t< $testshistorylist.length;t++)
+				{
+					$TblStr+=	'<tr>';
+					$TblStr+=		'<td style="width:15%;">'+$testshistorylist[t][1]+'</td>';
+					$TblStr+=		'<td>'+$testshistorylist[t][4]+'  ('+$testshistorylist[t][5]+')'+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$testshistorylist[t][6]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$testshistorylist[t][7]+'</td>';
+					$TblStr+=	'</tr>';
+				}
+				
+				
+				$TblStr+=	'</tbody>';
+				$("#modal-history-table").DataTable().destroy();
+				$('#modal-history-table').html($TblStr);
+				$("#modal-history-table").DataTable({
+			        "lengthMenu": [10, 25, 50, 75, 100],
+			        "pagingType": "simple",
+			        "language": {
+					      "emptyTable": "No Record Found"
+					    }
+
+			    });
+				$('.my-history-modal').modal('toggle');
+			}
+		});
+		
+		
+		
+		
+	}else if(itemid==3){
+		$('#m-header').html('Medicines History');		
+		
+		$.ajax({
+
+			type : "GET",
+			url : "MedicinesHistoryAjax.htm",
+			data : {
+					
+				chssapplyid : $chssapplyid,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				var $medshistorylist = Object.keys(result).map(function(e){
+					return result[e]
+				})	
+				var $TblStr = '';
+
+				$TblStr+=	'<thead><tr>';
+				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Medicine Name</th>';
+				$TblStr+=		'<th>Rx Qty.</th>';
+				$TblStr+=		'<th>Pur Qty.</th>';
+				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
+				$TblStr+=	'</tr></thead>';
+				$TblStr+=	'<tbody>';
+				
+				for(var m=0;m< $medshistorylist.length;m++)
+				{
+					$TblStr+=	'<tr>';
+					$TblStr+=		'<td style="width:15%;">'+$medshistorylist[m][1]+'</td>';
+					$TblStr+=		'<td>'+$medshistorylist[m][3]+'</td>';
+					$TblStr+=		'<td>'+$medshistorylist[m][4]+'</td>';
+					$TblStr+=		'<td>'+$medshistorylist[m][5]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$medshistorylist[m][6]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$medshistorylist[m][7]+'</td>';
+					$TblStr+=	'</tr>';
+				}
+				
+				
+				$TblStr+=	'</tbody>';
+				$("#modal-history-table").DataTable().destroy();
+				$('#modal-history-table').html($TblStr);
+				$("#modal-history-table").DataTable({
+			        "lengthMenu": [10, 25, 50, 75, 100],
+			        "pagingType": "simple",
+			        "language": {
+					      "emptyTable": "No Record Found"
+					    }
+
+			    });
+				$('.my-history-modal').modal('toggle');
+			}
+		});
+		
+		
+		
+		
+	}else if(itemid==4)
+	{
+		
+		$('#m-header').html('Other Items History');			
+		
+		$.ajax({
+
+			type : "GET",
+			url : "OthersHistoryAjax.htm",
+			data : {
+					
+				chssapplyid : $chssapplyid,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				var $othershistorylist = Object.keys(result).map(function(e){
+					return result[e]
+				})	
+				var $TblStr = '';
+
+				$TblStr+=	'<thead><tr>';
+				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Other Item Name</th>';
+				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
+				$TblStr+=	'</tr></thead>';
+				$TblStr+=	'<tbody>';
+				
+				for(var m=0;m< $othershistorylist.length;m++)
+				{
+					$TblStr+=	'<tr>';
+					$TblStr+=		'<td style="width:15%;">'+$othershistorylist[m][1]+'</td>';
+					$TblStr+=		'<td>'+$othershistorylist[m][4]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$othershistorylist[m][5]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$othershistorylist[m][6]+'</td>';
+					$TblStr+=	'</tr>';
+				}
+				
+				
+				$TblStr+=	'</tbody>';
+				$("#modal-history-table").DataTable().destroy();
+				$('#modal-history-table').html($TblStr);
+				$("#modal-history-table").DataTable({
+			        "lengthMenu": [10, 25, 50, 75, 100],
+			        "pagingType": "simple",
+			        "language": {
+					      "emptyTable": "No Record Found"
+					    }
+
+			    });
+				$('.my-history-modal').modal('toggle');
+			}
+		});
+		
+		
+	}else if(itemid==5)
+	{
+		
+		$('#m-header').html('Miscellaneous Items History');					
+		
+		$.ajax({
+
+			type : "GET",
+			url : "MiscItemsHistoryAjax.htm",
+			data : {
+					
+				chssapplyid : $chssapplyid,
+			},
+			datatype : 'json',
+			success : function(result) {
+				var result = JSON.parse(result);
+				var $mischistorylist = Object.keys(result).map(function(e){
+					return result[e]
+				})	
+				var $TblStr = '';
+
+				$TblStr+=	'<thead><tr>';
+				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Miscellaneous Item</th>';
+				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
+				$TblStr+=	'</tr></thead>';
+				$TblStr+=	'<tbody>';
+				
+				for(var m=0;m< $mischistorylist.length;m++)
+				{
+					$TblStr+=	'<tr>';
+					$TblStr+=		'<td style="width:15%;">'+$mischistorylist[m][1]+'</td>';
+					$TblStr+=		'<td>'+$mischistorylist[m][3]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$mischistorylist[m][4]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$mischistorylist[m][5]+'</td>';
+					$TblStr+=	'</tr>';
+				}
+				
+				
+				$TblStr+=	'</tbody>';
+				$("#modal-history-table").DataTable().destroy();
+				$('#modal-history-table').html($TblStr);
+				$("#modal-history-table").DataTable({
+			        "lengthMenu": [10, 25, 50, 75, 100],
+			        "pagingType": "simple",
+			        "language": {
+					      "emptyTable": "No Record Found"
+					    }
+
+			    });
+				$('.my-history-modal').modal('toggle');
+			}
+		});
+		
+		
+	}
+		
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
+
+</script>
+	 
+	 
 	 
 <script type="text/javascript">
 

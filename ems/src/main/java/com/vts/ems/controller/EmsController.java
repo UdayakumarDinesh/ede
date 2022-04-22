@@ -69,13 +69,6 @@ public class EmsController {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	@RequestMapping(value = "NotificationList.htm" , method = RequestMethod.GET)
 	public @ResponseBody String NotificationList(HttpServletRequest request ,HttpSession ses) throws Exception {
 			

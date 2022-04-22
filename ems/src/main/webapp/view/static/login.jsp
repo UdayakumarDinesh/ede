@@ -109,7 +109,7 @@
 	
 								<div class="col-md-12">
 								
-									<center><h5 style="color:maroon;font-family: 'Lato', sans-serif;display: block;" class="welcome">Welcome !</h5></center> 
+									<div align="center"><h5 style="color:maroon;font-family: 'Lato', sans-serif;display: block;" class="welcome">Welcome !</h5></div> 
 									
 									<div class="login-form-wrapper " style="padding-right: 43px;padding-left: 43px; padding-bottom: 43px; padding-top: 8px " >
 										
@@ -130,7 +130,7 @@
 													</div>
 													
 													<div class="form-group col-12 position-relative">
-														<input name="password" type="password" placeholder="Password" required class="form-control">
+														<input name="password" type="password" placeholder="Password"  class="form-control">
 														<i class="fa fa-lock fa-lg position-absolute"></i>	
 													</div>
 														
@@ -146,9 +146,12 @@
 															<div class="form-submit-button">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 																<button type="submit" class="btn btn-block btn-success" style="font-family: 'Montserrat', sans-serif;" >Login</button>
+																<button type="submit" class="btn btn-link" formaction="#"> Forgot Password?</button>
 															</div>
 														</div>
 													</div>
+													
+													
 												</div>
 												
 												
@@ -156,12 +159,14 @@
 											
 										</div>
 										
-										<div class="credentials-info-container">
+										<div class="credentials-info-container" style="margin-top: -35px;margin-bottom: -6px">
 											<div class="row">
 												<div class="col-md-12">
+													
 													<div class="info-container text-md-left">
-														<p class="text-secondary" style="font-family: 'Lato', sans-serif;font-size: 15px;margin-top: -19px;margin-bottom: -6px">* Do not share credentials with anyone</p>
+														<p class="text-secondary" style="font-family: 'Lato', sans-serif;font-size: 15px;">* Do not share credentials with anyone</p>
 													</div>
+													
 												</div>
 											</div>
 										</div>
@@ -180,6 +185,9 @@
 		</div>
 	</div>
  </section> 
+  
+  
+  
   
 
 
