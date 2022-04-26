@@ -1241,4 +1241,35 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSApprovalAuthList();
 	}
 	
+	
+	@Override
+	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception
+	{
+		return dao.ConsultationHistor(chssapplyid);
+	}
+	
+	
+	@Override
+	public List<Object[]> TestsHistory(String chssapplyid) throws Exception
+	{
+		return dao.TestsHistory(chssapplyid);
+	}
+	
+	@Override
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception
+	{
+		return dao.MedicinesHistory(chssapplyid);
+	}
+	
+	@Override
+	public List<Object[]> OthersHistory(String chssapplyid) throws Exception
+	{
+		return dao.OthersHistory(chssapplyid);
+	}
+	
+	@Override
+	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception
+	{
+		return dao.MiscItemsHistory(chssapplyid);
+	}
 }

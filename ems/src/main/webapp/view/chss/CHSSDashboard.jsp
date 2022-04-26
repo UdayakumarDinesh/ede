@@ -1,3 +1,4 @@
+<%@page import="java.io.File"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
@@ -209,6 +210,7 @@
 		patientidvalue=(String)request.getAttribute("patientidvalue");
 	}
 
+	String profilepicpath = (String) request.getAttribute("profilepicpath"); 
 %>
 
  <div class="col page">
@@ -308,11 +310,11 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<%-- <%if(employee.getPhoto()!=null && !employee.getPhoto().trim().equals("") ){ %>
-								<img src="<%=employee.getPhoto()%>">
-								<%}else{ %> --%>
-								<img src="view/images/tharun.jpg" alt="Photo Not Found">
-								<%-- <%} %> --%>
+								<%if(employee.getGender().equalsIgnoreCase("F")){ %>
+								<img src="view/images/femaleuser.png" alt="Photo Not Found">
+								<%}else{ %>
+								<img src="view/images/maleuser.png" alt="Photo Not Found">
+								<%}%>
 							</div>
 						</div>
 					</div>
@@ -323,8 +325,7 @@
 					</div>
 				</div>	
 			</div>
-			
-			
+						
 		</div>
 		
 		<%for(Object[] obj : empfamilylist){ %>
@@ -334,9 +335,11 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								
-								<img src="view/images/user.png">
-								
+								<%if(obj[8].toString().equalsIgnoreCase("F")){ %>
+								<img src="view/images/femaleuser.png" alt="Photo Not Found">
+								<%}else{ %>
+								<img src="view/images/maleuser.png" alt="Photo Not Found">
+								<%}%>
 							</div>
 						</div>
 					</div>
@@ -346,15 +349,11 @@
 						<p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> 
 					</div>
 				</div>	
-			</div>  
+			</div>
 		</div>
-	 <%} %>
-	
+		<%} %>
 	</div>
-
 </div>
-
-
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 

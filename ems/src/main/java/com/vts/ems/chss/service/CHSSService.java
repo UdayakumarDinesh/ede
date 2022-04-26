@@ -95,6 +95,11 @@ public interface CHSSService
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
 	public List<Object[]> CHSSApprovalAuthList() throws Exception;
+	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception;
+	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
+	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 
 	
 }

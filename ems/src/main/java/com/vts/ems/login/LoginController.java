@@ -55,4 +55,17 @@ public class LoginController
     	
         return "accessdenied";
     }
+    
+    
+    @RequestMapping(value = {"/forgotPassword.htm"}, method = RequestMethod.POST)
+    public String forgotPasswordPage(Model model,HttpServletRequest req,HttpSession ses) 
+    {
+    	String username=req.getParameter("username");
+    	
+    	req.setAttribute("username", username);
+    	return "static/ForgotPassword";
+    }
+    
+    
+    
 }

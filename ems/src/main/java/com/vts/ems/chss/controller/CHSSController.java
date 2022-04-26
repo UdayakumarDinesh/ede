@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +71,9 @@ public class CHSSController {
 	@Autowired
 	AdminService adminservice;
 	
+	@Value("${Image_uploadpath}")
+	private String uploadpath;
+	
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "CHSSDashboard.htm" )
 	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -100,9 +104,7 @@ public class CHSSController {
 			if(req.getParameter("todate")!=null) {
 				ToDate= req.getParameter("todate");
 			}
-			
-			
-			
+					
 			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
 			req.setAttribute("dashboard", chssdashboard);
 			req.setAttribute("employee", service.getEmployee(EmpId));
@@ -111,6 +113,11 @@ public class CHSSController {
 			req.setAttribute("Fromdate", FromDate );
 			req.setAttribute("Todate", ToDate );;
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
+			req.setAttribute("profilepicpath", uploadpath);
+
+			
+			
+			
 			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
@@ -1940,5 +1947,94 @@ public class CHSSController {
 		}
 		return "chss/CHSSApprovedBills";
 	}
+	
+	
+	
+	@RequestMapping(value = "ConsultationHistoryAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ConsultationHistoryAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConsultationHistoryAjax.htm "+Username);
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.ConsultationHistor(chssapplyid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ConsultationHistoryAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "TestsHistoryAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String TestsHistoryAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside TestsHistoryAjax.htm "+Username);
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.TestsHistory(chssapplyid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside TestsHistoryAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "MedicinesHistoryAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String MedicinesHistoryAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedicinesHistoryAjax.htm "+Username);
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.MedicinesHistory(chssapplyid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedicinesHistoryAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "OthersHistoryAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String OthersHistoryAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OthersHistoryAjax.htm "+Username);
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.OthersHistory(chssapplyid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OthersHistoryAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	
+	@RequestMapping(value = "MiscItemsHistoryAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String MiscItemsHistoryAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MiscItemsHistoryAjax.htm "+Username);
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.MiscItemsHistory(chssapplyid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MiscItemsHistoryAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
 	
 }

@@ -93,5 +93,10 @@ public interface CHSSDao {
 	public List<Object[]> CHSSApprovalAuthList() throws Exception;
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception;
 	public long NotificationAdd(EMSNotification notification) throws Exception;
+	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception;
+	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
+	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 
 }

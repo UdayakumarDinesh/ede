@@ -47,7 +47,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ORDER BY relation_id  ";
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ORDER BY relation_id  ";
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -1240,5 +1240,103 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	private static final String CONSULTATIONHISTOR  ="SELECT cc.ConsultationId,ca.CHSSApplyNo,cb.Billno, cc.ConsultType, cc.DocName, cdr.DocQualification, cc.ConsultDate, cc.ConsultCharge, cc.ConsultRemAmount FROM chss_apply ca, chss_apply ca1, chss_bill cb, chss_consultation cc, chss_doctor_rates cdr WHERE ca.IsActive = 1 AND cb.isactive=1 AND cc.isactive=1 AND  cb.BillId = cc.BillId AND cb.CHSSApplyId = ca.CHSSApplyId AND cc.DocQualification=cdr.DocRateId AND ca.empid=ca1.empid AND ca.PatientId=ca1.PatientId AND ca.IsSelf = ca1.IsSelf AND ca1.chssapplyid=:chssapplyid ";
+	@Override
+	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ConsultationHistor");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(CONSULTATIONHISTOR);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	
+	private static final String TESTSHISTORY  ="SELECT   ct.CHSSTestId,  ca.CHSSApplyNo,  cb.Billno,  ct.TestSubId,  cts.TestName, cts.TestCode,  ct.TestCost,  ct.TestRemAmount FROM  chss_apply ca,  chss_apply ca1,  chss_bill cb,  chss_tests ct,  chss_test_sub cts  WHERE ca.IsActive = 1  AND cb.isactive = 1  AND ct.isactive = 1  AND cb.BillId = ct.BillId AND cb.CHSSApplyId = ca.CHSSApplyId  AND ct.TestSubId = cts.TestSubId  AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf AND ca.CHSSStatusId =14  AND ca1.chssapplyid = :chssapplyid";
+	@Override
+	public List<Object[]> TestsHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO TestsHistory");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(TESTSHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	private static final String MEDICINESHISTORY  ="SELECT   cm.CHSSMedicineId ,  ca.CHSSApplyNo,  cb.Billno,  cm.MedicineName,  cm.PresQuantity,  cm.MedQuantity,  cm.MedicineCost,  cm.MedsRemAmount FROM   chss_apply ca,  chss_apply ca1,  chss_bill cb,  chss_medicine cm   WHERE ca.IsActive = 1  AND cb.isactive = 1   AND cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = ca.CHSSApplyId   AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf  AND ca.CHSSStatusId =14  AND ca1.chssapplyid = :chssapplyid";
+	@Override
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MedicinesHistory");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(MEDICINESHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	private static final String OTHERSHISTORY  ="SELECT   co.CHSSOtherId,  ca.CHSSApplyNo,  cb.Billno,  co.OtherItemId,  coi.OtherItemName,  co.OtherItemCost,  co.OtherRemAmount FROM  chss_apply ca,  chss_apply ca1,  chss_bill cb,  chss_other co,  chss_other_items coi WHERE ca.IsActive = 1  AND cb.isactive = 1  AND co.isactive = 1  AND cb.BillId = co.BillId  AND co.OtherItemId =coi.OtherItemId  AND cb.CHSSApplyId = ca.CHSSApplyId  AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf  AND ca.CHSSStatusId =14   AND ca1.chssapplyid = :chssapplyid";
+	@Override
+	public List<Object[]> OthersHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO OthersHistory");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(OTHERSHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	private static final String MISCITEMSHISTORY  ="SELECT   cmi.ChssMiscId,  ca.CHSSApplyNo,  cb.Billno,  cmi.MiscItemName,  cmi.MiscItemCost,  cmi.MiscRemAmount FROM  chss_apply ca,  chss_apply ca1,  chss_bill cb,   chss_misc cmi WHERE ca.IsActive = 1  AND cb.isactive = 1  AND cmi.isactive = 1  AND cb.BillId = cmi.BillId    AND cb.CHSSApplyId = ca.CHSSApplyId  AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf   AND ca.CHSSStatusId = 14  AND ca1.chssapplyid = :chssapplyid";
+	@Override
+	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MiscItemsHistory");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(MISCITEMSHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	
 	
 }
