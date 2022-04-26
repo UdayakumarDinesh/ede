@@ -1,6 +1,7 @@
 package com.vts.ems.Admin.Controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -475,7 +479,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			try {
 				
 				String action = (String)req.getParameter("Action");
-				System.out.println(action);
+				
 				
 				if("MESSAGE".equalsIgnoreCase(action)) {
 					
@@ -516,6 +520,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}
 					return "redirect:/EmpRequestMsg.htm";
 				}else {
+					
 					List<Object[]> Reqlist = service.GetRequestMessageList(Long.toString(EmpId));
 					req.setAttribute("msglist", Reqlist);				
 				}
@@ -528,20 +533,243 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			return "Admin/EmpRequestMsg";
 		}
 		
-		@RequestMapping(value ="HandlingOver.htm",method= {RequestMethod.GET,RequestMethod.POST})
+		@RequestMapping(value ="HandingOver.htm",method= {RequestMethod.GET,RequestMethod.POST})
 		public String HadlingOver(HttpServletRequest req , HttpSession ses)throws Exception
 		{
+			long EmpId = (long)ses.getAttribute("EmpId");
 			String UserId = (String)ses.getAttribute("Username");
+			String logintype = (String)ses.getAttribute("LoginType");
 			logger.info(new Date() +"Inside HadlingOver.htm "+UserId);
 			try {
-				String fromdate = (String) req.getParameter("fromdate");
-				String todate= (String) req.getParameter("todate");
-				List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate,todate);
+				LocalDate today= LocalDate.now();
+				String start ="";
+				String end="";
+				int currentmonth= today.getMonthValue();
+				if(currentmonth<4) 
+				{
+					start = String.valueOf(today.getYear()-1);
+					end =String.valueOf(today.getYear());
+				}else{
+					start=String.valueOf(today.getYear());
+					end =String.valueOf(today.getYear()+1);
+				}	
+				String fromdate1 ="01-04-"+start;
+				//String todate   ="31-03-"+end;
+				String todate1 = new Date().toString();
+				
+				String action = (String)req.getParameter("Action");
+				if("ADD".equalsIgnoreCase(action)) {
+					
+					req.setAttribute("emplist", pisservice.getEmpList());
+					return "Admin/AddHandingOver";
+					
+				}else if("ADDHANDING".equalsIgnoreCase(action)){
+					
+					req.setAttribute("emplist", pisservice.getEmpList());
+					String fromemp  = (String)req.getParameter("fromemp");
+					String toeme    = (String)req.getParameter("toemp");
+					String todate   = (String)req.getParameter("todate");
+					String fromdate = (String)req.getParameter("fromdate");
+					LeaveHandingOver ho = new LeaveHandingOver();
+					ho.setFrom_empid(fromemp);
+					ho.setTo_empid(toeme);
+					ho.setFrom_date(DateTimeFormatUtil.dateConversionSql(fromdate));
+					ho.setTo_date(DateTimeFormatUtil.dateConversionSql(todate));
+					ho.setStatus("A");
+					ho.setLogin_type(logintype);
+					ho.setApplied_date(DateTimeFormatUtil.dateConversionSql(sdf.format(new Date())));
+					ho.setCreatedby(UserId);
+					ho.setCreatedate(sdtf.format(new Date()));
+					ho.setIs_active(1);
+					
+
+					Object[] checkAlreadyPresentForSameEmpidAndSameDates = service.checkAlreadyPresentForSameEmpidAndSameDates(fromemp, toeme, fromdate, todate);
+					
+					if (fromemp.equalsIgnoreCase(toeme)) {
+						req.setAttribute("resultfail", "Both Employee Can Not Be Same");
+					}else if(checkAlreadyPresentForSameEmpidAndSameDates!=null) {
+						req.setAttribute("resultfail", "Add Restricted Because Of Duplicacy");
+					}else{
+						int result = service.AddHandingOver(ho);
+						if (result != 0) {
+			    			req.setAttribute("result", "HANDING OVER ADDED SUCCESSFUL");
+						} else {
+							req.setAttribute("resultfail", "HANDING OVER ADDED UNSUCCESSFUL");
+						}
+					}
+					
+					return "Admin/AddHandingOver";
+					
+				}else if("REVOKE".equalsIgnoreCase(action)){
+					
+					String HandingOverId = req.getParameter("HandingOverId");
+					int updateRevokeInHandingOver = service.updateRevokeInHandingOver(EmpId, HandingOverId);
+					if (updateRevokeInHandingOver != 0) {
+		    			req.setAttribute("result", "HANDING OVER REVOKED SUCCESSFUL");
+					} else {
+						req.setAttribute("resultfail", "HANDING OVER REVOKED UNSUCCESSFUL");
+					}
+					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,todate1);		
+					req.setAttribute("handlingoverlist", handlingoverlist);
+					return "Admin/HandlingOver";
+					
+				}else if("LIST".equalsIgnoreCase(action)){
+					String fromdate = (String)req.getParameter("fromdate");
+					String todate = (String)req.getParameter("todate");
+					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate,todate);					
+					req.setAttribute("handlingoverlist", handlingoverlist);
+					return "Admin/HandlingOver";
+					
+				}else{
+								
+				List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,todate1);				
+					req.setAttribute("handlingoverlist", handlingoverlist);
+					return "Admin/HandlingOver";	
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
 				return "Admin/HandlingOver";
+			}
+			
+		}
+			
+		@RequestMapping(value = "DoctorsMaster.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		public String DoctorsMasters(HttpSession ses , HttpServletRequest req ,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				String action = (String)req.getParameter("Action");
+				
+				if("EDIT".equalsIgnoreCase(action)) {
+					System.out.println();
+					String DocRateid =(String)req.getParameter("DocRateid");
+					List<Object[]> treatment = service.GetTreatmentType();
+					CHSSDoctorRates  docrate = service.getCHSSDocRate(Long.parseLong(DocRateid));
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("docrate", docrate);
+					return "Admin/CHSSDoctorEdit";
+				}else if("EDITDOCRATE".equalsIgnoreCase(action)){
+					
+					String Rateid = (String)req.getParameter("Rateid");
+					String Treatementid = (String)req.getParameter("Treatementid");
+					//String DocQualification = (String)req.getParameter("DocQualification");
+					//String DocRating = (String)req.getParameter("DocRating");
+					String Consultation1 = (String)req.getParameter("Consultation1");
+					String Consultation2 = (String)req.getParameter("Consultation2");
+					
+					CHSSDoctorRates  DocRate = new CHSSDoctorRates();
+					DocRate.setDocRateId(Integer.parseInt(Rateid));
+					DocRate.setTreatTypeId(Integer.parseInt(Treatementid));
+					//DocRate.setDocQualification(DocQualification);
+					//DocRate.setDocRating(DocRating);
+					DocRate.setConsultation_1(Integer.parseInt(Consultation1));
+					DocRate.setConsultation_2(Integer.parseInt(Consultation2));
+					DocRate.setModifiedBy(UserId);
+					DocRate.setModifiedDate(sdtf.format(new Date()));
+					int result = service.EditDoctorMaster(DocRate);
+					if (result != 0) {
+		    			redir.addAttribute("result", "DOCTOR EDIT SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "DOCTOR EDIT UNSUCCESSFUL");
+					}
+					return "redirect:/DoctorsMaster.htm";
+				}else {
+					List<Object[]> doctorlist = service.GetDoctorList();
+					req.setAttribute("doctorlist", doctorlist);
+					return "Admin/CHSSDoctorsList";
+				}		
+			} catch (Exception e) {
+				req.setAttribute("resultfail", "Some Provblem Occure!");
+				e.printStackTrace();
+				return "Admin/CHSSDoctorsList";
+			}
+			
+		}                                
+		
+		@RequestMapping(value = "LabMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
+		public String LabMaster(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				String action =(String)req.getParameter("Action");
+				if("EDIT".equalsIgnoreCase(action)) {
+					String labmasterId = (String)req.getParameter("labmasterId");
+					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
+					List<Object[]> labslist=service.getLabsList();
+					req.setAttribute("emplist", pisservice.getEmpList());
+					req.setAttribute("labslist", labslist);
+					req.setAttribute("labdetails", lab);
+					       return "Admin/LadMasterEdit";
+				}else if("EDITLAB".equalsIgnoreCase(action)){
+					String labcode = (String)req.getParameter("LabCode");
+					String labname = (String)req.getParameter("LabName");
+					String labaddress = (String)req.getParameter("LabAddress");
+					String labcity = (String)req.getParameter("LabCity");
+					String labemail = (String)req.getParameter("LabEmail");
+					String labpin = (String)req.getParameter("LabPin");
+					String labunitcode = (String)req.getParameter("LabUnitCode");
+					String labtelph = (String)req.getParameter("LabTelephone");
+					String labfxno = (String)req.getParameter("LabFaxNo");
+					String labauthority = (String)req.getParameter("LabAuthority");
+					String labauthorityname = (String)req.getParameter("LabAuthorityName");
+					String Lab  = (String)req.getParameter("labid");
+					String LabRfp  = (String)req.getParameter("LabRFPEmail");
+					String LabMasterId = (String)req.getParameter("LabMasterId");
+					LabMaster lab = new LabMaster ();
+					
+					lab.setLabCode(labcode);
+					lab.setLabName(labname);
+					lab.setLabAddress(labaddress);
+					lab.setLabCity(labcity);
+					lab.setLabEmail(labemail);
+					lab.setLabPin(labpin);
+					lab.setLabUnitCode(labunitcode);
+					lab.setLabTelNo(labtelph);
+					lab.setLabFaxNo(labfxno);
+					lab.setLabAuthority(labauthority);
+					lab.setLabAuthorityId(Integer.parseInt(labauthorityname));
+					lab.setLabId(Integer.parseInt(Lab));
+					lab.setLabRfpEmail(LabRfp);
+					lab.setLabMasterId(Long.parseLong(LabMasterId));
+					lab.setModifiedBy(UserId);
+					lab.setModifiedDate(sdtf.format(new Date()));
+					long result = service.EditLabMaster(lab);
+					if (result != 0) {
+		    			redir.addAttribute("result", "LAB MASTER SUCCESSFUL");
+					} else {
+						redir.addAttribute("resultfail", "LAB MASTER UNSUCCESSFUL");
+					}
+					return "redirect:/LabMaster.htm";
+				}else {
+					Object[] labdetails = service.getLabDetails();
+					req.setAttribute("labdetails", labdetails);
+				           return "Admin/LabDetails";
+				}
+			} catch (Exception e) {
+				req.setAttribute("resultfail", "Some Provblem Occure!");
+				e.printStackTrace();
+				return "Admin/LabDetails";
+			}
+			
+		}
+		
+		@RequestMapping(value = "OtherItemAmount.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+		public String OtherItem(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				List<Object[]> otheritem = service.OtherItems(); 
+				req.setAttribute("itemlist", otheritem);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return "";
+			return "Admin/OtherItemAmount";
 		}
-		                                                                                            
+		
 }

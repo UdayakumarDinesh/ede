@@ -20,11 +20,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
@@ -111,7 +114,7 @@ public class AdminDaoImpl implements AdminDao{
 		logger.info(new java.util.Date() +"Inside FormRoleActive");
 		int count=0;
 		
-		System.out.println("Inside update " + formroleaccessid + Value);
+		System.out.println("Inside UPDATE " + formroleaccessid + Value);
 		
 		if(Value.equals(1L)) {
 			
@@ -379,7 +382,7 @@ public class AdminDaoImpl implements AdminDao{
 	
 	@Override
 	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
-		logger.info(new Date() + "Inside getEmecaddress()");
+		logger.info(new Date() + "Inside getCHSSMedicine()");
 		CHSSMedicineList memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -510,7 +513,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String HANDLINGOVERLIST="";
+	private static final String HANDLINGOVERLIST="SELECT a.handingover_id , b.empname as 'fromemp' ,c.empname as 'toemp',a.from_date, a.to_date , a.applied_date , a.status FROM leave_ra_sa_handingover a , employee b ,employee c WHERE a.from_empid=b.empid AND a.to_empid=c.empid AND is_active='1' AND(( a.from_date BETWEEN  :fromdate AND  :todate ) OR( a.to_date BETWEEN  :fromdate AND  :todate )OR ( a.from_date > :fromdate AND a.to_date < :todate ))";
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
 	{
@@ -528,4 +531,191 @@ public class AdminDaoImpl implements AdminDao{
 			return null;
 		}
 	}
+	private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a.docqualification ,a.docrating ,a.consultation_1 ,a.consultation_2  FROM chss_doctor_rates a , chss_treattype b WHERE a.isactive='1' AND a.treattypeid = b.treattypeid";
+	
+	@Override
+	public List<Object[]> GetDoctorList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetDoctorList()");
+		try {
+			
+			Query query= manager.createNativeQuery(DOCTORLIST);			
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception 
+	{
+		logger.info(new Date() + "Inside getCHSSDocRate()");
+		CHSSDoctorRates memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSDoctorRates> cq = cb.createQuery(CHSSDoctorRates.class);
+			Root<CHSSDoctorRates> root = cq.from(CHSSDoctorRates.class);
+			Predicate p1 = cb.equal(root.get("DocRateId"), docrateid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<CHSSDoctorRates> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+			return memeber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
+	
+	@Override
+	public int EditDoctorMaster(CHSSDoctorRates Docrate) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditDoctorMaster()");
+		try {
+			manager.merge(Docrate);
+			manager.flush();		
+			return Docrate.getDocRateId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	private static final String LABDETAILS="SELECT labmasterid, labcode ,labname ,labunitcode, labaddress, labcity, labpin FROM lab_master";
+	@Override
+	public Object[] getLabDetails()throws Exception
+	{
+		 logger.info(new Date() +"Inside getLabDetails()");	
+		 try {
+			 Query query = manager.createNativeQuery(LABDETAILS);
+			 
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}	
+	}
+	@Override
+	public LabMaster GetLabDetailsToEdit(long labid)throws Exception
+	{
+		logger.info(new Date() + "Inside getCHSSDocRate()");
+		LabMaster memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<LabMaster> cq = cb.createQuery(LabMaster.class);
+			Root<LabMaster> root = cq.from(LabMaster.class);
+			Predicate p1 = cb.equal(root.get("LabMasterId"), labid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<LabMaster> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+			return memeber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String LABSLIST="SELECT a.labid , a.labname ,a.labcode FROM cluster_lab a ,cluster b WHERE a.clusterid=b.clusterid";
+	
+	@Override
+	public List<Object[]> getLabsList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getLabsList()");
+		try {
+			
+			Query query= manager.createNativeQuery(LABSLIST);			
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
+	public long EditLabMaster(LabMaster labmatster) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditLabMaster()");
+		try {
+			manager.merge(labmatster);
+			manager.flush();		
+			return labmatster.getLabMasterId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	
+	private static final String  CHECKHANDINGDATA="SELECT login_type, from_empid FROM leave_ra_sa_handingover  WHERE from_empid=:fromemp AND to_empid=:toemp AND STATUS='S' AND (:fromDate BETWEEN from_date  AND to_date  OR :toDate BETWEEN from_date  AND to_date  OR from_date BETWEEN :fromDate AND :toDate) AND is_active='1'";
+	@Override
+	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO checkAlreadyPresentForSameEmpidAndSameDates()");
+		try {
+			
+			Query query= manager.createNativeQuery(CHECKHANDINGDATA);				
+			query.setParameter("fromemp", FromEmpid);
+			query.setParameter("toemp", ToEmpid);
+			query.setParameter("fromDate", DateTimeFormatUtil.dateConversionSql(FromDate));
+			query.setParameter("toDate",DateTimeFormatUtil.dateConversionSql(ToDate) );
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	@Override
+	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception
+	{
+		logger.info(new Date() + "Inside AddHandingOver()");
+		try {
+			manager.persist(handinfover);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return handinfover.getHandingover_id();
+	}
+	
+	private static final String REVOKEHANDINGOVER="UPDATE leave_ra_sa_handingover SET revokedate=:revokedate , revokeempid=:revokeempId , revokestatus=:revokestatus ,status=:status ,modifiedby=:modifiedby , modifieddate=:modifieddate WHERE handingover_id=:HandingOverId";
+	@Override
+	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception
+	{
+		logger.info(new Date() + "Inside updateRevokeInHandingOver()");
+		int count=0;
+		try {
+			Date d = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Query query= manager.createNativeQuery(REVOKEHANDINGOVER);				
+			query.setParameter("revokeempId", empid);
+			query.setParameter("HandingOverId", HandingOverId);
+			query.setParameter("revokestatus","Y");
+			query.setParameter("status","R");
+			query.setParameter("revokedate",sdf.format(d));
+			query.setParameter("modifiedby", empid);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			count = query.executeUpdate();
+			return count;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return count;
+		}
+		
+	}
+	
 }

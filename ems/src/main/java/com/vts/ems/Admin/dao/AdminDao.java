@@ -4,10 +4,13 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
 
 public interface AdminDao {
@@ -46,4 +49,31 @@ public interface AdminDao {
 	public long AddRequestMsgNotification(EMSNotification notification)throws Exception;
 	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception;
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
+	public List<Object[]> GetDoctorList()throws Exception;
+	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception ;
+	public int EditDoctorMaster(CHSSDoctorRates Docrate) throws Exception;
+	public Object[] getLabDetails()throws Exception;
+	public LabMaster GetLabDetailsToEdit(long labid)throws Exception;
+	public List<Object[]> getLabsList()throws Exception;
+	public long EditLabMaster(LabMaster labmatster) throws Exception;
+	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception;
+	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
+	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

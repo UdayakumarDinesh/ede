@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -261,4 +264,126 @@ public class AdminServiceImpl implements AdminService{
 	{
 		return dao.GethandlingOverList(fromdate,todate);
 	}
+	
+	@Override
+	public List<Object[]> GetDoctorList()throws Exception
+	{
+		return dao.GetDoctorList();
+	}
+	
+	@Override
+	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception
+	{
+		return dao.getCHSSDocRate(docrateid);
+	}
+	
+	@Override
+	public int EditDoctorMaster(CHSSDoctorRates docrate) throws Exception
+	{	
+		CHSSDoctorRates doctor = dao.getCHSSDocRate(docrate.getDocRateId());
+		
+		doctor.setTreatTypeId(docrate.getTreatTypeId());
+		//doctor.setDocQualification(docrate.getDocQualification());
+		//doctor.setDocRating(docrate.getDocRating());
+		doctor.setConsultation_1(docrate.getConsultation_1());
+		doctor.setConsultation_2(docrate.getConsultation_2());
+		doctor.setModifiedBy(docrate.getModifiedBy());
+		doctor.setModifiedDate(docrate.getModifiedDate());
+		
+		return dao.EditDoctorMaster(doctor);
+	}
+	
+	@Override
+	public Object[] getLabDetails()throws Exception
+	{
+		return dao.getLabDetails();
+	}
+	
+	@Override
+	public LabMaster GetLabDetailsToEdit(long labid)throws Exception
+	{
+		return dao.GetLabDetailsToEdit(labid);
+	}
+	
+	@Override
+	public List<Object[]> getLabsList()throws Exception
+	{
+		return dao.getLabsList();
+	}
+	
+	@Override
+	public long EditLabMaster(LabMaster labmater)throws Exception
+	{
+		
+		LabMaster lab = dao.GetLabDetailsToEdit(labmater.getLabMasterId());
+		
+		lab.setLabCode(labmater.getLabCode());
+		lab.setLabName(labmater.getLabName());
+		lab.setLabAddress(labmater.getLabAddress());
+		lab.setLabCity(labmater.getLabCity());
+		lab.setLabEmail(labmater.getLabEmail());
+		lab.setLabPin(labmater.getLabPin());
+		lab.setLabUnitCode(labmater.getLabUnitCode());
+		lab.setLabTelNo(labmater.getLabTelNo());
+		lab.setLabFaxNo(labmater.getLabFaxNo());
+		lab.setLabAuthority(labmater.getLabAuthority());
+		lab.setLabAuthorityId(labmater.getLabAuthorityId());
+		lab.setLabId(labmater.getLabId());
+		lab.setLabRfpEmail(labmater.getLabRfpEmail());
+		lab.setModifiedBy(labmater.getModifiedBy());
+		lab.setModifiedDate(labmater.getModifiedDate());
+		return dao.EditLabMaster(lab);
+	}
+	@Override
+	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception
+	{ 
+		
+		return dao.checkAlreadyPresentForSameEmpidAndSameDates(FromEmpid, ToEmpid, FromDate, ToDate);
+	}
+	
+	
+	@Override
+	public int AddHandingOver(LeaveHandingOver addhanding)throws Exception
+	{
+		return dao.AddHandingOver(addhanding);
+	}
+	
+	
+	@Override
+	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception
+	{
+		return dao.updateRevokeInHandingOver(empid,HandingOverId);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
