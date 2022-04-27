@@ -63,4 +63,10 @@ public class EMSMainServiceImpl implements EMSMainService
 	{
 		return dao.NotificationUpdate(NotificationId);
 	}
+	
+	@Override
+	public Object[] LoginExistCheck(String username) throws Exception
+	{
+		return dao.LoginExistCheck(username);
+	}
 }

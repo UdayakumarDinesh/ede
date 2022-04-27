@@ -58,9 +58,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 
 				.antMatchers("/").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/fpwd/**").permitAll()
 				.antMatchers("/webresources/**").permitAll()
 				.antMatchers("/view/**").permitAll()
 				.antMatchers("/webjars/**").permitAll()
+				.antMatchers("/login").permitAll()
 				.anyRequest().authenticated().accessDecisionManager(adm())
 
 				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error")

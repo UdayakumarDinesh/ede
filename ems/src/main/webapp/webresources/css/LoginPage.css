@@ -1,6 +1,6 @@
 
 .loginpage #header {
- 	background: rgba(6,103,200,1) url("/rfpwizardmain/src/main/webapp/view/bg3.jpg") 50% 0 no-repeat;
+ 	background: rgba(6,103,200,1)  50% 0 no-repeat;
  }
  
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
@@ -43,10 +43,10 @@ body {
 }
 body.home .header-wrapper {
 	/* background: url("../view/bg3.jpg") 50% 0 no-repeat; */
- 	background: rgba(6,103,200,1) url("/rfpwizardmain/src/main/webapp/view/bg3.jpg") 50% 0 no-repeat;
+ 	background: rgba(6,103,200,1)  50% 0 no-repeat;
  }
 body.inner .header-wrapper {
-	background: rgba(6,105,203,1) url("/rfpwizardmain/src/main/webapp/view/bg3.jpg") 50% 0 no-repeat;
+	background: rgba(6,105,203,1)  50% 0 no-repeat;
 }
 a {
 	color: #0c99d5;
@@ -152,7 +152,7 @@ a:focus {
 /*Logo*/
 
 .logo {
-	background: url(../images/emblem-dark.png) no-repeat 10px 0;
+	background:  no-repeat 10px 0;
 	float: left;
 	font-size: 214%;
 	line-height: 93%;
@@ -285,7 +285,7 @@ a:focus {
 
 
 .loginpage #header {
- 	background: rgba(6,103,200,1) url("/rfpwizardmain/src/main/webapp/view/bg3.jpg") 50% 0 no-repeat;
+ 	background: rgba(6,103,200,1)  50% 0 no-repeat;
  }
 
 /* Media Query for Marquee */
