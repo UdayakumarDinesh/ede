@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -355,11 +356,23 @@ public class AdminServiceImpl implements AdminService{
 		return dao.updateRevokeInHandingOver(empid,HandingOverId);
 	}
 	
+	@Override
+	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception
+	{
+		return dao.GetOtherItemAmlountList(id);
+	}
 	
+	@Override
+	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception
+	{
+		return dao.AddOtherItemAmt(otheramt);
+	}
 	
-	
-	
-	
+	@Override
+	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception
+	{
+		return dao.updateOtherAmt(chssOtheramtid, admAmt, UserId);
+	}
 	
 	
 	

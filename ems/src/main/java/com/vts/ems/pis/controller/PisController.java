@@ -1391,10 +1391,10 @@ public class PisController {
 					redir.addAttribute("resultfail", "Password Change Unsuccessfull ");
 				}
 				System.out.println(count);
-		}catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
-		}
+			}catch (Exception e) {
+					e.printStackTrace();
+					logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
+			}
 
 		return "redirect:/PasswordChange.htm";
 		

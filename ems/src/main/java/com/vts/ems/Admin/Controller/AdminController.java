@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +23,7 @@ import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -739,9 +742,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					lab.setModifiedDate(sdtf.format(new Date()));
 					long result = service.EditLabMaster(lab);
 					if (result != 0) {
-		    			redir.addAttribute("result", "LAB MASTER SUCCESSFUL");
+		    			redir.addAttribute("result", "LAB MASTER EDITED SUCCESSFUL");
 					} else {
-						redir.addAttribute("resultfail", "LAB MASTER UNSUCCESSFUL");
+						redir.addAttribute("resultfail", "LAB MASTER EDITED UNSUCCESSFUL");
 					}
 					return "redirect:/LabMaster.htm";
 				}else {
@@ -758,18 +761,107 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		}
 		
 		@RequestMapping(value = "OtherItemAmount.htm" , method = {RequestMethod.POST,RequestMethod.GET})
-		public String OtherItem(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		public String OtherItem( Model model, HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
 			try {
-				List<Object[]> otheritem = service.OtherItems(); 
-				req.setAttribute("itemlist", otheritem);
+				String tratementid =(String)req.getParameter("tratementid");
 				
+				  if(tratementid==null) {
+					   Map md=model.asMap();
+					   tratementid=(String)md.get("tratementid");	
+				   }
+				if(tratementid!=null) {
+					List<Object[]> otheritem = service.OtherItems();			
+					req.setAttribute("itemlist", otheritem);
+					List<Object[]> list = service.GetOtherItemAmlountList(tratementid);
+				
+					req.setAttribute("tratementid", tratementid);
+					req.setAttribute("list", list);
+				}else {
+				List<Object[]> otheritem = service.OtherItems();
+				List<Object[]> list = service.GetOtherItemAmlountList("1");
+				req.setAttribute("list", list);
+				req.setAttribute("tratementid", "1");
+				req.setAttribute("itemlist", otheritem);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "Admin/OtherItemAmount";
 		}
 		
+		
+		@RequestMapping(value = "AddOtherItemAmount.htm" , method = {RequestMethod.GET,RequestMethod.POST})
+		public String AddOtherItemAmount(HttpSession ses  , HttpServletRequest req ,RedirectAttributes redir)throws Exception
+		{
+
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				String action = (String)req.getParameter("Action");
+				if("ADDAMT".equalsIgnoreCase(action)){
+					String basicfrom = (String)req.getParameter("basicfrom");
+					String basicto   = (String)req.getParameter("basicto");
+					String adsamt    = (String)req.getParameter("admAmt");
+					String treatid   = (String)req.getParameter("treateid");
+					System.out.println(req.getParameter("tratementid"));
+					OtherPermitAmt other = new OtherPermitAmt();
+					other.setOtherItemId(Integer.parseInt(treatid));
+					other.setBasicFrom(Long.parseLong(basicfrom));
+					other.setBasicTo(Long.parseLong(basicto));
+					other.setItemPermitAmt(Integer.parseInt(adsamt));
+					other.setIsActive(1);
+					other.setCreatedBy(UserId);
+					other.setCreatedDate(sdtf.format(new Date()));
+					long result = service.AddOtherItemAmt(other);
+					if (result != 0) {
+						 redir.addAttribute("result", "PERMIT AMOUNT ADDED SUCCESSFUL");
+					} else {
+						 redir.addAttribute("resultfail", "PERMIT AMOUNT ADDED UNSUCCESSFUL");
+					}
+					 redir.addFlashAttribute("tratementid", treatid);
+					List<Object[]> otheritem = service.OtherItems();			
+					req.setAttribute("itemlist", otheritem);
+					List<Object[]> list = service.GetOtherItemAmlountList(treatid);
+					req.setAttribute("tratementid", treatid);
+					req.setAttribute("list", list);
+				}
+				
+				return "redirect:/OtherItemAmount.htm";
+				
+			} catch (Exception e) {
+				 redir.addAttribute("resultfail", "SOME PROBLEM OCCURE!");
+				e.printStackTrace();
+				return "redirect:/OtherItemAmount.htm";
+			}
+			
+		}
+		@RequestMapping(value = "EDITOtherAmt.htm" , method = RequestMethod.POST)
+		public String EDITOtherAmt(HttpSession ses ,HttpServletRequest req,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				String chssOtheramtid = (String)req.getParameter("chssOtheramtid");
+				String adm="admAmt1"+chssOtheramtid;
+				System.out.println(adm);
+				String admAmt1 = (String)req.getParameter(adm);
+				String treatid = (String)req.getParameter("treateid");
+				long result = service.updateOtherAmt(chssOtheramtid ,admAmt1, UserId);
+				if (result != 0) {
+					 redir.addAttribute("result", "PERMIT AMOUNT EDITED SUCCESSFUL");
+				} else {
+					 redir.addAttribute("resultfail", "PERMIT AMOUNT EDITED UNSUCCESSFUL");
+				}
+				 redir.addFlashAttribute("tratementid", treatid);
+				 return "redirect:/OtherItemAmount.htm";
+			} catch (Exception e) {
+				 redir.addAttribute("resultfail", "SOME PROBLEM OCCURE!");
+					e.printStackTrace();
+					return "redirect:/OtherItemAmount.htm";
+			}
+			
+		}
 }

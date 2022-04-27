@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -716,6 +717,59 @@ public class AdminDaoImpl implements AdminDao{
 			return count;
 		}
 		
+	}
+	
+	private static final String GETOTHEREMSLIST="SELECT a.basicfrom , a.basicto , a.itempermitamt , a.CHSSOtherAmtId FROM chss_other_perm_amt a , chss_other_items b WHERE a.otheritemid=b.otheritemid AND a.isactive='1' AND a.otheritemid=:id"; 
+	@Override
+	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetOtherItemAmlountList()");
+		try {
+			
+			Query query= manager.createNativeQuery(GETOTHEREMSLIST);			
+			query.setParameter("id", id);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception
+	{
+		logger.info(new Date() + "Inside AddOtherItemAmt()");
+		try {
+			manager.persist(otheramt);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return otheramt.getCHSSOtherAmtId();
+	}
+	private static final String UPDATEOTHERITEMAMT="UPDATE chss_other_perm_amt SET itempermitamt=:admAmt  ,modifiedby=:modifiedby , modifieddate=:modifieddate WHERE CHSSOtherAmtId=:chssOtheramtid";
+	@Override
+	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception
+	{
+		logger.info(new Date() + "Inside updateOtherAmt()");
+		int count=0;
+		try {
+			Date d = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Query query= manager.createNativeQuery(UPDATEOTHERITEMAMT);				
+			query.setParameter("chssOtheramtid", chssOtheramtid);
+			query.setParameter("admAmt",admAmt);
+			query.setParameter("modifiedby", UserId);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			count = query.executeUpdate();
+			return count;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return count;
+			}
 	}
 	
 }

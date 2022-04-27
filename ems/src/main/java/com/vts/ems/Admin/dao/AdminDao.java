@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
@@ -59,9 +60,9 @@ public interface AdminDao {
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception;
 	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
 	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception;
-	
-	
-	
+	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception;
+	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception;
+	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
 	
 	
 	
