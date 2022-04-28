@@ -104,6 +104,11 @@ public class CHSSController {
 			if(req.getParameter("todate")!=null) {
 				ToDate= req.getParameter("todate");
 			}
+			String PatientName="All";
+			if(req.getParameter("patientname")!=null) {
+				PatientName=req.getParameter("patientname");
+			}
+			
 					
 			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
 			req.setAttribute("dashboard", chssdashboard);
@@ -114,6 +119,7 @@ public class CHSSController {
 			req.setAttribute("Todate", ToDate );;
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
 			req.setAttribute("profilepicpath", uploadpath);
+			req.setAttribute("patientname", PatientName);;
 
 			
 			
