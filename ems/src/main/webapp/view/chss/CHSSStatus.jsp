@@ -158,7 +158,6 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Claim Status</li>
 					</ol>
 				</div>

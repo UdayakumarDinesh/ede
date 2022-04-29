@@ -1,6 +1,8 @@
 package com.vts.ems.Admin.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,10 +141,6 @@ public class AdminServiceImpl implements AdminService{
 	{
 		CHSSOtherItems test=dao.getOtherItem(item.getOtherItemId());
 			test.setOtherItemName(item.getOtherItemName());
-			test.setPayLevel1(item.getPayLevel1());
-			test.setPayLevel2(item.getPayLevel2());
-			test.setPayLevel3(item.getPayLevel3());
-			test.setPayLevel4(item.getPayLevel4());
 			test.setModifiedBy(item.getModifiedBy());
 			test.setModifiedDate(item.getModifiedDate());
 		return dao.EditItem(test);
@@ -262,8 +260,11 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
-	{
-		return dao.GethandlingOverList(fromdate,todate);
+	{	
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+		LocalDate ToDate= LocalDate.parse(todate, formatter);
+		return dao.GethandlingOverList(Fromdate,ToDate);
 	}
 	
 	@Override

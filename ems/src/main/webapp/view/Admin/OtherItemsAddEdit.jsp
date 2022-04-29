@@ -28,11 +28,11 @@
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
-						<li class="breadcrumb-item "><a href="OtherItems.htm"> OtherItems List </a></li>
+						<li class="breadcrumb-item "><a href="OtherItems.htm"> Other Items List </a></li>
 						<%if(item!=null){ %>						
-						<li class="breadcrumb-item active " aria-current="page">OtherItems Edit</li>
+						<li class="breadcrumb-item active " aria-current="page">Other Items Edit</li>
 						<%}else{ %>
-						<li class="breadcrumb-item active " aria-current="page">OtherItems Add</li>
+						<li class="breadcrumb-item active " aria-current="page">Other Items Add</li>
 						<%} %>
 					</ol>
 				</div>
