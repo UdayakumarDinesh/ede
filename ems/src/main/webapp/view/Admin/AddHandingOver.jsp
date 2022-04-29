@@ -41,23 +41,9 @@
 		 
 		 
 		<div class="card-body" align="center">
-			 <div align="center">
-					<%String ses=(String)request.getAttribute("result"); 
-					String ses1=(String)request.getAttribute("resultfail");
-					if(ses1!=null){ %>
-						<div class="alert alert-danger" role="alert">
-							<%=ses1 %>
-						</div>
 			
-		              <%}if(ses!=null){ %>
-			
-						<div class="alert alert-success" role="alert">
-							<%=ses %>
-						</div>
-		             <%} %>
-        	</div>
 		
-			<div class="card" style="width: 60%;" id="card" >
+			<div class="card" style="width: 75%;" id="card" >
 				<div class="card-header"  >
 				<h4 align="left">Fill Details </h4>
 				</div>
@@ -68,7 +54,7 @@
 						
 						<div class="col-4">
 			                <label class="text-nowrap  ">Handing Over Officer:<span class="mandatory">*</span></label>
-			                <select name="fromemp" id="fromemp" class="form-control select2" sty>
+			                <select name="fromemp" id="fromemp" class="form-control select2" >
 								<%for( Object[] obj: emplist){ %>
 									<option value="<%=obj[0]%>"><%=obj[1]%></option>
 								<%} %>
@@ -86,13 +72,13 @@
 			            
 			            <div class="col-2">
 			             <label class="text-nowrap  ">From Date:<span class="mandatory">*</span></label>
-			             <input type="text"  style="width: 115%;" class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="fromdate" name="fromdate"  required="required"  > 
+			             <input type="text"  style="width: 105 %;" class="form-control input-sm mydate" readonly="readonly" onchange=" setTodate()" value="" placeholder=""  id="fromdate" name="fromdate"  required="required"  > 
 						 <label class="input-group-addon btn" for="testdate"></label>
 			            </div>
 			            
 			            <div class="col-2">
 			             <label class="text-nowrap  ">To Date:<span class="mandatory">*</span></label>
-			             <input type="text" style="width: 115%;" class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="todate" name="todate"  required="required"  > 
+			             <input type="text" style="width: 110%; " class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="todate" name="todate"  required="required"  > 
 						 <label class="input-group-addon btn" for="testdate"></label>
 			            </div>
 						</div>
@@ -100,7 +86,7 @@
 						<div class="row">
 						<div class="col-12" align="center">
 							<button type="submit" class="btn btn-sm add-btn" name="Action" onclick="return checkEmp();" value="ADDHANDING"   >ADD </button>
-							<a href="Address.htm?empid="   class="btn btn-sm  btn-info">BACK</a>
+							 <a href="HandingOver.htm?empid="   class="btn btn-sm  btn-info">BACK</a> 
 						</div>
 						</div>
 						</form>
@@ -124,18 +110,41 @@ $('#fromdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-$('#todate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	/* "minDate" :datearray,   */
-	"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
+function setTodate()
+{
+	var fromdate = $("#fromdate").val();
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :fromdate,   
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+}
+$(document).ready(function() {
+	
+	var fromdate = $("#fromdate").val();
+	
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :fromdate,   
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
 });
+
+
 </script>
 <script type="text/javascript">
 function checkEmp()

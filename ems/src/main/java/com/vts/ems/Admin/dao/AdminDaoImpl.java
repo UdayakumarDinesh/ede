@@ -2,6 +2,7 @@ package com.vts.ems.Admin.dao;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -37,6 +38,7 @@ public class AdminDaoImpl implements AdminDao{
 
 	private static final Logger logger = LogManager.getLogger(CHSSDaoImpl.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	@PersistenceContext
 	EntityManager manager;
 	
@@ -138,7 +140,7 @@ public class AdminDaoImpl implements AdminDao{
 	
 	
 
-	private static final String OTHERITEM = "SELECT  otheritemid , otheritemname FROM chss_other_items";
+	private static final String OTHERITEM = "SELECT  otheritemid , otheritemname FROM chss_other_items ORDER BY otheritemid DESC";
 	@Override
 	public List<Object[]> OtherItems() throws Exception {
 		logger.info(new Date() +"Inside OtherItems");	
@@ -514,16 +516,16 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String HANDLINGOVERLIST="SELECT a.handingover_id , b.empname as 'fromemp' ,c.empname as 'toemp',a.from_date, a.to_date , a.applied_date , a.status FROM leave_ra_sa_handingover a , employee b ,employee c WHERE a.from_empid=b.empid AND a.to_empid=c.empid AND is_active='1' AND(( a.from_date BETWEEN  :fromdate AND  :todate ) OR( a.to_date BETWEEN  :fromdate AND  :todate )OR ( a.from_date > :fromdate AND a.to_date < :todate ))";
+	private static final String HANDLINGOVERLIST="SELECT a.handingover_id , b.empname as 'fromemp' ,c.empname as 'toemp',a.from_date, a.to_date , a.applied_date , a.status FROM leave_ra_sa_handingover a , employee b ,employee c WHERE a.from_empid=b.empid AND a.to_empid=c.empid AND is_active='1' AND(( a.from_date BETWEEN  :fromdate AND  :todate ) OR( a.to_date BETWEEN  :fromdate AND  :todate )OR ( a.from_date > :fromdate AND a.to_date < :todate )) ORDER BY a.handingover_id DESC";
 	@Override
-	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
+	public List<Object[]> GethandlingOverList(LocalDate FromDate, LocalDate Todate)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO GethandlingOverList()");
 		try {
 			
 			Query query= manager.createNativeQuery(HANDLINGOVERLIST);
-			query.setParameter("fromdate", fromdate);
-			query.setParameter("todate", todate);
+			query.setParameter("fromdate",FromDate );
+			query.setParameter("todate", Todate);
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
 			
@@ -738,7 +740,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	@Override
-	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception
+	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception
 	{
 		logger.info(new Date() + "Inside AddOtherItemAmt()");
 		try {

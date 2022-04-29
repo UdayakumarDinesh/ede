@@ -1,15 +1,16 @@
 package com.vts.ems.Admin.dao;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -49,7 +50,7 @@ public interface AdminDao {
 	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception;
 	public long AddRequestMsgNotification(EMSNotification notification)throws Exception;
 	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception;
-	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
+	public List<Object[]> GethandlingOverList(LocalDate FromDate, LocalDate Todate)throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
 	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception ;
 	public int EditDoctorMaster(CHSSDoctorRates Docrate) throws Exception;
@@ -61,7 +62,7 @@ public interface AdminDao {
 	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
 	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception;
 	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception;
-	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception;
+	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception;
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
 	
 	

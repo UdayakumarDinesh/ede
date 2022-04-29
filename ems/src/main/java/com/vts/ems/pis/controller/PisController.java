@@ -140,8 +140,7 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);		
 		try {			
-			req.setAttribute("desiglist", service.DesigList());
-			
+			req.setAttribute("desiglist", service.DesigList());		
 			req.setAttribute("piscategorylist", service.PisCategoryList());
 			req.setAttribute("piscatclasslist", service.PisCatClassList());
 			req.setAttribute("piscaderlist", service.PisCaderList());
@@ -286,9 +285,9 @@ public class PisController {
 			
 			Long value=service.EmployeeAddSubmit(emp);
 			if (value != 0) {
-				redir.addAttribute("result", "EMPLOYEE ADDED SUCCESSFUL");
+				redir.addAttribute("result", "Employee Added Successful");
 			} else {
-				redir.addAttribute("resultfail", "EMPLOYEE ADDED UNSUCCESSFUL");
+				redir.addAttribute("resultfail", "Employee Added UnSuccessful");
 			}
 			
 			return "redirect:/PisAdminEmpList.htm";
@@ -450,14 +449,14 @@ public class PisController {
 			
 			long value =service.EmployeeEditSubmit(emp);
 			if (value != 0) {
-				redir.addAttribute("result", "EMPLOYEE EDITED SUCCESSFUL");
+				redir.addAttribute("result", "Employee Edited Successful");
 			} else {
-				redir.addAttribute("resultfail", "EMPLOYEE EDITED UNSUCCESSFUL");
+				redir.addAttribute("resultfail", "Employee Edited UnSuccessful");
 			}
 			return "redirect:/PisAdminEmpList.htm";
 		} catch (Exception e) {
 			logger.error(new Date() + " Inside EmployeeEditSubmit.htm " + Username, e);
-			req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
+			req.setAttribute("resultfail", "Some Problem Occure!");
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -499,13 +498,13 @@ public class PisController {
 			req.setAttribute("employeedetails", employeedetails);
 			req.setAttribute("basevalue", basevalue);
 			if (value != 0) {
-				req.setAttribute("result", "Photo Upload SUCCESSFUL");
+				req.setAttribute("result", "Photo Upload Successful");
 			} else {
-				req.setAttribute("resultfail", "Photo Upload UNSUCCESSFUL");
+				req.setAttribute("resultfail", "Photo Upload UnSuccessful");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			req.setAttribute("resultfail", "Photo Upload UNSUCCESSFUL");
+			req.setAttribute("resultfail", "Photo Upload UnSuccessful");
 			logger.error(new Date() + " Inside EmployeeEditSubmit.htm " + Username, e);
 		}
 		return "pis/EmpBasicDetails";
@@ -1089,7 +1088,7 @@ public class PisController {
         	  long result  =  service.AddResAddress(resadd); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "RESIDENTIAL ADDRESS ADD SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Residential Address Add SUCCESSFULLY");	
         		} else {
         			 redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS ADD UNSUCCESSFUL");	
         	    }
@@ -1102,9 +1101,9 @@ public class PisController {
         	  long result  =  service.EditResAddress(resadd); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "RESIDENTIAL ADDRESS EDIT SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Residential Address Edit Successfully");	
         		} else {
-        			 redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS EDIT UNSUCCESSFUL");	
+        			 redir.addAttribute("resultfail", "Residential Address Edit UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
 		}
@@ -1184,9 +1183,9 @@ public class PisController {
         	  long result  =  service.AddNextAddress(kinaddress); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "NEXT KIN ADDRESS ADD SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Next Kin Address Add Successfully");	
         		} else {
-        			 redir.addAttribute("resultfail", "NEXT KIN ADDRESS ADD UNSUCCESSFUL");	
+        			 redir.addAttribute("resultfail", "Next Kin Address ADD UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
     	   }else if("EDIT".equalsIgnoreCase(Action)) {
@@ -1197,9 +1196,9 @@ public class PisController {
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
 	       	    if(result>0) {
-	       	    	 redir.addAttribute("result", "NEXT KIN ADDRESS EDIT SUCCESSFULLY");	
+	       	    	 redir.addAttribute("result", "Next Kin Address Edit Successfully");	
 	       		} else {
-	       			 redir.addAttribute("resultfail", "NEXT KIN ADDRESS EDIT UNSUCCESSFUL");	
+	       			 redir.addAttribute("resultfail", "Next Kin Address Edit UnSuccessful");	
 	       	    }
 	       	    redir.addFlashAttribute("Employee", empid);
     	   }
@@ -1280,9 +1279,9 @@ public class PisController {
         	  long result  =   service.AddEmecAddress(emecaddress); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "EMERGENCY ADDRESS ADD SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Emergency Address Add Successfully");	
         		} else {
-        			 redir.addAttribute("resultfail", "EMERGENCY ADDRESS ADD UNSUCCESSFUL");	
+        			 redir.addAttribute("resultfail", "Emergency Address Add UNSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
     	   }else if("EDIT".equalsIgnoreCase(Action)) {
@@ -1293,9 +1292,9 @@ public class PisController {
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 
 	       	    if(result>0) {
-	       	    	 redir.addAttribute("result", "EMERGENCY ADDRESS EDIT SUCCESSFULLY");	
+	       	    	 redir.addAttribute("result", "Emergency Address Edit Successfully");	
 	       		} else {
-	       			 redir.addAttribute("resultfail", "EMERGENCY ADDRESS EDIT UNSUCCESSFUL");	
+	       			 redir.addAttribute("resultfail", "Emergency Address Edit UnSuccessful");	
 	       	    }
 	       	    redir.addFlashAttribute("Employee", empid);
     	   }
@@ -1373,8 +1372,7 @@ public class PisController {
 	
 	@RequestMapping(value = "PasswordChanges.htm", method = RequestMethod.POST)
 	public String PasswordChangeSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
-		String Username = (String) ses.getAttribute("Username");
-		
+		String Username = (String) ses.getAttribute("Username");	
 		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
 		try {
 				long LoginId = (long) ses.getAttribute("LoginId");  
@@ -1400,7 +1398,29 @@ public class PisController {
 		
 	}
 	
+	@RequestMapping(value="Resetpassword.htm" , method=RequestMethod.POST)
+	public String Resetpassword(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
+		try {
+			String loginid = (String) req.getParameter("loginid");
+			
+			int result=service.ResetPassword(loginid,Username);
+			if (result > 0) 
+			{
+				redir.addAttribute("result", "Reset Password Changed Successfully");
+			}else{
+				redir.addAttribute("resultfail", "Reset Password Changed UnSuccessfully");
+			}
+			return "redirect:/LoginMaster.htm";
+		}catch(Exception e) {
+			redir.addAttribute("resultfail", "Some Problem Occure!");
+			e.printStackTrace();
+			return "redirect:/LoginMaster.htm";
+		}		
+			
+	}
 	
 
-	
 }

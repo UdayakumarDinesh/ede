@@ -16,4 +16,8 @@ public interface EmsDao
 	public List<EMSNotification> NotificationList(long EmpId) throws Exception;
 	public int NotificationUpdate(String NotificationId) throws Exception;
 	public Object[] LoginExistCheck(String username) throws Exception;
+	public Object[] getResetOtp(String loginid) throws Exception;
+	public int UpdateResetOtp(String loginid, String otp) throws Exception;
+	public int userResetPassword(String loginid, String password) throws Exception;
+	public Object[] LoginEmpInfo(String loginid) throws Exception;
 }

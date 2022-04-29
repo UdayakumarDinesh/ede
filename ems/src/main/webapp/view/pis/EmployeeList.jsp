@@ -131,7 +131,7 @@
 							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
 							<button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button>
-					<!-- 		<button type="submit" class="btn btn-sm view-btn" style="background-color:#12b571;" name="action" value="ResetPwd" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >RESETPASSWORD </button> -->
+							
 							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>
 							<button type="button" class="btn btn-sm submit-btn" name="action" value="view"  >SUBMIT </button>
 							<button type="button" class="btn btn-sm delete-btn" name="action" value="view"  >DELETE </button>

@@ -20,13 +20,14 @@ int slno=0;
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Medicine List</h5>
+				<h5>CHSS Item Amount List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>	
-						<li class="breadcrumb-item active " aria-current="page">CHSS Medicine List</li>
+						<li class="breadcrumb-item "><a href="OtherItems.htm">CHSS Item Amount List</a></li>
+						<li class="breadcrumb-item active " aria-current="page"> Item Amount </li>
 					</ol>
 				</div>
 			</div>
@@ -48,9 +49,9 @@ int slno=0;
 					</div>
 				<%} %>
 	    </div>
-			 <div class="card">
-				 <div class="card-body">
-						<div class="row">
+			 <div class="card" >
+				 <div class="card-body"  style="width: 70px;">
+						<div class="row" >
 						<div class="col-4"></div>
 						<div class="col-2" align="left" style="margin-right: -8%;"> <h5>Item Name :</h5></div>
 						<form action="OtherItemAmount.htm" id="myform">
@@ -69,8 +70,8 @@ int slno=0;
 						<br>
 						<form action="##" method="GET"> 
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							<div class="row">					
-								<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
+							<div class="row" >					
+								<table class="table table-bordered table-hover table-condensed  info shadow-nohover" style="width: 70%;" align="center">
 									<thead>
 										<tr>
 											<th style="width:5%;"  >SNo.          </th>
@@ -93,7 +94,7 @@ int slno=0;
 											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control items" name="basicto1" id="basicto1" value="<%=obj[1] %>"  readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
-											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
+											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
 									</tr>							
 									<%}%> 

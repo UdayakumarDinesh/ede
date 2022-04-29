@@ -465,11 +465,21 @@
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 									<%-- <td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td> --%>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%= Double.parseDouble(obj[24].toString()) %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%= Double.parseDouble(obj[25].toString()) %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
-									
-											
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." 
+										<%if("7".equals(obj[9].toString())||"9".equals(obj[9].toString()) ||"11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>  
+										    style=" color:#d1312c; font-weight: 600;"				
+											<%}else if("1".equals(obj[9].toString())){%>
+											 style="  color:#2db714; font-weight: 600;"     
+											<%}else if("3".equals(obj[9].toString())||"12".equals(obj[9].toString())||"6".equals(obj[9].toString())){%>
+											style="  color:#588c20; font-weight: 600;"
+											<%}else if("10".equals(obj[9].toString())||"4".equals(obj[9].toString())||"2".equals(obj[9].toString())){%>
+												style=" color:#149694; font-weight: 600;"
+											<%}else{ %>
+											style=" color:#0b4980; font-weight: 600;"
+											<%} %>
+									><%=obj[18] %> </a></td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">

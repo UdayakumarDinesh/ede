@@ -1,6 +1,8 @@
 package com.vts.ems.Admin.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,12 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -139,10 +141,6 @@ public class AdminServiceImpl implements AdminService{
 	{
 		CHSSOtherItems test=dao.getOtherItem(item.getOtherItemId());
 			test.setOtherItemName(item.getOtherItemName());
-			test.setPayLevel1(item.getPayLevel1());
-			test.setPayLevel2(item.getPayLevel2());
-			test.setPayLevel3(item.getPayLevel3());
-			test.setPayLevel4(item.getPayLevel4());
 			test.setModifiedBy(item.getModifiedBy());
 			test.setModifiedDate(item.getModifiedDate());
 		return dao.EditItem(test);
@@ -262,8 +260,11 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
-	{
-		return dao.GethandlingOverList(fromdate,todate);
+	{	
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+		LocalDate ToDate= LocalDate.parse(todate, formatter);
+		return dao.GethandlingOverList(Fromdate,ToDate);
 	}
 	
 	@Override
@@ -363,7 +364,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
-	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception
+	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception
 	{
 		return dao.AddOtherItemAmt(otheramt);
 	}

@@ -1,4 +1,4 @@
-package com.vts.ems.Admin.model;
+package com.vts.ems.chss.model;
 
 import java.io.Serializable;
 
@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "chss_other_perm_amt")
-public class OtherPermitAmt  implements Serializable {
-
+public class CHSSOtherPermitAmt  implements Serializable 
+{
 	private static final long serialVersionUID = 1L;
 
 	@Id

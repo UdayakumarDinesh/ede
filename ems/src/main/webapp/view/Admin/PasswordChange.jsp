@@ -32,27 +32,28 @@ NFormatConvertion nfc=new NFormatConvertion();
 				</ol>
 			</div>	
 		</div>
-	</div>	
+		
 	
 
-<%String ses=(String)request.getParameter("result"); 
+
+	<div class="card-body" align="center">
+	<%String ses=(String)request.getParameter("result"); 
  String ses1=(String)request.getParameter("resultfail");
 	if(ses1!=null){
 	%>
 	<div align="center">
 
-		<div class="alert alert-danger" role="alert">
+		<div class="alert alert-danger" role="alert" align="center">
 			<%=ses1 %>
 		</div>
 	
 	<%}if(ses!=null){ %>
 
-		<div class="alert alert-success" role="alert">
+		<div class="alert alert-success" role="alert" align="center">
 			<%=ses %>
 		</div>
   </div>
 	<%}%>
-	
 	
 <div class="container" style="margin-top: 10px;">
 	<div class="row" style="">
@@ -111,8 +112,8 @@ NFormatConvertion nfc=new NFormatConvertion();
 		<div class="col-md-2" ></div>
 	</div>
 </div>	
-	
-
+	</div>
+	</div>
 <script type="text/javascript">
 
 $('#password, #confirm_password').on('keyup', function () {
