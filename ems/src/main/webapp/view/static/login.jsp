@@ -146,7 +146,7 @@
 															<div class="form-submit-button">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 																<button type="submit" class="btn btn-block btn-success" style="font-family: 'Montserrat', sans-serif;" >Login</button>
-																<button type="submit" class="btn btn-link" formaction="#"> Forgot Password?</button>
+																<button type="submit" class="btn btn-link" formaction="fpwd/ForgotPassword.htm" > Forgot Password?</button>
 															</div>
 														</div>
 													</div>

@@ -137,4 +137,22 @@ public class EmsDaoImpl implements EmsDao
 	}
 	
 	
+	private static final String LOGINEXISTCHECK="SELECT  l.LoginId, l.UserName, l.EmpId, e.EmpName, e.Email FROM  login l, employee e WHERE l.EmpId = e.EmpId  AND l.IsActive=1 AND l.UserName =:username ";
+	@Override
+	public Object[] LoginExistCheck(String username) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO LoginExistCheck");	
+		try {
+			Query query = manager.createNativeQuery(LOGINEXISTCHECK);
+			
+			query.setParameter("username", username);
+			return (Object[])query.getSingleResult();
+		}
+		catch (Exception e) {
+//			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 }

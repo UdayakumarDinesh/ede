@@ -15,4 +15,5 @@ public interface EmsDao
 	public Object[] EmployeeData(String EmpId) throws Exception;
 	public List<EMSNotification> NotificationList(long EmpId) throws Exception;
 	public int NotificationUpdate(String NotificationId) throws Exception;
+	public Object[] LoginExistCheck(String username) throws Exception;
 }

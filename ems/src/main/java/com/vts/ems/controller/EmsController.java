@@ -49,7 +49,7 @@ public class EmsController {
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
 		} catch (Exception e) {
-			logger.error(new Date() + " Login Problem Occures When Login By " + req.getUserPrincipal().getName(), e);
+			logger.error(new Date() + " Login Issue Occures When Login By " + req.getUserPrincipal().getName(), e);
 		}
 
 		return "redirect:/MainDashBoard.htm";
@@ -70,7 +70,8 @@ public class EmsController {
 	
 	
 	@RequestMapping(value = "NotificationList.htm" , method = RequestMethod.GET)
-	public @ResponseBody String NotificationList(HttpServletRequest request ,HttpSession ses) throws Exception {
+	public @ResponseBody String NotificationList(HttpServletRequest request ,HttpSession ses) throws Exception 
+	{
 			
 		List<EMSNotification> notificationlist= new ArrayList<EMSNotification>();
 		 

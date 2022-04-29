@@ -36,6 +36,13 @@
 	background: #0B4619;
 }
 
+.apply-btn{
+	background: #0e6fb6;
+    padding: 3px 13px;
+    color: white
+	
+}
+
 .view-btn
 {
 	color: #ffffff;
