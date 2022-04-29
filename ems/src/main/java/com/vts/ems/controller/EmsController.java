@@ -3,8 +3,10 @@ package com.vts.ems.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.login.Login;
@@ -118,7 +121,108 @@ public class EmsController {
 		
 	}
 	
+    
+	 @RequestMapping(value = "fpwd/ForgotPassword.htm", method = {RequestMethod.POST,RequestMethod.GET}) 
+	 public String forgotPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 {	 
+		logger.info(new Date() +"Inside fpwd/ForgotPassword.htm ");
+		try 
+		{
+			String username=req.getParameter("username");
+			
+			if (username == null) {
+				Map md = model.asMap();
+				username = (String) md.get("username");
+			}
+			
+			if(username==null) {
+				return "redirect:/login"; 
+			}
+			
+			Object[] userinfo = service.LoginExistCheck(username);
+			
+			if(userinfo==null) 
+			{
+				redir.addFlashAttribute("error","Login for this Username not found, Please Contact Admin.");
+				return "redirect:/login";
+			}
+			
+			if(userinfo[4]==null || userinfo[4].toString().trim().equals("") )
+			{
+				redir.addFlashAttribute("error","Email id not found, Please Contact Admin.");
+				return "redirect:/login";
+			}
+			
+			String otp =service.getPasswordResetOTP(userinfo[0].toString());
+			
+			req.setAttribute("otp", otp);
+	    	req.setAttribute("userinfo", userinfo);
+	    	return "static/ForgotPassword";
+	    	
+	    	
+		} catch (Exception e) {
+			e.printStackTrace();
+			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
+			return "redirect:/login";
+		}
 	
+	    
+	 }
+
+	
+	 @RequestMapping(value = "fpwd/ResetPassword.htm", method = RequestMethod.POST) 
+	 public String resetPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 {	 
+		logger.info(new Date() +"Inside fpwd/ResetPassword.htm ");
+		try 
+		{
+			String loginid=req.getParameter("loginid");
+			String NewPassword=req.getParameter("NewPassword");
+			
+			int count =service.userResetPassword(loginid, NewPassword);
+			
+			if(count>0) {
+				redir.addFlashAttribute("success","Password reset Successfull.");
+				return "redirect:/login";
+			}
+			
+			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
+			return "redirect:/login";
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
+			return "redirect:/login";
+		}
+	
+	    
+	 }
+	 
+	 @RequestMapping(value = "fpwd/ResendOTP.htm", method = RequestMethod.POST) 
+	 public String ResendOTP(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 {	 
+		logger.info(new Date() +"Inside fpwd/ResendOTP.htm ");
+		try 
+		{
+			String loginid=req.getParameter("loginid");
+			String username=req.getParameter("username");
+			
+			service.reSendResetOTP(loginid);
+			
+			redir.addAttribute("username", username);
+			return "redirect:/fpwd/ForgotPassword.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
+			return "redirect:/login";
+		}
+	
+	    
+	 }
+	 
+
+
 	
 	
 

@@ -137,7 +137,7 @@ public class EmsDaoImpl implements EmsDao
 	}
 	
 	
-	private static final String LOGINEXISTCHECK="SELECT  l.LoginId, l.UserName, l.EmpId, e.EmpName, e.Email FROM  login l, employee e WHERE l.EmpId = e.EmpId  AND l.IsActive=1 AND l.UserName =:username ";
+	private static final String LOGINEXISTCHECK="SELECT  l.LoginId, l.UserName, l.EmpId, e.EmpName, e.Email, l.ResetOTP FROM  login l, employee e WHERE l.EmpId = e.EmpId  AND l.IsActive=1 AND l.UserName =:username ";
 	@Override
 	public Object[] LoginExistCheck(String username) throws Exception
 	{		
@@ -149,10 +149,95 @@ public class EmsDaoImpl implements EmsDao
 			return (Object[])query.getSingleResult();
 		}
 		catch (Exception e) {
-//			e.printStackTrace();
+			logger.error(new Date() +" Inside DAO LoginExistCheck "+ e);
 			return null;
 		}
 	}
+	
+	private static final String UPDATERESETOTP = "UPDATE login SET ResetOTP = :otp WHERE loginid= :loginid";
+			
+	@Override
+	public int UpdateResetOtp(String loginid,String otp) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO UpdateResetOtp");	
+		try {
+			Query query = manager.createNativeQuery(UPDATERESETOTP);
+			
+			query.setParameter("loginid", loginid);
+			query.setParameter("otp", otp);
+			
+			
+			return query.executeUpdate();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO UpdateResetOtp "+ e);
+			return 0;
+		}
+	}
+	
+	private static final String GETRESETOTP = "SELECT resetotp,'otp' FROM login WHERE loginid =:loginid ";
+	
+	@Override
+	public Object[] getResetOtp(String loginid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO getResetOtp");	
+		try {
+			Query query = manager.createNativeQuery(GETRESETOTP);
+			
+			query.setParameter("loginid", loginid);
+			
+			return (Object[])query.getSingleResult();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getResetOtp "+ e);
+			return null;
+		}
+	}
+	
+	
+	private static final String USERRESETPASSWORD = "UPDATE login SET password = :password , ResetOTP =NULL  WHERE loginid=:loginid";
+	
+	@Override
+	public int userResetPassword(String loginid,String password) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO userResetPassword");	
+		try {
+			Query query = manager.createNativeQuery(USERRESETPASSWORD);
+			
+			query.setParameter("loginid", loginid);
+			query.setParameter("password", password);
+			
+			
+			return query.executeUpdate();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO userResetPassword"+ e);
+			return 0;
+		}
+	}
+	
+	
+	
+	
+	
+	private static final String LOGINEMPINFO="SELECT  l.LoginId, l.UserName, l.EmpId, e.EmpName, e.Email, l.ResetOTP FROM  login l, employee e WHERE l.EmpId = e.EmpId  AND l.IsActive=1 AND l.LoginId =:loginid ";
+	
+	@Override
+	public Object[] LoginEmpInfo(String loginid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO LoginEmpInfo");	
+		try {
+			Query query = manager.createNativeQuery(LOGINEMPINFO);
+			
+			query.setParameter("loginid", loginid);
+			return (Object[])query.getSingleResult();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO LoginEmpInfo "+ e);
+			return null;
+		}
+	}
+	
 	
 	
 }

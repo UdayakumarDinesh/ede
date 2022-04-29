@@ -68,31 +68,42 @@
 
 </head>
 <body>
+<%
+	Object[] userinfo=(Object[])request.getAttribute("userinfo");
+	String otp=(String)request.getAttribute("otp");
+%>
+
 	<div class="card-holder">
 	  <div class="card">
 	     <h3 style="color: #FFD36E;">Reset Password</h3>
 	    <hr style="background-color: #ffffff">
-	    <form action="#" method="post" >
+	    <form action="ResetPassword.htm" method="post" autocomplete="off" >
 		    <div align="left" style="padding: 10px;">
 		    	<div id="otp-div">
 			    	<span style="color: #ffffff;"><b>OTP  :</b>&nbsp;&nbsp;</span>
-			    	<input type="text" class="form-control" style="width: 40%;display: inline;"  name="otp" id="otpvalue" placeholder="Enter OTP">&nbsp;&nbsp;&nbsp;
+			    	<input type="text" class="form-control" style="width: 40%;display: inline;"  name="otp" id="otpvalue" maxlength="4" placeholder="Enter OTP">&nbsp;&nbsp;&nbsp;
 			    	<button class="btn btn-sm submit-btn" type="button" onclick="validateOtp();">Submit</button>
+			    	<button class="btn  btn-link" style="color: #ffffff" type="submit" formaction="ResendOTP.htm" formnovalidate="formnovalidate" >Resend OTP</button>
+			    	<br>
+			    	<div style="color: #FFE61B; margin-top: 8px; "> A OTP is already sent to your e-mail </div>
 		    	</div>
 		    	<div id="password-div" style="display: none;">	    		
 			    	<h5 style="color: #ffffff">New Password :</h5>
-			    	<input type="text" class="form-control" style="width: 80%;"  name="NewPassword" id="NewPassword" placeholder="Enter New Password" >
+			    	<input type="password" class="form-control" style="width: 80%;"  name="NewPassword" id="NewPassword" placeholder="Enter New Password" onkeyup ="validatePassword();" required="required">
 			    	<br>
 			    	<h5 style="color: #ffffff">Re-New Password :</h5>
-			    	<input type="text" class="form-control" style="width: 80%;"  name="ReNewPassword" id="ReNewPassword" placeholder="Re-Enter New Password" onkeyup ="validatePassword();" >
-			    	<div id="err-msg" style="display: none;color: yellow; margin-top: 5px; "> Passwords do not match </div>
+			    	<input type="password" class="form-control" style="width: 80%;"  name="ReNewPassword" id="ReNewPassword" placeholder="Re-Enter New Password" onkeyup ="validatePassword();" required="required">
+			    	<div id="err-msg" style="display: none;color: #FFE61B; margin-top: 5px; "> Passwords do not match </div>
 			    	
 			    	<div align="center">
-			    		<button type="button" class="btn btn-sm " id="update-btn" style="margin-top: 10px"  onclick="validatePassword();">Update</button>
+			    		<button type="submit" class="btn btn-sm " id="update-btn" style="margin-top: 10px"  onclick="return confirm('Are you sure to update your password?');">Update</button>
 			    	</div>
 		    	</div>
 		    	
 		    </div>	  
+		    <input type="hidden" name="loginid" value="<%=userinfo[0]%>">
+		    <input type="hidden" name="username" value="<%=userinfo[1]%>">
+		    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	    </form> 
 	  </div>
 	</div>
@@ -120,7 +131,7 @@ function validatePassword()
 
 
 
-var $genotp='d1';
+var $genotp='<%=otp%>';
 function validateOtp()
 {
 	$userotp = $('#otpvalue').val().trim();
@@ -141,13 +152,11 @@ function validateOtp()
 	
 }
 
-
-
 </script>	
 
 <script type="text/javascript">
 
-/* 
+
 document.onkeydown = function(e) {
 	if(event.keyCode == 123) {
 	return false;
@@ -165,7 +174,7 @@ document.onkeydown = function(e) {
 
 $(document).bind("contextmenu",function(e){
 	  return false;
-	    }); */
+	    }); 
 </script>
 </body>
 </html>
