@@ -465,9 +465,6 @@
 											style=" color:#0b4980; font-weight: 600;"
 											<%} %>
 									><%=obj[18] %> </a></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%= Double.parseDouble(obj[24].toString()) %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%= Double.parseDouble(obj[25].toString()) %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." ><%=obj[18] %> </a></td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
