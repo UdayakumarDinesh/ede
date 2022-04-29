@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -62,7 +62,7 @@ public interface AdminDao {
 	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
 	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception;
 	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception;
-	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception;
+	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception;
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
 	
 	

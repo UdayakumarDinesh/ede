@@ -14,6 +14,7 @@ import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -97,5 +98,6 @@ public interface CHSSDao {
 	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
+	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
 
 }
