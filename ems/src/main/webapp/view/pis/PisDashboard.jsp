@@ -26,10 +26,10 @@
 			</div>			
 		</div>
 	</div>	
-	<div class="card-body" >
+
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<div class="card" >
+			<div class="card dashboard-card" >
 				<div class="card-body " >
 					<div class="row" > 
 						<!-- <div class="col-md-3">
@@ -55,7 +55,7 @@
 			</div>		
 		</form>
 		
-	</div>
+	
 	
 
  </div>

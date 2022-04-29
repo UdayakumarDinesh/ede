@@ -18,8 +18,7 @@
 	Object[] empdata = (Object[])request.getAttribute("Empdata");
 	AddressPer peraddress =(AddressPer)request.getAttribute("peraddress");
 	%>
-
-<div class="col page card"> 
+	
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
@@ -33,12 +32,15 @@
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-						<li class="breadcrumb-item active " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Permanent Address </li>
 					</ol>
 				</div>
 		</div>
 	</div>
+
+<div class="page card dashboard-card"> 
+	
 
 	<div class="card-body">
 		

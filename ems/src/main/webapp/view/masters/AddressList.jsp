@@ -48,8 +48,8 @@ Object[] kinAddress   = (Object[])request.getAttribute("kinAddress");
 Object[] EmeAddress   = (Object[])request.getAttribute("EmeAddress");
 List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 %>
- <div class="col page card">
-	 <div class="card-header page-top">
+
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
 				<h5>Address List<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
@@ -59,12 +59,15 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-						<li class="breadcrumb-item active " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Address List</li>
 					</ol>
 				</div>
 			</div>
 	 </div>
+
+ <div class="page card dashboard-card">
+	 
 
 <div class="card-body" >		
 			<div align="center">
