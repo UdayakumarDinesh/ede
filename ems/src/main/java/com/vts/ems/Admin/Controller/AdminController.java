@@ -37,7 +37,6 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class AdminController {
-
 	
 private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
