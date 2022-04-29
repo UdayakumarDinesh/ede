@@ -285,8 +285,10 @@ public class PisServiceImpl implements PisService
 	public int UserNamePresentCount(String username)throws Exception{
 		return dao.UserNamePresentCount( username);
 	}
+	
 	@Override
-	public Long UserManagerAdd(UserManageAdd useradd)throws Exception{
+	public Long UserManagerAdd(UserManageAdd useradd)throws Exception
+	{
 		
 		Login login = new Login();
 		
@@ -613,5 +615,31 @@ public class PisServiceImpl implements PisService
 			return dao.getFamilydetails(empid);
 		}
 		
-	
+		@Override
+		public int ResetPassword(String loginid,String username)throws Exception
+		{
+
+			logger.info(new Date() +"Inside ResetPassword()");
+			try {
+				String resetpwd = "4321";
+				String pwd=encoder.encode(resetpwd);
+				System.out.println(pwd);
+				return dao.ResetPassword(loginid,pwd,  username);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		
+		@Override
+		public List<Object[]> GetAllEmployee()throws Exception
+		{
+			logger.info(new Date() +"Inside GetAllEmployee()");
+			try {
+				return dao.GetAllEmployee();
+			}catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 }

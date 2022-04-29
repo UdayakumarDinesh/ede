@@ -14,6 +14,8 @@
 <body>
 <%
 List<Object[]> handingoverlist = (List<Object[]>)request.getAttribute("handlingoverlist");
+String fromdate = (String)request.getAttribute("fromdate");
+String todate   = (String)request.getAttribute("todate");
 String treat = (String)request.getAttribute("treat");
 %>
 
@@ -39,8 +41,8 @@ String treat = (String)request.getAttribute("treat");
 	
 	<div class="card-body" >		
 			<div align="center">
-		<%String ses=(String)request.getAttribute("result"); 
-		String ses1=(String)request.getAttribute("resultfail");
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
 		if(ses1!=null){ %>
 			<div class="alert alert-danger" role="alert">
 				<%=ses1 %>
@@ -53,6 +55,7 @@ String treat = (String)request.getAttribute("treat");
 			</div>
 		<%} %>
 	</div>
+	
 		
 			<div class="card" >
 			
@@ -65,16 +68,16 @@ String treat = (String)request.getAttribute("treat");
 				<div class="col-5"></div>
 				<div class="col-7">
 				<div class="row">
-					  <div class="col-2"  align="right">FromDate :</div>
-					  
+				
+					     <div class="col-2"  align="right">FromDate :</div>
 				         <div class="col-2"> 
-							    <input type="text" style="width: 115%;"  class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="fromdate" name="fromdate"  required="required"  > 
+							    <input type="text" style="width: 115%;"  class="form-control input-sm mydate"  readonly="readonly" value="<%if(fromdate!=null){%><%=fromdate%><%}%>"   id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  > 
 							    <label class="input-group-addon btn" for="testdate"></label>              
 						 </div>
 						 
 						  <div class="col-2" align="right" ><h6>ToDate :</h6></div>
 						  <div class="col-2">						
-							     <input type="text" style="width: 115%;"  class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="todate" name="todate"  required="required"  > 							
+							     <input type="text" style="width: 115%;"  class="form-control input-sm mydate" readonly="readonly" value="<%if(todate!=null){%><%=todate%><%}%>"   id="todate" name="todate"  required="required"  > 							
 						 		 <label class="input-group-addon btn" for="testdate"></label>    
 						 </div>
 						 
@@ -113,7 +116,7 @@ String treat = (String)request.getAttribute("treat");
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%></td>
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%></td>
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%></td>
-											<td><%if("A".equalsIgnoreCase(obj[6].toString())){%>APPLIED<%}else if("R".equalsIgnoreCase(obj[6].toString())){%>REVOKED<%}else{ %> SANTIONED<%} %></td>
+											<td><%if("A".equalsIgnoreCase(obj[6].toString())){%>Created Date<%}else if("R".equalsIgnoreCase(obj[6].toString())){%>Revoked<%}else{ %> Santioned<%} %></td>
 										</tr>
 									<%}%>
 								</tbody>
@@ -158,7 +161,7 @@ $('#fromdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	/* "minDate" :datearray,   */
-	"startDate" : fdate,
+	/* "startDate" : fdate, */
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -166,13 +169,32 @@ $('#fromdate').daterangepicker({
 	}
 });
 });
-
+function setTodate()
+{
+	var fromdate = $("#fromdate").val();
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :fromdate,   
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	}
+$(document).ready(function() {
+	
+	var fromdate = $("#fromdate").val();
+	
 $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	/* "minDate" :datearray,   */
-	"startDate" : new Date(),
+	"minDate" :fromdate,   
+	/* "startDate" : new Date(), */
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -180,6 +202,7 @@ $('#todate').daterangepicker({
 	}
 });
 
+});
 
 function Edit() {
 

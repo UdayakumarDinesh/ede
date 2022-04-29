@@ -105,9 +105,9 @@
 											style="padding-top:5px; padding-bottom:5px;  color:#83bd62;"
 											<%}else if("10".equals(obj[9].toString())||"4".equals(obj[9].toString())||"2".equals(obj[9].toString())){%>
 												style="padding-top:5px; padding-bottom:5px;  color:#149694;"
-											<%}else{ %>
+											<%}else{%>
 											style="padding-top:5px; padding-bottom: 5px;  color:#0b4980;"
-											<%} %>
+											<%}%>
 											 class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>"   title="Click for Details." ><%=obj[18] %> </a></td>
 											
 											

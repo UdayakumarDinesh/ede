@@ -81,5 +81,6 @@ public interface PisService {
 	public Object[] EmployeePerAddressDetails(String empid) throws Exception;
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception;
 	public List<Object[]> getFamilydetails(String empid) throws Exception;
-	
+	public int ResetPassword(String loginid,String username)throws Exception;
+	public List<Object[]> GetAllEmployee()throws Exception;
 }
