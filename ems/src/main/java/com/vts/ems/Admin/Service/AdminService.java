@@ -61,7 +61,7 @@ public interface AdminService {
 	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception;
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
 	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId,String basicto)throws Exception;
-	
+	public List<Object[]> GetReqListFromUser()throws Exception;
 	
 	
 	

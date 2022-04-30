@@ -65,6 +65,7 @@ public class Employee {
 	private String Height;
 	private Long BasicPay;
 	private Date EmpStatusDate;
+	private String PhoneNo;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

@@ -61,10 +61,10 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
-										<th>Select</th>
-										<th> Name</th>
-										<th> Main Name </th>
-										<th> Rate</th>
+										<th style="width: 10%;">Select</th>
+										<th style="width: 55%;"> Name</th>
+										<th style="width: 25%;"> Main Name </th>
+										<th style="width: 10%;"><i class="fa fa-inr" aria-hidden="true"></i> Rate </th>
 									</tr>
 								</thead>
 								<tbody>

@@ -857,4 +857,19 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 			
 		}
+		
+		@RequestMapping()
+		public String ReqMsgFromUserToAdmin(HttpSession ses ,HttpServletRequest req,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				List<Object[]>  reqlist = service.GetReqListFromUser();
+				return "";			
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "";
+			}
+		}
+		
 }

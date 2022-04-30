@@ -36,7 +36,7 @@ public interface PisDao {
 	public long getempno()throws Exception;
 	public String PhotoPath(String empid)throws Exception;
 	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
-	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception;
+	public List<Object[]> LoginMasterList() throws Exception;
 	public List<Object[]> getEmpList()throws Exception;
 	public List<Object[]> getLoginTypeList()throws Exception;
 	public int UserManagerDelete(String username , String loginid)throws Exception;
@@ -85,4 +85,5 @@ public interface PisDao {
 	public List<Object[]> getFamilydetails(String empid) throws Exception;
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception;
 	public List<Object[]> GetAllEmployee()throws Exception;
+	public Object[] GetEmpPhoneNo(String loginid) throws Exception;
 }

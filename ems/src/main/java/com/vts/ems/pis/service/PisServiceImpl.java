@@ -67,9 +67,9 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
-	public List<Object[]> LoginMasterList(String LoginType,String Empid) throws Exception
+	public List<Object[]> LoginMasterList() throws Exception
 	{
-		return dao.LoginMasterList(LoginType, Empid);
+		return dao.LoginMasterList();
 	}
 	
 	@Override
@@ -207,7 +207,7 @@ public class PisServiceImpl implements PisService
 		employee.setSubCategary(emp.getSubCategary());
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
 		employee.setModifiedDate(sdtf.format(new Date()));
-		
+		employee.setPhoneNo(emp.getPhoneNo());
 		return dao.EmployeeEditSubmit(employee);
 	}
 	
@@ -618,12 +618,18 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int ResetPassword(String loginid,String username)throws Exception
 		{
-
 			logger.info(new Date() +"Inside ResetPassword()");
 			try {
-				String resetpwd = "4321";
+				//Object[] empdata = dao.GetEmpPhoneNo(loginid);
+				String resetpwd = null;
+				//if(empdata!=null) {
+				//	resetpwd = ""+empdata[2];
+				//}else {
+					resetpwd = "4321";
+				//}
+				 
 				String pwd=encoder.encode(resetpwd);
-				System.out.println(pwd);
+				
 				return dao.ResetPassword(loginid,pwd,  username);
 			} catch (Exception e) {
 				e.printStackTrace();

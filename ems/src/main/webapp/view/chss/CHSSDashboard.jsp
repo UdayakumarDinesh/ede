@@ -475,14 +475,14 @@
 										<%} %>
 									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." 
-										<%if("7".equals(obj[9].toString())||"9".equals(obj[9].toString()) ||"11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>  
-										    style=" color:#d1312c; font-weight: 600;"				
-											<%}else if("1".equals(obj[9].toString())){%>
-											 style="  color:#2db714; font-weight: 600;"     
-											<%}else if("3".equals(obj[9].toString())||"12".equals(obj[9].toString())||"6".equals(obj[9].toString())){%>
-											style="  color:#588c20; font-weight: 600;"
-											<%}else if("10".equals(obj[9].toString())||"4".equals(obj[9].toString())||"2".equals(obj[9].toString())){%>
-												style=" color:#149694; font-weight: 600;"
+										<%if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString())){%>  
+										    style=" color:#bf251d; font-weight: 600;"				
+											<%}else if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) || "8".equals(obj[9].toString()) || "10".equals(obj[9].toString())){%>
+											 style="  color:#1b0e80; font-weight: 600;"     
+											<%}else if("13".equals(obj[9].toString())||"11".equals(obj[9].toString())){%>
+											style="  color:#bf251d; font-weight: 600;"
+											<%}else if("4".equals(obj[9].toString())||"14".equals(obj[9].toString())||"12".equals(obj[9].toString()) || "6".equals(obj[9].toString())){%>
+												style=" color:#6ca818; font-weight: 600;"
 											<%}else{ %>
 											style=" color:#0b4980; font-weight: 600;"
 											<%} %>

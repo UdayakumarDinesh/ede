@@ -436,7 +436,17 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div> -->
 			     <!--    </div>
 			    </div> -->
-			    
+			      <div class=" form-group ">
+			        <div class="row">
+			         <div class=" col-md-2 ">
+			                <label>Phone No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
+			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                     onblur="checknegative(this) ">
+			            </div>
+			
+			        </div>
+    			</div>
 			    
 			    
 			    <div class="row" >
@@ -556,6 +566,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 </script>
     <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
+setPatternFilter($("#Phoneno"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#InternalNum"), /^-?\d*$/);
