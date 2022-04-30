@@ -190,7 +190,7 @@ th,td
 										<tr>
 											<th>Basic Pay : <%=employee.getBasicPay() %> </th>
 											<th colspan="2">Level in The Pay Matrix : <%=employee.getPayLevelId() %></th>
-											<th colspan="2">Ph.No. : <%=employee.getpho%></th>
+											<th colspan="2">Ph.No. : <%=employee.getPhoneNo()%></th>
 										</tr>
 									</tbody>
 								</table>
