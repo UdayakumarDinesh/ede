@@ -23,5 +23,10 @@ public class CHSSOther implements Serializable {
 	private Integer OtherItemId;
 	private Integer OtherItemCost;
 	private Integer OtherRemAmount;
+	private String Comments;
 	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

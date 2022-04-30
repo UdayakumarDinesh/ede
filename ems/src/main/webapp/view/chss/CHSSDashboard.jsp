@@ -333,26 +333,29 @@
 	</div>
 	
 
- <%-- 	<div>
- 	<form action="#" method="post" style="margin-top: 5px;">
+	<div>
+ 		<form action="#" method="post" style="margin-top: 5px;">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
- 					<div class="row"> 
+ 				<div class="row"> 
 						
-						<%if(dashboard!=null)
-						{ 
-							for(Object[] obj:dashboard)
-							{
-								if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))){
-							 %>							
-							 <div class="col-md-3" >
-								<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
-							</div>
-							<%} }
-						}%>
+				<%if(dashboard!=null)
+				{ 
+					for(Object[] obj:dashboard)
+					{
+						if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))) 
+						{ %>	
+											
+						<div class="col-md-3" >
+							<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
+						</div>
 						
-					</div>
-				</form>
-	</div>  --%>	
+					<%	} 
+					}
+				}%>
+						
+			</div>
+		</form>
+	</div> 	
 
 	<div class="row" >
 		<div class="col-md-2">
@@ -361,18 +364,18 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<%if(employee.getGender().equalsIgnoreCase("F")){ %>
-								<img src="view/images/femaleuser.png" alt="Photo Not Found">
-								<%}else{ %>
-								<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<%}%>
+								<% if(employee.getGender().equalsIgnoreCase("F")) { %>
+									<img src="view/images/femaleuser.png" alt="Photo Not Found">
+								<% }else{ %>
+									<img src="view/images/maleuser.png" alt="Photo Not Found">
+								<% } %>
 							</div>
 						</div>
 					</div>
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=employee.getEmpName() %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
-						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
-						<p class="employee-details"> 	&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> 
+						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
+						<p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> 
 					</div>
 				</div>	
 			</div>
@@ -423,16 +426,16 @@
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
 					 	 <%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
 					
-		<%-- <form class="form-inline my-2 my-lg-0">
+		<form class="form-inline my-2 my-lg-0">
 	    	<select class="form-control select2" id="empname" required="required" name="empname"  onchange="changeform()" >
-					<option value="0" <%if(patientidvalue.equalsIgnoreCase("0")){ %>selected<% } %> >All</option>
-					<option value="<%=employee.getEmpId()%>" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))){ %>selected<% } %> ><%=employee.getEmpName() %> (Self)</option>
-					<% for (Object[] obj : empfamilylist) {%>
-						<option value="<%=obj[0]%>" <%if(obj[0].toString().equalsIgnoreCase(patientidvalue)){ %>selected<% } %> ><%=obj[1]%> (<%=obj[7] %>)</option> 
-					<%} %>
+				<option value="0" <%if(patientidvalue.equalsIgnoreCase("0")){ %>selected<% } %> >All</option>
+				<option value="<%=employee.getEmpId()%>" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))){ %>selected<% } %> ><%=employee.getEmpName() %> (Self)</option>
+				<% for (Object[] obj : empfamilylist) {%>
+					<option value="<%=obj[0]%>" <%if(obj[0].toString().equalsIgnoreCase(patientidvalue)){ %>selected<% } %> ><%=obj[1]%> (<%=obj[7] %>)</option>
+				<%} %>
 			</select>
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    	</form>	 --%>		
+    	</form>
 
 	</div>
 
@@ -447,7 +450,6 @@
 								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
-								<!-- <td style="padding-top:5px; padding-bottom: 5px;">Ailment</td> -->
 								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amnt</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amnt</td>
@@ -463,10 +465,15 @@
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-									<%-- <td style="padding-top:5px; padding-bottom: 5px;"><%=obj[17] %></td> --%>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[25] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
+										<%if("14".equals(obj[9].toString())){ %>
+											&#8377;  <%=obj[25] %>
+										<%}else{ %>
+											-
+										<%} %>
+									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details." 
 										<%if("7".equals(obj[9].toString())||"9".equals(obj[9].toString()) ||"11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>  
 										    style=" color:#d1312c; font-weight: 600;"				

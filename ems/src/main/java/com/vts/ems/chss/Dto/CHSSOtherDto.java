@@ -11,5 +11,10 @@ public class CHSSOtherDto {
 	private String OtherItemCost[];
 	
 	private String empid;
-	
+	private String Comments;
+	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

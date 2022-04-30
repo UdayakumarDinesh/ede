@@ -11,5 +11,10 @@ public class CHSSTestsDto{
 	private String TestMainId[];
 	private String TestSubId[];
 	private String TestCost[];
+	private String Comments;
+	private Integer IsActive;
 	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

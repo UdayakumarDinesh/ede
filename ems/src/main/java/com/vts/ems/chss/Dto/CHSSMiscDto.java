@@ -11,5 +11,10 @@ public class CHSSMiscDto {
 	private String BillId;
 	private String[] MiscItemName;
 	private String[] MiscItemCost;
-	private String Isactive;
+	private String Comments;
+	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

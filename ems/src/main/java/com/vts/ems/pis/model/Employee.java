@@ -57,7 +57,7 @@ public class Employee {
 	private Date ResigDate;
 	private int PayLevelId;
 	private String SBIAccNo;
-	private String OtherAccNo;
+	private String OtherAccNo; 
 	private String SubCategary ;
 	private String  InternalNumber ;
 	private long SrNo;	

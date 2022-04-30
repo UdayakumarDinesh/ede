@@ -188,9 +188,9 @@ th,td
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
-											<th>Basic Pay :</th>
-											<th colspan="2">Level in The Pay Matrix :</th>
-											<th colspan="2">Ph.No. : </th>
+											<th>Basic Pay : <%=employee.getBasicPay() %> </th>
+											<th colspan="2">Level in The Pay Matrix : <%=employee.getPayLevelId() %></th>
+											<th colspan="2">Ph.No. : <%=employee.getpho%></th>
 										</tr>
 									</tbody>
 								</table>
@@ -298,9 +298,9 @@ th,td
 												<tr><td colspan="6" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
-													<th class="center" colspan="4" style="width: 70%;">Particulars</th>
+													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
 													<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-													<th class="right" style="width: 15%;">Reimbursable under CHSS (&#8377;)</th>
+													<th class="right" style="width: 25%;">Reimbursable under CHSS (&#8377;)</th>
 												</tr>
 												<%long itemstotal=0, totalremamount=0; %>
 												<% int i=1;
@@ -311,7 +311,7 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation charges </b>
 																<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 																 <%} %>
@@ -338,9 +338,10 @@ th,td
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
 														<td class="right">
-														<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-															<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
-															<button type="submit" class="btn btn-sm editbtn"  name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update">
+														<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+															<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >	 
+															<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+															<button type="submit" class="btn btn-sm editbtn" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>				
 														<%}else if((chssstatusid>=6)){ %>
@@ -389,7 +390,8 @@ th,td
 													<td class="right"><%=test[4] %></td>
 													<td class="right">
 													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
+														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>												
@@ -404,7 +406,7 @@ th,td
 											totalremamount +=Integer.parseInt(test[7].toString());
 											} %>
 												
-									</form>
+										</form>
 										<form action="MedRemAmountEdit.htm" method="post">
 											
 											<% i=1;
@@ -443,8 +445,8 @@ th,td
 													<td class="right"><%=medicine[3] %></td>
 													<td class="right">
 													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ){ %>	 
-													
-														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
+														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
+														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -494,8 +496,8 @@ th,td
 													<td class="right"><%=other[3] %></td>
 													<td class="right">
 													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-													
-														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
+														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
+														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>	
@@ -546,7 +548,8 @@ th,td
 													<td class="right"><%=misc[3] %></td>
 													<td class="right">
 													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-														<input type="number" class="numberonly" style="width: 75%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
+														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -831,6 +834,7 @@ function ShowHistory(itemid)
 
 				$TblStr+=	'<thead><tr>';
 				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th>Bill Date</th>';
 				$TblStr+=		'<th>Medicine Name</th>';
 				$TblStr+=		'<th>Rx Qty.</th>';
 				$TblStr+=		'<th>Pur Qty.</th>';
@@ -839,10 +843,16 @@ function ShowHistory(itemid)
 				$TblStr+=	'</tr></thead>';
 				$TblStr+=	'<tbody>';
 				
+				
 				for(var m=0;m< $medshistorylist.length;m++)
 				{
 					$TblStr+=	'<tr>';
 					$TblStr+=		'<td style="width:15%;">'+$medshistorylist[m][1]+'</td>';
+					
+					let now = new Date($medshistorylist[m][8]);
+					var dateString = moment(now).format('DD-MM-YYYY');
+					
+					$TblStr+=		'<td style="width:15%;">'+dateString+'</td>';
 					$TblStr+=		'<td>'+$medshistorylist[m][3]+'</td>';
 					$TblStr+=		'<td>'+$medshistorylist[m][4]+'</td>';
 					$TblStr+=		'<td>'+$medshistorylist[m][5]+'</td>';

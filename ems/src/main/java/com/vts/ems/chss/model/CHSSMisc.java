@@ -23,5 +23,10 @@ public class CHSSMisc implements Serializable {
 	private String MiscItemName;
 	private Integer MiscItemCost;
 	private Integer MiscRemAmount;
+	private String Comments;
 	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

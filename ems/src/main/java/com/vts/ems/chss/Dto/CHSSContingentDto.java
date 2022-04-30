@@ -16,5 +16,5 @@ public class CHSSContingentDto {
 	private String VO;
 	private String AO;
 	private String CEO;
-
+	
 }

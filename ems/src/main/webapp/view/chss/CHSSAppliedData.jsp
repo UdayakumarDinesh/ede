@@ -418,7 +418,6 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<!-- <th style="width:5%;" >SN</th> -->
 											<th style="width:15%;"> Consultation </th>
 											<th style="width:30%;">Name of the Doctor</th>
 											<th style="width:20%;">Qualification</th>
@@ -429,7 +428,6 @@ p {
 									</thead>
 									<tbody>
 										<tr class="tr_clone_cons" >
-											<!-- <td   style="text-align: center;" ><span class="sno" id="sno" >1</span> </td> -->
 											<td>
 												<select class="form-control w-100" name="consult-type" required="required" >
 													<option value="Fresh">Fresh</option>
@@ -438,7 +436,6 @@ p {
 											</td>
 											<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td>
-												<!-- <input type="text" class="form-control items" name="doc-qualification" id="doc-qualification" value="" style="width:100%;"   maxlength="50" required="required"> -->
 												<select class="form-control w-100" name="doc-qualification" required="required" >
 													<%for(CHSSDoctorRates rate:doctorrates ){ %>
 														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
@@ -471,7 +468,6 @@ p {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<!-- <th style="width:35%;"> Category </th> -->
 											<th style="width:35%;">Test Name</th>
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
@@ -492,8 +488,6 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<!-- <th style="width:5%;" >SN</th> -->
-											<!-- <th style="width:35%;"> Category </th> -->
 											<th style="width:75%;">Test Name</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-tests"  data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button>  </th>
@@ -501,7 +495,6 @@ p {
 									</thead>
 									<tbody>
 										<tr class="tr_clone_tests"  id="tr_clone_tests">
-											<!-- <td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td> -->
 											<td style="max-width:35% !important;">
 												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id" required="required" data-live-search="true" data-container="body" >
 												
@@ -511,11 +504,6 @@ p {
 													<% } %>
 												</select>
 											</td>
-											<!-- <td style="max-width:35% !important;">
-												<select class="form-control test-id  select2 " style="width: 100%" data-size="auto" id="test-id_1"  name="test-id" required="required" data-live-search="true" data-container="body">
-										F			<option value="" selected="selected" disabled="disabled" >Choose..</option>
-												</select>
-											</td> -->
 											<td><input type="number" class="form-control items numberonly" name="tests-cost"  value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
@@ -544,7 +532,6 @@ p {
 											<th style="width:50%;"> Medicine Name </th>
 											<th style="width:10%;">Rx Qty.</th>
 											<th style="width:10%;">Pur Qty.</th>
-											<!-- <th style="width:10%;">Date</th> -->
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
@@ -564,18 +551,15 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<!-- <th style="width:5%;" >SN</th> -->
 											<th style="width:50%;"> Medicine Name </th>
 											<th style="width:10%;">Rx Qty.</th>
 											<th style="width:10%;">Pur Qty.</th>
-											<!-- <th style="width:10%;">Date</th> -->
 											<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr class="tr_clone_meds" >
-											<!-- <td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td> -->
 											<td>
 												<%if(Integer.parseInt(chssapplydata[7].toString())==1){ %>
 												<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required">
@@ -589,7 +573,6 @@ p {
 											</td>
 											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
-											<!-- <td><input type="text" class="form-control meds-date" name="meds-date" id="meds-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td> -->
 											<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
@@ -635,7 +618,6 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<!-- <th style="width:5%;" >SN</th> -->
 											<th style="width:70%;"> Item</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-other" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
@@ -643,7 +625,6 @@ p {
 									</thead>
 									<tbody>
 										<tr class="tr_clone_other" >
-											<!-- <td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td> -->
 											<td>
 												<select class="form-control selectpicker " name="otheritemid" required="required" style="width: 100%" data-live-search="true"  >
 													<%for(int k=0 ;k<otheritemslist.size();k++){ %>
@@ -697,7 +678,6 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<!-- <th style="width:5%;" >SN</th> -->
 											<th style="width:70%;"> Item Name </th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
@@ -705,13 +685,11 @@ p {
 									</thead>
 									<tbody class="tr_other_add">
 										<tr class="tr_clone_misc" >
-											<!-- <td   style="text-align: center;" ><span class="sno" id="sno">1</span> </td> -->
 											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td><input type="number" class="form-control items numberonly" name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
-									</tbody>							
-									
+									</tbody>			
 								</table>
 								<div align="center">
 									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
@@ -807,7 +785,6 @@ function MedsAllowedList()
 					return result[e]
 				})
 				
-				console.log( $medsAllowedList);
 				
 			}
 		});
@@ -1377,7 +1354,6 @@ function getMedicinesData(){
 		var medsVals= Object.keys(result).map(function(e){
 			return result[e]
 		})
-		console.log(medsVals);
 		var medsHTMLStr = '';
 		for(var m=0;m<medsVals.length;m++)
 		{
@@ -1395,7 +1371,6 @@ function getMedicinesData(){
 				medsHTMLStr +=	'		<option value="" disabled selected>Choose...</option> ';
 							for(var ml=0;ml<$medsAllowedList.length;ml++)
 							{								
-								console.log(meds.MedicineName === $medsAllowedList[ml].MedicineName);
 								if(meds.MedicineName === $medsAllowedList[ml].MedicineName){
 				medsHTMLStr +=	'		<option value="'+$medsAllowedList[ml].MedicineName+'" selected >'+$medsAllowedList[ml].MedicineName+'</option> ';
 								}else{

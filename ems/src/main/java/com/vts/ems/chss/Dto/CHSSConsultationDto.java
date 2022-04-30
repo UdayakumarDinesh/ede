@@ -14,9 +14,10 @@ public class CHSSConsultationDto {
 	private String[] DocQualification;
 	private String[] ConsultDate;
 	private String[] ConsultCharge;
-	private String IsActive;
-//	private String CreatedBy;
-//	private String CreatedDate;
-//	private String ModifiedBy;
-//	private String ModifiedDate;
+	private String Comments;
+	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }
