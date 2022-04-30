@@ -67,10 +67,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	String LoginType = (String) session.getAttribute("LoginType");
 %>
  
-                   
-                    
- <div class="col page card">
-	<div class="card-header page-top">
+  <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Employee View </h5>
@@ -85,7 +82,10 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				</ol>
 			</div>	
 		</div>
-	</div>	
+	</div>	                 
+                    
+ <div class=" page card dashboard-card">
+	
 	
 	
 <% String ses=(String)request.getAttribute("result"); 

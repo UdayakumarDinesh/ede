@@ -80,10 +80,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 %>
 
-
-
- <div class="col page card">
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Employee Edit</h5>
@@ -98,6 +95,10 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			</div>	
 		</div>
 	</div>	
+
+
+ <div class="  page card dashboard-card">
+	
 	
 	<div class="card-body" >
 		<div class="card" >

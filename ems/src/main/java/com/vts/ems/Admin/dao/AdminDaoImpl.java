@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -741,7 +741,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	@Override
-	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception
+	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception
 	{
 		logger.info(new Date() + "Inside AddOtherItemAmt()");
 		try {

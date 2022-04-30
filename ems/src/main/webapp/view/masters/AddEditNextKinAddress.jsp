@@ -19,8 +19,7 @@
 	AddressNextKin nextkin =(AddressNextKin)request.getAttribute("nextkinaddress");
 	%>
 
-<div class="col page card"> 
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
 			<%if(nextkin!=null){ %>
@@ -33,13 +32,16 @@
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-						<li class="breadcrumb-item active " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Next Kin  Address </li>
 					</ol>
 				</div>
 		</div>
 	</div>
 
+
+<div class="dashboard-card page card"> 
+	
 	<div class="card-body">
 		
 		<div class="row">

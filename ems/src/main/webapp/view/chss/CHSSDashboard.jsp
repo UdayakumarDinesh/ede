@@ -58,7 +58,8 @@
 
 .text-container h3 {
   margin: 16px 0px 3px 0px;
-  font-size: 18px;
+  font-size: 100%;
+  white-space:pre-line;
       font-family: 'Lato';
     text-transform: capitalize;
     font-weight: 700;
@@ -193,7 +194,7 @@
 }
 
  .heading-breadcrumb{
-	    margin-top: 10px !important;
+	   /*  margin-top: 10px !important; */
 	    font-family: 'Montserrat',sans-serif;
 	    font-weight: 700 !important;
 	    color: #005C97;
@@ -207,6 +208,13 @@
     padding: 0rem 1.25rem;
 } 
  
+.apply-btn{
+	    box-shadow: 2px 2px 5px grey;
+	    background-color: green
+}
+
+
+
 </style>
 </head>
 <body>
@@ -238,13 +246,13 @@
  <div class="col page">
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-3  ">
 				<h5>CHSS DASHBOARD</h5>
 			</div>
 			<div class="col-md-9 " >
 				<nav aria-label="breadcrumb">
 				  <ol class="breadcrumb ">
-				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
 				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
 				  </ol>
 				</nav>
@@ -286,18 +294,25 @@
 	</div>  --%>
 
  </div> 
- 
-<!--  <div class="card-header page-button">
+<!--  
+ <div class="card-header page-button">
 		<div class="row">
-			<div class="col-md-9 heading-breadcrumb">
-				<h5 style="font-weight: 700 !important">DASHBOARD</h5>
+			<div class="col-md-3 heading-breadcrumb">
+				<h5 style="font-weight: 700 !important">CHSS DASHBOARD</h5>
 			</div>
-			<div class="col-md-3 " >
 			
-			</div>			
+			<div class="col-md-9 " >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
+				  </ol>
+				</nav>
+			</div>
+						
 		</div>
-	</div>  -->
- 
+	</div> 
+  -->
  
  
  <div class="card profile-card-container" >
@@ -366,7 +381,7 @@
 		
 		<%for(Object[] obj : empfamilylist){ %>
 		<div class="col-md-2">
-			<div class="main" onclick="submitform('N','<%=obj[0]%>','<%=obj[1] %>')" data-toggle="tooltip" data-placement="bottom" title="Apply"> 
+			<div class="main" onclick="submitform('N','<%=obj[0]%>','<%=obj[1] %>')" > 
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -394,10 +409,10 @@
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
 		<div class="col-md-5">
-			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List</h4>
+			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm apply-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i></button>
+			</h4>
 		</div>
 		<div class="col-md-3">
-			<button type="button" class="btn btn-sm apply-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()"><i class="fa-solid fa-paper-plane"></i> &nbsp;&nbsp;APPLY</button>
 		</div>
 		<label style=" font-weight: 800">From Date : </label>
 		<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;"

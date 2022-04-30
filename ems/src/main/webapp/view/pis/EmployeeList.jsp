@@ -43,8 +43,7 @@
 	List<Object[]> EmployeeDetailsList = (List<Object[]> )request.getAttribute("EmployeeDetailsList") ;
 %>
 
- <div class="col page card">
-	<div class="card-header page-top">
+<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Employee List</h5>
@@ -58,11 +57,9 @@
 				</div>
 			</div>
 	</div>	
-	
 
-	
-	
-	
+
+ <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 

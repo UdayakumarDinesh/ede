@@ -30,6 +30,7 @@ import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -120,6 +121,37 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return remamountlist;
 	}
+	
+	
+	@Override
+	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid,long  basicpay) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSOtherPermitAmt");
+		CHSSOtherPermitAmt list= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSOtherPermitAmt> cq= cb.createQuery(CHSSOtherPermitAmt.class);
+			Root<CHSSOtherPermitAmt> root= cq.from(CHSSOtherPermitAmt.class);		
+			
+			
+			Predicate p1=cb.equal(root.get("OtherItemId") , Integer.parseInt(otheritemid));
+			Predicate p2=cb.lessThanOrEqualTo(root.get("BasicFrom") , basicpay);
+			Predicate p3=cb.greaterThanOrEqualTo(root.get("BasicTo") , basicpay);
+			Predicate p4=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2,p3,p4);
+			
+			TypedQuery<CHSSOtherPermitAmt> allquery = manager.createQuery(cq);
+			list= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
 	
 	@Override
 	public List<CHSSTreatType> CHSSTreatTypeList() throws Exception

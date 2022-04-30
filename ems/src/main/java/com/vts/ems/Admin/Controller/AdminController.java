@@ -23,12 +23,12 @@ import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
-import com.vts.ems.Admin.model.OtherPermitAmt;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicineList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -37,7 +37,6 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class AdminController {
-
 	
 private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
@@ -791,8 +790,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String basicto   = (String)req.getParameter("basicto");
 					String adsamt    = (String)req.getParameter("admAmt");
 					String treatid   = (String)req.getParameter("treateid");
-				
-					OtherPermitAmt other = new OtherPermitAmt();
+
+					CHSSOtherPermitAmt other = new CHSSOtherPermitAmt();
+
 					other.setOtherItemId(Integer.parseInt(treatid));
 					other.setBasicFrom(Long.parseLong(basicfrom));
 					other.setBasicTo(Long.parseLong(basicto));

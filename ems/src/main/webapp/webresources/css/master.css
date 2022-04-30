@@ -7,7 +7,6 @@
 
 .breadcrumb
 {
-	margin-top: -5px;
 	padding: 5px 5px;
 	width: 100%;
 	background-color: transparent;
@@ -39,11 +38,17 @@ body,html {
 .page-top{
 	
 	height : 3rem;
+	border-bottom: none;
+	margin: 5px 12px;
+    background-color: #e9ecef;
 	
 }
 
 .card-header h5{
-	font-weight: 800;	
+	font-weight: 800;
+	font-size: 1.5rem;	
+	font-family: Poppins;
+    color: #005C97;
 }
 
 #myTable thead tr
@@ -58,15 +63,16 @@ text-align: center;
     color: red;
 }
 
-.breadcrumb
-{
-	margin-top: 5px;
+.fa-house-chimney{
+	color:#0e6fb6;
+	margin: 0px 3px;
 }
 
 .breadcrumb .breadcrumb-item, .breadcrumb .breadcrumb-item a
 {
 	
-	font-size: 12px !important;
+	font-size: 14px !important;
+	font-weight: 800;
 }
 
 .alert {
@@ -99,4 +105,17 @@ hr{
 	max-width: 100% !important;	
 }
 
+.dashboard-card{
+	border: none;
+    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
+    margin: 12px;
+}
 
+.table thead tr{
+	background-color: #0e6fb6;
+	color: white;
+}
+
+.table td, .table th {
+    padding: 0.5rem !important;
+}

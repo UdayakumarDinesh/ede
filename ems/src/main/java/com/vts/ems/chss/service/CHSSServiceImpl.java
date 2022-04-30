@@ -8,13 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.mail.internet.MimeMessage;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -36,6 +33,7 @@ import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
 import com.vts.ems.chss.model.CHSSOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
@@ -652,30 +650,16 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 		
-		if(basicpay<=476000) {
-			
-		}
 		
+		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(otheritemid,basicpay);
 		
+		System.out.println( basicpay);
+		System.out.println(chssremamt);
 		
-		int rembamt = 0;
-		if(emp.getPayLevelId()>=-1 && emp.getPayLevelId()<=6) 
-		{
-			rembamt = remlist.getPayLevel1();
+		int rembamt=0;
+		if(chssremamt!=null && chssremamt.getItemPermitAmt()!=null) {
+			rembamt=chssremamt.getItemPermitAmt();
 		}
-		else if(emp.getPayLevelId()>=7 && emp.getPayLevelId()<=10) 
-		{
-			rembamt = remlist.getPayLevel2();
-		}
-		else if(emp.getPayLevelId()>=11 && emp.getPayLevelId()<=14) 
-		{
-			rembamt = remlist.getPayLevel3();
-		}
-		else if(emp.getPayLevelId()>=15 && emp.getPayLevelId()<=18) 
-		{
-			rembamt = remlist.getPayLevel4();
-		}
-		
 		
 		if(itemcost<= rembamt)
 		{
