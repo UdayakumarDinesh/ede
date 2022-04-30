@@ -77,60 +77,60 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
         <thead>
 				<tr>
 					<th><label>Lab Code: <span class="mandatory"style="color: red;">*</span></label></th>
-					<td colspan="4"><input class="form-control" type="text"name="LabCode" required="required" maxlength="255"	style="font-size: 15px; " id="LabCode" value="<%if(labdetail!=null){%><%=labdetail.getLabCode()%><%}%>"></td>
+					<td colspan="4"><input class="form-control" type="text"name="LabCode" required="required" maxlength="255"	style="font-size: 15px; " id="LabCode" value="<%if(labdetail!=null){%><%=labdetail.getLabCode()%><%}%>" readonly="readonly"></td>
 				</tr>
 		</thead>
 
        <thead>
                 <tr>
                     <th><label >Lab Name:<span class="mandatory" style="color: red;">*</span></label></th>
-                     <td colspan="4"><input  class="form-control form-control" type="text" name="LabName" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabName()%><%}%>" ></td>
+                     <td colspan="4"><input  class="form-control form-control" type="text" name="LabName" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabName()%><%}%>" readonly="readonly"></td>
                  </tr>
        </thead>
        
        <thead>
 				<tr>
 					<th><label >Lab Address:<span class="mandatory" style="color: red;">*</span></label></th>
-                    <td colspan="4"><input  class="form-control form-control" type="text" name="LabAddress" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabAddress()%><%}%>" ></td>
+                    <td colspan="4"><input  class="form-control form-control" type="text" name="LabAddress" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabAddress()%><%}%>" readonly="readonly" ></td>
                 </tr>
        </thead>
        
        <thead>
                <tr>
                <th><label >Lab City:<span class="mandatory" style="color: red;">*</span></label></th>
-               <td><input  class="form-control form-control" type="text" name="LabCity" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabCity()%><%}%>" ></td>
+               <td><input  class="form-control form-control" type="text" name="LabCity" required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize;" value="<%if(labdetail!=null){%><%=labdetail.getLabCity()%><%}%>" readonly="readonly"></td>
                <th><label >Lab Email:<span class="mandatory" style="color: red;">*</span></label></th>
-               <td ><input  class="form-control form-control" type="text" name="LabEmail" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabEmail()%><%}%>" ></td>
+               <td ><input  class="form-control form-control" type="text" name="LabEmail" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabEmail()%><%}%>" readonly="readonly" ></td>
                </tr>
       </thead>
       
       <thead>
               <tr>
                  <th><label >Lab Pin:<span class="mandatory" style="color: red;">*</span></label></th>
-                 <td><input  class="form-control form-control" type="text" name="LabPin" required="required" maxlength="6" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabPin()%><%}%>" ></td>
+                 <td><input  class="form-control form-control" type="text" name="LabPin" required="required" maxlength="6" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabPin()%><%}%>" readonly="readonly"></td>
                  <th><label >Lab Unit Code:<span class="mandatory" style="color: red;">*</span></label></th>
-                 <td><input  class="form-control form-control" type="number" name="LabUnitCode" required="required" maxlength="255" style="font-size: 15px;"    value="<%if(labdetail!=null){%><%=labdetail.getLabUnitCode()%><%}%>" ></td>
+                 <td><input  class="form-control form-control" type="number" name="LabUnitCode" required="required" maxlength="255" style="font-size: 15px;"    value="<%if(labdetail!=null){%><%=labdetail.getLabUnitCode()%><%}%>" readonly="readonly" ></td>
 			  </tr>
       </thead>
       
       <thead>
              <tr>
                 <th><label >Lab Telephone:<span class="mandatory" style="color: red;">*</span></label></th>
-                <td><input  class="form-control form-control" type="text" name="LabTelephone" required="required" maxlength="15" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabTelNo()%><%}%>" ></td>
+                <td><input  class="form-control form-control" type="text" name="LabTelephone" required="required" maxlength="15" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabTelNo()%><%}%>" readonly="readonly" ></td>
                 <th><label >Lab Fax No:<span class="mandatory" style="color: red;">*</span></label></th>
-                <td><input  class="form-control form-control" type="number" name="LabFaxNo" required="required" maxlength="255" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabFaxNo()%><%}%>" ></td>
+                <td><input  class="form-control form-control" type="number" name="LabFaxNo" required="required" maxlength="255" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabFaxNo()%><%}%>" readonly="readonly" ></td>
             </tr>
       </thead> 
       
       <thead>
              <tr>
                  <th><label >Lab Authority:<span class="mandatory" style="color: red;">*</span></label></th>
- 				 <td style="width:20%"><input  class="form-control form-control" type="text" name="LabAuthority" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabAuthority()%><%}%>"></td>
+ 				 <td style="width:20%"><input  class="form-control form-control" type="text" name="LabAuthority" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabAuthority()%><%}%>" readonly="readonly"></td>
                  <th><label >Lab Authority Name:<span class="mandatory" style="color: red;">*</span></label></th>
-                 <td><select class="form-control select2" name="LabAuthorityName" data-container="body" data-live-search="true"  required="required" style="width: 100%">
+                 <td><select class="form-control select2" name="LabAuthorityName" data-container="body" data-live-search="true"  required="required" style="width: 100%"  >
 				     <option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 				     <%if(emplist!=null){  for(Object[] obj:emplist){ %>
-				      <option value="<%=obj[0]%>" <%if(labdetail.getLabAuthorityId().toString().equalsIgnoreCase(obj[0].toString())){%> selected<%}%>><%=obj[1] %> </option>
+				      <option value="<%=obj[0]%>" <%if(labdetail.getLabAuthorityId().toString().equalsIgnoreCase(obj[0].toString())){%> selected<%}%> disabled="disabled"><%=obj[1] %> </option>
 				      <%} }%>
 			     </select> </td>
             </tr>
@@ -142,7 +142,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
             <td colspan="4"><select class="form-control select2" name="labid" data-container="body" data-live-search="true"  required="required" style="width: 100%">
 				<option value="" disabled="disabled" selected="selected"hidden="true">--Select--</option>
 			   <%if(labslist!=null){  for(Object[] obj:labslist){ %>
-				      <option value="<%=obj[0]%>" <%if(labdetail.getLabId().toString().equalsIgnoreCase(obj[0].toString())){%> selected<%}%>><%=obj[1] %> </option>
+				      <option value="<%=obj[0]%>" <%if(labdetail.getLabId().toString().equalsIgnoreCase(obj[0].toString())){%> selected<%}%> disabled="disabled"><%=obj[1] %> </option>
 				      <%} }%>
 		        </select> 
 			</td>
@@ -152,7 +152,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
     <thead>
           <tr>
              <th style="width:20%"><label >Lab RFP Website:<span class="mandatory" style="color: red;">*</span></label></th>
-             <td colspan="4"><input  class="form-control form-control" type="text" name="LabRFPEmail" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabRfpEmail()%><%}%>" ></td>
+             <td colspan="4"><input  class="form-control form-control" type="text" name="LabRFPEmail" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabRfpEmail()%><%}%>" readonly="readonly"></td>
           </tr>
     </thead> 
     
@@ -161,7 +161,8 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 </div>
 
 	  <div id="LabAddSubmit" align="center">
-	  <input type="submit"  class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB"/>
+	  <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster();">EDIT</button>
+	  <input type="submit"  class="btn btn-sm submit-btn" hidden onclick="return confirm('Are You Sure To Update');" name="Action" value="UPDATE"/>
 	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />
 		<input type="hidden" name="LabMasterId" value="<%if(labdetail!=null){%><%=labdetail.getLabMasterId()%><%}%>">
@@ -174,4 +175,13 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 	</div>
 </div>
 </body>
+<script type="text/javascript">
+
+function EditlabMaster()
+{
+	
+	
+}
+
+</script>
 </html>

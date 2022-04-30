@@ -150,7 +150,7 @@ public class AdminDaoImpl implements AdminDao{
 		return FormModuleList;
 	}
 	
-	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid";
+	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid ORDER BY a.testsubid DESC";
 	@Override
 	public List<Object[]> ChssTestSub() throws Exception
 	{
@@ -321,7 +321,7 @@ public class AdminDaoImpl implements AdminDao{
 		}
 		
 	}
-	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid";
+	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid ORDER BY a.medicineid DESC";
 	@Override
 	public List<Object[]>  getMedicineList()throws Exception
 	{
@@ -364,14 +364,15 @@ public class AdminDaoImpl implements AdminDao{
 			return null;
 		}
 	}
-	private static final String CHECKMEDICINE="SELECT COUNT(medicineid) FROM chss_medicines_list WHERE medicinename=:medicinename";
+	private static final String CHECKMEDICINE="SELECT COUNT(medicineid) FROM chss_medicines_list WHERE medicinename=:medicinename AND treattypeid=:treatid";
 	@Override
-	public int Checkduplicate(String medicinename)throws Exception
+	public int Checkduplicate(String medicinename ,String treatid)throws Exception
 	{
 		 logger.info(new Date() +"Inside Checkduplicate()");	
 		 try {
 			Query query = manager.createNativeQuery(CHECKMEDICINE);
 			query.setParameter("medicinename", medicinename);
+			query.setParameter("treatid", treatid);
 			Object o = query.getSingleResult();
 			Integer value = Integer.parseInt(o.toString());
 			int result = value;
@@ -774,4 +775,26 @@ public class AdminDaoImpl implements AdminDao{
 			}
 	}
 	
+	private static final String UPDATEOTHERITEMAMTWITHBASICTOAMT="UPDATE chss_other_perm_amt SET itempermitamt=:admAmt  ,modifiedby=:modifiedby , modifieddate=:modifieddate , basicto=:basicto WHERE CHSSOtherAmtId=:chssOtheramtid";
+	@Override
+	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId ,String basicto)throws Exception
+	{
+		logger.info(new Date() + "Inside updateOtherAmt()");
+		int count=0;
+		try {
+			Date d = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Query query= manager.createNativeQuery(UPDATEOTHERITEMAMTWITHBASICTOAMT);				
+			query.setParameter("chssOtheramtid", chssOtheramtid);
+			query.setParameter("admAmt",admAmt);
+			query.setParameter("basicto",basicto);
+			query.setParameter("modifiedby", UserId);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			count = query.executeUpdate();
+			return count;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return count;
+			}
+	}
 }

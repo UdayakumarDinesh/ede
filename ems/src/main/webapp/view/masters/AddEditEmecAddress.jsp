@@ -43,11 +43,11 @@
 	<div class="card-body">
 		
 		<div class="row">
-		<div class="col-3"></div>
-		<form action="EmecAddAddressDetails.htm" method="POST" id="MyTable"">
+		<div class="col-2"></div>
+		<form action="EmecAddAddressDetails.htm" method="POST" id="MyTable"" autocomplete="off">
 		<input type="hidden" id="EmerId" name="empid" value="<%=empdata[2]%>">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card"  > 
+		<div class="card"  style="width: 140%;"> 
 		<div class="card-header">
 		<h5>Fill Address Details</h5>
 		</div>
@@ -157,7 +157,7 @@
 							 </div>
 							</div>
 						 </div>
-				
+				</div>
 			</form>
 		</div>
 		</div>				
@@ -233,11 +233,11 @@ $("#EmerAddress").on("change",function(e){
 	
 	var EmpId =$("#EmerId").val();
 
-	console.log(EmpId);
+	
 	 var fields = $("input[name='EmerAddress']").serializeArray();
 	
 	
-   console.log(fields.length);
+   
    if(fields.length==0){
 	  
 	   document.getElementById("MyTable").reset();

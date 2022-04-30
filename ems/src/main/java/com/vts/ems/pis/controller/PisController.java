@@ -243,7 +243,7 @@ public class PisController {
 				e.printStackTrace();
 				dor = DateTimeFormatUtil.dateConversionSql("31-12-2050");
 			}
-			System.out.println(dor);
+			
 			emp.setDOB(dob);
 			emp.setDOA(doa);
 			emp.setDOJL(doj);
@@ -408,7 +408,7 @@ public class PisController {
 				e.printStackTrace();
 				dor = DateTimeFormatUtil.dateConversionSql("31-12-2050");
 			}
-			System.out.println(dor);
+		
 			emp.setDOB(dob);
 			emp.setDOA(doa);
 			emp.setDOJL(doj);
@@ -556,9 +556,9 @@ public class PisController {
 			
 			int count = service.UserManagerDelete(Username,loginid);
 			if (count > 0) {
-				redir.addAttribute("result", "USER DELETE SUCCESSFULLY");
+				redir.addAttribute("result", "User Delete Successfull");
 			} else {
-				redir.addAttribute("resultfail", "USER DELETE UNSUCCESSFUL");
+				redir.addAttribute("resultfail", "User Delete UnSuccessful");
 			}
 			return "redirect:/LoginMaster.htm";
 		}
@@ -606,15 +606,15 @@ public class PisController {
 			
 			logger.info(new Date() +"Inside UserManagerAddSubmit.htm "+Username);
 			e.printStackTrace();
-			redir.addAttribute("resultfail", "SOME ERROR OCCURED OR USERNAME NOT AVAILABLE");
+			redir.addAttribute("resultfail", "Some Error Occured Or Username Not Available");
 			return "redirect:/LoginMaster.htm";
 		}
 		if (count > 0) {
 			
-			redir.addAttribute("result", "USER ADD SUCCESSFULLY");
+			redir.addAttribute("result", "User Add Successfull");
 			
 		} else {
-			redir.addAttribute("resultfail", "USER ADD UNSUCCESSFUL");
+			redir.addAttribute("resultfail", "User Add UnSuccessful");
 		}
     	
 		return "redirect:/LoginMaster.htm";
@@ -632,9 +632,9 @@ public class PisController {
         	
         	int count =service.UserMangerEdit(Empid , Logintype,Username,Loginid);
         	if(count>0) {
-        		redir.addAttribute("result", "USER EDIT SUCCESSFULLY");	
+        		redir.addAttribute("result", "User Edit Successfull");	
     		} else {
-    			redir.addAttribute("resultfail", "USER EDIT UNSUCCESSFUL");
+    			redir.addAttribute("resultfail", "User Edit UnSuccessful");
         	}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -693,9 +693,9 @@ public class PisController {
 			String familyid = (String) req.getParameter("familyid");
 			int count = service.DeleteMeber(familyid, Username);
 			if (count > 0) {
-				redir.addAttribute("result", "MEMBER DELETE SUCCESSFULLY");
+				redir.addAttribute("result", "Member Delete Successfull");
 			} else {
-				redir.addAttribute("resultfail", "MEMBER DELETE UNSUCCESSFUL");
+				redir.addAttribute("resultfail", "Member Delete UnSuccessful");
 			}
 			redir.addFlashAttribute("Employee", empid);
 			return "redirect:/FamilyMembersList.htm";
@@ -753,9 +753,9 @@ public class PisController {
     	   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "MEMBER ADD SUCCESSFULLY");	
+    		   redir.addAttribute("result", "Member Add Successfull");	
    		   } else {
-   			redir.addAttribute("resultfail", "MEMBER ADD UNSUCCESSFUL");
+   			redir.addAttribute("resultfail", "Member Add UNSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);
@@ -817,16 +817,16 @@ public class PisController {
     	   }
     	   Long result = service.EditFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "MEMBER EDIT SUCCESSFULLY");	
+    		   redir.addAttribute("result", "Member Edit Successfull");	
    		   } else {
-   			redir.addAttribute("resultfail", "MEMBER EDIT UNSUCCESSFUL");
+   			redir.addAttribute("resultfail", "Member Edit UnSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);   
     	   
 	      } catch (Exception e) {
 	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
-				req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
+				req.setAttribute("resultfail", "Some Problem Occure!");
 				e.printStackTrace();
 				return "static/Error";
 	      }
@@ -942,9 +942,9 @@ public class PisController {
         	  long result  =  service.AddPerAddress(peraddress); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "PARMANENT ADDRESS ADD SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Parmanent Address Add Successfull");	
         		} else {
-        			 redir.addAttribute("resultfail", "PARMANENT ADDRESS ADD UNSUCCESSFUL");	
+        			 redir.addAttribute("resultfail", "Parmanent Address Add UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
     	   }else if("EDIT".equalsIgnoreCase(Action)) {
@@ -955,9 +955,9 @@ public class PisController {
         	   long result  =  service.EditPerAddress(peraddress); 
           	 
 	       	    if(result>0) {
-	       	    	 redir.addAttribute("result", "PARMANENT ADDRESS EDIT SUCCESSFULLY");	
+	       	    	 redir.addAttribute("result", "Parmanent Address Edit Successfull");	
 	       		} else {
-	       			 redir.addAttribute("resultfail", "PARMANENT ADDRESS EDIT UNSUCCESSFUL");	
+	       			 redir.addAttribute("resultfail", "Parmanent Address Edit UnSuccessful");	
 	       	    }
 	       	    redir.addFlashAttribute("Employee", empid);
     	   }
@@ -1002,9 +1002,9 @@ public class PisController {
 					
 			int count =service.deleteResAdd(addressid,Username);
 			if (count > 0) {
-				redir.addAttribute("result", "RESIDENTIAL ADDRESS DELETE SUCCESSFULLY");
+				redir.addAttribute("result", "Residential Address Delete Successfull");
 			} else {
-				redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS DELETE UNSUCCESSFUL");
+				redir.addAttribute("resultfail", "Residential Address Delete UnSuccessful");
 			}
 			redir.addFlashAttribute("Employee", empid);
 			return "redirect:/Address.htm";
@@ -1088,9 +1088,9 @@ public class PisController {
         	  long result  =  service.AddResAddress(resadd); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Residential Address Add SUCCESSFULLY");	
+        	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
         		} else {
-        			 redir.addAttribute("resultfail", "RESIDENTIAL ADDRESS ADD UNSUCCESSFUL");	
+        			 redir.addAttribute("resultfail", "Residential Address ADD UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
 		}else if ("EDIT".equalsIgnoreCase(Action)) {
@@ -1101,7 +1101,7 @@ public class PisController {
         	  long result  =  service.EditResAddress(resadd); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Residential Address Edit Successfully");	
+        	    	 redir.addAttribute("result", "Residential Address Edit Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Residential Address Edit UnSuccessful");	
         	    }
@@ -1183,7 +1183,7 @@ public class PisController {
         	  long result  =  service.AddNextAddress(kinaddress); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Next Kin Address Add Successfully");	
+        	    	 redir.addAttribute("result", "Next Kin Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Next Kin Address ADD UnSuccessful");	
         	    }
@@ -1196,7 +1196,7 @@ public class PisController {
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
 	       	    if(result>0) {
-	       	    	 redir.addAttribute("result", "Next Kin Address Edit Successfully");	
+	       	    	 redir.addAttribute("result", "Next Kin Address Edit Successfull");	
 	       		} else {
 	       			 redir.addAttribute("resultfail", "Next Kin Address Edit UnSuccessful");	
 	       	    }
@@ -1223,7 +1223,7 @@ public class PisController {
     	   String empid =(String)req.getParameter("empid");
     	   
     	   	if("EDITEmecAddress".equalsIgnoreCase(Action)) {
-    	   	System.out.println(empid +"Action     +"+Action);
+    	 
     	   	AddressEmec emecaddress = service.getEmecAddressData(empid);
     	   		
     	   		List<Object[]> States = service.getStates();
@@ -1279,7 +1279,7 @@ public class PisController {
         	  long result  =   service.AddEmecAddress(emecaddress); 
         	 
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Emergency Address Add Successfully");	
+        	    	 redir.addAttribute("result", "Emergency Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Emergency Address Add UNSuccessful");	
         	    }
@@ -1292,7 +1292,7 @@ public class PisController {
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 
 	       	    if(result>0) {
-	       	    	 redir.addAttribute("result", "Emergency Address Edit Successfully");	
+	       	    	 redir.addAttribute("result", "Emergency Address Edit Successfull");	
 	       		} else {
 	       			 redir.addAttribute("resultfail", "Emergency Address Edit UnSuccessful");	
 	       	    }
@@ -1388,7 +1388,7 @@ public class PisController {
 				{
 					redir.addAttribute("resultfail", "Password Change Unsuccessfull ");
 				}
-				System.out.println(count);
+			
 			}catch (Exception e) {
 					e.printStackTrace();
 					logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
@@ -1409,9 +1409,9 @@ public class PisController {
 			int result=service.ResetPassword(loginid,Username);
 			if (result > 0) 
 			{
-				redir.addAttribute("result", "Reset Password Changed Successfully");
+				redir.addAttribute("result", "Reset Password  Successfull");
 			}else{
-				redir.addAttribute("resultfail", "Reset Password Changed UnSuccessfully");
+				redir.addAttribute("resultfail", "Reset Password  UnSuccessfull");
 			}
 			return "redirect:/LoginMaster.htm";
 		}catch(Exception e) {

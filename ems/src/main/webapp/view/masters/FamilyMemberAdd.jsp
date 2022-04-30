@@ -76,7 +76,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="relation" required  data-live-search="true">
-		                      <option value="">Select Relation</option>
+		                      <option value="" disabled="disabled">Select Relation</option>
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
 		                        <option value="<%=relativeLs[0]%>"><%=relativeLs[1]%></option>
 		                        <%} %> 
@@ -89,7 +89,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="form-group">
 		                	<label>Gender:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
-		                      <option value="">Select Gender</option>
+		                      <option value="" disabled="disabled">Select Gender</option>
 		                      
 		                        <option value="M">Male</option>
 		                       <option value="F">Female</option>

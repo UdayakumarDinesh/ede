@@ -232,10 +232,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				logger.info(new Date() +"Inside ChssTestSub.htm "+UserId);
 				try {
 					 String action= (String)req.getParameter("action");
-					System.out.println(action);
+					
 				if ("ADDITEM".equalsIgnoreCase(action)) {
 						String itemname = (String)req.getParameter("ItemName");
-						System.out.println(itemname);
+					
 						CHSSOtherItems item = new CHSSOtherItems();
 		
 						item.setCreatedBy(UserId);
@@ -438,7 +438,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
 			try {
 				String Medicinename = (String)req.getParameter("MedicineName");
-				count = service.Checkduplicate( Medicinename);
+				String treatid = (String)req.getParameter("Treatmentid");
+				count = service.Checkduplicate( Medicinename ,treatid);
 				
 				 return json.toJson(count);
 			}catch (Exception e){
@@ -452,7 +453,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			long EmpId = (long)ses.getAttribute("EmpId");
-			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			logger.info(new Date() +"Inside EmpRequestMsg.htm"+UserId);
 			try {
 				
 				String action = (String)req.getParameter("Action");
@@ -478,7 +479,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					notification.setNotificationUrl("");
 					notification.setIsActive(1);
 					long value= service.EmpRequestNotification(notification);
-					System.out.println("value   :"+value);
+					
 					if (result != 0) {
 		    			redir.addAttribute("result", "Message Sent To Admin Successful");
 					} else {
@@ -631,28 +632,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			try {
 				String action = (String)req.getParameter("Action");
 				
-				if("EDIT".equalsIgnoreCase(action)) {
-					System.out.println();
-					String DocRateid =(String)req.getParameter("DocRateid");
-					List<Object[]> treatment = service.GetTreatmentType();
-					CHSSDoctorRates  docrate = service.getCHSSDocRate(Long.parseLong(DocRateid));
-					req.setAttribute("treatment", treatment);
-					req.setAttribute("docrate", docrate);
-					return "Admin/CHSSDoctorEdit";
-				}else if("EDITDOCRATE".equalsIgnoreCase(action)){
+			
+			if("EDITDOCRATE".equalsIgnoreCase(action)){
 					
-					String Rateid = (String)req.getParameter("Rateid");
-					String Treatementid = (String)req.getParameter("Treatementid");
-					//String DocQualification = (String)req.getParameter("DocQualification");
-					//String DocRating = (String)req.getParameter("DocRating");
-					String Consultation1 = (String)req.getParameter("Consultation1");
-					String Consultation2 = (String)req.getParameter("Consultation2");
+					String Rateid = (String)req.getParameter("DocRateid");
+					String con1= "Consultation1"+Rateid;
+					String con2= "Consultation2"+Rateid;
+					String Consultation1 = (String)req.getParameter(con1);
+					String Consultation2 = (String)req.getParameter(con2);
 					
 					CHSSDoctorRates  DocRate = new CHSSDoctorRates();
-					DocRate.setDocRateId(Integer.parseInt(Rateid));
-					DocRate.setTreatTypeId(Integer.parseInt(Treatementid));
-					//DocRate.setDocQualification(DocQualification);
-					//DocRate.setDocRating(DocRating);
+					
+					DocRate.setDocRateId(Integer.parseInt(Rateid));				
 					DocRate.setConsultation_1(Integer.parseInt(Consultation1));
 					DocRate.setConsultation_2(Integer.parseInt(Consultation2));
 					DocRate.setModifiedBy(UserId);
@@ -734,8 +725,17 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					return "redirect:/LabMaster.htm";
 				}else {
 					Object[] labdetails = service.getLabDetails();
-					req.setAttribute("labdetails", labdetails);
-				           return "Admin/LabDetails";
+					String labmasterId =""+labdetails[0];
+					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
+					List<Object[]> labslist=service.getLabsList();
+					req.setAttribute("emplist", pisservice.GetAllEmployee());
+					req.setAttribute("labslist", labslist);
+					req.setAttribute("labdetails", lab);
+				
+					
+					       return "Admin/LadMasterEdit";
+				
+				           
 				}
 			} catch (Exception e) {
 				req.setAttribute("resultfail", "Some Problem Occure!");
@@ -791,7 +791,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String basicto   = (String)req.getParameter("basicto");
 					String adsamt    = (String)req.getParameter("admAmt");
 					String treatid   = (String)req.getParameter("treateid");
-					System.out.println(req.getParameter("tratementid"));
+				
 					OtherPermitAmt other = new OtherPermitAmt();
 					other.setOtherItemId(Integer.parseInt(treatid));
 					other.setBasicFrom(Long.parseLong(basicfrom));
@@ -831,10 +831,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			try {
 				String chssOtheramtid = (String)req.getParameter("chssOtheramtid");
 				String adm="admAmt1"+chssOtheramtid;
-				System.out.println(adm);
+				String basicto = "basicto1"+chssOtheramtid;
 				String admAmt1 = (String)req.getParameter(adm);
 				String treatid = (String)req.getParameter("treateid");
-				long result = service.updateOtherAmt(chssOtheramtid ,admAmt1, UserId);
+				String basicto2 = (String)req.getParameter(basicto);
+			
+				long result = 0l;
+				if(basicto2!=null) {
+					 result = service.updateOtherItemAmt(chssOtheramtid ,admAmt1, UserId , basicto2);
+				}else {
+					 result = service.updateOtherAmt(chssOtheramtid ,admAmt1, UserId);
+				}
+				
 				if (result != 0) {
 					 redir.addAttribute("result", "Permit Amount Edited Successful");
 				} else {

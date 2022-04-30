@@ -50,7 +50,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
         	</div>
 		 <div class="card">
 		 <div class="card-body">
-		 		<form action="##" method="POST" id="empForm">
+		 		<form action="##" method="POST" id="empForm" autocomplete="off">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<div class="table-responsive">
@@ -70,16 +70,19 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 								<tbody>
 									<%long slno=0;
 							for(Object[] obj : doctorlist){ 
-								slno++; %>
+								slno++;
+								String  Consultation1= "Consultation1"+String.valueOf(obj[0]); 
+								String  Consultation2 = "Consultation2"+String.valueOf(obj[0]); 
+								%>
 										<tr>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=slno%>.</td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1]%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[2]%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377;<%=obj[4]%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377;<%=obj[5]%></td>
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: right"><input type="text"  class="form-control " name="<%=Consultation1%>"  value="<%=obj[4]%>"> </td>
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: right"><input type="text"  class="form-control " name="<%=Consultation2%>"  value="<%=obj[5]%>"> </td>
 											<td style="padding-top:5px; padding-bottom: 5px;" align="center">
-											<input type="hidden" name="Action"	value="EDIT" />
-											<button type="submit" class="btn btn-sm" name="DocRateid" value="<%=obj[0]%>" formaction="DoctorsMaster.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+											<input type="hidden" name="Action"	value="EDITDOCRATE" />
+											<button type="submit" class="btn btn-sm" name="DocRateid" value="<%=obj[0]%>" formaction="DoctorsMaster.htm" formmethod="post" data-toggle="tooltip" onclick="return confirm('Are You Sure To Update');" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 											</button>
 											</td>

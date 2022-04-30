@@ -78,7 +78,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 											</label></th>
 											<td><input class="form-control form-control"
 												placeholder="Enter Rate" type="text" id="RateValue" name="Rate" value="<%if(list!=null){%><%=list.getTestRate()%><%}%>"
-												required="required" maxlength="255" style="font-size: 15px;"
+												required="required" maxlength="10" style="font-size: 15px;"
 												id="Rate" ></td>
 										</tr>
 									</thead>

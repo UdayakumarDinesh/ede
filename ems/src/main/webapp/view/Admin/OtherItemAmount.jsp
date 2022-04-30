@@ -78,26 +78,50 @@ int slno=0;
 											<th style="width:20%;" >Basic From 	  </th>
 											<th style="width:20%;" >Basic To      </th>
 											<th style="width:20%;" >Permit Amount </th>
-											<th style="width:5%;"  ><button type="button" class="btn tbl-row-add" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											<th style="width:5%;"  >Action</th>
 										</tr>
 									</thead>
 									<tbody>
 									<%if(list!=null&&list.size()>0){  
 										Long basicfrom =0L;
+										int flag=0;
 										for(Object[] obj:list){
-											++slno;						    
+											++slno;
+											
 											basicfrom =Long.parseLong(String.valueOf(obj[1]));	
 											
-											String admAmt1 ="admAmt1"+String.valueOf(obj[3]);  %>
-									<tr>
+											String admAmt1 ="admAmt1"+String.valueOf(obj[3]); 
+											String basicto2 ="basicto1"+String.valueOf(obj[3]); 
+										
+											int value = list.size()-1;
+											if(flag!=value){%>
+									  	<tr>
 									        <td><span class="sno" id="sno"><%=slno %></span></td>
 											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control items" name="basicto1" id="basicto1" value="<%=obj[1] %>"  readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
 											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
-									</tr>							
-									<%}%> 
+									    </tr>	
+							
+											
+											<%}else{ %>
+							
+									<tr>
+									        <td><span class="sno" id="sno"><%=slno %></span></td>
+											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
+											<td><input type="text" class="form-control items" name="<%=basicto2%>" id="basicto1" value="<%=obj[1] %>"    maxlength="10" required="required"></td>
+											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
+											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
+												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
+									</tr>
+									</tbody>
+									</table>
+									<%}%>
+														
+									<% flag++;}%> 
+									<table class="table table-bordered table-hover table-condensed  info shadow-nohover" style="width: 70%;" align="center">
+									<tbody>
 									<tr class="tr_clone" >
 											<td><span class="sno" id="sno"><%=++slno%></span></td>
 											<td><input type="text" class="form-control items" name="basicfrom" id="basicfrom" value="<%=++basicfrom %>" readonly  maxlength="10" ></td>
@@ -105,18 +129,22 @@ int slno=0;
 											<td><input type="text" class="form-control admAmt" name="admAmt" id="admAmt" value=""     maxlength="100"  ></td>
 											<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
 									</tr>
-									
+									</tbody>
+									</table>
 									<%}else {  Long basicfrom =0L;%>
+										<table class="table table-bordered table-hover table-condensed  info shadow-nohover" style="width: 70%;" align="center">
+									<tbody>
 										<tr class="tr_clone" >
-											<td><span class="sno" id="sno"><%=++slno%></span></td>
-											<td><input type="text" class="form-control items" name="basicfrom" id="basicfrom" value="<%=basicfrom%>" readonly="readonly"  maxlength="10" ></td>
-											<td><input type="text" class="form-control items" name="basicto" id="basicto" value=""    maxlength="10" ></td>
-											<td><input type="text" class="form-control admAmt" name="admAmt" id="admAmt" value=""     maxlength="10"  ></td>
-											<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
+											<td style="width:5%; text-align: center;"><span class="sno" id="sno"><%=++slno%></span></td>
+											<td style="width:20%;"><input type="text" class="form-control items" name="basicfrom" id="basicfrom" value="<%=basicfrom%>" readonly="readonly"  maxlength="10" ></td>
+											<td style="width:20%;"><input type="text" class="form-control items" name="basicto" id="basicto" value=""   style="width: 100%;"  maxlength="10" ></td>
+											<td style="width:20%;"><input type="text" class="form-control admAmt" name="admAmt" id="admAmt" value=""    style="width: 100%;" maxlength="10"  ></td>
+											<td style="width:5%;"><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red; width: 100%;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
 										</tr>
+										</tbody>
+										</table>
 										<%}%>
-									</tbody>															
-								</table>
+								
 						   </div>
 						   <div class="row">
 						   		<div class="col-12" align="center">
@@ -222,8 +250,7 @@ $(function () {
 {
 	  var admAmt1 = $("#admAmt").val();
 	  var basicto = $("#basicto").val();
-	  console.log(admAmt1);
-	  console.log(basicto);
+	 
 	  if(basicto==null||basicto==""||basicto=="null" ||admAmt1==""||admAmt1==null||admAmt1=="null")
 	  {
 		   alert("Enter the Data Properly!");

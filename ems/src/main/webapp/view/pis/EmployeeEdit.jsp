@@ -475,7 +475,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    <div class="row" >
 			    	<div class="col-12" align="center">
 					<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
-					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="validateform();" value="submit" >SUBMIT</button>
+					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="return validateform();" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 
 			

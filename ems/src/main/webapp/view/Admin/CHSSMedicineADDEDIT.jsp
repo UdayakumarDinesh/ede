@@ -56,7 +56,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 									
 										<tr>
 											<th><label>Treatment Name <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"  name="tratementname" id="tratementname" data-container="body" data-live-search="true" onchange="SetIsAdmissible();" required="required" style="font-size: 25px;">
+											<td><select class="form-control select2"  name="tratementname" id="tratementname" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 												<%if(main!=null&&main.size()>0){for(Object[] O:main){ %>
 												
@@ -82,7 +82,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							<%if(list!=null){ %>
 							<input type="hidden" name="medicineId" value="<%=list.getMedicineId()%>">
 							<input type="hidden" name="Action" value="EDITMEDICINE">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate1()" >UPDATE</button>
+								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >UPDATE</button>
 									<%}else{ %>
 									<input type="hidden" name="Action" value="ADDMEDICINE">
 									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
@@ -101,13 +101,14 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 function checkDuplicate()
 {
 	var $name = $("#MedicineName").val();	
-	
+	var $treatid = $("#tratementname").val();
 		$.ajax({
 			type : "GET",
 			url : "DuplicateMedicine.htm",	
 			datatype : 'json',
 			data : {
-				MedicineName : $name
+				MedicineName : $name,
+				Treatmentid : $treatid
 			},
 			success :  function(result){
 				 var rr=result;
@@ -135,23 +136,24 @@ function checkDuplicate()
 
 
 </script>
-
+<!-- 
 <script type="text/javascript">
 function checkDuplicate1()
 {
 	var $name = $("#MedicineName").val();	
-	
+	var $treatid = $("#tratementname").val();
 		$.ajax({
 			type : "GET",
 			url : "DuplicateMedicine.htm",	
 			datatype : 'json',
 			data : {
-				MedicineName : $name
+				MedicineName : $name,
+				Treatmentid : $treatid
 			},
 			success :  function(result){
 				 var rr=result;
                  var a = parseInt(rr) ;
-				
+				console.log(a);
 				if(a > 1){					
 					alert("Medicine Already Exist!");
 					return false;
@@ -170,7 +172,7 @@ function checkDuplicate1()
 			}
 		});	
 }
-</script>
+</script> -->
 
 </body>
 </html>

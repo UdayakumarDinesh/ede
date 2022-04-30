@@ -43,11 +43,11 @@
 	<div class="card-body">
 		
 		<div class="row">
-		<div class="col-3"></div>
-		<form action="NextKinAddAddressDetails.htm" method="POST">
+		<div class="col-2"></div>
+		<form action="NextKinAddAddressDetails.htm" method="POST" autocomplete="off">
 		<input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card"  > 
+		<div class="card"  style="width: 140%;"> 
 		<div class="card-header">
 		<h5>Fill Address Details</h5>
 		</div>
@@ -153,7 +153,7 @@
 							</div>
 						 </div>
 						 
-								
+					</div>			
 			</form>
 		</div>
 		</div>				

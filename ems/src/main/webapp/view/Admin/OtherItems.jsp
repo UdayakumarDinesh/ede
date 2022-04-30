@@ -52,7 +52,7 @@
 			
 				<div class="card-body" >
 				
-					<form action="##" method="POST" id="empForm">
+					<form action="##" method="POST" id="empForm" autocomplete="off">
 						
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -115,7 +115,7 @@
         	<div class="form-inline">
         	<div class="form-group">
                <label>Item Name : &nbsp;&nbsp;&nbsp;</label> 
-               <input type="text" class=" form-control"   name="ItemName" > 
+               <input type="text" class=" form-control"   name="ItemName" required="required" > 
       		</div>
       		</div>
         </div>

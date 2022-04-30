@@ -47,7 +47,7 @@
 				<div class="card-header"  >
 				<h4 align="left">Fill Details </h4>
 				</div>
-				<div class="card-body">
+				<div class="card-body" align="left">
 				<form action="HandingOver.htm" method="GET">
 						<div class="form-group">
 						<div class="row">

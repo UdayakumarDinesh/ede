@@ -38,7 +38,7 @@ public interface AdminService {
 	public List<Object[]> getMedicineList()throws Exception;
 	public List<Object[]> getMedicineListByTreatment(String treatmentname)throws Exception;
 	public List<Object[]> GetTreatmentType()throws Exception;
-	public int Checkduplicate(String medicinename)throws Exception;
+	public int Checkduplicate(String medicinename,String treatid)throws Exception;
 	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception ;
 	public Long AddMedicine(CHSSMedicineList medicine)throws Exception;
 	public Long EditMedicine(CHSSMedicineList medicine)throws Exception;
@@ -60,6 +60,7 @@ public interface AdminService {
 	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception;
 	public long AddOtherItemAmt(OtherPermitAmt otheramt)throws Exception;
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
+	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId,String basicto)throws Exception;
 	
 	
 	

@@ -185,8 +185,8 @@ public class AdminServiceImpl implements AdminService{
 	return dao.GetTreatmentType();	
 	}
 	@Override
-	public int Checkduplicate(String medicinename)throws Exception{
-		return dao.Checkduplicate(medicinename);
+	public int Checkduplicate(String medicinename,String treatid)throws Exception{
+		return dao.Checkduplicate(medicinename,treatid);
 	}
 	@Override
 	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
@@ -284,7 +284,7 @@ public class AdminServiceImpl implements AdminService{
 	{	
 		CHSSDoctorRates doctor = dao.getCHSSDocRate(docrate.getDocRateId());
 		
-		doctor.setTreatTypeId(docrate.getTreatTypeId());
+		//doctor.setTreatTypeId(docrate.getTreatTypeId());
 		//doctor.setDocQualification(docrate.getDocQualification());
 		//doctor.setDocRating(docrate.getDocRating());
 		doctor.setConsultation_1(docrate.getConsultation_1());
@@ -375,7 +375,10 @@ public class AdminServiceImpl implements AdminService{
 		return dao.updateOtherAmt(chssOtheramtid, admAmt, UserId);
 	}
 	
-	
+	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId,String basicto)throws Exception
+	{
+		return dao.updateOtherItemAmt(chssOtheramtid, admAmt, UserId,basicto);
+	}
 	
 	
 	

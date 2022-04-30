@@ -81,7 +81,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm selectpicker" name="relation" required  data-live-search="true">
-		                      <option value="">Select Relation</option>
+		                     
 		                        <% for(Object[] relativeLs:RelativeList){ %> 
 		                       <option value="<%=relativeLs[0]%>" <%if(memberdata.getRelation_id() == Integer.parseInt(relativeLs[0].toString())){%>selected<%}%>><%=relativeLs[1]%></option>
 		                        <%} %> 
@@ -94,7 +94,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="form-group">
 		                	<label>Gender:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
-		                      <option value="">Select Gender</option>
+		                     
 		                      
 		                        <option value="M" <%if(memberdata.getGender().equalsIgnoreCase("M")){ %>selected<%}%>>Male</option>
 		                       <option value="F"  <%if(memberdata.getGender().equalsIgnoreCase("F")){ %>selected<%}%>>Female</option>
