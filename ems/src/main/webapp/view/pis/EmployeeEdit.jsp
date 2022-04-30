@@ -470,7 +470,18 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div> -->
 			      <!--   </div>
 			    </div> -->
-			       
+			     <div class=" form-group ">
+			        <div class="row">
+			        
+			         <div class=" col-md-2 ">
+			                <label>Phone No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="PhoneNo" id="PhoneNo" value="<%if(employee!=null){%><%=employee.getPhoneNo()%><%}%>" maxlength="10"
+			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                     onblur="checknegative(this) ">
+			            </div>
+			
+			        </div>
+    			</div>
 
 			    
 			    <div class="row" >
@@ -492,6 +503,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
+setPatternFilter($("#PhoneNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#PAN"),/^[a-zA-Z0-9_]*$/);
@@ -658,9 +670,6 @@ $("#PunchcardTextBox").blur(function(){
 
             }
       });
-
-
-
 
 
 function isNumber(evt)

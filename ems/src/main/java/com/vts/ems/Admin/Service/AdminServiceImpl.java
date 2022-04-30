@@ -381,6 +381,12 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	
+	@Override
+	public List<Object[]> GetReqListFromUser()throws Exception
+	{
+		return dao.GetReqListFromUser();
+	}
+	
 	
 	
 	

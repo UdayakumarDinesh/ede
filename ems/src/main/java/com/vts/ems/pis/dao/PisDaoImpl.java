@@ -64,7 +64,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1'";
 	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
 	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
-	private static final String  MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
+	private static final String MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
 	
 	
 	
@@ -346,7 +346,7 @@ public class PisDaoImpl implements PisDao {
 	}
 
 	@Override
-	public List<Object[]> LoginMasterList(String LoginType, String Empid) throws Exception {
+	public List<Object[]> LoginMasterList() throws Exception {
 		logger.info(new Date() + "Inside LoginMasterList()");
 		try {
 			Query query = manager.createNativeQuery(LOGINMASTER);
@@ -1111,8 +1111,26 @@ public class PisDaoImpl implements PisDao {
 		logger.info(new Date() + "Inside GetAllEmployee()");
 		try {
 			Query query = manager.createNativeQuery(ALLEMPLIST);
-			List<Object[]> List=(List<Object[]>) query.getResultList();
-			return List;
+			List<Object[]> list=(List<Object[]>) query.getResultList();
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String GETPHONENO="SELECT a.loginid,  e.empname,  e.phoneno FROM login a ,  employee e WHERE  a.isactive=1 AND a.empid=e.empid  AND a.loginid=:loginid";
+	@Override
+	public Object[] GetEmpPhoneNo(String loginid) throws Exception
+	{
+		logger.info(new Date() + "Inside GetEmpPhoneNo()");
+		try {
+			Query query = manager.createNativeQuery(GETPHONENO);
+			query.setParameter("loginid", loginid);
+			List<Object[]> list=(List<Object[]>) query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);				
+			}
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

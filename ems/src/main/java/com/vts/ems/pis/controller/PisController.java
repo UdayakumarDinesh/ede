@@ -192,6 +192,7 @@ public class PisController {
 			String PunchCardNo = req.getParameter("PunchCardNo");
 			String idMark = req.getParameter("idMark");
 			String empstatus = req.getParameter("empstatus");
+			String phoneno = req.getParameter("PhoneNo");
 			String EmpStatusDate = req.getParameter("EmpStatusDate");
 			String PermPassNo = req.getParameter("PermPassNo");
 			
@@ -262,6 +263,7 @@ public class PisController {
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
+			emp.setPhoneNo(phoneno);
 			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
 			}
@@ -360,7 +362,7 @@ public class PisController {
 			String empstatus = req.getParameter("empstatus");
 			String PermPassNo = req.getParameter("PermPassNo");
 			String EmpId = req.getParameter("EmpId");
-
+			String phno = req.getParameter("PhoneNo");
 			Employee emp = new Employee();
 			emp.setEmpName(empname.trim());
 			emp.setDesignationId(Integer.parseInt(Designationid));
@@ -427,7 +429,7 @@ public class PisController {
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
-			
+			emp.setPhoneNo(phno);
 			if (uid != null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
 			}
@@ -520,7 +522,7 @@ public class PisController {
 		try {
 			List<Object[]> loginmaster =null;
 			
-				loginmaster = service.LoginMasterList(LoginType, EmpId);
+				loginmaster = service.LoginMasterList();
 						
 			req.setAttribute("loginmaster", loginmaster);
 			return "pis/LoginMaster";

@@ -72,7 +72,7 @@
 											<td><input type="text"  class="form-control " name="<%=ItemName%>"  value="<%=obj[1]%>"> </td>
 											<td align="center"><button type="submit" class="btn btn-sm " name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update!');" data-toggle="tooltip" data-placement="top" title="Edit">
 											
-												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
+												<i class="fa-solid fa-pen-to-square" ></i></button></td>
 										</tr>
 									 <%}}%> 
 								</tbody>

@@ -797,4 +797,23 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
+	
+	@Override
+	public List<Object[]> GetReqListFromUser()throws Exception
+	{
+
+		logger.info(new Date() + "Inside updateOtherAmt()");
+		int count=0;
+		try {
+			Date d = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Query query= manager.createNativeQuery(UPDATEOTHERITEMAMT);				
+		
+			count = query.executeUpdate();
+			return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+	}
 }
