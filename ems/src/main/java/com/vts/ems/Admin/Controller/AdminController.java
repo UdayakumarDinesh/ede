@@ -904,8 +904,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				String emp       = (String)req.getParameter("employee");
 				String fromdate  = (String)req.getParameter("fromdate");
 				String todate    = (String)req.getParameter("todate");
-				
-				
+				                    
+				 
 				List<Object[]>  list = service.GetReqResMessagelist(emp , fromdate ,todate);
 				req.setAttribute("msglist", list);	
 				req.setAttribute("emplist", pisservice.GetAllEmployee());
