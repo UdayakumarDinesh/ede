@@ -41,5 +41,4 @@ public class LabMaster implements Serializable {
 	private String ModifiedDate;
 	
 	
-	
 }
