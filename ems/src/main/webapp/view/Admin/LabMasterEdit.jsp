@@ -39,6 +39,11 @@ table
 	box-shadow: 0 4px 6px -2px gray;
 }
 
+.table thead tr{
+	background-color: white !important;
+	color: black !important;
+}
+
 </style>
 </head>
 <body>
@@ -63,43 +68,34 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 			   </div>
 		</div>
 	</div> 
-<<<<<<< HEAD
 	
-	   <div class="page card dashboard-card">
-=======
-	<div class="card-body">
-	<div align="center">
-		<%String ses=(String)request.getParameter("result"); 
-		String ses1=(String)request.getParameter("resultfail");
-		if(ses1!=null){%>
-			<div class="alert alert-danger" role="alert">
-				<%=ses1%>
-			</div>
-			
-		<%}if(ses!=null){%>
-			
-			<div class="alert alert-success" role="alert">
-				<%=ses%>
-			</div>
-		<%}%>
+	
+			<div align="center">
+				<%String ses=(String)request.getParameter("result"); 
+				String ses1=(String)request.getParameter("resultfail");
+				if(ses1!=null){%>
+					<div class="alert alert-danger" role="alert">
+						<%=ses1%>
+					</div>
+					
+				<%}if(ses!=null){%>
+					
+					<div class="alert alert-success" role="alert">
+						<%=ses%>
+					</div>
+				<%}%>
 	     </div>
-	   <div class="card" >
->>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
-	   		<div class="card-body" >
+	     
+	  <div class="page card dashboard-card">
+		<div class="card-body">
 	   		
 <form name="myfrm" action="LabMaster.htm" method="POST" >
 
   <div class="form-group">
   <div class="table-responsive">
-<<<<<<< HEAD
 	  <table class="table table-bordered table-hover table-striped table-condensed "  style="width: 100%;"  >
-	<!--  <tr align="center"><th colspan="6" align="center"> Lab Details</th></tr></thead> -->
        
-=======
-	  <table class="table table-bordered table-hover table-striped table-condensed "  style="width: 70%;" align="center" >
-	<!--   <thead><tr align="center"><th colspan="6" align="center"> Lab Details</th></tr></thead> -->
         <thead>
->>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 				<tr>
 					<th><label>Lab Code: <span class="mandatory"style="color: red;">*</span></label></th>
 					<td colspan="4"><input class="form-control" type="text"name="LabCode" required="required" maxlength="255"	style="font-size: 15px; " id="LabCode" value="<%if(labdetail!=null){%><%=labdetail.getLabCode()%><%}%>" disabled ></td>
@@ -185,17 +181,14 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 </div>
 </div>
 
-<<<<<<< HEAD
 	  <div id="LabAddSubmit" align="center">
 	  <!-- <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster();">EDIT</button> -->
 	  <input type="submit"  class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="UPDATE"/>
-=======
 	  <div id="Edit" align="center">
 	  <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster()"  >EDIT</button>
 	  </div>
 	   <div id="Update" align="center" hidden>
 	  <button type="submit"  class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB">UPDATE</button>
->>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />
 		<input type="hidden" name="LabMasterId" value="<%if(labdetail!=null){%><%=labdetail.getLabMasterId()%><%}%>">
@@ -205,8 +198,6 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 	   		
 	   	</div>
 	   </div>
-	</div>
-</div>
 </body>
 <script type="text/javascript">
 
