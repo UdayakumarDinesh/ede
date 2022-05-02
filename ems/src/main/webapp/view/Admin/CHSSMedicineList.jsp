@@ -7,6 +7,14 @@
 <meta charset="ISO-8859-1">
 <title>Medicine List</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+
+
+<style>
+	.card-header{
+		border-bottom: none !important;
+		    padding: 0.5rem 1.25rem;
+	}
+</style>
 </head>
 <body>
 <%
@@ -18,7 +26,6 @@ String treat = (String)request.getAttribute("treat");
 
 
 
-<div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -36,7 +43,7 @@ String treat = (String)request.getAttribute("treat");
 		 </div>
 		 
 	
-	
+	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -56,22 +63,25 @@ String treat = (String)request.getAttribute("treat");
 		
 			<div class="card" >
 			
+				<div class="card-header">
+					<div class="row justify-content-end">
+						<div class="col-2" ><h6>Treatment Name :</h6></div>
+						<form action="MedicineList.htm" method="GET">
+						        <div class="col-3" style="margin-left:-30px;" >
+						        
+			                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
+									<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> 
+											<%if(main!=null&&main.size()>0){for(Object[] O:main){%>
+														<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
+														<%}}%>
+								</select>
+						        </div>
+					   </form>
+					</div>
+				</div>
+			
 				<div class="card-body " >
-				<div class="row">
-				<div class="col-3"></div>
-				<div class="col-2" ><h5>Treatment Name :</h5></div>
-				<form action="MedicineList.htm" method="GET">
-				        <div class="col-3" style="margin-left:-30px;" >
-				        
-	                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
-							<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> 
-									<%if(main!=null&&main.size()>0){for(Object[] O:main){%>
-												<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
-												<%}}%>
-						</select>
-				        </div>
-			   </form>
-			   </div>
+				
 					<form action="ChssMedicine.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						

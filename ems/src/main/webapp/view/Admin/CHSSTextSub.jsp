@@ -15,7 +15,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -33,7 +33,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 		 </div>
 		 
 	
-	
+	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 

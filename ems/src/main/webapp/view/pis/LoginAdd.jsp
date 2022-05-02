@@ -20,24 +20,25 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 %>
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>LoginType Add</h5>
+				<h5>Login Add</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
 						<li class="breadcrumb-item "><a href="LoginMaster.htm"> Login List </a></li>
-						<li class="breadcrumb-item active " aria-current="page">LoginType Add</li>
+						<li class="breadcrumb-item active " aria-current="page">Login Add</li>
 					</ol>
 				</div>
 			</div>
 		 </div>
 	
 	
+	 <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >
@@ -47,7 +48,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 							<table
 								class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
 								<tr>
-										<th><label>USER NAME: <span class="mandatory"
+										<th><label>User name: <span class="mandatory"
 												style="color: red;">*</span>
 										</label></th>
 										<td><input class="form-control form-control"
@@ -70,7 +71,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
 									
 										<tr>
-											<th><label>USER NAME: <span class="mandatory" style="color: red;">*</span></label></th>
+											<th><label>User name : <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder="UserName" type="text" name="UserName"
 												required="required" maxlength="255" style="font-size: 15px;"
@@ -78,7 +79,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 										</tr>
 
 										<tr>
-											<th><label>LOGIN TYPE: <span class="mandatory"	style="color: red;">*</span></label></th>
+											<th><label>Login Type : <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><select class="form-control select2" name="LoginType" id="LoginType" data-container="body" data-live-search="true" required="required" style="font-size: 5px;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 												<%for(Object[] login :loginlist){ %>
@@ -87,7 +88,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 											</select></td>
 										</tr>
 										<tr>
-											<th><label>EMPLOYEE: <span class="mandatory" style="color: red;">*</span>
+											<th><label>Employee : <span class="mandatory" style="color: red;">*</span>
 											</label></th>
 											<td><select class="form-control select2"
 												name="Employee" id="Employee" data-container="body"

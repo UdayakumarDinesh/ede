@@ -14,7 +14,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 %>
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -31,7 +31,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 			</div>
 		 </div>
 		 
-		 
+		  <div class="page card dashboard-card">
 		 <div class="card-body">
 		 <div align="center">
 					<%String ses=(String)request.getParameter("result"); 
@@ -58,7 +58,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
-										<th>SlNo.</th>
+										<th>SN</th>
 										<th>Treatment</th>
 										<th>Doctor-Qualification</th>
 										<!-- <th>Doctor-Rating</th> -->

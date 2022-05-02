@@ -24,7 +24,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
-				<h5>Family Members List<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%></b></small></h5>
+				<h5>Family Members List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 				<div class="col-md-7">
 					<ol class="breadcrumb ">

@@ -59,37 +59,35 @@ String treat = (String)request.getAttribute("treat");
 		
 			<div class="card" >
 			
+				<div class="card-header">
+					<form action="HandingOver.htm" method="GET">
+					<div class="row justify-content-end">
+					
+						     <div class="col-1"  align="right"><h6>From Date :</h6></div>
+					         <div class="col-1"> 
+								    <input type="text" style="width: 115%;"  class="form-control input-sm mydate"  readonly="readonly" value="<%if(fromdate!=null){%><%=fromdate%><%}%>"   id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  > 
+								    <label class="input-group-addon btn" for="testdate"></label>              
+							 </div>
+							 
+							  <div class="col-1" align="right" ><h6>To Date :</h6></div>
+							  <div class="col-1">						
+								     <input type="text" style="width: 115%;"  class="form-control input-sm mydate" readonly="readonly" value="<%if(todate!=null){%><%=todate%><%}%>"   id="todate" name="todate"  required="required"  > 							
+							 		 <label class="input-group-addon btn" for="testdate"></label>    
+							 </div>
+							 
+							 <div class="col-1" align="right">
+							    <button type="submit" class="btn btn-sm submit-btn" style="height: 60%; width: 70%;"  name="Action" value="List" >SUBMIT</button>
+							 </div>
+							
+							
+					</div>
+							 
+				   </form>
+				
+				</div>
+			
 				<div class="card-body">
 			 	
-				
-				<form action="HandingOver.htm" method="GET">
-				
-				<div class="row" style="padding-bottom: 10px;">
-				<div class="col-5"></div>
-				<div class="col-7">
-				<div class="row">
-				
-					     <div class="col-2"  align="right">FromDate :</div>
-				         <div class="col-2"> 
-							    <input type="text" style="width: 115%;"  class="form-control input-sm mydate"  readonly="readonly" value="<%if(fromdate!=null){%><%=fromdate%><%}%>"   id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  > 
-							    <label class="input-group-addon btn" for="testdate"></label>              
-						 </div>
-						 
-						  <div class="col-2" align="right" ><h6>ToDate :</h6></div>
-						  <div class="col-2">						
-							     <input type="text" style="width: 115%;"  class="form-control input-sm mydate" readonly="readonly" value="<%if(todate!=null){%><%=todate%><%}%>"   id="todate" name="todate"  required="required"  > 							
-						 		 <label class="input-group-addon btn" for="testdate"></label>    
-						 </div>
-						 
-						 <div class="col-2" align="right">
-						    <button type="submit" class="btn btn-sm submit-btn" style="height: 60%; width: 70%;"  name="Action" value="List" >SUBMIT</button>
-						 </div>
-						 </div>
-						 </div>
-						 </div>
-						 
-			   </form>
-			   
 					<form action="HandingOver.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						

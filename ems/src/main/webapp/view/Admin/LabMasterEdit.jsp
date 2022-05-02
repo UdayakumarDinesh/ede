@@ -49,7 +49,6 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 
 %>
 
-<div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -64,15 +63,15 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 			   </div>
 		</div>
 	</div> 
-	<div class="card-body">
-	   <div class="card" >
+	
+	   <div class="page card dashboard-card">
 	   		<div class="card-body" >
 	   		
 <form name="myfrm" action="LabMaster.htm" method="POST" >
 
   <div class="form-group">
   <div class="table-responsive">
-	  <table class="table table-bordered table-hover table-striped table-condensed "  style="width: 70%;"  >
+	  <table class="table table-bordered table-hover table-striped table-condensed "  style="width: 100%;"  >
 	<!--  <tr align="center"><th colspan="6" align="center"> Lab Details</th></tr></thead> -->
        
 				<tr>
@@ -160,7 +159,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 </div>
 
 	  <div id="LabAddSubmit" align="center">
-	  <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster();">EDIT</button>
+	  <!-- <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster();">EDIT</button> -->
 	  <input type="submit"  class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="UPDATE"/>
 	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />

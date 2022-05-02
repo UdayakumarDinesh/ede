@@ -16,7 +16,7 @@ List<Object[]> list = (List<Object[]>)request.getAttribute("list");
 String tratementid = (String)request.getAttribute("tratementid");
 int slno=0;
 %>
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -33,6 +33,7 @@ int slno=0;
 			</div>
 		 </div>
 		 
+		  <div class="page card dashboard-card">
 		 <div class="card-body">
 		 <div align="center">
 				<%String ses=(String)request.getParameter("result"); 
@@ -74,7 +75,7 @@ int slno=0;
 								<table class="table table-bordered table-hover table-condensed  info shadow-nohover" style="width: 70%;" align="center">
 									<thead>
 										<tr>
-											<th style="width:5%;"  >SNo.          </th>
+											<th style="width:5%;"  >SN          </th>
 											<th style="width:20%;" >Basic From 	  </th>
 											<th style="width:20%;" >Basic To      </th>
 											<th style="width:20%;" >Permit Amount </th>
@@ -96,7 +97,7 @@ int slno=0;
 											int value = list.size()-1;
 											if(flag!=value){%>
 									  	<tr>
-									        <td><span class="sno" id="sno"><%=slno %></span></td>
+									        <td><span class="sno" id="sno"><%=slno %>.</span></td>
 											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control items" name="basicto1" id="basicto1" value="<%=obj[1] %>"  readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>

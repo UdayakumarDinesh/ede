@@ -23,9 +23,9 @@
 		<div class="row">
 			<div class="col-md-5">
 			<%if(peraddress!=null){ %>
-				<h5>Permanent Address Edit<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
+				<h5>Permanent Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}else{ %>
-						<h5>Permanent Address Add<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
+						<h5>Permanent Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}%>
 			</div>
 			   <div class="col-md-7">
@@ -33,14 +33,12 @@
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<%-- <li class="breadcrumb-item  " aria-current="page"><a href="Address.htm?empid=<%=empdata[2]%>">Address List</a></li> --%>
 						<li class="breadcrumb-item active " aria-current="page">Permanent Address </li>
 					</ol>
 				</div>
 		</div>
 	</div>
-
-
-	<div class="card-body" >
 
 <div class="page card dashboard-card"> 
 	
@@ -119,7 +117,7 @@
 				      <div class="col-md-4">
                       <div class="form-group">
                             <label> Alt Mobile No.</label>
-                            <input  id="AltMobileTextBox"  type="text" value="<%if(peraddress!=null&&peraddress.getAlt_mobile()!=null){%><%=peraddress.getAlt_mobile()%><%}%>" class="form-control input-sm " name="altMobile"  maxlength="10"    placeholder="Enter AltMobileNo."  onblur="checknegative(this)"/>
+                            <input  id="AltMobileTextBox"  type="text" value="<%if(peraddress!=null&&peraddress.getAlt_mobile()!=null){%><%=peraddress.getAlt_mobile()%><%}%>" class="form-control input-sm " name="altMobile"  maxlength="10"    placeholder="Enter Alt MobileNo."  onblur="checknegative(this)"/>
                        </div>
                        </div>
                        
@@ -127,7 +125,7 @@
 				       <div class="col-md-4">
                        <div class="form-group">
                               <label>Landline No.:</label>
-                              <input  id="LandLineTextBox" type="text" value="<%if(peraddress!=null&&peraddress.getLandline()!=null){%><%=peraddress.getLandline()%><%}%>" class="form-control input-sm " name="landineNo"  maxlength="10"  placeholder="Enter LandlineNo"  onblur="checknegative(this)">  
+                              <input  id="LandLineTextBox" type="text" value="<%if(peraddress!=null&&peraddress.getLandline()!=null){%><%=peraddress.getLandline()%><%}%>" class="form-control input-sm " name="landineNo"  maxlength="10"  placeholder="Enter Landline No"  onblur="checknegative(this)">  
                        </div>
                        </div> 
                          
