@@ -14,5 +14,10 @@ public class CHSSMedicineDto {
 	private String[] MedicineDate;
 	private String[] PresQuantity;
 	private String[] MedQuantity;
-	private String Isactive;
+	private String Comments;
+	private Integer IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
+	private String ModifiedBy;
+	private String ModifiedDate;
 }

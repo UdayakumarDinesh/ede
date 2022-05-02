@@ -549,8 +549,7 @@ public class CHSSController {
 			dto.setDocQualification(docqualification);
 			dto.setConsultDate(consdate);
 			dto.setConsultCharge(conscharge);
-			
-//			dto.setCreatedBy(Username);
+			dto.setCreatedBy(Username);
 			
 			long count= service.ConsultationBillAdd(dto);
 			if (count > 0) {
@@ -613,7 +612,7 @@ public class CHSSController {
 			consult.setDocQualification(docqualification);
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Integer.parseInt(conscharge));
-//			consult.setModifiedBy(Username);
+			consult.setModifiedBy(Username);
 			
 			long count = service.ConsultationBillEdit(consult);
 			
@@ -676,7 +675,6 @@ public class CHSSController {
 			String billid = req.getParameter("billid");
 			
 			String[] medsname=req.getParameterValues("meds-name");
-//			String[] medsdate=req.getParameterValues("meds-date");
 			String[] medscost=req.getParameterValues("meds-cost");
 			String[] medspresquantity=req.getParameterValues("meds-presquantity");
 			String[] medsquantity=req.getParameterValues("meds-quantity");
@@ -684,10 +682,10 @@ public class CHSSController {
 			
 			dto.setBillId(billid);
 			dto.setMedicineName(medsname);
-//			dto.setMedicineDate(medsdate);
 			dto.setMedicineCost(medscost);
 			dto.setPresQuantity(medspresquantity);
 			dto.setMedQuantity(medsquantity);
+			dto.setCreatedBy(Username);
 			
 			long count= service.MedicinesBillAdd(dto);
 			if (count > 0) {
@@ -735,7 +733,6 @@ public class CHSSController {
 			String medicineid = req.getParameter("medicineid"); 
 			
 			String medsname = req.getParameter("meds-name-"+medicineid);
-//			String medsdate = req.getParameter("meds-date-"+medicineid);
 			String medscost = req.getParameter("meds-cost-"+medicineid);
 			String medsquantity = req.getParameter("meds-quantity-"+medicineid);
 			String medspresquantity = req.getParameter("meds-presquantity-"+medicineid);
@@ -743,11 +740,10 @@ public class CHSSController {
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setCHSSMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
-//			meds.setMedicineDate(sdf.format(rdf.parse(medsdate)));
 			meds.setMedicineCost(Integer.parseInt(medscost));
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			meds.setPresQuantity(Integer.parseInt(medspresquantity));
-			
+			meds.setModifiedBy(Username);
 			
 			long count = service.MedicineBillEdit(meds);
 			
@@ -865,7 +861,6 @@ public class CHSSController {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String testid = req.getParameter("testid"); 
 			
-			String testtype = req.getParameter("test-maintype-"+testid);
 			String testsubid = req.getParameter("test-subid-"+testid);
 			String testcost = req.getParameter("test-cost-"+testid);
 			
@@ -874,7 +869,7 @@ public class CHSSController {
 			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
 			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
 			test.setTestCost(Integer.parseInt(testcost));
-			
+			test.setModifiedBy(Username);
 			
 			long count = service.TestBillEdit(test);
 			
@@ -944,7 +939,7 @@ public class CHSSController {
 			dto.setBillId(billid);
 			dto.setMiscItemName(miscname);
 			dto.setMiscItemCost(misccost);
-			
+			dto.setCreatedBy(Username);
 			
 			long count= service.MiscBillAdd(dto);
 			if (count > 0) {
@@ -998,7 +993,7 @@ public class CHSSController {
 			meds.setChssMiscId(Long.parseLong(chssmiscid));
 			meds.setMiscItemName(medsname);
 			meds.setMiscItemCost(Integer.parseInt(micscost));
-			
+			meds.setModifiedBy(Username);
 			
 			long count = service.MiscBillEdit(meds);
 			
@@ -1028,7 +1023,7 @@ public class CHSSController {
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String chssotherid = req.getParameter("chssotherid"); 
+			String chssotherid = req.getParameter("chssmiscid"); 
 						
 			long count = service.MiscBillDelete(chssotherid, Username);
 			
@@ -1103,6 +1098,8 @@ public class CHSSController {
 			dto.setOtherItemId(otheritemid);
 			dto.setOtherItemCost(otheritemcost);
 			dto.setEmpid(EmpId);
+			dto.setCreatedBy(Username);
+			
 			
 			long count= service.OtherBillAdd(dto);
 			if (count > 0) {
@@ -1138,7 +1135,7 @@ public class CHSSController {
 			meds.setCHSSOtherId(Long.parseLong(chssotherid));
 			meds.setOtherItemId(Integer.parseInt(otheritemid));
 			meds.setOtherItemCost(Integer.parseInt(otheritemcost));
-			
+			meds.setModifiedBy(Username);
 			
 			long count = service.OtherBillEdit(meds);
 			
@@ -1359,6 +1356,7 @@ public class CHSSController {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSUserPreview.htm "+Username, e);
 			return "static/Error";
+			
 		}
 			
 	}
@@ -1389,7 +1387,6 @@ public class CHSSController {
 			}
 			else if (chssstatusid == 2 || chssstatusid ==4 || chssstatusid >=5) 
 			{
-			 
 
 				if(action.equalsIgnoreCase("F")) {
 					if (count > 0) {
@@ -1469,11 +1466,12 @@ public class CHSSController {
 			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
-			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+			
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
 			
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
@@ -1498,11 +1496,13 @@ public class CHSSController {
 			String consultationid = req.getParameter("consultationid"); 
 			
 			String consultremamount = req.getParameter("consultremamount-"+consultationid);
-			
+			String consultcomment = req.getParameter("consultcomment-"+consultationid);
 			
 			CHSSConsultation consult= new CHSSConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
 			consult.setConsultRemAmount(Integer.parseInt(consultremamount));
+			consult.setComments(consultcomment);
+			consult.setModifiedBy(Username);
 			
 			long count = service.ConsultRemAmountEdit(consult);
 			
@@ -1534,11 +1534,14 @@ public class CHSSController {
 			String testid = req.getParameter("testid"); 
 			
 			String testremamount = req.getParameter("testremamount-"+testid);
+			String testcomment = req.getParameter("testcomment-"+testid);
 			
 			
 			CHSSTests test= new CHSSTests();
 			test.setCHSSTestId(Long.parseLong(testid));
 			test.setTestRemAmount(Integer.parseInt(testremamount));
+			test.setComments(testcomment);
+			test.setModifiedBy(Username);
 			
 			long count = service.TestRemAmountEdit(test);
 			
@@ -1560,42 +1563,6 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value = "OtherRemAmountEdit.htm", method = RequestMethod.POST )
-	public String OtherRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside OtherRemAmountEdit.htm "+Username);
-		try {
-			
-			String chssapplyid = req.getParameter("chssapplyid");
-			String otherid = req.getParameter("otherid"); 
-			
-			String otheridremamount = req.getParameter("otherremamount-"+otherid);
-			
-			
-			CHSSOther other= new CHSSOther();
-			other.setCHSSOtherId(Long.parseLong(otherid));
-			other.setOtherRemAmount(Integer.parseInt(otheridremamount));
-			
-			long count = service.OtherRemAmountEdit(other);
-			
-			
-			if (count > 0) {
-				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
-			} else {
-				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
-			}	
-			
-			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			return "redirect:/CHSSFormEdit.htm";
-		}catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside OtherRemAmountEdit.htm "+Username, e);
-			return "static/Error";
-		}
-	}
-	
 	@RequestMapping(value = "MedRemAmountEdit.htm", method = RequestMethod.POST )
 	public String MedRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -1607,11 +1574,13 @@ public class CHSSController {
 			String medicineid = req.getParameter("medicineid"); 
 			
 			String medicineremamount = req.getParameter("medicineremamount-"+medicineid);
-			
+			String medscomment = req.getParameter("medscomment-"+medicineid);
 			
 			CHSSMedicine medicine= new CHSSMedicine();
 			medicine.setCHSSMedicineId(Long.parseLong(medicineid));
 			medicine.setMedsRemAmount(Integer.parseInt(medicineremamount));
+			medicine.setComments(medscomment);
+			medicine.setModifiedBy(Username);
 			
 			long count = service.MedRemAmountEdit(medicine);
 			
@@ -1632,6 +1601,47 @@ public class CHSSController {
 		}
 	}
 	
+	
+	
+	@RequestMapping(value = "OtherRemAmountEdit.htm", method = RequestMethod.POST )
+	public String OtherRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OtherRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String otherid = req.getParameter("otherid"); 
+			
+			String otheridremamount = req.getParameter("otherremamount-"+otherid);
+			String otherscomment = req.getParameter("otherscomment-"+otherid);
+			
+			CHSSOther other= new CHSSOther();
+			other.setCHSSOtherId(Long.parseLong(otherid));
+			other.setOtherRemAmount(Integer.parseInt(otheridremamount));
+			other.setComments(otherscomment);
+			other.setModifiedBy(Username);
+			long count = service.OtherRemAmountEdit(other);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside OtherRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+
+	
 	@RequestMapping(value = "MiscRemAmountEdit.htm", method = RequestMethod.POST )
 	public String MiscRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -1643,12 +1653,13 @@ public class CHSSController {
 			String miscid = req.getParameter("miscid"); 
 			
 			String miscremamount = req.getParameter("miscremamount-"+miscid);
-			
+			String miscomment = req.getParameter("miscomment-"+miscid);
 			
 			CHSSMisc misc= new CHSSMisc();
 			misc.setChssMiscId(Long.parseLong(miscid));
 			misc.setMiscRemAmount(Integer.parseInt(miscremamount));
-			
+			misc.setComments(miscomment);
+			misc.setModifiedBy(Username);
 			long count = service.MiscRemAmountEdit(misc);
 			
 			

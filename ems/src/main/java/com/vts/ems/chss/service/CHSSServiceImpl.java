@@ -331,8 +331,8 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setConsultRemAmount(getConsultEligibleAmount(consult.getConsultCharge(),consult.getDocQualification(),consult.getConsultType()));
 				
 				consult.setIsActive(1);
-//				consult.setCreatedBy(dto.getCreatedBy());
-//				consult.setCreatedDate(sdtf.format(new Date()));				
+				consult.setCreatedBy(dto.getCreatedBy());
+				consult.setCreatedDate(sdtf.format(new Date()));				
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
@@ -380,8 +380,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setDocQualification(modal.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
-//		fetch.setModifiedBy(modal.getModifiedBy());
-//		fetch.setModifiedDate(sdtf.format(new Date()));
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		fetch.setConsultRemAmount(getConsultEligibleAmount(modal.getConsultCharge(),modal.getDocQualification(),modal.getConsultType()));
 
 		
@@ -393,8 +393,8 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSConsultation fetch = dao.getCHSSConsultation(consultationid);
 		fetch.setIsActive(0);
-//		fetch.setModifiedBy(modifiedby);
-//		fetch.setModifiedDate(sdtf.format(new Date()));
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.ConsultationBillEdit(fetch);
 	}
 	
@@ -416,12 +416,13 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				meds.setBillId(Long.parseLong(dto.getBillId()));
 				meds.setMedicineName(dto.getMedicineName()[i]);
-//				meds.setMedicineDate(sdf.format(rdf.parse(dto.getMedicineDate()[i])));
 				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
 				meds.setMedsRemAmount(0);
 				meds.setIsActive(1);
+				meds.setCreatedBy(dto.getCreatedBy());
+				meds.setCreatedDate(sdtf.format(new Date()));
 				count = dao.MedicinesBillAdd(meds);
 				
 			}
@@ -449,11 +450,12 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getCHSSMedicineId()));
 		fetch.setMedicineName(modal.getMedicineName());
-//		fetch.setMedicineDate(modal.getMedicineDate());
 		fetch.setMedicineCost(modal.getMedicineCost());
 		fetch.setMedQuantity(modal.getMedQuantity());
 		fetch.setMedsRemAmount(modal.getMedicineCost());
 		fetch.setPresQuantity(modal.getPresQuantity());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MedicineBillEdit(fetch);
 	}
 	
@@ -462,6 +464,8 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSMedicine fetch = dao.getCHSSMedicine(medicineid);
 		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MedicineBillEdit(fetch);
 	}
 	
@@ -484,6 +488,9 @@ public class CHSSServiceImpl implements CHSSService {
 				test.setTestCost(Integer.parseInt(dto.getTestCost()[i]));
 				test.setIsActive(1);
 				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
+				test.setCreatedBy(dto.getCreatedBy());
+				test.setCreatedDate(sdtf.format(new Date()));
+				
 				count = dao.TestsBillAdd(test);
 			}
 						
@@ -528,6 +535,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setTestSubId(modal.getTestSubId());
 		fetch.setTestCost(modal.getTestCost());
 		fetch.setTestRemAmount(getTestEligibleAmount(modal.getTestCost(),String.valueOf(modal.getTestSubId())));
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.TestBillEdit(fetch);
 	}
 	
@@ -536,6 +545,8 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSTests fetch = dao.getCHSSTest(chsstestid);
 		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.TestBillEdit(fetch);
 	}
 	
@@ -555,6 +566,8 @@ public class CHSSServiceImpl implements CHSSService {
 				misc.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
 				misc.setMiscRemAmount(0);
 				misc.setIsActive(1);
+				misc.setCreatedBy(dto.getCreatedBy());
+				misc.setCreatedDate(sdtf.format(new Date()));
 				count = dao.MiscBillAdd(misc);
 			}
 			return count;
@@ -579,6 +592,8 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
 		fetch.setMiscItemName(modal.getMiscItemName());
 		fetch.setMiscItemCost(modal.getMiscItemCost());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MiscBillEdit(fetch);
 	}
 	
@@ -587,6 +602,8 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSMisc fetch = dao.getCHSSMisc(chssMiscid);
 		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MiscBillEdit(fetch);
 	}
 	
@@ -626,7 +643,8 @@ public class CHSSServiceImpl implements CHSSService {
 				other.setIsActive(1);
 				
 				other.setOtherRemAmount(getOtherItemRemAmount(dto.getEmpid(),dto.getOtherItemId()[i],Integer.parseInt(dto.getOtherItemCost()[i]) ));
-				
+				other.setCreatedBy(dto.getCreatedBy());
+				other.setCreatedDate(sdtf.format(new Date()));
 				count = dao.OtherBillAdd(other);
 			}
 						
@@ -649,12 +667,7 @@ public class CHSSServiceImpl implements CHSSService {
 			 basicpay=emp.getBasicPay();
 		}
 		
-		
-		
 		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(otheritemid,basicpay);
-		
-		System.out.println( basicpay);
-		System.out.println(chssremamt);
 		
 		int rembamt=0;
 		if(chssremamt!=null && chssremamt.getItemPermitAmt()!=null) {
@@ -679,6 +692,8 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherItemId(modal.getOtherItemId());
 		fetch.setOtherItemCost(modal.getOtherItemCost());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.OtherBillEdit(fetch);
 	}
 	
@@ -687,6 +702,8 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSOther fetch = dao.getCHSSOther(chssotherid);
 		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.OtherBillEdit(fetch);
 	}
 	
@@ -857,7 +874,9 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultRemAmount(modal.getConsultRemAmount());
-		
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.ConsultationBillEdit(fetch);
 	}
 	
@@ -866,6 +885,9 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
 		fetch.setTestRemAmount(modal.getTestRemAmount());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.TestBillEdit(fetch);
 	}
 	
@@ -874,6 +896,9 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherRemAmount(modal.getOtherRemAmount());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.OtherBillEdit(fetch);
 	}
 	
@@ -882,6 +907,9 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getCHSSMedicineId()));
 		fetch.setMedsRemAmount(modal.getMedsRemAmount());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MedicineBillEdit(fetch);
 	}
 	
@@ -890,6 +918,9 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
 		fetch.setMiscRemAmount(modal.getMiscRemAmount());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
 		return dao.MiscBillEdit(fetch);
 	}
 	
