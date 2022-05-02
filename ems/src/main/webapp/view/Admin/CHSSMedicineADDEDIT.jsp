@@ -50,9 +50,8 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 					<form name="myfrm" action="ChssMedicine.htm" method="POST" id="addform">
 						<div class="form-group">
 							<div class="table-responsive">
-								<table
-									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
-									<thead>
+								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
+									
 									
 										<tr>
 											<th><label>Treatment Name <span class="mandatory"	style="color: red;">*</span></label></th>
@@ -72,7 +71,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 												></td>
 										</tr>
 									
-								</thead>
+								
 								</table>
 							</div>
 						</div>

@@ -51,49 +51,52 @@
 			<div class="card" >
 			
 				<div class="card-body" >
-				
-					<form action="##" method="POST" id="empForm" autocomplete="off">
+					<div class="row">
+						<div class="col-md-12" >
+							<form action="#" method="POST" id="empForm" autocomplete="off">
 						
-						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
-								<thead>
-									<tr>
-										<th>Select</th>
-										<th>Item Name</th>	
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<%if(list!=null){ int slno=0; for(Object[] obj : list){
-										String ItemName = "ItemName"+String.valueOf(obj[0]); 
-										%>
-										<tr>
-											<td style="text-align: center;"><%=++slno %><input type="hidden"  name="action"  value="EDITITEM"> </td>
-											<td><input type="text"  class="form-control " name="<%=ItemName%>"  value="<%=obj[1]%>"> </td>
-											<td align="center"><button type="submit" class="btn btn-sm " name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update!');" data-toggle="tooltip" data-placement="top" title="Edit">
-											
-												<i class="fa-solid fa-pen-to-square" ></i></button></td>
-										</tr>
-									 <%}}%> 
-								</tbody>
-							</table>
-							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-						</div>
-					
+								<div class="table-responsive">
+						   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+										<thead>
+											<tr>
+												<th>Select</th>
+												<th>Item Name</th>	
+												<th>Update</th>
+											</tr>
+										</thead>
+										<tbody>
+											<%if(list!=null){ int slno=0; for(Object[] obj : list){
+												String ItemName = "ItemName"+String.valueOf(obj[0]); 
+												%>
+												<tr>
+													<td style="text-align: center;"><%=++slno %> </td>
+													<td><input type="text"  class="form-control " name="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
+													<td align="center">
+														<button type="submit" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update!');" data-toggle="tooltip" data-placement="top" title="Update">											
+														<i class="fa-solid fa-pen-to-square " style="color: #E45826" ></i>
+														</button>
+													</td>
+												</tr>
+											 <%}}%> 
+										</tbody>
+									</table>
+									<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+								</div>
 							
-					<div class="row text-center">
-						<div class="col-md-12">
-												
-							<button type="button" class="btn btn-sm add-btn AddItem" name="action" value="ADD"  >ADD</button>
-							<button type="submit" class="btn btn-sm add-btn" style="background-color:#67349e;" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
-					    
-					    </div>						 
-					</div>
-					
-			  </form>
-			  </div>
-		   	 </div>				
-	        </div>
+									
+								<div class="row text-center">
+									<div class="col-md-12">
+															
+										<button type="button" class="btn btn-sm add-btn AddItem" name="action" value="ADD"  >ADD</button>
+										<button type="submit" class="btn btn-sm add-btn" style="background-color:#67349e;" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
+								    
+								    </div>						 
+								</div>
+								
+							  </form>
+						  </div>
+		   			</div>				
+	        	</div>
            </div>
            
 
@@ -113,9 +116,9 @@
         <!-- Modal body -->
         <div class="modal-body">
         	<div class="form-inline">
-        	<div class="form-group">
+        	<div class="form-group w-100">
                <label>Item Name : &nbsp;&nbsp;&nbsp;</label> 
-               <input type="text" class=" form-control"   name="ItemName" required="required" > 
+               <input type="text" class=" form-control w-100" maxlength="100"   name="ItemName" required="required" > 
       		</div>
       		</div>
         </div>

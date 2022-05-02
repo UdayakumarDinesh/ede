@@ -21,7 +21,8 @@ List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
-						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>					
+						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
+						<li class="breadcrumb-item "><a	href="EmployeeDetails.htm">Profile  </a></li>											
 						<li class="breadcrumb-item active " aria-current="page"> Request Message</li>
 					</ol>
 				</div>
@@ -38,9 +39,7 @@ List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
 			<div class="alert alert-danger" role="alert">
 				<%=ses1 %>
 			</div>
-			
 		<%}if(ses!=null){ %>
-			
 			<div class="alert alert-success" role="alert">
 				<%=ses %>
 			</div>

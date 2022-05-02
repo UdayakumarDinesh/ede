@@ -853,7 +853,7 @@ public class PisController {
 					return "redirect:/PisAdminEmpList.htm";
 				}
 		   }
-		  	  
+		  	                        
 		   Object[]  perAddress = (Object[])service.getPerAddress(empid);
 		   List<Object[]> resAddress = (List<Object[]>)service.getResAddress(empid);
 		   Object[] kinAddress = (Object[]) service.getKinAddress(empid);

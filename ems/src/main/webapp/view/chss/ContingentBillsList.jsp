@@ -95,19 +95,24 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(LocalDate.now().toString()))%></td>
 											<%} %>
 											<td 
-											<%if("7".equals(obj[8].toString())||"9".equals(obj[8].toString()) ||"11".equals(obj[8].toString())||"13".equals(obj[8].toString())){%>  
-										    style=" color:#d1312c; font-weight: 600;"				
-											<%}else if("1".equals(obj[8].toString())){%>
-											 style="  color:#2db714; font-weight: 600;"     
-											<%}else if("3".equals(obj[8].toString())||"12".equals(obj[8].toString())||"6".equals(obj[8].toString())){%>
-											style="  color:#588c20; font-weight: 600;"
-											<%}else if("10".equals(obj[8].toString())||"4".equals(obj[8].toString())||"2".equals(obj[8].toString())){%>
-												style=" color:#149694; font-weight: 600;"
-											<%}else{ %>
-											style=" color:#0b4980; font-weight: 600;"
-											<%} %>             ><%=obj[7] %></td>
-											
-											
+												<%if("1".equals(obj[5].toString()) || "2".equals(obj[5].toString()) ){%>  
+											    style=" padding-top:5px; padding-bottom: 5px;color:#4700D8; font-weight: 600;"				
+												<%}else if("3".equals(obj[5].toString())||"5".equals(obj[5].toString()) ||"7".equals(obj[5].toString())||"9".equals(obj[5].toString()) || "11".equals(obj[5].toString())||"13".equals(obj[5].toString())){%>
+												 style="  padding-top:5px; padding-bottom: 5px;color:#B20600; font-weight: 600;"     
+												<%}else  if("4".equals(obj[5].toString())||"6".equals(obj[5].toString())||"8".equals(obj[5].toString())|| "10".equals(obj[5].toString()) || "12".equals(obj[5].toString())){%>
+													style="padding-top:5px; padding-bottom: 5px; color:#F66B0E; font-weight: 600;"
+												<%}else if("14".equals(obj[5].toString())){ %>
+												style=" padding-top:5px; padding-bottom: 5px;color:#6BCB77; font-weight: 600;"
+												<%}else{ %>
+												 style="padding-top:5px; padding-bottom: 5px; color:#4700D8; font-weight: 600;"
+												<%} %>	
+											>
+												<%if("1".equals(obj[5].toString()) ){%>  
+												 Bill Generated
+												<%}else{ %>
+												<%=obj[7] %>
+												<%} %>
+											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Details">

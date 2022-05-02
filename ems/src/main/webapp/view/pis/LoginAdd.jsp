@@ -46,9 +46,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 						<div class="table-responsive">
 							<table
 								class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
-								<thead>
-
-									<tr>
+								<tr>
 										<th><label>USER NAME: <span class="mandatory"
 												style="color: red;">*</span>
 										</label></th>
@@ -60,7 +58,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 										<td><input type="submit" class="btn btn-primary btn-sm"
 											value="CHECK" id="check" /></td>
 									</tr>
-								</thead>
+							
 							</table>
 						</div>
 					</div>
@@ -70,7 +68,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 							<div class="table-responsive">
 								<table
 									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
-									<thead>
+									
 										<tr>
 											<th><label>USER NAME: <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
@@ -100,7 +98,7 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 												<%}%>
 											</select></td>
 										</tr>
-									</thead>
+									
 								</table>
 							</div>
 						</div>
