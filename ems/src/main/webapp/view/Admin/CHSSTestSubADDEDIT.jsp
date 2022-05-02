@@ -51,9 +51,8 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 					<form name="myfrm" action="ChssTestSub.htm" method="POST">
 						<div class="form-group">
 							<div class="table-responsive">
-								<table
-									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
-									<thead>
+								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
+									
 									
 										<tr>
 											<th><label>Main <span class="mandatory"	style="color: red;">*</span></label></th>
@@ -81,7 +80,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 												required="required" maxlength="10" style="font-size: 15px;"
 												id="Rate" ></td>
 										</tr>
-									</thead>
+									
 								</table>
 							</div>
 						</div>

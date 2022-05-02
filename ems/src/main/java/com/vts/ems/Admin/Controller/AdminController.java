@@ -681,7 +681,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("emplist", pisservice.GetAllEmployee());
 					req.setAttribute("labslist", labslist);
 					req.setAttribute("labdetails", lab);
-					       return "Admin/LadMasterEdit";
+					       return "Admin/LabMasterEdit";
 				}else if("EDITLAB".equalsIgnoreCase(action)){
 					String labcode = (String)req.getParameter("LabCode");
 					String labname = (String)req.getParameter("LabName");
@@ -732,7 +732,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("labdetails", lab);
 				
 					
-					       return "Admin/LadMasterEdit";
+					       return "Admin/LabMasterEdit";
 				
 				           
 				}

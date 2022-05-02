@@ -167,13 +167,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 						<%if(!"A".equalsIgnoreCase(LoginType)){ %>
 					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
-					<form action="EmpRequestMsg.htm" method="GET">
-					<div class="row" >
-					    	<div class="col-11" align="right">
-					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
-					    	</div>  	
-			    	</div> 
-			    	</form>
+					
 			       </td></tr> <%}%>
 					</tbody>
 				</table>
@@ -210,7 +204,14 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">Passport</a>
 	</li> -->
+	
+
+	
 </ul>
+<form action="EmpRequestMsg.htm" method="post" style="float: right;">
+	<button type="submit" class="btn btn-sm submit-btn" style="margin: 3px;"  name="action" value="msg" >REQUEST MESSGAE</button>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 
 <!-- Tab panes -->
 <div class="tab-content">
@@ -604,8 +605,8 @@ function checkPic1(){
 	
     var imgpath=document.getElementById('imageUpload1');
     var value  = (imgpath.files[0].size/1024)/1024; 
-    if(value>2){
-    	 alert("Image Size Should Be less than 2MB!");
+    if(value>5){
+    	 alert("Image Size Should Be less than 5MB!");
     	 event.preventDefault();
     	 return false;
     }else{   	
@@ -619,8 +620,8 @@ function checkPic2(){
 
     var imgpath1=document.getElementById('imageUpload');
     var value1 = (imgpath1.files[0].size/1024)/1024;   
-    if(value1>2){
-    	 alert("Image Size Should Be less than 2MB!");
+    if(value1>5){
+    	 alert("Image Size Should Be less than 5MB!");
     	 event.preventDefault();
     	 return false;
     }else{   	

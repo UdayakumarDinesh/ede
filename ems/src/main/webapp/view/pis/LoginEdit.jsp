@@ -47,7 +47,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 							<div class="table-responsive">
 								<table
 									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
-									<thead>
+									
 
 										<tr>
 											<th><label>LOGIN TYPE: <span class="mandatory"	style="color: red;">*</span></label></th>
@@ -71,7 +71,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 												<%}%>
 											</select></td>
 										</tr>
-									</thead>
+									
 								</table>
 							</div>
 						</div>

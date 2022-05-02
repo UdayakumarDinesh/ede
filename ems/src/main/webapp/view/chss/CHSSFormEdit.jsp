@@ -188,9 +188,9 @@ th,td
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
-											<th>Basic Pay : <%=employee.getBasicPay() %> </th>
-											<th colspan="2">Level in The Pay Matrix : <%=employee.getPayLevelId() %></th>
-											<th colspan="2">Ph.No. : <%=employee.getPhoneNo()%></th>
+											<td><b>Basic Pay : </b> &#8377; <%=employee.getBasicPay() %> </td>
+											<td colspan="2"><b>Level in The Pay Matrix : </b> <%=employee.getPayLevelId() %></td>
+											<td colspan="2"><b>Ph.No. : </b> <%=employee.getPhoneNo()%></td>
 										</tr>
 									</tbody>
 								</table>
