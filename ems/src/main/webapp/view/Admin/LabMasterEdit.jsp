@@ -181,10 +181,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 </div>
 </div>
 
-	  <div id="LabAddSubmit" align="center">
-	  <!-- <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster();">EDIT</button> -->
-	  <input type="submit"  class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="UPDATE"/>
-	  <div id="Edit" align="center">
+<div id="Edit" align="center">
 	  <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster()"  >EDIT</button>
 	  </div>
 	   <div id="Update" align="center" hidden>
