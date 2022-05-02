@@ -88,6 +88,38 @@ String treat = (String)request.getAttribute("treat");
 			
 				<div class="card-body">
 			 	
+<<<<<<< HEAD
+=======
+				
+				<form action="HandingOver.htm" method="GET">
+				
+				<div class="row" style="padding-bottom: 10px;">
+				<div class="col-5"></div>
+				<div class="col-7">
+				<div class="row">
+				
+					     <div class="col-2"  align="right">FromDate :</div>
+				         <div class="col-2"> 
+							    <input type="text" style="width: 115%;" data-date-format="dd-mm-yyyy" onchange=" setTodate()" class="form-control form-control date"  readonly="readonly" <%if(fromdate!=null){%> value="<%=(fromdate)%>" <%}%>   id="fromdate" name="fromdate"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate"></label>              
+						 </div>
+						 
+						  <div class="col-2" align="right" ><h6>ToDate :</h6></div>
+						  <div class="col-2">						
+							     <input type="text" style="width: 115%;" data-date-format="dd-mm-yyyy" class="form-control form-control" readonly="readonly" <%if(todate!=null){%>value="<%=(todate) %>"<%}%>   id="todate" name="todate"  required="required"  > 							
+						 		 <label class="input-group-addon btn" for="testdate"></label>    
+						 </div>
+						 
+						 <div class="col-2" align="right">
+						    <button type="submit" class="btn btn-sm submit-btn" style="height: 60%; width: 70%;"  name="Action" value="List" >SUBMIT</button>
+						 </div>
+						 </div>
+						 </div>
+						 </div>
+						 
+			   </form>
+			   
+>>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 					<form action="HandingOver.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
@@ -139,20 +171,8 @@ String treat = (String)request.getAttribute("treat");
 <script type="text/javascript">
 
 
-$(document).ready(function(){
 
-	var financial_year = "";
-    var today = new Date();
-    if ((today.getMonth() + 1) <= 3) {
-        financial_year = (today.getFullYear() - 1) + "-" + today.getFullYear()
-    } else {
-        financial_year = today.getFullYear() + "-" + (today.getFullYear() + 1)
-    }
-    
-	var date =  financial_year.split("-");
-	var fdate = "01-04-"+date[0];
-	var tdate = "31-03-"+date[1];
-	
+
 
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,
@@ -166,7 +186,7 @@ $('#fromdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-});
+
 function setTodate()
 {
 	var fromdate = $("#fromdate").val();
@@ -174,15 +194,15 @@ function setTodate()
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		"minDate" :fromdate,   
-		"startDate" : new Date(),
+		"minDate" :fromdate,  
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
 			format : 'DD-MM-YYYY'
 		}
 	});
-	}
+}
+
 
 
 function Edit() {
