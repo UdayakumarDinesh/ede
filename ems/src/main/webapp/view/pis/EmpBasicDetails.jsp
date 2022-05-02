@@ -168,11 +168,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<%if(!"A".equalsIgnoreCase(LoginType)){ %>
 					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
 					<form action="EmpRequestMsg.htm" method="GET">
-					<div class="row" >
+					<!-- <div class="row" >
 					    	<div class="col-11" align="right">
 					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
 					    	</div>  	
-			    	</div> 
+			    	</div>  -->
 			    	</form>
 			       </td></tr> <%}%>
 					</tbody>

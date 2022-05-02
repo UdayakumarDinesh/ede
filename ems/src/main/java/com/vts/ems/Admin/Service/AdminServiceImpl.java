@@ -387,9 +387,21 @@ public class AdminServiceImpl implements AdminService{
 		return dao.GetReqListFromUser();
 	}
 	
+	@Override
+	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception
+	{
+		return dao.UpdateAdminResponse( responsemsg ,  requestid ,UserId);
+	}
 	
 	
-	
+	@Override
+	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+		LocalDate ToDate= LocalDate.parse(todate, formatter);
+		return dao.GetReqResMessagelist(emp,Fromdate,ToDate);
+	}
 	
 	
 	
