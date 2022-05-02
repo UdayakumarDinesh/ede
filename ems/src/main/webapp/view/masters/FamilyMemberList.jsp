@@ -61,7 +61,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 	     <div class="card">    
 	     <div class="card-body">
 	     
-	     		<form action="FamilyMemberAddEditDelete.htm" name="empForm">
+	     		<form action="FamilyMemberAddEditDelete.htm" name="empForm" method="post">
 	     			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	     			<div class="table-responsive">
 	     			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 

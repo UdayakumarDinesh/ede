@@ -668,7 +668,7 @@ public class PisController {
         return "masters/FamilyMemberList";
    }
 
-	@RequestMapping(value = "FamilyMemberAddEditDelete.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "FamilyMemberAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
 	public String FamilyMemberAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside FamilyMemberAddEditDelete.htm " + Username);

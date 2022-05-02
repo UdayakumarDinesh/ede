@@ -882,7 +882,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}else {
 						List<Object[]> Reqlist = service.GetReqListFromUser();
 						req.setAttribute("emplist", pisservice.GetAllEmployee());
-						req.setAttribute("msglist", Reqlist);		
+						req.setAttribute("msglist", Reqlist);	
+					
+						req.setAttribute("fromdate", DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat());	
+						req.setAttribute("todate",DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now()));	
 						return "Admin/ReplyToReqMsg";	
 				}
 				
