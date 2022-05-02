@@ -150,7 +150,7 @@
 					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)"><i class="fa-solid fa-map-location-dot"></i> &nbsp;&nbsp;Address</button>
 			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)"> Publication</button>
 					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Passport</button> -->
-					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" >Request Message</button>
+					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;Request Message</button>
 					</div>
 				</div> 
 					
