@@ -797,23 +797,61 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
-	
+	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.requestdate DESC";
 	@Override
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
 
-		logger.info(new Date() + "Inside updateOtherAmt()");
-		int count=0;
-		try {
-			Date d = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Query query= manager.createNativeQuery(UPDATEOTHERITEMAMT);				
+		logger.info(new Date() + "Inside GetReqListFromUser()");
 		
-			count = query.executeUpdate();
-			return null;
+		try {
+			Query query= manager.createNativeQuery(GETREQLIST);			
+		
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
+	}
+	
+	private static final String UPDATEADMINREPLY="UPDATE ems_emp_request SET modifiedby=:modifiedby , modifieddate=:modifieddate , responsemessage=:responsemsg WHERE emprequestid=:emprequestid";
+	@Override
+	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception
+	{
+		logger.info(new Date() + "Inside UpdateAdminResponse()");
+		int count=0;
+		try {
+			
+			Query query= manager.createNativeQuery(UPDATEADMINREPLY);				
+			query.setParameter("responsemsg", responsemsg);
+			query.setParameter("emprequestid",requestid);
+			query.setParameter("modifiedby", UserId);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			count = query.executeUpdate();
+			return count;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return count;
+			}
+	}
+	private static final String GETREQRESMESSAGELIST="SELECT a.emprequestid , b.empname , a.requestmessage  , a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.empid=:emp AND a.isactive='1' AND a.requestdate BETWEEN :FromDate AND :Todate  ORDER BY a.requestdate DESC";
+	
+	@Override
+	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception
+	{
+		logger.info(new Date() + "Inside GetReqResMessagelist()");
+		
+		try {
+			Query query= manager.createNativeQuery(GETREQRESMESSAGELIST);			
+			query.setParameter("emp", emp);
+			query.setParameter("FromDate",FromDate);
+			query.setParameter("Todate", Todate);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+		   }
 	}
 }

@@ -185,24 +185,7 @@ function setTodate()
 		}
 	});
 	}
-$(document).ready(function() {
-	
-	var fromdate = $("#fromdate").val();
-	
-$('#todate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"minDate" :fromdate,   
-	/* "startDate" : new Date(), */
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
 
-});
 
 function Edit() {
 

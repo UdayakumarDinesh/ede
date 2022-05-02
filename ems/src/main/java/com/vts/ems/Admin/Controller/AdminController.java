@@ -858,18 +858,66 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 		}
 		
-		@RequestMapping()
+		@RequestMapping(value = "AdminReplyToReqMsg.htm" , method = {RequestMethod.GET, RequestMethod.POST})
 		public String ReqMsgFromUserToAdmin(HttpSession ses ,HttpServletRequest req,RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
+		
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
 			try {
-				List<Object[]>  reqlist = service.GetReqListFromUser();
-				return "";			
+				String requestid = (String)req.getParameter("action");
+				
+				if(requestid!=null) {
+					String response = "response"+requestid;
+					String responsemsg = (String)req.getParameter(response);
+					
+					int result  = service.UpdateAdminResponse( responsemsg ,  requestid ,UserId);
+					if (result != 0) {
+						 redir.addAttribute("result", "Response Sent Successfuly");
+					} else {
+						 redir.addAttribute("resultfail", "Response Sent UnSuccessful");
+					}
+					return "redirect:/AdminReplyToReqMsg.htm";	
+					
+				}else {
+						List<Object[]> Reqlist = service.GetReqListFromUser();
+						req.setAttribute("emplist", pisservice.GetAllEmployee());
+						req.setAttribute("msglist", Reqlist);		
+						return "Admin/ReplyToReqMsg";	
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
-				return "";
+				return "Admin/ReplyToReqMsg";
 			}
 		}
 		
+		
+		@RequestMapping(value = "RequestMessagelist.htm" ,method=RequestMethod.POST)
+		public String RequestMessagelist(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			
+			String UserId = (String)ses.getAttribute("Username");
+			
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			try {
+				String emp       = (String)req.getParameter("employee");
+				String fromdate  = (String)req.getParameter("fromdate");
+				String todate    = (String)req.getParameter("todate");
+				                    
+				 
+				List<Object[]>  list = service.GetReqResMessagelist(emp , fromdate ,todate);
+				req.setAttribute("msglist", list);	
+				req.setAttribute("emplist", pisservice.GetAllEmployee());
+				req.setAttribute("emp", emp);
+				req.setAttribute("fromdate", fromdate);
+				req.setAttribute("todate", todate);
+				
+				return "Admin/ReplyToReqMsg";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "";
+			
+		}
 }

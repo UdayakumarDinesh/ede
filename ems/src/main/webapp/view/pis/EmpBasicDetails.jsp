@@ -168,6 +168,13 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<%if(!"A".equalsIgnoreCase(LoginType)){ %>
 					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
 					
+					<form action="EmpRequestMsg.htm" method="GET">
+					<!-- <div class="row" >
+					    	<div class="col-11" align="right">
+					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
+					    	</div>  	
+			    	</div>  -->
+			    	</form>
 			       </td></tr> <%}%>
 					</tbody>
 				</table>
@@ -208,11 +215,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 
 	
 </ul>
-<form action="EmpRequestMsg.htm" method="post" style="float: right;">
+<%-- <form action="EmpRequestMsg.htm" method="post" style="float: right;">
 	<button type="submit" class="btn btn-sm submit-btn" style="margin: 3px;"  name="action" value="msg" >REQUEST MESSGAE</button>
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-
+ --%>
 <!-- Tab panes -->
 <div class="tab-content">
 
