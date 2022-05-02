@@ -590,7 +590,7 @@ body{
  background: #0e6fb6;
  min-width: 33.3%;
  color: white;
- box-shadow:2px 2px 3px lightblue;
+ box-shadow:6px 6px 0px lightblue;
  border:none;
  cursor: pointer;
 }
