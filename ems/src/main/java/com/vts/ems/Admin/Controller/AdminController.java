@@ -217,7 +217,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					 	 
 					 }
 		       }catch(Exception e){
-		    	   redir.addAttribute("resultfail", "Some Problem Occure!");
+		    	   redir.addAttribute("resultfail", "Internal Error!");
 		    	   e.printStackTrace();
 		    	   return "redirect:/TestSub.htm";
 		       }
@@ -270,7 +270,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}
 					 
 				}catch (Exception e) {
-					redir.addAttribute("resultfail", "Some Problem Occure!");
+					redir.addAttribute("resultfail", "Internal Error!");
 					e.printStackTrace();
 					return "redirect:/OtherItems.htm";
 				}
@@ -617,7 +617,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
+				req.setAttribute("resultfail", "Internal Error!");
 				return "Admin/HandlingOver";
 			}
 			
@@ -660,18 +660,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					return "Admin/CHSSDoctorsList";
 				}		
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Some Problem Occure!");
+				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "Admin/CHSSDoctorsList";
 			}
 			
 		}                                
 		
-		@RequestMapping(value = "LabMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
+		@RequestMapping(value = "UnitMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
 		public String LabMaster(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside UnitMaster.htm "+UserId);
 			try {
 				String action =(String)req.getParameter("Action");
 				if("EDIT".equalsIgnoreCase(action)) {
@@ -737,7 +737,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				           
 				}
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Some Problem Occure!");
+				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "Admin/LabDetails";
 			}
@@ -817,7 +817,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				return "redirect:/OtherItemAmount.htm";
 				
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Some Problem Occure!");
+				 redir.addAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "redirect:/OtherItemAmount.htm";
 			}
@@ -851,7 +851,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				 redir.addFlashAttribute("tratementid", treatid);
 				 return "redirect:/OtherItemAmount.htm";
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Some Problem Occure!");
+				 redir.addAttribute("resultfail", "Internal Error!");
 					e.printStackTrace();
 					return "redirect:/OtherItemAmount.htm";
 			}

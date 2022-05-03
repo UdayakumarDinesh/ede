@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Lab Details</title>
+<title>Unit Details</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 </head>
 <body>
@@ -19,14 +19,14 @@ Object[] labdetails = (Object[])request.getAttribute("labdetails");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Lab Details</h5>
+				<h5>Unit Details</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
 						
-						<li class="breadcrumb-item active " aria-current="page">Lab Details</li>
+						<li class="breadcrumb-item active " aria-current="page">Unit Details</li>
 				</ol>
 			   </div>
 		</div>
@@ -56,12 +56,12 @@ Object[] labdetails = (Object[])request.getAttribute("labdetails");
 				 <table class="table table-striped table-bordered" >
 					<tbody>
 					<tr>
-						     <th>Lab Code</th>
-	                         <th>Lab Name</th>
-	                         <th>Lab UnitCode</th>
-	                         <th>Lab Address</th>
-	                         <th>Lab City</th>
-	                         <th>Lab Pin</th>
+						     <th>Unit Code</th>
+	                         <th>Unit Name</th>
+	                         <th>Unit UnitCode</th>
+	                         <th>Unit Address</th>
+	                         <th>Unit City</th>
+	                         <th>Unit Pin</th>
 					</tr>
 						<%if(labdetails!=null){ %>
 						<tr>
