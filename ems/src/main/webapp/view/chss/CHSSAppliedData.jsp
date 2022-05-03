@@ -236,7 +236,7 @@ p {
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
 													</button>													
-													<button type="button"  class="btn btn-sm" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
+													<button type="button"  class="btn btn-sm details-icon	" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
 														<i class="fa-solid fa-file-lines"></i>
 													</button>													
 												</td>										
@@ -286,11 +286,11 @@ p {
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="button" class="btn btn-sm" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
+									<button type="button" class="btn btn-sm view-icon" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
 										<i class="fa-solid fa-eye"></i>
 									</button>
-									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
-										<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Preview	
+									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
 									
 								</div>
@@ -452,7 +452,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >ADD</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >ADD</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -513,7 +513,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="confirm('Are You Sure To Submit?');">Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="confirm('Are You Sure To Submit?');">Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -582,7 +582,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -641,7 +641,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -694,7 +694,7 @@ p {
 									</tbody>			
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">

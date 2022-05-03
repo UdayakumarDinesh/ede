@@ -210,10 +210,7 @@
     padding: 0rem 1.25rem;
 } 
  
-.apply-btn{
-	    box-shadow: 2px 2px 5px grey;
-	    background-color: green
-}
+
 
 
 
@@ -414,7 +411,7 @@
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
 		<div class="col-md-3">
-			<button type="button" class="btn btn-sm apply-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i> APPLY</button>
+			<button type="button" class="btn btn-sm misc2-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i> &nbsp;&nbsp;APPLY&nbsp;</button>
 			
 		</div>
 		<div class="col-md-5 d-flex justify-content-center">
@@ -480,13 +477,13 @@
 									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details."
 									 
 										<%if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) ){%>  
-										    style=" color:#4700D8; font-weight: 600;"				
+										    style=" color:#2155CD; font-weight: 600;"				
 											<%}else if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString()) || "11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>
 											 style="  color:#B20600; font-weight: 600;"     
 											<%}else  if("4".equals(obj[9].toString())||"6".equals(obj[9].toString())||"8".equals(obj[9].toString())|| "10".equals(obj[9].toString()) || "12".equals(obj[9].toString())){%>
 												style=" color:#F66B0E; font-weight: 600;"
 											<%}else if("14".equals(obj[9].toString())){ %>
-											style=" color:#6BCB77; font-weight: 600;"
+											style=" color:#125C13; font-weight: 600;"
 											<%}else{ %>
 											 style=" color:#4700D8; font-weight: 600;"
 											<%} %>
@@ -500,7 +497,7 @@
 											</button>	
 										<%} %>
 											
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>	
 											

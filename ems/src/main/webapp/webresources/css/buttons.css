@@ -26,7 +26,7 @@
 .edit-btn
 {	
 	color: #ffffff;
-	background: darkorange;
+	background: #F66B0E;
 }
 
 
@@ -79,10 +79,26 @@
 	background: #051367;
 }
 
+
+
 .misc1-btn{
 	color: #ffffff;
-	background: #67349e;
+	background: #1597BB; 
 }
 
+.misc2-btn{
+	color: #ffffff;
+	background: #125C13;
+	box-shadow: 2px 2px 5px grey;
+}
+
+
+.view-icon{
+	color: #67349e;
+}
+
+.details-icon{
+	color: #214252;
+}
 
 

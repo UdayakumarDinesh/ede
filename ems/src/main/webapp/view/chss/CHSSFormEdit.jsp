@@ -619,7 +619,7 @@ th,td
 									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 								<%} else if(chssstatusid==1){ %>
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
-										<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Submit for processing	
+										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
 									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSAppliedDetails.htm">
 										Edit
@@ -627,7 +627,7 @@ th,td
 									<input type="hidden" name="claimaction" value="F" >
 								<%} else if(chssstatusid==3){ %>
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
-										<i class="fa-solid fa-forward" style="color: #A63EC5"></i> Submit for processing	
+										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
 									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSAppliedDetails.htm">
 										Edit

@@ -173,30 +173,17 @@
 						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
 					        </a>
 					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown" style="width:400px;padding: 0px;margin-top: 6px; ">
-								<span class="dropdown-header" style="background-color: #5089C6;font-size: 16px;color: #ffffff; margin-top: -1px;border-top-left-radius: 3px;border-top-right-radius: 3px;"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
+								<span class="dropdown-header" style="background-color: #faa51e;font-size: 16px;color: #145374; margin-top: -1px;border-top-left-radius: 3px;border-top-right-radius: 3px;font-weight: 700"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
 
 
 						        <div id="Notification">
 						        </div>
 						        
-<<<<<<< HEAD
-						            <a class="dropdown-item text-center small text-gray-500 showall" href="#" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
-=======
-						            <a class="dropdown-item text-center small text-gray-500" href="AllNotificationList.htm" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
->>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
+						            <a class="dropdown-item text-center small text-gray-500 showall" href="AllNotificationList.htm" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
 						        </div>
 						    </div>
 						    
-						    
-						    
-						    
-						    
-						    
-						    
-						    
-						    
-						    
-						    
+
 							<div class="btn-group">
 						        <button type="button" class="btn btn-link btn-responsive" style="text-decoration: none !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    	<img alt="logo" src="view/images/myacc.png" style="">

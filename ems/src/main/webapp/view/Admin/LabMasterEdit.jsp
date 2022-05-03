@@ -175,10 +175,10 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 </div>
 
 	  <div id="Edit" align="center">
-	  <button type="button" class="btn btn-sm submit-btn" onclick="EditlabMaster()"  >EDIT</button>
+	  <button type="button" class="btn btn-sm edit-btn" onclick="EditlabMaster()"  >EDIT</button>
 	  </div>
 	   <div id="Update" align="center" hidden>
-	  <button type="submit"  class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB">UPDATE</button>
+	  <button type="submit"  class="btn btn-sm edit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB">UPDATE</button>
  	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />
 		<input type="hidden" name="LabMasterId" value="<%if(labdetail!=null){%><%=labdetail.getLabMasterId()%><%}%>">
