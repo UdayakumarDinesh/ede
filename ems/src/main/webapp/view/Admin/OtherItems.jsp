@@ -89,7 +89,7 @@
 									<div class="col-md-12">
 															
 										<button type="button" class="btn btn-sm add-btn AddItem" name="action" value="ADD"  >ADD</button>
-										<button type="submit" class="btn btn-sm add-btn" style="background-color:#67349e;" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
+										<button type="submit" class="btn btn-sm misc1-btn" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
 								    
 								    </div>						 
 								</div>

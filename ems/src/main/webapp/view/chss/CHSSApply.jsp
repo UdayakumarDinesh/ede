@@ -142,7 +142,6 @@ color: black;
 	Employee employee = (Employee )request.getAttribute("employee") ;
 %>
 
- <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -157,6 +156,9 @@ color: black;
 				</div>
 			</div>
 	</div>	
+	
+	 <div class="page card dashboard-card">
+	
 	<div class="card-body" >			
 	
 	

@@ -26,7 +26,6 @@
 
 %>
  
- <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -42,6 +41,9 @@
 				</div>
 			</div>
 	</div>	
+	
+	 <div class="page card dashboard-card">
+	
 	<div class="card-body" >
 	
 	
@@ -62,27 +64,44 @@
 	</div>
 				
 			<div class="card" >
+			
+				<div class="card-header">
+					<form action="CHSSBatchList.htm" method="post" >
+					
+					<div class="row justify-content-end">
+		
+						
+							<div class="col-sm-1half">	
+								<h6 class="control-label" style="color: #145374;"> From : </h6>
+							</div>		
+								
+							<div class="col-md-2">			
+										 <input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"> 
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								
+							</div>
+							
+							<div class="col-sm-1half">	
+								<h6 class="control-label"  style="color: #145374; margin-bottom: 10px;"> To : </h6> 						
+							</div>
+							
+							<div class="col-md-2">	
+	
+									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"> 
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />	
+						
+							</div>
+							
+						</div>
+					
+					
+					
+					</form>	
+				</div>
+			
 				<div class="card-body " >
 					
-					<form action="CHSSBatchList.htm" method="post" >
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							<div class="form-group row">
-								<div class="col-5"></div>
-								<label for="inputPassword" class="col-sm-1 col-form-label" style="padding-left: 45px; margin-right: 0px;">From :</label>
-								<div class="col-sm-2" style="padding:0px;">
-									<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"> 
-								</div>
-							    
-								<label for="inputPassword" class="col-sm-1 col-form-label" style="padding-left: 45px; margin-right: 0px;">To :</label>
-								<div class="col-sm-2" style="padding:0px;">
-									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"> 
-								</div>
-								<div class="col-sm-1">
-								
-									<button type="submit" class="btn btn-sm submit-btn" >submit</button>
-								</div>
-						</div>
-					</form>		 
+						 
 											
 					<form action="CHSSContingentGenerate.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -100,7 +119,7 @@
 										<th style="padding-top:5px; padding-bottom: 5px;">Patient Name</th>
 										<th style="padding-top:5px; padding-bottom: 5px;text-align: center ;">Applied Date</th>
 										<th style="padding-top:5px; padding-bottom: 5px;width:10%;text-align: right;">Claim Amount (&#8377;)</th>
-										<th style="padding-top:5px; padding-bottom: 5px;width:10%;text-align: right;">Admitted Amount (&#8377;)</th>
+										<th style="padding-top:5px; padding-bottom: 5px;width:12%;text-align: right;">Admitted Amount (&#8377;)</th>
 										<th style="padding-top:5px; padding-bottom: 5px;width:10%;">Action</th>
 									</tr>
 								</thead>

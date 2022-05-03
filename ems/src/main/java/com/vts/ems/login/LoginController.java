@@ -35,15 +35,15 @@ public class LoginController
 	        model.addAttribute("message", "You have been logged out successfully.");
 	    
 	    
-	    error= req.getParameter("error");
-		if (error == null) {
-			Map md = model.asMap();
-			error = (String) md.get("error");
-		}
-	    if(error!=null) {
-	    	 model.addAttribute("error", error);
-	    }
-	    
+//	    error= req.getParameter("error");
+//		if (error == null) {
+//			Map md = model.asMap();
+//			error = (String) md.get("error");
+//		}
+//	    if(error!=null) {
+//	    	 model.addAttribute("error", error);
+//	    }
+//	    
 	    
 	    String success= req.getParameter("success");
 		if (success == null) {

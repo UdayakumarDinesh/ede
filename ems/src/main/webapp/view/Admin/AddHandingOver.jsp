@@ -85,8 +85,8 @@
 						</div>
 						<div class="row">
 						<div class="col-12" align="center">
-							<button type="submit" class="btn btn-sm add-btn" name="Action" onclick="return checkEmp();" value="ADDHANDING"   >ADD </button>
-							 <a href="HandingOver.htm?empid="   class="btn btn-sm  btn-info">BACK</a> 
+							<button type="submit" class="btn btn-sm submit-btn" name="Action" onclick="return checkEmp();" value="ADDHANDING"   >SUBMIT </button>
+							 <!-- <a href="HandingOver.htm?empid="   class="btn btn-sm  btn-info">BACK</a>  -->
 						</div>
 						</div>
 						</form>

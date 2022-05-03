@@ -80,7 +80,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							<%if(list!=null){ %>
 							<input type="hidden" name="medicineId" value="<%=list.getMedicineId()%>">
 							<input type="hidden" name="Action" value="EDITMEDICINE">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >UPDATE</button>
+								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
 									<%}else{ %>
 									<input type="hidden" name="Action" value="ADDMEDICINE">
 									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>

@@ -75,7 +75,7 @@ String treat = (String)request.getAttribute("treat");
 							 </div>
 							 
 							 <div class="col-1" align="right">
-							    <button type="submit" class="btn btn-sm submit-btn" style="height: 60%; width: 70%;"  name="Action" value="List" >SUBMIT</button>
+							    <button type="submit" class="btn btn-sm submit-btn"   name="Action" value="List" >SUBMIT</button>
 							 </div>
 							
 							

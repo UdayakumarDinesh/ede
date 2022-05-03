@@ -32,88 +32,78 @@ NFormatConvertion nfc=new NFormatConvertion();
 				</ol>
 			</div>	
 		</div>
+	</div>
+	
+	<div class="page card dashboard-card">
+		<div class="card-body" >		
+			<div align="center">
+				<%String ses=(String)request.getParameter("result"); 
+				String ses1=(String)request.getParameter("resultfail");
+				if(ses1!=null){ %>
+					<div class="alert alert-danger" role="alert">
+						<%=ses1 %>
+					</div>
+					
+				<%}if(ses!=null){ %>
+					
+					<div class="alert alert-success" role="alert">
+						<%=ses %>
+					</div>
+				<%} %>
+				</div>
 		
-	
-
-
-	<div class="card-body" align="center">
-	<%String ses=(String)request.getParameter("result"); 
- String ses1=(String)request.getParameter("resultfail");
-	if(ses1!=null){
-	%>
-	<div align="center">
-
-		<div class="alert alert-danger" role="alert" align="center">
-			<%=ses1 %>
-		</div>
-	
-	<%}if(ses!=null){ %>
-
-		<div class="alert alert-success" role="alert" align="center">
-			<%=ses %>
-		</div>
-  </div>
-	<%}%>
-	
-<div class="container" style="margin-top: 10px;">
-	<div class="row" style="">
-
-		<div class="col-md-2" ></div>
-		<div class="col-md-8" >
-
- 			<div class="card shadow-nohover" style="width: 800px;" >
-				
-				<div class="card-header" style=" background-color: #005C97;margin-top: ">
-                    <b class="text-white">Password Change</b>
-        		</div>
-        
-        		<div class="card-body" >
-        			<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
+			<div class="card" >
+			
+				<div class="card-body">
         			
-                		<div class="row justify-content-md-center">
-                    		<div class="col-md-4 ">
-                        		<div class="form-group">
-                            		<label class="control-label">Old Password</label>
-                              		 <input  class="form-control form-control"  type="password"  placeholder="Old Password " required name="OldPassword" >
-                        		</div>
-                    		</div>
-                		</div>
-                		
-                		<div class="row justify-content-md-center">
-                			<div class="col-md-4 ">
-                        		<div class="form-group">
-                            		<label class="control-label">New Password</label>
-                              		 <input  class="form-control form-control"  type="password" placeholder="New Password" required  name="NewPassword" id="password" >
-                        		</div>
-                    		</div>	
-                    	</div>
-                    	
-                    	<div class="row justify-content-md-center">
-                			<div class="col-md-4 ">
-                        		<div class="form-group">
-                            		<label class="control-label">Confirm New Password</label>
-                              		 <input  class="form-control form-control"  type="password" placeholder="Confirm New Password" required name="NewPassword" id="confirm_password" >
-                        			<span id='message'></span>
-                        		</div>
-                    		</div>	
-                    	</div>
+					<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						
+	                   <div class="row"> 
+	                		<div class="col-md-1"></div>
+	                    		<div class="col-md-3">
+	                        		<div class="form-group">
+	                              		<label class="control-label">Old Password</label><span class="mandatory">*</span>
+                              		 	<input  class="form-control form-control"  type="password"  placeholder="Old Password " required name="OldPassword" >
+	                        		</div>
+	                    		</div>
+	         					
+	                    		<div class="col-md-3">
+	                        		<div class="form-group">
+	                            		<label class="control-label">New Password</label><span class="mandatory">*</span>
+                              		 	<input  class="form-control form-control"  type="password" placeholder="New Password" required  name="NewPassword" id="password" >
+	                        		</div>
+	                    		</div>
+	                    		
+	                    		<div class="col-md-3">
+	                        		<div class="form-group">
+	                            		<label class="control-label">Confirm New Password</label><span class="mandatory">*</span>
+	                              		 <input  class="form-control form-control"  type="password" placeholder="Confirm New Password" required name="NewPassword" id="confirm_password" >
+	                        			<span id='message'></span>
+	                        		</div>
+	                    		</div>
+	                    		
+	                    		       		
+	                        </div> 
+	                        
+	                          <div  align="center"> 
+	                          		<input type="hidden" name="type" value="AD"/>
+	                                   <!--  <button class="btn btn-sm submit-btn" type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;">Submit</button>  -->
+	                                    <input type="submit" class="btn btn-sm submit-btn" id="sub" value="SUBMIT" name="sub"  onclick="return AddPwd(myfrm)" > 
+	                          </div>
+	                          
+                        </form>      
+	 		      <br>
+	  			</div>
+	
+	
+	
+		   	 </div>				
+	       </div>
+	     </div>	
+	
+	
 
-				        <div class="form-group" align="center" >
-					 		<input type="submit" class="btn btn-sm submit-btn" id="sub" value="SUBMIT" name="sub"  onclick="return AddPwd(myfrm)" > 							
-						</div>
-				
-					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
-				 	</form>
-        
-     			</div>    
-        
-        	</div>
-		</div>
-		<div class="col-md-2" ></div>
-	</div>
-</div>	
-	</div>
-	</div>
 <script type="text/javascript">
 
 $('#password, #confirm_password').on('keyup', function () {
