@@ -92,7 +92,6 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 %>
  
- <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -116,6 +115,9 @@ th,td
 				</div>
 			</div>
 	</div>	
+	
+	 <div class="page card dashboard-card">
+	
 	<div class="card-body" >
 		
 	<div align="center">

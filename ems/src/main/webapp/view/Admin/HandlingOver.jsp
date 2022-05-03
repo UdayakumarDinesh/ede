@@ -74,8 +74,13 @@ String treat = (String)request.getAttribute("treat");
 							 		 <label class="input-group-addon btn" for="testdate"></label>    
 							 </div>
 							 
+<<<<<<< HEAD
+							 <div class="col-1" align="right">
+							    <button type="submit" class="btn btn-sm submit-btn"   name="Action" value="List" >SUBMIT</button>
+=======
 							 <div class="col-2" align="right">
 							    
+>>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 							 </div>
 							
 							

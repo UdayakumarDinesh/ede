@@ -26,14 +26,14 @@
 .edit-btn
 {	
 	color: #ffffff;
-	background: #AE431E;
+	background: darkorange;
 }
 
 
 .submit-btn
 {
 	color: #ffffff;
-	background: #0B4619;
+	background: green;
 }
 
 .apply-btn{
@@ -58,7 +58,7 @@
 .delete-btn
 {
 	color: #ffffff;
-	background: #FC4F4F;
+	background: #B20600;
 }
 
 
@@ -68,10 +68,21 @@
 	background: #051367;
 }
 
+.reset-btn{
+	color: #ffffff;
+	background: #D82148;
+}
 
-misc-btn
+.misc-btn
 {
 	color: #ffffff;
 	background: #051367;
 }
+
+.misc1-btn{
+	color: #ffffff;
+	background: #67349e;
+}
+
+
 

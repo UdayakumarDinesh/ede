@@ -148,7 +148,6 @@
 List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDetails");
 %>
 
- <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -164,6 +163,8 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 			</div>
 	</div>	
 
+	 <div class="page card dashboard-card">
+	
 
 	      <section id="timeline">
 	      
@@ -198,6 +199,7 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 			  
 			<%count++;}%> 		
 		</section>
+		
 </div>
 
 

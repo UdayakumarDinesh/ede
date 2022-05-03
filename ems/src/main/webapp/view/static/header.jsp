@@ -50,7 +50,14 @@
 	    margin: 0px 0px 0px 35px;
 }
 
+.logoutdivider{
+	margin: 0px !important
+}
 
+.logout a{
+	font-size: 14px !important;
+	font-weight: 800 !important;
+}
 </style>
 
 </head>
@@ -115,7 +122,7 @@
             	<div class="container-fluid">
 
 					<a class="navbar-brand" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:40% ">
-						<img class="headerlogo" src="view/images/lablogo.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
+						<img class="headerlogo" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
 						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
 						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
 					</a>
@@ -166,12 +173,17 @@
 						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
 					        </a>
 					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown" style="width:400px;padding: 0px;margin-top: 6px; ">
-								<span class="dropdown-header" style="background-color: #0E6FB6;height: 40px;font-size: 16px;color: #ffffff;"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
-								
+								<span class="dropdown-header" style="background-color: #5089C6;font-size: 16px;color: #ffffff; margin-top: -1px;border-top-left-radius: 3px;border-top-right-radius: 3px;"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
+
+
 						        <div id="Notification">
 						        </div>
 						        
+<<<<<<< HEAD
+						            <a class="dropdown-item text-center small text-gray-500 showall" href="#" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
+=======
 						            <a class="dropdown-item text-center small text-gray-500" href="AllNotificationList.htm" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
+>>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 						        </div>
 						    </div>
 						    
@@ -194,24 +206,24 @@
 							
 							    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in logout" aria-labelledby="userDropdown">
 							    	
-								    <a class="dropdown-item" href="#"><i class="fa fa-user-circle-o" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
-								    <div class="dropdown-divider"></div>
+								    <a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
+								    <div class="dropdown-divider logoutdivider"></div>
 								    
-								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true"></i> Audit Stamping </a>     
-								    <div class="dropdown-divider"></div>
+								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true" style="color: purple"></i> &nbsp;&nbsp;Audit Stamping </a>     
+								    <div class="dropdown-divider logoutdivider"></div>
 								 
-								 	<a class="dropdown-item" href="PasswordChange.htm" ><i class="fa fa-key" aria-hidden="true"></i> Change Password </a>
-								    <div class="dropdown-divider"></div>
+								 	<a class="dropdown-item" href="PasswordChange.htm" ><i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
+								    <div class="dropdown-divider logoutdivider"></div>
 								   
-								   	<a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: #142850"></i> HELP </a>
-								  	<div class="dropdown-divider"></div>
+								   	<a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
+								  	<div class="dropdown-divider logoutdivider"></div>
 									
 									<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
 								            
 								    	<form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
 									        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-								                <button class="dropdown-item " href="#" data-target="#logoutModal">
-								                    <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: red"></i>
+								                <button class="dropdown-item " href="#" data-target="#logoutModal" style="font-weight: 700">
+								                    <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: #B20600"></i>
 								                    &nbsp;&nbsp;Logout
 								                </button>
 								        </form>
@@ -326,7 +338,7 @@ $(document).ready(function() {
 					
 					
 				
-					module+="<a class='dropdown-item d-flex align-items-center' id='"+values[i].NotificationId+"'  onclick='RemNotification("+values[i].NotificationId+")' href='"+values[i].NotificationUrl+"'  style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-arrow-right' aria-hidden='true' style='color:green'></i></div> <div style='margin-left:20px'> " +values[i].NotificationMessage+" </div> </a>";
+					module+="<a class='dropdown-item d-flex align-items-center' id='"+values[i].NotificationId+"'  onclick='RemNotification("+values[i].NotificationId+")' href='"+values[i].NotificationUrl+"'  style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-arrow-right' aria-hidden='true' style='color:green'></i></div> <div style='margin-left:20px'> " +values[i].NotificationMessage+" </div> </a> <div class='dropdown-divider logoutdivider'></div>";
 					if(i>4){
 						break;
 					}

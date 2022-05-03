@@ -361,7 +361,7 @@
 
 	<div class="row" >
 		<div class="col-md-2">
-			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>','<%=employee.getEmpName() %>')" data-toggle="tooltip" data-placement="bottom" title="Apply"> 
+			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>','<%=employee.getEmpName() %>')" > 
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -413,18 +413,19 @@
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
-		<div class="col-md-5">
-			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm apply-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i></button>
-			</h4>
-		</div>
 		<div class="col-md-3">
+			<button type="button" class="btn btn-sm apply-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i> APPLY</button>
+			
 		</div>
-		<label style=" font-weight: 800">From Date : </label>
+		<div class="col-md-5 d-flex justify-content-center">
+			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
+		</div>
+		<label style=" font-weight: 800">From Date : &nbsp; </label>
 		<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;"
 		<%if(Fromdate!=null){%> value="<%=(Fromdate) %>" <%} %> onchange="changeform('<%=patientname %>')" >
 					  
 	
-		<label style="font-weight: 800">To Date : </label>
+		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
 					 	 <%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
 					
