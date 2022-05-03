@@ -746,7 +746,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						redir.addAttribute("resultfail", "Lab Master Updated UnSuccessful");
 					}
 					return "redirect:/UnitMaster.htm";
-				}else {
+				}else {                                      
 					Object[] labdetails = service.getLabDetails();
 					String labmasterId =""+labdetails[0];
 					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
