@@ -51,6 +51,14 @@ body,html {
     color: #005C97;
 }
 
+.card-header h6{
+	font-weight: 800;
+	font-size: 1rem;	
+	font-family: Poppins;
+    color: #005C97;
+    line-height: 2rem;
+}
+
 #myTable thead tr
 {
 text-align: center;

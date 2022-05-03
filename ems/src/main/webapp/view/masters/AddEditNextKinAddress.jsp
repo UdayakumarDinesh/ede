@@ -23,9 +23,9 @@
 		<div class="row">
 			<div class="col-md-5">
 			<%if(nextkin!=null){ %>
-				<h5>Next Kin  Address Edit<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
+				<h5>Next Kin  Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}else{ %>
-						<h5>Next Kin  Address Add<small><b>&nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
+						<h5>Next Kin  Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}%>
 			</div>
 			   <div class="col-md-7">

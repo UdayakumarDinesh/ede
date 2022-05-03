@@ -182,6 +182,7 @@
 .custom-navbar{
 	border-top-left-radius: 7px;
 	border-top-right-radius: 7px;
+	background-color: #e9ecef !important;
 }
 
 .employee-details{
@@ -426,7 +427,7 @@
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
 					 	 <%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
 					
-		<form class="form-inline my-2 my-lg-0">
+		<%-- <form class="form-inline my-2 my-lg-0">
 	    	<select class="form-control select2" id="empname" required="required" name="empname"  onchange="changeform()" >
 				<option value="0" <%if(patientidvalue.equalsIgnoreCase("0")){ %>selected<% } %> >All</option>
 				<option value="<%=employee.getEmpId()%>" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))){ %>selected<% } %> ><%=employee.getEmpName() %> (Self)</option>
@@ -435,7 +436,7 @@
 				<%} %>
 			</select>
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    	</form>
+    	</form> --%>
 
 	</div>
 

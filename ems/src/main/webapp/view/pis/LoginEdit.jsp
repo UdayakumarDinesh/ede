@@ -20,7 +20,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 %>
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -31,13 +31,14 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
 						<li class="breadcrumb-item "><a href="LoginMaster.htm"> Login List </a></li>
-						<li class="breadcrumb-item active " aria-current="page">LoginType Edit</li>
+						<li class="breadcrumb-item active " aria-current="page">Login Edit</li>
 					</ol>
 				</div>
 			</div>
 		 </div>
 		 
 		 
+		  <div class="page card dashboard-card">
 		 <div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >
@@ -50,7 +51,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 									
 
 										<tr>
-											<th><label>LOGIN TYPE: <span class="mandatory"	style="color: red;">*</span></label></th>
+											<th><label>Login Type : <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><select class="form-control select2" name="LoginType" id="LoginType" data-container="body" data-live-search="true" required="required" style="font-size: 5px;">
 												
 												<%for(Object[] login :loginlist){ %>
@@ -59,7 +60,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 											</select></td>
 										</tr>
 										<tr>
-											<th><label>EMPLOYEE: <span class="mandatory" style="color: red;">*</span>
+											<th><label>Employee : <span class="mandatory" style="color: red;">*</span>
 											</label></th>
 											<td><select class="form-control select2"
 												name="Employee" id="Employee" data-container="body"

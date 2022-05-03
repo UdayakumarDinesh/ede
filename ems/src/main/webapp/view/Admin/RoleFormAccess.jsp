@@ -9,9 +9,7 @@
 
 <title>Role Access</title>
 <style type="text/css">
-.control-label{
-	font-weight: 550 !important;
-}
+
 
 
 .table thead th{
@@ -36,6 +34,11 @@
  
    .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20rem; }
   .toggle.ios .toggle-handle { border-radius: 20rem; }
+  
+  h6{
+  	font-size: 16px;
+  	    font-weight: 700 !important;
+  }
  
 </style>
 </head>
@@ -48,7 +51,7 @@ String logintype=(String)request.getAttribute("logintype");
 String moduleid=(String)request.getAttribute("moduleid");
 
 %>
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -64,20 +67,19 @@ String moduleid=(String)request.getAttribute("moduleid");
 			</div>
 		 </div>
 
-
-
-		<div class="card">
+		 
+		<div class="page card dashboard-card">
 			<div class="card-header">
 				<form class="" method="post" action="Role.htm" id="myform">
 					
-						<div class="row">
+						<div class="row justify-content-end">
 		
-							<div class="col-md-6">
-								<h3 class="control-label" style="color: #145374;"> Forms List</h3>
-							</div>
+							<!-- <div class="col-md-6">
+								<h6 class="control-label" style="color: #145374;"> Forms List</h6>
+							</div> -->
 			
 							<div class="col-sm-1half">	
-								<h5 class="control-label" style="color: #145374;"> Role : </h5>
+								<h6 class="control-label" style="color: #145374;"> Role : </h6>
 							</div>		
 								
 							<div class="col-md-2">			
@@ -91,7 +93,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 							</div>
 							
 							<div class="col-sm-1half">	
-								<h5 class="control-label"  style="color: #145374; margin-bottom: 10px;"> Module : </h5> 						
+								<h6 class="control-label"  style="color: #145374; margin-bottom: 10px;"> Module : </h6> 						
 							</div>
 							
 							<div class="col-md-2">	
@@ -132,7 +134,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 										for(Object[] 	obj:FormDetailsList){ %>
 													   
 								<tr>
-									<td ><%=count %></td>
+									<td ><%=count %>.</td>
 									<td><%=obj[2] %></td>
 										<td>
 										

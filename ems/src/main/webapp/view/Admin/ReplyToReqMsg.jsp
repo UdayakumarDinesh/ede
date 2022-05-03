@@ -22,10 +22,10 @@ String todate  =  (String)request.getAttribute("todate");
 <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h4>Employee Request Message</h4>
+			<div class="col-md-4">
+				<h5>Employee Request Message</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-8 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>					
 						<li class="breadcrumb-item active " aria-current="page"> Request Message</li>
@@ -68,11 +68,11 @@ String todate  =  (String)request.getAttribute("todate");
 						                </select>
 					
 					<label style=" font-weight: 800">From Date : </label>
-					<input  class="form-control form-control date"   id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  style="width: 120px;"	 value="<%if(fromdate!=null){%><%=fromdate%><%}%>"   >
+					<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy"  id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  style="width: 120px;"	 <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   >
 								  
 				
 					<label style="font-weight: 800">To Date : </label>
-					<input  class="form-control form-control"  id="todate" name="todate"  style="width: 120px;" value="<%if(todate!=null){%><%=todate%><%}%>">
+					<input  class="form-control form-control" data-date-format="dd-mm-yyyy"  id="todate" name="todate"  style="width: 120px;" <%if(todate!=null){%> value="<%=todate%>"<%}%>>
 					
 					
 					<button type="submit" class="btn btn-sm submit-btn"  name="Action" value="List" >SUBMIT</button>
@@ -130,7 +130,7 @@ $('#fromdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	/* "minDate" :fromdate,    */
-	"startDate" : new Date(new Date().getFullYear(), new Date().getMonth() - 0, 1),
+	/* "startDate" : new Date(new Date().getFullYear(), new Date().getMonth() - 0, 1), */
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -145,7 +145,7 @@ function setTodate()
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		"minDate" :fromdate,   
-		"startDate" : new Date(),
+		/* "startDate" : new Date(), */
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {

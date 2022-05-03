@@ -18,7 +18,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 
 %>
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -43,7 +43,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 			</div>
 		 </div>
 	
-	
+	 <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >

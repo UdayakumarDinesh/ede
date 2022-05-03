@@ -21,7 +21,7 @@
 <%List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");%>
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -39,14 +39,14 @@
 		 </div>
 		 
 		 
-		 
+		  <div class="page card dashboard-card">
 		<div class="card-body" align="center">
 			
 		
 			<div class="card" style="width: 75%;" id="card" >
-				<div class="card-header"  >
+				<!-- <div class="card-header"  >
 				<h4 align="left">Fill Details </h4>
-				</div>
+				</div> -->
 				<div class="card-body" align="left">
 				<form action="HandingOver.htm" method="GET">
 						<div class="form-group">

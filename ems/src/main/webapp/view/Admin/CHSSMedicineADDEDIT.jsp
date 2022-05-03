@@ -17,7 +17,6 @@ List<Object[]> main =(List<Object[]>)request.getAttribute("treatment");
 CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 %>
 
-<div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -42,7 +41,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 			</div>
 		 </div>
 	
-	
+<div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >

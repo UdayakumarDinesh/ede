@@ -18,6 +18,9 @@
 	    return;
 	}
  </script>
+ <style type="text/css">
+
+ </style>
 </head>
 <body>
 <%
@@ -41,6 +44,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 									<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 									<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 									<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+									<li class="breadcrumb-item  " aria-current="page"><a href="Address.htm?empid=<%if(empdata!=null){%><%=empdata[2]%><%}%>">Address List</a></li>
 									<li class="breadcrumb-item active " aria-current="page">Residential Address </li>
 								</ol>
 							</div>
@@ -49,18 +53,18 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 
 <div class=" page card dashboard-card"> 
 
-				<div class="card-body">
+				<div class="card-body" align="center">
 		
 		<div class="row">
 		<div class="col-2"></div>
 		<form action="AddEditResAddressDetails.htm" method="POST" autocomplete="off">
 		 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%>  <%}%>"> 
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card"  style="width: 140%;"> 
-		<div class="card-header">
+		<div class="card"  style="width: 80%;" > 
+		<div class="card-header" align="left">
 		<h5>Fill Address Details</h5>
 		</div>
-			<div class="card-body" >
+			<div class="card-body" align="left">
 			 
           <div class="row">   
                      <div class="col-md-6">

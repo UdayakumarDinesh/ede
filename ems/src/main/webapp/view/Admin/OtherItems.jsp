@@ -12,7 +12,7 @@
 <body>
 
 
-<div class="col page card">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -31,6 +31,7 @@
 		 
 		<%List<Object[]> list = (List<Object[]>)request.getAttribute("itemlist"); %>
 	
+	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -59,7 +60,7 @@
 						   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 										<thead>
 											<tr>
-												<th>Select</th>
+												<th>SN</th>
 												<th>Item Name</th>	
 												<th>Update</th>
 											</tr>
@@ -69,7 +70,7 @@
 												String ItemName = "ItemName"+String.valueOf(obj[0]); 
 												%>
 												<tr>
-													<td style="text-align: center;"><%=++slno %> </td>
+													<td style="text-align: center;"><%=++slno %>. </td>
 													<td><input type="text"  class="form-control " name="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
 													<td align="center">
 														<button type="submit" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update!');" data-toggle="tooltip" data-placement="top" title="Update">											
@@ -98,7 +99,8 @@
 		   			</div>				
 	        	</div>
            </div>
-           
+          </div>
+          </div> 
 
            <!-- container -->
 <div class="container">
