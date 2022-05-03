@@ -171,7 +171,7 @@
 						        <div id="Notification">
 						        </div>
 						        
-						            <a class="dropdown-item text-center small text-gray-500" href="#" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
+						            <a class="dropdown-item text-center small text-gray-500" href="AllNotificationList.htm" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
 						        </div>
 						    </div>
 						    

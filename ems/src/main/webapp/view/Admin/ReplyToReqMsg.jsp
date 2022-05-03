@@ -57,7 +57,7 @@ String todate  =  (String)request.getAttribute("todate");
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="col-md-1"></div>
 					 <label style=" font-weight: 800">Employee:<span class="mandatory">*</span></label>
-					<select name="employee" id="employee" class="form-control select2"  style="width: 30%;">
+					<select name="employee" id="employee" class="form-control select2"  style="width: 30%;" >
 											<%for( Object[] obj: emplist){ %>
 											<%if(empid!=null){ %>
 												<option value="<%=obj[0]%>" <%if(empid.equalsIgnoreCase(obj[0].toString())){ %>selected="selected" <%}%>><%=obj[1]%></option>
@@ -68,16 +68,12 @@ String todate  =  (String)request.getAttribute("todate");
 						                </select>
 					
 					<label style=" font-weight: 800">From Date : </label>
-					<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy"  id="fromdate" name="fromdate" onchange=" setTodate()" required="required"  style="width: 120px;"	 <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   >
+					<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy"  id="fromdate" name="fromdate" onchange="this.form.submit()" required="required"  style="width: 120px;"	 <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   >
 								  
 				
 					<label style="font-weight: 800">To Date : </label>
-					<input  class="form-control form-control" data-date-format="dd-mm-yyyy"  id="todate" name="todate"  style="width: 120px;" <%if(todate!=null){%> value="<%=todate%>"<%}%>>
-					
-					
-					<button type="submit" class="btn btn-sm submit-btn"  name="Action" value="List" >SUBMIT</button>
-					
-					
+					<input  class="form-control form-control" data-date-format="dd-mm-yyyy"  id="todate" name="todate" onchange="this.form.submit()"  style="width: 120px;" <%if(todate!=null){%> value="<%=todate%>"<%}%>>
+										
 			      <div class="col-md-1"></div>
 			      
 				    </div>
@@ -119,32 +115,28 @@ String todate  =  (String)request.getAttribute("todate");
 	             </div>
 		   	 </div>				
 	        </div>
-	        </div>
+	    
 
 </body>
 
 <script type="text/javascript">
 
-$('#fromdate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	/* "minDate" :fromdate,    */
-	/* "startDate" : new Date(new Date().getFullYear(), new Date().getMonth() - 0, 1), */
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-function setTodate()
-{
-	var fromdate = $("#fromdate").val();
+	$('#fromdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+
 	$('#todate').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		"minDate" :fromdate,   
+		"minDate" :$("#fromdate").val(),   
 		/* "startDate" : new Date(), */
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
@@ -152,7 +144,7 @@ function setTodate()
 			format : 'DD-MM-YYYY'
 		}
 	});
-	}
+	
 
 </script>
 </html>

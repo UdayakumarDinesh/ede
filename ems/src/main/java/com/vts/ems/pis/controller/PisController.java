@@ -287,9 +287,9 @@ public class PisController {
 			
 			Long value=service.EmployeeAddSubmit(emp);
 			if (value != 0) {
-				redir.addAttribute("result", "Employee Added Successful");
+				redir.addAttribute("result", "Employee details added successfully");
 			} else {
-				redir.addAttribute("resultfail", "Employee Added UnSuccessful");
+				redir.addAttribute("resultfail", "Employee details added Unsuccessfull");
 			}
 			
 			return "redirect:/PisAdminEmpList.htm";
@@ -451,9 +451,9 @@ public class PisController {
 			
 			long value =service.EmployeeEditSubmit(emp);
 			if (value != 0) {
-				redir.addAttribute("result", "Employee Edited Successful");
+				redir.addAttribute("result", "Employee details Edited Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Employee Edited UnSuccessful");
+				redir.addAttribute("resultfail", "Employee details Edited Unsuccessfull");
 			}
 			return "redirect:/PisAdminEmpList.htm";
 		} catch (Exception e) {
@@ -558,9 +558,9 @@ public class PisController {
 			
 			int count = service.UserManagerDelete(Username,loginid);
 			if (count > 0) {
-				redir.addAttribute("result", "User Delete Successfull");
+				redir.addAttribute("result", "LoginID deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "User Delete UnSuccessful");
+				redir.addAttribute("resultfail", "LoginID deleted Unsuccessfull");
 			}
 			return "redirect:/LoginMaster.htm";
 		}
@@ -613,10 +613,10 @@ public class PisController {
 		}
 		if (count > 0) {
 			
-			redir.addAttribute("result", "User Add Successfull");
+			redir.addAttribute("result", "LoginID created Successfully");
 			
 		} else {
-			redir.addAttribute("resultfail", "User Add UnSuccessful");
+			redir.addAttribute("resultfail", "LoginID created Unsuccessfull");
 		}
     	
 		return "redirect:/LoginMaster.htm";
@@ -634,9 +634,9 @@ public class PisController {
         	
         	int count =service.UserMangerEdit(Empid , Logintype,Username,Loginid);
         	if(count>0) {
-        		redir.addAttribute("result", "User Edit Successfull");	
+        		redir.addAttribute("result", "LoginID Edited successfully");	
     		} else {
-    			redir.addAttribute("resultfail", "User Edit UnSuccessful");
+    			redir.addAttribute("resultfail", "LoginID Edited Unsuccessfull");
         	}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -68,8 +68,8 @@ public interface AdminDao {
 	public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;
 	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception;
-	
-	
+	public List<Object[]> AllNotificationLists(long empid)throws Exception;
+	public int CheckduplicateItem(String treatmentname)throws Exception;
 	
 	
 	

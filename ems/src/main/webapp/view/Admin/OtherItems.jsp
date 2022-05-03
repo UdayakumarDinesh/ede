@@ -71,9 +71,9 @@
 												%>
 												<tr>
 													<td style="text-align: center;"><%=++slno %>. </td>
-													<td><input type="text"  class="form-control " name="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
+													<td><input type="text"  class="form-control " name="<%=ItemName%>" id="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
 													<td align="center">
-														<button type="submit" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update!');" data-toggle="tooltip" data-placement="top" title="Update">											
+														<button type="submit" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick ="return checkDuplicate('<%=ItemName%>')" data-toggle="tooltip" data-placement="top" title="Update">											
 														<i class="fa-solid fa-pen-to-square " style="color: #E45826" ></i>
 														</button>
 													</td>
@@ -109,7 +109,7 @@
   <div class="modal" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
-      <form action="OtherItemAddEdit.htm" method="post">
+      <form action="OtherItemAddEdit.htm" method="post" id="addform">
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Other Items Add</h4>
@@ -120,7 +120,7 @@
         	<div class="form-inline">
         	<div class="form-group w-100">
                <label>Item Name : &nbsp;&nbsp;&nbsp;</label> 
-               <input type="text" class=" form-control w-100" maxlength="100"   name="ItemName" required="required" > 
+               <input type="text" class=" form-control w-100" maxlength="100"  id="ItemName"  name="ItemName" required="required" > 
       		</div>
       		</div>
         </div>
@@ -128,7 +128,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <!-- Modal footer -->
         <div class="modal-footer" >
-        	<button type="submit"  class="btn btn-sm submit-btn" onclick="return confirm('Are You sure to Submit!');">SUBMIT</button>
+        	<button type="submit"  class="btn btn-sm submit-btn" onclick ="return checkDuplicate()">SUBMIT</button>
         </div>
         </form>
       </div>
@@ -155,6 +155,78 @@ $(".AddItem").click(function(){
 				    }
 				        return true;
 				 }
+</script>
+
+
+<script type="text/javascript">
+function checkDuplicate()
+{
+	var $name = $("#ItemName").val();	
+	
+		$.ajax({
+			type : "GET",
+			url : "DuplicateOtherItem.htm",	
+			datatype : 'json',
+			data : {
+				treatmentName : $name,
+				
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;
+				
+				if(a > 0){					
+					alert("Item Already Exist!");
+					return false;
+				}else if(confirm("Are you sure to Submit!")){
+					var $ItemName = $("#ItemName").val();
+					
+					if($ItemName=="null" || $ItemName==null ){
+						alert("Enter Data Properly!");
+						return false;
+					}else{
+						document.getElementById("addform").submit();
+					}		
+			   }
+		  }
+	});	
+}
+</script>
+
+<script type="text/javascript">
+
+function checkDuplicate(value)
+{
+	var $name = document.getElementById(value).value;	
+	console.log($name);
+		$.ajax({
+			type : "GET",
+			url : "DuplicateOtherItem.htm",	
+			datatype : 'json',
+			data : {
+				treatmentName : $name,
+				
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;
+				
+				if(a > 0){					
+					alert("Item Already Exist!");
+					return false;
+				}else if(confirm("Are you sure to Submit!")){
+					var $ItemName =document.getElementById(value).value;	
+					
+					if($ItemName=="null" || $ItemName==null ){
+						alert("Enter Data Properly!");
+						return false;
+					}else{
+						document.getElementById("addform").submit();
+					}		
+			   }
+		  }
+	});	
+}
 </script>
 </body>
 </html>

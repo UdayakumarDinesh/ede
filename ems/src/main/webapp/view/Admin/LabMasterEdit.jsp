@@ -17,7 +17,7 @@ label
 }
 
 .table thead tr th 
-{
+{                   
 	align-items:center;
 	text-align: left;
 	width:30%;
