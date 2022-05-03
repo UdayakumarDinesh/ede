@@ -210,7 +210,7 @@ function checkDuplicate(value)
 			success :  function(result){
 				 var rr=result;
                  var a = parseInt(rr) ;
-				
+				console.log(a);
 				if(a > 0){					
 					alert("Item Already Exist!");
 					return false;
