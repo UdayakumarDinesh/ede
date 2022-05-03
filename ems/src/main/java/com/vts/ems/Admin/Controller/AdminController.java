@@ -217,7 +217,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					 	 
 					 }
 		       }catch(Exception e){
-		    	   redir.addAttribute("resultfail", "Some Problem Occure!");
+		    	   redir.addAttribute("resultfail", "Internal Error!");
 		    	   e.printStackTrace();
 		    	   return "redirect:/TestSub.htm";
 		       }
@@ -231,7 +231,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				logger.info(new Date() +"Inside ChssTestSub.htm "+UserId);
 				try {
 					 String action= (String)req.getParameter("action");
-					
+					System.out.println(action);
 				if ("ADDITEM".equalsIgnoreCase(action)) {
 						String itemname = (String)req.getParameter("ItemName");
 					
@@ -249,7 +249,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 					 	return "redirect:/OtherItems.htm";
 					 	
-					}else if ("EDITITEM".equalsIgnoreCase(action)) {
+					}else{
 					
 						String itemid   = (String)req.getParameter("itemid");				
 						String name = "ItemName"+itemid;
@@ -270,11 +270,11 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}
 					 
 				}catch (Exception e) {
-					redir.addAttribute("resultfail", "Some Problem Occure!");
+					redir.addAttribute("resultfail", "Internal Error!");
 					e.printStackTrace();
 					return "redirect:/OtherItems.htm";
 				}
-				return "redirect:/OtherItems.htm";
+				
 		    }
 		    
 		    
@@ -447,6 +447,25 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 		}
 		
+		@RequestMapping(value ="DuplicateOtherItem.htm",method=RequestMethod.GET)
+		public @ResponseBody String CheckDuplicateOtherItems(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			int count =0;
+			Gson json = new Gson();
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside CheckDuplicateOtherItems()"+UserId);
+			try {
+				String treatmentName = (String)req.getParameter("treatmentName");
+				
+				count = service.CheckduplicateItem( treatmentName );
+				
+				 return json.toJson(count);
+			}catch (Exception e){
+				e.printStackTrace();
+				 return json.toJson(count);
+			}
+		}
+		
 		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.POST})
 		public String EmpRequestMessage(HttpServletRequest req,HttpSession ses,RedirectAttributes redir)throws Exception
 		{
@@ -590,34 +609,38 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					} else {
 						req.setAttribute("resultfail", "Handing Over Revoked UnSuccessful");
 					}
-					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,todate1);		
-					req.setAttribute("handlingoverlist", handlingoverlist);
-					return "Admin/HandlingOver";
-					
-				}else if("LIST".equalsIgnoreCase(action)){
-					String fromdate = (String)req.getParameter("fromdate");
-					String todate = (String)req.getParameter("todate");
-					
-					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate,todate);		
-					
-					req.setAttribute("handlingoverlist", handlingoverlist);
-					req.setAttribute("fromdate", fromdate);
-					req.setAttribute("todate", todate);
-					return "Admin/HandlingOver";
-					
-				}else{
-							
-					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,new SimpleDateFormat("dd-MM-yyyy").format(new Date()));				
-					
-					req.setAttribute("handlingoverlist", handlingoverlist);
+					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,new SimpleDateFormat("dd-MM-yyyy").format(new Date()));	
 					req.setAttribute("fromdate", fromdate1);
 					req.setAttribute("todate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-					return "Admin/HandlingOver";	
-				}
-				
+					req.setAttribute("handlingoverlist", handlingoverlist);
+					return "Admin/HandlingOver";
+					
+				}else { 
+					String fromdate = (String)req.getParameter("fromdate");
+					String todate = (String)req.getParameter("todate");
+							
+						if(fromdate!=null&&todate!=null){
+							
+							List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate,todate);		
+							
+							req.setAttribute("handlingoverlist", handlingoverlist);
+							req.setAttribute("fromdate", fromdate);
+							req.setAttribute("todate", todate);
+							return "Admin/HandlingOver";
+							
+						}else{
+									
+							List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,new SimpleDateFormat("dd-MM-yyyy").format(new Date()));				
+							
+							req.setAttribute("handlingoverlist", handlingoverlist);
+							req.setAttribute("fromdate", fromdate1);
+							req.setAttribute("todate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+							return "Admin/HandlingOver";	
+						}
+			      }
 			} catch (Exception e) {
 				e.printStackTrace();
-				req.setAttribute("resultfail", "SOME PROBLEM OCCURE!");
+				req.setAttribute("resultfail", "Internal Error!");
 				return "Admin/HandlingOver";
 			}
 			
@@ -660,18 +683,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					return "Admin/CHSSDoctorsList";
 				}		
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Some Problem Occure!");
+				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "Admin/CHSSDoctorsList";
 			}
 			
 		}                                
 		
-		@RequestMapping(value = "LabMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
+		@RequestMapping(value = "UnitMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
 		public String LabMaster(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside UnitMaster.htm "+UserId);
 			try {
 				String action =(String)req.getParameter("Action");
 				if("EDIT".equalsIgnoreCase(action)) {
@@ -717,9 +740,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					lab.setModifiedDate(sdtf.format(new Date()));
 					long result = service.EditLabMaster(lab);
 					if (result != 0) {
-		    			redir.addAttribute("result", "Lab Master Edited Successful");
+		    			redir.addAttribute("result", "Lab Master Updated Successful");
 					} else {
-						redir.addAttribute("resultfail", "Lab Master Edited UnSuccessful");
+						redir.addAttribute("resultfail", "Lab Master Updated UnSuccessful");
 					}
 					return "redirect:/LabMaster.htm";
 				}else {
@@ -737,7 +760,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				           
 				}
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Some Problem Occure!");
+				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "Admin/LabDetails";
 			}
@@ -817,7 +840,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				return "redirect:/OtherItemAmount.htm";
 				
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Some Problem Occure!");
+				 redir.addAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "redirect:/OtherItemAmount.htm";
 			}
@@ -851,7 +874,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				 redir.addFlashAttribute("tratementid", treatid);
 				 return "redirect:/OtherItemAmount.htm";
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Some Problem Occure!");
+				 redir.addAttribute("resultfail", "Internal Error!");
 					e.printStackTrace();
 					return "redirect:/OtherItemAmount.htm";
 			}
@@ -900,8 +923,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String RequestMessagelist(HttpSession ses , HttpServletRequest req)throws Exception
 		{
 			
-			String UserId = (String)ses.getAttribute("Username");
-			
+			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
 			try {
 				String emp       = (String)req.getParameter("employee");
@@ -919,8 +941,30 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				return "Admin/ReplyToReqMsg";
 			} catch (Exception e) {
 				e.printStackTrace();
+				return "Admin/ReplyToReqMsg";
 			}
-			return "";
-			
+	
 		}
+		
+		@RequestMapping(value = "AllNotificationList.htm" ,method=RequestMethod.GET)
+		public String EmsNotificationList(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			
+			String UserId = (String)ses.getAttribute("Username");			
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			long EmpId = (long)ses.getAttribute("EmpId");
+			try {
+				
+				 
+				List<Object[]>  list = service.AllNotificationLists(EmpId);
+				req.setAttribute("notificationlist", list);	
+			    return "Admin/NotificationList";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "Admin/NotificationList";
+			}
+	
+		}
+		
+	                                         
 }

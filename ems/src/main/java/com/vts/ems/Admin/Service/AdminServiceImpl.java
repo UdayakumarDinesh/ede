@@ -402,10 +402,17 @@ public class AdminServiceImpl implements AdminService{
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
 		return dao.GetReqResMessagelist(emp,Fromdate,ToDate);
 	}
+	@Override
+	public List<Object[]> AllNotificationLists(long emp)throws Exception
+	{
+		return dao.AllNotificationLists(emp);
+	}
 	
-	
-	
-	
+	@Override
+	public int CheckduplicateItem(String treatmentname)throws Exception
+	{
+		return dao.CheckduplicateItem(treatmentname);
+	}
 	
 	
 	

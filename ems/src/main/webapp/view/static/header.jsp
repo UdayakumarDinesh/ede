@@ -179,7 +179,11 @@
 						        <div id="Notification">
 						        </div>
 						        
+<<<<<<< HEAD
 						            <a class="dropdown-item text-center small text-gray-500 showall" href="#" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
+=======
+						            <a class="dropdown-item text-center small text-gray-500" href="AllNotificationList.htm" style="border-top:1px solid black ;height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
+>>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
 						        </div>
 						    </div>
 						    

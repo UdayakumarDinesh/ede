@@ -64,7 +64,8 @@ public interface AdminService {
 	public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;
 	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception;
-	
+	public List<Object[]> AllNotificationLists(long  emp  )throws Exception;
+	public int CheckduplicateItem(String treatmentname)throws Exception;
 	
 	
 	

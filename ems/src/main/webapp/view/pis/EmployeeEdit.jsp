@@ -275,9 +275,9 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                    data-live-search=" true ">		
 			                    <option value=" Confirmed " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Confirmed")){%>selected<%}%>>Confirmed</option>
 			                    <option value=" Probation " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Probation")){%>selected<%}%>>Probation</option>
-			                    <option value=" Adhoc "     <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Adhoc")){%>selected<%}%>>Adhoc</option>
+			                    <option value=" Adhoc "     <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Adhoc"))    {%>selected<%}%>>Adhoc</option>
 			                    <option value=" Temporary " <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Temporary")){%>selected<%}%>>Temporary</option>
-			                    <option value=" Contract "  <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Contract")){%>selected<%}%>>Contract</option>
+			                    <option value=" Contract "  <%if(employee!=null&&employee.getServiceStatus().equalsIgnoreCase("Contract")) {%>selected<%}%>>Contract</option>
 			                </select>
 			            </div>
 			            
@@ -475,7 +475,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			        
 			         <div class=" col-md-2 ">
 			                <label>Phone No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="PhoneNo" value="<%if(employee!=null){%><%=employee.getPhoneNo()%><%}%>" maxlength="10"
+			                <input type="text"  name="PhoneNo" id="PhoneNo" <%if(employee!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
 			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
 			                     onblur="checknegative(this) ">
 			            </div>

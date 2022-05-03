@@ -2,6 +2,7 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
+<%@page import=" java.math.RoundingMode, java.text.DecimalFormat" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"   import="java.util.*"%>
 <!DOCTYPE html>
@@ -241,7 +242,7 @@
 	}
 	String profilepicpath = (String) request.getAttribute("profilepicpath"); 
 	
-	
+	DecimalFormat df = new DecimalFormat("0.00");
 %>
 
  <div class="col page">
@@ -468,10 +469,10 @@
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=obj[24] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=df.format(obj[24])%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
 										<%if("14".equals(obj[9].toString())){ %>
-											&#8377;  <%=obj[25] %>
+											&#8377; <%=df.format(obj[25])%>
 										<%}else{ %>
 											-
 										<%} %>
@@ -595,6 +596,7 @@ $(document).ready(function(){
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
         onSelect: function(selected) {
+        	console.log(selected);
         $("#datepicker3").datepicker("option","minDate", selected)
         },
         locale : {
@@ -610,7 +612,9 @@ $(document).ready(function(){
         "singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
+		"minDate":$("#datepicker1").val(),
 	    onSelect: function(selected) {
+	    	console.log(selected);
 	    $("#datepicker1").datepicker("option","maxDate", selected)
         },
         locale : {

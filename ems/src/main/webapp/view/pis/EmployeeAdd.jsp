@@ -25,7 +25,6 @@ function validateform(){
 		  var uid =$("#UIDTextBox").val();
 		  var sbiAccount = $("#SBITextBox").val();
 		  var internalnum = $("#InternalNum").val();
-		  
 		if(pan.length<10){
 			 alert("Check PAN Number!");
 		       event.preventDefault();

@@ -854,4 +854,40 @@ public class AdminDaoImpl implements AdminDao{
 				return null;
 		   }
 	}
+	
+	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE empid=:empid AND isactive=1";
+	public List<Object[]> AllNotificationLists(long empid)throws Exception
+	{
+		logger.info(new Date() + "Inside AllNotificationLists()");
+		try {
+			Query query= manager.createNativeQuery(ALLNOTIFICATION);			
+			query.setParameter("empid", empid);
+		
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+		   }
+	}
+	
+	private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other_items WHERE otheritemname=:treatmentname";
+	
+	@Override
+	public int CheckduplicateItem(String treatmentname)throws Exception
+	{
+		 logger.info(new Date() +"Inside CheckduplicateItem()");	
+		 try {
+			Query query = manager.createNativeQuery(CHECKITEM);
+			query.setParameter("treatmentname", treatmentname);		
+			Object o = query.getSingleResult();
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+				return result;
+		  }catch (Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }
