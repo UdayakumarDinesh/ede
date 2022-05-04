@@ -73,16 +73,9 @@ String treat = (String)request.getAttribute("treat");
 								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>"<%}%>   id="todate" name="todate"  required="required"  > 							
 							 		 <label class="input-group-addon btn" for="testdate"></label>    
 							 </div>
-							 
-<<<<<<< HEAD
-							 <div class="col-1" align="right">
-							    <button type="submit" class="btn btn-sm submit-btn"   name="Action" value="List" >SUBMIT</button>
-=======
-							 <div class="col-2" align="right">
-							    
->>>>>>> branch 'master' of git@bitbucket.org:susant-vedts/ems.git
-							 </div>
-							
+
+							 <div class="col-3" align="right"></div>
+						
 							
 					</div>
 							 

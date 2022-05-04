@@ -695,9 +695,9 @@ public class PisController {
 			String familyid = (String) req.getParameter("familyid");
 			int count = service.DeleteMeber(familyid, Username);
 			if (count > 0) {
-				redir.addAttribute("result", "Member Delete Successfull");
+				redir.addAttribute("result", "Family Member deleted sucessfully");
 			} else {
-				redir.addAttribute("resultfail", "Member Delete UnSuccessful");
+				redir.addAttribute("resultfail", "Family Member deleted Unsucessfull");
 			}
 			redir.addFlashAttribute("Employee", empid);
 			return "redirect:/FamilyMembersList.htm";
@@ -755,9 +755,9 @@ public class PisController {
     	   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "Member Add Successfull");	
+    		   redir.addAttribute("result", "Family Member Saved Successfully");	
    		   } else {
-   			redir.addAttribute("resultfail", "Member Add UNSuccessful");
+   			redir.addAttribute("resultfail", "Family Member Saved UNSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);
@@ -819,16 +819,16 @@ public class PisController {
     	   }
     	   Long result = service.EditFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "Member Edit Successfull");	
+    		   redir.addAttribute("result", "Family member Edited sucessfully");	
    		   } else {
-   			redir.addAttribute("resultfail", "Member Edit UnSuccessful");
+   			redir.addAttribute("resultfail", "Family Member Edited UnSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);   
     	   
 	      } catch (Exception e) {
 	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
-				req.setAttribute("resultfail", "Some Problem Occure!");
+				req.setAttribute("resultfail", "Internal Problem!");
 				e.printStackTrace();
 				return "static/Error";
 	      }
@@ -1004,7 +1004,7 @@ public class PisController {
 					
 			int count =service.deleteResAdd(addressid,Username);
 			if (count > 0) {
-				redir.addAttribute("result", "Residential Address Delete Successfull");
+				redir.addAttribute("result", "Residential Address Deleted Sucessfully");
 			} else {
 				redir.addAttribute("resultfail", "Residential Address Delete UnSuccessful");
 			}

@@ -46,7 +46,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 			<div class="card" >
 				<div class="card-body " align="center" >
 
-					<form name="myfrm" action="ChssMedicine.htm" method="POST" id="addform">
+					<form name="myfrm" action="ChssMedicine.htm" method="POST" id="addform" autocomplete="off">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">

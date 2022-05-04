@@ -65,9 +65,9 @@ String treat = (String)request.getAttribute("treat");
 			
 				<div class="card-header">
 					<div class="row justify-content-end">
-						<div class="col-2" ><h6>Treatment Name :</h6></div>
+						<div class="col-2" style="margin-left:500px;" ><h6>Treatment Type :</h6></div>
 						<form action="MedicineList.htm" method="GET">
-						        <div class="col-3" style="margin-left:-30px;" >
+						        <div class="col-3">
 						        
 			                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
 									<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> 
@@ -80,7 +80,7 @@ String treat = (String)request.getAttribute("treat");
 					</div>
 				</div>
 			
-				<div class="card-body " >
+				<div class="card-body">
 				
 					<form action="ChssMedicine.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -91,7 +91,7 @@ String treat = (String)request.getAttribute("treat");
 								<thead>
 									<tr>
 										<th>Select</th>
-										<th>Treatment Name</th>
+										<th>Treatment Type</th>
 										<th> Medicine Name </th>
 									</tr>
 								</thead>
@@ -114,11 +114,10 @@ String treat = (String)request.getAttribute("treat");
 					
 					<div class="row text-center">
 						<div class="col-md-12">
-						
-						
-						<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD" >ADD</button>
-						<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-								
+											
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD" >ADD</button>
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
+									
 					    </div>						 
 					</div>
 					
