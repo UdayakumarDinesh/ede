@@ -2052,5 +2052,24 @@ public class CHSSController {
 		return json.toJson(list);
 	}
 	
-	
+//	@RequestMapping(value = "ContingetReport.htm", method = {RequestMethod.POST,RequestMethod.GET})
+//	public String ContingetReport(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+//	{
+//		String Username = (String) ses.getAttribute("Username");
+//		logger.info(new Date() +"Inside ContingetBill.htm "+Username);
+//		try {
+//			String contingentid = req.getParameter("contingentid");
+//			
+//			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+//			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+//			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+//			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+//			return "chss/ContingentReport";
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error(new Date() +" Inside ContingetBill.htm "+Username, e);
+//			return "static/Error";
+//		}
+//	}
+//	
 }

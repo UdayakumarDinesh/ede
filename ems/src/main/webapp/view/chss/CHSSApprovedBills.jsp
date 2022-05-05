@@ -91,6 +91,10 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
+												<%-- <button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+													<i class="fa-regular fa-file-lines"></i>
+												</button> --%>
+												
 											</td>
 										</tr>
 									<%} }%>

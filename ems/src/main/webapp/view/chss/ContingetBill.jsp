@@ -152,12 +152,13 @@ th,td
 	<table>
 		<tr>
 			<th style="text-align: center;" >SN</th>
-			<th style="text-align: center;">Emp. No.</th>
+			<th style="text-align: center;width: 10%;">Emp. No.</th>
 			<th style="text-align: center;">Name</th>
 			<th style="text-align: center;">Relation</th>
-			<th style="text-align: center;">No. of Bills</th>
-			<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-			<th class="right" style="width: 15%;">Amount Allowed (&#8377;)</th>
+			<th style="text-align: center;">Claim No</th>
+			<th style="text-align: center;width: 10%;">No of Bills</th>
+			<th class="right" style="width: 12%;">Amount Claimed (&#8377;)</th>
+			<th class="right" style="width: 12%;">Amount Allowed (&#8377;)</th>
 		</tr>
 		
 		<%long allowedamt=0,claimamt=0,billscount=0;
@@ -177,7 +178,14 @@ th,td
 				
 					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 				<%} %>
-				<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[14] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px;">
+					<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
+						<%=obj[12] %> (<%=obj[14] %>)
+					<%}else{ %>
+						<%=obj[14] %>
+					<%} %>
+				</td>
+				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
@@ -191,7 +199,7 @@ th,td
 		}%>
 	
 			<tr>
-				<td colspan="4" class="right">Total</td>
+				<td colspan="5" class="right"><b>Total</b></td>
 				<td class="center"><%=billscount %></td>
 				<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
 				<td class="right">
