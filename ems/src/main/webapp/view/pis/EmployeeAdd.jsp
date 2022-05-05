@@ -274,9 +274,9 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 						 <div class=" col-md-2 ">
 			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="" maxlength="4"
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="4"
 			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                     onblur="checknegative(this) ">
+			                     onblur="checknegative(this)">
 			            </div>
 			
 			           
@@ -599,9 +599,9 @@ function checknegative(str) {
 </script>
 <script type="text/javascript">
 $("#PunchcardTextBox").blur(function(){
-
+		
     var punchcard =$("#PunchcardTextBox").val();
-
+    console.log(punchcard);
     if(punchcard.length>=4){
 
          $.ajax({
@@ -611,11 +611,11 @@ $("#PunchcardTextBox").blur(function(){
                    dataType:'Json',
                    success:function(data){
                       var rr=data;
-                      var a = parseInt(rr) ;
+                      var a = parseInt(rr);
                             
                       if (a == 1){
                  	    
-                 		alert("Punch Card No. All ready Taken!");
+                 		alert("Punch Card No. already Exist!");
 
                      	}
             }
@@ -643,7 +643,7 @@ $("#PAN").keypress(function(event){
     }
 });
 
-};
+
 
 function trim(el) {
     el.value = el.value.
