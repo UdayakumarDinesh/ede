@@ -12,6 +12,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface AdminService {
 
@@ -66,11 +67,12 @@ public interface AdminService {
 	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception;
 	public List<Object[]> AllNotificationLists(long  emp  )throws Exception;
 	public int CheckduplicateItem(String treatmentname)throws Exception;
-	
-	
-	
-	
-	
+	public int CheckduplicateTest(String testname)throws Exception;
+	public long DeleteOtherAmt(String chssOtheramtid, String userid)throws Exception;
+	public List<Object[]> GetDesignation()throws Exception;
+	public long AddDesignation(EmployeeDesig desig)throws Exception;
+	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception;
+	public long EditDesignation(EmployeeDesig desig)throws Exception;
 	
 	
 	

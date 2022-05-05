@@ -31,6 +31,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
 @Repository
@@ -889,5 +890,115 @@ public class AdminDaoImpl implements AdminDao{
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	private static final String CHECKTEST = "SELECT COUNT(testname) FROM chss_test_sub WHERE testname=:testname";
+	
+	@Override
+	public int CheckduplicateTest(String testname)throws Exception
+	{
+		 logger.info(new Date() +"Inside CheckduplicateTest()");	
+		 try {
+			Query query = manager.createNativeQuery(CHECKTEST);
+			query.setParameter("testname", testname);		
+			Object o = query.getSingleResult();
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+			return result;
+		  }catch (Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String DELETEITEM="UPDATE chss_other_perm_amt SET modifiedby=:modifiedby , modifieddate=:modifieddate , isactive=:isactive WHERE chssotheramtid=:chssOtheramtid";
+	
+	@Override
+	public long DeleteOtherAmt(String chssOtheramtid, String userid)throws Exception
+	{
+		logger.info(new Date() + "Inside DeleteOtherAmt()");
+		long count=0;
+		try {
+			
+			Query query= manager.createNativeQuery(DELETEITEM);				
+			query.setParameter("chssOtheramtid", chssOtheramtid);
+			query.setParameter("isactive","0");
+			query.setParameter("modifiedby", userid);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			
+			count = query.executeUpdate();
+			return count;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return count;
+		}
+	}
+	
+	private static final String DESIGNATION ="SELECT  desigid , desigcode , designation , desiglimit FROM employee_desig order by desigid desc";
+	
+	@Override
+	public List<Object[]> GetDesignation()throws Exception
+	{
+		logger.info(new Date() + "Inside GetDesignation()");
+		try {
+				Query query= manager.createNativeQuery(DESIGNATION);			
+				List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+		   }
+	}
+	
+	
+	@Override
+	public long AddDesignation(EmployeeDesig desig)throws Exception
+	{
+		logger.info(new Date() + "Inside AddDesignation()");
+		try {
+			manager.persist(desig);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return desig.getDesigId();
+	}
+	
+	@Override
+	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception
+	{
+		logger.info(new Date() + "Inside GetDesignationToEdit()");
+		EmployeeDesig memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EmployeeDesig> cq = cb.createQuery(EmployeeDesig.class);
+			Root<EmployeeDesig> root = cq.from(EmployeeDesig.class);
+			Predicate p1 = cb.equal(root.get("DesigId"), desigid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<EmployeeDesig> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+			return memeber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public long EditDesignation(EmployeeDesig desig) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditDesignation()");
+		try {
+			manager.merge(desig);
+			manager.flush();		
+			return desig.getDesigId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
 	}
 }

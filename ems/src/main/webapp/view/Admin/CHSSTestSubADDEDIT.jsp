@@ -48,7 +48,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 			<div class="card" >
 				<div class="card-body " align="center" >
 
-					<form name="myfrm" action="ChssTestSub.htm" method="POST">
+					<form name="myfrm" action="ChssTestSub.htm" method="POST" id="myfrm1">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -90,11 +90,11 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 							<%if(list!=null){ %>
 							<input type="hidden" name="SubId" value="<%=list.getTestSubId()%>">
 								<button type="submit" class="btn btn-sm submit-btn"
-									onclick="return confirm('Are You Sure To Submit?');"
+									onclick="return checkDuplicate1();"
 									name="action"  value="EDITTEST">SUBMIT</button>
 									<%}else{ %>
 									<button type="submit" class="btn btn-sm submit-btn"
-									onclick="return confirm('Are You Sure To Submit?');"
+									onclick="return checkDuplicate();"
 									name="action"  value="ADDTEST">SUBMIT</button>
 									
 									<%} %>
@@ -127,9 +127,91 @@ function setInputFilter(obj, inputFilter) {
 	  });
 	}
 </script>
+
+<script type="text/javascript">
+function checkDuplicate()
+{
+	var $name = $("#Name").val();	
+	
+	var retValue = false;
+		$.ajax({
+			type : "GET",
+			url : "DuplicateTest.htm",	
+			datatype : 'json',
+			data : {
+				testName : $name,				
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;
+				
+				if(a > 0){					
+					alert("Test Name Already Exist!");
+					retValue = false;
+				}else if(confirm("Are you sure to Submit!")){
+					var $testname = $("#Name").val();
+					
+					if($testname=="null" || $testname==null ||  $testname=="" || $testname==" "){
+						alert("Enter Data Properly!");
+						retValue = false;
+					}else{
+						retValue = true;
+						document.getElementById("myfrm1").submit();
+					}
+		
+			    }
+		   }
+	 });	
+		if(retValue==true){
+			
+			document.getElementById("myfrm1").submit();
+		}else{
+			return retValue;
+		}
+}
+</script>
+
 <script type="text/javascript">
 
-
+function checkDuplicate1()
+{
+	var $name = $("#Name").val();	
+	var retValue = false;
+		$.ajax({
+			type : "GET",
+			url : "DuplicateTest.htm",	
+			datatype : 'json',
+			data : {
+				testName : $name,				
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;
+				
+				if(a >= 1){					
+					alert("Test Name Already Exist!");
+					retValue = false;
+				}else if(confirm("Are you sure to Submit!")){
+					var $testname = $("#Name").val();
+					
+					if($testname=="null" || $testname==null ||  $testname=="" || $testname==" "){
+						alert("Enter Data Properly!");
+						retValue = false;
+					}else{
+						retValue = true;
+						document.getElementById("myfrm1").submit();
+					}
+		
+			    }
+		   }
+	 });	
+		if(retValue==true){
+			
+			document.getElementById("myfrm1").submit();
+		}else{
+			return retValue;
+		}
+}
 </script>
 </body>
 </html>

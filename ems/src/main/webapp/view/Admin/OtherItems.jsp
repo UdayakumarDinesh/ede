@@ -90,7 +90,7 @@
 									<div class="col-md-12">
 															
 										<button type="button" class="btn btn-sm add-btn AddItem" name="action" value="ADD"  >ADD</button>
-										<button type="submit" class="btn btn-sm misc1-btn" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
+										<button type="submit" class="btn btn-sm misc1-btn" formaction="OtherItemAmount.htm" formmethod="POST" name="action"  >ITEM AMOUNT</button>
 								    
 								    </div>						 
 								</div>
@@ -192,9 +192,9 @@ function checkDuplicate()
 			   }
 		  }
 	});	
-		console.log(retValue);
+		
 		if(retValue==true){
-			console.log(retValue);
+			
 			document.getElementById("addform").submit();
 		}else{
 			return retValue;
@@ -237,9 +237,9 @@ function checkDuplicateItem(value , itemid)
 			   }
 		  }
 	});	
-		console.log(retValue);
+		
 		if(retValue==true){
-			console.log(retValue);
+			
 			document.getElementById("empForm").submit();
 		}else{
 			return retValue;

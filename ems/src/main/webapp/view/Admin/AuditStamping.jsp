@@ -64,14 +64,14 @@ String ListName=(String)request.getAttribute("Username");
 
 	<form class="form-inline " method="GET" action="AuditStamping.htm" style="margin-left: auto !important">
 		
-		<div class="row justify-content-end">
+		<div class="row ">
 			<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 				
 				   <label style="margin-left: 70px; margin-right: 10px; color: black;">User Name: <span class="mandatory" style="color: red;">*</span></label>
 			
 			
 					<select class="form-control form-control select2" name="username" style="margin-left: 12px;" required="required" id="username" >
-				<%if("A".equalsIgnoreCase(LoginType)){ %>
+			    	<%if("A".equalsIgnoreCase(LoginType)){ %>
 				    <%for(Object[] obj:emplist){%>
 					<option value="<%=obj[2]%>-<%=obj[1]%>"<% if(obj[2].toString().equalsIgnoreCase(loginid)){%> selected<%}%> ><%=obj[1]%></option>
 					<%}}else{%>
@@ -166,8 +166,7 @@ $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	//"minDate" :datearray, 
-	//"startDate" : new Date(),
+	"minDate" :$('#fromdate').val(), 	
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

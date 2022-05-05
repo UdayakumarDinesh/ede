@@ -1340,7 +1340,7 @@ public class PisController {
 	    	   List<Object[]> list=null;
 	    	  
 	    	   req.setAttribute("list", list);
-	    	   req.setAttribute("emplist", service.getEmpList());
+	    	   req.setAttribute("emplist", service.GetAllEmployee());
 	    	   
 	    		if(Usernameparam == null) {
 					
@@ -1349,9 +1349,7 @@ public class PisController {
 					req.setAttribute("Todate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 					req.setAttribute("loginid", String.valueOf(LoginId));
 					req.setAttribute("Username",(String) ses.getAttribute("EmpName"));
-				}
-			
-				else {
+				}else {
 				String[] userName=Usernameparam.split("-");	
 				req.setAttribute("auditstampinglist", service.AuditStampingList(userName[0],Fromdate, Todate));
 				req.setAttribute("Username", userName[1]);
