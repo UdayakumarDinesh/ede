@@ -248,7 +248,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td> <b>Group</b> </td>
 							<td><%=employeedetails[25] %>(<%=employeedetails[26] %>)</td>
 							<td> <b>PAN</b> </td>
-							<td><%=employeedetails[13] %></td>
+							<td><%if(employeedetails[13]!=null){ %><%=employeedetails[13].toString().toUpperCase()%><%}else{%>--<%}%></td>
 						</tr>
 						
 						

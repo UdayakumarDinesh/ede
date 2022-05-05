@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@page import="java.util.List" %>
      <%@page import="java.time.LocalDate"%>
+     <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
       <%@page import="com.vts.ems.pis.model.EmpFamilyDetails" %>
 <!DOCTYPE html>
 <html>
@@ -63,7 +64,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="col-md-4">
 		                 <div class="form-group">
                             <label>Date Of Birth:<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getDob()%>" id="DOB" readonly="readonly" name="dob"required="required">
+                            <input type="text" class="form-control input-sm mydate" value="<%if(memberdata!=null&&memberdata.getDob()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(memberdata.getDob().toString())%><%}%>" id="DOB" readonly="readonly" name="dob"required="required">
                         </div>
 		                
 		              </div>
@@ -143,7 +144,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                         <div class="col-4">
                          <div class="form-group">
                           <label>Status From<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getStatus_from()%>" id="STATUSDATE" name="statusDate" readonly="readonly" required="required" placeholder="Enter Date" />
+                            <input type="text" class="form-control input-sm mydate" value="<%if(memberdata!=null&&memberdata.getStatus_from()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(memberdata.getStatus_from().toString())%><%}%>" id="STATUSDATE" name="statusDate" readonly="readonly" required="required" placeholder="Enter Date" />
                          </div>
                         </div>
                    
@@ -197,7 +198,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                          </select>
 		                            
 		                          </span>
-		                          <input type="text" class="form-control input-sm mydate" value="<%=memberdata.getMed_dep_from()%>" id="MEDICALDEPDATE" name="medicaldepdate" readonly="readonly" placeholder="Enter Date" required style="width: 85px">
+		                          <input type="text" class="form-control input-sm mydate" value="<%if(memberdata!=null&&memberdata.getMed_dep_from()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(memberdata.getMed_dep_from().toString())%><%}%>" id="MEDICALDEPDATE" name="medicaldepdate" readonly="readonly" placeholder="Enter Date" required style="width: 85px">
 		                        </div><!-- /input-group -->
 		                    </div> 
 		                </div><!-- / Medical -->
@@ -214,7 +215,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                          </select>
 		                               
 		                          </span>
-		                        <input type="text" class="form-control input-sm mydate"  readonly="readonly" value="<%=memberdata.getLtc_dep_from()%>" placeholder=""  id="LTC" name="LTC"  required="required"  >
+		                        <input type="text" class="form-control input-sm mydate"  readonly="readonly" value="<%if(memberdata!=null&&memberdata.getLtc_dep_from()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(memberdata.getLtc_dep_from().toString())%><%}%>" placeholder=""  id="LTC" name="LTC"  required="required"  >
 		                        </div><!-- /input-group -->
 		                    </div> 
 		                </div><!-- LTC Dependent -->

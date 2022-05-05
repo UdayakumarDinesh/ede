@@ -37,7 +37,6 @@ String ListName=(String)request.getAttribute("Username");
 %>
 
 
-<div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -54,21 +53,25 @@ String ListName=(String)request.getAttribute("Username");
 			</div>
 		 </div>
 
-</div>
+
 <br>
 
+
+
 <div class="container-fluid">	
-<div class="nav navbar auditnavbar" style="background-color: white;">
+<div class="nav navbar auditnavbar" style="background-color: white;margin-top: -18px">
 
 
-	<form class="form-inline " method="GET" action="AuditStamping.htm">
-				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
+	<form class="form-inline " method="GET" action="AuditStamping.htm" style="margin-left: auto !important">
+		
+		<div class="row ">
+			<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 				
 				   <label style="margin-left: 70px; margin-right: 10px; color: black;">User Name: <span class="mandatory" style="color: red;">*</span></label>
 			
 			
 					<select class="form-control form-control select2" name="username" style="margin-left: 12px;" required="required" id="username" >
-				<%if("A".equalsIgnoreCase(LoginType)){ %>
+			    	<%if("A".equalsIgnoreCase(LoginType)){ %>
 				    <%for(Object[] obj:emplist){%>
 					<option value="<%=obj[2]%>-<%=obj[1]%>"<% if(obj[2].toString().equalsIgnoreCase(loginid)){%> selected<%}%> ><%=obj[1]%></option>
 					<%}}else{%>
@@ -88,7 +91,11 @@ String ListName=(String)request.getAttribute("Username");
 					<input type="text" class="form-control input-sm todate" style="width: 140px;" readonly="readonly" value="<%if(Todate!=null){%><%=Todate%><%}%>"  id="todate" name="todate"  required="required" > 			
 				
 				
-			    	<button type="submit" class="btn btn-sm submit-btn" style="margin-left: 40px;"  id="submit">SUBMIT</button>
+			    	<button type="submit" class="btn btn-sm submit-btn" style="margin-left: 40px;margin-right: 7px;"  id="submit">SUBMIT</button>
+		
+		</div>
+	
+				
 	 </form>
 					
 </div>
@@ -96,7 +103,7 @@ String ListName=(String)request.getAttribute("Username");
 	
  <div class="row">
 	<div class="col-md-9">
-		<div class="badge badge-secondary" style="padding: 8px; margin-left: 50%;margin-bottom: 10px; margin-top:10px; ">
+		<div class="badge badge-secondary" style="padding: 5px; margin-left: 50%;margin-bottom: 10px; margin-top:10px; ">
 		<h6><%if(ListName != null){%>Details of <b><%=ListName.toUpperCase()%></b><%}else{%> Details of <b><%=Username.toUpperCase()%></b> <%}%> from <span class="datefont"><%=Fromdate%></span> to <span class="datefont"><%=Todate %></span></h6>
 		</div>
 	</div>	
@@ -159,8 +166,7 @@ $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	//"minDate" :datearray, 
-	//"startDate" : new Date(),
+	"minDate" :$('#fromdate').val(), 	
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

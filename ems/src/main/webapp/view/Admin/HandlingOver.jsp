@@ -73,11 +73,9 @@ String treat = (String)request.getAttribute("treat");
 								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>"<%}%>   id="todate" name="todate"  required="required"  > 							
 							 		 <label class="input-group-addon btn" for="testdate"></label>    
 							 </div>
-							 
-							 <div class="col-2" align="right">
-							    
-							 </div>
-							
+
+							 <div class="col-3" align="right"></div>
+						
 							
 					</div>
 							 

@@ -20,6 +20,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.model.EmployeeDesig;
 @Service
 public class AdminServiceImpl implements AdminService{
 
@@ -414,12 +415,44 @@ public class AdminServiceImpl implements AdminService{
 		return dao.CheckduplicateItem(treatmentname);
 	}
 	
+	@Override
+	public int CheckduplicateTest(String testname)throws Exception
+	{
+		return dao.CheckduplicateTest(testname);
+	}
 	
+	@Override
+	public long DeleteOtherAmt(String chssOtheramtid, String userid)throws Exception
+	{
+		return dao.DeleteOtherAmt(chssOtheramtid , userid);
+	}
 	
+	@Override
+	public List<Object[]> GetDesignation()throws Exception
+	{
+		return dao.GetDesignation();
+	}
+	@Override
+	public long AddDesignation(EmployeeDesig desig)throws Exception
+	{
+		return dao.AddDesignation(desig);
+	}
+	@Override
+	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception
+	{
+		return dao.GetDesignationToEdit(desigid);
+	}
 	
-	
-	
-	
+	@Override
+	public long EditDesignation(EmployeeDesig desig)throws Exception
+	{
+		EmployeeDesig designation = dao.GetDesignationToEdit(desig.getDesigId());
+		designation.setDesigId(desig.getDesigId());
+		designation.setDesigCode(desig.getDesigCode());
+		designation.setDesigLimit(desig.getDesigLimit());
+		designation.setDesignation(desig.getDesignation());
+		return dao.EditDesignation(designation);
+	}
 	
 	
 	

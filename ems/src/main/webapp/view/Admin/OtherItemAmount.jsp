@@ -79,7 +79,7 @@ int slno=0;
 											<th style="width:20%;" >Basic From 	  </th>
 											<th style="width:20%;" >Basic To      </th>
 											<th style="width:20%;" >Permit Amount </th>
-											<th style="width:5%;"  >Action</th>
+											<th style="width:10%;"  >Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -100,7 +100,7 @@ int slno=0;
 									        <td><span class="sno" id="sno"><%=slno %>.</span></td>
 											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control items" name="basicto1" id="basicto1" value="<%=obj[1] %>"  readonly="readonly"  maxlength="10" required="required"></td>
-											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
+											<td align="center"><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
 											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
 									    </tr>	
@@ -114,7 +114,12 @@ int slno=0;
 											<td><input type="text" class="form-control items" name="<%=basicto2%>" id="basicto1" value="<%=obj[1] %>"    maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
 											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
-												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button></td>
+												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>
+												<button type="submit"  class="btn btn-sm" formaction="EDITOtherAmt.htm" formmethod="POST" Onclick="return confirm('Are You Sure To Delete?');" name="otheritemid" value="<%=obj[3]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
+														<i class="fa-solid fa-trash-can" style="color: red;"></i>
+													</button>
+												
+												</td>
 									</tr>
 									</tbody>
 									</table>
@@ -128,7 +133,9 @@ int slno=0;
 											<td><input type="text" class="form-control items" name="basicfrom" id="basicfrom" value="<%=++basicfrom %>" readonly  maxlength="10" ></td>
 											<td><input type="text" class="form-control items" name="basicto" id="basicto" value=""    maxlength="100" ></td>
 											<td><input type="text" class="form-control admAmt" name="admAmt" id="admAmt" value=""     maxlength="100"  ></td>
-											<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
+											<td><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button>
+											
+											</td>
 									</tr>
 									</tbody>
 									</table>
@@ -140,7 +147,9 @@ int slno=0;
 											<td style="width:20%;"><input type="text" class="form-control items" name="basicfrom" id="basicfrom" value="<%=basicfrom%>" readonly="readonly"  maxlength="10" ></td>
 											<td style="width:20%;"><input type="text" class="form-control items" name="basicto" id="basicto" value=""   style="width: 100%;"  maxlength="10" ></td>
 											<td style="width:20%;"><input type="text" class="form-control admAmt" name="admAmt" id="admAmt" value=""    style="width: 100%;" maxlength="10"  ></td>
-											<td style="width:5%;"><button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red; width: 100%;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
+											<td style="width:5%;">
+											
+											<button type="button" class="btn tbl-row-rem"><i class="fa-solid fa-minus" style="color: red; width: 100%;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button></td>
 										</tr>
 										</tbody>
 										</table>

@@ -36,7 +36,6 @@
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
 %>
 
- <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -52,6 +51,9 @@
 				</div>
 			</div>
 	</div>	
+	
+	 <div class="page card dashboard-card">
+	
 	<div class="card-body" >
 	
 	

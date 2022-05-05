@@ -54,7 +54,7 @@
 				<div class="card-body" >
 					<div class="row">
 						<div class="col-md-12" >
-							<form action="#" method="POST" id="empForm" autocomplete="off">
+							<form action="OtherItemAddEdit.htm" method="POST" id="empForm" autocomplete="off">
 						
 								<div class="table-responsive">
 						   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -73,7 +73,7 @@
 													<td style="text-align: center;"><%=++slno %>. </td>
 													<td><input type="text"  class="form-control " name="<%=ItemName%>" id="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
 													<td align="center">
-														<button type="submit" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>" formaction="OtherItemAddEdit.htm" formmethod="POST" onclick ="return checkDuplicate('<%=ItemName%>')" data-toggle="tooltip" data-placement="top" title="Update">											
+														<button type="button" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>"  onclick ="return checkDuplicateItem('<%=ItemName%>','<%=obj[0]%>')" data-toggle="tooltip" data-placement="top" title="Update">											
 														<i class="fa-solid fa-pen-to-square " style="color: #E45826" ></i>
 														</button>
 													</td>
@@ -82,6 +82,7 @@
 										</tbody>
 									</table>
 									<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+									<input type="hidden" id="itemid" name="item" value="">
 								</div>
 							
 									
@@ -89,7 +90,7 @@
 									<div class="col-md-12">
 															
 										<button type="button" class="btn btn-sm add-btn AddItem" name="action" value="ADD"  >ADD</button>
-										<button type="submit" class="btn btn-sm add-btn" style="background-color:#67349e;" formaction="OtherItemAmount.htm" formmethod="GET" name="action"  >ITEM AMOUNT</button>
+										<button type="submit" class="btn btn-sm misc1-btn" formaction="OtherItemAmount.htm" formmethod="POST" name="action"  >ITEM AMOUNT</button>
 								    
 								    </div>						 
 								</div>
@@ -109,7 +110,7 @@
   <div class="modal" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
-      <form action="OtherItemAddEdit.htm" method="post" id="addform">
+      <form action="OtherItemAddEdit.htm" method="post" id="addform" autocomplete="off">
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Other Items Add</h4>
@@ -124,11 +125,11 @@
       		</div>
       		</div>
         </div>
-       <input type="hidden" name="action" value="ADDITEM"> 
+      
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <!-- Modal footer -->
         <div class="modal-footer" >
-        	<button type="submit"  class="btn btn-sm submit-btn" onclick ="return checkDuplicate()">SUBMIT</button>
+        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick ="return checkDuplicate()">SUBMIT</button>
         </div>
         </form>
       </div>
@@ -162,7 +163,7 @@ $(".AddItem").click(function(){
 function checkDuplicate()
 {
 	var $name = $("#ItemName").val();	
-	
+	var retValue = false;
 		$.ajax({
 			type : "GET",
 			url : "DuplicateOtherItem.htm",	
@@ -177,35 +178,44 @@ function checkDuplicate()
 				
 				if(a > 0){					
 					alert("Item Already Exist!");
-					return false;
+					retValue= false;
 				}else if(confirm("Are you sure to Submit!")){
 					var $ItemName = $("#ItemName").val();
 					
 					if($ItemName=="null" || $ItemName==null ){
 						alert("Enter Data Properly!");
-						return false;
+						retValue= false;
 					}else{
+						retValue = true;
 						document.getElementById("addform").submit();
 					}		
 			   }
 		  }
 	});	
+		
+		if(retValue==true){
+			
+			document.getElementById("addform").submit();
+		}else{
+			return retValue;
+		}	
 }
 </script>
 
 <script type="text/javascript">
 
-function checkDuplicate(value)
+function checkDuplicateItem(value , itemid)
 {
-	var $name = document.getElementById(value).value;	
-	console.log($name);
+	var $name = document.getElementById(value).value;
+	$("#itemid").val(itemid);
+	var retValue = false;
+
 		$.ajax({
 			type : "GET",
 			url : "DuplicateOtherItem.htm",	
 			datatype : 'json',
 			data : {
-				treatmentName : $name,
-				
+				treatmentName : $name,				
 			},
 			success :  function(result){
 				 var rr=result;
@@ -213,19 +223,27 @@ function checkDuplicate(value)
 				
 				if(a > 0){					
 					alert("Item Already Exist!");
-					return false;
+					retValue= false;
 				}else if(confirm("Are you sure to Submit!")){
 					var $ItemName =document.getElementById(value).value;	
 					
 					if($ItemName=="null" || $ItemName==null ){
 						alert("Enter Data Properly!");
-						return false;
+						retValue= false;
 					}else{
-						document.getElementById("addform").submit();
+						retValue =true;
+						document.getElementById("empForm").submit();
 					}		
 			   }
 		  }
 	});	
+		
+		if(retValue==true){
+			
+			document.getElementById("empForm").submit();
+		}else{
+			return retValue;
+		}	
 }
 </script>
 </body>

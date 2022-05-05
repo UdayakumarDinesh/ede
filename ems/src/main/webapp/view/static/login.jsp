@@ -43,7 +43,7 @@
       			<div class="header-right clearfix">
         			<div class="float-element">
         				<a class="" href="" target="_blank">
-        					<img  class ="drdologo" src="view/images/lablogo.png" alt=""></a>
+        					<img  class ="drdologo" src="view/images/lablogoui.png" alt=""></a>
         			</div>
       			</div>
      			<div class="logo">
@@ -120,8 +120,8 @@
 										<div class="login-form-container">
 										
 											   <form action="${contPath}/login" autocomplete="off" method="post" >
-												
-												
+											   
+									
 												<div class="form-row">
 													
 													<div class="form-group col-12 position-relative ${error != null ? 'has-error' : ''}">
@@ -134,8 +134,10 @@
 														<i class="fa fa-lock fa-lg position-absolute"></i>	
 													</div>
 														
-													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="error-alert">${error}</span>
-													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:green;margin-bottom: 10px;" id="success-alert">${success}</span>
+													<%-- <span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="error-alert">${error}</span>
+													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:green;margin-bottom: 10px;" id="success-alert">${success}</span> --%>
+													
+															<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
 																		
 												</div>
 												
@@ -240,6 +242,9 @@ $("#success-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
 $("#error-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
     $("#error-alert").slideUp(1000);
 });
+
+
+
 
 
 </script>

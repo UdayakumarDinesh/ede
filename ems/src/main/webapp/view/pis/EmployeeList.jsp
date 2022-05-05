@@ -79,8 +79,11 @@
 			<div class="card" >
 			
 				<div class="card-body " >
-				
+			
 					<form action="#" method="post" id="empForm">
+				<div align="right">
+				<button type="submit" class="btn btn-sm btnclr"  style="background-color: #9dbf13; color: white; margin-bottom: 1%;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;Request Message</button>
+				</div>
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -150,7 +153,7 @@
 					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)"><i class="fa-solid fa-map-location-dot"></i> &nbsp;&nbsp;Address</button>
 			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)"> Publication</button>
 					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Passport</button> -->
-					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;Request Message</button>
+					
 					</div>
 				</div> 
 					

@@ -32,6 +32,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -163,6 +164,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				logger.info(new Date() +"Inside ChssTestSub.htm "+UserId);
 				try {
 					 String action= (String)req.getParameter("action");
+					 System.out.println(action +"  req "+ req.getParameter("SubId"));
 					 List<Object[]> TestMain = service.ChssTestMain(); 
 					 if("ADD".equalsIgnoreCase(action)){
 						
@@ -176,8 +178,31 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							req.setAttribute("subdata",sub);
 						return "Admin/CHSSTestSubADDEDIT";
 						
-					 }else if("ADDTEST".equalsIgnoreCase(action)){
-						
+					 }else {
+						 
+						 if(req.getParameter("SubId")!=null){
+							 //Test Edit code 
+							 String testmain =(String)req.getParameter("Main");
+						 	 String testName =(String)req.getParameter("Name");
+						 	 String Rate     =(String)req.getParameter("Rate");
+						 	 String subid    =(String)req.getParameter("SubId");
+						 	CHSSTestSub  sub = new CHSSTestSub();
+						 	 	sub.setTestSubId(Long.parseLong(subid));
+							 	sub.setTestRate(Integer.parseInt(Rate)); 
+							 	sub.setTestName(testName); 
+							 	sub.setTestMainId(Long.parseLong(testmain));				 	 
+							 	sub.setModifiedDate(sdtf.format(new Date()));
+							 	sub.setModifiedBy(UserId);
+							 	long result =service.EditTestSub(sub);
+							 	if (result != 0) {
+									redir.addAttribute("result", "Test details Updated");
+								} else {
+									redir.addAttribute("resultfail", "Test details Failed to Update");
+								}
+							return "redirect:/TestSub.htm";
+						 	 
+						 }else {
+							//Test Add code 
 						 	 String testmain =(String)req.getParameter("Main");
 						 	 String testName =(String)req.getParameter("Name");
 						 	 String Rate     =(String)req.getParameter("Rate");
@@ -188,53 +213,55 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	sub.setIsActive(1);						 	 
 						 	sub.setCreatedDate(sdtf.format(new Date()));
 						 	sub.setCreatedBy(UserId);
-						 	long result = service.AddTestSub(sub);
+						 	long result =  service.AddTestSub(sub);
 						 	if (result != 0) {
-								redir.addAttribute("result", "Test Added Successful");
+								redir.addAttribute("result", "Test details saved");
 							} else {
-								redir.addAttribute("resultfail", "Test Added UnSuccessful");
+								redir.addAttribute("resultfail", "Test details Failed to save");
 							}
 						return "redirect:/TestSub.htm";
-					 }else if("EDITTEST".equalsIgnoreCase(action)){
-						 String testmain =(String)req.getParameter("Main");
-					 	 String testName =(String)req.getParameter("Name");
-					 	 String Rate     =(String)req.getParameter("Rate");
-					 	 String subid    =(String)req.getParameter("SubId");
-					 	CHSSTestSub  sub = new CHSSTestSub();
-					 	 	sub.setTestSubId(Long.parseLong(subid));
-						 	sub.setTestRate(Integer.parseInt(Rate)); 
-						 	sub.setTestName(testName); 
-						 	sub.setTestMainId(Long.parseLong(testmain));				 	 
-						 	sub.setModifiedDate(sdtf.format(new Date()));
-						 	sub.setModifiedBy(UserId);
-						 	long result = service.EditTestSub(sub);
-						 	if (result != 0) {
-								redir.addAttribute("result", "Test Edited Successful");
-							} else {
-								redir.addAttribute("resultfail", "Test Edited UnSuccessful");
-							}
-						return "redirect:/TestSub.htm";
-					 	 
-					 }
+						 }
+					 } 
+					 
+					
 		       }catch(Exception e){
 		    	   redir.addAttribute("resultfail", "Internal Error!");
 		    	   e.printStackTrace();
 		    	   return "redirect:/TestSub.htm";
 		       }
-				return "Admin/CHSSTestSubADDEDIT";
+				
 		    }
 		    
 		    @RequestMapping(value = "OtherItemAddEdit.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
 		    public String OtherItemAddEdit(HttpSession ses ,HttpServletRequest req , RedirectAttributes redir)throws Exception
 		    {
+	    	
 		    	String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside ChssTestSub.htm "+UserId);
-				try {
-					 String action= (String)req.getParameter("action");
-					System.out.println(action);
-				if ("ADDITEM".equalsIgnoreCase(action)) {
-						String itemname = (String)req.getParameter("ItemName");
+				logger.info(new Date() +"Inside OtherItemAddEdit.htm "+UserId);
+				try {	
+				if (req.getParameter("item")!=null) {
 					
+							String itemid   = (String)req.getParameter("item");	
+							String name = "ItemName"+itemid;
+							String itemname = (String)req.getParameter(name);
+							CHSSOtherItems item = new CHSSOtherItems();
+						
+							item.setOtherItemId(Integer.parseInt(itemid));
+							item.setModifiedDate(sdtf.format(new Date()));
+							item.setModifiedBy(UserId);
+							item.setOtherItemName(itemname);
+							int result = service.EditItem(item);
+						 	if (result != 0) {
+								redir.addAttribute("result", "Item Edited Successful");
+							} else {
+								redir.addAttribute("resultfail", "Item Edited UnSuccessful");
+							}
+							return "redirect:/OtherItems.htm";
+					 	
+					}else{
+					
+						String itemname = (String)req.getParameter("ItemName");
+						
 						CHSSOtherItems item = new CHSSOtherItems();
 		
 						item.setCreatedBy(UserId);
@@ -248,25 +275,6 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							redir.addAttribute("resultfail", "Item Added UnSuccessful");
 						}
 					 	return "redirect:/OtherItems.htm";
-					 	
-					}else{
-					
-						String itemid   = (String)req.getParameter("itemid");				
-						String name = "ItemName"+itemid;
-						String itemname = (String)req.getParameter(name);
-						CHSSOtherItems item = new CHSSOtherItems();
-					
-						item.setOtherItemId(Integer.parseInt(itemid));
-						item.setModifiedDate(sdtf.format(new Date()));
-						item.setModifiedBy(UserId);
-						item.setOtherItemName(itemname);
-						int result = service.EditItem(item);
-					 	if (result != 0) {
-							redir.addAttribute("result", "Item Edited Successful");
-						} else {
-							redir.addAttribute("resultfail", "Item Edited UnSuccessful");
-						}
-						return "redirect:/OtherItems.htm";
 					}
 					 
 				}catch (Exception e) {
@@ -293,9 +301,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    			if(!id.isEmpty()) {
 		    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId); 
 				    		if (result != 0) {
-				    			redir.addAttribute("result", "Approval Authority Edited Successful");
+				    			redir.addAttribute("result", "Approving officers updated");
 							} else {
-								redir.addAttribute("resultfail", "Approval Authority Edited UnSuccessful");
+								redir.addAttribute("resultfail", "Approving officers failed to updated");
 							}
 		    			}else {
 		    				CHSSApproveAuthority approve = new CHSSApproveAuthority();
@@ -305,9 +313,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    				approve.setIsActive(1);
 		    				long result = service.AddApprovalAuthority(approve); 
 				    		if (result != 0) {
-				    			redir.addAttribute("result", "Approval Authority Added Successful");
+				    			redir.addAttribute("result", "Approving Officers Saved");
 							} else {
-								redir.addAttribute("resultfail", "Approval Authority Added UnSuccessful");
+								redir.addAttribute("resultfail", "Approving Officers Failed to Save");
 							}
 		    			}
 		    	
@@ -365,7 +373,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				String action = (String)req.getParameter("Action");
 			
 				if("ADD".equalsIgnoreCase(action)){
-					
+					String treatid = (String)req.getParameter("tratementname");
+					System.out.println(treatid);
 					List<Object[]> treatment = service.GetTreatmentType();
 					req.setAttribute("treatment", treatment);
 					return "Admin/CHSSMedicineADDEDIT";
@@ -392,7 +401,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					medicinelist.setIsAdmissible(IsAdmissible);
 					long result =service.EditMedicine(medicinelist);;
 					if (result != 0) {
-		    			redir.addAttribute("result", "Medicine Edited Successful");
+		    			redir.addAttribute("result", "Medicine Edited Successfully");
 					} else {
 						redir.addAttribute("resultfail", "Medicine Edited UnSuccessful");
 					}
@@ -414,9 +423,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					medicinelist.setIsActive(1);
 					long result=service.AddMedicine(medicinelist);
 					if (result != 0) {
-		    			redir.addAttribute("result", "Medicine ADDED Successful");
+		    			redir.addAttribute("result", "Medicine added successfully");
 					} else {
-						redir.addAttribute("resultfail", "Medicine ADDED UnSuccessful");
+						redir.addAttribute("resultfail", "Medicine added UnSuccessful");
 					}
 					return "redirect:/MedicineList.htm";
 				}	
@@ -499,7 +508,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					long value= service.EmpRequestNotification(notification);
 					
 					if (result != 0) {
-		    			redir.addAttribute("result", "Message Sent To Admin Successful");
+		    			redir.addAttribute("result", "Message Sent To Admin Successfully");
 					} else {
 						redir.addAttribute("resultfail", "Message Sent To Admin UnSuccessful");
 					}
@@ -510,7 +519,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String requestid = (String)req.getParameter("RequestId");
 					int result = service.DeleteRequestMsg(requestid ,UserId);
 					if (result != 0) {
-		    			redir.addAttribute("result", "Message Delete Successful");
+		    			redir.addAttribute("result", "Message Deleted Successfully");
 					} else {
 						redir.addAttribute("resultfail", "Message Delete UnSuccessful");
 					}
@@ -592,9 +601,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else{
 						int result = service.AddHandingOver(ho);
 						if (result != 0) {
-							redir.addAttribute("result", "Handing Over Added Successful");
+							redir.addAttribute("result", "Handling Over officers added successfully");
 						} else {
-							redir.addAttribute("resultfail", "Handing Over Added UnSuccessful");
+							redir.addAttribute("resultfail", "Handling Over officers added Unsuccessfull");
 						}
 					}
 					
@@ -672,9 +681,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					DocRate.setModifiedDate(sdtf.format(new Date()));
 					int result = service.EditDoctorMaster(DocRate);
 					if (result != 0) {
-		    			redir.addAttribute("result", "Doctor Edit Successful");
+		    			redir.addAttribute("result", "Doctor Details Updated");
 					} else {
-						redir.addAttribute("resultfail", "DOCTOR EDIT UnSuccessful");
+						redir.addAttribute("resultfail", "Doctor Details Failed to Update");
 					}
 					return "redirect:/DoctorsMaster.htm";
 				}else {
@@ -697,6 +706,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			logger.info(new Date() +"Inside UnitMaster.htm "+UserId);
 			try {
 				String action =(String)req.getParameter("Action");
+			
 				if("EDIT".equalsIgnoreCase(action)) {
 					String labmasterId = (String)req.getParameter("labmasterId");
 					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
@@ -740,12 +750,12 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					lab.setModifiedDate(sdtf.format(new Date()));
 					long result = service.EditLabMaster(lab);
 					if (result != 0) {
-		    			redir.addAttribute("result", "Lab Master Updated Successful");
+		    			redir.addAttribute("result", "Unit details updated successfully");
 					} else {
-						redir.addAttribute("resultfail", "Lab Master Updated UnSuccessful");
+						redir.addAttribute("resultfail", "Unit details updated Unsuccessfull");
 					}
-					return "redirect:/LabMaster.htm";
-				}else {
+					return "redirect:/UnitMaster.htm";
+				}else {                                      
 					Object[] labdetails = service.getLabDetails();
 					String labmasterId =""+labdetails[0];
 					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
@@ -753,16 +763,14 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("emplist", pisservice.GetAllEmployee());
 					req.setAttribute("labslist", labslist);
 					req.setAttribute("labdetails", lab);
-				
-					
-					       return "Admin/LabMasterEdit";
-				
-				           
+									
+					   return "Admin/LabMasterEdit";
+			           
 				}
 			} catch (Exception e) {
 				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
-				return "Admin/LabDetails";
+				return "Admin/LabMasterEdit";
 			}
 			
 		}
@@ -853,26 +861,44 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
 			try {
 				String chssOtheramtid = (String)req.getParameter("chssOtheramtid");
-				String adm="admAmt1"+chssOtheramtid;
-				String basicto = "basicto1"+chssOtheramtid;
-				String admAmt1 = (String)req.getParameter(adm);
-				String treatid = (String)req.getParameter("treateid");
-				String basicto2 = (String)req.getParameter(basicto);
-			
-				long result = 0l;
-				if(basicto2!=null) {
-					 result = service.updateOtherItemAmt(chssOtheramtid ,admAmt1, UserId , basicto2);
-				}else {
-					 result = service.updateOtherAmt(chssOtheramtid ,admAmt1, UserId);
-				}
+				if(chssOtheramtid!=null) {
+					String adm="admAmt1"+chssOtheramtid;
+					String basicto = "basicto1"+chssOtheramtid;
+					String admAmt1 = (String)req.getParameter(adm);
+					String treatid = (String)req.getParameter("treateid");
+					String basicto2 = (String)req.getParameter(basicto);
 				
-				if (result != 0) {
-					 redir.addAttribute("result", "Permit Amount Edited Successful");
-				} else {
-					 redir.addAttribute("resultfail", "Permit Amount Edited UnSuccessful");
+					long result = 0l;
+					if(basicto2!=null) {
+						 result = service.updateOtherItemAmt(chssOtheramtid ,admAmt1, UserId , basicto2);
+					}else {
+						 result = service.updateOtherAmt(chssOtheramtid ,admAmt1, UserId);
+					}
+					
+					if (result != 0) {
+						 redir.addAttribute("result", "Permit Amount Edited Successful");
+					} else {
+						 redir.addAttribute("resultfail", "Permit Amount Edited UnSuccessful");
+					}
+					 redir.addFlashAttribute("tratementid", treatid);
+					 return "redirect:/OtherItemAmount.htm";
+				}else {
+					String chssother = (String) req.getParameter("otheritemid");
+					String treatid = (String)req.getParameter("treateid");
+					long result = 0l;
+				
+					result = service.DeleteOtherAmt(chssother ,UserId);
+					
+					
+					if (result != 0) {
+						 redir.addAttribute("result", "Permit Amount Deleted Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Permit Amount Failed to Delete");
+					}
+					 redir.addFlashAttribute("tratementid", treatid);
+					 return "redirect:/OtherItemAmount.htm";
 				}
-				 redir.addFlashAttribute("tratementid", treatid);
-				 return "redirect:/OtherItemAmount.htm";
+			
 			} catch (Exception e) {
 				 redir.addAttribute("resultfail", "Internal Error!");
 					e.printStackTrace();
@@ -953,8 +979,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
 			long EmpId = (long)ses.getAttribute("EmpId");
-			try {
-				
+			try {			
 				 
 				List<Object[]>  list = service.AllNotificationLists(EmpId);
 				req.setAttribute("notificationlist", list);	
@@ -964,6 +989,104 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				return "Admin/NotificationList";
 			}
 	
+		}
+		
+		
+		@RequestMapping(value ="DuplicateTest.htm",method=RequestMethod.GET)
+		public @ResponseBody String CheckDuplicateTest(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			int count =0;
+			Gson json = new Gson();
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
+			try {
+				String testname = (String)req.getParameter("testName");
+				
+				count = service.CheckduplicateTest( testname );
+				
+				 return json.toJson(count);
+			}catch (Exception e){
+				e.printStackTrace();
+				 return json.toJson(count);
+			}
+		}
+		
+		@RequestMapping(value = "Designation.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+		public String GetDesignation(HttpServletRequest req, HttpSession ses )throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");			
+			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			
+			try {			
+				String action = (String)req.getParameter("action");
+				if("ADD".equalsIgnoreCase(action)) {
+					
+					  return "Admin/DesignationAddEdit";
+				}else if ("EDIT".equalsIgnoreCase(action)) {
+					String desigid = (String)req.getParameter("desigid");
+					EmployeeDesig desig =service.GetDesignationToEdit(Long.parseLong(desigid));
+					req.setAttribute("desig", desig);
+					  return "Admin/DesignationAddEdit";
+				}else {
+				  List<Object[]>  list = service.GetDesignation();
+				  req.setAttribute("designation", list);				
+			    return "Admin/Designation";
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				return "Admin/NotificationList";
+			}
+		}
+		
+		@RequestMapping(value = "DesignationAddEdit.htm" , method =RequestMethod.POST )
+		public String DesgnationAddEdit (HttpServletRequest req, HttpSession ses , RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");			
+			logger.info(new Date() +" Inside DesignationAddEdit.htm "+UserId);
+			
+			try {			
+				String designationid = (String)req.getParameter("deisignationid");
+				if(designationid!=null) {
+					
+					String code  = (String)req.getParameter("Designationcode");
+					String name  = (String)req.getParameter("DesignationName");
+					String limit = (String)req.getParameter("Designationlimit");
+					EmployeeDesig desig = new EmployeeDesig();
+					desig.setDesigId(Long.parseLong(designationid));
+					desig.setDesigCode(code.toUpperCase());
+					desig.setDesignation(name);
+					desig.setDesigLimit(Long.parseLong(limit));
+					long result = service.EditDesignation(desig);
+					if (result != 0) {
+						 redir.addAttribute("result", "Designation Updated Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Designation Updated Unsuccessfull");
+					}
+					return "redirect:/Designation.htm";
+					
+				}else{
+					String code  = (String)req.getParameter("Designationcode");
+					String name  = (String)req.getParameter("DesignationName");
+					String limit = (String)req.getParameter("Designationlimit");
+					
+					EmployeeDesig desig = new EmployeeDesig();
+					desig.setDesigCode(code.toUpperCase());
+					desig.setDesignation(name);
+					desig.setDesigLimit(Long.parseLong(limit));
+					
+					long result = service.AddDesignation(desig);
+					if (result != 0) {
+						 redir.addAttribute("result", "Designation Added Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Designation Added Unsuccessfull");
+					}
+					return "redirect:/Designation.htm";
+				}				
+				}catch (Exception e){
+					e.printStackTrace();
+					redir.addAttribute("resultfail", "Internal Error!");
+					return "redirect:/Designation.htm";
+				}
 		}
 		
 	                                         

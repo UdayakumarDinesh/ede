@@ -75,7 +75,7 @@
 
 	<div class="card-holder">
 	  <div class="card">
-	     <h3 style="color: #FFD36E;">Reset Password  <a class="btn btn-sm" style="float: right;background-color: white;" href="../login">Login</a></h3>
+	     <h3 style="color: #FFD36E;font-family: 'Lato'"><i class="fa-solid fa-key fa-lg" ></i> &nbsp;&nbsp;&nbsp;Reset Password  <a class="btn btn-sm" style="float: right;background-color: white;" href="../login">Login Page</a></h3>
 	    <hr style="background-color: #ffffff">
 	    
 		    <div align="left" style="padding: 10px;">

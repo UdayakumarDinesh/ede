@@ -14,6 +14,10 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface AdminDao {
 
@@ -70,11 +74,12 @@ public interface AdminDao {
 	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception;
 	public List<Object[]> AllNotificationLists(long empid)throws Exception;
 	public int CheckduplicateItem(String treatmentname)throws Exception;
-	
-	
-	
-	
-	
+	public int CheckduplicateTest(String testname)throws Exception;
+	public long DeleteOtherAmt(String chssOtheramtid, String userid)throws Exception;
+	public List<Object[]> GetDesignation()throws Exception;
+	public long AddDesignation(EmployeeDesig desig)throws Exception;
+	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception;
+	public long EditDesignation(EmployeeDesig desig) throws Exception;
 	
 	
 	
