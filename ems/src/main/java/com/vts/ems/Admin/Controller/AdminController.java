@@ -503,7 +503,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					notification.setNotificationBy(EmpId);
 					notification.setNotificationMessage("Request Message from "+UserId);
 					notification.setNotificationDate(sdtf.format(new Date()));
-					notification.setNotificationUrl("");
+					notification.setNotificationUrl("AdminReplyToReqMsg.htm");
 					notification.setIsActive(1);
 					long value= service.EmpRequestNotification(notification);
 					

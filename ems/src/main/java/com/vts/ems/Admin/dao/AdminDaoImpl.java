@@ -798,7 +798,7 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
-	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.requestdate DESC";
+	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
 	@Override
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
