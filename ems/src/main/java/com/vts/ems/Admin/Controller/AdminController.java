@@ -497,7 +497,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					reqMsg.setCreatedDate(sdtf.format(new Date()));
 					reqMsg.setIsActive(1);
 					long result = service.AddRequestMsg(reqMsg);
-					EMSNotification notification = new EMSNotification(); 
+					EMSNotification notification = new EMSNotification();                
 					notification.setCreatedBy(UserId);
 					notification.setCreatedDate(sdtf.format(new Date()));
 					notification.setNotificationBy(EmpId);
