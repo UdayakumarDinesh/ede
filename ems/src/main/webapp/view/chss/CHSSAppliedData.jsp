@@ -297,8 +297,8 @@ p {
 							
 							
 							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-								<div class="modal-dialog modal-lg modal-dialog-centered" >
-									<div class="modal-content" style="width: 100%;" >
+								<div class="modal-dialog  modal-dialog-centered" >
+									<div class="modal-content" >
 										<div class="modal-header">
 											
 											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -311,14 +311,11 @@ p {
 											    	<b>No of Enclosures : </b><br>
 													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
 												</div>
-												<!-- <div class="col-md-12">
-													<b> Remarks :</b> <br>
-													<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500" required="required"></textarea>
-												</div> -->
+												
 												 <div class="col-12 w-100" align="center">
 												 <br>
 												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
-													Submit
+													Save
 												</button>
 												</div>
 											</div>

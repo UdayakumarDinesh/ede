@@ -295,12 +295,13 @@ th,td
 									<table>
 										<tbody>
 											<form action="ConsultRemAmountEdit.htm" method="post">
-												<tr><td colspan="6" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
+												<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
-													<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-													<th class="right" style="width: 25%;">Reimbursable under CHSS (&#8377;)</th>
+													<th class="right" style="width: 5%;">Amount Claimed (&#8377;)</th>
+													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
+													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
 												<%long itemstotal=0, totalremamount=0; %>
 												<% int i=1;
@@ -310,7 +311,7 @@ th,td
 														<tr>
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation charges </b>
-																<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+																<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -320,13 +321,15 @@ th,td
 																<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 															</td>
-															<td class="right"></td>
+															<td ></td>
+															<td ></td>
 														</tr>
 														<tr>
 															<th>Bill No</th>
 															<th>Doctor</th>
 															<th style="width:10%;">Type</th>
 															<th style="width:15%;" class="center">Date</th>
+															<th></th>
 															<th></th>
 															<th></th>
 														</tr>			
@@ -337,17 +340,31 @@ th,td
 														<td><%=consult[2] %></td>
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
-														<td class="right">
-														<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-															<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >	 
-															<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
-															<button type="submit" class="btn btn-sm editbtn" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
-																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-															</button>				
-														<%}else if((chssstatusid>=6)){ %>
-															<%=consult[7]%>			
-														<%} %>
+														
+														<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+															<td class="">
+															<td class="">
+														<%}else if((chssstatusid==14 || chssstatusid==6)){ %>
+														<td class="right">	
+															<%=consult[7]%>		
+														</td>	
+														<td class="">
+															<%if(consult[10]!=null){ %>
+																<%=consult[10]%>
+															<%} %>
 														</td>
+														<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+															<td class="right">	
+																<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+															</td>
+															<td >
+																<input type="text" maxlength="255"  style="width: 90%;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
+																<button type="submit" class="btn btn-sm editbtn" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
+																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+																</button>	
+															</td>
+														<%}%>
+														
 																											
 													</tr>					
 												<%	i++;
@@ -365,7 +382,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Pathological/Investigations Test</b> 
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -375,11 +392,13 @@ th,td
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 														</td>
-														<td class="right"></td>
+														<td ></td>
+														<td ></td>
 													</tr>
 													<tr>
 														<th>Bill No</th>
 														<th colspan="3">Test</th>
+														<th></th>
 														<th></th>
 														<th></th>
 													</tr>			
@@ -388,18 +407,40 @@ th,td
 													<td><%=test[8] %></td>
 													<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 													<td class="right"><%=test[4] %></td>
-													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
-														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+												
+													
+													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+															<td class="">
+															<td class="">
+													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+														<td class="right">	
+															<%=test[7]%>	
+														</td>	
+														<td class="">
+															<%if(test[11]!=null){ %>
+																<%=test[11]%>
+															<%} %>
+														</td>
+													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+														<td class="right">	
+															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+														</td>
+														<td >
+														<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
+															
 														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>												
+														</button>
+														</td>
+													<%}%>
 													
-													<%}else if((chssstatusid>=6)){ %>
-															<%=test[7]%>			
-													<%} %>
-													</td>
+													
+													
+													
+													
+													
+													
+													
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(test[4].toString());
@@ -416,7 +457,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -426,13 +467,15 @@ th,td
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														</td>
-														<td class="right"></td>
+														<td ></td>
+														<td ></td>
 													</tr>
 													<tr>
 														<th>Bill No</th>
 														<th>Medicine Name</th>
 														<th style="width:10%;">Rx Qty.</th>
 														<th style="width:15%;">Pur Qty.</th>
+														<th></th>
 														<th></th>
 														<th></th>
 													</tr>			
@@ -443,18 +486,35 @@ th,td
 													<td><%=medicine[5] %></td>
 													<td><%=medicine[4] %></td> 
 													<td class="right"><%=medicine[3] %></td>
-													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ){ %>	 
-														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
-														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
-														<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>
+												
 													
-													<%}else if((chssstatusid>=6)){ %>
-															<%=medicine[6]%>			
-													<%} %>
-													</td>
+													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+														<td class="">
+														<td class="">
+													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+														<td class="right">	
+															<%=medicine[6]%>
+														</td>	
+														<td class="">
+															<%if(medicine[9]!=null){ %>
+																<%=medicine[9]%>
+															<%} %>
+															
+														</td>
+													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+														<td class="right">	
+															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
+														</td>
+														<td >
+															<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
+																
+															<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+															</button>
+														</td>
+													<%}%>
+													
+													
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(medicine[3].toString());
@@ -471,7 +531,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Others</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -481,11 +541,13 @@ th,td
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														</td>
-														<td class="right"></td>
+														<td ></td>
+														<td ></td>
 													</tr>
 													<tr>
 														<th>Bill No</th>
 														<th colspan="3">Other Items</th>
+														<th></th>
 														<th></th>
 														<th></th>
 													</tr>			
@@ -494,18 +556,34 @@ th,td
 													<td><%=other[6] %></td>
 													<td colspan="3"><%=other[4] %></td>
 													<td class="right"><%=other[3] %></td>
-													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
-														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
-														<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+													
+													
+													
+													
+													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+														<td class="">
+														<td class="">
+													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+														<td class="right">	
+															<%=other[5]%>
+														</td>	
+														<td class="">
+															<%if(other[8]!=null){ %>
+																<%=other[8]%>
+															<%} %>
+														</td>
+													<%}else  if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+														<td class="right">	
+															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
+														</td>
+														<td >
+															<input type="text"maxlength="255" style="width: 90%;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
+															<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>	
-													<%}else if((chssstatusid>=6)){ %>
-															<%=other[5]%>			
-														
-													<%} %>
-													</td>
+														</button>
+														</td>
+													<%}%>
+													
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(other[3].toString());
@@ -523,7 +601,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Miscellaneous</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
+															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -533,11 +611,13 @@ th,td
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														</td>
-														<td class="right"></td>
+														<td ></td>
+														<td ></td>
 													</tr>
 													<tr>
 														<th>Bill No</th>
 														<th colspan="3">Item</th>
+														<th></th>
 														<th></th>
 														<th></th>
 													</tr>			
@@ -546,19 +626,35 @@ th,td
 													<td><%=misc[5] %></td>
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
-													<td class="right">
-													<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-														<input type="text" class="w-100" maxlength="255" style="padding: 3px;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
-														<input type="number" class="numberonly" style="width: 85%;direction: rtl;margin-top: 3px;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
-														<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>
-													<%}else if((chssstatusid>=6)){ %>
-														
-															<%=misc[4]%>			
-														
-													<%} %>
-													</td>
+													
+													
+													
+													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+														<td class="">
+														<td class="">
+													<%}else if((chssstatusid==14 || chssstatusid==6  )){ %>
+														<td class="right">	
+															<%=misc[4]%>
+														</td>	
+														<td class="">
+															<%if(misc[7]!=null){ %>
+																<%=misc[7]%>
+															<%} %>
+														</td>
+													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+														<td class="right">	
+															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+														</td>
+														<td >
+															<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
+															<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+															</button>
+														</td>
+													<%}%>
+													
+													
+													
 												</tr>					
 											<%i++;
 											itemstotal += Integer.parseInt(misc[3].toString());
@@ -567,7 +663,7 @@ th,td
 										
 										<tr>
 											<td colspan="3"></td>
-											<td class="right">Total</td>
+											<td class="right"><b>Total</b></td>
 											<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
 											
 											<td class="right">
@@ -575,28 +671,29 @@ th,td
 											&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
 											<%} %>
 											</td>
+											<td ></td>
 										</tr>
 												
 								</form>
 								
 									
 										<tr>
-											<td colspan="6">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
+											<td colspan="7">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
 										</tr>
 										
 										<tr>
-											<td colspan="6" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
+											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
 										</tr>
 										
 										<tr>
-											<td colspan="6">Admitted to Rs.
+											<td colspan="7">Admitted to Rs.
 											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
 											 <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
 											 <%} %>
 										</tr>
 										
 										<tr>
-											<td colspan="6" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
+											<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
 										</tr>
 									</tbody>				
 								</table>

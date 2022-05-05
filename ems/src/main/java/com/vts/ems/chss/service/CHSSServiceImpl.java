@@ -8,10 +8,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.internet.MimeMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -846,21 +849,21 @@ public class CHSSServiceImpl implements CHSSService {
 			dao.NotificationAdd(notify);
 		}
 		
+		long count= dao.CHSSApplyEdit(claim);
+		
+		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
+		{
+			MimeMessage msg = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+			
+			helper.setTo(Email);	
+			helper.setSubject( "Medical Claim Application");
+			helper.setText( mailbody , true);
+			javaMailSender.send(msg); 
+		}
 		
 		
-//		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
-//		{
-//			MimeMessage msg = javaMailSender.createMimeMessage();
-//			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-//			
-//			helper.setTo(Email);	
-//			helper.setSubject( "Test mail from ems application");
-//			helper.setText( mailbody , true);
-//			javaMailSender.send(msg); 
-//		}
-		
-		
-		return dao.CHSSApplyEdit(claim);
+		return count;
 	}
 		
 	@Override
@@ -1179,6 +1182,13 @@ public class CHSSServiceImpl implements CHSSService {
 		if(notify.getEmpId()>0) {
 			dao.NotificationAdd(notify);
 		}
+		
+		
+		
+		
+		
+		
+		
 		return continid;
 		
 	}

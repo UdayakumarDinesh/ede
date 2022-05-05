@@ -126,10 +126,10 @@ th,td
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
-	
+	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String isapproval = (String)request.getAttribute("isapproval");
 	boolean show = false;
-	if(isapproval!=null && isapproval.equalsIgnoreCase("Y")){
+	if(isapproval!=null && isapproval.equalsIgnoreCase("Y") || chssstatusid==14 ){
 		show = true;
 	} 
 	
@@ -280,11 +280,12 @@ th,td
 		<div align="center" >
 			<table>
 				<tbody>
-					<tr><td colspan="6" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr>  <!-- --------------- consultation -------------------- -->
+					<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr>  <!-- --------------- consultation -------------------- -->
 					<tr>
 						<th class="center" colspan="4" style="width: 70%;">Particulars</th>
-						<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
-						<th class="right" style="width: 15%;">Reimbursable under CHSS  (&#8377;)</th>
+						<th class="right" style="width: 5%;">Amount Claimed (&#8377;)</th>
+						<th class="right" style="width: 5%;">Reimbursable under CHSS  (&#8377;)</th>
+						<th class="center" style="width: 25%;">Comments</th>
 					</tr>
 					<%long itemstotal=0,totalremamount=0; %>
 					<% int i=1;
@@ -295,12 +296,14 @@ th,td
 								<td colspan="4" style="text-align: center;"><b>Consultation charges</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
+								<td class="right"></td>
 							</tr>
 							<tr>
 								<th style="width: 14% !important">Bill No</th>
 								<th>Doctor</th>
 								<th style="width:10%;">Type</th>
 								<th style="width:15%;" class="center">Date</th>
+								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
@@ -311,11 +314,20 @@ th,td
 							<td><%=consult[2] %></td>
 							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 							<td class="right"><%=consult[6] %></td>
-							<td class="right">
-								<%if(show){ %>
-									<%=consult[7] %>
-								<%} %>
-							</td>
+							<%if(show){ %>
+								<td class="right">	
+									<%=consult[7]%>		
+								</td>	
+								<td class="">
+									<%if(consult[10]!=null){ %>
+										<%=consult[10]%>
+									<%} %>
+								</td>
+							<%}else{ %>
+								<td></td>
+								<td></td>
+							<%} %>
+							
 						</tr>					
 					<%	i++;
 						itemstotal += Integer.parseInt(consult[6].toString());
@@ -332,10 +344,12 @@ th,td
 								<td colspan="4" style="text-align: center;"><b>Pathological/Investigations Test</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
+								<td class="right"></td>
 							</tr>
 							<tr>
 								<th>Bill No</th>
 								<th colspan="3">Test</th>
+								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
@@ -344,11 +358,21 @@ th,td
 							<td><%=test[8] %></td>
 							<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 							<td class="right"><%=test[4] %></td>
-							<td class="right">
-								<%if(show){ %>
-									<%=test[7] %>
-								<%} %>
-							</td>
+							
+							<%if(show){ %>
+								<td class="right">	
+									<%=test[7]%>		
+								</td>	
+								<td class="">
+									<%if(test[11]!=null){ %>
+										<%=test[11]%>
+									<%} %>
+								</td>
+							<%}else{ %>
+								<td></td>
+								<td></td>
+							<%} %>
+							
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(test[4].toString());
@@ -363,12 +387,14 @@ th,td
 								<td colspan="4" style="text-align: center;"><b>Medicines</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
+								<td class="right"></td>
 							</tr>
 							<tr>
 								<th>Bill No</th>
 								<th>Medicine Name</th>
 								<th style="width:10%;">Rx Qty.</th>
 								<th style="width:15%;">Pur Qty.</th>
+								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
@@ -379,11 +405,21 @@ th,td
 							<td><%=medicine[5] %></td>
 							<td><%=medicine[4] %></td> 
 							<td class="right"><%=medicine[3] %></td>
-							<td class="right">
-								<%if(show){ %>
-									<%=medicine[7] %>
-								<%} %>
-							</td>
+							
+							<%if(show){ %>
+								<td class="right">	
+									<%=medicine[6]%>		
+								</td>	
+								<td class="">
+									<%if(medicine[9]!=null){ %>
+										<%=medicine[9]%>
+									<%} %>
+								</td>
+							<%}else{ %>
+								<td></td>
+								<td></td>
+							<%} %>
+
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(medicine[3].toString());
@@ -399,10 +435,12 @@ th,td
 								<td colspan="4" style="text-align: center;"><b>Others</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
+								<td class="right"></td>
 							</tr>
 							<tr>
 								<th>Bill No</th>
 								<th colspan="3">Other Items</th>
+								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
@@ -411,11 +449,21 @@ th,td
 							<td><%=other[6] %></td>
 							<td colspan="3"><%=other[4] %></td>
 							<td class="right"><%=other[3] %></td>
-							<td class="right">
-								<%if(show){ %>
-									<%=other[5] %>
-								<%} %>
-							</td>
+							
+							<%if(show){ %>
+								<td class="right">	
+									<%=other[5]%>		
+								</td>	
+								<td class="">
+									<%if(other[8]!=null){ %>
+										<%=other[8]%>
+									<%} %>
+								</td>
+							<%}else{ %>
+								<td></td>
+								<td></td>
+							<%} %>
+							
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(other[3].toString());
@@ -431,10 +479,12 @@ th,td
 								<td colspan="4" style="text-align: center;"><b>Miscellaneous</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
+								<td class=""></td>
 							</tr>
 							<tr>
 								<th>Bill No</th>
 								<th colspan="3">Item</th>
+								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
@@ -443,11 +493,19 @@ th,td
 							<td><%=misc[5] %></td>
 							<td colspan="3"><%=misc[2] %></td>
 							<td class="right"><%=misc[3] %></td>
-							<td class="right">
 								<%if(show){ %>
-									<%=misc[4] %>
+									<td class="right">	
+										<%=misc[4]%>		
+									</td>	
+									<td class="">
+										<%if(misc[7]!=null){ %>
+											<%=misc[7]%>
+										<%} %>
+									</td>
+								<%}else{ %>
+									<td></td>
+									<td></td>
 								<%} %>
-							</td>
 						</tr>					
 					<%i++;
 					itemstotal += Integer.parseInt(misc[3].toString());
@@ -461,27 +519,29 @@ th,td
 								&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
 							<%} %>						
 						</td>	
+						<td class="right">
+						</td>
 					</tr>
 					
 					<tr>
-						<td colspan="6">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
+						<td colspan="7">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
 					</tr>
 					
 					<tr>
-						<td colspan="6" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
+						<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
 					</tr>
 					
 					<tr>
 						<%if(show){ %>
-								<td colspan="6">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
+								<td colspan="7">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
 						<%}else{ %>
-							<td colspan="6">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
+							<td colspan="7">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
 						<%} %>
 						
 					</tr>
 					
 					<tr>
-						<td colspan="6" style="height: 50px;vertical-align:bottom">Finance & Accounts Dept.</td>
+						<td colspan="7" style="height: 50px;vertical-align:bottom">Finance & Accounts Dept.</td>
 					</tr>
 				</tbody>				
 			</table>
