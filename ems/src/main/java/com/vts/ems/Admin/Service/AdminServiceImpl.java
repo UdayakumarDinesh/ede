@@ -454,8 +454,24 @@ public class AdminServiceImpl implements AdminService{
 		return dao.EditDesignation(designation);
 	}
 	
+
+	@Override
+	public Object[] DesignationAddCheck(String desigcode,String designation) throws Exception
+	{
+		Object[] returnobj=new Object[2];
+		returnobj[0]=dao.DesignationCodeCheck(desigcode)[0].toString();
+		returnobj[1]=dao.DesignationCheck(designation)[0].toString();
+		return returnobj;
+	}
 	
-	
+	@Override
+	public Object[] DesignationEditCheck(String desigcode,String designation,String desigid) throws Exception
+	{
+		Object[] returnobj=new Object[2];
+		returnobj[0]=dao.DesignationCodeEditCheck(desigcode,desigid)[0].toString();
+		returnobj[1]=dao.DesignationEditCheck(designation,desigid)[0].toString();
+		return returnobj;
+	}
 	
 	
 	

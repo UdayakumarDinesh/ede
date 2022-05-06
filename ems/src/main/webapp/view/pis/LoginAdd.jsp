@@ -161,6 +161,8 @@ $(document).ready(function() {
 					}
 				}
 			});
+		}else{
+			alert("Enter minimum 4 characters!");
 		}
 	});
 });

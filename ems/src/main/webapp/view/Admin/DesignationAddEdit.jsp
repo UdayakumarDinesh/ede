@@ -45,23 +45,23 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 			<div class="card" >
 				<div class="card-body " align="center" >
 
-					<form name="myfrm" action="DesignationAddEdit.htm" method="POST" id="myfrm1" autocomplete="off">
+					<form name="myfrm" action="DesignationAddEdit.htm" method="POST" id="addfrm" autocomplete="off">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">								
 										<tr>
 											<th><label>Designation Code<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
-												placeholder=" Enter Designation Code" type="text" name="Designationcode" value="<%if(desig!=null){ %><%=desig.getDesigCode()%><%} %>"
+												placeholder=" Enter Designation Code" type="text" id="desigcode" name="Designationcode" value="<%if(desig!=null){ %><%=desig.getDesigCode()%><%} %>"
 												required="required" maxlength="255" style="font-size: 15px;"
-												id="Name" ></td>
+												 ></td>
 										</tr>
 										<tr>
 											<th><label>Designation Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Designation Name" type="text" name="DesignationName" value="<%if(desig!=null){%> <%=desig.getDesignation()%> <%} %>"
 												required="required" maxlength="255" style="font-size: 15px;"
-												id="Name" ></td>
+												 id="designation"></td>
 										</tr>
 										<tr>
 											<th><label>Designation Limit  <i class="fa fa-inr" aria-hidden="true"></i> <span class="mandatory" style="color: red;"> *</span>
@@ -69,7 +69,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 											<td><input class="form-control form-control"
 												placeholder="Enter Designation Limit" type="text" id="RateValue" name="Designationlimit" value="<%if(desig!=null){%><%=desig.getDesigLimit()%> <%}%>"
 												required="required" maxlength="10" style="font-size: 15px;"
-												id="Rate" ></td>
+												 ></td>
 										</tr>
 									
 								</table>
@@ -79,13 +79,13 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 						<div class="row" style="margin-left: 47%;" align="center">
 							<div id="UsernameSubmit">
 							<%if(desig!=null){ %>
-							<input type="hidden" name="deisignationid" value="<%=desig.getDesigId()%>">
-								<button type="submit" class="btn btn-sm submit-btn"
-									onclick="return confirm('Are You Sure to Update!');"
+							<input type="hidden" id="deisignationid" name="deisignationid" value="<%=desig.getDesigId()%>">
+								<button type="button" class="btn btn-sm submit-btn"
+									onclick="return  DesignationEditcheck('addfrm');"
 									name="action"  value="EDITTEST">SUBMIT</button>
 									<%}else{ %>
-									<button type="submit" class="btn btn-sm submit-btn"
-									onclick="return confirm('Are You Sure to Submit!');"
+									<button type="button" class="btn btn-sm submit-btn"
+									onclick="return DesignationAddcheck('addfrm');"
 									name="action"  value="ADDTEST">SUBMIT</button>
 									
 									<%} %>
@@ -119,6 +119,105 @@ function setInputFilter(obj, inputFilter) {
 	}
 </script>
 
+
+<script type="text/javascript">
+
+
+function DesignationAddcheck(frmid){
+	
+	var desigcode=$('#desigcode').val();
+	var designation=$('#designation').val();
+	var desigid     =   $('#deisignationid').val();
+	var count=false;
+	console.log(desigid);
+	$.ajax({
+
+		type : "GET",
+		url : "DesignationAddCheck.htm",
+		data : {
+			
+			dcode:desigcode.trim(),
+			dname:designation.trim(),
+			
+		},
+		datatype : 'json',
+		success : function(result) {
+			var ajaxresult = JSON.parse(result);
+			
+			if(ajaxresult[0]>0){
+				alert('Designation Code Already Exists');
+				count = false;
+			}else if(ajaxresult[1]>0){
+				alert('Designation Name Already Exists');
+				count = false;
+			}else if(count){
+			console.log("jfhgbdhjgbjfdg");
+			var ret = confirm('Are you Sure To Submit ?');
+			if(ret){
+				return true;
+				$('#'+frmid).submit();
+				}else{
+					return false;
+				}
+		}else{
+			
+			return false;
+		}
+		}
+	});
+	
+}
+
+</script>
+<script type="text/javascript">
+
+
+function DesignationEditcheck(frmid){
+	
+	var desigcode   =$('#desigcode').val();
+	var designation =$('#designation').val();
+	var desigid     =   $('#deisignationid').val();
+	var count=false;
+	
+	console.log(desigid);
+	$.ajax({
+
+		type : "GET",
+		url : "DesignationEditCheck.htm",
+		data : {
+			
+			dcode:desigcode.trim(),
+			dname:designation.trim(),
+			desigid:desigid
+		},
+		datatype : 'json',
+		success : function(result) {
+			var ajaxresult = JSON.parse(result);
+			
+			if(ajaxresult[0]>0){
+				alert('Designation Code Already Exists');
+				count = false;
+			}else if(ajaxresult[1]>0){
+				alert('Designation Name Already Exists');
+				count = false;
+			}else if(count){
+			
+			var ret = confirm('Are you Sure To Submit ?');
+			if(ret){
+				return count;
+				$('#'+frmid).submit();
+				}else{
+					return count;
+				}
+		}else{
+			return count;
+		}
+		}
+	});	
+	
+}
+
+</script>
 
 </body>
 </html>

@@ -80,7 +80,8 @@ public interface AdminDao {
 	public long AddDesignation(EmployeeDesig desig)throws Exception;
 	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception;
 	public long EditDesignation(EmployeeDesig desig) throws Exception;
-	
-	
-	
+	public Object[] DesignationCodeCheck(String desigcode)throws Exception;
+	public Object[] DesignationCheck(String designation)throws Exception;
+	public Object[] DesignationCodeEditCheck(String desigcode,String desigid )throws Exception;
+	public Object[] DesignationEditCheck(String designation,String desigid)throws Exception;
 }

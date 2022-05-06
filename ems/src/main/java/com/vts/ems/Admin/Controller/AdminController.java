@@ -1056,7 +1056,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name);
 					desig.setDesigLimit(Long.parseLong(limit));
-					long result = service.EditDesignation(desig);
+					long result =0; //service.EditDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Updated Successfully");
 					} else {
@@ -1074,7 +1074,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					desig.setDesignation(name);
 					desig.setDesigLimit(Long.parseLong(limit));
 					
-					long result = service.AddDesignation(desig);
+					long result =0; //service.AddDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Added Successfully");
 					} else {
@@ -1089,5 +1089,45 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 		}
 		
-	                                         
+	    @RequestMapping(value = "DesignationAddCheck.htm", method = RequestMethod.GET)
+			  public @ResponseBody String DesignationAddCheck(HttpSession ses, HttpServletRequest req) throws Exception 
+			  {
+				String UserId=(String)ses.getAttribute("Username");
+				Object[] DisDesc = null;
+				logger.info(new Date() +"Inside DesignationAddCheck.htm "+UserId);
+				try
+				{	  
+					String desigcode=req.getParameter("dcode");
+					String designation=req.getParameter("dname");
+					DisDesc =service.DesignationAddCheck(desigcode,designation);
+				}
+				catch (Exception e) {
+						e.printStackTrace(); logger.error(new Date() +"Inside DesignationAddCheck.htm "+UserId,e);
+				}
+				  Gson json = new Gson();
+				  return json.toJson(DisDesc);           
+				  
+			}
+		    
+		    @RequestMapping(value = "DesignationEditCheck.htm", method = RequestMethod.GET)
+			  public @ResponseBody String DesignationEditCheck(HttpSession ses, HttpServletRequest req) throws Exception 
+			  {
+				String UserId=(String)ses.getAttribute("Username");
+				Object[] DisDesc = null;
+				logger.info(new Date() +"Inside DesignationEditCheck.htm "+UserId);
+				try
+				{	  
+					String desigcode=req.getParameter("dcode");
+					String designation=req.getParameter("dname");
+					String desigid=req.getParameter("desigid");
+					DisDesc =service.DesignationEditCheck(desigcode,designation,desigid);
+				}
+				catch (Exception e) {
+						e.printStackTrace(); logger.error(new Date() +"Inside DesignationEditCheck.htm "+UserId,e);
+				}
+				  Gson json = new Gson();
+				  return json.toJson(DisDesc); 
+				  
+			}
+		
 }

@@ -1001,4 +1001,41 @@ public class AdminDaoImpl implements AdminDao{
 			return 0;
 		}		
 	}
+	private static final String DESIGNATIONCODECHECK="SELECT COUNT(desigcode),'desigcode' FROM employee_desig WHERE desigcode=:desigcode";
+	@Override
+	public Object[] DesignationCodeCheck(String desigcode)throws Exception
+	{
+		Query query =manager.createNativeQuery(DESIGNATIONCODECHECK);
+		query.setParameter("desigcode", desigcode);
+		return (Object[])query.getSingleResult();
+	}
+	
+	private static final String DESIGNATIONCHECK="SELECT COUNT(designation),'designation' FROM employee_desig WHERE designation=:designation";
+	@Override
+	public Object[] DesignationCheck(String designation)throws Exception
+	{
+		Query query =manager.createNativeQuery(DESIGNATIONCHECK);
+		query.setParameter("designation", designation);
+		return (Object[])query.getSingleResult();
+	}
+	
+	private static final String DESIGNATIONCODEEDITCHECK="SELECT COUNT(desigcode),'desigcode' FROM employee_desig WHERE desigcode=:desigcode AND desigid<>:desigid";
+	@Override
+	public Object[] DesignationCodeEditCheck(String desigcode,String desigid )throws Exception
+	{
+		Query query =manager.createNativeQuery(DESIGNATIONCODEEDITCHECK);
+		query.setParameter("desigcode", desigcode);
+		query.setParameter("desigid", desigid);
+		return (Object[])query.getSingleResult();
+	}
+	
+	private static final String DESIGNATIONEDITCHECK="SELECT COUNT(designation),'designation' FROM employee_desig WHERE designation=:designation AND desigid<>:desigid";
+	@Override
+	public Object[] DesignationEditCheck(String designation,String desigid)throws Exception
+	{
+		Query query =manager.createNativeQuery(DESIGNATIONEDITCHECK);
+		query.setParameter("designation", designation);
+		query.setParameter("desigid", desigid);
+		return (Object[])query.getSingleResult();
+	}
 }

@@ -73,8 +73,8 @@ public interface AdminService {
 	public long AddDesignation(EmployeeDesig desig)throws Exception;
 	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception;
 	public long EditDesignation(EmployeeDesig desig)throws Exception;
-	
-	
+	public Object[] DesignationAddCheck(String desigcode,String designation) throws Exception;
+	public Object[] DesignationEditCheck(String desigcode,String designation,String desigid) throws Exception;
 	
 	
 	
