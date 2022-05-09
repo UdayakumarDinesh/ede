@@ -167,6 +167,8 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("isself",isself);
+//			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
+			
 			if(isself.equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(patientid));
