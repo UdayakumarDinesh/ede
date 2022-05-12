@@ -18,7 +18,10 @@
 </style>
 </head>
 <body>
-<%List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");%>
+<%
+List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
+List<Object[]> emplist1 = (List<Object[]>)request.getAttribute("emplist1");
+%>
 
 
 
@@ -64,7 +67,7 @@
 			            <div class="col-4">
 			                <label class="text-nowrap  ">Handing Over To:<span class="mandatory">*</span></label>
 			                <select name="toemp" id="toemp" class="form-control select2">
-								<%for( Object[] obj: emplist){ %>
+								<%for( Object[] obj: emplist1){ %>
 									<option value="<%=obj[0]%>"><%=obj[1]%></option>
 								<%} %>
 			                </select>
@@ -157,7 +160,12 @@ function checkEmp()
 		alert("Both Employee Can Not Be Same!");
 		return false;
 	}else{
-		return true;
+		if(confirm("Are you sure To Submit?")){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 }
 

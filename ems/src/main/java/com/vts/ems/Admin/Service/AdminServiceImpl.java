@@ -473,8 +473,16 @@ public class AdminServiceImpl implements AdminService{
 		return returnobj;
 	}
 	
+	@Override
+	public List<Object[]> GetFromemployee()throws Exception
+	{
+		return dao.GetFromemployee();
+	}
 	
-	
-	
+	@Override
+	public List<Object[]> GetToemployee()throws Exception
+	{
+		return dao.GetToemployee();
+	}
 	
 }

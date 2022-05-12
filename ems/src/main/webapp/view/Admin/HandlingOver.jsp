@@ -105,14 +105,17 @@ String treat = (String)request.getAttribute("treat");
 								</thead>
 								<tbody>
 									<%for(Object[] obj:handingoverlist){ %>
-										<tr>
-											<td style="text-align: center;"><input type="radio" name="HandingOverId" value="<%=obj[0]%>"> </td>
+										<tr><%if("R".equalsIgnoreCase(obj[6].toString())){%>
+											<td style="text-align: center;"><input type="radio" disabled="disabled" name="HandingOverId" value="<%=obj[0]%>"> </td>
+											<%}else{%>
+											<td style="text-align: center;"><input type="radio"  name="HandingOverId" value="<%=obj[0]%>"> </td>
+											<%} %>
 											<td><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%></td>
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%></td>
 											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%></td>
-											<td><%if("A".equalsIgnoreCase(obj[6].toString())){%>Created Date<%}else if("R".equalsIgnoreCase(obj[6].toString())){%>Revoked<%}else{ %> Santioned<%} %></td>
+											<td><%if("A".equalsIgnoreCase(obj[6].toString())){%>Created <%}else if("R".equalsIgnoreCase(obj[6].toString())){%>Revoked<%}else{ %> Santioned<%} %></td>
 										</tr>
 									<%}%>
 								</tbody>
@@ -124,7 +127,7 @@ String treat = (String)request.getAttribute("treat");
 					<div class="row text-center">
 						<div class="col-md-12">						
 						<button type="submit" class="btn btn-sm add-btn"    name="Action" value="ADD" >ADD    </button>
-						<button type="submit" class="btn btn-sm delete-btn" name="Action" value="REVOKE" Onclick="Edit()" >REVOKE </button>
+						<button type="submit" class="btn btn-sm delete-btn" name="Action" value="REVOKE" Onclick="return Edit()" >REVOKE </button>
 					    </div>						 
 					</div>
 					
@@ -178,8 +181,14 @@ function Edit() {
 
 		event.preventDefault();
 		return false;
+	}else {
+		if(confirm("Are you sure To Revoke?")){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
-	return true;
 }
 </script>
 </html>

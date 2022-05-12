@@ -1038,4 +1038,22 @@ public class AdminDaoImpl implements AdminDao{
 		query.setParameter("desigid", desigid);
 		return (Object[])query.getSingleResult();
 	}
+	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT from_empid FROM leave_ra_sa_handingover WHERE STATUS='A' AND is_active='1')";
+	@Override
+	public List<Object[]> GetFromemployee()throws Exception
+	{
+		Query query = manager.createNativeQuery(FROMEMPLOYEE);
+		List<Object[]> list = (List<Object[]>)query.getResultList();	
+		return list; 
+	}
+	
+	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT to_empid FROM leave_ra_sa_handingover WHERE STATUS='A' AND is_active='1')";
+	@Override
+	public List<Object[]> GetToemployee()throws Exception
+	{
+		Query query = manager.createNativeQuery(TOEMPLOYEE);
+		List<Object[]> list = (List<Object[]>)query.getResultList();
+		
+		return list; 
+	}
 }

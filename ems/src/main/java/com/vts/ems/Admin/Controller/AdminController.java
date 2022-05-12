@@ -565,7 +565,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				String action = (String)req.getParameter("Action");
 				if("ADD".equalsIgnoreCase(action)) {
 					
-					req.setAttribute("emplist", pisservice.GetAllEmployee());
+					req.setAttribute("emplist",service.GetFromemployee());
+					req.setAttribute("emplist1",service.GetToemployee());
 					return "Admin/AddHandingOver";
 					
 				}else if("ADDHANDING".equalsIgnoreCase(action)){
@@ -601,9 +602,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else{
 						int result = service.AddHandingOver(ho);
 						if (result != 0) {
-							redir.addAttribute("result", "Handling Over officers added successfully");
+							redir.addAttribute("result", "Handing Over officers added successfully");
 						} else {
-							redir.addAttribute("resultfail", "Handling Over officers added Unsuccessfull");
+							redir.addAttribute("resultfail", "Handing Over officers added Unsuccessfull");
 						}
 					}
 					
@@ -614,15 +615,15 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String HandingOverId = req.getParameter("HandingOverId");
 					int updateRevokeInHandingOver = service.updateRevokeInHandingOver(EmpId, HandingOverId);
 					if (updateRevokeInHandingOver != 0) {
-		    			req.setAttribute("result", "Handing Over Revoked Successful");
+						redir.addAttribute("result", "Handing Over Revoked Successful");
 					} else {
-						req.setAttribute("resultfail", "Handing Over Revoked UnSuccessful");
+						redir.addAttribute("resultfail", "Handing Over Revoked UnSuccessful");
 					}
 					List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,new SimpleDateFormat("dd-MM-yyyy").format(new Date()));	
 					req.setAttribute("fromdate", fromdate1);
 					req.setAttribute("todate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 					req.setAttribute("handlingoverlist", handlingoverlist);
-					return "Admin/HandlingOver";
+					return "redirect:/HandingOver.htm";
 					
 				}else { 
 					String fromdate = (String)req.getParameter("fromdate");

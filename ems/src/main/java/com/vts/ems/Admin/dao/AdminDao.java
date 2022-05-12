@@ -84,4 +84,6 @@ public interface AdminDao {
 	public Object[] DesignationCheck(String designation)throws Exception;
 	public Object[] DesignationCodeEditCheck(String desigcode,String desigid )throws Exception;
 	public Object[] DesignationEditCheck(String designation,String desigid)throws Exception;
+	public List<Object[]> GetFromemployee()throws Exception;
+	public List<Object[]> GetToemployee()throws Exception;
 }
