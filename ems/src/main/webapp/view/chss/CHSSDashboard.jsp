@@ -374,7 +374,7 @@
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=employee.getEmpName() %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
 						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
-						<p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> 
+						<%-- <p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> --%> 
 					</div>
 				</div>	
 			</div>
@@ -399,7 +399,7 @@
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(obj[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;" >(<%=obj[7] %>)</span></h3>
 						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
-						<p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> 
+						<%-- <p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> --%> 
 					</div>
 				</div>	
 			</div>

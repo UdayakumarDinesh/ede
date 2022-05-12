@@ -973,7 +973,11 @@ public class CHSSServiceImpl implements CHSSService {
 			helper.setTo(Email);	
 			helper.setSubject( "Medical Claim Application");
 			helper.setText( mailbody , true);
-			javaMailSender.send(msg); 
+			try {
+				javaMailSender.send(msg); 
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		
