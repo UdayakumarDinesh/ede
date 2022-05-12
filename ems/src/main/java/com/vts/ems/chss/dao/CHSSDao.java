@@ -6,6 +6,7 @@ import java.util.List;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -93,11 +94,21 @@ public interface CHSSDao {
 	public List<Object[]> CHSSApprovalAuthList() throws Exception;
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception;
 	public long NotificationAdd(EMSNotification notification) throws Exception;
-	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception;
+	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
+	public long CHSSConsultMainAdd(CHSSConsultMain consultmain) throws Exception;
+	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception;
+	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception;
+	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception;
+	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception;
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception;
+	public int ConsultBillsDelete(String consultmainid) throws Exception;
+	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
+	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception;
 
 }

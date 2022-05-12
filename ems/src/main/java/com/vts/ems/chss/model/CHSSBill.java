@@ -20,7 +20,8 @@ public class CHSSBill implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long BillId;
-	private Long CHSSApplyId; 
+	private long CHSSApplyId; 
+	private long CHSSConsultMainId;
 	private String BillNo; 
 	private String CenterName;
 	private String BillDate;

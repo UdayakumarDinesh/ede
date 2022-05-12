@@ -718,7 +718,7 @@ th,td
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSAppliedDetails.htm">
+									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
@@ -726,7 +726,7 @@ th,td
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSAppliedDetails.htm">
+									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >

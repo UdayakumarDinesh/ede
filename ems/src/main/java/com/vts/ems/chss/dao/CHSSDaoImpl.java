@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -192,6 +194,17 @@ public class CHSSDaoImpl implements CHSSDao {
 		return bill.getBillId();
 	}
 	
+	
+	@Override
+	public long CHSSConsultMainAdd(CHSSConsultMain consultmain) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultMainAdd");
+		manager.persist(consultmain);
+		manager.flush();
+		
+		return consultmain.getCHSSConsultMainId();
+	}
+	
 	@Override
 	public CHSSApply CHSSApplied(String chssapplyid) throws Exception
 	{
@@ -259,6 +272,26 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	
+	
+	
+	
+	@Override
+	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultMainBillsList");
+		try {
+			Query query = manager.createNativeQuery("CALL chss_consult_bills_list (:chssapplyid ,:consultmainid );");
+			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("consultmainid", consultmainid);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
 	private static final String CLAIMCONSULTATIONSCOUNT = "SELECT COUNT(cc.consultationid),'count' FROM chss_bill cb, chss_consultation cc WHERE cb.billid=cc.BillId AND cc.isactive=1 AND cb.chssapplyid=:CHSSApplyId";
 	
 	@Override
@@ -316,6 +349,20 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
+	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSConsultMainEdit");
+		try {
+			return manager.find(CHSSConsultMain.class, Long.parseLong(ConsultMainId));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
 	public CHSSBill getCHSSBill(String billid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getCHSSBill");
@@ -360,6 +407,41 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	@Override
+	public int CHSSConsultMainDelete(String  consultmainid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
+		try {
+			CriteriaBuilder criteriaBuilder  = manager.getCriteriaBuilder();
+			CriteriaDelete<CHSSConsultMain> query = criteriaBuilder.createCriteriaDelete(CHSSConsultMain.class);
+			Root<CHSSConsultMain> root = query.from(CHSSConsultMain.class);
+			query.where(root.get("CHSSConsultMainId").in(Long.parseLong(consultmainid)));
+
+			int result = manager.createQuery(query).executeUpdate();
+			return result;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+		
+	@Override
+	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
+		try {
+			manager.merge(consultmain);
+			manager.flush();
+			
+			return consultmain.getCHSSConsultMainId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 	
 	@Override
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception
@@ -1216,6 +1298,26 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
+	private static final String GETCHSSCONSULTMAINLIST = "SELECT   ccm.CHSSConsultMainId,ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate FROM   chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSConsultMainId IN ( SELECT cb.CHSSConsultMainId FROM chss_bill cb WHERE cb.IsActive=1 AND cb.CHSSApplyId = :applyid ) AND  ccm.CHSSApplyId <> :applyid UNION SELECT ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate FROM  chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSApplyId = :applyid ";
+	
+	@Override
+	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSConsultMainList");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(GETCHSSCONSULTMAINLIST);
+			query.setParameter("applyid", applyid);
+			list =  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;		
+	}
+	
+	
 	
 	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType IN ('K','V','W','Z')  ";
 	@Override
@@ -1274,15 +1376,15 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CONSULTATIONHISTOR  ="SELECT cc.ConsultationId,ca.CHSSApplyNo,cb.Billno, cc.ConsultType, cc.DocName, cdr.DocQualification, cc.ConsultDate, cc.ConsultCharge, cc.ConsultRemAmount FROM chss_apply ca, chss_apply ca1, chss_bill cb, chss_consultation cc, chss_doctor_rates cdr WHERE ca.IsActive = 1 AND cb.isactive=1 AND cc.isactive=1 AND  cb.BillId = cc.BillId AND cb.CHSSApplyId = ca.CHSSApplyId AND cc.DocQualification=cdr.DocRateId AND ca.empid=ca1.empid AND ca.PatientId=ca1.PatientId AND ca.IsSelf = ca1.IsSelf AND ca1.chssapplyid=:chssapplyid ";
+	private static final String CONSULTATIONHISTORY  ="SELECT cc.ConsultationId,ca.CHSSApplyNo,cb.Billno, cc.ConsultType, cc.DocName, cdr.DocQualification, cc.ConsultDate, cc.ConsultCharge, cc.ConsultRemAmount FROM chss_apply ca, chss_apply ca1, chss_bill cb, chss_consultation cc, chss_doctor_rates cdr WHERE ca.IsActive = 1 AND cb.isactive=1 AND cc.isactive=1 AND  cb.BillId = cc.BillId AND cb.CHSSApplyId = ca.CHSSApplyId AND cc.DocQualification=cdr.DocRateId AND ca.empid=ca1.empid AND ca.PatientId=ca1.PatientId AND ca.IsSelf = ca1.IsSelf AND ca1.chssapplyid=:chssapplyid ";
 	@Override
-	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception
+	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultationHistor");
+		logger.info(new Date() +"Inside DAO ConsultationHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
-			Query query= manager.createNativeQuery(CONSULTATIONHISTOR);
+			Query query= manager.createNativeQuery(CONSULTATIONHISTORY);
 			query.setParameter("chssapplyid", chssapplyid);
 			list=  (List<Object[]>)query.getResultList();
 			
@@ -1370,6 +1472,77 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	private static final String CONSULTBILLSCONSULTCOUNT  ="SELECT COUNT(cc.ConsultationId) AS 'consult count' , 'count' AS 'Count' FROM chss_consultation cc, chss_bill cb WHERE cb.IsActive=1 AND cc.IsActive =1 AND cb.BillId = cc.BillId AND cb.CHSSConsultMainId =:chssconsultmainid AND cb.CHSSApplyId = :chssapplyid";
+	@Override
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ConsultBillsConsultCount");
+		Object[] list = null;
+		try {
+			
+			Query query= manager.createNativeQuery(CONSULTBILLSCONSULTCOUNT);
+			query.setParameter("chssconsultmainid", consultmainid);
+			query.setParameter("chssapplyid", chssapplyid);
+			
+			list=  (Object[])query.getSingleResult();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
 	
+	private static final String CONSULTBILLSDELETE  ="UPDATE chss_bill SET isactive=0 WHERE CHSSConsultMainId =:consultmainid";
+	@Override
+	public int ConsultBillsDelete(String consultmainid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ConsultBillsDelete");
+		try {
+			Query query= manager.createNativeQuery(CONSULTBILLSDELETE);
+			query.setParameter("consultmainid", consultmainid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	private static final String PATIENTCONSULTHISTORY  ="SELECT  ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.ConsultDate, ccm.DocName, ca.Ailment FROM  chss_apply ca,chss_apply ca1,  chss_consult_main ccm WHERE ca.CHSSApplyId = ccm.CHSSApplyId  AND ccm.isactive = 1  AND ca.isactive = 1  AND ccm.CHSSConsultMainId NOT IN  (SELECT     ccm1.CHSSConsultMainId  FROM    chss_consult_main ccm1  WHERE ccm1.CHSSApplyId = :chssapplyid)  AND ca.EmpId=ca1.EmpId AND ca.PatientId = ca1.PatientId AND ca.IsSelf = ca1.IsSelf   AND ca.CHSSStatusId =14 AND ca1.CHSSApplyId =:chssapplyid";
+	@Override
+	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO PatientConsultHistory");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			
+			Query query= manager.createNativeQuery(PATIENTCONSULTHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list=  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
+	
+	private static final String OLDCONSULTMEDSLIST  ="SELECT cb.CHSSApplyId, cb.BillId, cm.CHSSMedicineId, cm.MedicineName, cm.PresQuantity, cm.MedQuantity FROM chss_bill cb, chss_medicine cm WHERE cb.IsActive =1 AND cm.IsActive =1 AND cb.BillId = cm.BillId AND cb.BillId = (SELECT MIN(cb1.BillId) FROM chss_bill cb1 WHERE  cb1.IsActive = 1 AND cb1.CHSSConsultMainId=:CHSSConsultMainId) AND cb.CHSSConsultMainId =:CHSSConsultMainId ";
+	@Override
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO OldConsultMedsList");
+		List<Object[]> list = new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(OLDCONSULTMEDSLIST);
+			query.setParameter("CHSSConsultMainId", CHSSConsultMainId);
+			list=  (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  list;
+		
+	}
 	
 }
