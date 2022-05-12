@@ -28,9 +28,13 @@ public class CHSSApplyDto {
 	private String Ailment;
 	private String ContingentId;
 	
-	private String[] BillNo; 
-	private String[] CenterName;
-	private String[] BillDate;
-//	private String[] BillAmount;
+//	private String[] BillNo; 
+//	private String[] CenterName;
+//	private String[] BillDate;
+
+//	private String[] consulttype; 
+	private String[] DocName;
+	private String[] ConsultDate;
+	
 	
 }

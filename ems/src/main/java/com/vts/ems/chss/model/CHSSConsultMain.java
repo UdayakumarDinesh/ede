@@ -22,7 +22,7 @@ public class CHSSConsultMain implements Serializable
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long CHSSConsultMainId;
-	private Long ClaimId;
+	private Long CHSSApplyId;
 	private String ConsultType;	
 	private String DocName;
 	private Integer DocQualification;

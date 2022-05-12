@@ -24,10 +24,12 @@ import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
+import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
+import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -90,6 +92,12 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSBill(billid);
 	}
 	
+	@Override
+	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception
+	{
+		return dao.getCHSSConsultMainList(applyid);
+	}
+	
 	
 	@Override
 	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception
@@ -137,29 +145,25 @@ public class CHSSServiceImpl implements CHSSService {
 				applyid=Long.parseLong(dto.getCHSSApplyId());
 			}
 			
-			long billid =0;
-			for(int i=0 ; i<dto.getCenterName().length && applyid>0 ; i++)
+			long conmainid =0;
+			for(int i=0 ; dto.getDocName()!=null && i<dto.getDocName().length && applyid>0 ; i++)
 			{
-				CHSSBill bill = new CHSSBill();
-				bill.setCHSSApplyId(applyid);
-				bill.setCenterName(dto.getCenterName()[i].trim());
-				bill.setBillNo(dto.getBillNo()[i]);
-				bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
-				bill.setIsActive(1);
-				bill.setCreatedBy(dto.getCreatedBy());
-				bill.setCreatedDate(sdtf.format(new Date()));
-				
-				billid = dao.CHSSBillAdd(bill);
+				CHSSConsultMain conmain = new CHSSConsultMain();
+//				conmain.setConsultType(dto.getConsulttype()[i]);
+				conmain.setCHSSApplyId(applyid);
+				conmain.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
+				conmain.setDocName(dto.getDocName()[i]);
+				conmain.setCreatedBy(dto.getCreatedBy());
+				conmain.setCreatedDate(sdtf.format(new Date()));
+				conmain.setIsActive(1);
+				conmainid = dao.CHSSConsultMainAdd(conmain);
 			}
 			
 			if(dto.getCHSSApplyId()==null) {
 				return applyid;
 			}
 			
-			return billid;
-			
-			
-						
+			return conmainid;
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -168,6 +172,88 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
+	
+	
+	
+	
+//	@Override
+//	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception
+//	{
+//		logger.info(new Date() +"Inside SERVICE CHSSApplySubmit");		
+//		try {
+//			long applyid=0;
+//			if(dto.getCHSSApplyId()==null) {
+//				CHSSApply apply= new CHSSApply();
+//				apply.setEmpId(Long.parseLong(dto.getEmpId()));
+//				apply.setPatientId(Long.parseLong(dto.getPatientId()));
+//				
+//				if(dto.getRelationId().equalsIgnoreCase("0")) {
+//					apply.setIsSelf("Y");
+//				}else {
+//					apply.setIsSelf("N");
+//				}
+//				
+//				apply.setFollowUp("N");
+//				apply.setCHSSNewId(0L);
+//				apply.setCHSSType(dto.getCHSSType());
+//				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
+//				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
+//				apply.setAilment(dto.getAilment());
+//				apply.setCHSSStatusId(1);
+//				apply.setIsActive(1);
+//				apply.setCreatedBy(dto.getCreatedBy());
+//				apply.setCreatedDate(sdtf.format(new Date()));
+//				apply.setCHSSApplyDate(sdf.format(new Date()));
+//				apply.setRemarks(dto.getRemarks());
+//				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
+//				apply.setContingentId(0L);
+//				applyid=dao.CHSSApplyAdd(apply);
+//				
+//				CHSSApplyTransaction transac =new CHSSApplyTransaction();
+//				transac.setCHSSApplyId(applyid);
+//				transac.setCHSSStatusId(1);
+//				transac.setRemark("");
+//				transac.setActionBy(Long.parseLong(dto.getEmpId()));
+//				transac.setActionDate(sdtf.format(new Date()));
+//				dao.CHSSApplyTransactionAdd(transac);
+//				
+//			}else
+//			{
+//				applyid=Long.parseLong(dto.getCHSSApplyId());
+//			}
+//			
+//			long billid =0;
+//			for(int i=0 ; i<dto.getCenterName().length && applyid>0 ; i++)
+//			{
+//				CHSSBill bill = new CHSSBill();
+//				bill.setCHSSApplyId(applyid);
+//				bill.setCenterName(dto.getCenterName()[i].trim());
+//				bill.setBillNo(dto.getBillNo()[i]);
+//				bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
+//				bill.setIsActive(1);
+//				bill.setCreatedBy(dto.getCreatedBy());
+//				bill.setCreatedDate(sdtf.format(new Date()));
+//				
+//				billid = dao.CHSSBillAdd(bill);
+//			}
+//			
+//			if(dto.getCHSSApplyId()==null) {
+//				return applyid;
+//			}
+//			
+//			return billid;
+//			
+//			
+//						
+//			
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error(new Date() +" Inside SERVICE CHSSApplySubmit");
+//			return 0;
+//		}
+//		
+//	}
+	
 	
 	public String GenerateCHSSClaimNo() throws Exception
 	{
@@ -209,6 +295,14 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.CHSSBillsList(chssapplyid);
 	}
+	
+	
+	@Override
+	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception
+	{
+		return dao.CHSSConsultMainBillsList(consultmainid,chssapplyid);
+	}
+	
 	@Override
 	public List<Object[]> empCHSSList(String empid,String PatientId, String FromDate, String Todate, String IsSelf) throws Exception
 	{
@@ -238,11 +332,36 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.claimConsultationsCount(chssapplyid);
 	}
 	
+	@Override
+	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception
+	{
+		CHSSConsultMain fetch = dao.getCHSSConsultMain(String.valueOf(consultmain.getCHSSConsultMainId()));
+		
+		fetch.setDocName(consultmain.getDocName());
+		fetch.setConsultDate(consultmain.getConsultDate());
+		fetch.setModifiedBy(consultmain.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		return dao.CHSSConsultMainEdit(fetch);
+	}
+		
+	@Override
+	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception
+	{
+		return dao.getCHSSConsultMain(ConsultMainId);
+	}
+	
+	@Override
+	public long CHSSConsultMainDelete(String consultmainid, String modifiedby) throws Exception
+	{
+	
+		dao.ConsultBillsDelete(consultmainid);
+		return dao.CHSSConsultMainDelete(consultmainid);
+	}
 	
 	@Override
 	public long CHSSBillEdit(CHSSBill bill) throws Exception
 	{
-		
 		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
 		
 		fetch.setCenterName(bill.getCenterName());
@@ -251,15 +370,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedBy(bill.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
-		
 		return dao.CHSSBillEdit(fetch);
-				
 	}
 	
 	@Override
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception
 	{
-		
 		CHSSBill fetch = dao.getCHSSBill(billid);
 		
 		fetch.setIsActive(0);
@@ -267,13 +383,11 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
 		return dao.CHSSBillEdit(fetch);
-				
 	}
 	
 	@Override
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception
 	{
-		
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
 		fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 //		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
@@ -1268,9 +1382,9 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public List<Object[]> ConsultationHistor(String chssapplyid) throws Exception
+	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception
 	{
-		return dao.ConsultationHistor(chssapplyid);
+		return dao.ConsultationHistory(chssapplyid);
 	}
 	
 	
@@ -1296,5 +1410,47 @@ public class CHSSServiceImpl implements CHSSService {
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception
 	{
 		return dao.MiscItemsHistory(chssapplyid);
+	}
+	
+	@Override
+	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception
+	{
+		long billid =0;
+		for(int i=0 ; i<dto.getBillNo().length ; i++)
+		{
+			CHSSBill bill = new CHSSBill();
+			bill.setCHSSApplyId(Long.parseLong(dto.getCHSSApplyId()));
+			bill.setCHSSConsultMainId(Long.parseLong(dto.getCHSSConsultMainId()));
+			bill.setBillNo(dto.getBillNo()[i]);
+			bill.setCenterName(dto.getCenterName()[i]);
+			bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
+			bill.setIsActive(1);
+			bill.setCreatedBy(dto.getCreatedBy());
+			bill.setCreatedDate(sdtf.format(new Date()));
+			
+			billid=dao.CHSSBillAdd(bill);
+		}
+		
+		
+		return billid;
+	}
+	
+	@Override
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception
+	{
+		return dao.ConsultBillsConsultCount(consultmainid,chssapplyid);
+	}
+	
+	@Override
+	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception
+	{
+		return dao.PatientConsultHistory(chssapplyid);
+	}
+	
+	
+	@Override
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception
+	{
+		return dao.OldConsultMedsList(CHSSConsultMainId);
 	}
 }

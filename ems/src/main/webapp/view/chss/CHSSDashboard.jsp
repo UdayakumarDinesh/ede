@@ -492,7 +492,7 @@
 									<%=obj[18] %> </a></td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSAppliedDetails.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 											</button>	
 										<%} %>

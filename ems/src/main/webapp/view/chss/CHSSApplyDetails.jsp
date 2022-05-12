@@ -35,6 +35,7 @@
 	Employee employee = (Employee )request.getAttribute("employee") ;
 	String isself = (String )request.getAttribute("isself") ;
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
+	List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory");
 	
 	/* List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates"); */
 %>
@@ -76,8 +77,6 @@
 			</div>
 		<%} %>
 	</div>
-	
-	
 				
 			<div class="card" >
 				<div class="card-body " >
@@ -154,47 +153,32 @@
 								
 							</table> -->
 							
-							<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
+							<!-- <table class="table table-bordered table-hover table-condensed info shadow-nohover" >
 								<thead>
 									<tr>
 										<td style="width:5%;">SN</td>
 										<th style="width:15%;"> Consultation </th>
 										<th style="width:30%;">Name of the Doctor</th>
-										<!-- <th style="width:20%;">Qualification</th> -->
 										<th style="width:15%;">Date</th>
 										<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr class="tr_clone" >
-											<td>
-												<select class="form-control w-100" name="consult-type" required="required" >
-													<option value="Fresh">Fresh</option>
-													<option value="FollowUp">FollowUp</option>
-												</select>
-											</td>
-											<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
-											<%-- <td>
-												<select class="form-control w-100" name="doc-qualification" required="required" >
-													<%for(CHSSDoctorRates rate:doctorrates ){ %>
-														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
-													<%} %>
-												</select>
-											</td> --%>
-											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-								</tbody>							
-								
-							</table>
+										<td><span class="sno" id="sno">1</span> </td>
+										<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+										<td><input type="text" class="form-control cons-date " name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
+										<td><button type="button" class="btn btn-sm tbl-row-rem"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+									</tr>
+								</tbody>								
+							</table> -->
 							
 							
 							
 						</div>
 						
 						<div class="row justify-content-center">
-							<button type="submit" class="btn btn-sm submit-btn" name="action" value="add" Onclick="return confirm('Are You Sure To Submit?')" >ENTER BILL DETAILS</button>						
+							<button type="submit" class="btn btn-sm submit-btn" name="action" value="add" Onclick="return confirm('Are You Sure To Submit?')" >save</button>						
 						</div>
 					</form>
 				</div>
@@ -222,7 +206,7 @@ var count=1;
 		
 		$clone.find(".sno").html(count).end(); 
 		 
-	  $clone.find('.billdate').daterangepicker({
+	  $clone.find('.cons-date').daterangepicker({
 			"singleDatePicker" : true,
 			"linkedCalendars" : false,
 			"showCustomRangeLabel" : true,
@@ -234,6 +218,7 @@ var count=1;
 				format : 'DD-MM-YYYY'
 		}
 		});
+	  $('[data-toggle="tooltip"]').tooltip('dispose');
 	  $('[data-toggle="tooltip"]').tooltip({
 			 trigger : 'hover',
 		});
@@ -245,16 +230,19 @@ var count=1;
 	$("table").on('click','.tbl-row-rem' ,function() {
 	var cl=$('.tr_clone').length;
 	if(cl>1){
-	          
+	   $('[data-toggle="tooltip"]').tooltip('dispose');        
 	   var $tr = $(this).closest('.tr_clone');
 	   var $clone = $tr.remove();
 	   $tr.after($clone);
-	   
+	  
+	   $('[data-toggle="tooltip"]').tooltip({
+			 trigger : 'hover',
+		});
 	}
 	   
 	});
 
-	$('.billdate').daterangepicker({
+	$('.cons-date').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,

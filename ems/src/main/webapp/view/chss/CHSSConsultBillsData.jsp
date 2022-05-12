@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.chss.model.CHSSConsultMain"%>
 <%@page import="com.vts.ems.chss.model.CHSSApply"%>
 <%@page import="com.vts.ems.chss.model.CHSSApproveAuthority"%>
 <%@page import="com.vts.ems.chss.model.CHSSMedicinesList"%>
@@ -66,7 +67,7 @@ p {
 	Employee employee = (Employee )request.getAttribute("employee") ;
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
-	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
+	/* List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist"); */
 	List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist");	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
@@ -74,6 +75,11 @@ p {
 	List<CHSSOtherItems> otheritemslist = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
 	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
 	List<CHSSMedicinesList> allowedmeds =(List<CHSSMedicinesList>)request.getAttribute("allowedmed");
+	
+	/* List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory"); */
+	
+	
+	CHSSConsultMain consultmain =(CHSSConsultMain) request.getAttribute("consultmain");
 	
 	Object[] consultcount = (Object[])request.getAttribute("consultcount");
 	Object[] medicinecount = (Object[])request.getAttribute("medicinecount");
@@ -91,6 +97,7 @@ p {
 	}
 	
 	String billid =(String)request.getAttribute("billid");
+	String consultmainid =(String)request.getAttribute("consultmainid");
 	String tab =(String)request.getAttribute("tab");
 %>
 
@@ -134,73 +141,61 @@ p {
 	
 			<div class="card" >
 				<div class="card-body " >
-				<%if(Integer.parseInt(chssapplydata[9].toString())>1){ %>
-					<div class="row">
-						<div class="col-md-12">
-							<p>Remark : 
-							<%=chssapplydata[19] %></p>
-						</div>
-					</div>
-				<%} %>
 				
-					<form action="CHSSApplyEdit.htm" method="post" autocomplete="off"  >
 						
 						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
-						<div class="row">
+						
 							
-							<%if(isself.equalsIgnoreCase("N")){
-								Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
+							<div class="row">
 								
-								<div class="col-4" >
-								<div class="row" style="padding:5px; ">
-									<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
+								<%if(isself.equalsIgnoreCase("N")){
+									Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
+									
+									<div class="col-3" >
+										<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
+									</div>
+									<div class="col-3">
+										<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
+										
+									</div>
+								<%}else{ %>
+									<div class="col-3">
+											<b> Patient Name : &nbsp;</b><%=employee.getEmpName() %>
+									</div>
+									<div class="col-3">
+											<b>Relation : &nbsp;</b>SELF
+											
+									</div>
+								<%} %>
+								<div class="col-3">
+									<b>Treatment Type : </b> <%=chssapplydata[10] %>																	
+								</div>
+								<div class="col-3">
+									<b>Ailment/Disease/Accident : </b><%=chssapplydata[17] %>
 								</div>
 								
-								<div class="row" style="padding:5px; ">
-									<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
-									<input type="hidden" name="patientid" value="<%=familyMemberData[0]%>">
-									<input type="hidden" name="relationid" value="<%=familyMemberData[2]%>">
-								</div>
-								</div>
-							<%}else{ %>
-								<div class="col-4">
-								<div class="row" style="padding:5px; ">
-									<b> Patient Name : &nbsp;</b><%=employee.getEmpName() %>
-								</div>
+								<!-- <div class="col-1">
+									<button type="submit" class="btn btn-sm " style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button> 
+								</div> -->
 								
-								<div class="row" style="padding:5px; ">
-									<b>Relation : &nbsp;</b>SELF
-									<input type="hidden" name="patientid" value="<%=employee.getEmpId()%>">
-									<input type="hidden" name="relationid" value="0">
-								</div>
-								</div>
-							<%} %>
-							<div class="col-2">
-								<b>Treatment Type : </b><br>
-								<select class="form-control select2 w-100" name="treatmenttype" id="treatmenttype" required="required" data-live-search="true" >
-									<option value="" selected="selected" disabled="disabled">Choose..</option>
-									<%for(CHSSTreatType treattype : treattypelist ){ %>
-										<option value="<%=treattype.getTreatTypeId()%>" <%if(Integer.parseInt(chssapplydata[7].toString())==treattype.getTreatTypeId()){ %>selected<%} %> ><%=treattype.getTreatmentName() %></option>
-									<%} %>								
-								</select>
 							</div>
-							<div class="col-3">
-								<b>Ailment/Disease/Accident : </b><br>
-								<input type="text" class="form-control w-100" name="ailment" value="<%=chssapplydata[17] %>" required="required" maxlength="255" >
-							</div>
-							
-							<div class="col-1">
-								<button type="submit" class="btn btn-sm " style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button> 
+							<br>
+							<div class="row">
+								<div class="col-3">
+									<b>Claim Id : </b><%=chssapplydata[16] %>
+								</div>
+								<div class="col-3">
+									<b>Consulted Doctor : </b><%=consultmain.getDocName() %>
+								</div>
+								<div class="col-3">
+									<b>Consulted Date: </b><%=DateTimeFormatUtil.SqlToRegularDate(consultmain.getConsultDate() ) %>
+								</div>
 							</div>
 						</div>
-						</div>
-						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					</form>
+						
 						
 							<form method="post" action="#" autocomplete="off"  >
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 										<thead>
@@ -260,10 +255,14 @@ p {
 								
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 							</form>
-							<form method="post" action="CHSSBillAdd.htm" autocomplete="off" >
+						
+						
+					<form method="post" action="CHSSBillAdd.htm" autocomplete="off" >
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<div class="table-responsive">
 								<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 									<tbody>
@@ -282,52 +281,16 @@ p {
 							</div>
 						</form>
 						
-						<form action="CHSSUserPreview.htm" method="post" id="form2">
-							<div class="row">
-								
-								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="button" class="btn btn-sm view-icon" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
-										<i class="fa-solid fa-eye"></i>
+					<form action="CHSSConsultMainData.htm" method="post" id="form2">
+							<div class="row" align="center">
+								<div class="col-12">
+									<button type="submit" class="btn btn-sm back-btn" style="background-color: #541690;color: white;" name="claimaction"  data-toggle="modal" data-target=".my-encl-modal">
+										Back	
 									</button>
-									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
-										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
-									</button>
-									
 								</div>
 							</div>
 							
-							
-							
-							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-								<div class="modal-dialog  modal-dialog-centered" >
-									<div class="modal-content" >
-										<div class="modal-header">
-											
-											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
-										    </button>
-										</div>
-										<div class="modal-body" >
-									          <div class="row">
-											    <div class="col-12">
-											    	<b>No of Enclosures : </b><br>
-													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
-												</div>
-												
-												 <div class="col-12 w-100" align="center">
-												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
-													Save
-												</button>
-												</div>
-											</div>
-										</div>
-										
-									</div>
-								</div>	
-							</div>
-							
-							
+							<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 							<input type="hidden" name="claimaction" value="F">
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -335,9 +298,10 @@ p {
 					</form>
 					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
 						
-					<input type="hidden" name="claimaction" value="F">
-							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="claimaction" value="F">						
+						<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 					</form>
 					
@@ -375,16 +339,16 @@ p {
 			    <div class="row" >
 			    	<div class="col-12">
 				    	<div class="nav nav-pills nav-justified" id="nav-tabs">
-				    		<a class="nav-item nav-link co" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
-				    		<a class="nav-item nav-link te" data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
-				    		<a class="nav-item nav-link me" data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link ot" data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
-				    		<a class="nav-item nav-link mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
+				    		<a class="nav-item nav-link co" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
+				    		<a class="nav-item nav-link te" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
+				    		<a class="nav-item nav-link me" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
+				    		<a class="nav-item nav-link ot" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
+				    		<a class="nav-item nav-link mi" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
+				    		
 				    	</div>
 			    	</div>
 			    </div>
 			   <div class="tab-content " id="nav-tabContent" style="margin-top: 10px;">
-			   
 <!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		   
 			   		<div class="tab-pane fade show active" id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
 			   		
@@ -409,11 +373,12 @@ p {
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 						</div>
-				   		<div class="col-md-12" >
-				    		<form action="ConsultationBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+				   		<div class="col-md-12" id="consult-add-form" >
+				    		<form action="ConsultationBillAdd.htm"  method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
@@ -422,14 +387,16 @@ p {
 											<th style="width:20%;">Qualification</th>
 											<th style="width:15%;">Date</th>
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-cons" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											<!-- <th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-cons" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th> -->
 										</tr>
 									</thead>
 									<tbody>
 										<tr class="tr_clone_cons" >
 											<td>
-												<select class="form-control w-100" name="consult-type" required="required" >
+												<select class="form-control w-100" name="consult-type" id="consult-type" required="required" >
+													<%if(consultmain.getCHSSApplyId()==Long.parseLong(chssapplydata[0].toString())){ %>
 													<option value="Fresh">Fresh</option>
+													<%} %>
 													<option value="FollowUp">FollowUp</option>
 												</select>
 											</td>
@@ -441,9 +408,9 @@ p {
 													<%} %>
 												</select>
 											</td>
-											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											<td><input type="text" class="form-control " name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
+											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="0" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
+											<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
 										</tr>
 									</tbody>							
 									
@@ -453,6 +420,7 @@ p {
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
 				    	</div>
@@ -479,6 +447,7 @@ p {
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 						</div>
@@ -513,6 +482,7 @@ p {
 									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="confirm('Are You Sure To Submit?');">Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
@@ -520,9 +490,25 @@ p {
 			   		</div>
 <!-- ------------------------------------------------------- Tests --------------------------------------------------- -->
 <!-- ------------------------------------------------------- medicines --------------------------------------------------- -->			   		
-			   		<div class="tab-pane fade " id="nav-medicines" role="tabpanel" aria-labelledby="nav-medicines-tab">
+			   		<div class="tab-pane fade " id="nav-medicines" role="tabpanel" aria-labelledby="nav-medicines-tab" >
 			   		
 				   		<div class="col-md-12" >
+				   			<div class="row" align="center" style="margin-bottom: 10px;margin-top:5px; ">
+				   				<div class="col-12" align="left">
+				   					<b>Get Medicines From Previous Consultation of this Doctor:</b> 
+				   					<input type="checkbox" name="" id="old-consult" value="<%=consultmain.getCHSSConsultMainId() %>" onclick="FillMedsList()" >
+				   				
+				   					
+				   					<%--    
+				   					<select name="old-consult" class="select2" id="old-consult" style="width: 60%" onchange="FillMedsList();"  >
+				   						<option value="0"> New</option>
+				   						<%for(Object[] consult : consulthistory){ %>
+				   							<option value="<%=consult[0]%>"><%=consult[3]%> &emsp;-&emsp; <%=consult[4]%> &emsp;-&emsp; <%=DateTimeFormatUtil.SqlToRegularDate(consult[2].toString())%> </option>
+				   						<%} %>
+				   					</select> --%>
+				   				</div>
+				   			</div>
+				   		
 				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
@@ -541,6 +527,7 @@ p {
 									</tbody>
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
@@ -557,6 +544,9 @@ p {
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
 									</thead>
+									<tbody  id="meds-add-tbody">
+									
+									</tbody>
 									<tbody>
 										<tr class="tr_clone_meds" >
 											<td>
@@ -582,6 +572,7 @@ p {
 									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
@@ -608,6 +599,7 @@ p {
 									</tbody>
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
@@ -642,6 +634,7 @@ p {
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
 				    	</div>
@@ -669,6 +662,7 @@ p {
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 						</div>
@@ -695,6 +689,7 @@ p {
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
 				    	</div>
@@ -712,6 +707,8 @@ p {
 
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
 
+
+
 <script type="text/javascript">
 
 var tab = '<%=tab%>';
@@ -720,7 +717,7 @@ function showBillDetails($billid)
 {
 	$(".billid").val($billid);
 	
-	
+	/* $("#old-consult").select2("val", "0"); */
 	
 	var $billid = $('.billid').val();
 	$.ajax({
@@ -752,7 +749,7 @@ function showBillDetails($billid)
 				$('.'+tab).click();
 				tab= 'null';
 			}
-			
+			ConsultMainConsultCount();
 			$('.my-bill-modal').modal('toggle');
 			
 		}
@@ -790,21 +787,6 @@ function MedsAllowedList()
 	}
 	
 }
-
-$(document).ready( function() {
-	onlyNumbers();
-	getdoctorrates(<%=chssapplydata[7]%>);
-	MedsAllowedList();
-	<%if(billid!=null && !billid.equalsIgnoreCase("null") && Long.parseLong(billid)>0 ){%>
-		showBillDetails(<%=billid%>);
-	<%}%> 
-	
-	<%if(mcount>0 || ccount>0 ){%>
-		$('#treatmenttype').prop('disabled', true);
-	<%}%> 
-
-});   
-
 
 
 
@@ -1005,11 +987,11 @@ function getConsultdata()
 			
 			consultHTMLStr +=	'		</select> ';
 			consultHTMLStr +=	'	</td> ';
-			consultHTMLStr +=	' 	<td><input type="text" class="form-control items" name="doc-name-'+consult.ConsultationId+'" id="doc-name" value="'+consult.DocName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+			consultHTMLStr +=	' 	<td><input type="text" class="form-control items" name="doc-name-'+consult.ConsultationId+'" value="'+consult.DocName+'" style="width:100%; " readonly maxlength="255" required="required"></td> ';
 			consultHTMLStr +=	'	<td>';
 			
 			
-			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" id="doc-qualification"  required="required" > ';
+			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required" > ';
 			for(var u=0;u<$docrateslist.length;u++){
 				
 				if(Number(consult.DocQualification) === $docrateslist[u].DocRateId)
@@ -1023,17 +1005,14 @@ function getConsultdata()
 			
 			consultHTMLStr +=	'		</select> ';
 			
-			
-			
-			
 			consultHTMLStr +=	'	</td>';
 			
 			let now = new Date(consult.ConsultDate);
 			var dateString = moment(now).format('DD-MM-YYYY');
 			
-			consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date" name="cons-date-'+consult.ConsultationId+'" id="cons-date" value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
+			consultHTMLStr +=	'	<td><input type="text" class="form-control " name="cons-date-'+consult.ConsultationId+'"  value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
-			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'" id="cons-charge" value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
+			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'"  value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
 			consultHTMLStr +=	'	<td>';
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
@@ -1071,6 +1050,69 @@ function getConsultdata()
 		}
 	});
 	/* $('#nav-consultation-tab').click(); */
+}
+
+
+function ConsultMainConsultCount()
+{
+	
+	$.ajax({
+
+		type : "GET",
+		url : "ConsultBillsConsultCountAjax.htm",
+		data : {
+				
+			consultmainid : <%=consultmainid%>,
+			chssapplyid : <%=chssapplydata[0]%>,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		
+			if(result==0)
+			{
+						
+				/* ------------------------------------------------------- */				
+					$.ajax({
+				
+							type : "GET",
+							url : "ConsultMainDataAjax.htm",
+							data : {
+													
+								consultmainid : <%=consultmainid%>,
+								chssapplyid : <%=chssapplydata[0]%>,
+							},
+							datatype : 'json',
+							success : function(result) {
+			
+								var result = JSON.parse(result);
+												
+								$('#doc-name').val(result.DocName);
+								$('#doc-name').prop('readonly','readonly');
+								let consdate = new Date(result.ConsultDate);
+								var dateString = moment(consdate).format('DD-MM-YYYY');
+													
+								$('#cons-date').val(dateString);
+								/* 					
+									$('.te').prop('disabled', true);
+									$('.me').prop('disabled', true);
+									$('.ot').prop('disabled', true);
+									$('.mi').prop('disabled', true); 
+								*/
+											
+							}
+					});
+				/* ------------------------------------------------------- */				
+				
+			}else
+			{
+				$('#consult-add-form').hide();
+			}
+		
+			
+		}
+	});
+	
 }
 
 
@@ -1333,6 +1375,21 @@ if(cl>1){
   
 });
 
+$("table").on('click','.tbl-row-rem_meds_old' ,function() {
+	
+	var cl=$('.tr_clone_meds').length;
+	if(cl>1){
+	          
+	   var $tr = $(this).closest('.tr_clone_meds_old');
+	   var $clone = $tr.remove();
+	   $tr.after($clone);
+	  
+	}
+	  
+});
+
+
+
 function getMedicinesData(){
 	
 	var $billid = $('.billid').val();
@@ -1417,6 +1474,65 @@ function getMedicinesData(){
 		}
 	});
 }
+
+
+
+function FillMedsList()
+{
+	var oldconsultid=0;
+	if($('#old-consult').prop('checked')){
+		oldconsultid=$('#old-consult').val();
+	}else
+	{
+		oldconsultid=0;
+	}
+	console.log(oldconsultid);
+		$.ajax({
+		
+			type : "GET",
+			url : "OldConsultMedsListAjax.htm",
+			data : {
+									
+				consultmainid : oldconsultid,
+			},
+			datatype : 'json',
+			success : function(result) 
+			{
+				var result = JSON.parse(result);
+				var medsVals= Object.keys(result).map(function(e){
+					return result[e]
+				})
+				
+				var medsHTMLStr = '';
+				for(var m=0;m<result.length;m++)
+				{
+					var meds = result[m];
+					medsHTMLStr +=	'<tr class="tr_clone_meds_old tr_clone_meds" > ';
+					
+					medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name" id="med-name" readonly value="'+meds[3]+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+					
+					
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity" readonly id="meds-presquantity" value="'+meds[4]+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+					
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
+					medsHTMLStr +=	'	<td>';
+					medsHTMLStr +=	'		<button type="button" class="btn btn-sm tbl-row-rem_meds_old"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> ';
+					medsHTMLStr +=	'	</td> ';
+					medsHTMLStr +=	'</tr> ';
+					
+				}
+				
+				
+				$('#meds-add-tbody').html(medsHTMLStr);
+				setTooltip();
+							
+			}
+		});
+}
+
+
+
 
 </script>
 <!-- ------------------------------------------------------- medicines script --------------------------------------------------- -->
