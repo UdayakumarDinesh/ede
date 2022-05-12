@@ -639,7 +639,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							return "Admin/HandlingOver";
 							
 						}else{
-									
+									                        
 							List<Object[]> handlingoverlist = service.GethandlingOverList(fromdate1,new SimpleDateFormat("dd-MM-yyyy").format(new Date()));				
 							
 							req.setAttribute("handlingoverlist", handlingoverlist);
