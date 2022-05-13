@@ -35,6 +35,7 @@ public class CHSSApplyDto {
 //	private String[] consulttype; 
 	private String[] DocName;
 	private String[] ConsultDate;
+	private String[] DocQualification;
 	
 	
 }

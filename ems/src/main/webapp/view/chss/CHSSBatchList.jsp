@@ -176,13 +176,19 @@
 							<input type="hidden" name="isapproval" value="N">
 						</div>
 						
-						
+						<!-- The Covid vaccination charges and the breakup for the same has been considered for reimbursement as per the ION ref:  STARC/P&A/1625-292/2021 dated 03-09-2021 for those employees who were vaccinated on or before 08-06-2021.
+ -->
 						
 					<%if(chssclaimlist.size()>0){ %>		
 						<div class="row">
 							<div class="col-12">
 								Content :
-								<textarea class="w-100 form-control" rows="4" cols="100" id="billcontent" name="billcontent" maxlength="3000"></textarea>
+								<textarea class="w-100 form-control" rows="8" cols="100" id="billcontent" name="billcontent" maxlength="3000">According to note no. STARC/P&A/302-457/18 dated 31-07-2018 all the medical claims irrespective of amount will be reimbursed, after the approval of CEO.
+
+
+It is requested to approve the reimbursement of medical expenses as above and for payment to the above employees.
+
+Put up for approval.</textarea>
 							</div>						
 						</div>			 
 						<div class="col-md-12" align="center" style="margin-top: 5px;">

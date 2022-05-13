@@ -299,8 +299,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSAppliedList.htm "+Username);
 		try {
 			
-			return "chss/CHSSAppliedList";
-			
+			return "chss/CHSSAppliedList";			
 		 }catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSAppliedList.htm "+Username, e);
@@ -349,7 +348,7 @@ public class CHSSController {
 //			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 //			req.setAttribute("testmainlist", service.CHSSTestSubList(""));
 //			req.setAttribute("otheritemslist", service.OtherItemsList());
-//			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
+			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 //			req.setAttribute("billid", billid);
 //			req.setAttribute("tab", tab);
 			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
@@ -404,6 +403,7 @@ public class CHSSController {
 //			String[] centernames=req.getParameterValues("centername");
 			String[] docname=req.getParameterValues("docname");
 			String[] consultdate=req.getParameterValues("consultdate");
+			String[] docqualification=req.getParameterValues("doc-qualification");
 			
 			CHSSApplyDto dto=new CHSSApplyDto();
 			
@@ -411,6 +411,7 @@ public class CHSSController {
 //			dto.setConsulttype(centernames);
 			dto.setDocName(docname);
 			dto.setConsultDate(consultdate); 
+			dto.setDocQualification(docqualification);
 			dto.setCreatedBy(Username);
 			
 			long count= service.CHSSApplySubmit(dto);
@@ -420,8 +421,8 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Bill Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
-//			redir.addFlashAttribute("billid",String.valueOf(count));
-			return "redirect:/CHSSConsultMainData.htm";
+			redir.addFlashAttribute("consultmainid",String.valueOf(count));
+			return "redirect:/CHSSConsultBills.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSConsultMainAdd.htm "+Username, e);

@@ -707,9 +707,20 @@ p {
 
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
 
-
-
+<!-- <div class="nav nav-pills nav-justified" id="nav-tabs">
+				    		<a class="nav-item nav-link co" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
+				    		<a class="nav-item nav-link te" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
+				    		<a class="nav-item nav-link me" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
+				    		<a class="nav-item nav-link ot" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
+				    		<a class="nav-item nav-link mi" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
+				    		
+				    	</div>
+ -->
 <script type="text/javascript">
+
+
+
+
 
 var tab = '<%=tab%>';
 
@@ -848,7 +859,7 @@ $('.billdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	"minDate":threeMonthsAgo, 
+	"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -865,6 +876,20 @@ function setTooltip()
 		$(this).tooltip('hide');
 	});
 }
+
+
+$(document).ready( function() 
+		{
+	onlyNumbers();
+	getdoctorrates(<%=chssapplydata[7]%>);
+	MedsAllowedList();
+	<%if(billid!=null && !billid.equalsIgnoreCase("null") && Long.parseLong(billid)>0 ){%>
+		showBillDetails(<%=billid%>);
+	<%}%> 
+	
+});   
+
+
 </script>
 
 <!-- -------------------------------------------------------modal script --------------------------------------------------- -->

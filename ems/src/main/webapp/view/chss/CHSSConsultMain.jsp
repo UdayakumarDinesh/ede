@@ -71,13 +71,16 @@ p {
 	/* List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist"); */	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
-/* 	List<CHSSTestSub> testmainlist1 = (List<CHSSTestSub>)request.getAttribute("testmainlist");	
+	/* 	
+	List<CHSSTestSub> testmainlist1 = (List<CHSSTestSub>)request.getAttribute("testmainlist");	
 	List<CHSSOtherItems> otheritemslist1 = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
-	List<CHSSDoctorRates> doctorrates1 = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
+	
 	List<CHSSMedicinesList> allowedmeds1 =(List<CHSSMedicinesList>)request.getAttribute("allowedmed");
 	 */
+	 
+	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
 	List<Object[]> consultmainlist =(List<Object[]>)request.getAttribute("consultmainlist");
-	 List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory");
+	List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory");
 	
 	Object[] consultcount = (Object[])request.getAttribute("consultcount");
 	Object[] medicinecount = (Object[])request.getAttribute("medicinecount");
@@ -154,15 +157,15 @@ p {
 								Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
 								
 								<div class="col-4" >
-								<div class="row" style="padding:5px; ">
-									<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
-								</div>
-								
-								<div class="row" style="padding:5px; ">
-									<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
-									<input type="hidden" name="patientid" value="<%=familyMemberData[0]%>">
-									<input type="hidden" name="relationid" value="<%=familyMemberData[2]%>">
-								</div>
+									<div class="row" style="padding:5px; ">
+										<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
+									</div>
+									
+									<div class="row" style="padding:5px; ">
+										<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
+										<input type="hidden" name="patientid" value="<%=familyMemberData[0]%>">
+										<input type="hidden" name="relationid" value="<%=familyMemberData[2]%>">
+									</div>
 								</div>
 							<%}else{ %>
 								<div class="col-4">
@@ -207,13 +210,18 @@ p {
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
-									<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
+									<div style="text-align: center;margin: 3px;width: 99%">
+										<b style="color: #F32424">Consultations in this claim</b>
+									</div>
+									<table class="table table-bordered table-hover table-condensed info shadow-nohover ">
+										
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
-												<th style="width:50%;" >Doctor Name</th>
-												<th style="width:20%;" > Consultation Date </th>
-												<th style="width:25%;" >Action  </th>
+												<th style="width:30%;" >Doctor Name</th>
+												<th style="width:20%;" > Date </th>
+												<th style="width:25%;" >Qualification  </th>
+												<th style="width:20%;" >Action  </th>
 											</tr>
 										</thead>
 										<tbody >
@@ -221,7 +229,8 @@ p {
 										
 										ArrayList<String> claimconsultids = new ArrayList<String>();
 										int sno=0;
-										for(Object[] cmain : consultmainlist){
+										for(Object[] cmain : consultmainlist)
+										{
 											sno++;											
 										%>
 											
@@ -230,9 +239,14 @@ p {
 													<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
 													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%; "  maxlength="500" required="required"></td>
 													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
-												
 													<td>
-														
+														<select class="form-control" name="doc-qualification" required="required" >
+															<%for(CHSSDoctorRates rate:doctorrates ){ %>
+																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[4].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
+															<%} %>
+														</select>
+													</td>
+													<td>
 														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -250,6 +264,13 @@ p {
 													<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
 													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"  readonly="readonly" value="<%=cmain[2] %>" style="width:100%; "  maxlength="500" required="required"></td>
 													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
+													<td>
+														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
+															<%for(CHSSDoctorRates rate:doctorrates ){ %>
+																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[4].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
+															<%} %>
+														</select>
+													</td>
 													<td>
 														<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 															<i class="fa-solid fa-receipt"></i>
@@ -288,9 +309,16 @@ p {
 									<tbody>
 										<tr class="" >
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
-											<td style="width:45%;" ><input type="text" class="form-control items" name="docname"  value="" style="width:100%; "  maxlength="500" required="required"></td>
-											<td style="width:25%;" ><input type="text" class="form-control consultdate " name="consultdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-											<td style="width:25%;" >
+											<td style="width:30%;" ><input type="text" class="form-control items" name="docname"  value="" style="width:100%; "  maxlength="500" required="required"></td>
+											<td style="width:20%;" ><input type="text" class="form-control consultdate " name="consultdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
+											<td style="width:25%;">
+												<select class="form-control" name="doc-qualification" required="required" >
+													<%for(CHSSDoctorRates rate:doctorrates ){ %>
+														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
+													<%} %>
+												</select>
+											</td>
+											<td style="width:20%;" >
 												<button type="submit"  class="btn btn-sm add-btn" Onclick="return confirm('Are You Sure To Add ?');" name="action" value="add" >ADD</button>
 											</td>										
 										</tr>
@@ -307,12 +335,15 @@ p {
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
+									<div  style="text-align: center;margin: 3px;width: 99%">
+										<b style="color: #F32424">Add From Previous Consultations</b>
+									</div>
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
 												<th style="width:50%;" >Doctor Name</th>
-												<th style="width:20%;" > Consultation Date </th>
+												<th style="width:20%;" > Date </th>
 												<th style="width:25%;" >Action  </th>
 											</tr>
 										</thead>

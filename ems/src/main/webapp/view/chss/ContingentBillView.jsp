@@ -242,7 +242,7 @@ th,td
 							<%if( logintype.equalsIgnoreCase("K") ){ %>
 								<div class="col-12">
 									Content :
-									<textarea class="w-100 form-control" rows="4" cols="100" id="billcontent" name="billcontent" maxlength="3000"><%=contingentdata[8] %></textarea>
+									<textarea class="w-100 form-control" rows="8" cols="100" id="billcontent" name="billcontent" maxlength="3000"><%=contingentdata[8] %></textarea>
 								</div>	
 							<%} %>
 							
@@ -252,17 +252,17 @@ th,td
 							</div>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
 								<%}else if( billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return remarkRequired('R')" >Forward</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R')" >Forward</button>
 								<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Recommend?');"  >Recommend</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
 									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
 								<%}else if((billstatus==10) && logintype.equalsIgnoreCase("W")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Authorize?');"  >Authorize</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Recommend?');"  >Recommend</button>
 									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
 								<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
 									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
 								<%} %>
 							</div>	
@@ -281,7 +281,10 @@ th,td
 
 <script type="text/javascript">
 
-
+$('#fwd-btn').click(function(){
+	$('#remarks').attr('required', false);
+	
+}); 
 
 function remarkRequired(action)
 {
@@ -296,7 +299,7 @@ function remarkRequired(action)
 		
 	}else{
 		$('#remarks').attr('required', false);
-		return confirm('Are You Sure To Submit?');
+		return confirm('Are You Sure To Submit 111?');
 	}
 	
 }

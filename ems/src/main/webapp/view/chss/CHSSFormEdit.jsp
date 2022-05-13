@@ -61,9 +61,6 @@ th,td
 	text-align: right;
 }
 	
-
-
-
 </style>
 
 
@@ -106,9 +103,9 @@ th,td
 						<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5  ){ %>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
 						<%}else if(chssstatusid==6 ||   chssstatusid==9 ||   chssstatusid==10 ||   chssstatusid==13){ %>
-						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Approval List</a></li>
+						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
 						<%}else if(chssstatusid==7 ||   chssstatusid==8 ||   chssstatusid==11 ||   chssstatusid==12){ %>
-						<li class="breadcrumb-item "><a href="CHSSBatchList.htm">CHSS Contingent List</a></li>
+						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
 						<%} %>
 						<li class="breadcrumb-item active " aria-current="page">Claim</li>
 					</ol>
@@ -709,30 +706,27 @@ th,td
 								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 							</div>
 							<div class="col-md-12" align="center" style="margin-top: 5px;">
-								<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-									<%if( chssstatusid!=9){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Approve</button>
-									<%} %>
+							
+							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
+								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Verify</button>
+							
 									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
-								<%} else if(chssstatusid==1){ %>
-									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
+							
+							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
+							
+							<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
 									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
-								<%} else if(chssstatusid==3){ %>
-									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
-										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
-									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
-										Edit
-									</button>
-									<input type="hidden" name="claimaction" value="F" >
-								<%}else if(chssstatusid==6){ %>
+									
+							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
+							
 									<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
-								<%} %>
+							<%} %>
+								
 							</div>
 						</div>
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
@@ -1148,10 +1142,12 @@ function remarkRequired(action)
 		
 	}else{
 		$('#remarks').attr('required', false);
-		return confirm('Are You Sure To Approve?');
+		return confirm('Are You Sure To Verify?');
 	}
 	
 }
+
+
 function CheckClaimAmount($chssapplyid)
 {
 	$.ajax({

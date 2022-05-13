@@ -150,6 +150,7 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				CHSSConsultMain conmain = new CHSSConsultMain();
 //				conmain.setConsultType(dto.getConsulttype()[i]);
+				conmain.setDocQualification(Integer.parseInt(dto.getDocQualification()[i]));
 				conmain.setCHSSApplyId(applyid);
 				conmain.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				conmain.setDocName(dto.getDocName()[i]);
@@ -947,7 +948,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSApplyTransaction transac =new CHSSApplyTransaction();
 		transac.setCHSSApplyId(claim.getCHSSApplyId());
 		transac.setCHSSStatusId(claim.getCHSSStatusId());
-		transac.setRemark("");
+		transac.setRemark(remarks);
 		transac.setActionBy(Long.parseLong(EmpId));
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.CHSSApplyTransactionAdd(transac);
