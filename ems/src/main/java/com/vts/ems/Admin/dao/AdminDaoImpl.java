@@ -151,7 +151,7 @@ public class AdminDaoImpl implements AdminDao{
 		return FormModuleList;
 	}
 	
-	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid ORDER BY a.testsubid DESC";
+	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname ,a.testcode FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid ORDER BY a.testsubid DESC";
 	@Override
 	public List<Object[]> ChssTestSub() throws Exception
 	{
@@ -336,7 +336,7 @@ public class AdminDaoImpl implements AdminDao{
 			return null;
 		}
 	}
-	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.treattypeid =:treatmentid";
+	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename,a.medno  FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.treattypeid =:treatmentid";
 	@Override
 	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception
 	{
@@ -657,7 +657,7 @@ public class AdminDaoImpl implements AdminDao{
 		}		
 	}
 	
-	private static final String  CHECKHANDINGDATA="SELECT login_type, from_empid FROM leave_ra_sa_handingover  WHERE from_empid=:fromemp AND to_empid=:toemp AND STATUS='S' AND (:fromDate BETWEEN from_date  AND to_date  OR :toDate BETWEEN from_date  AND to_date  OR from_date BETWEEN :fromDate AND :toDate) AND is_active='1'";
+	private static final String  CHECKHANDINGDATA="SELECT login_type, from_empid FROM leave_ra_sa_handingover  WHERE  to_empid=:toemp AND STATUS='A' AND (:fromDate BETWEEN from_date  AND to_date  OR :toDate BETWEEN from_date  AND to_date  OR from_date BETWEEN :fromDate AND :toDate) AND is_active='1'";
 	@Override
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception
 	{
@@ -665,7 +665,7 @@ public class AdminDaoImpl implements AdminDao{
 		try {
 			
 			Query query= manager.createNativeQuery(CHECKHANDINGDATA);				
-			query.setParameter("fromemp", FromEmpid);
+			//query.setParameter("fromemp", FromEmpid);
 			query.setParameter("toemp", ToEmpid);
 			query.setParameter("fromDate", DateTimeFormatUtil.dateConversionSql(FromDate));
 			query.setParameter("toDate",DateTimeFormatUtil.dateConversionSql(ToDate) );
@@ -698,7 +698,7 @@ public class AdminDaoImpl implements AdminDao{
 	
 	private static final String REVOKEHANDINGOVER="UPDATE leave_ra_sa_handingover SET revokedate=:revokedate , revokeempid=:revokeempId , revokestatus=:revokestatus ,status=:status ,modifiedby=:modifiedby , modifieddate=:modifieddate WHERE handingover_id=:HandingOverId";
 	@Override
-	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception
+	public int updateRevokeInHandingOver(long empid ,String UserId, String HandingOverId)throws Exception
 	{
 		logger.info(new Date() + "Inside updateRevokeInHandingOver()");
 		int count=0;
@@ -711,7 +711,7 @@ public class AdminDaoImpl implements AdminDao{
 			query.setParameter("revokestatus","Y");
 			query.setParameter("status","R");
 			query.setParameter("revokedate",sdf.format(d));
-			query.setParameter("modifiedby", empid);
+			query.setParameter("modifiedby", UserId);
 			query.setParameter("modifieddate", sdtf.format(new Date()));
 			count = query.executeUpdate();
 			return count;
@@ -1001,6 +1001,7 @@ public class AdminDaoImpl implements AdminDao{
 			return 0;
 		}		
 	}
+	
 	private static final String DESIGNATIONCODECHECK="SELECT COUNT(desigcode),'desigcode' FROM employee_desig WHERE desigcode=:desigcode";
 	@Override
 	public Object[] DesignationCodeCheck(String desigcode)throws Exception
@@ -1038,7 +1039,8 @@ public class AdminDaoImpl implements AdminDao{
 		query.setParameter("desigid", desigid);
 		return (Object[])query.getSingleResult();
 	}
-	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT from_empid FROM leave_ra_sa_handingover WHERE STATUS='A' AND is_active='1')";
+	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
+	
 	@Override
 	public List<Object[]> GetFromemployee()throws Exception
 	{
@@ -1047,7 +1049,7 @@ public class AdminDaoImpl implements AdminDao{
 		return list; 
 	}
 	
-	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT to_empid FROM leave_ra_sa_handingover WHERE STATUS='A' AND is_active='1')";
+	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1'))";
 	@Override
 	public List<Object[]> GetToemployee()throws Exception
 	{
@@ -1055,5 +1057,14 @@ public class AdminDaoImpl implements AdminDao{
 		List<Object[]> list = (List<Object[]>)query.getResultList();
 		
 		return list; 
+	}
+	private static final String MAXMEDNO="SELECT MAX(medno) FROM chss_medicines_list WHERE treattypeid=:treattype";
+	@Override
+	public int GetMaxMedNo(String treatmenttype)throws Exception
+	{
+		Query query = manager.createNativeQuery(MAXMEDNO);
+		query.setParameter("treattype", treatmenttype);
+		Integer result = (Integer) query.getSingleResult();
+		return result;
 	}
 }

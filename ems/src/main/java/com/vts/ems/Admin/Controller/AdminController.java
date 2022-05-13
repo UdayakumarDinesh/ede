@@ -164,7 +164,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				logger.info(new Date() +"Inside ChssTestSub.htm "+UserId);
 				try {
 					 String action= (String)req.getParameter("action");
-					 System.out.println(action +"  req "+ req.getParameter("SubId"));
+					
 					 List<Object[]> TestMain = service.ChssTestMain(); 
 					 if("ADD".equalsIgnoreCase(action)){
 						
@@ -349,7 +349,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("treat", name);
 				} else {
 					
-					List<Object[]>  list = service.getMedicineList();
+					List<Object[]>  list = service.getMedicineListByTreatment("1");
 					List<Object[]> treatment = service.GetTreatmentType();
 					req.setAttribute("treatment", treatment);
 					req.setAttribute("MedicineList", list);
@@ -374,7 +374,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 				if("ADD".equalsIgnoreCase(action)){
 					String treatid = (String)req.getParameter("tratementname");
-					System.out.println(treatid);
+					
 					List<Object[]> treatment = service.GetTreatmentType();
 					req.setAttribute("treatment", treatment);
 					return "Admin/CHSSMedicineADDEDIT";
@@ -417,11 +417,14 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else {
 						medicinelist.setIsAdmissible("Y");
 					}
+					int  MedNo = service.GetMaxMedNo(tratementname);
+					
+					medicinelist.setMedNo(Long.valueOf(++MedNo));
 					medicinelist.setMedicineName(MedicineName);
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setCategoryId(0l);
 					medicinelist.setIsActive(1);
-					long result=service.AddMedicine(medicinelist);
+					long result = service.AddMedicine(medicinelist);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Medicine added successfully");
 					} else {
@@ -579,11 +582,11 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String toeme    = (String)req.getParameter("toemp");
 					String todate   = (String)req.getParameter("todate");
 					String fromdate = (String)req.getParameter("fromdate");
-					
+				
 					LeaveHandingOver ho = new LeaveHandingOver();
 					
 					ho.setFrom_empid(fromemp);
-					ho.setTo_empid(toeme);
+					ho.setTo_empid(toeme.split("//")[0]);
 					ho.setFrom_date(DateTimeFormatUtil.dateConversionSql(fromdate));
 					ho.setTo_date(DateTimeFormatUtil.dateConversionSql(todate));
 					ho.setStatus("A");
@@ -593,12 +596,12 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					ho.setCreatedate(sdtf.format(new Date()));
 					ho.setIs_active(1);
 					
-					Object[] checkAlreadyPresentForSameEmpidAndSameDates = service.checkAlreadyPresentForSameEmpidAndSameDates(fromemp, toeme, fromdate, todate);
+					Object[] checkAlreadyPresentForSameEmpidAndSameDates = service.checkAlreadyPresentForSameEmpidAndSameDates(fromemp, toeme.split("//")[0], fromdate, todate);
 					
 					if (fromemp.equalsIgnoreCase(toeme)) {
 						redir.addAttribute("resultfail", "Both Employee Can Not Be Same");
 					}else if(checkAlreadyPresentForSameEmpidAndSameDates!=null) {
-						redir.addAttribute("resultfail", "Add Restricted Because Of Duplicancy");
+						redir.addAttribute("resultfail", toeme.split("//")[1]+" is not available  for the related date ");
 					}else{
 						int result = service.AddHandingOver(ho);
 						if (result != 0) {
@@ -613,7 +616,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}else if("REVOKE".equalsIgnoreCase(action)){
 					
 					String HandingOverId = req.getParameter("HandingOverId");
-					int updateRevokeInHandingOver = service.updateRevokeInHandingOver(EmpId, HandingOverId);
+					int updateRevokeInHandingOver = service.updateRevokeInHandingOver(EmpId,UserId,HandingOverId);
 					if (updateRevokeInHandingOver != 0) {
 						redir.addAttribute("result", "Handing Over Revoked Successful");
 					} else {
@@ -625,7 +628,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("handlingoverlist", handlingoverlist);
 					return "redirect:/HandingOver.htm";
 					
-				}else { 
+				}else{ 
 					String fromdate = (String)req.getParameter("fromdate");
 					String todate = (String)req.getParameter("todate");
 							

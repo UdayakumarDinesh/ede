@@ -70,7 +70,7 @@ String treat = (String)request.getAttribute("treat");
 						        <div class="col-3">
 						        
 			                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
-									<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> 
+								<%-- 	<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> --%> 
 											<%if(main!=null&&main.size()>0){for(Object[] O:main){%>
 														<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
 														<%}}%>
@@ -87,10 +87,11 @@ String treat = (String)request.getAttribute("treat");
 						
 						<div class="table-responsive">
 						
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 				   			
 								<thead>
 									<tr>
 										<th>Select</th>
+										<th>SlNo.</th>
 										<th>Treatment Type</th>
 										<th> Medicine Name </th>
 									</tr>
@@ -101,6 +102,7 @@ String treat = (String)request.getAttribute("treat");
 									%>
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="MedicineId" value="<%=obj[0] %>"> </td>
+											<td><%=obj[3] %> </td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											
@@ -139,6 +141,14 @@ String treat = (String)request.getAttribute("treat");
 	        	}
 	        	return true;
 	        }
+	        
+	        
+	        $("#myTable1").DataTable({
+	            "lengthMenu": [5, 10, 25, 50, 75, 100],
+	            "pagingType": "simple",
+	            "pageLength": 100
+
+	        });
 	        </script>
 </body>
 </html>

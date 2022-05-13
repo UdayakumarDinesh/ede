@@ -68,7 +68,7 @@ List<Object[]> emplist1 = (List<Object[]>)request.getAttribute("emplist1");
 			                <label class="text-nowrap  ">Handing Over To:<span class="mandatory">*</span></label>
 			                <select name="toemp" id="toemp" class="form-control select2">
 								<%for( Object[] obj: emplist1){ %>
-									<option value="<%=obj[0]%>"><%=obj[1]%></option>
+									<option value="<%=obj[0]%>//<%=obj[1]%>"><%=obj[1]%></option>
 								<%} %>
 			                </select>
 			            </div>

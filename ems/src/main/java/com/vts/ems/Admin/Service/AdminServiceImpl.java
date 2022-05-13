@@ -353,9 +353,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	
 	@Override
-	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception
+	public int updateRevokeInHandingOver(long empid ,String UserId , String HandingOverId)throws Exception
 	{
-		return dao.updateRevokeInHandingOver(empid,HandingOverId);
+		return dao.updateRevokeInHandingOver(empid,UserId,HandingOverId);
 	}
 	
 	@Override
@@ -485,4 +485,10 @@ public class AdminServiceImpl implements AdminService{
 		return dao.GetToemployee();
 	}
 	
+	
+	@Override
+	public int GetMaxMedNo(String treatmenttype)throws Exception
+	{
+		return dao.GetMaxMedNo(treatmenttype);
+	}
 }

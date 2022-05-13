@@ -21,6 +21,7 @@ public class CHSSMedicineList implements Serializable {
 		private Long MedicineId;
 		private Long TreatTypeId;
 		private Long CategoryId;
+		private Long MedNo;
 		private String MedicineName;
 		private String IsAdmissible;
 		private Integer IsActive;

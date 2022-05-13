@@ -64,7 +64,7 @@ public interface AdminDao {
 	public long EditLabMaster(LabMaster labmatster) throws Exception;
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception;
 	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
-	public int updateRevokeInHandingOver(long empid , String HandingOverId)throws Exception;
+	public int updateRevokeInHandingOver(long empid ,String UserId , String HandingOverId)throws Exception;
 	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception;
 	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception;
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception;
@@ -86,4 +86,5 @@ public interface AdminDao {
 	public Object[] DesignationEditCheck(String designation,String desigid)throws Exception;
 	public List<Object[]> GetFromemployee()throws Exception;
 	public List<Object[]> GetToemployee()throws Exception;
+	public int GetMaxMedNo(String treatmenttype)throws Exception;
 }
