@@ -593,7 +593,6 @@ $(document).ready(function(){
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
         onSelect: function(selected) {
-        	console.log(selected);
         $("#datepicker3").datepicker("option","minDate", selected)
         },
         locale : {
