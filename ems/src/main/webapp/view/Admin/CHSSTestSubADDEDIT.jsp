@@ -48,7 +48,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 			<div class="card" >
 				<div class="card-body " align="center" >
 
-					<form name="myfrm" action="ChssTestSub.htm" method="POST" id="myfrm1">
+					<form name="myfrm" action="ChssTestSub.htm" method="POST" id="myfrm1" autocomplete="off">
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -70,7 +70,15 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 												required="required" maxlength="255" style="font-size: 15px;"
 												id="Name" ></td>
 										</tr>
-
+										
+	                                     <tr>	
+											<th><label> Code   <span class="mandatory" style="color: red;"> *</span>
+											</label></th>
+											<td><input class="form-control form-control"
+												placeholder="Enter Code" type="text" id="TestCode" name="TestCode" value="<%if(list!=null){%><%=list.getTestCode()%><%}%>"
+												required="required" maxlength="10" style="font-size: 15px;"
+												id="Rate" onblur="return checkCode();"></td>
+										</tr>
 									
 										<tr>
 											<th><label> Rate  <i class="fa fa-inr" aria-hidden="true"></i> <span class="mandatory" style="color: red;"> *</span>
@@ -80,7 +88,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 												required="required" maxlength="10" style="font-size: 15px;"
 												id="Rate" ></td>
 										</tr>
-									
+	
 								</table>
 							</div>
 						</div>
@@ -110,6 +118,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 </div>
 <script type="text/javascript">
 setPatternFilter($("#RateValue"), /^-?\d*$/);
+setPatternFilter($("#TestCode"), /^-?\d*$/);
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });
 	}
@@ -188,7 +197,7 @@ function checkDuplicate1()
 				 var rr=result;
                  var a = parseInt(rr) ;
 				
-				if(a >= 1){					
+				if(a > 1){					
 					alert("Test Name Already Exist!");
 					retValue = false;
 				}else if(confirm("Are you sure to Submit!")){
@@ -213,5 +222,42 @@ function checkDuplicate1()
 		}
 }
 </script>
+<script type="text/javascript">
+
+function checkCode()
+{
+	var $code = $("#TestCode").val();	
+
+	var retValue = false;
+		$.ajax({
+			type : "GET",
+			url : "DuplicateTestCode.htm",	
+			datatype : 'json',
+			data : {
+				TestCode : $code,				
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;				
+				if(a >= 1){					
+						alert("Test Code Already Exist!");
+						$("#TestCode").val('');
+					    retValue = false;
+					
+				     }else {
+						   retValue = true;					
+					  }	
+		    }  
+	 });	
+		if(retValue==true){
+			
+			return true;
+		}else{
+			return retValue;
+		}
+}
+
+</script>
+
 </body>
 </html>

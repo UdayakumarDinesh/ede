@@ -87,4 +87,5 @@ public interface AdminDao {
 	public List<Object[]> GetFromemployee()throws Exception;
 	public List<Object[]> GetToemployee()throws Exception;
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
+	public int CheckduplicateTestCode(String testcode)throws Exception;
 }

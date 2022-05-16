@@ -1067,4 +1067,27 @@ public class AdminDaoImpl implements AdminDao{
 		Integer result = (Integer) query.getSingleResult();
 		return result;
 	}
+	
+	
+	private static final String CHECKTESTCODE = "SELECT COUNT(testcode) FROM chss_test_sub WHERE testcode=:testcode";
+	
+	@Override
+	public int CheckduplicateTestCode(String testcode)throws Exception
+	{
+		 logger.info(new Date() +"Inside CheckduplicateTestCode()");	
+		 try {
+			Query query = manager.createNativeQuery(CHECKTESTCODE);
+			query.setParameter("testcode", testcode);		
+			Object o = query.getSingleResult();
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+			return result;
+		  }catch (Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 }

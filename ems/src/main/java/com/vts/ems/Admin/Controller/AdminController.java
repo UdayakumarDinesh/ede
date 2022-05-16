@@ -186,6 +186,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	 String testName =(String)req.getParameter("Name");
 						 	 String Rate     =(String)req.getParameter("Rate");
 						 	 String subid    =(String)req.getParameter("SubId");
+						 	 String testcode =(String)req.getParameter("TestCode");
 						 	CHSSTestSub  sub = new CHSSTestSub();
 						 	 	sub.setTestSubId(Long.parseLong(subid));
 							 	sub.setTestRate(Integer.parseInt(Rate)); 
@@ -193,6 +194,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							 	sub.setTestMainId(Long.parseLong(testmain));				 	 
 							 	sub.setModifiedDate(sdtf.format(new Date()));
 							 	sub.setModifiedBy(UserId);
+							 	sub.setTestCode(testcode);
 							 	long result =service.EditTestSub(sub);
 							 	if (result != 0) {
 									redir.addAttribute("result", "Test details Updated");
@@ -206,6 +208,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	 String testmain =(String)req.getParameter("Main");
 						 	 String testName =(String)req.getParameter("Name");
 						 	 String Rate     =(String)req.getParameter("Rate");
+						 	 String testcode =(String)req.getParameter("TestCode");
 						 	CHSSTestSub  sub = new CHSSTestSub();
 						 	sub.setTestRate(Integer.parseInt(Rate)); 
 						 	sub.setTestName(testName); 
@@ -213,6 +216,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	sub.setIsActive(1);						 	 
 						 	sub.setCreatedDate(sdtf.format(new Date()));
 						 	sub.setCreatedBy(UserId);
+						 	sub.setTestCode(testcode);
 						 	long result =  service.AddTestSub(sub);
 						 	if (result != 0) {
 								redir.addAttribute("result", "Test details saved");
@@ -1132,6 +1136,26 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				  Gson json = new Gson();
 				  return json.toJson(DisDesc); 
 				  
+			}
+		    
+		    
+			@RequestMapping(value ="DuplicateTestCode.htm",method=RequestMethod.GET)
+			public @ResponseBody String CheckDuplicateTestCode(HttpSession ses , HttpServletRequest req)throws Exception
+			{
+				int count =0;
+				Gson json = new Gson();
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside DuplicateTestCode()"+UserId);
+				try {
+					String testCode = (String)req.getParameter("TestCode");
+					
+					count = service.CheckduplicateTestCode( testCode );
+					
+					 return json.toJson(count);
+				}catch (Exception e){
+					e.printStackTrace();
+					 return json.toJson(count);
+				}
 			}
 		
 }

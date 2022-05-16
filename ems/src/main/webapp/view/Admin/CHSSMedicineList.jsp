@@ -144,7 +144,7 @@ String treat = (String)request.getAttribute("treat");
 	        
 	        
 	        $("#myTable1").DataTable({
-	            "lengthMenu": [5, 10, 25, 50, 75, 100],
+	            "lengthMenu": [ 10, 25, 50, 100, 200,500],
 	            "pagingType": "simple",
 	            "pageLength": 100
 

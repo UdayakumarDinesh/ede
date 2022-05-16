@@ -491,4 +491,9 @@ public class AdminServiceImpl implements AdminService{
 	{
 		return dao.GetMaxMedNo(treatmenttype);
 	}
+	@Override
+	public int CheckduplicateTestCode(String testcode)throws Exception
+	{
+		return dao.CheckduplicateTestCode(testcode);
+	}
 }
