@@ -80,7 +80,23 @@
  
  <spring:url value="/webresources/bootstrap-toggle.min.js" var="Togglejs" />
  <script src="${Togglejs}"></script> 
-         
+  
+  
+  <!-- ----------  High Charts  ---------- -->
+ 
+  <spring:url value="/webresources/js/chart/highcharts.js" var="Chartjs" /> 
+  <script src="${Chartjs}"></script>    
+  
+  <spring:url value="/webresources/js/chart/exporting.js" var="Exportjs" /> 
+  <script src="${Exportjs}"></script> 
+  
+  <spring:url value="/webresources/js/chart/export-data.js" var="ExportDatajs" /> 
+  <script src="${ExportDatajs}"></script> 
+  
+  <spring:url value="/webresources/js/chart/accessibility.js" var="Accessbilityjs" />  
+  <script src="${Accessbilityjs}"></script>    
+
+
 
 
 </head>
