@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -1472,9 +1473,9 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CONSULTBILLSCONSULTCOUNT  ="SELECT COUNT(cc.ConsultationId) AS 'consult count' , 'count' AS 'Count' FROM chss_consultation cc, chss_bill cb WHERE cb.IsActive=1 AND cc.IsActive =1 AND cb.BillId = cc.BillId AND cb.CHSSConsultMainId =:chssconsultmainid AND cb.CHSSApplyId = :chssapplyid";
+	private static final String CONSULTBILLSCONSULTCOUNT  ="SELECT COUNT(cc.ConsultationId) AS 'consult count' , 'count' AS 'Count' FROM chss_consultation cc, chss_bill cb WHERE cb.IsActive=1 AND cc.IsActive =1 AND cb.BillId = cc.BillId AND cb.BillId = :billid AND cb.CHSSConsultMainId =:chssconsultmainid AND cb.CHSSApplyId = :chssapplyid";
 	@Override
-	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO ConsultBillsConsultCount");
 		Object[] list = null;
@@ -1509,7 +1510,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String PATIENTCONSULTHISTORY  ="SELECT  ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.ConsultDate, ccm.DocName, ca.Ailment FROM  chss_apply ca,chss_apply ca1,  chss_consult_main ccm WHERE ca.CHSSApplyId = ccm.CHSSApplyId  AND ccm.isactive = 1  AND ca.isactive = 1  AND ccm.CHSSConsultMainId NOT IN  (SELECT     ccm1.CHSSConsultMainId  FROM    chss_consult_main ccm1  WHERE ccm1.CHSSApplyId = :chssapplyid)  AND ca.EmpId=ca1.EmpId AND ca.PatientId = ca1.PatientId AND ca.IsSelf = ca1.IsSelf   AND ca.CHSSStatusId =14 AND ca1.CHSSApplyId =:chssapplyid";
+	private static final String PATIENTCONSULTHISTORY  ="SELECT  ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.ConsultDate, ccm.DocName, ca.Ailment FROM  chss_apply ca,chss_apply ca1,  chss_consult_main ccm WHERE ca.CHSSApplyId = ccm.CHSSApplyId  AND ccm.isactive = 1  AND ca.isactive = 1  AND ccm.CHSSConsultMainId NOT IN  (SELECT     ccm1.CHSSConsultMainId  FROM    chss_consult_main ccm1  WHERE ccm1.CHSSApplyId = :chssapplyid) AND ca.TreatTypeId = ca1.TreatTypeId   AND ca.EmpId=ca1.EmpId AND ca.PatientId = ca1.PatientId AND ca.IsSelf = ca1.IsSelf  AND ca1.CHSSApplyId =:chssapplyid";   /*  AND ca.CHSSStatusId =14   */
 	@Override
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception
 	{
@@ -1528,7 +1529,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String OLDCONSULTMEDSLIST  ="SELECT cb.CHSSApplyId, cb.BillId, cm.CHSSMedicineId, cm.MedicineName, cm.PresQuantity, cm.MedQuantity FROM chss_bill cb, chss_medicine cm WHERE cb.IsActive =1 AND cm.IsActive =1 AND cb.BillId = cm.BillId AND cb.BillId = (SELECT MIN(cb1.BillId) FROM chss_bill cb1 WHERE  cb1.IsActive = 1 AND cb1.CHSSConsultMainId=:CHSSConsultMainId) AND cb.CHSSConsultMainId =:CHSSConsultMainId ";
+	private static final String OLDCONSULTMEDSLIST  ="SELECT cb.CHSSApplyId, cb.BillId, cm.CHSSMedicineId, cm.MedicineName, cm.PresQuantity, cm.MedQuantity FROM chss_bill cb, chss_medicine cm WHERE cb.IsActive =1 AND cm.IsActive =1 AND cb.BillId = cm.BillId AND cb.CHSSApplyId = (SELECT MIN(cb1.CHSSApplyId) FROM chss_bill cb1 WHERE  cb1.IsActive = 1 AND cb1.CHSSConsultMainId=:CHSSConsultMainId) AND cb.CHSSConsultMainId =:CHSSConsultMainId ";
 	@Override
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception
 	{
@@ -1544,5 +1545,29 @@ public class CHSSDaoImpl implements CHSSDao {
 		return  list;
 		
 	}
+	
+	
+	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND MedicineName LIKE :medicinename ";
+	@Override
+	public Object[] MedAdmissibleCheck(String medicinename) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MedAdmissibleCheck");
+		Object[] list = null;
+		try {
+			
+			Query query= manager.createNativeQuery(MEDADMISSIBLECHECK);
+			query.setParameter("medicinename", medicinename+"%");
+			
+			list=  (Object[])query.getResultList().get(0);
+			
+		}catch (NoResultException e) {
+			System.err.println ("No Result Exception");
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return  list;
+	}
+	
 	
 }

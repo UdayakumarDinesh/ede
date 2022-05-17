@@ -358,7 +358,7 @@ p {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:12%;"> Consultation </th>
+											<!-- <th style="width:12%;"> Consultation </th> -->
 											<th style="width:30%;">Doctor's Name</th>
 											<th style="width:15%;">Qualification</th>
 											<th style="width:15%;">Consult Date</th>
@@ -372,6 +372,7 @@ p {
 									</tbody>
 								</table>
 								<input type="hidden" class="billid" name="billid" value="">
+								<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -382,7 +383,7 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:15%;"> Consultation </th>
+											<!-- <th style="width:15%;"> Consultation </th> -->
 											<th style="width:30%;">Name of the Doctor</th>
 											<th style="width:20%;">Qualification</th>
 											<th style="width:15%;">Date</th>
@@ -392,24 +393,26 @@ p {
 									</thead>
 									<tbody>
 										<tr class="tr_clone_cons" >
-											<td>
+											<%-- <td>
 												<select class="form-control w-100" name="consult-type" id="consult-type" required="required" >
 													<%if(consultmain.getCHSSApplyId()==Long.parseLong(chssapplydata[0].toString())){ %>
 													<option value="Fresh">Fresh</option>
 													<%} %>
 													<option value="FollowUp">FollowUp</option>
 												</select>
-											</td>
+											</td> --%>
 											<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td>
-												<select class="form-control w-100" name="doc-qualification" required="required" >
-													<%for(CHSSDoctorRates rate:doctorrates ){ %>
+												<select class="form-control w-100" name="doc-qualification-view" id="doc-qualification" disabled="disabled" >
+													<%int docqual=0;
+													for(CHSSDoctorRates rate:doctorrates ){ %>
 														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
 													<%} %>
 												</select>
+												<input type="hidden" name="doc-qualification" value=""  id="doc-qualification-val" >
 											</td>
-											<td><input type="text" class="form-control " name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="0" style="width:100%;direction: rtl;" min="0" max="9999999" required="required" ></td>
+											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
+											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
 										</tr>
 									</tbody>							
@@ -420,6 +423,7 @@ p {
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+								<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						    </form>
@@ -703,7 +707,7 @@ p {
 	</div>
 </div>
 
-<!-- -------------------------------------------------------modal script --------------------------------------------------- -->
+
 
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
 
@@ -716,19 +720,17 @@ p {
 				    		
 				    	</div>
  -->
+ <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
+ 
 <script type="text/javascript">
 
 
-
-
-
+var $billdate=new Date();
 var tab = '<%=tab%>';
 
 function showBillDetails($billid)
 {
 	$(".billid").val($billid);
-	
-	/* $("#old-consult").select2("val", "0"); */
 	
 	var $billid = $('.billid').val();
 	$.ajax({
@@ -746,6 +748,7 @@ function showBillDetails($billid)
 			$('#modal-billno').html(result[2]);
 			$('#modal-centername').html(result[3]);
 			$('#modal-billdate').html(result[4]);
+			$billdate =new Date(result[4]); 
 			if(result[5]!=null){
 				$('#modal-billamount').html(result[5]);
 			
@@ -760,8 +763,12 @@ function showBillDetails($billid)
 				$('.'+tab).click();
 				tab= 'null';
 			}
-			ConsultMainConsultCount();
+			/* ConsultMainConsultCount($billid); */
 			$('.my-bill-modal').modal('toggle');
+			
+			
+
+			
 			
 		}
 	});
@@ -859,7 +866,7 @@ $('.billdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+	"minDate":threeMonthsAgo, 
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -930,19 +937,7 @@ $("table").on('click','.tbl-row-add-cons' ,function()
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
 	
-  	$clone.find('.cons-date').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		"maxDate" :new Date(),
-		"minDate":threeMonthsAgo,
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-	}
-	});
-  	
+
   	setTooltip();
   
 });
@@ -960,18 +955,6 @@ if(cl>1){
   
 });
 
-$('.cons-date').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"maxDate" :new Date(),
-	"minDate":threeMonthsAgo, 
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
 
 
 
@@ -994,12 +977,13 @@ function getConsultdata()
 			return result[e]
 		})
 		var consultHTMLStr = '';
-		for(var c=0;c<consultVals.length;c++)
-		{
-			var consult = consultVals[c];
+		
+		if(consultVals.length>0){
+			var consult = consultVals[0];
+						
 			consultHTMLStr +=	'<tr> ';
-			consultHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (c+1) +'.</span> </td> ';
-			consultHTMLStr +=	'	<td> ';
+			consultHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ 1 +'.</span> </td> ';
+			/* consultHTMLStr +=	'	<td> ';
 			consultHTMLStr +=	'		<select class="form-control w-100" name="consult-type-'+consult.ConsultationId+'"  required="required" > ';
 																		
 										if(consult.ConsultType.toUpperCase() === 'FRESH'){
@@ -1011,12 +995,12 @@ function getConsultdata()
 										}				
 			
 			consultHTMLStr +=	'		</select> ';
-			consultHTMLStr +=	'	</td> ';
+			consultHTMLStr +=	'	</td> '; */
 			consultHTMLStr +=	' 	<td><input type="text" class="form-control items" name="doc-name-'+consult.ConsultationId+'" value="'+consult.DocName+'" style="width:100%; " readonly maxlength="255" required="required"></td> ';
 			consultHTMLStr +=	'	<td>';
 			
 			
-			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required" > ';
+			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required" disabled > ';
 			for(var u=0;u<$docrateslist.length;u++){
 				
 				if(Number(consult.DocQualification) === $docrateslist[u].DocRateId)
@@ -1032,10 +1016,11 @@ function getConsultdata()
 			
 			consultHTMLStr +=	'	</td>';
 			
-			let now = new Date(consult.ConsultDate);
-			var dateString = moment(now).format('DD-MM-YYYY');
+			/* let now = new Date(consult.ConsultDate);
+			var dateString = moment(now).format('DD-MM-YYYY'); */
 			
-			consultHTMLStr +=	'	<td><input type="text" class="form-control " name="cons-date-'+consult.ConsultationId+'"  value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
+			/* consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'"  value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> '; */
+			consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
 			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'"  value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
 			consultHTMLStr +=	'	<td>';
@@ -1044,31 +1029,90 @@ function getConsultdata()
 			consultHTMLStr +=	'	</td> ';
 			consultHTMLStr +=	'</tr> ';
 			
-		}
+			$('#consult-list-table').html(consultHTMLStr);
+			
+			$('.cons-date').daterangepicker({
+				"singleDatePicker" : true,
+				"linkedCalendars" : false,
+				"showCustomRangeLabel" : true,
+				"startDate" : new Date(consult.ConsultDate),
+				"maxDate" :$billdate,
+				"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+				"cancelClass" : "btn-default",
+				showDropdowns : true,
+				locale : {
+					format : 'DD-MM-YYYY'
+				}
+			});
+			
+			$('#consult-add-form').hide();
 		
+		}
 		if(consultVals.length==0){
 			
 			consultHTMLStr +=	'<tr><td colspan="7" style="text-align: center;"> No Record Found</td></tr> ';
-		}
-		
-		$('#consult-list-table').html(consultHTMLStr);
-		
-		setTooltip();
-		$('.cons-date').daterangepicker({
-			"singleDatePicker" : true,
-			"linkedCalendars" : false,
-			"showCustomRangeLabel" : true,
-			"maxDate" :new Date(),
-			"minDate":threeMonthsAgo, 
-			"cancelClass" : "btn-default",
-			showDropdowns : true,
-			locale : {
-				format : 'DD-MM-YYYY'
-			}
-		});
+			$('#consult-list-table').html(consultHTMLStr);			
+			$('#consult-add-form').show();
 			
-		onlyNumbers();
+			
+			/* ------------------------------------------------------- */				
+				$.ajax({
+			
+						type : "GET",
+						url : "ConsultMainDataAjax.htm",
+						data : {
+												
+							consultmainid : <%=consultmainid%>,
+							chssapplyid : <%=chssapplydata[0]%>,
+						},
+						datatype : 'json',
+						success : function(result) {
+							var result = JSON.parse(result);
+							$('#doc-name').val(result.DocName);
+							$('#doc-name').prop('readonly','readonly');
+							
+							$('#doc-qualification-val').val(result.DocQualification);
+							$('#doc-qualification').val(result.DocQualification);
+							
+							
+							
+							/* let consdate = new Date($billdate);
+							var dateString = moment(consdate).format('DD-MM-YYYY');
+												
+							$('#cons-date').val(dateString);  */
+							
+							/* 					
+								$('.te').prop('disabled', true);
+								$('.me').prop('disabled', true);
+								$('.ot').prop('disabled', true);
+								$('.mi').prop('disabled', true); 
+							*/
+							$('.cons-date').daterangepicker({
+								"singleDatePicker" : true,
+								"linkedCalendars" : false,
+								"showCustomRangeLabel" : true,
+								"startDate" : $billdate,
+								"maxDate" :$billdate,
+								"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+								"cancelClass" : "btn-default",
+								showDropdowns : true,
+								locale : {
+									format : 'DD-MM-YYYY'
+								}
+							});
+										
+						}
+				});
+			/* ------------------------------------------------------- */				
+			 
+			
+			
+			
+		}
+				
+		setTooltip();
 		
+		onlyNumbers();
 		
 		
 		
@@ -1078,9 +1122,8 @@ function getConsultdata()
 }
 
 
-function ConsultMainConsultCount()
+<%-- function ConsultMainConsultCount($billid)
 {
-	
 	$.ajax({
 
 		type : "GET",
@@ -1089,6 +1132,7 @@ function ConsultMainConsultCount()
 				
 			consultmainid : <%=consultmainid%>,
 			chssapplyid : <%=chssapplydata[0]%>,
+			billid : $billid ,
 		},
 		datatype : 'json',
 		success : function(result) {
@@ -1109,21 +1153,39 @@ function ConsultMainConsultCount()
 							},
 							datatype : 'json',
 							success : function(result) {
-			
 								var result = JSON.parse(result);
-												
 								$('#doc-name').val(result.DocName);
 								$('#doc-name').prop('readonly','readonly');
-								let consdate = new Date(result.ConsultDate);
+								
+								$('#doc-qualification-val').val(result.DocQualification);
+								$('#doc-qualification').val(result.DocQualification);
+								
+								
+								
+								/* let consdate = new Date($billdate);
 								var dateString = moment(consdate).format('DD-MM-YYYY');
 													
-								$('#cons-date').val(dateString);
+								$('#cons-date').val(dateString);  */
+								
 								/* 					
 									$('.te').prop('disabled', true);
 									$('.me').prop('disabled', true);
 									$('.ot').prop('disabled', true);
 									$('.mi').prop('disabled', true); 
 								*/
+								$('.cons-date').daterangepicker({
+									"singleDatePicker" : true,
+									"linkedCalendars" : false,
+									"showCustomRangeLabel" : true,
+									"startDate" : new Date('<%=consultmain.getConsultDate()%>'),
+									"maxDate" :$billdate,
+									"minDate":threeMonthsAgo, 
+									"cancelClass" : "btn-default",
+									showDropdowns : true,
+									locale : {
+										format : 'DD-MM-YYYY'
+									}
+								});
 											
 							}
 					});
@@ -1133,13 +1195,14 @@ function ConsultMainConsultCount()
 			{
 				$('#consult-add-form').hide();
 			}
-		
+			
+			
 			
 		}
 	});
 	
 }
-
+ --%>
 
 </script>
 
@@ -1504,6 +1567,7 @@ function getMedicinesData(){
 
 function FillMedsList()
 {
+	console.log();
 	var oldconsultid=0;
 	if($('#old-consult').prop('checked')){
 		oldconsultid=$('#old-consult').val();
@@ -1511,7 +1575,6 @@ function FillMedsList()
 	{
 		oldconsultid=0;
 	}
-	console.log(oldconsultid);
 		$.ajax({
 		
 			type : "GET",

@@ -240,7 +240,7 @@ p {
 													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%; "  maxlength="500" required="required"></td>
 													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 													<td>
-														<select class="form-control" name="doc-qualification" required="required" >
+														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
 															<%for(CHSSDoctorRates rate:doctorrates ){ %>
 																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[4].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
 															<%} %>
@@ -277,12 +277,10 @@ p {
 														</button>												
 													</td>				
 												
-												
-												
 												<%} %>
-											</tr>
-											
+											</tr>											
 											<%} %>
+											
 											<%if(sno==0){ %>
 												<tr>
 													<td colspan="6" style="text-align: center ;">
@@ -394,7 +392,7 @@ p {
 						</div>			
 				
 					</div>	
-						<form action="CHSSUserPreview.htm" method="post" id="form2">
+						<form action="CHSSFormEdit.htm" method="post" id="form2">
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
@@ -463,46 +461,13 @@ p {
 <script type="text/javascript">
 
 
-
-var $medsAllowedList;
-
-function MedsAllowedList()
-{
-	
-	var $treattype = $('#treattypeid').val();
-	
-	if(Number($treattype)>1){
-		$.ajax({
-	
-			type : "GET",
-			url : "CHSSMedicinesListAjax.htm",
-			data : {
-					
-				treattypeid : $treattype,
-			},
-			datatype : 'json',
-			success : function(result) {
-				var result = JSON.parse(result);
-				
-				$medsAllowedList = Object.keys(result).map(function(e){
-					return result[e]
-				})
-				
-				
-			}
-		});
-	}
-	
-}
-
 $(document).ready( function() {
 	onlyNumbers();
-	getdoctorrates(<%=chssapplydata[7]%>);
-	MedsAllowedList();
-
-	<%if(mcount>0 || ccount>0 ){%>
+	
+	<%if(consultmainlist.size()>0){%>
 		$('#treatmenttype').prop('disabled', true);
 	<%}%> 
+
 
 });   
 
@@ -593,9 +558,6 @@ function setTooltip()
 $(document).ready( function() {
 
 	
-	<%if(mcount>0 || ccount>0 ){%>
-		$('#treatmenttype').prop('disabled', true);
-	<%}%> 
 
 });   
 

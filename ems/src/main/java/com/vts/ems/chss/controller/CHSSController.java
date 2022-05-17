@@ -439,13 +439,14 @@ public class CHSSController {
 			String consultmainid = req.getParameter("consultmainid");
 			String docname = req.getParameter("docname-"+consultmainid);
 			String consultdate = req.getParameter("consultdate-"+consultmainid);
+			String docqualification = req.getParameter("doc-qualification-"+consultmainid);
 			
 			CHSSConsultMain consultmain = new CHSSConsultMain();
 			consultmain.setCHSSConsultMainId(Long.parseLong(consultmainid));
 			consultmain.setDocName(docname);
 			consultmain.setConsultDate(sdf.format(rdf.parse(consultdate)));
 			consultmain.setModifiedBy(Username);
-			
+			consultmain.setDocQualification(Integer.parseInt(docqualification));
 			long count = service.CHSSConsultMainEdit(consultmain);
 			
 			
@@ -784,7 +785,7 @@ public class CHSSController {
 			String[] docqualification=req.getParameterValues("doc-qualification");
 			String[] consdate=req.getParameterValues("cons-date");
 			String[] conscharge=req.getParameterValues("cons-charge");
-			
+			String consultmainidold=req.getParameter("consultmainid-old");
 			CHSSConsultationDto dto=new CHSSConsultationDto();
 			
 			dto.setBillId(billid);
@@ -795,7 +796,7 @@ public class CHSSController {
 			dto.setConsultCharge(conscharge);
 			dto.setCreatedBy(Username);
 			
-			long count= service.ConsultationBillAdd(dto);
+			long count= service.ConsultationBillAdd(dto,chssapplyid,consultmainidold);
 			if (count > 0) {
 				redir.addAttribute("result", "Consultation Details Added Successfully");
 			} else {
@@ -814,26 +815,6 @@ public class CHSSController {
 	}
 	
 	
-	
-	
-	@RequestMapping(value = "ChssConsultationListAjax.htm", method = RequestMethod.GET)
-	public @ResponseBody String ChssConsultationListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetChssConsultationList.htm "+Username);
-		List<CHSSConsultation> list=new ArrayList<CHSSConsultation>();
-		try {
-			String billid = req.getParameter("billid");
-			list = service.CHSSConsultationList(billid);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside ChssConsultationListAjax.htm "+Username, e);
-		}
-		Gson json = new Gson();
-		return json.toJson(list);
-	}
-	
 	@RequestMapping(value = "ConsultationBillEdit.htm", method = RequestMethod.POST )
 	public String ConsultationBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -849,17 +830,18 @@ public class CHSSController {
 			String docqualification = req.getParameter("doc-qualification-"+consultationid);
 			String consdate = req.getParameter("cons-date-"+consultationid);
 			String conscharge = req.getParameter("cons-charge-"+consultationid);
+			String consultmainidold=req.getParameter("consultmainid-old");
 			
 			CHSSConsultation consult= new CHSSConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
 			consult.setConsultType(consulttype);
 			consult.setDocName(docname);
-			consult.setDocQualification(docqualification);
+//			consult.setDocQualification(docqualification);
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Integer.parseInt(conscharge));
 			consult.setModifiedBy(Username);
 			
-			long count = service.ConsultationBillEdit(consult);
+			long count = service.ConsultationBillEdit(consult,chssapplyid,consultmainidold);
 			
 			
 			if (count > 0) {
@@ -879,6 +861,31 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	
+	
+	
+
+	@RequestMapping(value = "ChssConsultationListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ChssConsultationListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GetChssConsultationList.htm "+Username);
+		List<CHSSConsultation> list=new ArrayList<CHSSConsultation>();
+		try {
+			String billid = req.getParameter("billid");
+			list = service.CHSSConsultationList(billid);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ChssConsultationListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	
+	
 	
 	@RequestMapping(value = "ConsultationBillDelete.htm", method = RequestMethod.POST )
 	public String ConsultationBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -934,7 +941,7 @@ public class CHSSController {
 			dto.setMedQuantity(medsquantity);
 			dto.setCreatedBy(Username);
 			
-			long count= service.MedicinesBillAdd(dto);
+			long count= service.MedicinesBillAdd(dto,chssapplyid);
 			if (count > 0) {
 				redir.addAttribute("result", "Consultation Details Added Successfully");
 			} else {
@@ -1592,33 +1599,55 @@ public class CHSSController {
 		return json.toJson(docrates);
 	}
 	
-	@RequestMapping(value = "CHSSUserPreview.htm", method = RequestMethod.POST)
-	public String CHSSUserPreview(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CHSSUserPreview.htm "+Username);
-		try {
-			String chssapplyid = req.getParameter("chssapplyid");
-			String enclosurecount = req.getParameter("enclosurecount");
-			
-			CHSSApplyDto dto =new CHSSApplyDto();
-			dto.setCHSSApplyId(chssapplyid);
-			dto.setNoEnclosures(enclosurecount);
-			
-			service.CHSSApplyEncCountEdit(dto);
-			
-			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			return "redirect:/CHSSFormEdit.htm";
-			
-		} catch (Exception e) {
-					
-			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSUserPreview.htm "+Username, e);
-			return "static/Error";
-			
-		}
-			
-	}
+//	@RequestMapping(value = "CHSSUserPreview.htm", method = RequestMethod.POST)
+//	public String CHSSUserPreview(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+//	{
+//		String Username = (String) ses.getAttribute("Username");
+//		logger.info(new Date() +"Inside CHSSUserPreview.htm "+Username);
+//		try {
+//			String chssapplyid = req.getParameter("chssapplyid");
+//			String enclosurecount = req.getParameter("enclosurecount");
+//			
+//			CHSSApplyDto dto =new CHSSApplyDto();
+//			dto.setCHSSApplyId(chssapplyid);
+//			dto.setNoEnclosures(enclosurecount);
+//			
+//			service.CHSSApplyEncCountEdit(dto);
+//			
+//			
+//			
+//			
+//			
+//			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
+//			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+//			
+//			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+//			
+//			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+//			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
+//			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
+//			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+//			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+//			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+//			req.setAttribute("chssapplydata", chssapplicationdata);
+//			req.setAttribute("employee", employee);
+//						
+//			return "chss/CHSSFormEdit";
+//			
+//			
+//			
+//			redir.addFlashAttribute("chssapplyid",chssapplyid);
+//			return "redirect:/CHSSFormEdit.htm";
+//			
+//		} catch (Exception e) {
+//					
+//			e.printStackTrace();
+//			logger.error(new Date() +" Inside CHSSUserPreview.htm "+Username, e);
+//			return "static/Error";
+//			
+//		}
+//			
+//	}
 	
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
@@ -1721,6 +1750,16 @@ public class CHSSController {
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
 			
+			String enclosurecount = req.getParameter("enclosurecount");
+			if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
+				CHSSApplyDto dto =new CHSSApplyDto();
+				dto.setCHSSApplyId(chssapplyid);
+				dto.setNoEnclosures(enclosurecount);
+				
+				service.CHSSApplyEncCountEdit(dto);
+			
+			}
+			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
 			
@@ -1731,7 +1770,7 @@ public class CHSSController {
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
-			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 						
@@ -2028,7 +2067,9 @@ public class CHSSController {
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("logintype", LoginType);
-					
+			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
 			return "chss/ContingentBillView";
 		} catch (Exception e) {
 			
@@ -2206,17 +2247,17 @@ public class CHSSController {
 
 	}
 	
-	@RequestMapping(value="ApprovedBiils.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+	@RequestMapping(value="ApprovedBills.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String ApprovedBiils(HttpSession ses,HttpServletRequest req , RedirectAttributes redir)throws Exception{
 		
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside ApprovedBiils.htm "+UserId);
+		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
 			List<Object[]> approvedlist = service.GetApprovedBills("0");
-			req.setAttribute("ApprovedBiils", approvedlist);
+			req.setAttribute("ApprovedBills", approvedlist);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+			logger.error(new Date() +" Inside ApprovedBills.htm "+UserId, e); 
 		}
 		return "chss/CHSSApprovedBills";
 	}
@@ -2320,7 +2361,8 @@ public class CHSSController {
 		try {
 			String consultmainid = req.getParameter("consultmainid");
 			String chssapplyid = req.getParameter("chssapplyid");
-			count = Integer.parseInt(service.ConsultBillsConsultCount(consultmainid,chssapplyid)[0].toString());
+			String billid = req.getParameter("billid");
+			count = Integer.parseInt(service.ConsultBillsConsultCount(consultmainid,chssapplyid,billid)[0].toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ConsultBillsConsultCountAjax.htm "+Username, e);

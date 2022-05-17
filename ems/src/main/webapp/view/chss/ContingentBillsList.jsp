@@ -27,10 +27,10 @@
  
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<h5>CHSS Contingent Approval List</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-8 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
@@ -40,7 +40,7 @@
 			</div>
 	</div>	
 	
-	 <div class="page card dashboard-card">
+	<div class="page card dashboard-card">
 	
 	<div class="card-body" >
 	
@@ -65,7 +65,7 @@
 			<div class="card" >
 				<div class="card-body " >
 				
-					<form action="ApprovedBiils.htm" method="POST" style="float: right;">
+					<form action="ApprovedBills.htm" method="POST" style="float: right;">
 							<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
 							<br>
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -88,7 +88,7 @@ th,td
 	
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
-	
+	String LabLogo = (String)request.getAttribute("LabLogo");
 %>
  
 	<div class="card-header page-top">
@@ -147,8 +147,12 @@ th,td
 						<div align="center">
 						
 						<div style="text-align: left;margin: 5px 5px 5px 10px;">
-							<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
-							<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br>
+							<img style="width: 100px; height: 100px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
+							<div style="padding-left: 5px;">
+								<br><br>
+								<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;vertical-align: bottom;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
+								<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br><br>
+							</div>
 							<p>
 								The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().withDayOfMonth(20).toString()) %> during the month of 
 								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following

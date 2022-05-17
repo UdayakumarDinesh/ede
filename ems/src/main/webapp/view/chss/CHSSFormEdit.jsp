@@ -61,6 +61,21 @@ th,td
 	text-align: right;
 }
 	
+
+/* .textarea {
+    resize: none;
+	overflow: hidden;
+	min-height: 30px;
+	max-height: 100px;
+	height: 30px;
+	width: 85%;
+}
+
+.editbtn
+{
+	margin-top:-15px;
+}
+ */
 </style>
 
 
@@ -87,6 +102,8 @@ th,td
 	String isapproval = (String)request.getAttribute("isapproval");
 	
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
+	
+	String LabLogo = (String)request.getAttribute("LabLogo");
 %>
  
 	<div class="card-header page-top">
@@ -151,10 +168,14 @@ th,td
 					<div align="center">
 						<div align="center">
 							<div>
-								<div>
-									<h3 style="font-weight: 600;">MEDICAL CLAIM</h3>
-									<div align="left"> <span>Claim No : <b><%=chssapplydata[16] %> </b></span><span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span></div>
-								</div>
+							
+								<table style="border: 0px; width: 100%">
+									<tr>
+										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 100px; height: 100px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
+										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
+										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span> </td>
+									</tr>
+								</table> 
 							
 								<table>	
 									<tbody>
@@ -293,7 +314,7 @@ th,td
 								
 									<table>
 										<tbody>
-											<form action="ConsultRemAmountEdit.htm" method="post">
+											<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
 												<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
@@ -334,7 +355,7 @@ th,td
 														</tr>			
 													<%} %>
 													<tr>
-														<td><%=consult[8] %></td>
+														<td><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
 														<td><%=consult[3] %></td>
 														<td><%=consult[2] %></td>
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
@@ -357,7 +378,10 @@ th,td
 																<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
 															</td>
 															<td >
-																<input type="text" maxlength="255"  style="width: 90%;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
+																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
+																
+																<%-- <textarea class="textarea" oninput="auto_grow(this)" placeholder="Comments" name="consultcomment-<%=consult[0]%>" > <%if(consult[10]!=null){ %><%=consult[10] %><%}%></textarea> --%>
+																
 																<button type="submit" class="btn btn-sm editbtn" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
 																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 																</button>	
@@ -373,7 +397,7 @@ th,td
 													
 												
 										</form>
-										<form action="TestRemAmountEdit.htm" method="post">
+										<form action="TestRemAmountEdit.htm" method="post" autocomplete="off">
 											<% i=1;
 											for(Object[] test :TestsDataList)
 											{%>
@@ -403,7 +427,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=test[8] %></td>
+													<td><%=test[8] %>&nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
 													<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 													<td class="right"><%=test[4] %></td>
 												
@@ -425,7 +449,7 @@ th,td
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														</td>
 														<td >
-														<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
+														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
 															
 														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -447,7 +471,7 @@ th,td
 											} %>
 												
 										</form>
-										<form action="MedRemAmountEdit.htm" method="post">
+										<form action="MedRemAmountEdit.htm" method="post" autocomplete="off">
 											
 											<% i=1;
 											for(Object[] medicine : MedicineDataList)
@@ -480,7 +504,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=medicine[7] %></td>
+													<td><%=medicine[7] %>&nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
 													<td><%=medicine[2] %></td>
 													<td><%=medicine[5] %></td>
 													<td><%=medicine[4] %></td> 
@@ -505,7 +529,7 @@ th,td
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
 																
 															<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -521,7 +545,7 @@ th,td
 											}%>
 											
 									</form>
-									<form action="OtherRemAmountEdit.htm" method="post">
+									<form action="OtherRemAmountEdit.htm" method="post" autocomplete="off">
 											
 											<% i=1;
 											for(Object[] other : OtherDataList)
@@ -552,7 +576,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=other[6] %></td>
+													<td><%=other[6] %>&nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
 													<td colspan="3"><%=other[4] %></td>
 													<td class="right"><%=other[3] %></td>
 													
@@ -576,7 +600,7 @@ th,td
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														</td>
 														<td >
-															<input type="text"maxlength="255" style="width: 90%;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
+															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
 															<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -591,7 +615,7 @@ th,td
 												
 									</form>
 								
-									<form action="MiscRemAmountEdit.htm" method="post">
+									<form action="MiscRemAmountEdit.htm" method="post" autocomplete="off">
 											
 											<% i=1;
 											for(Object[] misc : MiscDataList)
@@ -622,7 +646,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=misc[5] %></td>
+													<td><%=misc[5] %>&nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
 													<td colspan="3"><%=misc[2] %></td>
 													<td class="right"><%=misc[3] %></td>
 													
@@ -645,7 +669,7 @@ th,td
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255" style="width: 90%;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
 															<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
@@ -1188,7 +1212,10 @@ function CheckClaimAmount($chssapplyid)
 	
 }
 
-
+function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight)+"px";
+}
 </script>
 
 </body>

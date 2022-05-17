@@ -105,10 +105,11 @@ public interface CHSSDao {
 	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception;
 	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception;
 	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception;
-	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception;
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public int ConsultBillsDelete(String consultmainid) throws Exception;
 	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception;
+	public Object[] MedAdmissibleCheck(String medicinename) throws Exception;
 
 }

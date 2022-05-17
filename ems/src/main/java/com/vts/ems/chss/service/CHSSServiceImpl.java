@@ -340,6 +340,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		fetch.setDocName(consultmain.getDocName());
 		fetch.setConsultDate(consultmain.getConsultDate());
+		fetch.setDocQualification(consultmain.getDocQualification());
 		fetch.setModifiedBy(consultmain.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -390,7 +391,9 @@ public class CHSSServiceImpl implements CHSSService {
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception
 	{
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
-		fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
+		if(dto.getTreatTypeId()!=null) {
+			fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
+		}
 //		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
 		fetch.setAilment(dto.getAilment());
 		fetch.setModifiedBy(dto.getModifiedBy());
@@ -428,7 +431,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long ConsultationBillAdd(CHSSConsultationDto dto) throws Exception
+	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception
 	{
 		logger.info(new Date() +"Inside SERVICE ConsultationBillAdd");		
 		try {
@@ -440,17 +443,18 @@ public class CHSSServiceImpl implements CHSSService {
 				CHSSConsultation consult = new CHSSConsultation();
 				
 				consult.setBillId(Long.parseLong(dto.getBillId()));
-				consult.setConsultType(dto.getConsultType()[i]);
+//				consult.setConsultType(dto.getConsultType()[i]);
 				consult.setDocName(dto.getDocName()[i]);
 				consult.setDocQualification(dto.getDocQualification()[i]);
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				consult.setConsultCharge(Integer.parseInt(dto.getConsultCharge()[i]));
 				
-				consult.setConsultRemAmount(getConsultEligibleAmount(consult.getConsultCharge(),consult.getDocQualification(),consult.getConsultType()));
-				
 				consult.setIsActive(1);
 				consult.setCreatedBy(dto.getCreatedBy());
-				consult.setCreatedDate(sdtf.format(new Date()));				
+				consult.setCreatedDate(sdtf.format(new Date()));		
+				
+				getConsultEligibleAmount(consult,chssapplyid,consultmainidold);
+				
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
@@ -464,23 +468,57 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public Integer getConsultEligibleAmount(int applyamount,String speciality,String  isfresh) throws Exception 
-	{
+	public Integer getConsultEligibleAmount(CHSSConsultation consult,String chssapplyid, String consultmainidold) throws Exception 
+	{		
+		String isfresh="";
+		int applyamount= consult.getConsultCharge();
+		String speciality=consult.getDocQualification();
+		String consultdate=consult.getConsultDate();
+		
 		CHSSDoctorRates rate  = dao.getDocterRate(speciality);
 		int allowedamt=0;
+		
+		CHSSConsultMain OldConsultMain = dao.getCHSSConsultMain(consultmainidold);
+		
+		LocalDate olddate= LocalDate.parse(OldConsultMain.getConsultDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate newdate= LocalDate.parse(consultdate.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		
+		
+		if(olddate.equals(newdate)) {
+			isfresh="Fresh" ;
+		}
+		else if(newdate.isAfter(olddate.plusDays(7)) && newdate.isBefore(olddate.plusDays(14))  ) {
+			isfresh="FollowUp" ;
+		}
+		else if( newdate.isAfter(olddate.plusDays(14))  ) {
+			isfresh="Fresh" ;
+		}
+		
 		
 		if(isfresh.equalsIgnoreCase("Fresh")) 
 		{
 			allowedamt = rate.getConsultation_1();
-		}else
+			consult.setConsultType(isfresh);
+		}
+		else if(isfresh.equalsIgnoreCase("FollowUp")) 
 		{
 			allowedamt = rate.getConsultation_2();
+			consult.setConsultType(isfresh);
+			consult.setComments("Followup Consultation with in a 2  week ");
+		}
+		else if(isfresh.equalsIgnoreCase("")) 
+		{
+			allowedamt = 0;
+			consult.setConsultType("FollowUp");
+			consult.setComments("Followup Consultation with in a week ");
 		}
 		
 		
-		if(allowedamt<=applyamount) {
+		if (allowedamt <= applyamount) {
+			consult.setConsultRemAmount(allowedamt);
 			return allowedamt;
-		}else {
+		} else {
+			consult.setConsultRemAmount(applyamount);
 			return applyamount;
 		}
 		
@@ -490,17 +528,17 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public long ConsultationBillEdit(CHSSConsultation modal) throws Exception
+	public long ConsultationBillEdit(CHSSConsultation modal,String chssapplyid, String consultmainidold) throws Exception
 	{
 		CHSSConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultType(modal.getConsultType());
 		fetch.setDocName(modal.getDocName());
-		fetch.setDocQualification(modal.getDocQualification());
+//		fetch.setDocQualification(modal.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setConsultRemAmount(getConsultEligibleAmount(modal.getConsultCharge(),modal.getDocQualification(),modal.getConsultType()));
+		fetch.setConsultRemAmount(getConsultEligibleAmount(fetch,chssapplyid,consultmainidold));      
 
 		
 		return dao.ConsultationBillEdit(fetch);
@@ -517,17 +555,15 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	
-	
-	
 	@Override
-	public long MedicinesBillAdd(CHSSMedicineDto dto) throws Exception
+	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception
 	{
 		logger.info(new Date() +"Inside SERVICE MedicinesBillAdd");		
 		try {
 			
 			long count=0;
-			
+			Object[] chssapplydata = dao.CHSSAppliedData(chssapplyid);
+			String treattypeid= chssapplydata[7].toString();
 			for(int i=0 ; i<dto.getMedicineName().length ; i++)
 			{
 				CHSSMedicine  meds = new CHSSMedicine();
@@ -537,10 +573,16 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
-				meds.setMedsRemAmount(0);
+				meds.setMedsRemAmount(Integer.parseInt(dto.getMedicineCost()[i]));
 				meds.setIsActive(1);
 				meds.setCreatedBy(dto.getCreatedBy());
 				meds.setCreatedDate(sdtf.format(new Date()));
+				
+				if(treattypeid.toString().equalsIgnoreCase("1")) {
+					checkMedAdmissibility(meds);
+				}
+				
+				
 				count = dao.MedicinesBillAdd(meds);
 				
 			}
@@ -553,6 +595,17 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
+	
+	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
+	{
+		Object[] medicinedata = dao.MedAdmissibleCheck(meds.getMedicineName());
+		if(medicinedata!=null)
+		{
+			meds.setMedsRemAmount(0);
+			meds.setComments("Medicine Name found in inadmissible List at Allopathy List at MedicineNo : "+medicinedata[1]);
+		}
+	}
+	
 	
 	
 	
@@ -1232,7 +1285,7 @@ public class CHSSServiceImpl implements CHSSService {
 				continstatus=14;
 				
 				notify.setNotificationMessage("Medical Claim Contingent Bill Approved");
-				notify.setNotificationUrl("ApprovedBiils.htm");
+				notify.setNotificationUrl("ApprovedBills.htm");
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
 					notify.setEmpId(0L);
@@ -1256,7 +1309,7 @@ public class CHSSServiceImpl implements CHSSService {
 			else if(continstatus==12 ) 
 			{
 				continstatus=13;
-				notify.setNotificationUrl("ApprovedBiils.htm");
+				notify.setNotificationUrl("ContingentApprovals.htm");
 			}	
 			
 			Object[] notifyto = dao.CHSSApprovalAuth("K");
@@ -1441,9 +1494,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception
 	{
-		return dao.ConsultBillsConsultCount(consultmainid,chssapplyid);
+		return dao.ConsultBillsConsultCount(consultmainid,chssapplyid,billid);
 	}
 	
 	@Override

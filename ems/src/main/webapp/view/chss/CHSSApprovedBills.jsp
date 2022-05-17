@@ -14,7 +14,7 @@
 <%
 	
 	
-	List<Object[]> ApprovedBiils=(List<Object[]>)request.getAttribute("ApprovedBiils");
+	List<Object[]> ApprovedBiils=(List<Object[]>)request.getAttribute("ApprovedBills");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();

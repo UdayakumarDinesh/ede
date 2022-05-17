@@ -140,11 +140,19 @@ th,td
 <div align="center">
 	<div align="center">
 		<div>
-			<div>
-				<%-- <span><img style="width: 2cm; height: 2cm"  src="data:image/png;base64,<%=LabLogo%>"></span> --%>
-				
+		<%-- 	<table style="border: 0px; width: 100%">
+				<tr>
+					<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
+					<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
+					<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span> </td>
+				</tr>
+			</table> --%>
+			
+			<div style="width: 100%;float:left;">
+				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
+				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM</span></h3> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span>  </div>
 			</div>
-			<div style="text-align:right; "><span><h3 style="text-align:center; " >MEDICAL CLAIM</h3> </span>  No.of ENCL : &nbsp;<%=chssapplydata[8] %></div>
+			
 			<table>	
 				<tbody>
 					<tr>
@@ -299,7 +307,7 @@ th,td
 								<td class="right"></td>
 							</tr>
 							<tr>
-								<th style="width: 14% !important">Bill No</th>
+								<th style="width: 15% !important">Bill No</th>
 								<th>Doctor</th>
 								<th style="width:10%;">Type</th>
 								<th style="width:15%;" class="center">Date</th>
@@ -309,7 +317,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=consult[8] %></td>
+							<td><%=consult[8] %><br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
 							<td><%=consult[3] %></td>
 							<td><%=consult[2] %></td>
 							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
@@ -355,7 +363,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=test[8] %></td>
+							<td><%=test[8] %> <br>(<%=rdf.format(sdf.parse(test[9].toString()))%>)</td>
 							<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 							<td class="right"><%=test[4] %></td>
 							
@@ -400,7 +408,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=medicine[7] %></td>
+							<td><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8].toString()))%>)</td>
 							<td><%=medicine[2] %></td>
 							<td><%=medicine[5] %></td>
 							<td><%=medicine[4] %></td> 
@@ -446,7 +454,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=other[6] %></td>
+							<td><%=other[6] %><br>(<%=rdf.format(sdf.parse(other[7].toString()))%>)</td>
 							<td colspan="3"><%=other[4] %></td>
 							<td class="right"><%=other[3] %></td>
 							
@@ -490,7 +498,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=misc[5] %></td>
+							<td><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6].toString()))%>)</td>
 							<td colspan="3"><%=misc[2] %></td>
 							<td class="right"><%=misc[3] %></td>
 								<%if(show){ %>

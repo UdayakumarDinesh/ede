@@ -47,11 +47,11 @@ public interface CHSSService
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception;
 	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
-	public long ConsultationBillAdd(CHSSConsultationDto dto) throws Exception;
+	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
-	public long ConsultationBillEdit(CHSSConsultation modal) throws Exception;
+	public long ConsultationBillEdit(CHSSConsultation modal,String chssapplyid, String consultmainidold) throws Exception;
 	public long ConsultationBillDelete(String consultationid, String modifiedby) throws Exception;
-	public long MedicinesBillAdd(CHSSMedicineDto dto) throws Exception;
+	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception;
 	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception;
 	public long MedicineBillDelete(String medicineid, String modifiedby) throws Exception;
 	public long MedicineBillEdit(CHSSMedicine modal) throws Exception;
@@ -108,7 +108,7 @@ public interface CHSSService
 	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception;
 	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception;
 	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception;
-	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid) throws Exception;
+	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception;
 
