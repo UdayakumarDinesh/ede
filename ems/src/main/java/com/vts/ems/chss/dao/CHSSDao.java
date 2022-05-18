@@ -109,7 +109,7 @@ public interface CHSSDao {
 	public int ConsultBillsDelete(String consultmainid) throws Exception;
 	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
-	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception;
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public Object[] MedAdmissibleCheck(String medicinename) throws Exception;
 
 }

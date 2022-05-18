@@ -110,7 +110,7 @@ public interface CHSSService
 	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception;
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
-	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception;
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 
 	
 }

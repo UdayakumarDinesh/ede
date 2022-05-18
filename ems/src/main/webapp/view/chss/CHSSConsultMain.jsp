@@ -195,7 +195,7 @@ p {
 							</div>
 							
 							<div class="col-1">
-								<button type="submit" class="btn btn-sm " style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button> 
+								<button type="submit" class="btn btn-sm " style="margin-top: 20px;"  data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button>  <!-- Onclick="return confirm ('Are You Sure To Update?');" --> 
 							</div>
 						</div>
 						</div>
@@ -247,13 +247,12 @@ p {
 														</select>
 													</td>
 													<td>
-														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
+														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
-														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
+														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 															<i class="fa-solid fa-trash-can" style="color: red;"></i>
-														</button>
-																										
+														</button>																										
 														<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 															<i class="fa-solid fa-receipt"></i>
 														</button>												
@@ -317,7 +316,7 @@ p {
 												</select>
 											</td>
 											<td style="width:20%;" >
-												<button type="submit"  class="btn btn-sm add-btn" Onclick="return confirm('Are You Sure To Add ?');" name="action" value="add" >ADD</button>
+												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >ADD</button>  <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	

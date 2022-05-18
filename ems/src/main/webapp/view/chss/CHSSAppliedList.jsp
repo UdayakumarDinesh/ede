@@ -174,7 +174,8 @@ function CheckClaimAmount($chssapplyid)
 		var result = JSON.parse(result);
 						
 			if(result===1){
-				if(confirm('Are You Sure To Forward?'))
+				/* if(confirm('Are You Sure To Forward?')) */
+				if(true)
 				{
 					$('#form2-chssapplyid').val($chssapplyid);
 					$('#form2').submit();

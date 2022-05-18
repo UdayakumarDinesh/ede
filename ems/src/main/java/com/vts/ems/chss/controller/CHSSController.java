@@ -2397,7 +2397,8 @@ public class CHSSController {
 		List<Object[]> list=new ArrayList<Object[]>();;
 		try {
 			String consultmainid = req.getParameter("consultmainid");
-			list = service.OldConsultMedsList(consultmainid);
+			String chssapplyid = req.getParameter("chssapplyid");
+			list = service.OldConsultMedsList(consultmainid,chssapplyid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside OldConsultMedsListAjax.htm "+Username, e);

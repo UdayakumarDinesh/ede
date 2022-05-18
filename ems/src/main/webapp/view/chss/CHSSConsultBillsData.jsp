@@ -273,7 +273,7 @@ p {
 											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
 											<td style="width:25%;" >
-												<button type="submit"  class="btn btn-sm add-btn" Onclick="return confirm('Are You Sure To Add ?');" name="action" value="add" >ADD</button>
+												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >ADD</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	
@@ -419,7 +419,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >ADD</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >ADD</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -483,7 +483,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="confirm('Are You Sure To Submit?');">Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit">Add</button>	<!--  onclick="confirm('Are You Sure To Submit?');" -->
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -499,9 +499,10 @@ p {
 				   		<div class="col-md-12" >
 				   			<div class="row" align="center" style="margin-bottom: 10px;margin-top:5px; ">
 				   				<div class="col-12" align="left">
+				   					<span class="btn " style="background-color: #F806CC; color: white;">
 				   					<b>Get Medicines From Previous Consultation of this Doctor:</b> 
 				   					<input type="checkbox" name="" id="old-consult" value="<%=consultmain.getCHSSConsultMainId() %>" onclick="FillMedsList()" >
-				   				
+				   				</span>
 				   					
 				   					<%--    
 				   					<select name="old-consult" class="select2" id="old-consult" style="width: 60%" onchange="FillMedsList();"  >
@@ -573,7 +574,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" >Add</button>	 <!--  onclick="return confirm('Are You Sure To Submit?');"  -->
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -634,7 +635,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit">Add</button>	<!--  onclick="return confirm('Are You Sure To Submit?');"  -->
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -689,7 +690,7 @@ p {
 									</tbody>			
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" onclick="return confirm('Are You Sure To Submit?');" >Add</button>	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" >Add</button>	 <!--  onclick="return confirm('Are You Sure To Submit?');" -->
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -1582,6 +1583,7 @@ function FillMedsList()
 			data : {
 									
 				consultmainid : oldconsultid,
+				chssapplyid : <%=chssapplydata[0]%>,
 			},
 			datatype : 'json',
 			success : function(result) 

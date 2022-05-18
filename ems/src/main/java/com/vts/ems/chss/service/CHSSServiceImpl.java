@@ -504,7 +504,7 @@ public class CHSSServiceImpl implements CHSSService {
 		{
 			allowedamt = rate.getConsultation_2();
 			consult.setConsultType(isfresh);
-			consult.setComments("Followup Consultation with in a 2  week ");
+			consult.setComments("Followup Consultation with in 2 weeks ");
 		}
 		else if(isfresh.equalsIgnoreCase("")) 
 		{
@@ -602,12 +602,9 @@ public class CHSSServiceImpl implements CHSSService {
 		if(medicinedata!=null)
 		{
 			meds.setMedsRemAmount(0);
-			meds.setComments("Medicine Name found in inadmissible List at Allopathy List at MedicineNo : "+medicinedata[1]);
+			meds.setComments("Found in inadmissible List : MedicineNo: "+medicinedata[1]);
 		}
 	}
-	
-	
-	
 	
 	
 	@Override
@@ -1507,8 +1504,8 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception
 	{
-		return dao.OldConsultMedsList(CHSSConsultMainId);
+		return dao.OldConsultMedsList(CHSSConsultMainId,chssapplyid);
 	}
 }

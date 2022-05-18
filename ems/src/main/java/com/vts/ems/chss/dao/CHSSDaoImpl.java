@@ -1529,15 +1529,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String OLDCONSULTMEDSLIST  ="SELECT cb.CHSSApplyId, cb.BillId, cm.CHSSMedicineId, cm.MedicineName, cm.PresQuantity, cm.MedQuantity FROM chss_bill cb, chss_medicine cm WHERE cb.IsActive =1 AND cm.IsActive =1 AND cb.BillId = cm.BillId AND cb.CHSSApplyId = (SELECT MIN(cb1.CHSSApplyId) FROM chss_bill cb1 WHERE  cb1.IsActive = 1 AND cb1.CHSSConsultMainId=:CHSSConsultMainId) AND cb.CHSSConsultMainId =:CHSSConsultMainId ";
+	private static final String OLDCONSULTMEDSLIST  ="SELECT cb.CHSSApplyId, cb.BillId, cm.CHSSMedicineId, cm.MedicineName, cm.PresQuantity, cm.MedQuantity FROM chss_bill cb, chss_medicine cm WHERE cb.IsActive =1 AND cm.IsActive =1 AND cb.BillId = cm.BillId AND cb.CHSSApplyId = (SELECT MIN(cb1.CHSSApplyId) FROM chss_bill cb1 WHERE  cb1.IsActive = 1 AND cb1.CHSSConsultMainId=:CHSSConsultMainId) AND cb.CHSSConsultMainId =:CHSSConsultMainId AND cb.CHSSApplyId <> :chssapplyid ";
 	@Override
-	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId) throws Exception
+	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO OldConsultMedsList");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(OLDCONSULTMEDSLIST);
 			query.setParameter("CHSSConsultMainId", CHSSConsultMainId);
+			query.setParameter("chssapplyid", chssapplyid);
 			list=  (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();

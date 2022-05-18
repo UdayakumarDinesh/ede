@@ -178,7 +178,7 @@
 						</div>
 						
 						<div class="row justify-content-center">
-							<button type="submit" class="btn btn-sm submit-btn" name="action" value="add" Onclick="return confirm('Are You Sure To Submit?')" >save</button>						
+							<button type="submit" class="btn btn-sm submit-btn" name="action" value="add"  >save</button> <!-- Onclick="return confirm('Are You Sure To Submit?')"  -->						
 						</div>
 					</form>
 				</div>
