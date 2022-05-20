@@ -105,7 +105,7 @@ $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	/* "minDate" :datearray,   */
+	 "minDate" :new Date(),   
 	"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,

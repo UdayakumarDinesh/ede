@@ -27,6 +27,21 @@
 		</div>
 	</div>	
 
+		<div align="center">
+				<%String ses=(String)request.getParameter("result"); 
+				String ses1=(String)request.getParameter("resultfail");
+				if(ses1!=null){ %>
+					<div class="alert alert-danger" role="alert">
+						<%=ses1 %>
+					</div>
+					
+				<%}if(ses!=null){ %>
+					
+					<div class="alert alert-success" role="alert">
+						<%=ses %>
+					</div>
+				<%} %>
+		</div>
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="card dashboard-card" >
