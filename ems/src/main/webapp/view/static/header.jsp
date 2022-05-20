@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page import="java.time.LocalDate"%>
@@ -66,7 +67,10 @@
          
 	<% String Username = (String)session.getAttribute("Username");
        String logintype   = (String)session.getAttribute("LoginType"); 
-       String EmpName     = (String)session.getAttribute("EmpName");%>
+       String EmpName     = (String)session.getAttribute("EmpName");
+    	
+       
+    %>
       
 	<div class="wrapper">
 
@@ -138,18 +142,6 @@
 	                    
 	                    <!-- Search Bar -->
 	                    
-						<!-- <form action="#" class="form-inline my-2 my-lg-0">
-							        <div class=" search rounded rounded-pill shadow-sm ">
-							            <div class="input-group">
-							                <input type="search" placeholder="Search" aria-describedby="button-addon1"
-							                    class="form-control border-0 ">
-							                <div class="input-group-append" style="background-color: #ffffff;border-bottom-right-radius: 4px;border-top-right-radius: 4px;">
-							                    <button id="button-addon1" type="submit" class="btn btn-link text-primary">
-							                    <i class="fa fa-search" style="color: blue"></i></button>
-							                </div>
-							            </div>
-							        </div>
-							    </form> -->
 						
 							
 							<ul class="navbar-nav ml-auto ">
@@ -166,6 +158,20 @@
 							
 							
 						<div class="btn-group ">
+						<%-- <%if(request.getRequestURI().equalsIgnoreCase("/ems/view/static/maindashboard.jsp")){ %>
+							<form action="EmpLogitypeChange.htm" class="form-inline my-2 my-lg-0" method="post">
+								<div class=" search rounded rounded-pill shadow-sm ">
+									<div class="input-group">
+										<select class="form-control select2" name="logintype" onchange="this.form.submit();">
+											<%for(Object[] login:emplogintypelist){ %>
+												<option value="<%=login[0]%>" <%if(logintype.equalsIgnoreCase(login[0].toString())){ %>selected <%} %>><%=login[1]%></option>
+											<%} %>
+										</select>
+										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+									</div>
+								</div>
+							</form> 
+						<%} %> --%>
 	
 							<a class="nav-link  onclickbell" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					            <img alt="logo" src="view/images/alarm.png" >

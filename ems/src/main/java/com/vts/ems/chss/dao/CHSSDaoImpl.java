@@ -995,7 +995,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CHSSMISCDATALIST = "SELECT  cm.ChssMiscId,  cm.BillId,  cm.MiscItemName,  cm.MiscItemCost,cm.MiscRemAmount  ,cb.BillNo,  cb.BillDate, cm.Comments  FROM  chss_misc cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId =:CHSSApplyId";
+	private static final String CHSSMISCDATALIST = "SELECT  cm.ChssMiscId,  cm.BillId,  cm.MiscItemName,  cm.MiscItemCost,cm.MiscRemAmount  ,cb.BillNo,  cb.BillDate, cm.Comments, cm.MiscCount  FROM  chss_misc cm,  chss_bill cb WHERE cm.isactive = 1 AND cb.isactive=1 AND cb.BillId = cm.BillId  AND cb.CHSSApplyId =:CHSSApplyId";
 
 	@Override
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception 
@@ -1009,7 +1009,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
 	
@@ -1416,9 +1415,9 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String MEDICINESHISTORY  ="SELECT   cm.CHSSMedicineId ,  ca.CHSSApplyNo,  cb.Billno,  cm.MedicineName,  cm.PresQuantity,  cm.MedQuantity,  cm.MedicineCost,  cm.MedsRemAmount, cb.BillDate FROM   chss_apply ca,  chss_apply ca1,  chss_bill cb,  chss_medicine cm   WHERE ca.IsActive = 1  AND cb.isactive = 1   AND cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = ca.CHSSApplyId   AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf  AND ca.CHSSStatusId =14  AND ca1.chssapplyid = :chssapplyid";
+	private static final String MEDICINESHISTORY  ="SELECT   cm.CHSSMedicineId ,  ca.CHSSApplyNo,  cb.Billno,  cm.MedicineName,  cm.PresQuantity,  cm.MedQuantity,  cm.MedicineCost,  cm.MedsRemAmount, cb.BillDate FROM   chss_apply ca,  chss_apply ca1,  chss_bill cb,  chss_medicine cm   WHERE ca.IsActive = 1  AND cb.isactive = 1   AND cm.isactive = 1  AND cb.BillId = cm.BillId  AND cb.CHSSApplyId = ca.CHSSApplyId   AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf  AND ca.CHSSStatusId =14 AND ca.chssapplyid < ca1.chssapplyid  AND ca1.TreatTypeId = :treattypeid  AND ca1.chssapplyid = :chssapplyid ";
 	@Override
-	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception
+	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO MedicinesHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
@@ -1426,6 +1425,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			Query query= manager.createNativeQuery(MEDICINESHISTORY);
 			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("treattypeid", treattypeid);
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
@@ -1454,7 +1454,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String MISCITEMSHISTORY  ="SELECT   cmi.ChssMiscId,  ca.CHSSApplyNo,  cb.Billno,  cmi.MiscItemName,  cmi.MiscItemCost,  cmi.MiscRemAmount FROM  chss_apply ca,  chss_apply ca1,  chss_bill cb,   chss_misc cmi WHERE ca.IsActive = 1  AND cb.isactive = 1  AND cmi.isactive = 1  AND cb.BillId = cmi.BillId    AND cb.CHSSApplyId = ca.CHSSApplyId  AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf   AND ca.CHSSStatusId = 14  AND ca1.chssapplyid = :chssapplyid";
+	private static final String MISCITEMSHISTORY  ="SELECT   cmi.ChssMiscId,  ca.CHSSApplyNo,  cb.Billno,  cmi.MiscItemName,  cmi.MiscItemCost,  cmi.MiscRemAmount, cmi.MiscCount FROM  chss_apply ca,  chss_apply ca1,  chss_bill cb,   chss_misc cmi WHERE ca.IsActive = 1  AND cb.isactive = 1  AND cmi.isactive = 1  AND cb.BillId = cmi.BillId    AND cb.CHSSApplyId = ca.CHSSApplyId  AND ca.empid = ca1.empid  AND ca.PatientId = ca1.PatientId  AND ca.IsSelf = ca1.IsSelf   AND ca.CHSSStatusId = 14  AND ca1.chssapplyid = :chssapplyid";
 	@Override
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception
 	{
@@ -1550,16 +1550,16 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND MedicineName LIKE :medicinename ";
 	@Override
-	public Object[] MedAdmissibleCheck(String medicinename) throws Exception
+	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO MedAdmissibleCheck");
-		Object[] list = null;
+		 List<Object[]> list = null;
 		try {
 			
 			Query query= manager.createNativeQuery(MEDADMISSIBLECHECK);
-			query.setParameter("medicinename", medicinename+"%");
+			query.setParameter("medicinename", medicinename.trim()+"%");
 			
-			list=  (Object[])query.getResultList().get(0);
+			list=  ( List<Object[]>)query.getResultList();
 			
 		}catch (NoResultException e) {
 			System.err.println ("No Result Exception");
@@ -1570,5 +1570,49 @@ public class CHSSDaoImpl implements CHSSDao {
 		return  list;
 	}
 	
+	private static final String MEDADMISSIBLELIST  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName,IsAdmissible FROM chss_medicines_list WHERE IsActive=1  AND TreatTypeId=:treattype  AND MedicineName LIKE :medicinename ";
+	@Override
+	public List<Object[]> MedAdmissibleList(String medicinename, String treattype)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MedAdmissibleList");
+		 List<Object[]> list = null;
+		try {
+			
+			Query query= manager.createNativeQuery(MEDADMISSIBLELIST);
+			query.setParameter("medicinename", medicinename.trim()+"%");
+			query.setParameter("treattype", treattype);
+			
+			
+			list=  ( List<Object[]>)query.getResultList();
+			
+		}catch (NoResultException e) {
+			System.err.println ("No Result Exception");
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return  list;
+	}
+	
+	private static final String POACKNOWLDGEDUPDATE  ="UPDATE chss_apply SET POAcknowledge = :poacknowledge WHERE chssapplyid=:chssapplyid";
+	@Override
+	public int POAcknowldgedUpdate(String chssapplyid)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO POAcknowldgedUpdate");
+		try {
+			
+			Query query= manager.createNativeQuery(POACKNOWLDGEDUPDATE);
+			query.setParameter("chssapplyid",chssapplyid);
+			query.setParameter("poacknowledge", 1);
+			
+			return query.executeUpdate();
+		}		
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 }

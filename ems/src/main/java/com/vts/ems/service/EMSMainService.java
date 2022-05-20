@@ -20,4 +20,5 @@ public interface EMSMainService {
 	public int SendOtpMail(String loginid) throws Exception;
 	public String reSendResetOTP(String loginid) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
+	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
 }

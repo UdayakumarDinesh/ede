@@ -61,7 +61,7 @@ body,html {
 
 #myTable thead tr
 {
-text-align: center;
+	text-align: center;
 }
 
 .c-body{
@@ -108,7 +108,7 @@ hr{
 	margin: 0px 20px !important;
 }
 
-#myTable
+#myTable , #myTable1
 {
 	max-width: 100% !important;	
 }

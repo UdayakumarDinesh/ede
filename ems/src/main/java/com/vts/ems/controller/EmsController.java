@@ -51,6 +51,9 @@ public class EmsController {
 			Employee employee = service.EmployeeInfo(login.getEmpId());
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
+			ses.setAttribute("emplogintypelist",service.EmpHandOverLoginTypeList(String.valueOf(employee.getEmpId())));
+			
+			
 		} catch (Exception e) {
 			logger.error(new Date() + " Login Issue Occures When Login By " + req.getUserPrincipal().getName(), e);
 		}
@@ -68,6 +71,24 @@ public class EmsController {
 //    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
 
 		return "static/maindashboard";
+	}
+	
+	@RequestMapping(value = "EmpLogitypeChange.htm" , method = RequestMethod.POST)
+	public String EmpLogitypeChange(HttpServletRequest req ,HttpSession ses) throws Exception {		
+		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside EmpLogitypeChange.htm "+UserId);		
+		try {
+			String logintype= req.getParameter("logintype");
+			ses.setAttribute("LoginType", logintype);
+			return "redirect:/MainDashBoard.htm";
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside EmpLogitypeChange.htm "+UserId, e);
+			return "redirect:/MainDashBoard.htm";
+		}
+		
 	}
 	
 	
@@ -121,7 +142,7 @@ public class EmsController {
 		
 	}
 	
-    
+  
 	 @RequestMapping(value = "fpwd/ForgotPassword.htm", method = {RequestMethod.POST,RequestMethod.GET}) 
 	 public String forgotPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 

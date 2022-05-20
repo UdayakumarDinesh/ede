@@ -20,4 +20,5 @@ public interface EmsDao
 	public int UpdateResetOtp(String loginid, String otp) throws Exception;
 	public int userResetPassword(String loginid, String password) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
+	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
 }

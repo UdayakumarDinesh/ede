@@ -190,4 +190,10 @@ public class EMSMainServiceImpl implements EMSMainService
 		return otp;
 	}
 	
+	@Override
+	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception
+	{
+		return dao.EmpHandOverLoginTypeList(empid);
+	}
+	
 }

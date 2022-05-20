@@ -147,7 +147,7 @@ th,td
 						<div align="center">
 						
 						<div style="text-align: left;margin: 5px 5px 5px 10px;">
-							<img style="width: 100px; height: 100px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
+							<img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
 							<div style="padding-left: 5px;">
 								<br><br>
 								<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;vertical-align: bottom;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>

@@ -70,7 +70,7 @@
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
+										<td style="padding-top:5px; padding-bottom: 5px;max-width: 15% !important">Action</td>
 									</tr>
 								</thead>
 								<tbody>
@@ -84,17 +84,19 @@
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<%-- <button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
 													<i class="fa-regular fa-file-lines"></i>
-												</button> --%>
-												
+												</button>
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
+													<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
+												</button>
 											</td>
 										</tr>
 									<%} }%>

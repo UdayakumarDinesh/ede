@@ -17,7 +17,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/header.jsp"></jsp:include> 
 
 <style type="text/css">
 input::-webkit-outer-spin-button,
@@ -58,6 +58,16 @@ p {
 	text-justify: inter-word;
 }
 
+.nav-link-btn
+{	
+	padding :10px 3px;
+	margin : 3px 0px;
+}
+
+.nav-link-btn:hover {
+	background-color: #F5C6A5;
+	
+}
 </style>
 </head>
 <body>
@@ -337,18 +347,17 @@ p {
 			<div class="modal-body" style="min-height: 30rem;">
 		
 			    <div class="row" >
-			    	<div class="col-12">
-				    	<div class="nav nav-pills nav-justified" id="nav-tabs">
-				    		<a class="nav-item nav-link co" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
-				    		<a class="nav-item nav-link te" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
-				    		<a class="nav-item nav-link me" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link ot" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
-				    		<a class="nav-item nav-link mi" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
-				    		
+			    	<div class="col-2" style="padding: 0px 5px 0px 5px;">
+				    	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.25);min-height: 28rem;border-radius: 5px;" >
+				    		<a class="nav-link nav-link-btn btn co"  data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
+				    		<a class="nav-link nav-link-btn btn te"  data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests / Procedures</a>
+				    		<a class="nav-link nav-link-btn btn me"  data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
+				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
+				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
-			    	</div>
-			    </div>
-			   <div class="tab-content " id="nav-tabContent" style="margin-top: 10px;">
+				    </div>
+			   <div class="col-10" style="padding:0px;  " >
+			   <div class="tab-content card-body " id="nav-tabContent" style="padding: 0px;" >
 <!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		   
 			   		<div class="tab-pane fade show active" id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
 			   		
@@ -498,20 +507,15 @@ p {
 			   		
 				   		<div class="col-md-12" >
 				   			<div class="row" align="center" style="margin-bottom: 10px;margin-top:5px; ">
+				   				<%if(Long.parseLong(chssapplydata[0].toString())!=consultmain.getCHSSApplyId()){ %>
 				   				<div class="col-12" align="left">
 				   					<span class="btn " style="background-color: #F806CC; color: white;">
 				   					<b>Get Medicines From Previous Consultation of this Doctor:</b> 
 				   					<input type="checkbox" name="" id="old-consult" value="<%=consultmain.getCHSSConsultMainId() %>" onclick="FillMedsList()" >
 				   				</span>
-				   					
-				   					<%--    
-				   					<select name="old-consult" class="select2" id="old-consult" style="width: 60%" onchange="FillMedsList();"  >
-				   						<option value="0"> New</option>
-				   						<%for(Object[] consult : consulthistory){ %>
-				   							<option value="<%=consult[0]%>"><%=consult[3]%> &emsp;-&emsp; <%=consult[4]%> &emsp;-&emsp; <%=DateTimeFormatUtil.SqlToRegularDate(consult[2].toString())%> </option>
-				   						<%} %>
-				   					</select> --%>
 				   				</div>
+				   				<%} %>
+				   				
 				   			</div>
 				   		
 				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
@@ -655,7 +659,8 @@ p {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:65%;"> Item Name </th>
+											<th style="width:55%;"> Item Name </th>
+											<th style="width:10%; text-align: center; ;">Qty</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
@@ -676,14 +681,16 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:70%;"> Item Name </th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+											<th style="width:60%;"> Item Name </th>
+											<th style="width:10%; text-align: center; ;">Qty</th> 
+											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th>
 											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 										</tr>
 									</thead>
 									<tbody class="tr_other_add">
 										<tr class="tr_clone_misc" >
 											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+											<td><input type="number" class="form-control items numberonly" name="misc-count" id="misc-count" value="0" style="width:100%;" min="0" max="999999" required="required" ></td>
 											<td><input type="number" class="form-control items numberonly" name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
@@ -701,7 +708,8 @@ p {
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->			   		
-			   </div>
+			   </div></div>
+			  </div>
 			</div>
 		      
 		</div>
@@ -711,16 +719,7 @@ p {
 
 
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
-
-<!-- <div class="nav nav-pills nav-justified" id="nav-tabs">
-				    		<a class="nav-item nav-link co" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
-				    		<a class="nav-item nav-link te" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests</a>
-				    		<a class="nav-item nav-link me" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-item nav-link ot" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
-				    		<a class="nav-item nav-link mi" style="border:1px solid #750550;margin :2px;padding :3px;" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
-				    		
-				    	</div>
- -->
+ 
  <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
  
 <script type="text/javascript">
@@ -1685,10 +1684,8 @@ function getmiscData(){
 				
 				miscHTMLStr +=	' 	<td><input type="text" class="form-control items" name="misc-name-'+misc.ChssMiscId+'"  value="'+misc.MiscItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
 				
-				let now = new Date(misc.MedicineDate);
-				var dateString = moment(now).format('DD-MM-YYYY');
-				
-				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-count-'+misc.ChssMiscId+'"  value="'+misc.MiscCount+'" style="width:100%;" min="0" max="9999999" required="required" ></td> ';
+				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 				miscHTMLStr +=	'	<td>';
 				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';

@@ -68,7 +68,7 @@
 						
 						<br>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
 								<thead>
 									<tr>
 										<td style="text-align: center;padding-top:5px; padding-bottom: 5px;">
@@ -115,7 +115,7 @@
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												
@@ -186,10 +186,14 @@ $(document).ready(function(){
         }
     });
 })
+$("#myTable1").DataTable({
+    "lengthMenu": [ 10, 25, 50, 75, 100],
+    "pagingType": "simple",
+    "language": {
+	      "emptyTable": "No Record Found"
+	    }
 
-/* $("#checkAll").click(function(){
-    $('input:checkbox').not(this).prop('checked', this.checked);
-}); */
+});
 </script>
 
 

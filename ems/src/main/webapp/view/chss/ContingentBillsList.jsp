@@ -74,7 +74,7 @@
 					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
 								<thead>
 									<tr>
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
@@ -118,9 +118,9 @@
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Details">
-													<i class="fa-solid fa-circle-info"></i>
+													<i class="fa-solid fa-circle-info" style="color: #03C4A1"></i>
 												</button>	
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
@@ -152,7 +152,18 @@
 		</div>
 	
 	 </div>
+	<script type="text/javascript">
 	
+	$("#myTable1").DataTable({
+	    "lengthMenu": [ 10, 25, 50, 75, 100],
+	    "pagingType": "simple",
+	    "language": {
+		      "emptyTable": "No Record Found"
+		    }
+
+	});
+	
+	</script>
 
 
 </body>

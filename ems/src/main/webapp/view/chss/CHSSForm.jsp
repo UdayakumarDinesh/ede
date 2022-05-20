@@ -149,7 +149,7 @@ th,td
 			</table> --%>
 			
 			<div style="width: 100%;float:left;">
-				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
+				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
 				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM</span></h3> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span>  </div>
 			</div>
 			
@@ -170,15 +170,19 @@ th,td
 			<table>	
 				<tbody>
 					<tr>
-						<th class="center">SN</th>
-						<th>Patient Name</th>
-						<th>Relation</th>
+						<th>Patient Name</th>						
+						<th>Ailment</th>
+						<th>Treatment Type</th>
+						<th>Submitted On</th>
+						
 					</tr>
 					<tr>
-						<td class="center">1</td>
-						<td><%=chssapplydata[12] %></td>
-						<td><%=chssapplydata[14] %></td>
+						<td><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+						<td><%=chssapplydata[17] %></td>
+						<td><%=chssapplydata[10] %></td>
+						<td><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
 					</tr>
+					
 				</tbody>
 			</table>
 			<table style="margin-bottom: 0px;">	
@@ -265,24 +269,21 @@ th,td
 						&#8226; That my wife / husband Shri / Smt. <%=chssapplydata[12] %> is an employee in STARC and that she / he is
 						covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 						benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
-						dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
+						dependent(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
 						<br>
 					<%} %>
 					
 					&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 					held liable, if anything is found to be incorrect later on.
 					<br>
-					&#8226; This bill is submitted on ................................. which is within 3 months of treatment / hospitalization.
+					&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 					<br>
 					&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 					<br>
 					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
 					(Strike out whichever is not applicable)
-			
 				</p>
-			
 			</div>
-			
 		</div>
 		<div class="break"></div>
 		<div align="center" >
@@ -349,7 +350,7 @@ th,td
 					{%>
 						<%if(i==1){ %>
 							<tr>
-								<td colspan="4" style="text-align: center;"><b>Pathological/Investigations Test</b></td>
+								<td colspan="4" style="text-align: center;"><b>Tests / Procedures</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
 								<td class="right"></td>
@@ -400,8 +401,8 @@ th,td
 							<tr>
 								<th>Bill No</th>
 								<th>Medicine Name</th>
-								<th style="width:10%;">Rx Qty.</th>
-								<th style="width:15%;">Pur Qty.</th>
+								<th style="width:10%;text-align: center;">Rx Qty.</th>
+								<th style="width:15%;text-align: center;">Pur Qty.</th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -410,8 +411,8 @@ th,td
 						<tr>
 							<td><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8].toString()))%>)</td>
 							<td><%=medicine[2] %></td>
-							<td><%=medicine[5] %></td>
-							<td><%=medicine[4] %></td> 
+							<td style="text-align: center;"><%=medicine[5] %></td>
+							<td style="text-align: center;"><%=medicine[4] %></td> 
 							<td class="right"><%=medicine[3] %></td>
 							
 							<%if(show){ %>
@@ -491,7 +492,8 @@ th,td
 							</tr>
 							<tr>
 								<th>Bill No</th>
-								<th colspan="3">Item</th>
+								<th colspan="2">Item</th>
+								<th style="text-align: center;">Qty</th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -499,7 +501,8 @@ th,td
 						<%} %>
 						<tr>
 							<td><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6].toString()))%>)</td>
-							<td colspan="3"><%=misc[2] %></td>
+							<td colspan="2"><%=misc[2] %></td>
+							<td style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 							<td class="right"><%=misc[3] %></td>
 								<%if(show){ %>
 									<td class="right">	
@@ -520,8 +523,8 @@ th,td
 					totalremamount +=Integer.parseInt(misc[4].toString());
 					}%>
 					<tr>
-						<td colspan="4" class="right">Total</td>
-						<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
+						<td colspan="4" class="right"><b>Total</b></td>
+						<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></b></td>
 						<td class="right">
 							<%if(show){ %>
 								&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
