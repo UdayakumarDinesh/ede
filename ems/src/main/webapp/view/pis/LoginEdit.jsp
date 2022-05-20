@@ -59,7 +59,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 													<%} %>
 											</select></td>
 										</tr>
-										<tr>
+									<%-- 	<tr>
 											<th><label>Employee : <span class="mandatory" style="color: red;">*</span>
 											</label></th>
 											<td><select class="form-control select2"
@@ -71,7 +71,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 											   <option value="<%=emp[0]%>"  <%if(loginEditdata.getEmpId().toString().equalsIgnoreCase(emp[0].toString())){%> selected <%}%>><%=emp[1]%> </option>
 												<%}%>
 											</select></td>
-										</tr>
+										</tr> --%>
 									
 								</table>
 							</div>

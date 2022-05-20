@@ -80,7 +80,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 				
 				
 				 <div class="row">
-				       <div class="col-md-4">
+				       <div class="col-md-5">
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm selectpicker" name="relation" required  data-live-search="true">
@@ -106,12 +106,12 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                </div>
 		              </div>
 		              
-		               <div class="col-md-4">
+		            <%--    <div class="col-md-4">
 		                <div class="form-group">
 		                    <label>Ben Id:<span class="mandatory">*</span></label>
 		                    <input  id="BenidTextBox" value="<%=memberdata.getCghs_ben_id()%>"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
 		                </div>
-		               </div> 
+		               </div>  --%>
 		                 		        	       
 				</div>	
 				
@@ -120,7 +120,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                 
                 
                   
-               <!-- Status,Status From,BG,PH -->
+               <%-- <!-- Status,Status From,BG,PH -->
                 <div class="row">
                   <div class="col-4">
                          <div class="form-group">
@@ -133,9 +133,9 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt(statusLs[0].toString())){%>selected<%}%>><%=statusLs[1]%></option>
 		                       <%} %> 
 
-                               <%--  <% for(Object[] statusLs:StatusList){ %> 
+                                <% for(Object[] statusLs:StatusList){ %> 
 		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
-		                        <%} %> --%>
+		                        <%} %>
 
                             </select>
                             </div>  
@@ -178,12 +178,12 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                     </div>
                  
                   
-                </div>
+                </div> --%>
                <!-- //Status,Status From,BG,PH -->
                 
                 
                 
-               <!-- dependency ,Employed,Married-->
+          <%--      <!-- dependency ,Employed,Married-->
 					<div class="row">
 		                <!-- Medical -->
 		                <div class="col-4">
@@ -246,9 +246,9 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                     </div>
      
 		          
-		           </div>
+		           </div> --%>
                
-                <!--// dependency ,Employed,Married-->
+            <%--     <!--// dependency ,Employed,Married-->
 				<div class="row">
 				
 							 <div class="col-md-4" id ="EmpHide">
@@ -265,7 +265,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             </div>  
                         </div>
                       
-				</div>
+				</div> --%>
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">

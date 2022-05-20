@@ -94,8 +94,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	
 	
 	<div class="card-body" >
-	<%if(ses1!=null){
-	%>
+	<%if(ses1!=null){%>
 	
 	<div align="center">
 	<div class="alert alert-danger" role="alert">
@@ -154,7 +153,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						     <th>Designation</th>
 	                         <th>Division</th>
 	                         <th>DOB</th>
-	                         <th>PunchCard No</th>
+	                         <th>Employee No</th>
 	                         <th>UID</th>
 						</tr>
 						<tr>
@@ -255,10 +254,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td> <b>DOJ</b> </td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[6].toString())%></td>
-							<td> <b>DOA</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[7].toString())%></td>
 							<td> <b>DOR</b> </td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString())%></td>
+							<td> <b>Phone No</b> </td>
+							<td><%=employeedetails[30].toString()%></td>
+							
 						</tr>
 						
 						<tr>
@@ -382,11 +382,11 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 						
 						<tr>
-							<td> <b>Alt_Mobile</b> </td>
+							<td><b>Alt_Mobile</b></td>
 							<td><%=O[0]%></td>
-							<td> <b>Landline</b> </td>
+							<td><b>Landline</b></td>
 							<td><%=O[3]%></td>
-							<td> <b>Pin</b> </td>
+							<td><b>Pin</b></td>
 							<td><%=O[6]%></td>
 						</tr>
 						

@@ -75,7 +75,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                 <!-- RELATIONSHIP & BENID-->
                 
                  <div class="row">
-				       <div class="col-md-4">
+				       <div class="col-md-5">
 		                <div class="form-group">
 		                	<label>Relation:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="relation" required  data-live-search="true">
@@ -103,14 +103,14 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		              
 		               <div class="col-md-4">
 		                <div class="form-group">
-		                    <label>Ben Id:<span class="mandatory">*</span></label>
-		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9" required="required"  placeholder="Enter BenID" onclick="checkLength()">
+		                    <!-- <label>Ben Id:<span class="mandatory">*</span></label>
+		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9" required="required"  placeholder="Enter BenID" onclick="checkLength()"> -->
 		                </div>
 		               </div> 
 		                 		        	       
 				</div>	
              
-                <div class="row">
+              <%--   <div class="row">
                   <div class="col-4">
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
@@ -164,10 +164,10 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                   
                 </div>
                <!-- //Status,Status From,BG,PH -->
+                 --%>
                 
                 
-                
-               <!-- dependency ,Employed,Married-->
+              <%--  <!-- dependency ,Employed,Married-->
 					<div class="row">
 		                <!-- Medical -->
 		                <div class="col-4">
@@ -230,7 +230,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                     </div>
      
 		          
-		           </div>
+		           </div> 
                
                 <!--// dependency ,Employed,Married-->
 				<div class="row">
@@ -247,7 +247,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             </select>
                             </div>  
                         </div>
-				</div>
+				</div>--%>
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">

@@ -305,14 +305,14 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
-	public int UserMangerEdit(String empid , String loginttype , String username,String loginid)throws Exception
+	public int UserMangerEdit(String logintype, String username,String loginid )throws Exception
 	{
 		Login login = new Login();
 		login.setModifiedBy(username);
-		login.setEmpId(Long.parseLong(empid));
+		//login.setEmpId(Long.parseLong(empid));
 		login.setLoginId(Long.parseLong(loginid));
 		login.setModifiedDate(sdf.format(new Date()));
-		login.setLoginType(loginttype);
+		login.setLoginType(logintype);
 		return dao.UserManagerEdit(login);
 	}
 	

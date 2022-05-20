@@ -46,7 +46,7 @@ public interface PisService {
 	public int UserNamePresentCount(String username)throws Exception;
 	public Long UserManagerAdd(UserManageAdd useradd)throws Exception;
 	public Login getLoginEditData(String LoginId)throws Exception;
-	public int UserMangerEdit(String empid , String logintype , String username,String loginid)throws Exception;
+	public int UserMangerEdit(String logintype, String username,String loginid )throws Exception;
 	public List<Object[]> getFamilyMembersList(String empid)throws Exception;
 	public Object[] GetEmpData(String empid)throws Exception;
 	public List<Object[]> getFamilyRelation()throws Exception;

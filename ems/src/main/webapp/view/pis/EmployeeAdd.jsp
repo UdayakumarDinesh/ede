@@ -124,26 +124,22 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</select>
 			            </div>
 			
-			            <div class="col-md-2">
-			                <label class="text-nowrap  ">Cadre Name<span class="mandatory">*</span></label>
-			                <select name="caderid" id="CadreId" class="form-control select2">
-								<%for( PisCadre cadre: piscaderlist){ %>
-									<option value="<%=cadre.getCadreId()%>"><%=cadre.getCadre()%></option>
-								<%} %>
-			                </select>
+			            <div class=" col-md-2 ">
+			                <label>Employee No<span class=" mandatory ">*</span></label>
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="4"
+			                    class=" form-control input-sm " placeholder="Enter Employee No " required="required"
+			                     onblur="checknegative(this)">
 			            </div>
-			
-			
-			            <div class="col-md-2">
-			                <label>CAT Class<span class="mandatory">*</span></label>
-			                <select name="catcode" class="form-control select2" required data-live-search="true">
-								<%for( PisCatClass catclass: piscatclasslist){ %>
-									<option value="<%=catclass.getCat_id()%>"><%=catclass.getCat_name()%></option>
-								<%} %>
+				
+						<div class="col-md-2">
+			                <label>Division <span class="mandatory">*</span></label>
+			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
+								<%for( DivisionMaster division: divisionlist){ %>
+									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
+								<%} %>			
 			
 			                </select>
 			            </div>
-			
 			
 			        </div>
 			    </div>
@@ -162,7 +158,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</div>
 						 </div>
 		
-			            <div class="col-md-2">
+			          <%--   <div class="col-md-2">
 			                <label>DOA<span class="mandatory">*</span></label>
 			               <div class=" input-group">
 							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doa" name="doa"  required="required"  > 
@@ -170,7 +166,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							      
 							    </label>                    
 							</div>
-			            </div>
+			            </div> --%>
 			
 			
 			            <div class="col-md-2">
@@ -189,24 +185,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    <option value="F">Female</option>
 			                </select>
 			            </div>
-			
-			
-			            <div class="col-md-2">
-			                <label class="text-nowrap">Blood Group<span class="mandatory">*</span></label>
-			                <select name="bloodgroup" class="form-control input-sm select2" required data-live-search="true">
-			
-			                    <option value="A-">A-</option>
-			                    <option value="A+">A+</option>
-			                    <option value="B-">B-</option>
-			                    <option value="B+">B+</option>
-			                    <option value="AB-">AB-</option>
-			                    <option value="AB+">AB+</option>
-			                    <option value="O-">O-</option>
-			                    <option value="O+">O+</option>
-			                    <option value="NOT">Not Available</option>
-			                </select>
-			            </div>
-			
+				
 						<div class=" col-md-2 ">
 			                <label>Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
@@ -214,7 +193,16 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    onchange="return trim(this) ">
 			            </div>
 			            
+			            <div class="col-md-2">
+			                <label>PAN<span class="mandatory">*</span></label>
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
+			            </div>
 			
+			
+			            <div class="col-md-2">
+			                <label>UID<span class="mandatory">*</span></label>
+			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
+			            </div>
 			
 			
 			        </div>
@@ -222,7 +210,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			   
 			    <div class="form-group">
 			        <div class="row">
-			        
+        
 						 <div class=" col-md-2 ">
 			                <label>Religion<span class=" mandatory ">*</span></label>
 			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
@@ -236,61 +224,34 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			                </select>
 			            </div>
-			            
-			            <div class="col-md-2">
-			                <label>Division <span class="mandatory">*</span></label>
-			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
-								<%for( DivisionMaster division: divisionlist){ %>
-									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
-								<%} %>			
-			
-			                </select>
-			            </div>
-			
-			
-			
-			            <div class="col-md-2">
-			                <label>PAN<span class="mandatory">*</span></label>
-			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
-			            </div>
-			
-			
-			            <div class="col-md-2">
-			                <label>UID<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
-			            </div>
-			
+		
 						<div class="col-md-2">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">
 			
-			                    <option value="Confirmed">Confirmed</option>
-			                    <option value="Probation">Probation</option>
-			                    <option value="Adhoc">Adhoc</option>
-			                    <option value="Temporary">Temporary</option>
-			                    <option value="Contract">Contract</option>
+			                    <option value="Confirmed"> Confirmed</option>
+			                    <option value="Probation"> Probation</option>
+			                    <option value="Adhoc">     Adhoc</option>
+			                    <option value="Temporary"> Temporary</option>
+			                    <option value="Contract">  Contract</option>
 			                </select>
 			            </div>
+			            
 						 <div class=" col-md-2 ">
-			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="4"
-			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                     onblur="checknegative(this)">
+			                <label>Phone No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
+			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                     onblur="checknegative(this) ">
 			            </div>
-			
-			           
-			
-			
-			        </div>
-			    </div>
-			
-			    <div class="form-group">
-			        <div class="row">
-
-			           
-			
-						<div class="col-md-2">
+			            
+			            <div class=" col-md-2 ">
+			                <label>SBI Account<span class=" mandatory ">*</span></label>
+			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
+			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
+			            </div>
+			            
+			            	<div class="col-md-2">
 			                <label>PayLevel<span class=" mandatory ">*</span></label>
 			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
 								<%for( PisPayLevel paylevel: paylevellist){ %>
@@ -305,7 +266,28 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input type="text" id="basicpaybox" value="" name="basicpay" class=" form-control input-sm " maxlength="12"
 			                    placeholder="Basic Pay" required="required">
 			            </div>
-			 			
+		
+			        </div>
+			    </div>
+			
+			    <div class="form-group">
+			        <div class="row">
+		           
+			          <div class="col-md-2">
+			                <label class="text-nowrap">Blood Group<span class="mandatory">*</span></label>
+			                <select name="bloodgroup" class="form-control input-sm select2" required data-live-search="true">
+			
+			                    <option value="A-">A-</option>
+			                    <option value="A+">A+</option>
+			                    <option value="B-">B-</option>
+			                    <option value="B+">B+</option>
+			                    <option value="AB-">AB-</option>
+			                    <option value="AB+">AB+</option>
+			                    <option value="O-">O-</option>
+			                    <option value="O+">O+</option>
+			                    <option value="NOT">Not Available</option>
+			                </select>
+			            </div>	 			
 			            
 			            <div class=" col-md-2 ">
 			                <label>Category<span class=" mandatory ">*</span></label>
@@ -315,39 +297,46 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 								<%} %>				
 			                </select>
 			            </div>
-			
-			
-			           
-						<div class=" col-md-2 ">
-			                <label>SBI Account<span class=" mandatory ">*</span></label>
-			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
-			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
-			            </div>
-
-			
+					
 			            <div class=" col-md-2 ">
 			                <label>Home Town<span class=" mandatory ">*</span></label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
 			                    onclick=" Validate() ">
 			            </div>
-						
-						
-			
-			               <div class=" col-md-2 ">
+								
+			            <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
 			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
 			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "   id="InternalNum"
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
+			            
+			              <div class="col-md-2">
+			                <label class="text-nowrap  ">Cadre Name</label>
+			                <select name="caderid" id="CadreId" class="form-control select2">
+								<%for( PisCadre cadre: piscaderlist){ %>
+									<option value="<%=cadre.getCadreId()%>"><%=cadre.getCadre()%></option>
+								<%} %>
+			                </select>
+			            </div>
+			
+			
+			            <div class="col-md-2">
+			                <label>CAT Class</label>
+			                <select name="catcode" class="form-control select2" required data-live-search="true">
+								<%for( PisCatClass catclass: piscatclasslist){ %>
+									<option value="<%=catclass.getCat_id()%>"><%=catclass.getCat_name()%></option>
+								<%} %>
+			
+			                </select>
+			            </div>
 			
 			        </div>
 			    </div>
-					    
 			    
-			    
-			    <div class=" form-group ">
-			        <div class="row">
+				    <div class=" form-group ">
+				        <div class="row">
     
 						<div class="col-md-2">
 			                <label>Availed Govt Quarters</label>
@@ -375,10 +364,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 								<option value="M">Married</option>									
 			                </select>			                
 			            </div>
-			            
-			            
-
-			
+		
 			            <div class=" col-md-2 ">
 			                <label>GPF/PRAN:</label>
 			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
@@ -437,12 +423,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    </div> -->
 			      <div class=" form-group ">
 			        <div class="row">
-			         <div class=" col-md-2 ">
-			                <label>Phone No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
-			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
-			                     onblur="checknegative(this) ">
-			            </div>
+			         			            
+			     
 			
 			        </div>
     			</div>

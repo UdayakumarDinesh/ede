@@ -82,7 +82,7 @@
 			
 					<form action="#" method="post" id="empForm">
 				<div align="right">
-				<button type="submit" class="btn btn-sm btnclr"  style="background-color: #9dbf13; color: white; margin-bottom: 1%;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;Request Message</button>
+				<button type="submit" class="btn btn-sm btnclr"  style="background-color: #9dbf13; color: white; margin-bottom: 1%;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;View Message</button>
 				</div>
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
