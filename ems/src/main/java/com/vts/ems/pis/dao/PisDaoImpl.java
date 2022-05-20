@@ -1135,5 +1135,20 @@ public class PisDaoImpl implements PisDao {
 			return null;
 		}
 	}
+	
+	private static final String GETEMPLIST="SELECT a.loginid, a.empid,a.username, e.EmpName FROM login a , employee e WHERE e.isactive=1 AND a.isactive=1 AND a.EmpId=e.EmpId";
+	@Override
+	public List<Object[]> GetEmployeeList()throws Exception
+	{
+		logger.info(new Date() + "Inside GetAllEmployee()");
+		try {
+			Query query = manager.createNativeQuery(GETEMPLIST);
+			List<Object[]> list=(List<Object[]>) query.getResultList();
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
 	

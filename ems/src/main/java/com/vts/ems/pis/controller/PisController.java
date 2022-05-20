@@ -1328,20 +1328,20 @@ public class PisController {
 
      }
 	
-	@RequestMapping(value="AuditStamping.htm" , method=RequestMethod.GET)
+	@RequestMapping(value="AuditStamping.htm" , method= {RequestMethod.GET,RequestMethod.POST})
 	 public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 		  String Username = (String) ses.getAttribute("Username");
 	       logger.info(new Date() +"Inside AuditStamping.htm "+Username); 
 	       long LoginId = (long) ses.getAttribute("LoginId");
 	       try {
 	    	   String Usernameparam=req.getParameter("username");
-	   		
+	    	   
 				String Fromdate=req.getParameter("fromdate");
 				String Todate=req.getParameter("todate");
 	    	   List<Object[]> list=null;
 	    	  
 	    	   req.setAttribute("list", list);
-	    	   req.setAttribute("emplist", service.GetAllEmployee());
+	    	   req.setAttribute("emplist", service.GetEmployeeList());
 	    	   
 	    		if(Usernameparam == null) {
 					

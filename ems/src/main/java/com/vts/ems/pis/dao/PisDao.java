@@ -55,6 +55,7 @@ public interface PisDao {
 	public EmpFamilyDetails getMember(String familyid) throws Exception;
 	public Object[] getPerAddress(String Empid)throws Exception;
 	public List<Object[]> getStates ()throws Exception;
+	public List<Object[]> GetAllEmployee()throws Exception;
 	public Long AddPerAddress(AddressPer peraddress)throws Exception;
 	public AddressPer getPerAddressData(String empid)throws Exception;
 	public Long EditPerAddress(AddressPer address) throws Exception;
@@ -84,6 +85,6 @@ public interface PisDao {
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception;
 	public List<Object[]> getFamilydetails(String empid) throws Exception;
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception;
-	public List<Object[]> GetAllEmployee()throws Exception;
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception;
+	public List<Object[]> GetEmployeeList()throws Exception;
 }

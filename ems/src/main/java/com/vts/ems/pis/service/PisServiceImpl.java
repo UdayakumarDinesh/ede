@@ -389,6 +389,18 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
+	public List<Object[]> GetAllEmployee()throws Exception
+	{
+		logger.info(new Date() +"Inside GetAllEmployee()");
+		try {
+			return dao.GetAllEmployee();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
 	public List<Object[]> getStates()throws Exception{
 		return dao.getStates();
 	}
@@ -637,15 +649,17 @@ public class PisServiceImpl implements PisService
 			}
 		}
 		
+	
 		@Override
-		public List<Object[]> GetAllEmployee()throws Exception
+		public List<Object[]> GetEmployeeList()throws Exception
 		{
-			logger.info(new Date() +"Inside GetAllEmployee()");
+			logger.info(new Date() +"Inside GetEmployeeList()");
 			try {
-				return dao.GetAllEmployee();
+				return dao.GetEmployeeList();
 			}catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
+			
 		}
 }

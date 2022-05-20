@@ -62,7 +62,7 @@ String ListName=(String)request.getAttribute("Username");
 <div class="nav navbar auditnavbar" style="background-color: white;margin-top: -18px">
 
 
-	<form class="form-inline " method="GET" action="AuditStamping.htm" style="margin-left: auto !important">
+	<form class="form-inline " method="POST" action="AuditStamping.htm" style="margin-left: auto !important">
 		
 		<div class="row ">
 			<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
@@ -73,7 +73,7 @@ String ListName=(String)request.getAttribute("Username");
 					<select class="form-control form-control select2" name="username" style="margin-left: 12px;" required="required" id="username" >
 			    	<%if("A".equalsIgnoreCase(LoginType)){ %>
 				    <%for(Object[] obj:emplist){%>
-					<option value="<%=obj[2]%>-<%=obj[1]%>"<% if(obj[2].toString().equalsIgnoreCase(loginid)){%> selected<%}%> ><%=obj[1]%></option>
+					<option value="<%=obj[0]%>-<%=obj[3]%>"<% if(obj[0].toString().equalsIgnoreCase(loginid)){%> selected<%}%> ><%=obj[3]%></option>
 					<%}}else{%>
 					<option value="<%if(loginid!=null){%><%=loginid%>-<%=ListName%><%}%>"  ><%if(ListName!=null){%><%=ListName%><%}%></option>
 					<%}%>
