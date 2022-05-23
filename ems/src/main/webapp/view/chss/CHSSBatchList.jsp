@@ -76,7 +76,7 @@
 							</div>		
 								
 							<div class="col-md-2">			
-										 <input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"> 
+										 <input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								
 							</div>
@@ -87,9 +87,12 @@
 							
 							<div class="col-md-2">	
 	
-									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"> 
+									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"  > 
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />	
 						
+							</div>
+							<div class="col-md-1">	
+								<button type="submit" class="btn btn-sm submit-btn" name="submit" value="submit">submit</button>
 							</div>
 							
 						</div>

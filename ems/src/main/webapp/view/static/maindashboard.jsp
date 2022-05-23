@@ -186,7 +186,7 @@
 					<form action="EmpLogitypeChange.htm" method="post" style="float: right;">
 							
 								<b>Login As : &nbsp;</b> 
-								<select class="form-control select2" name="logintype" onchange="this.form.submit();" style="margin-top: -5px;">
+								<select class="form-control select2" name="logintype" onchange="this.form.submit();" style="margin-top: -5px;width: 200px;">
 									<%for(Object[] login:emplogintypelist){ %>
 										<option value="<%=login[0]%>" <%if(logintype.equalsIgnoreCase(login[0].toString())){ %>selected <%} %>><%=login[1]%></option>
 									<%} %>

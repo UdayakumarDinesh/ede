@@ -1962,8 +1962,6 @@ public class CHSSController {
 				todate = sdf.format(rdf.parse(todate));				
 			}
 			
-		
-			
 			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType, fromdate, todate,"0");
 			req.setAttribute("chssclaimlist", claimslist);
 			req.setAttribute("fromdate", fromdate);
