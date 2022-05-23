@@ -76,8 +76,8 @@
 							</div>		
 								
 							<div class="col-md-2">			
-										 <input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								
 							</div>
 							
