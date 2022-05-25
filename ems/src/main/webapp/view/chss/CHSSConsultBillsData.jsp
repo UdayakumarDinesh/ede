@@ -230,9 +230,9 @@ p {
 												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" id="billno-<%=obj[0]%>"  value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>"  id="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 												<%if(obj[5]!=null){ %>
-												<td> <input type="number" class="form-control items numberonly " name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
 												<%}else{ %>
-												<td> <input type="number" class="form-control items numberonly" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
+												<td> <input type="number" class="form-control items cost-only" step=".01" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
 												<%} %>
 												<td>
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
@@ -328,7 +328,7 @@ p {
 			<div class="modal-header" style="background: #F5C6A5 ">
 		          <div class="row" style="width: 100%;">
 				    <div class="col-3">
-				    	<span><b>BillNo : </b><span id="modal-billno" ></span></span> 
+				    	<span><b>Bill No : </b><span id="modal-billno" ></span></span> 
 				    </div>
 				    <div class="col-3">
 				    	<span><b>Medical Center : </b><span id="modal-centername" ></span></span>
@@ -421,7 +421,7 @@ p {
 												<input type="hidden" name="doc-qualification" value=""  id="doc-qualification-val" >
 											</td>
 											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="cons-charge" id="cons-charge" value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="cons-charge" id="cons-charge" value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
 										</tr>
 									</tbody>							
@@ -448,7 +448,7 @@ p {
 									<thead>
 										<tr>
 											<th style="width:5%;" >SN</th>
-											<th style="width:35%;">Test Name</th>
+											<th style="width:35%;">Test / Procedure</th>
 											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:10%;" > Action </th>
 										</tr>
@@ -469,7 +469,7 @@ p {
 				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 									<thead>
 										<tr>
-											<th style="width:75%;">Test Name</th>
+											<th style="width:75%;">Test / Procedure</th>
 											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
 											<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-tests"  data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button>  </th>
 										</tr>
@@ -480,12 +480,12 @@ p {
 												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id" required="required" data-live-search="true" data-container="body" >
 												
 													<option value="" selected="selected" disabled="disabled">Choose..</option>
-													<%for(CHSSTestSub testmain : testmainlist){ %>
-														<option value="<%= testmain.getTestMainId()%>_<%= testmain.getTestSubId() %>"><%=testmain.getTestName()%></option>
+													<%for(CHSSTestSub testsub : testmainlist){ %>
+														<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
 													<% } %>
 												</select>
 											</td>
-											<td><input type="number" class="form-control items numberonly" name="tests-cost"  value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -571,7 +571,7 @@ p {
 											</td>
 											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
 											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
-											<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -632,7 +632,7 @@ p {
 													<%} %>
 												</select>
 											</td>
-											<td><input type="number" class="form-control items numberonly" name="otheritemcost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -691,7 +691,7 @@ p {
 										<tr class="tr_clone_misc" >
 											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 											<td><input type="number" class="form-control items numberonly" name="misc-count" id="misc-count" value="0" style="width:100%;" min="0" max="999999" required="required" ></td>
-											<td><input type="number" class="form-control items numberonly" name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="misc-cost" id="misc-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>			
@@ -848,8 +848,8 @@ function CheckClaimAmount($chssapplyid)
 var threeMonthsAgo = moment().subtract(3, 'months');
 
 function  onlyNumbers() {    
-    
-    $('.numberonly').keypress(function (e) {    
+    	
+	 	$('.numberonly').keypress(function (e) {    
 
         var charCode = (e.which) ? e.which : event.keyCode    
 
@@ -857,7 +857,17 @@ function  onlyNumbers() {
 
             return false;                        
 
-    });    
+  		});
+    
+	 $('.cost-only').keypress( function (evt) {
+
+	    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
+	    {
+	        evt.preventDefault();
+	    } 
+		
+	    
+	});
 
 }
 
@@ -1022,7 +1032,7 @@ function getConsultdata()
 			/* consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'"  value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> '; */
 			consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
-			consultHTMLStr +=	'	<td><input type="number" class="form-control items numberonly " name="cons-charge-'+consult.ConsultationId+'"  value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
+			consultHTMLStr +=	'	<td><input type="number" class="form-control items cost-only "  step=".01"  name="cons-charge-'+consult.ConsultationId+'"  value="'+consult.ConsultCharge+'" style="width:100%;direction: rtl;" min="0" max="9999999" required="req uired" ></td> ';
 			consultHTMLStr +=	'	<td>';
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
@@ -1331,7 +1341,7 @@ function getTestsList()
 		type : "GET",
 		url : "GetTestsListAjax.htm",
 		data : {
-			
+			treattypeid : <%=chssapplydata[7]%>,
 		},
 		datatype : 'json',
 		success : function(result) {
@@ -1387,7 +1397,7 @@ function getTestsData()
 			testsHTMLStr +=	'</td>';
 			
 			
-			testsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="test-cost-'+test.CHSSTestId+'"  value="'+test.TestCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			testsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="test-cost-'+test.CHSSTestId+'"  value="'+test.TestCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
 			testsHTMLStr +=	'	<td>';
 			testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testid" value="'+test.CHSSTestId+'" formaction="TestBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testid" value="'+test.CHSSTestId+'" formaction="TestBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
@@ -1527,7 +1537,7 @@ function getMedicinesData(){
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.CHSSMedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.CHSSMedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost-'+meds.CHSSMedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost-'+meds.CHSSMedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td>';
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
@@ -1604,7 +1614,7 @@ function FillMedsList()
 					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity" readonly id="meds-presquantity" value="'+meds[4]+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 					
-					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 					medsHTMLStr +=	'	<td>';
 					medsHTMLStr +=	'		<button type="button" class="btn btn-sm tbl-row-rem_meds_old"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> ';
 					medsHTMLStr +=	'	</td> ';
@@ -1685,7 +1695,7 @@ function getmiscData(){
 				miscHTMLStr +=	' 	<td><input type="text" class="form-control items" name="misc-name-'+misc.ChssMiscId+'"  value="'+misc.MiscItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
 				
 				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-count-'+misc.ChssMiscId+'"  value="'+misc.MiscCount+'" style="width:100%;" min="0" max="9999999" required="required" ></td> ';
-				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
+				miscHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td> ';
 				miscHTMLStr +=	'	<td>';
 				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
@@ -1803,7 +1813,7 @@ function getOthersDetails()
 			otherHTMLStr +=	'		</select> ';
 			otherHTMLStr +=	'	</td> ';
 			
-			otherHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="otheritemcost-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
+			otherHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'" style="width:100%;direction: rtl;" min="1" max="9999999" required="req uired" ></td> ';
 			otherHTMLStr +=	'	<td>';
 			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';

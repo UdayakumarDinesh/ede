@@ -538,7 +538,7 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 //			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSConsultMainBillsList(consultmainid,chssapplyid));
-			req.setAttribute("testmainlist", service.CHSSTestSubList(""));
+			req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
 			req.setAttribute("otheritemslist", service.OtherItemsList());
 			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 			req.setAttribute("billid", billid);
@@ -740,7 +740,8 @@ public class CHSSController {
 		logger.info(new Date() +"Inside GetTestsListAjax.htm "+Username);
 		List<CHSSTestSub> list=new ArrayList<CHSSTestSub>();
 		try {
-			list = service.CHSSTestSubList("");
+			String treattypeid = req.getParameter("treattypeid");
+			list = service.CHSSTestSubList(treattypeid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside GetTestsListAjax.htm "+Username, e);
@@ -838,11 +839,10 @@ public class CHSSController {
 			consult.setDocName(docname);
 //			consult.setDocQualification(docqualification);
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
-			consult.setConsultCharge(Integer.parseInt(conscharge));
+			consult.setConsultCharge(Double.parseDouble(conscharge));
 			consult.setModifiedBy(Username);
 			
 			long count = service.ConsultationBillEdit(consult,chssapplyid,consultmainidold);
-			
 			
 			if (count > 0) {
 				redir.addAttribute("result", "Consultation Data Updated Successfully");
@@ -995,7 +995,7 @@ public class CHSSController {
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setCHSSMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
-			meds.setMedicineCost(Integer.parseInt(medscost));
+			meds.setMedicineCost(Double.parseDouble(medscost));
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			meds.setPresQuantity(Integer.parseInt(medspresquantity));
 			meds.setModifiedBy(Username);
@@ -1126,7 +1126,7 @@ public class CHSSController {
 			test.setCHSSTestId(Long.parseLong(testid));
 			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
 			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
-			test.setTestCost(Integer.parseInt(testcost));
+			test.setTestCost(Double.parseDouble(testcost));
 			test.setModifiedBy(Username);
 			
 			long count = service.TestBillEdit(test);
@@ -1257,7 +1257,7 @@ public class CHSSController {
 			meds.setChssMiscId(Long.parseLong(chssmiscid));
 			meds.setMiscItemName(medsname);
 			meds.setMiscCount(Integer.parseInt(micscount));
-			meds.setMiscItemCost(Integer.parseInt(micscost));
+			meds.setMiscItemCost(Double.parseDouble(micscost));
 			meds.setModifiedBy(Username);
 			
 			long count = service.MiscBillEdit(meds);
@@ -1403,7 +1403,7 @@ public class CHSSController {
 			CHSSOther meds= new CHSSOther();
 			meds.setCHSSOtherId(Long.parseLong(chssotherid));
 			meds.setOtherItemId(Integer.parseInt(otheritemid));
-			meds.setOtherItemCost(Integer.parseInt(otheritemcost));
+			meds.setOtherItemCost(Double.parseDouble(otheritemcost));
 			meds.setModifiedBy(Username);
 			
 			long count = service.OtherBillEdit(meds,EmpId);
@@ -1762,7 +1762,7 @@ public class CHSSController {
 			
 			CHSSConsultation consult= new CHSSConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
-			consult.setConsultRemAmount(Integer.parseInt(consultremamount));
+			consult.setConsultRemAmount(Double.parseDouble(consultremamount));
 			consult.setComments(consultcomment);
 			consult.setModifiedBy(Username);
 			
@@ -1801,7 +1801,7 @@ public class CHSSController {
 			
 			CHSSTests test= new CHSSTests();
 			test.setCHSSTestId(Long.parseLong(testid));
-			test.setTestRemAmount(Integer.parseInt(testremamount));
+			test.setTestRemAmount(Double.parseDouble(testremamount));
 			test.setComments(testcomment);
 			test.setModifiedBy(Username);
 			
@@ -1840,7 +1840,7 @@ public class CHSSController {
 			
 			CHSSMedicine medicine= new CHSSMedicine();
 			medicine.setCHSSMedicineId(Long.parseLong(medicineid));
-			medicine.setMedsRemAmount(Integer.parseInt(medicineremamount));
+			medicine.setMedsRemAmount(Double.parseDouble(medicineremamount));
 			medicine.setComments(medscomment);
 			medicine.setModifiedBy(Username);
 			
@@ -1880,7 +1880,7 @@ public class CHSSController {
 			
 			CHSSOther other= new CHSSOther();
 			other.setCHSSOtherId(Long.parseLong(otherid));
-			other.setOtherRemAmount(Integer.parseInt(otheridremamount));
+			other.setOtherRemAmount(Double.parseDouble(otheridremamount));
 			other.setComments(otherscomment);
 			other.setModifiedBy(Username);
 			long count = service.OtherRemAmountEdit(other);
@@ -1919,7 +1919,7 @@ public class CHSSController {
 			
 			CHSSMisc misc= new CHSSMisc();
 			misc.setChssMiscId(Long.parseLong(miscid));
-			misc.setMiscRemAmount(Integer.parseInt(miscremamount));
+			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
 			misc.setComments(miscomment);
 			misc.setModifiedBy(Username);
 			long count = service.MiscRemAmountEdit(misc);

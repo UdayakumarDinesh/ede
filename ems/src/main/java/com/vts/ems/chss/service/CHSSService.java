@@ -45,7 +45,7 @@ public interface CHSSService
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception;
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception;
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
 	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;

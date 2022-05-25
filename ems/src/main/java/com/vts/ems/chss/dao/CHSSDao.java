@@ -40,7 +40,7 @@ public interface CHSSDao {
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception;
 	public long CHSSApplyEdit(CHSSApply apply) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList() throws Exception;
 	public long ConsultationBillAdd(CHSSConsultation consult) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
 	public CHSSConsultation getCHSSConsultation(String consultationid) throws Exception;
@@ -113,5 +113,6 @@ public interface CHSSDao {
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
 	public int POAcknowldgedUpdate(String chssapplyid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubListWithAyur() throws Exception;
 
 }

@@ -144,9 +144,11 @@ String treat = (String)request.getAttribute("treat");
 	        
 	        
 	        $("#myTable1").DataTable({
-	            "lengthMenu": [ 10, 25, 50, 100, 200,500],
+	            "lengthMenu": [10, 25, 50, 75, 100],
 	            "pagingType": "simple",
-	            "pageLength": 100
+	            "language": {
+	    		      "emptyTable": "No Record Found"
+	    		    }
 
 	        });
 	        </script>

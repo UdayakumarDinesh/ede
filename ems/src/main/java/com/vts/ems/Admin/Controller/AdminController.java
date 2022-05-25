@@ -154,7 +154,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		       }catch(Exception e){
 		    	   e.printStackTrace();
 		       }
-				return "Admin/CHSSTextSub";
+				return "Admin/CHSSTestSub";
 		     }
 		    
 		    @RequestMapping(value="ChssTestSub.htm" , method=RequestMethod.POST)

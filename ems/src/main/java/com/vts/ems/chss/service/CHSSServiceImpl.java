@@ -413,9 +413,14 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception
+	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception
 	{
-		return dao.CHSSTestSubList(testmainid);
+		List<CHSSTestSub> list= dao.CHSSTestSubList();
+		if(Integer.parseInt(treattypeid)==2) {
+			list.addAll(dao.CHSSTestSubListWithAyur());
+		}
+		return list;
+		
 	}
 	
 	@Override
@@ -447,7 +452,7 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setDocName(dto.getDocName()[i]);
 				consult.setDocQualification(dto.getDocQualification()[i]);
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
-				consult.setConsultCharge(Integer.parseInt(dto.getConsultCharge()[i]));
+				consult.setConsultCharge(Double.parseDouble(dto.getConsultCharge()[i]));
 				
 				consult.setIsActive(1);
 				consult.setCreatedBy(dto.getCreatedBy());
@@ -468,10 +473,10 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public Integer getConsultEligibleAmount(CHSSConsultation consult,String chssapplyid, String consultmainidold) throws Exception 
+	public double getConsultEligibleAmount(CHSSConsultation consult,String chssapplyid, String consultmainidold) throws Exception 
 	{		
 		String isfresh="";
-		int applyamount= consult.getConsultCharge();
+		double applyamount= consult.getConsultCharge();
 		String speciality=consult.getDocQualification();
 		String consultdate=consult.getConsultDate();
 		
@@ -572,8 +577,8 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setMedicineName(dto.getMedicineName()[i]);
 				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
-				meds.setMedicineCost(Integer.parseInt(dto.getMedicineCost()[i]));
-				meds.setMedsRemAmount(Integer.parseInt(dto.getMedicineCost()[i]));
+				meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
+				meds.setMedsRemAmount(Double.parseDouble(dto.getMedicineCost()[i]));
 				meds.setIsActive(1);
 				meds.setCreatedBy(dto.getCreatedBy());
 				meds.setCreatedDate(sdtf.format(new Date()));
@@ -669,7 +674,7 @@ public class CHSSServiceImpl implements CHSSService {
 				test.setBillId(Long.parseLong(dto.getBillId()));
 				test.setTestMainId(Long.parseLong(dto.getTestSubId()[i].split("_")[0]));
 				test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
-				test.setTestCost(Integer.parseInt(dto.getTestCost()[i]));
+				test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
 				test.setIsActive(1);
 				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
 				test.setComments(test.getTestRemAmount()+" is admitted as per CHSS.");
@@ -690,7 +695,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	public int getTestEligibleAmount(int applyamount,String testsubid) throws Exception 
+	public double getTestEligibleAmount(double applyamount,String testsubid) throws Exception 
 	{
 		int testsubamount = dao.getCHSSTestSub(testsubid).getTestRate();
 		
@@ -750,7 +755,7 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				misc.setBillId(Long.parseLong(dto.getBillId()));
 				misc.setMiscItemName(dto.getMiscItemName()[i]);
-				misc.setMiscItemCost(Integer.parseInt(dto.getMiscItemCost()[i]));
+				misc.setMiscItemCost(Double.parseDouble(dto.getMiscItemCost()[i]));
 				misc.setMiscCount(Integer.parseInt(dto.getMiscCount()[i]));
 				misc.setMiscRemAmount(0);
 				misc.setIsActive(1);
@@ -828,10 +833,10 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				other.setBillId(Long.parseLong(dto.getBillId()));
 				other.setOtherItemId(Integer.parseInt(dto.getOtherItemId()[i]));
-				other.setOtherItemCost(Integer.parseInt(dto.getOtherItemCost()[i]));
+				other.setOtherItemCost(Double.parseDouble(dto.getOtherItemCost()[i]));
 				other.setIsActive(1);
 				
-				other.setOtherRemAmount(getOtherItemRemAmount(dto.getEmpid(),dto.getOtherItemId()[i],Integer.parseInt(dto.getOtherItemCost()[i]) ));
+				other.setOtherRemAmount(getOtherItemRemAmount(dto.getEmpid(),dto.getOtherItemId()[i],Double.parseDouble(dto.getOtherItemCost()[i]) ));
 				other.setCreatedBy(dto.getCreatedBy());
 				other.setCreatedDate(sdtf.format(new Date()));
 				other.setComments(other.getOtherRemAmount()+" is admitted as per CHSS.");
@@ -848,7 +853,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	public int getOtherItemRemAmount(String empid,String otheritemid,int itemcost) throws Exception
+	public double getOtherItemRemAmount(String empid,String otheritemid,double itemcost) throws Exception
 	{
 		Employee emp =dao.getEmployee(empid);
 		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
