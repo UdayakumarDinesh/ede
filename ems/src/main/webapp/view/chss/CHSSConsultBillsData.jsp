@@ -291,13 +291,55 @@ p {
 							</div>
 						</form>
 						
-					<form action="CHSSConsultMainData.htm" method="post" id="form2">
-							<div class="row" align="center">
-								<div class="col-12">
-									<button type="submit" class="btn btn-sm back-btn" style="background-color: #541690;color: white;" name="claimaction"  data-toggle="modal" data-target=".my-encl-modal">
+			
+					
+					<form action="CHSSFormEdit.htm" method="post" id="form2">
+							<div class="row">
+								
+								<div class="col-md-12" align="center" style="margin-top: 5px;">
+									<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
 										Back	
 									</button>
+									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
+									</button>
+									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
+										<i class="fa-solid fa-eye"></i>
+									</button>
+									
+									
 								</div>
+							</div>
+							
+							
+							
+							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog  modal-dialog-centered" >
+									<div class="modal-content" >
+										<div class="modal-header">
+											
+											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+										    </button>
+										</div>
+										<div class="modal-body" >
+									          <div class="row">
+											    <div class="col-12">
+											    	<b>No of Enclosures : </b><br>
+													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
+												</div>
+												
+												 <div class="col-12 w-100" align="center">
+												 <br>
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
+													Save
+												</button>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>	
 							</div>
 							
 							<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -306,13 +348,18 @@ p {
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 					</form>
+					
 					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
-						
+						<input type="hidden" name="claimaction" value="F">
+						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					</form>
+					
+					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
 						<input type="hidden" name="claimaction" value="F">						
 						<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
 					</form>
 					
 				</div>
@@ -355,6 +402,26 @@ p {
 				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
 				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
+				    	
+				    	<form action="CHSSFormEdit.htm" method="post" id="form2">
+							<div class="row">
+								
+								<div class="col-md-12" align="center" style="margin-top: 5px;">
+									<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
+										Back	
+									</button>
+									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
+									</button>
+									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
+										<i class="fa-solid fa-eye"></i>
+									</button>
+									
+									
+								</div>
+							</div>
+						</form>
+				    	
 				    </div>
 			   <div class="col-10" style="padding:0px;  " >
 			   <div class="tab-content card-body " id="nav-tabContent" style="padding: 0px;" >

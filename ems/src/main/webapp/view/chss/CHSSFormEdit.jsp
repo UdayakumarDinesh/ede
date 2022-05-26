@@ -229,10 +229,10 @@ th,td
 											<th class="center">Date</th>
 											<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 										</tr>
-										<% long billstotal=0;
+										<% double billstotal=0;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Long.parseLong(chssbillslist.get(i)[5].toString());
+												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 												%>
 											<tr>
 												<td class="center"><%=i+1 %></td>
@@ -252,7 +252,7 @@ th,td
 											<tr>
 												<td colspan="5" class="center" >Nil</td>
 											</tr>
-										<%} %>
+										<% } %>
 									</tbody>
 								</table>
 								
@@ -302,7 +302,7 @@ th,td
 										&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 										held liable, if anything is found to be incorrect later on.
 										<br>
-										&#8226; This bill is submitted on ................................. which is within 3 months of treatment / hospitalization.
+										&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 										<br>
 										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 										<br>
@@ -325,11 +325,11 @@ th,td
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
-													<th class="right" style="width: 5%;">Amount Claimed (&#8377;)</th>
+													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
 													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
-												<%long itemstotal=0, totalremamount=0; %>
+												<%double itemstotal=0, totalremamount=0; %>
 												<% int i=1;
 												for(Object[] consult :ConsultDataList)
 												{%>
@@ -397,8 +397,8 @@ th,td
 																											
 													</tr>					
 												<%	i++;
-													itemstotal += Integer.parseInt(consult[6].toString());
-													totalremamount +=Integer.parseInt(consult[7].toString());
+													itemstotal += Double.parseDouble(consult[6].toString());
+													totalremamount +=Double.parseDouble(consult[7].toString());
 												} %>
 													
 												
@@ -472,8 +472,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(test[4].toString());
-											totalremamount +=Integer.parseInt(test[7].toString());
+											itemstotal += Double.parseDouble(test[4].toString());
+											totalremamount +=Double.parseDouble(test[7].toString());
 											} %>
 												
 										</form>
@@ -548,8 +548,8 @@ th,td
 													<%}%>
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(medicine[3].toString());
-											totalremamount +=Integer.parseInt(medicine[6].toString());
+											itemstotal += Double.parseDouble(medicine[3].toString());
+											totalremamount +=Double.parseDouble(medicine[6].toString());
 											}%>
 											
 									</form>
@@ -617,8 +617,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(other[3].toString());
-											totalremamount +=Integer.parseInt(other[5].toString());
+											itemstotal += Double.parseDouble(other[3].toString());
+											totalremamount +=Double.parseDouble(other[5].toString());
 											} %>
 												
 									</form>
@@ -689,18 +689,18 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(misc[3].toString());
-											totalremamount +=Integer.parseInt(misc[4].toString());
+											itemstotal += Double.parseDouble(misc[3].toString());
+											totalremamount +=Double.parseDouble(misc[4].toString());
 											}%>
 										
 										<tr>
 											<td colspan="3"></td>
-											<td class="right"><b>Total</b></td>
-											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></b></td>
+											<td class="right"><b>Rounded Total</b></td>
+											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
 											<td class="right">
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-											&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ||chssstatusid==14 || chssstatusid==6  ){ %>	 
+											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
 											<%} %>
 											</td>
 											<td ></td>
@@ -710,7 +710,7 @@ th,td
 								
 									
 										<tr>
-											<td colspan="7">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
+											<td colspan="7">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -719,9 +719,9 @@ th,td
 										
 										<tr>
 											<td colspan="7">Admitted to Rs.
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-											 <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
-											 <%} %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==14 || chssstatusid==6  ){ %>
+											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
+											<%} %>
 										</tr>
 										
 										<tr>

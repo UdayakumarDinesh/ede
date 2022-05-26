@@ -1255,8 +1255,7 @@ public class CHSSServiceImpl implements CHSSService {
 		notify.setCreatedDate(sdtf.format(new Date()));
 		
 //		Object[] notifyto = dao.CHSSApprovalAuth("V");
-		
-		
+				
 		if(dto.getAction().equalsIgnoreCase("F")) 
 		{
 			
@@ -1272,7 +1271,6 @@ public class CHSSServiceImpl implements CHSSService {
 					contingent.setAO(0L);
 					contingent.setCEO(0L);
 				}
-								
 				
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto==null) {

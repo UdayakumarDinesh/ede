@@ -22,7 +22,7 @@
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	long itemstotal=0,totalremamount=0;
+	double itemstotal=0,totalremamount=0;
 
 %>
  
@@ -147,8 +147,8 @@
 											</td>
 										</tr>
 									<%
-									itemstotal += Integer.parseInt(obj[25].toString());
-									totalremamount +=Integer.parseInt(obj[26].toString());
+									itemstotal += Double.parseDouble(obj[25].toString());
+									totalremamount +=Double.parseDouble(obj[26].toString());
 									} %>
 									
 									<%if(chssclaimlist.size()>0){ %>

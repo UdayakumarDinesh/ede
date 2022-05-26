@@ -52,7 +52,7 @@
 					<form action="LoginMasterAddEdit.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
 										<th>Select</th>
@@ -136,11 +136,6 @@
 		}
 	}
 	
-	$("#myTable1").DataTable({
-	    "lengthMenu": [5, 10, 25, 50, 75, 100],
-	    "pagingType": "simple"
-
-	});
 
 </script>
 

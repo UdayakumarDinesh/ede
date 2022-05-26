@@ -58,7 +58,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 					<form action="ChssTestSub.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
 										<th style="width: 10%;">Select</th>
@@ -113,15 +113,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 	        	return true;
 	        }
 	        
-	        
-	        $("#myTable1").DataTable({
-	            "lengthMenu": [ 10, 25, 50, 75, 100],
-	            "pagingType": "simple",
-	            "language": {
-	    		      "emptyTable": "No Record Found"
-	    		    }
-
-	        });
+	       
 	        </script>
 </body>
 

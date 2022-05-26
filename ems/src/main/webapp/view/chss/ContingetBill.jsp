@@ -188,13 +188,13 @@ th,td
 				</td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString()))  %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString()))  %></td>
 											
 			</tr>
 		<%	k++;
-			claimamt += Integer.parseInt(obj[27].toString());
-			allowedamt +=Integer.parseInt(obj[28].toString());
+			claimamt += Math.round(Double.parseDouble(obj[27].toString()));
+			allowedamt +=Math.round(Double.parseDouble(obj[28].toString())) ;
 			billscount += Integer.parseInt(obj[22].toString());
 			} 
 		}%>

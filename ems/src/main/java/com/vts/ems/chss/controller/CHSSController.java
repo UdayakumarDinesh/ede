@@ -93,7 +93,7 @@ public class CHSSController {
 			if(req.getParameter("patientidvalue")!=null) {
 				PatientId= req.getParameter("patientidvalue");
 			}
-			String IsSelf="Y";
+			String IsSelf="";
 			if(req.getParameter("isselfvalue")!=null) {
 				IsSelf= req.getParameter("isselfvalue");
 			}
@@ -120,7 +120,8 @@ public class CHSSController {
 			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
 			req.setAttribute("profilepicpath", uploadpath);
-			req.setAttribute("patientname", PatientName);;
+			req.setAttribute("patientname", PatientName);
+			req.setAttribute("IsSelf", IsSelf);;
 
 			
 			
@@ -1563,9 +1564,9 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
-			long claimamount=0;
+			double claimamount=0;
 			for(Object[] bill : claimdata) {
-				claimamount += Long.parseLong(bill[5].toString());
+				claimamount += Double.parseDouble(bill[5].toString());
 			}
 			
 //			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
@@ -2025,7 +2026,7 @@ public class CHSSController {
 			{
 				Map md=model.asMap();
 				contingentid=(String)md.get("contingentid");
-			}	
+			}
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("logintype", LoginType);

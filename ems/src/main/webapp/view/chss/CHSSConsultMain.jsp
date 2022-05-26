@@ -395,11 +395,12 @@ p {
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="button" class="btn btn-sm view-icon" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
-										<i class="fa-solid fa-eye"></i>
-									</button>
-									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+									
+									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"    data-toggle="modal" data-target=".my-encl-modal">
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
+									</button>
+									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
+										<i class="fa-solid fa-eye"></i>
 									</button>
 									
 								</div>
