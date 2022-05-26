@@ -410,7 +410,7 @@ p {
 									<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
 										Back	
 									</button>
-									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal" title="Preview and Forward">
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
 									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
