@@ -113,7 +113,7 @@ public interface CHSSService
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
-	public int POAcknowldgedUpdate(String chssapplyid) throws Exception;
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
 
 	

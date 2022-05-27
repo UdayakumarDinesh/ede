@@ -1621,14 +1621,14 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	private static final String POACKNOWLDGEDUPDATE  ="UPDATE chss_apply SET POAcknowledge = :poacknowledge WHERE chssapplyid=:chssapplyid";
 	@Override
-	public int POAcknowldgedUpdate(String chssapplyid)throws Exception
+	public int POAcknowldgedUpdate(String chssapplyid,String poacknowledge)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO POAcknowldgedUpdate");
 		try {
 			
 			Query query= manager.createNativeQuery(POACKNOWLDGEDUPDATE);
 			query.setParameter("chssapplyid",chssapplyid);
-			query.setParameter("poacknowledge", 1);
+			query.setParameter("poacknowledge", poacknowledge);
 			
 			return query.executeUpdate();
 		}		

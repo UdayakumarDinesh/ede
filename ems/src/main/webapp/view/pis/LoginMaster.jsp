@@ -7,7 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<script src="webresources/js/master.js" type="text/javascript"></script>
+
 </head>
 <body>
 
