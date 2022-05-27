@@ -21,8 +21,8 @@ public class CHSSOther implements Serializable {
 	private Long CHSSOtherId;
 	private Long BillId;
 	private Integer OtherItemId;
-	private Integer OtherItemCost;
-	private Integer OtherRemAmount;
+	private double OtherItemCost;
+	private double OtherRemAmount;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

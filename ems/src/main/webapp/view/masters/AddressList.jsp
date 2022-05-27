@@ -92,7 +92,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 					<h5>Permanent Address</h5>
 					<hr>
 					<%if(perAddress!=null){ %>
-					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="myTable1">
+					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="">
 					<tbody>
 					    <tr align="center">
 							<th>Per.Address</th>

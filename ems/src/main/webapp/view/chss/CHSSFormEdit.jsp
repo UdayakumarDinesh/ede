@@ -229,10 +229,10 @@ th,td
 											<th class="center">Date</th>
 											<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 										</tr>
-										<% long billstotal=0;
+										<% double billstotal=0;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Long.parseLong(chssbillslist.get(i)[5].toString());
+												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 												%>
 											<tr>
 												<td class="center"><%=i+1 %></td>
@@ -252,7 +252,7 @@ th,td
 											<tr>
 												<td colspan="5" class="center" >Nil</td>
 											</tr>
-										<%} %>
+										<% } %>
 									</tbody>
 								</table>
 								
@@ -302,7 +302,7 @@ th,td
 										&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 										held liable, if anything is found to be incorrect later on.
 										<br>
-										&#8226; This bill is submitted on ................................. which is within 3 months of treatment / hospitalization.
+										&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 										<br>
 										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 										<br>
@@ -325,11 +325,11 @@ th,td
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
-													<th class="right" style="width: 5%;">Amount Claimed (&#8377;)</th>
+													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
 													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
-												<%long itemstotal=0, totalremamount=0; %>
+												<%double itemstotal=0, totalremamount=0; %>
 												<% int i=1;
 												for(Object[] consult :ConsultDataList)
 												{%>
@@ -397,8 +397,8 @@ th,td
 																											
 													</tr>					
 												<%	i++;
-													itemstotal += Integer.parseInt(consult[6].toString());
-													totalremamount +=Integer.parseInt(consult[7].toString());
+													itemstotal += Double.parseDouble(consult[6].toString());
+													totalremamount +=Double.parseDouble(consult[7].toString());
 												} %>
 													
 												
@@ -472,8 +472,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(test[4].toString());
-											totalremamount +=Integer.parseInt(test[7].toString());
+											itemstotal += Double.parseDouble(test[4].toString());
+											totalremamount +=Double.parseDouble(test[7].toString());
 											} %>
 												
 										</form>
@@ -548,8 +548,8 @@ th,td
 													<%}%>
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(medicine[3].toString());
-											totalremamount +=Integer.parseInt(medicine[6].toString());
+											itemstotal += Double.parseDouble(medicine[3].toString());
+											totalremamount +=Double.parseDouble(medicine[6].toString());
 											}%>
 											
 									</form>
@@ -617,8 +617,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(other[3].toString());
-											totalremamount +=Integer.parseInt(other[5].toString());
+											itemstotal += Double.parseDouble(other[3].toString());
+											totalremamount +=Double.parseDouble(other[5].toString());
 											} %>
 												
 									</form>
@@ -689,18 +689,18 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(misc[3].toString());
-											totalremamount +=Integer.parseInt(misc[4].toString());
+											itemstotal += Double.parseDouble(misc[3].toString());
+											totalremamount +=Double.parseDouble(misc[4].toString());
 											}%>
 										
 										<tr>
 											<td colspan="3"></td>
-											<td class="right"><b>Total</b></td>
-											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></b></td>
+											<td class="right"><b>Rounded Total</b></td>
+											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
 											<td class="right">
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-											&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ||chssstatusid==14 || chssstatusid==6  ){ %>	 
+											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
 											<%} %>
 											</td>
 											<td ></td>
@@ -710,7 +710,7 @@ th,td
 								
 									
 										<tr>
-											<td colspan="7">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
+											<td colspan="7">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -719,9 +719,9 @@ th,td
 										
 										<tr>
 											<td colspan="7">Admitted to Rs.
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-											 <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
-											 <%} %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==14 || chssstatusid==6  ){ %>
+											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
+											<%} %>
 										</tr>
 										
 										<tr>
@@ -747,10 +747,10 @@ th,td
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
-							<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
+									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
+									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" >
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
@@ -765,6 +765,40 @@ th,td
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+						
+								
+							
+							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog  modal-dialog-centered" >
+									<div class="modal-content" >
+										<div class="modal-header">
+											
+											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+										    </button>
+										</div>
+										<div class="modal-body" >
+									          <div class="row">
+											    <div class="col-12">
+											    	<b>No of Enclosures : </b><br>
+													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
+												</div>
+												
+												 <div class="col-12 w-100" align="center">
+												 <br>
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">													Save
+												</button>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>	
+							</div>
+							
+						
+						
 						
 					</form>
 

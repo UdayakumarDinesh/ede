@@ -114,7 +114,7 @@ String ListName=(String)request.getAttribute("Username");
 				<div class="card-body "  >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
 										<th>Login Date</th>
@@ -174,10 +174,5 @@ $('#todate').daterangepicker({
 	}
 });
 
-$("#myTable1").DataTable({
-    "lengthMenu": [5, 10, 25, 50, 75, 100],
-    "pagingType": "simple"
-
-});
 </script>
 </html>

@@ -19,7 +19,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Test Sub List</h5>
+				<h5>Tests / Procedures List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
@@ -62,9 +62,8 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 								<thead>
 									<tr>
 										<th style="width: 10%;">Select</th>
-										<th style="width: 25%;"> Code </th>
+										<th style="width: 10%;"> Code </th>
 										<th style="width: 55%;"> Name</th>
-										<th style="width: 25%;"> Main Name </th>
 										<th style="width: 10%;"><i class="fa fa-inr" aria-hidden="true"></i> Rate </th>
 									</tr>
 								</thead>
@@ -76,7 +75,6 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 											<td style="text-align: center;"><input type="radio" name="SubId" value="<%=obj[0] %>"> </td>
 											<td><%=obj[4] %> </td>
 											<td><%=obj[1] %></td>
-											<td><%=obj[3] %></td>										
 											<td><%=obj[2] %></td>
 										</tr>
 									 <%} %> 
@@ -114,6 +112,8 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 	        	}
 	        	return true;
 	        }
+	        
+	       
 	        </script>
 </body>
 

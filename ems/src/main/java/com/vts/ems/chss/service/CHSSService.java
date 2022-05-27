@@ -45,7 +45,7 @@ public interface CHSSService
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception;
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception;
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
 	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
@@ -113,7 +113,7 @@ public interface CHSSService
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
-	public int POAcknowldgedUpdate(String chssapplyid) throws Exception;
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
 
 	

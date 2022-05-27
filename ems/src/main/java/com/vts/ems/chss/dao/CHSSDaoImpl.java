@@ -507,7 +507,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception
+	public List<CHSSTestSub> CHSSTestSubList() throws Exception
 	{
 		logger.info(new Date() +"Inside DAO CHSSTestSubList");
 		List<CHSSTestSub> testsublist= new ArrayList<CHSSTestSub>();
@@ -516,10 +516,35 @@ public class CHSSDaoImpl implements CHSSDao {
 			CriteriaQuery<CHSSTestSub> cq= cb.createQuery(CHSSTestSub.class);
 			
 			Root<CHSSTestSub> root=cq.from(CHSSTestSub.class);								
-//			Predicate p1=cb.equal(root.get("TestMainId") , Long.parseLong(testmainid));
+			Predicate p1=cb.notEqual(root.get("TestMainId") , 0);
 			Predicate p2=cb.equal(root.get("IsActive") , 1);
 			
-			cq=cq.select(root).where(p2);
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSTestSub> allquery = manager.createQuery(cq);
+			testsublist= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return testsublist;
+	}
+	
+	@Override
+	public List<CHSSTestSub> CHSSTestSubListWithAyur() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSTestSubList");
+		List<CHSSTestSub> testsublist= new ArrayList<CHSSTestSub>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSTestSub> cq= cb.createQuery(CHSSTestSub.class);
+			
+			Root<CHSSTestSub> root=cq.from(CHSSTestSub.class);								
+			Predicate p1=cb.equal(root.get("TestMainId") , 0);
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
 			
 			
 			TypedQuery<CHSSTestSub> allquery = manager.createQuery(cq);
@@ -1596,14 +1621,14 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	private static final String POACKNOWLDGEDUPDATE  ="UPDATE chss_apply SET POAcknowledge = :poacknowledge WHERE chssapplyid=:chssapplyid";
 	@Override
-	public int POAcknowldgedUpdate(String chssapplyid)throws Exception
+	public int POAcknowldgedUpdate(String chssapplyid,String poacknowledge)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO POAcknowldgedUpdate");
 		try {
 			
 			Query query= manager.createNativeQuery(POACKNOWLDGEDUPDATE);
 			query.setParameter("chssapplyid",chssapplyid);
-			query.setParameter("poacknowledge", 1);
+			query.setParameter("poacknowledge", poacknowledge);
 			
 			return query.executeUpdate();
 		}		

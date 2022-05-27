@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $("#myTable").DataTable({
-        "lengthMenu": [5, 10, 25, 50, 75, 100],
+        "lengthMenu": [ 50, 75, 100],
         "pagingType": "simple",
         "language": {
 		      "emptyTable": "No Record Found"
