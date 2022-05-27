@@ -27,19 +27,19 @@ public class LeaveAppl {
 	 private Date   ToDate;
 	 private double TotalDays;
 	 private String DivId;
-	 private String Remarks;
 	 private String LeaveCode;
-	 private String Status;
 	 private String FnAn;
 	 private String ApplId;
 	 private String Ltc;
+	 private String Status;
+	 private String Remarks;
+	 private int LeaveAmend;
 	 private String DopNo;
 	 private Date   DopDate;
-	 private int    HolidayCnt;
 	 private String LeaveYear;
 	 private String CreatedBy;
 	 private String CreatedDate;
-	 private int LeaveAmend;
+
 	 
 
 }

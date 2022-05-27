@@ -747,10 +747,10 @@ th,td
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
-							<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
+									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
+									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" >
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
@@ -765,6 +765,40 @@ th,td
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+						
+								
+							
+							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog  modal-dialog-centered" >
+									<div class="modal-content" >
+										<div class="modal-header">
+											
+											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+										    </button>
+										</div>
+										<div class="modal-body" >
+									          <div class="row">
+											    <div class="col-12">
+											    	<b>No of Enclosures : </b><br>
+													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
+												</div>
+												
+												 <div class="col-12 w-100" align="center">
+												 <br>
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">													Save
+												</button>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>	
+							</div>
+							
+						
+						
 						
 					</form>
 

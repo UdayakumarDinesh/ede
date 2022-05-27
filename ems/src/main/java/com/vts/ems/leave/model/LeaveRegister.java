@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name="leave_register")
 @Data
 @NoArgsConstructor
-public class LeaveRegisterModel {
+public class LeaveRegister {
 	
 	
 	@Id	
@@ -37,8 +37,8 @@ public class LeaveRegisterModel {
 	private int ADV_EL;
 	private int ADV_HPL;
 	private int EOL;
-	private Date FROM_DATE;
-	private Date TO_DATE;
+	private String FROM_DATE;
+	private String TO_DATE;
 	private String MONTH;
 	private String YEAR;
 	private String STATUS;

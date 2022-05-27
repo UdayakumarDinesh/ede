@@ -950,6 +950,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			if(claimstatus==1 || claimstatus==3 ) 
 			{
+				dao.POAcknowldgedUpdate(CHSSApplyId,"0");
 				
 				claim.setCHSSStatusId(2);
 				claim.setCHSSApplyDate(LocalDate.now().toString());
@@ -1586,9 +1587,9 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	@Override
-	public int POAcknowldgedUpdate(String chssapplyid)throws Exception
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge)throws Exception
 	{
-		return dao.POAcknowldgedUpdate(chssapplyid);
+		return dao.POAcknowldgedUpdate(chssapplyid,poacknowledge);
 	}
 	@Override
 	public long CHSSUserRevoke(String CHSSApplyId,String Username,String EmpId)throws Exception

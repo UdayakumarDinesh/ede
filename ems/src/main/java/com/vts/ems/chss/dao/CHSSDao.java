@@ -112,7 +112,7 @@ public interface CHSSDao {
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
-	public int POAcknowldgedUpdate(String chssapplyid) throws Exception;
 	public List<CHSSTestSub> CHSSTestSubListWithAyur() throws Exception;
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 
 }

@@ -1621,8 +1621,20 @@ public class CHSSController {
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
 			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
+			
+			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
+				String enclosurecount = req.getParameter("enclosurecount");
+				if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
+					CHSSApplyDto dto =new CHSSApplyDto();
+					dto.setCHSSApplyId(chssapplyid);
+					dto.setNoEnclosures(enclosurecount);
+					
+					service.CHSSApplyEncCountEdit(dto);
+				
+				}
+				
 				if (count > 0) {
 					redir.addAttribute("result", "Claim application Sent for Processing  Successfully");
 				} else {
@@ -1711,18 +1723,8 @@ public class CHSSController {
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
 			
-			String enclosurecount = req.getParameter("enclosurecount");
-			if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
-				CHSSApplyDto dto =new CHSSApplyDto();
-				dto.setCHSSApplyId(chssapplyid);
-				dto.setNoEnclosures(enclosurecount);
-				
-				service.CHSSApplyEncCountEdit(dto);
-			
-			}
-			
 			if(isapproval!=null && isapproval.trim().equalsIgnoreCase("Y") && LoginType.equalsIgnoreCase("K")) {
-				service.POAcknowldgedUpdate(chssapplyid);
+				service.POAcknowldgedUpdate(chssapplyid,"1");
 			}
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);

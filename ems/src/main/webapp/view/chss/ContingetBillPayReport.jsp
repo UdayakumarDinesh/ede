@@ -173,11 +173,11 @@ th,td
 				<% long empallowedamount = 0;
 		          	for(Object[] obj :arrlist )
 			        {
-		          		empallowedamount += Long.parseLong(obj[28].toString());
+		          		empallowedamount += Math.round( Double.parseDouble(obj[28].toString()));
 			        } 
 		          	allowedamt +=empallowedamount;
 			    %>
-				<td class="right" style="width: 20%;"><%=nfc.rupeeFormat(String.valueOf(empallowedamount)) %></td>
+				<td class="right" style="width: 20%;"><%=nfc.rupeeFormat(String.valueOf( empallowedamount)) %></td>
 			</tr>
 		<%}%>
 	
