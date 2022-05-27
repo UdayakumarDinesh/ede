@@ -58,6 +58,23 @@ p {
 	text-justify: inter-word;
 }
 
+table.roundedCorners { 
+  border-radius: 8px; 
+  border-spacing: 0;
+  }
+table.roundedCorners tr:last-child > td {
+  border-bottom: none;
+}
+
+
+table th:first-child{
+  border-radius:8px 0 0 0;
+}
+
+table th:last-child{
+  border-radius:0 8px 0 0;
+}
+
 </style>
 </head>
 <body>
@@ -213,14 +230,14 @@ p {
 									<div style="text-align: center;margin: 3px;width: 99%">
 										<b style="color: #F32424">Consultations in this claim</b>
 									</div>
-									<table class="table table-bordered table-hover table-condensed info shadow-nohover ">
+									<table class="table table-bordered table-hover table-condensed info shadow-nohover roundedCorners ">
 										
-										<thead>
+										<thead style="border-radius: 13px">
 											<tr>
 												<th style="width:5%;" >SN</th>
 												<th style="width:30%;" >Doctor Name</th>
 												<th style="width:20%;" > Date </th>
-												<th style="width:25%;" >Qualification  </th>
+												<th style="width:25%;" >Qualifications  </th>
 												<th style="width:20%;" >Action  </th>
 											</tr>
 										</thead>
@@ -335,7 +352,7 @@ p {
 									<div  style="text-align: center;margin: 3px;width: 99%">
 										<b style="color: #F32424">Add From Previous Consultations</b>
 									</div>
-									<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
+									<table class="table table-bordered table-hover table-condensed  info shadow-nohover roundedCorners" >
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
