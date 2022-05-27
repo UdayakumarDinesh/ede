@@ -29,8 +29,10 @@
 <link href="${daterangepickerCss}" rel="stylesheet" />
 
 
-
-
+ <spring:url value="/webresources/bootstrap-datepicker.min.css" var="DatepickerCss" />
+ <spring:url value="/webresources/bootstrap-datepicker.min.js" var="Datepickerjs" />
+<link href="${DatepickerCss}" rel="stylesheet" />
+<script src="${Datepickerjs}"></script> 
  <!-- ----------  select2   ---------- -->
 <spring:url value="/webresources/addons/select2/select2.min.js" var="select2js" />  
 <script src="${select2js}"></script> 
