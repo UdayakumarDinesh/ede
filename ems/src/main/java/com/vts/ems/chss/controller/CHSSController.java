@@ -1479,9 +1479,15 @@ public class CHSSController {
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
-			req.setAttribute("isapproval", req.getParameter("isapproval"));
+			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			
-			return "chss/CHSSForm";
+			
+			req.setAttribute("isapproval", req.getParameter("isapproval"));
+			req.setAttribute("onlyview", "Y");
+			
+			return "chss/CHSSFormEdit";
+//			return "chss/CHSSForm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSForm.htm "+Username, e);
@@ -1515,6 +1521,10 @@ public class CHSSController {
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
+			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			
+			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			String filename="CHSS-Claim";
@@ -1609,6 +1619,7 @@ public class CHSSController {
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
+		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSUserForward.htm "+Username);
@@ -1620,7 +1631,7 @@ public class CHSSController {
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
 			
 			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
@@ -1723,12 +1734,9 @@ public class CHSSController {
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
 			
-			if(isapproval!=null && isapproval.trim().equalsIgnoreCase("Y") && LoginType.equalsIgnoreCase("K")) {
-				service.POAcknowldgedUpdate(chssapplyid,"1");
-			}
 			
-			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
-			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
+			Employee employee = service.getEmployee(chssapplydata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			
@@ -1738,9 +1746,13 @@ public class CHSSController {
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			req.setAttribute("chssapplydata", chssapplicationdata);
+			req.setAttribute("chssapplydata", chssapplydata);
 			req.setAttribute("employee", employee);
-						
+			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			
+			req.setAttribute("isapproval", req.getParameter("isapproval"));
+			req.setAttribute("logintype", LoginType);
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2111,6 +2123,8 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType));
 			req.setAttribute("logintype", LoginType);
+			
+			
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2132,7 +2146,10 @@ public class CHSSController {
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			return "chss/ContingetBill";
+			req.setAttribute("onlyview","Y");
+			return "chss/ContingentBillView";
+			
+//			return "chss/ContingetBill";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ContingetBill.htm "+Username, e);
@@ -2164,7 +2181,7 @@ public class CHSSController {
 	{
 		String UserId = (String) ses.getAttribute("Username");
 
-		logger.info(new Date() +"Inside CHSSFormEmpDownload.htm "+UserId);
+		logger.info(new Date() +"Inside ContingetBillDownload.htm "+UserId);
 		
 		try {	
 			String contingentid = req.getParameter("contingentid");
@@ -2207,7 +2224,7 @@ public class CHSSController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();  
-			logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+			logger.error(new Date() +" Inside ContingetBillDownload.htm "+UserId, e); 
 		}
 
 	}
@@ -2492,6 +2509,22 @@ public class CHSSController {
 			logger.error(new Date() +" Inside ContingetBillPayReportDownload.htm "+UserId, e); 
 		}
 
+	}
+	
+	@RequestMapping(value = "POAcknowledgeUpdateAjax.htm", method = RequestMethod.GET)
+	public void POAcknowledgeUpdateAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside POAcknowledgeUpdateAjax.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");			
+			service.POAcknowldgedUpdate(chssapplyid,"1");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside POAcknowledgeUpdateAjax.htm "+Username, e);
+		}
+//		Gson json = new Gson();
+//		return json.toJson(list);
 	}
 	
 }

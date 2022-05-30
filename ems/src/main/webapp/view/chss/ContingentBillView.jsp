@@ -89,6 +89,8 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	String LabLogo = (String)request.getAttribute("LabLogo");
+	String onlyview = (String)request.getAttribute("onlyview");
+	
 %>
  
 	<div class="card-header page-top">
@@ -170,9 +172,9 @@ th,td
 								<th style="text-align: center;">No. of Bills</th>
 								<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
 								<th class="right" style="width: 15%;">Amount Admitted (&#8377;)</th>
-								<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+								
 								<th  style="width: 10%" >Form</th>
-								<%} %>
+								
 							</tr>
 							
 							<%long allowedamt=0,claimamt=0,billscount=0;
@@ -203,7 +205,7 @@ th,td
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString())) %></td>
-									<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+									<%if( true){  %>
 									<td >
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 										<i class="fa-solid fa-eye"></i>
@@ -212,6 +214,7 @@ th,td
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
+									<input type="hidden" name="isapproval" value="Y">
 									</td>
 									<%} %>							
 								</tr>
@@ -234,18 +237,16 @@ th,td
 								</tr>
 						</table>
 						
-						<%if(!logintype.equalsIgnoreCase("K")){ %>
-						<div>
-							<p>
-								<%=contingentdata[8] %>
-							</p>
-						</div>
+						<%if(logintype!=null && !logintype.equalsIgnoreCase("K")){ %>
+							<div>
+								<p>
+									<%=contingentdata[8] %>
+								</p>
+							</div>
 						<%} %>
-						
-						
 					</div>
 					</form>	
-					<%if(billscount>0){ %>
+					<%if(billscount>0 && (logintype==null || !logintype.equals("Y"))){ %>
 					<form action="CHSSContingentApprove.htm" method="post">
 					
 						<div class="row">

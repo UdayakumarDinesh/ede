@@ -22,7 +22,7 @@
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	double itemstotal=0,totalremamount=0;
+	long itemstotal=0,totalremamount=0;
 
 %>
  
@@ -136,8 +136,8 @@
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[25] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[26] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[25].toString())) %></td>
+											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[26].toString())) %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
@@ -147,8 +147,8 @@
 											</td>
 										</tr>
 									<%
-									itemstotal += Double.parseDouble(obj[25].toString());
-									totalremamount +=Double.parseDouble(obj[26].toString());
+									itemstotal += Math.round(Double.parseDouble(obj[25].toString()));
+									totalremamount += Math.round(Double.parseDouble(obj[26].toString()));
 									} %>
 									
 									<%if(chssclaimlist.size()>0){ %>

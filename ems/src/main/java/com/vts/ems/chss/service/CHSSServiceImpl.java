@@ -129,6 +129,9 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSApplyDate(sdf.format(new Date()));
 				apply.setRemarks(dto.getRemarks());
 				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
+				apply.setPOAcknowledge(0);
+				apply.setPOId(0L);
+				apply.setVOId(0L);
 				apply.setContingentId(0L);
 				applyid=dao.CHSSApplyAdd(apply);
 				
@@ -559,6 +562,28 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.ConsultationBillEdit(fetch);
 	}
 	
+	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
+	{
+		List<Object[]> medicinedata = dao.MedAdmissibleCheck(meds.getMedicineName());
+		if(medicinedata!=null && medicinedata.size()>0)
+		{
+			meds.setMedsRemAmount(0);
+			meds.setComments("Found in inadmissible List : MedicineNo: "+medicinedata.get(0)[1]);
+		}
+	}
+	
+	public void calculateMedAmount(CHSSMedicine  meds ) throws Exception
+	{
+		int purs = meds.getMedQuantity();
+		int pres = meds.getPresQuantity();
+		double cost = meds.getMedicineCost(); 
+		if(purs>pres) 
+		{
+			cost=cost/(double)purs;
+			meds.setMedsRemAmount(Math.round((cost*pres) * 100.0) / 100.0); 
+		}
+		
+	}
 	
 	@Override
 	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception
@@ -579,6 +604,8 @@ public class CHSSServiceImpl implements CHSSService {
 				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 				meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
 				meds.setMedsRemAmount(Double.parseDouble(dto.getMedicineCost()[i]));
+				calculateMedAmount(meds);
+				
 				meds.setIsActive(1);
 				meds.setCreatedBy(dto.getCreatedBy());
 				meds.setCreatedDate(sdtf.format(new Date()));
@@ -614,8 +641,11 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setMedicineName(modal.getMedicineName());
 		fetch.setMedicineCost(modal.getMedicineCost());
 		fetch.setMedQuantity(modal.getMedQuantity());
-		fetch.setMedsRemAmount(modal.getMedicineCost());
 		fetch.setPresQuantity(modal.getPresQuantity());
+		fetch.setMedsRemAmount(modal.getMedicineCost());
+		
+		calculateMedAmount(fetch);
+		
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -629,15 +659,7 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.MedicineBillEdit(fetch);
 	}
 	
-	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
-	{
-		List<Object[]> medicinedata = dao.MedAdmissibleCheck(meds.getMedicineName());
-		if(medicinedata!=null && medicinedata.size()>0)
-		{
-			meds.setMedsRemAmount(0);
-			meds.setComments("Found in inadmissible List : MedicineNo: "+medicinedata.get(0)[1]);
-		}
-	}
+	
 	
 	
 	@Override
@@ -936,7 +958,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId) throws Exception 
+	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
 	{
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
@@ -977,19 +999,18 @@ public class CHSSServiceImpl implements CHSSService {
 					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
-				
+				claim.setPOId(Long.parseLong(EmpId));
 				
 			}
 			else if(claimstatus==4) 
 			{
 				claim.setCHSSStatusId(6);
-				
+				claim.setVOId(Long.parseLong(EmpId));
 			}
 			
 			
 			mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") Recieved for Verification";
-			
-			
+						
 		}
 		
 		if(action.equalsIgnoreCase("R")) 
@@ -1005,6 +1026,8 @@ public class CHSSServiceImpl implements CHSSService {
 				Employee emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp.getEmail()!=null) { 	Email =  emp.getEmail();		}
 				notify.setNotificationUrl("CHSSDashboard.htm");
+				claim.setPOId(0L);
+				claim.setVOId(0L);
 				
 			}
 			else if(claimstatus==4) 
@@ -1019,7 +1042,7 @@ public class CHSSServiceImpl implements CHSSService {
 				}
 				notify.setNotificationUrl("CHSSApprovalsList.htm");
 			}
-			
+			claim.setVOId(0L);
 			claim.setContingentId(0L);
 		}
 		
@@ -1266,13 +1289,7 @@ public class CHSSServiceImpl implements CHSSService {
 				continstatus=8;
 				contingent.setContingentDate(LocalDate.now().toString());
 				contingent.setBillContent(dto.getBillcontent());
-				if(continstatus==1) {
-					contingent.setPO(0L);
-					contingent.setVO(0L);
-					contingent.setAO(0L);
-					contingent.setCEO(0L);
-				}
-				
+								
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto==null) {
 					notify.setEmpId(0L);
@@ -1280,7 +1297,7 @@ public class CHSSServiceImpl implements CHSSService {
 					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
-				
+				contingent.setPO(Long.parseLong(dto.getEmpId()));
 				
 			}
 			else if(continstatus==8  ) 
@@ -1295,6 +1312,7 @@ public class CHSSServiceImpl implements CHSSService {
 					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
+				contingent.setVO(Long.parseLong(dto.getEmpId()));
 				
 			}
 			else if(continstatus==10  ) 
@@ -1309,6 +1327,7 @@ public class CHSSServiceImpl implements CHSSService {
 					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
+				contingent.setAO(Long.parseLong(dto.getEmpId()));
 				
 			}	
 			else if(continstatus==12 ) 
@@ -1324,6 +1343,8 @@ public class CHSSServiceImpl implements CHSSService {
 					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
+				contingent.setApprovalDate(LocalDate.now().toString());
+				contingent.setCEO(Long.parseLong(dto.getEmpId()));
 				
 			}	
 		}
@@ -1370,6 +1391,10 @@ public class CHSSServiceImpl implements CHSSService {
 				if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 			}
 			
+			contingent.setPO(0L);
+			contingent.setVO(0L);
+			contingent.setAO(0L);
+			contingent.setCEO(0L);
 			
 		}
 					
@@ -1377,7 +1402,7 @@ public class CHSSServiceImpl implements CHSSService {
 		contingent.setContingentStatusId(continstatus);
 		contingent.setModifiedBy(dto.getUsername());
 		contingent.setModifiedDate(sdf.format(new Date()));
-		//continid=dao.CHSSContingentEdit(contingent);
+		continid=dao.CHSSContingentEdit(contingent);
 		
 		
 		List<Object> CHSSApplyId  =dao.ContingentApplyIds(dto.getContingentid());
@@ -1610,6 +1635,19 @@ public class CHSSServiceImpl implements CHSSService {
 		long count= dao.CHSSApplyEdit(claim);
 		
 		return count;
+	}
+	
+	@Override
+	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
+	{
+		return dao.ClaimApprovedPOVOData(chssapplyid);
+	}
+	
+	
+	@Override
+	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
+	{
+		return dao.ClaimRemarksHistory(chssapplyid);
 	}
 	
 }

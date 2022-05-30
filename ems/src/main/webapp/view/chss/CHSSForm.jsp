@@ -71,10 +71,13 @@ body
 {
 	font-size:14px !important;
 }
-div, table{
+ table{
+	max-width: 670px !important;
+}
+div
+{
 	width: 650px !important;
 }
-
 table{
 	align: left;
 	width: 650px !important;
@@ -134,12 +137,15 @@ th,td
 	} 
 	
 	String LabLogo = (String)request.getAttribute("LabLogo");
+	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
+	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	
 %>
 
 <div align="center">
 	<div align="center">
-		<div>
+		
+		
 		<%-- 	<table style="border: 0px; width: 100%">
 				<tr>
 					<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
@@ -283,10 +289,59 @@ th,td
 					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
 					(Strike out whichever is not applicable)
 				</p>
+				
+				
+				<%if(ClaimRemarksHistory.size()>0){ %>
+				<table style="max-width: 650px;">
+					<tr>
+						<td style="border:none;">
+							<h3>Remarks :</h3> 
+						</td>
+						<td style="border:none;">
+							
+						</td>
+					</tr>
+					<%for(Object[] obj : ClaimRemarksHistory){
+						if(obj[1]!=null && !obj[1].toString().trim().equals("")){
+					%>
+					<tr>
+						<td style="border:none;width: 25%;">
+							<%=obj[3] %>&nbsp; :
+						</td>
+						<td style="border:none;">
+							<%=obj[1] %>
+						</td>
+						
+					</tr>
+					<%}} %>
+				</table>
+				<%} %>
+				<table>
+					<tr>
+						<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
+							<ol style="list-style-type: none;margin-left: -45px">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("PO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %> </li>
+								<% } } %>
+							</ol>
+						</td>
+						<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
+							<ul style="float: right;list-style-type: none; ">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("VO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %></li>
+								<% } } %>
+							</ul>					
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div>
+
 		<div class="break"></div>
-		<div align="center" >
+		<div align="center">
 			<table>
 				<tbody>
 					<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr>  <!-- --------------- consultation -------------------- -->
@@ -552,8 +607,9 @@ th,td
 					</tr>
 					
 					<tr>
-						<td colspan="7" style="height: 50px;vertical-align:bottom">Finance & Accounts Dept.</td>
+						<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
 					</tr>
+					
 				</tbody>				
 			</table>
 		</div>

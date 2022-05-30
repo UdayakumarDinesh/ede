@@ -1141,6 +1141,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	{
 		logger.info(new Date() +"Inside DAO CHSSContingentEdit");
 		try {
+			
 			manager.merge(contingent);
 			manager.flush();
 			
@@ -1569,7 +1570,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			e.printStackTrace();
 		}
 		return  list;
-		
 	}
 	
 	
@@ -1600,7 +1600,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO MedAdmissibleList");
-		 List<Object[]> list = null;
+		List<Object[]> list = null;
 		try {
 			
 			Query query= manager.createNativeQuery(MEDADMISSIBLELIST);
@@ -1639,5 +1639,43 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+
+	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
+	@Override
+	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimApprovedPOVOData");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CLAIMAPPROVEDPOVODATA);
+			query.setParameter("chssapplyid", chssapplyid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
+	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.Designation FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.DesignationId = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate";
+	@Override
+	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimRemarksHistory");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CLAIMREMARKSHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
 	
 }

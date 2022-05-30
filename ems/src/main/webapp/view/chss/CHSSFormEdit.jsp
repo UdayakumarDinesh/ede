@@ -76,6 +76,65 @@ th,td
 	margin-top:-15px;
 }
  */
+ 
+ 
+ 
+input {
+  &[type="button"] {
+    padding: 5px 10px;
+    margin: 10px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #ddd;
+    border: 1px solid #ccc;
+
+    &:hover {
+      background: #ccc;
+    }
+  }
+}
+
+.confirm {
+  display: none;
+
+  > div {
+    &:first-of-type {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      top: 0px;
+      left: 0px;
+    }
+
+    &:last-of-type {
+      padding: 10px 20px;
+      background: white;
+      position: absolute;
+      width: auto;
+      height: auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 5px;
+      border: 1px solid #333;
+
+      div {
+        &:first-of-type {
+          min-width: 150px;
+          padding: 10px;
+        }
+
+        &:last-of-type {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+ 
+ 
+ 
 </style>
 
 
@@ -91,7 +150,9 @@ th,td
 	List<Object[]> MedicineDataList = (List<Object[]>)request.getAttribute("MedicineDataList");
 	List<Object[]> OtherDataList = (List<Object[]>)request.getAttribute("OtherDataList");
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
-
+	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
+	
+	
 	Employee employee = (Employee)request.getAttribute("employee");
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -100,14 +161,17 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	
 	String isapproval = (String)request.getAttribute("isapproval");
+	String logintype = (String)request.getAttribute("logintype");
 	
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
-	
 	String LabLogo = (String)request.getAttribute("LabLogo");
+	String onlyview=(String)request.getAttribute("onlyview");
+	boolean showhistorybtn = (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13) && (isapproval!=null && isapproval.equalsIgnoreCase("Y"));
+	boolean showitemedit =  isapproval!=null && isapproval.equalsIgnoreCase("Y");
 	
-	boolean showhistorybtn = chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13;
+	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 %>
- 
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -154,18 +218,7 @@ th,td
 				
 			<div class="card" >
 				<div class="card-body " >
-					<div class="row">
-						<%if(chssstatusid>=2 && chssapplydata[19]!=null && !chssapplydata[19].toString().trim().equalsIgnoreCase("")){ %>
-						<div class="col-md-12">
-							<span style="font-weight: 600;"> Remark : </span>
-							<%if(chssstatusid == 3 || chssstatusid == 5 || chssstatusid == 7  ){ %>
-								<span style="font-weight: 600; color: #D82148;"> <%=chssapplydata[19] %> </span>					
-							<%}else{ %>    
-								<span style="font-weight: 600; color: #035397;"> <%=chssapplydata[19] %> </span>			
-							<%} %>
-						</div>
-						<%} %>
-					</div>
+					
 				
 					<div align="center">
 						<div align="center">
@@ -312,6 +365,56 @@ th,td
 									</p>
 								
 								</div>
+							
+								<%if(ClaimRemarksHistory.size()>0){ %>
+								<table >
+									<tr>
+										<td style="border:none;width: 25%;">
+											<h3>Remarks :</h3> 
+										</td>
+										<td style="border:none;">
+											
+										</td>
+									</tr>
+									<%for(Object[] obj : ClaimRemarksHistory){
+										if(obj[1]!=null && !obj[1].toString().trim().equals("")){
+									%>
+									<tr>
+										<td style="border:none;">
+											<%=obj[3] %>&nbsp; :
+										</td>
+										<td style="border:none;">
+											<%=obj[1] %>
+										</td>
+										
+									</tr>
+									<%}} %>
+								</table>
+								<%} %>
+								
+								<table>
+									<tr>
+										<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
+											<ol style="list-style-type: none;margin-left: -45px">
+												<%for(Object[] obj:ClaimapprovedPOVO){
+													if(obj[1].toString().equalsIgnoreCase("PO")){%>
+													<li><%=obj[2] %>,</li>
+													<li><%=obj[4] %> </li>
+												<% } } %>
+											</ol>
+										</td>
+										<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
+											<ul style="float: right;list-style-type: none; ">
+												<%for(Object[] obj:ClaimapprovedPOVO){
+													if(obj[1].toString().equalsIgnoreCase("VO")){%>
+													<li><%=obj[2] %>,</li>
+													<li><%=obj[4] %></li>
+												<% } } %>
+											</ul>					
+										</td>
+									</tr>
+								</table>
+								
 								
 							</div>
 							<div class="break"></div>
@@ -338,7 +441,7 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation charges </b>
 																<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
+																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 																 <%} %>
@@ -367,10 +470,12 @@ th,td
 														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right"><%=consult[6] %></td>
 														
-														<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+														
+														
+													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 															<td class="">
 															<td class="">
-														<%}else if((chssstatusid==14 || chssstatusid==6)){ %>
+													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=consult[7]%>		
 														</td>	
@@ -392,7 +497,10 @@ th,td
 																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 																</button>	
 															</td>
-														<%}%>
+														<%} else {%>
+														<td class="">
+															<td class="">
+														<%} %>
 														
 																											
 													</tr>					
@@ -412,7 +520,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -438,10 +546,10 @@ th,td
 													<td class="right"><%=test[4] %></td>
 												
 													
-													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 															<td class="">
 															<td class="">
-													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=test[7]%>	
 														</td>	
@@ -461,7 +569,11 @@ th,td
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 														</td>
-													<%}%>
+													<%} else {%>
+														<td class="">
+															<td class="">
+														<%} %>
+														
 													
 													
 													
@@ -487,7 +599,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -521,10 +633,10 @@ th,td
 													<td class="right"><%=medicine[3] %></td>
 												
 													
-													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 														<td class="">
 														<td class="">
-													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=medicine[6]%>
 														</td>	
@@ -545,7 +657,11 @@ th,td
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
-													<%}%>
+													<%} else {%>
+														<td class="">
+															<td class="">
+														<%} %>
+														
 												</tr>					
 											<%i++;
 											itemstotal += Double.parseDouble(medicine[3].toString());
@@ -563,7 +679,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Others</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -591,10 +707,10 @@ th,td
 													
 													
 													
-													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 														<td class="">
 														<td class="">
-													<%}else if((chssstatusid==14 || chssstatusid==6 )){ %>
+													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=other[5]%>
 														</td>	
@@ -613,7 +729,11 @@ th,td
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 														</td>
-													<%}%>
+													<%} else {%>
+														<td class="">
+															<td class="">
+														<%} %>
+														
 													
 												</tr>					
 											<%i++;
@@ -633,7 +753,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Miscellaneous</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -661,10 +781,10 @@ th,td
 													<td class="right"><%=misc[3] %></td>
 													
 																										
-													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
+													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 														<td class="">
 														<td class="">
-													<%}else if((chssstatusid==14 || chssstatusid==6  )){ %>
+													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=misc[4]%>
 														</td>	
@@ -683,7 +803,11 @@ th,td
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
-													<%}%>
+													<%} else {%>
+														<td class="">
+															<td class="">
+														<%} %>
+														
 													
 													
 													
@@ -699,7 +823,7 @@ th,td
 											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
 											<td class="right">
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ||chssstatusid==14 || chssstatusid==6  ){ %>	 
+											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==6 ) && showitemedit ) || chssstatusid==14){ %>	 
 											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
 											<%} %>
 											</td>
@@ -719,7 +843,7 @@ th,td
 										
 										<tr>
 											<td colspan="7">Admitted to Rs.
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==14 || chssstatusid==6  ){ %>
+											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==6 ) && showitemedit ) || chssstatusid==14){ %>
 											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
 											<%} %>
 										</tr>
@@ -727,36 +851,61 @@ th,td
 										<tr>
 											<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
 										</tr>
+										
+										
 									</tbody>				
 								</table>
 							</div>
 						</div>
 					</div>
+					
+				<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 					<form action="CHSSUserForward.htm" method="post" id="fwdform">
+					<div class="row">
+						<%if(chssstatusid>=2 && chssapplydata[19]!=null && !chssapplydata[19].toString().trim().equalsIgnoreCase("")){ %>
+						<div class="col-md-12">
+							<span style="font-weight: 600;"> Remark : </span>
+							<%if(chssstatusid == 3 || chssstatusid == 5 || chssstatusid == 7  ){ %>
+								<span style="font-weight: 600; color: #D82148;"> <%=chssapplydata[19] %> </span>					
+							<%}else{ %>    
+								<span style="font-weight: 600; color: #035397;"> <%=chssapplydata[19] %> </span>			
+							<%} %>
+						</div>
+						<%} %>
+					</div>
 						<div class="row">
-							<div class="col-md-12">
-								Remarks : <br>
-								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-							</div>
+							
 							<div class="col-md-12" align="center" style="margin-top: 5px;">
 							
 							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
+								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
+									Remarks : <br>
+									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
+								</div>
 								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Verify</button>
 							
 									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
+								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
+									Remarks : <br>
+									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
+								</div>
 									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" >
+									<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
 									
 							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
 							
+								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
+									Remarks : <br>
+									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
+								</div>
 									<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 							<%} %>
 								
@@ -787,7 +936,8 @@ th,td
 												
 												 <div class="col-12 w-100" align="center">
 												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">													Save
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)" >
+													submit
 												</button>
 												</div>
 											</div>
@@ -801,7 +951,7 @@ th,td
 						
 						
 					</form>
-
+				<%} %>
 
 				</div>
 			</div>		
@@ -838,9 +988,56 @@ th,td
 </div>
 	 
 	
+<%if(isapproval!=null && isapproval.equalsIgnoreCase("Y") && logintype.equals("K") && chssapplydata[20].toString().equals("0") ){ %>
+
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+       
+      </div>
+      <div class="modal-body">
+       Did You Receive The Physical Copy of the Claim?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="acknowledgeFunction(false)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">	 
+
+	$('#my_acknowledge_model').modal('show')
+ 	  function acknowledgeFunction(yesorno){
+		
+		 if(yesorno)
+		 {
+			 $.ajax({
+
+					type : "GET",
+					url : "POAcknowledgeUpdateAjax.htm",
+					data : {
+							
+						chssapplyid : $chssapplyid,
+					},
+					datatype : 'json',
+					success : function(result) {
+	
+					}
+				}); 
+		}else
+		{
+			window.location = "CHSSApprovalsList.htm";
+		}
+	 	
+	 
+	 }
 	 
 	 
-	 
+</script>
+<%} %>	 
 	 
 <script type="text/javascript">
 $("#modal-history-table").DataTable({
@@ -1169,7 +1366,7 @@ function ShowHistory(itemid)
 
 function  onlyNumbers() {    
     
-    $('.numberonly').keypress(function (e) {    
+/*     $('.numberonly').keypress(function (e) {    
 
         var charCode = (e.which) ? e.which : event.keyCode    
 
@@ -1177,7 +1374,17 @@ function  onlyNumbers() {
 
             return false;                        
 
-    });    
+    }); */    
+    
+    $('.numberonly').keypress( function (evt) {
+
+	    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
+	    {
+	        evt.preventDefault();
+	    } 
+		
+	    
+	});
 
 }
 $(document).ready( function() {

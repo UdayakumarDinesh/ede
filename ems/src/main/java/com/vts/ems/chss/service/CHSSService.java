@@ -74,7 +74,7 @@ public interface CHSSService
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
-	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId) throws Exception;
+	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String LoginType) throws Exception;
 	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
 	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSTests modal) throws Exception;
@@ -115,6 +115,8 @@ public interface CHSSService
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
 	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
+	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception;
 
 	
 }

@@ -1454,7 +1454,7 @@ function getTestsData()
 		
 		
 		
-		
+		onlyNumbers();
 		setTooltip();
 		$('.meds-date').daterangepicker({
 			"singleDatePicker" : true,
@@ -1488,8 +1488,10 @@ $("table").on('click','.tbl-row-add-meds' ,function()
    	var $clone = $tr.clone();
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
-
+    $clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
+    $clone.find('.selectpicker').selectpicker('render'); 
   	setTooltip();
+  	onlyNumbers();
   
 });
 
@@ -1587,6 +1589,7 @@ function getMedicinesData(){
 		$('#meds-list-table').html(medsHTMLStr);
 		
 		setTooltip();
+		onlyNumbers();
 		$('.meds-date').daterangepicker({
 			"singleDatePicker" : true,
 			"linkedCalendars" : false,
@@ -1658,6 +1661,7 @@ function FillMedsList()
 				
 				$('#meds-add-tbody').html(medsHTMLStr);
 				setTooltip();
+				onlyNumbers();
 							
 			}
 		});
@@ -1682,6 +1686,7 @@ $("table").on('click','.tbl-row-add-misc' ,function()
 
 	
    	setTooltip();
+   	onlyNumbers();
   
 });
 
@@ -1771,7 +1776,7 @@ $("table").on('click','.tbl-row-add-other' ,function()
 		   	$clone.find(".items").val("").end();  
 		 
 		  	setTooltip();
-		  
+		  	onlyNumbers();
 		});
 
 
