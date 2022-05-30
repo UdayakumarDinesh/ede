@@ -1,5 +1,8 @@
 package com.vts.ems.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +54,9 @@ public class EmsController {
 			Employee employee = service.EmployeeInfo(login.getEmpId());
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
+			ses.setAttribute("emplogintypelist",service.EmpHandOverLoginTypeList(String.valueOf(employee.getEmpId())));
+			
+			
 		} catch (Exception e) {
 			logger.error(new Date() + " Login Issue Occures When Login By " + req.getUserPrincipal().getName(), e);
 		}
@@ -68,6 +74,24 @@ public class EmsController {
 //    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
 
 		return "static/maindashboard";
+	}
+	
+	@RequestMapping(value = "EmpLogitypeChange.htm" , method = RequestMethod.POST)
+	public String EmpLogitypeChange(HttpServletRequest req ,HttpSession ses) throws Exception {		
+		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside EmpLogitypeChange.htm "+UserId);		
+		try {
+			String logintype= req.getParameter("logintype");
+			ses.setAttribute("LoginType", logintype);
+			return "redirect:/MainDashBoard.htm";
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside EmpLogitypeChange.htm "+UserId, e);
+			return "redirect:/MainDashBoard.htm";
+		}
+		
 	}
 	
 	
@@ -121,7 +145,7 @@ public class EmsController {
 		
 	}
 	
-    
+  
 	 @RequestMapping(value = "fpwd/ForgotPassword.htm", method = {RequestMethod.POST,RequestMethod.GET}) 
 	 public String forgotPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
@@ -221,9 +245,69 @@ public class EmsController {
 	    
 	 }
 	 
+	 
+	 
+	 @RequestMapping(value = "LoginPage/DoctorsList.htm", method = RequestMethod.GET)
+		public void DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 
+			String path = req.getServletContext().getRealPath("/manuals/" + "DoctorsList.pdf");
 
+			res.setContentType("application/pdf");
+			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+
+			File my_file = new File(path);
+
+			OutputStream out = res.getOutputStream();
+			FileInputStream in = new FileInputStream(my_file);
+			byte[] buffer = new byte[4096];
+			int length;
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			in.close();
+			out.flush();
+		}
+
+	 @RequestMapping(value = "LoginPage/Circulars.htm", method = RequestMethod.GET)
+		public void Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+
+			String path = req.getServletContext().getRealPath("/manuals/" + "Circulars.pdf");
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+
+			File my_file = new File(path);
+
+			OutputStream out = res.getOutputStream();
+			FileInputStream in = new FileInputStream(my_file);
+			byte[] buffer = new byte[4096];
+			int length;
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			in.close();
+			out.flush();
+		}
 	
-	
+	 @RequestMapping(value = "LoginPage/Eligibility.htm", method = RequestMethod.GET)
+		public void Eligibility(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+
+			String path = req.getServletContext().getRealPath("/manuals/" + "Eligibility.pdf");
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+
+			File my_file = new File(path);
+
+			OutputStream out = res.getOutputStream();
+			FileInputStream in = new FileInputStream(my_file);
+			byte[] buffer = new byte[4096];
+			int length;
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			in.close();
+			out.flush();
+		}
 
 }

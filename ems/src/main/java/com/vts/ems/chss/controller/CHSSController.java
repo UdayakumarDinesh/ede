@@ -93,7 +93,7 @@ public class CHSSController {
 			if(req.getParameter("patientidvalue")!=null) {
 				PatientId= req.getParameter("patientidvalue");
 			}
-			String IsSelf="Y";
+			String IsSelf="";
 			if(req.getParameter("isselfvalue")!=null) {
 				IsSelf= req.getParameter("isselfvalue");
 			}
@@ -117,10 +117,11 @@ public class CHSSController {
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
 			req.setAttribute("Fromdate", FromDate );
-			req.setAttribute("Todate", ToDate );;
+			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
 			req.setAttribute("profilepicpath", uploadpath);
-			req.setAttribute("patientname", PatientName);;
+			req.setAttribute("patientname", PatientName);
+			req.setAttribute("IsSelf", IsSelf);;
 
 			
 			
@@ -538,7 +539,7 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 //			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSConsultMainBillsList(consultmainid,chssapplyid));
-			req.setAttribute("testmainlist", service.CHSSTestSubList(""));
+			req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
 			req.setAttribute("otheritemslist", service.OtherItemsList());
 			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 			req.setAttribute("billid", billid);
@@ -740,7 +741,8 @@ public class CHSSController {
 		logger.info(new Date() +"Inside GetTestsListAjax.htm "+Username);
 		List<CHSSTestSub> list=new ArrayList<CHSSTestSub>();
 		try {
-			list = service.CHSSTestSubList("");
+			String treattypeid = req.getParameter("treattypeid");
+			list = service.CHSSTestSubList(treattypeid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside GetTestsListAjax.htm "+Username, e);
@@ -838,11 +840,10 @@ public class CHSSController {
 			consult.setDocName(docname);
 //			consult.setDocQualification(docqualification);
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
-			consult.setConsultCharge(Integer.parseInt(conscharge));
+			consult.setConsultCharge(Double.parseDouble(conscharge));
 			consult.setModifiedBy(Username);
 			
 			long count = service.ConsultationBillEdit(consult,chssapplyid,consultmainidold);
-			
 			
 			if (count > 0) {
 				redir.addAttribute("result", "Consultation Data Updated Successfully");
@@ -995,12 +996,12 @@ public class CHSSController {
 			CHSSMedicine meds= new CHSSMedicine();
 			meds.setCHSSMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
-			meds.setMedicineCost(Integer.parseInt(medscost));
+			meds.setMedicineCost(Double.parseDouble(medscost));
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			meds.setPresQuantity(Integer.parseInt(medspresquantity));
 			meds.setModifiedBy(Username);
 			
-			long count = service.MedicineBillEdit(meds);
+			long count = service.MedicineBillEdit(meds,chssapplyid);
 			
 			
 			if (count > 0) {
@@ -1126,7 +1127,7 @@ public class CHSSController {
 			test.setCHSSTestId(Long.parseLong(testid));
 			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
 			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
-			test.setTestCost(Integer.parseInt(testcost));
+			test.setTestCost(Double.parseDouble(testcost));
 			test.setModifiedBy(Username);
 			
 			long count = service.TestBillEdit(test);
@@ -1193,12 +1194,14 @@ public class CHSSController {
 			
 			String[] miscname=req.getParameterValues("misc-name");
 			String[] misccost=req.getParameterValues("misc-cost");
+			String[] misccount=req.getParameterValues("misc-count");
 			
 			CHSSMiscDto dto=new CHSSMiscDto();
 			
 			dto.setBillId(billid);
 			dto.setMiscItemName(miscname);
 			dto.setMiscItemCost(misccost);
+			dto.setMiscCount(misccount);
 			dto.setCreatedBy(Username);
 			
 			long count= service.MiscBillAdd(dto);
@@ -1249,11 +1252,13 @@ public class CHSSController {
 			
 			String medsname = req.getParameter("misc-name-"+chssmiscid);
 			String micscost = req.getParameter("misc-cost-"+chssmiscid);
+			String micscount = req.getParameter("misc-count-"+chssmiscid);
 			
 			CHSSMisc meds= new CHSSMisc();
 			meds.setChssMiscId(Long.parseLong(chssmiscid));
 			meds.setMiscItemName(medsname);
-			meds.setMiscItemCost(Integer.parseInt(micscost));
+			meds.setMiscCount(Integer.parseInt(micscount));
+			meds.setMiscItemCost(Double.parseDouble(micscost));
 			meds.setModifiedBy(Username);
 			
 			long count = service.MiscBillEdit(meds);
@@ -1386,6 +1391,7 @@ public class CHSSController {
 	public String OtherBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside OtherBillEdit.htm "+Username);
 		try {
 			
@@ -1398,10 +1404,10 @@ public class CHSSController {
 			CHSSOther meds= new CHSSOther();
 			meds.setCHSSOtherId(Long.parseLong(chssotherid));
 			meds.setOtherItemId(Integer.parseInt(otheritemid));
-			meds.setOtherItemCost(Integer.parseInt(otheritemcost));
+			meds.setOtherItemCost(Double.parseDouble(otheritemcost));
 			meds.setModifiedBy(Username);
 			
-			long count = service.OtherBillEdit(meds);
+			long count = service.OtherBillEdit(meds,EmpId);
 			
 			
 			if (count > 0) {
@@ -1558,9 +1564,9 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
-			long claimamount=0;
+			double claimamount=0;
 			for(Object[] bill : claimdata) {
-				claimamount += Long.parseLong(bill[5].toString());
+				claimamount += Double.parseDouble(bill[5].toString());
 			}
 			
 //			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
@@ -1598,56 +1604,7 @@ public class CHSSController {
 		Gson json = new Gson();
 		return json.toJson(docrates);
 	}
-	
-//	@RequestMapping(value = "CHSSUserPreview.htm", method = RequestMethod.POST)
-//	public String CHSSUserPreview(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
-//	{
-//		String Username = (String) ses.getAttribute("Username");
-//		logger.info(new Date() +"Inside CHSSUserPreview.htm "+Username);
-//		try {
-//			String chssapplyid = req.getParameter("chssapplyid");
-//			String enclosurecount = req.getParameter("enclosurecount");
-//			
-//			CHSSApplyDto dto =new CHSSApplyDto();
-//			dto.setCHSSApplyId(chssapplyid);
-//			dto.setNoEnclosures(enclosurecount);
-//			
-//			service.CHSSApplyEncCountEdit(dto);
-//			
-//			
-//			
-//			
-//			
-//			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
-//			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
-//			
-//			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-//			
-//			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
-//			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
-//			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
-//			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
-//			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
-//			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-//			req.setAttribute("chssapplydata", chssapplicationdata);
-//			req.setAttribute("employee", employee);
-//						
-//			return "chss/CHSSFormEdit";
-//			
-//			
-//			
-//			redir.addFlashAttribute("chssapplyid",chssapplyid);
-//			return "redirect:/CHSSFormEdit.htm";
-//			
-//		} catch (Exception e) {
-//					
-//			e.printStackTrace();
-//			logger.error(new Date() +" Inside CHSSUserPreview.htm "+Username, e);
-//			return "static/Error";
-//			
-//		}
-//			
-//	}
+
 	
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
@@ -1664,8 +1621,20 @@ public class CHSSController {
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
 			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId);
+			
+			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
+				String enclosurecount = req.getParameter("enclosurecount");
+				if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
+					CHSSApplyDto dto =new CHSSApplyDto();
+					dto.setCHSSApplyId(chssapplyid);
+					dto.setNoEnclosures(enclosurecount);
+					
+					service.CHSSApplyEncCountEdit(dto);
+				
+				}
+				
 				if (count > 0) {
 					redir.addAttribute("result", "Claim application Sent for Processing  Successfully");
 				} else {
@@ -1727,6 +1696,7 @@ public class CHSSController {
 		try {
 						
 			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType));
+			
 			return "chss/CHSSApprovalList";
 		} catch (Exception e) {
 			
@@ -1741,23 +1711,20 @@ public class CHSSController {
 	public String CHSSFormEdit(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSFormEdit.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
+			String isapproval=req.getParameter("isapproval");
+			
 			if (chssapplyid == null) 
 			{
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
 			
-			String enclosurecount = req.getParameter("enclosurecount");
-			if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
-				CHSSApplyDto dto =new CHSSApplyDto();
-				dto.setCHSSApplyId(chssapplyid);
-				dto.setNoEnclosures(enclosurecount);
-				
-				service.CHSSApplyEncCountEdit(dto);
-			
+			if(isapproval!=null && isapproval.trim().equalsIgnoreCase("Y") && LoginType.equalsIgnoreCase("K")) {
+				service.POAcknowldgedUpdate(chssapplyid,"1");
 			}
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
@@ -1798,7 +1765,7 @@ public class CHSSController {
 			
 			CHSSConsultation consult= new CHSSConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
-			consult.setConsultRemAmount(Integer.parseInt(consultremamount));
+			consult.setConsultRemAmount(Double.parseDouble(consultremamount));
 			consult.setComments(consultcomment);
 			consult.setModifiedBy(Username);
 			
@@ -1837,7 +1804,7 @@ public class CHSSController {
 			
 			CHSSTests test= new CHSSTests();
 			test.setCHSSTestId(Long.parseLong(testid));
-			test.setTestRemAmount(Integer.parseInt(testremamount));
+			test.setTestRemAmount(Double.parseDouble(testremamount));
 			test.setComments(testcomment);
 			test.setModifiedBy(Username);
 			
@@ -1876,7 +1843,7 @@ public class CHSSController {
 			
 			CHSSMedicine medicine= new CHSSMedicine();
 			medicine.setCHSSMedicineId(Long.parseLong(medicineid));
-			medicine.setMedsRemAmount(Integer.parseInt(medicineremamount));
+			medicine.setMedsRemAmount(Double.parseDouble(medicineremamount));
 			medicine.setComments(medscomment);
 			medicine.setModifiedBy(Username);
 			
@@ -1916,7 +1883,7 @@ public class CHSSController {
 			
 			CHSSOther other= new CHSSOther();
 			other.setCHSSOtherId(Long.parseLong(otherid));
-			other.setOtherRemAmount(Integer.parseInt(otheridremamount));
+			other.setOtherRemAmount(Double.parseDouble(otheridremamount));
 			other.setComments(otherscomment);
 			other.setModifiedBy(Username);
 			long count = service.OtherRemAmountEdit(other);
@@ -1955,7 +1922,7 @@ public class CHSSController {
 			
 			CHSSMisc misc= new CHSSMisc();
 			misc.setChssMiscId(Long.parseLong(miscid));
-			misc.setMiscRemAmount(Integer.parseInt(miscremamount));
+			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
 			misc.setComments(miscomment);
 			misc.setModifiedBy(Username);
 			long count = service.MiscRemAmountEdit(misc);
@@ -1997,8 +1964,6 @@ public class CHSSController {
 				fromdate = sdf.format(rdf.parse(fromdate));
 				todate = sdf.format(rdf.parse(todate));				
 			}
-			
-		
 			
 			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType, fromdate, todate,"0");
 			req.setAttribute("chssclaimlist", claimslist);
@@ -2063,7 +2028,7 @@ public class CHSSController {
 			{
 				Map md=model.asMap();
 				contingentid=(String)md.get("contingentid");
-			}	
+			}
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
 			req.setAttribute("logintype", LoginType);
@@ -2258,6 +2223,7 @@ public class CHSSController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ApprovedBills.htm "+UserId, e); 
+			return "static/Error";
 		}
 		return "chss/CHSSApprovedBills";
 	}
@@ -2306,7 +2272,8 @@ public class CHSSController {
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
-			list = service.MedicinesHistory(chssapplyid);
+			String treattype = req.getParameter("treattype");
+			list = service.MedicinesHistory(chssapplyid,treattype);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside MedicinesHistoryAjax.htm "+Username, e);
@@ -2394,7 +2361,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OldConsultMedsListAjax.htm "+Username);
-		List<Object[]> list=new ArrayList<Object[]>();;
+		List<Object[]> list=new ArrayList<Object[]>();
 		try {
 			String consultmainid = req.getParameter("consultmainid");
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -2408,5 +2375,123 @@ public class CHSSController {
 	}
 	
 	
+	@RequestMapping(value = "MedsNameListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String MedsNameListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MedsNameListAjax.htm "+Username);
+		List<Object[]> list=new ArrayList<Object[]>();
+		try {
+			String medname = req.getParameter("medname");
+			
+			list = service.MedAdmissibleList(medname.trim(),"1");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside MedsNameListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(list);
+	}
+	
+	@RequestMapping(value = "CHSSEmpClaimRevoke.htm", method = RequestMethod.POST)
+	public String CHSSEmpClaimRevoke(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSEmpClaimRevoke.htm "+Username);
+		List<Object[]> list=new ArrayList<Object[]>();
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			long count =service.CHSSUserRevoke(chssapplyid, Username, EmpId);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Claim Revoked Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim Revoke Unsuccessful");	
+			}	
+			
+			return "redirect:/CHSSDashboard.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSEmpClaimRevoke.htm "+Username, e);
+			return "static/Error";			
+		}
+		
+	}
+	
+	
+	@RequestMapping(value = "ContingetBillPayReport.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingetBillPayReport(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ContingetBillPayReport.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			
+			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			return "chss/ContingetBillPayReport";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingetBillPayReport.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "ContingetBillPayReportDownload.htm")
+	public void ContingetBillPayReportDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside ContingetBillPayReportDownload.htm "+UserId);
+		
+		try {	
+			String contingentid = req.getParameter("contingentid");
+			
+			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String filename="CHSSConsolidatedBill";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+			
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/chss/ContingetBillPayReport.jsp").forward(req, customResponse);
+			String html1 = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        File f=new File(path +File.separator+ filename+".pdf");
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ContingetBillPayReportDownload.htm "+UserId, e); 
+		}
+
+	}
 	
 }

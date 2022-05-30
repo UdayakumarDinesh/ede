@@ -104,6 +104,8 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	
 	String LabLogo = (String)request.getAttribute("LabLogo");
+	
+	boolean showhistorybtn = chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13;
 %>
  
 	<div class="card-header page-top">
@@ -171,7 +173,7 @@ th,td
 							
 								<table style="border: 0px; width: 100%">
 									<tr>
-										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 100px; height: 100px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
+										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
 										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
 										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span> </td>
 									</tr>
@@ -194,15 +196,19 @@ th,td
 								<table>	
 									<tbody>
 										<tr>
-											<th class="center">SN</th>
-											<th>Patient Name</th>
-											<th>Relation</th>
+											<th>Patient Name</th>						
+											<th>Ailment</th>
+											<th>Treatment Type</th>
+											<th>Submitted On</th>
+											
 										</tr>
 										<tr>
-											<td class="center">1</td>
-											<td><%=chssapplydata[12] %></td>
-											<td><%=chssapplydata[14] %></td>
+											<td><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+											<td><%=chssapplydata[17] %></td>
+											<td><%=chssapplydata[10] %></td>
+											<td><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
 										</tr>
+										
 									</tbody>
 								</table>
 								<table style="margin-bottom: 0px;">	
@@ -223,10 +229,10 @@ th,td
 											<th class="center">Date</th>
 											<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 										</tr>
-										<% long billstotal=0;
+										<% double billstotal=0;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Long.parseLong(chssbillslist.get(i)[5].toString());
+												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 												%>
 											<tr>
 												<td class="center"><%=i+1 %></td>
@@ -246,7 +252,7 @@ th,td
 											<tr>
 												<td colspan="5" class="center" >Nil</td>
 											</tr>
-										<%} %>
+										<% } %>
 									</tbody>
 								</table>
 								
@@ -296,7 +302,7 @@ th,td
 										&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 										held liable, if anything is found to be incorrect later on.
 										<br>
-										&#8226; This bill is submitted on ................................. which is within 3 months of treatment / hospitalization.
+										&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 										<br>
 										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 										<br>
@@ -319,11 +325,11 @@ th,td
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
-													<th class="right" style="width: 5%;">Amount Claimed (&#8377;)</th>
+													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
 													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
-												<%long itemstotal=0, totalremamount=0; %>
+												<%double itemstotal=0, totalremamount=0; %>
 												<% int i=1;
 												for(Object[] consult :ConsultDataList)
 												{%>
@@ -331,7 +337,7 @@ th,td
 														<tr>
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation charges </b>
-																<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+																<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -373,7 +379,7 @@ th,td
 																<%=consult[10]%>
 															<%} %>
 														</td>
-														<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+														<%}else if(showhistorybtn){ %>
 															<td class="right">	
 																<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
 															</td>
@@ -391,8 +397,8 @@ th,td
 																											
 													</tr>					
 												<%	i++;
-													itemstotal += Integer.parseInt(consult[6].toString());
-													totalremamount +=Integer.parseInt(consult[7].toString());
+													itemstotal += Double.parseDouble(consult[6].toString());
+													totalremamount +=Double.parseDouble(consult[7].toString());
 												} %>
 													
 												
@@ -404,8 +410,8 @@ th,td
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;">
-															<b>Pathological/Investigations Test</b> 
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+															<b>Tests / Procedures</b> 
+															<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -444,7 +450,7 @@ th,td
 																<%=test[11]%>
 															<%} %>
 														</td>
-													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+													<%}else if(showhistorybtn){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														</td>
@@ -466,8 +472,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(test[4].toString());
-											totalremamount +=Integer.parseInt(test[7].toString());
+											itemstotal += Double.parseDouble(test[4].toString());
+											totalremamount +=Double.parseDouble(test[7].toString());
 											} %>
 												
 										</form>
@@ -480,7 +486,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+															<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -496,8 +502,8 @@ th,td
 													<tr>
 														<th>Bill No</th>
 														<th>Medicine Name</th>
-														<th style="width:10%;">Rx Qty.</th>
-														<th style="width:15%;">Pur Qty.</th>
+														<th style="width:10%;text-align: center;">Rx Qty.</th>
+														<th style="width:15%;text-align: center;">Pur Qty.</th>
 														<th></th>
 														<th></th>
 														<th></th>
@@ -505,9 +511,13 @@ th,td
 												<%} %>
 												<tr>
 													<td><%=medicine[7] %>&nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
-													<td><%=medicine[2] %></td>
-													<td><%=medicine[5] %></td>
-													<td><%=medicine[4] %></td> 
+													<td>	
+														<%=medicine[2] %>
+														<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
+														   <button type="button" class="btn btn-sm" style="float: right;background-color: #FFD24C" onclick="showsimilarmeds('<%=medicine[2]%>');" data-toggle="tooltip" data-placement="top" title="Similar Medicines List" ><i class="fa-solid fa-list-ul"></i></button></td> 
+														<%} %>
+													<td style="text-align: center;"><%=medicine[5] %></td>
+													<td style="text-align: center;" ><%=medicine[4] %></td> 
 													<td class="right"><%=medicine[3] %></td>
 												
 													
@@ -524,7 +534,7 @@ th,td
 															<%} %>
 															
 														</td>
-													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+													<%}else if(showhistorybtn){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
 														</td>
@@ -536,12 +546,10 @@ th,td
 															</button>
 														</td>
 													<%}%>
-													
-													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(medicine[3].toString());
-											totalremamount +=Integer.parseInt(medicine[6].toString());
+											itemstotal += Double.parseDouble(medicine[3].toString());
+											totalremamount +=Double.parseDouble(medicine[6].toString());
 											}%>
 											
 									</form>
@@ -554,7 +562,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Others</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+															<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -595,7 +603,7 @@ th,td
 																<%=other[8]%>
 															<%} %>
 														</td>
-													<%}else  if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+													<%}else  if(showhistorybtn){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														</td>
@@ -609,8 +617,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(other[3].toString());
-											totalremamount +=Integer.parseInt(other[5].toString());
+											itemstotal += Double.parseDouble(other[3].toString());
+											totalremamount +=Double.parseDouble(other[5].toString());
 											} %>
 												
 									</form>
@@ -624,7 +632,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Miscellaneous</b>
-															<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+															<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history" style="float: right;" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -639,7 +647,8 @@ th,td
 													</tr>
 													<tr>
 														<th>Bill No</th>
-														<th colspan="3">Item</th>
+														<th colspan="2">Item</th>
+														<th style="text-align: center;">Qty</th>
 														<th></th>
 														<th></th>
 														<th></th>
@@ -647,11 +656,11 @@ th,td
 												<%} %>
 												<tr>
 													<td><%=misc[5] %>&nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
-													<td colspan="3"><%=misc[2] %></td>
+													<td colspan="2"><%=misc[2] %></td>
+													<td style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 													<td class="right"><%=misc[3] %></td>
 													
-													
-													
+																										
 													<%if(chssstatusid==1 || chssstatusid==3 || chssstatusid==7){ %>
 														<td class="">
 														<td class="">
@@ -664,7 +673,7 @@ th,td
 																<%=misc[7]%>
 															<%} %>
 														</td>
-													<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13){ %>
+													<%}else if(showhistorybtn){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
@@ -680,18 +689,18 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Integer.parseInt(misc[3].toString());
-											totalremamount +=Integer.parseInt(misc[4].toString());
+											itemstotal += Double.parseDouble(misc[3].toString());
+											totalremamount +=Double.parseDouble(misc[4].toString());
 											}%>
 										
 										<tr>
 											<td colspan="3"></td>
-											<td class="right"><b>Total</b></td>
-											<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(itemstotal)) %></td>
+											<td class="right"><b>Rounded Total</b></td>
+											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
 											<td class="right">
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>	 
-											&#8377; <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 ||chssstatusid==14 || chssstatusid==6  ){ %>	 
+											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
 											<%} %>
 											</td>
 											<td ></td>
@@ -701,7 +710,7 @@ th,td
 								
 									
 										<tr>
-											<td colspan="7">(In words Rupees <%=awc.convert1(itemstotal) %> Only)</td>
+											<td colspan="7">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -710,9 +719,9 @@ th,td
 										
 										<tr>
 											<td colspan="7">Admitted to Rs.
-											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9){ %>
-											 <%=nfc.rupeeFormat(String.valueOf(totalremamount)) %> (Rupees  <%=awc.convert1(totalremamount) %> Only)</td>
-											 <%} %>
+											<%if(chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==14 || chssstatusid==6  ){ %>
+											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
+											<%} %>
 										</tr>
 										
 										<tr>
@@ -738,10 +747,10 @@ th,td
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
-							<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return CheckClaimAmount(<%=chssapplydata[0]%>);" >
+									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
 										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 									</button>
-									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="CHSSConsultMainData.htm">
+									<button type="Submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" >
 										Edit
 									</button>
 									<input type="hidden" name="claimaction" value="F" >
@@ -756,6 +765,40 @@ th,td
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+						
+								
+							
+							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog  modal-dialog-centered" >
+									<div class="modal-content" >
+										<div class="modal-header">
+											
+											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+										    </button>
+										</div>
+										<div class="modal-body" >
+									          <div class="row">
+											    <div class="col-12">
+											    	<b>No of Enclosures : </b><br>
+													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
+												</div>
+												
+												 <div class="col-12 w-100" align="center">
+												 <br>
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">													Save
+												</button>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>	
+							</div>
+							
+						
+						
 						
 					</form>
 
@@ -940,6 +983,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
+				treattype : <%=chssapplydata[7]%>
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -1077,8 +1121,9 @@ function ShowHistory(itemid)
 				$TblStr+=	'<thead><tr>';
 				$TblStr+=		'<th>Claim No</th>';
 				$TblStr+=		'<th>Miscellaneous Item</th>';
-				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
-				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:center";>Qty</th>';
+				$TblStr+=		'<th style="text-align:right;width: 15%;">Claimed (&#8377;)</th>';
+				$TblStr+=		'<th style="text-align:right;width: 15%;">Admitted (&#8377;)</th>';
 				$TblStr+=	'</tr></thead>';
 				$TblStr+=	'<tbody>';
 				
@@ -1086,6 +1131,7 @@ function ShowHistory(itemid)
 				{
 					$TblStr+=	'<tr>';
 					$TblStr+=		'<td style="width:15%;">'+$mischistorylist[m][1]+'</td>';
+					$TblStr+=		'<td style="text-align:center"; >'+$mischistorylist[m][6]+'</td>';
 					$TblStr+=		'<td>'+$mischistorylist[m][3]+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$mischistorylist[m][4]+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$mischistorylist[m][5]+'</td>';
@@ -1111,21 +1157,6 @@ function ShowHistory(itemid)
 		
 	}
 		
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 
@@ -1216,6 +1247,73 @@ function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
 }
+
+
+
+function showsimilarmeds($medname)
+{
+	$('#m-header').html('Medicine List');
+	$.ajax({
+
+		type : "GET",
+		url : "MedsNameListAjax.htm",
+		data : {
+				
+			medname : $medname,
+		},
+		datatype : 'json',
+		success : function(result) {
+			var result = JSON.parse(result);
+			var $medslist = Object.keys(result).map(function(e){
+				return result[e]
+			})	
+			var $TblStr = '';
+
+			$TblStr+=	'<thead><tr>';
+			$TblStr+=		'<th>SN</th>';
+			$TblStr+=		'<th>Medicine No</th>';
+			$TblStr+=		'<th>Medicine Name</th>';
+			$TblStr+=		'<th>Admissible</th>';
+			$TblStr+=	'</tr></thead>';
+			$TblStr+=	'<tbody>';
+			
+			for(var med=0;med< $medslist.length;med++)
+			{
+				$TblStr+=	'<tr>';
+				$TblStr+=		'<td style="width:15%;">'+(med+1)+'</td>';
+				$TblStr+=		'<td  style="width:10%;" >'+$medslist[med][1]+'</td>';
+				$TblStr+=		'<td>'+$medslist[med][4]+'</td>';
+				if($medslist[med][5]==='N'){
+					$TblStr+=		'<td style="color:red" ><b>InAdmissible</b></td>';
+				}else{
+					$TblStr+=		'<td style="color:green" ><b>Admissible</b></td>';
+				}	
+				$TblStr+=	'</tr>';
+			}
+			
+			
+			$TblStr+=	'</tbody>';
+			$("#modal-history-table").DataTable().clear().destroy();
+			$('#modal-history-table').html($TblStr);
+			$("#modal-history-table").DataTable({
+		        "lengthMenu": [10, 25, 50, 75, 100],
+		        "pagingType": "simple",
+		        "language": {
+				      "emptyTable": "No Record Found"
+				    }
+
+		    });
+			$('.my-history-modal').modal('toggle');
+		}
+	});
+	
+	
+	
+	
+}
+
+
+
 </script>
 
 </body>

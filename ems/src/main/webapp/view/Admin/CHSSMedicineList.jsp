@@ -87,7 +87,7 @@ String treat = (String)request.getAttribute("treat");
 						
 						<div class="table-responsive">
 						
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 				   			
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
 										<th>Select</th>
@@ -142,13 +142,6 @@ String treat = (String)request.getAttribute("treat");
 	        	return true;
 	        }
 	        
-	        
-	        $("#myTable1").DataTable({
-	            "lengthMenu": [ 10, 25, 50, 100, 200,500],
-	            "pagingType": "simple",
-	            "pageLength": 100
-
-	        });
 	        </script>
 </body>
 </html>

@@ -147,7 +147,7 @@ th,td
 						<div align="center">
 						
 						<div style="text-align: left;margin: 5px 5px 5px 10px;">
-							<img style="width: 100px; height: 100px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
+							<img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
 							<div style="padding-left: 5px;">
 								<br><br>
 								<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;vertical-align: bottom;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
@@ -192,10 +192,17 @@ th,td
 									
 										<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 									<%} %>
-									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[14] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;">
+									<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
+										<%=obj[12] %> (<%=obj[14] %>)
+									<%}else{ %>
+										<%=obj[14] %>
+									<%} %>
+									
+									</td>
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[27] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=obj[28] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
+									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString())) %></td>
 									<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
 									<td >
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
@@ -209,8 +216,8 @@ th,td
 									<%} %>							
 								</tr>
 							<%	k++;
-								claimamt += Integer.parseInt(obj[27].toString());
-								allowedamt +=Integer.parseInt(obj[28].toString());
+								claimamt += Math.round(Double.parseDouble(obj[27].toString()));
+								allowedamt +=Math.round(Double.parseDouble(obj[28].toString()));
 								billscount += Integer.parseInt(obj[22].toString());
 								} 
 							}%>

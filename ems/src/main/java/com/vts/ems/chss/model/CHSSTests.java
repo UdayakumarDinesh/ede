@@ -21,8 +21,8 @@ public class CHSSTests implements Serializable {
 	private Long BillId;
 	private Long TestMainId;
 	private Long TestSubId;
-	private Integer TestCost;
-	private Integer TestRemAmount;
+	private double TestCost;
+	private double TestRemAmount;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

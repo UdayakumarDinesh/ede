@@ -152,132 +152,47 @@ th,td
 	
 	<table>
 		<tr>
-			<th style="text-align: center;" >SN</th>
-			<th style="text-align: center;width: 10%;">Emp. No.</th>
-			<th style="text-align: center;">Name</th>
-			<th style="text-align: center;">Relation</th>
-			<th style="text-align: center;">Claim No</th>
-			<th style="text-align: center;width: 10%;">No of Bills</th>
-			<th class="right" style="width: 12%;">Amount Claimed (&#8377;)</th>
-			<th class="right" style="width: 12%;">Amount Allowed (&#8377;)</th>
+			<th style="text-align: center;width: 10%" >SN</th>
+			<th style="text-align: center;width: 15%;">Emp. No.</th>
+			<th style="text-align: center;width: 55%;">Name</th>
+			<th class="right" style="width: 20%;">Bank Transfer (&#8377;)</th>
 		</tr>
 		
-		<%long allowedamt=0,claimamt=0,billscount=0;
+		<%long allowedamt=0;
 		int i=0;
 		for (Map.Entry mapEle : ContingentList.entrySet()) 
-		{
+		{ 
+			i++;
 			int k=0;
-			ArrayList<Object[]> arrlist = (ArrayList<Object[]>)mapEle.getValue();
-          	for(Object[] obj :arrlist )
-          	{
-				i++; %>
+			ArrayList<Object[]> arrlist = (ArrayList<Object[]>)mapEle.getValue();%>
 			<tr>
+				<td style="text-align: center;" ><%=i %></td>
+				<td style="text-align: center;width: 15%;"><%=arrlist.get(0)[21] %></td>
+				<td style="width: 55%;"><%=arrlist.get(0)[19] %></td>
 				
-				<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%=i %></td>
-				<%if(k==0){ %>
-					<td rowspan="<%=arrlist.size() %>" style="padding-top:5px; padding-bottom: 5px;"><%=obj[21] %></td>
-				
-					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
-				<%} %>
-				<td style="padding-top:5px; padding-bottom: 5px;">
-					<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
-						<%=obj[12] %> (<%=obj[14] %>)
-					<%}else{ %>
-						<%=obj[14] %>
-					<%} %>
-				</td>
-				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString()))  %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString()))  %></td>
-											
+				<% long empallowedamount = 0;
+		          	for(Object[] obj :arrlist )
+			        {
+		          		empallowedamount += Math.round( Double.parseDouble(obj[28].toString()));
+			        } 
+		          	allowedamt +=empallowedamount;
+			    %>
+				<td class="right" style="width: 20%;"><%=nfc.rupeeFormat(String.valueOf( empallowedamount)) %></td>
 			</tr>
-		<%	k++;
-			claimamt += Math.round(Double.parseDouble(obj[27].toString()));
-			allowedamt +=Math.round(Double.parseDouble(obj[28].toString())) ;
-			billscount += Integer.parseInt(obj[22].toString());
-			} 
-		}%>
+		<%}%>
 	
 			<tr>
-				<td colspan="5" class="right"><b>Total</b></td>
-				<td class="center"><%=billscount %></td>
-				<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
-				<td class="right">
-					
-					&#8377; <%=nfc.rupeeFormat(String.valueOf(allowedamt)) %>
-												
-				</td>	
+				<td colspan="3" class="right"><b>Total</b></td>
+				<td class="right"><b><%=nfc.rupeeFormat(String.valueOf(allowedamt)) %></b></td>
+				
+			</tr>
+			<tr>
+				<td colspan="4">In words Rupees <%=awc.convert1(allowedamt) %> Only</td>
 			</tr>
 	</table>
-	<div style="text-align: left;margin: 5px 5px 5px 10px;">
-		<p>
-			<%=contingentdata[8] %>
-		</p>
+	
 	</div>
-	</div>
-		<div style="position: relative;margin-bottom: 0;page-break-inside: avoid !important;  page-break-before: auto !important;">
-			<table style="width: 100%;margin: 60px 5px 5px 10px;">
-				<tr>
-					<td style="border: 0px;">
-						<%for(Object[] auth : ApprovalAuth)
-						{
-							if(auth[3].toString().equalsIgnoreCase("K")){
-						%>
-								<%=auth[1] %><br>
-								<%=auth[2] %>
-							
-						<% }} %>
-					</td>
-					<td style="border: 0px;text-align: right;" >
-		
-						<%for(Object[] auth : ApprovalAuth)
-						{
-							if(auth[3].toString().equalsIgnoreCase("V")){
-						%>
-								<%=auth[1] %><br>
-								<%=auth[2] %>
-							
-						<% }} %>
-			
-					</td>
-				</tr>
-			</table>
-		
-		<table style="width: 100%;margin: 60px 5px 5px 10px;">
-			<tr>
-				<td style="border: 0px;">
-				<%for(Object[] auth : ApprovalAuth)
-				{
-					if(auth[3].toString().equalsIgnoreCase("W")){
-				%>
-						<%=auth[1] %><br>
-						<%=auth[2] %>
-					
-				<% }} %>
-				</td>
-			</tr>
-		</table>
-		
-		
-		<div align="center">
-		<br><br>	<span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
-				<span><b>
-					<%for(Object[] auth : ApprovalAuth)
-					{
-						if(auth[3].toString().equalsIgnoreCase("Z")){
-					%>
-							<%=auth[1] %><br>
-							CEO
-						
-					<% }} %></b>
-				</span>
-			
-			
-		</div>
-		
-	</div>
-
+	
 
 </body>
 

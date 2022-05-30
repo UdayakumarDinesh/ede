@@ -20,10 +20,10 @@ public class CHSSMedicine implements Serializable {
 	private Long CHSSMedicineId;
 	private Long BillId;
 	private String MedicineName;
-	private Integer MedicineCost;
 	private Integer PresQuantity;
 	private Integer MedQuantity;
-	private Integer MedsRemAmount;
+	private double MedicineCost;
+	private double MedsRemAmount;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

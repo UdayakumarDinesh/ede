@@ -238,6 +238,22 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String EMPHANDOVERLOGINTYPELIST="SELECT  l.logintype,  lt.LoginDesc FROM  login l,  login_type lt WHERE   l.isactive=1 AND l.LoginType=lt.LoginType AND l.empid=:empid UNION SELECT l.logintype,  lt.LoginDesc FROM  leave_ra_sa_handingover ho,  login l,  login_type lt WHERE ho.is_active = 1  AND l.isactive = 1  AND l.logintype=lt.LoginType  AND ho.from_empid = l.empid  AND ho.status = 'A'  AND (CURDATE() BETWEEN ho.from_date AND ho.to_date) AND ho.to_empid = :empid ";
 	
+	@Override
+	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO EmpHandOverLoginTypeList");	
+		try {
+			Query query = manager.createNativeQuery(EMPHANDOVERLOGINTYPELIST);
+			
+			query.setParameter("empid", empid);
+			return (List<Object[]>)query.getResultList();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO EmpHandOverLoginTypeList "+ e);
+			return null;
+		}
+	}
 	
 }

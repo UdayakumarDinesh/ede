@@ -40,7 +40,7 @@ public interface CHSSDao {
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception;
 	public long CHSSApplyEdit(CHSSApply apply) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList() throws Exception;
 	public long ConsultationBillAdd(CHSSConsultation consult) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
 	public CHSSConsultation getCHSSConsultation(String consultationid) throws Exception;
@@ -96,7 +96,7 @@ public interface CHSSDao {
 	public long NotificationAdd(EMSNotification notification) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
-	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception;
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
@@ -110,6 +110,9 @@ public interface CHSSDao {
 	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
-	public Object[] MedAdmissibleCheck(String medicinename) throws Exception;
+	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
+	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubListWithAyur() throws Exception;
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 
 }

@@ -211,7 +211,12 @@
 } 
  
 
+.apply-bn
+{
+	padding: 2px;
+	margin-top: 5px;
 
+}
 
 
 </style>
@@ -237,6 +242,13 @@
 	if(request.getAttribute("patientidvalue")!=null){
 		patientidvalue=(String)request.getAttribute("patientidvalue");
 	}
+	
+	String IsSelf = "Y";
+	if(request.getAttribute("IsSelf")!=null){
+		IsSelf=(String)request.getAttribute("IsSelf");
+	}
+	
+	
 	String profilepicpath = (String) request.getAttribute("profilepicpath"); 
 	
 	DecimalFormat df = new DecimalFormat("0.00");
@@ -358,7 +370,12 @@
 
 	<div class="row" >
 		<div class="col-md-2">
+		<%if(!IsSelf.equalsIgnoreCase("Y") ){ %>
 			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>','<%=employee.getEmpName() %>')" > 
+			<%}else{ %>
+			<div class="main" > 
+			<%} %>
+			 
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -374,7 +391,14 @@
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=employee.getEmpName() %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
 						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
-						<%-- <p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> --%> 
+						<%-- <p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> --%>
+						
+						<%if(IsSelf.equalsIgnoreCase("Y")){ %>
+						<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
+							
+							&nbsp;&nbsp;Apply&nbsp;
+						</button>
+						<%} %>
 					</div>
 				</div>	
 			</div>
@@ -383,7 +407,11 @@
 		
 		<%for(Object[] obj : empfamilylist){ %>
 		<div class="col-md-2">
+			<%if(!(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString()))){ %>
 			<div class="main" onclick="submitform('N','<%=obj[0]%>','<%=obj[1] %>')" > 
+			<%}else{ %>
+			<div class="main" > 
+			<%} %>
 				<div class="a-box">
 					<div class="img-container">
 						<div class="img-inner">
@@ -399,7 +427,16 @@
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(obj[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;" >(<%=obj[7] %>)</span></h3>
 						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
-						<%-- <p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> --%> 
+						<%-- <p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> --%>
+						
+						
+						<%if(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString())){ %>
+							<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
+								
+								&nbsp;&nbsp;Apply&nbsp;
+							</button>
+						<%} %>
+						 
 					</div>
 				</div>	
 			</div>
@@ -410,10 +447,10 @@
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
-		<div class="col-md-3">
+		<%-- <div class="col-md-3">
 			<button type="button" class="btn btn-sm misc2-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i> &nbsp;&nbsp;APPLY&nbsp;</button>
-			
-		</div>
+		</div>  --%>
+		<div class="col-md-3"></div>
 		<div class="col-md-5 d-flex justify-content-center">
 			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
 		</div>
@@ -424,7 +461,7 @@
 	
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
-					 	 <%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
+		<%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
 					
 		<%-- <form class="form-inline my-2 my-lg-0">
 	    	<select class="form-control select2" id="empname" required="required" name="empname"  onchange="changeform()" >
@@ -474,8 +511,9 @@
 											-
 										<%} %>
 									</td>
-									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click"> <a class="font" href="Chss-Status-details.htm?chssapplyid=<%=obj[0]%>" target="_blank"  title="Click for Details."
-									 
+									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
+									 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
+									 data-toggle="tooltip" data-placement="top" title="Transaction History"
 										<%if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) ){%>  
 										    style=" color:#2155CD; font-weight: 600;"				
 											<%}else if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString()) || "11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>
@@ -487,9 +525,9 @@
 											<%}else{ %>
 											 style=" color:#4700D8; font-weight: 600;"
 											<%} %>
-									>
+									>  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 									
-									<%=obj[18] %> </a></td>
+									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
@@ -504,6 +542,13 @@
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
+										
+										<%if(Integer.parseInt(obj[9].toString())==2 && obj[26].toString().equalsIgnoreCase("0")){ %>
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
+											<i class="fa-solid fa-backward" style="color: #333C83"></i>
+										</button>
+										<%} %>
+										
 										<input type="hidden" name="isapproval" value="N">							
 									</td>
 								</tr>
@@ -539,11 +584,8 @@
 
 function applyform(){
 
-	if(<%=employee.getEmpId()%>==<%=patientidvalue%>){
-		$('#isself').val('Y')		
-	}else{
-		$('#isself').val('N')		
-	}
+	
+	$('#isself').val('<%=IsSelf%>')		
 	$('#patientid').val(<%=patientidvalue%>)
 	$('#myform').submit(); 
 	
@@ -619,6 +661,17 @@ $(document).ready(function(){
     }); 
 
 });
+
+$("#myTable1").DataTable({
+    "lengthMenu": [ 50, 75, 100],
+    "pagingType": "simple",
+    "language": {
+	      "emptyTable": "No Record Found"
+	    }
+
+});
+
+
 </script>
 </body>
 </html>

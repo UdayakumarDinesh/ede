@@ -22,7 +22,7 @@
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	long itemstotal=0,totalremamount=0;
+	double itemstotal=0,totalremamount=0;
 
 %>
  
@@ -76,8 +76,8 @@
 							</div>		
 								
 							<div class="col-md-2">			
-										 <input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"> 
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								
 							</div>
 							
@@ -87,9 +87,12 @@
 							
 							<div class="col-md-2">	
 	
-									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"> 
+									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"  > 
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />	
 						
+							</div>
+							<div class="col-md-1">	
+								<button type="submit" class="btn btn-sm submit-btn" name="submit" value="submit">submit</button>
 							</div>
 							
 						</div>
@@ -100,8 +103,6 @@
 				</div>
 			
 				<div class="card-body " >
-					
-						 
 											
 					<form action="CHSSContingentGenerate.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -146,8 +147,8 @@
 											</td>
 										</tr>
 									<%
-									itemstotal += Integer.parseInt(obj[25].toString());
-									totalremamount +=Integer.parseInt(obj[26].toString());
+									itemstotal += Double.parseDouble(obj[25].toString());
+									totalremamount +=Double.parseDouble(obj[26].toString());
 									} %>
 									
 									<%if(chssclaimlist.size()>0){ %>

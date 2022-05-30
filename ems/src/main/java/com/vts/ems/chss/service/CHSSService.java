@@ -45,7 +45,7 @@ public interface CHSSService
 	public long CHSSBillEdit(CHSSBill bill) throws Exception;
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception;
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception;
-	public List<CHSSTestSub> CHSSTestSubList(String testmainid) throws Exception;
+	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception;
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception;
 	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception;
 	public List<CHSSConsultation> CHSSConsultationList(String billid) throws Exception;
@@ -54,7 +54,7 @@ public interface CHSSService
 	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception;
 	public List<CHSSMedicine> CHSSMedicineList(String billid) throws Exception;
 	public long MedicineBillDelete(String medicineid, String modifiedby) throws Exception;
-	public long MedicineBillEdit(CHSSMedicine modal) throws Exception;
+	public long MedicineBillEdit(CHSSMedicine modal, String chssapplyid) throws Exception;
 	public long TestsBillAdd(CHSSTestsDto dto) throws Exception;
 	public List<CHSSTests> CHSSTestsList(String billid) throws Exception;
 	public long MiscBillAdd(CHSSMiscDto dto) throws Exception;
@@ -65,7 +65,7 @@ public interface CHSSService
 	public List<CHSSOtherItems> OtherItemsList() throws Exception;
 	public List<CHSSOther> CHSSOtherList(String billid) throws Exception;
 	public long OtherBillAdd(CHSSOtherDto dto) throws Exception;
-	public long OtherBillEdit(CHSSOther modal) throws Exception;
+	public long OtherBillEdit(CHSSOther modal,String  Empid) throws Exception;
 	public long OtherBillDelete(String chssotherid, String modifiedby) throws Exception;
 	public long TestBillEdit(CHSSTests modal) throws Exception;
 	public long TestBillDelete(String chsstestid, String modifiedby) throws Exception;
@@ -99,7 +99,7 @@ public interface CHSSService
 	public List<Object[]> CHSSApprovalAuthList() throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
-	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
+	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception;
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception;
@@ -111,6 +111,10 @@ public interface CHSSService
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
+	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
+	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
+	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
+	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
 
 	
 }

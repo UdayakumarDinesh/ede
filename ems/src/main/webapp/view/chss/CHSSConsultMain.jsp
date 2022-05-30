@@ -58,6 +58,23 @@ p {
 	text-justify: inter-word;
 }
 
+table.roundedCorners { 
+  border-radius: 8px; 
+  border-spacing: 0;
+  }
+table.roundedCorners tr:last-child > td {
+  border-bottom: none;
+}
+
+
+table th:first-child{
+  border-radius:8px 0 0 0;
+}
+
+table th:last-child{
+  border-radius:0 8px 0 0;
+}
+
 </style>
 </head>
 <body>
@@ -213,14 +230,14 @@ p {
 									<div style="text-align: center;margin: 3px;width: 99%">
 										<b style="color: #F32424">Consultations in this claim</b>
 									</div>
-									<table class="table table-bordered table-hover table-condensed info shadow-nohover ">
+									<table class="table table-bordered table-hover table-condensed info shadow-nohover roundedCorners ">
 										
-										<thead>
+										<thead style="border-radius: 13px">
 											<tr>
 												<th style="width:5%;" >SN</th>
 												<th style="width:30%;" >Doctor Name</th>
 												<th style="width:20%;" > Date </th>
-												<th style="width:25%;" >Qualification  </th>
+												<th style="width:25%;" >Qualifications  </th>
 												<th style="width:20%;" >Action  </th>
 											</tr>
 										</thead>
@@ -335,7 +352,7 @@ p {
 									<div  style="text-align: center;margin: 3px;width: 99%">
 										<b style="color: #F32424">Add From Previous Consultations</b>
 									</div>
-									<table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
+									<table class="table table-bordered table-hover table-condensed  info shadow-nohover roundedCorners" >
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
@@ -395,19 +412,18 @@ p {
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="button" class="btn btn-sm view-icon" name="chssapplyid" value="<%=chssapplydata[0] %>" onclick="$('#previewform').submit();" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Preview">
-										<i class="fa-solid fa-eye"></i>
-									</button>
-									<button type="button" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal">
+									
+									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward"  >
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
+									</button>
+									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
+										<i class="fa-solid fa-eye"></i>
 									</button>
 									
 								</div>
 							</div>
 							
-							
-							
-							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+							<%-- <div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog  modal-dialog-centered" >
 									<div class="modal-content" >
 										<div class="modal-header">
@@ -435,7 +451,7 @@ p {
 									</div>
 								</div>	
 							</div>
-							
+							 --%>
 							
 							<input type="hidden" name="claimaction" value="F">
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -455,24 +471,10 @@ p {
 		</div>
 	
 	 </div>
-	 
-
 <script type="text/javascript">
 
 
-$(document).ready( function() {
-	onlyNumbers();
-	
-	<%if(consultmainlist.size()>0){%>
-		$('#treatmenttype').prop('disabled', true);
-	<%}%> 
-
-
-});   
-
-
-
-
+/* 
 function CheckClaimAmount($chssapplyid)
 {
 	$.ajax({
@@ -509,7 +511,66 @@ function CheckClaimAmount($chssapplyid)
 	
 }
 
+ */
 
+
+
+</script>
+	 
+
+<script type="text/javascript">
+
+
+$(document).ready( function() {
+	onlyNumbers();
+	
+	<%if(consultmainlist.size()>0){%>
+		$('#treatmenttype').prop('disabled', true);
+	<%}%> 
+
+
+});   
+
+
+
+
+/* function CheckClaimAmount($chssapplyid)
+{
+	$.ajax({
+
+		type : "GET",
+		url : "CHSSClaimFwdApproveAjax.htm",
+		data : {
+				
+			chssapplyid : $chssapplyid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+						
+			if(result===1){
+				
+						if(Number($('#enclosurecount').val())<1){
+							alert('Total No. of Enclosures should not be zero !');
+						}else{
+							
+							$('#form2').submit();
+						}	
+						
+			}else if(result===-1){
+				alert('Please Add Atleast one Consultation details.');
+				return false;	
+			}else if(result===0){
+				alert('Total claim amount should not be zero !');
+				return false;	
+			}
+		
+		}
+	});
+	
+}
+
+ */
 var threeMonthsAgo = moment().subtract(3, 'months');
 
 function  onlyNumbers() {    

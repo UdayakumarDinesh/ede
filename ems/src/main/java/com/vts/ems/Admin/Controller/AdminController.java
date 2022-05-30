@@ -91,6 +91,27 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 			
 		}
+		
+		@RequestMapping(value = "LeaveDashBoard.htm", method = RequestMethod.GET)
+		public String LeaveDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside LeaveDashboard.htm "+Username);		
+			try {
+				
+				String logintype = (String)ses.getAttribute("LoginType");
+				
+			
+				List<Object[]> admindashboard = service.HeaderSchedulesList("5" ,logintype); 
+			
+				req.setAttribute("dashboard", admindashboard);
+				return "leave/LeaveDashboard";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside LeaveDashboard.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
 		@RequestMapping(value = "HeaderModuleList.htm" , method = RequestMethod.GET)
 		public @ResponseBody String HeaderModuleList(HttpServletRequest request ,HttpSession ses) throws Exception {
 			
@@ -155,7 +176,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		       }catch(Exception e){
 		    	   e.printStackTrace();
 		       }
-				return "Admin/CHSSTextSub";
+				return "Admin/CHSSTestSub";
 		     }
 		    
 		    @RequestMapping(value="ChssTestSub.htm" , method=RequestMethod.POST)
