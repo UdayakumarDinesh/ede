@@ -53,10 +53,9 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
 									
-									
 										<tr>
 											<th><label>Main <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2" name="Main" id="Main" data-container="body" data-live-search="true" required="required" style="font-size: 5px;">
+											<td><select class="form-control select2" name="Main" id="Main" data-container="body" data-live-search="true"  style="font-size: 5px;" required>
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 												<%if(main!=null&&main.size()>0){for(Object[] O:main){ %>
 												<option value="<%=O[0]%>" <%if(list!=null){if(list.getTestMainId()==Long.parseLong(O[0].toString())){%> selected <%}}%>> <%=O[1]%></option>
@@ -67,7 +66,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 											<th><label>Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Name" type="text" name="Name" value="<%if(list!=null){ %><%=list.getTestName()%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px;"
+												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize;"
 												id="Name" ></td>
 										</tr>
 										
@@ -141,6 +140,9 @@ function setInputFilter(obj, inputFilter) {
 function checkDuplicate()
 {
 	var $name = $("#Name").val();	
+	var $mainid =$("#Main").val();
+	var $rate = $("#RateValue").val();
+	var $code = $("#TestCode").val();
 	
 	var retValue = false;
 		$.ajax({
@@ -160,8 +162,17 @@ function checkDuplicate()
 				}else if(confirm("Are you sure to Submit!")){
 					var $testname = $("#Name").val();
 					
-					if($testname=="null" || $testname==null ||  $testname=="" || $testname==" "){
-						alert("Enter Data Properly!");
+					if ($mainid =="null" ||  $mainid==null|| $mainid == "" || $mainid == " " ) {
+						alert("Select Test Main !");
+						retValue = false;
+					}else if($testname=="null" || $testname==null ||  $testname== "" || $testname== " " ){
+						alert("Enter Test Name !");
+						retValue = false;
+					}else  if ($code=="null" || $code==null || $code == "" || $code == " "){ 
+						alert("Enter Code !");
+						retValue = false;
+					}else if ($rate=="null" || $rate==null || $rate == "" || $rate == " " ) {
+						alert("Enter Rate !");
 						retValue = false;
 					}else{
 						retValue = true;
@@ -185,6 +196,10 @@ function checkDuplicate()
 function checkDuplicate1()
 {
 	var $name = $("#Name").val();	
+	var $mainid = $("#Main").val();
+	var $rate = $("#RateValue").val();
+	var $code = $("#TestCode").val();
+	
 	var retValue = false;
 		$.ajax({
 			type : "GET",
@@ -203,8 +218,17 @@ function checkDuplicate1()
 				}else if(confirm("Are you sure to Submit!")){
 					var $testname = $("#Name").val();
 					
-					if($testname=="null" || $testname==null ||  $testname=="" || $testname==" "){
-						alert("Enter Data Properly!");
+					if ($mainid =="null" ||  $mainid==null|| $mainid == "" || $mainid == " " ) {
+						alert("Select Test Main !");
+						retValue = false;
+					}else if($testname=="null" || $testname==null ||  $testname== "" || $testname== " " ){
+						alert("Enter Test Name !");
+						retValue = false;
+					}else  if ($code=="null" || $code==null || $code == "" || $code == " "){ 
+						alert("Enter Code !");
+						retValue = false;
+					}else if ($rate=="null" || $rate==null || $rate == "" || $rate == " " ) {
+						alert("Enter Rate !");
 						retValue = false;
 					}else{
 						retValue = true;

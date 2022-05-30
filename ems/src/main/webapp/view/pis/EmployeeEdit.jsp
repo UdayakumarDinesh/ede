@@ -123,7 +123,8 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			            <div class="col-md-4">
 			                <label>Name<span class="mandatory">*</span></label>
-			                <input name="empname" required="required" id="empname" style="text-transform:uppercase" value="<%=employee.getEmpName() %>" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onkeyup="return trim(this)" />
+			                <input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm" value="<%=employee.getEmpName() %>"  maxlength="100"  placeholder="Enter Employee name"   onclick="return trim(this)" onchange="return trim(this)">
+			                <%-- <input name="empname" required="required" id="empname" style="text-transform:uppercase" value="<%=employee.getEmpName() %>" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onkeyup="return trim(this)" /> --%>
 			            </div>			
 			            <div class="col-md-2">			
 			                <label>Designation<span class="mandatory">*</span></label>
@@ -357,7 +358,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <label class="text-nowrap  ">Cadre Name<span class="mandatory">*</span></label>
 			                <select name="caderid" id="CadreId" class="form-control select2">
 								<%for( PisCadre cadre: piscaderlist){ %>
-									<option value="<%=cadre.getCadreId()%>"  <%if(employee.getCadreId()!=0 && employee.getCadreId()==cadre.getCadreId()){ %>selected  <%} %>   ><%=cadre.getCadre()%></option>
+									<option value="<%=cadre.getCadreId()%>"  <%if( employee.getCadreId()!=0 && employee.getCadreId()==cadre.getCadreId()){ %>selected  <%} %>   ><%=cadre.getCadre()%></option>
 								<%} %>
 			                </select>
 			            </div>

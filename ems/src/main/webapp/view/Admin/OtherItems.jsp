@@ -121,7 +121,7 @@
         	<div class="form-inline">
         	<div class="form-group w-100">
                <label>Item Name : &nbsp;&nbsp;&nbsp;</label> 
-               <input type="text" class=" form-control w-100" maxlength="100"  id="ItemName"  name="ItemName" required="required" > 
+               <input type="text" class=" form-control w-100" maxlength="100" style="text-transform:capitalize;"  id="ItemName"  name="ItemName" required="required" > 
       		</div>
       		</div>
         </div>

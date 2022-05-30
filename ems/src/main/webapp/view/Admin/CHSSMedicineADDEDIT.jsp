@@ -66,7 +66,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 											<th><label>Medicine Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Medicine Name" type="text" id="MedicineName" name="MedicineName" value="<%if(list!=null){ %><%=list.getMedicineName()%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px;"
+												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
 												></td>
 										</tr>
 									

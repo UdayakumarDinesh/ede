@@ -1,4 +1,5 @@
 <%@page import="java.util.List"%>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -94,8 +95,8 @@
 										<th>EmpNo</th>
 										<th>Name</th>
 										<th>Designation</th>
-										<th>Division</th>
-										<th>Group</th>
+										<th>DOB</th>
+									
 										<!-- <th>Action</th> -->
 									</tr>
 								</thead>
@@ -108,9 +109,9 @@
 											<td><%= slno%>.</td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
-											<td><%=obj[8] %></td>
-											<td><%=obj[5] %></td>
-											<td><%=obj[6] %></td>
+											<td><%=obj[4] %></td>
+											<td><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%><%} %></td>
+				
 											<%-- <td>
 												<button type="submit" name="empid" value="<%=obj[0] %>"  class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="View Employee Details" > 
 													<i class="  fa-solid fa-eye"></i>

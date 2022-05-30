@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,7 +200,7 @@ public class PisController {
 			
 			
 			Employee emp= new Employee();
-			emp.setEmpName(empname.trim());
+			emp.setEmpName(WordUtils.capitalizeFully(empname.trim()));
 			emp.setDesignationId(Integer.parseInt(Designationid));
 			emp.setTitle(salutation);
 		
@@ -364,7 +366,7 @@ public class PisController {
 			String EmpId = req.getParameter("EmpId");
 			String phno = req.getParameter("PhoneNo");
 			Employee emp = new Employee();
-			emp.setEmpName(empname.trim());
+			emp.setEmpName(WordUtils.capitalizeFully(empname.trim()));
 			emp.setDesignationId(Integer.parseInt(Designationid));
 			emp.setTitle(salutation);
 			
@@ -679,7 +681,7 @@ public class PisController {
 			req.setAttribute("Empdata", service.GetEmpData(empid));
 			req.setAttribute("FamilyRelation", service.getFamilyRelation());
 			req.setAttribute("FamilyStatus", service.getFamilyStatus());
-			
+	
 			return "masters/FamilyMemberAdd";
 		} else if ("EDIT".equalsIgnoreCase(Action)) {
 			String familyid = (String) req.getParameter("familyid");
@@ -734,12 +736,14 @@ public class PisController {
     	   details.setMember_name(name);
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
+    	   details.setGender(gender);
+    	   details.setFamily_status_id(1);
 //    	   details.setCghs_ben_id(benId);
 //    	   details.setFamily_status_id(Integer.parseInt(status));
 //    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
 //    	   details.setBlood_group(bloodgroup);
 //    	   details.setPH(Phone);
-//    	   details.setGender(gender);
+//    	   
 //    	   details.setMed_dep(medicaldep);
 //    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
 //    	   details.setLtc_dep(ltcdep);

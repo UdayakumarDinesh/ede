@@ -18,13 +18,13 @@ List<Object[]> designation  =  (List<Object[]>)request.getAttribute("designation
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Notification List</h5>
+				<h5>Designation List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>					
-						<li class="breadcrumb-item active " aria-current="page">Notification List</li>
+						<li class="breadcrumb-item active " aria-current="page">Designation List</li>
 					</ol>
 				</div>
 			</div>

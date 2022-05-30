@@ -110,8 +110,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			
 			            <div class="col-md-4">
-			                <label>Name<span class="mandatory">*</span></label>
-			                <input name="empname" required="required" id="empname" style="text-transform:uppercase" value="" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onkeyup="return trim(this)" />
+			                <label>Name<span class="mandatory">*</span></label> 
+			            	<input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm"   maxlength="100"  placeholder="Enter Employee name"   onclick="return trim(this)" onchange="return trim(this)">
 			            </div>			
 			            <div class="col-md-2">			
 			                <label>Designation<span class="mandatory">*</span></label>
