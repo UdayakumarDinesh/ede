@@ -268,7 +268,7 @@ th,td
 						if(auth[3].toString().equalsIgnoreCase("Z")){
 					%>
 							<%=auth[1] %><br>
-							CEO
+							CEO, SITAR
 						
 					<% }} %></b>
 				</span>
