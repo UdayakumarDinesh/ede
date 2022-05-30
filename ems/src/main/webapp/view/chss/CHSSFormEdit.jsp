@@ -77,63 +77,10 @@ th,td
 }
  */
  
- 
- 
-input {
-  &[type="button"] {
-    padding: 5px 10px;
-    margin: 10px 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    background: #ddd;
-    border: 1px solid #ccc;
-
-    &:hover {
-      background: #ccc;
-    }
-  }
+.dynamic
+{
+	color: blue;
 }
-
-.confirm {
-  display: none;
-
-  > div {
-    &:first-of-type {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      top: 0px;
-      left: 0px;
-    }
-
-    &:last-of-type {
-      padding: 10px 20px;
-      background: white;
-      position: absolute;
-      width: auto;
-      height: auto;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 5px;
-      border: 1px solid #333;
-
-      div {
-        &:first-of-type {
-          min-width: 150px;
-          padding: 10px;
-        }
-
-        &:last-of-type {
-          text-align: right;
-        }
-      }
-    }
-  }
-}
- 
- 
  
 </style>
 
@@ -240,9 +187,9 @@ input {
 											<th>Grade</th>
 										</tr>
 										<tr>
-											<td><%=employee.getEmpName() %></td>
-											<td><%=employee.getEmpNo() %></td>
-											<td><%=employee.getPayLevelId() %></td>
+											<td class="dynamic" ><%=employee.getEmpName() %></td>
+											<td class="dynamic" ><%=employee.getEmpNo() %></td>
+											<td class="dynamic" ><%=employee.getPayLevelId() %></td>
 										</tr>
 									</tbody>
 								</table>
@@ -256,10 +203,10 @@ input {
 											
 										</tr>
 										<tr>
-											<td><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
-											<td><%=chssapplydata[17] %></td>
-											<td><%=chssapplydata[10] %></td>
-											<td><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
+											<td class="dynamic" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+											<td class="dynamic" ><%=chssapplydata[17] %></td>
+											<td class="dynamic" ><%=chssapplydata[10] %></td>
+											<td class="dynamic" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
 										</tr>
 										
 									</tbody>
@@ -267,9 +214,9 @@ input {
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
-											<td><b>Basic Pay : </b> &#8377; <%=employee.getBasicPay() %> </td>
-											<td colspan="2"><b>Level in The Pay Matrix : </b> <%=employee.getPayLevelId() %></td>
-											<td colspan="2"><b>Ph.No. : </b> <%=employee.getPhoneNo()%></td>
+											<td><b>Basic Pay : </b> &#8377;<span class="dynamic" ><%=employee.getBasicPay() %></span>  </td>
+											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="dynamic" ><%=employee.getPayLevelId() %></span></td>
+											<td colspan="2"><b>Ph.No. : </b> <span class="dynamic" ><%=employee.getPhoneNo()%></span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -288,18 +235,18 @@ input {
 												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 												%>
 											<tr>
-												<td class="center"><%=i+1 %></td>
-												<td><%=chssbillslist.get(i)[3] %></td>
-												<td><%=chssbillslist.get(i)[2] %></td>
-												<td class="center" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
+												<td class="center dynamic"><%=i+1 %></td>
+												<td class="dynamic"><%=chssbillslist.get(i)[3] %></td>
+												<td class="dynamic"><%=chssbillslist.get(i)[2] %></td>
+												<td class="center dynamic" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+												<td class="dynamic" style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
 											</tr>
 										<%} %>
 										<%if(chssbillslist.size()>0){ %>
 											<tr>
 												<td colspan="3"></td>
 												<td style="text-align: right;"><b>Total </b></td>
-												<td style="text-align: right;"><%=billstotal %></td>
+												<td style="text-align: right;" class="dynamic" ><%=billstotal %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
@@ -383,7 +330,7 @@ input {
 										<td style="border:none;">
 											<%=obj[3] %>&nbsp; :
 										</td>
-										<td style="border:none;">
+										<td style="border:none;" class="dynamic" >
 											<%=obj[1] %>
 										</td>
 										
@@ -464,17 +411,17 @@ input {
 														</tr>			
 													<%} %>
 													<tr>
-														<td><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
-														<td><%=consult[3] %></td>
-														<td><%=consult[2] %></td>
-														<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
-														<td class="right"><%=consult[6] %></td>
+														<td  class="dynamic" ><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+														<td class="dynamic" ><%=consult[3] %></td>
+														<td class="dynamic" ><%=consult[2] %></td>
+														<td class="center dynamic"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
+														<td class="right dynamic"><%=consult[6] %></td>
 														
 														
 														
 													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-															<td class="">
-															<td class="">
+															<td class="dynamic" >
+															<td class="dynamic" >
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
 														<td class="right">	
 															<%=consult[7]%>		

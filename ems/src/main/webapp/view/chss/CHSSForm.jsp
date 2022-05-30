@@ -316,28 +316,7 @@ th,td
 					<%}} %>
 				</table>
 				<%} %>
-				<table>
-					<tr>
-						<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
-							<ol style="list-style-type: none;margin-left: -45px">
-								<%for(Object[] obj:ClaimapprovedPOVO){
-									if(obj[1].toString().equalsIgnoreCase("PO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %> </li>
-								<% } } %>
-							</ol>
-						</td>
-						<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
-							<ul style="float: right;list-style-type: none; ">
-								<%for(Object[] obj:ClaimapprovedPOVO){
-									if(obj[1].toString().equalsIgnoreCase("VO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %></li>
-								<% } } %>
-							</ul>					
-						</td>
-					</tr>
-				</table>
+				
 			</div>
 
 		<div class="break"></div>
@@ -610,8 +589,34 @@ th,td
 						<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
 					</tr>
 					
-				</tbody>				
+				</tbody>			
+				
+					
 			</table>
+			
+			<table>
+					<tr>
+						<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
+							<ol style="list-style-type: none;margin-left: -45px">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("PO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %> </li>
+								<% } } %>
+							</ol>
+						</td>
+						<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
+							<ul style="float: right;list-style-type: none; ">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("VO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %></li>
+								<% } } %>
+							</ul>					
+						</td>
+					</tr>
+				</table>
+			
 		</div>
 	</div>
 </div>
