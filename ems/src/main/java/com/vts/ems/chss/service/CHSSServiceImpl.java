@@ -1076,21 +1076,21 @@ public class CHSSServiceImpl implements CHSSService {
 		long count= dao.CHSSApplyEdit(claim);
 		
 		
-		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
-		{
-			
-			MimeMessage msg = javaMailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-			
-			helper.setTo(Email);	
-			helper.setSubject( "Medical Claim Application");
-			helper.setText( mailbody , true);
-			try {
-				javaMailSender.send(msg); 
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
+//		{
+//			
+//			MimeMessage msg = javaMailSender.createMimeMessage();
+//			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+//			
+//			helper.setTo(Email);	
+//			helper.setSubject( "Medical Claim Application");
+//			helper.setText( mailbody , true);
+//			try {
+//				javaMailSender.send(msg); 
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		
 		return count;
@@ -1446,21 +1446,21 @@ public class CHSSServiceImpl implements CHSSService {
 		Email = Emaillist.toArray(Email);
 		
 		mailbody = notify.getNotificationMessage();
-		if(Email!=null && Email.length>0 && !mailbody.equalsIgnoreCase(""))
-		{
-			
-			MimeMessage msg = javaMailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-			
-			helper.setTo(Email);	
-			helper.setSubject( "Medical Claims Contingent Bill");
-			helper.setText( mailbody , true);
-			try {
-				javaMailSender.send(msg); 
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		if(Email!=null && Email.length>0 && !mailbody.equalsIgnoreCase(""))
+//		{
+//			
+//			MimeMessage msg = javaMailSender.createMimeMessage();
+//			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+//			
+//			helper.setTo(Email);	
+//			helper.setSubject( "Medical Claims Contingent Bill");
+//			helper.setText( mailbody , true);
+//			try {
+//				javaMailSender.send(msg); 
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		
 		return continid;
