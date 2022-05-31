@@ -212,7 +212,7 @@ table th:last-child{
 							</div>
 							
 							<div class="col-1">
-								<button type="submit" class="btn btn-sm " style="margin-top: 20px;"  data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button>  <!-- Onclick="return confirm ('Are You Sure To Update?');" --> 
+								<button type="submit" class="btn btn-sm update-btn " style="margin-top: 20px;"  data-toggle="tooltip" data-placement="top" title="Update"> Update <!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"> --></i></button>  <!-- Onclick="return confirm ('Are You Sure To Update?');" --> 
 							</div>
 						</div>
 						</div>
@@ -264,8 +264,9 @@ table th:last-child{
 														</select>
 													</td>
 													<td>
-														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
+															<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
+															update
 														</button>
 														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 															<i class="fa-solid fa-trash-can" style="color: red;"></i>
