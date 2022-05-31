@@ -58,15 +58,15 @@
 	/* counter css */
 	
 	.counter{
-	    color: #628900;
-	    background: linear-gradient(to bottom, #628900 49%, transparent 50%);
+	    color: #36AE7C;
+	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
 	    font-family: 'Poppins', sans-serif;
 	    text-align: center;
 	    width: 175px;
 	    height: 175px;
 	    padding: 12px 15px 35px;
 	    margin: 0 auto;
-	    border: 18px solid #628900;
+	    border: 18px solid #36AE7C;
 	    border-radius: 100% 100%;
 	    box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.3);
 	}
@@ -94,9 +94,9 @@
 	    border-color: #fb8603;
 	}
 	.counter.blue{
-	    color: #1f8bc1;
-	    background: linear-gradient(to bottom, #1f8bc1 49%, transparent 50%);
-	    border-color: #1f8bc1;
+	    color: #187498;
+	    background: linear-gradient(to bottom, #187498 49%, transparent 50%);
+	    border-color: #187498;
 	}
 	@media screen and (max-width:990px) {
 	    .counter{ margin-bottom: 40px; }
@@ -120,7 +120,7 @@
   }
 
   .card-counter.primary{
-    background-color: #1f8bc1;
+    background-color: #187498;
     color: #FFF;
   }
 
@@ -130,7 +130,7 @@
   }  
 
   .card-counter.success{
-    background-color: #66bb6a;
+    background-color: #36AE7C;
     color: #FFF;
   }  
 
@@ -218,7 +218,7 @@
 				        <div class="col-md-3 col-sm-6">
 				            <div class="counter blue">
 				                <span class="counter-value">29</span>
-				                <h3>Applied</h3>
+				                <h3>Pending</h3>
 				            </div>
 				        </div>
 				        <div class="col-md-3 col-sm-6">
@@ -321,7 +321,7 @@
     yAxis: {
         min: 0,
         title: {
-            text: 'Counts'
+            text: 'Amount'
         }
     },
     tooltip: {
@@ -339,8 +339,8 @@
         }
     },
     colors: [
-        '#1f8bc1',
-        '#628900',
+        '#187498',
+        '#36AE7C',
     ],
     legend: {
         layout: 'vertical',
@@ -362,7 +362,10 @@
         name: 'Approved',
         data: [17,6, 1, 3, 5, 2]
 
-    }]
+    }],
+    credits: {
+        enabled: false
+    },
 });
 
 
@@ -395,18 +398,19 @@
         }
     },
     tooltip: {
-        valueSuffix: ' '
+        valueSuffix: ' %'
     },
     plotOptions: {
         bar: {
             dataLabels: {
-                enabled: true
+                enabled: true,
+                format: '{y} %'
             }
         }
     },
     colors:[
-    	'#1f8bc1',
-    	'#66bb6a'
+    	'#187498',
+    	'#36AE7C'
     ],
     legend: {
         layout: 'vertical',
@@ -425,10 +429,10 @@
     },
     series: [{
         name: 'Claimed',
-        data: [50000, ]
+        data: [100, ]
     }, {
         name: 'Settled',
-        data: [28000, ]
+        data: [50, ]
     },]
 });
 	

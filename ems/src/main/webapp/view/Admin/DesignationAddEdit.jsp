@@ -53,23 +53,20 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 											<th><label>Designation Code<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Designation Code" type="text" id="desigcode" name="Designationcode" value="<%if(desig!=null){ %><%=desig.getDesigCode()%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px;"
-												 ></td>
+												required="required" maxlength="255" style="font-size: 15px;" ></td>
 										</tr>
 										<tr>
 											<th><label>Designation Name <span class="mandatory" style="color: red;">*</span></label></th>
-											<td><input class="form-control form-control"
+											<td><input class="form-control form-control" style="text-transform:capitalize"
 												placeholder=" Enter Designation Name" type="text" name="DesignationName" value="<%if(desig!=null){%> <%=desig.getDesignation()%> <%} %>"
-												required="required" maxlength="255" style="font-size: 15px;"
-												 id="designation"></td>
+												required="required" maxlength="255" style="font-size: 15px;" id="designation"></td>
 										</tr>
 										<tr>
 											<th><label>Designation Limit  <i class="fa fa-inr" aria-hidden="true"></i> <span class="mandatory" style="color: red;"> *</span>
 											</label></th>
 											<td><input class="form-control form-control"
 												placeholder="Enter Designation Limit" type="text" id="RateValue" name="Designationlimit" value="<%if(desig!=null){%><%=desig.getDesigLimit()%> <%}%>"
-												required="required" maxlength="10" style="font-size: 15px;"
-												 ></td>
+												required="required" maxlength="10" style="font-size: 15px;" ></td>
 										</tr>
 									
 								</table>
@@ -128,7 +125,7 @@ function DesignationAddcheck(frmid){
 	var desigcode=$('#desigcode').val();
 	var designation=$('#designation').val();
 	var desigid     =   $('#deisignationid').val();
-	var count=false;
+	var count=true;
 	console.log(desigid);
 	$.ajax({
 
@@ -143,7 +140,7 @@ function DesignationAddcheck(frmid){
 		datatype : 'json',
 		success : function(result) {
 			var ajaxresult = JSON.parse(result);
-			
+			console.log(ajaxresult);
 			if(ajaxresult[0]>0){
 				alert('Designation Code Already Exists');
 				count = false;
@@ -151,11 +148,12 @@ function DesignationAddcheck(frmid){
 				alert('Designation Name Already Exists');
 				count = false;
 			}else if(count){
-			console.log("jfhgbdhjgbjfdg");
+			
 			var ret = confirm('Are you Sure To Submit ?');
 			if(ret){
-				return true;
+				
 				$('#'+frmid).submit();
+				return true;
 				}else{
 					return false;
 				}
@@ -177,7 +175,7 @@ function DesignationEditcheck(frmid){
 	var desigcode   =$('#desigcode').val();
 	var designation =$('#designation').val();
 	var desigid     =   $('#deisignationid').val();
-	var count=false;
+	var count=true;
 	
 	console.log(desigid);
 	$.ajax({
@@ -204,13 +202,14 @@ function DesignationEditcheck(frmid){
 			
 			var ret = confirm('Are you Sure To Submit ?');
 			if(ret){
-				return count;
+				
 				$('#'+frmid).submit();
+				return true;
 				}else{
-					return count;
+					return false;
 				}
 		}else{
-			return count;
+			return false;
 		}
 		}
 	});	

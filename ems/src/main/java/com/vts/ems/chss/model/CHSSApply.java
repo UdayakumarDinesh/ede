@@ -34,6 +34,9 @@ public class CHSSApply implements Serializable {
 	private Integer CHSSStatusId;
 	private String Remarks;
 	private Long ContingentId;
+	private Integer POAcknowledge;
+	private Long POId;
+	private Long VOId;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

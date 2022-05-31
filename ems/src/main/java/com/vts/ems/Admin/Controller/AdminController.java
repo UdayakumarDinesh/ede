@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,9 +134,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		}
 		
 	    @RequestMapping(value = "FormRoleActive.htm", method = RequestMethod.GET)
-			public @ResponseBody String FormRoleActive(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)
-					throws Exception 
-			{
+		public @ResponseBody String FormRoleActive(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception 
+		{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside FormRoleActive.htm "+UserId);
 				try
@@ -176,8 +176,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	   e.printStackTrace();
 		       }
 				return "Admin/CHSSTestSub";
-		     }
-		    
+		    }
+		                                                                                                     
 		    @RequestMapping(value="ChssTestSub.htm" , method=RequestMethod.POST)
 		    public String ChssTestSubAddEdit(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
 		    {
@@ -211,7 +211,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	CHSSTestSub  sub = new CHSSTestSub();
 						 	 	sub.setTestSubId(Long.parseLong(subid));
 							 	sub.setTestRate(Integer.parseInt(Rate)); 
-							 	sub.setTestName(testName); 
+							 	sub.setTestName(WordUtils.capitalizeFully(testName.trim())); 
 							 	sub.setTestMainId(Long.parseLong(testmain));				 	 
 							 	sub.setModifiedDate(sdtf.format(new Date()));
 							 	sub.setModifiedBy(UserId);
@@ -226,13 +226,13 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	 
 						 }else {
 							//Test Add code 
-						 	 String testmain =(String)req.getParameter("Main");
-						 	 String testName =(String)req.getParameter("Name");
-						 	 String Rate     =(String)req.getParameter("Rate");
-						 	 String testcode =(String)req.getParameter("TestCode");
+						 	String testmain =(String)req.getParameter("Main");
+						 	String testName =(String)req.getParameter("Name");
+						 	String Rate     =(String)req.getParameter("Rate");
+						 	String testcode =(String)req.getParameter("TestCode");
 						 	CHSSTestSub  sub = new CHSSTestSub();
 						 	sub.setTestRate(Integer.parseInt(Rate)); 
-						 	sub.setTestName(testName); 
+						 	sub.setTestName(WordUtils.capitalizeFully(testName.trim())); 
 						 	sub.setTestMainId(Long.parseLong(testmain));
 						 	sub.setIsActive(1);						 	 
 						 	sub.setCreatedDate(sdtf.format(new Date()));
@@ -421,7 +421,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String IsAdmissible  = (String)req.getParameter("IsAdmissible");
 					CHSSMedicineList  medicinelist = new CHSSMedicineList();
 					medicinelist.setMedicineId(Long.parseLong(medicineId));
-					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setIsAdmissible(IsAdmissible);
 					long result =service.EditMedicine(medicinelist);;
@@ -445,7 +445,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					int  MedNo = service.GetMaxMedNo(tratementname);
 					
 					medicinelist.setMedNo(Long.valueOf(++MedNo));
-					medicinelist.setMedicineName(MedicineName);
+					medicinelist.setMedicineName(WordUtils.capitalizeFully(MedicineName.trim()));
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setCategoryId(0l);
 					medicinelist.setIsActive(1);
@@ -1083,9 +1083,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigId(Long.parseLong(designationid));
 					desig.setDesigCode(code.toUpperCase());
-					desig.setDesignation(name);
+					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
 					desig.setDesigLimit(Long.parseLong(limit));
-					long result =0; //service.EditDesignation(desig);
+					long result = service.EditDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Updated Successfully");
 					} else {
@@ -1100,10 +1100,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
-					desig.setDesignation(name);
-					desig.setDesigLimit(Long.parseLong(limit));
+					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
+					desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
-					long result =0; //service.AddDesignation(desig);
+					long result = service.AddDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Added Successfully");
 					} else {

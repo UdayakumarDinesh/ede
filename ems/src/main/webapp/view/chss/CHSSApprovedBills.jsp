@@ -29,7 +29,7 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item"><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
+						<!-- <li class="breadcrumb-item"><a href="ContingentApprovals.htm">CHSS Contingent List</a></li> -->
 						<li class="breadcrumb-item active " aria-current="page">CHSS Approved Bills</li>
 					</ol>
 				</div>
@@ -70,6 +70,7 @@
 										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;max-width: 15% !important">Action</td>
 									</tr>
 								</thead>
@@ -81,7 +82,7 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1] %></td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[2].toString()))%></td>
-											
+											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><% if(obj[8]!=null){ %><%=rdf.format(sdf.parse(obj[8].toString()))%><%} %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
 												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
@@ -91,12 +92,13 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
 													<i class="fa-regular fa-file-lines"></i>
 												</button>
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
 													<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
 												</button>
+												<input type="hidden" name="isapproval" value="Y">
 											</td>
 										</tr>
 									<%} }%>

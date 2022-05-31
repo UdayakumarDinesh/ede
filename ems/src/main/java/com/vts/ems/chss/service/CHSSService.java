@@ -74,7 +74,7 @@ public interface CHSSService
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
-	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId) throws Exception;
+	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String LoginType) throws Exception;
 	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
 	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSTests modal) throws Exception;
@@ -96,7 +96,7 @@ public interface CHSSService
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
-	public List<Object[]> CHSSApprovalAuthList() throws Exception;
+	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception;
@@ -115,6 +115,11 @@ public interface CHSSService
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
 	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
+	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception;
+	public Object[] getLabCode() throws Exception;
+	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
+	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 
 	
 }

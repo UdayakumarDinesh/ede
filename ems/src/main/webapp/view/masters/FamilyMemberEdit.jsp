@@ -99,8 +99,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
 		                     
 		                      
-		                        <option value="M" <%if(memberdata.getGender().equalsIgnoreCase("M")){ %>selected<%}%>>Male</option>
-		                       <option value="F"  <%if(memberdata.getGender().equalsIgnoreCase("F")){ %>selected<%}%>>Female</option>
+		                        <option value="M" <%if(memberdata.getGender()!=null && memberdata.getGender().equalsIgnoreCase("M")){ %>selected<%}%>>Male</option>
+		                       <option value="F"  <%if(memberdata.getGender()!=null && memberdata.getGender().equalsIgnoreCase("F")){ %>selected<%}%>>Female</option>
 		                                     
 		                    </select>
 		                </div>

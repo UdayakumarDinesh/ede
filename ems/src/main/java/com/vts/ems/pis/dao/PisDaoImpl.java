@@ -47,7 +47,7 @@ public class PisDaoImpl implements PisDao {
 	@PersistenceContext
 	EntityManager manager;
 
-	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno,dm.divisionname,dm.DivisionCode,dg.groupname,dg.GroupCode, ed.designation FROM employee e, division_master dm,division_group dg, employee_desig ed WHERE e.isactive=1 AND e.designationid=ed.desigid AND e.divisionid=dm.divisionid AND dm.groupid=dg.groupid ORDER BY e.srno DESC";
+	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,e.dob FROM employee e, employee_desig ed WHERE e.isactive=1 AND e.designationid=ed.desigid ORDER BY e.srno DESC";
 	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  e.Title,  e.dob,  e.DOJL,  e.DOA,  e.DOR,  e.gender,  e.BloodGroup,  e.maritalStatus,  e.Religion,  e.pan,  e.punchcard,  e.uid,  e.email,  e.designationid,  e.divisionid,  e.groupid,  e.SBIAccNo,  e.CategoryId,  ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,e.hometown, e.quarters ,e.photo, e.phoneno FROM  employee e,  division_master dm,  division_group dg,  employee_desig ed WHERE e.isactive = 1  AND e.designationid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid  AND empid = :empid ORDER BY e.srno DESC";
 	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard";
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
