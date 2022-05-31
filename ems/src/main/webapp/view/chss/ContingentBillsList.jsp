@@ -109,11 +109,9 @@
 												 style="padding-top:5px; padding-bottom: 5px; color:#4700D8; font-weight: 600;"
 												<%} %>	
 											>
-												<%if("1".equals(obj[5].toString()) ){%>  
-												 Bill Generated
-												<%}else{ %>
+												
 												<%=obj[7] %>
-												<%} %>
+											
 											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												

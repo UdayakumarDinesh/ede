@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,9 +134,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		}
 		
 	    @RequestMapping(value = "FormRoleActive.htm", method = RequestMethod.GET)
-			public @ResponseBody String FormRoleActive(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)
-					throws Exception 
-			{
+		public @ResponseBody String FormRoleActive(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception 
+		{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside FormRoleActive.htm "+UserId);
 				try
@@ -177,7 +176,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	   e.printStackTrace();
 		       }
 				return "Admin/CHSSTestSub";
-		     }
+		    }
 		                                                                                                     
 		    @RequestMapping(value="ChssTestSub.htm" , method=RequestMethod.POST)
 		    public String ChssTestSubAddEdit(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
@@ -227,10 +226,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						 	 
 						 }else {
 							//Test Add code 
-						 	 String testmain =(String)req.getParameter("Main");
-						 	 String testName =(String)req.getParameter("Name");
-						 	 String Rate     =(String)req.getParameter("Rate");
-						 	 String testcode =(String)req.getParameter("TestCode");
+						 	String testmain =(String)req.getParameter("Main");
+						 	String testName =(String)req.getParameter("Name");
+						 	String Rate     =(String)req.getParameter("Rate");
+						 	String testcode =(String)req.getParameter("TestCode");
 						 	CHSSTestSub  sub = new CHSSTestSub();
 						 	sub.setTestRate(Integer.parseInt(Rate)); 
 						 	sub.setTestName(WordUtils.capitalizeFully(testName.trim())); 

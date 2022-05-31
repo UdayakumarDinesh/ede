@@ -9,6 +9,7 @@ import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -91,7 +92,7 @@ public interface CHSSDao {
 	public List<Object> ContingentApplyIds(String contingentid) throws Exception;
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
-	public List<Object[]> CHSSApprovalAuthList() throws Exception;
+	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception;
 	public long NotificationAdd(EMSNotification notification) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
@@ -116,5 +117,9 @@ public interface CHSSDao {
 	public int POAcknowldgedUpdate(String chssapplyid, String poacknowledge) throws Exception;
 	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception;
 	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception;
+	public Object[] getLabCode() throws Exception;
+	public long CHSSContingentTransactionAdd(CHSSContingentTransaction transaction) throws Exception;
+	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
+	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 
 }

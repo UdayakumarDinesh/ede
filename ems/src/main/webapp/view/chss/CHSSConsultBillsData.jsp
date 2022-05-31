@@ -666,7 +666,7 @@ p {
 												</select>
 											</td>
 											<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_other"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
 									
@@ -1079,8 +1079,8 @@ function getConsultdata()
 				"linkedCalendars" : false,
 				"showCustomRangeLabel" : true,
 				"startDate" : new Date(consult.ConsultDate),
-				"maxDate" :$billdate,
-				"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+				"maxDate" :new Date(),
+				"minDate":$billdate, 
 				"cancelClass" : "btn-default",
 				showDropdowns : true,
 				locale : {
@@ -1135,8 +1135,8 @@ function getConsultdata()
 								"linkedCalendars" : false,
 								"showCustomRangeLabel" : true,
 								"startDate" : $billdate,
-								"maxDate" :$billdate,
-								"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+								"maxDate" :new Date(),
+								"minDate":$billdate, 
 								"cancelClass" : "btn-default",
 								showDropdowns : true,
 								locale : {

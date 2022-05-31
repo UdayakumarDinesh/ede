@@ -96,7 +96,7 @@ public interface CHSSService
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
 	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
-	public List<Object[]> CHSSApprovalAuthList() throws Exception;
+	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception;
@@ -117,6 +117,9 @@ public interface CHSSService
 	public long CHSSUserRevoke(String CHSSApplyId, String Username, String EmpId) throws Exception;
 	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception;
 	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception;
+	public Object[] getLabCode() throws Exception;
+	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
+	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 
 	
 }

@@ -104,6 +104,16 @@ th,td
 	text-align: right;
 }
 			
+.text-blue
+{
+	color: blue;
+}
+
+.text-green
+{
+	color: #4E944F;
+}
+ 
 			
 </style>
 		<meta charset="ISO-8859-1">
@@ -167,9 +177,9 @@ th,td
 						<th>Grade</th>
 					</tr>
 					<tr>
-						<td><%=employee.getEmpName() %></td>
-						<td><%=employee.getEmpNo() %></td>
-						<td><%=employee.getPayLevelId() %></td>
+						<td class="text-blue" ><%=employee.getEmpName() %></td>
+						<td class="text-blue" ><%=employee.getEmpNo() %></td>
+						<td class="text-blue" ><%=employee.getPayLevelId() %></td>
 					</tr>
 				</tbody>
 			</table>
@@ -183,10 +193,10 @@ th,td
 						
 					</tr>
 					<tr>
-						<td><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
-						<td><%=chssapplydata[17] %></td>
-						<td><%=chssapplydata[10] %></td>
-						<td><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
+						<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+						<td class="text-blue" ><%=chssapplydata[17] %></td>
+						<td class="text-blue" ><%=chssapplydata[10] %></td>
+						<td class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
 					</tr>
 					
 				</tbody>
@@ -215,18 +225,18 @@ th,td
 							billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 							%>
 						<tr>
-							<td class="center"><%=i+1 %></td>
-							<td><%=chssbillslist.get(i)[3] %></td>
-							<td><%=chssbillslist.get(i)[2] %></td>
-							<td class="center" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-							<td style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
+							<td class="center text-blue"><%=i+1 %></td>
+							<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
+							<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
+							<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
 						</tr>
 					<%} %>
 					<%if(chssbillslist.size()>0){ %>
 						<tr>
 							<td colspan="3"></td>
 							<td style="text-align: right;"><b>Total </b></td>
-							<td style="text-align: right;"><%=billstotal %></td>
+							<td style="text-align: right;" class="text-blue" ><%=billstotal %></td>
 						</tr>
 					<%}else{ %>
 						<tr>
@@ -292,28 +302,26 @@ th,td
 				
 				
 				<%if(ClaimRemarksHistory.size()>0){ %>
-				<table style="max-width: 650px;">
+				<table style="max-width: 650px;border: 1px solid black;">
 					<tr>
 						<td style="border:none;">
-							<h3>Remarks :</h3> 
+							<h4 style="text-decoration: underline;">Remarks :</h4> 
 						</td>
 						<td style="border:none;">
 							
 						</td>
 					</tr>
-					<%for(Object[] obj : ClaimRemarksHistory){
-						if(obj[1]!=null && !obj[1].toString().trim().equals("")){
-					%>
+					<%for(Object[] obj : ClaimRemarksHistory){%>
 					<tr>
 						<td style="border:none;width: 25%;">
 							<%=obj[3] %>&nbsp; :
 						</td>
-						<td style="border:none;">
+						<td style="border:none;" class="text-blue" >
 							<%=obj[1] %>
 						</td>
 						
 					</tr>
-					<%}} %>
+					<%} %>
 				</table>
 				<%} %>
 				
@@ -352,16 +360,16 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=consult[8] %><br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
-							<td><%=consult[3] %></td>
-							<td><%=consult[2] %></td>
-							<td class="center"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
-							<td class="right"><%=consult[6] %></td>
+							<td  class="text-blue" ><%=consult[8] %><br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+							<td class="text-blue" ><%=consult[3] %></td>
+							<td class="text-blue" ><%=consult[2] %></td>
+							<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
+							<td class="right text-blue"><%=consult[6] %></td>
 							<%if(show){ %>
-								<td class="right">	
+								<td class="right text-green">	
 									<%=consult[7]%>		
 								</td>	
-								<td class="">
+								<td class="text-green">	
 									<%if(consult[10]!=null){ %>
 										<%=consult[10]%>
 									<%} %>
@@ -398,15 +406,15 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=test[8] %> <br>(<%=rdf.format(sdf.parse(test[9].toString()))%>)</td>
-							<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
-							<td class="right"><%=test[4] %></td>
+							<td class="text-blue" ><%=test[8] %><br>(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
+							<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
+							<td class="right text-blue"><%=test[4] %></td>
 							
 							<%if(show){ %>
-								<td class="right">	
+								<td class="right text-green">	
 									<%=test[7]%>		
 								</td>	
-								<td class="">
+								<td class="text-green">
 									<%if(test[11]!=null){ %>
 										<%=test[11]%>
 									<%} %>
@@ -443,17 +451,17 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8].toString()))%>)</td>
-							<td><%=medicine[2] %></td>
-							<td style="text-align: center;"><%=medicine[5] %></td>
-							<td style="text-align: center;"><%=medicine[4] %></td> 
-							<td class="right"><%=medicine[3] %></td>
+							<td  class="text-blue" ><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
+							<td  class="text-blue" ><%=medicine[2] %></td>														
+							<td  class="text-blue" style="text-align: center;"><%=medicine[5] %></td>
+							<td class="text-blue"  style="text-align: center;" ><%=medicine[4] %></td> 
+							<td  class="text-blue right"><%=medicine[3] %></td>
 							
 							<%if(show){ %>
-								<td class="right">	
+								<td class="right text-green">	
 									<%=medicine[6]%>		
 								</td>	
-								<td class="">
+								<td class="text-green">
 									<%if(medicine[9]!=null){ %>
 										<%=medicine[9]%>
 									<%} %>
@@ -489,15 +497,15 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=other[6] %><br>(<%=rdf.format(sdf.parse(other[7].toString()))%>)</td>
-							<td colspan="3"><%=other[4] %></td>
-							<td class="right"><%=other[3] %></td>
+							<td  class="text-blue" ><%=other[6] %><br>(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
+							<td  class="text-blue" colspan="3"><%=other[4] %></td>
+							<td class="right text-blue"><%=other[3] %></td>
 							
 							<%if(show){ %>
-								<td class="right">	
+								<td class="right text-green">	
 									<%=other[5]%>		
 								</td>	
-								<td class="">
+								<td class="text-green">
 									<%if(other[8]!=null){ %>
 										<%=other[8]%>
 									<%} %>
@@ -534,15 +542,15 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6].toString()))%>)</td>
-							<td colspan="2"><%=misc[2] %></td>
-							<td style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
-							<td class="right"><%=misc[3] %></td>
+							<td class="text-blue" ><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
+							<td  class="text-blue" colspan="2"><%=misc[2] %></td>
+							<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
+							<td class="right text-blue"><%=misc[3] %></td>
 								<%if(show){ %>
-									<td class="right">	
+									<td class="right text-green">	
 										<%=misc[4]%>		
 									</td>	
-									<td class="">
+									<td class="text-green">
 										<%if(misc[7]!=null){ %>
 											<%=misc[7]%>
 										<%} %>
@@ -557,11 +565,11 @@ th,td
 					totalremamount +=Double.parseDouble(misc[4].toString());
 					}%>
 					<tr>
-						<td colspan="4" class="right"><b>Total</b></td>
-						<td class="right"><b>&#8377;  <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
-						<td class="right">
+						<td colspan="4" class="right"><b>Rounded Total</b></td>
+						<td class="right text-blue"><b>&#8377;  <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
+						<td class="right text-green">
 							<%if(show){ %>
-								&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
+								&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
 							<%} %>						
 						</td>	
 						<td class="right">
@@ -569,7 +577,7 @@ th,td
 					</tr>
 					
 					<tr>
-						<td colspan="7">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td>
+						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td>
 					</tr>
 					
 					<tr>
@@ -578,7 +586,7 @@ th,td
 					
 					<tr>
 						<%if(show){ %>
-								<td colspan="7">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td>
+								<td colspan="7" class="text-green">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td>
 						<%}else{ %>
 							<td colspan="7">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
 						<%} %>

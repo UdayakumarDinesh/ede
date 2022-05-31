@@ -62,24 +62,19 @@ th,td
 }
 	
 
-/* .textarea {
-    resize: none;
-	overflow: hidden;
-	min-height: 30px;
-	max-height: 100px;
-	height: 30px;
-	width: 85%;
-}
-
-.editbtn
+.btn-history
 {
-	margin-top:-15px;
+	float: right;
+	background-color: #FFD24C;
 }
- */
- 
-.dynamic
+.text-blue
 {
 	color: blue;
+}
+
+.text-green
+{
+	color: #4E944F;
 }
  
 </style>
@@ -113,7 +108,11 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview=(String)request.getAttribute("onlyview");
-	boolean showhistorybtn = (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13) && (isapproval!=null && isapproval.equalsIgnoreCase("Y"));
+	
+	
+	
+	
+	boolean showhistorybtn = (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13) && (isapproval!=null && isapproval.equalsIgnoreCase("Y") );
 	boolean showitemedit =  isapproval!=null && isapproval.equalsIgnoreCase("Y");
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
@@ -187,9 +186,9 @@ th,td
 											<th>Grade</th>
 										</tr>
 										<tr>
-											<td class="dynamic" ><%=employee.getEmpName() %></td>
-											<td class="dynamic" ><%=employee.getEmpNo() %></td>
-											<td class="dynamic" ><%=employee.getPayLevelId() %></td>
+											<td class="text-blue" ><%=employee.getEmpName() %></td>
+											<td class="text-blue" ><%=employee.getEmpNo() %></td>
+											<td class="text-blue" ><%=employee.getPayLevelId() %></td>
 										</tr>
 									</tbody>
 								</table>
@@ -203,10 +202,10 @@ th,td
 											
 										</tr>
 										<tr>
-											<td class="dynamic" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
-											<td class="dynamic" ><%=chssapplydata[17] %></td>
-											<td class="dynamic" ><%=chssapplydata[10] %></td>
-											<td class="dynamic" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
+											<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+											<td class="text-blue" ><%=chssapplydata[17] %></td>
+											<td class="text-blue" ><%=chssapplydata[10] %></td>
+											<td class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
 										</tr>
 										
 									</tbody>
@@ -214,9 +213,9 @@ th,td
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
-											<td><b>Basic Pay : </b> &#8377;<span class="dynamic" ><%=employee.getBasicPay() %></span>  </td>
-											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="dynamic" ><%=employee.getPayLevelId() %></span></td>
-											<td colspan="2"><b>Ph.No. : </b> <span class="dynamic" ><%=employee.getPhoneNo()%></span></td>
+											<td><b>Basic Pay : </b> &#8377;<span class="text-blue" ><%=employee.getBasicPay() %></span>  </td>
+											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="text-blue" ><%=employee.getPayLevelId() %></span></td>
+											<td colspan="2"><b>Ph.No. : </b> <span class="text-blue" ><%=employee.getPhoneNo()%></span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -235,18 +234,18 @@ th,td
 												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
 												%>
 											<tr>
-												<td class="center dynamic"><%=i+1 %></td>
-												<td class="dynamic"><%=chssbillslist.get(i)[3] %></td>
-												<td class="dynamic"><%=chssbillslist.get(i)[2] %></td>
-												<td class="center dynamic" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="dynamic" style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
+												<td class="center text-blue"><%=i+1 %></td>
+												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
+												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
+												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
 											</tr>
 										<%} %>
 										<%if(chssbillslist.size()>0){ %>
 											<tr>
 												<td colspan="3"></td>
 												<td style="text-align: right;"><b>Total </b></td>
-												<td style="text-align: right;" class="dynamic" ><%=billstotal %></td>
+												<td style="text-align: right;" class="text-blue" ><%=billstotal %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
@@ -314,32 +313,30 @@ th,td
 								</div>
 							
 								<%if(ClaimRemarksHistory.size()>0){ %>
-								<table >
+								<table style="border: 1px solid black">
 									<tr>
-										<td style="border:none;width: 25%;">
-											<h3>Remarks :</h3> 
+										<td style="border:none;">
+											<h4 style="text-decoration: underline;">Remarks :</h4> 
 										</td>
 										<td style="border:none;">
 											
 										</td>
 									</tr>
-									<%for(Object[] obj : ClaimRemarksHistory){
-										if(obj[1]!=null && !obj[1].toString().trim().equals("")){
-									%>
+									<%for(Object[] obj : ClaimRemarksHistory){%>
 									<tr>
-										<td style="border:none;">
+										<td style="border:none;width: 20%;">
 											<%=obj[3] %>&nbsp; :
 										</td>
-										<td style="border:none;" class="dynamic" >
+										<td style="border:none;" class="text-blue" >
 											<%=obj[1] %>
 										</td>
 										
 									</tr>
-									<%}} %>
+									<%} %>
 								</table>
 								<%} %>
 								
-								<table>
+								<%-- <table>
 									<tr>
 										<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
 											<ol style="list-style-type: none;margin-left: -45px">
@@ -360,7 +357,7 @@ th,td
 											</ul>					
 										</td>
 									</tr>
-								</table>
+								</table> --%>
 								
 								
 							</div>
@@ -388,7 +385,7 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation charges </b>
 																<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 																 <%} %>
@@ -411,22 +408,22 @@ th,td
 														</tr>			
 													<%} %>
 													<tr>
-														<td  class="dynamic" ><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
-														<td class="dynamic" ><%=consult[3] %></td>
-														<td class="dynamic" ><%=consult[2] %></td>
-														<td class="center dynamic"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
-														<td class="right dynamic"><%=consult[6] %></td>
+														<td  class="text-blue" ><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+														<td class="text-blue" ><%=consult[3] %></td>
+														<td class="text-blue" ><%=consult[2] %></td>
+														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
+														<td class="right text-blue"><%=consult[6] %></td>
 														
 														
 														
 													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-															<td class="dynamic" >
-															<td class="dynamic" >
+															<td class="text-blue" >
+															<td class="text-blue" >
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
-														<td class="right">	
+														<td class="right text-green">	
 															<%=consult[7]%>		
 														</td>	
-														<td class="">
+														<td class="text-green">
 															<%if(consult[10]!=null){ %>
 																<%=consult[10]%>
 															<%} %>
@@ -467,7 +464,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -488,19 +485,19 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=test[8] %>&nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
-													<td colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
-													<td class="right"><%=test[4] %></td>
+													<td class="text-blue" ><%=test[8] %>&nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
+													<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
+													<td class="right text-blue"><%=test[4] %></td>
 												
 													
 													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 															<td class="">
 															<td class="">
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
-														<td class="right">	
+														<td class="right text-green">	
 															<%=test[7]%>	
 														</td>	
-														<td class="">
+														<td class="text-green">
 															<%if(test[11]!=null){ %>
 																<%=test[11]%>
 															<%} %>
@@ -546,7 +543,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -569,25 +566,26 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=medicine[7] %>&nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
-													<td>	
+													<td  class="text-blue" ><%=medicine[7] %>&nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
+													<td  class="text-blue" >	
 														<%=medicine[2] %>
 														<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
-														   <button type="button" class="btn btn-sm" style="float: right;background-color: #FFD24C" onclick="showsimilarmeds('<%=medicine[2]%>');" data-toggle="tooltip" data-placement="top" title="Similar Medicines List" ><i class="fa-solid fa-list-ul"></i></button></td> 
+														   <button type="button" class="btn btn-sm" style="float: right;background-color: #FFD24C" onclick="showsimilarmeds('<%=medicine[2]%>');" data-toggle="tooltip" data-placement="top" title="Similar Medicines List" ><i class="fa-solid fa-list-ul"></i></button> 
 														<%} %>
-													<td style="text-align: center;"><%=medicine[5] %></td>
-													<td style="text-align: center;" ><%=medicine[4] %></td> 
-													<td class="right"><%=medicine[3] %></td>
+													</td>
+													<td  class="text-blue" style="text-align: center;"><%=medicine[5] %></td>
+													<td class="text-blue"  style="text-align: center;" ><%=medicine[4] %></td> 
+													<td  class="text-blue right"><%=medicine[3] %></td>
 												
 													
 													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 														<td class="">
 														<td class="">
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
-														<td class="right">	
+														<td class="right text-green">	
 															<%=medicine[6]%>
 														</td>	
-														<td class="">
+														<td class="text-green">
 															<%if(medicine[9]!=null){ %>
 																<%=medicine[9]%>
 															<%} %>
@@ -626,7 +624,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Others</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -647,9 +645,9 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=other[6] %>&nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
-													<td colspan="3"><%=other[4] %></td>
-													<td class="right"><%=other[3] %></td>
+													<td  class="text-blue" ><%=other[6] %>&nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
+													<td  class="text-blue" colspan="3"><%=other[4] %></td>
+													<td class="right text-blue"><%=other[3] %></td>
 													
 													
 													
@@ -658,10 +656,10 @@ th,td
 														<td class="">
 														<td class="">
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
-														<td class="right">	
+														<td class="right text-green">	
 															<%=other[5]%>
 														</td>	
-														<td class="">
+														<td class="text-green">
 															<%if(other[8]!=null){ %>
 																<%=other[8]%>
 															<%} %>
@@ -700,7 +698,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Miscellaneous</b>
 															<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history" style="float: right;background-color: #FFD24C" onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
 															 <%} %>
@@ -722,20 +720,20 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td><%=misc[5] %>&nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
-													<td colspan="2"><%=misc[2] %></td>
-													<td style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
-													<td class="right"><%=misc[3] %></td>
+													<td class="text-blue" ><%=misc[5] %>&nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
+													<td  class="text-blue" colspan="2"><%=misc[2] %></td>
+													<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
+													<td class="right text-blue"><%=misc[3] %></td>
 													
 																										
 													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
 														<td class="">
 														<td class="">
 													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
-														<td class="right">	
+														<td class="right text-green">	
 															<%=misc[4]%>
 														</td>	
-														<td class="">
+														<td class="text-green">
 															<%if(misc[7]!=null){ %>
 																<%=misc[7]%>
 															<%} %>
@@ -754,9 +752,6 @@ th,td
 														<td class="">
 															<td class="">
 														<%} %>
-														
-													
-													
 													
 												</tr>					
 											<%i++;
@@ -767,11 +762,11 @@ th,td
 										<tr>
 											<td colspan="3"></td>
 											<td class="right"><b>Rounded Total</b></td>
-											<td class="right"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
+											<td class="right text-blue"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
-											<td class="right">
-											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==6 ) && showitemedit ) || chssstatusid==14){ %>	 
-											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %>
+											<td class="right text-green">
+											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid>6 ) && showitemedit ) || chssstatusid==14){ %>	 
+											&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
 											<%} %>
 											</td>
 											<td ></td>
@@ -781,7 +776,7 @@ th,td
 								
 									
 										<tr>
-											<td colspan="7">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
+											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -789,8 +784,8 @@ th,td
 										</tr>
 										
 										<tr>
-											<td colspan="7">Admitted to Rs.
-											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid==6 ) && showitemedit ) || chssstatusid==14){ %>
+											<td colspan="7" class="text-green">Admitted to Rs.
+											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid>6 ) && showitemedit ) || chssstatusid==14){ %>
 											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
 											<%} %>
 										</tr>

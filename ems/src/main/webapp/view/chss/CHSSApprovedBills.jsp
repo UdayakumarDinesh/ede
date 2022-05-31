@@ -92,12 +92,13 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
 													<i class="fa-regular fa-file-lines"></i>
 												</button>
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
 													<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
 												</button>
+												<input type="hidden" name="isapproval" value="Y">
 											</td>
 										</tr>
 									<%} }%>

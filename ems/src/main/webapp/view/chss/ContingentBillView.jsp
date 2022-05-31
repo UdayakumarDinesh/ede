@@ -64,7 +64,15 @@ th,td
 	text-align: right;
 }
 	
+.text-blue
+{
+	color: blue;
+}
 
+.text-green
+{
+	color: #4E944F;
+}
 
 
 </style>
@@ -78,6 +86,8 @@ th,td
 	
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
 	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
+	Object[] labdata = (Object[])request.getAttribute("labdata");
+	List<Object[]> contingentremarks = (List<Object[]>)request.getAttribute("contingentremarks");
 	
 	String logintype = (String)request.getAttribute("logintype");
 	int billstatus = Integer.parseInt(contingentdata[5].toString());
@@ -101,8 +111,12 @@ th,td
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>						
+						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>	
+						<%if(billstatus==14){ %>					
+						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Contingent List</a></li>
+						<%}else{ %>
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
+						<%} %>
 						<li class="breadcrumb-item active " aria-current="page">Contingent Bill</li>
 					</ol>
 				</div>
@@ -152,7 +166,15 @@ th,td
 							<img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
 							<div style="padding-left: 5px;">
 								<br><br>
-								<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;vertical-align: bottom;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
+								<span style="font-size: 20px; font-weight:600; "><%=labdata[0] %></span> 
+								<span style="float: right;vertical-align: bottom;">
+									Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %> 
+									<%if(contingentdata[9]!=null){ %>
+									<br>	Approved On:<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
+									<% } %>
+								
+								</span>
+									<br>
 								<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br><br>
 							</div>
 							<p>
@@ -160,7 +182,6 @@ th,td
 								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
 								employees have been processed and admitted at CHSS rates.
 							</p>
-						
 						</div>
 						
 						<table>
@@ -259,13 +280,38 @@ th,td
 							<%} %>
 							
 							<div class="col-md-12" align="left">
+								<%if(contingentremarks.size()>0){ %>
+								<table style="border: 1px solid black">
+									<tr>
+										<td style="border:none;">
+											<h4 style="text-decoration: underline;">Remarks :</h4> 
+										</td>
+										<td style="border:none;">
+											
+										</td>
+									</tr>
+									<%for(Object[] obj : contingentremarks){%>
+									<tr>
+										<td style="border:none;width: 20%;">
+											<%=obj[3] %>&nbsp; :
+										</td>
+										<td style="border:none;" class="text-blue" >
+											<%=obj[4] %>
+										</td>
+										
+									</tr>
+									<%} %>
+								</table>
+								<%} %>
+							</div>
+							<div class="col-md-12" align="left">
 								Remarks : <br>
 								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
 							</div>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
-								<%}else if( billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){ %>
+								<%}else if(( billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R')" >Forward</button>
 								<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
@@ -280,6 +326,7 @@ th,td
 							</div>	
 						</div>
 						<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
+						<input type="hidden" name="isapproval" value="Y">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 					<%} %>					

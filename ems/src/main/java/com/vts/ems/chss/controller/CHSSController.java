@@ -1733,6 +1733,11 @@ public class CHSSController {
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
+			if (isapproval == null) 
+			{
+				Map md=model.asMap();
+				isapproval=(String)md.get("isapproval");
+			}	
 			
 			
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
@@ -1751,7 +1756,7 @@ public class CHSSController {
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			
-			req.setAttribute("isapproval", req.getParameter("isapproval"));
+			req.setAttribute("isapproval", isapproval);
 			req.setAttribute("logintype", LoginType);
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
@@ -1792,6 +1797,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("isapproval","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1831,6 +1837,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("isapproval","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1870,6 +1877,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("isapproval","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1909,6 +1917,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("isapproval","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1948,6 +1957,7 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("isapproval","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2043,7 +2053,11 @@ public class CHSSController {
 			}
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("contingentremarks", service.ContingentBillRemarkHistory(contingentid));
+			
+			
 			req.setAttribute("logintype", LoginType);
+			req.setAttribute("labdata", service.getLabCode());
 			
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			
@@ -2128,7 +2142,7 @@ public class CHSSController {
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside ContingentApprovals.htm "+Username, e);
+			logger.error(new Date() +"Inside ContingentApprovals.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -2137,6 +2151,7 @@ public class CHSSController {
 	@RequestMapping(value = "ContingetBill.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String ContingetBill(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
+		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ContingetBill.htm "+Username);
 		try {
@@ -2144,12 +2159,18 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("labdata", service.getLabCode());
+			req.setAttribute("contingentremarks", service.ContingentBillRemarkHistory(contingentid));
 			req.setAttribute("onlyview","Y");
-			return "chss/ContingentBillView";
+			req.setAttribute("logintype",LoginType);
 			
-//			return "chss/ContingetBill";
+		
+			
+//			return "chss/ContingentBillView";
+			
+			return "chss/ContingentBill";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ContingetBill.htm "+Username, e);
@@ -2188,16 +2209,16 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			
+			req.setAttribute("labdata", service.getLabCode());
 			String filename="CHSSContingentList";
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
 			
 	        
 	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-			req.getRequestDispatcher("/view/chss/ContingetBill.jsp").forward(req, customResponse);
+			req.getRequestDispatcher("/view/chss/ContingentBill.jsp").forward(req, customResponse);
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
@@ -2438,48 +2459,49 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value = "ContingetBillPayReport.htm", method = {RequestMethod.POST,RequestMethod.GET})
-	public String ContingetBillPayReport(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "ContingentBillPayReport.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingentBillPayReport(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside ContingetBillPayReport.htm "+Username);
+		logger.info(new Date() +"Inside ContingentBillPayReport.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
+			req.setAttribute("labdata", service.getLabCode());
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			return "chss/ContingetBillPayReport";
+			return "chss/ContingentBillPayReport";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside ContingetBillPayReport.htm "+Username, e);
+			logger.error(new Date() +" Inside ContingentBillPayReport.htm "+Username, e);
 			return "static/Error";
 		}
 	}
 	
-	@RequestMapping(value = "ContingetBillPayReportDownload.htm")
-	public void ContingetBillPayReportDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	@RequestMapping(value = "ContingentBillPayReportDownload.htm")
+	public void ContingentBillPayReportDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
 
-		logger.info(new Date() +"Inside ContingetBillPayReportDownload.htm "+UserId);
+		logger.info(new Date() +"Inside ContingentBillPayReportDownload.htm "+UserId);
 		
 		try {	
 			String contingentid = req.getParameter("contingentid");
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList());
+			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			
+			req.setAttribute("labdata", service.getLabCode());
 			String filename="CHSSConsolidatedBill";
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
 			
 	        
 	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-			req.getRequestDispatcher("/view/chss/ContingetBillPayReport.jsp").forward(req, customResponse);
+			req.getRequestDispatcher("/view/chss/ContingentBillPayReport.jsp").forward(req, customResponse);
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
@@ -2506,7 +2528,7 @@ public class CHSSController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();  
-			logger.error(new Date() +" Inside ContingetBillPayReportDownload.htm "+UserId, e); 
+			logger.error(new Date() +" Inside ContingentBillPayReportDownload.htm "+UserId, e); 
 		}
 
 	}
