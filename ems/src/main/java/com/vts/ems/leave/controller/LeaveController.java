@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -94,7 +95,7 @@ public class LeaveController {
 	
 	@RequestMapping(value = "LeaveCredited.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveCredited(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
-		String UserId = (String) ses.getAttribute("Username");
+		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside LeaveCredited.htm"+UserId);		
 		try {
 			String month=req.getParameter("month");
@@ -164,6 +165,64 @@ public class LeaveController {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
 	       }
 	   return "leave/LeaveApply";
+
+	}
+	
+	@RequestMapping(value = "AddUpdateCredit.htm", method = {RequestMethod.POST})
+	public String AddUpdateCredit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside AddUpdateCredit.htm"+UserId);		
+		try {
+			String month=req.getParameter("mnth");
+			String year=req.getParameter("yr");
+			LeaveRegister register=new LeaveRegister();
+			if(req.getParameter("type").equalsIgnoreCase("C")) {
+			register.setEMPID(req.getParameter("EmpId"));
+			}else if(req.getParameter("type").equalsIgnoreCase("U")) {
+				register.setRegisterId(Long.parseLong(req.getParameter("RegId")));
+				register.setEMPID(req.getParameter("EmpId"));
+			}
+			register.setCL(Double.parseDouble(req.getParameter("cl")));
+			register.setEL(Integer.parseInt(req.getParameter("el")));
+			register.setHPL(Integer.parseInt(req.getParameter("hpl")));
+			register.setCML(Integer.parseInt(req.getParameter("cml")));
+			register.setRH(Integer.parseInt(req.getParameter("rh")));
+			register.setEL_LAPSE(0);
+			register.setML(Integer.parseInt(req.getParameter("ml")));
+			register.setPL(Integer.parseInt(req.getParameter("pl")));
+			register.setSL(Integer.parseInt(req.getParameter("sl")));
+			register.setCCL(Integer.parseInt(req.getParameter("ccl")));
+			register.setADV_EL(0);
+			register.setADV_HPL(0);
+			register.setEOL(0);
+			register.setMONTH(month);
+			register.setYEAR(year);
+			register.setSTATUS("LKU");
+			if("January".equalsIgnoreCase(month)){
+			register.setFROM_DATE(year+"-01-01");
+			register.setTO_DATE(year+"-01-01");
+			}else if("July".equalsIgnoreCase(month)){
+				register.setFROM_DATE(year+"-07-01");
+				register.setTO_DATE(year+"-07-01");
+			}
+			register.setAPPL_ID("0");
+			register.setCREDITED_BY("SYSTEM");
+			register.setCREDITED_BY(UserId);
+			register.setCREDITED_ON(sdf.getSqlDateAndTimeFormat().format(new Date()));
+
+			
+			long result=service.LeaveCreditedAddUpdate(register,req.getParameter("type"));
+		    if (result>0) {
+				redir.addAttribute("result", "Leave Credited Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Leave Credit unsuccessful");
+			}
+	
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside AddUpdateCredit.htm"+UserId, e);
+	       }
+	   return "redirect:/LeaveCredit.htm";
 
 	}
 }

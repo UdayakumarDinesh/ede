@@ -114,6 +114,12 @@ public class LeaveServiceImpl implements LeaveService{
 		return dao.LeaveCreditById(registerId);
 	}
 
+	@Override
+	public long LeaveCreditedAddUpdate(LeaveRegister register, String type) throws Exception {
+		
+		return 0;
+	}
+
 
 	
 	}

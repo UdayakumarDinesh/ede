@@ -15,4 +15,5 @@ public interface LeaveService {
 	public long LeaveCredited(String month,String year,String emmNo) throws Exception;
 	public List<Object[]> LeaveCreditInd(String month, String year,String emmNo) throws Exception;
 	public List<Object[]> LeaveCreditById(String registerId)throws Exception;
+	public long LeaveCreditedAddUpdate(LeaveRegister register,String type) throws Exception;
 }
