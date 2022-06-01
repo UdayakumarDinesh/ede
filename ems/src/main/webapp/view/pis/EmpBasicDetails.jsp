@@ -547,8 +547,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<td><b>Member Name</b></td>
 						<td><b>Relation</b></td>
 						<td><b>Date Of Birth</b></td>
-				    	<td><b>Med Dep</b></td>
-				    	<td><b>Blood Group</b></td>
+				    <!-- 	<td><b>Med Dep</b></td>
+				    	<td><b>Blood Group</b></td> -->
 						</tr>
 							
 						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
@@ -556,8 +556,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td><%=O[0]%></td>
 							<td><%=O[1]%></td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%></td>
-						    <td><%=O[3]%></td>
-							<td><%=O[4]%></td>
+						  <%--   <td><%=O[3]%></td>
+							<td><%=O[4]%></td> --%>
 						
 						</tr>	
 						

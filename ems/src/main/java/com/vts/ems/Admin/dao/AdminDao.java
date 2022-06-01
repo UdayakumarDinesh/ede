@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.chss.model.CHSSDoctorRates;
@@ -88,4 +89,7 @@ public interface AdminDao {
 	public List<Object[]> GetToemployee()throws Exception;
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
 	public int CheckduplicateTestCode(String testcode)throws Exception;
+	public int checkavaibility(String logintype,String detailsid)throws Exception;
+	public int updateformroleaccess(String formroleid,String active,String auth)throws Exception;
+	public Long insertformroleaccess(FormRoleAccess main) throws Exception;
 }

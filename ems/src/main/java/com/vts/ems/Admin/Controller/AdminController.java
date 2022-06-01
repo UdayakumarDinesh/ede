@@ -2,6 +2,7 @@ package com.vts.ems.Admin.Controller;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
+import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
@@ -49,22 +51,45 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
 	@Autowired
 	AdminService service;
-	                                  
+	                      
+	@Autowired
+	EMSMainService emsservice;
+	
 	@Autowired
 	private PisService pisservice;
 	
 	   @RequestMapping(value = "Role.htm" )
-			public String RoleFormAccess(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
+			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
 					throws Exception {
 				String UserId = (String) ses.getAttribute("Username");
 				logger.info(new Date() +"Inside LoginTypeList.htm "+UserId);		
 				try {
-			
+					
+				
+					String logintype=req.getParameter("logintype");
+					Map md=model.asMap();
+					if(logintype==null) {
+					
+						logintype=(String)md.get("logintype");
+						if(logintype==null) {
+							logintype="A";
+						}	
+					}
+					
+					String moduleid=req.getParameter("moduleid");
+					if(moduleid==null) {
+						moduleid=(String)md.get("moduleid");
+						if(moduleid==null) {
+							moduleid="0";
+						}		
+					}	
+					System.out.println("logintype     :"+logintype);
+					System.out.println("moduleid      :"+moduleid);
 					req.setAttribute("LoginTypeRoles",service.LoginTypeRoles());
-					req.setAttribute("FormDetailsList", service.FormDetailsList(req.getParameter("logintype"),req.getParameter("moduleid")));
+					req.setAttribute("FormDetailsList", service.FormDetailsList(logintype,moduleid));
 					req.setAttribute("FormModulesList", service.FormModulesList());
-					req.setAttribute("logintype", req.getParameter("logintype"));
-					req.setAttribute("moduleid", req.getParameter("moduleid"));
+					req.setAttribute("logintype", logintype);
+					req.setAttribute("moduleid", moduleid);
 				}
 				catch (Exception e) {
 						e.printStackTrace(); logger.error(new Date() +" Inside LoginTypeList.htm "+UserId, e);
@@ -275,7 +300,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							item.setOtherItemId(Integer.parseInt(itemid));
 							item.setModifiedDate(sdtf.format(new Date()));
 							item.setModifiedBy(UserId);
-							item.setOtherItemName(itemname);
+							item.setOtherItemName(WordUtils.capitalizeFully(itemname.trim()));
 							int result = service.EditItem(item);
 						 	if (result != 0) {
 								redir.addAttribute("result", "Item Edited Successful");
@@ -292,7 +317,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		
 						item.setCreatedBy(UserId);
 						item.setCreatedDate(sdtf.format(new Date()));
-						item.setOtherItemName(itemname);
+						item.setOtherItemName(WordUtils.capitalizeFully(itemname.trim()));
 						item.setIsActive(1);
 						int result = service.AddOtherItem(item);
 					 	if (result != 0) {
@@ -1179,5 +1204,55 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					 return json.toJson(count);
 				}
 			}
+			
+			
+			@RequestMapping(value="UpdateRoleAcess.htm" ,method = RequestMethod.POST)
+			public String RoleAccess(HttpSession ses, HttpServletRequest req , RedirectAttributes redir )throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside RoleAccess.htm "+UserId);
+				try {
+					String formroleaccessid = (String)req.getParameter("formroleaccessid");
+					String moduleid  = (String)req.getParameter("moduleid");
+					String LoginType  = (String)req.getParameter("logintype1");
+					String detailsid  = (String)req.getParameter("detailsid"+formroleaccessid);
+					String isactive   = (String)req.getParameter("isactive"+formroleaccessid);
+			
+					int result = service.updateformroleaccess(formroleaccessid,detailsid, isactive,LoginType , UserId);
+					
+					redir.addFlashAttribute("logintype",LoginType);
+					redir.addFlashAttribute("moduleid",moduleid );
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return "redirect:/Role.htm";
+			}
+			
+			@RequestMapping(value="circulatAddEditList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+			public String circularAddEdit(HttpSession ses, HttpServletRequest req )throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				List<Object[]> circulatlist = new ArrayList<Object[]>();
+			   	 try {
+			   		 String action = (String)req.getParameter("action");
+			   		 if("ADD".equals(action)) {
+			   			 
+			   			 return "Admin/CircularAddEdit";
+			   		 }else if ("EDIT".equals(action)) {
+			   			return "Admin/CircularAddEdit";
+			   		 }else {
+			   			 circulatlist = emsservice.circulatlist();
+				   		 req.setAttribute("circulatlist", circulatlist);
+				   		return "Admin/CircularList";
+			   		 }
+			   		
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "";
+				}
+				
+			}
+			
 		
 }

@@ -256,4 +256,14 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , fromdate ,todate FROM chss_circular_list ORDER BY circularid DESC";
+	
+	@Override
+	 public List<Object[]> circulatlist() throws Exception
+	 {
+		Query query =  manager.createNativeQuery(CIRCULARLIST);
+		 
+		return (List<Object[]>)query.getResultList();
+	 }
+	
 }

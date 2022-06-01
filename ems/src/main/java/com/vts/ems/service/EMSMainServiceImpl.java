@@ -196,4 +196,10 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.EmpHandOverLoginTypeList(empid);
 	}
 	
+	@Override
+	public List<Object[]> circulatlist() throws Exception
+	{
+		return dao.circulatlist();
+	}
+	
 }
