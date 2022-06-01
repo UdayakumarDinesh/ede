@@ -27,6 +27,7 @@ import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -1141,6 +1142,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	{
 		logger.info(new Date() +"Inside DAO CHSSContingentEdit");
 		try {
+			
 			manager.merge(contingent);
 			manager.flush();
 			
@@ -1185,6 +1187,25 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	
+	
+	@Override
+	public long CHSSContingentTransactionAdd(CHSSContingentTransaction transaction ) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSApplyEdit");
+		try {
+			manager.persist(transaction);
+			manager.flush();
+			
+			return transaction.getContinTransactionId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
 //	private static final String GETCHSSCONTINGENTLIST  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE cc.isactive=1 AND cc.ContingentStatusId = cs.chssstatusid ORDER BY cc.ContingentStatusId ASC";
 	
 	@Override
@@ -1219,7 +1240,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
-	private static final String CHSSCONTINGENTDATA  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus,cc.billcontent FROM chss_contingent cc , chss_status cs WHERE  cc.ContingentStatusId = cs.chssstatusid AND cc.contingentid= :contingentid ORDER BY cc.ContingentStatusId ASC";
+	private static final String CHSSCONTINGENTDATA  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus,cc.billcontent, cc.ApprovalDate FROM chss_contingent cc , chss_status cs WHERE  cc.ContingentStatusId = cs.chssstatusid AND cc.contingentid= :contingentid ORDER BY cc.ContingentStatusId ASC";
 	@Override
 	public Object[] CHSSContingentData(String contingentid) throws Exception
 	{
@@ -1285,9 +1306,9 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> GetApprovedBills(String bill)throws Exception
 	{
-          logger.info(new Date() +"Inside DAO GetApprovedBills()");
+       logger.info(new Date() +"Inside DAO GetApprovedBills()");
 		
-		try {
+	   try {
 			Query query= manager.createNativeQuery("CALL chss_contingent_bills_list(:bill)");
 			query.setParameter("bill", bill);
 			return (List<Object[]>)query.getResultList();		
@@ -1344,14 +1365,21 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType IN ('K','V','W','Z')  ";
+	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.DesignationId = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+			+ "UNION \r\n"
+			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.DesignationId = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
+			+ "UNION \r\n"
+			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.DesignationId = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+			+ "UNION \r\n"
+			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.DesignationId = ed.DesigId AND cc.ContingentId = :contingentid ";
 	@Override
-	public List<Object[]> CHSSApprovalAuthList() throws Exception
+	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
 		try {
 			
 			Query query= manager.createNativeQuery(CHSSAPPROVALAUTHLIST);
+			query.setParameter("contingentid", contingentid);
 			return (List<Object[]>)query.getResultList();
 			
 			
@@ -1569,7 +1597,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			e.printStackTrace();
 		}
 		return  list;
-		
 	}
 	
 	
@@ -1600,7 +1627,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO MedAdmissibleList");
-		 List<Object[]> list = null;
+		List<Object[]> list = null;
 		try {
 			
 			Query query= manager.createNativeQuery(MEDADMISSIBLELIST);
@@ -1639,5 +1666,100 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+
+	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
+	@Override
+	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimApprovedPOVOData");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CLAIMAPPROVEDPOVODATA);
+			query.setParameter("chssapplyid", chssapplyid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
+	
+	
+	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.Designation FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.DesignationId = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND TRIM(cat.Remark)<>'' AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimRemarksHistory");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CLAIMREMARKSHISTORY);
+			query.setParameter("chssapplyid", chssapplyid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String GETLABCODE  ="SELECT labcode,LabName FROM lab_master";
+	@Override
+	public Object[] getLabCode() throws Exception
+	{
+
+		logger.info(new Date() +"Inside DAO getLabCode");
+		try {
+			
+			Query query= manager.createNativeQuery(GETLABCODE);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	
+	private static final String CONTINGENTHISTORY  ="SELECT cct.ContinTransactionId,  DATE (cct.ActionDate),  ccs.CHSSStatus,  e.EmpName  FROM  chss_contingent_transaction cct,  chss_contingent_status ccs,  employee e WHERE cct.StatusId = ccs.CHSSContinStatusId  AND cct.ActionBy = e.EmpId  AND cct.ContingentId = :contingentid  ORDER BY cct.ActionDate";
+	@Override
+	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ContingentHistory");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CONTINGENTHISTORY);
+			query.setParameter("contingentid", contingentid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String CONTINGENTBILLREMARKHISTORY  ="SELECT cct.ContinTransactionId,  DATE (cct.ActionDate),  ccs.CHSSStatus,  e.EmpName,  cct.Remarks FROM  chss_contingent_transaction cct,  chss_contingent_status ccs,  employee e WHERE cct.StatusId = ccs.CHSSContinStatusId  AND TRIM(cct.Remarks) <> ''  AND cct.ActionBy = e.EmpId  AND cct.ContingentId =:contingentid ORDER BY cct.ActionDate ASC";
+	@Override
+	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ContingentBillRemarkHistory");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CONTINGENTBILLREMARKHISTORY);
+			query.setParameter("contingentid", contingentid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+			
 }

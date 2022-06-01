@@ -235,8 +235,8 @@ p {
 												<td> <input type="number" class="form-control items cost-only" step=".01" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" readonly="readonly"></td>
 												<%} %>
 												<td>
-													<button type="submit"  class="btn btn-sm" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
-														<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
+														update
 													</button>
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
@@ -666,7 +666,7 @@ p {
 												</select>
 											</td>
 											<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost" value="" style="width:100%;direction: rtl;" min="1" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_other"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
 									
@@ -1079,8 +1079,8 @@ function getConsultdata()
 				"linkedCalendars" : false,
 				"showCustomRangeLabel" : true,
 				"startDate" : new Date(consult.ConsultDate),
-				"maxDate" :$billdate,
-				"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+				"maxDate" :new Date(),
+				"minDate":$billdate, 
 				"cancelClass" : "btn-default",
 				showDropdowns : true,
 				locale : {
@@ -1135,8 +1135,8 @@ function getConsultdata()
 								"linkedCalendars" : false,
 								"showCustomRangeLabel" : true,
 								"startDate" : $billdate,
-								"maxDate" :$billdate,
-								"minDate":new Date('<%=consultmain.getConsultDate()%>'), 
+								"maxDate" :new Date(),
+								"minDate":$billdate, 
 								"cancelClass" : "btn-default",
 								showDropdowns : true,
 								locale : {
@@ -1454,7 +1454,7 @@ function getTestsData()
 		
 		
 		
-		
+		onlyNumbers();
 		setTooltip();
 		$('.meds-date').daterangepicker({
 			"singleDatePicker" : true,
@@ -1488,8 +1488,10 @@ $("table").on('click','.tbl-row-add-meds' ,function()
    	var $clone = $tr.clone();
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
-
+    $clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
+    $clone.find('.selectpicker').selectpicker('render'); 
   	setTooltip();
+  	onlyNumbers();
   
 });
 
@@ -1587,6 +1589,7 @@ function getMedicinesData(){
 		$('#meds-list-table').html(medsHTMLStr);
 		
 		setTooltip();
+		onlyNumbers();
 		$('.meds-date').daterangepicker({
 			"singleDatePicker" : true,
 			"linkedCalendars" : false,
@@ -1658,6 +1661,7 @@ function FillMedsList()
 				
 				$('#meds-add-tbody').html(medsHTMLStr);
 				setTooltip();
+				onlyNumbers();
 							
 			}
 		});
@@ -1682,6 +1686,7 @@ $("table").on('click','.tbl-row-add-misc' ,function()
 
 	
    	setTooltip();
+   	onlyNumbers();
   
 });
 
@@ -1771,7 +1776,7 @@ $("table").on('click','.tbl-row-add-other' ,function()
 		   	$clone.find(".items").val("").end();  
 		 
 		  	setTooltip();
-		  
+		  	onlyNumbers();
 		});
 
 

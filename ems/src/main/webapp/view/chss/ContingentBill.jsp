@@ -117,7 +117,8 @@ th,td
 	/* Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); */
 	List<Object[]> ApprovalAuth = (List<Object[]>)request.getAttribute("ApprovalAuth");
 	String LabLogo = (String)request.getAttribute("LabLogo");
-	
+	Object[] labdata = (Object[])request.getAttribute("labdata");
+	List<Object[]> contingentremarks = (List<Object[]>)request.getAttribute("contingentremarks");
 	if(contingentdata[2]==null){
 		contingentdata[2] = LocalDate.now().toString();
 	}
@@ -136,8 +137,13 @@ th,td
 	<table style="margin-bottom: 10px;margin-top: -65px;">
 		<tr>
 			<td style="width: 80px; height: 75px;border: 0;margin-bottom: 10px;"></td>
-			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0;">STARC <br><br> Ref: <%=contingentdata[1] %>  </td>
-			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;"><b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></b>  </td>
+			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0;"><%=labdata[0] %> <br><br> Ref: <%=contingentdata[1] %>  </td>
+			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;">
+			<b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></b>
+			<%if(contingentdata[9]!=null){ %>
+									<br>	Approved On :&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
+									<% } %> 
+			 </td>
 		</tr>
 	</table>
 	<br>
@@ -222,10 +228,10 @@ th,td
 					<td style="border: 0px;">
 						<%for(Object[] auth : ApprovalAuth)
 						{
-							if(auth[3].toString().equalsIgnoreCase("K")){
+							if(auth[1].toString().equalsIgnoreCase("PO")){
 						%>
-								<%=auth[1] %><br>
-								<%=auth[2] %>
+								<%=auth[2] %><br>
+								<%=auth[4] %>
 							
 						<% }} %>
 					</td>
@@ -233,10 +239,10 @@ th,td
 		
 						<%for(Object[] auth : ApprovalAuth)
 						{
-							if(auth[3].toString().equalsIgnoreCase("V")){
+							if(auth[1].toString().equalsIgnoreCase("VO")){
 						%>
-								<%=auth[1] %><br>
-								<%=auth[2] %>
+								<%=auth[2] %><br>
+								<%=auth[4] %>
 							
 						<% }} %>
 			
@@ -249,10 +255,10 @@ th,td
 				<td style="border: 0px;">
 				<%for(Object[] auth : ApprovalAuth)
 				{
-					if(auth[3].toString().equalsIgnoreCase("W")){
+					if(auth[1].toString().equalsIgnoreCase("AO")){
 				%>
-						<%=auth[1] %><br>
-						<%=auth[2] %>
+						<%=auth[2] %><br>
+						<%=auth[4] %>
 					
 				<% }} %>
 				</td>
@@ -261,14 +267,14 @@ th,td
 		
 		
 		<div align="center">
-		<br><br>	<span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
+		<br><br><span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
 				<span><b>
 					<%for(Object[] auth : ApprovalAuth)
 					{
-						if(auth[3].toString().equalsIgnoreCase("Z")){
+						if(auth[1].toString().equalsIgnoreCase("CEO")){
 					%>
-							<%=auth[1] %><br>
-							CEO
+							<%=auth[2] %><br>
+							CEO, <%=labdata[0] %>
 						
 					<% }} %></b>
 				</span>

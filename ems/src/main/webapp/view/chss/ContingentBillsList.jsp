@@ -65,11 +65,11 @@
 			<div class="card" >
 				<div class="card-body " >
 				
-					<form action="ApprovedBills.htm" method="POST" style="float: right;">
+				<%-- 	<form action="ApprovedBills.htm" method="POST" style="float: right;">
 							<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
 							<br>
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					</form>
+					</form> --%>
 							
 					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -109,11 +109,9 @@
 												 style="padding-top:5px; padding-bottom: 5px; color:#4700D8; font-weight: 600;"
 												<%} %>	
 											>
-												<%if("1".equals(obj[5].toString()) ){%>  
-												 Bill Generated
-												<%}else{ %>
+												
 												<%=obj[7] %>
-												<%} %>
+											
 											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												

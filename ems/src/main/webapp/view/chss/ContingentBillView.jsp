@@ -64,7 +64,15 @@ th,td
 	text-align: right;
 }
 	
+.text-blue
+{
+	color: blue;
+}
 
+.text-green
+{
+	color: #4E944F;
+}
 
 
 </style>
@@ -78,6 +86,8 @@ th,td
 	
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
 	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
+	Object[] labdata = (Object[])request.getAttribute("labdata");
+	List<Object[]> contingentremarks = (List<Object[]>)request.getAttribute("contingentremarks");
 	
 	String logintype = (String)request.getAttribute("logintype");
 	int billstatus = Integer.parseInt(contingentdata[5].toString());
@@ -89,6 +99,8 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	String LabLogo = (String)request.getAttribute("LabLogo");
+	String onlyview = (String)request.getAttribute("onlyview");
+	
 %>
  
 	<div class="card-header page-top">
@@ -99,8 +111,12 @@ th,td
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>						
+						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>	
+						<%if(billstatus==14){ %>					
+						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Contingent List</a></li>
+						<%}else{ %>
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
+						<%} %>
 						<li class="breadcrumb-item active " aria-current="page">Contingent Bill</li>
 					</ol>
 				</div>
@@ -150,7 +166,15 @@ th,td
 							<img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>">
 							<div style="padding-left: 5px;">
 								<br><br>
-								<span style="font-size: 20px; font-weight:600; ">SITAR</span> <span style="float: right;vertical-align: bottom;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></span><br>
+								<span style="font-size: 20px; font-weight:600; "><%=labdata[0] %></span> 
+								<span style="float: right;vertical-align: bottom;">
+									Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %> 
+									<%if(contingentdata[9]!=null){ %>
+									<br>	Approved On:<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
+									<% } %>
+								
+								</span>
+									<br>
 								<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br><br>
 							</div>
 							<p>
@@ -158,7 +182,6 @@ th,td
 								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
 								employees have been processed and admitted at CHSS rates.
 							</p>
-						
 						</div>
 						
 						<table>
@@ -170,9 +193,9 @@ th,td
 								<th style="text-align: center;">No. of Bills</th>
 								<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
 								<th class="right" style="width: 15%;">Amount Admitted (&#8377;)</th>
-								<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+								
 								<th  style="width: 10%" >Form</th>
-								<%} %>
+								
 							</tr>
 							
 							<%long allowedamt=0,claimamt=0,billscount=0;
@@ -203,7 +226,7 @@ th,td
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString())) %></td>
-									<%if( billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){  %>
+									<%if( true){  %>
 									<td >
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 										<i class="fa-solid fa-eye"></i>
@@ -212,6 +235,7 @@ th,td
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
+									<input type="hidden" name="isapproval" value="Y">
 									</td>
 									<%} %>							
 								</tr>
@@ -234,18 +258,16 @@ th,td
 								</tr>
 						</table>
 						
-						<%if(!logintype.equalsIgnoreCase("K")){ %>
-						<div>
-							<p>
-								<%=contingentdata[8] %>
-							</p>
-						</div>
+						<%if(logintype!=null && !logintype.equalsIgnoreCase("K")){ %>
+							<div>
+								<p>
+									<%=contingentdata[8] %>
+								</p>
+							</div>
 						<%} %>
-						
-						
 					</div>
 					</form>	
-					<%if(billscount>0){ %>
+					<%if(billscount>0 && (logintype==null || !logintype.equals("Y"))){ %>
 					<form action="CHSSContingentApprove.htm" method="post">
 					
 						<div class="row">
@@ -258,13 +280,38 @@ th,td
 							<%} %>
 							
 							<div class="col-md-12" align="left">
+								<%if(contingentremarks.size()>0){ %>
+								<table style="border: 1px solid black">
+									<tr>
+										<td style="border:none;">
+											<h4 style="text-decoration: underline;">Remarks :</h4> 
+										</td>
+										<td style="border:none;">
+											
+										</td>
+									</tr>
+									<%for(Object[] obj : contingentremarks){%>
+									<tr>
+										<td style="border:none;width: 20%;">
+											<%=obj[3] %>&nbsp; :
+										</td>
+										<td style="border:none;" class="text-blue" >
+											<%=obj[4] %>
+										</td>
+										
+									</tr>
+									<%} %>
+								</table>
+								<%} %>
+							</div>
+							<div class="col-md-12" align="left">
 								Remarks : <br>
 								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
 							</div>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
-								<%}else if( billstatus==9 || billstatus==11 || billstatus==13 && logintype.equalsIgnoreCase("K")){ %>
+								<%}else if(( billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R')" >Forward</button>
 								<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
@@ -279,6 +326,7 @@ th,td
 							</div>	
 						</div>
 						<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
+						<input type="hidden" name="isapproval" value="Y">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 					<%} %>					

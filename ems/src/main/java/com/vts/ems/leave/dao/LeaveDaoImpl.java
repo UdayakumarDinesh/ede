@@ -32,7 +32,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CREDIT="select * from leave_credit where month=:mnth";
     private static final String CREDITPREVIEW="select b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.phcl,b.ph FROM Leave_credit a, employee b, employee_desig c  WHERE a.month=:mnth and b.designationid=c.desigid and b.empno not in(select empid from leave_register where month=:mnth and year=:yr and status='K') and case when 'A'=:empNo then 1=1 else  b.empno=:empNo end ";
     private static final String CREDITIND="CALL leave_credit_individual(:mnth,:yr,:empNo)";
-    private static final String CREDITBYID="SELECT b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.cl AS phcl,b.ph,a.ccl AS ccl,a.sl AS sl,a.month,a.year,a.gender   FROM leave_register a, employee b, employee_desig c WHERE  a.registerid=:id AND b.designationid=c.desigid AND b.empno=a.empid";
+    private static final String CREDITBYID="SELECT b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.cl AS phcl,b.ph,a.ccl AS ccl,a.sl AS sl,a.month,a.year,b.gender,a.ml,a.pl   FROM leave_register a, employee b, employee_desig c WHERE  a.registerid=:id AND b.designationid=c.desigid AND b.empno=a.empid";
     
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {

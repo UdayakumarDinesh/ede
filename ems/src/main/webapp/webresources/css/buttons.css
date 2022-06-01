@@ -7,7 +7,7 @@
 
 .btn-sm
 {
-	text-transform: uppercase;
+	text-transform: capitalize;
 	
 }
 

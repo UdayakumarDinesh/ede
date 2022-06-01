@@ -117,7 +117,7 @@ th,td
 	/* Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); */
 	List<Object[]> ApprovalAuth = (List<Object[]>)request.getAttribute("ApprovalAuth");
 	String LabLogo = (String)request.getAttribute("LabLogo");
-	
+	Object[] labdata = (Object[])request.getAttribute("labdata");
 	if(contingentdata[2]==null){
 		contingentdata[2] = LocalDate.now().toString();
 	}
@@ -136,8 +136,11 @@ th,td
 	<table style="margin-bottom: 10px;margin-top: -65px;">
 		<tr>
 			<td style="width: 80px; height: 75px;border: 0;margin-bottom: 10px;"></td>
-			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0;">STARC <br><br> Ref: <%=contingentdata[1] %>  </td>
-			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;"><b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></b>  </td>
+			<td style="font-size: 15px; font-weight:600;vertical-align: bottom;border: 0;"><%=labdata[0] %> <br><br> Ref: <%=contingentdata[1] %>  </td>
+			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;"><b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %>
+			<%if(contingentdata[9]!=null){ %>
+									<br>	Approved On:<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
+									<% } %></b>  </td>
 		</tr>
 	</table>
 	<br>

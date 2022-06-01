@@ -223,7 +223,7 @@ String ses=(String)request.getParameter("result");
   	      </div>
   	      <div class="modal-body">
   	      
-  	      	<form action="AddEvent.htm" name="attachform" id="attachform"  method="POST">
+  	      	<form action="AddUpdateCredit.htm" method="POST">
   	      		<div class="row">
   	      		    <div class="col-md-1">
   	      		    </div>
@@ -279,6 +279,9 @@ String ses=(String)request.getParameter("result");
 
   	      		<input type="hidden" name="type" value="" id="type"/>
                 <input type="hidden" name="EmpId" value="" id="EmpId"/>
+                <input type="hidden" name="RegId" value="" id="RegId"/>
+                <input type="hidden" name="mnth" value="" id="mnth"/>
+                <input type="hidden" name="yr" value="" id="yr"/>
   	      		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   	      	</form>
   	      		
@@ -332,6 +335,8 @@ function leaveCredit(){
 	  			$("#rh").val(consultVals[0][7]);
 	  			$("#ccl").val(consultVals[0][10]);
 	  			$("#sl").val(consultVals[0][11]);
+	  			$("#mnth").val(month);
+	  			$("#yr").val(year);
 	  			if('C'== consultVals[0][12]){
 		  			$("#sub").val('Credit');
 		 			$("#exampleModalLongTitle").html(consultVals[0][1]+', '+consultVals[0][2]+'   Leave Credit For '+month+' '+year);
@@ -340,7 +345,8 @@ function leaveCredit(){
 		  		}else if('U'== consultVals[0][12]){
 			  	    $("#sub").val('Update');
 		 			$("#exampleModalLongTitle").html(consultVals[0][1]+', '+consultVals[0][2]+'  Already   Leave  Credited For '+month+' '+year);
-		 			$("#EmpId").val(consultVals[0][13]);
+		 			$("#RegId").val(consultVals[0][13]);
+		 			$("#EmpId").val(consultVals[0][0]);
 					$("#type").val('U');
 			  }
 	  			
@@ -398,11 +404,28 @@ function leaveCreditEdit(id){
 			$("#rh").val(consultVals[0][7]);
 			$("#ccl").val(consultVals[0][10]);
 			$("#sl").val(consultVals[0][11]);
-			$("#EmpId").val(id);
+			$("#RegId").val(id);
+			$("#EmpId").val(consultVals[0][0]);
+			$("#mnth").val(consultVals[0][12]);
+  			$("#yr").val(consultVals[0][13]);
 			$("#type").val('U');
 	  	    $("#sub").val('Update');
  			$("#exampleModalLongTitle").html(consultVals[0][1]+', '+consultVals[0][2]+'     Leave  Credited For '+consultVals[0][12]+' '+consultVals[0][13]);
-
+ 			if('M'== consultVals[0][14]){
+	  			$("#CCL").hide();
+	  			$("#F").hide();
+	  			$("#M").show();
+	 			$("#pl").val(consultVals[0][16]);
+	 			$("#ml").val(consultVals[0][15]);
+	 			 $('#div').removeClass().addClass('col-md-4');
+	  		}else if('F'== consultVals[0][14]){
+	  			$("#CCL").show();
+	  			$("#F").show();
+	  			$("#M").hide();
+	 			$("#pl").val(consultVals[0][16]);
+	 			$("#ml").val(consultVals[0][15]);
+	 			$('#div').removeClass().addClass('col-md-3');
+		    }
 			$('[data-toggle="tooltip"]').tooltip()
 				
 				
