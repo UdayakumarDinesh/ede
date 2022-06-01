@@ -60,8 +60,6 @@ th,td
 {
 	text-align: right;
 }
-	
-
 .btn-history
 {
 	float: right;
@@ -103,6 +101,7 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	
 	String isapproval = (String)request.getAttribute("isapproval");
+	String showedit = (String)request.getAttribute("show-edit");
 	String logintype = (String)request.getAttribute("logintype");
 	
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
@@ -112,8 +111,7 @@ th,td
 	
 	
 	
-	boolean showhistorybtn = (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13) && (isapproval!=null && isapproval.equalsIgnoreCase("Y") );
-	boolean showitemedit =  isapproval!=null && isapproval.equalsIgnoreCase("Y");
+	boolean showhistorybtn = showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y");
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 %>
@@ -174,12 +172,15 @@ th,td
 									<tr>
 										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
 										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
-										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span> </td>
+										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </td>
 									</tr>
 								</table> 
 							
-								<table>	
+								<table style="margin-top: 5px;">	
 									<tbody>
+										<tr>
+											<th colspan="3" style="border: 0px"> Claim No : <%=chssapplydata[16] %></th>
+										</tr>
 										<tr>
 											<th>Name</th>
 											<th>Emp No</th>
@@ -306,35 +307,12 @@ th,td
 										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 										<br>
 										&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
-										(Strike out whichever is not applicable)
+										
 								
 									</p>
 								
 								</div>
 							
-								<%if(ClaimRemarksHistory.size()>0){ %>
-								<table style="border: 1px solid black">
-									<tr>
-										<td style="border:none;">
-											<h4 style="text-decoration: underline;">Remarks :</h4> 
-										</td>
-										<td style="border:none;">
-											
-										</td>
-									</tr>
-									<%for(Object[] obj : ClaimRemarksHistory){%>
-									<tr>
-										<td style="border:none;width: 20%;">
-											<%=obj[3] %>&nbsp; :
-										</td>
-										<td style="border:none;" class="text-blue" >
-											<%=obj[1] %>
-										</td>
-										
-									</tr>
-									<%} %>
-								</table>
-								<%} %>
 								
 								<%-- <table>
 									<tr>
@@ -364,10 +342,10 @@ th,td
 							<div class="break"></div>
 							<div align="center" >
 							
-								
+								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
 									<table>
 										<tbody>
-											<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
+											
 												<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
@@ -416,10 +394,7 @@ th,td
 														
 														
 														
-													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-															<td class="text-blue" >
-															<td class="text-blue" >
-													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
+													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=consult[7]%>		
 														</td>	
@@ -428,23 +403,21 @@ th,td
 																<%=consult[10]%>
 															<%} %>
 														</td>
-														<%}else if(showhistorybtn){ %>
-															<td class="right">	
-																<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
-															</td>
-															<td >
-																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
-																
-																<%-- <textarea class="textarea" oninput="auto_grow(this)" placeholder="Comments" name="consultcomment-<%=consult[0]%>" > <%if(consult[10]!=null){ %><%=consult[10] %><%}%></textarea> --%>
-																
-																<button type="submit" class="btn btn-sm editbtn" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
-																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-																</button>	
-															</td>
-														<%} else {%>
+													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+														<td class="right">	
+															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+														</td>
+														<td >
+															<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
+															
+															<button type="submit" class="btn btn-sm editbtn" formaction="ConsultRemAmountEdit.htm" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
+																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+															</button>	
+														</td>
+													<% }else {%>
 														<td class="">
-															<td class="">
-														<%} %>
+														<td class="">		
+													<%} %>	
 														
 																											
 													</tr>					
@@ -453,9 +426,7 @@ th,td
 													totalremamount +=Double.parseDouble(consult[7].toString());
 												} %>
 													
-												
-										</form>
-										<form action="TestRemAmountEdit.htm" method="post" autocomplete="off">
+										
 											<% i=1;
 											for(Object[] test :TestsDataList)
 											{%>
@@ -490,10 +461,7 @@ th,td
 													<td class="right text-blue"><%=test[4] %></td>
 												
 													
-													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-															<td class="">
-															<td class="">
-													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
+													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=test[7]%>	
 														</td>	
@@ -502,39 +470,27 @@ th,td
 																<%=test[11]%>
 															<%} %>
 														</td>
-													<%}else if(showhistorybtn){ %>
+													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
 														</td>
 														<td >
 														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
 															
-														<button type="submit" class="btn btn-sm editbtn"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<button type="submit" class="btn btn-sm editbtn" formaction="TestRemAmountEdit.htm"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 														</td>
-													<%} else {%>
+													<% }else {%>
 														<td class="">
-															<td class="">
-														<%} %>
-														
-													
-													
-													
-													
-													
-													
-													
-													
+														<td class="">		
+													<%} %>											
 												</tr>					
 											<%i++;
 											itemstotal += Double.parseDouble(test[4].toString());
 											totalremamount +=Double.parseDouble(test[7].toString());
 											} %>
-												
-										</form>
-										<form action="MedRemAmountEdit.htm" method="post" autocomplete="off">
-											
+																	
 											<% i=1;
 											for(Object[] medicine : MedicineDataList)
 											{%>
@@ -578,10 +534,7 @@ th,td
 													<td  class="text-blue right"><%=medicine[3] %></td>
 												
 													
-													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-														<td class="">
-														<td class="">
-													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
+													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=medicine[6]%>
 														</td>	
@@ -591,30 +544,27 @@ th,td
 															<%} %>
 															
 														</td>
-													<%}else if(showhistorybtn){ %>
+													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
 																
-															<button type="submit" class="btn btn-sm editbtn"  name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<button type="submit" class="btn btn-sm editbtn" formaction="MedRemAmountEdit.htm" name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
 													<%} else {%>
 														<td class="">
-															<td class="">
-														<%} %>
+														<td class="">
+													<%} %>
 														
 												</tr>					
 											<%i++;
 											itemstotal += Double.parseDouble(medicine[3].toString());
 											totalremamount +=Double.parseDouble(medicine[6].toString());
 											}%>
-											
-									</form>
-									<form action="OtherRemAmountEdit.htm" method="post" autocomplete="off">
 											
 											<% i=1;
 											for(Object[] other : OtherDataList)
@@ -652,10 +602,7 @@ th,td
 													
 													
 													
-													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-														<td class="">
-														<td class="">
-													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
+													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=other[5]%>
 														</td>	
@@ -664,20 +611,20 @@ th,td
 																<%=other[8]%>
 															<%} %>
 														</td>
-													<%}else  if(showhistorybtn){ %>
+													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
 														</td>
 														<td >
 															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
-															<button type="submit" class="btn btn-sm editbtn"  name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<button type="submit" class="btn btn-sm editbtn" formaction="OtherRemAmountEdit.htm" name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 														</td>
 													<%} else {%>
 														<td class="">
-															<td class="">
-														<%} %>
+														<td class="">
+													<%} %>
 														
 													
 												</tr>					
@@ -685,11 +632,6 @@ th,td
 											itemstotal += Double.parseDouble(other[3].toString());
 											totalremamount +=Double.parseDouble(other[5].toString());
 											} %>
-												
-									</form>
-								
-									<form action="MiscRemAmountEdit.htm" method="post" autocomplete="off">
-											
 											<% i=1;
 											for(Object[] misc : MiscDataList)
 											{%>
@@ -726,10 +668,7 @@ th,td
 													<td class="right text-blue"><%=misc[3] %></td>
 													
 																										
-													<%if((chssstatusid==1 || chssstatusid==3 || chssstatusid==7) && showitemedit){ %>
-														<td class="">
-														<td class="">
-													<%}else if(chssstatusid==14 || (chssstatusid>6  && showitemedit)){ %>
+													<% if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=misc[4]%>
 														</td>	
@@ -738,20 +677,20 @@ th,td
 																<%=misc[7]%>
 															<%} %>
 														</td>
-													<%}else if(showhistorybtn){ %>
+													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
-															<button type="submit" class="btn btn-sm editbtn"  name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<button type="submit" class="btn btn-sm editbtn" formaction="MiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
-													<%} else {%>
+													<%} else { %>
 														<td class="">
-															<td class="">
-														<%} %>
+														<td class="">
+													<%} %>
 													
 												</tr>					
 											<%i++;
@@ -765,90 +704,120 @@ th,td
 											<td class="right text-blue"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
 											
 											<td class="right text-green">
-											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid>6 ) && showitemedit ) || chssstatusid==14){ %>	 
+											<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
 											&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
 											<%} %>
 											</td>
 											<td ></td>
 										</tr>
-												
-								</form>
-								
-									
 										<tr>
 											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
-										
 										<tr>
 											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
 										</tr>
-										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-											<%if(((chssstatusid==2 || chssstatusid==4 || chssstatusid==7 || chssstatusid==5 ||  chssstatusid==9 || chssstatusid>6 ) && showitemedit ) || chssstatusid==14){ %>
-											<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td> 
-											<%} %>
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>
+												<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)
+												<%}else{ %>
+													&#8377;  ............................. (Rupees ...........................................................................................Only)
+												<%} %>
+											</td> 
 										</tr>
 										
 										<tr>
-											<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
+											<td colspan="7" style="text-align:center; ;border-bottom : 0">Finance & Accounts Dept.</td>
+										<tr>
+										<tr>
+											<td colspan="4" style="border-top: 0;border-right : 0;">
+											
+												<ul style="list-style-type: none;margin:10px 5px -25px -35px;">
+													<%for(Object[] obj:ClaimapprovedPOVO){
+														if(obj[1].toString().equalsIgnoreCase("PO")){%>
+														<li><%=obj[2] %>,</li>
+														<li><%=obj[4] %> </li>
+													<% } } %>
+												</ul>
+											
+											</td>
+											<td colspan="4" style="border-top: 0;border-left : 0;height: 80px;" >
+											
+												<ul style="float: right;list-style-type: none; margin:10px 5px -25px 0px; ">
+													<%for(Object[] obj:ClaimapprovedPOVO){
+														if(obj[1].toString().equalsIgnoreCase("VO")){%>
+														<li><%=obj[2] %>,</li>
+														<li><%=obj[4] %></li>
+													<% } } %>
+												</ul>					
+											</td>
 										</tr>
 										
 										
 									</tbody>				
 								</table>
+							
+								</form>
 							</div>
 						</div>
 					</div>
 					
 				<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 					<form action="CHSSUserForward.htm" method="post" id="fwdform">
-					<div class="row">
-						<%if(chssstatusid>=2 && chssapplydata[19]!=null && !chssapplydata[19].toString().trim().equalsIgnoreCase("")){ %>
-						<div class="col-md-12">
-							<span style="font-weight: 600;"> Remark : </span>
-							<%if(chssstatusid == 3 || chssstatusid == 5 || chssstatusid == 7  ){ %>
-								<span style="font-weight: 600; color: #D82148;"> <%=chssapplydata[19] %> </span>					
-							<%}else{ %>    
-								<span style="font-weight: 600; color: #035397;"> <%=chssapplydata[19] %> </span>			
-							<%} %>
-						</div>
-						<%} %>
-					</div>
 						<div class="row">
+							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(ClaimRemarksHistory.size()>0){ %>
+									<table style="margin: 3px;">
+										<tr>
+											<td style="border:none;">
+												<h4 style="text-decoration: underline;">Remarks :</h4> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : ClaimRemarksHistory){%>
+										<tr>
+											<td style="border:none;width: 80%;">
+												<%=obj[3] %>&nbsp; :
+												<span style="border:none;" class="text-blue" >	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+						
+							</div>
+					
+						
 							
-							<div class="col-md-12" align="center" style="margin-top: 5px;">
+							<div class="col-md-6" align="center" style="margin-top: 5px;">
 							
-							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
+							
+							
+							<%if(chssstatusid!=8 ){ %>
 								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
 									Remarks : <br>
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 								</div>
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Verify</button>
+							<%} %>
 							
-									<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
+								
+								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Verify</button>
+								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
-								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-									Remarks : <br>
-									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-								</div>
-									<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
-										<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
-									</button>
-									<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
-										Edit
-									</button>
-									<input type="hidden" name="claimaction" value="F" >
+								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
+									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
+								</button>
+								<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
+									Edit
+								</button>
+								<input type="hidden" name="claimaction" value="F" >	
 									
 							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
 							
-								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-									Remarks : <br>
-									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-								</div>
-									<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								
 							<%} %>
 								
 							</div>
@@ -863,8 +832,7 @@ th,td
 							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog  modal-dialog-centered" >
 									<div class="modal-content" >
-										<div class="modal-header">
-											
+										<div class="modal-header">											
 											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
 										    </button>

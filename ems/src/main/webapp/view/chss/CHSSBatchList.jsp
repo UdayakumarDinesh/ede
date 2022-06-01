@@ -143,7 +143,9 @@
 												
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
-												</button>	
+												</button>
+												<input type="hidden" name="isapproval" value="Y">
+												<input type="hidden" name="show-edit" value="Y">
 											</td>
 										</tr>
 									<%
