@@ -256,4 +256,52 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String MAINDASHBOARDCOUNTDATA = "CALL Chss_MainDashboard_Count (:empid, :fromdate,  :todate) ";
+	
+	@Override 
+	public Object[] MainDashboardCountData(String Empid, String FromDate, String ToDate) throws Exception{
+	
+		logger.info(new Date() + "Inside DAO MainDashboardCountData");
+		
+		try {
+			
+			Query query = manager.createNativeQuery(MAINDASHBOARDCOUNTDATA);
+			query.setParameter("empid", Empid);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			
+			return (Object[])query.getSingleResult();
+			
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside Dao MainDashboardCountData " + e);
+			return null;
+		}
+		
+	}
+	
+	private static final String MAINDASHBOARDGRAPHDATA = "CALL Chss_MainDashboard_GraphData (:empid, :fromdate,  :todate) ";
+	
+	@Override 
+	public List<Object[]> MainDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception{
+	
+		logger.info(new Date() + "Inside DAO MainDashboardGraphData");
+		
+		try {
+			
+			Query query = manager.createNativeQuery(MAINDASHBOARDGRAPHDATA);
+			query.setParameter("empid", Empid);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			
+			return (List<Object[]> )query.getResultList();
+			
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside Dao MainDashboardGraphData " + e);
+			return null;
+		}
+		
+	}
+	
 }
