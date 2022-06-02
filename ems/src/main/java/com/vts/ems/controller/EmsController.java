@@ -135,6 +135,7 @@ public class EmsController {
 		req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
 		req.setAttribute("logintype", LoginType);
 		req.setAttribute("isself", IsSelf);
+		req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
 
 		return "static/maindashboard";
 	}

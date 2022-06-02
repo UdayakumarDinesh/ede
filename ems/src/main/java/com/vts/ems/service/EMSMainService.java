@@ -26,4 +26,5 @@ public interface EMSMainService {
 	public List<Object[]> circulatlist() throws Exception;
 	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> MonthlyWiseDashboardData(String FromDate , String ToDate) throws Exception;
 }
