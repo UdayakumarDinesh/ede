@@ -402,7 +402,6 @@
 					</div>
 				</div>	
 			</div>
-						
 		</div>
 		
 		<%for(Object[] obj : empfamilylist){ %>
@@ -432,7 +431,6 @@
 						
 						<%if(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString())){ %>
 							<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
-								
 								&nbsp;&nbsp;Apply&nbsp;
 							</button>
 						<%} %>
@@ -539,18 +537,16 @@
 										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>	
-											
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
-										
 										<%if(Integer.parseInt(obj[9].toString())==2 && obj[26].toString().equalsIgnoreCase("0")){ %>
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
 											<i class="fa-solid fa-backward" style="color: #333C83"></i>
 										</button>
 										<%} %>
-										
-										<input type="hidden" name="isapproval" value="N">							
+										<input type="hidden" name="isapproval" value="N">
+										<input type="hidden" name="show-edit" value="N">
 									</td>
 								</tr>
 							<%} %>
@@ -578,8 +574,6 @@
 	
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
-
-
 <script>
 
 

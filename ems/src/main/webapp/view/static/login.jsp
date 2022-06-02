@@ -29,7 +29,7 @@
 </head>
 
 <body class="home" >
-
+<%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist"); %>
 
 <!--  Login Page  -->  
   
@@ -64,7 +64,7 @@
 					    <a class="nav-link" href="LoginPage/DoctorsList.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/Circulars.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
+					    <a class="nav-link" href="Circulars.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Eligibility Details</a>
@@ -105,6 +105,11 @@
 						
 						
 						<div class="col-md-6">
+						<%if(circularlist!=null  && circularlist.size()>0) {
+						for(Object[] obj:circularlist){
+						%>
+						<marquee direction="left" height="20" width="630" bgcolor="white"> <b><%=obj[1]%> </b></marquee>
+						<%   break;} }%>
 							<div class="row justify-content-end" style="margin-left:7rem;margin-top: 4rem" >
 	
 								<div class="col-md-12">

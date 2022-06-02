@@ -175,12 +175,17 @@
 	<%	
 		List<Object[]> emplogintypelist     = (List<Object[]> )session.getAttribute("emplogintypelist");
 		String logintype   = (String)session.getAttribute("LoginType");
+		String Fromdate=(String)request.getAttribute("Fromdate");
+		String Todate=(String)request.getAttribute("Todate"); 
+		Object[] TotalCountData = (Object[])request.getAttribute("countdata");
+		List<Object[]> graphdata  = (List<Object[]> )request.getAttribute("graphdata");
+	
 	%>
 	
 	<div class="card-header page-top" style="padding: 0.25rem 1.25rem;">
 		<div class="row">
 			<div class="col-md-3">
-				<h5 style="padding-top: 0.5rem">MAIN DASHBOARD</h5>
+				<h5 style="padding-top: 0.5rem">MAIN DASHBOARD </h5>
 			</div>
 			<div class="col-md-9">
 					<form action="EmpLogitypeChange.htm" method="post" style="float: right;">
@@ -211,19 +216,19 @@
 					<div class="row">
 				        <div class="col-md-3 col-sm-6">
 				            <div class="counter red">
-				                <span class="counter-value">46</span>
+				                <span class="counter-value"><%=TotalCountData[2] %></span>
 				                <h3>Total</h3>
 				            </div>
 				        </div>
 				        <div class="col-md-3 col-sm-6">
 				            <div class="counter blue">
-				                <span class="counter-value">29</span>
+				                <span class="counter-value"><%=TotalCountData[0] %></span>
 				                <h3>Pending</h3>
 				            </div>
 				        </div>
 				        <div class="col-md-3 col-sm-6">
 				            <div class="counter ">
-				                <span class="counter-value">17</span>
+				                <span class="counter-value"><%=TotalCountData[1] %></span>
 				                <h3>Approved</h3>
 				            </div>
 				        </div>
@@ -237,10 +242,15 @@
 			    	<div class="container">
 					    <div class="row justify-content-end" >
 					    	
-					    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
-							<input  class="form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;">
-			    			
-			    			<input type="checkbox"  checked data-toggle="toggle" data-width="100"  data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+					    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
+
+						    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
+								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">
+								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
+	
+				    			<input type="checkbox"  checked data-toggle="toggle" data-width="100"  data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+			    				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
+			    			</form>	
 			    				
 			    		</div>
 			    		<br>
@@ -296,7 +306,7 @@
 	
 /* Counts Graph */	
 	
-	Highcharts.chart('container', {
+/* 	Highcharts.chart('container', {
     chart: {
         type: 'column'
     },
@@ -366,75 +376,172 @@
     credits: {
         enabled: false
     },
-});
+});  */
+
+
+	Highcharts.chart('container', {
+	    title: {
+	        text: 'Analysis'
+	    },
+	    
+	    xAxis: {
+	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[4]%>' ,   <%}%>   ] 
+	   
+	    },
+	    yAxis: {
+	        min: 0,
+	        title: {
+	            text: 'Count'
+	        }
+	    },
+	    labels: {
+	        items: [{
+	            html: 'Total Amount Settled',
+	            style: {
+	                left:'570px',
+	                top: '0px',
+	                color: ( // theme
+	                    Highcharts.defaultOptions.title.style &&
+	                    Highcharts.defaultOptions.title.style.color
+	                ) || 'black' 
+	                
+	            }
+	        }]
+	    },
+	    colors: [
+	        '#187498',
+	        '#36AE7C',
+	    ],
+	    series: [{
+	        type: 'column',
+	        name: 'Pending',
+	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[6]%> ,   <%}%>   ] 
+	    }, {
+	        type: 'column',
+	        name: 'Approved',
+	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[7]%> ,   <%}%>   ]
+	    }
+	  
+	    
+	    /* , 
+	    {
+	        type: 'spline',
+	        name: 'Average',
+	        data: [3, 2.67, 3, 6.33, 3.33],
+	        marker: {
+	            lineWidth: 2,
+	            lineColor: Highcharts.getOptions().colors[3],
+	            fillColor: 'white'
+	        }
+	    } */
+	    
+	    , {
+	        type: 'pie',
+	        name: 'Amount Approved',
+	        data: [{
+	            name: 'Self',
+	            y: 13,
+	            color: Highcharts.getOptions().colors[0] // Jane's color
+	        }, {
+	            name: 'Mem1',
+	            y: 23,
+	            color: Highcharts.getOptions().colors[1] // John's color
+	        }, {
+	            name: 'Mem2',
+	            y: 19,
+	            color: Highcharts.getOptions().colors[2] // Joe's color
+	        }
+	        
+	        
+	        
+	        ],
+	        center: [620, 50],
+	        size: 100,
+	        showInLegend: false,
+	        dataLabels: {
+	            enabled: false
+	        }, 
+	        
+	    	
+	    }],
+	    credits: {
+            enabled: false
+        },
+	}); 
+
 
 
 	/* Amount Graph */	
 
+	// Radialize the colors
+	Highcharts.setOptions({
+	    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+	        return {
+	            radialGradient: {
+	                cx: 0.5,
+	                cy: 0.3,
+	                r: 0.7
+	            },
+	            stops: [
+	                [0, color],
+	                [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
+	            ]
+	        };
+	    })
+	});
+
+// Build the chart
 	Highcharts.chart('container2', {
-    chart: {
-        type: 'bar'
-    },
-    title: {
-        text: 'Claimed Amount vs Settled Amount'
-    },
-    subtitle: {
-        text: ''
-    },
-    xAxis: {
-        categories: ['Amount'],
-        title: {
-            text: null
-        }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: '',
-            align: 'high'
+	    chart: {
+	        plotBackgroundColor: null,
+	        plotBorderWidth: null,
+	        plotShadow: false,
+	        type: 'pie'
+	    },
+	    title: {
+	        text: 'Amount Claimed vs Amount Settled'
+	    },
+	    tooltip: {
+	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	    },
+	    accessibility: {
+	        point: {
+	            valueSuffix: '%'
+	        }
+	    },
+	    plotOptions: {
+	        pie: {
+	            allowPointSelect: true,
+	            cursor: 'pointer',
+	            dataLabels: {
+	                enabled: true,
+	                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                connectorColor: 'silver'
+	            },
+	            colors: [
+	                '#187498', 
+	                '#36AE7C', 
+	                '#DDDF00', 
+	                '#24CBE5', 
+	                '#64E572', 
+	                '#FF9655', 
+	                '#FFF263', 
+	                '#6AF9C4'
+	              ],
+	        }
+	    },
+	    series: [{
+	        name: 'Share',
+	        data: [
+	            { name: 'Amount Claimed', y: 61 },
+	            { name: 'Amount Settled', y: 52 },
+	         
+	        ]
+	    }],
+	    credits: {
+            enabled: false
         },
-        labels: {
-            overflow: 'justify'
-        }
-    },
-    tooltip: {
-        valueSuffix: ' %'
-    },
-    plotOptions: {
-        bar: {
-            dataLabels: {
-                enabled: true,
-                format: '{y} %'
-            }
-        }
-    },
-    colors:[
-    	'#187498',
-    	'#36AE7C'
-    ],
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        x: -40,
-        y: 90,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor:
-            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-        shadow: true
-    },
-    credits: {
-        enabled: false
-    },
-    series: [{
-        name: 'Claimed',
-        data: [100, ]
-    }, {
-        name: 'Settled',
-        data: [50, ]
-    },]
-});
+	});
 	
 	
 	
@@ -447,49 +554,50 @@
 	        $(this).prop('Counter',0).animate({
 	            Counter: $(this).text()
 	        },{
-	            duration: 1500,
+	            duration: 1000,
 	            easing: 'swing',
 	            step: function (now){
 	                $(this).text(Math.ceil(now));
 	            }
 	        });
 	    });
+
 	    
-	    $("#datepicker1").daterangepicker({
-	        minDate: 0,
-	        maxDate: 0,
-	        numberOfMonths: 1,
-	        autoclose: true,
-	        "singleDatePicker" : true,
-			"linkedCalendars" : false,
-			"showCustomRangeLabel" : true,
-	        onSelect: function(selected) {
-	        $("#datepicker3").datepicker("option","minDate", selected)
-	        },
-	        locale : {
-				format : 'YYYY'
-			}
+	    $("#datepicker1").datepicker({
+	    	
+	    	autoclose: true,
+	    	 format: 'yyyy',
+	    		 viewMode: "years", 
+	    		    minViewMode: "years"
 	    });
 
-	    $("#datepicker3").daterangepicker({
-	        minDate: 0,
-	        maxDate: 0, 
-	        numberOfMonths: 1,
-	        autoclose: true,
-	        "singleDatePicker" : true,
-			"linkedCalendars" : false,
-			"showCustomRangeLabel" : true,
-			"minDate":$("#datepicker1").val(),
-		    onSelect: function(selected) {
-		    $("#datepicker1").datepicker("option","maxDate", selected)
-	        },
-	        locale : {
-				format : 'YYYY'
-			}
+	   
+
+	    <%if(Fromdate!=null){%>
+	    document.getElementById("datepicker1").value =<%=Fromdate%>
+	     <%} %>
+	     <%if(Todate!=null){%>
+	     document.getElementById("datepicker2").value =<%=Todate%>
+	      <%} %>
+	    
+	    
+	    $('#datepicker1').change(function () {
+	    	
+	        var startDate = document.getElementById("datepicker1").value;
+	        var year1=Number(startDate);
+	     
+	        document.getElementById("datepicker2").value = year1+1;
+	        
+	        $('#dateform').submit();
+	        
 	    }); 
+	    
+	
+	    
 
 	});
 
 </script>
-	
+
+
 </html>

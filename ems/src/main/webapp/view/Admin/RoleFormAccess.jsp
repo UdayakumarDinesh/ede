@@ -99,7 +99,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 							<div class="col-md-2">	
 	
 										 <select class="form-control select2" id="moduleid" required="required" name="moduleid" onchange='submitForm();' >
-										 		<option value="A" >All </option>
+										 		<option value="0" >All </option>
 						   						<% for (Object[] obj : FormModulesList) {%>
 												<option value="<%=obj[0]%>" <%if(obj[0].toString().equalsIgnoreCase(moduleid)){ %>selected<% } %> ><%=obj[1]%></option>
 												<%} %>
@@ -118,6 +118,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 
 			           
 			        	<div class="table-responsive">
+			        	<form action="UpdateRoleAcess.htm" method="POST" id="myform1">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  > 
 					        <thead style="background-color: rgb(15,80,180);color: white">
 					          <tr>
@@ -131,15 +132,32 @@ String moduleid=(String)request.getAttribute("moduleid");
 							<% 
 								if(FormDetailsList.size()>0){
 									int count=1;
-										for(Object[] 	obj:FormDetailsList){ %>
+										for(Object[] 	obj:FormDetailsList){
+											String detailsid = null;
+											String isactive  =null;	
+											if(obj[0]!=null){
+											   detailsid ="detailsid"+obj[0];
+											   isactive  ="isactive"+obj[0];
+											}else{
+												detailsid ="detailsidId";
+												isactive  ="isactiveId";
+											}
+											%>
 													   
 								<tr>
 									<td ><%=count %>.</td>
-									<td><%=obj[2] %></td>
-										<td>
+									<td><%=obj[3] %></td>
+									<td>
 										
-											<input name="access"   onchange="FormNameEdit(<%=obj[0]%>)"  type="checkbox"  <%if(obj[1].toString().equalsIgnoreCase("A")){ %> disabled <%} %> <%if((obj[3]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" >
-											<input 	type="hidden" name="sample" value="attendance<%=count %>" >	
+											<%-- <input name="access"   onchange="FormNameEdit(<%=obj[0]%>)"  type="checkbox"  <%if(obj[2].toString().equalsIgnoreCase("1")||obj[2].toString().equalsIgnoreCase("4")||obj[2].toString().equalsIgnoreCase("3")){ %> disabled <%} %> <%if(obj[4]!=null && (obj[4]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" > --%>
+											<input name="access"  value="<%=obj[0]%>"  onchange="UpdateIsActive(<%=obj[0]%>);"  type="checkbox"  <%if(logintype.toString().equalsIgnoreCase("A")){ %> disabled <%} %> <%if(obj[4]!=null && (obj[4]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" >
+											<input type="hidden" name="sample"     value="attendance<%=count %>" >
+											<input type="hidden" name="moduleid" value="<%=moduleid%>">	
+											<input type="hidden" name="logintype1" value="<%=logintype%>">
+											<input type="hidden" name ="<%=detailsid%>"  value="<%=obj[1]%>">
+											<input type="hidden" name ="<%=isactive%>"  value="<%=obj[4]%>">
+											<input type="hidden" id="formroleid" name ="formroleaccessid" value="<%=obj[0]%>">
+											
 											<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 									</td>
 
@@ -157,7 +175,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 							</tbody>
       				
       				</table>
-	           
+	           </form>
 			      </div>
 			     
 			    </div> 
@@ -173,6 +191,20 @@ function submitForm()
 { 
   document.getElementById('myform').submit(); 
 } 
+
+function UpdateIsActive(value)
+{
+	if(value!=null){
+		$("#formroleid").val(value);
+		document.getElementById('myform1').submit(); 
+	}else{
+		$("#formroleid").val("Id");
+		document.getElementById('myform1').submit(); 
+	}
+	
+}
+
+
 
 function FormNameEdit(id){
 		 $.ajax({
@@ -196,10 +228,6 @@ function FormNameEdit(id){
 			});
 	 
 }
-
-
-
-
 
 </script>
 

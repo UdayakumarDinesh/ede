@@ -21,4 +21,9 @@ public interface EmsDao
 	public int userResetPassword(String loginid, String password) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
+	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> circulatlist() throws Exception;
+
+
 }

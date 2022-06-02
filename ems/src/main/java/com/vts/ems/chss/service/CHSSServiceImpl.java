@@ -123,7 +123,7 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSType(dto.getCHSSType());
 				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-				apply.setAilment(dto.getAilment());
+				apply.setAilment(WordUtils.capitalizeFully(dto.getAilment()));
 				apply.setCHSSStatusId(1);
 				apply.setIsActive(1);
 				apply.setCreatedBy(dto.getCreatedBy());
@@ -400,7 +400,7 @@ public class CHSSServiceImpl implements CHSSService {
 			fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 		}
 //		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-		fetch.setAilment(dto.getAilment());
+		fetch.setAilment(WordUtils.capitalizeFully(dto.getAilment()));
 		fetch.setModifiedBy(dto.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 			
@@ -414,8 +414,6 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
 		return dao.CHSSApplyEdit(fetch);
 	}
-	
-	
 	
 	@Override
 	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception

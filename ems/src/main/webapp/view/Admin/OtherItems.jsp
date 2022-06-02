@@ -53,7 +53,7 @@
 			
 				<div class="card-body" >
 					<div class="row">
-						<div class="col-md-12" >
+						<div class="col-md-12">
 							<form action="OtherItemAddEdit.htm" method="POST" id="empForm" autocomplete="off">
 						
 								<div class="table-responsive">
@@ -71,7 +71,7 @@
 												%>
 												<tr>
 													<td style="text-align: center;"><%=++slno %>. </td>
-													<td><input type="text"  class="form-control " name="<%=ItemName%>" id="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>"> </td>
+													<td><input type="text"  class="form-control " name="<%=ItemName%>" id="<%=ItemName%>" maxlength="100" value="<%=obj[1]%>" style="text-transform:capitalize;"> </td>
 													<td align="center">
 														<button type="button" class="btn btn-sm "  name="itemid" value="<%=obj[0]%>"  onclick ="return checkDuplicateItem('<%=ItemName%>','<%=obj[0]%>')" data-toggle="tooltip" data-placement="top" title="Update">											
 														<i class="fa-solid fa-pen-to-square " style="color: #E45826" ></i>

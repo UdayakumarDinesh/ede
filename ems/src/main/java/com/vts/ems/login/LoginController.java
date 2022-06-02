@@ -1,6 +1,8 @@
 package com.vts.ems.login;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.vts.ems.service.EMSMainService;
+
 @Controller
 public class LoginController 
 {
@@ -23,6 +27,8 @@ public class LoginController
 	@Autowired
 	LoginRepository Repository;
     
+	@Autowired
+	EMSMainService service;
 
 	 @RequestMapping(value = "/login", method = RequestMethod.GET)
 	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
@@ -44,6 +50,14 @@ public class LoginController
 //	    	 model.addAttribute("error", error);
 //	    }
 //	    
+	    
+	    List<Object[]> circulatlist = new ArrayList<Object[]>();
+		   	 try {
+		   		 circulatlist = service.circulatlist();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		req.setAttribute("circularlist", circulatlist);
 	    
 	    String success= req.getParameter("success");
 		if (success == null) {

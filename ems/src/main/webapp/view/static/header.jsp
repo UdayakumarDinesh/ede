@@ -10,6 +10,7 @@
 <meta charset="ISO-8859-1">
 
 <title>EMS</title>
+<link rel="shortcut icon" type="image/png" href="view/images/lablogoui.png">
 <jsp:include page="dependancy.jsp"></jsp:include>
         
 <spring:url value="/webresources/css/Header.css" var="Header" />

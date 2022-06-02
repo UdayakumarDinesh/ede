@@ -205,7 +205,6 @@ p {
 						
 						
 							<form method="post" action="#" autocomplete="off"  >
-								
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 										<thead>
@@ -306,6 +305,8 @@ p {
 									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
 										<i class="fa-solid fa-eye"></i>
 									</button>
+									<input type="hidden" name="isapproval" value="N">
+										<input type="hidden" name="show-edit" value="N">
 								</div>
 							</div>
 							
@@ -320,7 +321,9 @@ p {
 					</form>
 					
 					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
-						<input type="hidden" name="claimaction" value="F">						
+						<input type="hidden" name="claimaction" value="F">	
+						<input type="hidden" name="isapproval" value="N">
+						<input type="hidden" name="show-edit" value="N">
 						<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -380,6 +383,8 @@ p {
 									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
 										<i class="fa-solid fa-eye"></i>
 									</button>
+									<input type="hidden" name="isapproval" value="N">
+										<input type="hidden" name="show-edit" value="N">
 									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 									<input type="hidden" name="claimaction" value="F">
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -909,7 +914,7 @@ $('.billdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	"minDate":threeMonthsAgo, 
+	"minDate":new Date('<%=consultmain.getConsultDate() %>'), 
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
