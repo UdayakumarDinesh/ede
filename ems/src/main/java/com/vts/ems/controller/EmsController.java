@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,11 +15,9 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.login.Login;
@@ -47,6 +46,8 @@ public class EmsController {
 
 	@Autowired
 	EMSMainService service;
+	
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcome(Model model, HttpServletRequest req, HttpSession ses) throws Exception {
@@ -73,7 +74,7 @@ public class EmsController {
 		return "redirect:/MainDashBoard.htm";
 	}
 
-	@RequestMapping(value = "MainDashBoard.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception {
 		logger.info(new Date() + "Inside MainDashBoard.htm ");
 //    	String LoginType=(String)ses.getAttribute("LoginType");
@@ -81,6 +82,50 @@ public class EmsController {
 //    	String EmpNo=(String)ses.getAttribute("EmpNo"); 
 
 //    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
+		
+		String EmpId= ses.getAttribute("EmpId").toString();
+		String FromDate = req.getParameter("FromDate");
+		String ToDate = req.getParameter("ToDate");
+		LocalDate today= LocalDate.now();
+		int currentmonth= today.getMonthValue();
+
+		String DbFromDate="";
+		String DbToDate="";
+		
+		if(FromDate== null) {
+			String start ="";
+			if(currentmonth<4) 
+			{
+				start = String.valueOf(today.getYear()-1);
+			}else{
+				start=String.valueOf(today.getYear());
+			}
+			
+			FromDate=start;
+			DbFromDate = start+"-04-01";
+			
+		}
+		
+		if(ToDate== null) {
+			String end="";
+			if(currentmonth<4) 
+			{
+				end =String.valueOf(today.getYear());
+			}else{
+				end =String.valueOf(today.getYear()+1);
+			}
+			
+			ToDate=end;
+			DbToDate=end+"-03-31";
+		}
+		
+		DbFromDate = FromDate+"-04-01";
+		DbToDate= ToDate+"-03-31";
+				
+		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate) );
+		req.setAttribute("Fromdate", FromDate);
+		req.setAttribute("Todate", ToDate);
+		req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
 
 		return "static/maindashboard";
 	}

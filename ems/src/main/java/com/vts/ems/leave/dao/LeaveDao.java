@@ -14,4 +14,9 @@ public interface LeaveDao {
 	public long LeaveCreditInsert(LeaveRegister register)throws Exception;
 	public List<Object[]> LeaveCreditInd(String month, String year,String emmNo) throws Exception;
 	public List<Object[]> LeaveCreditById(String registerId)throws Exception;
+	public long LeaveCreditAddById(LeaveRegister register)throws Exception;
+	public long LeaveCreditUpdateById(LeaveRegister register)throws Exception;
+	public List<Object[]>   GetHolidays(String Type)throws Exception;
+	public List<Object[]>   EmpDetails(String EmpNo)throws Exception;
+
 }

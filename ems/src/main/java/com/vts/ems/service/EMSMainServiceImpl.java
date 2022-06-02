@@ -197,6 +197,17 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
+	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate) throws Exception{
+		
+		return dao.MainDashboardCountData(EmpId, FromDate, ToDate);
+	}
+	
+	@Override
+	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception{
+		
+		return dao.MainDashboardGraphData(EmpId, FromDate, ToDate);
+	}
+	
 	public List<Object[]> circulatlist() throws Exception
 	{
 		return dao.circulatlist();

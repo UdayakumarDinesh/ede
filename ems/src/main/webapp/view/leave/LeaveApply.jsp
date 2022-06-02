@@ -37,6 +37,13 @@
 .btn-group1 button:hover {
   background-color: #3e8e41;
 }
+.card-body{
+padding: 0.25rem 0.25rem 0.25rem 0.25rem !important;
+}
+
+.navbar{
+padding: 0.05rem 0rem 0.05rem 0rem !important;
+}
 
 </style>
 </head>
@@ -71,25 +78,25 @@
                    </div></center>
                     <%} %>
  <%
-   
-    String month=(String)request.getAttribute("month");
-    String year=(String)request.getAttribute("year");
+ 
+    List<Object[]> officerdetails=(List<Object[]>)request.getAttribute("officerdetails");
+    List<Employee> emplist=(List<Employee>)request.getAttribute("EmpList");
     String empNo=(String)request.getAttribute("empNo");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	   %>
-<div class="page card dashboard-card">
+<div class="page card dashboard-card" style="margin-top: 1px;">
 
 			 
    <div class="card-body" align="center" >
-    <form action="LeaveCredited.htm" method="POST" name="myfrm">
      <div class="row">
 			<div class="col-md-3">
-			 <div id="clb" class="panel panel-default">
-	            <div class="panel-heading">
-	                <span class="h4">Current Leave Balance</span>
+			 <div  class="card">
+	            <div class="card-header">
+	                <span class="h5">Current Leave Balance</span>
 	            </div>
-	            <div class="panel-body p-015">
-	                <table class=" table table-bordered table-hover table-striped table-condensed">
+	            <div class="card-body">
+	            <div class="table-responsive">
+	                <table class="table table-bordered table-hover table-striped table-condensed">
 	                    <thead>
 	                        <tr>
 	                            <th>CL</th>
@@ -112,26 +119,30 @@
 	                      
 	                    </tbody>
 	                </table>
+	                </div>
 	            </div>
 	        </div><!-- / current-leave-balance-->
 	        
 	         <!--Holidays-->
-	        <div class="panel panel-default">
-	            <div class="panel-heading">
-	                <span class="h4">Important Dates</span>
+	        <div  class="card" style="margin-top:7px;">
+	            <div class="card-header">
+	                <span class="h5">Important Dates</span>
 	            </div>
-	            <div class="panel-body p-015">
-	                <div class="">
+	           
 	                    <ul class="nav nav-tabs">
-	                        <li class="active"><a data-toggle="tab" href="#upcoming">Upcoming</a></li>
-	                        <li><a data-toggle="tab" href="#general">Gen</a></li>
-	                        <li><a data-toggle="tab" href="#restricted">RH</a></li>
-	                          
-	                    </ul>
-	                   <div class="tab-content">
-	                   <!-- upcoming holidays -->
-	                    <div id="upcoming" class="tab-pane fade in active  pre-scrollable">
-	                        <table class="table table-bordered table-hover table-striped table-condensed tabText">
+	                        <li class="nav-item"><a class="nav-link  active" id="upcoming" href="#" onclick="getHoliday('U','upcoming')">Upcoming</a></li>
+	                        <li class="nav-item"><a class="nav-link" id="gen" href="#" onclick="getHoliday('G','gen')">Gen</a></li>
+	                        <li class="nav-item"><a class="nav-link" id="rh" href="#" onclick="getHoliday('R','rh')">RH</a></li>
+	                        <li class="nav-item"><a class="nav-link" id="wor" href="#" onclick="getHoliday('W','wor')">Wor</a></li>
+	                        <li class="nav-item"><a class="nav-link" id="hol" href="#" onclick="getHoliday('H','hol')">Hol</a></li>
+	                    </ul> 
+	                    
+	                    
+	                    
+	            <div class="card-body">
+	                 
+	                   <div class="table-responsive">
+	                        <table class="table table-bordered table-hover table-striped table-condensed">
 	                            <thead>
 	                            <tr>
 	                                  <th>Date</th>
@@ -139,65 +150,156 @@
 	                                    
 	                            </tr>
 	                            </thead>
-	                            <tbody>
+	                            <tbody id="other-list-table">
 	                       
-	                        </tbody>
+	                          </tbody>
 	                        </table>
-	                    </div>
-	                   
-	                   <!-- general holidays -->
-	                    <div id="general" class="tab-pane fade pre-scrollable">
-	                     <table class="table table-bordered table-hover table-striped table-condensed ">
-	                            <thead>
-	                            <tr>
-	                                  <th>Date</th>
-	                                  <th style=" text-align: left;">Event</th> 
-	                                    
-	                            </tr>
-	                            </thead>
-	                            <tbody>
-	                        
-	                        </tbody>
-	                        </table>
-	                     </div>
-	                    
-	                    <!-- restricted holidays -->
-	                    <div id="restricted" class="tab-pane fade pre-scrollable">
-	                    <table class="table table-bordered table-hover table-striped table-condensed tabText">
-	                            <thead>
-	                            <tr>
-	                                  <th>Date</th>
-	                                  <th style=" text-align: left;">Event</th> 
-	                                    
-	                            </tr>
-	                            </thead>
-	                         <tbody>
-	                      
-	                        </tbody>
-	                        </table>
-	                    </div>
+	              
 	                    
 	                    
 	                    
-	                 </div>    <!-- <div id="working" class="tab-pane fade in active"></div> -->
-	                </div>    
+	                 </div>   
+	                
 	            </div>
 	        </div>
 	        <!--Holidays-->
 			</div>
+			<!--Leave Apply  -->
+			
+			<%
+			List<Object[]> leaveTypeDropdown=(List<Object[]>)request.getAttribute("leaveTypeDropdown");
+			%>
 			<div class="col-md-6">
-			
+			      <div  class="card">
+	                    <div class="card-header">
+	                     <form action="LeaveApply.htm" method="post">
+	                    <div class="input-group  custom-search-form">
+                              
+                               <select class="form-control selectpicker" name="EmpNo" data-live-search="true">
+                                 
+                                 <%if(emplist!=null&&emplist.size()>0){
+                                  for(Employee emp:emplist){ %> 
+                                   <option value="<%=emp.getEmpNo()%>" <%if(1==emp.getEmpId()){ %> selected="selected" <%} %>><%=emp.getEmpName()%></option> 
+                                 <%}} %> 
+                                </select>
+                                
+                                  <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+                                  <button class="btn btn-success" type="submit">
+                                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                  </button>
+
+                                
+                              </div>
+                                </form>
+                                
+                                  <!-- Recc -->    <%if(officerdetails!=null){ 
+                       for(Object[] obj:officerdetails){ 
+                       %>
+	                       <div style="margin-top:10px; text-align: right; color: green;"><span class="h4">Leave Application For</span> <b class="h5"><%=obj[1] %></b>, <small><%=obj[2] %> </small> </div>             
+                               <hr style="margin: 0rem 0rem 0.45rem 0rem  !important">
+                                <div class="row" style="margin-top:0px;" >
+	                            <div class="col-sm-2" style="text-align: right;" align="right">
+	                                <b  style="font-size:small;color:#4E4C4C ; ">Recc Officer:</b>
+	                            </div>
+	                            <div class="col-sm-4" style="text-align: left;" align="left">
+	                               <b style="font-size:small ; color:#575656  ;"><%=obj[3] %></b>
+	                            </div>
+	                            <div class="col-sm-2"  	style="text-align: right;">
+	                                <b style="font-size:small ;color:#4E4C4C ;">Sanc Officer :</b>
+	                            </div>
+	                            <div class="col-sm-4" style="text-align: left;">
+	                               <b style="font-size:small;  color:#575656  ;"><%=obj[4] %></b>
+	                               </div>
+	                       
+	                           </div>
+	                  <%}} %>
+	                    <!-- / Recc -->
+	                  <!-- // reset apply and check button -->
+	                    </div>
+	                  <div class="card-body">
+                           <form action="apply-leave-add.htm" method="post">
+	                    
+	                    
+	                    <!-- Leave Type-->
+	                    <div class="form-group">
+	                        <div class="row" style="margin-top:5px; ">
+	                            <div class="col-sm-3"><label for="leaveType">Leave Type:</label></div>
+	                            
+	                              <div class="col-sm-4">
+	                                <select id="leaveType"  name="leavetypecode" class="form-control selectpicker" onChange="leavecheck(); cmlMessage();" required="required" title="Leave Type">
+	                                  <% if(leaveTypeDropdown!=null&&leaveTypeDropdown.size()>0){
+	                                       for(Object[] l:leaveTypeDropdown){%>
+	                                       <option value="<%=l[0]%>"><%=l[1]%> </option>
+	                                       <%}}%>
+	                                </select>
+	                              </div>
+	                              <div id="fullhalfdiv"  class="col-sm-3">
+	                                <select  id="halforfull" name="fullhalf" class="form-control selectpicker" onChange="halffull()" required="required">
+	                                    <option value="X" >Full</option>
+	                                     <option value="H" >Half</option>
+	                                     <option value="T" >Hours</option>
+	                                </select>
+	                            </div>
+	                            <div id="hours"  class="col-sm-2">
+	                                <select  id="hours" name="hours" class="form-control selectpicker" required="required" title="Hours">
+	                                    <option value="1" >1</option>
+	                                     <option value="2" >2</option>
+	                                     <option value="3" >3</option>
+	                                     <option value="4" >4</option>
+	                                     <option value="5" >5</option>
+	                                     <option value="6" >6</option>
+	                                </select>
+	                            </div>
+	                              
+	                              </div>
+	                              </div>
+	                              </form>
+	                               
+                         
+                        <br>
+                        </div>
+                        </div>
+                        
+                       
 			</div>
+			<!--Leave Apply End  -->
+			<!--Applied   -->
 			<div class="col-md-3">
-			
+			<div class="card">
+	            <div class="card-header">
+	                <span class="h5">Recent Applied</span>
+	            </div>
+	            <div class="card-body">
+	                <ul class="list-group">
+	                <li class="list-group-item list-group-item-warning"><b><i>Recent Applied  Leave Is Not Present For Edit &amp; Delete </i></b></li>
+	                </ul>
+
+	            </div>
+	            </div>
+	            <br>
+	            <div class="card">
+	            <div class="card-header">
+	                <span class="h5">Recent Leaves</span>
+	            </div>
+	            <div class="card-body">
+	                <ul class="list-group">
+	               
+	                <li class="list-group-item list-group-item-warning"><b><i>Recent Sanctioned Leave Is Not Present For Modify &amp; Cancel</i></b></li>
+	                
+	                
+	                </ul>
+	            </div>
+	            </div>
+	            
 			</div>
+			
 			
 	</div>		
 
 
 
 
-	   </form>
+
 	   </div>
 	   </div>
 
@@ -207,6 +309,60 @@
 
 
 <script type="text/javascript">
+  $( document ).ready(function() {
+	  getHoliday('U','upcoming');
+    });
+
+	function getHoliday(type,id){
+		$(".nav-link").removeClass("active");
+		$('#'+id).addClass('active');
+		
+		$.ajax({
+			
+			type : "GET",
+			url : "GetHolidays.htm",
+			data : {
+				type:type
+				
+			},
+			datatype : 'json',
+			success : function(result) {
+			var result = JSON.parse(result);
+			var consultVals= Object.keys(result).map(function(e){
+			return result[e]
+			})
+			
+
+			
+			var otherHTMLStr = '';
+			for(var c=0;c<consultVals.length;c++)
+			{
+				var other = consultVals[c];
+			
+				otherHTMLStr +=	'<tr> ';
+				otherHTMLStr +=	'	<td  style="text-align: center;" >'+ other[0] +'</td> ';
+				otherHTMLStr +=	'	<td  style="text-align: left;" >'+ other[1] +' </td> ';
+				otherHTMLStr +=	'</tr> ';
+
+				
+				
+			}
+			
+			if(consultVals.length>0){
+				$('.downloadtable').css('display','block');
+			}
+			
+			$('#other-list-table').html(otherHTMLStr);
+
+				
+			}
+		});
+		
+		
+		
+	}
+
+
 function Edit(myfrm){
 	
 	 var fields = $("input[name='Aid']").serializeArray();

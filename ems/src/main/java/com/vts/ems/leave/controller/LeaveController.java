@@ -157,9 +157,13 @@ public class LeaveController {
 	public String LeaveApply(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside LeaveApply.htm "+UserId);		
-		try {
-
-	
+		try { 
+			 String EmpNo=req.getParameter("EmpNo");
+			 if(EmpNo==null) {
+				 EmpNo=(String)ses.getAttribute("EmpNo");
+			 }
+			 req.setAttribute("EmpList", service.EmpList());
+			 req.setAttribute("officerdetails", service.EmpDetails(EmpNo));
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -206,16 +210,16 @@ public class LeaveController {
 				register.setTO_DATE(year+"-07-01");
 			}
 			register.setAPPL_ID("0");
-			register.setCREDITED_BY("SYSTEM");
 			register.setCREDITED_BY(UserId);
 			register.setCREDITED_ON(sdf.getSqlDateAndTimeFormat().format(new Date()));
+			register.setREMARKS("SYSTEM");
 
 			
 			long result=service.LeaveCreditedAddUpdate(register,req.getParameter("type"));
 		    if (result>0) {
 				redir.addAttribute("result", "Leave Credited Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Leave Credit unsuccessful");
+				redir.addAttribute("resultfail", "Leave Credit Update unsuccessful");
 			}
 	
 	    }
@@ -224,5 +228,24 @@ public class LeaveController {
 	       }
 	   return "redirect:/LeaveCredit.htm";
 
+	}
+	
+	
+	@RequestMapping(value = "GetHolidays.htm" , method = RequestMethod.GET)
+	public @ResponseBody String GetHolidays(HttpServletRequest req ,HttpSession ses) throws Exception {
+		
+		Gson json = new Gson();
+		List<Object[]> GetCreditDetails = null;
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside GetHolidays.htm "+UserId);		
+		try {
+			GetCreditDetails =service.GetHolidays(req.getParameter("type"));
+		     
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside GetHolidays.htm "+UserId, e);
+		}
+			return json.toJson(GetCreditDetails);	
 	}
 }
