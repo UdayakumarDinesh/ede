@@ -38,7 +38,7 @@
 <h3 class="group">CIRCULAR LIST</h3>
 		<div class="card" >
 			<div class="card-header" style="height: 4rem">
-					<form action="CircularLists.htm" method="POST">
+					<form action="Circulars.htm" method="POST">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="row justify-content-end">
 					

@@ -31,7 +31,7 @@
 <body class="home" >
 <%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
 
-System.out.println(circularlist.size());
+
 %>
 
 <!--  Login Page  -->  

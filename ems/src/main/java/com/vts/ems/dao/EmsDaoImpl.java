@@ -305,7 +305,7 @@ public class EmsDaoImpl implements EmsDao
 		
 	}
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , fromdate ,todate FROM chss_circular_list ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,todate FROM chss_circular_list  WHERE circulardate BETWEEN :fromdate AND :todate ORDER BY circularid DESC";
 
 	
 	@Override
