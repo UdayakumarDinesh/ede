@@ -1421,8 +1421,6 @@ public class CHSSServiceImpl implements CHSSService {
 		contingent.setModifiedBy(dto.getUsername());
 		contingent.setModifiedDate(sdf.format(new Date()));
 		continid=dao.CHSSContingentEdit(contingent);
-		
-		
 //		List<Object> CHSSApplyId  =dao.ContingentApplyIds(dto.getContingentid());
 		
 		List<Object[]> claimslist = dao.CHSSContingentClaimList(dto.getContingentid());
