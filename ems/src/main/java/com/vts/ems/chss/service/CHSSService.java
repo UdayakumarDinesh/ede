@@ -75,7 +75,7 @@ public interface CHSSService
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String LoginType) throws Exception;
-	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception;
 	public long ConsultRemAmountEdit(CHSSConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSTests modal) throws Exception;
 	public long OtherRemAmountEdit(CHSSOther modal) throws Exception;
@@ -120,6 +120,7 @@ public interface CHSSService
 	public Object[] getLabCode() throws Exception;
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
+	public long CHSSContingentDelete(String contingentid, String Username) throws Exception;
 
 	
 }

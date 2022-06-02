@@ -1058,12 +1058,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 
 	@Override
-	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception 
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception 
 	{
 		logger.info(new Date() +"Inside DAO CHSSApproveClaimList");
 		try {
-			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype);");
+			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype, :empid);");
 			query.setParameter("logintype", logintype);
+			query.setParameter("empid", empid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1761,5 +1762,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
-			
+	
+	
+	
 }
