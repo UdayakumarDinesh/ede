@@ -1,5 +1,8 @@
 package com.vts.ems.Admin.Controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,21 +11,27 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.Service.AdminService;
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.controller.CHSSController;
@@ -58,6 +67,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	@Autowired
 	private PisService pisservice;
 	
+	@Value("${Image_uploadpath}")
+	private String uploadpath;
+	
 	   @RequestMapping(value = "Role.htm" )
 			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
 					throws Exception {
@@ -83,8 +95,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							moduleid="0";
 						}		
 					}	
-					System.out.println("logintype     :"+logintype);
-					System.out.println("moduleid      :"+moduleid);
+				
 					req.setAttribute("LoginTypeRoles",service.LoginTypeRoles());
 					req.setAttribute("FormDetailsList", service.FormDetailsList(logintype,moduleid));
 					req.setAttribute("FormModulesList", service.FormModulesList());
@@ -1205,17 +1216,17 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 			
 			
-			@RequestMapping(value="UpdateRoleAcess.htm" ,method = RequestMethod.POST)
-			public String RoleAccess(HttpSession ses, HttpServletRequest req , RedirectAttributes redir )throws Exception
+			@RequestMapping(value="UpdateRoleAcess.htm" ,method = RequestMethod.GET)
+			public @ResponseBody String RoleAccess(HttpSession ses, HttpServletRequest req , RedirectAttributes redir )throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside RoleAccess.htm "+UserId);
 				try {
 					String formroleaccessid = (String)req.getParameter("formroleaccessid");
 					String moduleid  = (String)req.getParameter("moduleid");
-					String LoginType  = (String)req.getParameter("logintype1");
-					String detailsid  = (String)req.getParameter("detailsid"+formroleaccessid);
-					String isactive   = (String)req.getParameter("isactive"+formroleaccessid);
+					String LoginType  = (String)req.getParameter("logintype");
+					String detailsid  = (String)req.getParameter("detailsid");
+					String isactive   = (String)req.getParameter("isactive");
 			
 					int result = service.updateformroleaccess(formroleaccessid,detailsid, isactive,LoginType , UserId);
 					
@@ -1227,31 +1238,131 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				return "redirect:/Role.htm";
 			}
 			
-			@RequestMapping(value="circulatAddEditList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
-			public String circularAddEdit(HttpSession ses, HttpServletRequest req )throws Exception
+			@RequestMapping(value="CircularLists.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+			public String circularList(HttpSession ses, HttpServletRequest req )throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
 				List<Object[]> circulatlist = new ArrayList<Object[]>();
 			   	 try {
 			   		 String action = (String)req.getParameter("action");
-			   		 if("ADD".equals(action)) {
+			   		 if("ADD".equalsIgnoreCase(action)){
 			   			 
 			   			 return "Admin/CircularAddEdit";
-			   		 }else if ("EDIT".equals(action)) {
+			   			 
+			   		 }else if ("EDIT".equalsIgnoreCase(action)){
+			   			 
+			   			String circularid = (String)req.getParameter("circulatId");
+						CircularList circular = service.GetCircularToEdit(Long.parseLong(circularid));
+						req.setAttribute("circular", circular);
 			   			return "Admin/CircularAddEdit";
-			   		 }else {
-			   			 circulatlist = emsservice.circulatlist();
+			   			
+			   		 }else{
+			   			 
+			   			 String fromdate = (String)req.getParameter("fromdate");
+			   			 String todate = (String)req.getParameter("todate");
+			   			 
+			   			 if(fromdate==null && todate == null) {
+			   				 fromdate = DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat();
+			   				 todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
+			   			 }
+			   				
+			   			 circulatlist = service.GetCircularList(fromdate , todate );
 				   		 req.setAttribute("circulatlist", circulatlist);
+				   		 req.setAttribute("fromdate", fromdate);	
+						 req.setAttribute("todate",todate);
 				   		return "Admin/CircularList";
 			   		 }
 			   		                                                      
 				} catch (Exception e) {
 					e.printStackTrace();
-					return "";
+					return "Admin/CircularList";
 				}
 				
 			}
 			
+			@RequestMapping(value ="CircularADDEDIT.htm" , method = RequestMethod.POST)
+			public String CirculatAddEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				try {
+					String action = (String)req.getParameter("action");
+					
+					if("CircularAdd".equalsIgnoreCase(action)) {
+						
+						String todate   =(String)req.getParameter("todate");
+						String description = (String)req.getParameter("description");
+						
+						CircularList circular = new CircularList();
+						
+						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+						circular.setDescription(description.trim());
+						circular.setCircularDate(LocalDate.now().toString());
+						CircularListDto filecircular = new CircularListDto();
+					
+						filecircular.setPath(selectedFile);
+						
+						long result = service.CircularListAdd(circular , filecircular);
+						if (result != 0) {
+							 redir.addAttribute("result", "Circular Added Successfully");
+						} else {
+							 redir.addAttribute("resultfail", "Circular Added Unsuccessfull");
+						}
+					}else {
+					
+						String todate   = (String)req.getParameter("todate");
+						String description = (String)req.getParameter("description");
+						String circularid = (String)req.getParameter("circular");
+						CircularList circular = new CircularList();
+						circular.setCircularDate(LocalDate.now().toString());
+						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+						circular.setDescription(description.trim());
+						circular.setCircularId(Long.parseLong(circularid));
+						CircularListDto filecircular = new CircularListDto();
+					
+						filecircular.setPath(selectedFile);
+						long result = service.CircularListEdit(circular , filecircular);
+						if (result != 0) {
+							 redir.addAttribute("result", "Circular Updated Successfully");
+						} else {
+							 redir.addAttribute("resultfail", "Circular Updated Unsuccessfull");
+						}
+						
+					}
+					return "redirect:/CircularLists.htm";
+				}catch (Exception e){
+					e.printStackTrace();
+					redir.addAttribute("resultfail", "Internal Error!");
+					return "redirect:/CircularLists.htm";
+				}
+				
+			}
+			
+			@RequestMapping(value = "download-CircularFile-attachment",method = {RequestMethod.GET,RequestMethod.POST})
+		    public void downloadCircularAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+							
+				try {
+					
+					String path = (String)req.getParameter("path");
+					System.out.println("path    :"+path);
+					String arr[] = path.split("//");
+					res.setContentType("Application/octet-stream");	
+					
+					File my_file = new File(arr[0]);
+					 res.setHeader("Content-disposition","attachment; filename="+arr[1]);
+				      OutputStream out = res.getOutputStream();
+				        FileInputStream in = new FileInputStream(my_file);
+				        byte[] buffer = new byte[4096];
+				        int length;
+				        while ((length = in.read(buffer)) > 0){
+				           out.write(buffer, 0, length);
+				        }
+				        in.close();
+				        out.flush();
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+		    }
 		
 }

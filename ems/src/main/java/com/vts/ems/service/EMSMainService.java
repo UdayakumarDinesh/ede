@@ -2,6 +2,7 @@ package com.vts.ems.service;
 
 import java.util.List;
 
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -21,5 +22,6 @@ public interface EMSMainService {
 	public String reSendResetOTP(String loginid) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
-	public List<Object[]> circulatlist() throws Exception;
+	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception;
+
 }

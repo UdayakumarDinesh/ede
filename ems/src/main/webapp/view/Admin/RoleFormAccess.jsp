@@ -150,7 +150,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 									<td>
 										
 											<%-- <input name="access"   onchange="FormNameEdit(<%=obj[0]%>)"  type="checkbox"  <%if(obj[2].toString().equalsIgnoreCase("1")||obj[2].toString().equalsIgnoreCase("4")||obj[2].toString().equalsIgnoreCase("3")){ %> disabled <%} %> <%if(obj[4]!=null && (obj[4]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" > --%>
-											<input name="access"  value="<%=obj[0]%>"  onchange="UpdateIsActive(<%=obj[0]%>);"  type="checkbox"  <%if(logintype.toString().equalsIgnoreCase("A")){ %> disabled <%} %> <%if(obj[4]!=null && (obj[4]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" >
+											<input name="access"  value="<%=obj[0]%>"  onchange="UpdateIsActive('<%=obj[0]%>','<%=obj[1]%>','<%=obj[4]%>','<%=moduleid%>','<%=logintype%>');"  type="checkbox"  <%if(logintype.toString().equalsIgnoreCase("A")){ %> disabled <%} %> <%if(obj[4]!=null && (obj[4]).toString().equalsIgnoreCase("1")){ %>checked<%}%> data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Active" data-off="<i class='fa fa-times' aria-hidden='true'></i> Inactive" >
 											<input type="hidden" name="sample"     value="attendance<%=count %>" >
 											<input type="hidden" name="moduleid" value="<%=moduleid%>">	
 											<input type="hidden" name="logintype1" value="<%=logintype%>">
@@ -192,8 +192,9 @@ function submitForm()
   document.getElementById('myform').submit(); 
 } 
 
-function UpdateIsActive(value)
+/* function UpdateIsActive(value)
 {
+	console.log(value);
 	if(value!=null){
 		$("#formroleid").val(value);
 		document.getElementById('myform1').submit(); 
@@ -202,14 +203,40 @@ function UpdateIsActive(value)
 		document.getElementById('myform1').submit(); 
 	}
 	
-}
-
-
-
-function FormNameEdit(id){
-		 $.ajax({
+} */
+function UpdateIsActive(formroleaccsid, detailsid,isactive,moduleid,logintype)
+{
+	 $.ajax({
 
 			type : "GET",
+			url : "UpdateRoleAcess.htm",
+			data : {
+						formroleaccessid : formroleaccsid,
+						detailsid        : detailsid,
+						isactive         : isactive,
+						moduleid         : moduleid,
+						logintype        : logintype
+				   },
+			datatype : 'json',
+			success : function(result) {
+
+			var result = JSON.parse(result);
+	
+			var values = Object.keys(result).map(function(e) {
+		 				 return result[e]
+		  
+							});
+				}
+				   
+			});
+}
+
+function FormNameEdit(id){
+	
+	
+		 $.ajax({
+
+			type : "POST",
 			url : "FormRoleActive.htm",
 			data : {
 						formroleaccessid : id

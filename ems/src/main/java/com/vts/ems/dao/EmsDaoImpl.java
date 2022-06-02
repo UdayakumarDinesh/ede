@@ -1,6 +1,7 @@
 package com.vts.ems.dao;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -256,14 +257,23 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , fromdate ,todate FROM chss_circular_list ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,todate ,OriginalName FROM chss_circular_list WHERE  circulardate BETWEEN  :fromdate AND :todate  ORDER BY circularid DESC";
 	
 	@Override
-	 public List<Object[]> circulatlist() throws Exception
+	 public List<Object[]> CirculatList(LocalDate fromdate , LocalDate todate) throws Exception
 	 {
-		Query query =  manager.createNativeQuery(CIRCULARLIST);
-		 
-		return (List<Object[]>)query.getResultList();
+		 logger.info(new Date() +"Inside DAO CirculatList()");	
+		 try {
+				Query query =  manager.createNativeQuery(CIRCULARLIST);
+				 query.setParameter("fromdate", fromdate);
+				 query.setParameter("todate", todate);
+				return (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CirculatList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	
 	 }
 	
 }

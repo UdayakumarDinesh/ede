@@ -1,5 +1,6 @@
 package com.vts.ems.login;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.vts.ems.service.EMSMainService;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class LoginController 
@@ -51,13 +53,17 @@ public class LoginController
 //	    }
 //	    
 	    
-	    List<Object[]> circulatlist = new ArrayList<Object[]>();
+	     
 		   	 try {
-		   		 circulatlist = service.circulatlist();
+		   		 String    todate=DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now().plusDays(7));
+	   			 String    fromdate= DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
+
+	   			List<Object[]> 	 circulatlist = service.CirculatList(fromdate ,todate);
+	   			req.setAttribute("circularlist", circulatlist);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		req.setAttribute("circularlist", circulatlist);
+	
 	    
 	    String success= req.getParameter("success");
 		if (success == null) {
