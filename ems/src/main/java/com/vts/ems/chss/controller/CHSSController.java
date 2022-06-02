@@ -2221,7 +2221,6 @@ public class CHSSController {
 		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside ContingentApprovals.htm "+Username);
 		try {
-			
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
 			
