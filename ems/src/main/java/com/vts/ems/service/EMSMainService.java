@@ -23,4 +23,5 @@ public interface EMSMainService {
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
 	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> circulatlist() throws Exception;
 }

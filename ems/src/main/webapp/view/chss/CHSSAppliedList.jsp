@@ -135,7 +135,8 @@
 														<i class="fa-solid fa-forward" style="color: #A63EC5"></i>
 													</button>
 												<%} %>		 --%>	
-												<input type="hidden" name="isapproval" value="N">							
+												<input type="hidden" name="isapproval" value="N">
+												<input type="hidden" name="show-edit" value="N">
 											</td>
 										</tr>
 									<%} %>

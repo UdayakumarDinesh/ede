@@ -1,21 +1,24 @@
 package com.vts.ems.controller;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Base64;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +28,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
+import com.vts.ems.utils.CharArrayWriterResponse;
 
 @Controller
 public class EmsController {
@@ -319,26 +322,30 @@ public class EmsController {
 			out.flush();
 		}
 
-	 @RequestMapping(value = "LoginPage/Circulars.htm", method = RequestMethod.GET)
-		public void Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-
-			String path = req.getServletContext().getRealPath("/manuals/" + "Circulars.pdf");
-
-			res.setContentType("application/pdf");
-			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
-
-			File my_file = new File(path);
-
-			OutputStream out = res.getOutputStream();
-			FileInputStream in = new FileInputStream(my_file);
-			byte[] buffer = new byte[4096];
-			int length;
-			while ((length = in.read(buffer)) > 0) {
-				out.write(buffer, 0, length);
-			}
-			in.close();
-			out.flush();
-		}
+//	 @RequestMapping(value = "LoginPage/Circulars.htm", method = RequestMethod.GET)
+//		public void Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+//
+//			String path = req.getServletContext().getRealPath("/manuals/" + "Circulars.pdf");
+//
+//			res.setContentType("application/pdf");
+//			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+//
+//			File my_file = new File(path);
+//
+//			OutputStream out = res.getOutputStream();
+//			FileInputStream in = new FileInputStream(my_file);
+//			byte[] buffer = new byte[4096];
+//			int length;
+//			while ((length = in.read(buffer)) > 0) {
+//				out.write(buffer, 0, length);
+//			}
+//			in.close();
+//			out.flush();
+//		}
+	 
+	 
+	 
+	
 	
 	 @RequestMapping(value = "LoginPage/Eligibility.htm", method = RequestMethod.GET)
 		public void Eligibility(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
@@ -360,5 +367,78 @@ public class EmsController {
 			in.close();
 			out.flush();
 		}
+	 
+	 @RequestMapping(value = "Circulars.htm", method = RequestMethod.GET)
+	 public String Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+	 
+		 logger.info(new Date() +"Inside Circulars.htm ");
+			try 
+			{
+				 List<Object[]> circulatlist = new ArrayList<Object[]>();
+	        	 
+				 circulatlist = service.circulatlist();
+	        	 
+	        	 req.setAttribute("circulatlist",circulatlist);
+
+				return "chss/CHSSCircularList";
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+				return "";
+			}
+
+	 }
+	 
+	 @RequestMapping(value = "CircularDownload.htm")
+		public void CircularDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+
+			logger.info(new Date() +"Inside CircularDownload.htm "+UserId);
+			
+			try {	
+				String contingentid = req.getParameter("contingentid");
+				
+			
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+				String filename="CHSSContingentList";
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+				
+		        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/chss/ContingetBill.jsp").forward(req, customResponse);
+				String html1 = customResponse.getOutput();        
+		        
+		        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+		         
+		        res.setContentType("application/pdf");
+		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		        File f=new File(path +File.separator+ filename+".pdf");
+		         
+		        
+		        FileInputStream fis = new FileInputStream(f);
+		        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+		        res.setHeader("Content-Length",String.valueOf(f.length()));
+		        byte[] buffer = new byte[1024];
+		        int len = 0;
+		        while ((len = fis.read(buffer)) >= 0) {
+		            os.write(buffer, 0, len);
+		        } 
+		        os.close();
+		        fis.close();
+		       
+		       
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+			}
+			catch (Exception e) {
+				e.printStackTrace();  
+				logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+			}
+
+		}
+	 
 
 }

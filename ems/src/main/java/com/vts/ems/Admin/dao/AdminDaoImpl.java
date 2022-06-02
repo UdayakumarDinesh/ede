@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -55,13 +56,13 @@ public class AdminDaoImpl implements AdminDao{
 		return LoginTypeRoles;
 	}
 	
-	private static final String FORMDETAILSLIST="SELECT a.formroleaccessid,a.logintype,b.formname,a.isactive FROM form_role_access a,form_detail b WHERE a.logintype=:logintype AND a.formdetailid=b.formdetailid AND CASE WHEN :moduleid <> 'A' THEN b.formmoduleid=:moduleid ELSE 1=1 END";
+	private static final String FORMDETAILSLIST="SELECT b.formroleaccessid,a.formdetailid,a.formmoduleid,a.formdispname,b.isactive , b.logintype FROM  (SELECT fd.formdetailid,fd.formmoduleid,fd.formdispname FROM form_detail fd WHERE fd.isactive=1 AND  CASE WHEN :formmoduleid <> '0' THEN fd.formmoduleid =:formmoduleid ELSE 1=1 END) AS a LEFT JOIN  (SELECT b.formroleaccessid,b.formdetailid AS 'detailid' ,b.logintype,b.isactive FROM form_detail a ,form_role_access b  WHERE a.formdetailid=b.formdetailid AND b.logintype=:logintype AND CASE WHEN :formmoduleid <> '0' THEN a.formmoduleid =:formmoduleid ELSE 1=1 END ) AS b ON a.formdetailid = b.detailid";
 	@Override
 	public List<Object[]> FormDetailsList(String LoginType,String ModuleId) throws Exception {
 
 		Query query=manager.createNativeQuery(FORMDETAILSLIST);
 		query.setParameter("logintype", LoginType);
-		query.setParameter("moduleid", ModuleId);
+		query.setParameter("formmoduleid", ModuleId);
 		List<Object[]> FormDetailsList=(List<Object[]>)query.getResultList();
 		
 		return FormDetailsList;
@@ -1090,4 +1091,32 @@ public class AdminDaoImpl implements AdminDao{
 		
 	}
 	
+	@Override
+	public int checkavaibility(String logintype,String detailsid)throws Exception{
+		Query query = manager.createNativeQuery("SELECT COUNT(formroleaccessid)  FROM `form_role_access` WHERE logintype=:logintype  AND  formdetailid=:detailsid");
+		query.setParameter("logintype", logintype);
+		query.setParameter("detailsid",detailsid );
+		
+		BigInteger result = (BigInteger) query.getSingleResult();
+		return result.intValue();
+	}
+	
+	@Override
+	public int updateformroleaccess(String formroleid,String active,String auth)throws Exception{
+		Query query = manager.createNativeQuery("UPDATE form_role_access SET isactive=:isactive , modifieddate=:modifieddate , modifiedby=:modifiedby WHERE formroleaccessid=:formroleaccessid");
+		query.setParameter("formroleaccessid", formroleid);
+		query.setParameter("isactive", active);
+		query.setParameter("modifieddate",sdtf.format(new Date()));
+		query.setParameter("modifiedby", auth);
+		
+		return query.executeUpdate();
+	}
+	
+	@Override
+	public Long insertformroleaccess(FormRoleAccess main) throws Exception {
+
+		manager.persist(main);
+		manager.flush();
+		return (long)main.getFormRoleAccessId();
+	}
 }

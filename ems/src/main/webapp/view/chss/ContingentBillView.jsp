@@ -235,7 +235,10 @@ th,td
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
+									
 									<input type="hidden" name="isapproval" value="Y">
+									<input type="hidden" name="show-edit" value="Y">
+									<input type="hidden" name="show-his-btn" value="Y">
 									</td>
 									<%} %>							
 								</tr>

@@ -79,7 +79,7 @@ public interface AdminService {
 	public List<Object[]> GetToemployee()throws Exception;
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
 	public int CheckduplicateTestCode(String testcode)throws Exception;
-	
+	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception;
 	
 	
 	

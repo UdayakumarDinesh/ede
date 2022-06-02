@@ -1,8 +1,10 @@
 package com.vts.ems.Admin.Service;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.model.EmployeeRequest;
+import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -28,6 +31,10 @@ public class AdminServiceImpl implements AdminService{
 	AdminDao dao;
 	@Autowired
 	CHSSDao chssdao;
+	
+	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	
 	@Override
 	public List<Object[]> LoginTypeRoles() throws Exception 
 	{
@@ -37,15 +44,8 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Object[]> FormDetailsList(String LoginType,String ModuleId) throws Exception 
 	{		
-		String logintype="A";
-		if(LoginType!=null) {
-			logintype=LoginType;
-		}
-		String moduleid="A";
-		if(ModuleId!=null) {
-			moduleid=ModuleId;
-		}	
-		return dao.FormDetailsList(logintype,moduleid);
+
+		return dao.FormDetailsList(LoginType,ModuleId);
 	}
 	
 	@Override
@@ -496,4 +496,36 @@ public class AdminServiceImpl implements AdminService{
 	{
 		return dao.CheckduplicateTestCode(testcode);
 	}
+	
+	
+	@Override
+	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception{
+		
+			if(isactive!=null && isactive.equals("0")){
+				isactive="1";
+			}else {
+				isactive="0";
+			}
+//		System.out.println("formroleaccessid  :"+formroleaccessid);
+//		System.out.println("detailsid         :"+detailsid);
+//		System.out.println("isactive          :"+isactive);
+//		System.out.println("logintype         :"+logintype);
+		int result = dao.checkavaibility(logintype,detailsid);
+		System.out.println("result  :"+result);
+		if(result == 0) {
+			FormRoleAccess formrole = new FormRoleAccess();
+			formrole.setLoginType(logintype);
+			formrole.setFormDetailId(Long.parseLong(detailsid));
+			formrole.setIsActive(1);
+			formrole.setCreatedBy(UserId);
+			formrole.setCreatedDate(sdf1.format(new Date()));	
+			Long value=dao.insertformroleaccess(formrole);
+			return value.intValue();
+		}else {
+		
+			return dao.updateformroleaccess(formroleaccessid,isactive,UserId);
+		}
+		
+	}
+	
 }

@@ -208,5 +208,9 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.MainDashboardGraphData(EmpId, FromDate, ToDate);
 	}
 	
+	public List<Object[]> circulatlist() throws Exception
+	{
+		return dao.circulatlist();
+	}
 	
 }

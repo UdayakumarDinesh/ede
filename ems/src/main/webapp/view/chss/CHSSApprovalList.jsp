@@ -123,7 +123,10 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<input type="hidden" name="isapproval" value="Y">	 --%>					
+												<input type="hidden" name="isapproval" value="Y">	 --%>	
+												<input type="hidden" name="isapproval" value="Y">
+												<input type="hidden" name="show-edit" value="Y">
+																
 											</td>
 										</tr>
 									<%} %>

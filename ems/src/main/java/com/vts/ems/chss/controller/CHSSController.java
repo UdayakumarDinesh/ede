@@ -33,6 +33,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
+import com.itextpdf.layout.Canvas;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
@@ -123,9 +138,6 @@ public class CHSSController {
 			req.setAttribute("patientname", PatientName);
 			req.setAttribute("IsSelf", IsSelf);;
 
-			
-			
-			
 			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
@@ -1477,13 +1489,15 @@ public class CHSSController {
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("starctext",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\starctext.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			
-			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
+			req.setAttribute("show-edit", req.getParameter("show-edit"));
+			
 			req.setAttribute("onlyview", "Y");
 			
 			return "chss/CHSSFormEdit";
@@ -1524,25 +1538,25 @@ public class CHSSController {
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			
-			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			String filename="CHSS-Claim";
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
-			
 	        
 	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 			req.getRequestDispatcher("/view/chss/CHSSForm.jsp").forward(req, customResponse);
-			String html1 = customResponse.getOutput();        
+			String html = customResponse.getOutput();        
 	        
-	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 	         
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
-	        File f=new File(path +File.separator+ filename+".pdf");
-	         
+	       
+	       
+	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        
+	        File f=new File(path +File.separator+ filename+".pdf");
 	        FileInputStream fis = new FileInputStream(f);
 	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
 	        res.setHeader("Content-Length",String.valueOf(f.length()));
@@ -1557,6 +1571,7 @@ public class CHSSController {
 	       
 	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
 	        Files.delete(pathOfFile);		
+	       	
 		}
 		catch (Exception e) {
 			e.printStackTrace();  
@@ -1564,6 +1579,47 @@ public class CHSSController {
 		}
 
 	}
+	
+	
+	
+	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
+	{
+		File pdffile = new File(pdffilepath);
+		File tofile = new File(newfilepath);
+		
+		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
+		    PdfFont helvetica = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
+		        PdfPage page = doc.getPage(pageNum);
+		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
+	
+		        PdfExtGState gstate = new PdfExtGState();
+		        gstate.setFillOpacity(.1f);
+		        canvas = new PdfCanvas(page);
+		        canvas.saveState();
+		        canvas.setExtGState(gstate);
+		        try (Canvas canvas2 = new Canvas(canvas, doc, page.getPageSize())) {
+		            double rotationDeg = 50d;
+		            double rotationRad = Math.toRadians(rotationDeg);
+		            Paragraph watermark = new Paragraph("STARC")
+		                    .setFont(helvetica)
+		                    .setFontSize(150f)
+		                    .setTextAlignment(TextAlignment.CENTER)
+		                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+		                    .setRotationAngle(rotationRad)
+		                    .setFixedPosition(200, 110, page.getPageSize().getWidth());
+	//	            System.out.println(page.getPageSize().getHeight()-((page.getPageSize().getHeight()*3)/4)-100);
+		            canvas2.add(watermark);
+		        }
+		        canvas.restoreState();
+		    }
+		 }
+		
+		pdffile.delete();
+		tofile.renameTo(pdffile);
+		
+}
+	
 	
 	@RequestMapping(value = "CHSSClaimFwdApproveAjax.htm", method = RequestMethod.GET)
 	public @ResponseBody String CHSSClaimFwdApproveAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
@@ -1732,12 +1788,19 @@ public class CHSSController {
 			{
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
-			}	
+			}
+			
 			if (isapproval == null) 
 			{
 				Map md=model.asMap();
 				isapproval=(String)md.get("isapproval");
 			}	
+			String showedit=req.getParameter("show-edit");
+			if (showedit == null) 
+			{
+				Map md=model.asMap();
+				showedit=(String)md.get("show-edit");
+			}
 			
 			
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
@@ -1757,6 +1820,7 @@ public class CHSSController {
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			
 			req.setAttribute("isapproval", isapproval);
+			req.setAttribute("show-edit", showedit);
 			req.setAttribute("logintype", LoginType);
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
@@ -1798,6 +1862,7 @@ public class CHSSController {
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1838,6 +1903,7 @@ public class CHSSController {
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1878,6 +1944,7 @@ public class CHSSController {
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1918,6 +1985,7 @@ public class CHSSController {
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1958,6 +2026,7 @@ public class CHSSController {
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2123,7 +2192,6 @@ public class CHSSController {
 			logger.error(new Date() +" Inside CHSSClaimsApprove.htm "+Username, e);
 			return "static/Error";
 		}
-		
 	}
 	
 	
@@ -2137,7 +2205,6 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType));
 			req.setAttribute("logintype", LoginType);
-			
 			
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
@@ -2165,12 +2232,10 @@ public class CHSSController {
 			req.setAttribute("contingentremarks", service.ContingentBillRemarkHistory(contingentid));
 			req.setAttribute("onlyview","Y");
 			req.setAttribute("logintype",LoginType);
+
+			return "chss/ContingentBillView";
 			
-		
-			
-//			return "chss/ContingentBillView";
-			
-			return "chss/ContingentBill";
+//			return "chss/ContingentBill";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ContingetBill.htm "+Username, e);
@@ -2222,7 +2287,7 @@ public class CHSSController {
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
-	         
+	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	        File f=new File(path +File.separator+ filename+".pdf");
@@ -2505,7 +2570,7 @@ public class CHSSController {
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
-	         
+	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	        File f=new File(path +File.separator+ filename+".pdf");

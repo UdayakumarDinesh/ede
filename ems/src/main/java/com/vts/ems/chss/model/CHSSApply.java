@@ -37,6 +37,8 @@ public class CHSSApply implements Serializable {
 	private Integer POAcknowledge;
 	private Long POId;
 	private Long VOId;
+	private Double AmountClaimed;
+	private Double AmountSettled;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
