@@ -2,6 +2,7 @@ package com.vts.ems.leave.service;
 
 import java.util.List;
 
+import com.vts.ems.leave.dto.LeaveCheckDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 
@@ -18,6 +19,9 @@ public interface LeaveService {
 	public long LeaveCreditedAddUpdate(LeaveRegister register,String type) throws Exception;
 	public List<Object[]>   GetHolidays(String Type)throws Exception;
 	public List<Object[]>   EmpDetails(String EmpNo)throws Exception;
-
+	public List<Object[]>   EmployeeList()throws Exception;
+	public List<Object[]> LeaveCode(String EmpNo) throws Exception ;
+	public List<Object[]>   purposeList()throws Exception;
+	public String LeaveCheck(LeaveCheckDto dto)throws Exception;
 	
 }

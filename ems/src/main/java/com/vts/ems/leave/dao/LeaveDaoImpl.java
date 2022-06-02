@@ -38,8 +38,10 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CREDITIND="CALL leave_credit_individual(:mnth,:yr,:empNo)";
     private static final String CREDITBYID="SELECT b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.cl AS phcl,b.ph,a.ccl AS ccl,a.sl AS sl,a.month,a.year,b.gender,a.ml,a.pl   FROM leave_register a, employee b, employee_desig c WHERE  a.registerid=:id AND b.designationid=c.desigid AND b.empno=a.empid";
     private static final String HOLIDAYS="select holidate,holiname from leave_holiday_workingday where isactive='1' and case when 'U'=:type then holidate>=DATE(SYSDATE()) else holitype=:type end and year(holidate)=YEAR(CURDATE()) ORDER BY holidate";
-    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,a.empname AS name1,b.empname AS name2 FROM employee a, employee b, leave_sa_ra c,employee d,employee_desig e WHERE a.empno=c.ra AND b.empno=c.sa AND c.empid=:empNo AND c.empid=d.empno AND e.desigid=d.designationid";
-    
+    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,a.empname AS name1,b.empname AS name2 FROM employee a, employee b, leave_sa_ra c,employee d,employee_desig e WHERE a.empno=c.ra AND b.empno=c.sa AND c.empid=:empNo AND c.empid=d.empno AND e.desigid=d.designationid UNION SELECT d.empno,d.empname,e.designation,'Not Assigned' AS name1,'Not Assigned' AS name2 FROM leave_sa_ra c,employee d,employee_desig e WHERE  :empNo NOT IN (c.empid) AND :empNo=d.empno AND e.desigid=d.designationid";
+    private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation from  employee d,employee_desig e WHERE  e.desigid=d.designationid ";
+    private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b  WHERE  b.empno=:empno and CASE WHEN b.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
+    private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
     
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -167,5 +169,31 @@ public class LeaveDaoImpl implements LeaveDao{
 		List<Object[]> EmpDetails= query.getResultList();
 		return EmpDetails;
 	}
+
+
+	@Override
+	public List<Object[]> EmployeeList() throws Exception {
+		logger.info(new Date() +"Inside EmployeeList");	
+		Query query = manager.createNativeQuery(EMPLOYEELIST);
+		List<Object[]> EmpDetails= query.getResultList();
+		return EmpDetails;
+	}
 	
+	@Override
+	public List<Object[]> LeaveCode(String EmpNo) throws Exception {
+		logger.info(new Date() +"Inside LeaveCode");	
+		Query query = manager.createNativeQuery(LEAVECODE);
+		query.setParameter("empno", EmpNo);
+		List<Object[]> EmpDetails= query.getResultList();
+		return EmpDetails;
+	}
+
+
+	@Override
+	public List<Object[]> purposeList() throws Exception {
+		logger.info(new Date() +"Inside purposeList");	
+		Query query = manager.createNativeQuery(PUROPSELIST);
+		List<Object[]> purposeList= query.getResultList();
+		return purposeList;
+	}
 }
