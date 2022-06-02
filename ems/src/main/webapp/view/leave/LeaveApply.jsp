@@ -2,6 +2,7 @@
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
 <%@page import="com.ibm.icu.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -45,6 +46,14 @@ padding: 0.25rem 0.25rem 0.25rem 0.25rem !important;
 padding: 0.05rem 0rem 0.05rem 0rem !important;
 }
 
+.card-header {
+    padding: 0.7rem 0.4rem 0.3rem 0.4rem !important;
+    }
+    
+ span, label{
+ font-weight: bold !important;
+ }   
+
 </style>
 </head>
 <body>
@@ -80,9 +89,10 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
  <%
  
     List<Object[]> officerdetails=(List<Object[]>)request.getAttribute("officerdetails");
-    List<Employee> emplist=(List<Employee>)request.getAttribute("EmpList");
-    String empNo=(String)request.getAttribute("empNo");
+    List<Object[]> emplist=(List<Object[]>)request.getAttribute("EmpList");
+    String empNo=(String)request.getAttribute("EmpNo");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+    long roleid=(Long)session.getAttribute("FormRole");
 	   %>
 <div class="page card dashboard-card" style="margin-top: 1px;">
 
@@ -92,7 +102,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			<div class="col-md-3">
 			 <div  class="card">
 	            <div class="card-header">
-	                <span class="h5">Current Leave Balance</span>
+	                <span class="h6">Current Leave Balance</span>
 	            </div>
 	            <div class="card-body">
 	            <div class="table-responsive">
@@ -126,7 +136,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	         <!--Holidays-->
 	        <div  class="card" style="margin-top:7px;">
 	            <div class="card-header">
-	                <span class="h5">Important Dates</span>
+	                <span class="h6">Important Dates</span>
 	            </div>
 	           
 	                    <ul class="nav nav-tabs">
@@ -167,19 +177,21 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			<!--Leave Apply  -->
 			
 			<%
-			List<Object[]> leaveTypeDropdown=(List<Object[]>)request.getAttribute("leaveTypeDropdown");
+			List<Object[]> leaveType=(List<Object[]>)request.getAttribute("leaveType");
+			List<Object[]> purposeList=(List<Object[]>)request.getAttribute("purposeList");
 			%>
 			<div class="col-md-6">
 			      <div  class="card">
 	                    <div class="card-header">
+	                     <% if(roleid==1){   %>
 	                     <form action="LeaveApply.htm" method="post">
-	                    <div class="input-group  custom-search-form">
+	                      <div class="input-group  custom-search-form">
                               
                                <select class="form-control selectpicker" name="EmpNo" data-live-search="true">
                                  
                                  <%if(emplist!=null&&emplist.size()>0){
-                                  for(Employee emp:emplist){ %> 
-                                   <option value="<%=emp.getEmpNo()%>" <%if(1==emp.getEmpId()){ %> selected="selected" <%} %>><%=emp.getEmpName()%></option> 
+                                  for(Object[] emp:emplist){ %> 
+                                   <option value="<%=emp[0]%>" <%if(emp[0].toString().equalsIgnoreCase(empNo)){ %> selected="selected" <%} %>><%=emp[1]%>, <%=emp[2]%>  (<%=emp[0]%>)</option> 
                                  <%}} %> 
                                 </select>
                                 
@@ -191,26 +203,44 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 
                               </div>
                                 </form>
+                                <%} %>
+                                 <div  id="successmsg" style='font-size: 16px;  font-weight: bold;' class="text-center">
+	                                  <%if(request.getParameter("result")!=null){
+	                                      %>
+	                                  <span style="color:green; display:block;">Successfully Applied</span>
+	                                  <%}if(request.getParameter("resultfail")!=null){%>
+	                                  <span style="color:red;">Some Error Occur While Applying</span>
+	                                     <%} %>
+	   
+	                                 <%if(request.getParameter("SameDateHandingOverAlreadyPresent")!=null){%>
+	                                 <span style="color:red;">Same Date And Employee Handing Over Already Present</span>
+	                                    <%}%>
+	   
+	                                          </div>
+	                                           <div id="sp" class="text-center" style=" "></div>
                                 
                                   <!-- Recc -->    <%if(officerdetails!=null){ 
                        for(Object[] obj:officerdetails){ 
-                       %>
-	                       <div style="margin-top:10px; text-align: right; color: green;"><span class="h4">Leave Application For</span> <b class="h5"><%=obj[1] %></b>, <small><%=obj[2] %> </small> </div>             
+                       %>       <div class="row" style="margin-top:0px;" >
+                                <div class="col-sm-1"></div>
+	                            <div class="col-sm-10" style="margin-top:10px; text-align: right; color: green;"><b class="h5">Leave Application For</b> <b class="h6" style="margin-left: 10px;"><%=obj[1] %></b>, <small> <%=obj[2] %> </small> </div>  
+	                            </div>         
                                <hr style="margin: 0rem 0rem 0.45rem 0rem  !important">
                                 <div class="row" style="margin-top:0px;" >
+                                <div class="col-sm-1"></div>
 	                            <div class="col-sm-2" style="text-align: right;" align="right">
-	                                <b  style="font-size:small;color:#4E4C4C ; ">Recc Officer:</b>
+	                                <b  style="font-size:small; ">Recc Officer:</b>
 	                            </div>
-	                            <div class="col-sm-4" style="text-align: left;" align="left">
-	                               <b style="font-size:small ; color:#575656  ;"><%=obj[3] %></b>
+	                            <div class="col-sm-3" style="text-align: left;" align="left">
+	                               <b style="font-size:small ; "><%=obj[3] %></b>
 	                            </div>
 	                            <div class="col-sm-2"  	style="text-align: right;">
-	                                <b style="font-size:small ;color:#4E4C4C ;">Sanc Officer :</b>
+	                                <b style="font-size:small ;">Sanc Officer :</b>
 	                            </div>
-	                            <div class="col-sm-4" style="text-align: left;">
-	                               <b style="font-size:small;  color:#575656  ;"><%=obj[4] %></b>
+	                            <div class="col-sm-3" style="text-align: left;">
+	                               <b style="font-size:small; "><%=obj[4] %></b>
 	                               </div>
-	                       
+	                            <input type="hidden" id="IsAssigned"	value="<%=obj[4] %>" />
 	                           </div>
 	                  <%}} %>
 	                    <!-- / Recc -->
@@ -222,15 +252,20 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    
 	                    <!-- Leave Type-->
 	                    <div class="form-group">
-	                        <div class="row" style="margin-top:5px; ">
-	                            <div class="col-sm-3"><label for="leaveType">Leave Type:</label></div>
+	                        <div class="row" style="margin-top:10px; ">
+	                            <div class="col-sm-3" align="right"><label for="leaveType">Leave Type : </label></div>
 	                            
-	                              <div class="col-sm-4">
-	                                <select id="leaveType"  name="leavetypecode" class="form-control selectpicker" onChange="leavecheck(); cmlMessage();" required="required" title="Leave Type">
-	                                  <% if(leaveTypeDropdown!=null&&leaveTypeDropdown.size()>0){
-	                                       for(Object[] l:leaveTypeDropdown){%>
+	                              <div class="col-sm-3">
+	                                <select id="leaveType"  name="leavetypecode" class="form-control selectpicker" onChange="leavecheck(); cmlMessage();" required="required" >
+	                                  <% if(leaveType!=null&&leaveType.size()>0){
+	                                       for(Object[] l:leaveType){
+	                                       if(roleid==1&&(l[0].toString().equalsIgnoreCase("0009")||l[0].toString().equalsIgnoreCase("0011"))){
+	                                       %>
 	                                       <option value="<%=l[0]%>"><%=l[1]%> </option>
-	                                       <%}}%>
+	                                      <%}else if(!l[0].toString().equalsIgnoreCase("0009")&&!l[0].toString().equalsIgnoreCase("0011")){
+	                                       %>
+	                                       <option value="<%=l[0]%>"><%=l[1]%> </option>
+	                                       <%}}}%>
 	                                </select>
 	                              </div>
 	                              <div id="fullhalfdiv"  class="col-sm-3">
@@ -241,18 +276,161 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                                </select>
 	                            </div>
 	                            <div id="hours"  class="col-sm-2">
-	                                <select  id="hours" name="hours" class="form-control selectpicker" required="required" title="Hours">
-	                                    <option value="1" >1</option>
-	                                     <option value="2" >2</option>
-	                                     <option value="3" >3</option>
-	                                     <option value="4" >4</option>
-	                                     <option value="5" >5</option>
-	                                     <option value="6" >6</option>
+	                                <select   name="hours" class="form-control selectpicker"  title="Hours">
+	                                     <option value="0.1" >1</option>
+	                                     <option value="0.2" >2</option>
+	                                     <option value="0.3" >3</option>
+	                                     <option value="0.4" >4</option>
+	                                     <option value="0.5" >5</option>
+	                                     <option value="0.6" >6</option>
 	                                </select>
 	                            </div>
 	                              
 	                              </div>
 	                              </div>
+	                              <!-- EL Encashment -->
+	                    <div class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="from">LTC ENCASH : </label>
+	                            </div>
+	                            <div class="col-sm-3">
+	                                <select id="Elcash" name="elcash" class="form-control selectpicker">
+	                                    <option value="N">No</option>
+	                                    <option value="Y">Yes</option>
+	                                    
+	                                </select>
+	                            </div>
+	                            
+	                            
+	                             <div  id="fnandiv" class="col-sm-3">
+	                                <select  id="anorfn" name="anfn"  class="form-control selectpicker" onChange="halffull()" >
+	                                    <option value="F">FN</option>
+	                                    <option value="A">AN</option>
+	                                    
+	                                </select>
+	                            </div>
+	                       
+	                       
+	                            
+	                            
+	                               
+	                        </div>
+	                    </div>
+	                    <!--ElEncashment  --> 
+	                            <!-- date from to -->
+	                    <div class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="fromApplyDate">Date : </label>
+	                            </div>
+	                            
+	                                
+	                            
+	                            
+	                            <div id="fromdiv" class="col-sm-3" align="left">
+	                            <b><span id="spanfrom">From</span></b>    <input id="fromApplyDate" type="text" class="form-control input-sm from" placeholder="from" onChange="fromDatefun()" name="startdate"  value="<%=sdf.format(new Date())%>" maxlength="10" >
+	                            </div>
+	                            <div  id="todiv" class="col-sm-3" align="left">
+	                           <b><span id="spanto">To</span></b>  <input id="toApplyDate"  type="text" class="form-control input-sm"  onchange="toDatefun()" name="enddate"   value="<%=sdf.format(new Date())%>"  maxlength="10" data-toggle="tooltip" data-placement="bottom" title="Please Select From Date First">
+	                            </div>
+	                           
+	                           
+	                            
+	                             
+	                        </div>
+	                    </div>
+	                     <!--/date from to  -->  
+	                           <!-- Purpose of leave -->
+	                    <div   class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="from">Purpose : </label>
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <select class="form-control selectpicker" name="leavepurpose" required="required">
+	                                   
+	                                   <%  for(Object[] pl:purposeList) {%>
+	                                    <option value="<%=pl[1]%>"><%=pl[1]%></option>
+	                                  
+	                                   <%} %>
+	                                       
+	                                </select>    
+	                            </div>
+	                        </div>    
+	                    </div>
+	                    <!-- /. Purpose of leave:-->
+	                    
+	                    
+	                    
+	                    <!-- Leave address -->
+	                    <div class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="from">Leave address : </label>
+	                            </div> 
+	                            <div class="col-sm-8">
+	                                <textarea class="form-control"  name="leaveadd" required> As Per SB Record </textarea>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <!-- / .leaveAddress-->
+	                    
+	                    <!-- Remarks -->
+	                    <div class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="from">Remarks : </label>
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <input id="from" class="form-control input-sm" name="remark" placeholder="Enter Some Remark">
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <!-- / Remarks -->    
+	                    <!-- HandingOver To -->
+	              <%if(roleid==1){%>
+	                 
+	                    <div class="form-group">
+	                        <div class="row">
+	                            <div class="col-sm-3" align="right">
+	                                <label for="from">Handing Over To:</label>
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <select name="HandingOverEmpid" class="form-control input-sm selectpicker" data-live-search="true">
+	                                
+	                                <option value="NotSelected">Select Employee Whom You Want To Hand Over</option>
+	                                 <%if(emplist!=null&&emplist.size()>0){
+	                                   for(Object[] ls:emplist){%>
+                                       <option value="<%=ls[0]%>"><%=ls[1]%> (<%=ls[0]%>)-<%=ls[2]%></option>
+                                     <%}}%>
+	                                </select>
+	                            </div>
+	                        </div>
+	                    </div>
+	                   
+	                   <%}else{%>  
+	                    <input type="hidden" name="HandingOverEmpid" value="NotSelected">
+	                   <%}%> 
+	                     <!--  reset apply and check button -->
+	                    <div class="form-group">
+	                    	<div class="row">
+	                    		<div class="col-sm-1"></div>
+	                    		<div class="col-sm-2">
+	                    			<button class="btn btn-warning btn-block" type="reset" onclick="resetform()" >Reset</button>
+	                    		</div>
+	                    		
+	                    		<div id="submit" class="col-sm-8">
+	                    			<button  type="submit" class="btn btn-success btn-block" name="ApplyLeaveSave" value=ApplyLeaveSave>Apply leave</button>
+	                    		</div>
+	                    		
+	                    		<div id="check" class="col-sm-8">
+	                    			<button  type="button" class="btn btn-primary btn-block" onclick="show()">Check leave</button>
+	                    		</div>
+	                    		
+	                    	</div>
+	                    </div> 
+	                              
 	                              </form>
 	                               
                          
@@ -267,7 +445,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			<div class="col-md-3">
 			<div class="card">
 	            <div class="card-header">
-	                <span class="h5">Recent Applied</span>
+	                <span class="h6">Recent Applied</span>
 	            </div>
 	            <div class="card-body">
 	                <ul class="list-group">
@@ -279,7 +457,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	            <br>
 	            <div class="card">
 	            <div class="card-header">
-	                <span class="h5">Recent Leaves</span>
+	                <span class="h6">Recent Leaves</span>
 	            </div>
 	            <div class="card-body">
 	                <ul class="list-group">
@@ -412,7 +590,260 @@ function Delete(myfrm){
 	
 	}
 
+var fromApplyDate, toApplyDate;
 
+
+fromApplyDate = $('#fromApplyDate');
+toApplyDate = $('#toApplyDate');
+
+$(fromApplyDate).daterangepicker({
+	"singleDatePicker": true,
+	"showDropdowns": true,
+	"showCustomRangeLabel": true,
+	"cancelClass": "btn-default",
+	autoUpdateInput: false,
+	locale: {
+		format: 'DD-MM-YYYY',    
+	}
+});
+
+$(fromApplyDate).on('apply.daterangepicker', function(ev, picker) {
+	$(this).val(picker.startDate.format('DD-MM-YYYY'));
+	if($(this).val != "")
+	   {
+		$('#toApplyDate').attr('disabled', false).daterangepicker({
+		"minDate": $(this).val(),
+		"singleDatePicker": true,
+		locale: {
+    	format: 'DD-MM-YYYY'
+		}
+	}); 	
+	}			
+});
+
+
+function fromDatefun()
+{
+	
+	$("#submit").hide(); //hide submit button (after check not allow to submit if some changes)
+	$("#check").show();
+	
+	 var ssuccessmsg=document.getElementById("successmsg");
+	 successmsg.innerHTML="     ";
+	 
+	 var sp=document.getElementById("sp");
+     sp.innerHTML="     ";
+} 
+
+
+
+function toDatefun()
+{
+	$("#submit").hide(); //hide submit button (after check not allow to submit if some changes)
+	$("#check").show();
+	
+	 var ssuccessmsg=document.getElementById("successmsg");
+	 successmsg.innerHTML="     ";
+	 
+	 
+	 var sp=document.getElementById("sp");
+     sp.innerHTML="     ";
+}
+
+$(document).ready(function(){
+
+	$("#submit").hide();
+	$("#hours").hide();
+	$("#anorfn").prop("disabled", true);
+	$(".selectpicker[data-id='anorfn']").addClass("disabled");
+	$('.selectpicker').selectpicker('refresh');
+});
+
+function cmlMessage()
+{
+	var leavetype=document.getElementById("leaveType").value;
+	
+	 if(leavetype==0003)
+	 	{
+		 
+		 var sp=document.getElementById("sp");
+	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 20px;'>Please Upload MC  Cerificate After Apply CML Leave</b>";
+	 	}
+	
+	
+}
+
+
+
+var anfn="X";
+
+function leavecheck()
+{
+	var leavetype=document.getElementById("leaveType").value;
+	$("#submit").hide(); // hide submit button (after check not allow to submit if some changes)
+	$("#check").show();
+	$("#hours").hide();
+	
+	 var ssuccessmsg=document.getElementById("successmsg");
+	 successmsg.innerHTML="     ";
+	 
+	 var sp=document.getElementById("sp");
+     sp.innerHTML="     ";
+	
+	 if(leavetype==0001)
+ 	{
+		 var halforfull=document.getElementById("halforfull").value; 
+		 if(halforfull=="H")
+		 {$("#todiv").hide();//from date disabled
+		 var spanfrom=document.getElementById("spanfrom");
+		 spanfrom.innerHTML ="On";}
+		
+		 
+ 	 $("#fullhalfdiv").show();
+     $("#fnandiv").show();
+ 	}
+ else
+ 	{
+	 $("#todiv").show();//from date enabled
+	 var spanfrom=document.getElementById("spanfrom");
+	 spanfrom.innerHTML ="From";
+	 
+	 
+	 
+ 	 $("#fullhalfdiv").hide();
+     $("#fnandiv").hide();
+ 	}
+		
+
+ }
+ 
+
+function halffull()
+{
+	
+	
+	$("#submit").hide(); //hide submit button (after check not allow to submit if some changes)
+	$("#check").show();
+	 var ssuccessmsg=document.getElementById("successmsg");
+	 successmsg.innerHTML="     ";
+	
+	 var sp=document.getElementById("sp");
+     sp.innerHTML="     ";
+	 
+	 
+	 
+	 var halforfull=document.getElementById("halforfull").value;
+	 var leavetype=document.getElementById("leaveType").value;
+	 
+	 if(halforfull=="X")
+	{
+	$("#hours").hide();	 
+	$("#anorfn").prop("disabled", true);
+	$(".selectpicker[data-id='anorfn']").addClass("disabled");
+	$('.selectpicker').selectpicker('refresh'); //fn/an dropdown disabled
+	$("#todiv").show();//fromd date enabled
+	
+	 var spanfrom=document.getElementById("spanfrom");
+	 spanfrom.innerHTML ="From";
+	 
+	anfn="X";
+	
+	}
+	
+	 if((halforfull=="H"||halforfull=="T")&&leavetype=="0001")
+	{
+		 $("#anorfn").prop("disabled", false);
+			$(".selectpicker[data-id='anorfn']").removeClass("disabled");
+			$('.selectpicker').selectpicker('refresh');// fn/an dropdown enabled
+		$("#todiv").hide();//fromd date disabled
+		 var spanfrom=document.getElementById("spanfrom");
+		 spanfrom.innerHTML ="On";
+		 
+		
+		var anorfn=document.getElementById("anorfn").value;
+		
+		if(anorfn=="F")
+			{
+			anfn="F";
+			}
+		else{anfn="A";}	
+		
+		if(halforfull=="T"){
+			$("#hours").show();
+		}
+			
+	}
+	 
+}
+
+ function resetform()
+ {
+	 
+	
+	 $("#hours").hide();
+	 $("#submit").hide();
+	 $("#check").show();
+	 $("#fullhalfdiv").show();
+     $("#fnandiv").show(); 
+     $("#anorfn").prop("disabled", true);
+     $(".selectpicker[data-id='anorfn']").addClass("disabled");
+ 	 $('.selectpicker').selectpicker('refresh');
+
+    // halffull();
+    $("#todiv").show();//fromd date enabled
+	
+	 var spanfrom=document.getElementById("spanfrom");
+	 spanfrom.innerHTML ="From";
+    
+	 anfn="X";
+    
+     
+     var sp=document.getElementById("sp");
+     sp.innerHTML="     ";
+     
+     var ssuccessmsg=document.getElementById("successmsg");
+	 successmsg.innerHTML="     ";
+     
+ }
+ 
+ function show()
+ {
+	var empno="<%=empNo%>"; 
+ 	var leavetype=document.getElementById("leaveType").value;
+ 	//var anfn=document.getElementById("anfn").value;
+ 	var halforfull=document.getElementById("halforfull").value;
+ 	var hours=document.getElementById("hours").value;
+ 	var ELCash=document.getElementById("Elcash").value;
+ 	var fdate=document.getElementById("fromApplyDate").value;
+ 	var tdate=document.getElementById("toApplyDate").value;
+ 	
+ 	$.ajax({
+		
+		type : "GET",
+		url : "GetLeaveChecked.htm",
+		data : {
+
+			empno:empno,
+			leavetype:leavetype,
+			ELCash:ELCash,
+			fdate:fdate,
+			tdate:tdate,
+			halforfull:halforfull,
+			hours:hours,
+			
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		 var sp=document.getElementById("sp");
+	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 20px;'>"+result+"</b>";
+
+		
+		
+			
+		}
+	});
+ }
 </script>
 </body>
 </html>

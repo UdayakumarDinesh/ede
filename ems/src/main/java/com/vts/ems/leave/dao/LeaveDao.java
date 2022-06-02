@@ -18,5 +18,8 @@ public interface LeaveDao {
 	public long LeaveCreditUpdateById(LeaveRegister register)throws Exception;
 	public List<Object[]>   GetHolidays(String Type)throws Exception;
 	public List<Object[]>   EmpDetails(String EmpNo)throws Exception;
+	public List<Object[]>   EmployeeList()throws Exception;
+	public List<Object[]> LeaveCode(String EmpNo) throws Exception;
+	public List<Object[]>   purposeList()throws Exception;
 
 }

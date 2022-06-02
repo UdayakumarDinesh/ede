@@ -98,7 +98,8 @@
   <spring:url value="/webresources/js/chart/accessibility.js" var="Accessbilityjs" />  
   <script src="${Accessbilityjs}"></script>   
   
-  
+  <spring:url value="/webresources/js/chart/no-data-to-display.js" var="NoDatajs" />  
+  <script src="${NoDatajs}"></script>   
 
 
 

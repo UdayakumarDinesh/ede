@@ -366,8 +366,30 @@ public class EmsDaoImpl implements EmsDao
 				logger.error(new Date()  + "Inside Dao MainDashboardIndividualAmountData " + e);
 				return null;
 			}
-			
 		}
+		
+		
+		private static final String DASHBOARDMONTHDATA="CALL Chss_MainDashboard_Monthly_Data (:fromdate, :todate, :month)";
+		
+		@Override
+		 public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate,int Month) throws Exception{
+			 		 
+			 logger.info(new Date() + "Inside DAO MonthlyWiseDashboardData");
+				try {
+					
+					Query query = manager.createNativeQuery(DASHBOARDMONTHDATA);
+					query.setParameter("fromdate", FromDate);
+					query.setParameter("todate", ToDate);
+					query.setParameter("month", Month);
+					
+					return (Object[])query.getSingleResult();
+				}
+				catch(Exception e) {
+					logger.error(new Date()  + "Inside Dao MonthlyWiseDashboardData " + e);
+					return null;
+				}
+		 }
+		
 
 	
 }
