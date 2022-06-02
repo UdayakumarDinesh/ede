@@ -60,6 +60,8 @@
 					margin-bottom: 30px;
 					content: "";
 				}
+				
+				
 
 			}
 
@@ -111,7 +113,7 @@ th,td
 
 .text-green
 {
-	color: #4E944F;
+	color:  #0A480A;
 }
  
 			
@@ -142,7 +144,7 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String isapproval = (String)request.getAttribute("isapproval");
 	boolean show = false;
-	if(isapproval!=null && isapproval.equalsIgnoreCase("Y") || chssstatusid==14 ){
+	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14 ){
 		show = true;
 	} 
 	
@@ -166,11 +168,14 @@ th,td
 			
 			<div style="width: 100%;float:left;">
 				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM</span></h3> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span>  </div>
+				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM - OPD</span></h3> <section style="float: right;"><span>No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </section> </div>
 			</div>
 			
-			<table>	
+			<table style="margin-top: 5px;">	
 				<tbody>
+					<tr>
+						<th colspan="3" style="border: 0px"> Claim No : <%=chssapplydata[16] %></th>
+					</tr>
 					<tr>
 						<th>Name</th>
 						<th>Emp No</th>
@@ -190,7 +195,6 @@ th,td
 						<th>Ailment</th>
 						<th>Treatment Type</th>
 						<th>Submitted On</th>
-						
 					</tr>
 					<tr>
 						<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
@@ -299,30 +303,31 @@ th,td
 					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
 					(Strike out whichever is not applicable)
 				</p>
-				
-				
-				<%if(ClaimRemarksHistory.size()>0){ %>
-				<table style="max-width: 650px;border: 1px solid black;">
-					<tr>
-						<td style="border:none;">
-							<h4 style="text-decoration: underline;">Remarks :</h4> 
-						</td>
-						<td style="border:none;">
-							
-						</td>
-					</tr>
-					<%for(Object[] obj : ClaimRemarksHistory){%>
-					<tr>
-						<td style="border:none;width: 25%;">
-							<%=obj[3] %>&nbsp; :
-						</td>
-						<td style="border:none;" class="text-blue" >
-							<%=obj[1] %>
-						</td>
+				<div style="max-width: 650px;padding-top:45px ;" align="left">
+					
 						
-					</tr>
-					<%} %>
-				</table>
+					Date : 							<span style="float: right;">(Signature of Employee) </span>
+				</div>
+				<%if(ClaimRemarksHistory.size()>0){ %>
+					<table style="max-width: 650px;margin-left:0px;">
+						<tr>
+							<td style="border:none;">
+								<h4 style="text-decoration: underline;">Remarks :</h4> 
+							</td>
+							
+						</tr>
+						<%for(Object[] obj : ClaimRemarksHistory){%>
+						<tr>
+							<td style="border:none;width: 25%;">
+								<%=obj[3] %>&nbsp; :
+							
+							<span style="border:none;" class="text-blue" >
+								<%=obj[1] %>
+							</span>
+							</td>
+						</tr>
+						<%} %>
+					</table>
 				<%} %>
 				
 			</div>
@@ -592,39 +597,35 @@ th,td
 						<%} %>
 						
 					</tr>
-					
 					<tr>
-						<td colspan="7" style="height: 70px;vertical-align:bottom">Finance & Accounts Dept.</td>
+						<td colspan="7" style="text-align:center; border-bottom : 0px">Finance and Accounts Department</td>
+					<tr>
+					<tr>
+						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:80px;padding: 0px;margin:0px;">
+							<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("PO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %> </li>
+								<% } } %>
+							</ul>
+						</td>				
+						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:80px;">
+							<ul style="float: right;list-style-type: none; margin:10px 5px -35px 0px; ">
+								<%for(Object[] obj:ClaimapprovedPOVO){
+									if(obj[1].toString().equalsIgnoreCase("VO")){%>
+									<li><%=obj[2] %>,</li>
+									<li><%=obj[4] %></li>
+								<% } } %>
+							</ul>
+							
+						</td>	
 					</tr>
 					
 				</tbody>			
 				
 					
 			</table>
-			
-			<table>
-					<tr>
-						<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
-							<ol style="list-style-type: none;margin-left: -45px">
-								<%for(Object[] obj:ClaimapprovedPOVO){
-									if(obj[1].toString().equalsIgnoreCase("PO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %> </li>
-								<% } } %>
-							</ol>
-						</td>
-						<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
-							<ul style="float: right;list-style-type: none; ">
-								<%for(Object[] obj:ClaimapprovedPOVO){
-									if(obj[1].toString().equalsIgnoreCase("VO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %></li>
-								<% } } %>
-							</ul>					
-						</td>
-					</tr>
-				</table>
-			
 		</div>
 	</div>
 </div>

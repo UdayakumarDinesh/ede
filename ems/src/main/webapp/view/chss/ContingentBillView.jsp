@@ -235,7 +235,10 @@ th,td
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
+									
 									<input type="hidden" name="isapproval" value="Y">
+									<input type="hidden" name="show-edit" value="N">
+									<input type="hidden" name="show-his-btn" value="Y">
 									</td>
 									<%} %>							
 								</tr>
@@ -330,6 +333,17 @@ th,td
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 					<%} %>					
+					
+					<%if(i==0){ %>
+						<form method="post" action="CHSSContingentDelete.htm">
+							<div class="col-12" align="center">
+								<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
+								<input type="hidden" name="isapproval" value="Y">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<button type="submit" class="btn btn-sm delete-btn" name="action" formaction="CHSSContingentDelete.htm" onclick="return confirm('Are You Sure To delete?');" >Delete</button>
+							</div>
+						</form>
+					<%} %>	
 
 				</div>
 			</div>		

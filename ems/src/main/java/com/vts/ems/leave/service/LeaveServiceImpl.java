@@ -116,8 +116,26 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public long LeaveCreditedAddUpdate(LeaveRegister register, String type) throws Exception {
+		long result=0;
+		if("U".equalsIgnoreCase(type)) {
+			
+			result=dao.LeaveCreditUpdateById(register);
+		}else {
+			result=dao.LeaveCreditAddById(register);
+		}
+		return result;
+	}
+
+	@Override
+	public List<Object[]> GetHolidays(String Type) throws Exception {
 		
-		return 0;
+		return dao.GetHolidays(Type);
+	}
+
+	@Override
+	public List<Object[]> EmpDetails(String EmpNo) throws Exception {
+		
+		return dao.EmpDetails(EmpNo);
 	}
 
 

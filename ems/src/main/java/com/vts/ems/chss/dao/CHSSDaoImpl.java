@@ -1058,12 +1058,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 
 	@Override
-	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception 
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception 
 	{
 		logger.info(new Date() +"Inside DAO CHSSApproveClaimList");
 		try {
-			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype);");
+			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype, :empid);");
 			query.setParameter("logintype", logintype);
+			query.setParameter("empid", empid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1344,7 +1345,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
-	private static final String GETCHSSCONSULTMAINLIST = "SELECT   ccm.CHSSConsultMainId,ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification FROM   chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSConsultMainId IN ( SELECT cb.CHSSConsultMainId FROM chss_bill cb WHERE cb.IsActive=1 AND cb.CHSSApplyId = :applyid ) AND  ccm.CHSSApplyId <> :applyid UNION SELECT ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification FROM  chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSApplyId = :applyid ";
+	private static final String GETCHSSCONSULTMAINLIST = "SELECT   ccm.CHSSConsultMainId,ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM   chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSConsultMainId IN ( SELECT cb.CHSSConsultMainId FROM chss_bill cb WHERE cb.IsActive=1 AND cb.CHSSApplyId = :applyid ) AND  ccm.CHSSApplyId <> :applyid UNION SELECT ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM  chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSApplyId = :applyid ";
 	
 	@Override
 	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception
@@ -1761,5 +1762,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
-			
+	
+	
+	
 }

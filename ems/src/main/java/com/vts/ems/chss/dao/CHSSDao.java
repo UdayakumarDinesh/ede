@@ -70,7 +70,7 @@ public interface CHSSDao {
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	public String CHSSApplyNoCount(String finYear) throws Exception;
-	public List<Object[]> CHSSApproveClaimList(String logintype) throws Exception;
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception;
 	public CHSSTestSub getCHSSTestSub(String testsubid) throws Exception;
 	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;

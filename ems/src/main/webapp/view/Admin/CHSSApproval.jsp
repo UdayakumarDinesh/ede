@@ -105,7 +105,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                     		</div>
                     		<div class="col-md-3">
                         		<div class="form-group">
-                            		<label class="control-label">Approving Officer</label><span class="mandatory">*</span>
+                            		<label class="control-label">Authorizing  Officer</label><span class="mandatory">*</span>
                               		<select class="form-control select2" id="EmpId3" required="required" name="approving">
     									<option disabled="true"  selected="selected" value="">Select </option>
     										<% if(emplist!=null){ for(Object[] O:emplist){%>

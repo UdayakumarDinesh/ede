@@ -199,15 +199,34 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.EmpHandOverLoginTypeList(empid);
 	}
 	
+	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
+		
+		return dao.MainDashboardCountData(EmpId, FromDate, ToDate,IsSelf);
+	}
+	
+	@Override
+	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception{
+		
+		return dao.MainDashboardGraphData(EmpId, FromDate, ToDate);
+	}
+
+	@Override
+	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
+		
+		return dao.MainDashboardAmountData(EmpId,FromDate,ToDate,IsSelf);
+	}
+	
+	@Override
+	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception{
+		
+		return dao.MainDashboardIndividualAmountData(EmpId, FromDate, ToDate);
+	}
 	@Override
 	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
-		
 		return dao.CirculatList(Fromdate , ToDate);
 	}
-	
-
 }

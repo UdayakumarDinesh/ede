@@ -254,8 +254,7 @@ table th:last-child{
 											<tr class="" >
 												<%if(chssapplydata[0].toString().equalsIgnoreCase(cmain[1].toString())){ %>
 													<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
-													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%; "  maxlength="500" required="required"></td>
-													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
+													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%;text-transform: capitalize; "  maxlength="500" required="required"></td>													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 													<td>
 														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
 															<%for(CHSSDoctorRates rate:doctorrates ){ %>
@@ -264,13 +263,23 @@ table th:last-child{
 														</select>
 													</td>
 													<td>
+														<%if(Integer.parseInt(cmain[5].toString())==0){ %>
 														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
 															<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
 															update
 														</button>
 														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 															<i class="fa-solid fa-trash-can" style="color: red;"></i>
-														</button>																										
+														</button>		
+														<%}else{ %>
+														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill" disabled>														
+															<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
+															update
+														</button>
+														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
+															<i class="fa-solid fa-trash-can" style="color: red;"></i>
+														</button>	
+														<%} %>																								
 														<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 															<i class="fa-solid fa-receipt"></i>
 														</button>												
@@ -453,7 +462,8 @@ table th:last-child{
 								</div>	
 							</div>
 							 --%>
-							
+							<input type="hidden" name="isapproval" value="n">
+							<input type="hidden" name="show-edit" value="N">
 							<input type="hidden" name="claimaction" value="F">
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -613,19 +623,7 @@ function setTooltip()
 </script>
 
 <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
-<script type="text/javascript">
 
-
-$(document).ready( function() {
-
-	
-
-});   
-
-
-
-
-</script>
 
 </body>
 </html>
