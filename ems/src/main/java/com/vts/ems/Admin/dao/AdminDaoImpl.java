@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -1114,9 +1115,99 @@ public class AdminDaoImpl implements AdminDao{
 	
 	@Override
 	public Long insertformroleaccess(FormRoleAccess main) throws Exception {
-
-		manager.persist(main);
-		manager.flush();
-		return (long)main.getFormRoleAccessId();
+		logger.info(new Date() + "Inside insertformroleaccess()");
+		try {
+			manager.persist(main);
+			manager.flush();
+			return (long)main.getFormRoleAccessId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0l;
+		}
+	
 	}
+	
+	@Override
+	public long CircularListAdd(CircularList circular)throws Exception
+	{
+		logger.info(new Date() + "Inside CircularListAdd()");
+		try {
+			manager.persist(circular);
+			manager.flush();
+			return (long)circular.getCircularId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0l;
+		}
+		
+	}
+	
+	@Override
+	public CircularList GetCircularToEdit(Long  circularid)throws Exception
+	{
+		logger.info(new Date() + "Inside GetCircularToEdit()");
+		CircularList list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<CircularList> cq = cb.createQuery(CircularList.class);
+			Root<CircularList> root = cq.from(CircularList.class);
+			Predicate p1 = cb.equal(root.get("CircularId"), circularid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<CircularList> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public long EditCircular(CircularList circular) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditCircular()");
+		try {
+			manager.merge(circular);
+			manager.flush();		
+			return circular.getCircularId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	
+	@Override
+	public long GetCircularMaxId()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
+		try {
+			Query query = manager.createNativeQuery("SELECT MAX(circularid)  FROM chss_circular_list");	
+			
+			BigInteger result = (BigInteger) query.getSingleResult();
+			return result.intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate ,todate ,OriginalName FROM chss_circular_list WHERE (( CircularDate BETWEEN  :fromdate AND :todate ) OR( todate BETWEEN :fromdate AND :todate )OR ( CircularDate > :fromdate AND todate < :todate ))  ORDER BY circularid DESC";
+	
+	@Override
+	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception
+	 {
+		 logger.info(new Date() +"Inside DAO CirculatList()");	
+		 try {
+				Query query =  manager.createNativeQuery(CIRCULARLIST);
+				 query.setParameter("fromdate", fromdate);
+				 query.setParameter("todate", todate);
+				return (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CirculatList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	
+	 }
 }

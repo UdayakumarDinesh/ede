@@ -1,5 +1,6 @@
 package com.vts.ems.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.model.AuditStamping;
@@ -21,9 +22,11 @@ public interface EmsDao
 	public int userResetPassword(String loginid, String password) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
-	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> CirculatList(LocalDate Fromdate , LocalDate todate) throws Exception;
+	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
-	public List<Object[]> circulatlist() throws Exception;
-
+	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
+	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate, int Month) throws Exception;
 
 }

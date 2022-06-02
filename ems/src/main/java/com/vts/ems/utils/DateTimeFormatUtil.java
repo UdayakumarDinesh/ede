@@ -195,6 +195,11 @@ public class DateTimeFormatUtil
 	{
 		return regularDateFormat.format(sqlDateFormat.parse(sqldate));
 	}
+	
+	public static  String RegularToSqlDate (String regulardate) throws ParseException
+	{
+		return sqlDateFormat.format(regularDateFormat.parse(regulardate));
+	}
 
 	public static java.sql.Date dateConversionSql(String sDate) {
 		java.sql.Date ddate = null;

@@ -1759,10 +1759,11 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSApprovalsList.htm "+Username);
 		try {
 						
-			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType));
+			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType,EmpId));
 			
 			return "chss/CHSSApprovalList";
 		} catch (Exception e) {
@@ -1919,7 +1920,6 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside MedRemAmountEdit.htm "+Username);
 		try {
-			
 			String chssapplyid = req.getParameter("chssapplyid");
 			String medicineid = req.getParameter("medicineid"); 
 			
@@ -2102,8 +2102,7 @@ public class CHSSController {
 		}
 		
 	}
-	
-	
+		
 	
 	@RequestMapping(value = "ContingentBillData.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String ContingentBillData(Model model,HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
@@ -2112,8 +2111,6 @@ public class CHSSController {
 		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside ContingentBillData.htm "+Username);
 		try {
-			
-			
 			String contingentid = req.getParameter("contingentid");
 			if (contingentid == null) 
 			{
@@ -2170,12 +2167,34 @@ public class CHSSController {
 //			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
 			
 			
-			if(action.equalsIgnoreCase("F")) {
-				if (count > 0) {
-					redir.addAttribute("result", "Claim application(s) Approved Successfully");
-				} else {
-					redir.addAttribute("resultfail", "Claim application(s) Approved Unsuccessful");	
-				}	
+			if(action.equalsIgnoreCase("F")) 
+			{
+				
+				if(LoginType.equalsIgnoreCase("Z")) 
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Approved Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Approved Unsuccessful");	
+					}
+					
+				}else if(LoginType.equalsIgnoreCase("W"))
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Recommended Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Recommend Unsuccessful");	
+					}
+				}else
+				{
+					if (count > 0)
+					{
+						redir.addAttribute("result", "Contingent Bill Forwarded Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Forward Unsuccessful");	
+					}
+				}
+				
 			}
 			if(action.equalsIgnoreCase("R")) {
 				if (count > 0) {
@@ -2203,7 +2222,33 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ContingentApprovals.htm "+Username);
 		try {
 			
-			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType));
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-01";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType,fromdate,todate));
 			req.setAttribute("logintype", LoginType);
 			
 			return "chss/ContingentBillsList";
@@ -2312,7 +2357,6 @@ public class CHSSController {
 			e.printStackTrace();  
 			logger.error(new Date() +" Inside ContingetBillDownload.htm "+UserId, e); 
 		}
-
 	}
 	
 	@RequestMapping(value="ApprovedBills.htm" , method= {RequestMethod.POST,RequestMethod.GET})
@@ -2321,7 +2365,35 @@ public class CHSSController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
-			List<Object[]> approvedlist = service.GetApprovedBills("0");
+			
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-01";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			
+			List<Object[]> approvedlist = service.getCHSSContingentList("0",fromdate,todate);
 			req.setAttribute("ApprovedBills", approvedlist);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2613,5 +2685,34 @@ public class CHSSController {
 //		Gson json = new Gson();
 //		return json.toJson(list);
 	}
+	
+	
+	@RequestMapping(value = "CHSSContingentDelete.htm", method = RequestMethod.POST)
+	public String CHSSContingentDelete(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSContingentDelete.htm "+Username);
+		long count=0;
+		try {
+			String contingentid = req.getParameter("contingentid");
+			count = service.CHSSContingentDelete(contingentid,Username);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill DeleteUnsuccessful");	
+			}	
+			
+			
+			return "redirect:/ContingentApprovals.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSMedicinesListAjax.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
 	
 }

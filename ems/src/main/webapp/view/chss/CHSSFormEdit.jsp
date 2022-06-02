@@ -72,7 +72,7 @@ th,td
 
 .text-green
 {
-	color: #4E944F;
+	color: #0A480A;
 }
  
 </style>
@@ -171,7 +171,7 @@ th,td
 								<table style="border: 0px; width: 100%">
 									<tr>
 										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
-										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
+										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM - OPD </h3> </td>
 										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </td>
 									</tr>
 								</table> 
@@ -801,12 +801,12 @@ th,td
 							
 							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
 								
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " >Verify</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
+								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Verify</button>
+								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
 							
 							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
 							
-								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  data-toggle="modal" data-target=".my-encl-modal"   >
+								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"   <%if(chssstatusid==3){ %> onclick="remarkscheck();" <%}else{%>data-toggle="modal" data-target=".my-encl-modal" <%} %> >
 									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 								</button>
 								<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
@@ -846,7 +846,7 @@ th,td
 												
 												 <div class="col-12 w-100" align="center">
 												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)" >
+												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount(<%=chssapplydata[0]%>)" >
 													submit
 												</button>
 												</div>
@@ -900,19 +900,18 @@ th,td
 	
 <%if(isapproval!=null && isapproval.equalsIgnoreCase("Y") && logintype.equals("K") && chssapplydata[20].toString().equals("0") ){ %>
 
-<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-       
-      </div>
+	  <div class="modal-header" style="">
+	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+	  </div>
       <div class="modal-body">
-       Did You Receive The Physical Copy of the Claim?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="acknowledgeFunction(true)">Yes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="acknowledgeFunction(false)">No</button>
+      	
+      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
       </div>
     </div>
   </div>
@@ -1275,17 +1274,7 @@ function ShowHistory(itemid)
 <script type="text/javascript">
 
 function  onlyNumbers() {    
-    
-/*     $('.numberonly').keypress(function (e) {    
 
-        var charCode = (e.which) ? e.which : event.keyCode    
-
-        if (String.fromCharCode(charCode).match(/[^0-9]/g))    
-
-            return false;                        
-
-    }); */    
-    
     $('.numberonly').keypress( function (evt) {
 
 	    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
@@ -1319,6 +1308,18 @@ function remarkRequired(action)
 	
 }
 
+function remarkscheck()
+{
+	
+	event.preventDefault();
+	$('#remarks').attr('required', true);
+	if($('#remarks').val().trim()===''){
+		alert('Please Fill Remarks to Submit! ');
+	}else{
+		$('.my-encl-modal').modal('show');
+	}
+}
+
 
 function CheckClaimAmount($chssapplyid)
 {
@@ -1336,18 +1337,14 @@ function CheckClaimAmount($chssapplyid)
 						
 			if(result===1)
 			{
-				if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
+				if(Number($('#enclosurecount').val())>0){
+					if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
+					{
+						$('#fwdform').submit();
+					}
+				}else
 				{
-					<%if(chssstatusid==3){ %>
-						$('#remarks').attr('required', true);
-						if($('#remarks').val().trim()===''){
-							alert('Please Fill Remarks to Submit! ');
-						}else{
-							$('#fwdform').submit();
-						}
-					<%}else{%>
-							$('#fwdform').submit();
-					<%}%>
+					alert('Please Enter No of Encloseres.');	
 				}
 			}else if(result===-1){
 				alert('Please Add Atleast one Consultation details.');

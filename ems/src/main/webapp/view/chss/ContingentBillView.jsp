@@ -237,7 +237,7 @@ th,td
 									</button>
 									
 									<input type="hidden" name="isapproval" value="Y">
-									<input type="hidden" name="show-edit" value="Y">
+									<input type="hidden" name="show-edit" value="N">
 									<input type="hidden" name="show-his-btn" value="Y">
 									</td>
 									<%} %>							
@@ -333,6 +333,17 @@ th,td
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 					<%} %>					
+					
+					<%if(i==0){ %>
+						<form method="post" action="CHSSContingentDelete.htm">
+							<div class="col-12" align="center">
+								<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
+								<input type="hidden" name="isapproval" value="Y">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<button type="submit" class="btn btn-sm delete-btn" name="action" formaction="CHSSContingentDelete.htm" onclick="return confirm('Are You Sure To delete?');" >Delete</button>
+							</div>
+						</form>
+					<%} %>	
 
 				</div>
 			</div>		

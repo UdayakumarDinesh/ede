@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -30,12 +31,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class EmsController {
@@ -47,7 +50,13 @@ public class EmsController {
 	@Autowired
 	EMSMainService service;
 	
+
+	@Autowired
+	AdminService adminservice;
+	  
+
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcome(Model model, HttpServletRequest req, HttpSession ses) throws Exception {
@@ -77,18 +86,18 @@ public class EmsController {
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception {
 		logger.info(new Date() + "Inside MainDashBoard.htm ");
-//    	String LoginType=(String)ses.getAttribute("LoginType");
+    	String LoginType=(String)ses.getAttribute("LoginType");
 //    	String LoginId=String.valueOf(ses.getAttribute("LoginId"));
 //    	String EmpNo=(String)ses.getAttribute("EmpNo"); 
 
 //    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
 		
+    	String IsSelf = req.getParameter("isselfvalue");
 		String EmpId= ses.getAttribute("EmpId").toString();
 		String FromDate = req.getParameter("FromDate");
 		String ToDate = req.getParameter("ToDate");
 		LocalDate today= LocalDate.now();
 		int currentmonth= today.getMonthValue();
-
 		String DbFromDate="";
 		String DbToDate="";
 		
@@ -121,11 +130,21 @@ public class EmsController {
 		
 		DbFromDate = FromDate+"-04-01";
 		DbToDate= ToDate+"-03-31";
-				
-		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate) );
+			
+		if(IsSelf==null) {
+			IsSelf="Y";
+		}
+		
+		
+		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
 		req.setAttribute("Fromdate", FromDate);
 		req.setAttribute("Todate", ToDate);
 		req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
+		req.setAttribute("amountdata", service.MainDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
+		req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
+		req.setAttribute("logintype", LoginType);
+		req.setAttribute("isself", IsSelf);
+		req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
 
 		return "static/maindashboard";
 	}
@@ -368,23 +387,32 @@ public class EmsController {
 			out.flush();
 		}
 	 
-	 @RequestMapping(value = "Circulars.htm", method = RequestMethod.GET)
+	 @RequestMapping(value = "Circulars.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	 public String Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 	 
 		 logger.info(new Date() +"Inside Circulars.htm ");
 			try 
 			{
+				
+				String fromdate = (String)req.getParameter("fromdate");
+				String todate   = (String)req.getParameter("todate");
 				 List<Object[]> circulatlist = new ArrayList<Object[]>();
-	        	 
-				 circulatlist = service.circulatlist();
+				 if(fromdate==null && todate==null) {
+					 fromdate = DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat();
+		   			   todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
+				 }
+				 
+
+				 circulatlist = adminservice.GetCircularList(fromdate,todate);
 	        	 
 	        	 req.setAttribute("circulatlist",circulatlist);
-
+	        	 req.setAttribute("fromdate", fromdate);	
+				 req.setAttribute("todate",todate);
 				return "chss/CHSSCircularList";
 			} catch (Exception e) {
 				e.printStackTrace();
 				
-				return "";
+				return "chss/CHSSCircularList";
 			}
 
 	 }
