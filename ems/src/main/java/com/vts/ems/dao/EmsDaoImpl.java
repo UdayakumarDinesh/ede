@@ -256,10 +256,10 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
-	private static final String MAINDASHBOARDCOUNTDATA = "CALL Chss_MainDashboard_Count (:empid, :fromdate,  :todate) ";
+	private static final String MAINDASHBOARDCOUNTDATA = "CALL Chss_MainDashboard_Count (:empid, :fromdate,  :todate, :isself) ";
 	
 	@Override 
-	public Object[] MainDashboardCountData(String Empid, String FromDate, String ToDate) throws Exception{
+	public Object[] MainDashboardCountData(String Empid, String FromDate, String ToDate,String IsSelf) throws Exception{
 	
 		logger.info(new Date() + "Inside DAO MainDashboardCountData");
 		
@@ -269,6 +269,7 @@ public class EmsDaoImpl implements EmsDao
 			query.setParameter("empid", Empid);
 			query.setParameter("fromdate", FromDate);
 			query.setParameter("todate", ToDate);
+			query.setParameter("isself", IsSelf);
 			
 			return (Object[])query.getSingleResult();
 			
@@ -286,7 +287,6 @@ public class EmsDaoImpl implements EmsDao
 	public List<Object[]> MainDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception{
 	
 		logger.info(new Date() + "Inside DAO MainDashboardGraphData");
-		
 		try {
 			
 			Query query = manager.createNativeQuery(MAINDASHBOARDGRAPHDATA);
@@ -303,6 +303,7 @@ public class EmsDaoImpl implements EmsDao
 		}
 		
 	}
+	
 	private static final String CIRCULARLIST = "SELECT circularid , description , path , fromdate ,todate FROM chss_circular_list ORDER BY circularid DESC";
 	
 	@Override
@@ -312,5 +313,50 @@ public class EmsDaoImpl implements EmsDao
 		 
 		return (List<Object[]>)query.getResultList();
 	 }
+	 
+	 private static final String MAINDASHBOARDAMOUNTDATA = "CALL Chss_MainDashboard_Total_Amnt (:empid, :fromdate,  :todate, :isself) ;";
+	 
+	 @Override
+	 public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
+		 		 
+		 logger.info(new Date() + "Inside DAO MainDashboardAmountData");
+			try {
+				
+				Query query = manager.createNativeQuery(MAINDASHBOARDAMOUNTDATA);
+				query.setParameter("empid", EmpId);
+				query.setParameter("fromdate", FromDate);
+				query.setParameter("todate", ToDate);
+				query.setParameter("isself", IsSelf);
+				
+				return (Object[])query.getSingleResult();
+			}
+			catch(Exception e) {
+				logger.error(new Date()  + "Inside Dao MainDashboardAmountData " + e);
+				return null;
+			}
+	 }
+	 
+	 private static final String MAINDASHBOARDAMOUNTINDIVIDUALDATA = "CALL Chss_MainDashboard_Individual_Amnt (:empid, :fromdate,  :todate) ";
+
+	 @Override 
+		public List<Object[]> MainDashboardIndividualAmountData(String Empid, String FromDate, String ToDate) throws Exception{
+		
+			logger.info(new Date() + "Inside DAO MainDashboardIndividualAmountData");
+			try {
+				
+				Query query = manager.createNativeQuery(MAINDASHBOARDAMOUNTINDIVIDUALDATA);
+				query.setParameter("empid", Empid);
+				query.setParameter("fromdate", FromDate);
+				query.setParameter("todate", ToDate);
+				
+				return (List<Object[]> )query.getResultList();
+			}
+			catch(Exception e) {
+				logger.error(new Date()  + "Inside Dao MainDashboardIndividualAmountData " + e);
+				return null;
+			}
+			
+		}
+
 	
 }

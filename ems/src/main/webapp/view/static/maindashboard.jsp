@@ -1,3 +1,5 @@
+<%@page import="org.bouncycastle.util.Arrays"%>
+<%@page import="org.apache.commons.lang3.ArrayUtils"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -177,8 +179,11 @@
 		String logintype   = (String)session.getAttribute("LoginType");
 		String Fromdate=(String)request.getAttribute("Fromdate");
 		String Todate=(String)request.getAttribute("Todate"); 
-		Object[] TotalCountData = (Object[])request.getAttribute("countdata");
+		Object[] TotalCountData = (Object[])request.getAttribute("countdata"); 
 		List<Object[]> graphdata  = (List<Object[]> )request.getAttribute("graphdata");
+		Object[] amountdata = (Object[])request.getAttribute("amountdata"); 
+		List<Object[]> amountdataindividual  = (List<Object[]> )request.getAttribute("amountdataindividual");
+		String isself   = (String)request.getAttribute("isself");
 	
 	%>
 	
@@ -248,8 +253,14 @@
 								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">
 								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
 	
-				    			<input type="checkbox"  checked data-toggle="toggle" data-width="100"  data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+								<%
+								String[] arr = new String[]{ "Z", "K", "V" , "W" };
+								if( ArrayUtils.contains(arr,  logintype) ){ %>
+				    				<input type="checkbox" <%if(isself.equalsIgnoreCase("Y")) {%> checked <%} %> data-toggle="toggle" data-width="100" id="isself" data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+			    				<%} %>
+			    				
 			    				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
+			    				<input type="hidden" name="isselfvalue" id="isselfvalue" />
 			    			</form>	
 			    				
 			    		</div>
@@ -261,16 +272,16 @@
 					    <div class="col-md-6">
 					      <div class="card-counter primary">
 					        <i class="fa fa-code-fork"></i>
-					        <span class="count-numbers">&#8377;50,839</span>
-					        <span class="count-name">Amount Claimed</span>
+					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=amountdata[0] %> <%}else {%>0 <%} %></span>
+					        <span class="count-name">Total Amount Claimed</span>
 					      </div>
 					    </div>
 		
 					    <div class="col-md-6">
 					      <div class="card-counter success">
 					        <i class="fa fa-database"></i>
-					        <span class="count-numbers">&#8377;28,456</span>
-					        <span class="count-name">Amount Settled</span>
+					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=amountdata[1] %> <%}else {%>0 <%} %></span>
+					        <span class="count-name">Total Amount Settled</span>
 					      </div>
 					    </div>
 					  </div>
@@ -284,14 +295,16 @@
 			    <div class="w-100"></div>
 			    
 			    <div class="col"><figure class="highcharts-figure">
-					    <div id="container"></div>
+					    <div id="container" style="display:block;" ></div>
+					    <div id="container3" style="display:block;" ></div>
 					</figure>
 				</div>
 					
 			    <div class="col">
 			    	<figure class="highcharts-figure">
-    					<div id="container2"></div>
+    					<div id="container2"  ></div>
 					</figure>
+
 			    </div>
 			    
 			  </div>
@@ -300,84 +313,48 @@
 		</div>
 	</div>
 	 
+<script>
+
+
+$(document).ready(function(){
+
+	var selfvalue = '<%=isself%>';
+	console.log(selfvalue)
 	
+	if(selfvalue == 'Y'){
+		$('#container').css("display" , "block");
+		$('#container3').css("display" , "none");
+	}else if(selfvalue== 'N'){
+		$('#container').css("display", "none");
+		$('#container3').css("display" , "block");
+	}
+	
+	
+})
+
+
+
+
+$('#isself').change(function(){
+	
+	if($(this).prop("checked")==true){
+		//is self
+		$('#isselfvalue').val('Y');
+		$('#dateform').submit();
+		
+	}else if($(this).prop("checked")==false){
+		console.log("asdas")
+		$('#isselfvalue').val('N')
+		$('#dateform').submit();
+	}
+	
+})
+
+</script>
 	
 <script type="text/javascript">
 	
 /* Counts Graph */	
-	
-/* 	Highcharts.chart('container', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Claims for the Financial Year 2022-23'
-    },
-    subtitle: {
-        text: ''
-    },
-    xAxis: {
-        categories: [
-        	'Total',
-            'Self',
-            'Mem1',
-            'Mem2',
-            'Mem3',
-            'Mem4',
-           
-        ],
-        crosshair: true
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Amount'
-        }
-    },
-    tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    colors: [
-        '#187498',
-        '#36AE7C',
-    ],
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        x: -40,
-        y: 90,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor:
-            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-        shadow: true
-    },
-    series: [{
-        name: 'Applied',
-        data: [29,12, 5, 4, 5, 3]
-
-    }, {
-        name: 'Approved',
-        data: [17,6, 1, 3, 5, 2]
-
-    }],
-    credits: {
-        enabled: false
-    },
-});  */
-
 
 	Highcharts.chart('container', {
 	    title: {
@@ -396,9 +373,9 @@
 	    },
 	    labels: {
 	        items: [{
-	            html: 'Total Amount Settled',
+	            html: 'Amount Settled',
 	            style: {
-	                left:'570px',
+	                left:'585px',
 	                top: '0px',
 	                color: ( // theme
 	                    Highcharts.defaultOptions.title.style &&
@@ -438,20 +415,17 @@
 	    , {
 	        type: 'pie',
 	        name: 'Amount Approved',
-	        data: [{
-	            name: 'Self',
-	            y: 13,
-	            color: Highcharts.getOptions().colors[0] // Jane's color
-	        }, {
-	            name: 'Mem1',
-	            y: 23,
-	            color: Highcharts.getOptions().colors[1] // John's color
-	        }, {
-	            name: 'Mem2',
-	            y: 19,
-	            color: Highcharts.getOptions().colors[2] // Joe's color
-	        }
+	        data: [
 	        
+	        <%  int i=0;
+	        for(Object[] obj : amountdataindividual) {%>	
+	        {
+	            name: '<%=obj[4]%>',
+	            y:<%=obj[7]%>,
+	            color: Highcharts.getOptions().colors[<%=i%>] 
+	        }
+	        ,
+	        <% i++; }%>
 	        
 	        
 	        ],
@@ -471,7 +445,7 @@
 
 
 
-	/* Amount Graph */	
+	/********************** Amount Graph ***********************************/	
 
 	// Radialize the colors
 	Highcharts.setOptions({
@@ -499,7 +473,7 @@
 	        type: 'pie'
 	    },
 	    title: {
-	        text: 'Amount Claimed vs Amount Settled'
+	        text: 'Total Amount Claimed vs Total Amount Settled'
 	    },
 	    tooltip: {
 	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -533,8 +507,8 @@
 	    series: [{
 	        name: 'Share',
 	        data: [
-	            { name: 'Amount Claimed', y: 61 },
-	            { name: 'Amount Settled', y: 52 },
+	            { name: 'Total Amount Claimed', y: <%=amountdata[0]%> },
+	            { name: 'Total Amount Settled', y: <%=amountdata[1]%> },
 	         
 	        ]
 	    }],
@@ -543,13 +517,72 @@
         },
 	});
 	
+
+
+	/********************************************* Unit Graph Month Wise ************************************** */
+	
+	Highcharts.chart('container3', {
+
+    chart: {
+        type: 'column'
+    },
+
+    title: {
+        text: 'Complete Analysis'
+    },
+
+    xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+
+    yAxis: {
+        allowDecimals: false,
+        min: 0,
+        title: {
+            text: 'Count'
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.x + '</b><br/>' +
+                this.series.name + ': ' + this.y + '<br/>' +
+                'Total: ' + this.point.stackTotal;
+        }
+    },
+
+    plotOptions: {
+        column: {
+            stacking: 'normal'
+        }
+    },
+
+    series: [{
+        name: 'Approved',
+        data: [5, 3, 4, 7, 2,5, 3, 4, 7, 2,1,4],
+        stack: 'male'
+    }, {
+        name: 'Pending',
+        data: [3, 4, 4, 2, 5, 5, 3, 4, 7, 2, 8 ,9 ],
+        stack: 'male'
+    }, {
+        name: 'Self Approved',
+        data: [2, 5, 6, 2, 1, 5, 3, 4, 7, 2, 5, 2],
+        stack: 'female'
+    }, {
+        name: 'Self Pending',
+        data: [3, 0, 4, 4, 3,5, 3, 4, 7, 2, 6,1],
+        stack: 'female'
+    }]
+});
+
 	
 	
 	
 	
 
 	$(document).ready(function(){
-		
+		 
 	    $('.counter-value').each(function(){
 	        $(this).prop('Counter',0).animate({
 	            Counter: $(this).text()

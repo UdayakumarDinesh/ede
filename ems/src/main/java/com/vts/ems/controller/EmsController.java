@@ -77,18 +77,18 @@ public class EmsController {
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception {
 		logger.info(new Date() + "Inside MainDashBoard.htm ");
-//    	String LoginType=(String)ses.getAttribute("LoginType");
+    	String LoginType=(String)ses.getAttribute("LoginType");
 //    	String LoginId=String.valueOf(ses.getAttribute("LoginId"));
 //    	String EmpNo=(String)ses.getAttribute("EmpNo"); 
 
 //    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
 		
+    	String IsSelf = req.getParameter("isselfvalue");
 		String EmpId= ses.getAttribute("EmpId").toString();
 		String FromDate = req.getParameter("FromDate");
 		String ToDate = req.getParameter("ToDate");
 		LocalDate today= LocalDate.now();
 		int currentmonth= today.getMonthValue();
-
 		String DbFromDate="";
 		String DbToDate="";
 		
@@ -121,11 +121,20 @@ public class EmsController {
 		
 		DbFromDate = FromDate+"-04-01";
 		DbToDate= ToDate+"-03-31";
-				
-		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate) );
+			
+		if(IsSelf==null) {
+			IsSelf="Y";
+		}
+		
+		
+		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
 		req.setAttribute("Fromdate", FromDate);
 		req.setAttribute("Todate", ToDate);
 		req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
+		req.setAttribute("amountdata", service.MainDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
+		req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
+		req.setAttribute("logintype", LoginType);
+		req.setAttribute("isself", IsSelf);
 
 		return "static/maindashboard";
 	}
