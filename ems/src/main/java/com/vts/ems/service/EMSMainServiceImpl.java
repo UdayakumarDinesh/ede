@@ -2,6 +2,8 @@ package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.dao.EmsDao;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
@@ -197,7 +200,6 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.EmpHandOverLoginTypeList(empid);
 	}
 	
-	@Override
 	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
 		
 		return dao.MainDashboardCountData(EmpId, FromDate, ToDate,IsSelf);
@@ -208,13 +210,7 @@ public class EMSMainServiceImpl implements EMSMainService
 		
 		return dao.MainDashboardGraphData(EmpId, FromDate, ToDate);
 	}
-	
-	@Override 
-	public List<Object[]> circulatlist() throws Exception
-	{
-		return dao.circulatlist();
-	}
-	
+
 	@Override
 	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
 		
@@ -240,5 +236,14 @@ public class EMSMainServiceImpl implements EMSMainService
 		}
 
 		return Newlist;
+	}
+	
+	@Override
+	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+		LocalDate ToDate= LocalDate.parse(todate, formatter);
+		return dao.CirculatList(Fromdate , ToDate);
 	}
 }

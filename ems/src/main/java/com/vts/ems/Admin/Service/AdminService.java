@@ -2,6 +2,8 @@ package com.vts.ems.Admin.Service;
 
 import java.util.List;
 
+import com.vts.ems.Admin.Dto.CircularListDto;
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -80,10 +82,10 @@ public interface AdminService {
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
 	public int CheckduplicateTestCode(String testcode)throws Exception;
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception;
-	
-	
-	
-	
+	public long CircularListAdd(CircularList circular , CircularListDto filecircular)throws Exception;
+	public CircularList GetCircularToEdit(Long circularid)throws Exception;
+	public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception;
+	public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception;
 	
 	
 	

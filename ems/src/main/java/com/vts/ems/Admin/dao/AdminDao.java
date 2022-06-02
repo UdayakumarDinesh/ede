@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -92,4 +93,9 @@ public interface AdminDao {
 	public int checkavaibility(String logintype,String detailsid)throws Exception;
 	public int updateformroleaccess(String formroleid,String active,String auth)throws Exception;
 	public Long insertformroleaccess(FormRoleAccess main) throws Exception;
+	public long CircularListAdd(CircularList circular)throws Exception;
+	public CircularList GetCircularToEdit(Long  circularid)throws Exception;
+	public long EditCircular(CircularList circular) throws Exception;
+	public long GetCircularMaxId()throws Exception;
+	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception;
 }

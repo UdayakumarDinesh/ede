@@ -29,7 +29,10 @@
 </head>
 
 <body class="home" >
-<%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist"); %>
+<%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
+
+
+%>
 
 <!--  Login Page  -->  
   
@@ -105,11 +108,7 @@
 						
 						
 						<div class="col-md-6">
-						<%if(circularlist!=null  && circularlist.size()>0) {
-						for(Object[] obj:circularlist){
-						%>
-						<marquee direction="left" height="20" width="630" bgcolor="white"> <b><%=obj[1]%> </b></marquee>
-						<%   break;} }%>
+					
 							<div class="row justify-content-end" style="margin-left:7rem;margin-top: 4rem" >
 	
 								<div class="col-md-12">
@@ -209,9 +208,13 @@
     	
  
 <!-- Blue Border for Login Page -->  
-    <div class="support-row clearfix" id="swapper-border" >
+    <div class="support-row clearfix" id="swapper-border" style="">
       		<div class="widget-guide clearfix">
-                
+                	<%if(circularlist!=null  && circularlist.size()>0) {
+						
+						%>
+						<marquee direction="left"  style="background: rgba(6,127,208,1);"> <b><%for(Object[] obj:circularlist){%><%=obj[1]%>  &emsp; || &emsp; <% }%></b></marquee>
+						<%  }%> 
               </div>
     	</div> 
     	

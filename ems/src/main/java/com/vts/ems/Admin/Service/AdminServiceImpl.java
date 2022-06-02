@@ -1,16 +1,30 @@
 package com.vts.ems.Admin.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.dao.AdminDao;
+import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -31,6 +45,10 @@ public class AdminServiceImpl implements AdminService{
 	AdminDao dao;
 	@Autowired
 	CHSSDao chssdao;
+	
+	@Value("${Circular_Files}")
+	private String CircularFilePath;
+	
 	
 	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
@@ -233,7 +251,7 @@ public class AdminServiceImpl implements AdminService{
 	{
 		
 		List<Object[]> adminlist =dao.CHSSApprovalAuth2("A");
-		System.out.println(adminlist.size());
+	
 		if(adminlist.size()>0) {
 			long id=0;
 			for(Object[] obj:adminlist) {
@@ -506,12 +524,8 @@ public class AdminServiceImpl implements AdminService{
 			}else {
 				isactive="0";
 			}
-//		System.out.println("formroleaccessid  :"+formroleaccessid);
-//		System.out.println("detailsid         :"+detailsid);
-//		System.out.println("isactive          :"+isactive);
-//		System.out.println("logintype         :"+logintype);
 		int result = dao.checkavaibility(logintype,detailsid);
-		System.out.println("result  :"+result);
+		
 		if(result == 0) {
 			FormRoleAccess formrole = new FormRoleAccess();
 			formrole.setLoginType(logintype);
@@ -528,4 +542,81 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
 	
+	@Override
+	public long CircularListAdd(CircularList circular ,CircularListDto filecirculardto)throws Exception
+	{
+		
+		long value = dao.GetCircularMaxId();
+	    if(!filecirculardto.getPath().isEmpty()) {
+		String name =filecirculardto.getPath().getOriginalFilename();
+		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
+		
+			circular.setPath(CircularFilePath+File.separator+filename);
+			circular.setOriginalName(name);
+			saveFile(CircularFilePath, filename, filecirculardto.getPath());
+		}		
+		return dao.CircularListAdd(circular);
+	}
+	
+	   public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
+	    {
+	        Path uploadPath = Paths.get(CircularFilePath);
+	          
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream()) {
+	            Path filePath = uploadPath.resolve(fileName);
+	            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	        } catch (IOException ioe) {       
+	            throw new IOException("Could not save image file: " + fileName, ioe);
+	        }     
+	    }
+	   @Override
+	   public CircularList GetCircularToEdit(Long circularid)throws Exception
+	   {
+		   return dao.GetCircularToEdit(circularid);
+	   }
+	   
+	   
+		@Override
+		public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception
+		{
+								
+			CircularList circularlist = dao.GetCircularToEdit(circular.getCircularId());
+			if(circular.getPath()!=null) {
+			  Path uploadPath = Paths.get(CircularFilePath);
+			  Path filePath = uploadPath.resolve(circular.getPath());
+              File f = filePath.toFile();
+              if(f.exists()) {
+            	  f.delete();
+              }
+			}
+          	
+    	    if(!filecirculardto.getPath().isEmpty()) {
+    		String name =filecirculardto.getPath().getOriginalFilename();
+    		String filename= "Circular-"+circularlist.getCircularId()+"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
+    		
+    		circularlist.setPath(CircularFilePath+File.separator+filename);
+    		circularlist.setOriginalName(name);
+    			saveFile(CircularFilePath, filename, filecirculardto.getPath());
+    		}	
+    	    circularlist.setCircularDate(circular.getCircularDate());
+    	    circularlist.setToDate(circular.getToDate());
+    	    circularlist.setDescription(circular.getDescription());
+    	    
+              return dao.EditCircular(circularlist);
+		}
+	   
+		
+		@Override
+		public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception
+		{
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+			LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+			LocalDate ToDate= LocalDate.parse(todate, formatter);
+			return dao.GetCircularList(Fromdate , ToDate);
+		}
+		
 }
