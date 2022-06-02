@@ -20,6 +20,9 @@
 	
 	List<Object[]> contingentlist=(List<Object[]>)request.getAttribute("ContingentList");
 	
+	String fromdate = (String)request.getAttribute("fromdate");
+	String todate = (String)request.getAttribute("todate");
+	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String logintype = (String)request.getAttribute("logintype");
@@ -65,11 +68,22 @@
 			<div class="card" >
 				<div class="card-body " >
 				
-				<%-- 	<form action="ApprovedBills.htm" method="POST" style="float: right;">
-							<button class="btn btn-sm" style="background-color: #94477b ;color: white; margin-bottom: 10px;" >Approved Bills</button>
-							<br>
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					</form> --%>
+					<form action="ContingentApprovals.htm" method="POST" style="float: right;">
+						<div class="row" style="margin-bottom: 10px;">
+							<div class="col-12">
+								<table style="width: 100%;">
+									<tr>
+										<td><b>From Date :&nbsp;</b></td>
+										<td><input type="text" class="form-control" name="fromdate" id="fromdate" readonly="readonly"></td>
+										<td><b>&nbsp;&nbsp; To date :&nbsp;</b></td>
+										<td><td><input type="text" class="form-control" name="todate" id="todate" readonly="readonly"></td>
+										<td>&nbsp;&nbsp;<button class="btn btn-sm submit-btn" >submit</button> </td>
+									</tr>
+								</table>
+							</div>
+						</div>							
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					</form>
 							
 					<form action="#" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -152,4 +166,35 @@
 	 </div>
 
 </body>
+<script type="text/javascript">
+
+$('#fromdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : true,
+	"showCustomRangeLabel" : true,
+	"maxDate" :new Date(), 
+	"startDate" :new Date('<%=fromdate%>'), 
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+
+$('#todate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"maxDate" :new Date(), 
+	"startDate" :new Date('<%=todate%>'), 
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+
+</script>
 </html>

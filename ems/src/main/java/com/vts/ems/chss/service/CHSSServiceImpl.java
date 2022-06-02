@@ -1498,9 +1498,9 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public List<Object[]> getCHSSContingentList(String logintype) throws Exception
+	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate ) throws Exception
 	{
-		return dao.getCHSSContingentList(logintype);
+		return dao.getCHSSContingentList( logintype, fromdate, todate );
 	}
 	
 	@Override
@@ -1550,13 +1550,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return claims;
 	}
-	
-	@Override
-	public List<Object[]> GetApprovedBills(String bill)throws Exception
-	{
-		return dao.GetApprovedBills(bill);
-	}
-	
+
 	@Override
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception
 	{

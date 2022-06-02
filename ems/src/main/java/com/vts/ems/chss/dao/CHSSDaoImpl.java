@@ -1210,13 +1210,15 @@ public class CHSSDaoImpl implements CHSSDao {
 //	private static final String GETCHSSCONTINGENTLIST  ="SELECT cc.contingentid,cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.BillsCount,cc.ContingentStatusId,cc.Remarks ,cs.chssstatus FROM chss_contingent cc , chss_status cs WHERE cc.isactive=1 AND cc.ContingentStatusId = cs.chssstatusid ORDER BY cc.ContingentStatusId ASC";
 	
 	@Override
-	public List<Object[]> getCHSSContingentList(String logintype) throws Exception
+	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getCHSSContingentList");
 		
 		try {
-			Query query= manager.createNativeQuery("call chss_contingent_bills_list(:logintype)");
+			Query query= manager.createNativeQuery("call chss_contingent_bills_list(:logintype,:fromdate,:todate)");
 			query.setParameter("logintype", logintype);
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
@@ -1304,20 +1306,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return 0;
 		}
 	}
-	@Override
-	public List<Object[]> GetApprovedBills(String bill)throws Exception
-	{
-       logger.info(new Date() +"Inside DAO GetApprovedBills()");
-		
-	   try {
-			Query query= manager.createNativeQuery("CALL chss_contingent_bills_list(:bill)");
-			query.setParameter("bill", bill);
-			return (List<Object[]>)query.getResultList();		
-		}catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<Object[]>();
-		}
-	}
+	
 	
 	
 

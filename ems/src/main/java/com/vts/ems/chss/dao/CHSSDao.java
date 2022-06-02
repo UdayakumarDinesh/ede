@@ -80,7 +80,7 @@ public interface CHSSDao {
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public long CHSSApplyTransactionAdd(CHSSApplyTransaction Transaction) throws Exception;
-	public List<Object[]> getCHSSContingentList(String logintype) throws Exception;
+	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate ) throws Exception;
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
@@ -90,7 +90,6 @@ public interface CHSSDao {
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public int getdata(String bill)throws Exception;
 	public List<Object> ContingentApplyIds(String contingentid) throws Exception;
-	public List<Object[]> GetApprovedBills(String bill)throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception;
