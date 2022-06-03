@@ -296,12 +296,11 @@ th,td
 					&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 					held liable, if anything is found to be incorrect later on.
 					<br>
-					&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
+					&#8226; This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 					<br>
 					&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 					<br>
 					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
-					(Strike out whichever is not applicable)
 				</p>
 				<div style="max-width: 650px;padding-top:45px ;" align="left">
 					
@@ -365,7 +364,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=consult[8] %><br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+							<td  class="text-blue" ><%=consult[8] %><%-- <br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 							<td class="text-blue" ><%=consult[3] %></td>
 							<td class="text-blue" ><%=consult[2] %></td>
 							<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
@@ -411,7 +410,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td class="text-blue" ><%=test[8] %><br>(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
+							<td class="text-blue" ><%=test[8] %><%-- <br>(<%=rdf.format(sdf.parse(test[9] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 							<td class="right text-blue"><%=test[4] %></td>
 							
@@ -448,15 +447,15 @@ th,td
 							<tr>
 								<th>Bill No</th>
 								<th>Medicine Name</th>
-								<th style="width:10%;text-align: center;">Rx Qty.</th>
-								<th style="width:15%;text-align: center;">Pur Qty.</th>
+								<th style="width:10%;text-align: center;">Rx<br>Qty.</th>
+								<th style="width:10%;text-align: center;">Pur<br> Qty.</th>
 								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
+							<td  class="text-blue" ><%=medicine[7] %><%-- <br>(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>) --%></td>
 							<td  class="text-blue" ><%=medicine[2] %></td>														
 							<td  class="text-blue" style="text-align: center;"><%=medicine[5] %></td>
 							<td class="text-blue"  style="text-align: center;" ><%=medicine[4] %></td> 
@@ -502,7 +501,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=other[6] %><br>(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
+							<td  class="text-blue" ><%=other[6] %><%-- <br>(<%=rdf.format(sdf.parse(other[7] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="3"><%=other[4] %></td>
 							<td class="right text-blue"><%=other[3] %></td>
 							
@@ -547,7 +546,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td class="text-blue" ><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
+							<td class="text-blue" ><%=misc[5] %><%-- <br>(<%=rdf.format(sdf.parse(misc[6] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 							<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 							<td class="right text-blue"><%=misc[3] %></td>
