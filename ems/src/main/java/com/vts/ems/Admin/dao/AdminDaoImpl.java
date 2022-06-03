@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.DoctorList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -1210,4 +1211,38 @@ public class AdminDaoImpl implements AdminDao{
 		}
 	
 	 }
+	 
+		@Override
+		public DoctorList GetDoctor(Long  doctorid)throws Exception
+		{
+			logger.info(new Date() + "Inside GetDoctor()");
+			DoctorList list = null;
+			try {
+				CriteriaBuilder cb = manager.getCriteriaBuilder();
+				CriteriaQuery<DoctorList> cq = cb.createQuery(DoctorList.class);
+				Root<DoctorList> root = cq.from(DoctorList.class);
+				Predicate p1 = cb.equal(root.get("DoctorId"), doctorid);
+				cq = cq.select(root).where(p1);
+				TypedQuery<DoctorList> allquery = manager.createQuery(cq);
+				list = allquery.getResultList().get(0);
+				return list;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		public long DoctorsAdd(DoctorList doctor)throws Exception
+		{
+			logger.info(new Date() + "Inside DoctorsAdd()");
+			try {
+				manager.persist(doctor);
+				manager.flush();
+				return (long)doctor.getDoctorId();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0l;
+			}
+		}
 }

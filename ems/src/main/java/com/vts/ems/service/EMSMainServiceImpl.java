@@ -229,4 +229,10 @@ public class EMSMainServiceImpl implements EMSMainService
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
 		return dao.CirculatList(Fromdate , ToDate);
 	}
+	
+	@Override
+	public List<Object[]> GetDoctorList()throws Exception
+	{
+		return dao.GetDoctorList();
+	}
 }

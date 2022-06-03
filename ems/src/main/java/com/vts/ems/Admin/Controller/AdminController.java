@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.DoctorList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.controller.CHSSController;
@@ -1299,6 +1300,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularDate(LocalDate.now().toString());
+						circular.setCreatedBy(UserId);
+						circular.setCreatedDate(sdtf.format(new Date()));
 						CircularListDto filecircular = new CircularListDto();
 					
 						filecircular.setPath(selectedFile);
@@ -1319,6 +1322,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularId(Long.parseLong(circularid));
+						circular.setModifiedBy(UserId);
+						circular.setModifiedDate(sdtf.format(new Date()));
 						CircularListDto filecircular = new CircularListDto();
 					
 						filecircular.setPath(selectedFile);
@@ -1365,4 +1370,82 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 		    }
 		
+			
+			@RequestMapping(value="DoctorList.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+			public String DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				List<Object[]> doctorlist = new ArrayList<Object[]>();
+			   	 try {
+					String action = (String)req.getParameter("action");
+					if("ADD".equalsIgnoreCase(action)) {
+						
+						return "Admin/DoctorAddEdit";
+					}else if("EDIT".equalsIgnoreCase(action)) {
+						String doctorid = (String)req.getParameter("doctorId");
+						DoctorList list = service.GetDoctor(Long.parseLong(doctorid));
+						req.setAttribute("doctor", list);
+						return "Admin/DoctorAddEdit";
+					}else {
+						doctorlist=emsservice.GetDoctorList();
+						req.setAttribute("doctorlist", doctorlist);
+						return "Admin/DoctorList";
+					}		   		 
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "Admin/DoctorList";
+				}
+			}
+			
+			
+			@RequestMapping(value="" , method = RequestMethod.POST)
+			public String DoctorsAddEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside DoctorsAddEdit.htm "+UserId);
+				try {
+					String action = (String)req.getParameter("action");
+					
+					if("ADDDOCTOR".equalsIgnoreCase(action)) {
+					String name = (String)req.getParameter("DoctorName");
+					String qualification = (String)req.getParameter("Qualification");
+						
+					DoctorList doctor = new DoctorList();
+					doctor.setDoctorName(name);
+					doctor.setQualification(qualification);
+					doctor.setCreatedBy(UserId);
+					doctor.setCreatedDate(sdtf.format(new Date()));
+					
+					long result = service.DoctorsAdd(doctor);
+					if (result != 0) {
+						 redir.addAttribute("result", "Doctor Added Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Doctor Added Unsuccessfull");
+					}
+					}else{
+						String name = (String)req.getParameter("DoctorName");
+						String qualification = (String)req.getParameter("Qualification");
+							
+						DoctorList doctor = new DoctorList();
+						doctor.setDoctorName(name);
+						doctor.setQualification(qualification);
+						doctor.setModifiedBy(UserId);
+						doctor.setModifiedDate(sdtf.format(new Date()));
+						long result = service.DoctorsAdd(doctor);
+						if (result != 0) {
+							 redir.addAttribute("result", "Doctor Updated Successfully");
+						} else {
+							 redir.addAttribute("resultfail", "Doctor Updated Unsuccessfull");
+						}
+						
+					}
+					 return "redirect:/DoctorList.htm";
+				} catch (Exception e) {
+					e.printStackTrace();
+					 redir.addAttribute("resultfail", "Internal Error!");
+					 return "redirect:/DoctorList.htm";
+				}
+				
+			}
 }

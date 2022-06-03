@@ -64,13 +64,16 @@
 			    <a class="nav-link active" href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 			 </li> 
 					   <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/DoctorsList.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					    <a class="nav-link" href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="Circulars.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Eligibility Details</a>
+					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
+					  </li> 
+					    <li class="nav-item">
+					    <a class="nav-link" href="LoginPage/EmpanneledHospital.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
@@ -213,7 +216,7 @@
                 	<%if(circularlist!=null  && circularlist.size()>0) {
 						
 						%>
-						<marquee direction="left"  style="background: rgba(6,127,208,1);"> <b><%for(Object[] obj:circularlist){%><%=obj[1]%>  &emsp; || &emsp; <% }%></b></marquee>
+						<marquee direction="left"  style="background: rgba(6,127,208,1);"> <b><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></b></marquee>
 						<%  }%> 
               </div>
     	</div> 
