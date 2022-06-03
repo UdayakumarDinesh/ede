@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.vts.ems.leave.dao.LeaveDaoImpl;
+import com.vts.ems.leave.dto.LeaveCheckDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -136,6 +137,30 @@ public class LeaveServiceImpl implements LeaveService{
 	public List<Object[]> EmpDetails(String EmpNo) throws Exception {
 		
 		return dao.EmpDetails(EmpNo);
+	}
+
+	@Override
+	public List<Object[]> EmployeeList() throws Exception {
+		
+		return dao.EmployeeList();
+	}
+
+	@Override
+	public List<Object[]> LeaveCode(String EmpNo) throws Exception {
+		
+		return dao.LeaveCode(EmpNo);
+	}
+
+	@Override
+	public List<Object[]> purposeList() throws Exception {
+		
+		return dao.purposeList();
+	}
+
+	@Override
+	public String LeaveCheck(LeaveCheckDto dto) throws Exception {
+		String Result="Please Try Again";
+		return Result;
 	}
 
 

@@ -2,7 +2,6 @@ package com.vts.ems.service;
 
 import java.util.List;
 
-import com.vts.ems.Admin.model.CircularList;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -28,4 +27,6 @@ public interface EMSMainService {
 	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
+	public List<Object[]> MonthlyWiseDashboardData(String FromDate , String ToDate) throws Exception;
+
 }

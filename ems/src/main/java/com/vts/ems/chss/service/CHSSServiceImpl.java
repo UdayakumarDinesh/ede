@@ -1562,8 +1562,6 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.CHSSApprovalAuthList(contingentid);
 	}
-	
-	
 	@Override
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception
 	{

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.leave.dto.LeaveCheckDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -162,8 +163,11 @@ public class LeaveController {
 			 if(EmpNo==null) {
 				 EmpNo=(String)ses.getAttribute("EmpNo");
 			 }
-			 req.setAttribute("EmpList", service.EmpList());
+			 req.setAttribute("EmpNo",EmpNo);
+			 req.setAttribute("EmpList", service.EmployeeList());
 			 req.setAttribute("officerdetails", service.EmpDetails(EmpNo));
+			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
+			 req.setAttribute("purposeList", service.purposeList());
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -247,5 +251,31 @@ public class LeaveController {
 				logger.error(new Date() +" Inside GetHolidays.htm "+UserId, e);
 		}
 			return json.toJson(GetCreditDetails);	
+	}
+	
+
+	@RequestMapping(value = "GetLeaveChecked.htm" , method = RequestMethod.GET)
+	public @ResponseBody String GetLeaveChecked(HttpServletRequest req ,HttpSession ses) throws Exception {
+		String Result="Please Try Again";
+		Gson json = new Gson();
+		String UserId=req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside GetLeaveChecked.htm "+UserId);		
+		try {
+			LeaveCheckDto dto=new LeaveCheckDto();
+			dto.setEmpNo(req.getParameter("empno"));
+			dto.setElCash(req.getParameter("ELCash"));
+			dto.setFromDate(req.getParameter("fdate"));
+			dto.setToDate(req.getParameter("tdate"));
+			dto.setLeaveType(req.getParameter("leavetype"));
+			dto.setHalfOrFull(req.getParameter("halforfull"));
+			dto.setHours(req.getParameter("hours"));
+			dto.setUserId(UserId);
+			Result=service.LeaveCheck(dto);
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside GetLeaveChecked.htm "+UserId, e);
+		}
+			return json.toJson(Result);	
 	}
 }

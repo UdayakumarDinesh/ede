@@ -1,6 +1,7 @@
 package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -221,6 +222,22 @@ public class EMSMainServiceImpl implements EMSMainService
 		
 		return dao.MainDashboardIndividualAmountData(EmpId, FromDate, ToDate);
 	}
+	
+	@Override
+	public List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception{
+		
+		ArrayList<Object[]> Newlist = new ArrayList<Object[]>();
+		
+		for(int i=1; i<=12; i++ ) {
+			
+			Object[] EachMonth = dao.MonthlyWiseDashboardData(FromDate, ToDate, i );
+			Newlist.add(EachMonth);
+	
+		}
+
+		return Newlist;
+	}
+	
 	@Override
 	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception
 	{

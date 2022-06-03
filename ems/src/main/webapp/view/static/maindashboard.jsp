@@ -17,9 +17,7 @@
 	    margin: 1em auto;
 	}
 	
-	#container {
-	    height: 400px;
-	}
+	
 	
 	.highcharts-data-table table {
 	    font-family: Verdana, sans-serif;
@@ -64,8 +62,6 @@
 	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
 	    font-family: 'Poppins', sans-serif;
 	    text-align: center;
-	    width: 175px;
-	    height: 175px;
 	    padding: 12px 15px 35px;
 	    margin: 0 auto;
 	    border: 18px solid #36AE7C;
@@ -150,7 +146,7 @@
     position: absolute;
     right: 35px;
     top: 20px;
-    font-size: 32px;
+    font-size: 2vw;
     display: block;
   }
 
@@ -167,6 +163,13 @@
   
   .toggle{
   	margin: 0px 35px !important;
+  }
+  
+  @media only screen and (max-width: 1600px){
+  	
+  	.counter h3{
+  		font-size: 12px !important;
+  	}
   }
 	
 	</style>
@@ -185,6 +188,7 @@
 		Object[] amountdata = (Object[])request.getAttribute("amountdata"); 
 		List<Object[]> amountdataindividual  = (List<Object[]> )request.getAttribute("amountdataindividual");
 		String isself   = (String)request.getAttribute("isself");
+		List<Object[]> monthlywisedata = (List<Object[]>)request.getAttribute("monthlywisedata");
 	
 	%>
 	
@@ -243,7 +247,7 @@
 				    <br>
 				</div>
 				
-			    <div class="col">
+			    <div class="col" style="margin-top: -7px">
 			    
 			    	<div class="container">
 					    <div class="row justify-content-end" >
@@ -282,7 +286,7 @@
 					      <div class="card-counter success">
 					        <i class="fa fa-database"></i>
 					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=amountdata[1] %> <%}else {%>0 <%} %></span>
-					        <span class="count-name">Total Amount Settled</span>
+					        <span class="count-name">Total Amount Settled </span>
 					      </div>
 					    </div>
 					  </div>
@@ -305,8 +309,12 @@
 			    	<figure class="highcharts-figure">
     					<div id="container2"  ></div>
 					</figure>
-
+					 <div id="container4"></div>
 			    </div>
+			    
+			   
+
+			    
 			    
 			  </div>
 			</div>
@@ -354,12 +362,12 @@ $('#isself').change(function(){
 </script>
 	
 <script type="text/javascript">
-	
+
 /* Counts Graph */	
 
 	Highcharts.chart('container', {
 	    title: {
-	        text: 'Analysis'
+	        text: 'Claim Summary'
 	    },
 	    
 	    xAxis: {
@@ -376,12 +384,13 @@ $('#isself').change(function(){
 	        items: [{
 	            html: 'Amount Settled',
 	            style: {
-	                left:'585px',
+	                left:'465px',
 	                top: '0px',
 	                color: ( // theme
 	                    Highcharts.defaultOptions.title.style &&
 	                    Highcharts.defaultOptions.title.style.color
-	                ) || 'black' 
+	                ) || 'black' ,
+	                fontSize:'10px'
 	                
 	            }
 	        }]
@@ -399,6 +408,8 @@ $('#isself').change(function(){
 	        name: 'Approved',
 	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[7]%> ,   <%}%>   ]
 	    }
+	    
+	  
 	  
 	    
 	    /* , 
@@ -413,13 +424,15 @@ $('#isself').change(function(){
 	        }
 	    } */
 	    
-	    , {
+	    , 
+	    
+	    {
 	        type: 'pie',
 	        name: 'Amount Approved',
 	        data: [
 	        
-	        <%  int i=0;
-	        for(Object[] obj : amountdataindividual) {%>	
+	        <%  int i=0; 
+	        for(Object[] obj : amountdataindividual) { %>	
 	        {
 	            name: '<%=obj[4]%>',
 	            y:<%=obj[7]%>,
@@ -430,18 +443,51 @@ $('#isself').change(function(){
 	        
 	        
 	        ],
-	        center: [620, 50],
+	        
+	        
+	        center: [480, 50],
 	        size: 100,
 	        showInLegend: false,
 	        dataLabels: {
 	            enabled: false
 	        }, 
-	        
-	    	
-	    }],
+	    }
+	    
+	    ],
+	    
 	    credits: {
             enabled: false
         },
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    yAxis: {
+                        labels: {
+                            align: 'left',
+                            x: 0,
+                            y: -5
+                        },
+                        title: {
+                            text: null
+                        }
+                    },
+                    subtitle: {
+                        text: null
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                }
+            }]
+        }
 	}); 
 
 
@@ -505,17 +551,51 @@ $('#isself').change(function(){
 	              ],
 	        }
 	    },
+
+		
 	    series: [{
 	        name: 'Share',
 	        data: [
-	            { name: 'Total Amount Claimed', y: <%=amountdata[0]%> },
+	           
+	        	 <%if(!amountdata[0].toString().equalsIgnoreCase("0.00")){%>{ name: 'Total Amount Claimed', y: <%=amountdata[0]%> },
 	            { name: 'Total Amount Settled', y: <%=amountdata[1]%> },
+	            <%}%>
 	         
-	        ]
+	        ] 
 	    }],
 	    credits: {
             enabled: false
         },
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    yAxis: {
+                        labels: {
+                            align: 'left',
+                            x: 0,
+                            y: -5
+                        },
+                        title: {
+                            text: null
+                        }
+                    },
+                    subtitle: {
+                        text: null
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                }
+            }]
+        }
 	});
 	
 
@@ -528,6 +608,13 @@ $('#isself').change(function(){
         type: 'column'
     },
 
+    colors: [
+        '#36AE7C', 
+        '#187498',
+        '#116530',
+        '#4D96FF'
+      ],
+    
     title: {
         text: 'Complete Analysis'
     },
@@ -555,26 +642,61 @@ $('#isself').change(function(){
     plotOptions: {
         column: {
             stacking: 'normal'
-        }
+        },
+        
     },
 
     series: [{
-        name: 'Approved',
-        data: [5, 3, 4, 7, 2,5, 3, 4, 7, 2,1,4],
-        stack: 'male'
-    }, {
-        name: 'Pending',
-        data: [3, 4, 4, 2, 5, 5, 3, 4, 7, 2, 8 ,9 ],
-        stack: 'male'
-    }, {
         name: 'Self Approved',
-        data: [2, 5, 6, 2, 1, 5, 3, 4, 7, 2, 5, 2],
-        stack: 'female'
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[1]%> ,   <%}%>   ] ,
+        stack: 'male'
     }, {
         name: 'Self Pending',
-        data: [3, 0, 4, 4, 3,5, 3, 4, 7, 2, 6,1],
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[0]%> ,   <%}%>   ] ,
+        stack: 'male'
+    }, {
+        name: 'Family Approved',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[3]%> ,   <%}%>   ] ,
         stack: 'female'
-    }]
+    }, {
+        name: 'Family Pending',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[2]%> ,   <%}%>   ] ,
+        stack: 'female'
+    }],
+    credits: {
+        enabled: false
+    },
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -5
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                subtitle: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                }
+            }
+        }]
+    }
+    
 });
 
 	
@@ -584,6 +706,7 @@ $('#isself').change(function(){
 
 	$(document).ready(function(){
 		 
+		
 	    $('.counter-value').each(function(){
 	        $(this).prop('Counter',0).animate({
 	            Counter: $(this).text()
@@ -621,6 +744,7 @@ $('#isself').change(function(){
 	        var year1=Number(startDate);
 	     
 	        document.getElementById("datepicker2").value = year1+1;
+	        $('#isselfvalue').val('<%=isself%>');
 	        
 	        $('#dateform').submit();
 	        
