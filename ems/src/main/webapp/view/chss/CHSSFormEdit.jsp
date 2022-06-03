@@ -187,7 +187,7 @@ th,td
 											<th>Grade</th>
 										</tr>
 										<tr>
-											<td class="text-blue" ><%=employee.getEmpName() %></td>
+											<td class="text-blue" style="text-transform: capitalize;" ><%=employee.getEmpName() %></td>
 											<td class="text-blue" ><%=employee.getEmpNo() %></td>
 											<td class="text-blue" ><%=employee.getPayLevelId() %></td>
 										</tr>
@@ -203,7 +203,7 @@ th,td
 											
 										</tr>
 										<tr>
-											<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+											<td class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
 											<td class="text-blue" ><%=chssapplydata[17] %></td>
 											<td class="text-blue" ><%=chssapplydata[10] %></td>
 											<td class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
@@ -263,7 +263,7 @@ th,td
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
 										<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my Parents / Parents-in-Law Shri / Smt. <%=chssapplydata[12] %> are wholly dependent
+											&#8226; That my Parents / Parents-in-Law Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> are wholly dependent
 											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 											month.
 											<br>
@@ -273,7 +273,7 @@ th,td
 											<br>
 										<%} %>
 										
-											&#8226; That the patient Shri / Smt. <%=chssapplydata[12] %> is not covered by the ESI Scheme / any
+											&#8226; That the patient Shri / Smt.<span style="text-transform: capitalize;"> <%=chssapplydata[12] %> </span> is not covered by the ESI Scheme / any
 											other medical facility.
 											<br>
 											
@@ -292,7 +292,7 @@ th,td
 											&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.
 											<br>
-											&#8226; That my wife / husband Shri / Smt. <%=chssapplydata[12] %> is an employee in STARC and that she / he is
+											&#8226; That my wife / husband Shri / Smt.<span style="text-transform: capitalize;"> <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
 											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -336,7 +336,6 @@ th,td
 										</td>
 									</tr>
 								</table> --%>
-								
 								
 							</div>
 							<div class="break"></div>
@@ -733,8 +732,8 @@ th,td
 												<ul style="list-style-type: none;margin:10px 5px -25px -35px;">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("PO")){%>
-														<li><%=obj[2] %>,</li>
-														<li><%=obj[4] %> </li>
+														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+														<li style="text-transform: capitalize;"><%=obj[4] %> </li>
 													<% } } %>
 												</ul>
 											
@@ -744,8 +743,8 @@ th,td
 												<ul style="float: right;list-style-type: none; margin:10px 5px -25px 0px; ">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("VO")){%>
-														<li><%=obj[2] %>,</li>
-														<li><%=obj[4] %></li>
+														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+														<li style="text-transform: capitalize;"><%=obj[4] %></li>
 													<% } } %>
 												</ul>					
 											</td>
