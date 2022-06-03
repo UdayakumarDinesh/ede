@@ -153,6 +153,7 @@
 
 								<li class="nav-item dropdown">
 									<ul class="navbar-nav" id="module">
+										
 				              		</ul>
 								</li>		
 							</ul>
@@ -300,13 +301,18 @@ $(document).ready(function() {
 				})
 				var module= "";
 				var logintype= $('#logintype').val();
-				
+				var chsscount=0;
 				for(i=0; i<values.length;i++)
 				{
 					var name=values[i][1].replace(/ /g,'');
-					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';				
+					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';
+					if(name.trim()==='CHSS'){
+						chsscount=1;
+					}
 				}
-			
+				if(chsscount==0){
+				module+='<li class="nav-item dropdown " >  <a href="CHSSDashboard.htm" class=" btn bg-transparent custom-button" >CHSS</a></li>';
+				}
 				$('#module').html(module); 
 				
 			}	
@@ -343,7 +349,7 @@ $(document).ready(function() {
 					
 					var info="No Notifications !";
 					var empty="";
-					 empty+="<a class='dropdown-item d-flex align-items-center' href=# style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-comment-o' aria-hidden='true' style='color:green;font-weight:800'></i></div> <div style='margin-left:20px'>" +info+" </div> </a>";
+					empty+="<a class='dropdown-item d-flex align-items-center' href=# style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-comment-o' aria-hidden='true' style='color:green;font-weight:800'></i></div> <div style='margin-left:20px'>" +info+" </div> </a>";
 
 					$('#Notification').html(empty); 
 					$('.showall').hide();
