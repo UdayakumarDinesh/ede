@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.DoctorList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -605,7 +606,8 @@ public class AdminServiceImpl implements AdminService{
     	    circularlist.setCircularDate(circular.getCircularDate());
     	    circularlist.setToDate(circular.getToDate());
     	    circularlist.setDescription(circular.getDescription());
-    	    
+    	    circularlist.setModifiedBy(circular.getModifiedBy());
+    	    circularlist.setModifiedDate(circular.getModifiedDate());
               return dao.EditCircular(circularlist);
 		}
 	   
@@ -619,4 +621,24 @@ public class AdminServiceImpl implements AdminService{
 			return dao.GetCircularList(Fromdate , ToDate);
 		}
 		
+		@Override
+		public DoctorList GetDoctor(long doctorId)throws Exception
+		{
+			return dao.GetDoctor(doctorId);
+		}
+		
+		@Override
+		public long DoctorsAdd(DoctorList doctor)throws Exception
+		{
+			return dao.DoctorsAdd( doctor);
+		}
+		
+		@Override
+		public long DoctorsEdit(DoctorList doc)throws Exception
+		{
+			DoctorList doctor = dao.GetDoctor(doc.getDoctorId());
+			doctor.setDoctorName(doc.getDoctorName());
+	
+			return dao.DoctorsAdd( doctor);
+		}
 }

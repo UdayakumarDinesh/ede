@@ -84,7 +84,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return result;
 	}
 	
-	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empid=:empid ";
+	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empid=:empid ";
 	
 	@Override
 	public  Object[] getEmployee(String empid) throws Exception

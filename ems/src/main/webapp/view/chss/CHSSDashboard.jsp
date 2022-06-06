@@ -226,7 +226,7 @@
 <% String logintype = (String) session.getAttribute("LoginType"); 
 	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
 	List<Object[]> empfamilylist = (List<Object[]>)request.getAttribute("empfamilylist");
-	Employee employee = (Employee )request.getAttribute("employee") ;
+	Object[] employee = (Object[])request.getAttribute("employee") ;
 	List<Object[]> empchsslist = (List<Object[]>)request.getAttribute("empchsslist");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -371,7 +371,7 @@
 	<div class="row" >
 		<div class="col-md-2">
 		<%if(!IsSelf.equalsIgnoreCase("Y") ){ %>
-			<div class="main" onclick="submitform('Y','<%=employee.getEmpId()%>','<%=employee.getEmpName() %>')" > 
+			<div class="main" onclick="submitform('Y','<%=employee[0]%>','<%=employee[1] %>')" > 
 			<%}else{ %>
 			<div class="main" > 
 			<%} %>
@@ -380,7 +380,7 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<% if(employee.getGender().equalsIgnoreCase("F")) { %>
+								<% if(employee[5].toString().equalsIgnoreCase("F")) { %>
 									<img src="view/images/femaleuser.png" alt="Photo Not Found">
 								<% }else{ %>
 									<img src="view/images/maleuser.png" alt="Photo Not Found">
@@ -388,9 +388,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
-						<h3><%=employee.getEmpName() %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
-						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee.getDOB().toString()))%></p>
+					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(employee[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
+						<h3><%=employee[2] %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
+						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee[10].toString()))%></p>
 						<%-- <p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> --%>
 						
 						<%if(IsSelf.equalsIgnoreCase("Y")){ %>
@@ -593,7 +593,7 @@ function changeform(val){
 	$('#patientidvalue').val(<%=patientidvalue%>);
 	$('#patientname').val(val)
 
-	if(<%=employee.getEmpId()%>==<%=patientidvalue%>){
+	if(<%=employee[1]%>==<%=patientidvalue%>){
 		$('#isselfvalue').val('Y')		
 	}else{
 		$('#isselfvalue').val('N')		

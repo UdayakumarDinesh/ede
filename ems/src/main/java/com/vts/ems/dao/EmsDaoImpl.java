@@ -391,5 +391,20 @@ public class EmsDaoImpl implements EmsDao
 		 }
 		
 
+		private static final String DOCTORSLIST="SELECT doctorid ,doctorname , qualification FROM chss_doctor_list ORDER BY doctorid DESC";
+		@Override
+		public List<Object[]> GetDoctorList()throws Exception
+		{
+			 logger.info(new Date() +"Inside DAO GetDoctorList()");	
+			 try {
+					Query query =  manager.createNativeQuery(DOCTORSLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetDoctorList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
 	
 }

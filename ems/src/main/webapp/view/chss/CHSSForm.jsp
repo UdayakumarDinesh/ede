@@ -182,9 +182,10 @@ th,td
 						<th>Grade</th>
 					</tr>
 					<tr>
-						<td class="text-blue" ><%=employee[2] %></td>
+						<td class="text-blue" style="text-transform: capitalize;" ><%=employee[2] %></td>
 						<td class="text-blue" ><%=employee[1] %></td>
 						<td class="text-blue" ><%=employee[9] %></td>
+
 					</tr>
 				</tbody>
 			</table>
@@ -197,7 +198,7 @@ th,td
 						<th>Submitted On</th>
 					</tr>
 					<tr>
-						<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+						<td class="text-blue"  style="text-transform: capitalize;" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
 						<td class="text-blue" ><%=chssapplydata[17] %></td>
 						<td class="text-blue" ><%=chssapplydata[10] %></td>
 						<td class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
@@ -257,7 +258,7 @@ th,td
 					dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 					<br>
 					<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-						&#8226; That my Parents / Parents-in-Law Shri / Smt. <%=chssapplydata[12] %> are wholly dependent
+						&#8226; That my Parents / Parents-in-Law Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> are wholly dependent
 						upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 						month.
 						<br>
@@ -267,7 +268,7 @@ th,td
 						<br>
 					<%} %>
 					
-						&#8226; That the patient Shri / Smt. <%=chssapplydata[12] %> is not covered by the ESI Scheme / any
+						&#8226; That the patient Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is not covered by the ESI Scheme / any
 						other medical facility.
 						<br>
 						
@@ -286,7 +287,7 @@ th,td
 						&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 						claimed in this bill has not been preferred / shall not be preferred from any other source.
 						<br>
-						&#8226; That my wife / husband Shri / Smt. <%=chssapplydata[12] %> is an employee in STARC and that she / he is
+						&#8226; That my wife / husband Shri / Smt.<span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is an employee in STARC and that she / he is
 						covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 						benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 						dependent(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -296,12 +297,11 @@ th,td
 					&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 					held liable, if anything is found to be incorrect later on.
 					<br>
-					&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
+					&#8226; This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 					<br>
 					&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 					<br>
 					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
-					(Strike out whichever is not applicable)
 				</p>
 				<div style="max-width: 650px;padding-top:45px ;" align="left">
 					
@@ -365,7 +365,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=consult[8] %><br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+							<td  class="text-blue" ><%=consult[8] %><%-- <br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 							<td class="text-blue" ><%=consult[3] %></td>
 							<td class="text-blue" ><%=consult[2] %></td>
 							<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
@@ -411,7 +411,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td class="text-blue" ><%=test[8] %><br>(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
+							<td class="text-blue" ><%=test[8] %><%-- <br>(<%=rdf.format(sdf.parse(test[9] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 							<td class="right text-blue"><%=test[4] %></td>
 							
@@ -448,15 +448,15 @@ th,td
 							<tr>
 								<th>Bill No</th>
 								<th>Medicine Name</th>
-								<th style="width:10%;text-align: center;">Rx Qty.</th>
-								<th style="width:15%;text-align: center;">Pur Qty.</th>
+								<th style="width:10%;text-align: center;">Rx<br>Qty.</th>
+								<th style="width:10%;text-align: center;">Pur<br> Qty.</th>
 								<th></th>
 								<th></th>
 								<th></th>
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=medicine[7] %><br>(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
+							<td  class="text-blue" ><%=medicine[7] %><%-- <br>(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>) --%></td>
 							<td  class="text-blue" ><%=medicine[2] %></td>														
 							<td  class="text-blue" style="text-align: center;"><%=medicine[5] %></td>
 							<td class="text-blue"  style="text-align: center;" ><%=medicine[4] %></td> 
@@ -502,7 +502,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td  class="text-blue" ><%=other[6] %><br>(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
+							<td  class="text-blue" ><%=other[6] %><%-- <br>(<%=rdf.format(sdf.parse(other[7] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="3"><%=other[4] %></td>
 							<td class="right text-blue"><%=other[3] %></td>
 							
@@ -547,7 +547,7 @@ th,td
 							</tr>			
 						<%} %>
 						<tr>
-							<td class="text-blue" ><%=misc[5] %><br>(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
+							<td class="text-blue" ><%=misc[5] %><%-- <br>(<%=rdf.format(sdf.parse(misc[6] .toString()))%>) --%></td>
 							<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 							<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 							<td class="right text-blue"><%=misc[3] %></td>
@@ -605,8 +605,8 @@ th,td
 							<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("PO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %> </li>
+									<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+									<li style="text-transform: capitalize;"><%=obj[4] %> </li>
 								<% } } %>
 							</ul>
 						</td>				
@@ -614,8 +614,8 @@ th,td
 							<ul style="float: right;list-style-type: none; margin:10px 5px -35px 0px; ">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("VO")){%>
-									<li><%=obj[2] %>,</li>
-									<li><%=obj[4] %></li>
+									<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+									<li style="text-transform: capitalize;"><%=obj[4] %></li>
 								<% } } %>
 							</ul>
 							

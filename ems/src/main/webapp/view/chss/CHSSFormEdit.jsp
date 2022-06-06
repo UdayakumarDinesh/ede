@@ -187,9 +187,11 @@ th,td
 											<th>Grade</th>
 										</tr>
 										<tr>
-											<td class="text-blue" ><%=employee[2] %></td>
+
+											<td class="text-blue" style="text-transform: capitalize;"><%=employee[2] %></td>
 											<td class="text-blue" ><%=employee[1] %></td>
 											<td class="text-blue" ><%=employee[9] %></td>
+
 										</tr>
 									</tbody>
 								</table>
@@ -203,7 +205,7 @@ th,td
 											
 										</tr>
 										<tr>
-											<td class="text-blue" ><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
+											<td class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %> &nbsp;(<%=chssapplydata[14] %>)</td>
 											<td class="text-blue" ><%=chssapplydata[17] %></td>
 											<td class="text-blue" ><%=chssapplydata[10] %></td>
 											<td class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %></td>
@@ -263,7 +265,7 @@ th,td
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
 										<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my Parents / Parents-in-Law Shri / Smt. <%=chssapplydata[12] %> are wholly dependent
+											&#8226; That my Parents / Parents-in-Law Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> are wholly dependent
 											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 											month.
 											<br>
@@ -273,7 +275,7 @@ th,td
 											<br>
 										<%} %>
 										
-											&#8226; That the patient Shri / Smt. <%=chssapplydata[12] %> is not covered by the ESI Scheme / any
+											&#8226; That the patient Shri / Smt.<span style="text-transform: capitalize;"> <%=chssapplydata[12] %> </span> is not covered by the ESI Scheme / any
 											other medical facility.
 											<br>
 											
@@ -292,7 +294,7 @@ th,td
 											&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.
 											<br>
-											&#8226; That my wife / husband Shri / Smt. <%=chssapplydata[12] %> is an employee in STARC and that she / he is
+											&#8226; That my wife / husband Shri / Smt.<span style="text-transform: capitalize;"> <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
 											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -302,7 +304,7 @@ th,td
 										&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
 										held liable, if anything is found to be incorrect later on.
 										<br>
-										&#8226; This bill is submitted on <b><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
+										&#8226; This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
 										<br>
 										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
 										<br>
@@ -336,7 +338,6 @@ th,td
 										</td>
 									</tr>
 								</table> --%>
-								
 								
 							</div>
 							<div class="break"></div>
@@ -386,13 +387,11 @@ th,td
 														</tr>			
 													<%} %>
 													<tr>
-														<td  class="text-blue" ><%=consult[8] %>&nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>)</td>
+														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %></td>
 														<td class="text-blue" ><%=consult[2] %></td>
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
-														
-														
 														
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
@@ -405,10 +404,10 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="consultremamount-<%=consult[0]%>" style="direction: rtl;" value="<%=consult[7]%>">
+															<input type="number" class="numberonly" style="width: 100%;text-align: right; " name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="direction: rtl;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="text-align: right;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
 															
 															<button type="submit" class="btn btn-sm editbtn" formaction="ConsultRemAmountEdit.htm" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -456,7 +455,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td class="text-blue" ><%=test[8] %>&nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>)</td>
+													<td class="text-blue" ><%=test[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 													<td class="right text-blue"><%=test[4] %></td>
 												
@@ -472,10 +471,10 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="testremamount-<%=test[0]%>" style="direction: rtl;" value="<%=test[7]%>">
+															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" style="text-align: right;" value="<%=test[7]%>">
 														</td>
 														<td >
-														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="direction: rtl;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
+														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="text-align: right;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
 															
 														<button type="submit" class="btn btn-sm editbtn" formaction="TestRemAmountEdit.htm"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -514,15 +513,15 @@ th,td
 													<tr>
 														<th>Bill No</th>
 														<th>Medicine Name</th>
-														<th style="width:10%;text-align: center;">Rx Qty.</th>
-														<th style="width:15%;text-align: center;">Pur Qty.</th>
+														<th style="width:10%;text-align: center;">Rx<br> Qty.</th>
+														<th style="width:15%;text-align: center;">Pur<br> Qty.</th>
 														<th></th>
 														<th></th>
 														<th></th>
 													</tr>			
 												<%} %>
 												<tr>
-													<td  class="text-blue" ><%=medicine[7] %>&nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>)</td>
+													<td  class="text-blue" ><%=medicine[7] %><%-- &nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>) --%></td>
 													<td  class="text-blue" >	
 														<%=medicine[2] %>
 														<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
@@ -546,10 +545,10 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="medicineremamount-<%=medicine[0]%>" style="direction: rtl;" value="<%=medicine[6]%>">
+															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="direction: rtl;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="text-align: right;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
 																
 															<button type="submit" class="btn btn-sm editbtn" formaction="MedRemAmountEdit.htm" name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
@@ -595,7 +594,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td  class="text-blue" ><%=other[6] %>&nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>)</td>
+													<td  class="text-blue" ><%=other[6] %><%-- &nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="3"><%=other[4] %></td>
 													<td class="right text-blue"><%=other[3] %></td>
 													
@@ -613,10 +612,10 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="otherremamount-<%=other[0]%>" style="direction: rtl;" value="<%=other[5]%>">
+															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
 														</td>
 														<td >
-															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="direction: rtl;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
+															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="text-align: right;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
 															<button type="submit" class="btn btn-sm editbtn" formaction="OtherRemAmountEdit.htm" name="otherid" value="<%=other[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
@@ -662,7 +661,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
-													<td class="text-blue" ><%=misc[5] %>&nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>)</td>
+													<td class="text-blue" ><%=misc[5] %><%-- &nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 													<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 													<td class="right text-blue"><%=misc[3] %></td>
@@ -679,10 +678,10 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;direction: rtl;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="direction: rtl;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
 															<button type="submit" class="btn btn-sm editbtn" formaction="MiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
@@ -735,8 +734,8 @@ th,td
 												<ul style="list-style-type: none;margin:10px 5px -25px -35px;">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("PO")){%>
-														<li><%=obj[2] %>,</li>
-														<li><%=obj[4] %> </li>
+														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+														<li style="text-transform: capitalize;"><%=obj[4] %> </li>
 													<% } } %>
 												</ul>
 											
@@ -746,8 +745,8 @@ th,td
 												<ul style="float: right;list-style-type: none; margin:10px 5px -25px 0px; ">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("VO")){%>
-														<li><%=obj[2] %>,</li>
-														<li><%=obj[4] %></li>
+														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+														<li style="text-transform: capitalize;"><%=obj[4] %></li>
 													<% } } %>
 												</ul>					
 											</td>
@@ -841,9 +840,8 @@ th,td
 									          <div class="row">
 											    <div class="col-12">
 											    	<b>No of Enclosures : </b><br>
-													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
-												</div>
-												
+													<input type="number" class="form-control numberonly1 w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" max="" maxlength="2" required="required" >
+												</div>												
 												 <div class="col-12 w-100" align="center">
 												 <br>
 												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount(<%=chssapplydata[0]%>)" >
@@ -857,9 +855,6 @@ th,td
 								</div>	
 							</div>
 							
-						
-						
-						
 					</form>
 				<%} %>
 
@@ -1286,6 +1281,19 @@ function  onlyNumbers() {
 	});
 
 }
+
+
+$('.numberonly1').keypress(function (e) {    
+
+    var charCode = (e.which) ? e.which : event.keyCode    
+
+    if (String.fromCharCode(charCode).match(/[^0-9]/g))    
+
+        return false;                        
+
+		});
+
+
 $(document).ready( function() {
 	onlyNumbers();
 });   
@@ -1337,12 +1345,17 @@ function CheckClaimAmount($chssapplyid)
 						
 			if(result===1)
 			{
-				if(Number($('#enclosurecount').val())>0){
-					if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
+				if(Number($('#enclosurecount').val())>0  ){
+					if(Number($('#enclosurecount').val())>99)
+					{
+						alert(' No of Encloseres Should be less than 100 !');
+					}
+					else if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
 					{
 						$('#fwdform').submit();
 					}
-				}else
+				}
+				else
 				{
 					alert('Please Enter No of Encloseres.');	
 				}

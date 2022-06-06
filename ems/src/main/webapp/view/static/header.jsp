@@ -126,7 +126,7 @@
         	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 1rem !important;">              
             	<div class="container-fluid">
 
-					<a class="navbar-brand" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:40% ">
+					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:40% ">
 						<img class="headerlogo" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
 						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
 						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
@@ -153,6 +153,7 @@
 
 								<li class="nav-item dropdown">
 									<ul class="navbar-nav" id="module">
+										
 				              		</ul>
 								</li>		
 							</ul>
@@ -174,7 +175,7 @@
 							</form> 
 						<%} %> --%>
 	
-							<a class="nav-link  onclickbell" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a class="nav-link  onclickbell" href="" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					            <img alt="logo" src="view/images/alarm.png" >
 						            <span class="badge badge-danger badge-counter" id="NotificationCount"></span>
 						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
@@ -300,13 +301,18 @@ $(document).ready(function() {
 				})
 				var module= "";
 				var logintype= $('#logintype').val();
-				
+				var chsscount=0;
 				for(i=0; i<values.length;i++)
 				{
 					var name=values[i][1].replace(/ /g,'');
-					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';				
+					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';
+					if(name.trim()==='CHSS'){
+						chsscount=1;
+					}
 				}
-			
+				if(chsscount==0){
+				module+='<li class="nav-item dropdown " >  <a href="CHSSDashboard.htm" class=" btn bg-transparent custom-button" >CHSS</a></li>';
+				}
 				$('#module').html(module); 
 				
 			}	
@@ -343,7 +349,7 @@ $(document).ready(function() {
 					
 					var info="No Notifications !";
 					var empty="";
-					 empty+="<a class='dropdown-item d-flex align-items-center' href=# style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-comment-o' aria-hidden='true' style='color:green;font-weight:800'></i></div> <div style='margin-left:20px'>" +info+" </div> </a>";
+					empty+="<a class='dropdown-item d-flex align-items-center' href=# style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-comment-o' aria-hidden='true' style='color:green;font-weight:800'></i></div> <div style='margin-left:20px'>" +info+" </div> </a>";
 
 					$('#Notification').html(empty); 
 					$('.showall').hide();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.DoctorList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -86,9 +87,9 @@ public interface AdminService {
 	public CircularList GetCircularToEdit(Long circularid)throws Exception;
 	public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception;
 	public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception;
-	
-	
-	
+	public DoctorList GetDoctor(long doctorId)throws Exception;
+	public long DoctorsAdd(DoctorList doctor)throws Exception;
+	public long DoctorsEdit(DoctorList doctor)throws Exception;
 	
 	
 	

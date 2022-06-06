@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.DoctorList;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.Admin.model.LabMaster;
@@ -16,9 +17,6 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.model.EmployeeDesig;
-import com.vts.ems.pis.model.EmployeeDesig;
-import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface AdminDao {
@@ -98,4 +96,6 @@ public interface AdminDao {
 	public long EditCircular(CircularList circular) throws Exception;
 	public long GetCircularMaxId()throws Exception;
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception;
+	 public DoctorList GetDoctor(Long  doctorid)throws Exception;
+	 public long DoctorsAdd(DoctorList doctor)throws Exception;
 }

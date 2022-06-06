@@ -13,10 +13,11 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>CHSS Circular List</title>
+<title>CHSS Doctors List</title>
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
 <spring:url value="/webresources/css/LoginPage.css" var="loginPageCss" />
 <link href="${loginPageCss}" rel="stylesheet" />
+
 <style type="text/css">
 .group
 {
@@ -31,11 +32,10 @@
 </head>
 <body>
 <%
-	List<Object[]> circulatlist = (List<Object[]> )request.getAttribute("circulatlist") ;
-	String fromdate = (String)request.getAttribute("fromdate");
-	String todate = (String)request.getAttribute("todate");
+	List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
+
 %>
-  
+
 <section class="loginpage">
   
 	<header id="header" class="clearfix">
@@ -64,10 +64,10 @@
 			    <a class="nav-link " href="login.jsp"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 			 </li> 
 					   <li class="nav-item">
-					    <a class="nav-link" href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					    <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link active" href="##"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
+					    <a class="nav-link " href="Circulars.htm"   ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
@@ -80,38 +80,18 @@
   		
 	</header>
 
-
-
 	<div align="center">
 		
 		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
 			
 			<div class="card-header" style="height: 4rem" >
-			
-					<form action="Circulars.htm" method="POST" >
-					
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					<div class="row ">
-						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Circulars</span></div>
+	           <div class="row ">
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Doctors</span></div>
 					    <div class="col-md-6">
-						    <table>
-						    	<tr>
-						    		<td><h6>From Date :&nbsp;&nbsp;</h6></td>
-									<td>							    	
-										<input type="text" style="width: 100%;"  class="form-control input-sm mydate"  onchange="this.form.submit()" readonly="readonly" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   id="fromdate" name="fromdate"  required="required"  >
-									</td>
-									<td><h6>&nbsp;&nbsp;To Date :&nbsp;&nbsp;</h6></td>
-									<td>		
-										<input type="text" style="width: 100%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
-									</td>
-								</tr>    
-							</table>
+						 
 						</div>
 
 					</div>
-							 
-				   </form>
-				
 				</div>
 
 				<div class="card-body " >
@@ -122,29 +102,20 @@
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1" > 
 								<thead>
 									<tr>
-										<th style="width: 10%">SlNo.</th>
-										<th style="width: 50%" >Description </th>
-										<th style="width: 20%" >Circular Date</th>
-										<th style="width: 20%">Valid Till</th>
-										<th style="width: 20%"> Download</th>
+										<th style=" text-align:center; width: 15%"> SlNo. </th>
+										<th style="width: 50%"> Name </th>
+										<th style="width: 35%"> Qualification </th>									
 									</tr>
 								</thead>
 								<tbody>
-									<%if(circulatlist!=null && circulatlist.size()>0){ 
+									<%if(doctorlist!=null && doctorlist.size()>0){ 
 										int slno=0;
-										for(Object[] obj : circulatlist){
+										for(Object[] obj : doctorlist){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 5%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 70%;"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%> <%} %></td>
-											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[5] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-											  <i style="color: #019267" class="fa-solid fa-download"></i>
-										    </button>
-											<%}else{%>--<%}%>
-											</td>
+											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
+											<td style="text-align:justify; width: 50%"><%=obj[1]%></td>
+											<td style="text-align:justify; width: 35%"><%=obj[2]%></td>
 										</tr>
 								<%} }%>
 								</tbody>
@@ -167,10 +138,8 @@
 		   	 </div>				
 	       
 	</div> 
-
 	</section>
 	
-
 <div class="wrapper" id="skipCont"></div>
 <!--/#skipCont-->
 
@@ -224,32 +193,5 @@ $("#myTable1").DataTable({
 
 });
 
-
-$('#fromdate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	/* "minDate" :datearray,   */
-	/* "startDate" : fdate, */
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-	
-	$('#todate').daterangepicker({
-		"singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		"minDate" :$("#fromdate").val(),  
-		"cancelClass" : "btn-default",
-		showDropdowns : true,
-		locale : {
-			format : 'DD-MM-YYYY'
-		}
-	});
-
-	</script>
+</script>
 </html>
