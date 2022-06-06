@@ -113,7 +113,7 @@ th,td
 
 .text-green
 {
-	color:  #0A480A;
+	color:  #243D25;
 }
  
 			
