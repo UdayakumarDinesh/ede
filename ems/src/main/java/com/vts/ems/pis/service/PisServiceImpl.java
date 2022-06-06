@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
@@ -329,7 +330,7 @@ public class PisServiceImpl implements PisService
 		login.setModifiedBy(username);
 		//login.setEmpId(Long.parseLong(empid));
 		login.setLoginId(Long.parseLong(loginid));
-		login.setModifiedDate(sdf.format(new Date()));
+		login.setModifiedDate(sdtf.format(new Date()));
 		login.setLoginType(logintype);
 		return dao.UserManagerEdit(login);
 	}
@@ -600,19 +601,29 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception {
+		public int PasswordChange(String OldPassword, String NewPassword, String loginid,String username)throws Exception {
 
 			logger.info(new Date() +"Inside PasswordChange");
-			String actualoldpassword=dao.OldPassword(UserId);
+			String actualoldpassword=dao.OldPassword(loginid);
 
-			if(encoder.matches(OldPassword, actualoldpassword)) {
+			if(encoder.matches(OldPassword, actualoldpassword))
+			{
 			
-			String oldpassword=encoder.encode(OldPassword);
-			String newpassword=encoder.encode(NewPassword);
-			
-			return dao.PasswordChange(oldpassword, newpassword, UserId, sdf.format(new Date()),username);
-			}else {
+				String oldpassword=encoder.encode(OldPassword);
+				String newpassword=encoder.encode(NewPassword);
+				int count=dao.PasswordChange(oldpassword, newpassword, loginid, sdtf.format(new Date()),username);
+				if(count>0) {
+					LoginPasswordHistory passHis= new LoginPasswordHistory();
+					passHis.setLoginId(Long.parseLong(loginid));
+					passHis.setPassword(newpassword);
+					passHis.setActionBy(username);
+					passHis.setActionDate(sdtf.format(new Date()));
+					passHis.setActionType("CP");
+					
+					dao.loginHisAddSubmit(passHis);
+				}
 				
+				return count;
 			}
 			return 0;
 		}
@@ -659,8 +670,19 @@ public class PisServiceImpl implements PisService
 				//}
 				 
 				String pwd=encoder.encode(resetpwd);
+				int count=dao.ResetPassword(loginid,pwd,  username);;
+				if(count>0) {
+					LoginPasswordHistory passHis= new LoginPasswordHistory();
+					passHis.setLoginId(Long.parseLong(loginid));
+					passHis.setPassword(pwd);
+					passHis.setActionBy(username);
+					passHis.setActionDate(sdtf.format(new Date()));
+					passHis.setActionType("AR");
+					
+					dao.loginHisAddSubmit(passHis);
+				}
 				
-				return dao.ResetPassword(loginid,pwd,  username);
+				return count;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return 0;

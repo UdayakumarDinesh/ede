@@ -75,9 +75,14 @@ public class EmsController {
 			ses.setAttribute("EmpName", employee.getEmpName());
 			ses.setAttribute("emplogintypelist",service.EmpHandOverLoginTypeList(String.valueOf(employee.getEmpId())));
 			
+			long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
+			if(pwdCount==0) 
+			{
+				return "redirect:/PasswordChange.htm";
+			}
 			
 		} catch (Exception e) {
-			logger.error(new Date() + " Login Issue Occures When Login By " + req.getUserPrincipal().getName(), e);
+			logger.error(new Date() + " Login Issue Occured When Login By " + req.getUserPrincipal().getName(), e);
 		}
 
 		return "redirect:/MainDashBoard.htm";

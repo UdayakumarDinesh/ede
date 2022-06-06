@@ -1046,7 +1046,6 @@ public class CHSSController {
 						
 			long count = service.MedicineBillDelete(medicineid, Username);
 			
-			
 			if (count > 0) {
 				redir.addAttribute("result", "Medicines Data Deleted Successfully");
 			} else {
@@ -1064,6 +1063,7 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
 	
 	@RequestMapping(value = "TestsBillAdd.htm", method = RequestMethod.POST )
 	public String TestsBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception

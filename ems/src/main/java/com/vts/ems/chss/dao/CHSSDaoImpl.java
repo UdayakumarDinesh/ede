@@ -408,6 +408,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	
 	@Override
 	public int CHSSConsultMainDelete(String  consultmainid) throws Exception
 	{
@@ -1271,7 +1272,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
-	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.designationid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
+	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
 	@Override
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
 	{

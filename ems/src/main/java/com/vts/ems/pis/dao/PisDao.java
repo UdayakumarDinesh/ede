@@ -3,6 +3,7 @@ package com.vts.ems.pis.dao;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -91,4 +92,5 @@ public interface PisDao {
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception;
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception;
 	public List<Object[]> GetEmployeeList()throws Exception;
+	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
 }

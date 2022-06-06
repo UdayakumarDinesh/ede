@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +49,7 @@ public class PisController {
 	
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 			
 	@Autowired
 	private PisService service;
@@ -826,7 +825,7 @@ public class PisController {
     	   details.setGender(gender);
     	   details.setEmpid(empid);
     	   details.setModifiedBy(Username);
-    	   details.setModifiedDate(sdf.format(new Date()));
+    	   details.setModifiedDate(sdtf.format(new Date()));
     	   
     	   
     	   
@@ -968,7 +967,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   peraddress.setAddress_per_id(Long.parseLong(addressid));
     		   peraddress.setModifiedBy(Username);
-        	   peraddress.setModifiedDate(sdf.format(new Date()));
+        	   peraddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  =  service.EditPerAddress(peraddress); 
           	 
 	       	    if(result>0) {
@@ -1114,7 +1113,7 @@ public class PisController {
 			String addressresid = (String)request.getParameter("addressresid");
 			resadd.setAddress_res_id(Long.parseLong(addressresid));
 			resadd.setModifiedBy(Username);
-			resadd.setModifiedDate(sdf.format(new Date()));
+			resadd.setModifiedDate(sdtf.format(new Date()));
         	  long result  =  service.EditResAddress(resadd); 
         	 
         	    if(result>0) {
@@ -1209,7 +1208,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   kinaddress.setAddress_kin_id(Long.parseLong(addressid));
     		   kinaddress.setModifiedBy(Username);
-    		   kinaddress.setModifiedDate(sdf.format(new Date()));
+    		   kinaddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
 	       	    if(result>0) {
@@ -1305,7 +1304,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   emecaddress.setAddress_emer_id(Long.parseLong(addressid));
     		   emecaddress.setModifiedBy(Username);
-    		   emecaddress.setModifiedDate(sdf.format(new Date()));
+    		   emecaddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 
 	       	    if(result>0) {
@@ -1409,7 +1408,7 @@ public class PisController {
 					logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
 			}
 
-		return "redirect:/PisAdminDashboard.htm";
+		return "redirect:/MainDashBoard.htm";
 		
 	}
 	

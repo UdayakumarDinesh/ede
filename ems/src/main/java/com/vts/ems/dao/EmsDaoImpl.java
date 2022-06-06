@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -101,6 +102,24 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String PASSWORDCHANGEHYSTORYCOUNT  ="SELECT COUNT(loginid),'passwordCount' FROM login_password_history WHERE loginid=:loginid";
+	@Override
+	public long PasswordChangeHystoryCount(String loginid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO PasswordChangeHystoryCount");
+		try {
+			Query query = manager.createNativeQuery(PASSWORDCHANGEHYSTORYCOUNT);
+			query.setParameter("loginid", loginid);		
+			Object[] result = (Object[])query.getResultList().get(0);
+			
+			return Long.parseLong(result[0].toString());
+					
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 	@Override
 	public List<EMSNotification> NotificationList(long EmpId)throws Exception
@@ -405,6 +424,21 @@ public class EmsDaoImpl implements EmsDao
 				e.printStackTrace();
 				return null;
 			}
+		}
+		
+		@Override
+		public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
+		{
+			logger.info(new Date() +"Inside DAO loginHisAddSubmit");
+
+			try {
+				manager.persist(model);
+				manager.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return model.getPasswordHistoryId(); 
 		}
 	
 }

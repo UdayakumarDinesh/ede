@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -66,8 +67,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
 	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
 	private static final String MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
-	
-	
 	
 	
 	@Override
@@ -1194,5 +1193,22 @@ public class PisDaoImpl implements PisDao {
 			return null;
 		}
 	}
+	
+	@Override
+	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO loginHisAddSubmit");
+
+		try {
+			manager.persist(model);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model.getPasswordHistoryId(); 
+	}
+	
+	
 }
 	
