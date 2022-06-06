@@ -598,10 +598,10 @@ th,td
 						
 					</tr>
 					<tr>
-						<td colspan="7" style="text-align:center; border-bottom : 0px">Finance and Accounts Department</td>
+						<td colspan="7" style="text-align:center; border-bottom : 0px;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
 					<tr>
 					<tr>
-						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:80px;padding: 0px;margin:0px;">
+						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:120px;padding: 0px;margin:0px;">
 							<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("PO")){%>
@@ -610,7 +610,7 @@ th,td
 								<% } } %>
 							</ul>
 						</td>				
-						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:80px;">
+						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:120px;">
 							<ul style="float: right;list-style-type: none; margin:10px 5px -35px 0px; ">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("VO")){%>

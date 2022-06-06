@@ -726,7 +726,7 @@ th,td
 										</tr>
 										
 										<tr>
-											<td colspan="7" style="text-align:center; ;border-bottom : 0">Finance & Accounts Dept.</td>
+											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
 										<tr>
 										<tr>
 											<td colspan="4" style="border-top: 0;border-right : 0;">
