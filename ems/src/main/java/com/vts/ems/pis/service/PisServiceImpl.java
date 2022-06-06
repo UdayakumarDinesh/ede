@@ -672,16 +672,16 @@ public class PisServiceImpl implements PisService
 				 
 				String pwd=encoder.encode(resetpwd);
 				int count=dao.ResetPassword(loginid,pwd,  username);;
-				if(count>0) {
-					LoginPasswordHistory passHis= new LoginPasswordHistory();
-					passHis.setLoginId(Long.parseLong(loginid));
-					passHis.setPassword(pwd);
-					passHis.setActionBy(username);
-					passHis.setActionDate(sdtf.format(new Date()));
-					passHis.setActionType("AR");
-					
-					dao.loginHisAddSubmit(passHis);
-				}
+//				if(count>0) {
+//					LoginPasswordHistory passHis= new LoginPasswordHistory();
+//					passHis.setLoginId(Long.parseLong(loginid));
+//					passHis.setPassword(pwd);
+//					passHis.setActionBy(username);
+//					passHis.setActionDate(sdtf.format(new Date()));
+//					passHis.setActionType("AR");
+//					
+//					dao.loginHisAddSubmit(passHis);
+//				}
 				
 				return count;
 			} catch (Exception e) {
