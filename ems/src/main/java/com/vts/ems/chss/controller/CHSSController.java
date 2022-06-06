@@ -71,6 +71,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -86,6 +87,9 @@ public class CHSSController {
 	CHSSService service;
 	@Autowired
 	AdminService adminservice;
+	
+	@Autowired
+	private PisService pisservice;
 	
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
@@ -2713,15 +2717,30 @@ public class CHSSController {
 		
 	}
 	
-	@RequestMapping(value = "ClaimsList.htm" , method =RequestMethod.POST )
+	@RequestMapping(value ="ClaimsList.htm" , method =RequestMethod.POST )
 	public String CHSSClaimsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ClaimsList.htm "+Username);
 		try {
-			List<Object[]> claimslist  =service.GetClaimsList();
+			String fromdate = (String)req.getParameter("fromdate");
+			String todate = (String) req.getParameter("todate");
+			String empid = (String)req.getParameter("empid");
+			List<Object[]> claimslist  = new ArrayList<Object[]>();
 			
-			return "";
+			if(fromdate==null && todate==null && empid==null) {
+				fromdate = DateTimeFormatUtil.getFinancialYearStartDateSqlFormat();
+				todate   = DateTimeFormatUtil.getFinancialYearEndDateSqlFormat();
+				empid="0";
+				
+			}else {
+				
+			}
+			  req.setAttribute("emplist", pisservice.GetEmployeeList());
+			claimslist  =service.GetClaimsList(fromdate , todate , empid);
+			req.setAttribute("claimslist", claimslist);
+		req.setAttribute("todate", todate);
+			return "chss/CHSSClaimsList";
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ClaimsList.htm "+Username, e);
