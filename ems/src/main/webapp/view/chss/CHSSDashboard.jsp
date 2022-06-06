@@ -371,7 +371,7 @@
 	<div class="row" >
 		<div class="col-md-2">
 		<%if(!IsSelf.equalsIgnoreCase("Y") ){ %>
-			<div class="main" onclick="submitform('Y','<%=employee[0]%>','<%=employee[1] %>')" > 
+			<div class="main" onclick="submitform('Y','<%=employee[0]%>','<%=employee[2] %>')" > 
 			<%}else{ %>
 			<div class="main" > 
 			<%} %>

@@ -74,7 +74,7 @@ p {
 
 <%
 	
-	Employee employee = (Employee )request.getAttribute("employee") ;
+Object[] employee = (Object[] )request.getAttribute("employee") ;
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
 	/* List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist"); */
@@ -170,7 +170,7 @@ p {
 									</div>
 								<%}else{ %>
 									<div class="col-3">
-											<b> Patient Name : &nbsp;</b><%=employee.getEmpName() %>
+											<b> Patient Name : &nbsp;</b><%=employee[2] %>
 									</div>
 									<div class="col-3">
 											<b>Relation : &nbsp;</b>SELF
@@ -282,7 +282,7 @@ p {
 											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
 											<td style="width:25%;" >
-												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >ADD</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
+												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	
@@ -466,7 +466,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >ADD</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >Add</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
