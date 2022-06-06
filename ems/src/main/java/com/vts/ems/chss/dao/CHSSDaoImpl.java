@@ -408,6 +408,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	
 	@Override
 	public int CHSSConsultMainDelete(String  consultmainid) throws Exception
 	{
@@ -1271,7 +1272,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
-	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.designationid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
+	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
 	@Override
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
 	{
@@ -1750,6 +1751,23 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
+
+	@Override
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetClaimsList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate );");
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			query.setParameter("empid", empid);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	
 }

@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -30,8 +31,8 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
-import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
@@ -49,11 +50,11 @@ public class PisDaoImpl implements PisDao {
 	EntityManager manager;
 
 	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,eds.dob FROM employee e, employee_desig ed,employee_details eds WHERE  e.empno=eds.empno  AND   e.isactive=1 AND e.desigid=ed.desigid ORDER BY e.srno DESC";
-	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  e.Title,  e.dob,  e.DOJL,  e.DOA,  e.DOR,  e.gender,  e.BloodGroup,  e.maritalStatus,  e.Religion,  e.pan,  e.punchcard,  e.uid,  e.email,  e.designationid,  e.divisionid,  e.groupid,  e.SBIAccNo,  e.CategoryId,  ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,e.hometown, e.quarters ,e.photo, e.phoneno FROM  employee e,  division_master dm,  division_group dg,  employee_desig ed WHERE e.isactive = 1  AND e.designationid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid  AND empid = :empid ORDER BY e.srno DESC";
-	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard";
-	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
-	private static final String PHOTOUPDATE = "update employee set photo=:Path where empid=:EmpId";
-	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
+	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid AND e.empno=ee.empno AND empid =:empid ORDER BY e.srno DESC";
+	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee_details WHERE PunchCard=:punchCard";
+	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
+	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
+	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.desigid=d.desigid AND a.logintype=lt.logintype order by a.loginid desc";
 	private static final String EMPLIST = "SELECT empid,empname FROM employee e WHERE e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
@@ -61,14 +62,11 @@ public class PisDaoImpl implements PisDao {
 	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id AND a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
-	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid FROM employee a ,employee_desig b WHERE b.desigid=a.designationid AND  empid=:empid";
+	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno FROM employee a ,employee_desig b WHERE b.desigid=a.desigid AND  empid=:empid";
 	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1'";
 	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
 	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
 	private static final String MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
-	
-	
-	
 	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType, String Empid) throws Exception {
@@ -317,17 +315,17 @@ public class PisDaoImpl implements PisDao {
 	}
 
 	@Override
-	public EmployeeDetails getEmployee(String empid) throws Exception {
-		logger.info(new Date() + "Inside PisCaderList()");
+	public EmployeeDetails getEmployee(String empdetailsid) throws Exception {
+		logger.info(new Date() + "Inside getEmployee()");
 		EmployeeDetails employee = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
 			CriteriaQuery<EmployeeDetails> cq = cb.createQuery(EmployeeDetails.class);
 			Root<EmployeeDetails> root = cq.from(EmployeeDetails.class);
-			Predicate p1 = cb.equal(root.get("EmpDetailsId"), Long.parseLong(empid));
+			Predicate p1 = cb.equal(root.get("EmpDetailsId"),  Long.parseLong(empdetailsid));
 			cq = cq.select(root).where(p1);
 			TypedQuery<EmployeeDetails> allquery = manager.createQuery(cq);
-			employee = allquery.getResultList().get(0);
+			employee = allquery.getResultList().get(0);		
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -335,6 +333,27 @@ public class PisDaoImpl implements PisDao {
 		return employee;
 	}
 
+	
+	@Override
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
+	{
+		logger.info(new Date() + "Inside getEmployeeDetailsData()");
+		EmployeeDetails employee = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EmployeeDetails> cq = cb.createQuery(EmployeeDetails.class);
+			Root<EmployeeDetails> root = cq.from(EmployeeDetails.class);
+			Predicate p1 = cb.equal(root.get("EmpNo"),  Long.parseLong(empno));
+			cq = cq.select(root).where(p1);
+			TypedQuery<EmployeeDetails> allquery = manager.createQuery(cq);
+			employee = allquery.getResultList().get(0);		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return employee;
+	}
+	
 	@Override
 	public int PunchcardList(String Punchcard) throws Exception {
 		
@@ -358,11 +377,11 @@ public class PisDaoImpl implements PisDao {
 	}
 
 	@Override
-	public String PhotoPath(String empid) throws Exception {
-		logger.info(new Date() + "Inside PunchcardList()");
+	public String PhotoPath(String empno) throws Exception {
+		logger.info(new Date() + "Inside PhotoPath()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOPATH);
-			query.setParameter("empid", empid);
+			query.setParameter("empno", empno);
 			String EmpName = (String) query.getSingleResult();
 			return EmpName;
 		} catch (Exception e) {
@@ -373,12 +392,12 @@ public class PisDaoImpl implements PisDao {
 	}
 
 	@Override
-	public int PhotoPathUpdate(String Path, String EmpId) throws Exception {
+	public int PhotoPathUpdate(String Path, String empno) throws Exception {
 		logger.info(new Date() + "Inside PhotoPathUpdate()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOUPDATE);
 			query.setParameter("Path", Path);
-			query.setParameter("EmpId", EmpId);
+			query.setParameter("empno", empno);
 			int count = (int) query.executeUpdate();
 
 			return count;
@@ -1147,7 +1166,7 @@ public class PisDaoImpl implements PisDao {
 		return  resetpwd;
 	}
 	
-	private static final String ALLEMPLIST="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId";
+	private static final String ALLEMPLIST="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId";
 	@Override
 	public List<Object[]> GetAllEmployee()throws Exception
 	{
@@ -1193,6 +1212,25 @@ public class PisDaoImpl implements PisDao {
 			e.printStackTrace();
 			return null;
 		}
+
 	}
+	
+	@Override
+	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO loginHisAddSubmit");
+
+		try {
+			manager.persist(model);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model.getPasswordHistoryId(); 
+	}
+	
+	
+
 }
 	

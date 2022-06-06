@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
@@ -157,14 +158,8 @@ public class PisServiceImpl implements PisService
 	public long EmployeeAddSubmit(Employee emp,EmployeeDetails empd) throws Exception
 	{
 		emp.setCreatedDate(sdtf.format(new Date()));
-		long empno = dao.getempno();
-		long intemp = empno + 1;
-		String empid2 = String.valueOf(intemp);
-		String empid = StringUtils.leftPad(empid2, 7, "0");
-		emp.setEmpNo(empid);
 		long result=dao.EmployeeAddSubmit(emp);
-		if(result>0) {
-			empd.setEmpNo(empid);
+		if(result>0) {		
 			empd.setCreatedDate(sdtf.format(new Date()));
 			dao.EmployeeDetailsAddSubmit(empd);
 		}
@@ -181,7 +176,7 @@ public class PisServiceImpl implements PisService
 		employee.setEmail(emp.getEmail());
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setDesigId(emp.getDesigId());
-		
+		employee.setEmpNo(emp.getEmpNo());
 	     return dao.EmployeeEditSubmit(employee);
 	}
 	
@@ -193,6 +188,7 @@ public class PisServiceImpl implements PisService
 		
 		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
 		employee.setTitle(emp.getTitle());
+		employee.setEmpNo(emp.getEmpNo());
 		employee.setDOB(emp.getDOB());
 		employee.setDOA(emp.getDOA());
 		employee.setDOJL(emp.getDOJL());
@@ -235,6 +231,12 @@ public class PisServiceImpl implements PisService
 	{
 		return dao.getEmployee(empid);
 	}
+	
+	@Override
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
+	{
+		return dao.getEmployeeDetailsData(empno);
+	}
 	@Override
 	public int PunchcardList(String puchcard)throws Exception{
 		return dao.PunchcardList(puchcard);
@@ -267,13 +269,13 @@ public class PisServiceImpl implements PisService
 	        }     
 	    }
 	@Override
-	public int saveEmpImage(MultipartFile file ,String empid ,String uploadpath)throws Exception{
+	public int saveEmpImage(MultipartFile file ,String empno ,String uploadpath)throws Exception{
 		int result =0;
 		try {
 			
 			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
-			 String fileName=empid+"."+OriginalFilename[1];
-			  result =dao.PhotoPathUpdate(fileName,empid);
+			 String fileName=empno+"."+OriginalFilename[1];
+			  result =dao.PhotoPathUpdate(fileName,empno);
 			 saveFile(uploadpath,fileName,file);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -329,7 +331,7 @@ public class PisServiceImpl implements PisService
 		login.setModifiedBy(username);
 		//login.setEmpId(Long.parseLong(empid));
 		login.setLoginId(Long.parseLong(loginid));
-		login.setModifiedDate(sdf.format(new Date()));
+		login.setModifiedDate(sdtf.format(new Date()));
 		login.setLoginType(logintype);
 		return dao.UserManagerEdit(login);
 	}
@@ -600,19 +602,29 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception {
+		public int PasswordChange(String OldPassword, String NewPassword, String loginid,String username)throws Exception {
 
 			logger.info(new Date() +"Inside PasswordChange");
-			String actualoldpassword=dao.OldPassword(UserId);
+			String actualoldpassword=dao.OldPassword(loginid);
 
-			if(encoder.matches(OldPassword, actualoldpassword)) {
+			if(encoder.matches(OldPassword, actualoldpassword))
+			{
 			
-			String oldpassword=encoder.encode(OldPassword);
-			String newpassword=encoder.encode(NewPassword);
-			
-			return dao.PasswordChange(oldpassword, newpassword, UserId, sdf.format(new Date()),username);
-			}else {
+				String oldpassword=encoder.encode(OldPassword);
+				String newpassword=encoder.encode(NewPassword);
+				int count=dao.PasswordChange(oldpassword, newpassword, loginid, sdtf.format(new Date()),username);
+				if(count>0) {
+					LoginPasswordHistory passHis= new LoginPasswordHistory();
+					passHis.setLoginId(Long.parseLong(loginid));
+					passHis.setPassword(newpassword);
+					passHis.setActionBy(username);
+					passHis.setActionDate(sdtf.format(new Date()));
+					passHis.setActionType("CP");
+					
+					dao.loginHisAddSubmit(passHis);
+				}
 				
+				return count;
 			}
 			return 0;
 		}
@@ -659,8 +671,19 @@ public class PisServiceImpl implements PisService
 				//}
 				 
 				String pwd=encoder.encode(resetpwd);
+				int count=dao.ResetPassword(loginid,pwd,  username);;
+//				if(count>0) {
+//					LoginPasswordHistory passHis= new LoginPasswordHistory();
+//					passHis.setLoginId(Long.parseLong(loginid));
+//					passHis.setPassword(pwd);
+//					passHis.setActionBy(username);
+//					passHis.setActionDate(sdtf.format(new Date()));
+//					passHis.setActionType("AR");
+//					
+//					dao.loginHisAddSubmit(passHis);
+//				}
 				
-				return dao.ResetPassword(loginid,pwd,  username);
+				return count;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return 0;

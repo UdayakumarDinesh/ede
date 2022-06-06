@@ -140,6 +140,7 @@ public class AdminServiceImpl implements AdminService{
 			test.setTestMainId(TestSub.getTestMainId());
 			test.setTestName(TestSub.getTestName());
 			test.setTestRate(TestSub.getTestRate());
+			test.setTestCode(TestSub.getTestCode());
 			test.setModifiedBy(TestSub.getModifiedBy());
 			test.setModifiedDate(TestSub.getModifiedDate());
 		return dao.EditTestSub(test);
@@ -276,6 +277,11 @@ public class AdminServiceImpl implements AdminService{
 			return 0l;
 		}
 		
+	}
+	@Override
+	public long EmpRequestNotification1(EMSNotification notification)throws Exception
+	{
+		return  dao.AddRequestMsgNotification(notification);
 	}
 	
 	@Override
@@ -638,7 +644,9 @@ public class AdminServiceImpl implements AdminService{
 		{
 			DoctorList doctor = dao.GetDoctor(doc.getDoctorId());
 			doctor.setDoctorName(doc.getDoctorName());
-	
-			return dao.DoctorsAdd( doctor);
+			doctor.setQualification(doc.getQualification());
+			doctor.setCreatedBy(doc.getCreatedBy());
+			doctor.setModifiedDate(doc.getModifiedDate());
+			return dao.DoctorsEdit( doctor);
 		}
 }

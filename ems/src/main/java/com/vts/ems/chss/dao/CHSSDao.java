@@ -120,5 +120,5 @@ public interface CHSSDao {
 	public long CHSSContingentTransactionAdd(CHSSContingentTransaction transaction) throws Exception;
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
-
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
 }

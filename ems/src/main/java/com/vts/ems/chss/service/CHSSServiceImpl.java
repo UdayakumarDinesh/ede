@@ -1050,7 +1050,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		claim.setRemarks(remarks);
 		claim.setModifiedBy(Username);
-		claim.setModifiedDate(sdf.format(new Date()));
+		claim.setModifiedDate(sdtf.format(new Date()));
 		
 		
 		
@@ -1204,7 +1204,7 @@ public class CHSSServiceImpl implements CHSSService {
 //			claim.setCHSSStatusId(8);
 			claim.setContingentId(contingentid);
 			claim.setModifiedBy(Username);
-			claim.setModifiedDate(sdf.format(new Date()));
+			claim.setModifiedDate(sdtf.format(new Date()));
 			count= dao.CHSSApplyEdit(claim);
 		}
 			
@@ -1417,7 +1417,7 @@ public class CHSSServiceImpl implements CHSSService {
 		contingent.setRemarks(dto.getRemarks());
 		contingent.setContingentStatusId(continstatus);
 		contingent.setModifiedBy(dto.getUsername());
-		contingent.setModifiedDate(sdf.format(new Date()));
+		contingent.setModifiedDate(sdtf.format(new Date()));
 		continid=dao.CHSSContingentEdit(contingent);
 //		List<Object> CHSSApplyId  =dao.ContingentApplyIds(dto.getContingentid());
 		
@@ -1437,7 +1437,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			claim.setCHSSStatusId(continstatus);
 			claim.setModifiedBy(dto.getUsername());
-			claim.setModifiedDate(sdf.format(new Date()));
+			claim.setModifiedDate(sdtf.format(new Date()));
 
 			CHSSApplyTransaction transac =new CHSSApplyTransaction();
 			transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -1655,7 +1655,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		claim.setCHSSStatusId(1);
 		claim.setModifiedBy(Username);
-		claim.setModifiedDate(sdf.format(new Date()));
+		claim.setModifiedDate(sdtf.format(new Date()));
 		
 		CHSSApplyTransaction transac =new CHSSApplyTransaction();
 		transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -1710,6 +1710,10 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSContingentEdit(contingent);
 	}
 	
-	
+	@Override
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	{
+		return dao.GetClaimsList(fromdate , todate , empid);
+	}
 	
 }

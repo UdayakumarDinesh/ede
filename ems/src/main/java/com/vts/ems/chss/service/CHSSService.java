@@ -120,6 +120,6 @@ public interface CHSSService
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 	public long CHSSContingentDelete(String contingentid, String Username) throws Exception;
-
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
 	
 }
