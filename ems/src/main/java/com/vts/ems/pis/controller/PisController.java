@@ -108,6 +108,8 @@ public class PisController {
 			if(empid==null) {
 				empid=String.valueOf((Long)ses.getAttribute("EmpId"));
 			}
+			
+			Object[] empdata = service.GetEmpData(empid);
 			Object[] employeedetails = service.EmployeeDetails(empid);	
 			Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
 			Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
@@ -116,7 +118,12 @@ public class PisController {
 			List<Object[]> familydetails = service.getFamilydetails(empid);
 			
 			
-            String basevalue=service.getimage(empid);
+            String basevalue=null;
+            if(empdata!=null && empdata[3]!=null) {
+            	basevalue=service.getimage(empdata[3].toString());
+            }
+            		
+            		
             
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
@@ -200,11 +207,12 @@ public class PisController {
 			Employee employee=new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
+			System.out.println("Designationid         :"+Designationid);
 			employee.setDesigId(Long.parseLong(Designationid));
 			employee.setEmpName(empname);
 			employee.setSrNo(Long.parseLong("0"));
-            
-			
+            employee.setEmpNo(PunchCardNo.trim());
+			employee.setIsActive(1);
 			
 			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
@@ -287,7 +295,7 @@ public class PisController {
 			emp.setCreatedDate(new Date().toString());
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			
+			emp.setEmpNo(PunchCardNo.trim());
 			
 			
 			Long value=service.EmployeeAddSubmit(employee,emp);
@@ -311,10 +319,10 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EmployeeEdit.htm "+Username);		
 		try {
-			
 			String empid=req.getParameter("empid");
+				
 			req.setAttribute("emp", service.getEmp(empid));
-			req.setAttribute("employee", service.getEmployee(empid));			
+			req.setAttribute("employee", service.getEmployeeDetailsData(service.getEmp(empid).getEmpNo()));			
 			req.setAttribute("desiglist", service.DesigList());
 			req.setAttribute("piscategorylist", service.PisCategoryList());
 			req.setAttribute("piscatclasslist", service.PisCatClassList());
@@ -367,21 +375,24 @@ public class PisController {
 			String empstatus = req.getParameter("empstatus");
 			String PermPassNo = req.getParameter("PermPassNo");
 			String phno = req.getParameter("PhoneNo");
-			String EmpDeatailsId=req.getParameter("EmpDeatailsId");
+			String empdetailsid=req.getParameter("empdetailsid");
 			String EmpId= req.getParameter("EmpId");
 			
 			Employee employee=new Employee();
-
-
-			
-			
+				employee.setEmpNo(PunchCardNo);
+				employee.setEmpName(empname);
+				employee.setDesigId(Long.parseLong(Designationid));
+				employee.setEmail(email);
+				employee.setDivisionId(Long.parseLong(divisionid));
+				employee.setEmpNo(PunchCardNo.trim());
+				employee.setEmpId(Long.parseLong(EmpId));
 			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
 			
 			// date conversion
         	java.sql.Date dob = DateTimeFormatUtil.dateConversionSql(req.getParameter("dob"));
 			java.sql.Date doj = DateTimeFormatUtil.dateConversionSql(req.getParameter("doj"));
-			java.sql.Date doa = DateTimeFormatUtil.dateConversionSql(req.getParameter("doa"));
+			//java.sql.Date doa = DateTimeFormatUtil.dateConversionSql(req.getParameter("doa"));
 			
 			java.sql.Date dor;
 
@@ -422,7 +433,7 @@ public class PisController {
 			}
 		
 			emp.setDOB(dob);
-			emp.setDOA(doa);
+			//emp.setDOA(doa);
 			emp.setDOJL(doj);
 			emp.setDOR(dor);
 			emp.setCategoryId(Integer.parseInt(category));
@@ -439,6 +450,7 @@ public class PisController {
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phno);
+			emp.setEmpNo(PunchCardNo);
 			if (uid != null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
 			}
@@ -455,7 +467,7 @@ public class PisController {
 			emp.setModifiedBy(Username);
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			emp.setEmpDetailsId(Long.parseLong(EmpDeatailsId));
+			emp.setEmpDetailsId(Long.parseLong(empdetailsid));
 
 			long value =service.EmployeeEditSubmit(employee);
 			if(value>0) {
@@ -496,17 +508,22 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside PisImageUpload.htm " + Username);
 		int value = 0;
-		String EmpId = (String) req.getParameter("employeeid");
+		String EmpId = (String) req.getParameter("empid");
 		try {
-			
-			String imagename = service.PhotoPath(EmpId);
+			Object[] empdata = service.GetEmpData(EmpId);
+			String imagename = null;
+			if(empdata!=null && empdata[3]!=null) {
+				imagename = service.PhotoPath(empdata[3]+"");
+			}
+					
+					
 			File f = new File(uploadpath + "\\" + imagename);
 			if (f.exists()) {
 				f.delete();
 			}
-			value = service.saveEmpImage(file, EmpId, uploadpath);
+			value = service.saveEmpImage(file, empdata[3]+"", uploadpath);
 			Object[] employeedetails = service.EmployeeDetails(EmpId);
-			String basevalue = service.getimage(EmpId);
+			String basevalue = service.getimage(empdata[3]+"");
 			req.setAttribute("empid", EmpId);
 			req.setAttribute("employeedetails", employeedetails);
 			req.setAttribute("basevalue", basevalue);

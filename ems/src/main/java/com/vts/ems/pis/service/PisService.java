@@ -36,11 +36,12 @@ public interface PisService {
 	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception;
 	public EmployeeDetails getEmployee(String empid) throws Exception;
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception;
 	public Employee getEmp(String empid) throws Exception;
 	public int PunchcardList(String value)throws Exception;
 	public String PhotoPath(String EmpId) throws Exception ;
 	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
-	public int saveEmpImage(MultipartFile file ,String empid,String uploadpath)throws Exception;
+	public int saveEmpImage(MultipartFile file ,String empno,String uploadpath)throws Exception;
 	public String getimage(String empid)throws Exception;
 	public List<Object[]> LoginMasterList() throws Exception;
 	public List<Object[]> getEmpList()throws Exception;

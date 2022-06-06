@@ -35,12 +35,13 @@ public interface PisDao {
 	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public long EmployeeDetailsAddSubmit(EmployeeDetails emp) throws Exception;
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception;
-	public EmployeeDetails getEmployee(String empid) throws Exception;
+	public EmployeeDetails getEmployee(String empno) throws Exception;
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception;
 	public Employee getEmp(String empid) throws Exception;
 	public int PunchcardList(String value)throws Exception;
 	public long getempno()throws Exception;
 	public String PhotoPath(String empid)throws Exception;
-	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
+	public int PhotoPathUpdate(String Path, String empno) throws Exception;
 	public List<Object[]> LoginMasterList() throws Exception;
 	public List<Object[]> getEmpList()throws Exception;
 	public List<Object[]> getLoginTypeList()throws Exception;

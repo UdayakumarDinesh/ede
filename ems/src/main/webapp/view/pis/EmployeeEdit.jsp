@@ -1,3 +1,4 @@
+<%@page import="org.hibernate.internal.build.AllowSysOut"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
@@ -115,10 +116,10 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            <div class="col-md-2">
 			                <label>Rank/Salutation<span class="mandatory">*</span></label><br>
 			                 <select class=" form-control select2" name="salutation" required="required">
-								<option value="Mr." <%if(employee.getTitle()!=null &&  employee.getTitle().equalsIgnoreCase("Mr.")){ %>selected  <%} %>  >Mr.</option>
-								<option value="Mrs." <%if(employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Mrs.")){ %>selected  <%} %>  >Mrs.</option>
-								<option value="Miss." <%if( employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Miss.")){ %>selected  <%} %> >Miss.</option>
-								<option value="Dr." <%if( employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Dr.")){ %>selected  <%} %> >Dr.</option>
+								<option value="Mr."   <%if(employee!=null && employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Mr.")){ %>selected  <%} %>  >Mr.</option>
+								<option value="Mrs."  <%if(employee!=null && employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Mrs.")){ %>selected  <%} %>  >Mrs.</option>
+								<option value="Miss." <%if(employee!=null && employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Miss.")){ %>selected  <%} %> >Miss.</option>
+								<option value="Dr."   <%if(employee!=null && employee.getTitle()!=null && employee.getTitle().equalsIgnoreCase("Dr.")){ %>selected  <%} %> >Dr.</option>
 							</select>
 			            </div>
 			
@@ -490,7 +491,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    <div class="row" >
 			    	<div class="col-12" align="center">
 					<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
-					<input type="hidden" value="<%=employee.getEmpDetailsId() %>" name="EmpDeatailsId">
+					<input type="hidden" value="<%=employee.getEmpDetailsId()%>" name="empdetailsid">
 					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="return validateform();" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 

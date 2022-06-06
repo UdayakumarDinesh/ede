@@ -1751,6 +1751,20 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
+	private static final String CLAIMCLIST="";
+	@Override
+	public List<Object[]> GetClaimsList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetClaimsList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(CLAIMCLIST);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	
 }

@@ -1710,6 +1710,10 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSContingentEdit(contingent);
 	}
 	
-	
+	@Override
+	public List<Object[]> GetClaimsList()throws Exception
+	{
+		return dao.GetClaimsList();
+	}
 	
 }

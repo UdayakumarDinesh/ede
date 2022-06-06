@@ -580,7 +580,7 @@ function checknegative(str) {
 
 </script>
 <script type="text/javascript">
-$("#PunchcardTextBox").blur(function(){
+ $("#PunchcardTextBox").blur(function(){
 		
     var punchcard =$("#PunchcardTextBox").val();
     console.log(punchcard);
@@ -609,7 +609,7 @@ $("#PunchcardTextBox").blur(function(){
      	   $("#awailable").html(" ");
 
             }
-      });
+      }); 
 
 
 $("#PAN").keypress(function(event){
