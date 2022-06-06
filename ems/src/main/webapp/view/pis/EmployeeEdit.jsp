@@ -9,6 +9,7 @@
 <%@page import="com.vts.ems.pis.model.PisCatClass"%>
 <%@page import="com.vts.ems.pis.model.PisCategory"%>
 <%@page import="com.vts.ems.pis.model.EmployeeDesig"%>
+<%@page import="com.vts.ems.pis.model.EmployeeDetails"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -74,7 +75,8 @@ List<EmpStatus> empstatuslist=(List<EmpStatus>)request.getAttribute("empstatusli
 List<PisPayLevel> paylevellist=(List<PisPayLevel>)request.getAttribute("paylevellist");
 List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("divisionlist");
 
-Employee employee=(Employee )request.getAttribute("employee");
+Employee emp=(Employee)request.getAttribute("emp");
+EmployeeDetails employee=(EmployeeDetails )request.getAttribute("employee");
 SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -123,7 +125,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			            <div class="col-md-4">
 			                <label>Name<span class="mandatory">*</span></label>
-			                <input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm" value="<%=employee.getEmpName() %>"  maxlength="100"  placeholder="Enter Employee name"   onclick="return trim(this)" onchange="return trim(this)">
+			                <input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm" value="<%=emp.getEmpName() %>"  maxlength="100"  placeholder="Enter Employee name"   onclick="return trim(this)" onchange="return trim(this)">
 			                <%-- <input name="empname" required="required" id="empname" style="text-transform:uppercase" value="<%=employee.getEmpName() %>" maxlength="75" placeholder="Enter Employee name" class="form-control input-sm" onclick="return trim(this)" onkeyup="return trim(this)" /> --%>
 			            </div>			
 			            <div class="col-md-2">			
@@ -131,7 +133,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <select class="form-control select2 " name="Designationid" required="required" data-live-search="true" >
 								<%if(desiglist!=null && desiglist.size()>0){
 					                for(EmployeeDesig desig : desiglist){ %>
-				                    <option value="<%=desig.getDesigId() %>" <%if(employee.getDesignationId()==desig.getDesigId()){ %>selected  <%} %> ><%= desig.getDesignation()%></option>
+				                    <option value="<%=desig.getDesigId() %>" <%if(emp.getDesigId()==desig.getDesigId()){ %>selected  <%} %> ><%= desig.getDesignation()%></option>
 					                <%}
 				                } %>  
 							</select>
@@ -148,7 +150,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <label>Division <span class="mandatory">*</span></label>
 			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
-									<option value="<%=division.getDivisionId()%>"<%if(employee!=null   && division.getDivisionId()==employee.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>
+									<option value="<%=division.getDivisionId()%>"<%if(employee!=null   && division.getDivisionId()==emp.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>
 								<%} %>			
 			
 			                </select>
@@ -203,7 +205,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 						<div class=" col-md-2 ">
 			                <label>Email<span class=" mandatory ">*</span></label>
 			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
-			                  value="<%if(employee!=null && employee.getEmail()!=null){%><%=employee.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
+			                  value="<%if(emp!=null && emp.getEmail()!=null){%><%=emp.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
 			                    onchange=" return trim(this) ">
 			            </div>
 			            
@@ -487,7 +489,8 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-					<input type="hidden" value="<%=employee.getEmpId()%>" name="EmpId">
+					<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
+					<input type="hidden" value="<%=employee.getEmpDetailsId() %>" name="EmpDeatailsId">
 					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="return validateform();" value="submit" >SUBMIT</button>
 			    	</div>
 			    </div> 

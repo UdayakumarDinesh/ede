@@ -93,7 +93,7 @@ th,td
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
 	
 	
-	Employee employee = (Employee)request.getAttribute("employee");
+	Object[] employee = (Object[])request.getAttribute("employee");
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
@@ -187,9 +187,11 @@ th,td
 											<th>Grade</th>
 										</tr>
 										<tr>
-											<td class="text-blue" style="text-transform: capitalize;" ><%=employee.getEmpName() %></td>
-											<td class="text-blue" ><%=employee.getEmpNo() %></td>
-											<td class="text-blue" ><%=employee.getPayLevelId() %></td>
+
+											<td class="text-blue" style="text-transform: capitalize;"><%=employee[2] %></td>
+											<td class="text-blue" ><%=employee[1] %></td>
+											<td class="text-blue" ><%=employee[9] %></td>
+
 										</tr>
 									</tbody>
 								</table>
@@ -214,9 +216,9 @@ th,td
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
-											<td><b>Basic Pay : </b> &#8377;<span class="text-blue" ><%=employee.getBasicPay() %></span>  </td>
-											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="text-blue" ><%=employee.getPayLevelId() %></span></td>
-											<td colspan="2"><b>Ph.No. : </b> <span class="text-blue" ><%=employee.getPhoneNo()%></span></td>
+											<td><b>Basic Pay : </b> &#8377;<span class="text-blue" ><%=employee[4] %></span>  </td>
+											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="text-blue" ><%=employee[9] %></span></td>
+											<td colspan="2"><b>Ph.No. : </b> <span class="text-blue" ><%=employee[8]%></span></td>
 										</tr>
 									</tbody>
 								</table>

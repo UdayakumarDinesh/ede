@@ -165,7 +165,8 @@ public class LeaveController {
 			 }
 			 req.setAttribute("EmpNo",EmpNo);
 			 req.setAttribute("EmpList", service.EmployeeList());
-			 req.setAttribute("officerdetails", service.EmpDetails(EmpNo));
+			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
+			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
 			 req.setAttribute("purposeList", service.purposeList());
 	    }
