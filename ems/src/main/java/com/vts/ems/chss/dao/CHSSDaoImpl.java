@@ -1751,14 +1751,17 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
-	private static final String CLAIMCLIST="";
+
 	@Override
-	public List<Object[]> GetClaimsList()throws Exception
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO GetClaimsList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
-			Query query = manager.createNativeQuery(CLAIMCLIST);
+			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate );");
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			query.setParameter("empid", empid);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

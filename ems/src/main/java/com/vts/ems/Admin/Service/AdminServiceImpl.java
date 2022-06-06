@@ -140,6 +140,7 @@ public class AdminServiceImpl implements AdminService{
 			test.setTestMainId(TestSub.getTestMainId());
 			test.setTestName(TestSub.getTestName());
 			test.setTestRate(TestSub.getTestRate());
+			test.setTestCode(TestSub.getTestCode());
 			test.setModifiedBy(TestSub.getModifiedBy());
 			test.setModifiedDate(TestSub.getModifiedDate());
 		return dao.EditTestSub(test);

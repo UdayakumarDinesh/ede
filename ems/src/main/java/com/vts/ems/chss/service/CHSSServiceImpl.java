@@ -1711,9 +1711,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> GetClaimsList()throws Exception
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
 	{
-		return dao.GetClaimsList();
+		return dao.GetClaimsList(fromdate , todate , empid);
 	}
 	
 }
