@@ -136,7 +136,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			  <%}%>
 			  </div>
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			   <input type="hidden" name="employeeid" value="<%=employeedetails[0]%>"/>
+			   <input type="hidden" name="empid" value="<%=employeedetails[0]%>"/>
 			  </form>
 			 
 			 

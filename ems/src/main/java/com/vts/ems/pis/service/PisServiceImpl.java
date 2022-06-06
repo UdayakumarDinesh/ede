@@ -157,14 +157,8 @@ public class PisServiceImpl implements PisService
 	public long EmployeeAddSubmit(Employee emp,EmployeeDetails empd) throws Exception
 	{
 		emp.setCreatedDate(sdtf.format(new Date()));
-		long empno = dao.getempno();
-		long intemp = empno + 1;
-		String empid2 = String.valueOf(intemp);
-		String empid = StringUtils.leftPad(empid2, 7, "0");
-		emp.setEmpNo(empid);
 		long result=dao.EmployeeAddSubmit(emp);
-		if(result>0) {
-			empd.setEmpNo(empid);
+		if(result>0) {		
 			empd.setCreatedDate(sdtf.format(new Date()));
 			dao.EmployeeDetailsAddSubmit(empd);
 		}
@@ -181,7 +175,7 @@ public class PisServiceImpl implements PisService
 		employee.setEmail(emp.getEmail());
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setDesigId(emp.getDesigId());
-		
+		employee.setEmpNo(emp.getEmpNo());
 	     return dao.EmployeeEditSubmit(employee);
 	}
 	
@@ -193,6 +187,7 @@ public class PisServiceImpl implements PisService
 		
 		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
 		employee.setTitle(emp.getTitle());
+		employee.setEmpNo(emp.getEmpNo());
 		employee.setDOB(emp.getDOB());
 		employee.setDOA(emp.getDOA());
 		employee.setDOJL(emp.getDOJL());
@@ -235,6 +230,12 @@ public class PisServiceImpl implements PisService
 	{
 		return dao.getEmployee(empid);
 	}
+	
+	@Override
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
+	{
+		return dao.getEmployeeDetailsData(empno);
+	}
 	@Override
 	public int PunchcardList(String puchcard)throws Exception{
 		return dao.PunchcardList(puchcard);
@@ -267,13 +268,13 @@ public class PisServiceImpl implements PisService
 	        }     
 	    }
 	@Override
-	public int saveEmpImage(MultipartFile file ,String empid ,String uploadpath)throws Exception{
+	public int saveEmpImage(MultipartFile file ,String empno ,String uploadpath)throws Exception{
 		int result =0;
 		try {
 			
 			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
-			 String fileName=empid+"."+OriginalFilename[1];
-			  result =dao.PhotoPathUpdate(fileName,empid);
+			 String fileName=empno+"."+OriginalFilename[1];
+			  result =dao.PhotoPathUpdate(fileName,empno);
 			 saveFile(uploadpath,fileName,file);
 		} catch (Exception e) {
 			e.printStackTrace();

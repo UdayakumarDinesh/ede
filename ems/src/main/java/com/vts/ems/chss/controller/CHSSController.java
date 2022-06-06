@@ -2713,5 +2713,20 @@ public class CHSSController {
 		
 	}
 	
-	
+	@RequestMapping(value = "ClaimsList.htm" , method =RequestMethod.POST )
+	public String CHSSClaimsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimsList.htm "+Username);
+		try {
+			List<Object[]> claimslist  =service.GetClaimsList();
+			
+			return "";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimsList.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 }
