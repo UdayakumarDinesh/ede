@@ -38,6 +38,7 @@ import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -197,11 +198,16 @@ public class PisController {
 			String phoneno = req.getParameter("PhoneNo");
 			String EmpStatusDate = req.getParameter("EmpStatusDate");
 			String PermPassNo = req.getParameter("PermPassNo");
+			Employee employee=new Employee();
+			employee.setEmail(email);
+			employee.setDivisionId(Long.parseLong(divisionid));
+			employee.setDesigId(Long.parseLong(Designationid));
+			employee.setEmpName(empname);
+			employee.setSrNo(Long.parseLong("0"));
+            
 			
 			
-			Employee emp= new Employee();
-			emp.setEmpName(WordUtils.capitalizeFully(empname.trim()));
-			emp.setDesignationId(Integer.parseInt(Designationid));
+			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
 		
 			// date conversion
@@ -253,7 +259,6 @@ public class PisController {
 			emp.setDOR(dor);
 			emp.setCategoryId(Integer.parseInt(category));
 			emp.setGroupId(0);
-			emp.setDivisionId(Integer.parseInt(divisionid));
 			emp.setCadreId(Integer.parseInt(caderid));
 			emp.setCatId(catcode);
 			emp.setGender(gender);
@@ -271,7 +276,6 @@ public class PisController {
 			}
 			emp.setQuarters(gq);
 			emp.setPH(ph);
-			emp.setEmail(email);
 			emp.setHomeTown(HomeTown);
 			emp.setServiceStatus(ServiceStatus);
 			emp.setPayLevelId(Integer.parseInt(payLevel));
@@ -287,7 +291,7 @@ public class PisController {
 			
 			
 			
-			Long value=service.EmployeeAddSubmit(emp);
+			Long value=service.EmployeeAddSubmit(employee,emp);
 			if (value != 0) {
 				redir.addAttribute("result", "Employee details added successfully");
 			} else {
@@ -310,7 +314,7 @@ public class PisController {
 		try {
 			
 			String empid=req.getParameter("empid");
-			
+			req.setAttribute("emp", service.getEmp(empid));
 			req.setAttribute("employee", service.getEmployee(empid));			
 			req.setAttribute("desiglist", service.DesigList());
 			req.setAttribute("piscategorylist", service.PisCategoryList());
@@ -363,11 +367,16 @@ public class PisController {
 			String idMark = req.getParameter("idMark");
 			String empstatus = req.getParameter("empstatus");
 			String PermPassNo = req.getParameter("PermPassNo");
-			String EmpId = req.getParameter("EmpId");
 			String phno = req.getParameter("PhoneNo");
-			Employee emp = new Employee();
-			emp.setEmpName(WordUtils.capitalizeFully(empname.trim()));
-			emp.setDesignationId(Integer.parseInt(Designationid));
+			String EmpDeatailsId=req.getParameter("EmpDeatailsId");
+			String EmpId= req.getParameter("EmpId");
+			
+			Employee employee=new Employee();
+
+
+			
+			
+			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
 			
 			// date conversion
@@ -419,7 +428,6 @@ public class PisController {
 			emp.setDOR(dor);
 			emp.setCategoryId(Integer.parseInt(category));
 			emp.setGroupId(0);
-			emp.setDivisionId(Integer.parseInt(divisionid));
 			emp.setCadreId(Integer.parseInt(caderid));
 			emp.setCatId(catcode);
 			emp.setGender(gender);
@@ -437,7 +445,6 @@ public class PisController {
 			}
 			emp.setQuarters(gq);
 			emp.setPH(ph);
-			emp.setEmail(email);
 			emp.setHomeTown(HomeTown);
 			emp.setServiceStatus(ServiceStatus);
 			emp.setPayLevelId(Integer.parseInt(payLevel));
@@ -449,9 +456,12 @@ public class PisController {
 			emp.setModifiedBy(Username);
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			emp.setEmpId(Integer.parseInt(EmpId));
-			
-			long value =service.EmployeeEditSubmit(emp);
+			emp.setEmpDetailsId(Long.parseLong(EmpDeatailsId));
+
+			long value =service.EmployeeEditSubmit(employee);
+			if(value>0) {
+			value =service.EmployeeDetailsEditSubmit(emp);
+			}
 			if (value != 0) {
 				redir.addAttribute("result", "Employee details Edited Successfully");
 			} else {

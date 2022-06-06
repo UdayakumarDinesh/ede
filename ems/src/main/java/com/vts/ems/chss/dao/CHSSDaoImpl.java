@@ -84,25 +84,23 @@ public class CHSSDaoImpl implements CHSSDao {
 		return result;
 	}
 	
+	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empid=:empid ";
 	
 	@Override
-	public Employee getEmployee(String empid) throws Exception
+	public  Object[] getEmployee(String empid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getEmployee");
-		Employee employee= null;
+		Query query =manager.createNativeQuery(EMPLOYEE);
+		Object[] result = null;
+		query.setParameter("empid", empid);
+		
 		try {
-			CriteriaBuilder cb= manager.getCriteriaBuilder();
-			CriteriaQuery<Employee> cq= cb.createQuery(Employee.class);
-			Root<Employee> root= cq.from(Employee.class);					
-			Predicate p1=cb.equal(root.get("EmpId") , Long.parseLong(empid));
-			cq=cq.select(root).where(p1);
-			TypedQuery<Employee> allquery = manager.createQuery(cq);
-			employee= allquery.getResultList().get(0);
-			
+			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return employee;
+		
+		return result;
 	}
 	
 	

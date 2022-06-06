@@ -33,7 +33,7 @@ public interface CHSSService
 {
 
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
-	public Employee getEmployee(String empid) throws Exception;
+	public  Object[] getEmployee(String empid) throws Exception;
 	public Object[] familyMemberData(String familydetailsid) throws Exception;
 	public List<CHSSTreatType> CHSSTreatTypeList() throws Exception;
 	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception;

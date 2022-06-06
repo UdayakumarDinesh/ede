@@ -71,7 +71,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public Employee getEmployee(String empid) throws Exception
+	public  Object[] getEmployee(String empid) throws Exception
 	{
 		return dao.getEmployee(empid);
 	}
@@ -879,11 +879,11 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public double getOtherItemRemAmount(String empid,String otheritemid,double itemcost) throws Exception
 	{
-		Employee emp =dao.getEmployee(empid);
+		Object[] emp =dao.getEmployee(empid);
 		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
 		long basicpay=0;
-		if(emp.getBasicPay()!=null) {
-			 basicpay=emp.getBasicPay();
+		if(emp[4]!=null) {
+			 basicpay=Long.parseLong(emp[4].toString());
 		}
 		
 		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(otheritemid,basicpay);
@@ -1025,8 +1025,8 @@ public class CHSSServiceImpl implements CHSSService {
 				claim.setCHSSStatusId(3);
 			
 				notify.setEmpId(claim.getEmpId());
-				Employee emp= dao.getEmployee(claim.getEmpId().toString());				
-				if( emp.getEmail()!=null) { 	Email =  emp.getEmail();		}
+				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
+				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
 				notify.setNotificationUrl("CHSSDashboard.htm");
 				claim.setPOId(0L);
 				claim.setVOId(0L);

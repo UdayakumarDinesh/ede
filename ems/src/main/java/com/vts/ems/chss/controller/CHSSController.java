@@ -1480,7 +1480,7 @@ public class CHSSController {
 			String chssapplyid = req.getParameter("chssapplyid");
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
-			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			Object[] employee = service.getEmployee(chssapplicationdata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
@@ -1522,7 +1522,7 @@ public class CHSSController {
 			
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
-			Employee employee = service.getEmployee(chssapplicationdata[1].toString());
+			Object[] employee = service.getEmployee(chssapplicationdata[1].toString());
 			
 			
 			
@@ -1805,7 +1805,7 @@ public class CHSSController {
 			
 			
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
-			Employee employee = service.getEmployee(chssapplydata[1].toString());
+			Object[] employee = service.getEmployee(chssapplydata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			

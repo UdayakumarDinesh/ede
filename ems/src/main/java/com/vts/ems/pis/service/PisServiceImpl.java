@@ -37,6 +37,7 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
@@ -153,7 +154,7 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
-	public long EmployeeAddSubmit(Employee emp) throws Exception
+	public long EmployeeAddSubmit(Employee emp,EmployeeDetails empd) throws Exception
 	{
 		emp.setCreatedDate(sdtf.format(new Date()));
 		long empno = dao.getempno();
@@ -161,24 +162,42 @@ public class PisServiceImpl implements PisService
 		String empid2 = String.valueOf(intemp);
 		String empid = StringUtils.leftPad(empid2, 7, "0");
 		emp.setEmpNo(empid);
-		return dao.EmployeeAddSubmit(emp);
+		long result=dao.EmployeeAddSubmit(emp);
+		if(result>0) {
+			empd.setEmpNo(empid);
+			empd.setCreatedDate(sdtf.format(new Date()));
+			dao.EmployeeDetailsAddSubmit(empd);
+		}
+		
+		return result;
+		
 	}
 	
 	@Override
 	public long EmployeeEditSubmit(Employee emp) throws Exception
 	{
-		
-		Employee employee = dao.getEmployee(String.valueOf(emp.getEmpId()));
-	
+		Employee employee = dao.getEmp(String.valueOf(emp.getEmpId()));
 		employee.setEmpName(emp.getEmpName());
-		employee.setDesignationId(emp.getDesignationId());
+		employee.setEmail(emp.getEmail());
+		employee.setDivisionId(emp.getDivisionId());
+		employee.setDesigId(emp.getDesigId());
+		
+	     return dao.EmployeeEditSubmit(employee);
+	}
+	
+	
+	
+	@Override
+	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception
+	{
+		
+		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
 		employee.setTitle(emp.getTitle());
 		employee.setDOB(emp.getDOB());
 		employee.setDOA(emp.getDOA());
 		employee.setDOJL(emp.getDOJL());
 		employee.setDOR(emp.getDOR());
 		employee.setCategoryId(emp.getCategoryId());
-		employee.setDivisionId(emp.getDivisionId());
 		employee.setCadreId(emp.getCadreId());
 		employee.setCatId(emp.getCatId());
 		employee.setGender(emp.getGender());
@@ -193,7 +212,6 @@ public class PisServiceImpl implements PisService
 		employee.setUID(emp.getUID());
 		employee.setQuarters(emp.getQuarters());
 		employee.setPH(emp.getPH());
-		employee.setEmail(emp.getEmail());
 		employee.setHomeTown(emp.getHomeTown());
 		employee.setServiceStatus(emp.getServiceStatus());
 		employee.setPayLevelId(emp.getPayLevelId());
@@ -208,12 +226,12 @@ public class PisServiceImpl implements PisService
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
 		employee.setModifiedDate(sdtf.format(new Date()));
 		employee.setPhoneNo(emp.getPhoneNo());
-		return dao.EmployeeEditSubmit(employee);
+		return dao.EmployeeDetailsEditSubmit(employee);
 	}
 	
 	
 	@Override
-	public Employee getEmployee(String empid) throws Exception
+	public EmployeeDetails getEmployee(String empid) throws Exception
 	{
 		return dao.getEmployee(empid);
 	}
@@ -661,5 +679,11 @@ public class PisServiceImpl implements PisService
 				return null;
 			}
 			
+		}
+
+		@Override
+		public Employee getEmp(String empid) throws Exception {
+			
+			return dao.getEmp(empid);
 		}
 }
