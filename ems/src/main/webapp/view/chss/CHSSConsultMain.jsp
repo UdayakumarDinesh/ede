@@ -81,7 +81,7 @@ table th:last-child{
 
 <%
 	
-	Employee employee = (Employee )request.getAttribute("employee") ;
+	Object[] employee = (Object[] )request.getAttribute("employee") ;
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
@@ -187,12 +187,12 @@ table th:last-child{
 							<%}else{ %>
 								<div class="col-4">
 								<div class="row" style="padding:5px; ">
-									<b> Patient Name : &nbsp;</b><%=employee.getEmpName() %>
+									<b> Patient Name : &nbsp;</b><%=employee[2] %>
 								</div>
 								
 								<div class="row" style="padding:5px; ">
 									<b>Relation : &nbsp;</b>SELF
-									<input type="hidden" name="patientid" value="<%=employee.getEmpId()%>">
+									<input type="hidden" name="patientid" value="<%=employee[0]%>">
 									<input type="hidden" name="relationid" value="0">
 								</div>
 								</div>

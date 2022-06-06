@@ -87,7 +87,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                    </div></center>
                     <%} %>
  <%
- 
+    List<Object[]> empdetails=(List<Object[]>)request.getAttribute("empdetails");
     List<Object[]> officerdetails=(List<Object[]>)request.getAttribute("officerdetails");
     List<Object[]> emplist=(List<Object[]>)request.getAttribute("EmpList");
     String empNo=(String)request.getAttribute("EmpNo");
@@ -219,29 +219,15 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                                          </div>
 	                                           <div id="sp" class="text-center" style=" "></div>
                                 
-                                  <!-- Recc -->    <%if(officerdetails!=null){ 
-                       for(Object[] obj:officerdetails){ 
+                                  <!-- Recc -->  
+                     <%if(empdetails!=null&&empdetails.size()>0){ 
+                       for(Object[] obj:empdetails){ 
                        %>       <div class="row" style="margin-top:0px;" >
                                 <div class="col-sm-1"></div>
-	                            <div class="col-sm-10" style="margin-top:10px; text-align: right; color: green;"><b class="h5">Leave Application For</b> <b class="h6" style="margin-left: 10px;"><%=obj[1] %></b>, <small> <%=obj[2] %> </small> </div>  
+	                            <div class="col-sm-4" style="margin-top:10px; text-align: left;; color: green;"><b class="h5">Leave Application </b>  </div>  
+	                            <div class="col-sm-6" style="margin-top:10px; text-align: right; color: green;"> <b class="h6" style="margin-left: 10px;"><%=obj[1] %></b>, <small> <%=obj[2] %> </small> </div>
 	                            </div>         
-                               <hr style="margin: 0rem 0rem 0.45rem 0rem  !important">
-                                <div class="row" style="margin-top:0px;" >
-                                <div class="col-sm-1"></div>
-	                            <div class="col-sm-2" style="text-align: right;" align="right">
-	                                <b  style="font-size:small; ">Recc Officer:</b>
-	                            </div>
-	                            <div class="col-sm-3" style="text-align: left;" align="left">
-	                               <b style="font-size:small ; "><%=obj[3] %></b>
-	                            </div>
-	                            <div class="col-sm-2"  	style="text-align: right;">
-	                                <b style="font-size:small ;">Sanc Officer :</b>
-	                            </div>
-	                            <div class="col-sm-3" style="text-align: left;">
-	                               <b style="font-size:small; "><%=obj[4] %></b>
-	                               </div>
-	                            <input type="hidden" id="IsAssigned"	value="<%=obj[4] %>" />
-	                           </div>
+                              
 	                  <%}} %>
 	                    <!-- / Recc -->
 	                  <!-- // reset apply and check button -->
@@ -432,9 +418,32 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    </div> 
 	                              
 	                              </form>
-	                               
-                         
-                        <br>
+                        <%if(officerdetails!=null&&officerdetails.size()>0){ 
+                       for(Object[] obj:officerdetails){ 
+                       %>              
+                               
+                                <div class="row" style="margin-top:10px;margin-bottom:10px;" >
+                                <div class="col-sm-1"></div>
+	                            <div class="col-sm-2" style="text-align: right;" align="right">
+	                                <b  style="font-size:small; ">Recc Officer:</b>
+	                            </div>
+	                            <div class="col-sm-3" style="text-align: left;" align="left">
+	                               <b style="font-size:small ; "><%=obj[3] %></b>
+	                            </div>
+	                            <div class="col-sm-2"  	style="text-align: right;">
+	                                <b style="font-size:small ;">Sanc Officer :</b>
+	                            </div>
+	                            <div class="col-sm-3" style="text-align: left;">
+	                               <b style="font-size:small; "><%=obj[4] %></b>
+	                               </div>
+	                            <input type="hidden" id="IsAssigned"	value="<%=obj[4] %>" />
+	                           </div>
+	                  <%}}else{ %>
+	                  <div class="row" style="margin-top:0px;" >
+                       
+	                   <div  class="col-sm-12"  style="margin-top:10px;margin-bottom:10px; text-align: center; color: green;"><b class="h5">Recommending Officers Not Assigned</b></div>
+	                   </div>
+	                  <%} %>
                         </div>
                         </div>
                         
@@ -445,7 +454,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			<div class="col-md-3">
 			<div class="card">
 	            <div class="card-header">
-	                <span class="h6">Recent Applied</span>
+	                <span class="h6">Recent Applied Leave</span>
 	            </div>
 	            <div class="card-body">
 	                <ul class="list-group">
@@ -457,7 +466,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	            <br>
 	            <div class="card">
 	            <div class="card-header">
-	                <span class="h6">Recent Leaves</span>
+	                <span class="h6">Recent Sanctioned Leave</span>
 	            </div>
 	            <div class="card-body">
 	                <ul class="list-group">

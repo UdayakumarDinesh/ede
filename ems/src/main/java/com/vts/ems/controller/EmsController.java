@@ -321,7 +321,7 @@ public class EmsController {
 	 @RequestMapping(value = "LoginPage/EmpanneledHospital.htm", method = RequestMethod.GET)
 		public void EmpanneledHospital(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 
-			String path = req.getServletContext().getRealPath("/manuals/" + "Circulars.pdf");
+			String path = req.getServletContext().getRealPath("/manuals/" + "EmpanelledHospitals.pdf");
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));

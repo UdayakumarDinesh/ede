@@ -30,6 +30,7 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
@@ -47,7 +48,7 @@ public class PisDaoImpl implements PisDao {
 	@PersistenceContext
 	EntityManager manager;
 
-	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,e.dob FROM employee e, employee_desig ed WHERE e.isactive=1 AND e.designationid=ed.desigid ORDER BY e.srno DESC";
+	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,eds.dob FROM employee e, employee_desig ed,employee_details eds WHERE  e.empno=eds.empno  AND   e.isactive=1 AND e.desigid=ed.desigid ORDER BY e.srno DESC";
 	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  e.Title,  e.dob,  e.DOJL,  e.DOA,  e.DOR,  e.gender,  e.BloodGroup,  e.maritalStatus,  e.Religion,  e.pan,  e.punchcard,  e.uid,  e.email,  e.designationid,  e.divisionid,  e.groupid,  e.SBIAccNo,  e.CategoryId,  ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,e.hometown, e.quarters ,e.photo, e.phoneno FROM  employee e,  division_master dm,  division_group dg,  employee_desig ed WHERE e.isactive = 1  AND e.designationid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid  AND empid = :empid ORDER BY e.srno DESC";
 	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard";
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
@@ -255,6 +256,34 @@ public class PisDaoImpl implements PisDao {
 		}
 		return emp.getEmpId();
 	}
+	
+	@Override
+	public long EmployeeDetailsAddSubmit(EmployeeDetails emp) throws Exception
+	{
+		logger.info(new Date() +"Inside EmployeeDetailsDetailsAddSubmit()");
+
+		try {
+			manager.persist(emp);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp.getEmpDetailsId();
+	}
+
+	@Override
+	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception {
+		logger.info(new Date() + "Inside EmployeeDetailsEditSubmit()");
+		try {
+			manager.merge(emp);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp.getEmpDetailsId();
+	}
 
 	@Override
 	public long getempno() throws Exception {
@@ -271,18 +300,33 @@ public class PisDaoImpl implements PisDao {
 		return result;
 
 	}
-
+	
 	@Override
-	public Employee getEmployee(String empid) throws Exception {
+	public Employee getEmp(String empid) throws Exception {
 		logger.info(new Date() + "Inside PisCaderList()");
 		Employee employee = null;
 		try {
+			Query query = manager.createQuery("FROM Employee WHERE EmpId=:empid AND IsActive='1'");
+			query.setParameter("empid",Long.parseLong(empid));
+			employee =(Employee)query.getSingleResult();
+			
+	       } catch (Exception e) {
+		   e.printStackTrace();
+	     }
+	return employee;
+	}
+
+	@Override
+	public EmployeeDetails getEmployee(String empid) throws Exception {
+		logger.info(new Date() + "Inside PisCaderList()");
+		EmployeeDetails employee = null;
+		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
-			CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
-			Root<Employee> root = cq.from(Employee.class);
-			Predicate p1 = cb.equal(root.get("EmpId"), Long.parseLong(empid));
+			CriteriaQuery<EmployeeDetails> cq = cb.createQuery(EmployeeDetails.class);
+			Root<EmployeeDetails> root = cq.from(EmployeeDetails.class);
+			Predicate p1 = cb.equal(root.get("EmpDetailsId"), Long.parseLong(empid));
 			cq = cq.select(root).where(p1);
-			TypedQuery<Employee> allquery = manager.createQuery(cq);
+			TypedQuery<EmployeeDetails> allquery = manager.createQuery(cq);
 			employee = allquery.getResultList().get(0);
 
 		} catch (Exception e) {

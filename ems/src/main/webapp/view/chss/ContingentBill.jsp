@@ -185,7 +185,7 @@ th,td
 				
 					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 				<%} %>
-				<td style="padding-top:5px; padding-bottom: 5px;">
+				<td style="padding-top:5px; padding-bottom: 5px;text-transform: capitalize;">
 					<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
 						<%=obj[12] %> (<%=obj[14] %>)
 					<%}else{ %>
@@ -241,8 +241,8 @@ th,td
 						{
 							if(auth[1].toString().equalsIgnoreCase("VO")){
 						%>
-								<%=auth[2] %><br>
-								<%=auth[4] %>
+								<span style="text-transform: capitalize;"> <%=auth[2] %><br>
+								<%=auth[4] %></span>
 							
 						<% }} %>
 			
@@ -257,8 +257,8 @@ th,td
 				{
 					if(auth[1].toString().equalsIgnoreCase("AO")){
 				%>
-						<%=auth[2] %><br>
-						<%=auth[4] %>
+						<span style="text-transform: capitalize;"><%=auth[2] %><br>
+						<%=auth[4] %></span>
 					
 				<% }} %>
 				</td>
@@ -273,8 +273,8 @@ th,td
 					{
 						if(auth[1].toString().equalsIgnoreCase("CEO")){
 					%>
-							<%=auth[2] %><br>
-							CEO, <%=labdata[0] %>
+							<span style="text-transform: capitalize;"><%=auth[2] %><br>
+							CEO, <%=labdata[0] %></span>
 						
 					<% }} %></b>
 				</span>

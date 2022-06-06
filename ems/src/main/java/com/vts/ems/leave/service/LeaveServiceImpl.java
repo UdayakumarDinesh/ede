@@ -163,6 +163,12 @@ public class LeaveServiceImpl implements LeaveService{
 		return Result;
 	}
 
+	@Override
+	public List<Object[]> OfficerDetails(String EmpNo) throws Exception {
+		
+		return dao.OfficerDetails(EmpNo);
+	}
+
 
 	
 	}
