@@ -10,15 +10,12 @@
 		<title>CHSS</title>
 		<jsp:include page="../static/header.jsp"></jsp:include>
 	<style>
-			.highcharts-figure,
-	.highcharts-data-table table {
+	
+	.highcharts-figure,	.highcharts-data-table table {
 	    min-width: 310px;
 	    max-width: 800px;
-	    margin: 1em auto;
 	}
-	
-	
-	
+
 	.highcharts-data-table table {
 	    font-family: Verdana, sans-serif;
 	    border-collapse: collapse;
@@ -58,47 +55,87 @@
 	/* counter css */
 	
 	.counter{
-	    color: #36AE7C;
-	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
-	    font-family: 'Poppins', sans-serif;
-	    text-align: center;
-	    padding: 12px 15px 35px;
-	    margin: 0 auto;
-	    border: 18px solid #36AE7C;
-	    border-radius: 100% 100%;
-	    box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+   	max-width: 200px; 
+    margin: 0 auto;
+	}
+	.counter .counter-content{
+	    height: 200px;
+	    padding: 55px 0 0;
+	    margin: 0 0 10px;
+	    position: relative;
+	    z-index: 1;
+	}
+	.counter .counter-content:before,
+	.counter .counter-content:after{
+	    content: '';
+	    background: linear-gradient(to right bottom,#e9e9e9,#fff);
+	    border-radius: 50% 50% 0 50%;
+	    border: 4px solid #fff;
+	    box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
+	    position: absolute;
+	    left: 7px;
+	    top: 7px;
+	    right: 7px;
+	    bottom: 7px;
+	    z-index: -1;
+	}
+	.counter .counter-content:after{
+	    background: linear-gradient(to right bottom, transparent 50%, #EA237E 51%);
+	    height: 70%;
+	    width: 70%;
+	    border: none;
+	    border-radius: 0;
+	    box-shadow: none;
+	    right: 0;
+	    bottom: 0;
+	    left: auto;
+	    top: auto;
+	    z-index: -2;
+	}
+	.counter .counter-icon{
+	    color:#999;
+	    font-size: 27px;
+	    line-height: 27px;
+	    position: absolute;
+	    bottom: 15px;
+	    right: 15px;
 	}
 	.counter .counter-value{
-	    color: #fff;
-	    font-size: 30px;
+	    color:#fff;
+	    background: #EA237E;
+	    font-size: 25px;
 	    font-weight: 600;
-	    display: block;
-	    margin: 0 0 25px;
+	    line-height: 6rem;
+	   	width: 47%;
+    	max-width: 56%;
+	    /* height: 95px; */
+	    border-radius: 50px;
+	    display: inline-block;
 	}
 	.counter h3{
-	    font-size: 18px;
-	    font-weight: 600;
+	    color: #888;
+	    font-size: 17px;
+	    font-weight: 700;
 	    text-transform: uppercase;
 	    margin: 0;
 	}
-	.counter.red{
-	    color: #7D1E6A;
-	    background: linear-gradient(to bottom, #7D1E6A 49%, transparent 50%);
-	    border-color: #7D1E6A;
+	.counter.purple .counter-value{ background: #6D4B87; }
+	.counter.purple .counter-content:after{
+	    background: linear-gradient(to right bottom, transparent 50%, #835AA8 51%);
 	}
-	.counter.orange{
-	    color: #fb8603;
-	    background: linear-gradient(to bottom, #fb8603 49%, transparent 50%);
-	    border-color: #fb8603;
+	.counter.blue .counter-value{ background: #187498; }
+	.counter.blue .counter-content:after{
+	    background: linear-gradient(to right bottom, transparent 50%, #187498 51%);
 	}
-	.counter.blue{
-	    color: #187498;
-	    background: linear-gradient(to bottom, #187498 49%, transparent 50%);
-	    border-color: #187498;
-	}
-	@media screen and (max-width:990px) {
+	.counter.skyblue .counter-value{ background: #36AE7C; ; }
+	.counter.skyblue .counter-content:after{
+	    background: linear-gradient(to right bottom, transparent 50%, #36AE7C  51%);
+	}\
+	@media screen and (max-width:990px){
 	    .counter{ margin-bottom: 40px; }
 	}
+
 	
 	/* second card counter */
 	
@@ -166,17 +203,49 @@
   }
   
   @media only screen and (max-width: 1600px){
-  	
+
+	.counter .counter-value{
+		line-height: 4rem;
+		font-size: 20px;
+		width: 36%;
+		
+	}
+	
+	.counter .counter-content{
+		height: 125px;
+		padding: 37px 0 0;
+	}
+
+	.counter{
+   	max-width: 165px; 
+	}
+
   	.counter h3{
   		font-size: 12px !important;
   	}
   }
+
 	
+	
+	@media (max-width: 600px) {
+	    .highcharts-figure,
+	    .highcharts-data-table table {
+	        width: 100%;
+	    }
+	
+	}
+	
+	#container, #container3, #container4, #container-speed {
+    height: 300px;
+    min-width: 310px;
+    max-width: 800px;
+}
+  
 	</style>
 
 	</head>
 
-	<body>
+	<body  >
 	<%	
 	
 		List<Object[]> emplogintypelist     = (List<Object[]> )session.getAttribute("emplogintypelist");
@@ -192,7 +261,7 @@
 	
 	%>
 	
-	<div class="card-header page-top" style="padding: 0.25rem 1.25rem;">
+	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
 		<div class="row">
 			<div class="col-md-3">
 				<h5 style="padding-top: 0.5rem">MAIN DASHBOARD </h5>
@@ -221,35 +290,51 @@
 			<div class="container-fluid">
 			  <div class="row">
 			  
-			    <div class="col">
+			    <div class="col-md-6">
+			   		<div class="container">
+					    <div class="row">
+					        <div class="col-md-4 col-sm-6">
+					            <div class="counter purple">
+					                <div class="counter-content ">
+					                    <div class="counter-icon">
+					                        <i class="fa fa-globe"></i>
+					                    </div>
+					                    <span class="counter-value"><%=TotalCountData[2] %></span>
+					                </div>
+					                <h3>TOTAL</h3>
+					            </div>
+					        </div>
+					        
+					        <div class="col-md-4 col-sm-6">
+					            <div class="counter blue">
+					                <div class="counter-content">
+					                    <div class="counter-icon">
+					                        <i class="fa-solid fa-clock"></i>
+					                    </div>
+					                    <span class="counter-value"><%=TotalCountData[0] %></span>
+					                </div>
+					                <h3>PENDING</h3>
+					            </div>
+					        </div>
+					        <div class="col-md-4 col-sm-6">
+					            <div class="counter skyblue">
+					                <div class="counter-content">
+					                    <div class="counter-icon">
+					                        <i class="fa-solid fa-circle-check"></i>
+					                    </div>
+					                    <span class="counter-value"><%=TotalCountData[1] %></span>
+					                </div>
+					                <h3>APPROVED</h3>
+					            </div>
+					        </div>
+					        
+					    </div>
+					</div>
+			    </div>
 			    	
-					<div class="row">
-				        <div class="col-md-3 col-sm-6">
-				            <div class="counter red">
-				                <span class="counter-value"><%=TotalCountData[2] %></span>
-				                <h3>Total</h3>
-				            </div>
-				        </div>
-				        <div class="col-md-3 col-sm-6">
-				            <div class="counter blue">
-				                <span class="counter-value"><%=TotalCountData[0] %></span>
-				                <h3>Pending</h3>
-				            </div>
-				        </div>
-				        <div class="col-md-3 col-sm-6">
-				            <div class="counter ">
-				                <span class="counter-value"><%=TotalCountData[1] %></span>
-				                <h3>Approved</h3>
-				            </div>
-				        </div>
-				    </div>
-				    <hr>
-				    <br>
-				</div>
-				
-			    <div class="col" style="margin-top: -7px">
-			    
-			    	<div class="container">
+			   	<div class="col-md-6">
+			   	
+			   		<div class="container" style="margin-bottom: -9px !important">
 					    <div class="row justify-content-end" >
 					    	
 					    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
@@ -259,7 +344,7 @@
 								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
 	
 								<%
-								String[] arr = new String[]{ "Z", "K", "V" , "W" };
+								String[] arr = new String[]{ "Z", "K", "V" , "W" , "F" };
 								if( ArrayUtils.contains(arr,  logintype) ){ %>
 				    				<input type="checkbox" <%if(isself.equalsIgnoreCase("Y")) {%> checked <%} %> data-toggle="toggle" data-width="100" id="isself" data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
 			    				<%} %>
@@ -272,7 +357,7 @@
 			    		<br>
 			    	</div>
 			    	
-			    	<div class="container" style="margin-bottom: 22px">
+			    	<div class="container" >
 					    <div class="row">
 					    <div class="col-md-6">
 					      <div class="card-counter primary">
@@ -292,57 +377,58 @@
 					  </div>
 					  
 					</div>
-					
-					<hr>
-					
-			    </div>
-			    
-			    <div class="w-100"></div>
-			    
-			    <div class="col"><figure class="highcharts-figure">
-					    <div id="container" style="display:block;" ></div>
-					    <div id="container3" style="display:block;" ></div>
-					</figure>
-				</div>
-					
-			    <div class="col">
-			    	<figure class="highcharts-figure">
-    					<div id="container2"  ></div>
-					</figure>
-					 <div id="container4"></div>
-			    </div>
-			    
-			   
+			   	
+			   	</div> 	
 
-			    
-			    
+				</div>
+				
+			   <hr>
+			   
+			   <div class="row">
+			   		<div class="col-md-6">
+			   			<div id="container" style="display:block;" ></div>
+					    <div id="container3" style="display:block;" ></div>
+			   		</div>
+			   		<div class="col-md-6">
+			   			<div id="container4"  style="display: block"></div>
+					    <div id="container-speed" style="display: block" ></div>
+			   		</div>
+			   </div>
+			   
 			  </div>
 			</div>
 	
 		</div>
-	</div>
+	 
+	 
+	
+
+	
 	 
 <script>
 
 
-$(document).ready(function(){
 
-	var selfvalue = '<%=isself%>';
-	console.log(selfvalue)
+$(document).ready(function(){
 	
+	window.onbeforeunload = function() { return "Your work will be lost."; };
+	
+	var selfvalue = '<%=isself%>';
 	if(selfvalue == 'Y'){
 		$('#container').css("display" , "block");
+		$('#container4').css("display" , "block");
 		$('#container3').css("display" , "none");
+		$('#container-speed').css("display" , "none");
+		
 	}else if(selfvalue== 'N'){
 		$('#container').css("display", "none");
+		$('#container4').css("display", "none");
 		$('#container3').css("display" , "block");
+		$('#container-speed').css("display" , "block");
 	}
 	
 	
 })
-
-
-
 
 $('#isself').change(function(){
 	
@@ -352,7 +438,6 @@ $('#isself').change(function(){
 		$('#dateform').submit();
 		
 	}else if($(this).prop("checked")==false){
-		console.log("asdas")
 		$('#isselfvalue').val('N')
 		$('#dateform').submit();
 	}
@@ -366,12 +451,18 @@ $('#isself').change(function(){
 /* Counts Graph */	
 
 	Highcharts.chart('container', {
+		
+		   chart: {
+		        type: 'column',
+		    },
 	    title: {
 	        text: 'Claim Summary'
 	    },
 	    
+	    
+	    
 	    xAxis: {
-	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[4]%>' ,   <%}%>   ] 
+	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[1]%>' ,   <%}%>   ] 
 	   
 	    },
 	    yAxis: {
@@ -381,7 +472,7 @@ $('#isself').change(function(){
 	        }
 	    },
 	    labels: {
-	        items: [{
+	       /*  items: [{
 	            html: 'Amount Settled',
 	            style: {
 	                left:'465px',
@@ -393,7 +484,7 @@ $('#isself').change(function(){
 	                fontSize:'10px'
 	                
 	            }
-	        }]
+	        }] */
 	    },
 	    colors: [
 	        '#187498',
@@ -408,51 +499,6 @@ $('#isself').change(function(){
 	        name: 'Approved',
 	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[7]%> ,   <%}%>   ]
 	    }
-	    
-	  
-	  
-	    
-	    /* , 
-	    {
-	        type: 'spline',
-	        name: 'Average',
-	        data: [3, 2.67, 3, 6.33, 3.33],
-	        marker: {
-	            lineWidth: 2,
-	            lineColor: Highcharts.getOptions().colors[3],
-	            fillColor: 'white'
-	        }
-	    } */
-	    
-	    , 
-	    
-	    {
-	        type: 'pie',
-	        name: 'Amount Approved',
-	        data: [
-	        
-	        <%  int i=0; 
-	        for(Object[] obj : amountdataindividual) { %>	
-	        {
-	            name: '<%=obj[4]%>',
-	            y:<%=obj[7]%>,
-	            color: Highcharts.getOptions().colors[<%=i%>] 
-	        }
-	        ,
-	        <% i++; }%>
-	        
-	        
-	        ],
-	        
-	        
-	        center: [480, 50],
-	        size: 100,
-	        showInLegend: false,
-	        dataLabels: {
-	            enabled: false
-	        }, 
-	    }
-	    
 	    ],
 	    
 	    credits: {
@@ -463,27 +509,24 @@ $('#isself').change(function(){
                 condition: {
                     maxWidth: 500
                 },
+                // Make the labels less space demanding on mobile
                 chartOptions: {
-                    legend: {
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        layout: 'horizontal'
+                    xAxis: {
+                        labels: {
+                            formatter: function () {
+                                return this.value.charAt(0);
+                            }
+                        }
                     },
                     yAxis: {
                         labels: {
                             align: 'left',
                             x: 0,
-                            y: -5
+                            y: -2
                         },
                         title: {
-                            text: null
+                            text: ''
                         }
-                    },
-                    subtitle: {
-                        text: null
-                    },
-                    credits: {
-                        enabled: false
                     }
                 }
             }]
@@ -492,8 +535,135 @@ $('#isself').change(function(){
 
 
 
-	/********************** Amount Graph ***********************************/	
+	/********************** Amount Gauge Unit ***********************************/	
 
+	var gaugeOptions = {
+    chart: {
+        type: 'solidgauge',
+        marginTop : 30,
+    },
+
+    title: null,
+
+    pane: {
+        size: '100%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: true
+    },
+
+    // the value axis
+    yAxis: {
+        stops: [
+            [0.1, '#DF5353'], // green
+            [0.5, '#DDDF0D'], // yellow
+            [0.9, '#55BF3B'] // red 
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: 70
+        },
+        labels: {
+            y: 16,
+          
+        }
+    },
+
+	    plotOptions: {
+	        solidgauge: {
+	            dataLabels: {
+	                y: 5,
+	                borderWidth: 0,
+	                useHTML: true,
+	                
+	            }
+	        }
+	    }
+	};
+	
+	// The amount gauge
+
+	var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: <%=amountdata[0]%>  ,
+        tickWidth: 0,
+        tickPositions: [0 , <%=amountdata[0]%> ],
+        title: {
+            text: 'Amount Settled',
+          
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Amount Settled',
+        data: [<%=amountdata[1]%> ],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">&#8377; {y}</span><br/>' +
+                '<span style="font-size:12px;opacity:0.4"></span>' +
+                '</div>'
+        },
+        tooltip: {
+            valuePrefix: ' &#8377;'
+        }
+    }],
+    
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            // Make the labels less space demanding on mobile
+            chartOptions: {
+                xAxis: {
+                    labels: {
+                        formatter: function () {
+                            return this.value.charAt(0);
+                        }
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -2
+                    },
+                    title: {
+                        text: ''
+                    }
+                }
+            }
+        }]
+    }
+
+}));
+
+
+	/* ****************************************** Pie Chart Amount Graph *************************************************** */
+	
 	// Radialize the colors
 	Highcharts.setOptions({
 	    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
@@ -511,33 +681,31 @@ $('#isself').change(function(){
 	    })
 	});
 
-// Build the chart
-	Highcharts.chart('container2', {
+	// Build the chart
+	Highcharts.chart('container4', {
 	    chart: {
 	        plotBackgroundColor: null,
 	        plotBorderWidth: null,
 	        plotShadow: false,
-	        type: 'pie'
+	        type: 'pie',
+
 	    },
 	    title: {
-	        text: 'Total Amount Claimed vs Total Amount Settled'
+	        text: 'Total Amount Settled'
 	    },
 	    tooltip: {
-	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        pointFormat: '{series.name}: <b>&#8377; {point.y:,.2f}</b>'
 	    },
-	    accessibility: {
-	        point: {
-	            valueSuffix: '%'
-	        }
-	    },
+	    
 	    plotOptions: {
 	        pie: {
 	            allowPointSelect: true,
 	            cursor: 'pointer',
 	            dataLabels: {
 	                enabled: true,
-	                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                format: '<b>{point.name}</b>:&#8377; {point.y:,.2f}',
 	                connectorColor: 'silver'
+	                
 	            },
 	            colors: [
 	                '#187498', 
@@ -552,16 +720,25 @@ $('#isself').change(function(){
 	        }
 	    },
 
-		
 	    series: [{
 	        name: 'Share',
 	        data: [
-	           
-	        	 <%if(!amountdata[0].toString().equalsIgnoreCase("0.00")){%>{ name: 'Total Amount Claimed', y: <%=amountdata[0]%> },
-	            { name: 'Total Amount Settled', y: <%=amountdata[1]%> },
-	            <%}%>
-	         
-	        ] 
+		        
+		        <% if(!amountdata[1].toString().equalsIgnoreCase("0.00")){  int j=0; 
+		        for(Object[] obj : amountdataindividual) { %>	
+		        {
+		            name: '<%=obj[1]%>',
+		            y:<%=obj[7]%>,
+		            color: Highcharts.getOptions().colors[<%=j%>] 
+		        }
+		        ,
+		        <% j++; 
+		        }
+		        }
+		        %>
+		        
+		        
+		        ],
 	    }],
 	    credits: {
             enabled: false
@@ -571,32 +748,30 @@ $('#isself').change(function(){
                 condition: {
                     maxWidth: 500
                 },
+                // Make the labels less space demanding on mobile
                 chartOptions: {
-                    legend: {
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        layout: 'horizontal'
+                    xAxis: {
+                        labels: {
+                            formatter: function () {
+                                return this.value.charAt(0);
+                            }
+                        }
                     },
                     yAxis: {
                         labels: {
                             align: 'left',
                             x: 0,
-                            y: -5
+                            y: -2
                         },
                         title: {
-                            text: null
+                            text: ''
                         }
-                    },
-                    subtitle: {
-                        text: null
-                    },
-                    credits: {
-                        enabled: false
                     }
                 }
             }]
         }
 	});
+	
 	
 
 
@@ -605,7 +780,7 @@ $('#isself').change(function(){
 	Highcharts.chart('container3', {
 
     chart: {
-        type: 'column'
+        type: 'column',
     },
 
     colors: [
@@ -671,27 +846,24 @@ $('#isself').change(function(){
             condition: {
                 maxWidth: 500
             },
+            // Make the labels less space demanding on mobile
             chartOptions: {
-                legend: {
-                    align: 'center',
-                    verticalAlign: 'bottom',
-                    layout: 'horizontal'
+                xAxis: {
+                    labels: {
+                        formatter: function () {
+                            return this.value.charAt(0);
+                        }
+                    }
                 },
                 yAxis: {
                     labels: {
                         align: 'left',
                         x: 0,
-                        y: -5
+                        y: -2
                     },
                     title: {
-                        text: null
+                        text: ''
                     }
-                },
-                subtitle: {
-                    text: null
-                },
-                credits: {
-                    enabled: false
                 }
             }
         }]
