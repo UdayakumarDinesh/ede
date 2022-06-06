@@ -801,7 +801,7 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
-	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
+	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage ,a.empid FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
 	@Override
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
@@ -1238,6 +1238,20 @@ public class AdminDaoImpl implements AdminDao{
 			logger.info(new Date() + "Inside DoctorsAdd()");
 			try {
 				manager.persist(doctor);
+				manager.flush();
+				return (long)doctor.getDoctorId();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0l;
+			}
+		}
+		
+		@Override
+		public long DoctorsEdit(DoctorList doctor)throws Exception
+		{
+			logger.info(new Date() + "Inside DoctorsEdit()");
+			try {
+				manager.merge(doctor);
 				manager.flush();
 				return (long)doctor.getDoctorId();
 			} catch (Exception e) {

@@ -50,6 +50,7 @@ public interface AdminService {
 	public int DeleteRequestMsg(String requestid ,String id)throws Exception;
 	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception;
 	public long EmpRequestNotification(EMSNotification notification)throws Exception;
+	public long EmpRequestNotification1(EMSNotification notification)throws Exception;
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
 	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception;

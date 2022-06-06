@@ -277,6 +277,11 @@ public class AdminServiceImpl implements AdminService{
 		}
 		
 	}
+	@Override
+	public long EmpRequestNotification1(EMSNotification notification)throws Exception
+	{
+		return  dao.AddRequestMsgNotification(notification);
+	}
 	
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
@@ -638,7 +643,9 @@ public class AdminServiceImpl implements AdminService{
 		{
 			DoctorList doctor = dao.GetDoctor(doc.getDoctorId());
 			doctor.setDoctorName(doc.getDoctorName());
-	
-			return dao.DoctorsAdd( doctor);
+			doctor.setQualification(doc.getQualification());
+			doctor.setCreatedBy(doc.getCreatedBy());
+			doctor.setModifiedDate(doc.getModifiedDate());
+			return dao.DoctorsEdit( doctor);
 		}
 }

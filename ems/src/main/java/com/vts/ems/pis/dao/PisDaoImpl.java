@@ -52,7 +52,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee WHERE PunchCard=:punchCard";
 	private static final String PHOTOPATH = "select photo from employee where empid=:empid";
 	private static final String PHOTOUPDATE = "update employee set photo=:Path where empid=:EmpId";
-	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype";
+	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.designationid=d.desigid AND a.logintype=lt.logintype order by a.loginid desc";
 	private static final String EMPLIST = "SELECT empid,empname FROM employee e WHERE e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";

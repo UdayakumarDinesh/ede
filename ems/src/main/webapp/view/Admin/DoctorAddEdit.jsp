@@ -73,11 +73,11 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 							<div id="UsernameSubmit">
 							<%if(list!=null){ %>
 							<input type="hidden" name="doctorId" value="<%=list.getDoctorId()%>">
-							<input type="hidden" name="Action" value="EDITDOCTOR">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
+							<input type="hidden" name="action" value="EDITDOCTOR">
+								   <button type="submit" class="btn btn-sm submit-btn" onclick ="return confirm('Are You Sure To Update!')" >SUBMIT</button>
 									<%}else{ %>
-									<input type="hidden" name="Action" value="ADDDOCTOR">
-									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
+									<input type="hidden" name="action" value="ADDDOCTOR">
+									<button type="submit" class="btn btn-sm submit-btn" onclick ="return confirm('Are You Sure To Submit!')" >SUBMIT</button>
 									<%} %>
 							</div>
 						</div>
@@ -89,4 +89,35 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 </div>
 
 </body>
+<script type="text/javascript">
+
+$('#DoctorName').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z \s]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter Alphabate');
+    return false;
+    }
+});
+
+$('#Qualification').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z \s]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter Alphabate');
+    return false;
+    }
+});
+
+</script>
 </html>

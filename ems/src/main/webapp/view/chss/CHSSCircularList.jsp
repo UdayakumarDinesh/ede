@@ -216,7 +216,7 @@
 <script type="text/javascript">
 
 $("#myTable1").DataTable({
-    "lengthMenu": [5,10,20, 50, 75, 100],
+    "lengthMenu": [10,20, 50, 75, 100],
     "pagingType": "simple",
     "language": {
 	      "emptyTable": "No Record Found"
