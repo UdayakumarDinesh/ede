@@ -1766,5 +1766,20 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
+	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed WHERE e.DesigId = ed.DesigId ORDER BY e.srno DESC";
+	@Override
+	public List<Object[]> EmployeesList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EmployeesList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEESLIST);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	
 }

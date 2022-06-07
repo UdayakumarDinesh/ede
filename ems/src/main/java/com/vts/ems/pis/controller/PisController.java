@@ -122,8 +122,7 @@ public class PisController {
             if(empdata!=null && empdata[3]!=null) {
             	basevalue=service.getimage(empdata[3].toString());
             }
-            		
-            		
+            		            		
             
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
