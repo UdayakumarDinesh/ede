@@ -84,10 +84,7 @@ public class PisController {
 		logger.info(new Date() +"Inside PisAdminEmpList.htm "+Username);		
 		try {
 			List<Object[]> EmployeeDetailsList =new ArrayList<Object[]>();
-			if(LoginType.equalsIgnoreCase("A")) 
-			{
-				EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);
-			}			
+			EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);				
 			req.setAttribute("EmployeeDetailsList", EmployeeDetailsList);
 			return "pis/EmployeeList";
 		}catch (Exception e) {
@@ -117,11 +114,11 @@ public class PisController {
 			Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
 			List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
 			List<Object[]> familydetails = service.getFamilydetails(empid);
-			
-			
+						
             String basevalue=null;
             if(empdata!=null && empdata[3]!=null) {
             	basevalue=service.getimage(empdata[3].toString());
+
             }        		
             
 			req.setAttribute("empid", empid);

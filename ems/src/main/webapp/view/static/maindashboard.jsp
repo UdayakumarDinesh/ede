@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="org.bouncycastle.util.Arrays"%>
 <%@page import="org.apache.commons.lang3.ArrayUtils"%>
 <%@page import="java.util.List"%>
@@ -259,6 +260,7 @@
 		String isself   = (String)request.getAttribute("isself");
 		List<Object[]> monthlywisedata = (List<Object[]>)request.getAttribute("monthlywisedata");
 	
+		IndianRupeeFormat nfc=new IndianRupeeFormat();
 	%>
 	
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
@@ -362,7 +364,7 @@
 					    <div class="col-md-6">
 					      <div class="card-counter primary">
 					        <i class="fa fa-code-fork"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=amountdata[0] %> <%}else {%>0 <%} %></span>
+					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[0].toString() ))))%> <%}else {%>0 <%} %></span>
 					        <span class="count-name">Total Amount Claimed</span>
 					      </div>
 					    </div>
@@ -370,7 +372,7 @@
 					    <div class="col-md-6">
 					      <div class="card-counter success">
 					        <i class="fa fa-database"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=amountdata[1] %> <%}else {%>0 <%} %></span>
+					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[1].toString() ))))%> <%}else {%>0 <%} %></span>
 					        <span class="count-name">Total Amount Settled </span>
 					      </div>
 					    </div>
@@ -411,7 +413,6 @@
 
 $(document).ready(function(){
 	
-	window.onbeforeunload = function() { return "Your work will be lost."; };
 	
 	var selfvalue = '<%=isself%>';
 	if(selfvalue == 'Y'){
@@ -618,7 +619,7 @@ $('#isself').change(function(){
 
     series: [{
         name: 'Amount Settled',
-        data: [<%=amountdata[1]%> ],
+        data: [<%=Math.round(Double.parseDouble(amountdata[1].toString() ))%> ],
         dataLabels: {
             format:
                 '<div style="text-align:center">' +

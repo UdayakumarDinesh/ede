@@ -289,16 +289,12 @@ th,td
 										<td style="border:none;">
 											<h4 style="text-decoration: underline;">Remarks :</h4> 
 										</td>
-										<td style="border:none;">
-											
-										</td>
+										
 									</tr>
 									<%for(Object[] obj : contingentremarks){%>
 									<tr>
 										<td style="border:none;width: 20%;">
 											<%=obj[3] %>&nbsp; :
-										</td>
-										<td style="border:none;" class="text-blue" >
 											<%=obj[4] %>
 										</td>
 										

@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.io.File"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -229,6 +230,7 @@
 	Object[] employee = (Object[])request.getAttribute("employee") ;
 	List<Object[]> empchsslist = (List<Object[]>)request.getAttribute("empchsslist");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String Fromdate=(String)request.getAttribute("Fromdate");
 	String Todate=(String)request.getAttribute("Todate");
@@ -501,10 +503,10 @@
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=df.format(obj[24])%></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[24].toString()))))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
 										<%if("14".equals(obj[9].toString())){ %>
-											&#8377; <%=df.format(obj[25])%>
+											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[25].toString()))))%>
 										<%}else{ %>
 											-
 										<%} %>

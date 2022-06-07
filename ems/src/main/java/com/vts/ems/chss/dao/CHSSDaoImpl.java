@@ -40,7 +40,6 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.model.Employee;
 
 
 @Transactional
@@ -1656,7 +1655,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 
-	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.desigid FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.desigid FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
+	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
 	@Override
 	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
 	{
@@ -1673,9 +1672,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
-	
-	
-	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.desigid FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.desigid = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND TRIM(cat.Remark)<>'' AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate ASC";
+	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.designation FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.desigid = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND TRIM(cat.Remark)<>'' AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate ASC";
 	@Override
 	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
 	{
@@ -1762,6 +1759,21 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
 			query.setParameter("empid", empid);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed WHERE e.DesigId = ed.DesigId ORDER BY e.srno DESC";
+	@Override
+	public List<Object[]> EmployeesList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EmployeesList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEESLIST);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

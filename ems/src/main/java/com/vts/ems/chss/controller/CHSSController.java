@@ -88,9 +88,6 @@ public class CHSSController {
 	@Autowired
 	AdminService adminservice;
 	
-	@Autowired
-	private PisService pisservice;
-	
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
 	
@@ -2726,20 +2723,32 @@ public class CHSSController {
 			String fromdate = (String)req.getParameter("fromdate");
 			String todate = (String) req.getParameter("todate");
 			String empid = (String)req.getParameter("empid");
-			List<Object[]> claimslist  = new ArrayList<Object[]>();
-			
-			if(fromdate==null && todate==null && empid==null) {
-				fromdate = DateTimeFormatUtil.getFinancialYearStartDateSqlFormat();
-				todate   = DateTimeFormatUtil.getFinancialYearEndDateSqlFormat();
+			LocalDate today = LocalDate.now();
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-01";
 				empid="0";
-				
-			}else {
-				
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
-			  req.setAttribute("emplist", pisservice.GetEmployeeList());
-			claimslist  =service.GetClaimsList(fromdate , todate , empid);
-			req.setAttribute("claimslist", claimslist);
-		req.setAttribute("todate", todate);
+		
+			req.setAttribute("empid", empid);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("emplist", service.EmployeesList());
+			req.setAttribute("claimslist", service.GetClaimsList(fromdate , todate , empid));
 			return "chss/CHSSClaimsList";
 		} catch (Exception e) {
 			e.printStackTrace();

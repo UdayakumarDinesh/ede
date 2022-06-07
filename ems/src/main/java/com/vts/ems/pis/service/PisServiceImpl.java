@@ -12,13 +12,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +37,8 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
-import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
@@ -668,7 +666,7 @@ public class PisServiceImpl implements PisService
 				//if(empdata!=null) {
 				//	resetpwd = ""+empdata[2];
 				//}else {
-					resetpwd = "4321";
+					resetpwd = "1234";
 				//}
 				 
 				String pwd=encoder.encode(resetpwd);
