@@ -32,5 +32,6 @@ public interface EmsDao
 	public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate, int Month) throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
-
+	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
+	
 }

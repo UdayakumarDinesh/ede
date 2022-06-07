@@ -94,4 +94,7 @@ public interface PisDao {
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception;
 	public List<Object[]> GetEmployeeList()throws Exception;
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
+	public Object[] GetEmpDetails(String empid)throws Exception;
+	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception;
+	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception;
 }

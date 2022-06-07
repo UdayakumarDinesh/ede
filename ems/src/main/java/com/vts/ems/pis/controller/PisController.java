@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,9 +122,7 @@ public class PisController {
             String basevalue=null;
             if(empdata!=null && empdata[3]!=null) {
             	basevalue=service.getimage(empdata[3].toString());
-            }
-            		
-            		
+            }        		
             
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
@@ -207,9 +206,9 @@ public class PisController {
 			Employee employee=new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
-			System.out.println("Designationid         :"+Designationid);
+			
 			employee.setDesigId(Long.parseLong(Designationid));
-			employee.setEmpName(empname);
+			employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
 			employee.setSrNo(Long.parseLong("0"));
             employee.setEmpNo(PunchCardNo.trim());
 			employee.setIsActive(1);
@@ -380,7 +379,7 @@ public class PisController {
 			
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
-				employee.setEmpName(empname);
+				employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
 				employee.setDesigId(Long.parseLong(Designationid));
 				employee.setEmail(email);
 				employee.setDivisionId(Long.parseLong(divisionid));
@@ -742,47 +741,46 @@ public class PisController {
     	   String name = (String)req.getParameter("memberName");
     	   String dob  = (String)req.getParameter("dob");
     	   String relation = (String)req.getParameter("relation");
-//    	   String benId =  (String)req.getParameter("benId");
-//    	   String status = (String)req.getParameter("status");
-//    	   String statusdate = (String)req.getParameter("statusDate");
-//    	   String bloodgroup = (String)req.getParameter("bloodgroup");
-//    	   String Phone = (String)req.getParameter("PH");
-//    	   String medicaldep = (String)req.getParameter("medicaldep");
-//    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
-//    	   String ltcdep  = (String)req.getParameter("ltcdep");
-//    	   String LTC = (String)req.getParameter("LTC");
-//    	   String marriagestatus = (String)req.getParameter("married_unmarried");
-//    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String gender = (String)req.getParameter("Gender");
     	   String empid = (String)req.getParameter("empid");
     	   
     	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(name);
+    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
     	   details.setGender(gender);
     	   details.setFamily_status_id(1);
-//    	   details.setCghs_ben_id(benId);
-//    	   details.setFamily_status_id(Integer.parseInt(status));
-//    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
-//    	   details.setBlood_group(bloodgroup);
-//    	   details.setPH(Phone);
-//    	   
-//    	   details.setMed_dep(medicaldep);
-//    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
-//    	   details.setLtc_dep(ltcdep);
-//    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
-//    	   details.setMar_unmarried(marriagestatus);
-//    	   details.setEmp_unemp(emp_unemp);
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone);  	   
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
     	   details.setEmpid(empid);
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
     	   details.setCreatedDate(sdf.format(new Date()));
-//    	   if(emp_unemp.equalsIgnoreCase("Y")) {
-//    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
-//    	   }
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+    	   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
     		   redir.addAttribute("result", "Family Member Saved Successfully");	
@@ -806,46 +804,43 @@ public class PisController {
     	   String name = (String)req.getParameter("memberName");
     	   String dob  = (String)req.getParameter("dob");
     	   String relation = (String)req.getParameter("relation");
-//    	   String benId =  (String)req.getParameter("benId");
-//    	   String status = (String)req.getParameter("status");
-//    	   String statusdate = (String)req.getParameter("statusDate");
-//    	   String bloodgroup = (String)req.getParameter("bloodgroup");
-//    	   String Phone = (String)req.getParameter("PH");
-//    	   String medicaldep = (String)req.getParameter("medicaldep");
-//    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
-//    	   String ltcdep  = (String)req.getParameter("ltcdep");
-//    	   String LTC = (String)req.getParameter("LTC");
-//    	   String marriagestatus = (String)req.getParameter("married_unmarried");
-//    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String empid = (String)req.getParameter("empid");
     	   String familyid = (String)req.getParameter("familyid");
     	   String gender   = (String)req.getParameter("Gender");
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(name);
+    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
-//    	   details.setCghs_ben_id(benId);
-//    	   details.setFamily_status_id(Integer.parseInt(status));
-//    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
-//    	   details.setBlood_group(bloodgroup);
-//    	   details.setPH(Phone); 	  
-//    	   details.setMed_dep(medicaldep);
-//    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
-//    	   details.setLtc_dep(ltcdep);
-//    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
-//    	   details.setMar_unmarried(marriagestatus);
-//    	   details.setEmp_unemp(emp_unemp);
-//    	   if(emp_unemp.equalsIgnoreCase("Y")) {
-//		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
-//	   }
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone); 	  
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+	       }
     	   details.setGender(gender);
     	   details.setEmpid(empid);
     	   details.setModifiedBy(Username);
-    	   details.setModifiedDate(sdtf.format(new Date()));
-    	   
-    	   
-    	   
+    	   details.setModifiedDate(sdtf.format(new Date()));  
     	   details.setFamily_details_id(Long.parseLong(familyid));
 
     	   Long result = service.EditFamilyDetails(details);
@@ -1453,5 +1448,36 @@ public class PisController {
 			
 	}
 	
+	@RequestMapping(value="UpdateEmployeeSeniority.htm" , method=RequestMethod.POST)
+	public String UpdateSeniority(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside UpdateEmployeeSeniority.htm "+Username);		
+		try {
+			String action = (String)req.getParameter("action");
+			if("UpdateSeniority".equalsIgnoreCase(action)) {
+				String empid = (String)req.getParameter("empid");
+				Object[]  empdetails = service.GetEmpDetails(empid); 
+				req.setAttribute("empdetails", empdetails);
+				return "pis/UpdateSeniority";
+			}else {
+				String empid= req.getParameter("empid");
+				String newSeniorityNumber=req.getParameter("UpdatedSrNo");
+		        int result= service.UpdateSeniorityNumber(empid,newSeniorityNumber);
+				   if(result>0) {
+						redir.addAttribute("result", "Emlpoyee Seniority Number Updated Successfully ");
+					}
+					else {
+						redir.addAttribute("resultfail", "Emlpoyee Seniority Number Updated Unsuccessful");
+					}					
+				   return "redirect:/PisAdminEmpList.htm";
+			}
+		} catch (Exception e) {
+			redir.addAttribute("resultfail", "Internal Error!");
+			e.printStackTrace();
+			 return "redirect:/PisAdminEmpList.htm";
+		}
+		
+	}
 
 }

@@ -29,5 +29,5 @@ public interface EMSMainService {
 	public List<Object[]> GetDoctorList()throws Exception;
 	public List<Object[]> MonthlyWiseDashboardData(String FromDate , String ToDate) throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
-
+	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
 }

@@ -58,11 +58,11 @@
 						
 						<div class="col-md-2" >
 						<div class="form-group">
-						<label><b>Valid Till </b><span class="mandatory"	style="color: red;">*</span></label>
+						<label><b>Circular Date</b><span class="mandatory"	style="color: red;">*</span></label>
 						<%if(circular!=null && circular.getToDate()!=null){%>
-						 <input type="text" style="width: 90%;" class="form-control input-sm mydate1" readonly="readonly" value="<%if(circular!=null && circular.getToDate()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(circular.getToDate().toString().trim())%><%}%>" placeholder=""  id="todate1" name="todate"  required="required"  >
+						 <input type="text" style="width: 90%;" class="form-control input-sm mydate1" readonly="readonly" value="<%if(circular!=null && circular.getCircularDate()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(circular.getCircularDate().toString().trim())%><%}%>" placeholder=""  id="todate1" name="circulardate"  required="required"  >
 						<%}else{%>
-						 <input type="text" style="width: 90%;" class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="todate" name="todate"  required="required"  >
+						 <input type="text" style="width: 90%;" class="form-control input-sm mydate" readonly="readonly" value="" placeholder=""  id="todate" name="circulardate"  required="required"  >
 						<%}%>
 						</div>
 						</div>

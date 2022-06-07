@@ -148,7 +148,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div>
 			            
 			         <div class="col-md-2">
-			                <label>Division <span class="mandatory">*</span></label>
+			                <label>Department <span class="mandatory">*</span></label>
 			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"<%if(employee!=null   && division.getDivisionId()==emp.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>

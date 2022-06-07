@@ -440,5 +440,20 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return model.getPasswordHistoryId(); 
 		}
+		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName FROM chss_empanelledhospital WHERE isactive='1'";
+		@Override
+		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
+		{
+			 logger.info(new Date() +"Inside DAO GetEmpanelledHostpitalList()");	
+			 try {
+					Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
 	
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html >
+<!DOCTYPE html>
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -10,29 +10,16 @@
 <c:set var="contPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
-<title>CHSS Doctors List</title>
+<meta charset="ISO-8859-1">
+<title>Empanelled Hospital</title>
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
 <spring:url value="/webresources/css/LoginPage.css" var="loginPageCss" />
 <link href="${loginPageCss}" rel="stylesheet" />
 
-<style type="text/css">
-.group
-{
-    text-align: center;
-    color: #3498DB;
-    text-shadow: 0px 0px 1px #3A3B3C;
-    text-decoration: underline;
-}
-
-</style>
-
 </head>
 <body>
 <%
-	List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
+	List<Object[]> Empanelled = (List<Object[]> )request.getAttribute("Empanelled") ;
 
 %>
 
@@ -60,20 +47,20 @@
   		
   		
   		<ul class="nav nav-tabs justify-content-end ">
-			<li class="nav-item">
-			    <a class="nav-link " href="login.jsp"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
-			 </li> 
+					  <li class="nav-item">
+					    <a class="nav-link " href="login.jsp"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
+					   </li> 
 					  <li class="nav-item">
 					    <a class="nav-link" href="CHSSPolicy.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link " href="Circulars.htm"   ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
-					  <li class="nav-item">  
-					     <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					  <li class="nav-item">
+					     <a class="nav-link " href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li> 
 					    <li class="nav-item">
-					    <a class="nav-link" href="EmpanneledHospital.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
+					    <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
@@ -86,7 +73,7 @@
 			
 			<div class="card-header" style="height: 4rem" >
 	           <div class="row ">
-						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Doctors</span></div>
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Empanelled Hospital</span></div>
 					    <div class="col-md-6">
 						 
 						</div>
@@ -104,18 +91,18 @@
 									<tr>
 										<th style=" text-align:center; width: 15%"> SlNo. </th>
 										<th style="width: 50%"> Name </th>
-										<th style="width: 35%"> Qualification </th>									
+																
 									</tr>
 								</thead>
 								<tbody>
-									<%if(doctorlist!=null && doctorlist.size()>0){ 
+									<%if(Empanelled!=null && Empanelled.size()>0){ 
 										int slno=0;
-										for(Object[] obj : doctorlist){
+										for(Object[] obj : Empanelled){
 									%>
 										<tr>
 											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
 											<td style="text-align:justify; width: 50%"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 35%"><%=obj[2]%></td>
+											
 										</tr>
 								<%} }%>
 								</tbody>
@@ -181,9 +168,7 @@
     <!--/#footer-->
 	
 </body>
-
 <script type="text/javascript">
-
 $("#myTable1").DataTable({
     "lengthMenu": [10,20, 50, 75, 100],
     "pagingType": "simple",
@@ -192,6 +177,7 @@ $("#myTable1").DataTable({
 	    }
 
 });
+
 
 </script>
 </html>
