@@ -351,7 +351,7 @@ public class EmsController {
 
 		 logger.info(new Date() +"Inside DoctorsList.htm ");
 			try 
-			{				System.out.println("ygfrebgfdkyujgrvgdfjhuydvgjhdfbg ");
+			{				
 				 List<Object[]> doctorlist = new ArrayList<Object[]>();
 				 doctorlist = service.GetDoctorList();
 	        	 req.setAttribute("doctorlist",doctorlist);
@@ -366,7 +366,7 @@ public class EmsController {
 	 @RequestMapping(value = "LoginPage/Eligibility.htm", method = RequestMethod.GET)
 		public void Eligibility(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 
-			String path = req.getServletContext().getRealPath("/manuals/" + "Eligibility.pdf");
+			String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
@@ -465,5 +465,63 @@ public class EmsController {
 
 		}
 	 
+	@RequestMapping(value = "UserManualDoc.htm", method = RequestMethod.GET)
+	public void UserManualDoc(HttpServletRequest req, HttpSession ses, HttpServletResponse res)	throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside UserManualDoc.htm "+UserId);		
+		try {
+			String path = req.getServletContext().getRealPath("/manuals/" + "User-Manual-chss.pdf");
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+	
+			File my_file = new File(path);
+	
+			OutputStream out = res.getOutputStream();
+			FileInputStream in = new FileInputStream(my_file);
+			byte[] buffer = new byte[4096];
+			int length;
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			in.close();
+			out.flush();
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside UserManualDoc.htm "+UserId, e);
+		}
+	}
+	
+	@RequestMapping(value = "WorkFlow.htm", method = RequestMethod.GET)
+	public void WorkFlow(HttpServletRequest req, HttpSession ses, HttpServletResponse res)	throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside WorkFlow.htm "+UserId);		
+		try {
+
+		String path = req.getServletContext().getRealPath("/manuals/" + "Work-Flow-chss.pdf");
+
+		res.setContentType("application/pdf");
+		res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
+
+		File my_file = new File(path);
+
+		OutputStream out = res.getOutputStream();
+		FileInputStream in = new FileInputStream(my_file);
+		byte[] buffer = new byte[4096];
+		int length;
+		while ((length = in.read(buffer)) > 0) {
+			out.write(buffer, 0, length);
+		}
+		in.close();
+		out.flush();
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside WorkFlow.htm "+UserId, e);
+		}
+	}
 
 }
