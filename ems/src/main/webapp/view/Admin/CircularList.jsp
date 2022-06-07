@@ -90,7 +90,7 @@ String todate = (String)request.getAttribute("todate");
 										<th>Select</th>
 										<th>Description </th>
 										<th>Circular Date</th>
-										<th>Valid Till</th>
+										
 										<th> Action</th>
 									</tr>
 								</thead>
@@ -101,10 +101,9 @@ String todate = (String)request.getAttribute("todate");
 										<tr>
 											<td style="text-align:center;  width: 5%;"> <input type="radio" name="circulatId" value="<%=obj[0]%>"> </td>
 											<td style="text-align:justify; width: 70%;"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%> <%} %></td>
+											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>								
 											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[5] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[4] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download"></i>
 										    </button>
 											<%}else{%>--<%}%>

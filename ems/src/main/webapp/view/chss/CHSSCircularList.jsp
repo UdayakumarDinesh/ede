@@ -125,7 +125,6 @@
 										<th style="width: 10%">SlNo.</th>
 										<th style="width: 50%" >Description </th>
 										<th style="width: 20%" >Circular Date</th>
-										<th style="width: 20%">Valid Till</th>
 										<th style="width: 20%"> Download</th>
 									</tr>
 								</thead>
@@ -138,9 +137,8 @@
 											<td style="text-align:center;  width: 5%;"> <%=++slno%>. </td>
 											<td style="text-align:justify; width: 70%;"><%=obj[1]%></td>
 											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%> <%} %></td>
 											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[5] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[4] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download"></i>
 										    </button>
 											<%}else{%>--<%}%>

@@ -24,7 +24,6 @@ public class CircularList implements Serializable {
 	private String Path;
 	private String OriginalName;
 	private String CircularDate;
-	private String ToDate;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

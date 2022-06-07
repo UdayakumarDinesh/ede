@@ -1193,7 +1193,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate ,todate ,OriginalName FROM chss_circular_list WHERE (( CircularDate BETWEEN  :fromdate AND :todate ) OR( todate BETWEEN :fromdate AND :todate )OR ( CircularDate > :fromdate AND todate < :todate ))  ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate  ,OriginalName FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY circularid DESC";
 	
 	@Override
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception

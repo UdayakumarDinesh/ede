@@ -54,10 +54,7 @@ public class LoginController
 	    
 	     
 		   	 try {
-		   		 String    todate=DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now().plusDays(7));
-	   			 String    fromdate= DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-
-	   			List<Object[]> 	 circulatlist = service.CirculatList(fromdate ,todate);
+	   			List<Object[]> 	 circulatlist = service.CirculatList();
 	   			req.setAttribute("circularlist", circulatlist);
 			} catch (Exception e) {
 				e.printStackTrace();
