@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -380,22 +381,22 @@ public class PisServiceImpl implements PisService
 		member.setMember_name(Details.getMember_name());
 		member.setDob(Details.getDob());
 		member.setRelation_id(Details.getRelation_id());
-//		member.setCghs_ben_id(Details.getCghs_ben_id());
-//		member.setFamily_status_id(Details.getFamily_status_id());
-//		member.setStatus_from(Details.getStatus_from());
-//		member.setBlood_group(Details.getBlood_group());
-//		member.setPH(Details.getPH());
+		member.setCghs_ben_id(Details.getCghs_ben_id());
+		member.setFamily_status_id(Details.getFamily_status_id());
+		member.setStatus_from(Details.getStatus_from());
+		member.setBlood_group(Details.getBlood_group());
+		member.setPH(Details.getPH());
 		member.setGender(Details.getGender());
-// 	    member.setMed_dep(Details.getMed_dep());
-// 	    member.setMed_dep_from(Details.getMed_dep_from());
-// 	    member.setLtc_dep(Details.getLtc_dep());
-//      member.setLtc_dep_from(Details.getLtc_dep_from());
-// 	    member.setMar_unmarried(Details.getMar_unmarried());
-//    	member.setEmp_unemp(Details.getEmp_unemp());
+ 	    member.setMed_dep(Details.getMed_dep());
+ 	    member.setMed_dep_from(Details.getMed_dep_from());
+ 	    member.setLtc_dep(Details.getLtc_dep());
+        member.setLtc_dep_from(Details.getLtc_dep_from());
+ 	    member.setMar_unmarried(Details.getMar_unmarried());
+    	member.setEmp_unemp(Details.getEmp_unemp());
      	member.setEmpid(Details.getEmpid());
      	member.setModifiedBy(Details.getModifiedBy());
  	    member.setModifiedDate(Details.getModifiedDate());
-//		member.setEmpStatus(Details.getEmpStatus());
+		member.setEmpStatus(Details.getEmpStatus());
 		member.setIsActive(1);
 		return dao.EditFamilyDetails( member);
 	}
@@ -706,5 +707,28 @@ public class PisServiceImpl implements PisService
 		public Employee getEmp(String empid) throws Exception {
 			
 			return dao.getEmp(empid);
+		}
+		
+		@Override
+		public Object[] GetEmpDetails(String empid)throws Exception
+		{
+			return dao.GetEmpDetails(empid);
+		}
+		@Override
+		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception{
+			
+			Long empId=Long.parseLong(empid);
+			Long SeniorityNumber=Long.parseLong(newSeniorityNumber);
+			int result= 0;
+			Long newSeniorityNumberL=SeniorityNumber;
+			List<Object[]> EmpSenHaveUpdate=dao.UpdateAndGetList(empId,newSeniorityNumber);
+			List<Object[]> result1=EmpSenHaveUpdate.stream().filter(srno-> Long.parseLong(srno[0].toString())>=SeniorityNumber && Long.parseLong(srno[1].toString())!=empId  ).collect(Collectors.toList());
+			
+			for(Object[] data:result1) { 
+			  Long empIdL=Long.parseLong(data[1].toString()); 
+			  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
+			}
+			
+			return result;
 		}
 }

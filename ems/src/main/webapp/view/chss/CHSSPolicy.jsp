@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html >
+<!DOCTYPE html>
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -13,7 +13,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>CHSS Doctors List</title>
+<title>CHSS Policy List</title>
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
 <spring:url value="/webresources/css/LoginPage.css" var="loginPageCss" />
 <link href="${loginPageCss}" rel="stylesheet" />
@@ -32,7 +32,6 @@
 </head>
 <body>
 <%
-	List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
 
 %>
 
@@ -63,79 +62,27 @@
 			<li class="nav-item">
 			    <a class="nav-link " href="login.jsp"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 			 </li> 
-					  <li class="nav-item">
-					    <a class="nav-link" href="CHSSPolicy.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
+					   <li class="nav-item">
+					    <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link " href="Circulars.htm"   ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
-					  <li class="nav-item">  
-					     <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					  <li class="nav-item">
+					   
+					     <a class="nav-link " href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li> 
 					    <li class="nav-item">
-					    <a class="nav-link" href="EmpanneledHospital.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
+					    <a class="nav-link" href="EmpanneledHospital.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
   		
 	</header>
 
-	<div align="center">
+	<div align="center" style="height: 100%;">
 		
-		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
-			
-			<div class="card-header" style="height: 4rem" >
-	           <div class="row ">
-						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Doctors</span></div>
-					    <div class="col-md-6">
-						 
-						</div>
-
-					</div>
-				</div>
-
-				<div class="card-body " >
-				
-					<form action="##" method="POST" id="empForm"   >
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<div class="table-responsive"    >
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1" > 
-								<thead>
-									<tr>
-										<th style=" text-align:center; width: 15%"> SlNo. </th>
-										<th style="width: 50%"> Name </th>
-										<th style="width: 35%"> Qualification </th>									
-									</tr>
-								</thead>
-								<tbody>
-									<%if(doctorlist!=null && doctorlist.size()>0){ 
-										int slno=0;
-										for(Object[] obj : doctorlist){
-									%>
-										<tr>
-											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 50%"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 35%"><%=obj[2]%></td>
-										</tr>
-								<%} }%>
-								</tbody>
-							</table>
-							
-							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-						</div>
 					
-					
-					<div class="row text-center">
-						<div class="col-md-12">
-						
-						<a href="login.jsp"   class="btn btn-sm  btn-info">HOME</a>
-								
-					    </div>						 
-					</div>
-					
-			   </form>		
-			  </div>
-		   	 </div>				
 	       
 	</div> 
 	</section>

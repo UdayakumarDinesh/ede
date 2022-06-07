@@ -1303,14 +1303,14 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					
 					if("CircularAdd".equalsIgnoreCase(action)) {
 						
-						String todate   =(String)req.getParameter("todate");
+						String circulardate   =(String)req.getParameter("circulardate");
 						String description = (String)req.getParameter("description");
 						
 						CircularList circular = new CircularList();
 						
-						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
-						circular.setCircularDate(LocalDate.now().toString());
+						circular.setToDate(LocalDate.now().plusDays(7).toString());
 						circular.setCreatedBy(UserId);
 						circular.setCreatedDate(sdtf.format(new Date()));
 						CircularListDto filecircular = new CircularListDto();
@@ -1325,12 +1325,12 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 					}else {
 					
-						String todate   = (String)req.getParameter("todate");
+						String circulardate   = (String)req.getParameter("circulardate");
 						String description = (String)req.getParameter("description");
 						String circularid = (String)req.getParameter("circular");
 						CircularList circular = new CircularList();
-						circular.setCircularDate(LocalDate.now().toString());
-						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+						circular.setToDate(LocalDate.now().plusDays(7).toString());
+						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularId(Long.parseLong(circularid));
 						circular.setModifiedBy(UserId);

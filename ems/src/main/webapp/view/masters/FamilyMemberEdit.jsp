@@ -47,7 +47,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		<div class="col-3"></div>
 		<form action="EditFamilyDetails.htm" method="POST">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card"  > 
+		<div class="card" > 
 		<div class="card-header">
 		<h5>Fill Family Member Details</h5>
 		</div>
@@ -57,7 +57,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 				      <div class="col-md-8">
 		                <div class="form-group">
 		                    <label>Name:<span class="mandatory">*</span></label>
-		                    <input type="text"  id="NameTextBox" value="<%=memberdata.getMember_name()%>"  class="form-control input-sm"   maxlength="100" name="memberName" required="required" placeholder="Enter name"  onclick="return trim(this)" onchange="return trim(this)">
+		                    <input type="text"  id="NameTextBox"  style="text-transform:capitalize" <%if(memberdata!=null && memberdata.getMember_name()!=null){ %>value="<%=memberdata.getMember_name()%>"<%}%>  class="form-control input-sm"   maxlength="100" name="memberName" required="required" placeholder="Enter name"  onclick="return trim(this)" onchange="return trim(this)">
 		                </div>
 		               </div> 
 		                
@@ -70,15 +70,10 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		              </div>
 		       </div>	
                 <!-- / .NAME & Date Of Birth -->
-                
-                
-                
+          
                  
                 <!-- RELATIONSHIP & BENID-->
-                
-               	
-				
-				
+
 				 <div class="row">
 				       <div class="col-md-5">
 		                <div class="form-group">
@@ -93,7 +88,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                </div>
 		              </div>
 		              
-		               <div class="col-md-4">
+		               <div class="col-md-3">
 		                <div class="form-group">
 		                	<label>Gender:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
@@ -106,36 +101,29 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                </div>
 		              </div>
 		              
-		            <%--    <div class="col-md-4">
+		                <div class="col-md-4">
 		                <div class="form-group">
 		                    <label>Ben Id:<span class="mandatory">*</span></label>
 		                    <input  id="BenidTextBox" value="<%=memberdata.getCghs_ben_id()%>"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
 		                </div>
-		               </div>  --%>
+		               </div>  
 		                 		        	       
-				</div>	
-				
-				
+				</div>			
                 <!-- RELATIONSHIP & BENID-->
                 
                 
                   
-               <%-- <!-- Status,Status From,BG,PH -->
+                <!-- Status,Status From,BG,PH -->
                 <div class="row">
                   <div class="col-4">
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
-                            <select class="form-control input-sm" name="status" required="required">
+                            <select class="form-control input-sm select2" name="status" required="required">
                               <option value="none" selected disabled hidden>Select Status</option> 
                               
-
                                <%for(Object[] statusLs:StatusList){ %> 
-		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt(statusLs[0].toString())){%>selected<%}%>><%=statusLs[1]%></option>
+		                       <option value="<%=statusLs[0]%>" <%if(memberdata!=null && memberdata.getFamily_status_id()==Integer.parseInt(statusLs[0].toString())){%>selected<%}%>><%=statusLs[1]%></option>
 		                       <%} %> 
-
-                                <% for(Object[] statusLs:StatusList){ %> 
-		                       <option value="<%=statusLs[0]%>" <%if(memberdata.getFamily_status_id()==Integer.parseInt()){%>selected<%}%>><%=statusLs[1]%></option>
-		                        <%} %>
 
                             </select>
                             </div>  
@@ -153,15 +141,15 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             <label>BG:<span class="mandatory">*</span></label>
                             <select class="form-control input-sm" name="bloodgroup" required="required" style="width:70px; height: 30px;" >
                                 
-                                <option value="A-" <%if(memberdata.getBlood_group().equalsIgnoreCase("A-")){%> selected <%}%>>A-</option>
-                                <option value="A+" <%if(memberdata.getBlood_group().equalsIgnoreCase("A+")){%> selected <%}%>>A+</option>
-                                <option value="B-" <%if(memberdata.getBlood_group().equalsIgnoreCase("B-")){%> selected <%}%>>B-</option>
-                                <option value="B+" <%if(memberdata.getBlood_group().equalsIgnoreCase("B+")){%> selected <%}%>>B+</option>
-                                <option value="AB-" <%if(memberdata.getBlood_group().equalsIgnoreCase("AB-")){%> selected <%}%>>AB-</option>
-                               <option value="AB+" <%if(memberdata.getBlood_group().equalsIgnoreCase("AB+")){%> selected <%}%>>AB+</option>
-                               <option value="O-" <%if(memberdata.getBlood_group().equalsIgnoreCase("O-")){%> selected <%}%>>O-</option>
-                               <option value="O+" <%if(memberdata.getBlood_group().equalsIgnoreCase("O+")){%> selected <%}%>>O+</option>
-                               <option value="Not Available" <%if(memberdata.getBlood_group().equalsIgnoreCase("Not Available")){%> selected <%}%>>Not Available</option>
+                                <option value="A-"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("A-")){%>  selected <%}%>>A-</option>
+                                <option value="A+"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("A+")){%>  selected <%}%>>A+</option>
+                                <option value="B-"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("B-")){%>  selected <%}%>>B-</option>
+                                <option value="B+"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("B+")){%>  selected <%}%>>B+</option>
+                                <option value="AB-" <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("AB-")){%> selected <%}%>>AB-</option>
+                                <option value="AB+" <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("AB+")){%> selected <%}%>>AB+</option>
+                                <option value="O-"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("O-")){%>  selected <%}%>>O-</option>
+                                <option value="O+"  <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("O+")){%>  selected <%}%>>O+</option>
+                                <option value="Not Available" <%if(memberdata!=null && memberdata.getBlood_group()!=null && memberdata.getBlood_group().equalsIgnoreCase("Not Available")){%> selected <%}%>>Not Available</option>
                             </select>
                         </div>
                     </div>
@@ -171,19 +159,19 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                        <div class="form-group">
 		                	<label>PH:<span class="mandatory">*</span></label>
 		                    <select name="PH" class="form-control input-sm" style="padding: 3px 6px; ">
-		                    <option value="N" <%if(memberdata.getPH().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
-		                    <option value="Y"  <%if(memberdata.getPH().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
+		                    <option value="N" <%if(memberdata!=null && memberdata.getPH()!=null && memberdata.getPH().equalsIgnoreCase("N")){%> selected <%}%> >No </option>
+		                    <option value="Y" <%if(memberdata!=null && memberdata.getPH()!=null && memberdata.getPH().equalsIgnoreCase("Y")){%> selected <%}%> >Yes</option>
 		                    </select>
 		                 </div>
                     </div>
                  
                   
-                </div> --%>
+                </div> 
                <!-- //Status,Status From,BG,PH -->
                 
                 
                 
-          <%--      <!-- dependency ,Employed,Married-->
+               <!-- dependency ,Employed,Married-->
 					<div class="row">
 		                <!-- Medical -->
 		                <div class="col-4">
@@ -192,8 +180,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                        <div class="input-group">
 		                          <span class="input-group-addon" style="padding: 3px 6px;">
 		                           <select name="medicaldep" class="form-control input-sm" style="width: 100%; height: 30px;">
-		                          <option value="N" <%if(memberdata.getMed_dep().equalsIgnoreCase("N")){%>selected<%}%> >No</option>
-		                          <option value="Y" <%if(memberdata.getMed_dep().equalsIgnoreCase("Y")){%>selected<%}%> >Yes</option>
+		                          <option value="N" <%if(memberdata!=null && memberdata.getMed_dep()!=null && memberdata.getMed_dep().equalsIgnoreCase("N")){%>selected<%}%> >No</option>
+		                          <option value="Y" <%if(memberdata!=null && memberdata.getMed_dep()!=null && memberdata.getMed_dep().equalsIgnoreCase("Y")){%>selected<%}%> >Yes</option>
 		                         
 		                          </select>
 		                            
@@ -210,8 +198,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                        <div class="input-group">
 		                          <span class="input-group-addon" style="padding: 3px 6px;">
 		                          <select name="ltcdep" class="form-control input-sm" style="width: 100%; height: 30px;">
-		                          <option value="Y" <%if(memberdata.getLtc_dep().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
-		                          <option value="N" <%if(memberdata.getLtc_dep().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                          <option value="Y" <%if(memberdata!=null && memberdata.getLtc_dep()!=null && memberdata.getLtc_dep().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
+		                          <option value="N" <%if(memberdata!=null && memberdata.getLtc_dep()!=null && memberdata.getLtc_dep().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
 		                          </select>
 		                               
 		                          </span>
@@ -228,8 +216,8 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                        <div class="form-group">
 		                	<label>Married:<span class="mandatory">*</span></label>
 		                    <select name="married_unmarried" class="form-control input-sm" style="padding: 3px 6px; height: 30px;">
-		                    <option value="N" <%if(memberdata.getMar_unmarried().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
-		                    <option value="Y" <%if(memberdata.getMar_unmarried().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
+		                    <option value="N" <%if(memberdata!=null && memberdata.getMar_unmarried()!=null && memberdata.getMar_unmarried().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                    <option value="Y" <%if(memberdata!=null && memberdata.getMar_unmarried()!=null && memberdata.getMar_unmarried().equalsIgnoreCase("Y")){%> selected <%}%>>Yes</option>
 		                    </select>
 		                 </div>
                     </div>
@@ -237,35 +225,35 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                     
                      <div class="col-2">
                        <div class="form-group">
-		                	<label>Employed: <%=memberdata.getEmp_unemp() %><span class="mandatory">*</span></label>
+		                	<label>Employed: <span class="mandatory">*</span></label>
 		                    <select name="emp_unemp" id="EmpId" class="form-control input-sm" style="width:70px; height: 30px;">
-		                    <option value="N" <%if(memberdata.getEmp_unemp().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
-		                    <option value="Y" <%if(memberdata.getEmp_unemp().equalsIgnoreCase("Y")){%> selected <%}%> >Yes</option>       
+		                    <option value="N" <%if(memberdata!=null && memberdata.getEmp_unemp()!=null && memberdata.getEmp_unemp().equalsIgnoreCase("N")){%> selected <%}%> >No</option>
+		                    <option value="Y" <%if(memberdata!=null && memberdata.getEmp_unemp()!=null && memberdata.getEmp_unemp().equalsIgnoreCase("Y")){%> selected <%}%> >Yes</option>       
 		                    </select>
 		                 </div>
                     </div>
      
 		          
-		           </div> --%>
+		           </div> 
                
-            <%--     <!--// dependency ,Employed,Married-->
+                 <!--// dependency ,Employed,Married-->
 				<div class="row">
 				
 							 <div class="col-md-4" id ="EmpHide">
                          <div class="form-group">
                           <label>Employed Status:  <span class="mandatory">*</span></label>
                             <select class="form-control input-sm" name="EmpStatus" required="required">
-                              <!-- <option value="none" selected disabled hidden>Select Status</option> -->
-		                    <option value="Private" <% if(memberdata.getEmpStatus()!=null){ if(memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}}%>>Private</option>
-		                    <option value="Central Goverment"  <% if(memberdata.getEmpStatus()!=null){ if(memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}}%>>Central Goverment.</option>
-		                    <option value="State Goverment" <%if(memberdata.getEmpStatus()!=null){  if(memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}}%>>State Goverment</option>
-		                    <option value="PSU" <%if(memberdata.getEmpStatus()!=null){  if(memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}}%>>PSU</option>
+                              
+		                    <option value="Private" <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}%>>Private</option>
+		                    <option value="Central Goverment"  <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}%>>Central Goverment.</option>
+		                    <option value="State Goverment" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}%>>State Goverment</option>
+		                    <option value="PSU" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}%>>PSU</option>
 		                      
                             </select>
                             </div>  
                         </div>
                       
-				</div> --%>
+				</div> 
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">

@@ -58,7 +58,7 @@
 										<th>Select</th>
 										<th>Employee</th>
 										<th>User Name</th>
-										<th>Division Name</th>
+										<th>Department Name</th>
 										<th>Login Type</th>
 										
 									</tr>

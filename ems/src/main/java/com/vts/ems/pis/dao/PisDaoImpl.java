@@ -1229,8 +1229,47 @@ public class PisDaoImpl implements PisDao {
 		}
 		return model.getPasswordHistoryId(); 
 	}
+	private static final String EMPDETAILS="SELECT  a.SrNo,a.empid, a.empno, a.empname, b.designation, a.extno, a.email, c.divisionname, a.desigid, a.divisionid   FROM employee a,employee_desig b, division_master c WHERE a.desigid= b.desigid AND a.divisionid= c.divisionid AND a.isactive='1' AND a.empid=:empid";
+	@Override
+	public Object[] GetEmpDetails(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside GetEmpDetails()");
+		try {
+			Query query = manager.createNativeQuery(EMPDETAILS);
+			query.setParameter("empid", empid);
+			List<Object[]> list=(List<Object[]>) query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);				
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
+	private final static String LISTOFSENIORITYNUMBER="SELECT SrNo, EmpId FROM employee WHERE SrNo !=0 ORDER BY SrNo ASC ";
+	@Override
+	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception
+	{
+		
+	    Query query=manager.createNativeQuery(LISTOFSENIORITYNUMBER);
+	    List<Object[]> listSeni=(List<Object[]>)query.getResultList();
+	    
+	    Query updatequery=manager.createNativeQuery(UPDATESRNO);
+	    updatequery.setParameter("empid", empId);
+        updatequery.setParameter("srno", newSeniorityNumber);  	   
+        updatequery.executeUpdate();
+        
+	    return listSeni;
+	}
 	
-	
-
+	@Override
+	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception{
+		    Query updatequery=manager.createNativeQuery(UPDATESRNO);
+		    updatequery.setParameter("empid", empIdL);
+	        updatequery.setParameter("srno", long1);  	 
+	        return updatequery.executeUpdate();
+	}
 }
 	

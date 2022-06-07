@@ -318,37 +318,27 @@ public class EmsController {
 			e.printStackTrace();
 			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
 			return "redirect:/login";
-		}
-	
-	    
+		}  
 	 }
 
-	 @RequestMapping(value = "LoginPage/EmpanneledHospital.htm", method = RequestMethod.GET)
-		public void EmpanneledHospital(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-
-			String path = req.getServletContext().getRealPath("/manuals/" + "EmpanelledHospitals.pdf");
-
-			res.setContentType("application/pdf");
-			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
-
-			File my_file = new File(path);
-
-			OutputStream out = res.getOutputStream();
-			FileInputStream in = new FileInputStream(my_file);
-			byte[] buffer = new byte[4096];
-			int length;
-			while ((length = in.read(buffer)) > 0) {
-				out.write(buffer, 0, length);
+	 @RequestMapping(value ="EmpanneledHospital.htm", method = RequestMethod.GET)
+		public String EmpanneledHospital(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+		 logger.info(new Date() +"Inside EmpanneledHospital.htm ");
+			try 
+			{				
+				 List<Object[]> Empanelled = new ArrayList<Object[]>();
+				 Empanelled = service.GetEmpanelledHostpitalList();
+	        	 req.setAttribute("Empanelled",Empanelled);
+				return "chss/CHSSEmpanelledHospital";
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+				return "chss/CHSSEmpanelledHospital";
 			}
-			in.close();
-			out.flush();
 		}
-	 
-	 
-	 
+ 
 	 @RequestMapping(value ="/DoctorsList.htm", method = RequestMethod.GET)
 		public String DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-
 		 logger.info(new Date() +"Inside DoctorsList.htm ");
 			try 
 			{				
@@ -384,6 +374,21 @@ public class EmsController {
 			out.flush();
 		}
 	 
+	 @RequestMapping(value = "CHSSPolicy.htm", method = RequestMethod.GET)
+		public String CHSSPolicy(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
+		 logger.info(new Date() +"Inside CHSSPolicy.htm ");
+			try 
+			{				
+//				 List<Object[]> CHSSPolicy = new ArrayList<Object[]>();
+//				 CHSSPolicy = service.GetDoctorList();
+//	        	 req.setAttribute("doctorlist",CHSSPolicy);
+				return "chss/CHSSPolicy";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "chss/CHSSPolicy";
+			}
+			
+		}
 	 @RequestMapping(value = "Circulars.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	 public String Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 	 
@@ -414,7 +419,7 @@ public class EmsController {
 
 	 }
 	 
-	 @RequestMapping(value = "CircularDownload.htm")
+	    @RequestMapping(value = "CircularDownload.htm")
 		public void CircularDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 		{
 			String UserId = (String) ses.getAttribute("Username");
