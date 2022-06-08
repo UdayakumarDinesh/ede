@@ -273,62 +273,7 @@
 		</div>
 	</div>	
 
- 	<%-- <div class="card-body" >
-		<form action="#" method="post">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<div class="card" >
-				<div class="card-body " >
-					<div class="row" > 
-						<div class="col-md-3 ">
-							<button type="submit" class=" db-button w-100" formaction="CHSSApply.htm" >CHSS Apply</button>
-						</div>
-						<div class="col-md-3 ">
-							<button type="submit" class=" db-button w-100" formaction="CHSSAppliedList.htm" >CHSS List</button>
-						</div>
-						<%if( logintype.equalsIgnoreCase("K") || logintype.equalsIgnoreCase("V") ){ %>
-							<div class="col-md-3 ">
-								<button type="submit" class=" db-button w-100" formaction="CHSSApprovalsList.htm" >CHSS Approvals</button>
-							</div>
-
-						<%} %>
-						
-						
-						<%if(dashboard!=null){  for(Object[] O:dashboard){%>							
-							 <div class="col-md-3 ">
-								<button type="submit" class=" db-button w-100" formaction="<%=O[1]%>" ><%=O[0]%></button>
-							</div>
-						<%}}%>
-
-					</div>
-				</div>
-			</div>		
-		</form>
-		
-	</div>  --%>
-
- </div> 
-<!--  
- <div class="card-header page-button">
-		<div class="row">
-			<div class="col-md-3 heading-breadcrumb">
-				<h5 style="font-weight: 700 !important">CHSS DASHBOARD</h5>
-			</div>
-			
-			<div class="col-md-9 " >
-				<nav aria-label="breadcrumb">
-				  <ol class="breadcrumb ">
-				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
-				  </ol>
-				</nav>
-			</div>
-						
-		</div>
-	</div> 
-  -->
  
- 
- <div class="card profile-card-container" >
  <div align="center">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
@@ -345,9 +290,10 @@
 		<%} %>
 	</div>
 	
-
-	<div>
- 		<form action="#" method="post" style="margin-top: 5px;">
+<div class="card profile-card-container" >
+ 
+<div style="margin:0px 0px 0px 0px !important;padding-top: 15px;">
+ 		<form action="#" method="post" >
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
  				<div class="row"> 
 						
@@ -369,10 +315,11 @@
 			</div>
 		</form>
 	</div> 	
+	
 
 	<div class="row" >
 		<div class="col-md-2">
-		<%if(!IsSelf.equalsIgnoreCase("Y") ){ %>
+		<%if(!IsSelf.equalsIgnoreCase("Y")){ %>
 			<div class="main" onclick="submitform('Y','<%=employee[0]%>','<%=employee[2] %>')" > 
 			<%}else{ %>
 			<div class="main" > 
@@ -447,9 +394,6 @@
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 
-		<%-- <div class="col-md-3">
-			<button type="button" class="btn btn-sm misc2-btn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply"><i class="fa-solid fa-paper-plane"></i> &nbsp;&nbsp;APPLY&nbsp;</button>
-		</div>  --%>
 		<div class="col-md-3"></div>
 		<div class="col-md-5 d-flex justify-content-center">
 			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
@@ -462,18 +406,7 @@
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
 		<%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
-					
-		<%-- <form class="form-inline my-2 my-lg-0">
-	    	<select class="form-control select2" id="empname" required="required" name="empname"  onchange="changeform()" >
-				<option value="0" <%if(patientidvalue.equalsIgnoreCase("0")){ %>selected<% } %> >All</option>
-				<option value="<%=employee.getEmpId()%>" <%if(patientidvalue.equalsIgnoreCase(Long.toString(employee.getEmpId()))){ %>selected<% } %> ><%=employee.getEmpName() %> (Self)</option>
-				<% for (Object[] obj : empfamilylist) {%>
-					<option value="<%=obj[0]%>" <%if(obj[0].toString().equalsIgnoreCase(patientidvalue)){ %>selected<% } %> ><%=obj[1]%> (<%=obj[7] %>)</option>
-				<%} %>
-			</select>
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    	</form> --%>
-
+		
 	</div>
 
 <div class="card table-card dashboard-margin" >
@@ -488,8 +421,8 @@
 								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amnt</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amnt</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amt</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amt</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 							</tr>
@@ -559,7 +492,7 @@
 			</form>
 		</div>
 	</div>
-
+ </div> </div></div>
 <form action="CHSSApplyDetails.htm" method="post" id="myform" >
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >

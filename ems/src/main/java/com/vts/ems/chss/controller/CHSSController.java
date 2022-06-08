@@ -303,25 +303,6 @@ public class CHSSController {
 		}
 	}
 	
-	
-	
-	@RequestMapping(value = "CHSSAppliedList.htm" )
-	public String CHSSAppliedList(Model model,HttpServletRequest req, HttpSession ses)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		logger.info(new Date() +"Inside CHSSAppliedList.htm "+Username);
-		try {
-			
-			return "chss/CHSSAppliedList";			
-		 }catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSAppliedList.htm "+Username, e);
-			return "static/Error";
-		}
-	}
-	
-	
 	@RequestMapping(value = "CHSSConsultMainData.htm" )
 	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
 	{
@@ -957,9 +938,9 @@ public class CHSSController {
 			
 			long count= service.MedicinesBillAdd(dto,chssapplyid);
 			if (count > 0) {
-				redir.addAttribute("result", "Consultation Details Added Successfully");
+				redir.addAttribute("result", "Medicine Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Medicine Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1089,9 +1070,9 @@ public class CHSSController {
 			
 			long count= service.TestsBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Tests Details Added Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Tests Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1147,9 +1128,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Test Data Updated Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Test Data Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1177,9 +1158,9 @@ public class CHSSController {
 			long count = service.TestBillDelete(testid, Username);
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Test Data Deleted Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Test Data Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1219,9 +1200,9 @@ public class CHSSController {
 			
 			long count= service.MiscBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Details Added Successfully");
+				redir.addAttribute("result", "Item Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1278,9 +1259,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Updated Successfully");
+				redir.addAttribute("result", "Item Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1309,9 +1290,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Deleted Successfully");
+				redir.addAttribute("result", "Item Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1384,9 +1365,9 @@ public class CHSSController {
 			
 			long count= service.OtherBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Added Successfully");
+				redir.addAttribute("result", "Item Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1424,9 +1405,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Updated Successfully");
+				redir.addAttribute("result", "Item Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1454,9 +1435,9 @@ public class CHSSController {
 			long count = service.OtherBillDelete(chssotherid, Username);
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Deleted Successfully");
+				redir.addAttribute("result", "Item Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);

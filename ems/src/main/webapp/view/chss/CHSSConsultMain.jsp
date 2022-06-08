@@ -155,7 +155,7 @@ table th:last-child{
 	</div>
 	
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 				<%if(Integer.parseInt(chssapplydata[9].toString())>1){ %>
 					<div class="row">
 						<div class="col-md-12">

@@ -37,12 +37,7 @@ NFormatConvertion nfc=new NFormatConvertion();
 	<div class="page card dashboard-card">
 		<div class="card-body" >		
 			
-		
-			<div class="card" >
-			
-				<div class="card-body">
-        			
-					<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
+		<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						
 	                   <div class="row"> 
@@ -79,13 +74,12 @@ NFormatConvertion nfc=new NFormatConvertion();
 	                          </div>
 	                          
                         </form>      
-	 		      <br>
-	  			</div>
+	 	
+	  	</div>
 	
 	
 	
-		   	 </div>				
-	       </div>
+		   
 	     </div>	
 	
 	

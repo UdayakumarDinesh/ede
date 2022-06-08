@@ -75,7 +75,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 		
 			<div class="card" >
 			
-					<div class="card-body">
+					<div class="card-body main-card">
         			
         		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  onsubmit="return confirm('Are you sure to submit');"> 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

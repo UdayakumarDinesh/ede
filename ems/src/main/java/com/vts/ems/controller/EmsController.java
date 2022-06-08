@@ -264,6 +264,7 @@ public class EmsController {
 	    	
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date() +" Inside fpwd/ForgotPassword.htm "+ e);
 			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
 			return "redirect:/login";
 		}
@@ -294,6 +295,7 @@ public class EmsController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date() +" Inside fpwd/ResetPassword.htm "+ e);
 			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
 			return "redirect:/login";
 		}
@@ -316,6 +318,7 @@ public class EmsController {
 			return "redirect:/fpwd/ForgotPassword.htm";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date() +" Inside fpwd/ResendOTP.htm "+ e);
 			redir.addFlashAttribute("error","Internal error occured, Please Contact Admin.");
 			return "redirect:/login";
 		}  
@@ -326,18 +329,18 @@ public class EmsController {
 		 logger.info(new Date() +"Inside EmpanneledHospital.htm ");
 			try 
 			{				
-				 List<Object[]> Empanelled = new ArrayList<Object[]>();
-				 Empanelled = service.GetEmpanelledHostpitalList();
-	        	 req.setAttribute("Empanelled",Empanelled);
+				List<Object[]> Empanelled = new ArrayList<Object[]>();
+				Empanelled = service.GetEmpanelledHostpitalList();
+	        	req.setAttribute("Empanelled",Empanelled);
 				return "chss/CHSSEmpanelledHospital";
 			} catch (Exception e) {
 				e.printStackTrace();
-				
+				logger.error(new Date() +" Inside EmpanneledHospital.htm "+ e);
 				return "chss/CHSSEmpanelledHospital";
 			}
 		}
  
-	 @RequestMapping(value ="/DoctorsList.htm", method = RequestMethod.GET)
+	 @RequestMapping(value ="DoctorsList.htm", method = RequestMethod.GET)
 		public String DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 		 logger.info(new Date() +"Inside DoctorsList.htm ");
 			try 
@@ -348,43 +351,25 @@ public class EmsController {
 				return "chss/CHSSDoctorList";
 			} catch (Exception e) {
 				e.printStackTrace();
-				
+				logger.error(new Date() +" Inside DoctorsList.htm "+ e);
 				return "chss/CHSSDoctorList";
 			}
 		}
 	
-	 @RequestMapping(value = "LoginPage/Eligibility.htm", method = RequestMethod.GET)
-		public void Eligibility(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-
-			String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
-
-			res.setContentType("application/pdf");
-			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
-
-			File my_file = new File(path);
-
-			OutputStream out = res.getOutputStream();
-			FileInputStream in = new FileInputStream(my_file);
-			byte[] buffer = new byte[4096];
-			int length;
-			while ((length = in.read(buffer)) > 0) {
-				out.write(buffer, 0, length);
-			}
-			in.close();
-			out.flush();
-		}
-	 
 	 @RequestMapping(value = "CHSSPolicy.htm", method = RequestMethod.GET)
 		public String CHSSPolicy(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 		 logger.info(new Date() +"Inside CHSSPolicy.htm ");
 			try 
-			{				
-//				 List<Object[]> CHSSPolicy = new ArrayList<Object[]>();
-//				 CHSSPolicy = service.GetDoctorList();
-//	        	 req.setAttribute("doctorlist",CHSSPolicy);
+			{	
+				String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
+				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+				req.setAttribute("Messege", "hello");
+				req.setAttribute("path", path);
+				req.setAttribute("chss_policy_pdf", chss_policy_pdf);
 				return "chss/CHSSPolicy";
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error(new Date() +" Inside CHSSPolicy.htm "+ e);
 				return "chss/CHSSPolicy";
 			}
 			
@@ -413,7 +398,7 @@ public class EmsController {
 				return "chss/CHSSCircularList";
 			} catch (Exception e) {
 				e.printStackTrace();
-				
+				logger.error(new Date() +" Inside Circulars.htm "+ e);
 				return "chss/CHSSCircularList";
 			}
 
@@ -423,12 +408,8 @@ public class EmsController {
 		public void CircularDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 		{
 			String UserId = (String) ses.getAttribute("Username");
-
 			logger.info(new Date() +"Inside CircularDownload.htm "+UserId);
-			
 			try {	
-				String contingentid = req.getParameter("contingentid");
-				
 			
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				
@@ -465,7 +446,8 @@ public class EmsController {
 			}
 			catch (Exception e) {
 				e.printStackTrace();  
-				logger.error(new Date() +" Inside CHSSFormEmpDownload.htm "+UserId, e); 
+				logger.error(new Date() +" Inside CircularDownload.htm "+UserId, e); 
+				
 			}
 
 		}

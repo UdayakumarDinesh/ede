@@ -79,7 +79,7 @@
 	</div>
 				
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 					<form action="CHSSApplySubmit.htm" method="post" autocomplete="off">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="row">

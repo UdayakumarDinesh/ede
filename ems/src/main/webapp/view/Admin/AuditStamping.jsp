@@ -111,7 +111,7 @@ String ListName=(String)request.getAttribute("Username");
 
 
 <div class="card">
-				<div class="card-body "  >
+				<div class="card-body main-card"  >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 

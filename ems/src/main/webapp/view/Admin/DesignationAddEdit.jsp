@@ -43,7 +43,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 	 <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
-				<div class="card-body " align="center" >
+				<div class="card-body  " align="center" >
 
 					<form name="myfrm" action="DesignationAddEdit.htm" method="POST" id="addfrm" autocomplete="off">
 						<div class="form-group">

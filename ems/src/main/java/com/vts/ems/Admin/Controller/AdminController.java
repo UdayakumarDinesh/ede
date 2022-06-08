@@ -1305,12 +1305,12 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						
 						String circulardate   =(String)req.getParameter("circulardate");
 						String description = (String)req.getParameter("description");
-						
+						String todate = (String)req.getParameter("todate");
 						CircularList circular = new CircularList();
 						
 						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
-						circular.setToDate(LocalDate.now().plusDays(7).toString());
+						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setCreatedBy(UserId);
 						circular.setCreatedDate(sdtf.format(new Date()));
 						CircularListDto filecircular = new CircularListDto();

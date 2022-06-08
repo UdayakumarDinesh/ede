@@ -49,7 +49,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 		             <%} %>
         	</div>
 		 <div class="card">
-		 <div class="card-body">
+		 <div class="card-body main-card">
 		 		<form action="##" method="POST" id="empForm" autocomplete="off">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						

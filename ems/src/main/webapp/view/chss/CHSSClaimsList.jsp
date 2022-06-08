@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
      <%@page import="java.time.LocalDate"%>
@@ -17,6 +18,9 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 String fromdate = (String)request.getAttribute("fromdate");
 String todate   = (String)request.getAttribute("todate");
 String empid = (String)request.getAttribute("empid");
+
+SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 %>
 
 
@@ -29,7 +33,7 @@ String empid = (String)request.getAttribute("empid");
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> CHSS </a></li>
+						<li class="breadcrumb-item "><a href="CHSSDashboard.htm"> CHSS </a></li>
 						<li class="breadcrumb-item active " aria-current="page">CHSS Claims List</li>
 					</ol>
 				</div>
@@ -79,7 +83,7 @@ String empid = (String)request.getAttribute("empid");
 				
 				</div>
 			
-				<div class="card-body">
+				<div class="card-body main-card">
 			 	
 
 					<form action="#" method="POST" id="empForm">
@@ -107,7 +111,7 @@ String empid = (String)request.getAttribute("empid");
 											<td><%=i %></td>
 											<td><%=obj[19] %></td>
 											<td><%=obj[12] %>(<%=obj[14] %>)</td>
-											<td><%=obj[15] %></td>
+											<td><%=rdf.format(sdf.parse(obj[15].toString())) %></td>
 											<td><%=obj[10] %></td>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 

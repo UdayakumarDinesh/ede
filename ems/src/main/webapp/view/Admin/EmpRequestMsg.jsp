@@ -48,7 +48,7 @@ List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
 		
 			<div class="card" >
 			
-					<div class="card-body">
+					<div class="card-body main-card ">
         			
         		  <form action="EmpRequestMsg.htm" method="GET" name="myfrm1" id="myfrm1"  > 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

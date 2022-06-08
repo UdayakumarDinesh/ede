@@ -180,7 +180,7 @@ color: black;
 	</div>
 	
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card" >
 					<div class="row">
 						<div class="col-12" align="center">
 							<h4> Select Member</h4>

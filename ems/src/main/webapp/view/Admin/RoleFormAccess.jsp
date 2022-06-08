@@ -114,9 +114,7 @@ String moduleid=(String)request.getAttribute("moduleid");
 			</div>
 			<!-- card header -->
 			
-			<div class="card-body"> 
-
-			           
+			<div class="card-body main-card "> 
 			        	<div class="table-responsive">
 			        	<form action="UpdateRoleAcess.htm" method="POST" id="myform1">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  > 

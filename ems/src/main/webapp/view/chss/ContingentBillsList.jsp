@@ -31,7 +31,7 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-4">
-				<h5>CHSS Contingent Approval List</h5>
+				<h5>Pending Contingent Bills List</h5>
 			</div>
 				<div class="col-md-8 ">
 					<ol class="breadcrumb">
@@ -66,7 +66,7 @@
 	</div>
 				
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 				
 					<form action="ContingentApprovals.htm" method="POST" style="float: right;">
 						<div class="row" style="margin-bottom: 10px;">

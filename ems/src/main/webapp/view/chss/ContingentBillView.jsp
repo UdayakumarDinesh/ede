@@ -146,7 +146,7 @@ th,td
 			
 		
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 					<%if(billstatus>=7 && contingentdata[6]!=null && !contingentdata[6].toString().trim().equalsIgnoreCase("")){ %>
 						<div class="col-md-12">
 							<span style="font-weight: 600;"> Remark : </span>
@@ -178,8 +178,8 @@ th,td
 								<span style="font-size: 15px; font-weight:600; ">Ref: <%=contingentdata[1] %></span><br><br>
 							</div>
 							<p>
-								The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().withDayOfMonth(20).toString()) %> during the month of 
-								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
+								The medical claim received up to <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().withDayOfMonth(20).toString()) %> during the month of 
+								<%=" "+LocalDate.now().getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbursement from the following
 								employees have been processed and admitted at CHSS rates.
 							</p>
 						</div>
@@ -224,8 +224,8 @@ th,td
 									
 									</td>
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
-									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString())) %></td>
+									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString())) )) %></td>
+									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString())) )) %></td>
 									<%if( true){  %>
 									<td >
 									<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">

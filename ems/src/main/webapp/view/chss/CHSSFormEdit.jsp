@@ -160,13 +160,8 @@ th,td
 		<%} %>
 	</div>
 				
-			<div class="card" >
-				<div class="card-body " >
-					
-				
-					<div align="center">
-						<div align="center">
-							<div>
+			<div class="card" style="padding-top:0px;margin-top: -15px;">
+				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="center">
 							
 								<table style="border: 0px; width: 100%">
 									<tr>
@@ -231,10 +226,10 @@ th,td
 											<th class="center">Date</th>
 											<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 										</tr>
-										<% double billstotal=0;
+										<% long billstotal=0;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
+												billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[5].toString()));
 												%>
 											<tr>
 												<td class="center text-blue"><%=i+1 %></td>
@@ -247,8 +242,8 @@ th,td
 										<%if(chssbillslist.size()>0){ %>
 											<tr>
 												<td colspan="3"></td>
-												<td style="text-align: right;"><b>Total </b></td>
-												<td style="text-align: right;" class="text-blue" ><%=billstotal %></td>
+												<td style="text-align: right;"><b>Rounded Total </b></td>
+												<td style="text-align: right;" class="text-blue" ><%=nfc.rupeeFormat(String.valueOf(billstotal)) %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
@@ -259,8 +254,7 @@ th,td
 								</table>
 								
 								<div style="margin-left: 10px;">
-									<p>
-											
+									<p>											
 										I do state that the member(s) of my family for whom reimbursement of medical expenses claimed in this bill are
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
@@ -312,33 +306,8 @@ th,td
 										
 								
 									</p>
-								
-								</div>
-							
-								
-								<%-- <table>
-									<tr>
-										<td style="height: 120px;vertical-align:bottom;border:none;max-width: 350px;">
-											<ol style="list-style-type: none;margin-left: -45px">
-												<%for(Object[] obj:ClaimapprovedPOVO){
-													if(obj[1].toString().equalsIgnoreCase("PO")){%>
-													<li><%=obj[2] %>,</li>
-													<li><%=obj[4] %> </li>
-												<% } } %>
-											</ol>
-										</td>
-										<td style="height: 120px;vertical-align:bottom; border:none;max-width: 300px;">	
-											<ul style="float: right;list-style-type: none; ">
-												<%for(Object[] obj:ClaimapprovedPOVO){
-													if(obj[1].toString().equalsIgnoreCase("VO")){%>
-													<li><%=obj[2] %>,</li>
-													<li><%=obj[4] %></li>
-												<% } } %>
-											</ul>					
-										</td>
-									</tr>
-								</table> --%>
-								
+
+
 							</div>
 							<div class="break"></div>
 							<div align="center" >
@@ -362,7 +331,7 @@ th,td
 													<%if(i==1){ %>
 														<tr>
 															<td colspan="4" style="text-align: center;">
-																<b>Consultation charges </b>
+																<b>Consultation Charges </b>
 																<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
@@ -758,23 +727,21 @@ th,td
 							
 								</form>
 							</div>
-						</div>
-					</div>
 					
 				<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 					<form action="CHSSUserForward.htm" method="post" id="fwdform">
 						<div class="row">
 							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
 								<%if(ClaimRemarksHistory.size()>0){ %>
-									<table style="margin: 3px;">
+									<table style="margin: 3px;padding: 0px">
 										<tr>
-											<td style="border:none;">
-												<h4 style="text-decoration: underline;">Remarks :</h4> 
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
 											</td>											
 										</tr>
 										<%for(Object[] obj : ClaimRemarksHistory){%>
 										<tr>
-											<td style="border:none;width: 80%;">
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
 												<%=obj[3] %>&nbsp; :
 												<span style="border:none;" class="text-blue" >	<%=obj[1] %></span>
 											</td>
@@ -828,9 +795,9 @@ th,td
 						
 								
 							
-							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-								<div class="modal-dialog  modal-dialog-centered" >
-									<div class="modal-content" >
+							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" align="center" style="left: 15%;">
+								<div class="modal-dialog  modal-dialog-centered"  >
+									<div class="modal-content" style="width: 50%;">
 										<div class="modal-header">											
 											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
