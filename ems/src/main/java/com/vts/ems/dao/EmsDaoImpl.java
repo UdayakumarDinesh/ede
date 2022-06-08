@@ -324,17 +324,16 @@ public class EmsDaoImpl implements EmsDao
 		
 	}
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,todate FROM chss_circular_list  WHERE circulardate BETWEEN :fromdate AND :todate ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND  DATE_ADD(circulardate,INTERVAL 7 DAY)ORDER BY circulardate DESC";
 
 	
 	@Override
-	 public List<Object[]> CirculatList(LocalDate fromdate , LocalDate todate) throws Exception
+	 public List<Object[]> CirculatList() throws Exception
 	 {
 		 logger.info(new Date() +"Inside DAO CirculatList()");	
 		 try {
 				Query query =  manager.createNativeQuery(CIRCULARLIST);
-				 query.setParameter("fromdate", fromdate);
-				 query.setParameter("todate", todate);
+				
 				return (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside DAO CirculatList "+ e);

@@ -1329,7 +1329,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						String description = (String)req.getParameter("description");
 						String circularid = (String)req.getParameter("circular");
 						CircularList circular = new CircularList();
-						circular.setToDate(LocalDate.now().plusDays(7).toString());
+					
 						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularId(Long.parseLong(circularid));
@@ -1361,7 +1361,6 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				try {
 					
 					String path = (String)req.getParameter("path");
-					System.out.println("path    :"+path);
 					String arr[] = path.split("//");
 					res.setContentType("Application/octet-stream");	
 					

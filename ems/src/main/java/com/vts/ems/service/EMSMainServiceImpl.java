@@ -255,12 +255,10 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
-	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception
+	public List<Object[]> CirculatList() throws Exception
 	{
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
-		LocalDate ToDate= LocalDate.parse(todate, formatter);
-		return dao.CirculatList(Fromdate , ToDate);
+
+		return dao.CirculatList();
 	}
 	
 	@Override
