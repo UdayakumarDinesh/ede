@@ -61,13 +61,13 @@
 						<div class="col-md-3">
 							<div class="form-group">
 							<label><b>Description </b><span class="mandatory"	style="color: red;">*</span></label>
-							  <textarea  name="description" rows="2" cols="60" style="border-bottom-color: gray;"  ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
+							  <textarea  name="description" rows="2" cols="60" style="border-bottom-color: gray;" required="required" ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
 							</div>
 						</div>
 						<div class="col-md-2" style="margin-left: 15%;">
 						<div class="form-group">
 						<label><b>File</b></label>
-						 <input type="file"   class="form-control input-sm "  value="<%if(circular!=null && circular.getPath()!=null){%> <%=circular.getPath()%><%}%>"   id="file" name="selectedFile" >
+						 <input type="file"   class="form-control input-sm "  value="<%if(circular!=null && circular.getPath()!=null){%> <%=circular.getPath()%><%}%>" required="required"  id="file" name="selectedFile" >
 					</div>
 					</div>
 						<%if(circular!=null && circular.getPath()!=null){%>
@@ -76,15 +76,15 @@
 											  <i style="color: #019267" class="fa-solid fa-download fa-2x"></i>
 										    </button><%} %>
 						
-				</div>
-				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-				 <div class="row" >
+					</div>
+					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+					<div class="row" >
 		    			<div class="col-12" align="center">
 		    			<%if(circular!=null ){%>
 		    			<input type="hidden" name="circular" value="<%if(circular.getCircularId()!=null){%><%=circular.getCircularId()%><%}%>">
-		    				<button type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Submit!');" name="action" value="CircularEdit" >UPDATE</button>
+		    				<button type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Update?');" name="action" value="CircularEdit" >UPDATE</button>
 		    			<%}else{ %>
-		    				<button type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Submit!');" name="action" value="CircularAdd" >SUBMIT</button>
+		    				<button type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Submit?');" name="action" value="CircularAdd" >SUBMIT</button>
 		    				<%} %>
 		    			</div>
 		    		</div> 

@@ -610,10 +610,11 @@ public class AdminServiceImpl implements AdminService{
     			saveFile(CircularFilePath, filename, filecirculardto.getPath());
     		}	
     	    circularlist.setCircularDate(circular.getCircularDate());
+    	    circularlist.setToDate(circular.getToDate());
     	    circularlist.setDescription(circular.getDescription());
     	    circularlist.setModifiedBy(circular.getModifiedBy());
     	    circularlist.setModifiedDate(circular.getModifiedDate());
-              return dao.EditCircular(circularlist);
+            return dao.EditCircular(circularlist);
 		}
 	   
 		

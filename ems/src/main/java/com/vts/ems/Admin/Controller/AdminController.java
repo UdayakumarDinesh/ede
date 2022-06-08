@@ -1,11 +1,17 @@
 package com.vts.ems.Admin.Controller;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.CircularList;
@@ -47,6 +55,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.service.EMSMainService;
+import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
@@ -1326,11 +1335,13 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else {
 					
 						String circulardate   = (String)req.getParameter("circulardate");
+						String todate   = (String)req.getParameter("todate");
 						String description = (String)req.getParameter("description");
 						String circularid = (String)req.getParameter("circular");
 						CircularList circular = new CircularList();
 					
 						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
+						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularId(Long.parseLong(circularid));
 						circular.setModifiedBy(UserId);
@@ -1458,5 +1469,6 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					 return "redirect:/DoctorList.htm";
 				}
 				
-			}                                                                                 
+			}                    
+			
 }
