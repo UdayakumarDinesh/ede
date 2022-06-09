@@ -24,5 +24,5 @@ public interface LeaveService {
 	public List<Object[]> LeaveCode(String EmpNo) throws Exception ;
 	public List<Object[]>   purposeList()throws Exception;
 	public String LeaveCheck(LeaveCheckDto dto)throws Exception;
-	
+	public LeaveRegister getRegister(String EmpNo) throws Exception ;
 }

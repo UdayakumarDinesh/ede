@@ -188,7 +188,8 @@ String ses=(String)request.getParameter("result");
     
     <div class="col-md-1">
     <div class="group-form">
-    <select class="form-control  selectpicker" required="required" name="month" title="Month" id="month1">
+    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
+    <option value="LOB">Opening</option>
     <option value="January">Jan</option>
     <option value="July">Jul</option>
     </select>
@@ -300,11 +301,9 @@ function leaveCredit(){
 	    var  year=$('#year1').val();
 	    var  month=$('#month1').val();
 	    var  id=$('#empNo').val();
-	    if(year!=''&&month!=''&&id!=''){    	
+	    if(year!=''&&month!='' &&'A'!=id&&id!=''){    	
 	    	$('#exampleModalCenter').modal('toggle');
-	    	if('A'==id){
-	    		$("#preview").submit();
-	    	}
+
 	    	$.ajax({
 	  			
 	  			type : "GET",
@@ -348,6 +347,17 @@ function leaveCredit(){
 		 			$("#RegId").val(consultVals[0][13]);
 		 			$("#EmpId").val(consultVals[0][0]);
 					$("#type").val('U');
+			  }else if('OC'== consultVals[0][12]){
+		  			$("#sub").val('Credit');
+		 			$("#exampleModalLongTitle").html(consultVals[0][1]+', '+consultVals[0][2]+'   Leave Credit For Leave Opening Balance '+year);
+		 			$("#EmpId").val(consultVals[0][0]);
+					$("#type").val('C');
+		  		}else if('OU'== consultVals[0][12]){
+			  	    $("#sub").val('Update');
+		 			$("#exampleModalLongTitle").html(consultVals[0][1]+', '+consultVals[0][2]+'  Already   Leave  Credited For Leave Opening Balance '+month+' '+year);
+		 			$("#RegId").val(consultVals[0][13]);
+		 			$("#EmpId").val(consultVals[0][0]);
+					$("#type").val('U');
 			  }
 	  			
 	  			if('M'== consultVals[0][14]){
@@ -370,8 +380,12 @@ function leaveCredit(){
 	 				
 	  			}
 	  		});
-	    	
-	    }else {
+	    }else if('A'==id && 'LOB'!=month && year!=''){
+	    		$("#preview").submit();
+	   	
+	    }else if('A'==id && 'LOB'==month){
+	    	alert("You Can't Credit Opening balance For All, Please Select One Employee.");
+	    }else{	
 	    	alert("Please Select Options.");
 	    }
 		

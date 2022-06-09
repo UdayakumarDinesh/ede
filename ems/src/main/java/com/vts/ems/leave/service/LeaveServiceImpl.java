@@ -1,5 +1,7 @@
 package com.vts.ems.leave.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dao.LeaveDaoImpl;
 import com.vts.ems.leave.dto.LeaveCheckDto;
 import com.vts.ems.leave.model.LeaveRegister;
@@ -160,6 +162,41 @@ public class LeaveServiceImpl implements LeaveService{
 	@Override
 	public String LeaveCheck(LeaveCheckDto dto) throws Exception {
 		String Result="Please Try Again";
+		LabMaster lab=dao.getLabDetails().get(0);
+		LeaveRegister register=CheckRegister(dto.getEmpNo());
+		long days=0;
+		Date startDate=sdf.getRegularDateFormat().parse(dto.getFromDate());
+		Date endDate=sdf.getRegularDateFormat().parse(dto.getToDate());
+		LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+		for (LocalDate date = start; date.isBefore(end)|| date.isEqual(end) ; date = date.plusDays(1)) {
+		    // Do your job here with `date`.
+		    System.out.println(date +" "+date.getDayOfWeek());
+		}
+		if(!lab.getLabCode().equalsIgnoreCase("STARC")) {
+		   if(dto.getLeaveType().equalsIgnoreCase("0001")) {
+			   
+			   if(register.getCL()>=(dto.getHalfOrFull().equalsIgnoreCase("X")?(double)days:(double)days/2)) {
+				   
+				   
+				   Result="You Can Apply CL";
+			   }else {
+				   Result="Insufficient Balance";
+			   }
+			   
+		   }else if(dto.getLeaveType().equalsIgnoreCase("0002")&&register.getEL()>=days) {
+			   
+			   
+			   Result="You Can Apply EL";
+		   }else {
+			   Result="Insufficient Balance";
+		   }
+		   
+			
+		}else {
+			Result="Sitara Please Try Again";
+		}
 		return Result;
 	}
 
@@ -169,6 +206,119 @@ public class LeaveServiceImpl implements LeaveService{
 		return dao.OfficerDetails(EmpNo);
 	}
 
+	@Override
+	public LeaveRegister getRegister(String EmpNo) throws Exception {
+		List<Object[]> regiList=dao.getRegister(EmpNo);
+		double CL=0.0;
+		int EL=0;
+		int EL_LAPSE=0;
+		int HPL=0;
+		int CML=0;
+		int RH=0;
+		int ML=0;
+		int PL=0;
+		int CCL=0;
+		int SL=0;
+		int ADV_EL=0;
+		int ADV_HPL=0;
+		int EOL=0;
+		if(regiList!=null&&regiList.size()>0) {
+		for(Object[] obj:regiList) {
+			if("LAU".equalsIgnoreCase(obj[14].toString())||"LSO".equalsIgnoreCase(obj[14].toString())) {
+				CL-=Double.parseDouble(obj[2].toString());
+				EL-=Integer.parseInt(obj[3].toString());
+				HPL-=Integer.parseInt(obj[4].toString());
+				CML-=Integer.parseInt(obj[5].toString());
+				RH-=Integer.parseInt(obj[6].toString());
+				CML-=Integer.parseInt(obj[7].toString());
+				CCL-=Integer.parseInt(obj[8].toString());
+				SL-=Integer.parseInt(obj[9].toString());
+				ML-=Integer.parseInt(obj[10].toString());
+				PL-=Integer.parseInt(obj[11].toString());
+			}else {
+				CL+=Double.parseDouble(obj[2].toString());
+				EL+=Integer.parseInt(obj[3].toString());
+				HPL+=Integer.parseInt(obj[4].toString());
+				CML+=Integer.parseInt(obj[5].toString());
+				RH+=Integer.parseInt(obj[6].toString());
+				CML+=Integer.parseInt(obj[7].toString());
+				CCL+=Integer.parseInt(obj[8].toString());
+				SL+=Integer.parseInt(obj[9].toString());
+				ML+=Integer.parseInt(obj[10].toString());
+				PL+=Integer.parseInt(obj[11].toString());
+			}
+		}
+		}
+		LeaveRegister register=new LeaveRegister();
+		register.setEMPID(EmpNo);
+   		register.setCL(CL);
+		register.setEL(EL);
+		register.setHPL(HPL);
+		register.setCML(CML);
+		register.setRH(RH);
+		register.setCCL(CCL);
+		register.setEOL(EOL);
+		register.setPL(PL);
+		register.setML(ML);
+		register.setSL(SL);
+		return register;
+	}
 
+	public LeaveRegister CheckRegister(String EmpNo) throws Exception {
+		List<Object[]> regiList=dao.getRegister(EmpNo);
+		double CL=0.0;
+		int EL=0;
+		int EL_LAPSE=0;
+		int HPL=0;
+		int CML=0;
+		int RH=0;
+		int ML=0;
+		int PL=0;
+		int CCL=0;
+		int SL=0;
+		int ADV_EL=0;
+		int ADV_HPL=0;
+		int EOL=0;
+		if(regiList!=null&&regiList.size()>0) {
+		for(Object[] obj:regiList) {
+			if("LAU".equalsIgnoreCase(obj[14].toString())||"LSO".equalsIgnoreCase(obj[14].toString())) {
+				CL-=Double.parseDouble(obj[2].toString());
+				EL-=Integer.parseInt(obj[3].toString());
+				HPL-=Integer.parseInt(obj[4].toString());
+				CML-=Integer.parseInt(obj[5].toString());
+				RH-=Integer.parseInt(obj[6].toString());
+				CML-=Integer.parseInt(obj[7].toString());
+				CCL-=Integer.parseInt(obj[8].toString());
+				SL-=Integer.parseInt(obj[9].toString());
+				ML-=Integer.parseInt(obj[10].toString());
+				PL-=Integer.parseInt(obj[11].toString());
+			}else {
+				CL+=Double.parseDouble(obj[2].toString());
+				EL+=Integer.parseInt(obj[3].toString());
+				HPL+=Integer.parseInt(obj[4].toString());
+				CML+=Integer.parseInt(obj[5].toString());
+				RH+=Integer.parseInt(obj[6].toString());
+				CML+=Integer.parseInt(obj[7].toString());
+				CCL+=Integer.parseInt(obj[8].toString());
+				SL+=Integer.parseInt(obj[9].toString());
+				ML+=Integer.parseInt(obj[10].toString());
+				PL+=Integer.parseInt(obj[11].toString());
+			}
+		}
+		}
+		LeaveRegister register=new LeaveRegister();
+		register.setEMPID(EmpNo);
+   		register.setCL(CL);
+		register.setEL(EL);
+		register.setHPL(HPL);
+		register.setCML(CML);
+		register.setRH(RH);
+		register.setCCL(CCL);
+		register.setEOL(EOL);
+		register.setPL(PL);
+		register.setML(ML);
+		register.setSL(SL);
+		return register;
+	}
 	
 	}
