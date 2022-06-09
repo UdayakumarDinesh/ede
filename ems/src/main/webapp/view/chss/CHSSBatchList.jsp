@@ -102,7 +102,7 @@
 					</form>	
 				</div>
 			
-				<div class="card-body " >
+				<div class="card-body main-card " >
 											
 					<form action="CHSSContingentGenerate.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -3,6 +3,7 @@ package com.vts.ems.dao;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -22,12 +23,15 @@ public interface EmsDao
 	public int userResetPassword(String loginid, String password) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
-	public List<Object[]> CirculatList(LocalDate Fromdate , LocalDate todate) throws Exception;
+	public List<Object[]> CirculatList() throws Exception;
 	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
 	public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate, int Month) throws Exception;
-
+	public long PasswordChangeHystoryCount(String loginid) throws Exception;
+	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
+	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
+	
 }

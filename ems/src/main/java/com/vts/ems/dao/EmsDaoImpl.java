@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -101,6 +102,24 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String PASSWORDCHANGEHYSTORYCOUNT  ="SELECT COUNT(loginid),'passwordCount' FROM login_password_history WHERE loginid=:loginid";
+	@Override
+	public long PasswordChangeHystoryCount(String loginid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO PasswordChangeHystoryCount");
+		try {
+			Query query = manager.createNativeQuery(PASSWORDCHANGEHYSTORYCOUNT);
+			query.setParameter("loginid", loginid);		
+			Object[] result = (Object[])query.getResultList().get(0);
+			
+			return Long.parseLong(result[0].toString());
+					
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 	@Override
 	public List<EMSNotification> NotificationList(long EmpId)throws Exception
@@ -305,17 +324,14 @@ public class EmsDaoImpl implements EmsDao
 		
 	}
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,todate FROM chss_circular_list  WHERE circulardate BETWEEN :fromdate AND :todate ORDER BY circularid DESC";
-
-	
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
 	@Override
-	 public List<Object[]> CirculatList(LocalDate fromdate , LocalDate todate) throws Exception
+	 public List<Object[]> CirculatList() throws Exception
 	 {
 		 logger.info(new Date() +"Inside DAO CirculatList()");	
 		 try {
 				Query query =  manager.createNativeQuery(CIRCULARLIST);
-				 query.setParameter("fromdate", fromdate);
-				 query.setParameter("todate", todate);
+				
 				return (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside DAO CirculatList "+ e);
@@ -402,6 +418,36 @@ public class EmsDaoImpl implements EmsDao
 					return (List<Object[]>)query.getResultList();
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside DAO GetDoctorList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
+		{
+			logger.info(new Date() +"Inside DAO loginHisAddSubmit");
+
+			try {
+				manager.persist(model);
+				manager.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return model.getPasswordHistoryId(); 
+		}
+		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName FROM chss_empanelledhospital WHERE isactive='1'";
+		@Override
+		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
+		{
+			 logger.info(new Date() +"Inside DAO GetEmpanelledHostpitalList()");	
+			 try {
+					Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
 				e.printStackTrace();
 				return null;
 			}

@@ -204,13 +204,19 @@
 								    <a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
-								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> <i class="fa fa-history" aria-hidden="true" style="color: purple"></i> &nbsp;&nbsp;Audit Stamping </a>     
+								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> &nbsp;&nbsp;<i class="fa fa-history" aria-hidden="true" style="color: purple"></i> &nbsp;&nbsp;Audit Stamping </a>     
 								    <div class="dropdown-divider logoutdivider"></div>
 								 
-								 	<a class="dropdown-item" href="PasswordChange.htm" ><i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
+								 	<a class="dropdown-item" href="PasswordChange.htm" >&nbsp;<i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								   
-								   	<a class="dropdown-item" href="#" target="blank"> <i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
+								   <a class="dropdown-item" href="UserManualDoc.htm" target="blank"><img src="view/images/handbook.png"/> &nbsp;&nbsp;Manual </a>
+								    <div class="dropdown-divider logoutdivider"></div>
+								    
+								    <a class="dropdown-item" href="WorkFlow.htm" target="blank" ><img src="view/images/work.png"/>&nbsp;&nbsp; Work Flow</a>
+								    <div class="dropdown-divider logoutdivider"></div>
+						
+								   	<a class="dropdown-item" href="#" target="blank"> &nbsp;<i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
 								  	<div class="dropdown-divider logoutdivider"></div>
 									
 									<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
@@ -218,7 +224,7 @@
 								    	<form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
 									        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								                <button class="dropdown-item " href="#" data-target="#logoutModal" style="font-weight: 700">
-								                    <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: #B20600"></i>
+								                   &nbsp; <i class="fa fa-sign-out fa-1.5x" aria-hidden="true" style="color: #B20600"></i>
 								                    &nbsp;&nbsp;Logout
 								                </button>
 								        </form>

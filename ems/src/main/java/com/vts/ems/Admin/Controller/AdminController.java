@@ -1,11 +1,17 @@
 package com.vts.ems.Admin.Controller;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.Dto.CircularListDto;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.CircularList;
@@ -47,6 +55,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.service.EMSMainService;
+import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
@@ -75,7 +84,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
 					throws Exception {
 				String UserId = (String) ses.getAttribute("Username");
-				logger.info(new Date() +"Inside LoginTypeList.htm "+UserId);		
+				logger.info(new Date() +"Inside RoleFormAccess.htm "+UserId);		
 				try {
 					
 				
@@ -104,7 +113,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("moduleid", moduleid);
 				}
 				catch (Exception e) {
-						e.printStackTrace(); logger.error(new Date() +" Inside LoginTypeList.htm "+UserId, e);
+						e.printStackTrace(); logger.error(new Date() +" Inside RoleFormAccess.htm "+UserId, e);
 				}	
 				 return "Admin/RoleFormAccess";
 			}
@@ -205,7 +214,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    public  String ChssTestMain(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
 		    {
 		    	String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside ChssTestMain.htm "+UserId);
+				logger.info(new Date() +"Inside TestSub.htm "+UserId);
 				try {				 
 					List<Object[]> ChssTestMain = service.ChssTestSub(); 
 					req.setAttribute("ChssTestMain", ChssTestMain);
@@ -429,7 +438,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String ADDEDITMedicine(HttpServletRequest req ,HttpSession ses ,RedirectAttributes redir)throws Exception
 		{
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside MedicineList.htm "+UserId);
+			logger.info(new Date() +"Inside ChssMedicine.htm "+UserId);
 			try {
 				
 				String action = (String)req.getParameter("Action");
@@ -527,7 +536,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			int count =0;
 			Gson json = new Gson();
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside CheckDuplicateOtherItems()"+UserId);
+			logger.info(new Date() +"Inside DuplicateOtherItem.htm"+UserId);
 			try {
 				String treatmentName = (String)req.getParameter("treatmentName");
 				
@@ -549,7 +558,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			try {
 				
 				String action = (String)req.getParameter("Action");
-				
+				String empname =(String)ses.getAttribute("EmpName"); 
 				
 				if("MESSAGE".equalsIgnoreCase(action)) {
 					
@@ -566,7 +575,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					notification.setCreatedBy(UserId);
 					notification.setCreatedDate(sdtf.format(new Date()));
 					notification.setNotificationBy(EmpId);
-					notification.setNotificationMessage("Request Message from "+UserId);
+					notification.setNotificationMessage("Request Message from "+empname);
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationUrl("AdminReplyToReqMsg.htm");
 					notification.setIsActive(1);
@@ -845,7 +854,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String OtherItem( Model model, HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside OtherItemAmount.htm "+UserId);
 			try {
 				String tratementid =(String)req.getParameter("tratementid");
 				
@@ -879,7 +888,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		{
 
 			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside AddOtherItemAmount.htm "+UserId);
 			try {
 				String action = (String)req.getParameter("Action");
 				if("ADDAMT".equalsIgnoreCase(action)){
@@ -924,7 +933,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String EDITOtherAmt(HttpSession ses ,HttpServletRequest req,RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside EDITOtherAmt.htm "+UserId);
 			try {
 				String chssOtheramtid = (String)req.getParameter("chssOtheramtid");
 				if(chssOtheramtid!=null) {
@@ -977,14 +986,25 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String ReqMsgFromUserToAdmin(HttpSession ses ,HttpServletRequest req,RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
-		
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			long EmpId = (long)ses.getAttribute("EmpId");
+			logger.info(new Date() +"Inside AdminReplyToReqMsg.htm "+UserId);
 			try {
 				String requestid = (String)req.getParameter("action");
-				
+				String empname = (String)ses.getAttribute("EmpName");
 				if(requestid!=null) {
 					String response = "response"+requestid;
+					String empid = "employeeid"+requestid;
 					String responsemsg = (String)req.getParameter(response);
+					EMSNotification notification = new EMSNotification();                
+					notification.setCreatedBy(UserId);
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setEmpId(Long.parseLong(req.getParameter(empid)));
+					notification.setNotificationBy(EmpId);
+					notification.setNotificationMessage("Response Message from "+empname);
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("EmpRequestMsg.htm");
+					notification.setIsActive(1);
+					long value= service.EmpRequestNotification1(notification);
 					
 					int result  = service.UpdateAdminResponse( responsemsg ,  requestid ,UserId);
 					if (result != 0) {
@@ -1016,7 +1036,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		{
 			
 			String UserId = (String)ses.getAttribute("Username");			
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside RequestMessagelist.htm "+UserId);
 			try {
 				String emp       = (String)req.getParameter("employee");
 				String fromdate  = (String)req.getParameter("fromdate");
@@ -1043,7 +1063,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		{
 			
 			String UserId = (String)ses.getAttribute("Username");			
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside AllNotificationList.htm "+UserId);
 			long EmpId = (long)ses.getAttribute("EmpId");
 			try {			
 				 
@@ -1064,7 +1084,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			int count =0;
 			Gson json = new Gson();
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
+			logger.info(new Date() +"Inside DuplicateTest.htm"+UserId);
 			try {
 				String testname = (String)req.getParameter("testName");
 				
@@ -1081,7 +1101,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		public String GetDesignation(HttpServletRequest req, HttpSession ses )throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");			
-			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
+			logger.info(new Date() +"Inside Designation.htm "+UserId);
 			
 			try {			
 				String action = (String)req.getParameter("action");
@@ -1203,7 +1223,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				int count =0;
 				Gson json = new Gson();
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside DuplicateTestCode()"+UserId);
+				logger.info(new Date() +"Inside DuplicateTestCode.htm"+UserId);
 				try {
 					String testCode = (String)req.getParameter("TestCode");
 					
@@ -1221,7 +1241,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public @ResponseBody String RoleAccess(HttpSession ses, HttpServletRequest req , RedirectAttributes redir )throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside RoleAccess.htm "+UserId);
+				logger.info(new Date() +"Inside UpdateRoleAcess.htm "+UserId);
 				try {
 					String formroleaccessid = (String)req.getParameter("formroleaccessid");
 					String moduleid  = (String)req.getParameter("moduleid");
@@ -1243,7 +1263,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public String circularList(HttpSession ses, HttpServletRequest req )throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				logger.info(new Date() +"Inside CircularLists.htm "+UserId);
 				List<Object[]> circulatlist = new ArrayList<Object[]>();
 			   	 try {
 			   		 String action = (String)req.getParameter("action");
@@ -1286,20 +1306,20 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public String CirculatAddEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				logger.info(new Date() +"Inside CircularADDEDIT.htm "+UserId);
 				try {
 					String action = (String)req.getParameter("action");
 					
 					if("CircularAdd".equalsIgnoreCase(action)) {
 						
-						String todate   =(String)req.getParameter("todate");
+						String circulardate   =(String)req.getParameter("circulardate");
 						String description = (String)req.getParameter("description");
-						
+						String todate = (String)req.getParameter("todate");
 						CircularList circular = new CircularList();
 						
-						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
-						circular.setCircularDate(LocalDate.now().toString());
+						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setCreatedBy(UserId);
 						circular.setCreatedDate(sdtf.format(new Date()));
 						CircularListDto filecircular = new CircularListDto();
@@ -1314,11 +1334,13 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 					}else {
 					
+						String circulardate   = (String)req.getParameter("circulardate");
 						String todate   = (String)req.getParameter("todate");
 						String description = (String)req.getParameter("description");
 						String circularid = (String)req.getParameter("circular");
 						CircularList circular = new CircularList();
-						circular.setCircularDate(LocalDate.now().toString());
+					
+						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
 						circular.setDescription(description.trim());
 						circular.setCircularId(Long.parseLong(circularid));
@@ -1350,7 +1372,6 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				try {
 					
 					String path = (String)req.getParameter("path");
-					System.out.println("path    :"+path);
 					String arr[] = path.split("//");
 					res.setContentType("Application/octet-stream");	
 					
@@ -1375,7 +1396,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public String DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside circularAddEdit.htm "+UserId);
+				logger.info(new Date() +"Inside DoctorList.htm "+UserId);
 				List<Object[]> doctorlist = new ArrayList<Object[]>();
 			   	 try {
 					String action = (String)req.getParameter("action");
@@ -1399,7 +1420,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 			
 			
-			@RequestMapping(value="" , method = RequestMethod.POST)
+			@RequestMapping(value="DoctorAddEdit.htm" , method = RequestMethod.POST)
 			public String DoctorsAddEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
@@ -1412,7 +1433,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String qualification = (String)req.getParameter("Qualification");
 						
 					DoctorList doctor = new DoctorList();
-					doctor.setDoctorName(name);
+					doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
 					doctor.setQualification(qualification);
 					doctor.setCreatedBy(UserId);
 					doctor.setCreatedDate(sdtf.format(new Date()));
@@ -1426,13 +1447,14 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else{
 						String name = (String)req.getParameter("DoctorName");
 						String qualification = (String)req.getParameter("Qualification");
-							
+						String doctorId = (String)req.getParameter("doctorId");
 						DoctorList doctor = new DoctorList();
-						doctor.setDoctorName(name);
+						doctor.setDoctorId(Long.parseLong(doctorId));
+						doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
 						doctor.setQualification(qualification);
 						doctor.setModifiedBy(UserId);
 						doctor.setModifiedDate(sdtf.format(new Date()));
-						long result = service.DoctorsAdd(doctor);
+						long result = service.DoctorsEdit(doctor);
 						if (result != 0) {
 							 redir.addAttribute("result", "Doctor Updated Successfully");
 						} else {
@@ -1447,5 +1469,6 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					 return "redirect:/DoctorList.htm";
 				}
 				
-			}
+			}                    
+			
 }

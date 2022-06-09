@@ -79,7 +79,7 @@ String todate  =  (String)request.getAttribute("todate");
 				    </div>
 			</form>
 			
-					<div class="card-body">
+					<div class="card-body main-card">
         			
         		  <form action="##" method="GET" name="myfrm1" id="myfrm1"  > 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
@@ -98,15 +98,17 @@ String todate  =  (String)request.getAttribute("todate");
 								<tbody>	
 								<%if(Reqlist!=null){ int slno=0; for(Object[] obj:Reqlist){ 
 								String respose = "response"+obj[0];
+								String employeeid = "employeeid"+obj[0];
 								%>							
 										<tr>
 											<td style="text-align: center;"><%=++slno%></td>
-											<td> <%=obj[1] %></td>
+											<td><input type="hidden" id="employeeid" name="<%=employeeid%>" value="<%=obj[4]%>"> <%=obj[1] %></td>
 											<td align="left"><%=obj[2]%></td>		
 											<td> <textarea class="form-control"  name="<%=respose%>"  rows="5" cols="60"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
-											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" formaction="AdminReplyToReqMsg.htm" formmethod="POST" name="action" value="<%=obj[0]%>" >SUBMIT</button><%}%></td>
+											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" formaction="AdminReplyToReqMsg.htm" formmethod="POST" name="action" value="<%=obj[0]%>" onclick="return confirm('Are You Sure To Submit!')">SUBMIT</button><%}%></td>		
 										</tr>	
-											<%}} %>							
+										
+								<%}} %>							
 								</tbody>
 							</table>					
 						</div>		

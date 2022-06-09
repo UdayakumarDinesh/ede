@@ -26,7 +26,7 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Approval List</h5>
+				<h5>Pending Approvals List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
@@ -61,7 +61,7 @@
 	</div>
 				
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 					
 					<form action="CHSSApprovalForward.htm" method="post" id="ClaimForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

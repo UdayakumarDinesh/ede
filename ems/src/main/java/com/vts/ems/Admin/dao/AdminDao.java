@@ -95,7 +95,8 @@ public interface AdminDao {
 	public CircularList GetCircularToEdit(Long  circularid)throws Exception;
 	public long EditCircular(CircularList circular) throws Exception;
 	public long GetCircularMaxId()throws Exception;
-	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception;
-	 public DoctorList GetDoctor(Long  doctorid)throws Exception;
-	 public long DoctorsAdd(DoctorList doctor)throws Exception;
+	public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception;
+	public DoctorList GetDoctor(Long  doctorid)throws Exception;
+	public long DoctorsAdd(DoctorList doctor)throws Exception;
+	public long DoctorsEdit(DoctorList doctor)throws Exception;
 }

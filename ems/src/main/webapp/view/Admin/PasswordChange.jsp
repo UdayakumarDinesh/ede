@@ -27,7 +27,7 @@ NFormatConvertion nfc=new NFormatConvertion();
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>			
+					<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li> -->			
 					<li class="breadcrumb-item active " aria-current="page">Password Change</li>
 				</ol>
 			</div>	
@@ -37,12 +37,7 @@ NFormatConvertion nfc=new NFormatConvertion();
 	<div class="page card dashboard-card">
 		<div class="card-body" >		
 			
-		
-			<div class="card" >
-			
-				<div class="card-body">
-        			
-					<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
+		<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						
 	                   <div class="row"> 
@@ -79,13 +74,12 @@ NFormatConvertion nfc=new NFormatConvertion();
 	                          </div>
 	                          
                         </form>      
-	 		      <br>
-	  			</div>
+	 	
+	  	</div>
 	
 	
 	
-		   	 </div>				
-	       </div>
+		   
 	     </div>	
 	
 	

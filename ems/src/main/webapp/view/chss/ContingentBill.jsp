@@ -149,8 +149,8 @@ th,td
 	<br>
 	<div style="text-align: left ;margin: 0px 5px 0px 10px;">
 		<p>
-			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
-			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
+			The medical claim received up to <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
+			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbursement from the following
 			employees have been processed and admitted at CHSS rates.
 		</p>
 	</div>
@@ -194,8 +194,8 @@ th,td
 				</td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString()))  %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[28].toString()))  %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString())) )) %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString())) )) %></td>
 											
 			</tr>
 		<%	k++;

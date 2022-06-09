@@ -3,6 +3,7 @@ package com.vts.ems.pis.dao;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -34,12 +35,13 @@ public interface PisDao {
 	public long EmployeeEditSubmit(Employee emp) throws Exception;
 	public long EmployeeDetailsAddSubmit(EmployeeDetails emp) throws Exception;
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception;
-	public EmployeeDetails getEmployee(String empid) throws Exception;
+	public EmployeeDetails getEmployee(String empno) throws Exception;
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception;
 	public Employee getEmp(String empid) throws Exception;
 	public int PunchcardList(String value)throws Exception;
 	public long getempno()throws Exception;
 	public String PhotoPath(String empid)throws Exception;
-	public int PhotoPathUpdate(String Path, String EmpId) throws Exception;
+	public int PhotoPathUpdate(String Path, String empno) throws Exception;
 	public List<Object[]> LoginMasterList() throws Exception;
 	public List<Object[]> getEmpList()throws Exception;
 	public List<Object[]> getLoginTypeList()throws Exception;
@@ -91,4 +93,8 @@ public interface PisDao {
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception;
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception;
 	public List<Object[]> GetEmployeeList()throws Exception;
+	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
+	public Object[] GetEmpDetails(String empid)throws Exception;
+	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception;
+	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception;
 }

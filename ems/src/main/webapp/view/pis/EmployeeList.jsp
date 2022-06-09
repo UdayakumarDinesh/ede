@@ -106,7 +106,7 @@
 									slno++;%>
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="empid" value="<%=obj[0] %>"> </td>
-											<td><%= slno%>.</td>
+											<td><%=obj[3]%></td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											<td><%=obj[4] %></td>
@@ -125,16 +125,16 @@
 						</div>
 					
 					
-					<div class="row text-center">
-						<div class="col-md-12">
+					<div class="row text-center" >
+						<div class="col-md-12" >
 						
-							<button type="submit" class="btn btn-sm add-btn" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm add-btn" style="margin-right: 5px;" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
+							<button type="submit" class="btn btn-sm edit-btn" style="margin-right: 5px;" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
 
 							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
-							<button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button>
-							
+							<button type="submit" class="btn btn-sm view-btn" style="margin-right: 5px;" name="action" value="view" formaction="EmployeeDetails.htm"  Onclick="Edit(empForm)" >VIEW </button>
+							<button type="submit" class="btn btn-sm view-btn" style="background-color: #4b6a9c;" name="action"  value="UpdateSeniority" formaction="UpdateEmployeeSeniority.htm"  Onclick="Edit(empForm)" >UPDATE SENIORITY </button>
 							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>
 							<button type="button" class="btn btn-sm submit-btn" name="action" value="view"  >SUBMIT </button>
 							<button type="button" class="btn btn-sm delete-btn" name="action" value="view"  >DELETE </button>

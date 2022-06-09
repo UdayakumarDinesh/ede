@@ -801,7 +801,7 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
-	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
+	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage ,a.empid FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
 	@Override
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
@@ -1042,7 +1042,7 @@ public class AdminDaoImpl implements AdminDao{
 		query.setParameter("desigid", desigid);
 		return (Object[])query.getSingleResult();
 	}
-	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
+	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
 	
 	@Override
 	public List<Object[]> GetFromemployee()throws Exception
@@ -1052,7 +1052,7 @@ public class AdminDaoImpl implements AdminDao{
 		return list; 
 	}
 	
-	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid NOT IN (SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.designationid=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1'))";
+	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid NOT IN (SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1'))";
 	@Override
 	public List<Object[]> GetToemployee()throws Exception
 	{
@@ -1193,7 +1193,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate ,todate ,OriginalName FROM chss_circular_list WHERE (( CircularDate BETWEEN  :fromdate AND :todate ) OR( todate BETWEEN :fromdate AND :todate )OR ( CircularDate > :fromdate AND todate < :todate ))  ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY circularid DESC";
 	
 	@Override
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception
@@ -1238,6 +1238,20 @@ public class AdminDaoImpl implements AdminDao{
 			logger.info(new Date() + "Inside DoctorsAdd()");
 			try {
 				manager.persist(doctor);
+				manager.flush();
+				return (long)doctor.getDoctorId();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0l;
+			}
+		}
+		
+		@Override
+		public long DoctorsEdit(DoctorList doctor)throws Exception
+		{
+			logger.info(new Date() + "Inside DoctorsEdit()");
+			try {
+				manager.merge(doctor);
 				manager.flush();
 				return (long)doctor.getDoctorId();
 			} catch (Exception e) {

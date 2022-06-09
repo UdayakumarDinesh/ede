@@ -100,6 +100,12 @@
   
   <spring:url value="/webresources/js/chart/no-data-to-display.js" var="NoDatajs" />  
   <script src="${NoDatajs}"></script>   
+  
+  <spring:url value="/webresources/js/chart/highcharts-more.js" var="HighMorejs" />  
+  <script src="${HighMorejs}"></script>   
+  
+  <spring:url value="/webresources/js/chart/solid-gauge.js" var="SolidGaugejs" />  
+  <script src="${SolidGaugejs}"></script>   
 
 
 

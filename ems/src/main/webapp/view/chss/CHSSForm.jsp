@@ -113,7 +113,7 @@ th,td
 
 .text-green
 {
-	color:  #0A480A;
+	color:  #243D25;
 }
  
 			
@@ -224,10 +224,10 @@ th,td
 						<th class="center">Date</th>
 						<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 					</tr>
-					<% double billstotal=0;
+					<% long billstotal=0;
 						for(int i=0;i<chssbillslist.size();i++)
 						{
-							billstotal +=Double.parseDouble(chssbillslist.get(i)[5].toString());
+							billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[5].toString()));
 							%>
 						<tr>
 							<td class="center text-blue"><%=i+1 %></td>
@@ -240,8 +240,8 @@ th,td
 					<%if(chssbillslist.size()>0){ %>
 						<tr>
 							<td colspan="3"></td>
-							<td style="text-align: right;"><b>Total </b></td>
-							<td style="text-align: right;" class="text-blue" ><%=billstotal %></td>
+							<td style="text-align: right;"><b>Rounded Total </b></td>
+							<td style="text-align: right;" class="text-blue" ><%=nfc.rupeeFormat(String.valueOf(billstotal)) %></td>
 						</tr>
 					<%}else{ %>
 						<tr>
@@ -349,7 +349,7 @@ th,td
 					{%>
 						<%if(i==1){ %>
 							<tr>
-								<td colspan="4" style="text-align: center;"><b>Consultation charges</b></td>
+								<td colspan="4" style="text-align: center;"><b>Consultation Charges</b></td>
 								<td class="right"></td>
 								<td class="right"></td>
 								<td class="right"></td>
@@ -389,8 +389,6 @@ th,td
 						itemstotal += Double.parseDouble(consult[6].toString());
 						totalremamount +=Double.parseDouble(consult[7].toString());
 					} %>
-					
-					
 					
 					<% i=1;
 					for(Object[] test :TestsDataList)
@@ -598,10 +596,10 @@ th,td
 						
 					</tr>
 					<tr>
-						<td colspan="7" style="text-align:center; border-bottom : 0px">Finance and Accounts Department</td>
+						<td colspan="7" style="text-align:center; border-bottom : 0px;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
+					</tr>
 					<tr>
-					<tr>
-						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:80px;padding: 0px;margin:0px;">
+						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:120px;padding: 0px;margin:0px;">
 							<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("PO")){%>
@@ -610,7 +608,7 @@ th,td
 								<% } } %>
 							</ul>
 						</td>				
-						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:80px;">
+						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:120px;">
 							<ul style="float: right;list-style-type: none; margin:10px 5px -35px 0px; ">
 								<%for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("VO")){%>

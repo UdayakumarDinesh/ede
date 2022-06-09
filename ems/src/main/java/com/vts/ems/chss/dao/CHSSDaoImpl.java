@@ -40,7 +40,6 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.model.Employee;
 
 
 @Transactional
@@ -407,6 +406,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
 	
 	@Override
 	public int CHSSConsultMainDelete(String  consultmainid) throws Exception
@@ -1271,7 +1271,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
-	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.designationid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
+	private static final String CHSSSTAUSDETAILS="SELECT a.chsstransactionid,f.empid,c.empname,d.designation,e.divisionname,a.actiondate,a.remark,b.chssstatus FROM chss_apply_transaction a, chss_status b,employee c,employee_desig d,division_master e ,chss_apply f WHERE a.chssstatusid=b.chssstatusid  AND f.chssapplyid=a.chssapplyid AND a.actionby=c.empid  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.chssapplyid=:chssapplyid";
 	@Override
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
 	{
@@ -1353,13 +1353,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.DesignationId = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.DesignationId = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
+			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.DesignationId = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.Designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.DesignationId = ed.DesigId AND cc.ContingentId = :contingentid ";
+			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid ";
 	@Override
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception
 	{
@@ -1378,7 +1378,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSAPPROVALAUTH  ="SELECT e.empid,e.empname,ed.Designation, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.DesignationId = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType  ";
+	private static final String CHSSAPPROVALAUTH  ="SELECT e.empid,e.empname,ed.desigid, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.desigid = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType  ";
 	@Override
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception
 	{
@@ -1655,7 +1655,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 
-	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.Designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.DesignationId = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
+	private static final String CLAIMAPPROVEDPOVODATA  ="SELECT e.empid,'PO' ,e.EmpName,ed.DesigCode, ed.designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.POId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid UNION SELECT e.empid,'VO' ,e.EmpName,ed.DesigCode, ed.designation FROM chss_apply ca, employee e, employee_desig ed WHERE ca.VOId = e.EmpId AND e.desigid = ed.DesigId AND ca.CHSSApplyId = :chssapplyid";
 	@Override
 	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
 	{
@@ -1672,9 +1672,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
-	
-	
-	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.Designation FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.DesignationId = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND TRIM(cat.Remark)<>'' AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate ASC";
+	private static final String CLAIMREMARKSHISTORY  ="SELECT cat.CHSSStatusId,cat.Remark, cs.CHSSStatus,  e.EmpName,  ed.designation FROM  chss_status cs,  chss_apply_transaction cat,  chss_apply ca,  employee e,  employee_desig ed WHERE cat.ActionBy = e.EmpId AND e.desigid = ed.DesigId  AND cs.CHSSStatusId = cat.CHSSStatusId AND ca.chssapplyid = cat.chssapplyid AND cs.CHSSStatusId<=6 AND TRIM(cat.Remark)<>'' AND ca.chssapplyid =:chssapplyid  ORDER BY cat.ActionDate ASC";
 	@Override
 	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
 	{
@@ -1750,6 +1748,38 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
+
+	@Override
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetClaimsList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate );");
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			query.setParameter("empid", empid);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed WHERE e.DesigId = ed.DesigId ORDER BY e.srno DESC";
+	@Override
+	public List<Object[]> EmployeesList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EmployeesList");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEESLIST);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	
 }

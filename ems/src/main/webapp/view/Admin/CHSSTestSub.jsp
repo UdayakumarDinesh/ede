@@ -53,7 +53,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 		
 			<div class="card" >
 			
-				<div class="card-body " >
+				<div class="card-body main-card  " >
 				
 					<form action="ChssTestSub.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

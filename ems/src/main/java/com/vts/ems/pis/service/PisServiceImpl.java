@@ -12,12 +12,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
@@ -37,8 +37,8 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
-import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
@@ -157,14 +157,8 @@ public class PisServiceImpl implements PisService
 	public long EmployeeAddSubmit(Employee emp,EmployeeDetails empd) throws Exception
 	{
 		emp.setCreatedDate(sdtf.format(new Date()));
-		long empno = dao.getempno();
-		long intemp = empno + 1;
-		String empid2 = String.valueOf(intemp);
-		String empid = StringUtils.leftPad(empid2, 7, "0");
-		emp.setEmpNo(empid);
 		long result=dao.EmployeeAddSubmit(emp);
-		if(result>0) {
-			empd.setEmpNo(empid);
+		if(result>0) {		
 			empd.setCreatedDate(sdtf.format(new Date()));
 			dao.EmployeeDetailsAddSubmit(empd);
 		}
@@ -181,7 +175,7 @@ public class PisServiceImpl implements PisService
 		employee.setEmail(emp.getEmail());
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setDesigId(emp.getDesigId());
-		
+		employee.setEmpNo(emp.getEmpNo());
 	     return dao.EmployeeEditSubmit(employee);
 	}
 	
@@ -193,6 +187,7 @@ public class PisServiceImpl implements PisService
 		
 		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
 		employee.setTitle(emp.getTitle());
+		employee.setEmpNo(emp.getEmpNo());
 		employee.setDOB(emp.getDOB());
 		employee.setDOA(emp.getDOA());
 		employee.setDOJL(emp.getDOJL());
@@ -235,6 +230,12 @@ public class PisServiceImpl implements PisService
 	{
 		return dao.getEmployee(empid);
 	}
+	
+	@Override
+	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
+	{
+		return dao.getEmployeeDetailsData(empno);
+	}
 	@Override
 	public int PunchcardList(String puchcard)throws Exception{
 		return dao.PunchcardList(puchcard);
@@ -267,13 +268,13 @@ public class PisServiceImpl implements PisService
 	        }     
 	    }
 	@Override
-	public int saveEmpImage(MultipartFile file ,String empid ,String uploadpath)throws Exception{
+	public int saveEmpImage(MultipartFile file ,String empno ,String uploadpath)throws Exception{
 		int result =0;
 		try {
 			
 			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
-			 String fileName=empid+"."+OriginalFilename[1];
-			  result =dao.PhotoPathUpdate(fileName,empid);
+			 String fileName=empno+"."+OriginalFilename[1];
+			  result =dao.PhotoPathUpdate(fileName,empno);
 			 saveFile(uploadpath,fileName,file);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -329,7 +330,7 @@ public class PisServiceImpl implements PisService
 		login.setModifiedBy(username);
 		//login.setEmpId(Long.parseLong(empid));
 		login.setLoginId(Long.parseLong(loginid));
-		login.setModifiedDate(sdf.format(new Date()));
+		login.setModifiedDate(sdtf.format(new Date()));
 		login.setLoginType(logintype);
 		return dao.UserManagerEdit(login);
 	}
@@ -380,22 +381,22 @@ public class PisServiceImpl implements PisService
 		member.setMember_name(Details.getMember_name());
 		member.setDob(Details.getDob());
 		member.setRelation_id(Details.getRelation_id());
-//		member.setCghs_ben_id(Details.getCghs_ben_id());
-//		member.setFamily_status_id(Details.getFamily_status_id());
-//		member.setStatus_from(Details.getStatus_from());
-//		member.setBlood_group(Details.getBlood_group());
-//		member.setPH(Details.getPH());
+		member.setCghs_ben_id(Details.getCghs_ben_id());
+		member.setFamily_status_id(Details.getFamily_status_id());
+		member.setStatus_from(Details.getStatus_from());
+		member.setBlood_group(Details.getBlood_group());
+		member.setPH(Details.getPH());
 		member.setGender(Details.getGender());
-// 	    member.setMed_dep(Details.getMed_dep());
-// 	    member.setMed_dep_from(Details.getMed_dep_from());
-// 	    member.setLtc_dep(Details.getLtc_dep());
-//      member.setLtc_dep_from(Details.getLtc_dep_from());
-// 	    member.setMar_unmarried(Details.getMar_unmarried());
-//    	member.setEmp_unemp(Details.getEmp_unemp());
+ 	    member.setMed_dep(Details.getMed_dep());
+ 	    member.setMed_dep_from(Details.getMed_dep_from());
+ 	    member.setLtc_dep(Details.getLtc_dep());
+        member.setLtc_dep_from(Details.getLtc_dep_from());
+ 	    member.setMar_unmarried(Details.getMar_unmarried());
+    	member.setEmp_unemp(Details.getEmp_unemp());
      	member.setEmpid(Details.getEmpid());
      	member.setModifiedBy(Details.getModifiedBy());
  	    member.setModifiedDate(Details.getModifiedDate());
-//		member.setEmpStatus(Details.getEmpStatus());
+		member.setEmpStatus(Details.getEmpStatus());
 		member.setIsActive(1);
 		return dao.EditFamilyDetails( member);
 	}
@@ -600,19 +601,29 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public int PasswordChange(String OldPassword, String NewPassword, String UserId,String username)throws Exception {
+		public int PasswordChange(String OldPassword, String NewPassword, String loginid,String username)throws Exception {
 
 			logger.info(new Date() +"Inside PasswordChange");
-			String actualoldpassword=dao.OldPassword(UserId);
+			String actualoldpassword=dao.OldPassword(loginid);
 
-			if(encoder.matches(OldPassword, actualoldpassword)) {
+			if(encoder.matches(OldPassword, actualoldpassword))
+			{
 			
-			String oldpassword=encoder.encode(OldPassword);
-			String newpassword=encoder.encode(NewPassword);
-			
-			return dao.PasswordChange(oldpassword, newpassword, UserId, sdf.format(new Date()),username);
-			}else {
+				String oldpassword=encoder.encode(OldPassword);
+				String newpassword=encoder.encode(NewPassword);
+				int count=dao.PasswordChange(oldpassword, newpassword, loginid, sdtf.format(new Date()),username);
+				if(count>0) {
+					LoginPasswordHistory passHis= new LoginPasswordHistory();
+					passHis.setLoginId(Long.parseLong(loginid));
+					passHis.setPassword(newpassword);
+					passHis.setActionBy(username);
+					passHis.setActionDate(sdtf.format(new Date()));
+					passHis.setActionType("CP");
+					
+					dao.loginHisAddSubmit(passHis);
+				}
 				
+				return count;
 			}
 			return 0;
 		}
@@ -655,12 +666,23 @@ public class PisServiceImpl implements PisService
 				//if(empdata!=null) {
 				//	resetpwd = ""+empdata[2];
 				//}else {
-					resetpwd = "4321";
+					resetpwd = "1234";
 				//}
 				 
 				String pwd=encoder.encode(resetpwd);
+				int count=dao.ResetPassword(loginid,pwd,  username);;
+//				if(count>0) {
+//					LoginPasswordHistory passHis= new LoginPasswordHistory();
+//					passHis.setLoginId(Long.parseLong(loginid));
+//					passHis.setPassword(pwd);
+//					passHis.setActionBy(username);
+//					passHis.setActionDate(sdtf.format(new Date()));
+//					passHis.setActionType("AR");
+//					
+//					dao.loginHisAddSubmit(passHis);
+//				}
 				
-				return dao.ResetPassword(loginid,pwd,  username);
+				return count;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return 0;
@@ -685,5 +707,28 @@ public class PisServiceImpl implements PisService
 		public Employee getEmp(String empid) throws Exception {
 			
 			return dao.getEmp(empid);
+		}
+		
+		@Override
+		public Object[] GetEmpDetails(String empid)throws Exception
+		{
+			return dao.GetEmpDetails(empid);
+		}
+		@Override
+		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception{
+			
+			Long empId=Long.parseLong(empid);
+			Long SeniorityNumber=Long.parseLong(newSeniorityNumber);
+			int result= 0;
+			Long newSeniorityNumberL=SeniorityNumber;
+			List<Object[]> EmpSenHaveUpdate=dao.UpdateAndGetList(empId,newSeniorityNumber);
+			List<Object[]> result1=EmpSenHaveUpdate.stream().filter(srno-> Long.parseLong(srno[0].toString())>=SeniorityNumber && Long.parseLong(srno[1].toString())!=empId  ).collect(Collectors.toList());
+			
+			for(Object[] data:result1) { 
+			  Long empIdL=Long.parseLong(data[1].toString()); 
+			  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
+			}
+			
+			return result;
 		}
 }

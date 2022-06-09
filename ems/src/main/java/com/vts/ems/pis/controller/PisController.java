@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +50,7 @@ public class PisController {
 	
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 			
 	@Autowired
 	private PisService service;
@@ -84,10 +84,7 @@ public class PisController {
 		logger.info(new Date() +"Inside PisAdminEmpList.htm "+Username);		
 		try {
 			List<Object[]> EmployeeDetailsList =new ArrayList<Object[]>();
-			if(LoginType.equalsIgnoreCase("A")) 
-			{
-				EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);
-			}			
+			EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);				
 			req.setAttribute("EmployeeDetailsList", EmployeeDetailsList);
 			return "pis/EmployeeList";
 		}catch (Exception e) {
@@ -109,15 +106,20 @@ public class PisController {
 			if(empid==null) {
 				empid=String.valueOf((Long)ses.getAttribute("EmpId"));
 			}
+			
+			Object[] empdata = service.GetEmpData(empid);
 			Object[] employeedetails = service.EmployeeDetails(empid);	
 			Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
 			Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
 			Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
 			List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
 			List<Object[]> familydetails = service.getFamilydetails(empid);
-			
-			
-            String basevalue=service.getimage(empid);
+						
+            String basevalue=null;
+            if(empdata!=null && empdata[3]!=null) {
+            	basevalue=service.getimage(empdata[3].toString());
+
+            }        		
             
 			req.setAttribute("empid", empid);
 			req.setAttribute("employeedetails", employeedetails);
@@ -201,11 +203,12 @@ public class PisController {
 			Employee employee=new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
-			employee.setDesigId(Long.parseLong(Designationid));
-			employee.setEmpName(empname);
-			employee.setSrNo(Long.parseLong("0"));
-            
 			
+			employee.setDesigId(Long.parseLong(Designationid));
+			employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
+			employee.setSrNo(Long.parseLong("0"));
+            employee.setEmpNo(PunchCardNo.trim());
+			employee.setIsActive(1);
 			
 			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
@@ -288,7 +291,7 @@ public class PisController {
 			emp.setCreatedDate(new Date().toString());
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			
+			emp.setEmpNo(PunchCardNo.trim());
 			
 			
 			Long value=service.EmployeeAddSubmit(employee,emp);
@@ -312,10 +315,10 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EmployeeEdit.htm "+Username);		
 		try {
-			
 			String empid=req.getParameter("empid");
+				
 			req.setAttribute("emp", service.getEmp(empid));
-			req.setAttribute("employee", service.getEmployee(empid));			
+			req.setAttribute("employee", service.getEmployeeDetailsData(service.getEmp(empid).getEmpNo()));			
 			req.setAttribute("desiglist", service.DesigList());
 			req.setAttribute("piscategorylist", service.PisCategoryList());
 			req.setAttribute("piscatclasslist", service.PisCatClassList());
@@ -368,21 +371,24 @@ public class PisController {
 			String empstatus = req.getParameter("empstatus");
 			String PermPassNo = req.getParameter("PermPassNo");
 			String phno = req.getParameter("PhoneNo");
-			String EmpDeatailsId=req.getParameter("EmpDeatailsId");
+			String empdetailsid=req.getParameter("empdetailsid");
 			String EmpId= req.getParameter("EmpId");
 			
 			Employee employee=new Employee();
-
-
-			
-			
+				employee.setEmpNo(PunchCardNo);
+				employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
+				employee.setDesigId(Long.parseLong(Designationid));
+				employee.setEmail(email);
+				employee.setDivisionId(Long.parseLong(divisionid));
+				employee.setEmpNo(PunchCardNo.trim());
+				employee.setEmpId(Long.parseLong(EmpId));
 			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
 			
 			// date conversion
         	java.sql.Date dob = DateTimeFormatUtil.dateConversionSql(req.getParameter("dob"));
 			java.sql.Date doj = DateTimeFormatUtil.dateConversionSql(req.getParameter("doj"));
-			java.sql.Date doa = DateTimeFormatUtil.dateConversionSql(req.getParameter("doa"));
+			//java.sql.Date doa = DateTimeFormatUtil.dateConversionSql(req.getParameter("doa"));
 			
 			java.sql.Date dor;
 
@@ -423,7 +429,7 @@ public class PisController {
 			}
 		
 			emp.setDOB(dob);
-			emp.setDOA(doa);
+			//emp.setDOA(doa);
 			emp.setDOJL(doj);
 			emp.setDOR(dor);
 			emp.setCategoryId(Integer.parseInt(category));
@@ -440,6 +446,7 @@ public class PisController {
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phno);
+			emp.setEmpNo(PunchCardNo);
 			if (uid != null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
 			}
@@ -456,7 +463,7 @@ public class PisController {
 			emp.setModifiedBy(Username);
 			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
-			emp.setEmpDetailsId(Long.parseLong(EmpDeatailsId));
+			emp.setEmpDetailsId(Long.parseLong(empdetailsid));
 
 			long value =service.EmployeeEditSubmit(employee);
 			if(value>0) {
@@ -497,17 +504,22 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside PisImageUpload.htm " + Username);
 		int value = 0;
-		String EmpId = (String) req.getParameter("employeeid");
+		String EmpId = (String) req.getParameter("empid");
 		try {
-			
-			String imagename = service.PhotoPath(EmpId);
+			Object[] empdata = service.GetEmpData(EmpId);
+			String imagename = null;
+			if(empdata!=null && empdata[3]!=null) {
+				imagename = service.PhotoPath(empdata[3]+"");
+			}
+					
+					
 			File f = new File(uploadpath + "\\" + imagename);
 			if (f.exists()) {
 				f.delete();
 			}
-			value = service.saveEmpImage(file, EmpId, uploadpath);
+			value = service.saveEmpImage(file, empdata[3]+"", uploadpath);
 			Object[] employeedetails = service.EmployeeDetails(EmpId);
-			String basevalue = service.getimage(EmpId);
+			String basevalue = service.getimage(empdata[3]+"");
 			req.setAttribute("empid", EmpId);
 			req.setAttribute("employeedetails", employeedetails);
 			req.setAttribute("basevalue", basevalue);
@@ -726,47 +738,46 @@ public class PisController {
     	   String name = (String)req.getParameter("memberName");
     	   String dob  = (String)req.getParameter("dob");
     	   String relation = (String)req.getParameter("relation");
-//    	   String benId =  (String)req.getParameter("benId");
-//    	   String status = (String)req.getParameter("status");
-//    	   String statusdate = (String)req.getParameter("statusDate");
-//    	   String bloodgroup = (String)req.getParameter("bloodgroup");
-//    	   String Phone = (String)req.getParameter("PH");
-//    	   String medicaldep = (String)req.getParameter("medicaldep");
-//    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
-//    	   String ltcdep  = (String)req.getParameter("ltcdep");
-//    	   String LTC = (String)req.getParameter("LTC");
-//    	   String marriagestatus = (String)req.getParameter("married_unmarried");
-//    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String gender = (String)req.getParameter("Gender");
     	   String empid = (String)req.getParameter("empid");
     	   
     	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(name);
+    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
     	   details.setGender(gender);
     	   details.setFamily_status_id(1);
-//    	   details.setCghs_ben_id(benId);
-//    	   details.setFamily_status_id(Integer.parseInt(status));
-//    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
-//    	   details.setBlood_group(bloodgroup);
-//    	   details.setPH(Phone);
-//    	   
-//    	   details.setMed_dep(medicaldep);
-//    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
-//    	   details.setLtc_dep(ltcdep);
-//    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
-//    	   details.setMar_unmarried(marriagestatus);
-//    	   details.setEmp_unemp(emp_unemp);
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone);  	   
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
     	   details.setEmpid(empid);
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
     	   details.setCreatedDate(sdf.format(new Date()));
-//    	   if(emp_unemp.equalsIgnoreCase("Y")) {
-//    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
-//    	   }
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+    		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+    	   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
     		   redir.addAttribute("result", "Family Member Saved Successfully");	
@@ -790,46 +801,43 @@ public class PisController {
     	   String name = (String)req.getParameter("memberName");
     	   String dob  = (String)req.getParameter("dob");
     	   String relation = (String)req.getParameter("relation");
-//    	   String benId =  (String)req.getParameter("benId");
-//    	   String status = (String)req.getParameter("status");
-//    	   String statusdate = (String)req.getParameter("statusDate");
-//    	   String bloodgroup = (String)req.getParameter("bloodgroup");
-//    	   String Phone = (String)req.getParameter("PH");
-//    	   String medicaldep = (String)req.getParameter("medicaldep");
-//    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
-//    	   String ltcdep  = (String)req.getParameter("ltcdep");
-//    	   String LTC = (String)req.getParameter("LTC");
-//    	   String marriagestatus = (String)req.getParameter("married_unmarried");
-//    	   String emp_unemp = (String)req.getParameter("emp_unemp");
+    	   String benId =  (String)req.getParameter("benId");
+    	   String status = (String)req.getParameter("status");
+    	   String statusdate = (String)req.getParameter("statusDate");
+    	   String bloodgroup = (String)req.getParameter("bloodgroup");
+    	   String Phone = (String)req.getParameter("PH");
+    	   String medicaldep = (String)req.getParameter("medicaldep");
+    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
+    	   String ltcdep  = (String)req.getParameter("ltcdep");
+    	   String LTC = (String)req.getParameter("LTC");
+    	   String marriagestatus = (String)req.getParameter("married_unmarried");
+    	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String empid = (String)req.getParameter("empid");
     	   String familyid = (String)req.getParameter("familyid");
     	   String gender   = (String)req.getParameter("Gender");
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(name);
+    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
-//    	   details.setCghs_ben_id(benId);
-//    	   details.setFamily_status_id(Integer.parseInt(status));
-//    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
-//    	   details.setBlood_group(bloodgroup);
-//    	   details.setPH(Phone); 	  
-//    	   details.setMed_dep(medicaldep);
-//    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
-//    	   details.setLtc_dep(ltcdep);
-//    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
-//    	   details.setMar_unmarried(marriagestatus);
-//    	   details.setEmp_unemp(emp_unemp);
-//    	   if(emp_unemp.equalsIgnoreCase("Y")) {
-//		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
-//	   }
+    	   details.setCghs_ben_id(benId);
+    	   details.setFamily_status_id(Integer.parseInt(status));
+    	   details.setStatus_from(DateTimeFormatUtil.dateConversionSql(statusdate));
+    	   details.setBlood_group(bloodgroup);
+    	   details.setPH(Phone); 	  
+    	   details.setMed_dep(medicaldep);
+    	   details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+    	   details.setLtc_dep(ltcdep);
+    	   details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+    	   details.setMar_unmarried(marriagestatus);
+    	   details.setEmp_unemp(emp_unemp);
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
+	       }
     	   details.setGender(gender);
     	   details.setEmpid(empid);
     	   details.setModifiedBy(Username);
-    	   details.setModifiedDate(sdf.format(new Date()));
-    	   
-    	   
-    	   
+    	   details.setModifiedDate(sdtf.format(new Date()));  
     	   details.setFamily_details_id(Long.parseLong(familyid));
 
     	   Long result = service.EditFamilyDetails(details);
@@ -968,7 +976,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   peraddress.setAddress_per_id(Long.parseLong(addressid));
     		   peraddress.setModifiedBy(Username);
-        	   peraddress.setModifiedDate(sdf.format(new Date()));
+        	   peraddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  =  service.EditPerAddress(peraddress); 
           	 
 	       	    if(result>0) {
@@ -1114,7 +1122,7 @@ public class PisController {
 			String addressresid = (String)request.getParameter("addressresid");
 			resadd.setAddress_res_id(Long.parseLong(addressresid));
 			resadd.setModifiedBy(Username);
-			resadd.setModifiedDate(sdf.format(new Date()));
+			resadd.setModifiedDate(sdtf.format(new Date()));
         	  long result  =  service.EditResAddress(resadd); 
         	 
         	    if(result>0) {
@@ -1209,7 +1217,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   kinaddress.setAddress_kin_id(Long.parseLong(addressid));
     		   kinaddress.setModifiedBy(Username);
-    		   kinaddress.setModifiedDate(sdf.format(new Date()));
+    		   kinaddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
 	       	    if(result>0) {
@@ -1305,7 +1313,7 @@ public class PisController {
     		   String addressid = (String)req.getParameter("addressId");
     		   emecaddress.setAddress_emer_id(Long.parseLong(addressid));
     		   emecaddress.setModifiedBy(Username);
-    		   emecaddress.setModifiedDate(sdf.format(new Date()));
+    		   emecaddress.setModifiedDate(sdtf.format(new Date()));
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 
 	       	    if(result>0) {
@@ -1409,7 +1417,7 @@ public class PisController {
 					logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
 			}
 
-		return "redirect:/PisAdminDashboard.htm";
+		return "redirect:/MainDashBoard.htm";
 		
 	}
 	
@@ -1437,5 +1445,36 @@ public class PisController {
 			
 	}
 	
+	@RequestMapping(value="UpdateEmployeeSeniority.htm" , method=RequestMethod.POST)
+	public String UpdateSeniority(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside UpdateEmployeeSeniority.htm "+Username);		
+		try {
+			String action = (String)req.getParameter("action");
+			if("UpdateSeniority".equalsIgnoreCase(action)) {
+				String empid = (String)req.getParameter("empid");
+				Object[]  empdetails = service.GetEmpDetails(empid); 
+				req.setAttribute("empdetails", empdetails);
+				return "pis/UpdateSeniority";
+			}else {
+				String empid= req.getParameter("empid");
+				String newSeniorityNumber=req.getParameter("UpdatedSrNo");
+		        int result= service.UpdateSeniorityNumber(empid,newSeniorityNumber);
+				   if(result>0) {
+						redir.addAttribute("result", "Emlpoyee Seniority Number Updated Successfully ");
+					}
+					else {
+						redir.addAttribute("resultfail", "Emlpoyee Seniority Number Updated Unsuccessful");
+					}					
+				   return "redirect:/PisAdminEmpList.htm";
+			}
+		} catch (Exception e) {
+			redir.addAttribute("resultfail", "Internal Error!");
+			e.printStackTrace();
+			 return "redirect:/PisAdminEmpList.htm";
+		}
+		
+	}
 
 }

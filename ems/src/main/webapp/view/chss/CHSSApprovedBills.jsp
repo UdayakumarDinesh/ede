@@ -60,7 +60,7 @@
 	</div>
 				
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 					<form action="ApprovedBills.htm" method="POST" style="float: right;">
 						<div class="row" style="margin-bottom: 10px;">
 							<div class="col-12">

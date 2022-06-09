@@ -127,3 +127,15 @@ hr{
 .table td, .table th {
     padding: 0.5rem !important;
 }
+
+
+.page-top
+{
+	margin: 0px 0px -10px 0px;
+}
+
+.main-card
+{
+	padding-top: 0px;
+	margin-top: 5px;
+}

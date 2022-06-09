@@ -46,7 +46,7 @@ List<Object[]> designation  =  (List<Object[]>)request.getAttribute("designation
 	        <%}%>
 	     </div>
 			<div class="card" >
-				<div class="card-body">			
+				<div class="card-body ">			
 					<form action="Designation.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
 						<div class="table-responsive">					

@@ -74,7 +74,7 @@ p {
 
 <%
 	
-	Employee employee = (Employee )request.getAttribute("employee") ;
+Object[] employee = (Object[] )request.getAttribute("employee") ;
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
 	/* List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist"); */
@@ -150,7 +150,7 @@ p {
 	</div>
 	
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 				
 						
 						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
@@ -170,7 +170,7 @@ p {
 									</div>
 								<%}else{ %>
 									<div class="col-3">
-											<b> Patient Name : &nbsp;</b><%=employee.getEmpName() %>
+											<b> Patient Name : &nbsp;</b><%=employee[2] %>
 									</div>
 									<div class="col-3">
 											<b>Relation : &nbsp;</b>SELF
@@ -282,7 +282,7 @@ p {
 											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
 											<td style="width:25%;" >
-												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >ADD</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
+												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	
@@ -466,7 +466,7 @@ p {
 									
 								</table>
 								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >ADD</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
+									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >Add</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
 								</div>
 								<input type="hidden" class="billid" name="billid" value="">
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -515,7 +515,7 @@ p {
 									<tbody>
 										<tr class="tr_clone_tests"  id="tr_clone_tests">
 											<td style="max-width:35% !important;">
-												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id" required="required" data-live-search="true" data-container="body" >
+												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" >
 												
 													<option value="" selected="selected" disabled="disabled">Choose..</option>
 													<%for(CHSSTestSub testsub : testmainlist){ %>
@@ -523,7 +523,20 @@ p {
 													<% } %>
 												</select>
 											</td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
+											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+										</tr>
+										<tr class="tr_clone_tests"  id="tr_clone_tests">
+											<td style="max-width:35% !important;">
+												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" >
+												
+													<option value="" selected="selected" disabled="disabled">Choose..</option>
+													<%for(CHSSTestSub testsub : testmainlist){ %>
+														<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
+													<% } %>
+												</select>
+											</td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
 									</tbody>							
@@ -595,23 +608,26 @@ p {
 									
 									</tbody>
 									<tbody>
+										<%for(int i=0;i<4;i++){ %>
 										<tr class="tr_clone_meds" >
 											<td>
 												<%if(Integer.parseInt(chssapplydata[7].toString())==1){ %>
-												<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" required="required">
+												<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" >
 												<%}else{ %>
-													<select class="form-control selectpicker " name="meds-name" required="required" style="width: 100%" data-live-search="true"  >
+													<select class="form-control selectpicker " name="meds-name"  style="width: 100%" data-live-search="true"  >
+														<option value="" selected="selected" disabled="disabled">Choose..</option>
 														<%for(CHSSMedicinesList medicine : allowedmeds ){ %>
 															<option value="<%=medicine.getMedicineName()%>"><%=medicine.getMedicineName() %></option>
 														<%} %>
 													</select>
 												<%} %>
 											</td>
-											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
-											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="0" onClick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="0" onClick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+											<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; "  max="9999999"  ></td>
 											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 										</tr>
+										<%} %>
 									</tbody>							
 									
 								</table>

@@ -146,8 +146,8 @@ th,td
 	<br>
 	<div style="text-align: left ;margin: 0px 5px 0px 10px;">
 		<p>
-			The medical claim recieved upto <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
-			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbrusement from the following
+			The medical claim received up to <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
+			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbursement from the following
 			employees have been processed and admitted at CHSS rates.
 		</p>
 	</div>
@@ -187,7 +187,6 @@ th,td
 			<tr>
 				<td colspan="3" class="right"><b>Total</b></td>
 				<td class="right"><b><%=nfc.rupeeFormat(String.valueOf(allowedamt)) %></b></td>
-				
 			</tr>
 			<tr>
 				<td colspan="4">In words Rupees <%=awc.convert1(allowedamt) %> Only</td>

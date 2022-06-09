@@ -132,7 +132,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 				
 						<div class="col-md-2">
-			                <label>Division <span class="mandatory">*</span></label>
+			                <label>Department <span class="mandatory">*</span></label>
 			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
@@ -580,7 +580,7 @@ function checknegative(str) {
 
 </script>
 <script type="text/javascript">
-$("#PunchcardTextBox").blur(function(){
+ $("#PunchcardTextBox").blur(function(){
 		
     var punchcard =$("#PunchcardTextBox").val();
     console.log(punchcard);
@@ -609,7 +609,7 @@ $("#PunchcardTextBox").blur(function(){
      	   $("#awailable").html(" ");
 
             }
-      });
+      }); 
 
 
 $("#PAN").keypress(function(event){

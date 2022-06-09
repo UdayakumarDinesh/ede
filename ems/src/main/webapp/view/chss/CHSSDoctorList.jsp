@@ -63,17 +63,17 @@
 			<li class="nav-item">
 			    <a class="nav-link " href="login.jsp"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 			 </li> 
-					   <li class="nav-item">
-					    <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					  <li class="nav-item">
+					    <a class="nav-link" href="CHSSPolicy.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link " href="Circulars.htm"   ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
+					  <li class="nav-item">  
+					     <a class="nav-link active" href="##" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li> 
 					    <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/EmpanneledHospital.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
+					    <a class="nav-link" href="EmpanneledHospital.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
@@ -94,7 +94,7 @@
 					</div>
 				</div>
 
-				<div class="card-body " >
+				<div class="card-body main-card " >
 				
 					<form action="##" method="POST" id="empForm"   >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -185,7 +185,7 @@
 <script type="text/javascript">
 
 $("#myTable1").DataTable({
-    "lengthMenu": [5,10,20, 50, 75, 100],
+    "lengthMenu": [10,20, 50, 75, 100],
     "pagingType": "simple",
     "language": {
 	      "emptyTable": "No Record Found"

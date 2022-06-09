@@ -80,7 +80,7 @@ String treat = (String)request.getAttribute("treat");
 					</div>
 				</div>
 			
-				<div class="card-body">
+				<div class="card-body main-card ">
 				
 					<form action="ChssMedicine.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

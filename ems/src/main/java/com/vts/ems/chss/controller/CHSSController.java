@@ -71,6 +71,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -301,25 +302,6 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
-	
-	
-	
-	@RequestMapping(value = "CHSSAppliedList.htm" )
-	public String CHSSAppliedList(Model model,HttpServletRequest req, HttpSession ses)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		logger.info(new Date() +"Inside CHSSAppliedList.htm "+Username);
-		try {
-			
-			return "chss/CHSSAppliedList";			
-		 }catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSAppliedList.htm "+Username, e);
-			return "static/Error";
-		}
-	}
-	
 	
 	@RequestMapping(value = "CHSSConsultMainData.htm" )
 	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
@@ -956,9 +938,9 @@ public class CHSSController {
 			
 			long count= service.MedicinesBillAdd(dto,chssapplyid);
 			if (count > 0) {
-				redir.addAttribute("result", "Consultation Details Added Successfully");
+				redir.addAttribute("result", "Medicine Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Medicine Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1046,7 +1028,6 @@ public class CHSSController {
 						
 			long count = service.MedicineBillDelete(medicineid, Username);
 			
-			
 			if (count > 0) {
 				redir.addAttribute("result", "Medicines Data Deleted Successfully");
 			} else {
@@ -1064,6 +1045,7 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
 	
 	@RequestMapping(value = "TestsBillAdd.htm", method = RequestMethod.POST )
 	public String TestsBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -1088,9 +1070,9 @@ public class CHSSController {
 			
 			long count= service.TestsBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Tests Details Added Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Tests Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1146,9 +1128,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Test Data Updated Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Test Data Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1176,9 +1158,9 @@ public class CHSSController {
 			long count = service.TestBillDelete(testid, Username);
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Test Data Deleted Successfully");
+				redir.addAttribute("result", "Tests/Procedures Details Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Test Data Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Tests/Procedures Details Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1218,9 +1200,9 @@ public class CHSSController {
 			
 			long count= service.MiscBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Details Added Successfully");
+				redir.addAttribute("result", "Item Details Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Details Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Details Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1277,9 +1259,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Updated Successfully");
+				redir.addAttribute("result", "Item Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1308,9 +1290,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Deleted Successfully");
+				redir.addAttribute("result", "Item Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1383,9 +1365,9 @@ public class CHSSController {
 			
 			long count= service.OtherBillAdd(dto);
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Added Successfully");
+				redir.addAttribute("result", "Item Added Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Adding Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",billid);
@@ -1423,9 +1405,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Updated Successfully");
+				redir.addAttribute("result", "Item Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1453,9 +1435,9 @@ public class CHSSController {
 			long count = service.OtherBillDelete(chssotherid, Username);
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Bill Item Deleted Successfully");
+				redir.addAttribute("result", "Item Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill Item Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Item Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -2713,5 +2695,47 @@ public class CHSSController {
 		
 	}
 	
-	
+	@RequestMapping(value ="ClaimsList.htm" , method =RequestMethod.POST )
+	public String CHSSClaimsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimsList.htm "+Username);
+		try {
+			String fromdate = (String)req.getParameter("fromdate");
+			String todate = (String) req.getParameter("todate");
+			String empid = (String)req.getParameter("empid");
+			LocalDate today = LocalDate.now();
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-01";
+				empid="0";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("empid", empid);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("emplist", service.EmployeesList());
+			req.setAttribute("claimslist", service.GetClaimsList(fromdate , todate , empid));
+			return "chss/CHSSClaimsList";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimsList.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 }

@@ -139,7 +139,7 @@ color: black;
 
 <%
 	List<Object[]> empfamilylist = (List<Object[]> )request.getAttribute("empfamilylist") ;
-	Employee employee = (Employee )request.getAttribute("employee") ;
+	Object[] employee = (Object[])request.getAttribute("employee") ;
 %>
 
 	<div class="card-header page-top">
@@ -180,7 +180,7 @@ color: black;
 	</div>
 	
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card" >
 					<div class="row">
 						<div class="col-12" align="center">
 							<h4> Select Member</h4>
@@ -190,7 +190,7 @@ color: black;
 							
 							<div class="col-3">
 								<form action="CHSSApplyDetails.htm" method="post" style="padding: 1rem">
-									<button type="submit" name="patientid" value="<%=employee.getEmpId() %>"  class="button-mem">
+									<button type="submit" name="patientid" value="<%=employee[0] %>"  class="button-mem">
 										<div class="cards">
 									        <div class="card-emp card-1 " >
 									       
@@ -199,7 +199,7 @@ color: black;
 									       	</h2>
 									        
 									            <span class="card__apply">
-									               <span class="card__link" style=""><%=employee.getEmpName() %></span>
+									               <span class="card__link" style=""><%=employee[2] %></span>
 									            </span>
 									             <span>(SELF)</span>
 									            

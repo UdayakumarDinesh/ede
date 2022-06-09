@@ -32,7 +32,7 @@
 
 <%
 	
-	Employee employee = (Employee )request.getAttribute("employee") ;
+	Object[] employee = (Object[] )request.getAttribute("employee") ;
 	String isself = (String )request.getAttribute("isself") ;
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
 	List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory");
@@ -79,7 +79,7 @@
 	</div>
 				
 			<div class="card" >
-				<div class="card-body " >
+				<div class="card-body main-card " >
 					<form action="CHSSApplySubmit.htm" method="post" autocomplete="off">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="row">
@@ -100,12 +100,12 @@
 							<%}else{ %>
 							
 								<div class="col-3">
-									<b> Patient Name : </b><br><%=employee.getEmpName() %>
+									<b> Patient Name : </b><br><%=employee[2] %>
 								</div>
 								
 								<div class="col-2">
 									<b>Relation : </b><br>SELF
-									<input type="hidden" name="patientid" value="<%=employee.getEmpId()%>">
+									<input type="hidden" name="patientid" value="<%=employee[0]%>">
 									<input type="hidden" name="relationid" value="0">
 								</div>
 								

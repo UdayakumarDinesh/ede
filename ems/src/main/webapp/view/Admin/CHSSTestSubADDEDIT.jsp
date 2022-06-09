@@ -46,7 +46,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 	 <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
-				<div class="card-body " align="center" >
+				<div class="card-body main-card  " align="center" >
 
 					<form name="myfrm" action="ChssTestSub.htm" method="POST" id="myfrm1" autocomplete="off">
 						<div class="form-group">

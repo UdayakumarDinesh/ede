@@ -1,9 +1,9 @@
 package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.vts.ems.Admin.model.CircularList;
+import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.dao.EmsDao;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
@@ -28,7 +28,7 @@ public class EMSMainServiceImpl implements EMSMainService
 {
 	private static final Logger logger=LogManager.getLogger(EMSMainServiceImpl.class);
 	
-	private SimpleDateFormat sdf1=DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	private SimpleDateFormat sdtf=DateTimeFormatUtil.getSqlDateAndTimeFormat();
 //	private  SimpleDateFormat sdf=util.getRegularDateFormat();
 //	private SimpleDateFormat sdf2=util.getSqlDateFormat();
 	
@@ -52,7 +52,7 @@ public class EMSMainServiceImpl implements EMSMainService
 		AuditStamping stamping=new AuditStamping();
         stamping.setAuditStampingId(dao.LastLoginStampingId(Logid));
         stamping.setLogOutType(LogoutType);
-        stamping.setLogOutDateTime(sdf1.format(new Date()));
+        stamping.setLogOutDateTime(sdtf.format(new Date()));
 		return dao.LoginStampingUpdate(stamping);
 	}
 
@@ -60,6 +60,12 @@ public class EMSMainServiceImpl implements EMSMainService
 	public Employee EmployeeInfo(long EmpId)throws Exception
 	{
 		return dao.EmployeeInfo(EmpId);
+	}
+	
+	@Override
+	public long PasswordChangeHystoryCount(String loginid) throws Exception
+	{
+		return dao.PasswordChangeHystoryCount(loginid);
 	}
 	
 	@Override
@@ -137,6 +143,16 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public int userResetPassword(String loginid,String password) throws Exception
 	{
+		
+			LoginPasswordHistory passHis= new LoginPasswordHistory();
+			passHis.setLoginId(Long.parseLong(loginid));
+			passHis.setPassword(encoder.encode(password));
+//			passHis.setActionBy(username);
+			passHis.setActionDate(sdtf.format(new Date()));
+			passHis.setActionType("FR");
+			
+			dao.loginHisAddSubmit(passHis);
+		
 		return dao.userResetPassword(loginid, encoder.encode(password));
 	}
 	
@@ -239,17 +255,21 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
-	public List<Object[]> CirculatList(String fromdate , String todate) throws Exception
+	public List<Object[]> CirculatList() throws Exception
 	{
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
-		LocalDate ToDate= LocalDate.parse(todate, formatter);
-		return dao.CirculatList(Fromdate , ToDate);
+
+		return dao.CirculatList();
 	}
 	
 	@Override
 	public List<Object[]> GetDoctorList()throws Exception
 	{
 		return dao.GetDoctorList();
+	}
+	
+	@Override
+	public List<Object[]> GetEmpanelledHostpitalList()throws Exception
+	{
+		return dao.GetEmpanelledHostpitalList();
 	}
 }

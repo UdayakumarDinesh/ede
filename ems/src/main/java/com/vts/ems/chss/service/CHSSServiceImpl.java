@@ -8,14 +8,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -46,7 +43,6 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.model.Employee;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -598,30 +594,32 @@ public class CHSSServiceImpl implements CHSSService {
 			String treattypeid= chssapplydata[7].toString();
 			for(int i=0 ; i<dto.getMedicineName().length ; i++)
 			{
-				CHSSMedicine  meds = new CHSSMedicine();
-				
-				meds.setBillId(Long.parseLong(dto.getBillId()));
-				meds.setMedicineName(WordUtils.capitalizeFully(dto.getMedicineName()[i]).trim().trim());
-				meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
-				meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
-				meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
-				meds.setMedsRemAmount(Double.parseDouble(dto.getMedicineCost()[i]));
-				calculateMedAmount(meds);
-				
-				meds.setIsActive(1);
-				meds.setCreatedBy(dto.getCreatedBy());
-				meds.setCreatedDate(sdtf.format(new Date()));
-				
-				if(treattypeid.toString().equalsIgnoreCase("1")) {
-					checkMedAdmissibility(meds);
+				if(dto.getMedicineName()[i]!=null && dto.getMedicineCost()[i]!=null && !dto.getMedicineCost()[i].trim().equals("")) 
+				{
+					CHSSMedicine  meds = new CHSSMedicine();
+					
+					meds.setBillId(Long.parseLong(dto.getBillId()));
+					meds.setMedicineName(WordUtils.capitalizeFully(dto.getMedicineName()[i]).trim());
+					meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
+					meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
+					meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
+					meds.setMedsRemAmount(Double.parseDouble(dto.getMedicineCost()[i]));
+					calculateMedAmount(meds);
+					
+					meds.setIsActive(1);
+					meds.setCreatedBy(dto.getCreatedBy());
+					meds.setCreatedDate(sdtf.format(new Date()));
+					
+					if(treattypeid.toString().equalsIgnoreCase("1")) {
+						checkMedAdmissibility(meds);
+					}
+					
+					if(meds.getMedsRemAmount()>0) {
+						meds.setComments(meds.getMedsRemAmount()+" is admitted as per CHSS.");
+					}
+					
+					count += dao.MedicinesBillAdd(meds);
 				}
-				
-				if(meds.getMedsRemAmount()>0) {
-					meds.setComments(meds.getMedsRemAmount()+" is admitted as per CHSS.");
-				}
-				
-				count = dao.MedicinesBillAdd(meds);
-				
 			}
 						
 			return count;
@@ -693,20 +691,23 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			for(int i=0 ; i<dto.getTestSubId().length; i++)
 			{
-				CHSSTests  test = new CHSSTests();
-				
-				test.setBillId(Long.parseLong(dto.getBillId()));
-				test.setTestMainId(Long.parseLong(dto.getTestSubId()[i].split("_")[0]));
-				test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
-				test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
-				test.setIsActive(1);
-				test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
-				test.setComments(test.getTestRemAmount()+" is admitted as per CHSS.");
-				test.setCreatedBy(dto.getCreatedBy());
-				test.setCreatedDate(sdtf.format(new Date()));
-				
-				
-				count = dao.TestsBillAdd(test);
+				if(dto.getTestSubId()[i]!=null && dto.getTestCost()[i]!=null && !dto.getTestCost()[i].trim().equals("")) 
+				{
+					CHSSTests  test = new CHSSTests();
+					
+					test.setBillId(Long.parseLong(dto.getBillId()));
+					test.setTestMainId(Long.parseLong(dto.getTestSubId()[i].split("_")[0]));
+					test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
+					test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
+					test.setIsActive(1);
+					test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
+					test.setComments(test.getTestRemAmount()+" is admitted as per CHSS.");
+					test.setCreatedBy(dto.getCreatedBy());
+					test.setCreatedDate(sdtf.format(new Date()));
+					
+					
+					count = dao.TestsBillAdd(test);
+				}
 			}
 						
 			return count;
@@ -970,7 +971,7 @@ public class CHSSServiceImpl implements CHSSService {
 		if(action.equalsIgnoreCase("F")) 
 		{
 			notify.setNotificationUrl("CHSSApprovalsList.htm");
-			notify.setNotificationMessage("Medical Claim Application Recieved");
+			notify.setNotificationMessage("Medical Claim Application Received");
 			
 			if(claimstatus==1 || claimstatus==3 ) 
 			{
@@ -1011,7 +1012,7 @@ public class CHSSServiceImpl implements CHSSService {
 			}
 			
 			
-			mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") Recieved for Verification";
+			mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") Received for Verification";
 						
 		}
 		
@@ -1050,7 +1051,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		claim.setRemarks(remarks);
 		claim.setModifiedBy(Username);
-		claim.setModifiedDate(sdf.format(new Date()));
+		claim.setModifiedDate(sdtf.format(new Date()));
 		
 		
 		
@@ -1204,7 +1205,7 @@ public class CHSSServiceImpl implements CHSSService {
 //			claim.setCHSSStatusId(8);
 			claim.setContingentId(contingentid);
 			claim.setModifiedBy(Username);
-			claim.setModifiedDate(sdf.format(new Date()));
+			claim.setModifiedDate(sdtf.format(new Date()));
 			count= dao.CHSSApplyEdit(claim);
 		}
 			
@@ -1281,7 +1282,7 @@ public class CHSSServiceImpl implements CHSSService {
 		if(dto.getAction().equalsIgnoreCase("F")) 
 		{
 			
-			notify.setNotificationMessage("Medical Claim Contingent Bill Recieved");
+			notify.setNotificationMessage("Medical Claim Contingent Bill Received");
 			if(continstatus==1  || continstatus==9 || continstatus==11 || continstatus==13 ) 
 			{
 				continstatus=8;
@@ -1305,7 +1306,6 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				continstatus=10;
 				
-				
 				Object[] notifyto = dao.CHSSApprovalAuth("W");
 				if(notifyto==null) 
 				{
@@ -1322,7 +1322,6 @@ public class CHSSServiceImpl implements CHSSService {
 			else if(continstatus==10  ) 
 			{
 				continstatus=12;
-				
 				
 				Object[] notifyto = dao.CHSSApprovalAuth("Z");
 				if(notifyto==null) 
@@ -1417,7 +1416,7 @@ public class CHSSServiceImpl implements CHSSService {
 		contingent.setRemarks(dto.getRemarks());
 		contingent.setContingentStatusId(continstatus);
 		contingent.setModifiedBy(dto.getUsername());
-		contingent.setModifiedDate(sdf.format(new Date()));
+		contingent.setModifiedDate(sdtf.format(new Date()));
 		continid=dao.CHSSContingentEdit(contingent);
 //		List<Object> CHSSApplyId  =dao.ContingentApplyIds(dto.getContingentid());
 		
@@ -1437,7 +1436,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			claim.setCHSSStatusId(continstatus);
 			claim.setModifiedBy(dto.getUsername());
-			claim.setModifiedDate(sdf.format(new Date()));
+			claim.setModifiedDate(sdtf.format(new Date()));
 
 			CHSSApplyTransaction transac =new CHSSApplyTransaction();
 			transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -1655,7 +1654,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		claim.setCHSSStatusId(1);
 		claim.setModifiedBy(Username);
-		claim.setModifiedDate(sdf.format(new Date()));
+		claim.setModifiedDate(sdtf.format(new Date()));
 		
 		CHSSApplyTransaction transac =new CHSSApplyTransaction();
 		transac.setCHSSApplyId(claim.getCHSSApplyId());
@@ -1710,6 +1709,15 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSContingentEdit(contingent);
 	}
 	
+	@Override
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	{
+		return dao.GetClaimsList(fromdate , todate , empid);
+	}
 	
-	
+	@Override
+	public List<Object[]> EmployeesList()throws Exception
+	{
+		return dao.EmployeesList();
+	}
 }

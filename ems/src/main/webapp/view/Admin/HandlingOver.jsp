@@ -83,7 +83,7 @@ String treat = (String)request.getAttribute("treat");
 				
 				</div>
 			
-				<div class="card-body">
+				<div class="card-body main-card ">
 			 	
 
 					<form action="HandingOver.htm" method="POST" id="empForm">

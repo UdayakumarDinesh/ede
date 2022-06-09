@@ -43,7 +43,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		
 		<div class="row">
 		<div class="col-3"></div>
-		<form action="AddFamilyDetails.htm" method="POST">
+		<form action="AddFamilyDetails.htm" method="POST" autocomplete="off">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card"  > 
 		<div class="card-header">
@@ -55,7 +55,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 				      <div class="col-md-8">
 		                <div class="form-group">
 		                    <label>Name:<span class="mandatory">*</span></label>
-		                    <input type="text"  id="NameTextBox"  class="form-control input-sm"   maxlength="100" name="memberName" required="required" placeholder="Enter name"  onclick="return trim(this)" onchange="return trim(this)">
+		                    <input type="text"  id="NameTextBox"  class="form-control input-sm" style="text-transform:capitalize"  maxlength="100" name="memberName" required="required" placeholder="Enter name"  onclick="return trim(this)" onchange="return trim(this)">
 		                </div>
 		               </div> 
 		                
@@ -88,7 +88,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                </div>
 		              </div>
 		              
-		              <div class="col-md-4">
+		              <div class="col-md-3">
 		                <div class="form-group">
 		                	<label>Gender:<span class="mandatory">*</span></label>
 		                    <select class="form-control input-sm select2" name="Gender" required  data-live-search="true">
@@ -103,14 +103,14 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		              
 		               <div class="col-md-4">
 		                <div class="form-group">
-		                    <!-- <label>Ben Id:<span class="mandatory">*</span></label>
-		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9" required="required"  placeholder="Enter BenID" onclick="checkLength()"> -->
+		                     <label>Ben Id:<span class="mandatory">*</span></label>
+		                    <input  id="BenidTextBox"  type="text" name="benId" class="form-control input-sm"   maxlength="9" required="required"  placeholder="Enter BenID" onclick="checkLength()"> 
 		                </div>
 		               </div> 
 		                 		        	       
 				</div>	
              
-              <%--   <div class="row">
+                <div class="row">
                   <div class="col-4">
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
@@ -164,10 +164,10 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                   
                 </div>
                <!-- //Status,Status From,BG,PH -->
-                 --%>
                 
                 
-              <%--  <!-- dependency ,Employed,Married-->
+                
+               <!-- dependency ,Employed,Married-->
 					<div class="row">
 		                <!-- Medical -->
 		                <div class="col-4">
@@ -247,7 +247,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                             </select>
                             </div>  
                         </div>
-				</div>--%>
+				</div>
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">

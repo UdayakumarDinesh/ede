@@ -136,7 +136,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			  <%}%>
 			  </div>
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			   <input type="hidden" name="employeeid" value="<%=employeedetails[0]%>"/>
+			   <input type="hidden" name="empid" value="<%=employeedetails[0]%>"/>
 			  </form>
 			 
 			 
@@ -151,7 +151,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 					<tr></tr>
 						<tr>
 						     <th>Designation</th>
-	                         <th>Division</th>
+	                         <th>Department</th>
 	                         <th>DOB</th>
 	                         <th>Employee No</th>
 	                         <th>UID</th>
@@ -264,8 +264,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td> <b>Email</b> </td>
 							<td><%=employeedetails[16] %></td>
-							<td> <b>Religion</b> </td>
-							<td><%=employeedetails[12] %></td>
+							<td> <b>PayLevel</b> </td>
+							<td><%=employeedetails[31] %></td>
 							<td> <b>Marital Status</b> </td>
 							<td>
 								<%if(employeedetails[11].toString().equalsIgnoreCase("M")){ %>

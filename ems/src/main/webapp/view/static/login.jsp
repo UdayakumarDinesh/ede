@@ -64,16 +64,16 @@
 			    <a class="nav-link active" href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 			 </li> 
 					   <li class="nav-item">
-					    <a class="nav-link" href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					    <a class="nav-link" href="CHSSPolicy.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>				   
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="Circulars.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/Eligibility.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>
+					    <a class="nav-link" href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li> 
 					    <li class="nav-item">
-					    <a class="nav-link" href="LoginPage/EmpanneledHospital.htm" target="_blank" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
+					    <a class="nav-link" href="EmpanneledHospital.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
@@ -206,18 +206,16 @@
 
 
 
-<section id="fontSize" class="clearfix" style="font-size: 100%;">
-  <section id="page" class="body-wrapper clearfix">
+<section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
+  <section id="page" class="body-wrapper clearfix" style="">
     	
  
 <!-- Blue Border for Login Page -->  
     <div class="support-row clearfix" id="swapper-border" style="">
-      		<div class="widget-guide clearfix">
-                	<%if(circularlist!=null  && circularlist.size()>0) {
-						
-						%>
-						<marquee direction="left"  style="background: rgba(6,127,208,1);"> <b><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></b></marquee>
-						<%  }%> 
+      		  <div class="widget-guide clearfix">
+                	    <%if(circularlist!=null  && circularlist.size()>0) {%>
+						<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1.4em;"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
+						<%}%> 
               </div>
     	</div> 
     	
