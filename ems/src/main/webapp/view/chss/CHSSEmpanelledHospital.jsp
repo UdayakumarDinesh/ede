@@ -90,7 +90,8 @@
 								<thead>
 									<tr>
 										<th style=" text-align:center; width: 15%"> SlNo. </th>
-										<th style="width: 50%"> Name </th>
+										<th style="width: 50%">Hospital Name </th>
+										<th style="width: 50%">Hospital Address</th>
 																
 									</tr>
 								</thead>
@@ -101,8 +102,8 @@
 									%>
 										<tr>
 											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 50%"><%=obj[1]%></td>
-											
+											<td style="text-align:justify; width: 30%"><%=obj[1]%></td>
+											<td style="text-align:justify; width: 45%"><%=obj[2]%></td>
 										</tr>
 								<%} }%>
 								</tbody>

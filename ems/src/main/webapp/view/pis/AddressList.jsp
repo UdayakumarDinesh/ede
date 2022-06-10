@@ -149,7 +149,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<tr align="center">
 							<td style="text-align: center;"><input type="radio" name="addressid" value="<%=obj[1]%>"> </td>					    
 						    <td><%=obj[2]%></td>
-							<td><%=obj[3]%></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%></td>
 							<td><%=obj[4]%></td>
 							<td><%=obj[6]%></td>
 							<td><%=obj[7]%></td>		

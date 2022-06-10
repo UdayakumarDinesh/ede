@@ -288,7 +288,21 @@
 
 	<div class="card dashboard-card" >
 		<div class="card-body " >
-
+		<div align="center">
+						<%String ses=(String)request.getParameter("result"); 
+						String ses1=(String)request.getParameter("resultfail");
+						if(ses1!=null){ %>
+							<div class="alert alert-danger" role="alert">
+								<%=ses1 %>
+							</div>
+							
+						<%}if(ses!=null){ %>
+							
+							<div class="alert alert-success" role="alert">
+								<%=ses %>
+							</div>
+						<%} %>
+					</div>
 			<div class="container-fluid">
 			  <div class="row">
 			  

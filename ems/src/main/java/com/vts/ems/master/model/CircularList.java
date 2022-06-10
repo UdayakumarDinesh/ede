@@ -1,4 +1,4 @@
-package com.vts.ems.Admin.model;
+package com.vts.ems.master.model;
 
 import java.io.Serializable;
 
