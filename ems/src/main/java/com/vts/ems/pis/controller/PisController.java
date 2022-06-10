@@ -30,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -51,9 +53,12 @@ public class PisController {
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
-			
+
 	@Autowired
 	private PisService service;
+	
+	@Autowired
+	MasterService masterservice;
 	
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
@@ -469,6 +474,14 @@ public class PisController {
 			if(value>0) {
 			value =service.EmployeeDetailsEditSubmit(emp);
 			}
+			String comments = (String)req.getParameter("comments");
+			MasterEdit masteredit = new MasterEdit();
+			masteredit.setTableRowId(Long.parseLong(EmpId));
+			masteredit.setTableName("employee");
+			masteredit.setComments(comments);
+			masteredit.setCreatedDate(sdtf.format(new Date()));
+			masteredit.setCreatedBy(Username);
+			masterservice.AddMasterEditComments(masteredit);
 			if (value != 0) {
 				redir.addAttribute("result", "Employee details Edited Successfully");
 			} else {
@@ -839,7 +852,17 @@ public class PisController {
     	   details.setModifiedBy(Username);
     	   details.setModifiedDate(sdtf.format(new Date()));  
     	   details.setFamily_details_id(Long.parseLong(familyid));
-
+    	   
+    	   String comments = (String)req.getParameter("comments");
+    	   MasterEdit masteredit  = new MasterEdit();
+    	   masteredit.setCreatedBy(Username);
+    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+    	   masteredit.setTableRowId(Long.parseLong(familyid));
+    	   masteredit.setComments(comments);
+    	   masteredit.setTableName("pis_emp_family_details");
+    	   
+    	   masterservice.AddMasterEditComments(masteredit);
+    	   
     	   Long result = service.EditFamilyDetails(details);
     	   if(result>0){
     		   redir.addAttribute("result", "Family member Edited sucessfully");	
@@ -977,6 +1000,18 @@ public class PisController {
     		   peraddress.setAddress_per_id(Long.parseLong(addressid));
     		   peraddress.setModifiedBy(Username);
         	   peraddress.setModifiedDate(sdtf.format(new Date()));
+        	   
+        	   
+        	   String comments = (String)req.getParameter("comments");
+        	   MasterEdit masteredit  = new MasterEdit();
+        	   masteredit.setCreatedBy(Username);
+        	   masteredit.setCreatedDate(sdtf.format(new Date()));
+        	   masteredit.setTableRowId(Long.parseLong(addressid));
+        	   masteredit.setComments(comments);
+        	   masteredit.setTableName("pis_address_per");
+        	   
+        	   masterservice.AddMasterEditComments(masteredit);
+
         	   long result  =  service.EditPerAddress(peraddress); 
           	 
 	       	    if(result>0) {
@@ -1123,6 +1158,17 @@ public class PisController {
 			resadd.setAddress_res_id(Long.parseLong(addressresid));
 			resadd.setModifiedBy(Username);
 			resadd.setModifiedDate(sdtf.format(new Date()));
+			
+			   String comments = (String)request.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(addressresid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_address_res");
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit);
+						
         	  long result  =  service.EditResAddress(resadd); 
         	 
         	    if(result>0) {
@@ -1145,7 +1191,7 @@ public class PisController {
   	public String NextkinAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
   	{   
 	   String Username = (String) ses.getAttribute("Username");
-       logger.info(new Date() +"Inside AddEditPerAddress.htm "+Username);
+       logger.info(new Date() +"Inside KinAddressAddEdit.htm "+Username);
        try {
 
     	   String Action = (String) req.getParameter("Action");
@@ -1218,6 +1264,17 @@ public class PisController {
     		   kinaddress.setAddress_kin_id(Long.parseLong(addressid));
     		   kinaddress.setModifiedBy(Username);
     		   kinaddress.setModifiedDate(sdtf.format(new Date()));
+    		   
+    		   String comments = (String)req.getParameter("comments");
+        	   MasterEdit masteredit  = new MasterEdit();
+        	   masteredit.setCreatedBy(Username);
+        	   masteredit.setCreatedDate(sdtf.format(new Date()));
+        	   masteredit.setTableRowId(Long.parseLong(addressid));
+        	   masteredit.setComments(comments);
+        	   masteredit.setTableName("pis_address_kin");
+        	   
+        	   masterservice.AddMasterEditComments(masteredit);
+    		      		   
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
 	       	    if(result>0) {
@@ -1314,6 +1371,17 @@ public class PisController {
     		   emecaddress.setAddress_emer_id(Long.parseLong(addressid));
     		   emecaddress.setModifiedBy(Username);
     		   emecaddress.setModifiedDate(sdtf.format(new Date()));
+    		   
+    		   String comments = (String)req.getParameter("comments");
+        	   MasterEdit masteredit  = new MasterEdit();
+        	   masteredit.setCreatedBy(Username);
+        	   masteredit.setCreatedDate(sdtf.format(new Date()));
+        	   masteredit.setTableRowId(Long.parseLong(addressid));
+        	   masteredit.setComments(comments);
+        	   masteredit.setTableName("pis_address_emer");
+        	   
+        	   masterservice.AddMasterEditComments(masteredit);
+
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 
 	       	    if(result>0) {

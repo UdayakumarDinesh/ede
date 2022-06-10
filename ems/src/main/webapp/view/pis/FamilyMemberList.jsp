@@ -92,7 +92,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 						
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-							 <button type="submit" class="btn btn-sm delete-btn" name="Action" value="Delete"  Onclick="Delete(empForm)" >DELETE </button>
+							<!--  <button type="submit" class="btn btn-sm delete-btn" name="Action" value="Delete"  Onclick="Delete(empForm)" >DELETE </button> -->
 						</div>
 						 
 					</div>

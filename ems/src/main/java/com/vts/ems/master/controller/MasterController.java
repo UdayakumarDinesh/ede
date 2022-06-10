@@ -40,6 +40,7 @@ import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
@@ -289,13 +290,20 @@ public class MasterController {
 					String tratementname = (String)req.getParameter("tratementname");
 					String MedicineName  = (String)req.getParameter("MedicineName");
 					String IsAdmissible  = (String)req.getParameter("IsAdmissible");
-					
+					String comments = (String)req.getParameter("comments");
 					CHSSMedicineList  medicinelist = new CHSSMedicineList();
 					medicinelist.setMedicineId(Long.parseLong(medicineId));
 					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setIsAdmissible(IsAdmissible);
-					long result =service.EditMedicine(medicinelist);;
+					long result =service.EditMedicine(medicinelist);
+					MasterEdit masteredit = new MasterEdit();
+					masteredit.setTableRowId(Long.parseLong(medicineId));
+					masteredit.setTableName("chss_medicines_list");
+					masteredit.setCreatedBy(UserId);
+					masteredit.setCreatedDate(sdtf.format(new Date()));
+					masteredit.setComments(comments);
+					service.AddMasterEditComments(masteredit);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Medicine Edited Successfully");
 					} else {

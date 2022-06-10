@@ -104,7 +104,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                <div class="col-md-4">
 		                <div class="form-group">
 		                    <label>Ben Id:<span class="mandatory">*</span></label>
-		                    <input  id="BenidTextBox" value="<%=memberdata.getCghs_ben_id()%>"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()">
+		                    <input  id="BenidTextBox" value="<%=memberdata.getCghs_ben_id()%>"  type="text" name="benId" class="form-control input-sm"   maxlength="9"   placeholder="Enter BenID" onclick="checkLength()" required="required">
 		                </div>
 		               </div>  
 		                 		        	       
@@ -260,13 +260,46 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 							 <div class="form-group">
 							 <input type="hidden" name="empid" value="<%=empdata[2]%>"> 
 							  <input type="hidden" name="familyid" value="<%=memberdata.getFamily_details_id()%>"> 
-								<button type="submit" class="btn btn-sm submit-btn"
-									onclick="return confirm('Are You Sure To Submit?');"
+								<button type="submit" class="btn btn-sm submit-btn AddItem"
+									
 									name="action" value="submit">SUBMIT</button>
 									</div>
 							</div>
 						</div>
-						
+			<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit!');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
 			</form>
 		</div>
 		</div>
@@ -274,6 +307,13 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		
 		</div>
 </body>
+<script type="text/javascript">
+$(".AddItem").click(function(){ 
+	
+		 $('#myModal').modal('show');
+});
+
+</script>
 <script type="text/javascript">
 $('#LTC').daterangepicker({
 	"singleDatePicker" : true,

@@ -163,7 +163,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 						     <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-					    	<button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button>
+					    	<!-- <button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button> -->
 					    </div>
 					    </div>
 				</form>

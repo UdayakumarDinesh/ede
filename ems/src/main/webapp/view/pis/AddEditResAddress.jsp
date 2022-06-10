@@ -113,7 +113,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                          <div class="col-md-2">
                         <div class="form-group">
                          <label>Mobile No.</label>
-                           <input id="MobileTextBox" type="text" value="<%if(addres!=null&&addres.getMobile()!=null){%> <%=addres.getMobile()%> <%}%>" class="form-control input-sm " name="mobile"  maxlength="10"  placeholder="Enter Mobile No. " onblur="checknegative(this)">  
+                           <input id="MobileTextBox" type="text" value="<%if(addres!=null&&addres.getMobile()!=null){%> <%=addres.getMobile()%> <%}%>" class="form-control input-sm " name="mobile"  maxlength="10"  placeholder="Enter Mobile No. " onblur="checknegative(this)" required="required">  
                         </div>
                         </div>
                          
@@ -121,14 +121,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                            <div class="col-md-2">
                            <div class="form-group">
                             <label> Alt Mobile No.</label>
-                            <input id="AltMobileTextBox" type="text" value="<%if(addres!=null&&addres.getAlt_mobile()!=null){%> <%=addres.getAlt_mobile()%> <%}%>" class="form-control input-sm " name="altMobile"  maxlength="10"   placeholder="Enter Alternate Mobile No."  onblur="checknegative(this)"/>
+                            <input id="AltMobileTextBox" type="text" value="<%if(addres!=null&&addres.getAlt_mobile()!=null){%> <%=addres.getAlt_mobile()%> <%}%>" class="form-control input-sm " name="altMobile"  maxlength="10"   placeholder="Enter Alternate Mobile No." required="required"  onblur="checknegative(this)"/>
                            </div>
                         </div>
                    
                           <div class="col-md-2">
                         <div class="form-group">
                          <label>Landline No.</label>
-                           <input   id="LandLineTextBox" type="text" value="<%if(addres!=null&&addres.getLandline()!=null){%> <%=addres.getLandline()%> <%}%>"  class="form-control input-sm " name="landineNo" maxlength="10"  placeholder="Enter Landline No"  onblur="checknegative(this)">  
+                           <input   id="LandLineTextBox" type="text" value="<%if(addres!=null&&addres.getLandline()!=null){%> <%=addres.getLandline()%> <%}%>"  class="form-control input-sm " name="landineNo" maxlength="10"  placeholder="Enter Landline No"  onblur="checknegative(this)" required="required">  
                         </div>
                          </div>
                          
@@ -145,7 +145,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                      <div class="col-md-2">
                            <div class="form-group">
                             <label>Ext No.:</label>
-                            <input id="EXTTextBox" type="text" value="<%if(addres!=null&&addres.getExt()!=null){%> <%=addres.getExt()%> <%}%>"  class="form-control input-sm " name="extNo"    maxlength="4"   placeholder="Enter Ext No" onblur="checknegative(this)"/>
+                            <input id="EXTTextBox" type="text" value="<%if(addres!=null&&addres.getExt()!=null){%> <%=addres.getExt()%> <%}%>"  class="form-control input-sm " name="extNo"    maxlength="4" required="required"  placeholder="Enter Ext No" onblur="checknegative(this)"/>
                            </div>
                         </div>
 
@@ -157,7 +157,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-6">
                            <div class="form-group">
                             <label>Quarter Details</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrDetails()!=null){%> <%=addres.getQtrDetails()%> <%}%>" class="form-control input-sm " name="qtrDetail"   maxlength="90"  placeholder="Enter Quarter Details" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrDetails()!=null){%> <%=addres.getQtrDetails()%> <%}%>" class="form-control input-sm " name="qtrDetail"   maxlength="90"  placeholder="Enter Quarter Details" onclick="return trim(this)" onchange="return trim(this)" required="required" >
                            </div>
                         </div>
                        
@@ -166,14 +166,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-3">
                            <div class="form-group">
                             <label>Quarter No</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrNo()!=null){%> <%=addres.getQtrNo()%> <%}%>" class="form-control input-sm " name="qtrNo"   maxlength="90"  placeholder="Enter Quarter No" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrNo()!=null){%> <%=addres.getQtrNo()%> <%}%>" class="form-control input-sm " name="qtrNo"   maxlength="90"  placeholder="Enter Quarter No" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
                        <div class="col-md-3">
                            <div class="form-group">
                             <label>Quarter Type</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrType()!=null){%> <%=addres.getQtrType()%> <%}%>" class="form-control input-sm " name="qtrType"   maxlength="90"  placeholder="Enter Quarter Type" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrType()!=null){%> <%=addres.getQtrType()%> <%}%>" class="form-control input-sm " name="qtrType"   maxlength="90"  placeholder="Enter Quarter Type" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
         
@@ -183,7 +183,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-3">
                         <div class="form-group">
                          <label>Email Drona</label>
-                           <input type="email" value="<%if(addres!=null&&addres.getEmailDrona()!=null){%> <%=addres.getEmailDrona()%> <%}%>"  class="form-control input-sm " name="eDrona" maxlength="90"    placeholder=" Enter Email Drona" onclick="return trim(this)" onchange="return trim(this)">  
+                           <input type="email" value="<%if(addres!=null&&addres.getEmailDrona()!=null){%> <%=addres.getEmailDrona()%> <%}%>"  class="form-control input-sm " name="eDrona" maxlength="90"    placeholder=" Enter Email Drona" onclick="return trim(this)" onchange="return trim(this)" required="required">  
                         </div>
                          </div>
                          
@@ -191,14 +191,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                            <div class="col-md-3">
                            <div class="form-group">
                             <label>Email Official</label>
-                            <input type="email" value="<%if(addres!=null&&addres.getEmailOfficial()!=null){%> <%=addres.getEmailOfficial()%> <%}%>" class="form-control input-sm " name="eOfficial"  maxlength="90"   placeholder="Enter Email Official" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="email" value="<%if(addres!=null&&addres.getEmailOfficial()!=null){%> <%=addres.getEmailOfficial()%> <%}%>" class="form-control input-sm " name="eOfficial"  maxlength="90"   placeholder="Enter Email Official" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
                           <div class="col-md-3">
                         <div class="form-group">
                          <label>Email Personal</label>
-                           <input type="email" value="<%if(addres!=null&&addres.getEmailPersonal()!=null){%> <%=addres.getEmailPersonal()%> <%}%>" class="form-control input-sm " name="ePersonal" maxlength="90"   placeholder="Enter Email Personal"  onclick="return trim(this)" onchange="return trim(this)">  
+                           <input type="email" value="<%if(addres!=null&&addres.getEmailPersonal()!=null){%> <%=addres.getEmailPersonal()%> <%}%>" class="form-control input-sm " name="ePersonal" maxlength="90"   placeholder="Enter Email Personal"  onclick="return trim(this)" onchange="return trim(this)" required="required">  
                         </div>
                          </div>
                          
@@ -206,7 +206,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                            <div class="col-md-3">
                            <div class="form-group">
                             <label>Email Outlook</label>
-                            <input type="email" value="<%if(addres!=null&&addres.getEmailOutlook()!=null){%> <%=addres.getEmailOutlook()%> <%}%>" class="form-control input-sm " name="eOutlook"   maxlength="90"   placeholder="Enter Email Outlook" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="email" value="<%if(addres!=null&&addres.getEmailOutlook()!=null){%> <%=addres.getEmailOutlook()%> <%}%>" class="form-control input-sm " name="eOutlook"   maxlength="90"   placeholder="Enter Email Outlook" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
@@ -218,7 +218,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 							 <div class="form-group">
 							<%if(addres!=null){ %>
 							<input type="hidden"  name="addressresid" value="<%=addres.getAddress_res_id()%>">
-				<button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="EDIT">SUBMIT</button>
+				<button type="submit" class="btn btn-sm submit-btn AddItem"	 name="action" value="submit">SUBMIT</button>
 								<%}else{%>
 			    <button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="ADD">SUBMIT</button>
 								<%}%>
@@ -228,11 +228,54 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 						   </div> 
 					      </div>							
 						 </div>	
+<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Submit?');" name="Action" value="EDIT">SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
+
 					      </form>
 				         </div>
 				        </div>	
 		               </div>
 </body>
+<script type="text/javascript">
+$(".AddItem").click(function(){ 
+	
+		 $('#myModal').modal('show');
+});
+
+</script>
+
 <script type="text/javascript">
 $('.mydate').daterangepicker({
 	"singleDatePicker" : true,
