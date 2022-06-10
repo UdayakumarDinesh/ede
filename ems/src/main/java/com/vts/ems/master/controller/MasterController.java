@@ -1076,6 +1076,6 @@ public class MasterController {
 					 redir.addAttribute("resultfail", "Internal Error!");
 					 return "redirect:/EmpanneledHospitalList.htm";
 				}
-				
+				                                                                     
 			}
 }

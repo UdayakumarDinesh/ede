@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 
@@ -43,6 +44,8 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation from  employee d,employee_desig e WHERE  e.desigid=d.desigid";
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
+    private static final String LABMASTER="FROM LabMaster";
+    private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
     
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -207,4 +210,24 @@ public class LeaveDaoImpl implements LeaveDao{
 		List<Object[]> EmpDetails= query.getResultList();
 		return EmpDetails;
 	}
+	
+	@Override
+	public List<LabMaster> getLabDetails() throws Exception {
+		logger.info(new Date() +"Inside getLabDetails");	
+		Query query = manager.createQuery(LABMASTER);
+		List<LabMaster> EmpList= query.getResultList();
+		return EmpList;
+	
+	}
+
+
+	@Override
+	public List<Object[]> getRegister(String EmpNo) throws Exception {
+		logger.info(new Date() +"Inside getRegister");	
+		Query query = manager.createNativeQuery(REGISTER);
+		query.setParameter("empNo", EmpNo);
+		List<Object[]> getRegister= query.getResultList();
+		return getRegister;
+	}
+	
 }

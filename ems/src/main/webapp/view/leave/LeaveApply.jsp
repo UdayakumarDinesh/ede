@@ -1,4 +1,3 @@
-<%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
 <%@page import="com.ibm.icu.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
@@ -57,7 +56,16 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 </style>
 </head>
 <body>
+       <!-- 
+        <nav id="sidebar">
 
+            <ul class="list-unstyled components" >
+            <li ><a href="LeaveApply.htm" ><i class="+fa-solid fa-user-doctor"></i>Leave Apply</a> </li>
+                
+            </ul>
+
+           
+        </nav> -->
 
 <div class="card-header page-top ">
 		<div class="row">
@@ -90,6 +98,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
     List<Object[]> empdetails=(List<Object[]>)request.getAttribute("empdetails");
     List<Object[]> officerdetails=(List<Object[]>)request.getAttribute("officerdetails");
     List<Object[]> emplist=(List<Object[]>)request.getAttribute("EmpList");
+    LeaveRegister register=(LeaveRegister)request.getAttribute("register");
     String empNo=(String)request.getAttribute("EmpNo");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
     long roleid=(Long)session.getAttribute("FormRole");
@@ -118,10 +127,10 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <tbody>
 	                           
 	                         <tr>
-	                            <td><%=0 %></td>
-	                            <td><%=0 %></td>
-	                            <td><%=0 %></td>
-	                            <td><%=0 %></td>    
+	                            <td><%=register.getCL() %></td>
+	                            <td><%=register.getEL() %></td>
+	                            <td><%=register.getHPL() %>/<%=register.getCML() %></td>
+	                            <td><%=register.getRH() %></td>    
 	                        </tr>
 	                        
 	                        
@@ -160,7 +169,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                                    
 	                            </tr>
 	                            </thead>
-	                            <tbody id="other-list-table">
+	                            <tbody id="other-list-table"  >
 	                       
 	                          </tbody>
 	                        </table>
@@ -307,18 +316,23 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                            <!-- date from to -->
 	                    <div class="form-group">
 	                        <div class="row">
-	                            <div class="col-sm-3" align="right">
+	                            <div class="col-sm-3" align="right" style="margin-top: 5px;">
 	                                <label for="fromApplyDate">Date : </label>
 	                            </div>
 	                            
 	                                
-	                            
+	                             <div class="col-sm-1" align="right" style="margin-top: 5px;">
+	                             <b><span id="spanfrom">From</span></b>   
+	                             </div>
 	                            
 	                            <div id="fromdiv" class="col-sm-3" align="left">
-	                            <b><span id="spanfrom">From</span></b>    <input id="fromApplyDate" type="text" class="form-control input-sm from" placeholder="from" onChange="fromDatefun()" name="startdate"  value="<%=sdf.format(new Date())%>" maxlength="10" >
+	                             <input id="fromApplyDate" type="text" class="form-control input-sm from" placeholder="from" onChange="fromDatefun()" name="startdate"  value="<%=sdf.format(new Date())%>" maxlength="10" >
 	                            </div>
+	                            <div class="col-sm-1" align="right" style="margin-top: 5px;">
+	                             <b><span id="spanto">To</span></b>    
+	                             </div>
 	                            <div  id="todiv" class="col-sm-3" align="left">
-	                           <b><span id="spanto">To</span></b>  <input id="toApplyDate"  type="text" class="form-control input-sm"  onchange="toDatefun()" name="enddate"   value="<%=sdf.format(new Date())%>"  maxlength="10" data-toggle="tooltip" data-placement="bottom" title="Please Select From Date First">
+	                            <input id="toApplyDate"  type="text" class="form-control input-sm"  onchange="toDatefun()" name="enddate"   value="<%=sdf.format(new Date())%>"  maxlength="10" data-toggle="tooltip" data-placement="bottom" title="Please Select From Date First">
 	                            </div>
 	                           
 	                           
@@ -375,7 +389,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    </div>
 	                    <!-- / Remarks -->    
 	                    <!-- HandingOver To -->
-	              <%if(roleid==1){%>
+	              <%if(roleid==1||roleid==2){%>
 	                 
 	                    <div class="form-group">
 	                        <div class="row">
@@ -421,27 +435,27 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                         <%if(officerdetails!=null&&officerdetails.size()>0){ 
                        for(Object[] obj:officerdetails){ 
                        %>              
-                               
-                                <div class="row" style="margin-top:10px;margin-bottom:10px;" >
-                                <div class="col-sm-1"></div>
+                                <div class=" card-footer">
+                                <div class="row" style="padding:5px;" >
 	                            <div class="col-sm-2" style="text-align: right;" align="right">
 	                                <b  style="font-size:small; ">Recc Officer:</b>
 	                            </div>
-	                            <div class="col-sm-3" style="text-align: left;" align="left">
+	                            <div class="col-sm-4" style="text-align: left;" align="left">
 	                               <b style="font-size:small ; "><%=obj[3] %></b>
 	                            </div>
 	                            <div class="col-sm-2"  	style="text-align: right;">
 	                                <b style="font-size:small ;">Sanc Officer :</b>
 	                            </div>
-	                            <div class="col-sm-3" style="text-align: left;">
+	                            <div class="col-sm-4" style="text-align: left;">
 	                               <b style="font-size:small; "><%=obj[4] %></b>
 	                               </div>
 	                            <input type="hidden" id="IsAssigned"	value="<%=obj[4] %>" />
 	                           </div>
+	                           </div>
 	                  <%}}else{ %>
-	                  <div class="row" style="margin-top:0px;" >
+	                  <div class="row card-footer" style="padding:5px;" >
                        
-	                   <div  class="col-sm-12"  style="margin-top:10px;margin-bottom:10px; text-align: center; color: green;"><b class="h5">Recommending Officers Not Assigned</b></div>
+	                   <div  class="col-sm-12"  style=" text-align: center; color: green;"><b class="h5">Recommending Officers Not Assigned</b></div>
 	                   </div>
 	                  <%} %>
                         </div>
@@ -705,7 +719,10 @@ function leavecheck()
 		 if(halforfull=="H")
 		 {$("#todiv").hide();//from date disabled
 		 var spanfrom=document.getElementById("spanfrom");
-		 spanfrom.innerHTML ="On";}
+		 spanfrom.innerHTML ="On";
+		 var spanfrom=document.getElementById("spanto");
+		 spanfrom.innerHTML =" ";
+		 }
 		
 		 
  	 $("#fullhalfdiv").show();
@@ -716,6 +733,8 @@ function leavecheck()
 	 $("#todiv").show();//from date enabled
 	 var spanfrom=document.getElementById("spanfrom");
 	 spanfrom.innerHTML ="From";
+	 var spanfrom=document.getElementById("spanto");
+	 spanfrom.innerHTML ="To";
 	 
 	 
 	 
@@ -754,7 +773,8 @@ function halffull()
 	
 	 var spanfrom=document.getElementById("spanfrom");
 	 spanfrom.innerHTML ="From";
-	 
+	 var spanfrom=document.getElementById("spanto");
+	 spanfrom.innerHTML ="To";
 	anfn="X";
 	
 	}
@@ -767,7 +787,8 @@ function halffull()
 		$("#todiv").hide();//fromd date disabled
 		 var spanfrom=document.getElementById("spanfrom");
 		 spanfrom.innerHTML ="On";
-		 
+		 var spanfrom=document.getElementById("spanto");
+		 spanfrom.innerHTML =" ";
 		
 		var anorfn=document.getElementById("anorfn").value;
 		
@@ -803,7 +824,8 @@ function halffull()
 	
 	 var spanfrom=document.getElementById("spanfrom");
 	 spanfrom.innerHTML ="From";
-    
+	 var spanfrom=document.getElementById("spanto");
+	 spanfrom.innerHTML ="To";
 	 anfn="X";
     
      
