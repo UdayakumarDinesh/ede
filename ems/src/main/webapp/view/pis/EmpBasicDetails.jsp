@@ -147,7 +147,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			 <div class="col-md-10"  >
 			 <table class="table table-striped table-bordered" >
 					<tbody>
-					<tr ><td colspan="5" rowspan="2"><h3 style="text-align: center;"> <%=employeedetails[3]%> (<%=employeedetails[22]%>)</h3></td></tr>
+					<tr ><td colspan="5" rowspan="2" style="background-color: #0e6fb6; color: white;"><h3 style="text-align: center;"> <%=employeedetails[3]%> (<%=employeedetails[22]%>)</h3></td></tr>
 					<tr></tr>
 						<tr>
 						     <th>Designation</th>
@@ -184,7 +184,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			
 		<ul class="nav nav-tabs" role="tablist">
 	<li class="nav-item">
-		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Basic Details</a>
+		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" >Basic Details</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
@@ -229,7 +229,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Basic Details</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Basic Details</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>
@@ -297,7 +297,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 		 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Permanent Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Permanent Address</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>
@@ -356,7 +356,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Residential  Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Residential  Address</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>
@@ -397,7 +397,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Residential  Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Residential  Address</b></td>
 						</tr>
 			        	<tr></tr>
 						<tr></tr>
@@ -414,7 +414,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				 <table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Next kin Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Next kin Address</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>
@@ -468,7 +468,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				<table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Emergency Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Emergency Address</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>
@@ -535,7 +535,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Family Details</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Family Details</b></td>
 						</tr>
 						<tr></tr>
 						<tr></tr>

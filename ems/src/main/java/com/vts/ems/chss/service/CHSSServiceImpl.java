@@ -13,6 +13,7 @@ import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,8 @@ public class CHSSServiceImpl implements CHSSService {
 		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
 	}
 	
+	@Value("${Circular_Files}")
+	private String CircularFilePath;
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -1741,4 +1744,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.EmployeesList();
 	}
+	
+	
+	
 }

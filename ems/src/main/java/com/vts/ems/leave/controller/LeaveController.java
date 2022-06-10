@@ -169,6 +169,7 @@ public class LeaveController {
 			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
 			 req.setAttribute("purposeList", service.purposeList());
+			 req.setAttribute("register", service.getRegister(EmpNo));
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -204,15 +205,22 @@ public class LeaveController {
 			register.setADV_EL(0);
 			register.setADV_HPL(0);
 			register.setEOL(0);
-			register.setMONTH(month);
 			register.setYEAR(year);
-			register.setSTATUS("LKU");
 			if("January".equalsIgnoreCase(month)){
 			register.setFROM_DATE(year+"-01-01");
 			register.setTO_DATE(year+"-01-01");
+			register.setSTATUS("LKU");
+			register.setMONTH(month);
 			}else if("July".equalsIgnoreCase(month)){
 				register.setFROM_DATE(year+"-07-01");
 				register.setTO_DATE(year+"-07-01");
+				register.setSTATUS("LKU");
+				register.setMONTH(month);
+			}else if("LOB".equalsIgnoreCase(month)){
+				register.setFROM_DATE(year+"-01-01");
+				register.setTO_DATE(year+"-01-01");
+				register.setSTATUS("LOB");
+				register.setMONTH("January");
 			}
 			register.setAPPL_ID("0");
 			register.setCREDITED_BY(UserId);

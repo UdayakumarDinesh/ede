@@ -437,7 +437,7 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return model.getPasswordHistoryId(); 
 		}
-		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName FROM chss_empanelledhospital WHERE isactive='1'";
+		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName, hospitaladdress FROM chss_empanelledhospital WHERE isactive='1'";
 		@Override
 		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
 		{

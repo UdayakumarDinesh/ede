@@ -1,4 +1,4 @@
-package com.vts.ems.Admin.model;
+package com.vts.ems.master.model;
 
 import java.io.Serializable;
 
@@ -12,16 +12,17 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Entity( name="chss_doctor_list" )
-public class DoctorList implements Serializable {
+@Entity(name="chss_empanelledhospital")
+public class CHSSEmpanelledHospital implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
-	private Long DoctorId;
-	private String DoctorName;
-	private String Qualification;
+	private Long EmpanelledHospitalId;
+	private String HospitalName;
+	private String HospitalAddress;
+	private String IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

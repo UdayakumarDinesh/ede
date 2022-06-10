@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class DateTimeFormatUtil 
 {
@@ -34,7 +36,10 @@ public class DateTimeFormatUtil
 		return new SimpleDateFormat("dd-MMMM-yyyy");
 	}
 	
-	
+	public static long getDifferenceDays(Date d1, Date d2) {
+	    long diff = d2.getTime() - d1.getTime();
+	    return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+	}
 	
 
 	public static  int getYearFromRegularDate(String datestring) 

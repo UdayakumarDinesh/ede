@@ -63,7 +63,7 @@ String todate = (String)request.getAttribute("todate");
 							 
 							  <div class="col-2" align="right" ><h6>To Date :</h6></div>
 							  <div class="col-1">						
-								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
+								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly"  <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
 							 		 <label class="input-group-addon btn" for="testdate"></label>    
 							 </div>
 
@@ -73,11 +73,7 @@ String todate = (String)request.getAttribute("todate");
 				   </form>
 				
 				</div>
-			
-			
-			
-			
-			
+
 			
 				<div class="card-body main-card  " >
 				
@@ -139,7 +135,6 @@ $('#fromdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	/* "minDate" :datearray,   */
-	/* "startDate" : fdate, */
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

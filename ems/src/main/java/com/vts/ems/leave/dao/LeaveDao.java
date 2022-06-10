@@ -2,6 +2,7 @@ package com.vts.ems.leave.dao;
 
 import java.util.List;
 
+import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 
@@ -22,5 +23,7 @@ public interface LeaveDao {
 	public List<Object[]>   EmployeeList()throws Exception;
 	public List<Object[]> LeaveCode(String EmpNo) throws Exception;
 	public List<Object[]>   purposeList()throws Exception;
-
+	public List<LabMaster> getLabDetails() throws Exception; 
+	public List<Object[]> getRegister(String EmpNo)throws Exception;
+	
 }

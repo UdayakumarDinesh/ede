@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-  <%@ page import="com.vts.ems.Admin.model.CircularList" %>
+  <%@ page import="com.vts.ems.master.model.CircularList" %>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
@@ -67,7 +67,11 @@
 						<div class="col-md-2" style="margin-left: 15%;">
 						<div class="form-group">
 						<label><b>File</b></label>
-						 <input type="file"   class="form-control input-sm "  value="<%if(circular!=null && circular.getPath()!=null){%> <%=circular.getPath()%><%}%>" required="required"  id="file" name="selectedFile" >
+						<%if(circular!=null && circular.getPath()!=null){%>
+						 <input type="file"   class="form-control input-sm "  value=" <%=circular.getPath()%>"   id="file" name="selectedFile" >
+							<%}else{%>
+							 <input type="file"   class="form-control input-sm "  value="" required="required"  id="file" name="selectedFile" >
+							 <%}%>
 					</div>
 					</div>
 						<%if(circular!=null && circular.getPath()!=null){%>

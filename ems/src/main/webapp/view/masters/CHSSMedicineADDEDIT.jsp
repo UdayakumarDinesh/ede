@@ -62,15 +62,21 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 												<%}}%>
 											    </select></td>
 										</tr>								
-											<tr>
+										<tr>
 											<th><label>Medicine Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Medicine Name" type="text" id="MedicineName" name="MedicineName" value="<%if(list!=null){ %><%=list.getMedicineName()%><%} %>"
 												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
 												></td>
 										</tr>
-									
-								
+									<%if(list!=null ){ %>
+								        <tr>
+											<th><label>Comments <span class="mandatory" style="color: red;">*</span></label></th>
+											<td><input class="form-control form-control" placeholder=" Enter Commets" type="text" id="comments" name="comments" value=""
+												 maxlength="1000" style="font-size: 15px; text-transform:capitalize; "
+												required="required"></td>
+										</tr>
+										<%} %>
 								</table>
 							</div>
 						</div>
@@ -80,7 +86,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							<%if(list!=null){ %>
 							<input type="hidden" name="medicineId" value="<%=list.getMedicineId()%>">
 							<input type="hidden" name="Action" value="EDITMEDICINE">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
+								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate1()" >SUBMIT</button>
 									<%}else{ %>
 									<input type="hidden" name="Action" value="ADDMEDICINE">
 									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
@@ -134,12 +140,13 @@ function checkDuplicate()
 
 
 </script>
-<!-- 
+ 
 <script type="text/javascript">
 function checkDuplicate1()
 {
 	var $name = $("#MedicineName").val();	
 	var $treatid = $("#tratementname").val();
+	var $commets = $("#comments").val();
 		$.ajax({
 			type : "GET",
 			url : "DuplicateMedicine.htm",	
@@ -158,7 +165,7 @@ function checkDuplicate1()
 				}else if(confirm("Are you sure to Submit!")){
 					var $treatmentname = $("#tratementname").val();
 					var $name1 = $("#MedicineName").val();	
-					if($treatmentname=="null" || $treatmentname==null ||  $name1=="" || $name1==" " ){
+					if($treatmentname=="null" || $treatmentname==null ||  $name1=="" || $name1==" " || $commets=="null" || $commets==""){
 						alert("Enter Data Properly!");
 						return false;
 					}else{
@@ -170,7 +177,7 @@ function checkDuplicate1()
 			}
 		});	
 }
-</script> -->
+</script> 
 
 </body>
 </html>

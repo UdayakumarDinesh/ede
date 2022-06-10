@@ -689,7 +689,7 @@ public class PisController {
 			e.printStackTrace();
 			 return "redirect:/PisAdminEmpList.htm";
 		}
-        return "masters/FamilyMemberList";
+        return "pis/FamilyMemberList";
    }
 
 	@RequestMapping(value = "FamilyMemberAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
@@ -704,7 +704,7 @@ public class PisController {
 			req.setAttribute("FamilyRelation", service.getFamilyRelation());
 			req.setAttribute("FamilyStatus", service.getFamilyStatus());
 	
-			return "masters/FamilyMemberAdd";
+			return "pis/FamilyMemberAdd";
 		} else if ("EDIT".equalsIgnoreCase(Action)) {
 			String familyid = (String) req.getParameter("familyid");
 		
@@ -713,7 +713,7 @@ public class PisController {
 			req.setAttribute("FamilyRelation", service.getFamilyRelation());
 			req.setAttribute("FamilyStatus", service.getFamilyStatus());
 
-			return "masters/FamilyMemberEdit";
+			return "pis/FamilyMemberEdit";
 		} else {
                                                                                         
 			String familyid = (String) req.getParameter("familyid");
@@ -892,7 +892,7 @@ public class PisController {
 		  e.printStackTrace();
 	   }
 	   
-	   return "masters/AddressList";
+	   return "pis/AddressList";
    }
    
    @RequestMapping(value ="AddEditPerAddress.htm" , method= {RequestMethod.GET,RequestMethod.POST})
@@ -912,19 +912,19 @@ public class PisController {
     	   		 req.setAttribute("peraddress", peraddress);
     	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
  	   		     req.setAttribute("States", States);
-    	   	      return "masters/AddEditPerAddress";
+    	   	      return "pis/AddEditPerAddress";
            }else{
     	   		List<Object[]> States = service.getStates();
     	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
     	   		req.setAttribute("States", States);
-    	   	 return "masters/AddEditPerAddress";
+    	   	 return "pis/AddEditPerAddress";
     	   	}
     	   	
 	    } catch (Exception e) {
 	 	    e.printStackTrace();
 	    }
       
-       return "masters/AddEditPerAddress";
+       return "pis/AddEditPerAddress";
    }
    
    @RequestMapping(value = "AddAddressDetails.htm" , method= RequestMethod.POST)
@@ -1010,7 +1010,7 @@ public class PisController {
 				 req.setAttribute("Empdata", service.GetEmpData(empid));
 	   		     req.setAttribute("States", States);
 						
-		  return "masters/AddEditResAddress";
+		  return "pis/AddEditResAddress";
 		}else if("EDIT".equalsIgnoreCase(Action)) {
 			
 			  String Addressid = (String)req.getParameter("addressid"); 	
@@ -1020,7 +1020,7 @@ public class PisController {
 			  req.setAttribute("addres", addres);
 			  req.setAttribute("States", States);
 			  
-		   return "masters/AddEditResAddress";
+		   return "pis/AddEditResAddress";
 		}else{
 			
 			String addressid = (String)req.getParameter("addressid");
@@ -1159,19 +1159,19 @@ public class PisController {
     	   		 req.setAttribute("nextkinaddress", nextkinaddress);
     	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
  	   		     req.setAttribute("States", States);
-    	   	      return "masters/AddEditNextKinAddress";
+    	   	      return "pis/AddEditNextKinAddress";
            }else{
     	   		List<Object[]> States = service.getStates();
     	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
     	   		req.setAttribute("States", States);
-    	   	 return "masters/AddEditNextKinAddress";
+    	   	 return "pis/AddEditNextKinAddress";
     	   	}
     	   	
 	    } catch (Exception e) {
 	 	    e.printStackTrace();
 	    }
        
-       return "masters/AddEditNextKinAddress";
+       return "pis/AddEditNextKinAddress";
   		
   	}
    
@@ -1255,19 +1255,19 @@ public class PisController {
     	   		 req.setAttribute("emecaddress", emecaddress);
     	     	 req.setAttribute("Empdata", service.GetEmpData(empid));
  	   		     req.setAttribute("States", States);
-    	   	      return "masters/AddEditEmecAddress";
+    	   	      return "pis/AddEditEmecAddress";
            }else{
     	   		List<Object[]> States = service.getStates();
     	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
     	   		req.setAttribute("States", States);
-    	   	 return "masters/AddEditEmecAddress";
+    	   	 return "pis/AddEditEmecAddress";
     	   	}
     	   	
 	    } catch (Exception e) {
 	 	    e.printStackTrace();
 	    }
        
-       return "masters/AddEditNextKinAddress";
+       return "pis/AddEditNextKinAddress";
   		
   	}
    
@@ -1390,7 +1390,7 @@ public class PisController {
 	@RequestMapping(value = "PasswordChange.htm", method = RequestMethod.GET)
 	public String PasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
 		
-		return "Admin/PasswordChange";
+		return "pis/PasswordChange";
 	}
 	
 	@RequestMapping(value = "PasswordChanges.htm", method = RequestMethod.POST)
@@ -1406,10 +1406,12 @@ public class PisController {
 				if (count > 0) 
 				{
 					redir.addAttribute("result", "Password Changed Successfully");
+					return "redirect:/MainDashBoard.htm";
 				} 
 				else 
 				{
 					redir.addAttribute("resultfail", "Password Change Unsuccessfull ");
+					return "redirect:/PasswordChange.htm";
 				}
 			
 			}catch (Exception e) {

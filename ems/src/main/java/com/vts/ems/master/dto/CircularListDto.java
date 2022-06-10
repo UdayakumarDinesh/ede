@@ -1,4 +1,4 @@
-package com.vts.ems.Admin.Dto;
+package com.vts.ems.master.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 

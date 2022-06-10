@@ -36,7 +36,21 @@ NFormatConvertion nfc=new NFormatConvertion();
 	
 	<div class="page card dashboard-card">
 		<div class="card-body" >		
-			
+			<div align="center">
+						<%String ses=(String)request.getParameter("result"); 
+						String ses1=(String)request.getParameter("resultfail");
+						if(ses1!=null){ %>
+							<div class="alert alert-danger" role="alert">
+								<%=ses1 %>
+							</div>
+							
+						<%}if(ses!=null){ %>
+							
+							<div class="alert alert-success" role="alert">
+								<%=ses %>
+							</div>
+						<%} %>
+					</div>
 		<form action="PasswordChanges.htm" method="POST" name="myfrm" id="myfrm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						
@@ -45,7 +59,7 @@ NFormatConvertion nfc=new NFormatConvertion();
 	                    		<div class="col-md-3">
 	                        		<div class="form-group">
 	                              		<label class="control-label">Old Password</label><span class="mandatory">*</span>
-                              		 	<input  class="form-control form-control"  type="password"  placeholder="Old Password " required name="OldPassword" >
+                              		 	<input  class="form-control form-control"  type="password"  placeholder="Old Password " required name="OldPassword"  id="Oldpassword">
 	                        		</div>
 	                    		</div>
 	         					
@@ -94,84 +108,31 @@ $('#password, #confirm_password').on('keyup', function () {
 	    $('#message').html('Password Not Matching').css('color', 'red');
 	  	  
 	});
-	
-
-	
-
-
-$(function () {
-	  $('[data-toggle="tooltip"]').tooltip()
-	})
-
-
-function Prints(myfrm){
-	
-	 var fields = $("input[name='btSelectItem']").serializeArray();
-
-	 
-	  if (fields.length === 0){
-		  myalert();
-	 event.preventDefault();
-	return false;
-	}
-	 
-
-		  return true;
-	 
-			
-	}
-	
-function Add(myfrm){
-	
-	event.preventDefault();
-	
-	bootbox.confirm({ 
- 		
-	    size: "small",
-			message: "<center></i>&nbsp;&nbsp;&nbsp;&nbsp;<b class='editbox'>Are You Sure ?</b></center>",
-	    buttons: {
-	        confirm: {
-	            label: 'Yes',
-	            className: 'btn-success'
-	        },
-	        cancel: {
-	            label: 'No',
-	            className: 'btn-danger'
-	        }
-	    },
-	    callback: function(result){ 
-	 
-	    	if(result){
-	    	
-	    		$("sub").value;
-	         $("#myfrm").submit(); 
-	    	}
-	    	else{
-	    		event.preventDefault();
-	    	}
-	    } 
-	}) 
-	
-	
-}
-
 
 function AddPwd(myfrm){
-	
+		var pwd  = $('#password').val();
+		var cpwd = $('#confirm_password').val();
+		var Opwd = $('#Oldpassword').val();
+
 		if(confirm("Are You Sure To Submit?")){
-			   $("#myfrm").submit(); 
+			if(pwd!=null && pwd!='' && cpwd!=null && cpwd!='' && Opwd!=null && Opwd!=''){
+				if(cpwd!=pwd){
+					alert("New Password and Confirm Password Should be Same!");
+					$('#message').html('Password Not Matching').css('color', 'red');
+					return false;
+				}else{
+					$("#myfrm").submit(); 
+				}
+				
+			}else{
+				alert("Enter All Passowrd!");
+				return false;
+			}
+			   
 		}else{
 			return false;
 		}
 }
-$(document).ready(function(){
-	
-	$("#table").DataTable({
-		"pageLength": 5
-	})
-})
-
-
 
 </script>
 </body>

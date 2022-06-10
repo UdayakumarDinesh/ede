@@ -27,7 +27,6 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
-import com.vts.ems.pis.model.Employee;
 
 public interface CHSSService 
 {
@@ -122,5 +121,5 @@ public interface CHSSService
 	public long CHSSContingentDelete(String contingentid, String Username) throws Exception;
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
-	
+
 }
