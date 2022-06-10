@@ -96,7 +96,7 @@ public interface CHSSDao {
 	public long NotificationAdd(EMSNotification notification) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception;
-	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception;
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception;
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception;
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;

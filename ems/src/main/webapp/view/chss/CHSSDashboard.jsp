@@ -421,8 +421,8 @@
 								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amt</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amt</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amt (&#8377;)</td>
+								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amt (&#8377;)</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 							</tr>
@@ -436,10 +436,10 @@
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[24].toString()))))%></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[24].toString()))))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
 										<%if("14".equals(obj[9].toString())){ %>
-											&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[25].toString()))))%>
+											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[25].toString()))))%>
 										<%}else{ %>
 											-
 										<%} %>
@@ -469,7 +469,7 @@
 											</button>	
 										<%} %>
 											
-										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>	
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">

@@ -226,24 +226,39 @@ th,td
 											<th class="center">Date</th>
 											<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
 										</tr>
-										<% long billstotal=0;
+										<% double billstotal=0, GST=0,discount=0;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[5].toString()));
-												%>
+												billstotal +=Double.parseDouble(chssbillslist.get(i)[8].toString());
+												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
+												{
+													GST +=Double.parseDouble(chssbillslist.get(i)[5].toString());
+													discount +=Double.parseDouble(chssbillslist.get(i)[6].toString());
+												}
+										%>
 											<tr>
 												<td class="center text-blue"><%=i+1 %></td>
 												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
 												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
 												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[5] %></td>
+												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[8] %></td>
 											</tr>
 										<%} %>
 										<%if(chssbillslist.size()>0){ %>
 											<tr>
 												<td colspan="3"></td>
+												<td style="text-align: right;"><b>Total GST (+)</b></td>
+												<td class="text-blue"  style="text-align: right;"><%=GST %></td>
+											</tr>
+											<tr>
+												<td colspan="3"></td>
+												<td style="text-align: right;"><b>Total Discount (-)</b></td>
+												<td class="text-blue"  style="text-align: right;"><%=discount %></td>
+											</tr>
+											<tr>
+												<td colspan="3"></td>
 												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td style="text-align: right;" class="text-blue" ><%=nfc.rupeeFormat(String.valueOf(billstotal)) %></td>
+												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(billstotal + GST - discount))) %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
@@ -324,10 +339,10 @@ th,td
 													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
-												<%double itemstotal=0, totalremamount=0; %>
-												<% int i=1;
+												<%double itemstotal=0, totalremamount=0;
+												int i=1;
 												for(Object[] consult :ConsultDataList)
-												{%>
+												{ %>
 													<%if(i==1){ %>
 														<tr>
 															<td colspan="4" style="text-align: center;">
@@ -335,8 +350,8 @@ th,td
 																<%if(showhistorybtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
-																 </button>
-																 <%} %>
+																</button>
+																<%} %>
 															</td>
 															<td class="right"> 
 																<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -354,7 +369,7 @@ th,td
 															<th></th>
 															<th></th>
 														</tr>			
-													<%} %>
+													<% } %>
 													<tr>
 														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %></td>
@@ -393,7 +408,6 @@ th,td
 													itemstotal += Double.parseDouble(consult[6].toString());
 													totalremamount +=Double.parseDouble(consult[7].toString());
 												} %>
-													
 										
 											<% i=1;
 											for(Object[] test :TestsDataList)
@@ -567,9 +581,6 @@ th,td
 													<td  class="text-blue" colspan="3"><%=other[4] %></td>
 													<td class="right text-blue"><%=other[3] %></td>
 													
-													
-													
-													
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right text-green">	
 															<%=other[5]%>
@@ -666,24 +677,51 @@ th,td
 											totalremamount +=Double.parseDouble(misc[4].toString());
 											}%>
 										
+										
 										<tr>
-											<td colspan="3"></td>
-											<td class="right"><b>Rounded Total</b></td>
-											<td class="right text-blue"><b>&#8377; <%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal))) %></b></td>
-											
+											<td colspan="4" class="right"><b>Total</b></td>
+											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
-											<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-											&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
-											<%} %>
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+												<%} %>
 											</td>
 											<td ></td>
 										</tr>
+															
+										<tr>
+											<td colspan="4" class="right"><b>Total GST (+)</b></td>
+											<td class="right text-blue"><b><%=GST %></b></td>
+											<td class="right text-green"></td>
+											<td ></td>
+										</tr>
+										<tr>
+											<td colspan="4" class="right"><b>Total Discount (-)</b></td>
+											<td class="right text-blue"><b><%=discount %></b></td>
+											<td class="right text-green"></td>
+											<td ></td>
+										</tr>
+															
+										<tr>
+											<td colspan="4" class="right"><b>Rounded Total</b></td>
+											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal +GST -discount))) %></b></td>
+															
+											<td class="right text-green">
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+												<%} %>
+											</td>
+											<td ></td>
+										</tr>
+																				
 										<tr>
 											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
 										</tr>
+										
 										<tr>
 											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
 										</tr>
+										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>
@@ -792,8 +830,6 @@ th,td
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-						
-								
 							
 							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" align="center" style="left: 15%;">
 								<div class="modal-dialog  modal-dialog-centered"  >
@@ -920,10 +956,8 @@ $("#modal-history-table").DataTable({
 
 });
 var $chssapplyid = <%=chssapplydata[0]%>;
-
 function ShowHistory(itemid)
 {
-	
 	
 	if(itemid==1)
 	{
@@ -935,6 +969,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
+				
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -983,9 +1018,9 @@ function ShowHistory(itemid)
 		});
 		
 		
-		
-		
-	}else if(itemid==2){
+	}
+	else if(itemid==2)
+	{
 		$('#m-header').html('Tests History');	
 		
 		$.ajax({
@@ -995,6 +1030,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
+				
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -1051,7 +1087,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
-				treattype : <%=chssapplydata[7]%>
+				
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -1121,6 +1157,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
+				
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -1177,6 +1214,7 @@ function ShowHistory(itemid)
 			data : {
 					
 				chssapplyid : $chssapplyid,
+				
 			},
 			datatype : 'json',
 			success : function(result) {
@@ -1310,9 +1348,18 @@ function CheckClaimAmount($chssapplyid)
 		success : function(result) {
 		var result = JSON.parse(result);
 						
-			if(result===1)
+			if(Number(result[0])===1)
 			{
-				if(Number($('#enclosurecount').val())>0  ){
+				alert('Please Enter Atleast One Item in All the bills');
+			}
+			else if(Number(result[1])===0)
+			{
+				alert('Total claim amount should not be zero !');
+			}
+			else
+			{
+				if(Number($('#enclosurecount').val())>0  )
+				{
 					if(Number($('#enclosurecount').val())>99)
 					{
 						alert(' No of Encloseres Should be less than 100 !');
@@ -1326,10 +1373,6 @@ function CheckClaimAmount($chssapplyid)
 				{
 					alert('Please Enter No of Encloseres.');	
 				}
-			}else if(result===-1){
-				alert('Please Add Atleast one Consultation details.');
-			}else if(result===0){
-				alert('Total claim amount should not be zero !');
 			}
 		
 		}

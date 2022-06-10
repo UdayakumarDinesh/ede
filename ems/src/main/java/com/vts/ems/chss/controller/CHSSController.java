@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -132,6 +133,7 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
+			System.out.println(EmpId+" "+PatientId+" "+FromDate+" "+ToDate+" "+IsSelf);
 			req.setAttribute("Fromdate", FromDate );
 			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
@@ -197,59 +199,6 @@ public class CHSSController {
 		}
 	}
 
-	
-//	@RequestMapping(value = "CHSSApplySubmit.htm" )
-//	public String CHSSApplySubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
-//	{
-//		String Username = (String) ses.getAttribute("Username");
-//		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-//		logger.info(new Date() +"Inside CHSSApplySubmit.htm "+Username);
-//		try {
-//			String patientid = req.getParameter("patientid");
-//			String relationid=req.getParameter("relationid");
-//			String treatmenttype=req.getParameter("treatmenttype");
-//			String noenclosures=req.getParameter("enclosurecount");
-//			String ailment = req.getParameter("ailment");
-//			
-//			String[] centernames=req.getParameterValues("centername");
-//			String[] billno=req.getParameterValues("billno");
-//			String[] billdate=req.getParameterValues("billdate");
-//			
-//			CHSSApplyDto dto=new CHSSApplyDto();
-//			dto.setRelationId(relationid);
-//			dto.setEmpId(EmpId);
-//			dto.setPatientId(patientid);
-//			dto.setCenterName(centernames);
-//			dto.setBillNo(billno);
-//			dto.setBillDate(billdate);
-//
-//			dto.setTreatTypeId(treatmenttype);
-//			dto.setCHSSType("OPD");
-//			dto.setCreatedBy(Username);
-//			dto.setNoEnclosures(noenclosures);
-//			dto.setAilment(ailment);
-//			dto.setCenterName(centernames);
-//			dto.setBillNo(billno);
-//			dto.setBillDate(billdate);
-//			dto.setCreatedBy(Username);
-//			
-//			
-//			long count= service.CHSSApplySubmit(dto);
-//			if (count > 0) {
-//				redir.addAttribute("result", "Bill(s) Added Successfully");
-//			} else {
-//				redir.addAttribute("resultfail", "Bill(s) Adding Unsuccessful");	
-//			}	
-//			redir.addFlashAttribute("chssapplyid",String.valueOf(count));
-//			redir.addFlashAttribute("billid",service.CHSSBillsList(String.valueOf(count)).get(0)[0].toString());
-//			return "redirect:/CHSSConsultMainData.htm";
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error(new Date() +" Inside CHSSApplySubmit.htm "+Username, e);
-//			return "static/Error";
-//		}
-//	}
-	
 	
 	
 	@RequestMapping(value = "CHSSApplySubmit.htm" )
@@ -317,19 +266,7 @@ public class CHSSController {
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
 			}	
-//			String billid = req.getParameter("billid");
-//			if (billid == null) 
-//			{
-//				Map md=model.asMap();
-//				billid=(String)md.get("billid");
-//			}	
-//			
-//			String tab = req.getParameter("tab");
-//			if (tab == null) 
-//			{
-//				Map md=model.asMap();
-//				tab=(String)md.get("tab");
-//			}	
+
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
@@ -340,15 +277,9 @@ public class CHSSController {
 			req.setAttribute("chssapplydata", apply);
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
-//			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-//			req.setAttribute("testmainlist", service.CHSSTestSubList(""));
-//			req.setAttribute("otheritemslist", service.OtherItemsList());
 			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
-//			req.setAttribute("billid", billid);
-//			req.setAttribute("tab", tab);
 			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
 			req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
-//			req.setAttribute("allowedmed", service.getCHSSMedicinesList(apply[7].toString()));
 			req.setAttribute("consultmainlist", service.getCHSSConsultMainList(chssapplyid));
 			req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
 			
@@ -365,11 +296,6 @@ public class CHSSController {
 		}
 	}
 
-	
-	
-	
-	
-	
 	@RequestMapping(value = "CHSSMedicinesListAjax.htm", method = RequestMethod.GET)
 	public @ResponseBody String CHSSMedicinesListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
@@ -395,7 +321,6 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			
-//			String[] centernames=req.getParameterValues("centername");
 			String[] docname=req.getParameterValues("docname");
 			String[] consultdate=req.getParameterValues("consultdate");
 			String[] docqualification=req.getParameterValues("doc-qualification");
@@ -403,7 +328,6 @@ public class CHSSController {
 			CHSSApplyDto dto=new CHSSApplyDto();
 			
 			dto.setCHSSApplyId(chssapplyid);
-//			dto.setConsulttype(centernames);
 			dto.setDocName(docname);
 			dto.setConsultDate(consultdate); 
 			dto.setDocQualification(docqualification);
@@ -571,6 +495,8 @@ public class CHSSController {
 			String[] centernames=req.getParameterValues("centername");
 			String[] billno=req.getParameterValues("billno");
 			String[] billdate=req.getParameterValues("billdate");
+			String[] GSTAmt=req.getParameterValues("GSTAmt");
+			String[] DiscountAmt=req.getParameterValues("DiscountAmt");
 			
 			ChssBillsDto dto=new ChssBillsDto();
 			
@@ -579,6 +505,8 @@ public class CHSSController {
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
+			dto.setGSTAmount(GSTAmt);
+			dto.setDiscount(DiscountAmt);
 			dto.setCreatedBy(Username);
 			
 			long count= service.CHSSConsultBillsAdd(dto);
@@ -598,7 +526,11 @@ public class CHSSController {
 		}
 	}
 	
-	
+	public double CropTo2Decimal(String Amount)throws Exception
+	{
+		DecimalFormat decimalformat = new DecimalFormat("0.00");
+		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
+	}
 	
 	@RequestMapping(value = "CHSSBillEdit.htm", method = RequestMethod.POST )
 	public String CHSSBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -611,12 +543,16 @@ public class CHSSController {
 			String centername = req.getParameter("centername-"+billid);
 			String billno = req.getParameter("billno-"+billid);
 			String billdate = req.getParameter("billdate-"+billid);
+			String GSTAmt = req.getParameter("GSTAmt-"+billid);
+			String Discount = req.getParameter("Discount-"+billid);
 			
 			CHSSBill bill = new CHSSBill();
 			bill.setBillId(Long.parseLong(billid));
 			bill.setCenterName(centername);
 			bill.setBillNo(billno);
 			bill.setBillDate(sdf.format(rdf.parse(billdate)));
+			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
+			bill.setDiscount(CropTo2Decimal(Discount));
 			bill.setModifiedBy(Username);
 			
 			long count = service.CHSSBillEdit(bill);
@@ -1576,7 +1512,7 @@ public class CHSSController {
 		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
 	
 		        PdfExtGState gstate = new PdfExtGState();
-		        gstate.setFillOpacity(.1f);
+		        gstate.setFillOpacity(.05f);
 		        canvas = new PdfCanvas(page);
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
@@ -1590,7 +1526,6 @@ public class CHSSController {
 		                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
 		                    .setRotationAngle(rotationRad)
 		                    .setFixedPosition(200, 110, page.getPageSize().getWidth());
-	//	            System.out.println(page.getPageSize().getHeight()-((page.getPageSize().getHeight()*3)/4)-100);
 		            canvas2.add(watermark);
 		        }
 		        canvas.restoreState();
@@ -1600,7 +1535,7 @@ public class CHSSController {
 		pdffile.delete();
 		tofile.renameTo(pdffile);
 		
-}
+	}
 	
 	
 	@RequestMapping(value = "CHSSClaimFwdApproveAjax.htm", method = RequestMethod.GET)
@@ -1608,24 +1543,25 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSClaimFwdApproveAjax.htm "+Username);
-		long allow=0;
+		long allow[]= {0,0,0};
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
+			
 			double claimamount=0;
-			for(Object[] bill : claimdata) {
-				claimamount += Double.parseDouble(bill[5].toString());
+			for(Object[] bill : claimdata) 
+			{
+				if(Double.parseDouble(bill[8].toString())==0) 
+				{
+					allow[0]=1;
+					break;
+				}
+				claimamount += Double.parseDouble(bill[8].toString());
 			}
 			
-//			int consultationcount = Integer.parseInt(service.claimConsultationsCount(chssapplyid)[0].toString());
-			
-			if(claimamount>0  ) 
+			if(claimamount>0) 
 			{
-				allow=1;
-				
-			}else
-			{
-				allow=0;
+				allow[1]=1;
 			}
 			
 		} catch (Exception e) {
@@ -2395,6 +2331,7 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			list = service.ConsultationHistory(chssapplyid);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ConsultationHistoryAjax.htm "+Username, e);
@@ -2428,8 +2365,7 @@ public class CHSSController {
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
-			String treattype = req.getParameter("treattype");
-			list = service.MedicinesHistory(chssapplyid,treattype);
+			list = service.MedicinesHistory(chssapplyid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside MedicinesHistoryAjax.htm "+Username, e);
@@ -2555,7 +2491,6 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		logger.info(new Date() +"Inside CHSSEmpClaimRevoke.htm "+Username);
-		List<Object[]> list=new ArrayList<Object[]>();
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			

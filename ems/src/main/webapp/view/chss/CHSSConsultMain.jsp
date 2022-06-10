@@ -264,25 +264,29 @@ table th:last-child{
 													</td>
 													<td>
 														<%if(Integer.parseInt(cmain[5].toString())==0){ %>
-														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
-															<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
-															update
-														</button>
-														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
-															<i class="fa-solid fa-trash-can" style="color: red;"></i>
-														</button>		
+															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details">														
+																<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
+																update
+															</button>
+															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
+																<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+															</button>		
+															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
+																<i class="fa-solid fa-trash-can" style="color: red;"></i>
+															</button>		
 														<%}else{ %>
-														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill" disabled>														
-															<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
-															update
-														</button>
-														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
-															<i class="fa-solid fa-trash-can" style="color: red;"></i>
-														</button>	
+															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details" disabled>														
+																<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
+																update
+															</button>
+															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
+																<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+															</button>		
+															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
+																<i class="fa-solid fa-trash-can" style="color: red;"></i>
+															</button>	
 														<%} %>																								
-														<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-															<i class="fa-solid fa-receipt"></i>
-														</button>												
+																								
 													</td>										
 												<%}else{
 													claimconsultids.add(cmain[0].toString());
@@ -298,9 +302,9 @@ table th:last-child{
 														</select>
 													</td>
 													<td>
-														<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-															<i class="fa-solid fa-receipt"></i>
-														</button>												
+													<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
+															<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+														</button>											
 													</td>				
 												
 												<%} %>
@@ -343,7 +347,7 @@ table th:last-child{
 												</select>
 											</td>
 											<td style="width:20%;" >
-												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >ADD</button>  <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
+												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >Add</button>  <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	
@@ -388,9 +392,9 @@ table th:last-child{
 												<td> <%=rdf.format(sdf.parse(consult[2].toString())) %></td>
 											
 												<td>
-													<button type="submit"  class="btn btn-sm details-icon" formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=consult[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-														<i class="fa-solid fa-receipt"></i>
-													</button>												
+													<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=consult[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
+														<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+													</button>
 												</td>										
 											
 											</tr>
@@ -422,46 +426,18 @@ table th:last-child{
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									
+									<%if(consultmainlist.size()>0){ %>
 									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward"  >
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
-									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
+									<%-- <button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
 										<i class="fa-solid fa-eye"></i>
-									</button>
-									
+									</button> --%>
+									<%} %>
 								</div>
 							</div>
 							
-							<%-- <div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-								<div class="modal-dialog  modal-dialog-centered" >
-									<div class="modal-content" >
-										<div class="modal-header">
-											
-											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
-										    </button>
-										</div>
-										<div class="modal-body" >
-									          <div class="row">
-											    <div class="col-12">
-											    	<b>No of Enclosures : </b><br>
-													<input type="number" class="form-control numberonly w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" required="required" >
-												</div>
-												
-												 <div class="col-12 w-100" align="center">
-												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount (<%=chssapplydata[0]%>)"  data-toggle="modal" data-target=".my-encl-modal">
-													Save
-												</button>
-												</div>
-											</div>
-										</div>
-										
-									</div>
-								</div>	
-							</div>
-							 --%>
+							
 							<input type="hidden" name="isapproval" value="n">
 							<input type="hidden" name="show-edit" value="N">
 							<input type="hidden" name="claimaction" value="F">

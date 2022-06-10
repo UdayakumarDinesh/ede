@@ -15,6 +15,8 @@ public class ChssBillsDto implements Serializable
 	private String[] BillNo; 
 	private String[] CenterName;
 	private String[] BillDate;
+	private String[] GSTAmount;
+	private String[] Discount;
 	
 	private String IsActive;
 	private String CreatedBy;

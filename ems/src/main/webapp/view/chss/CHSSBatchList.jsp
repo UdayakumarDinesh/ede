@@ -191,14 +191,13 @@
 								Content :
 								<textarea class="w-100 form-control" rows="8" cols="100" id="billcontent" name="billcontent" maxlength="3000">According to note no. STARC/P&A/302-457/18 dated 31-07-2018 all the medical claims irrespective of amount will be reimbursed, after the approval of CEO.
 
-
 It is requested to approve the reimbursement of medical expenses as above and for payment to the above employees.
 
 Put up for approval.</textarea>
 							</div>						
 						</div>			 
 						<div class="col-md-12" align="center" style="margin-top: 5px;">
-							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " >Generate</button>
+							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " data-toggle="tooltip" data-placement="top" title="Generate New Contingent Bill">Generate</button>
 						</div>
 					<%} %>
 					 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

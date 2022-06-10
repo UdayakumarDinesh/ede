@@ -205,7 +205,7 @@ public class PisController {
 			employee.setDivisionId(Long.parseLong(divisionid));
 			
 			employee.setDesigId(Long.parseLong(Designationid));
-			employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
+			employee.setEmpName(WordUtils.capitalize(empname.trim()));
 			employee.setSrNo(Long.parseLong("0"));
             employee.setEmpNo(PunchCardNo.trim());
 			employee.setIsActive(1);
@@ -376,7 +376,7 @@ public class PisController {
 			
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
-				employee.setEmpName(WordUtils.capitalizeFully(empname.trim()));
+				employee.setEmpName(WordUtils.capitalize(empname.trim()));
 				employee.setDesigId(Long.parseLong(Designationid));
 				employee.setEmail(email);
 				employee.setDivisionId(Long.parseLong(divisionid));
@@ -755,7 +755,7 @@ public class PisController {
     	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
+    	   details.setMember_name(WordUtils.capitalize(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
     	   details.setGender(gender);
@@ -817,7 +817,7 @@ public class PisController {
     	   String gender   = (String)req.getParameter("Gender");
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
-    	   details.setMember_name(WordUtils.capitalizeFully(name.trim()));
+    	   details.setMember_name(WordUtils.capitalize(name.trim()));
     	   details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
     	   details.setRelation_id(Integer.parseInt(relation));
     	   details.setCghs_ben_id(benId);

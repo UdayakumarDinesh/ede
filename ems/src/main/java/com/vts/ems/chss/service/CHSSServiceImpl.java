@@ -1,5 +1,6 @@
 package com.vts.ems.chss.service;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -51,6 +52,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
+	
 	private static final Logger logger = LogManager.getLogger(CHSSServiceImpl.class);
 	
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
@@ -59,6 +61,13 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	@Autowired
 	CHSSDao dao;
+	
+	public double CropTo2Decimal(String Amount)throws Exception
+	{
+		DecimalFormat decimalformat = new DecimalFormat("0.00");
+		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
+	}
+	
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -119,7 +128,7 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCHSSType(dto.getCHSSType());
 				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-				apply.setAilment(WordUtils.capitalizeFully(dto.getAilment()).trim());
+				apply.setAilment(WordUtils.capitalize(dto.getAilment()).trim());
 				apply.setCHSSStatusId(1);
 				apply.setIsActive(1);
 				apply.setCreatedBy(dto.getCreatedBy());
@@ -156,7 +165,7 @@ public class CHSSServiceImpl implements CHSSService {
 				conmain.setDocQualification(Integer.parseInt(dto.getDocQualification()[i]));
 				conmain.setCHSSApplyId(applyid);
 				conmain.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
-				conmain.setDocName(WordUtils.capitalizeFully(dto.getDocName()[i]).trim());
+				conmain.setDocName(WordUtils.capitalize(dto.getDocName()[i]).trim());
 				conmain.setCreatedBy(dto.getCreatedBy());
 				conmain.setCreatedDate(sdtf.format(new Date()));
 				conmain.setIsActive(1);
@@ -341,7 +350,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSConsultMain fetch = dao.getCHSSConsultMain(String.valueOf(consultmain.getCHSSConsultMainId()));
 		
-		fetch.setDocName(WordUtils.capitalizeFully(consultmain.getDocName()).trim());
+		fetch.setDocName(WordUtils.capitalize(consultmain.getDocName()).trim());
 		fetch.setConsultDate(consultmain.getConsultDate());
 		fetch.setDocQualification(consultmain.getDocQualification());
 		fetch.setModifiedBy(consultmain.getModifiedBy());
@@ -369,9 +378,11 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
 		
-		fetch.setCenterName(WordUtils.capitalizeFully(bill.getCenterName()).trim());
+		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
 		fetch.setBillNo(bill.getBillNo());
 		fetch.setBillDate(bill.getBillDate());
+		fetch.setGSTAmount(bill.getGSTAmount());
+		fetch.setDiscount(bill.getDiscount());
 		fetch.setModifiedBy(bill.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -398,7 +409,7 @@ public class CHSSServiceImpl implements CHSSService {
 			fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
 		}
 //		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-		fetch.setAilment(WordUtils.capitalizeFully(dto.getAilment()).trim());
+		fetch.setAilment(WordUtils.capitalize(dto.getAilment()).trim());
 		fetch.setModifiedBy(dto.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 			
@@ -418,7 +429,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		List<CHSSTestSub> list= dao.CHSSTestSubList();
 		if(Integer.parseInt(treattypeid)==2) {
-			list.addAll(dao.CHSSTestSubListWithAyur());
+			list.addAll (0,dao.CHSSTestSubListWithAyur());
 		}
 		return list;
 		
@@ -450,7 +461,7 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				consult.setBillId(Long.parseLong(dto.getBillId()));
 //				consult.setConsultType(dto.getConsultType()[i]);
-				consult.setDocName(WordUtils.capitalizeFully(dto.getDocName()[i]).trim());
+				consult.setDocName(WordUtils.capitalize(dto.getDocName()[i]).trim());
 				consult.setDocQualification(dto.getDocQualification()[i]);
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				consult.setConsultCharge(Double.parseDouble(dto.getConsultCharge()[i]));
@@ -538,7 +549,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultType(modal.getConsultType());
-		fetch.setDocName(WordUtils.capitalizeFully(modal.getDocName()).trim());
+		fetch.setDocName(WordUtils.capitalize(modal.getDocName()).trim());
 //		fetch.setDocQualification(modal.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
@@ -562,7 +573,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
 	{
-		List<Object[]> medicinedata = dao.MedAdmissibleCheck(WordUtils.capitalizeFully(meds.getMedicineName()).trim());
+		List<Object[]> medicinedata = dao.MedAdmissibleCheck(WordUtils.capitalize(meds.getMedicineName()).trim());
 		if(medicinedata!=null && medicinedata.size()>0)
 		{
 			meds.setMedsRemAmount(0);
@@ -599,7 +610,7 @@ public class CHSSServiceImpl implements CHSSService {
 					CHSSMedicine  meds = new CHSSMedicine();
 					
 					meds.setBillId(Long.parseLong(dto.getBillId()));
-					meds.setMedicineName(WordUtils.capitalizeFully(dto.getMedicineName()[i]).trim());
+					meds.setMedicineName(WordUtils.capitalize(dto.getMedicineName()[i]).trim());
 					meds.setPresQuantity(Integer.parseInt(dto.getPresQuantity()[i]));
 					meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 					meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
@@ -638,7 +649,14 @@ public class CHSSServiceImpl implements CHSSService {
 		Object[] chssapplydata = dao.CHSSAppliedData(chssapplyid);
 		String treattypeid= chssapplydata[7].toString();
 		CHSSMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getCHSSMedicineId()));
-		fetch.setMedicineName(WordUtils.capitalizeFully(modal.getMedicineName()).trim());
+		if(treattypeid.toString().equalsIgnoreCase("1")) 
+		{
+			fetch.setMedicineName(WordUtils.capitalize(modal.getMedicineName()).trim());
+		}
+		else
+		{
+			fetch.setMedicineName(modal.getMedicineName());
+		}
 		fetch.setMedicineCost(modal.getMedicineCost());
 		fetch.setMedQuantity(modal.getMedQuantity());
 		fetch.setPresQuantity(modal.getPresQuantity());
@@ -779,7 +797,7 @@ public class CHSSServiceImpl implements CHSSService {
 				CHSSMisc  misc = new CHSSMisc();
 				
 				misc.setBillId(Long.parseLong(dto.getBillId()));
-				misc.setMiscItemName(WordUtils.capitalizeFully(dto.getMiscItemName()[i]).trim());
+				misc.setMiscItemName(WordUtils.capitalize(dto.getMiscItemName()[i]).trim());
 				misc.setMiscItemCost(Double.parseDouble(dto.getMiscItemCost()[i]));
 				misc.setMiscCount(Integer.parseInt(dto.getMiscCount()[i]));
 				misc.setMiscRemAmount(0);
@@ -808,7 +826,7 @@ public class CHSSServiceImpl implements CHSSService {
 	public long MiscBillEdit(CHSSMisc modal) throws Exception
 	{
 		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
-		fetch.setMiscItemName(WordUtils.capitalizeFully(modal.getMiscItemName()).trim());
+		fetch.setMiscItemName(WordUtils.capitalize(modal.getMiscItemName()).trim());
 		fetch.setMiscItemCost(modal.getMiscItemCost());
 		fetch.setMiscCount(modal.getMiscCount());
 		fetch.setModifiedBy(modal.getModifiedBy());
@@ -1573,9 +1591,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> MedicinesHistory(String chssapplyid, String treattypeid) throws Exception
+	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception
 	{
-		return dao.MedicinesHistory(chssapplyid,treattypeid);
+		return dao.MedicinesHistory(chssapplyid);
 	}
 	
 	@Override
@@ -1593,6 +1611,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception
 	{
+		
 		long billid =0;
 		for(int i=0 ; i<dto.getBillNo().length ; i++)
 		{
@@ -1600,8 +1619,10 @@ public class CHSSServiceImpl implements CHSSService {
 			bill.setCHSSApplyId(Long.parseLong(dto.getCHSSApplyId()));
 			bill.setCHSSConsultMainId(Long.parseLong(dto.getCHSSConsultMainId()));
 			bill.setBillNo(dto.getBillNo()[i]);
-			bill.setCenterName(WordUtils.capitalizeFully(dto.getCenterName()[i]).trim());
+			bill.setCenterName(WordUtils.capitalize(dto.getCenterName()[i]).trim());
 			bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
+			bill.setGSTAmount(CropTo2Decimal(dto.getGSTAmount()[i]));
+			bill.setDiscount(CropTo2Decimal(dto.getDiscount()[i]));
 			bill.setIsActive(1);
 			bill.setCreatedBy(dto.getCreatedBy());
 			bill.setCreatedDate(sdtf.format(new Date()));

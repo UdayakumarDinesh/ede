@@ -90,7 +90,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	
 	
 	CHSSConsultMain consultmain =(CHSSConsultMain) request.getAttribute("consultmain");
-	
 	Object[] consultcount = (Object[])request.getAttribute("consultcount");
 	Object[] medicinecount = (Object[])request.getAttribute("medicinecount");
 	
@@ -151,11 +150,8 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	
 			<div class="card" >
 				<div class="card-body main-card " >
-				
-						
 						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 						
-							
 							<div class="row">
 								
 								<%if(isself.equalsIgnoreCase("N")){
@@ -170,11 +166,10 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									</div>
 								<%}else{ %>
 									<div class="col-3">
-											<b> Patient Name : &nbsp;</b><%=employee[2] %>
+										<b> Patient Name : &nbsp;</b><%=employee[2] %>
 									</div>
 									<div class="col-3">
-											<b>Relation : &nbsp;</b>SELF
-											
+										<b>Relation : &nbsp;</b>SELF
 									</div>
 								<%} %>
 								<div class="col-3">
@@ -202,19 +197,20 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								</div>
 							</div>
 						</div>
-						
-						
+						<b style="margin-bottom: 5px;"><span style="color: blue;">Note : &nbsp;&nbsp;</span><span style="color: red;">Please Update GST and Discount Details without Fail.</span></b>
 							<form method="post" action="#" autocomplete="off"  >
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
-												<th style="width:35%;" >Hospital / Medical / Diagnostics Centre Name</th>
-												<th style="width:20%;" >Bill / Receipt No.</th>
-												<th style="width:10%;" >Bill Date</th>
-												<th style="width:15%; text-align: right;">Amount (&#8377;)</th>
-												<th style="width:10%;" >Action  </th>
+												<th style="width:20%;" >Hospital / Medical / Diagnostics Centre Name</th>
+												<th style="width:10%;" >Bill / Receipt No.</th>
+												<th style="width:8%;" >Bill Date</th>
+												<th style="width:10%; text-align: right;">GST Amt (&#8377;)</th>
+												<th style="width:10%; text-align: right;">Discount (&#8377;)</th>
+												<th style="width:10%; text-align: right;">Bill Amt (&#8377;)</th>
+												<th style="width:13%;" >Action  </th>
 											</tr>
 										</thead>
 										<tbody >
@@ -225,32 +221,29 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 											<tr class="" >
 											
 												<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
-												<td> <input type="text" class="form-control items" name="centername-<%=obj[0]%>"  id="centername-<%=obj[0]%>"  value="<%=obj[3] %>" style="width:100%; "  maxlength="500" required="required"></td>
-												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" id="billno-<%=obj[0]%>"  value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
-												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>"  id="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
-												<%if(obj[5]!=null){ %>
-												<td> <input type="number" class="form-control items cost-only " step=".01" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;text-align: right; " min="1" max="9999999" required="required" readonly="readonly"></td>
-												<%}else{ %>
-												<td> <input type="number" class="form-control items cost-only" step=".01" name="billamount-<%=obj[0]%>" id="billamount-<%=obj[0]%>"  value="0" style="width:100%;text-align: right; " min="1" max="9999999" required="required" readonly="readonly"></td>
-												<%} %>
+												<td> <input type="text" class="form-control items" name="centername-<%=obj[0]%>" value="<%=obj[3] %>" style="width:100%; "  maxlength="500" required="required"></td>
+												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
+												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>"   value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>"  value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="billamount-<%=obj[0]%>" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="1" max="9999999" required="required" readonly="readonly"></td>
 												<td>
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
 														update
 													</button>
+													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
+														<!-- <i class="fa-solid fa-file-lines"></i> --> Details
+													</button>	
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
 													</button>													
-													<button type="button"  class="btn btn-sm details-icon	" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
-														<i class="fa-solid fa-file-lines"></i>
-													</button>													
 												</td>										
-											
 											</tr>
 											
 											<%} %>
 											<%if(sno==0){ %>
 												<tr>
-													<td colspan="6" style="text-align: center ;">
+													<td colspan="8" style="text-align: center ;">
 														Bills Not Added
 													</td>
 												</tr>
@@ -261,14 +254,13 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									</table>
 								</div>
 								
-								
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 							</form>
 						
 						
-					<form method="post" action="CHSSBillAdd.htm" autocomplete="off" >
+							<form method="post" action="CHSSBillAdd.htm" autocomplete="off" >
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -276,12 +268,13 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
 									<tbody>
 										<tr class="" >
-										
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
-											<td style="width:35%;" ><input type="text" class="form-control items " name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
-											<td style="width:20%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
-											<td style="width:10%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
-											<td style="width:25%;" >
+											<td style="width:20%;" ><input type="text" class="form-control items " name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
+											<td style="width:10%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
+											<td style="width:8%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt"   value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only " step=".01" name="DiscountAmt"  value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
+											<td style="width:23%;" >
 												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
@@ -299,12 +292,11 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
 										Back	
 									</button>
+									<%if(chssbillslist.size()>0){ %>
 									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward">
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
-									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
-										<i class="fa-solid fa-eye"></i>
-									</button>
+									<%} %>									
 									<input type="hidden" name="isapproval" value="N">
 										<input type="hidden" name="show-edit" value="N">
 								</div>
@@ -337,6 +329,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	 </div>
 	 
 <div class="modal fade my-bill-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
 	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
 		<div class="modal-content" >
 			<div class="modal-header" style="background: #F5C6A5 ">
@@ -380,9 +373,9 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F" data-toggle="tooltip" data-placement="top" title="Preview and Forward">
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
-									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
+									<%-- <button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
 										<i class="fa-solid fa-eye"></i>
-									</button>
+									</button> --%>
 									<input type="hidden" name="isapproval" value="N">
 										<input type="hidden" name="show-edit" value="N">
 									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -681,6 +674,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										<tr class="tr_clone_other" >
 											<td>
 												<select class="form-control selectpicker " name="otheritemid" required="required" style="width: 100%" data-live-search="true"  >
+													<option value="" selected="selected" disabled="disabled">Choose..</option>
 													<%for(int k=0 ;k<otheritemslist.size();k++){ %>
 														<option value="<%=otheritemslist.get(k).getOtherItemId() %>"><%=otheritemslist.get(k).getOtherItemName() %></option>
 													<%} %>
@@ -762,7 +756,8 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 			   			
 			   		</div>
 <!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->			   		
-			   </div></div>
+				   </div>
+			   </div>
 			  </div>
 			</div>
 		      
@@ -774,8 +769,8 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
  
- <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
- 
+<!-- -------------------------------------------------------modal script --------------------------------------------------- -->
+
 <script type="text/javascript">
 
 
@@ -1543,7 +1538,7 @@ $("table").on('click','.tbl-row-rem_meds_old' ,function() {
 });
 
 
-
+var medsVals;
 function getMedicinesData(){
 	
 	var $billid = $('.billid').val();
@@ -1561,7 +1556,7 @@ function getMedicinesData(){
 		datatype : 'json',
 		success : function(result) {
 		var result = JSON.parse(result);
-		var medsVals= Object.keys(result).map(function(e){
+		medsVals= Object.keys(result).map(function(e){
 			return result[e]
 		})
 		var medsHTMLStr = '';
@@ -1577,7 +1572,7 @@ function getMedicinesData(){
 			}
 			else if(Number($treattype)>1)
 			{
-				medsHTMLStr +=	'	<td><select class="form-control w-100 selectpicker" name="meds-name-'+meds.CHSSMedicineId+'"  required="required" data-live-search="true"   > ';
+				medsHTMLStr +=	'	<td><select class="form-control w-100 selectpicker added-meds" name="meds-name-'+meds.CHSSMedicineId+'"  required="required" data-live-search="true"   > ';
 				medsHTMLStr +=	'		<option value="" disabled selected>Choose...</option> ';
 							for(var ml=0;ml<$medsAllowedList.length;ml++)
 							{								
@@ -1634,9 +1629,9 @@ function getMedicinesData(){
 
 function FillMedsList()
 {
-	console.log();
 	var oldconsultid=0;
-	if($('#old-consult').prop('checked')){
+	if($('#old-consult').prop('checked'))
+	{
 		oldconsultid=$('#old-consult').val();
 	}else
 	{
@@ -1655,23 +1650,34 @@ function FillMedsList()
 			success : function(result) 
 			{
 				var result = JSON.parse(result);
-				var medsVals= Object.keys(result).map(function(e){
-					return result[e]
-				})
+							
+				console.log(medsVals);
 				
 				var medsHTMLStr = '';
 				for(var m=0;m<result.length;m++)
 				{
 					var meds = result[m];
+					var allowThisMed = 0;
+					for(var a=0;a<medsVals.length;a++)
+					{
+						if(meds[3].toUpperCase().trim() === medsVals[a].MedicineName.toUpperCase().trim())
+						{
+							allowThisMed=1;
+						}
+					}
+					if(allowThisMed==1)
+					{
+						continue;
+					}
+					
 					medsHTMLStr +=	'<tr class="tr_clone_meds_old tr_clone_meds" > ';
 					
 					medsHTMLStr +=	' 	<td><input type="text" class="form-control items" name="meds-name" id="med-name" readonly value="'+meds[3]+'" style="width:100%; "  maxlength="255" required="required"></td> ';
 					
-					
 					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity" readonly id="meds-presquantity" value="'+meds[4]+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
-					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="" style="width:100%;" min="1" max="9999999"  ></td> ';
 					
-					medsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td> ';
+					medsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; " min="1" max="9999999" ></td> ';  
 					medsHTMLStr +=	'	<td>';
 					medsHTMLStr +=	'		<button type="button" class="btn btn-sm tbl-row-rem_meds_old"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> ';
 					medsHTMLStr +=	'	</td> ';
@@ -1687,9 +1693,6 @@ function FillMedsList()
 			}
 		});
 }
-
-
-
 
 </script>
 <!-- ------------------------------------------------------- medicines script --------------------------------------------------- -->
