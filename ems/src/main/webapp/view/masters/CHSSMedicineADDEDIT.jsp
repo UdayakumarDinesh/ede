@@ -69,14 +69,14 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
 												></td>
 										</tr>
-									<%if(list!=null ){ %>
+									<%-- <%if(list!=null ){ %>
 								        <tr>
 											<th><label>Comments <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control" placeholder=" Enter Commets" type="text" id="comments" name="comments" value=""
 												 maxlength="1000" style="font-size: 15px; text-transform:capitalize; "
 												required="required"></td>
 										</tr>
-										<%} %>
+										<%} %> --%>
 								</table>
 							</div>
 						</div>
@@ -86,7 +86,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							<%if(list!=null){ %>
 							<input type="hidden" name="medicineId" value="<%=list.getMedicineId()%>">
 							<input type="hidden" name="Action" value="EDITMEDICINE">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate1()" >SUBMIT</button>
+								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
 									<%}else{ %>
 									<input type="hidden" name="Action" value="ADDMEDICINE">
 									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
@@ -140,7 +140,7 @@ function checkDuplicate()
 
 
 </script>
- 
+ <!-- 
 <script type="text/javascript">
 function checkDuplicate1()
 {
@@ -177,7 +177,7 @@ function checkDuplicate1()
 			}
 		});	
 }
-</script> 
+</script>  -->
 
 </body>
 </html>
