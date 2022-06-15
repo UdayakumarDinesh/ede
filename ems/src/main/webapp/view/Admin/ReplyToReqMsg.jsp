@@ -12,7 +12,7 @@
 <%
 
 List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
-List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
+List<Object[]> emplists = (List<Object[]>) request.getAttribute("emplist");
 String empid = (String)request.getAttribute("emp");
 String fromdate = (String)request.getAttribute("fromdate");
 String todate  =  (String)request.getAttribute("todate");
@@ -58,13 +58,13 @@ String todate  =  (String)request.getAttribute("todate");
 					<div class="col-md-1"></div>
 					 <label style=" font-weight: 800">Employee:<span class="mandatory">*</span></label>
 					<select name="employee" id="employee" class="form-control select2"  style="width: 30%;" >
-											<%for( Object[] obj: emplist){ %>
+											<%if(emplists!=null){  for( Object[] obj: emplists){ %>
 											<%if(empid!=null){ %>
 												<option value="<%=obj[0]%>" <%if(empid.equalsIgnoreCase(obj[0].toString())){ %>selected="selected" <%}%>><%=obj[1]%></option>
 												<%}else{%>
 												<option value="<%=obj[0]%>" ><%=obj[1]%></option>
 												<%}%>
-											<%} %>
+											<%} }%>
 						                </select>
 					
 					<label style=" font-weight: 800">From Date : </label>
@@ -81,7 +81,7 @@ String todate  =  (String)request.getAttribute("todate");
 			
 					<div class="card-body main-card">
         			
-        		  <form action="##" method="GET" name="myfrm1" id="myfrm1"  > 	 						
+        		  <form action="AdminReplyToReqMsg.htm" method="POST" name="myfrm1" id="myfrm1"  > 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
                                           
                         <div class="table-responsive">
@@ -104,8 +104,8 @@ String todate  =  (String)request.getAttribute("todate");
 											<td style="text-align: center;"><%=++slno%></td>
 											<td><input type="hidden" id="employeeid" name="<%=employeeid%>" value="<%=obj[4]%>"> <%=obj[1] %></td>
 											<td align="left"><%=obj[2]%></td>		
-											<td> <textarea class="form-control"  name="<%=respose%>"  rows="5" cols="60"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
-											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" formaction="AdminReplyToReqMsg.htm" formmethod="POST" name="action" value="<%=obj[0]%>" onclick="return confirm('Are You Sure To Submit!')">SUBMIT</button><%}%></td>		
+											<td> <textarea class="form-control"  name="<%=respose%>"  rows="5" cols="60" required="required"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
+											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" name="action" value="<%=obj[0]%>" onclick="return confirm('Are You Sure To Submit!')">SUBMIT</button><%}%></td>		
 										</tr>	
 										
 								<%}} %>							

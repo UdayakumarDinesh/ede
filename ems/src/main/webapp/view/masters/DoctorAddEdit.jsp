@@ -63,6 +63,20 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
 												></td>
 										</tr>
+										<tr>
+											<th><label>Address <span class="mandatory"	style="color: red;">*</span></label></th>
+											<td><input class="form-control form-control"
+												placeholder=" Enter Doctor Address" type="text" id="address" name="address" value="<%if(list!=null){ %><%=list.getAddress()%><%} %>"
+												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
+												></td>
+										</tr>								
+											<tr>
+											<th><label>Phone No <span class="mandatory" style="color: red;">*</span></label></th>
+											<td><input class="form-control form-control"
+												placeholder=" Enter Phone No" type="text" id="phoneno" name="phoneno" value="<%if(list!=null){ %><%=list.getPhoneNo()%><%} %>"
+												required="required" maxlength="10" style="font-size: 15px; text-transform:capitalize; "
+												onblur="checknegative(this) "></td>
+										</tr>
 									
 								
 								</table>
@@ -74,7 +88,7 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 							<%if(list!=null){ %>
 							<input type="hidden" name="doctorId" value="<%=list.getDoctorId()%>">
 							<input type="hidden" name="action" value="EDITDOCTOR">
-								   <button type="submit" class="btn btn-sm submit-btn" onclick ="return confirm('Are You Sure To Update!')" >SUBMIT</button>
+								   <button type="submit" class="btn btn-sm submit-btn" onclick ="return CommentsModel()" >SUBMIT</button>
 									<%}else{ %>
 									<input type="hidden" name="action" value="ADDDOCTOR">
 									<button type="submit" class="btn btn-sm submit-btn" onclick ="return confirm('Are You Sure To Submit!')" >SUBMIT</button>
@@ -82,6 +96,42 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 							</div>
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+			<% if(list!=null){%>			
+<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->						
+						<%} %>
 					</form>
 				</div>
 	   </div>
@@ -119,5 +169,44 @@ $('#Qualification').keypress(function (e) {
     }
 });
 
+</script>
+<script type="text/javascript">
+
+
+setPatternFilter($("#phoneno"), /^-?\d*$/);
+
+function setPatternFilter(obj, pattern) {
+	  setInputFilter(obj, function(value) { return pattern.test(value); });
+	}
+
+function setInputFilter(obj, inputFilter) {
+	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+	    if (inputFilter(this.value)) {
+	      this.oldValue = this.value;
+	      this.oldSelectionStart = this.selectionStart;
+	      this.oldSelectionEnd = this.selectionEnd;
+	    } else if (this.hasOwnProperty("oldValue")) {
+	      this.value = this.oldValue;
+	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+	    }
+	  });
+	}
+function checknegative(str) {
+    if (parseFloat(document.getElementById(str.id).value) < 0) {
+        document.getElementById(str.id).value = "";
+        document.getElementById(str.id).focus();
+        alert('Negative Values Not allowed');
+        return false;
+    }
+}
+
+</script>
+<script type="text/javascript">
+function CommentsModel()
+{
+	if(confirm("Are You Sure To Update!")){
+		 $('#myModal').modal('show');
+	}	
+}
 </script>
 </html>

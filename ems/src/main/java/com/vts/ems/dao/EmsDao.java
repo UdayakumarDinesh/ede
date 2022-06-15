@@ -33,5 +33,5 @@ public interface EmsDao
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
-	
+	public List<Object[]> GetCircularList()throws Exception;
 }

@@ -144,6 +144,7 @@
 											<%}else{%>--<%}%>
 											</td>
 										</tr>
+										<%if(slno==10){break;} %>
 								<%} }%>
 								</tbody>
 							</table>

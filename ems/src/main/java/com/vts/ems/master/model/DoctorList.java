@@ -21,6 +21,8 @@ public class DoctorList implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long DoctorId;
 	private String DoctorName;
+	private String Address;
+	private String PhoneNo;
 	private String Qualification;
 	private String CreatedBy;
 	private String CreatedDate;

@@ -326,6 +326,8 @@ public class MasterServiceImpl implements MasterService {
 		doctor.setQualification(doc.getQualification());
 		doctor.setCreatedBy(doc.getCreatedBy());
 		doctor.setModifiedDate(doc.getModifiedDate());
+		doctor.setAddress(doc.getAddress());
+		doctor.setPhoneNo(doc.getPhoneNo());
 		return dao.DoctorsEdit( doctor);
 	}
 	

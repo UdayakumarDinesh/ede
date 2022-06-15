@@ -96,7 +96,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 							<div id="UsernameSubmit">
 							<%if(list!=null){ %>
 							<input type="hidden" name="SubId" value="<%=list.getTestSubId()%>">
-								<button type="submit" class="btn btn-sm submit-btn"
+								<button type="submit" class="btn btn-sm submit-btn "
 									onclick="return checkDuplicate1();"
 									name="action"  value="EDITTEST">SUBMIT</button>
 									<%}else{ %>
@@ -106,10 +106,46 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 									
 									<%} %>
 							</div>
-
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-					</form>
+						
+							<%if(list!=null){ %>
+<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="EDITTEST" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+			<!----------------------------- container Close ---------------------------->	
+						<%} %>
+				  </form>
 				</div>
 	   </div>
 	</div>
@@ -232,7 +268,7 @@ function checkDuplicate1()
 						retValue = false;
 					}else{
 						retValue = true;
-						document.getElementById("myfrm1").submit();
+						$('#myModal').modal('show');
 					}
 		
 			    }

@@ -94,7 +94,42 @@
 								    
 								    </div>						 
 								</div>
-								
+								<%if(list!=null){%>
+								<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal1">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
+					<%} %>
 							  </form>
 						  </div>
 		   			</div>				
@@ -137,6 +172,8 @@
   </div>
   
 </div>
+
+
 <script type="text/javascript">
 $(".AddItem").click(function(){ 
 	
@@ -182,8 +219,8 @@ function checkDuplicate()
 				}else if(confirm("Are you sure to Submit!")){
 					var $ItemName = $("#ItemName").val();
 					
-					if($ItemName=="null" || $ItemName==null ){
-						alert("Enter Data Properly!");
+					if($ItemName.trim()=="null" || $ItemName.trim()==null || $ItemName.trim()==''){
+						alert("Enter Item Name!");
 						retValue= false;
 					}else{
 						retValue = true;
@@ -227,12 +264,12 @@ function checkDuplicateItem(value , itemid)
 				}else if(confirm("Are you sure to Submit!")){
 					var $ItemName =document.getElementById(value).value;	
 					
-					if($ItemName=="null" || $ItemName==null ){
-						alert("Enter Data Properly!");
+					if($ItemName.trim()=="null" || $ItemName.trim()==null || $ItemName.trim()==''){
+						alert("Enter Item Name!");
 						retValue= false;
 					}else{
-						retValue =true;
-						document.getElementById("empForm").submit();
+						 $('#myModal1').modal('show');
+						 retValue= true;
 					}		
 			   }
 		  }

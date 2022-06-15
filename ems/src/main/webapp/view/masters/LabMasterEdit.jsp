@@ -178,11 +178,44 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 	  <button type="button" class="btn btn-sm edit-btn" onclick="EditlabMaster()"  >EDIT</button>
 	  </div>
 	   <div id="Update" align="center" hidden>
-	  <button type="submit"  class="btn btn-sm edit-btn"  onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB">UPDATE</button>
+	  <button type="submit"  class="btn btn-sm edit-btn AddItem"  >UPDATE</button>
  	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />
 		<input type="hidden" name="LabMasterId" value="<%if(labdetail!=null){%><%=labdetail.getLabMasterId()%><%}%>">
-	 
+	 <!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Update');" name="Action" value="EDITLAB" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
 	 
 	  </form>
 	   		
@@ -216,5 +249,11 @@ function EditlabMaster()
 	
 }
 
+</script>
+
+<script type="text/javascript">
+$(".AddItem").click(function(){ 	
+	 $('#myModal').modal('show');
+});
 </script>
 </html>

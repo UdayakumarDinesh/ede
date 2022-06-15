@@ -23,6 +23,7 @@ public class EmployeeRequest implements Serializable {
 	private Long EmpId; 
 	private String RequestMessage; 
 	private String ResponseMessage;
+	private String RequestDate;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

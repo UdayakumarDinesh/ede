@@ -90,6 +90,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+								<%if(desig!=null){ %>
 						<!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -124,7 +125,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 					  </div>
 					</div>
 					<!----------------------------- container Close ---------------------------->
-					
+					<%} %>
 					</form>
 				</div>
 	   </div>
