@@ -56,84 +56,47 @@
 	/* counter css */
 	
 	.counter{
+    color: #628900;
+    background: linear-gradient(to bottom, #628900 49%, transparent 50%);
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-   	max-width: 200px; 
+    /* width: 200px; */
+   /*  height: 200px; */
+    padding: 25px 15px 35px;
     margin: 0 auto;
-	}
-	.counter .counter-content{
-	    height: 200px;
-	    padding: 55px 0 0;
-	    margin: 0 0 10px;
-	    position: relative;
-	    z-index: 1;
-	}
-	.counter .counter-content:before,
-	.counter .counter-content:after{
-	    content: '';
-	    background: linear-gradient(to right bottom,#e9e9e9,#fff);
-	    border-radius: 50% 50% 0 50%;
-	    border: 4px solid #fff;
-	    box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
-	    position: absolute;
-	    left: 7px;
-	    top: 7px;
-	    right: 7px;
-	    bottom: 7px;
-	    z-index: -1;
-	}
-	.counter .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #EA237E 51%);
-	    height: 70%;
-	    width: 70%;
-	    border: none;
-	    border-radius: 0;
-	    box-shadow: none;
-	    right: 0;
-	    bottom: 0;
-	    left: auto;
-	    top: auto;
-	    z-index: -2;
-	}
-	.counter .counter-icon{
-	    color:#999;
-	    font-size: 27px;
-	    line-height: 27px;
-	    position: absolute;
-	    bottom: 15px;
-	    right: 15px;
+    border: 18px solid #628900;
+    border-radius: 100% 100%;
+    box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.3);
 	}
 	.counter .counter-value{
-	    color:#fff;
-	    background: #EA237E;
-	    font-size: 25px;
+	    color: #fff;
+	    /* font-size: 35px; */
 	    font-weight: 600;
-	    line-height: 6rem;
-	   	width: 47%;
-    	max-width: 56%;
-	    /* height: 95px; */
-	    border-radius: 50px;
-	    display: inline-block;
+	    display: block;
+	    margin: 0 0 25px;
 	}
 	.counter h3{
-	    color: #888;
-	    font-size: 17px;
-	    font-weight: 700;
+	    font-size: 16px;
+	    font-weight: 600;
 	    text-transform: uppercase;
 	    margin: 0;
 	}
-	.counter.purple .counter-value{ background: #6D4B87; }
-	.counter.purple .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #835AA8 51%);
+	.counter.red{
+	    color: #e3213c;
+	    background: linear-gradient(to bottom, #e3213c 49%, transparent 50%);
+	    border-color: #e3213c;
 	}
-	.counter.blue .counter-value{ background: #187498; }
-	.counter.blue .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #187498 51%);
+	.counter.orange{
+	    color: #fb8603;
+	    background: linear-gradient(to bottom, #fb8603 49%, transparent 50%);
+	    border-color: #fb8603;
 	}
-	.counter.skyblue .counter-value{ background: #36AE7C; ; }
-	.counter.skyblue .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #36AE7C  51%);
-	}\
-	@media screen and (max-width:990px){
+	.counter.blue{
+	    color: #1f8bc1;
+	    background: linear-gradient(to bottom, #1f8bc1 49%, transparent 50%);
+	    border-color: #1f8bc1;
+	}
+	@media screen and (max-width:990px) {
 	    .counter{ margin-bottom: 40px; }
 	}
 
@@ -203,31 +166,7 @@
   	margin: 0px 35px !important;
   }
   
-  @media only screen and (max-width: 1600px){
-
-	.counter .counter-value{
-		line-height: 4rem;
-		font-size: 20px;
-		width: 36%;
-		
-	}
-	
-	.counter .counter-content{
-		height: 125px;
-		padding: 37px 0 0;
-	}
-
-	.counter{
-   	max-width: 165px; 
-	}
-
-  	.counter h3{
-  		font-size: 12px !important;
-  	}
-  }
-
-	
-	
+s
 	@media (max-width: 600px) {
 	    .highcharts-figure,
 	    .highcharts-data-table table {
@@ -307,7 +246,7 @@
 			  <div class="row">
 			  
 			    <div class="col-md-6">
-			   		<div class="container">
+			   		<%-- <div class="container">
 					    <div class="row">
 					        <div class="col-md-4 col-sm-6">
 					            <div class="counter purple">
@@ -344,6 +283,22 @@
 					            </div>
 					        </div>
 					        
+					    </div>
+					</div> --%>
+					<div class="container">
+					    <div class="row">
+					        <div class="col-md-4">
+					            <div class="counter">
+					                <span class="counter-value">1387</span>
+					                <!-- <h3>Web Designing</h3> -->
+					            </div>
+					        </div>
+					        <div class="col-md-4 ">
+					            <div class="counter red">
+					                <span class="counter-value">1310</span>
+					                <!-- <h3>Web Development</h3> -->
+					            </div>
+					        </div>
 					    </div>
 					</div>
 			    </div>

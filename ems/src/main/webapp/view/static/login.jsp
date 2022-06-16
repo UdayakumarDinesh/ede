@@ -46,11 +46,11 @@
       			<div class="header-right clearfix">
         			<div class="float-element">
         				<a class="" href="" target="_blank">
-        					<img  class ="drdologo" src="view/images/lablogoui.png" alt=""></a>
+        					<img  class ="drdologo " src="view/images/lablogoui.png" alt=""></a>
         			</div>
       			</div>
      			<div class="logo">
-     				<a href="#" title="PMS"><span class="title"  style="margin-top: 2% !important;font-size: 113% !important;">CONTRIBUTORY HEALTH SERVICE SCHEME</span></a>
+     				<a href="#" title="PMS"><span class="c"  style="margin-top: 2% !important;font-size: 113% !important;">CONTRIBUTORY HEALTH SERVICE SCHEME</span></a>
      			</div>
      		
      			
@@ -97,13 +97,13 @@
 									<p class="quote">Simplifying Medical Claims</p>
 									
 	
-								 <h4 style="font-family: 'Lato', sans-serif;font-weight: 400" >Claims  &nbsp;|&nbsp; Coverages  &nbsp;|&nbsp;  Empowerment</h4>
+								 <h4 class="quote2" style="font-family: 'Lato', sans-serif;font-weight: 400" >Claims  &nbsp;|&nbsp; Coverages  &nbsp;|&nbsp;  Empowerment</h4>
 									
 									
 								</div>
 								
 								<div class="product-banner-container" style="margin-top:35px">
-									<img class="img-fluid " src="view/images/LoginImg4.png" style="">
+									<img class="img-fluid img-responsive" src="view/images/LoginImg4.png" style="">
 								</div>
 								
 							</div>
@@ -195,39 +195,10 @@
 		</div>
 	</div>
  </section> 
-  
-  
-  
-  
-
-
-<div class="wrapper" id="skipCont"></div>
-<!--/#skipCont-->
-
-
-
-<section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
-  <section id="page" class="body-wrapper clearfix" style="">
-    	
  
-<!-- Blue Border for Login Page -->  
-    <div class="support-row clearfix" id="swapper-border" style="">
-      		  <div class="widget-guide clearfix">
-                	    <%if(circularlist!=null  && circularlist.size()>0) {%>
-						<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1.4em;"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
-						<%}%> 
-              </div>
-    	</div> 
-    	
-  </section>  <!--/#page--> 
-  
-
-</section> 
-
-
 <!-- Footer -->
 
-    <footer id="footer" class="clearfix">
+ <!--    <footer id="footer" class="clearfix">
   		<div class="widget-guide clearfix">
        		<div class="footr-rt">
             	<div class="copyright-content"> 
@@ -235,11 +206,32 @@
             	</div>
     		</div>
   	</div>
-</footer>
+</footer> -->
 
     <!--/#footer-->
     
-	    
+	<footer class="footer" id="footer">
+	    <section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
+		  <section id="page" class="body-wrapper clearfix" style="">
+		    	<!-- Blue Border for Login Page -->  
+		    <div class="support-row clearfix" id="swapper-border" style="">
+		      		  <div class="widget-guide clearfix">
+		                	    <%if(circularlist!=null  && circularlist.size()>0) {%>
+								<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1rem;margin-bottom: 0px !important"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
+								<%}%> 
+		              </div>
+		    	</div> 
+		    	
+		  </section>  
+		</section> 
+		<div class="widget-guide clearfix">
+       		<div class="footr-rt">
+            	<div class="copyright-content"> 
+            		<p>Website maintained by Vedant Tech Solutions<br>Site best viewed at 1360 x 768 resolution in I.E 11+, Mozilla 70+, Google Chrome 79+	</p> 
+            	</div>
+    		</div>
+  		</div>
+	</footer>
 
 </body>
 
@@ -252,11 +244,25 @@ $("#error-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
     $("#error-alert").slideUp(1000);
 });
 
-
-
-
-
 </script>
+
+<script>
+    $(document).ready(function() {
+        setInterval(function() {
+            var docHeight = $(window).height();
+            var footerHeight = $('#footer').height();
+            var footerTop = $('#footer').position().top + footerHeight;
+            var marginTop = (docHeight - footerTop + 10);
+
+            if (footerTop < docHeight)
+                $('#footer').css('margin-top', marginTop + 'px'); // padding of 30 on footer
+            else
+                $('#footer').css('margin-top', '0px');
+            // console.log("docheight: " + docHeight + "\n" + "footerheight: " + footerHeight + "\n" + "footertop: " + footerTop + "\n" + "new docheight: " + $(window).height() + "\n" + "margintop: " + marginTop);
+        }, 250);
+    });
+</script>
+
 
 
 </html>
