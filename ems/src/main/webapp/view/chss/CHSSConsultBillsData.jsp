@@ -227,9 +227,11 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
 												
 												<td>
+													<%if(Double.parseDouble(obj[9].toString())==0){ %>
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
 														update
 													</button>
+													<%} %>
 													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
 														<!-- <i class="fa-solid fa-file-lines"></i> --> Details
 													</button>	
