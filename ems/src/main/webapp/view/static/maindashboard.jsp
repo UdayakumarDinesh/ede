@@ -62,7 +62,7 @@
     text-align: center;
     /* width: 200px; */
    /*  height: 200px; */
-    padding: 25px 15px 35px;
+    padding: 19px 20px 18px;
     margin: 0 auto;
     border: 18px solid #628900;
     border-radius: 100% 100%;
@@ -70,34 +70,73 @@
 	}
 	.counter .counter-value{
 	    color: #fff;
-	    /* font-size: 35px; */
+	    font-size: 23px; 
 	    font-weight: 600;
 	    display: block;
-	    margin: 0 0 25px;
+	    margin: 0 0 16px;
 	}
 	.counter h3{
-	    font-size: 16px;
+	    font-size: 14px;
 	    font-weight: 600;
 	    text-transform: uppercase;
 	    margin: 0;
 	}
-	.counter.red{
-	    color: #e3213c;
-	    background: linear-gradient(to bottom, #e3213c 49%, transparent 50%);
-	    border-color: #e3213c;
-	}
-	.counter.orange{
-	    color: #fb8603;
-	    background: linear-gradient(to bottom, #fb8603 49%, transparent 50%);
-	    border-color: #fb8603;
-	}
 	.counter.blue{
-	    color: #1f8bc1;
-	    background: linear-gradient(to bottom, #1f8bc1 49%, transparent 50%);
-	    border-color: #1f8bc1;
+	    color: #187498;
+	    background: linear-gradient(to bottom, #187498 49%, transparent 50%);
+	    border-color: #187498;
+	}
+	.counter.purple{
+	    color: #6E3274;
+	    background: linear-gradient(to bottom, #6E3274 49%, transparent 50%);
+	    border-color: #6E3274;
+	}
+	.counter.green{
+	    color: #36AE7C;
+	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
+	    border-color: #36AE7C;
 	}
 	@media screen and (max-width:990px) {
 	    .counter{ margin-bottom: 40px; }
+	}
+
+	@media screen and (min-width: 1151px) and (max-width : 1500px){
+		.counter {
+			width : 150px;
+			height: 150px;
+		}
+	}
+	
+	@media screen and (min-width: 1501px) {
+		.counter {
+			width : 180px;
+			height: 180px;
+			padding: 49px 19px 19px;
+		}
+		
+		.counter h3{
+			font-size: 20px
+		}
+		
+		.counter .counter-value {
+		    font-size: 30px;
+		    margin: -27px 0 21px;
+		}
+	}
+
+	@media screen and (max-width : 1150px){
+		.counter h3{
+			font-size: 11px
+		}
+		.counter {
+			width : 135px;
+			height: 135px;
+		}
+		
+		.counter .counter-value{
+			font-size: 17px;
+			 margin: 0 0 18px;
+		}
 	}
 
 	
@@ -246,57 +285,25 @@ s
 			  <div class="row">
 			  
 			    <div class="col-md-6">
-			   		<%-- <div class="container">
-					    <div class="row">
-					        <div class="col-md-4 col-sm-6">
-					            <div class="counter purple">
-					                <div class="counter-content ">
-					                    <div class="counter-icon">
-					                        <i class="fa fa-globe"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[2] %></span>
-					                </div>
-					                <h3>TOTAL</h3>
-					            </div>
-					        </div>
-					        
-					        <div class="col-md-4 col-sm-6">
-					            <div class="counter blue">
-					                <div class="counter-content">
-					                    <div class="counter-icon">
-					                        <i class="fa-solid fa-clock"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[0] %></span>
-					                </div>
-					                <h3>PENDING</h3>
-					            </div>
-					        </div>
-					        <div class="col-md-4 col-sm-6">
-					            <div class="counter skyblue">
-					                <div class="counter-content">
-					                    <div class="counter-icon">
-					                        <i class="fa-solid fa-circle-check"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[1] %></span>
-					                </div>
-					                <h3>APPROVED</h3>
-					            </div>
-					        </div>
-					        
-					    </div>
-					</div> --%>
+			   		
 					<div class="container">
 					    <div class="row">
 					        <div class="col-md-4">
-					            <div class="counter">
-					                <span class="counter-value">1387</span>
-					                <!-- <h3>Web Designing</h3> -->
+					            <div class="counter purple">
+					                <span class="counter-value"><%=TotalCountData[2] %></span>
+					                <h3>TOTAL</h3>
 					            </div>
 					        </div>
 					        <div class="col-md-4 ">
-					            <div class="counter red">
-					                <span class="counter-value">1310</span>
-					                <!-- <h3>Web Development</h3> -->
+					            <div class="counter blue">
+					                <span class="counter-value"><%=TotalCountData[0] %></span>
+					                <h3>PENDING</h3>
+					            </div>
+					        </div>
+					        <div class="col-md-4 ">
+					            <div class="counter green">
+					                <span class="counter-value"><%=TotalCountData[1] %></span>
+					                <h3>APPROVED</h3>
 					            </div>
 					        </div>
 					    </div>

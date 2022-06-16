@@ -112,7 +112,7 @@
 						
 						<div class="col-md-6">
 					
-							<div class="row justify-content-end" style="margin-left:7rem;margin-top: 4rem" >
+							<div class="row justify-content-end login-main-container" style="margin-left:7rem;margin-top: 4rem" >
 	
 								<div class="col-md-12">
 								

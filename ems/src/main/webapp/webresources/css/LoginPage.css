@@ -343,6 +343,7 @@ a:focus {
 	
 	.img-fluid{
 		max-width: 100% !important;
+		margin-left:-23%;
 	}
 }
 
@@ -562,9 +563,33 @@ a:focus {
 .copyright-content{
 	text-align: center;
     color: white;
-    padding: 15px 0px 0px 0px;
+    padding: 23px 0px 0px 0px;
 }
 
 .copyright-content p{
 	font-size: 12px !important;
+}
+
+@media screen and (min-height:850px){
+	.img-fluid{
+		max-width: 135% !important;
+		margin-left: -20%;
+	}
+	.login-main-container{
+		margin-top: 8rem !important;
+	}
+}
+
+@media screen and (min-height:950px){
+	.img-fluid{
+		max-width: 145% !important;
+		margin-left: -20%;
+	}
+	.product-banner-container{
+		margin-top: 5rem !important;
+	}
+	
+	.login-main-container{
+		margin-top: 10rem !important;
+	}
 }
