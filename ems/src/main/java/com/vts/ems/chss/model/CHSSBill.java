@@ -13,7 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "chss_bill")
-public class CHSSBill implements Serializable {
+public class CHSSBill implements Serializable 
+{
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,13 +26,15 @@ public class CHSSBill implements Serializable {
 	private String BillNo; 
 	private String CenterName;
 	private String BillDate;
+	private Double ItemsTotalAmt;
 	private Double GSTAmount;
 	private Double Discount;
+	private Double DiscountPercent;
+	private Double FinalBillAmt;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-	
 	
 }

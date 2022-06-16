@@ -386,6 +386,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setBillDate(bill.getBillDate());
 		fetch.setGSTAmount(bill.getGSTAmount());
 		fetch.setDiscount(bill.getDiscount());
+		fetch.setDiscountPercent(bill.getDiscountPercent());
+		fetch.setFinalBillAmt(bill.getFinalBillAmt());
 		fetch.setModifiedBy(bill.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -473,8 +475,8 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));		
 				
-				getConsultEligibleAmount(consult,chssapplyid,consultmainidold);
-				consult.setComments(consult.getConsultRemAmount()+" is admitted as per CHSS.");
+				getConsultEligibleAmount(consult,chssapplyid,consultmainidold,dto.getBillId());
+				consult.setComments(consult.getConsultRemAmount()+" is admitted.");
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
@@ -488,10 +490,12 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public double getConsultEligibleAmount(CHSSConsultation consult,String chssapplyid, String consultmainidold) throws Exception 
+	public double getConsultEligibleAmount(CHSSConsultation consult,String chssapplyid, String consultmainidold,String billid) throws Exception 
 	{		
+		CHSSBill bill = dao.getCHSSBill(billid);
 		String isfresh="";
-		double applyamount= consult.getConsultCharge();
+		double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
+		consult.setAmountPaid(applyamount);
 		String speciality=consult.getDocQualification();
 		String consultdate=consult.getConsultDate();
 		
@@ -558,8 +562,8 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setConsultRemAmount(getConsultEligibleAmount(fetch,chssapplyid,consultmainidold));      
-		fetch.setComments(fetch.getConsultRemAmount()+" is admitted as per CHSS.");
+		fetch.setConsultRemAmount(getConsultEligibleAmount(fetch,chssapplyid,consultmainidold,String.valueOf(fetch.getBillId())));      
+		fetch.setComments(fetch.getConsultRemAmount()+" is admitted.");
 		
 		return dao.ConsultationBillEdit(fetch);
 	}
@@ -584,19 +588,6 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 	}
 	
-	public void calculateMedAmount(CHSSMedicine  meds ) throws Exception
-	{
-		int purs = meds.getMedQuantity();
-		int pres = meds.getPresQuantity();
-		double cost = meds.getMedicineCost(); 
-		if(purs>pres) 
-		{
-			cost=cost/(double)purs;
-			meds.setMedsRemAmount(Math.round((cost*pres) * 100.0) / 100.0); 
-		}
-		
-	}
-	
 	@Override
 	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception
 	{
@@ -618,7 +609,7 @@ public class CHSSServiceImpl implements CHSSService {
 					meds.setMedQuantity(Integer.parseInt(dto.getMedQuantity()[i]));
 					meds.setMedicineCost(Double.parseDouble(dto.getMedicineCost()[i]));
 					meds.setMedsRemAmount(Double.parseDouble(dto.getMedicineCost()[i]));
-					calculateMedAmount(meds);
+					calculateMedAmount(meds,dto.getBillId());
 					
 					meds.setIsActive(1);
 					meds.setCreatedBy(dto.getCreatedBy());
@@ -626,12 +617,10 @@ public class CHSSServiceImpl implements CHSSService {
 					
 					if(treattypeid.toString().equalsIgnoreCase("1")) {
 						checkMedAdmissibility(meds);
-					}
-					
+					}					
 					if(meds.getMedsRemAmount()>0) {
-						meds.setComments(meds.getMedsRemAmount()+" is admitted as per CHSS.");
-					}
-					
+						meds.setComments(meds.getMedsRemAmount()+" is admitted.");
+					}					
 					count += dao.MedicinesBillAdd(meds);
 				}
 			}
@@ -642,6 +631,22 @@ public class CHSSServiceImpl implements CHSSService {
 			logger.error(new Date() +" Inside SERVICE MedicinesBillAdd");
 			return 0;
 		}
+		
+	}
+	
+	public void calculateMedAmount(CHSSMedicine  meds, String billid ) throws Exception
+	{
+		CHSSBill bill = dao.getCHSSBill(billid);
+		int purs = meds.getMedQuantity();
+		int pres = meds.getPresQuantity();
+		double cost = meds.getMedicineCost()-(meds.getMedicineCost()*(bill.getDiscountPercent()/100));
+		meds.setMedsRemAmount(cost);
+		meds.setAmountPaid(cost);
+		if(purs>pres) 
+		{
+			cost=cost/(double)purs;
+			meds.setMedsRemAmount(Math.round((cost*pres) * 100.0) / 100.0); 
+		}		
 		
 	}
 	
@@ -665,7 +670,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setPresQuantity(modal.getPresQuantity());
 		fetch.setMedsRemAmount(modal.getMedicineCost());
 		
-		calculateMedAmount(fetch);
+		calculateMedAmount(fetch,String.valueOf(modal.getBillId()));
 		
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
@@ -674,7 +679,7 @@ public class CHSSServiceImpl implements CHSSService {
 			checkMedAdmissibility(fetch);
 		}
 		if(fetch.getMedsRemAmount()>0) {
-			fetch.setComments(fetch.getMedsRemAmount()+" is admitted as per CHSS.");
+			fetch.setComments(fetch.getMedsRemAmount()+" is admitted.");
 		}
 		
 		return dao.MedicineBillEdit(fetch);
@@ -721,8 +726,8 @@ public class CHSSServiceImpl implements CHSSService {
 					test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
 					test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
 					test.setIsActive(1);
-					test.setTestRemAmount(getTestEligibleAmount(test.getTestCost(),dto.getTestSubId()[i].toString().split("_")[1]));
-					test.setComments(test.getTestRemAmount()+" is admitted as per CHSS.");
+					getTestEligibleAmount(test);
+					test.setComments(test.getTestRemAmount()+" is admitted.");
 					test.setCreatedBy(dto.getCreatedBy());
 					test.setCreatedDate(sdtf.format(new Date()));
 					
@@ -741,17 +746,20 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	public double getTestEligibleAmount(double applyamount,String testsubid) throws Exception 
+	public void getTestEligibleAmount(CHSSTests testsub) throws Exception 
 	{
-		int testsubamount = dao.getCHSSTestSub(testsubid).getTestRate();
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(testsub.getBillId()));
+		double applyamount = testsub.getTestCost()-(testsub.getTestCost() * (bill.getDiscountPercent()/100));
+		testsub.setAmountPaid(applyamount);
+		int testsubamount = dao.getCHSSTestSub(String.valueOf(testsub.getTestSubId())).getTestRate();
 		
 		if(testsubamount<= applyamount)
 		{
-			return testsubamount;
+			testsub.setTestRemAmount(testsubamount);
 		}
 		else
 		{
-			return applyamount;
+			testsub.setTestRemAmount(applyamount);
 		}
 	}
 	
@@ -771,10 +779,10 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setTestMainId(modal.getTestMainId());
 		fetch.setTestSubId(modal.getTestSubId());
 		fetch.setTestCost(modal.getTestCost());
-		fetch.setTestRemAmount(getTestEligibleAmount(modal.getTestCost(),String.valueOf(modal.getTestSubId())));
+		getTestEligibleAmount(fetch);
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setComments(fetch.getTestRemAmount()+" is admitted as per CHSS.");
+		fetch.setComments(fetch.getTestRemAmount()+" is admitted.");
 		return dao.TestBillEdit(fetch);
 	}
 	
@@ -798,10 +806,11 @@ public class CHSSServiceImpl implements CHSSService {
 			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
 			{
 				CHSSMisc  misc = new CHSSMisc();
-				
+				CHSSBill bill = dao.getCHSSBill(dto.getBillId());
 				misc.setBillId(Long.parseLong(dto.getBillId()));
 				misc.setMiscItemName(WordUtils.capitalize(dto.getMiscItemName()[i]).trim());
 				misc.setMiscItemCost(Double.parseDouble(dto.getMiscItemCost()[i]));
+				misc.setAmountPaid(misc.getMiscItemCost()-(misc.getMiscItemCost() *(bill.getDiscountPercent()/100)));
 				misc.setMiscCount(Integer.parseInt(dto.getMiscCount()[i]));
 				misc.setMiscRemAmount(0);
 				misc.setIsActive(1);
@@ -829,8 +838,10 @@ public class CHSSServiceImpl implements CHSSService {
 	public long MiscBillEdit(CHSSMisc modal) throws Exception
 	{
 		CHSSMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
 		fetch.setMiscItemName(WordUtils.capitalize(modal.getMiscItemName()).trim());
 		fetch.setMiscItemCost(modal.getMiscItemCost());
+		fetch.setAmountPaid(modal.getMiscItemCost()-(modal.getMiscItemCost() *(bill.getDiscountPercent()/100)));
 		fetch.setMiscCount(modal.getMiscCount());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
@@ -882,10 +893,10 @@ public class CHSSServiceImpl implements CHSSService {
 				other.setOtherItemCost(Double.parseDouble(dto.getOtherItemCost()[i]));
 				other.setIsActive(1);
 				
-				other.setOtherRemAmount(getOtherItemRemAmount(dto.getEmpid(),dto.getOtherItemId()[i],Double.parseDouble(dto.getOtherItemCost()[i]) ));
+				getOtherItemRemAmount(dto.getEmpid(),other);
 				other.setCreatedBy(dto.getCreatedBy());
 				other.setCreatedDate(sdtf.format(new Date()));
-				other.setComments(other.getOtherRemAmount()+" is admitted as per CHSS.");
+				other.setComments(other.getOtherRemAmount()+" is admitted.");
 				count = dao.OtherBillAdd(other);
 			}
 						
@@ -899,16 +910,19 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	public double getOtherItemRemAmount(String empid,String otheritemid,double itemcost) throws Exception
+	public void getOtherItemRemAmount(String empid,CHSSOther other) throws Exception
 	{
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(other.getBillId()));
+		double itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
+		other.setAmountPaid(itemcost);
 		Object[] emp =dao.getEmployee(empid);
-		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
+//		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
 		long basicpay=0;
 		if(emp[4]!=null) {
 			 basicpay=Long.parseLong(emp[4].toString());
 		}
 		
-		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(otheritemid,basicpay);
+		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(String.valueOf(other.getOtherItemId()),basicpay);
 		
 		int rembamt=0;
 		if(chssremamt!=null && chssremamt.getItemPermitAmt()!=null) {
@@ -917,11 +931,11 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		if(itemcost<= rembamt)
 		{
-			return itemcost;
+			other.setOtherRemAmount(itemcost);
 		}
 		else
 		{
-			return rembamt;
+			other.setOtherRemAmount(rembamt);
 		}
 			
 	}
@@ -933,10 +947,10 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherItemId(modal.getOtherItemId());
 		fetch.setOtherItemCost(modal.getOtherItemCost());
-		fetch.setOtherRemAmount(getOtherItemRemAmount(String.valueOf(empid),String.valueOf(modal.getOtherItemId()),modal.getOtherItemCost()));
+		getOtherItemRemAmount(String.valueOf(empid),fetch);
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setComments(fetch.getOtherRemAmount()+" is admitted as per CHSS.");
+		fetch.setComments(fetch.getOtherRemAmount()+" is admitted.");
 		return dao.OtherBillEdit(fetch);
 	}
 	
@@ -1513,8 +1527,6 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	
-	
 	@Override
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate ) throws Exception
 	{
@@ -1614,7 +1626,6 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception
 	{
-		
 		long billid =0;
 		for(int i=0 ; i<dto.getBillNo().length ; i++)
 		{
@@ -1624,16 +1635,17 @@ public class CHSSServiceImpl implements CHSSService {
 			bill.setBillNo(dto.getBillNo()[i]);
 			bill.setCenterName(WordUtils.capitalize(dto.getCenterName()[i]).trim());
 			bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
-			bill.setGSTAmount(CropTo2Decimal(dto.getGSTAmount()[i]));
+//			bill.setGSTAmount(CropTo2Decimal(dto.getGSTAmount()[i]));
+			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(dto.getDiscount()[i]));
+			bill.setDiscountPercent(Double.parseDouble(dto.getDiscountPer()[i]));
+			bill.setFinalBillAmt(CropTo2Decimal(dto.getFinalbillamount()[i]));
 			bill.setIsActive(1);
 			bill.setCreatedBy(dto.getCreatedBy());
 			bill.setCreatedDate(sdtf.format(new Date()));
 			
 			billid=dao.CHSSBillAdd(bill);
 		}
-		
-		
 		return billid;
 	}
 	

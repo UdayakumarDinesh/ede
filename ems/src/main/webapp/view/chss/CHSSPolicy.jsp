@@ -67,7 +67,6 @@
                 </li>
             </ul>
 
-
         </header>
 
         <div align="center" style="min-height: 29rem !important;">
@@ -76,7 +75,6 @@
                     <div class="row" align="center">
                     	<div class="col-md-1"></div>
                         <div class="col-md-10" align="left">
-                            Message
                         </div>
                     </div>
 
