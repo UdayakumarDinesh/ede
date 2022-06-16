@@ -103,8 +103,10 @@
 								<thead>
 									<tr>
 										<th style=" text-align:center; width: 15%"> SlNo. </th>
-										<th style="width: 50%"> Name </th>
-										<th style="width: 35%"> Qualification </th>									
+										<th style=""> Name </th>
+										
+										<th style="width: 50%"> Address </th>
+										<th style="width: 35%"> Contact Details </th>									
 									</tr>
 								</thead>
 								<tbody>
@@ -113,9 +115,11 @@
 										for(Object[] obj : doctorlist){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 50%"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 35%"><%=obj[2]%></td>
+											<td style="text-align:center;  width: 10%;"> <%=++slno%>. </td>
+											<td style="text-align:justify; width: 30%"><%=obj[1]%> (<%=obj[2]%>)</td>
+									
+											<td style="text-align:justify; width: 30%"><%=obj[3]%></td>
+											<td style="text-align:justify; width: 15%"><%=obj[4]%></td>
 										</tr>
 								<%} }%>
 								</tbody>

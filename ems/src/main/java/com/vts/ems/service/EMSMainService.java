@@ -30,4 +30,5 @@ public interface EMSMainService {
 	public List<Object[]> MonthlyWiseDashboardData(String FromDate , String ToDate) throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
+	public List<Object[]> GetCircularList()throws Exception;
 }

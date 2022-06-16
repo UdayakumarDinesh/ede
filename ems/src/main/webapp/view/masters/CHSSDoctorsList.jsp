@@ -50,7 +50,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
         	</div>
 		 <div class="card">
 		 <div class="card-body main-card">
-		 		<form action="##" method="POST" id="empForm" autocomplete="off">
+		 		<form action="DoctorsMaster.htm" method="POST" id="empForm" autocomplete="off">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<div class="table-responsive">
@@ -82,7 +82,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 											<td style="padding-top:5px; padding-bottom: 5px;text-align: right"><input type="text"  class="form-control " name="<%=Consultation2%>"  value="<%=obj[5]%>"> </td>
 											<td style="padding-top:5px; padding-bottom: 5px;" align="center">
 											<input type="hidden" name="Action"	value="EDITDOCRATE" />
-											<button type="submit" class="btn btn-sm" name="DocRateid" value="<%=obj[0]%>" formaction="DoctorsMaster.htm" formmethod="post" data-toggle="tooltip" onclick="return confirm('Are You Sure To Update');" data-placement="top" title="Edit">
+											<button type="submit" class="btn btn-sm" name="Rateid" value="<%=obj[0]%>"  data-toggle="tooltip" onclick="return CommentModel('<%=obj[0]%>');" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 											</button>
 											</td>
@@ -91,11 +91,55 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 								</tbody>
 							</table>
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-						</div>				
+						</div>	
+						
+							<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        <input type="hidden" id="DocRateid" name="DocRateid" value=""> 
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->			
 			   </form>
 		 </div>
 		 </div>
 		 </div>
 </div>
 </body>
+<script type="text/javascript">
+function CommentModel(docId)
+{
+	
+	 $('#myModal').modal('show');
+	 $('#DocRateid').val(docId);
+}
+</script>
 </html>

@@ -57,7 +57,10 @@
 									<tr>
 										<th>Select</th>
 										<th>Name </th>
-										<th>Qualification</th>									
+									
+										<th>Address </th>
+										<th>Contact Details</th>		
+																	
 									</tr>
 								</thead>
 								<tbody>
@@ -66,9 +69,9 @@
 									%>
 										<tr>
 											<td style="text-align:center;  width: 5%;"> <input type="radio" name="doctorId" value="<%=obj[0]%>"> </td>
-											<td style=" width: 70%;"><%=obj[1]%></td>
-											<td style=" width: 10%;"><%=obj[2]%></td>
-										
+											<td ><%=obj[1]%> (<%=obj[2]%>)</td>
+										    <td ><%=obj[3]%></td>
+											<td ><%=obj[4]%></td>
 										</tr>
 								<%} }%>
 								</tbody>

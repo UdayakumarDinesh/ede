@@ -670,6 +670,17 @@ public class PisController {
         	String Loginid   = (String)req.getParameter("loginid");
         	
         	int count =service.UserMangerEdit( Logintype,Username,Loginid);
+        	
+           String comments = (String)req.getParameter("comments");
+     	   MasterEdit masteredit  = new MasterEdit();
+     	   masteredit.setCreatedBy(Username);
+     	   masteredit.setCreatedDate(sdtf.format(new Date()));
+     	   masteredit.setTableRowId(Long.parseLong(Loginid));
+     	   masteredit.setComments(comments);
+     	   masteredit.setTableName("login");
+     	   
+     	   masterservice.AddMasterEditComments(masteredit);
+
         	if(count>0) {
         		redir.addAttribute("result", "LoginID Edited successfully");	
     		} else {
