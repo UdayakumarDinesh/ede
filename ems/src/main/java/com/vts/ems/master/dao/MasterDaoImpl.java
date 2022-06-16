@@ -30,6 +30,7 @@ import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -856,5 +857,19 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 				e.printStackTrace();
 				return 0;
 			}	
+		}
+		
+		@Override
+		public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
+		{
+			logger.info(new Date() + "Inside AddMasterEditComments()");
+			try {
+				manager.persist(masteredit);
+				manager.flush();
+				return (long)masteredit.getMasterEditId();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0l;
+			}
 		}
 }

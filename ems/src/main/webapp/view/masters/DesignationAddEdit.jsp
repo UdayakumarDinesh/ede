@@ -79,7 +79,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 							<input type="hidden" id="deisignationid" name="deisignationid" value="<%=desig.getDesigId()%>">
 								<button type="button" class="btn btn-sm submit-btn"
 									onclick="return  DesignationEditcheck('addfrm');"
-									name="action"  value="EDITTEST">SUBMIT</button>
+									name="action"  value="submit">SUBMIT</button>
 									<%}else{ %>
 									<button type="button" class="btn btn-sm submit-btn"
 									onclick="return DesignationAddcheck('addfrm');"
@@ -90,6 +90,42 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+								<%if(desig!=null){ %>
+						<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action"  value="EDITTEST" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
+					<%} %>
 					</form>
 				</div>
 	   </div>
@@ -203,7 +239,7 @@ function DesignationEditcheck(frmid){
 			var ret = confirm('Are you Sure To Submit ?');
 			if(ret){
 				
-				$('#'+frmid).submit();
+				$('#myModal').modal('show');
 				return true;
 				}else{
 					return false;

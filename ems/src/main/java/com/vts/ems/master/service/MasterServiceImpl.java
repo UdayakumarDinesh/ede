@@ -28,6 +28,7 @@ import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.pis.model.EmployeeDesig;
 
 @Service
@@ -325,6 +326,8 @@ public class MasterServiceImpl implements MasterService {
 		doctor.setQualification(doc.getQualification());
 		doctor.setCreatedBy(doc.getCreatedBy());
 		doctor.setModifiedDate(doc.getModifiedDate());
+		doctor.setAddress(doc.getAddress());
+		doctor.setPhoneNo(doc.getPhoneNo());
 		return dao.DoctorsEdit( doctor);
 	}
 	
@@ -443,5 +446,11 @@ public class MasterServiceImpl implements MasterService {
 		public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception
 		{
 			return dao.GetEmpanelled(empanelledid);
+		}
+		
+		@Override
+		public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
+		{
+			return dao.AddMasterEditComments(masteredit);
 		}
 }

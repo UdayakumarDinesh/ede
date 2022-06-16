@@ -40,6 +40,7 @@ import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
@@ -134,6 +135,18 @@ public class MasterController {
 						 	sub.setModifiedBy(UserId);
 						 	sub.setTestCode(testcode);
 						 	long result =service.EditTestSub(sub);
+						 	
+						 	String comments = (String)req.getParameter("comments");
+					    	   MasterEdit masteredit  = new MasterEdit();
+					    	   masteredit.setCreatedBy(UserId);
+					    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+					    	   masteredit.setTableRowId(Long.parseLong(subid));
+					    	   masteredit.setComments(comments);
+					    	   masteredit.setTableName("chss_test_sub");
+					    	   
+					    	   service.AddMasterEditComments(masteredit);
+
+						 	
 						 	if (result != 0) {
 								redir.addAttribute("result", "Test details Updated");
 							} else {
@@ -193,6 +206,16 @@ public class MasterController {
 						item.setModifiedBy(UserId);
 						item.setOtherItemName(WordUtils.capitalizeFully(itemname.trim()));
 						int result = service.EditItem(item);
+						
+						String comments = (String)req.getParameter("comments");
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(itemid));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_other_items");
+				    	   
+				    	   service.AddMasterEditComments(masteredit);
 					 	if (result != 0) {
 							redir.addAttribute("result", "Item Edited Successful");
 						} else {
@@ -295,7 +318,17 @@ public class MasterController {
 					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setIsAdmissible(IsAdmissible);
-					long result =service.EditMedicine(medicinelist);;
+					long result =service.EditMedicine(medicinelist);
+					
+					
+					String comments = (String)req.getParameter("comments");
+					MasterEdit masteredit = new MasterEdit();
+					masteredit.setTableRowId(Long.parseLong(medicineId));
+					masteredit.setTableName("chss_medicines_list");
+					masteredit.setCreatedBy(UserId);
+					masteredit.setCreatedDate(sdtf.format(new Date()));
+					masteredit.setComments(comments);
+					service.AddMasterEditComments(masteredit);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Medicine Edited Successfully");
 					} else {
@@ -401,6 +434,16 @@ public class MasterController {
 					DocRate.setModifiedBy(UserId);
 					DocRate.setModifiedDate(sdtf.format(new Date()));
 					int result = service.EditDoctorMaster(DocRate);
+					String comments = (String)req.getParameter("comments");
+			    	   MasterEdit masteredit  = new MasterEdit();
+			    	   masteredit.setCreatedBy(UserId);
+			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+			    	   masteredit.setTableRowId(Long.parseLong(Rateid));
+			    	   masteredit.setComments(comments);
+			    	   masteredit.setTableName("chss_doctor_rates");
+			    	   
+			    	   service.AddMasterEditComments(masteredit);
+					
 					if (result != 0) {
 		    			redir.addAttribute("result", "Doctor Details Updated");
 					} else {
@@ -469,10 +512,20 @@ public class MasterController {
 					lab.setLabMasterId(Long.parseLong(LabMasterId));
 					lab.setModifiedBy(UserId);
 					lab.setModifiedDate(sdtf.format(new Date()));
-					long result = service.EditLabMaster(lab);
+					long result = service.EditLabMaster(lab);					
+					
+					String comments = (String)req.getParameter("comments");
+			    	   MasterEdit masteredit  = new MasterEdit();
+			    	   masteredit.setCreatedBy(UserId);
+			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+			    	   masteredit.setTableRowId(Long.parseLong(LabMasterId));
+			    	   masteredit.setComments(comments);
+			    	   masteredit.setTableName("lab_master");
+			    	   
+			    	   service.AddMasterEditComments(masteredit);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Unit details updated successfully");
-					} else {
+					}else {
 						redir.addAttribute("resultfail", "Unit details updated Unsuccessfull");
 					}
 					return "redirect:/UnitMaster.htm";
@@ -693,6 +746,16 @@ public class MasterController {
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
 					desig.setDesigLimit(Long.parseLong(limit.trim()));
+					
+					String comments = (String)req.getParameter("comments");
+			    	   MasterEdit masteredit  = new MasterEdit();
+			    	   masteredit.setCreatedBy(UserId);
+			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+			    	   masteredit.setTableRowId(Long.parseLong(designationid));
+			    	   masteredit.setComments(comments);
+			    	   masteredit.setTableName("employee_desig");
+			    	   
+			    	   service.AddMasterEditComments(masteredit);
 					long result = service.EditDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Updated Successfully");
@@ -827,10 +890,13 @@ public class MasterController {
 					if("ADDDOCTOR".equalsIgnoreCase(action)) {
 					String name = (String)req.getParameter("DoctorName");
 					String qualification = (String)req.getParameter("Qualification");
-						
+					String address = (String)req.getParameter("address");
+					String phoneno = (String)req.getParameter("phoneno");
 					DoctorList doctor = new DoctorList();
 					doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
-					doctor.setQualification(qualification);
+					doctor.setQualification(qualification.toUpperCase());
+					doctor.setAddress(address);
+					doctor.setPhoneNo(phoneno.trim());
 					doctor.setCreatedBy(UserId);
 					doctor.setCreatedDate(sdtf.format(new Date()));
 					
@@ -844,13 +910,30 @@ public class MasterController {
 						String name = (String)req.getParameter("DoctorName");
 						String qualification = (String)req.getParameter("Qualification");
 						String doctorId = (String)req.getParameter("doctorId");
+						String address = (String)req.getParameter("address");
+						String phoneno = (String)req.getParameter("phoneno");
 						DoctorList doctor = new DoctorList();
 						doctor.setDoctorId(Long.parseLong(doctorId));
 						doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
-						doctor.setQualification(qualification);
+						doctor.setQualification(qualification.toUpperCase());
+						doctor.setAddress(address);
+						doctor.setPhoneNo(phoneno.trim());
 						doctor.setModifiedBy(UserId);
 						doctor.setModifiedDate(sdtf.format(new Date()));
 						long result = service.DoctorsEdit(doctor);
+						
+					     String comments = (String)req.getParameter("comments");
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(doctorId));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_doctor_list");
+				    	   
+				    	   service.AddMasterEditComments(masteredit);
+						
+						
+						
 						if (result != 0) {
 							 redir.addAttribute("result", "Doctor Updated Successfully");
 						} else {
@@ -958,6 +1041,18 @@ public class MasterController {
 					
 						filecircular.setPath(selectedFile);
 						long result = service.CircularListEdit(circular , filecircular);
+						
+						String comments = (String)req.getParameter("comments");
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(circularid));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_circular_list");
+				    	   
+				    	   service.AddMasterEditComments(masteredit);
+						
+						
 						if (result != 0) {
 							 redir.addAttribute("result", "Circular Updated Successfully");
 						} else {
@@ -1063,6 +1158,17 @@ public class MasterController {
 						hospital.setModifiedBy(UserId);
 						hospital.setModifiedDate(sdtf.format(new Date()));
 						long result =service.EmpanelledHospitalEdit(hospital);
+						
+						String comments = (String)req.getParameter("comments");
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(empanelledId));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_empanelledhospital");
+				    	   
+				    	   service.AddMasterEditComments(masteredit);
+						
 						if (result != 0) {
 							 redir.addAttribute("result", "Empanelled Hospital Updated Successfully");
 						} else {

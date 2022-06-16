@@ -69,14 +69,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
 												></td>
 										</tr>
-									<%-- <%if(list!=null ){ %>
-								        <tr>
-											<th><label>Comments <span class="mandatory" style="color: red;">*</span></label></th>
-											<td><input class="form-control form-control" placeholder=" Enter Commets" type="text" id="comments" name="comments" value=""
-												 maxlength="1000" style="font-size: 15px; text-transform:capitalize; "
-												required="required"></td>
-										</tr>
-										<%} %> --%>
+									
 								</table>
 							</div>
 						</div>
@@ -86,7 +79,7 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							<%if(list!=null){ %>
 							<input type="hidden" name="medicineId" value="<%=list.getMedicineId()%>">
 							<input type="hidden" name="Action" value="EDITMEDICINE">
-								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
+								   <button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate1()" >SUBMIT</button>
 									<%}else{ %>
 									<input type="hidden" name="Action" value="ADDMEDICINE">
 									<button type="button" class="btn btn-sm submit-btn" onclick ="return checkDuplicate()" >SUBMIT</button>
@@ -94,6 +87,44 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 							</div>
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						<%if(list!=null){ %>
+		<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="Action" value="EDITMEDICINE" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>		
+					        		       
+					      </div>
+					    </div>
+					  </div>
+					  
+					</div>
+		<!----------------------------- container Close ---------------------------->
+				<%} %>
 					</form>
 				</div>
 	   </div>
@@ -129,9 +160,7 @@ function checkDuplicate()
 						return false;
 					}else{
 						document.getElementById("addform").submit();
-					}
-			
-					
+					}				
 				}
 			}
 		});	
@@ -140,13 +169,13 @@ function checkDuplicate()
 
 
 </script>
- <!-- 
+ 
 <script type="text/javascript">
 function checkDuplicate1()
 {
 	var $name = $("#MedicineName").val();	
 	var $treatid = $("#tratementname").val();
-	var $commets = $("#comments").val();
+
 		$.ajax({
 			type : "GET",
 			url : "DuplicateMedicine.htm",	
@@ -159,25 +188,25 @@ function checkDuplicate1()
 				 var rr=result;
                  var a = parseInt(rr) ;
 				console.log(a);
-				if(a > 1){					
+				if(a >= 1){					
 					alert("Medicine Already Exist!");
 					return false;
 				}else if(confirm("Are you sure to Submit!")){
 					var $treatmentname = $("#tratementname").val();
 					var $name1 = $("#MedicineName").val();	
-					if($treatmentname=="null" || $treatmentname==null ||  $name1=="" || $name1==" " || $commets=="null" || $commets==""){
+					if($treatmentname=="null" || $treatmentname==null ||  $name1=="" || $name1==" " ){
 						alert("Enter Data Properly!");
 						return false;
 					}else{
-						document.getElementById("addform").submit();
+						$('#myModal').modal('show');
+						//document.getElementById("addform").submit();
 					}
-			
-					
+	
 				}
 			}
 		});	
 }
-</script>  -->
+</script> 
 
 </body>
 </html>

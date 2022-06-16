@@ -9,23 +9,19 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.Setter;
-
 @Setter
 @Getter
-@Entity( name="chss_doctor_list" )
-public class DoctorList implements Serializable {
+@Entity( name="master_edit")
+public class MasterEdit implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
-	private Long DoctorId;
-	private String DoctorName;
-	private String Address;
-	private String PhoneNo;
-	private String Qualification;
+	private Long MasterEditId;
+	private String TableName;
+	private Long TableRowId;
+	private String Comments;
 	private String CreatedBy;
 	private String CreatedDate;
-	private String ModifiedBy;
-	private String ModifiedDate;
 }

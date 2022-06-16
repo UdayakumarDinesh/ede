@@ -77,7 +77,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 			
 					<div class="card-body main-card">
         			
-        		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  onsubmit="return confirm('Are you sure to submit');"> 	 						
+        		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  > 	 						
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                    <div class="row"> 
                 		<div class="col-md-1"></div>
@@ -117,13 +117,53 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                     		
                     		<div class="col-md-2">
                         		<div class="form-group">
+                        		<%if(approval!=null){%>
                         		<input type="hidden" name="AuthId" value="<%if(approval!=null){%><%=approval[0]%><%}%>"> 
                             		<label class="control-label"></label>
                             		<input type="hidden" name="type" value="AD"/>
-                                         <button class="btn btn-sm submit-btn" type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;">Submit</button> 
+                                         <button class="btn btn-sm submit-btn AddItem" type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
+                                         <%}else{%> 
+                                          <button class="btn btn-sm submit-btn " type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
+                                         <%}%>
                         		</div>
                     		</div>        		
-                        </div>   
+                        </div>
+                        <%if(approval!=null){ %>
+                        <!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="Action" value="EDIT" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->   
+					<%} %>
                         </form>      
 	 		      <br>
 	  </div>
@@ -133,4 +173,9 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 	        </div>
 	    
 </body>
+<script type="text/javascript">
+$(".AddItem").click(function(){ 	
+	 $('#myModal').modal('show');
+});
+</script>
 </html>

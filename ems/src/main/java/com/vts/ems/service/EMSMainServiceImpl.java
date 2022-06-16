@@ -272,4 +272,10 @@ public class EMSMainServiceImpl implements EMSMainService
 	{
 		return dao.GetEmpanelledHostpitalList();
 	}
+	
+	@Override
+	public List<Object[]> GetCircularList()throws Exception
+	{
+		return dao.GetCircularList();
+	}
 }

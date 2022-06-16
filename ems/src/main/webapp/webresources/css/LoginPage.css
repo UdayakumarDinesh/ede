@@ -40,6 +40,7 @@ body {
 	font-size: 15px;
 	line-height: 18px;
 	overflow-x: hidden;
+	overflow-y: hidden;
 }
 body.home .header-wrapper {
 	/* background: url("../view/bg3.jpg") 50% 0 no-repeat; */
@@ -271,14 +272,12 @@ a:focus {
 	
 	@media screen and (max-width:1100px){
 	
-		.drdo-writing{
-			color:#003366 !important;
+
+		.quote2{
+			font-size: 20px !important;	
 		}
-		.quote{
-			color:#003366 !important;	
-		}
-		.drdo-writing-footer{
-			color:#003366 !important;
+		.nav-link{
+			font-size: 12px !important;
 		}	
 	}
 
@@ -319,9 +318,9 @@ a:focus {
 
 @media screen and (max-width: 1370px) and (min-width:100px) {
     
-    .img-fluid{
+  /*   .img-fluid{
  		max-width: 65% !important;   
-    }
+    } */
     
     .login-form-wrapper{
     	padding-top: 0px !important;
@@ -344,6 +343,7 @@ a:focus {
 	
 	.img-fluid{
 		max-width: 100% !important;
+		margin-left:-23%;
 	}
 }
 
@@ -563,6 +563,33 @@ a:focus {
 .copyright-content{
 	text-align: center;
     color: white;
-    padding: 11px 0px 0px 0px;
+    padding: 23px 0px 0px 0px;
 }
 
+.copyright-content p{
+	font-size: 12px !important;
+}
+
+@media screen and (min-height:850px){
+	.img-fluid{
+		max-width: 135% !important;
+		margin-left: -20%;
+	}
+	.login-main-container{
+		margin-top: 8rem !important;
+	}
+}
+
+@media screen and (min-height:950px){
+	.img-fluid{
+		max-width: 145% !important;
+		margin-left: -20%;
+	}
+	.product-banner-container{
+		margin-top: 5rem !important;
+	}
+	
+	.login-main-container{
+		margin-top: 10rem !important;
+	}
+}

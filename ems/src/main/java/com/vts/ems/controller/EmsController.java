@@ -390,11 +390,11 @@ public class EmsController {
 				 if(fromdate==null && todate==null) {
 					 fromdate = DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat();
 		   			   todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
+		   			circulatlist = service.GetCircularList();
+				 }else {
+					 circulatlist = masterservice.GetCircularList(fromdate,todate);
 				 }
-				 
 
-				 circulatlist = masterservice.GetCircularList(fromdate,todate);
-	        	 
 	        	 req.setAttribute("circulatlist",circulatlist);
 	        	 req.setAttribute("fromdate", fromdate);	
 				 req.setAttribute("todate",todate);

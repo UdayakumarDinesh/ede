@@ -12,6 +12,7 @@ import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface MasterDao {
@@ -69,7 +70,7 @@ public interface MasterDao {
 	public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception;
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
 	public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception;
-	
+	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception;
 	
 	
 	

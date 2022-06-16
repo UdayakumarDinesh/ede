@@ -407,7 +407,7 @@ public class EmsDaoImpl implements EmsDao
 		 }
 		
 
-		private static final String DOCTORSLIST="SELECT doctorid ,doctorname , qualification FROM chss_doctor_list ORDER BY doctorid DESC";
+		private static final String DOCTORSLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
 		@Override
 		public List<Object[]> GetDoctorList()throws Exception
 		{
@@ -448,6 +448,21 @@ public class EmsDaoImpl implements EmsDao
 					return (List<Object[]>)query.getResultList();
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		private static final String GETCIRCULAR="SELECT circularid , description , path , CircularDate  ,OriginalName,todate FROM chss_circular_list ORDER BY circularid DESC";
+		@Override
+		public List<Object[]> GetCircularList()throws Exception
+		{
+			 logger.info(new Date() +"Inside DAO GetCircularList()");	
+			 try {
+					Query query =  manager.createNativeQuery(GETCIRCULAR);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetCircularList "+ e);
 				e.printStackTrace();
 				return null;
 			}

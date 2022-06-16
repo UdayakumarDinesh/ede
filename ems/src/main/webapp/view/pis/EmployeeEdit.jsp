@@ -32,29 +32,33 @@ function validateform(){
 		  var pan =$("#PAN").val();
 		  var uid =$("#UIDTextBox").val();
 		  var sbiAccount = $("#SBITextBox").val();
-		  var internalnum = $("#InternalNum").val();
+		  var internalnum = $("#internalNo").val();
 		  
 		if(pan.length<10){
+			
 			 alert("Check PAN Number!");
 		       event.preventDefault();
 		       return false;
-		}
-		if(uid.length<12){
+		}else if(uid.length<12){
+			
 			 alert("Check UID Number!");
 		       event.preventDefault();
+		       
 		       return false;
-		}
-		if(sbiAccount.length<11){
+		}else if(sbiAccount.length<11){
+			
 			 alert("Check SBI Number!");
 		       event.preventDefault();
 		       return false;
-		}
-		if(internalnum.length<4){
+		}else if(internalnum.length<4){
+			
 			 alert("Check Internal Number!");
 		       event.preventDefault();
 		       return false;
+		}else{
+			 $('#myModal').modal('show');
 		}
-	      return true;
+	      
 	  
 	  }else{
 	 return false;}
@@ -352,7 +356,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            
 			            <div class=" col-md-2 ">
 			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="<%if(employee!=null && employee.getInternalNumber()!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
+			                <input type="text" id="internalNo" name="internalNo" value="<%if(employee!=null && employee.getInternalNumber()!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
 			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
@@ -492,10 +496,43 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    	<div class="col-12" align="center">
 					<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
 					<input type="hidden" value="<%=employee.getEmpDetailsId()%>" name="empdetailsid">
-					<button type="submit" class="btn btn-sm submit-btn" name="action" Onclick="return validateform();" value="submit" >SUBMIT</button>
+					<button type="submit" class="btn btn-sm submit-btn" name="action"  value="submit"  Onclick="return validateform();" >SUBMIT</button>
 			    	</div>
 			    </div> 
-			
+					<!--------------------------- container ------------------------->
+					<div class="container">
+					
+					  <!-- The Modal -->
+					  <div class="modal" id="myModal">
+					    <div class="modal-dialog">
+					      <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					      		</div>
+					      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit!');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
 				</form>
 			</div>
 		</div>
@@ -504,6 +541,13 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 </div>
 
 
+<script type="text/javascript">
+$(".AddItem").click(function(){ 
+	
+		 $('#myModal').modal('show');
+});
+
+</script>
 
 
 <script type="text/javascript">

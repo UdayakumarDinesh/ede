@@ -26,6 +26,8 @@ import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.service.MasterService;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.service.EMSMainService;
@@ -49,6 +51,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
 	@Autowired
 	private PisService pisservice;
+	
+	@Autowired
+	private MasterService masterservice;
 	
 	@Value("${Image_uploadpath}")
 	private String uploadpath;
@@ -183,9 +188,21 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    			String approving = (String)req.getParameter("approving");
 		    			String id = (String)req.getParameter("AuthId");
 		    			
-		    			if(!id.isEmpty()) {
-		    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId); 
-				    		if (result != 0) {
+		    			if(id!=null) {
+		    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId);
+		    				
+		    				
+		    				String comments = (String)req.getParameter("comments");
+		    		    	   MasterEdit masteredit  = new MasterEdit();
+		    		    	   masteredit.setCreatedBy(UserId);
+		    		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+		    		    	   masteredit.setTableRowId(Long.parseLong(id));
+		    		    	   masteredit.setComments(comments);
+		    		    	   masteredit.setTableName("chss_approve_auth");
+		    		    	   
+		    		    	   masterservice.AddMasterEditComments(masteredit);
+		    				
+		    				if (result != 0) {
 				    			redir.addAttribute("result", "Approving officers updated");
 							} else {
 								redir.addAttribute("resultfail", "Approving officers failed to updated");
@@ -236,8 +253,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					EmployeeRequest reqMsg = new EmployeeRequest();
 					reqMsg.setRequestMessage(messgae);
 					reqMsg.setEmpId(EmpId);
+					reqMsg.setRequestDate(LocalDate.now().toString());
 					reqMsg.setCreatedBy(UserId);
-					reqMsg.setCreatedDate(messgae);
 					reqMsg.setCreatedDate(sdtf.format(new Date()));
 					reqMsg.setIsActive(1);
 					long result = service.AddRequestMsg(reqMsg);
@@ -427,9 +444,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					
 					int result  = service.UpdateAdminResponse( responsemsg ,  requestid ,UserId);
 					if (result != 0) {
-						 redir.addAttribute("result", "Response Sent Successfuly");
+						 redir.addAttribute("result", "Response Sent Successfully");
 					} else {
-						 redir.addAttribute("resultfail", "Response Sent UnSuccessful");
+						 redir.addAttribute("resultfail", "Response Sent UnSuccessfull");
 					}
 					return "redirect:/AdminReplyToReqMsg.htm";	
 					
@@ -460,8 +477,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				String emp       = (String)req.getParameter("employee");
 				String fromdate  = (String)req.getParameter("fromdate");
 				String todate    = (String)req.getParameter("todate");
-				                    
-				 
+				                    				 
 				List<Object[]>  list = service.GetReqResMessagelist(emp , fromdate ,todate);
 				req.setAttribute("msglist", list);	
 				req.setAttribute("emplist", pisservice.GetAllEmployee());
