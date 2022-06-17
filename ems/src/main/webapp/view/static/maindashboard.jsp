@@ -227,7 +227,7 @@ s
 	<body  >
 	<%	
 	
-		List<Object[]> emplogintypelist     = (List<Object[]> )session.getAttribute("emplogintypelist");
+		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
 		String Fromdate=(String)request.getAttribute("Fromdate");
 		String Todate=(String)request.getAttribute("Todate"); 

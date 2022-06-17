@@ -1,6 +1,5 @@
 package com.vts.ems.dao;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
@@ -34,4 +33,5 @@ public interface EmsDao
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
 	public List<Object[]> GetCircularList()throws Exception;
+	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception;
 }

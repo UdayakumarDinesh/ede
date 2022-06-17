@@ -940,9 +940,9 @@ public class CHSSController {
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Medicines Data Updated Successfully");
+				redir.addAttribute("result", "Medicine(s) Data Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Medicines Data Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Medicine(s) Data Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);

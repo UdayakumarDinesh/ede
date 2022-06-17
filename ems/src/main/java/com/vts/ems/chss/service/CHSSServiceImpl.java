@@ -599,7 +599,7 @@ public class CHSSServiceImpl implements CHSSService {
 			String treattypeid= chssapplydata[7].toString();
 			for(int i=0 ; i<dto.getMedicineName().length ; i++)
 			{
-				if(dto.getMedicineName()[i]!=null && dto.getMedicineCost()[i]!=null && !dto.getMedicineCost()[i].trim().equals("")) 
+				if(dto.getMedicineName()[i]!=null && dto.getMedicineCost()[i]!=null && !dto.getMedicineCost()[i].trim().equals("") && Integer.parseInt(dto.getMedQuantity()[i])>0 ) 
 				{
 					CHSSMedicine  meds = new CHSSMedicine();
 					

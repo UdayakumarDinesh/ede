@@ -33,7 +33,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
 import com.vts.ems.master.service.MasterService;
@@ -76,7 +75,6 @@ public class EmsController {
 			Employee employee = service.EmployeeInfo(login.getEmpId());
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
-			ses.setAttribute("emplogintypelist",service.EmpHandOverLoginTypeList(String.valueOf(employee.getEmpId())));
 			
 			long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
 			if(pwdCount==0) 
@@ -92,69 +90,73 @@ public class EmsController {
 	}
 
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
-	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception {
+	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
+	{
 		logger.info(new Date() + "Inside MainDashBoard.htm ");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
-//    	String LoginId=String.valueOf(ses.getAttribute("LoginId"));
-//    	String EmpNo=(String)ses.getAttribute("EmpNo"); 
-
-//    	req.setAttribute("employeedata", service.EmployeeData(EmpId));
-		
-    	String IsSelf = req.getParameter("isselfvalue");
-		String EmpId= ses.getAttribute("EmpId").toString();
-		String FromDate = req.getParameter("FromDate");
-		String ToDate = req.getParameter("ToDate");
-		LocalDate today= LocalDate.now();
-		int currentmonth= today.getMonthValue();
-		String DbFromDate="";
-		String DbToDate="";
-		
-		if(FromDate== null) {
-			String start ="";
-			if(currentmonth<4) 
-			{
-				start = String.valueOf(today.getYear()-1);
-			}else{
-				start=String.valueOf(today.getYear());
+    	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
+    	String UserId = (String) ses.getAttribute("Username");
+    	try {
+	    	String IsSelf = req.getParameter("isselfvalue");
+			String FromDate = req.getParameter("FromDate");
+			String ToDate = req.getParameter("ToDate");
+			LocalDate today= LocalDate.now();
+			int currentmonth= today.getMonthValue();
+			String DbFromDate="";
+			String DbToDate="";
+			
+			if(FromDate== null) {
+				String start ="";
+				if(currentmonth<4) 
+				{
+					start = String.valueOf(today.getYear()-1);
+				}else{
+					start=String.valueOf(today.getYear());
+				}
+				
+				FromDate=start;
+				DbFromDate = start+"-04-01";
+				
 			}
 			
-			FromDate=start;
-			DbFromDate = start+"-04-01";
-			
-		}
-		
-		if(ToDate== null) {
-			String end="";
-			if(currentmonth<4) 
-			{
-				end =String.valueOf(today.getYear());
-			}else{
-				end =String.valueOf(today.getYear()+1);
+			if(ToDate== null) {
+				String end="";
+				if(currentmonth<4) 
+				{
+					end =String.valueOf(today.getYear());
+				}else{
+					end =String.valueOf(today.getYear()+1);
+				}
+				
+				ToDate=end;
+				DbToDate=end+"-03-31";
 			}
 			
-			ToDate=end;
-			DbToDate=end+"-03-31";
-		}
-		
-		DbFromDate = FromDate+"-04-01";
-		DbToDate= ToDate+"-03-31";
+			DbFromDate = FromDate+"-04-01";
+			DbToDate= ToDate+"-03-31";
+				
+			if(IsSelf==null) {
+				IsSelf="Y";
+			}
 			
-		if(IsSelf==null) {
-			IsSelf="Y";
+			
+			req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
+			req.setAttribute("Fromdate", FromDate);
+			req.setAttribute("Todate", ToDate);
+			req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
+			req.setAttribute("amountdata", service.MainDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
+			req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
+			req.setAttribute("logintype", LoginType);
+			req.setAttribute("isself", IsSelf);
+			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
+			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			return "static/maindashboard";
+    	}catch (Exception e) {
+    		e.printStackTrace();
+			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);
+			return "static/Error";
 		}
-		
-		
-		req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
-		req.setAttribute("Fromdate", FromDate);
-		req.setAttribute("Todate", ToDate);
-		req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
-		req.setAttribute("amountdata", service.MainDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
-		req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
-		req.setAttribute("logintype", LoginType);
-		req.setAttribute("isself", IsSelf);
-		req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
-
-		return "static/maindashboard";
 	}
 	
 	@RequestMapping(value = "EmpLogitypeChange.htm" , method = RequestMethod.POST)

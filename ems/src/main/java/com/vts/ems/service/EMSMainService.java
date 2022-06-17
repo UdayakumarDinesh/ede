@@ -20,7 +20,7 @@ public interface EMSMainService {
 	public int SendOtpMail(String loginid) throws Exception;
 	public String reSendResetOTP(String loginid) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
-	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
+	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception;
 	public List<Object[]> CirculatList() throws Exception;
 	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
