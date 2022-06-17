@@ -1905,7 +1905,6 @@ function getOthersDetails()
 			otherHTMLStr +=	'					<option value="'+$OtherItemsList[oi].OtherItemId+'"  >'+$OtherItemsList[oi].OtherItemName+'</option> ';
 											}
 										}
-			
 			otherHTMLStr +=	'		</select> ';
 			otherHTMLStr +=	'	</td> ';
 			
