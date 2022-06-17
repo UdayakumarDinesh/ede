@@ -577,15 +577,21 @@ $('#isself').change(function(){
 	
 	// The amount gauge
 
+	var maxamount = Math.round(<%=amountdata[0]%>);
+	
 	var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: <%=amountdata[0]%>  ,
+        max: maxamount  ,
         tickWidth: 0,
-        tickPositions: [0 , <%=amountdata[0]%> ],
+        tickPositions: [0 , maxamount ],
         title: {
             text: 'Amount Settled',
-          
+        },
+        labels : {
+        	style :{
+        		'font-size': 20	
+        	}
         }
     },
 
@@ -613,7 +619,6 @@ $('#isself').change(function(){
             condition: {
                 maxWidth: 500
             },
-            // Make the labels less space demanding on mobile
             chartOptions: {
                 xAxis: {
                     labels: {
