@@ -34,4 +34,5 @@ public interface EmsDao
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
 	public List<Object[]> GetCircularList()throws Exception;
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception;
+	public List<Object[]> LoginLoginType(String loginid) throws Exception;
 }

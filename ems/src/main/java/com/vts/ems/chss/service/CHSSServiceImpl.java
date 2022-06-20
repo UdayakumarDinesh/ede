@@ -1636,6 +1636,7 @@ public class CHSSServiceImpl implements CHSSService {
 			bill.setCenterName(WordUtils.capitalize(dto.getCenterName()[i]).trim());
 			bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
 //			bill.setGSTAmount(CropTo2Decimal(dto.getGSTAmount()[i]));
+			bill.setItemsTotalAmt(0.00);
 			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(dto.getDiscount()[i]));
 			bill.setDiscountPercent(Double.parseDouble(dto.getDiscountPer()[i]));

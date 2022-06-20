@@ -147,7 +147,7 @@ th,td
 		
 			<div class="card" >
 				<div class="card-body main-card " >
-					<%if(billstatus>=7 && contingentdata[6]!=null && !contingentdata[6].toString().trim().equalsIgnoreCase("")){ %>
+					<%if(billstatus>=7  && contingentdata[6]!=null && !contingentdata[6].toString().trim().equalsIgnoreCase("")){ %>
 						<div class="col-md-12">
 							<span style="font-weight: 600;"> Remark : </span>
 							<%if(billstatus == 9 || billstatus == 11 || billstatus == 13  ){ %>
@@ -303,10 +303,12 @@ th,td
 								</table>
 								<%} %>
 							</div>
-							<div class="col-md-12" align="left">
-								Remarks : <br>
-								<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
-							</div>
+							<%if(billstatus<14 ){%>
+								<div class="col-md-12" align="left">
+									Remarks : <br>
+									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
+								</div>
+							<%} %>
 							<div class="col-12" align="center">
 								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>

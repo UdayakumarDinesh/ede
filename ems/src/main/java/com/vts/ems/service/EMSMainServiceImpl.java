@@ -211,8 +211,9 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception
 	{
-		List<Object[]> allowedtypes  =dao.AllowedLoginTypesList(loginid);
-		allowedtypes.addAll(dao.EmpHandOverLoginTypeList(empid));
+		List<Object[]> allowedtypes  = dao.LoginLoginType(loginid);
+		allowedtypes.addAll(dao.AllowedLoginTypesList(loginid));		
+		allowedtypes.addAll(dao.EmpHandOverLoginTypeList(empid));		
 		List<String> uniquelist = new ArrayList<String>();
 		for(int i=0;i< allowedtypes.size();i++) 
 		{

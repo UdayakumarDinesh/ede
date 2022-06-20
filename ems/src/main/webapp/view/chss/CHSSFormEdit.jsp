@@ -49,6 +49,9 @@ th,td
 	text-align: left;
 	border: 1px solid black;
 	padding: 4px;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	
 }
 
 .center{
@@ -224,7 +227,7 @@ th,td
 											<th>Hospital / Medical / Diagnostics Centre Name</th>
 											<th>Bill / Receipt No.</th>
 											<th class="center">Date</th>
-											<th style="text-align: right;">Amt (&#8377;)</th>
+											<th style="text-align: right;">MRP (&#8377;)</th>
 											<th style="text-align: right;">Discount (&#8377;)</th>
 											<th style="text-align: right;">Total (&#8377;)</th>
 										</tr>
@@ -243,7 +246,7 @@ th,td
 												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
 												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
 												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[9] %></td>
+												<td class="text-blue" style="text-align: right;"><%=Double.parseDouble(chssbillslist.get(i)[6].toString())+Double.parseDouble(chssbillslist.get(i)[7].toString()) %></td>
 												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
 												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
 											</tr>
@@ -663,7 +666,7 @@ th,td
 															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
 														<td >
-															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
+															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
 															<button type="submit" class="btn btn-sm editbtn" formaction="MiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>

@@ -206,7 +206,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<!-- <th style="width:7%; text-align: right;">GST Amt (&#8377;)</th> -->
 												<th style="width:10%; text-align: right;">Discount (&#8377;)</th>
 												<th style="width:10%; text-align: right;">Discount (%)</th>
-												
 												<th style="width:12%;" >Action  </th>
 											</tr>
 										</thead>
@@ -217,7 +216,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 											<tr class="" >
 												<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
 												<td> <input type="text" class="form-control items" name="centername-<%=obj[0]%>" value="<%=obj[3] %>" style="width:100%; "  maxlength="500" required="required"></td>
-												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
+												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="25" required="required"></td>
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="finalbillamount-<%=obj[0]%>" id="finalbillamount-<%=obj[0]%>"  onkeyup="enableDiscount('<%=obj[0]%>')" value="<%=obj[7]%>" style="width:100%;text-align: right; " min="1" max="9999999" required="required"></td>
 												<%-- <td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>" id="GSTAmt-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td> --%>
@@ -269,7 +268,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										<tr class="" >
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
 											<td style="width:20%;" ><input type="text" class="form-control items" name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
-											<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
+											<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="25" required="required"></td>
 											<td style="width:8%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
 											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="this.select();" onkeyup="enableDiscount('')" value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
 											<!-- <td style="width:7%;" > <input type="number" class="form-control items cost-only" step=".01" name="GSTAmt"  id="GSTAmt-"  Onclick="this.select();" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td> -->

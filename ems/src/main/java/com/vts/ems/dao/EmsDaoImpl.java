@@ -275,6 +275,24 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String LOGINLOGINTYPE="SELECT lt.LoginType, lt.LoginDesc FROM login l, login_type lt WHERE l.LoginType = lt.logintype AND l.loginid=:loginid ";
+	
+	@Override
+	public List<Object[]> LoginLoginType(String loginid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO LoginLoginType");	
+		try {
+			Query query = manager.createNativeQuery(LOGINLOGINTYPE);
+			
+			query.setParameter("loginid", loginid);
+			return (List<Object[]>)query.getResultList();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO LoginLoginType "+ e);
+			return null;
+		}
+	}
+	
 	private static final String ALLOWEDlOGINTYPESlIST="SELECT lt.logintype,  lt.LoginDesc FROM login l,login_type_access lta, login_type lt WHERE l.logintype = lta.logintype AND lta.AllowedLoginTypes = lt.LoginType AND lta.isactive=1 AND l.loginid=:loginid ";
 	
 	@Override
