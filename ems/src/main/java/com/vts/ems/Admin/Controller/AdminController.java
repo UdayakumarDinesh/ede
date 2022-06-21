@@ -44,7 +44,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
-
+                                                                         
 	
 	@Autowired
 	AdminService service;
