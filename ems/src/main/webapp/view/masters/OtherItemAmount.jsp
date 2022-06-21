@@ -93,7 +93,7 @@ int slno=0;
 											
 											String admAmt1 ="admAmt1"+String.valueOf(obj[3]); 
 											String basicto2 ="basicto1"+String.valueOf(obj[3]); 
-										
+											String basicfrom2 = "basicfrom1"+String.valueOf(obj[3]);
 											int value = list.size()-1;
 											if(flag!=value){%>
 									  	<tr>
@@ -110,10 +110,10 @@ int slno=0;
 							
 									<tr>
 									        <td><span class="sno" id="sno"><%=slno %></span></td>
-											<td><input type="text" class="form-control items" name="basicfrom1" id="basicfrom1" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
-											<td><input type="text" class="form-control items" name="<%=basicto2%>" id="basicto1" value="<%=obj[1] %>"    maxlength="10" required="required"></td>
+											<td><input type="text" class="form-control items" name="basicfrom1" id="<%=basicfrom2%>" value="<%=obj[0] %>" readonly="readonly"  maxlength="10" required="required"></td>
+											<td><input type="text" class="form-control items" name="<%=basicto2%>" id="<%=basicto2%>" value="<%=obj[1] %>"    maxlength="10" required="required"></td>
 											<td><input type="text" class="form-control admAmt" name="<%=admAmt1%>" id="admAmt1" value="<%=obj[2] %>"      maxlength="10"  required="required"></td>
-											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return confirm('Are You Sure To Update!');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
+											<td><button type="submit" class="btn btn-sm" name="chssOtheramtid" value="<%=obj[3] %>" onclick="return EditItem('<%=obj[3] %>');" formaction="EDITOtherAmt.htm" formmethod="POST"   data-toggle="tooltip" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>
 												<button type="submit"  class="btn btn-sm" formaction="EDITOtherAmt.htm" formmethod="POST" Onclick="return confirm('Are You Sure To Delete?');" name="otheritemid" value="<%=obj[3]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
@@ -275,6 +275,26 @@ $(function () {
 	  
 	
 }
-	
+</script>
+
+<script type="text/javascript">
+function EditItem(val)
+{
+	var bFrom = "basicfrom1"+val;
+	var bTo = "basicto1"+val;
+	var basicfrom =parseInt( $('#'+bFrom).val());
+	var basicto =parseInt( $('#'+bTo).val());
+	  if(basicto <= basicfrom){
+		   alert("Basic-To Amount Should be Greater Than Basic-from Amount");
+		   $("#"+bTo).val("");
+		   return false;
+	   }else{
+		   if(confirm("Are you sure to Submit!")){
+			   return true;
+		   }else{
+			   return false;
+		   }  
+	   }
+}
 </script>
 </html>

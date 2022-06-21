@@ -104,7 +104,7 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 					             <div class="form-inline">
 					        	 <div class="form-group "  >
 					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" required="required" > 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
 					      		 </div>
 					      		 </div>
 					        	
@@ -157,9 +157,20 @@ $('#HospitalName').keypress(function (e) {
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm("Are You Sure To Update!")){
-		 $('#myModal').modal('show');
-	}	
+	var HName = $('#HospitalName').val();
+	var Address = $('#HospitalAddress').val();
+	
+	if(HName=="" || HName=="null" || HName==null){
+		alert("Enter the Hospital Name!");
+		return false;
+	}else if( Address=='' || Address==null || Address=="null"){
+		alert("Enter the Hospital Address");
+		return false;
+	}else{
+		$('#myModal').modal('show');
+		return false;
+	}
+	
 }
 </script>
 </html>
