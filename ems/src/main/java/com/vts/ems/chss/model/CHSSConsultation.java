@@ -27,12 +27,11 @@ public class CHSSConsultation implements Serializable {
 	private String ConsultDate;
 	private double ConsultCharge;
 	private double ConsultRemAmount;
+	private double AmountPaid;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-	
-	
 }

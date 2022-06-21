@@ -794,7 +794,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	}
 	
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY circularid DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate ,referenceno FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY CircularDate DESC";
 	
 	@Override
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception

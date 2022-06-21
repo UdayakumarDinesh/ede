@@ -43,8 +43,11 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >
-
-					<form name="myfrm" action="EmpanelledHospitalAddEdit.htm" method="POST" id="addform" autocomplete="off">
+					<%if(list!=null){ %>	
+					<form name="myfrm" action="EmpanelledHospitalEdit.htm" method="POST" id="addform" autocomplete="off" enctype="multipart/form-data" >	
+					<%}else{ %>
+					<form name="myfrm" action="EmpanelledHospitalAdd.htm" method="POST" id="addform" autocomplete="off">
+						<%}%>
 						<div class="form-group">
 							<div class="table-responsive">
 								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -82,7 +85,7 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						
-												
+						<%if(list!=null){ %>						
 <!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -98,13 +101,20 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -115,10 +125,10 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 					      </div>
 					    </div>
 					  </div>
-					</div>
+					</div><%}%>
 					<!----------------------------- container Close ---------------------------->		
 						
-					</form>
+				<%if(list!=null){ %></form><%}else{%></form><%}%>
 				</div>
 	   </div>
 	</div>
@@ -147,9 +157,20 @@ $('#HospitalName').keypress(function (e) {
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm("Are You Sure To Update!")){
-		 $('#myModal').modal('show');
-	}	
+	var HName = $('#HospitalName').val();
+	var Address = $('#HospitalAddress').val();
+	
+	if(HName=="" || HName=="null" || HName==null){
+		alert("Enter the Hospital Name!");
+		return false;
+	}else if( Address=='' || Address==null || Address=="null"){
+		alert("Enter the Hospital Address");
+		return false;
+	}else{
+		$('#myModal').modal('show');
+		return false;
+	}
+	
 }
 </script>
 </html>

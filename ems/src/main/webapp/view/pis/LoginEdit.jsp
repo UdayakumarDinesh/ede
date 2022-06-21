@@ -43,11 +43,10 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 			<div class="card" >
 				<div class="card-body " align="center" >
 		 
-		 <form name="myfrm" action="UserManagerEditSubmit.htm" method="POST">
+		 <form name="myfrm" action="UserManagerEditSubmit.htm" method="POST" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="table-responsive">
-								<table
-									class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
+								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
 									
 
 										<tr>
@@ -79,8 +78,8 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 
 						<div class="row" style="margin-left: 47%;" align="center">
 							<div id="UsernameSubmit">
-								<button type="submit" class="btn btn-sm submit-btn AddItem"
-									onclick="return confirm('Are You Sure To Update?');"
+								<button type="submit" class="btn btn-sm submit-btn "
+									onclick="return CommentsModel();"
 									name="action" value="submit">SUBMIT</button>
 							</div>
 
@@ -103,10 +102,18 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
+					        
+					        	<div class="form-inline">
+					        	<div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
+					      		</div>
+					      		</div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					               <label>Comments : <span class="mandatory"	style="color: red;">*</span>&nbsp;&nbsp;&nbsp;</label> 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
 					        </div>
@@ -129,8 +136,10 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 	</div>
 </body>
 <script type="text/javascript">
-$(".AddItem").click(function(){ 	
+function CommentsModel()
+{
 	 $('#myModal').modal('show');
-});
+	 return false;
+}
 </script>
 </html>

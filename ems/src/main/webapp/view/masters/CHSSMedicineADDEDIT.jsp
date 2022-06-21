@@ -45,8 +45,11 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body main-card " align="center" >
-
-					<form name="myfrm" action="ChssMedicine.htm" method="POST" id="addform" autocomplete="off">
+					<%if(list!=null){ %>
+					<form name="myfrm" action="ChssMedicineEdit.htm" method="POST" id="addform" autocomplete="off" enctype="multipart/form-data" >
+						<%}else{ %>
+						<form name="myfrm" action="ChssMedicine.htm" method="POST" id="addform" autocomplete="off">
+						<%} %>
 						<div class="form-group">
 							<div class="table-responsive">
 								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -103,14 +106,22 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 					        </div>
 					        
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					      <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group"  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					               <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      		
+					     </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -123,9 +134,10 @@ CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
 					  </div>
 					  
 					</div>
-		<!----------------------------- container Close ---------------------------->
-				<%} %>
-					</form>
+		            <%}%>
+					<!----------------------------- container Close ---------------------------->
+			<%if(list!=null){%></form>
+			<%}else{%></form><%}%>
 				</div>
 	   </div>
 	</div>
@@ -187,11 +199,11 @@ function checkDuplicate1()
 			success :  function(result){
 				 var rr=result;
                  var a = parseInt(rr) ;
-				console.log(a);
+				
 				if(a >= 1){					
 					alert("Medicine Already Exist!");
 					return false;
-				}else if(confirm("Are you sure to Submit!")){
+				}else {
 					var $treatmentname = $("#tratementname").val();
 					var $name1 = $("#MedicineName").val();	
 					if($treatmentname=="null" || $treatmentname==null ||  $name1=="" || $name1==" " ){

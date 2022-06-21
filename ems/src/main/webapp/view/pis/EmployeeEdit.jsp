@@ -26,13 +26,14 @@
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
 <script type="text/javascript">
 function validateform(){
-	var x = confirm("Are you sure To Submit?");
+	//var x = confirm("Are you sure To Submit?");
 	
-	  if (x){
+	  if (true){
 		  var pan =$("#PAN").val();
 		  var uid =$("#UIDTextBox").val();
 		  var sbiAccount = $("#SBITextBox").val();
 		  var internalnum = $("#internalNo").val();
+		  var empname = $("#empname").val();
 		  
 		if(pan.length<10){
 			
@@ -55,8 +56,14 @@ function validateform(){
 			 alert("Check Internal Number!");
 		       event.preventDefault();
 		       return false;
+		}else if(empname==null || empname =="" || empname =="null"){
+			
+			alert("Enter the Employee Name!");
+		       event.preventDefault();
+		       return false;
 		}else{
 			 $('#myModal').modal('show');
+			 return false;
 		}
 	      
 	  
@@ -112,7 +119,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 						
 						
 			<div class="card-body">
-				<form action="EmployeeEditSubmit.htm" method="post" autocomplete="off" >
+				<form action="EmployeeEditSubmit.htm" method="post" autocomplete="off" enctype="multipart/form-data">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			    <div class="form-group">
 			        <div class="row">
@@ -208,7 +215,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 	       
 			
 						<div class=" col-md-2 ">
-			                <label>Email<span class=" mandatory ">*</span></label>
+			                <label>Internal Email<span class=" mandatory ">*</span></label>
 			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
 			                  value="<%if(emp!=null && emp.getEmail()!=null){%><%=emp.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
 			                    onchange=" return trim(this) ">
@@ -260,7 +267,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div>
 			            
 			            <div class=" col-md-2 ">
-			                <label>Phone No<span class=" mandatory ">*</span></label>
+			                <label>Mobile No<span class=" mandatory ">*</span></label>
 			                <input type="text"  name="PhoneNo" id="PhoneNo" <%if(employee!=null && employee.getPhoneNo()!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
 			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
 			                     onblur="checknegative(this) ">
@@ -355,9 +362,9 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 						
 			            
 			            <div class=" col-md-2 ">
-			                <label>Internal number<span class="mandatory"></span></label>
-			                <input type="text" id="internalNo" name="internalNo" value="<%if(employee!=null && employee.getInternalNumber()!=null){%><%=employee.getInternalNumber()%><%}%>" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "
+			                <label>Extension Number<span class="mandatory"></span></label>
+			                <input type="text" id="internalNo" name="internalNo" value="<%if(emp!=null && emp.getExtNo()!=null){%><%=emp.getExtNo()%><%}%>" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
 			            
@@ -431,8 +438,15 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <input type="text" name="gpf" value="<%if(employee!=null && employee.getGPFNo()!=null){%><%=employee.getGPFNo()%><%}%>" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-			
-			            <div class=" col-md-4 ">
+						
+						 <div class=" col-md-2 ">
+			                <label>UAN No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="UANNo" id="UANNo" value="<%if(emp!=null && emp.getUANNo()!=null){%><%=emp.getUANNo()%><%}%>" maxlength="12"
+			                    class=" form-control input-sm " placeholder="Enter UAN no " 
+			                     onblur="checknegative(this) ">
+			            </div>
+						
+			            <div class=" col-md-2 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="<%if(employee!=null && employee.getIdMark()!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
@@ -514,12 +528,22 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
+					        
+					        	<div class="form-inline">
+					        	<div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		</div>
+					      		</div>
+					      		
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					               <textarea type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments"  required="required"></textarea> 
 					      		</div>
 					      		</div>
+					      		
+					      	
 					        </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -553,6 +577,7 @@ $(".AddItem").click(function(){
 <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#PhoneNo"), /^-?\d*$/);
+setPatternFilter($("#UANNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#PAN"),/^[a-zA-Z0-9_]*$/);

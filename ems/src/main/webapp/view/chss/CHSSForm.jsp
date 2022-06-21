@@ -94,6 +94,8 @@ th,td
 	text-align: left;
 	border: 1px solid black;
 	padding: 4px;
+	word-break: break-word;
+	overflow-wrap: anywhere;
 }
 
 .center{
@@ -113,7 +115,7 @@ th,td
 
 .text-green
 {
-	color:  #243D25;
+	color:  #008005;
 }
  
 			
@@ -222,45 +224,49 @@ th,td
 						<th>Hospital / Medical / Diagnostics Centre Name</th>
 						<th>Bill / Receipt No.</th>
 						<th class="center">Date</th>
-						<th style="text-align: right;">Amount &nbsp;(&#8377;)</th>
+						<th style="text-align: right;">MRP (&#8377;)</th>
+						<th style="text-align: right;">Discount (&#8377;)</th>
+						<th style="text-align: right;">Total (&#8377;)</th>
 					</tr>
-					<% double billstotal=0, GST=0,discount=0;
-						for(int i=0;i<chssbillslist.size();i++)
+					<% double billstotal=0 ,discount=0 /*,  GST=0 */;
+					for(int i=0;i<chssbillslist.size();i++)
+					{
+						billstotal +=Double.parseDouble(chssbillslist.get(i)[7].toString());
+						if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 						{
-							billstotal +=Double.parseDouble(chssbillslist.get(i)[8].toString());
-							if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
-							{
-								GST +=Double.parseDouble(chssbillslist.get(i)[5].toString());
-								discount +=Double.parseDouble(chssbillslist.get(i)[6].toString());
-							}
-							%>
+							/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
+							discount +=Double.parseDouble(chssbillslist.get(i)[6].toString());
+						}
+					%>
 						<tr>
 							<td class="center text-blue"><%=i+1 %></td>
 							<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
 							<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
 							<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[8] %></td>
+							<td class="text-blue" style="text-align: right;"><%=Double.parseDouble(chssbillslist.get(i)[6].toString())+Double.parseDouble(chssbillslist.get(i)[7].toString()) %></td>
+							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
+							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
 						</tr>
 					<%} %>
 					<%if(chssbillslist.size()>0){ %>
+					<%-- 	<tr>
+							<td colspan="5"></td>
+							<td style="text-align: right;"><b>Total GST (+)</b></td>
+							<td class="text-blue"  style="text-align: right;"><%=GST %></td>
+						</tr>
 						<tr>
-												<td colspan="3"></td>
-												<td style="text-align: right;"><b>Total GST (+)</b></td>
-												<td class="text-blue"  style="text-align: right;"><%=GST %></td>
-											</tr>
-											<tr>
-												<td colspan="3"></td>
-												<td style="text-align: right;"><b>Total Discount (-)</b></td>
-												<td class="text-blue"  style="text-align: right;"><%=discount %></td>
-											</tr>
-											<tr>
-												<td colspan="3"></td>
-												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(billstotal + GST - discount))) %></td>
-											</tr>
+							<td colspan="5"></td>
+							<td style="text-align: right;"><b>Total Discount (-)</b></td>
+							<td class="text-blue"  style="text-align: right;"><%=discount %></td>
+						</tr> --%>
+						<tr>
+							<td colspan="5"></td>
+							<td style="text-align: right;"><b>Rounded Total </b></td>
+							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(billstotal))) %></td>
+						</tr>
 					<%}else{ %>
 						<tr>
-							<td colspan="5" class="center" >Nil</td>
+							<td colspan="5" class="center" >Bills Not Added</td>
 						</tr>
 					<%} %>
 				</tbody>
@@ -594,13 +600,12 @@ th,td
 						<td ></td>
 					</tr>
 										
-					<tr>
-						
+					<%-- <tr>
 						<td colspan="4" class="right"><b>Total GST (+)</b></td>
 						<td class="right text-blue"><b><%=GST %></b></td>
 						<td class="right text-green"></td>
 						<td ></td>
-					</tr>
+					</tr> --%>
 					<tr>
 						<td colspan="4" class="right"><b>Total Discount (-)</b></td>
 						<td class="right text-blue"><b><%=discount %></b></td>
@@ -610,7 +615,7 @@ th,td
 										
 					<tr>
 						<td colspan="4" class="right"><b>Rounded Total</b></td>
-						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal +GST -discount))) %></b></td>
+						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal -discount))) %></b></td>
 										
 						<td class="right text-green">
 							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
@@ -621,7 +626,7 @@ th,td
 					</tr>
 					
 					<tr>
-						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td>
+						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal-discount)) %> Only)</td>
 					</tr>
 					
 					<tr>

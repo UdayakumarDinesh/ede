@@ -41,6 +41,7 @@
 
 <%
 	List<Object[]> EmployeeDetailsList = (List<Object[]> )request.getAttribute("EmployeeDetailsList") ;
+	String logintype = (String)session.getAttribute("LoginType");
 %>
 
 <div class="card-header page-top ">
@@ -83,7 +84,9 @@
 			
 					<form action="#" method="post" id="empForm">
 				<div align="right">
+				<%if("P".equalsIgnoreCase(logintype)){ %>
 				<button type="submit" class="btn btn-sm btnclr"  style="background-color: #9dbf13; color: white; margin-bottom: 1%;" name="address" value="address" formaction="AdminReplyToReqMsg.htm" ><i class="fa-solid fa-message"></i> &nbsp;&nbsp;View Message</button>
+				<%} %>
 				</div>
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">

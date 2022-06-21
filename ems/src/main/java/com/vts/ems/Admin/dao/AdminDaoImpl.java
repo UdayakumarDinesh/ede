@@ -189,7 +189,7 @@ public class AdminDaoImpl implements AdminDao{
 		
 	}
 	
-	private static final String REQUESTMSGLIST = "SELECT emprequestid, requestmessage ,responsemessage FROM ems_emp_request WHERE empid=:empid and isactive='1'";
+	private static final String REQUESTMSGLIST = "SELECT emprequestid, requestmessage ,responsemessage , DATE_FORMAT(requestdate,'%Y-%m-%d'  ) AS 'requestdate' ,DATE_FORMAT(requestdate, '%H:%i') AS 'requesttime',DATE_FORMAT(responsedate,'%Y-%m-%d'  ) AS 'responsedate' ,DATE_FORMAT(responsedate, '%H:%i') AS 'responsetime' FROM ems_emp_request WHERE empid=:empid and isactive='1'";
 	@Override
 	public List<Object[]> GetRequestMessageList(String empid) throws Exception {
 		logger.info(new Date() +"Inside GetRequestMessageList()");	
@@ -362,7 +362,7 @@ public class AdminDaoImpl implements AdminDao{
 
 	
 	
-	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage ,a.empid FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
+	private static final String GETREQLIST="SELECT a.emprequestid , b.empname , a.requestmessage ,a.responsemessage ,a.empid , DATE_FORMAT(a.requestdate,'%Y-%m-%d'  ) AS 'requestdate' ,DATE_FORMAT(a.requestdate, '%H:%i') AS 'requesttime',DATE_FORMAT(a.responsedate,'%Y-%m-%d'  ) AS 'responsedate' ,DATE_FORMAT(a.responsedate, '%H:%i') AS 'responsetime' FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.isactive='1' ORDER BY a.emprequestid DESC";
 	@Override
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
@@ -380,7 +380,7 @@ public class AdminDaoImpl implements AdminDao{
 			}
 	}
 	
-	private static final String UPDATEADMINREPLY="UPDATE ems_emp_request SET modifiedby=:modifiedby , modifieddate=:modifieddate , responsemessage=:responsemsg WHERE emprequestid=:emprequestid";
+	private static final String UPDATEADMINREPLY="UPDATE ems_emp_request SET modifiedby=:modifiedby , modifieddate=:modifieddate , responsemessage=:responsemsg ,ResponseDate=:responsedate  WHERE emprequestid=:emprequestid";
 	@Override
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception
 	{
@@ -393,6 +393,7 @@ public class AdminDaoImpl implements AdminDao{
 			query.setParameter("emprequestid",requestid);
 			query.setParameter("modifiedby", UserId);
 			query.setParameter("modifieddate", sdtf.format(new Date()));
+			query.setParameter("responsedate", sdtf.format(new Date()));
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
@@ -400,7 +401,7 @@ public class AdminDaoImpl implements AdminDao{
 				return count;
 			}
 	}
-	private static final String GETREQRESMESSAGELIST="SELECT a.emprequestid , b.empname , a.requestmessage  , a.responsemessage , a.empid FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.empid=:emp AND a.isactive='1' AND a.requestdate BETWEEN :FromDate AND :Todate  ORDER BY a.requestdate DESC";
+	private static final String GETREQRESMESSAGELIST="SELECT a.emprequestid , b.empname , a.requestmessage  , a.responsemessage , a.empid , DATE_FORMAT(a.requestdate,'%Y-%m-%d'  ) AS 'requestdate' ,DATE_FORMAT(a.requestdate, '%H:%i') AS 'requesttime',DATE_FORMAT(a.responsedate,'%Y-%m-%d'  ) AS 'responsedate' ,DATE_FORMAT(a.responsedate, '%H:%i') AS 'responsetime' FROM ems_emp_request a , employee b WHERE a.empid=b.empid AND a.empid=:emp AND a.isactive='1' AND a.requestdate BETWEEN :FromDate AND :Todate  ORDER BY a.requestdate DESC";
 	
 	@Override
 	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception

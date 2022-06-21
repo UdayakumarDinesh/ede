@@ -83,7 +83,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 	   <div class="card"  align="center">
 	   		<div class="card-body" >
 	   		
-<form name="myfrm" action="UnitMaster.htm" method="POST" >
+<form name="myfrm" action="UnitMasterEdit.htm" method="POST" autocomplete="off" enctype="multipart/form-data">
 
   <div class="form-group">
   <div class="table-responsive">
@@ -116,9 +116,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
                <th><label >Unit Email:<span class="mandatory" style="color: red;">*</span></label></th>
                <td ><input  class="form-control form-control" type="text" name="LabEmail" id="LabEmail" required="required" maxlength="30" style="font-size: 15px;" value="<%if(labdetail!=null){%><%=labdetail.getLabEmail()%><%}%>" disabled ></td>
                </tr>
-     
-      
-     
+
               <tr>
                  <th><label >Unit Pin:<span class="mandatory" style="color: red;">*</span></label></th>
                  <td><input  class="form-control form-control" type="text" name="LabPin" id="LabPin" required="required" maxlength="6" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabPin()%><%}%>" disabled></td>
@@ -134,8 +132,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
                 <th><label >Unit Fax No:<span class="mandatory" style="color: red;">*</span></label></th>
                 <td><input  class="form-control form-control" type="number" name="LabFaxNo" id="LabFaxNo" required="required" maxlength="255" style="font-size: 15px;"  value="<%if(labdetail!=null){%><%=labdetail.getLabFaxNo()%><%}%>" disabled></td>
             </tr>
-      
-      
+
      
              <tr>
                  <th><label >Unit Authority:<span class="mandatory" style="color: red;">*</span></label></th>
@@ -178,7 +175,7 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 	  <button type="button" class="btn btn-sm edit-btn" onclick="EditlabMaster()"  >EDIT</button>
 	  </div>
 	   <div id="Update" align="center" hidden>
-	  <button type="submit"  class="btn btn-sm edit-btn AddItem"  >UPDATE</button>
+	  <button type="submit"  class="btn btn-sm edit-btn AddItem" onclick="return CommentsModel();" >UPDATE</button>
  	  </div>
 	    <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}"  />
 		<input type="hidden" name="LabMasterId" value="<%if(labdetail!=null){%><%=labdetail.getLabMasterId()%><%}%>">
@@ -196,14 +193,21 @@ List<Object[]> labslist = (List<Object[]>)request.getAttribute("labslist");
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					      <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -252,8 +256,11 @@ function EditlabMaster()
 </script>
 
 <script type="text/javascript">
-$(".AddItem").click(function(){ 	
-	 $('#myModal').modal('show');
-});
+function CommentsModel()
+{
+	
+		 $('#myModal').modal('show');
+			return false;
+}
 </script>
 </html>

@@ -178,11 +178,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								<div class="col-3">
 									<b>Ailment/Disease/Accident : </b><%=chssapplydata[17] %>
 								</div>
-								
-								<!-- <div class="col-1">
-									<button type="submit" class="btn btn-sm " style="margin-top: 20px;" Onclick="return confirm ('Are You Sure To Update?');" data-toggle="tooltip" data-placement="top" title="Update"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i></button> 
-								</div> -->
-								
 							</div>
 							<br>
 							<div class="row">
@@ -197,7 +192,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								</div>
 							</div>
 						</div>
-						<b style="margin-bottom: 5px;"><span style="color: blue;">Note : &nbsp;&nbsp;</span><span style="color: red;">Please Update GST and Discount Details without Fail.</span></b>
+						<!-- <b style="margin-bottom: 5px;"><span style="color: blue;">Note : &nbsp;&nbsp;</span><span style="color: red;">Please Update GST and Discount Details without Fail.</span></b> -->
 							<form method="post" action="#" autocomplete="off"  >
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
@@ -207,47 +202,47 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<th style="width:20%;" >Hospital / Medical / Diagnostics Centre Name</th>
 												<th style="width:10%;" >Bill / Receipt No.</th>
 												<th style="width:8%;" >Bill Date</th>
-												<th style="width:10%; text-align: right;">GST Amt (&#8377;)</th>
+												<th style="width:10%; text-align: right;">Paid Amt (&#8377;)</th>
+												<!-- <th style="width:7%; text-align: right;">GST Amt (&#8377;)</th> -->
 												<th style="width:10%; text-align: right;">Discount (&#8377;)</th>
-												<th style="width:10%; text-align: right;">Bill Amt (&#8377;)</th>
-												<th style="width:13%;" >Action  </th>
+												<th style="width:10%; text-align: right;">Discount (%)</th>
+												<th style="width:12%;" >Action  </th>
 											</tr>
 										</thead>
 										<tbody >
 										<%	int sno=0;
 										for(Object[] obj : chssbillslist){
-											sno++;%>
-											
+											sno++;%>											
 											<tr class="" >
-											
 												<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
 												<td> <input type="text" class="form-control items" name="centername-<%=obj[0]%>" value="<%=obj[3] %>" style="width:100%; "  maxlength="500" required="required"></td>
-												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="100" required="required"></td>
+												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="25" required="required"></td>
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
-												<td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>"   value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>"  value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-												<td> <input type="number" class="form-control items cost-only " step=".01" name="billamount-<%=obj[0]%>" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="1" max="9999999" required="required" readonly="readonly"></td>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="finalbillamount-<%=obj[0]%>" id="finalbillamount-<%=obj[0]%>"  onkeyup="enableDiscount('<%=obj[0]%>')" value="<%=obj[7]%>" style="width:100%;text-align: right; " min="1" max="9999999" required="required"></td>
+												<%-- <td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>" id="GSTAmt-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td> --%>
+												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
+												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
 												<td>
-													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Update Bill">														
+													<%if(Double.parseDouble(obj[9].toString())==0){ %>
+													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
 														update
 													</button>
-													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>" data-toggle="tooltip"  data-placement="top" title="Bill Details" >
+													<%} %>
+													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
 														<!-- <i class="fa-solid fa-file-lines"></i> --> Details
 													</button>	
-													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
+													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" >  <!-- data-toggle="tooltip" data-placement="top" title="Delete Bill" -->
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
-													</button>													
+													</button>
 												</td>										
-											</tr>
-											
+											</tr>											
 											<%} %>
 											<%if(sno==0){ %>
 												<tr>
-													<td colspan="8" style="text-align: center ;">
+													<td colspan="9" style="text-align: center ;">
 														Bills Not Added
 													</td>
 												</tr>
-											
 											<%} %>
 										</tbody>							
 										
@@ -269,21 +264,21 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									<tbody>
 										<tr class="" >
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
-											<td style="width:20%;" ><input type="text" class="form-control items " name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
-											<td style="width:10%;" ><input type="text" class="form-control items " name="billno"  value="" style="width:100%;"   maxlength="100" required="required"></td>
-											<td style="width:8%;" ><input type="text" class="form-control billdate " name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
-											<td style="width:10%;" > <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt"   value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-											<td style="width:10%;" > <input type="number" class="form-control items cost-only " step=".01" name="DiscountAmt"  value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-											<td style="width:23%;" >
-												<button type="submit"  class="btn btn-sm add-btn"  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
+											<td style="width:20%;" ><input type="text" class="form-control items" name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
+											<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="25" required="required"></td>
+											<td style="width:8%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="this.select();" onkeyup="enableDiscount('')" value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+											<!-- <td style="width:7%;" > <input type="number" class="form-control items cost-only" step=".01" name="GSTAmt"  id="GSTAmt-"  Onclick="this.select();" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td> -->
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-" Onclick="this.select();"  onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".1" name="DiscountPer" id="DiscountPer-" value="0.0" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td>
+											<td style="width:12%;" >
+												<button type="submit"  class="btn btn-sm add-btn "  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
 									</tbody>	
 								</table>
-							</div>
-						</form>
-						
-			
+								</div>
+							</form>
 					
 					<form action="CHSSFormEdit.htm" method="post" id="form2">
 							<div class="row">
@@ -301,15 +296,11 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										<input type="hidden" name="show-edit" value="N">
 								</div>
 							</div>
-							
-							
-							
 		
 							<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
 							<input type="hidden" name="claimaction" value="F">
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
 					</form>
 					
 					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
@@ -353,17 +344,17 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 		    </div>
 			<div class="modal-body" style="min-height: 30rem;">
 		
-			    <div class="row" >
-			    	<div class="col-2" style="padding: 0px 5px 0px 5px;">
+			   <div class="row" >
+			   		<div class="col-2" style="padding: 0px 5px 0px 5px;">
 				    	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.25);min-height: 28rem;border-radius: 5px;" >
 				    		<a class="nav-link nav-link-btn btn co"  data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
 				    		<a class="nav-link nav-link-btn btn te"  data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests / Procedures</a>
 				    		<a class="nav-link nav-link-btn btn me"  data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" onclick="getOthersDetails()" >Others</a>
-				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" onclick="getmiscData()" >Miscellaneous</a>
+				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" Onclick="getOthersDetails()" >Others</a>
+				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" Onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
 				    	
-				    	<form action="CHSSFormEdit.htm" method="post" id="form2">
+				    	<%-- <form action="CHSSFormEdit.htm" method="post" id="form2">
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
@@ -373,9 +364,9 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F" data-toggle="tooltip" data-placement="top" title="Preview and Forward">
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
-									<%-- <button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
+									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
 										<i class="fa-solid fa-eye"></i>
-									</button> --%>
+									</button>
 									<input type="hidden" name="isapproval" value="N">
 										<input type="hidden" name="show-edit" value="N">
 									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
@@ -384,395 +375,468 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</div>
 							</div>
-						</form>
+						</form> --%>
 				    	
 				    </div>
 			   <div class="col-10" style="padding:0px;  " >
-			   <div class="tab-content card-body " id="nav-tabContent" style="padding: 0px;" >
-<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		   
-			   		<div class="tab-pane fade show active" id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
-			   		
-				   		<div class="col-md-12" >
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<!-- <th style="width:12%;"> Consultation </th> -->
-											<th style="width:30%;">Doctor's Name</th>
-											<th style="width:15%;">Qualification</th>
-											<th style="width:15%;">Consult Date</th>
-											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:8%;" > Action </th>
-										</tr>
-									</thead>
-									<tbody id="consult-list-table">
+				   <div class="tab-content card-body " id="nav-tabContent" style="padding: 0px;" >
+	<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		
+						<div align="center">
+							<%/* String ses-1=(String)request.getParameter("result"); 
+									String ses1=(String)request.getParameter("resultfail"); */
+									if(ses1!=null){ %>
+										<div class="alert alert-danger" role="alert">
+											<%=ses1 %>
+										</div>
 										
-
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
-				   		<div class="col-md-12" id="consult-add-form" >
-				    		<form action="ConsultationBillAdd.htm"  method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<!-- <th style="width:15%;"> Consultation </th> -->
-											<th style="width:30%;">Name of the Doctor</th>
-											<th style="width:20%;">Qualification</th>
-											<th style="width:15%;">Date</th>
-											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-											<!-- <th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-cons" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th> -->
-										</tr>
-									</thead>
-									<tbody>
-										<tr class="tr_clone_cons" >
-											<%-- <td>
-												<select class="form-control w-100" name="consult-type" id="consult-type" required="required" >
-													<%if(consultmain.getCHSSApplyId()==Long.parseLong(chssapplydata[0].toString())){ %>
-													<option value="Fresh">Fresh</option>
-													<%} %>
-													<option value="FollowUp">FollowUp</option>
-												</select>
-											</td> --%>
-											<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
-											<td>
-												<select class="form-control w-100" name="doc-qualification-view" id="doc-qualification" disabled="disabled" >
-													<%int docqual=0;
-													for(CHSSDoctorRates rate:doctorrates ){ %>
-														<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
-													<%} %>
-												</select>
-												<input type="hidden" name="doc-qualification" value=""  id="doc-qualification-val" >
-											</td>
-											<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="cons-charge" id="cons-charge" value="0" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-											<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
-										</tr>
-									</tbody>							
-									
-								</table>
-								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit"  >Add</button>  <!-- onclick="return confirm('Are You Sure To Submit?');"  -->	
-								</div>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						    </form>
-				    	</div>
-				    		
-			   		</div>
-<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->
-<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   	
-			   		<div class="tab-pane fade " id="nav-tests" role="tabpanel" aria-labelledby="nav-tests-tab">
-			   			<div class="col-md-12" >
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<th style="width:35%;">Test / Procedure</th>
-											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > Action </th>
-										</tr>
-									</thead>
-									<tbody id="tests-list-table">
+									<%}if(ses!=null){ %>
 										
-
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
-				   		<div class="col-md-12" >
-				    		<form action="TestsBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:75%;">Test / Procedure</th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-tests"  data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button>  </th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr class="tr_clone_tests"  id="tr_clone_tests">
-											<td style="max-width:35% !important;">
-												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" >
-												
-													<option value="" selected="selected" disabled="disabled">Choose..</option>
-													<%for(CHSSTestSub testsub : testmainlist){ %>
-														<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
-													<% } %>
-												</select>
-											</td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-										<tr class="tr_clone_tests"  id="tr_clone_tests">
-											<td style="max-width:35% !important;">
-												<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" >
-												
-													<option value="" selected="selected" disabled="disabled">Choose..</option>
-													<%for(CHSSTestSub testsub : testmainlist){ %>
-														<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
-													<% } %>
-												</select>
-											</td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-									</tbody>							
-									
-								</table>
-								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit">Add</button>	<!--  onclick="confirm('Are You Sure To Submit?');" -->
-								</div>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						    </form>
-				    	</div>
-			   		</div>
-<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->
-<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->			   		
-			   		<div class="tab-pane fade " id="nav-medicines" role="tabpanel" aria-labelledby="nav-medicines-tab" >
-			   		
-				   		<div class="col-md-12" >
-				   			<div class="row" align="center" style="margin-bottom: 10px;margin-top:5px; ">
-				   				<%if(Long.parseLong(chssapplydata[0].toString())!=consultmain.getCHSSApplyId()){ %>
-				   				<div class="col-12" align="left">
-				   					<span class="btn " style="background-color: #F806CC; color: white;">
-				   					<b>Get Medicines From Previous Consultation of this Doctor:</b> 
-				   					<input type="checkbox" name="" id="old-consult" value="<%=consultmain.getCHSSConsultMainId() %>" onclick="FillMedsList()" >
-				   				</span>
-				   				</div>
-				   				<%} %>
-				   				
-				   			</div>
-				   		
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<th style="width:50%;"> Medicine Name </th>
-											<th style="width:10%;">Rx Qty.</th>
-											<th style="width:10%;">Pur Qty.</th>
-											<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > Action </th>
-										</tr>
-									</thead>
-									<tbody id="meds-list-table">
-										
-
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
-				   		<div class="col-md-12" >
-				    		<form action="MedicinesBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:50%;"> Medicine Name </th>
-											<th style="width:10%;">Rx Qty.</th>
-											<th style="width:10%;">Pur Qty.</th>
-											<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
-											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
-										</tr>
-									</thead>
-									<tbody  id="meds-add-tbody">
-									
-									</tbody>
-									<tbody>
-										<%for(int i=0;i<4;i++){ %>
-										<tr class="tr_clone_meds" >
-											<td>
-												<%if(Integer.parseInt(chssapplydata[7].toString())==1){ %>
-												<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" >
-												<%}else{ %>
-													<select class="form-control selectpicker " name="meds-name"  style="width: 100%" data-live-search="true"  >
-														<option value="" selected="selected" disabled="disabled">Choose..</option>
-														<%for(CHSSMedicinesList medicine : allowedmeds ){ %>
-															<option value="<%=medicine.getMedicineName()%>"><%=medicine.getMedicineName() %></option>
+										<div class="alert alert-success" role="alert">
+											<%=ses %>
+										</div>
+									<%} %>
+								</div>   
+				   		<div class="tab-pane fade show active" id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
+				   			
+					   		<div class="col-md-12" >
+					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:5%;" >SN</th>
+												<!-- <th style="width:12%;"> Consultation </th> -->
+												<th style="width:30%;">Doctor's Name</th>
+												<th style="width:15%;">Qualification</th>
+												<th style="width:15%;">Consult Date</th>
+												<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:8%;" > Action </th>
+											</tr>
+										</thead>
+										<tbody id="consult-list-table">
+											
+	
+										</tbody>
+									</table>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form>
+							</div>
+					   		<div class="col-md-12" id="consult-add-form" >
+					    		<form action="ConsultationBillAdd.htm"  method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<!-- <th style="width:15%;"> Consultation </th> -->
+												<th style="width:30%;">Name of the Doctor</th>
+												<th style="width:20%;">Qualification</th>
+												<th style="width:15%;">Date</th>
+												<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+												<!-- <th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-cons" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th> -->
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="tr_clone_cons" >
+												<%-- <td>
+													<select class="form-control w-100" name="consult-type" id="consult-type" required="required" >
+														<%if(consultmain.getCHSSApplyId()==Long.parseLong(chssapplydata[0].toString())){ %>
+														<option value="Fresh">Fresh</option>
+														<%} %>
+														<option value="FollowUp">FollowUp</option>
+													</select>
+												</td> --%>
+												<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+												<td>
+													<select class="form-control w-100" name="doc-qualification-view" id="doc-qualification" disabled="disabled" >
+														<%int docqual=0;
+														for(CHSSDoctorRates rate:doctorrates ){ %>
+															<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
 														<%} %>
 													</select>
-												<%} %>
-											</td>
-											<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="0" onClick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
-											<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="0" onClick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; "  max="9999999"  ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-										<%} %>
-									</tbody>							
-									
-								</table>
-								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" >Add</button>	 <!--  onclick="return confirm('Are You Sure To Submit?');"  -->
-								</div>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						    </form>
-				    	</div>
-			   			
-			   		</div>
-<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
-<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
-			   		<div class="tab-pane fade " id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
-			   		
-			   			<div class="col-md-12" >
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<th style="width:65%;"> Item Name </th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > Action </th>
-										</tr>
-									</thead>
-									<tbody id="other-list-table">
+													<input type="hidden" name="doc-qualification" value=""  id="doc-qualification-val" >
+												</td>
+												<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
+												<td><input type="number" class="form-control items cost-only co-cost"  step=".01"  name="cons-charge" id="cons-charge" value="0" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+												<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
+											</tr>
+										</tbody>							
 										
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
-				   		<div class="col-md-12" >
-				    		<form action="OtherBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:70%;"> Item</th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-other" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr class="tr_clone_other" >
-											<td>
-												<select class="form-control selectpicker " name="otheritemid" required="required" style="width: 100%" data-live-search="true"  >
-													<option value="" selected="selected" disabled="disabled">Choose..</option>
-													<%for(int k=0 ;k<otheritemslist.size();k++){ %>
-														<option value="<%=otheritemslist.get(k).getOtherItemId() %>"><%=otheritemslist.get(k).getOtherItemName() %></option>
+									</table>
+									<div align="center">
+										<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('co')" >Add</button>  <!-- Onclick="return confirm('Are You Sure To Submit?');"  -->	
+									</div>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid-old" value="<%=consultmain.getCHSSConsultMainId()%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							    </form>
+					    	</div>
+					    		
+				   		</div>
+	<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->
+	<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   	
+				   		<div class="tab-pane fade " id="nav-tests" role="tabpanel" aria-labelledby="nav-tests-tab">
+				   			<div class="col-md-12" >
+					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:5%;" >SN</th>
+												<th style="width:35%;">Test / Procedure</th>
+												<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:10%;" > Action </th>
+											</tr>
+										</thead>
+										<tbody id="tests-list-table">
+											
+	
+										</tbody>
+									</table>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form>
+							</div>
+					   		<div class="col-md-12" >
+					    		<form action="TestsBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:75%;">Test / Procedure</th>
+												<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-tests"  data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button>  </th>
+											</tr>
+										</thead>
+										<tbody>
+											<%for(int i=0;i<2;i++){ %>
+											<tr class="tr_clone_tests"  id="tr_clone_tests">
+												<td style="max-width:35% !important;">
+													<select class="form-control test-type  selectpicker " id="test-type_1" style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" >
+													
+														<option value="" selected="selected" disabled="disabled">Choose..</option>
+														<%for(CHSSTestSub testsub : testmainlist){ %>
+															<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
+														<% } %>
+													</select>
+												</td>
+												<td><input type="number" class="form-control items cost-only te-cost"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
+												<td><button type="button" class="btn btn-sm tbl-row-rem_tests"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											</tr>
+											<%} %>
+										</tbody>							
+										
+									</table>
+									<div align="center">
+										<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('te')">Add</button>	<!--  Onclick="confirm('Are You Sure To Submit?');" -->
+									</div>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							    </form>
+					    	</div>
+				   		</div>
+	<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->
+	<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->			   		
+				   		<div class="tab-pane fade " id="nav-medicines" role="tabpanel" aria-labelledby="nav-medicines-tab" >
+				   		
+					   		<div class="col-md-12" >
+					   			<div class="row" align="center" style="margin-bottom: 10px;margin-top:5px; ">
+					   				<%if(Long.parseLong(chssapplydata[0].toString())!=consultmain.getCHSSApplyId()){ %>
+					   				<div class="col-12" align="left">
+					   					<span class="btn " style="background-color: #F806CC; color: white;">
+					   					<b>Get Medicines From Previous Consultation of this Doctor:</b> 
+					   					<input type="checkbox" name="" id="old-consult" value="<%=consultmain.getCHSSConsultMainId() %>" Onclick="FillMedsList()" >
+					   				</span>
+					   				</div>
+					   				<%} %>
+					   				
+					   			</div>
+					   		
+					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:5%;" >SN</th>
+												<th style="width:50%;"> Medicine Name </th>
+												<th style="width:10%;">Rx Qty.</th>
+												<th style="width:10%;">Pur Qty.</th>
+												<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:10%;" > Action </th>
+											</tr>
+										</thead>
+										<tbody id="meds-list-table">
+											
+	
+										</tbody>
+									</table>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form>
+							</div>
+					   		<div class="col-md-12" >
+					    		<form action="MedicinesBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:50%;"> Medicine Name </th>
+												<th style="width:10%;">Rx Qty.</th>
+												<th style="width:10%;">Pur Qty.</th>
+												<th style="width:20%; text-align: right;">Amount (&#8377;)</th> 
+												<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-meds" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											</tr>
+										</thead>
+										<tbody  id="meds-add-tbody">
+										
+										</tbody>
+										<tbody>
+											<%for(int i=0;i<4;i++){ %>
+											<tr class="tr_clone_meds" >
+												<td>
+													<%if(Integer.parseInt(chssapplydata[7].toString())==1){ %>
+													<input type="text" class="form-control items" name="meds-name" id="meds-name" value="" style="width:100%; "  maxlength="255" >
+													<%}else{ %>
+														<select class="form-control selectpicker " name="meds-name"  style="width: 100%" data-live-search="true"  >
+															<option value="" selected="selected" disabled="disabled">Choose..</option>
+															<%for(CHSSMedicinesList medicine : allowedmeds ){ %>
+																<option value="<%=medicine.getMedicineName()%>"><%=medicine.getMedicineName() %></option>
+															<%} %>
+														</select>
 													<%} %>
-												</select>
-											</td>
-											<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_other"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-									</tbody>							
-									
-								</table>
-								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit">Add</button>	<!--  onclick="return confirm('Are You Sure To Submit?');"  -->
-								</div>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						    </form>
-				    	</div>
-			   			
-			   		</div>
-<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
-<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->	
-			   		<div class="tab-pane fade " id="nav-misc" role="tabpanel" aria-labelledby="nav-misc-tab">
-			   		
-			   			<div class="col-md-12" >
-				    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:5%;" >SN</th>
-											<th style="width:55%;"> Item Name </th>
-											<th style="width:10%; text-align: center; ;">Qty</th>
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
-											<th style="width:10%;" > Action </th>
-										</tr>
-									</thead>
-									<tbody id="misc-list-table">
+												</td>
+												<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items cost-only me-cost"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; "  max="9999999"  ></td>
+												<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											</tr>
+											<%} %>
+										</tbody>							
 										
-
-									</tbody>
-								</table>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</form>
-						</div>
-				   		<div class="col-md-12" >
-				    		<form action="MiscBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
-				    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
-									<thead>
-										<tr>
-											<th style="width:60%;"> Item Name </th>
-											<th style="width:10%; text-align: center; ;">Qty</th> 
-											<th style="width:20%; text-align: right;">Amount  (&#8377;)</th>
-											<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
-										</tr>
-									</thead>
-									<tbody class="tr_other_add">
-										<tr class="tr_clone_misc" >
-											<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
-											<td><input type="number" class="form-control items numberonly" name="misc-count" id="misc-count" value="0" style="width:100%;" min="0" max="999999" required="required" ></td>
-											<td><input type="number" class="form-control items cost-only"  step=".01"  name="misc-cost" id="misc-cost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-											<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
-										</tr>
-									</tbody>			
-								</table>
-								<div align="center">
-									<button type="submit" class="btn btn-sm add-btn" name="action" value="submit" >Add</button>	 <!--  onclick="return confirm('Are You Sure To Submit?');" -->
-								</div>
-								<input type="hidden" class="billid" name="billid" value="">
-								<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-								<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						    </form>
-				    	</div>
-			   			
-			   		</div>
-<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->			   		
-				   </div>
-			   </div>
+									</table>
+									<div align="center">
+										<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('me')" >Add</button>	 <!--  Onclick="return confirm('Are You Sure To Submit?');"  -->
+									</div>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							    </form>
+					    	</div>
+				   			
+				   		</div>
+	<!-- ------------------------------------------------------- medicines --------------------------------------------------- -->
+	<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
+				   		<div class="tab-pane fade " id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab">
+				   		
+				   			<div class="col-md-12" >
+					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:5%;" >SN</th>
+												<th style="width:65%;"> Item Name </th>
+												<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:10%;" > Action </th>
+											</tr>
+										</thead>
+										<tbody id="other-list-table">
+											
+										</tbody>
+									</table>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form>
+							</div>
+					   		<div class="col-md-12" >
+					    		<form action="OtherBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:70%;"> Item</th>
+												<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-other" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="tr_clone_other" >
+												<td>
+													<select class="form-control selectpicker " name="otheritemid" required="required" style="width: 100%" data-live-search="true"  >
+														<option value="" selected="selected" disabled="disabled">Choose..</option>
+														<%for(int k=0 ;k<otheritemslist.size();k++){ %>
+															<option value="<%=otheritemslist.get(k).getOtherItemId() %>"><%=otheritemslist.get(k).getOtherItemName() %></option>
+														<%} %>
+													</select>
+												</td>
+												<td><input type="number" class="form-control items cost-only ot-cost"  step=".01" name="otheritemcost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+												<td><button type="button" class="btn btn-sm tbl-row-rem_other"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											</tr>
+										</tbody>							
+										
+									</table>
+									<div align="center">
+										<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('ot')" >Add</button>	<!--  Onclick="return confirm('Are You Sure To Submit?');"  -->
+									</div>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							    </form>
+					    	</div>
+				   			
+				   		</div>
+	<!-- ------------------------------------------------------- Others --------------------------------------------------- -->	
+	<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->	
+				   		<div class="tab-pane fade " id="nav-misc" role="tabpanel" aria-labelledby="nav-misc-tab">
+				   		
+				   			<div class="col-md-12" >
+					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:5%;" >SN</th>
+												<th style="width:55%;"> Item Name </th>
+												<th style="width:10%; text-align: center; ;">Qty</th>
+												<th style="width:20%; text-align: right;">Amount  (&#8377;)</th> 
+												<th style="width:10%;" > Action </th>
+											</tr>
+										</thead>
+										<tbody id="misc-list-table">
+											
+	
+										</tbody>
+									</table>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form>
+							</div>
+					   		<div class="col-md-12" >
+					    		<form action="MiscBillAdd.htm" method="post" autocomplete="off" style="width: 100%;">
+					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
+										<thead>
+											<tr>
+												<th style="width:60%;"> Item Name </th>
+												<th style="width:10%; text-align: center; ;">Qty</th> 
+												<th style="width:20%; text-align: right;">Amount  (&#8377;)</th>
+												<th style="width:10%;" > <button type="button" class="btn btn-sm tbl-row-add-misc" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+											</tr>
+										</thead>
+										<tbody class="tr_other_add">
+											<tr class="tr_clone_misc" >
+												<td><input type="text" class="form-control items" name="misc-name" id="misc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
+												<td><input type="number" class="form-control items numberonly" name="misc-count" id="misc-count" value="0" style="width:100%;" min="0" max="999999" required="required" ></td>
+												<td><input type="number" class="form-control items cost-only mi-cost"  step=".01"  name="misc-cost" id="misc-cost" value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+												<td><button type="button" class="btn btn-sm tbl-row-rem_misc"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+											</tr>
+										</tbody>			
+									</table>
+									<div align="center">
+										<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('mi')" >Add</button>	 <!--  Onclick="return confirm('Are You Sure To Submit?');" -->
+									</div>
+									<input type="hidden" class="billid" name="billid" value="">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							    </form>
+					    	</div>
+				   			
+				   		</div>
+	<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->			   		
+					 
+					   </div>
+					
+			  </div>
+			  		
+			  
 			  </div>
 			</div>
 		      
+		    <div class="modal-header  w-100">
+		    	<div class="row w-100" >
+		    		<div class="col-md-9">
+		    			<form action="CHSSFormEdit.htm" method="post" id="form2">
+							<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
+								Back	
+							</button>
+							<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F" data-toggle="tooltip" data-placement="top" title="Preview and Forward">
+								<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
+							</button>
+							
+							<input type="hidden" name="isapproval" value="N">
+							<input type="hidden" name="show-edit" value="N">
+							<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
+							<input type="hidden" name="claimaction" value="F">
+							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						</form>
+		    		
+		    		</div>
+		    		<div class="col-md-3" style="float: right;">
+			    		<b>Total  :&nbsp;&nbsp;</b>&#8377;&nbsp;<span id="modal-items-total"></span>
+		    		</div>
+		    	</div>
+		    </div>
 		</div>
 	</div>
 </div>
 
 
-
 <input type="hidden" name="treattype" id="treattypeid" value="<%=chssapplydata[7]%>">
+
+<script type="text/javascript">
+
+function calculateDiscountPer($id)
+{
+	var disAmt = Number($('#DiscountAmt-'+$id).val());
+	var billAmt = Number($('#finalbillamount-'+$id).val());
+	
+	if(billAmt===0 ){
+		$('#DiscountPer-'+$id).val("0.00");
+		$('#DiscountAmt-'+$id).val("0.00");
+	}else{
+		var discPer = (100*disAmt)/(billAmt+disAmt);
+		$('#DiscountPer-'+$id).val(discPer.toFixed(1));
+		
+		$('#DiscountAmt-'+$id).attr('max',billAmt);
+		$('#GSTAmt-'+$id).attr('max',billAmt);
+	}
+}
+
+function enableDiscount($id)
+{
+	var billAmt = $('#finalbillamount-'+$id).val();
+	if(Number(billAmt)>0){
+		$('#DiscountAmt-'+$id).prop("readonly", false);
+		$('#DiscountAmt-'+$id).attr('max',billAmt);
+		calculateDiscountPer($id);
+	}else
+	{
+		$('#DiscountAmt-'+$id).prop("readonly", true);
+		
+	}
+	calculateDiscountPer($id);
+}
+
+
+</script>
+
+
  
 <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
 
 <script type="text/javascript">
 
+var itemstotal = 0;
+var billamount = 0;
 
 var $billdate=new Date();
 var tab = '<%=tab%>';
@@ -797,13 +861,27 @@ function showBillDetails($billid)
 			$('#modal-billno').html(result[2]);
 			$('#modal-centername').html(result[3]);
 			$('#modal-billdate').html(result[4]);
+			/* $('#modal-items-total').html(result[8]+'-'+result[7]+'='+(result[8]-result[7])); */
+			
+			$('#modal-items-total').html(result[8]);
+			itemstotal = Number(result[8]);
+			billamount = result[5]+result[7];
 			$billdate =new Date(result[4]); 
 			if(result[5]!=null){
-				$('#modal-billamount').html(result[5]);
+				$('#modal-billamount').html(result[5]+result[7]);
 			
 			}else{
 				$('#modal-billamount').html('0');
 			}
+			
+			/* if(Number(result[8]-result[7]) < Number(result[5]))
+			{
+				$('.new-item-add-btn').prop('disabled', false);
+				$('.new-item-add-btn').removeAttr('Onclick');
+			}else
+			{
+				$('.new-item-add-btn').prop('disabled', true);
+			} */
 			
 			if(tab=='null'){
 				$('.co').click();
@@ -814,15 +892,48 @@ function showBillDetails($billid)
 			}
 			/* ConsultMainConsultCount($billid); */
 			$('.my-bill-modal').modal('toggle');
-			
-			
-
-			
-			
 		}
 	});
 	
 }
+
+function itemAddEligibleCheck(itemtype)
+{ 
+	var total = 0;
+	$('.'+itemtype+'-cost').each(function(i, obj) {		    
+	    total += Number(obj.value);
+	});
+	if((itemstotal+total)<=billamount){
+		return true;
+	}else
+	{
+		alert('Items Total Cost is Exceeding Bill Amount.\nPlease Check all Details in the Bill');
+		return false;	
+	}
+}
+
+
+
+function itemEditEligibleCheck(itemtype,itemid)
+{ 	
+	var itemoldcost=Number( $('#'+itemtype+'-cost-org-'+itemid).val());
+	var itemnewcost=Number( $('#'+itemtype+'-cost-'+itemid).val());
+	
+	console.log(itemoldcost);
+	console.log(itemnewcost);
+	console.log(itemstotal+itemnewcost-itemoldcost);
+	if((itemstotal+itemnewcost-itemoldcost)<=billamount){
+		return confirm ('Are You Sure To Update ?');
+	}else
+	{
+		alert('Items Total Cost is Exceeding Bill Amount.\nPlease Check all Details in the Bill');
+		return false;	
+	}
+	
+	
+	return false;
+}
+
 
 var $medsAllowedList;
 
@@ -1060,15 +1171,14 @@ function getConsultdata()
 			
 			
 			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required" disabled > ';
-			for(var u=0;u<$docrateslist.length;u++){
-				
+			for(var u=0;u<$docrateslist.length;u++)
+			{				
 				if(Number(consult.DocQualification) === $docrateslist[u].DocRateId)
 				{
 					consultHTMLStr +=	'			<option value="'+$docrateslist[u].DocRateId+'" selected >'+$docrateslist[u].DocQualification+'</option>';
 				}else{
 					consultHTMLStr +=	'			<option value="'+$docrateslist[u].DocRateId+'"  >'+$docrateslist[u].DocQualification+'</option>';										
-				}
-				
+				}				
 			}
 			
 			consultHTMLStr +=	'		</select> ';
@@ -1081,9 +1191,12 @@ function getConsultdata()
 			/* consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'"  value="'+dateString+'" style="width:100%;"  maxlength="10" readonly required="required"></td> '; */
 			consultHTMLStr +=	'	<td><input type="text" class="form-control cons-date " name="cons-date-'+consult.ConsultationId+'" style="width:100%;"  maxlength="10" readonly required="required"></td> ';
 			
-			consultHTMLStr +=	'	<td><input type="number" class="form-control items cost-only "  step=".01"  name="cons-charge-'+consult.ConsultationId+'"  value="'+consult.ConsultCharge+'" style="width:100%;text-align: right; " min="0" max="9999999" required="req uired" ></td> ';
 			consultHTMLStr +=	'	<td>';
-			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			consultHTMLStr +=	'		<input type="number" class="form-control items cost-only "  step=".01"  name="cons-charge-'+consult.ConsultationId+'" id="co-cost-'+consult.ConsultationId+'" value="'+consult.ConsultCharge+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" >';
+			consultHTMLStr +=	'		<input type="hidden" id="co-cost-org-'+consult.ConsultationId+'" value="'+consult.ConsultCharge+'" >';
+			consultHTMLStr +=	'	</td> ';
+			consultHTMLStr +=	'	<td>';
+			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update" Onclick="return itemEditEligibleCheck(\'co\',\''+consult.ConsultationId+'\')"  ><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; /* Onclick="return confirm(\'Are You Sure To Update ?\');" */ 
 			consultHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="consultationid" value="'+consult.ConsultationId+'" formaction="ConsultationBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
 			consultHTMLStr +=	'	</td> ';
 			consultHTMLStr +=	'</tr> ';
@@ -1446,9 +1559,12 @@ function getTestsData()
 			testsHTMLStr +=	'</td>';
 			
 			
-			testsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="test-cost-'+test.CHSSTestId+'"  value="'+test.TestCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="req uired" ></td> ';
 			testsHTMLStr +=	'	<td>';
-			testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testid" value="'+test.CHSSTestId+'" formaction="TestBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			testsHTMLStr +=	'		<input type="number" class="form-control items cost-only"  step=".01"  name="test-cost-'+test.CHSSTestId+'" id="te-cost-'+test.CHSSTestId+'" value="'+test.TestCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" > ';
+			testsHTMLStr +=	'		<input type="hidden" id="te-cost-org-'+test.CHSSTestId+'"  value="'+test.TestCost+'" > ';
+			testsHTMLStr +=	'	</td>';
+			testsHTMLStr +=	'	<td>';
+			testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testid" value="'+test.CHSSTestId+'" formaction="TestBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update" Onclick="return itemEditEligibleCheck(\'te\',\''+test.CHSSTestId+'\')"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			testsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="testid" value="'+test.CHSSTestId+'" formaction="TestBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
 			testsHTMLStr +=	'	</td> ';
 			testsHTMLStr +=	'</tr> ';
@@ -1588,9 +1704,12 @@ function getMedicinesData(){
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.CHSSMedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.CHSSMedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost-'+meds.CHSSMedicineId+'" id="meds-cost" value="'+meds.MedicineCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td>';
-			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			medsHTMLStr +=	'		<input type="number" class="form-control items cost-only"  step=".01"  name="meds-cost-'+meds.CHSSMedicineId+'" id="me-cost-'+meds.CHSSMedicineId+'" value="'+meds.MedicineCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" > ';
+			medsHTMLStr +=	'		<input type="hidden" id="me-cost-org-'+meds.CHSSMedicineId+'" value="'+meds.MedicineCost+'" > ';
+			medsHTMLStr +=	'	</td>';
+			medsHTMLStr +=	'	<td>';
+			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update" Onclick="return itemEditEligibleCheck(\'me\',\''+meds.CHSSMedicineId+'\')" ><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			medsHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="medicineid" value="'+meds.CHSSMedicineId+'" formaction="MedicineBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
 			medsHTMLStr +=	'	</td> ';
 			medsHTMLStr +=	'</tr> ';
@@ -1697,93 +1816,6 @@ function FillMedsList()
 </script>
 <!-- ------------------------------------------------------- medicines script --------------------------------------------------- -->
 
-<!-- ------------------------------------------------------- Miscellaneous script--------------------------------------------------- -->
-<script type="text/javascript">
-
-
-$("table").on('click','.tbl-row-add-misc' ,function() 
-{
-   	var $tr = $('.tr_clone_misc').last('.tr_clone_misc');
-   	var $clone = $tr.clone();
-   	$tr.after($clone);
-   	$clone.find(".items").val("").end();
-
-	
-   	setTooltip();
-   	onlyNumbers();
-  
-});
-
-
-$("table").on('click','.tbl-row-rem_misc' ,function() {
-var cl=$('.tr_clone_misc').length;
-if(cl>1){
-          
-   var $tr = $(this).closest('.tr_clone_misc');
-   var $clone = $tr.remove();
-   $tr.after($clone);
-  
-}
-  
-});
-
-function getmiscData(){
-	
-	var $billid = $('.billid').val();
-	
-	$.ajax({
-
-		type : "GET",
-		url : "ChssMiscListAjax.htm",
-		data : {
-				
-			billid : $billid,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-		var miscVals= Object.keys(result).map(function(e){
-			return result[e]
-		})
-		var miscHTMLStr = '';
-		for(var m=0;m<miscVals.length;m++)
-		{
-			var misc = miscVals[m];
-			
-			
-				miscHTMLStr +=	'<tr> ';
-				miscHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
-				
-				miscHTMLStr +=	' 	<td><input type="text" class="form-control items" name="misc-name-'+misc.ChssMiscId+'"  value="'+misc.MiscItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
-				
-				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-count-'+misc.ChssMiscId+'"  value="'+misc.MiscCount+'" style="width:100%;" min="0" max="9999999" required="required" ></td> ';
-				miscHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01"  name="misc-cost-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td> ';
-				miscHTMLStr +=	'	<td>';
-				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
-				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
-				miscHTMLStr +=	'	</td> ';
-				miscHTMLStr +=	'</tr> ';
-			
-			
-		}
-		
-		if(miscVals.length==0){
-			
-			miscHTMLStr +=	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
-		}
-		
-		$('#misc-list-table').html(miscHTMLStr);
-		
-		setTooltip();
-		onlyNumbers();
-
-		}
-	});
-}
-
-</script>
-<!-- ------------------------------------------------------- Miscellaneous script --------------------------------------------------- -->
-
 <!-- ------------------------------------------------------- Others script --------------------------------------------------- -->
 
 <script type="text/javascript">
@@ -1871,13 +1903,14 @@ function getOthersDetails()
 			otherHTMLStr +=	'					<option value="'+$OtherItemsList[oi].OtherItemId+'"  >'+$OtherItemsList[oi].OtherItemName+'</option> ';
 											}
 										}
-			
 			otherHTMLStr +=	'		</select> ';
 			otherHTMLStr +=	'	</td> ';
 			
-			otherHTMLStr +=	'	<td><input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="req uired" ></td> ';
+			otherHTMLStr +=	'	<td> ';
+			otherHTMLStr +=	'		<input type="number" class="form-control items cost-only"  step=".01" name="otheritemcost-'+other.CHSSOtherId+'" id="ot-cost-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" > ';
+			otherHTMLStr +=	'		<input type="hidden" id="ot-cost-org-'+other.CHSSOtherId+'" value="'+other.OtherItemCost+'"  > ';
 			otherHTMLStr +=	'	<td>';
-			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return confirm(\'Are You Sure To Update ?\');"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return itemEditEligibleCheck(\'ot\',\''+other.CHSSOtherId+'\')"><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
 			otherHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssotherid" value="'+other.CHSSOtherId+'" formaction="OtherBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
 			otherHTMLStr +=	'	</td> ';
 			otherHTMLStr +=	'</tr> ';
@@ -1905,6 +1938,94 @@ function getOthersDetails()
 
 <!-- ------------------------------------------------------- Others script --------------------------------------------------- -->
 
+<!-- ------------------------------------------------------- Miscellaneous script--------------------------------------------------- -->
+<script type="text/javascript">
+
+
+$("table").on('click','.tbl-row-add-misc' ,function() 
+{
+   	var $tr = $('.tr_clone_misc').last('.tr_clone_misc');
+   	var $clone = $tr.clone();
+   	$tr.after($clone);
+   	$clone.find(".items").val("").end();
+
+	
+   	setTooltip();
+   	onlyNumbers();
+  
+});
+
+
+$("table").on('click','.tbl-row-rem_misc' ,function() {
+var cl=$('.tr_clone_misc').length;
+if(cl>1){
+          
+   var $tr = $(this).closest('.tr_clone_misc');
+   var $clone = $tr.remove();
+   $tr.after($clone);
+  
+}
+  
+});
+
+function getmiscData(){
+	
+	var $billid = $('.billid').val();
+	
+	$.ajax({
+
+		type : "GET",
+		url : "ChssMiscListAjax.htm",
+		data : {
+				
+			billid : $billid,
+		},
+		datatype : 'json',
+		success : function(result) {
+		var result = JSON.parse(result);
+		var miscVals= Object.keys(result).map(function(e){
+			return result[e]
+		})
+		var miscHTMLStr = '';
+		for(var m=0;m<miscVals.length;m++)
+		{
+			var misc = miscVals[m];
+			
+			
+				miscHTMLStr +=	'<tr> ';
+				miscHTMLStr +=	'	<td  style="text-align: center;" ><span class="sno" id="sno" >'+ (m+1) +'.</span> </td> ';
+				
+				miscHTMLStr +=	' 	<td><input type="text" class="form-control items" name="misc-name-'+misc.ChssMiscId+'"  value="'+misc.MiscItemName+'" style="width:100%; "  maxlength="255" required="required"></td> ';
+				
+				miscHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="misc-count-'+misc.ChssMiscId+'"  value="'+misc.MiscCount+'" style="width:100%;" min="0" max="9999999" required="required" ></td> ';
+				miscHTMLStr +=	'	<td>';
+				miscHTMLStr +=	'		<input type="number" class="form-control items cost-only"  step=".01"  name="misc-cost-'+misc.ChssMiscId+'" id="mi-cost-'+misc.ChssMiscId+'" value="'+misc.MiscItemCost+'" style="width:100%;text-align: right; " min="1" max="9999999" required="required" >';
+				miscHTMLStr +=	'		<input type="hidden" id="mi-cost-org-'+misc.ChssMiscId+'"  value="'+misc.MiscItemCost+'"  > ';
+				miscHTMLStr +=	'	<td>';
+				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillEdit.htm" data-toggle="tooltip" data-placement="top" title="Update"  Onclick="return itemEditEligibleCheck(\'mi\',\''+misc.ChssMiscId+'\')" ><i class="fa-solid fa-pen-to-square" style="color: #FF7800;" ></i></button>'; 
+				miscHTMLStr +=	'		<button type="submit" class="btn btn-sm" name="chssmiscid" value="'+misc.ChssMiscId+'" formaction="MiscBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm(\'Are You Sure To Delete ?\');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button> ';
+				miscHTMLStr +=	'	</td> ';
+				miscHTMLStr +=	'</tr> ';
+			
+			
+		}
+		
+		if(miscVals.length==0){
+			
+			miscHTMLStr +=	'<tr><td colspan="4" style="text-align: center;"> No Record Found</td></tr> ';
+		}
+		
+		$('#misc-list-table').html(miscHTMLStr);
+		
+		setTooltip();
+		onlyNumbers();
+
+		}
+	});
+}
+
+</script>
+<!-- ------------------------------------------------------- Miscellaneous script --------------------------------------------------- -->
 
 
 

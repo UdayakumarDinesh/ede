@@ -87,7 +87,7 @@
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="Edit"  Onclick="Edit(empForm)" >EDIT </button>
                            <button type="button" class="btn btn-sm delete-btn" name="action" value="Delete" Onclick=" Delete(empForm)" >DELETE </button>
                            <!--  <button type="submit" class="btn btn-sm view-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="Edit(empForm)" >VIEW </button> -->
-						<button type="submit" class="btn btn-sm reset-btn"  name="action" value="ResetPwd" formaction="Resetpassword.htm" Onclick="Edit(empForm)" >RESET PASSWORD </button>
+						<button type="submit" class="btn btn-sm reset-btn"  name="action" value="ResetPwd" formaction="Resetpassword.htm" Onclick="return ResetPwd(empForm)" >RESET PASSWORD </button>
 						</div>
 					</div>
 				</form>	
@@ -100,11 +100,11 @@
 </body>
 <script type="text/javascript">
 
-	function Edit(myfrm) {
+	function Edit(myfrm){
 
 		var fields = $("input[name='loginid']").serializeArray();
 
-		if (fields.length === 0) {
+		if (fields.length === 0){
 			alert("Please Select Atleast One Employee ");
 
 			event.preventDefault();
@@ -112,30 +112,49 @@
 		}
 		return true;
 	}
+	
+	function ResetPwd(myfrm){
 
-	function Delete(myfrm) { 
+		var fields = $("input[name='loginid']").serializeArray();
+
+		if (fields.length === 0){
+			alert("Please Select Atleast One Employee ");
+			event.preventDefault();
+			return false;
+		}else{
+			if(confirm("Are you sure to Submit!")){
+				return true;
+			}else{
+				event.preventDefault();
+				return false;
+			}
+		}
+		
+	}
+
+	function Delete(myfrm){ 
 		
 		var fields = $("input[name='loginid']").serializeArray();
 
-		if (fields.length === 0) {
+		if (fields.length === 0){
 			alert("Please Select Atleast One Employee");
 			event.preventDefault();
 			return false;
 		}
+		
 		var cnf = confirm("Are You Sure To Delete!");
 
-		if (cnf) {
+		if(cnf){
 			
 			document.getElementById("empForm").submit();
 			return true;
 
-		} else {
+		}else{
 			
 			event.preventDefault();
 			return false;
 		}
 	}
-	
 
 </script>
 

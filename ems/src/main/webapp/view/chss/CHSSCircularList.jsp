@@ -94,7 +94,7 @@
 					<div class="row ">
 						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Circulars</span></div>
 					    <div class="col-md-6">
-						    <table>
+						 <%--    <table>
 						    	<tr>
 						    		<td><h6>From Date :&nbsp;&nbsp;</h6></td>
 									<td>							    	
@@ -105,7 +105,7 @@
 										<input type="text" style="width: 100%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
 									</td>
 								</tr>    
-							</table>
+							</table> --%>
 						</div>
 
 					</div>
@@ -144,7 +144,7 @@
 											<%}else{%>--<%}%>
 											</td>
 										</tr>
-										<%if(slno==10){break;} %>
+										
 								<%} }%>
 								</tbody>
 							</table>

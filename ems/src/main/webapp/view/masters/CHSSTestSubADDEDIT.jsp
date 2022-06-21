@@ -15,7 +15,6 @@
 <%
 List<Object[]> main =(List<Object[]>)request.getAttribute("TestMain");
 CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
-
 %>
 
 
@@ -47,8 +46,11 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body main-card  " align="center" >
-
+					<%if(list!=null){ %>
+					<form name="myfrm" action="ChssTestSubEdit.htm" method="POST" id="myfrm1" autocomplete="off" enctype="multipart/form-data" >
+					<%}else{ %>	
 					<form name="myfrm" action="ChssTestSub.htm" method="POST" id="myfrm1" autocomplete="off">
+					<%}%>	
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -109,7 +111,7 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						
-							<%if(list!=null){ %>
+			<%if(list!=null){ %>
 <!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -125,13 +127,20 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -144,8 +153,9 @@ CHSSTestSub list = (CHSSTestSub)request.getAttribute("subdata");
 					  </div>
 					</div>
 			<!----------------------------- container Close ---------------------------->	
-						<%} %>
-				  </form>
+						<%}%>
+						<%if(list!=null){%></form><%}else{ %></form><%} %>
+				  
 				</div>
 	   </div>
 	</div>
@@ -251,7 +261,7 @@ function checkDuplicate1()
 				if(a > 1){					
 					alert("Test Name Already Exist!");
 					retValue = false;
-				}else if(confirm("Are you sure to Submit!")){
+				}else{
 					var $testname = $("#Name").val();
 					
 					if ($mainid =="null" ||  $mainid==null|| $mainid == "" || $mainid == " " ) {

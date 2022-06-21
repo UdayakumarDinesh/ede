@@ -44,8 +44,11 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body  " align="center" >
-
-					<form name="myfrm" action="DesignationAddEdit.htm" method="POST" id="addfrm" autocomplete="off">
+					<%if(desig!=null){ %>
+					<form name="myfrm" action="DesignationEdit.htm" method="POST" id="addfrm" autocomplete="off"  enctype="multipart/form-data" >	
+						<%}else{%>
+					<form name="myfrm" action="DesignationAdd.htm" method="POST" id="addfrm" autocomplete="off"   >	
+						<%}%>
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">								
@@ -60,6 +63,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 											<td><input class="form-control form-control" style="text-transform:capitalize"
 												placeholder=" Enter Designation Name" type="text" name="DesignationName" value="<%if(desig!=null){%> <%=desig.getDesignation()%> <%} %>"
 												required="required" maxlength="255" style="font-size: 15px;" id="designation"></td>
+												
 										</tr>
 										<tr>
 											<th><label>Designation Limit  <i class="fa fa-inr" aria-hidden="true"></i> <span class="mandatory" style="color: red;"> *</span>
@@ -106,12 +110,20 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
-					      		</div>
-					      		</div>
+					        
+						        	<div class="form-inline">
+						        	<div class="form-group">
+						               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+						               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+						      		</div>
+						      		</div>
+					        	
+						        	<div class="form-inline">
+						        	<div class="form-group w-100">
+						               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+						              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
+						      		</div>
+						      		</div>
 					        </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -126,7 +138,11 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 					</div>
 					<!----------------------------- container Close ---------------------------->
 					<%} %>
+					<%if(desig!=null){ %>
 					</form>
+					<%}else{ %>
+					</form>
+					<%} %>
 				</div>
 	   </div>
 	</div>
@@ -161,8 +177,9 @@ function DesignationAddcheck(frmid){
 	var desigcode=$('#desigcode').val();
 	var designation=$('#designation').val();
 	var desigid     =   $('#deisignationid').val();
+	var RateValue=$('#RateValue').val();
 	var count=true;
-	console.log(desigid);
+
 	$.ajax({
 
 		type : "GET",
@@ -176,7 +193,7 @@ function DesignationAddcheck(frmid){
 		datatype : 'json',
 		success : function(result) {
 			var ajaxresult = JSON.parse(result);
-			console.log(ajaxresult);
+			
 			if(ajaxresult[0]>0){
 				alert('Designation Code Already Exists');
 				count = false;
@@ -187,9 +204,13 @@ function DesignationAddcheck(frmid){
 			
 			var ret = confirm('Are you Sure To Submit ?');
 			if(ret){
-				
-				$('#'+frmid).submit();
-				return true;
+				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null" || RateValue=="" || RateValue==null || RateValue=="null"){
+					alert('Enter Data Properly');
+					return false;
+				}else{
+					$('#'+frmid).submit();
+					return true;
+				}	
 				}else{
 					return false;
 				}
@@ -212,8 +233,8 @@ function DesignationEditcheck(frmid){
 	var designation =$('#designation').val();
 	var desigid     =   $('#deisignationid').val();
 	var count=true;
+	var RateValue=$('#RateValue').val();
 	
-	console.log(desigid);
 	$.ajax({
 
 		type : "GET",
@@ -235,15 +256,15 @@ function DesignationEditcheck(frmid){
 				alert('Designation Name Already Exists');
 				count = false;
 			}else if(count){
-			
-			var ret = confirm('Are you Sure To Submit ?');
-			if(ret){
-				
+					
+				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null" || RateValue=="" || RateValue==null || RateValue=="null"){
+					alert('Enter Data Properly');
+					return false;
+				}else{
 				$('#myModal').modal('show');
 				return true;
-				}else{
-					return false;
 				}
+			
 		}else{
 			return false;
 		}

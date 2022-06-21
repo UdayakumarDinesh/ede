@@ -22,6 +22,8 @@ public class MasterEdit implements Serializable {
 	private String TableName;
 	private Long TableRowId;
 	private String Comments;
+	private String FilePath;
+	private String OriginalName;
 	private String CreatedBy;
 	private String CreatedDate;
 }

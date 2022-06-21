@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@page import="java.util.List"%>
+    <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,16 +72,20 @@ List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
-										<th>Select</th>
-										<th>Request Message</th>
-										<th> Response Message </th>
+										<th style="width: 5%;">Select</th>
+										<th style="width: 10%;"> Request Date  &  Time </th>
+										<th style="width: 40%;"> Request Message</th>
+										<th style="width: 10%;"> Response Date  &   Time </th>	
+										<th style="width: 35%;"> Response Message </th>
 									</tr>
 								</thead>
 								<tbody>	
 								<%if(Reqlist!=null){for(Object[] obj:Reqlist){ %>							
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="RequestId" value="<%=obj[0]%>"> </td>
+											<td align="center"> <%if(obj[3]!=null && obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString()) %><br><%=obj[4]%><%}else{%>--<%}%></td>
 											<td> <%=obj[1] %></td>
+											<td align="center"> <%if(obj[5]!=null && obj[6]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString()) %><br><%=obj[6]%><%}else{%>--<%}%></td>
 											<td align="center"><%if(obj[2]!=null){%><%=obj[2]%><%}else{%>--<%}%></td>
 										
 										</tr>	

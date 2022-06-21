@@ -94,42 +94,7 @@
 								    
 								    </div>						 
 								</div>
-								<%if(list!=null){%>
-								<!--------------------------- container ------------------------->
-			<div class="container">
-					
-				<!-- The Modal -->
-				<div class="modal" id="myModal1">
-					 <div class="modal-dialog">
-					    <div class="modal-content">
-					     
-					        <!-- Modal Header -->
-					        <div class="modal-header">
-					          <h4 class="modal-title">The Reason For Edit</h4>
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        </div>
-					        <!-- Modal body -->
-					        <div class="modal-body">
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
-					      		</div>
-					      		</div>
-					        </div>
-					      
-					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					        <!-- Modal footer -->
-					        <div class="modal-footer" >
-					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
-					        </div>
-					       
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					<!----------------------------- container Close ---------------------------->
-					<%} %>
+								
 							  </form>
 						  </div>
 		   			</div>				
@@ -145,7 +110,7 @@
   <div class="modal" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
-      <form action="OtherItemAddEdit.htm" method="post" id="addform" autocomplete="off">
+      <form action="OtherItemAdd.htm" method="post" id="addform" autocomplete="off">
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Other Items Add</h4>
@@ -172,7 +137,52 @@
   </div>
   
 </div>
-
+<%if(list!=null){%>
+								<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal1">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     	<form action="OtherItemEdit.htm" method="POST" id="empForm" autocomplete="off" enctype="multipart/form-data" >	
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					         <div class="modal-body">
+						        	<div class="form-inline">
+						        	<div class="form-group "  >
+						               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+						               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
+						      		</div>
+						      		</div>
+					        	
+						        	<div class="form-inline">
+						        	<div class="form-group w-100">
+						               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+						              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
+						      		</div>
+						      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					         <input type="hidden" id="value1" name="itemid" value=""/>
+					          <input type="hidden" id="value2" name="itemname" value=""/>
+					          <input type="hidden" name="" value=""/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        </div>
+					       </form>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!----------------------------- container Close ---------------------------->
+					<%}%>
 
 <script type="text/javascript">
 $(".AddItem").click(function(){ 
@@ -261,13 +271,15 @@ function checkDuplicateItem(value , itemid)
 				if(a > 0){					
 					alert("Item Already Exist!");
 					retValue= false;
-				}else if(confirm("Are you sure to Submit!")){
+				}else{
 					var $ItemName =document.getElementById(value).value;	
 					
 					if($ItemName.trim()=="null" || $ItemName.trim()==null || $ItemName.trim()==''){
 						alert("Enter Item Name!");
 						retValue= false;
 					}else{
+						$("#value1").val(itemid);
+						$("#value2").val($("#"+value).val());
 						 $('#myModal1').modal('show');
 						 retValue= true;
 					}		

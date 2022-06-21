@@ -91,11 +91,11 @@
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
-										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Contingent No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">View</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
 									</tr>
 								</thead>
 								<tbody>
@@ -129,9 +129,9 @@
 											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Details">
+												<%-- <button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Details">
 													<i class="fa-solid fa-circle-info" style="color: #03C4A1"></i>
-												</button>	
+												</button>	 --%>
 												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	

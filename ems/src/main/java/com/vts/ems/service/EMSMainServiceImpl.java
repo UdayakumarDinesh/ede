@@ -1,8 +1,6 @@
 package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -211,9 +209,25 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
-	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception
+	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception
 	{
-		return dao.EmpHandOverLoginTypeList(empid);
+		List<Object[]> allowedtypes  = dao.LoginLoginType(loginid);
+		allowedtypes.addAll(dao.AllowedLoginTypesList(loginid));		
+		allowedtypes.addAll(dao.EmpHandOverLoginTypeList(empid));		
+		List<String> uniquelist = new ArrayList<String>();
+		for(int i=0;i< allowedtypes.size();i++) 
+		{
+			if(uniquelist.contains(allowedtypes.get(i)[0].toString().trim()))
+			{
+				allowedtypes.remove(i);
+			}
+			else
+			{
+				uniquelist.add(allowedtypes.get(i)[0].toString().trim());
+			}
+		}
+		
+		return allowedtypes;
 	}
 	
 	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{

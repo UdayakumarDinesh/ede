@@ -42,8 +42,11 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body " align="center" >
-
-					<form name="myfrm" action="DoctorAddEdit.htm" method="POST" id="addform" autocomplete="off">
+				<%if(list!=null){%>	
+					<form name="myfrm" action="DoctorEdit.htm" method="POST" id="addform" autocomplete="off" enctype="multipart/form-data" >
+					<%}else{%>
+					<form name="myfrm" action="DoctorAdd.htm" method="POST" id="addform" autocomplete="off">
+						<%}%>
 						<div class="form-group">
 							<div class="table-responsive">
 								<table class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">
@@ -111,14 +114,21 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					          <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					               <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>					      
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -131,8 +141,8 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 					  </div>
 					</div>
 					<!----------------------------- container Close ---------------------------->						
-						<%} %>
-					</form>
+						<%}%>
+					<%if(list!=null){%></form><%}else{%></form><%}%>
 				</div>
 	   </div>
 	</div>
@@ -204,9 +214,28 @@ function checknegative(str) {
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm("Are You Sure To Update!")){
-		 $('#myModal').modal('show');
-	}	
+	var docName = $('#DoctorName').val();
+	var qualification = $('#Qualification').val();
+    var address = $('#address').val();
+    var phoneno = $('#phoneno').val();
+    if(docName=="" || docName=="null" || docName==null){
+    	alert("Enter the Doctor Name!");
+    	return false;
+    }else if(qualification=="" || qualification=="null" || qualification==null){
+    	alert("Enter the Qualification!");
+    	return false;
+    }else if(address=="" || address=="null" || address==null){
+    	alert("Enter the Address!");
+    	return false;
+    }else if(phoneno=="" || phoneno=="null" || phoneno==null){
+    	alert("Enter the Phone Number!");
+    	return false;
+    }else{
+    	$('#myModal').modal('show');
+    	return false;
+    }
+		 
+		
 }
 </script>
 </html>

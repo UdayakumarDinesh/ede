@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
@@ -26,6 +28,7 @@ import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.model.EMSNotification;
@@ -41,7 +44,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
-
+                                                                         
 	
 	@Autowired
 	AdminService service;
@@ -182,36 +185,16 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				logger.info(new Date() +"Inside ChssApproval.htm "+UserId);
 		    	String action = (String)req.getParameter("Action");
 		    	try {
-		    		if("EDIT".equalsIgnoreCase(action)) {
+		    		if("ADD".equalsIgnoreCase(action)) {
 		    			String processing   = (String)req.getParameter("processing");
 		    			String verification = (String)req.getParameter("verification");
 		    			String approving = (String)req.getParameter("approving");
-		    			String id = (String)req.getParameter("AuthId");
-		    			
-		    			if(id!=null) {
-		    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId);
-		    				
-		    				
-		    				String comments = (String)req.getParameter("comments");
-		    		    	   MasterEdit masteredit  = new MasterEdit();
-		    		    	   masteredit.setCreatedBy(UserId);
-		    		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-		    		    	   masteredit.setTableRowId(Long.parseLong(id));
-		    		    	   masteredit.setComments(comments);
-		    		    	   masteredit.setTableName("chss_approve_auth");
-		    		    	   
-		    		    	   masterservice.AddMasterEditComments(masteredit);
-		    				
-		    				if (result != 0) {
-				    			redir.addAttribute("result", "Approving officers updated");
-							} else {
-								redir.addAttribute("resultfail", "Approving officers failed to updated");
-							}
-		    			}else {
+
+		    		
 		    				CHSSApproveAuthority approve = new CHSSApproveAuthority();
 		    				approve.setPO(Long.parseLong(processing));
 		    				approve.setVO(Long.parseLong(verification));
-		    				approve.setAO(Long.parseLong(processing));
+		    				approve.setAO(Long.parseLong(approving));
 		    				approve.setIsActive(1);
 		    				long result = service.AddApprovalAuthority(approve); 
 				    		if (result != 0) {
@@ -219,7 +202,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 							} else {
 								redir.addAttribute("resultfail", "Approving Officers Failed to Save");
 							}
-		    			}
+		    			
 		    	
 		    		return "redirect:/ChssApproval.htm";
 		    		}else {
@@ -235,7 +218,45 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	
 		    }
 		    
-
+		    @RequestMapping(value = "ChssApprovalEdit.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
+		    public String ChssApprovalEdit(HttpSession ses , HttpServletRequest req , @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception{
+		    	String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside ChssApprovalEdit.htm "+UserId);
+		    	try {		    	
+		    		String processing   = (String)req.getParameter("processing");
+	    			String verification = (String)req.getParameter("verification");
+	    			String approving = (String)req.getParameter("approving");
+	    			String id = (String)req.getParameter("AuthId");
+	    			
+	    				int result = service.UpdateApprovalAuth(processing,verification,approving,id,UserId);
+	    					    				
+	    				String comments = (String)req.getParameter("comments");
+	    		    	   MasterEdit masteredit  = new MasterEdit();
+	    		    	   masteredit.setCreatedBy(UserId);
+	    		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    		    	   masteredit.setTableRowId(Long.parseLong(id));
+	    		    	   masteredit.setComments(comments);
+	    		    	   masteredit.setTableName("chss_approve_auth");
+	    		    	   
+	    		    	   MasterEditDto masterdto = new MasterEditDto();
+	    		    	   masterdto.setFilePath(selectedFile); 
+	    		    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    				
+	    				if(result != 0){
+			    			redir.addAttribute("result", "Approving officers updated");
+						}else{
+							redir.addAttribute("resultfail", "Approving officers failed to updated");
+						}
+	    				return "redirect:/ChssApproval.htm";
+				} catch (Exception e) {
+					e.printStackTrace();
+					redir.addAttribute("resultfail", "Internal Error!");
+					return "redirect:/ChssApproval.htm";
+				}
+		    	
+		    }
+    
+		    
 		@RequestMapping(value ="EmpRequestMsg.htm",method= {RequestMethod.GET,RequestMethod.POST})
 		public String EmpRequestMessage(HttpServletRequest req,HttpSession ses,RedirectAttributes redir)throws Exception
 		{
@@ -253,7 +274,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					EmployeeRequest reqMsg = new EmployeeRequest();
 					reqMsg.setRequestMessage(messgae);
 					reqMsg.setEmpId(EmpId);
-					reqMsg.setRequestDate(LocalDate.now().toString());
+					reqMsg.setRequestDate(sdtf.format(new Date()));
 					reqMsg.setCreatedBy(UserId);
 					reqMsg.setCreatedDate(sdtf.format(new Date()));
 					reqMsg.setIsActive(1);

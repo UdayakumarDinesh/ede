@@ -50,7 +50,9 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
         	</div>
 		 <div class="card">
 		 <div class="card-body main-card">
-		 		<form action="DoctorsMaster.htm" method="POST" id="empForm" autocomplete="off">
+		 		
+		 		<form action="DoctorsMasterEdit.htm" method="POST" id="empForm" autocomplete="off"  enctype="multipart/form-data" >
+		 
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<div class="table-responsive">
@@ -92,7 +94,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 							</table>
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>	
-						
+					<%if(doctorlist!=null){ %>	
 							<!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -107,14 +109,21 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					       <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -127,8 +136,9 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 					    </div>
 					  </div>
 					</div>
-					<!----------------------------- container Close ---------------------------->			
-			   </form>
+					<%} %>
+					<!----------------------------- container Close ---------------------------->	
+					</form>		
 		 </div>
 		 </div>
 		 </div>
@@ -136,10 +146,10 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 </body>
 <script type="text/javascript">
 function CommentModel(docId)
-{
-	
-	 $('#myModal').modal('show');
-	 $('#DocRateid').val(docId);
+{	
+		 $('#myModal').modal('show');
+		 $('#DocRateid').val(docId);
+         return false; 
 }
 </script>
 </html>

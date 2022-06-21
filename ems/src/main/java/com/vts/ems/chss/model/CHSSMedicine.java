@@ -23,6 +23,7 @@ public class CHSSMedicine implements Serializable {
 	private Integer PresQuantity;
 	private Integer MedQuantity;
 	private double MedicineCost;
+	private double AmountPaid;
 	private double MedsRemAmount;
 	private String Comments;
 	private Integer IsActive;

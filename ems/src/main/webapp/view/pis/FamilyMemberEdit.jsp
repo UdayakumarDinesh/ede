@@ -45,7 +45,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		
 		<div class="row">
 		<div class="col-3"></div>
-		<form action="EditFamilyDetails.htm" method="POST">
+		<form action="EditFamilyDetails.htm" method="POST" enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card" > 
 		<div class="card-header">
@@ -262,7 +262,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 							  <input type="hidden" name="familyid" value="<%=memberdata.getFamily_details_id()%>"> 
 								<button type="submit" class="btn btn-sm submit-btn AddItem"
 									
-									name="action" value="submit">SUBMIT</button>
+									name="action" value="submit" onclick="return CommentsModel();">SUBMIT</button>
 									</div>
 							</div>
 						</div>
@@ -281,12 +281,19 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 					        </div>
 					        <!-- Modal body -->
 					        <div class="modal-body">
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
-					      		</div>
-					      		</div>
+						        	<div class="form-inline">
+						        	<div class="form-group "  >
+						               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+						               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+						      		</div>
+						      		</div>
+						        	
+						        	<div class="form-inline">
+						        	<div class="form-group w-100">
+						               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+						              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
+						      		</div>
+						      		</div>
 					        </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -308,11 +315,21 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		</div>
 </body>
 <script type="text/javascript">
-$(".AddItem").click(function(){ 
-	
-		 $('#myModal').modal('show');
-});
-
+function CommentsModel()
+{
+	var name = $("#NameTextBox").val();
+	var benid = $("#BenidTextBox").val();
+	if(name==null || name=='' || name=="null" ){
+		alert('Enter the Name!');
+		return false;
+	}else if(benid==null || benid=='' || benid=="null" ){
+		alert('Enter the BenId!');
+		return false;
+	}else{
+		$('#myModal').modal('show');
+	}
+		 
+}
 </script>
 <script type="text/javascript">
 $('#LTC').daterangepicker({
