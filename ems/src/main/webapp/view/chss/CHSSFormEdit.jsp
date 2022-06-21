@@ -336,7 +336,16 @@ th,td
 									<table>
 										<tbody>
 											
-												<tr><td colspan="7" style="text-align: center;padding: 0;"><h4>MEDICAL REIMBURSEMENT DETAILS</h4></td></tr> 
+												<tr>
+													<td colspan="7" style="text-align: center;padding: 0;">
+														<span><h4>MEDICAL REIMBURSEMENT DETAILS </h4></span> 
+														<span style="float: right; margin:3px 3px 0px 0px;">
+														<!-- 	<button type="button" data-toggle="modal" data-target=".my-disc-cal-modal" class="btn- btn-sm" style="float: right;border:0px;background-color:green; ">
+															<i class="fa-solid fa-calculator" style="color: white;"></i>
+															</button> -->
+														</span>
+													</td>
+												</tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
 													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
@@ -720,7 +729,7 @@ th,td
 										</tr>
 																				
 										<tr>
-											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal)) %> Only)</td> 
+											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal -discount)) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -774,6 +783,7 @@ th,td
 				<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 					<form action="CHSSUserForward.htm" method="post" id="fwdform">
 						<div class="row">
+						
 							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
 								<%if(ClaimRemarksHistory.size()>0){ %>
 									<table style="margin: 3px;padding: 0px">
@@ -792,14 +802,9 @@ th,td
 										<%} %>
 									</table>
 								<%} %>
-						
 							</div>
-					
-						
 							
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
-							
-							
 							
 							<%if(chssstatusid!=8 ){ %>
 								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
@@ -899,7 +904,164 @@ th,td
 		</div>
 	</div>
 </div>
-	 
+
+
+ <div class="modal fade my-disc-cal-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
+		<div class="modal-content" >
+			<div class="modal-header" style="background: #F5C6A5 ">
+				<div> <h4> Discount Calculator</h4> </div>
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+			    </button>
+		    </div>
+			<div class="modal-body" style="min-height: 30rem;">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<table class=""  style="max-width: 70% !important;border: 0px;" >
+									<tr>	
+										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 3px;" maxlength="4" onclick="this.select();"></td> 
+										<td style="border: 0px;">Item Cost&nbsp;:&nbsp;</td>
+										<td style="border: 0px;"><input type="radio" value="Y" name="gst-plus" checked="checked"> With GST&nbsp;<input type="radio" value="N" name="gst-plus"> Without GST</td>
+										<td style="border: 0px;">Discount&nbsp;:&nbsp;</td>
+										<td style="border: 0px;"><input type="radio" value="Y" name="disc-gst-plus" checked="checked"> With GST&nbsp;<input type="radio" value="N" name="disc-gst-plus"> Without GST</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="table-responsive">
+					    	<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" style="max-width: 99% !important" >
+								<thead>
+									<tr>
+										<th >Item Cost</th>
+										<th >Quantity</th>
+										<th >GST (%)</th>
+										<th >Inadmissible</th>
+										<th >Item Cost With GST<br>(Exc Disc)</th>
+										<th >Item Cost Without GST<br>(Exc Disc)</th> 
+										<th style="width:5%;"> <button type="button" class="btn btn-sm disc-tbl-row-add" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="tr_clone_disc" >
+										<td ><input type="number"  class="form-control items cost-only disc-item-cost " id="disc-item-cost-1" Onchange="DiscountCalculate(1);" ></td>
+										<td ><input type="number"  class="form-control items numberonly disc-qty-cost " id="disc-qty-1" Onchange="DiscountCalculate(1);" ></td>
+										<td ><input type="number"  class="form-control items cost-only disc-gst-cost" id="disc-gst-1" maxlength="4" Onchange="DiscountCalculate(1);" ></td>
+										<td ><input type="number"  class="form-control items numberonly disc-inadm" id="disc-inadm-1" min="0" max="1" Onchange="DiscountCalculate(1);" ></td>
+										<td ><input type="text"  class="form-control items disc-icwgst " id="disc-icwgst-1" readonly="readonly" Onchange="DiscountCalculate(1);" ></td>
+										<td ><input type="text"  class="form-control items disc-icwogst" id="disc-icwogst-1" readonly="readonly" Onchange="DiscountCalculate(1);" ></td> 
+										<td style="width:5%;"> <button type="button" class="btn btn-sm disc-tbl-row-rem" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		      
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+
+function DiscountCalculate(rowc)
+{
+	var $disc_perc = Number( $('#disc-perc').val() );
+	var $gst_plus =  $("input:radio[name=gst-plus]:checked").val();
+	var $disc_gst_plus = document.querySelector('input[name="disc-gst-plus"]:checked').value;
+	var $no_rows =$('.disc-item-cost').length;
+	
+	/* for(var l=0 ; l<$no_rows ; l++)
+	{
+		var id=
+	} */
+	
+	$('.disc-item-cost').each(function(){
+		var id= $(this).attr("id").split('-')[3];
+		var itemcost = $('#disc-item-cost-'+id).val();
+		
+		
+	});
+	
+}
+
+
+
+
+var $rowcount = 1;
+		$("table").on('click','.disc-tbl-row-add' ,function() 
+		{
+			$rowcount++;
+		   	var $tr = $('.tr_clone_disc').last('.tr_clone_disc');
+		   	var $clone = $tr.clone();
+		    $tr.after($clone);
+		    
+		    /* $clone.find(".disc-item-cost").attr("onclick", 'openMainModal(\''+count+'\',\'a\')').val("").end(); */
+		    $clone.find(".disc-item-cost").prop("id", 'disc-item-cost-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		    $clone.find(".disc-qty-cost").prop("id", 'disc-qty-cost-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		    $clone.find(".disc-gst-cost").prop("id", 'disc-gst-costt-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		    $clone.find(".disc-inadm").prop("id", 'disc-inadm-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		    $clone.find(".disc-icwgst").prop("id", 'disc-icwgst-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		    $clone.find(".disc-icwogst").prop("id", 'disc-icwogst-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
+		   			   			   	
+		  
+		 
+		  	
+		  	onlyNumbers();
+		});
+
+
+		$("table").on('click','.disc-tbl-row-rem' ,function() {
+		var cl=$('.tr_clone_disc').length;
+		if(cl>1){
+		          
+		   var $tr = $(this).closest('.tr_clone_disc');
+		   var $clone = $tr.remove();
+		   $tr.after($clone);
+		  
+		}
+		  
+		});
+
+
+
+
+
+
+
+
+
+/* $('.my-disc-cal-modal').modal('show'); */
+
+onlyNumbers();
+function  onlyNumbers() {    
+	
+ 	$('.numberonly').keypress(function (e) {    
+
+    var charCode = (e.which) ? e.which : event.keyCode    
+
+    if (String.fromCharCode(charCode).match(/[^0-9]/g))    
+
+        return false;                        
+
+		});
+
+ $('.cost-only').keypress( function (evt) {
+
+    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
+    {
+        evt.preventDefault();
+    } 
+    
+});
+ 
+}
+
+
+</script>
 	
 <%if(isapproval!=null && isapproval.equalsIgnoreCase("Y") && logintype.equals("K") && chssapplydata[20].toString().equals("0") ){ %>
 

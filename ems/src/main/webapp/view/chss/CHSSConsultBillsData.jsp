@@ -222,7 +222,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<%-- <td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>" id="GSTAmt-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td> --%>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
 												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
-												
 												<td>
 													<%if(Double.parseDouble(obj[9].toString())==0){ %>
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
@@ -236,8 +235,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
 													</button>
 												</td>										
-											</tr>
-											
+											</tr>											
 											<%} %>
 											<%if(sno==0){ %>
 												<tr>
@@ -245,7 +243,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 														Bills Not Added
 													</td>
 												</tr>
-											
 											<%} %>
 										</tbody>							
 										
@@ -801,11 +798,17 @@ function calculateDiscountPer($id)
 {
 	var disAmt = Number($('#DiscountAmt-'+$id).val());
 	var billAmt = Number($('#finalbillamount-'+$id).val());
-	$('#DiscountAmt-'+$id).attr('max',billAmt);
-	$('#GSTAmt-'+$id).attr('max',billAmt);
 	
-	var discPer = (100*disAmt)/(billAmt+disAmt);
-	$('#DiscountPer-'+$id).val(discPer.toFixed(1));
+	if(billAmt===0 ){
+		$('#DiscountPer-'+$id).val("0.00");
+		$('#DiscountAmt-'+$id).val("0.00");
+	}else{
+		var discPer = (100*disAmt)/(billAmt+disAmt);
+		$('#DiscountPer-'+$id).val(discPer.toFixed(1));
+		
+		$('#DiscountAmt-'+$id).attr('max',billAmt);
+		$('#GSTAmt-'+$id).attr('max',billAmt);
+	}
 }
 
 function enableDiscount($id)
@@ -820,7 +823,7 @@ function enableDiscount($id)
 		$('#DiscountAmt-'+$id).prop("readonly", true);
 		
 	}
-	
+	calculateDiscountPer($id);
 }
 
 
@@ -831,8 +834,6 @@ function enableDiscount($id)
 <!-- -------------------------------------------------------modal script --------------------------------------------------- -->
 
 <script type="text/javascript">
-
-
 
 var itemstotal = 0;
 var billamount = 0;
@@ -891,8 +892,6 @@ function showBillDetails($billid)
 			}
 			/* ConsultMainConsultCount($billid); */
 			$('.my-bill-modal').modal('toggle');
-			
-			
 		}
 	});
 	
