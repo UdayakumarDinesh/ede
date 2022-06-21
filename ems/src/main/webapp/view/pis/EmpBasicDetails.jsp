@@ -157,14 +157,14 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	                         <th>UID</th>
 						</tr>
 						<tr>
-						<td><%=employeedetails[22]%></td>
-				     	<td><%=employeedetails[23]%>(<%=employeedetails[24] %>)</td>
-						<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%></td>
-					    <td><%=employeedetails[14]%></td>
-						<td><%=employeedetails[15]%></td>
+						<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
+				     	<td><%if(employeedetails[23]!=null||employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
+						<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
+					    <td><%if(employeedetails[14]!=null){%><%=employeedetails[14]%><%}else{%>--<%}%></td>
+					    <td><%if(employeedetails[15]!=null){%><%=employeedetails[15]%><%}else{%>--<%}%></td>
 						
 						</tr>
-						<%if(!"A".equalsIgnoreCase(LoginType)){ %>
+						<%if(!"P".equalsIgnoreCase(LoginType)){ %>
 					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
 					
 					<form action="EmpRequestMsg.htm" method="GET">
@@ -238,14 +238,14 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td> <b>Gender</b> </td>
 							<td>
-								<%if(employeedetails[9].toString().equalsIgnoreCase("M")){ %>
+								<%if(employeedetails[9]!=null || employeedetails[9].toString().equalsIgnoreCase("M")){ %>
 									Male
-								<%}else if(employeedetails[9].toString().equalsIgnoreCase("F")){ %>
+								<%}else if(employeedetails[9]!=null || employeedetails[9].toString().equalsIgnoreCase("F")){ %>
 									Female
-								<%} %> 
+								<%}else{%>--<%}%> 
 							</td>
 							<td> <b>Group</b> </td>
-							<td><%=employeedetails[25] %>(<%=employeedetails[26] %>)</td>
+							<td><%if(employeedetails[25]!=null || employeedetails[26]!=null){%><%=employeedetails[25] %>(<%=employeedetails[26] %>) <%}else{%>--<%}%></td>
 							<td> <b>PAN</b> </td>
 							<td><%if(employeedetails[13]!=null){ %><%=employeedetails[13].toString().toUpperCase()%><%}else{%>--<%}%></td>
 						</tr>
@@ -253,36 +253,36 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 						<tr>
 							<td> <b>DOJ</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[6].toString())%></td>
+							<td><%if(employeedetails[6]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[6].toString())%><%}else{%>--<%}%></td>
 							<td> <b>DOR</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString())%></td>
-							<td> <b>Phone No</b> </td>
-							<td><%=employeedetails[30].toString()%></td>
+							<td><%if(employeedetails[8]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString())%><%}else{%>--<%}%></td>
+							<td> <b>Mobile No</b> </td>
+							<td><%if(employeedetails[30]!=null){%><%=employeedetails[30].toString()%><%}else{%>--<%}%></td>
 							
 						</tr>
 						
 						<tr>
-							<td> <b>Email</b> </td>
-							<td><%=employeedetails[16] %></td>
-							<td> <b>PayLevel</b> </td>
-							<td><%=employeedetails[31] %></td>
+							<td> <b>Internal Email</b> </td>
+							<td><%if(employeedetails[16]!=null){%><%=employeedetails[16]%><%}else{%>--<%}%></td>
+							<td> <b>Extension No</b> </td>
+							<td><%if(employeedetails[32]!=null){%><%=employeedetails[32]%><%}else{%>--<%}%></td>
 							<td> <b>Marital Status</b> </td>
 							<td>
-								<%if(employeedetails[11].toString().equalsIgnoreCase("M")){ %>
+								<%if(employeedetails[11]!=null || (employeedetails[11]+"").equalsIgnoreCase("M")){ %>
 									Married
-								<%}else if(employeedetails[11].toString().equalsIgnoreCase("U")){ %>
+								<%}else if(employeedetails[11]!=null || (employeedetails[11]+"").equalsIgnoreCase("U")){ %>
 									UnMarried
-								<%} %> 
+								<%}else{%>--<%}%> 
 							</td>
 						</tr>
 						
 						<tr>
 							<td> <b>SBI AccNo.</b> </td>
-							<td><%=employeedetails[20] %></td>
+							<td><%if(employeedetails[20]!=null){%><%=employeedetails[20]%><%}else{%>--<%}%></td>
 							<td> <b>Blood Group</b> </td>
-							<td><%if(employeedetails[10]!=null){%><%=employeedetails[10] %><%}else{%>--<%}%></td>
+							<td><%if(employeedetails[10]!=null){%><%=employeedetails[10]%><%}else{%>--<%}%></td>
 							<td> <b>Home Town</b> </td>
-							<td><%=employeedetails[27] %></td>
+							<td><%if(employeedetails[27]!=null){%><%=employeedetails[27]%><%}else{%>--<%}%></td>
 						</tr>
 					</tbody>
 				</table>
@@ -305,28 +305,29 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 						<tr>
 							<td > <b>Per Address</b> </td>
-							<td colspan="3"><%=Perdetails[6]%></td>
+							<td colspan="3"><%if(Perdetails[6]!=null){%><%=Perdetails[6]%><%}else{%>--<%}%></td>
 							<td><b>City</b> </td>
-							<td><%=Perdetails[1]%></td>
+							<td><%if(Perdetails[1]!=null){%><%=Perdetails[1]%><%}else{%>--<%}%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-						    <td><%=Perdetails[5]%></td>
+						    <td><%if(Perdetails[5]!=null){%><%=Perdetails[5]%><%}else{%>--<%}%></td>
 							<td> <b>State</b> </td>
-					    	<td><%=Perdetails[8]%></td>
+					    	<td><%if(Perdetails[8]!=null){%><%=Perdetails[8]%><%}else{%>--<%}%></td>
 							<td> <b>From_Per_Address</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(Perdetails[2].toString())%></td>
+							<td><%if(Perdetails[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(Perdetails[2].toString())%><%}else{%>--<%}%></td>
+							
 						</tr>
 						
 						<tr>
 							<td> <b>Alt_Mobile</b> </td>
-							<td><%=Perdetails[0]%></td>
+							<td><%if(Perdetails[0]!=null){%><%=Perdetails[0]%><%}else{%>--<%}%></td>
 							<td> <b>Landline</b> </td>
-							<td><%=Perdetails[4]%></td>
+							<td><%if(Perdetails[4]!=null){%><%=Perdetails[4]%><%}else{%>--<%}%></td>
 							<td> <b>Pin</b> </td>
-							<td><%=Perdetails[7]%></td>
+							<td><%if(Perdetails[7]!=null){%><%=Perdetails[7]%><%}else{%>--<%}%></td>
 						</tr>
 						
 					
@@ -366,28 +367,28 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 						<tr>
 						<td > <b>Res Address</b> </td>
-							<td colspan="3"><%=O[5]%></td>
+							<td colspan="3"><%if(O[5]!=null){%><%=O[5]%><%}else{%>--<%}%></td>
 							<td><b>City</b> </td>
-							<td><%=O[1]%></td>
+							<td><%if(O[1]!=null){%><%=O[1]%><%}else{%>--<%}%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-							<td><%=O[4]%></td>
+							<td><%if(O[4]!=null){%><%=O[4]%><%}else{%>--<%}%></td>
 							<td> <b>State</b> </td>
-							<td><%=O[7]%></td>
+							<td><%if(O[7]!=null){%><%=O[7]%><%}else{%>--<%}%></td>
 							<td> <b>From_Res_Address</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%></td>
+							<td><%if(O[2]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>
 						</tr>
 						
 						<tr>
 							<td><b>Alt_Mobile</b></td>
-							<td><%=O[0]%></td>
+							<td><%if(O[0]!=null){%><%=O[0]%><%}else{%>--<%}%></td>
 							<td><b>Landline</b></td>
-							<td><%=O[3]%></td>
+							<td><%if(O[3]!=null){%><%=O[3]%><%}else{%>--<%}%></td>
 							<td><b>Pin</b></td>
-							<td><%=O[6]%></td>
+							<td><%if(O[6]!=null){%><%=O[6]%><%}else{%>--<%}%></td>
 						</tr>
 						
 					<%}%>
@@ -422,28 +423,28 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 						<tr>
 						<td > <b>Next kin Address</b> </td>
-							<td colspan="3"><%=Nextdetails[6]%></td>
+							<td colspan="3"><%if(Nextdetails[6]!=null){%><%=Nextdetails[6]%><%}else{%>--<%}%></td>
 							<td><b>City</b> </td>
-							<td><%=Nextdetails[1]%></td>
+							<td><%if(Nextdetails[1]!=null){%><%=Nextdetails[1]%><%}else{%>--<%}%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-							<td><%=Nextdetails[5]%></td>
+							<td><%if(Nextdetails[5]!=null){%><%=Nextdetails[5]%><%}else{%>--<%}%></td>
 							<td> <b>State</b> </td>
-							<td><%=Nextdetails[8]%></td>
+							<td><%if(Nextdetails[8]!=null){%><%=Nextdetails[8]%><%}else{%>--<%}%></td>
 							<td> <b>From_Res_Address</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(Nextdetails[2].toString())%></td>
+							<td><%if(Nextdetails[8]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(Nextdetails[8].toString())%><%}else{%>--<%}%></td>
 						</tr>
 						
 						<tr>
 							<td> <b>Alt_Mobile</b> </td>
-							<td><%=Nextdetails[0]%></td>
+							<td><%if(Nextdetails[0]!=null){%><%=Nextdetails[0]%><%}else{%>--<%}%></td>
 							<td> <b>Landline</b> </td>
-							<td><%=Nextdetails[4]%></td>
+							<td><%if(Nextdetails[4]!=null){%><%=Nextdetails[4]%><%}else{%>--<%}%></td>
 							<td> <b>Pin</b> </td>
-							<td><%=Nextdetails[7]%></td>
+							<td><%if(Nextdetails[7]!=null){%><%=Nextdetails[7]%><%}else{%>--<%}%></td>
 						</tr>		
 					</tbody>
 				</table>
@@ -476,28 +477,28 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 							<tr>
 						<td > <b>Emergency Address</b> </td>
-							<td colspan="3"><%=Emecdetails[6]%></td>
+							<td colspan="3"><%if(Emecdetails[6]!=null){%><%=Emecdetails[6]%><%}else{%>--<%}%></td>
 							<td><b>City</b> </td>
-							<td><%=Emecdetails[1]%></td>
+							<td><%if(Emecdetails[1]!=null){%><%=Emecdetails[1]%><%}else{%>--<%}%></td>
 						</tr>
 						
 						
 						<tr>
 							<td> <b>Mobile</b> </td>
-							<td><%=Emecdetails[5]%></td>
+							<td><%if(Emecdetails[5]!=null){%><%=Emecdetails[5]%><%}else{%>--<%}%></td>
 							<td> <b>State</b> </td>
-							<td><%=Emecdetails[8]%></td>
+							<td><%if(Emecdetails[8]!=null){%><%=Emecdetails[8]%><%}else{%>--<%}%></td>
 							<td> <b>From_Emec_Address</b> </td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(Emecdetails[2].toString())%></td>
+							<td><%if(Emecdetails[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(Emecdetails[2].toString())%><%}else{%>--<%}%></td>
 						</tr>
 						
 						<tr>
 							<td> <b>Alt_Mobile</b> </td>
-							<td><%=Emecdetails[0]%></td>
+							<td><%if(Emecdetails[0]!=null){%><%=Emecdetails[0]%><%}else{%>--<%}%></td>
 							<td> <b>Landline</b> </td>
-						    <td><%=Emecdetails[4]%></td>
+						    <td><%if(Emecdetails[4]!=null){%><%=Emecdetails[4]%><%}else{%>--<%}%></td>
 							<td> <b>Pin</b> </td>
-							<td><%=Emecdetails[7]%></td>
+							<td><%if(Emecdetails[7]!=null){%><%=Emecdetails[7]%><%}else{%>--<%}%></td>
 						</tr>	
 						
 					
@@ -553,9 +554,9 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							
 						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
 						<tr>
-							<td><%=O[0]%></td>
-							<td><%=O[1]%></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%></td>
+							<td><%if(O[0]!=null){%><%=O[0]%><%}else{%>--<%}%></td>
+							<td><%if(O[1]!=null){%><%=O[1]%><%}else{%>--<%}%></td>
+							<td><%if(O[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>
 						  <%--   <td><%=O[3]%></td>
 							<td><%=O[4]%></td> --%>
 						

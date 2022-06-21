@@ -46,7 +46,11 @@
 		
 		<div class="row">
 		<div class="col-2"></div>
-		<form action="NextKinAddAddressDetails.htm" method="POST" autocomplete="off">
+		<%if(nextkin!=null){%>
+		<form action="NextKinEditAddressDetails.htm" method="POST" autocomplete="off" enctype="multipart/form-data" >
+		<%}else{%>
+		<form action="NextKinAddAddressDetails.htm" method="POST" autocomplete="off"  >
+		<%}%>
 		<input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card"  style="width: 140%;"> 
@@ -146,7 +150,7 @@
 							 <div class="form-group">
 							<%if(nextkin!=null){ %>
 							<input type="hidden" name="addressId" value="<%=nextkin.getAddress_kin_id()%>">
-				<button type="submit" class="btn btn-sm submit-btn AddItem"	 name="action" value="submit">SUBMIT</button>
+				<button type="submit" class="btn btn-sm submit-btn AddItem"	 name="action" value="submit" onclick="return CommentsModel();">SUBMIT</button>
 									<%}else{%>
 				<button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="ADD">SUBMIT</button>
 									<%}%>
@@ -155,7 +159,7 @@
 							</div>
 						 </div> 
 					</div>	
-					
+					<%if(nextkin!=null){ %>
 					<!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -170,14 +174,21 @@
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					      <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" required="required" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -189,17 +200,23 @@
 					    </div>
 					  </div>
 					</div>
+					<%}%>
 					<!----------------------------- container Close ---------------------------->
-			
-			</form>
+			<%if(nextkin!=null){%></form>
+			<%}else{%></form><%}%>
 		</div>
 		</div>				
 		</div>
 </body>
 <script type="text/javascript">
-$(".AddItem").click(function(){ 	
-	 $('#myModal').modal('show');
-});
+function CommentsModel()
+{
+	if(confirm('Are you sure to submit')){
+		 $('#myModal').modal('show');
+	}else{
+		return false;
+	}
+}
 </script>
 <script type="text/javascript">
 $('.mydate').daterangepicker({

@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,6 +26,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dao.MasterDao;
 import com.vts.ems.master.dto.CircularListDto;
+import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
@@ -40,6 +43,8 @@ public class MasterServiceImpl implements MasterService {
 	@Value("${Circular_Files}")
 	private String CircularFilePath;
 	
+	@Value("${EMSFilesPath}")
+	private String emsfilespath;
 	
 	@Override
 	public List<Object[]> OtherItems() throws Exception 
@@ -411,6 +416,7 @@ public class MasterServiceImpl implements MasterService {
     	    circularlist.setCircularDate(circular.getCircularDate());
     	    circularlist.setToDate(circular.getToDate());
     	    circularlist.setDescription(circular.getDescription());
+    	    circularlist.setReferenceNo(circular.getReferenceNo());
     	    circularlist.setModifiedBy(circular.getModifiedBy());
     	    circularlist.setModifiedDate(circular.getModifiedDate());
             return dao.EditCircular(circularlist);
@@ -449,8 +455,21 @@ public class MasterServiceImpl implements MasterService {
 		}
 		
 		@Override
-		public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
+		public Long AddMasterEditComments(MasterEdit masteredit , MasterEditDto masterdto )throws Exception
 		{
+			Timestamp instant= Timestamp.from(Instant.now());
+			String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
+			
+			   if(!masterdto.getFilePath().isEmpty()) {
+					String name =masterdto.getFilePath().getOriginalFilename();
+					String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
+					String filepath=emsfilespath+"MastersEditFilePath";
+							
+					masteredit.setFilePath(filepath+File.separator+filename);
+					masteredit.setOriginalName(name);
+				    saveFile(filepath , filename, masterdto.getFilePath());
+					
+				}	
 			return dao.AddMasterEditComments(masteredit);
 		}
 }

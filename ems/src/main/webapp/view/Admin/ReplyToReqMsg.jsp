@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="java.util.* ,java.time.LocalDate"%>
     <%@ page import="java.time.format.DateTimeFormatter" %>
+    <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -88,11 +89,13 @@ String todate  =  (String)request.getAttribute("todate");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
-										<th style="width: 5%;">  SlNo</th>
+										<th style="width: 5%;">  SlNo </th>
+										<th style="width: 10%;"> Request Date  &  Time </th>
 										<th style="width: 10%;"> Request From     </th>
-										<th style="width: 45%;"> Request Message  </th>										
-										<th style="width: 35%;"> Response Message </th>
-										<th style="width: 10%;"> Action           </th>
+										<th style="width: 40%;"> Request Message  </th>	
+										<th style="width: 10%;"> Response Date  &   Time </th>									
+										<th style="width: 40%;"> Response Message  </th>
+										<th style="width: 10%;"> Action            </th>
 									</tr>
 								</thead>
 								<tbody>	
@@ -102,8 +105,10 @@ String todate  =  (String)request.getAttribute("todate");
 								%>							
 										<tr>
 											<td style="text-align: center;"><%=++slno%></td>
+											<td align="center"> <%if(obj[5]!=null && obj[6]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString()) %><br><%=obj[6]%><%}else{%>--<%}%></td>
 											<td><input type="hidden" id="employeeid" name="<%=employeeid%>" value="<%=obj[4]%>"> <%=obj[1] %></td>
 											<td align="left"><%=obj[2]%></td>		
+											<td align="center"><%if(obj[7]!=null && obj[7]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[7].toString()) %><br><%=obj[8]%><%}else{%>--<%}%></td>
 											<td> <textarea class="form-control"  name="<%=respose%>"  rows="5" cols="60" required="required"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
 											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" name="action" value="<%=obj[0]%>" onclick="return confirm('Are You Sure To Submit!')">SUBMIT</button><%}%></td>		
 										</tr>	

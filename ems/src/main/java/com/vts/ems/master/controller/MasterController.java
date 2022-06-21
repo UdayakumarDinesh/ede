@@ -36,6 +36,7 @@ import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dto.CircularListDto;
+import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
@@ -118,43 +119,7 @@ public class MasterController {
 					return "masters/CHSSTestSubADDEDIT";
 					
 				 }else {
-					 
-					 if(req.getParameter("SubId")!=null){
-						 //Test Edit code 
-						 String testmain =(String)req.getParameter("Main");
-					 	 String testName =(String)req.getParameter("Name");
-					 	 String Rate     =(String)req.getParameter("Rate");
-					 	 String subid    =(String)req.getParameter("SubId");
-					 	 String testcode =(String)req.getParameter("TestCode");
-					 	CHSSTestSub  sub = new CHSSTestSub();
-					 	 	sub.setTestSubId(Long.parseLong(subid));
-						 	sub.setTestRate(Integer.parseInt(Rate)); 
-						 	sub.setTestName(WordUtils.capitalizeFully(testName.trim())); 
-						 	sub.setTestMainId(Long.parseLong(testmain));				 	 
-						 	sub.setModifiedDate(sdtf.format(new Date()));
-						 	sub.setModifiedBy(UserId);
-						 	sub.setTestCode(testcode);
-						 	long result =service.EditTestSub(sub);
-						 	
-						 	String comments = (String)req.getParameter("comments");
-					    	   MasterEdit masteredit  = new MasterEdit();
-					    	   masteredit.setCreatedBy(UserId);
-					    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-					    	   masteredit.setTableRowId(Long.parseLong(subid));
-					    	   masteredit.setComments(comments);
-					    	   masteredit.setTableName("chss_test_sub");
-					    	   
-					    	   service.AddMasterEditComments(masteredit);
 
-						 	
-						 	if (result != 0) {
-								redir.addAttribute("result", "Test details Updated");
-							} else {
-								redir.addAttribute("resultfail", "Test details Failed to Update");
-							}
-						return "redirect:/TestSub.htm";
-					 	 
-					 }else {
 						//Test Add code 
 					 	String testmain =(String)req.getParameter("Main");
 					 	String testName =(String)req.getParameter("Name");
@@ -175,10 +140,7 @@ public class MasterController {
 							redir.addAttribute("resultfail", "Test details Failed to save");
 						}
 					return "redirect:/TestSub.htm";
-					 }
-				 } 
-				 
-				
+					 }		
 	       }catch(Exception e){
 	    	   redir.addAttribute("resultfail", "Internal Error!");
 	    	   e.printStackTrace();
@@ -187,43 +149,69 @@ public class MasterController {
 			
 	    }
 	    
-	    @RequestMapping(value = "OtherItemAddEdit.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
-	    public String OtherItemAddEdit(HttpSession ses ,HttpServletRequest req , RedirectAttributes redir)throws Exception
+	    @RequestMapping(value="ChssTestSubEdit.htm" , method=RequestMethod.POST)
+	    public String ChssTestSubEdit(HttpSession ses, HttpServletRequest req,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
 	    {
-   	
 	    	String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside OtherItemAddEdit.htm "+UserId);
-			try {	
-			if (req.getParameter("item")!=null) {
+			logger.info(new Date() +"Inside ChssTestSubEdit.htm "+UserId);
+			try {
 				
-						String itemid   = (String)req.getParameter("item");	
-						String name = "ItemName"+itemid;
-						String itemname = (String)req.getParameter(name);
-						CHSSOtherItems item = new CHSSOtherItems();
-					
-						item.setOtherItemId(Integer.parseInt(itemid));
-						item.setModifiedDate(sdtf.format(new Date()));
-						item.setModifiedBy(UserId);
-						item.setOtherItemName(WordUtils.capitalizeFully(itemname.trim()));
-						int result = service.EditItem(item);
-						
-						String comments = (String)req.getParameter("comments");
+					 //Test Edit code 
+					 String testmain =(String)req.getParameter("Main");
+				 	 String testName =(String)req.getParameter("Name");
+				 	 String Rate     =(String)req.getParameter("Rate");
+				 	 String subid    =(String)req.getParameter("SubId");
+				 	 String testcode =(String)req.getParameter("TestCode");
+				 	CHSSTestSub  sub = new CHSSTestSub();
+				 	 	sub.setTestSubId(Long.parseLong(subid));
+					 	sub.setTestRate(Integer.parseInt(Rate)); 
+					 	sub.setTestName(WordUtils.capitalizeFully(testName.trim())); 
+					 	sub.setTestMainId(Long.parseLong(testmain));				 	 
+					 	sub.setModifiedDate(sdtf.format(new Date()));
+					 	sub.setModifiedBy(UserId);
+					 	sub.setTestCode(testcode);
+					 	long result =service.EditTestSub(sub);
+					 	
+					 	String comments = (String)req.getParameter("comments");
 				    	   MasterEdit masteredit  = new MasterEdit();
 				    	   masteredit.setCreatedBy(UserId);
 				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-				    	   masteredit.setTableRowId(Long.parseLong(itemid));
+				    	   masteredit.setTableRowId(Long.parseLong(subid));
 				    	   masteredit.setComments(comments);
-				    	   masteredit.setTableName("chss_other_items");
+				    	   masteredit.setTableName("chss_test_sub");
 				    	   
-				    	   service.AddMasterEditComments(masteredit);
+				    	   MasterEditDto masterdto = new MasterEditDto();
+				    	   masterdto.setFilePath(selectedFile);
+				    	   service.AddMasterEditComments(masteredit , masterdto);
+
 					 	if (result != 0) {
-							redir.addAttribute("result", "Item Edited Successful");
+							redir.addAttribute("result", "Test details Updated");
 						} else {
-							redir.addAttribute("resultfail", "Item Edited UnSuccessful");
+							redir.addAttribute("resultfail", "Test details Failed to Update");
 						}
-						return "redirect:/OtherItems.htm";
-				 	
-				}else{
+					return "redirect:/TestSub.htm";
+				 	 
+				 
+			} catch (Exception e) {
+				 redir.addAttribute("resultfail", "Internal Error!");
+		    	   e.printStackTrace();
+				return "redirect:/TestSub.htm";
+			}
+	    }
+	    
+	    
+	    
+	    
+	    
+	    
+	    @RequestMapping(value = "OtherItemAdd.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
+	    public String OtherItemAdd(HttpSession ses ,HttpServletRequest req , RedirectAttributes redir)throws Exception
+	    {
+   	
+	    	String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside OtherItemAdd.htm "+UserId);
+			try {	
+		
 				
 					String itemname = (String)req.getParameter("ItemName");
 					
@@ -240,8 +228,57 @@ public class MasterController {
 						redir.addAttribute("resultfail", "Item Added UnSuccessful");
 					}
 				 	return "redirect:/OtherItems.htm";
-				}
+				
 				 
+			}catch (Exception e) {
+				redir.addAttribute("resultfail", "Internal Error!");
+				e.printStackTrace();
+				return "redirect:/OtherItems.htm";
+			}
+			
+	    }
+	    
+	    @RequestMapping(value = "OtherItemEdit.htm" ,method= {RequestMethod.POST,RequestMethod.GET})
+	    public String OtherItemEdit(HttpSession ses ,HttpServletRequest req ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
+	    {
+   	
+	    	String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside OtherItemEdit.htm "+UserId);
+			try {	
+			if (req.getParameter("itemid")!=null) {
+				
+						String itemid   = (String)req.getParameter("itemid");	
+
+						String itemname = (String)req.getParameter("itemname");
+						CHSSOtherItems item = new CHSSOtherItems();
+
+						item.setOtherItemId(Integer.parseInt(itemid));
+						item.setModifiedDate(sdtf.format(new Date()));
+						item.setModifiedBy(UserId);
+						item.setOtherItemName(WordUtils.capitalizeFully(itemname.trim()));
+						int result = service.EditItem(item);
+						
+						String comments = (String)req.getParameter("comments");
+						
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(itemid));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_other_items");
+				    	   
+				    	   MasterEditDto masterdto = new MasterEditDto();
+				    	   masterdto.setFilePath(selectedFile);
+				    	   
+				    	   service.AddMasterEditComments(masteredit , masterdto);
+				    	   
+					 	if (result != 0) {
+							redir.addAttribute("result", "Item Edited Successful");
+						} else {
+							redir.addAttribute("resultfail", "Item Edited UnSuccessful");
+						}	
+				}
+			return "redirect:/OtherItems.htm";
 			}catch (Exception e) {
 				redir.addAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
@@ -306,37 +343,7 @@ public class MasterController {
 					req.setAttribute("medicinelist", medicinelist);
 					return "masters/CHSSMedicineADDEDIT";
 					
-				}else if ("EDITMEDICINE".equalsIgnoreCase(action)) {
-					
-					String medicineId = (String)req.getParameter("medicineId");
-					String tratementname = (String)req.getParameter("tratementname");
-					String MedicineName  = (String)req.getParameter("MedicineName");
-					String IsAdmissible  = (String)req.getParameter("IsAdmissible");
-					
-					CHSSMedicineList  medicinelist = new CHSSMedicineList();
-					medicinelist.setMedicineId(Long.parseLong(medicineId));
-					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
-					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
-					medicinelist.setIsAdmissible(IsAdmissible);
-					long result =service.EditMedicine(medicinelist);
-					
-					
-					String comments = (String)req.getParameter("comments");
-					MasterEdit masteredit = new MasterEdit();
-					masteredit.setTableRowId(Long.parseLong(medicineId));
-					masteredit.setTableName("chss_medicines_list");
-					masteredit.setCreatedBy(UserId);
-					masteredit.setCreatedDate(sdtf.format(new Date()));
-					masteredit.setComments(comments);
-					service.AddMasterEditComments(masteredit);
-					if (result != 0) {
-		    			redir.addAttribute("result", "Medicine Edited Successfully");
-					} else {
-						redir.addAttribute("resultfail", "Medicine Edited UnSuccessful");
-					}
-					return "redirect:/MedicineList.htm";
-					
-				}else if ("ADDMEDICINE".equalsIgnoreCase(action)) {
+				}else  if ("ADDMEDICINE".equalsIgnoreCase(action)) {
 					
 					String tratementname = (String)req.getParameter("tratementname");
 					String MedicineName  = (String)req.getParameter("MedicineName");
@@ -363,6 +370,55 @@ public class MasterController {
 				}	
 				return "redirect:/MedicineList.htm";
 			}catch (Exception e){
+				e.printStackTrace();
+				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
+				return "redirect:/MedicineList.htm";
+			}
+		}
+		
+		@RequestMapping(value="ChssMedicineEdit.htm", method= {RequestMethod.POST,RequestMethod.GET})
+		public String EDITMedicine(HttpServletRequest req ,HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside ChssMedicine.htm "+UserId);
+			try {
+				String action = (String)req.getParameter("Action");
+                  if ("EDITMEDICINE".equalsIgnoreCase(action)) {
+					
+					String medicineId = (String)req.getParameter("medicineId");
+					String tratementname = (String)req.getParameter("tratementname");
+					String MedicineName  = (String)req.getParameter("MedicineName");
+					String IsAdmissible  = (String)req.getParameter("IsAdmissible");
+					
+					CHSSMedicineList  medicinelist = new CHSSMedicineList();
+					medicinelist.setMedicineId(Long.parseLong(medicineId));
+					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
+					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
+					medicinelist.setIsAdmissible(IsAdmissible);
+					long result =service.EditMedicine(medicinelist);
+					
+					
+					String comments = (String)req.getParameter("comments");
+					MasterEdit masteredit = new MasterEdit();
+					masteredit.setTableRowId(Long.parseLong(medicineId));
+					masteredit.setTableName("chss_medicines_list");
+					masteredit.setCreatedBy(UserId);
+					masteredit.setCreatedDate(sdtf.format(new Date()));
+					masteredit.setComments(comments);
+					
+					MasterEditDto masterdto = new MasterEditDto();
+					masterdto.setFilePath(selectedFile);
+					
+					service.AddMasterEditComments(masteredit , masterdto);
+					if (result != 0) {
+		    			redir.addAttribute("result", "Medicine Edited Successfully");
+					}else{
+						redir.addAttribute("resultfail", "Medicine Edited UnSuccessful");
+					}
+	
+				}
+                  return "redirect:/MedicineList.htm";
+			} catch (Exception e) {
 				e.printStackTrace();
 				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
 				return "redirect:/MedicineList.htm";
@@ -414,54 +470,68 @@ public class MasterController {
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			logger.info(new Date() +"Inside DoctorsMasters.htm "+UserId);
-			try {
-				String action = (String)req.getParameter("Action");
+			try{
 				
-			
-			if("EDITDOCRATE".equalsIgnoreCase(action)){
-					
-					String Rateid = (String)req.getParameter("DocRateid");
-					String con1= "Consultation1"+Rateid;
-					String con2= "Consultation2"+Rateid;
-					String Consultation1 = (String)req.getParameter(con1);
-					String Consultation2 = (String)req.getParameter(con2);
-					
-					CHSSDoctorRates  DocRate = new CHSSDoctorRates();
-					
-					DocRate.setDocRateId(Integer.parseInt(Rateid));				
-					DocRate.setConsultation_1(Integer.parseInt(Consultation1));
-					DocRate.setConsultation_2(Integer.parseInt(Consultation2));
-					DocRate.setModifiedBy(UserId);
-					DocRate.setModifiedDate(sdtf.format(new Date()));
-					int result = service.EditDoctorMaster(DocRate);
-					String comments = (String)req.getParameter("comments");
-			    	   MasterEdit masteredit  = new MasterEdit();
-			    	   masteredit.setCreatedBy(UserId);
-			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-			    	   masteredit.setTableRowId(Long.parseLong(Rateid));
-			    	   masteredit.setComments(comments);
-			    	   masteredit.setTableName("chss_doctor_rates");
-			    	   
-			    	   service.AddMasterEditComments(masteredit);
-					
-					if (result != 0) {
-		    			redir.addAttribute("result", "Doctor Details Updated");
-					} else {
-						redir.addAttribute("resultfail", "Doctor Details Failed to Update");
-					}
-					return "redirect:/DoctorsMaster.htm";
-				}else {
 					List<Object[]> doctorlist = service.GetDoctorList();
 					req.setAttribute("doctorlist", doctorlist);
 					return "masters/CHSSDoctorsList";
-				}		
-			} catch (Exception e) {
+						
+			}catch(Exception e){
 				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
 				return "masters/CHSSDoctorsList";
+			}			
+		}    
+		
+		@RequestMapping(value = "DoctorsMasterEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		public String DoctorsMastersEdit(HttpSession ses , HttpServletRequest req , @RequestPart("selectedFile") MultipartFile selectedFile,RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasterEdit.htm "+UserId);
+			try {
+				String action = (String)req.getParameter("Action");
+								
+				if("EDITDOCRATE".equalsIgnoreCase(action)){						
+						String Rateid = (String)req.getParameter("DocRateid");
+						String con1= "Consultation1"+Rateid;
+						String con2= "Consultation2"+Rateid;
+						String Consultation1 = (String)req.getParameter(con1);
+						String Consultation2 = (String)req.getParameter(con2);
+						
+						CHSSDoctorRates  DocRate = new CHSSDoctorRates();
+						
+						DocRate.setDocRateId(Integer.parseInt(Rateid));				
+						DocRate.setConsultation_1(Integer.parseInt(Consultation1));
+						DocRate.setConsultation_2(Integer.parseInt(Consultation2));
+						DocRate.setModifiedBy(UserId);
+						DocRate.setModifiedDate(sdtf.format(new Date()));
+						int result = service.EditDoctorMaster(DocRate);
+						
+						String comments = (String)req.getParameter("comments");
+				    	   MasterEdit masteredit  = new MasterEdit();
+				    	   masteredit.setCreatedBy(UserId);
+				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+				    	   masteredit.setTableRowId(Long.parseLong(Rateid));
+				    	   masteredit.setComments(comments);
+				    	   masteredit.setTableName("chss_doctor_rates");
+				    	   
+				    	   MasterEditDto masterdto = new MasterEditDto();
+				    	   masterdto.setFilePath(selectedFile);
+				    	   service.AddMasterEditComments(masteredit , masterdto);
+						
+						if (result != 0) {
+			    			redir.addAttribute("result", "Doctor Details Updated");
+						} else {
+							redir.addAttribute("resultfail", "Doctor Details Failed to Update");
+						}	
+					}
+				return "redirect:/DoctorsMaster.htm";
+			} catch (Exception e) {
+				req.setAttribute("resultfail", "Internal Error!");
+				e.printStackTrace();
+				return "redirect:/DoctorsMaster.htm";
 			}
-			
-		}                                
+		}
 		
 		@RequestMapping(value = "UnitMaster.htm",method= {RequestMethod.POST,RequestMethod.GET})
 		public String LabMaster(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
@@ -479,7 +549,34 @@ public class MasterController {
 					req.setAttribute("labslist", labslist);
 					req.setAttribute("labdetails", lab);
 					       return "masters/LabMasterEdit";
-				}else if("EDITLAB".equalsIgnoreCase(action)){
+				}else {                                      
+					Object[] labdetails = service.getLabDetails();
+					String labmasterId =""+labdetails[0];
+					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
+					List<Object[]> labslist=service.getLabsList();
+					req.setAttribute("emplist", pisservice.GetAllEmployee());
+					req.setAttribute("labslist", labslist);
+					req.setAttribute("labdetails", lab);
+									
+					   return "masters/LabMasterEdit";
+			           
+				}
+			} catch (Exception e) {
+				req.setAttribute("resultfail", "Internal Error!");
+				e.printStackTrace();
+				return "masters/LabMasterEdit";
+			}
+			
+		}
+		
+		@RequestMapping(value = "UnitMasterEdit.htm",method= {RequestMethod.POST,RequestMethod.GET})
+		public String LabMasterEdit(HttpSession ses , HttpServletRequest req , @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
+		{
+			String UserId = (String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside UnitMasterEdit.htm "+UserId);
+			try {
+				String action =(String)req.getParameter("Action");
+				 if("EDITLAB".equalsIgnoreCase(action)){
 					String labcode = (String)req.getParameter("LabCode");
 					String labname = (String)req.getParameter("LabName");
 					String labaddress = (String)req.getParameter("LabAddress");
@@ -522,33 +619,25 @@ public class MasterController {
 			    	   masteredit.setComments(comments);
 			    	   masteredit.setTableName("lab_master");
 			    	   
-			    	   service.AddMasterEditComments(masteredit);
+			    	   MasterEditDto masterdto = new MasterEditDto();
+			    	   masterdto.setFilePath(selectedFile);
+			    	   service.AddMasterEditComments(masteredit , masterdto);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Unit details updated successfully");
 					}else {
 						redir.addAttribute("resultfail", "Unit details updated Unsuccessfull");
 					}
+					
+				 }
 					return "redirect:/UnitMaster.htm";
-				}else {                                      
-					Object[] labdetails = service.getLabDetails();
-					String labmasterId =""+labdetails[0];
-					LabMaster lab = service.GetLabDetailsToEdit(Long.parseLong(labmasterId));
-					List<Object[]> labslist=service.getLabsList();
-					req.setAttribute("emplist", pisservice.GetAllEmployee());
-					req.setAttribute("labslist", labslist);
-					req.setAttribute("labdetails", lab);
-									
-					   return "masters/LabMasterEdit";
-			           
-				}
+				
 			} catch (Exception e) {
 				req.setAttribute("resultfail", "Internal Error!");
 				e.printStackTrace();
-				return "masters/LabMasterEdit";
+				return "redirect:/UnitMaster.htm";
 			}
-			
-		}
 		
+		}
 		@RequestMapping(value = "OtherItemAmount.htm" , method = {RequestMethod.POST,RequestMethod.GET})
 		public String OtherItem( Model model, HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
@@ -728,9 +817,9 @@ public class MasterController {
 			}
 		}
 		
-		@RequestMapping(value = "DesignationAddEdit.htm" , method =RequestMethod.POST )
-		public String DesgnationAddEdit (HttpServletRequest req, HttpSession ses , RedirectAttributes redir)throws Exception
-		{
+		@RequestMapping(value = "DesignationEdit.htm" , method =RequestMethod.POST )
+		public String DesgnationEdit (HttpServletRequest req, HttpSession ses , @RequestPart("selectedFile") MultipartFile selectedFile , RedirectAttributes redir)throws Exception
+		{ 
 			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +" Inside DesignationAddEdit.htm "+UserId);
 			
@@ -754,8 +843,12 @@ public class MasterController {
 			    	   masteredit.setTableRowId(Long.parseLong(designationid));
 			    	   masteredit.setComments(comments);
 			    	   masteredit.setTableName("employee_desig");
+			    	     
+			    	   MasterEditDto masterdto = new MasterEditDto();
+			    	   masterdto.setFilePath(selectedFile);
 			    	   
-			    	   service.AddMasterEditComments(masteredit);
+			    	   service.AddMasterEditComments(masteredit , masterdto);
+			    	   
 					long result = service.EditDesignation(desig);
 					if (result != 0) {
 						 redir.addAttribute("result", "Designation Updated Successfully");
@@ -788,6 +881,38 @@ public class MasterController {
 					return "redirect:/Designation.htm";
 				}
 		}
+		
+		@RequestMapping(value = "DesignationAdd.htm" , method =RequestMethod.POST )
+		public String DesgnationAdd (HttpServletRequest req, HttpSession ses , RedirectAttributes redir)throws Exception
+		{ 
+			String UserId = (String)ses.getAttribute("Username");			
+			logger.info(new Date() +" Inside DesignationAdd.htm "+UserId);
+			
+			try {						
+					String code  = (String)req.getParameter("Designationcode");
+					String name  = (String)req.getParameter("DesignationName");
+					String limit = (String)req.getParameter("Designationlimit");
+					
+					EmployeeDesig desig = new EmployeeDesig();
+					desig.setDesigCode(code.toUpperCase());
+					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
+					desig.setDesigLimit(Long.parseLong(limit.trim()));
+					
+					long result = service.AddDesignation(desig);
+					if (result != 0) {
+						 redir.addAttribute("result", "Designation Added Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Designation Added Unsuccessfull");
+					}
+					return "redirect:/Designation.htm";
+							
+				}catch (Exception e){
+					e.printStackTrace();
+					redir.addAttribute("resultfail", "Internal Error!");
+					return "redirect:/Designation.htm";
+				}
+		}
+		
 		
 	    @RequestMapping(value = "DesignationAddCheck.htm", method = RequestMethod.GET)
 			  public @ResponseBody String DesignationAddCheck(HttpSession ses, HttpServletRequest req) throws Exception 
@@ -879,8 +1004,8 @@ public class MasterController {
 			}
 			
 			
-			@RequestMapping(value="DoctorAddEdit.htm" , method = RequestMethod.POST)
-			public String DoctorsAddEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+			@RequestMapping(value="DoctorAdd.htm" , method = RequestMethod.POST)
+			public String DoctorsAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside DoctorsAddEdit.htm "+UserId);
@@ -906,40 +1031,6 @@ public class MasterController {
 					} else {
 						 redir.addAttribute("resultfail", "Doctor Added Unsuccessfull");
 					}
-					}else{
-						String name = (String)req.getParameter("DoctorName");
-						String qualification = (String)req.getParameter("Qualification");
-						String doctorId = (String)req.getParameter("doctorId");
-						String address = (String)req.getParameter("address");
-						String phoneno = (String)req.getParameter("phoneno");
-						DoctorList doctor = new DoctorList();
-						doctor.setDoctorId(Long.parseLong(doctorId));
-						doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
-						doctor.setQualification(qualification.toUpperCase());
-						doctor.setAddress(address);
-						doctor.setPhoneNo(phoneno.trim());
-						doctor.setModifiedBy(UserId);
-						doctor.setModifiedDate(sdtf.format(new Date()));
-						long result = service.DoctorsEdit(doctor);
-						
-					     String comments = (String)req.getParameter("comments");
-				    	   MasterEdit masteredit  = new MasterEdit();
-				    	   masteredit.setCreatedBy(UserId);
-				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-				    	   masteredit.setTableRowId(Long.parseLong(doctorId));
-				    	   masteredit.setComments(comments);
-				    	   masteredit.setTableName("chss_doctor_list");
-				    	   
-				    	   service.AddMasterEditComments(masteredit);
-						
-						
-						
-						if (result != 0) {
-							 redir.addAttribute("result", "Doctor Updated Successfully");
-						} else {
-							 redir.addAttribute("resultfail", "Doctor Updated Unsuccessfull");
-						}
-						
 					}
 					 return "redirect:/DoctorList.htm";
 				} catch (Exception e) {
@@ -950,6 +1041,54 @@ public class MasterController {
 				
 			}	
 			
+			@RequestMapping(value="DoctorEdit.htm" , method = RequestMethod.POST)
+			public String DoctorsEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile ,RedirectAttributes redir)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside DoctorsEdit.htm "+UserId);
+				try {
+					String name = (String)req.getParameter("DoctorName");
+					String qualification = (String)req.getParameter("Qualification");
+					String doctorId = (String)req.getParameter("doctorId");
+					String address = (String)req.getParameter("address");
+					String phoneno = (String)req.getParameter("phoneno");
+					DoctorList doctor = new DoctorList();
+					doctor.setDoctorId(Long.parseLong(doctorId));
+					doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
+					doctor.setQualification(qualification.toUpperCase());
+					doctor.setAddress(address);
+					doctor.setPhoneNo(phoneno.trim());
+					doctor.setModifiedBy(UserId);
+					doctor.setModifiedDate(sdtf.format(new Date()));
+					long result = service.DoctorsEdit(doctor);
+					
+				     String comments = (String)req.getParameter("comments");
+			    	   MasterEdit masteredit  = new MasterEdit();
+			    	   masteredit.setCreatedBy(UserId);
+			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+			    	   masteredit.setTableRowId(Long.parseLong(doctorId));
+			    	   masteredit.setComments(comments);
+			    	   masteredit.setTableName("chss_doctor_list");
+			    	   
+			    	   	MasterEditDto masterdto = new MasterEditDto();
+			    	   	masterdto.setFilePath(selectedFile);
+			    	   service.AddMasterEditComments(masteredit , masterdto);
+					
+					
+					
+					if (result != 0) {
+						 redir.addAttribute("result", "Doctor Updated Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Doctor Updated Unsuccessfull");
+					}
+					 return "redirect:/DoctorList.htm";
+				} catch (Exception e) {
+					e.printStackTrace();
+					 redir.addAttribute("resultfail", "Internal Error!");
+					 return "redirect:/DoctorList.htm";
+				}
+				
+			}
 			@RequestMapping(value="CircularLists.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 			public String circularList(HttpSession ses, HttpServletRequest req )throws Exception
 			{
@@ -993,11 +1132,11 @@ public class MasterController {
 				
 			}
 			
-			@RequestMapping(value ="CircularADDEDIT.htm" , method = RequestMethod.POST)
-			public String CirculatAddEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
+			@RequestMapping(value ="CircularADD.htm" , method = RequestMethod.POST)
+			public String CirculatAdd(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside CircularADDEDIT.htm "+UserId);
+				logger.info(new Date() +"Inside CircularADD.htm "+UserId);
 				try {
 					String action = (String)req.getParameter("action");
 					
@@ -1006,8 +1145,10 @@ public class MasterController {
 						String circulardate   =(String)req.getParameter("circulardate");
 						String description = (String)req.getParameter("description");
 						String todate = (String)req.getParameter("todate");
+						String referenceNo = (String)req.getParameter("referenceno");
 						CircularList circular = new CircularList();
 						
+						circular.setReferenceNo(referenceNo);
 						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
 						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
@@ -1023,42 +1164,6 @@ public class MasterController {
 						} else {
 							 redir.addAttribute("resultfail", "Circular Added Unsuccessfull");
 						}
-					}else {
-					
-						String circulardate   = (String)req.getParameter("circulardate");
-						String todate   = (String)req.getParameter("todate");
-						String description = (String)req.getParameter("description");
-						String circularid = (String)req.getParameter("circular");
-						CircularList circular = new CircularList();
-					
-						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
-						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
-						circular.setDescription(description.trim());
-						circular.setCircularId(Long.parseLong(circularid));
-						circular.setModifiedBy(UserId);
-						circular.setModifiedDate(sdtf.format(new Date()));
-						CircularListDto filecircular = new CircularListDto();
-					
-						filecircular.setPath(selectedFile);
-						long result = service.CircularListEdit(circular , filecircular);
-						
-						String comments = (String)req.getParameter("comments");
-				    	   MasterEdit masteredit  = new MasterEdit();
-				    	   masteredit.setCreatedBy(UserId);
-				    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-				    	   masteredit.setTableRowId(Long.parseLong(circularid));
-				    	   masteredit.setComments(comments);
-				    	   masteredit.setTableName("chss_circular_list");
-				    	   
-				    	   service.AddMasterEditComments(masteredit);
-						
-						
-						if (result != 0) {
-							 redir.addAttribute("result", "Circular Updated Successfully");
-						} else {
-							 redir.addAttribute("resultfail", "Circular Updated Unsuccessfull");
-						}
-						
 					}
 					return "redirect:/CircularLists.htm";
 				}catch (Exception e){
@@ -1068,6 +1173,58 @@ public class MasterController {
 				}
 				
 			}
+			
+			@RequestMapping(value ="CircularEDIT.htm" , method = RequestMethod.POST)
+			public String CirculatEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile,@RequestPart("selectedFile1") MultipartFile selectedFile1, RedirectAttributes redir) throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside CircularEDIT.htm "+UserId);
+				try {
+					
+					String circulardate   = (String)req.getParameter("circulardate");
+					String todate   = (String)req.getParameter("todate");
+					String description = (String)req.getParameter("description");
+					String circularid = (String)req.getParameter("circular");
+					String referenceNo = (String)req.getParameter("referenceno");
+					CircularList circular = new CircularList();
+				
+					circular.setReferenceNo(referenceNo);
+					circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
+					circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
+					circular.setDescription(description.trim());
+					circular.setCircularId(Long.parseLong(circularid));
+					circular.setModifiedBy(UserId);
+					circular.setModifiedDate(sdtf.format(new Date()));
+					CircularListDto filecircular = new CircularListDto();
+				
+					filecircular.setPath(selectedFile);
+					long result = service.CircularListEdit(circular , filecircular);
+					
+					String comments = (String)req.getParameter("comments");
+			    	   MasterEdit masteredit  = new MasterEdit();
+			    	   masteredit.setCreatedBy(UserId);
+			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+			    	   masteredit.setTableRowId(Long.parseLong(circularid));
+			    	   masteredit.setComments(comments);
+			    	   masteredit.setTableName("chss_circular_list");
+			    	   
+			    	   MasterEditDto masteredto = new MasterEditDto();
+			    	   masteredto.setFilePath(selectedFile1);
+			    	   service.AddMasterEditComments(masteredit , masteredto);
+											
+					if (result != 0) {
+						 redir.addAttribute("result", "Circular Updated Successfully");
+					} else {
+						 redir.addAttribute("resultfail", "Circular Updated Unsuccessfull");
+					}
+					return "redirect:/CircularLists.htm";
+				} catch (Exception e) {
+					e.printStackTrace();
+					redir.addAttribute("resultfail", "Internal Error!");
+					return "redirect:/CircularLists.htm";
+				}			
+			}
+			
 			
 			@RequestMapping(value = "download-CircularFile-attachment",method = {RequestMethod.GET,RequestMethod.POST})
 		    public void downloadCircularAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
@@ -1124,11 +1281,11 @@ public class MasterController {
 				
 			}
 			
-			@RequestMapping(value="EmpanelledHospitalAddEdit.htm" , method = RequestMethod.POST)
-			public String EmpanelledHospitalAddEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+			@RequestMapping(value="EmpanelledHospitalAdd.htm" , method = RequestMethod.POST)
+			public String EmpanelledHospitalAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside EmpanelledHospitalAddEdit.htm "+UserId);
+				logger.info(new Date() +"Inside EmpanelledHospitalAdd.htm "+UserId);
 				try {
 					String action = (String)req.getParameter("action");
 					
@@ -1147,7 +1304,23 @@ public class MasterController {
 					} else {
 						 redir.addAttribute("resultfail", "Empanelled Hospital Added Unsuccessfull");
 					}
-					}else{
+					}
+					 return "redirect:/EmpanneledHospitalList.htm";
+				} catch (Exception e) {
+					e.printStackTrace();
+					 redir.addAttribute("resultfail", "Internal Error!");
+					 return "redirect:/EmpanneledHospitalList.htm";
+				}
+				                                                                     
+			}
+			
+			@RequestMapping(value="EmpanelledHospitalEdit.htm" , method = RequestMethod.POST)
+			public String EmpanelledHospitalEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside EmpanelledHospitalEdit.htm "+UserId);
+				try {
+					
 						String name = (String)req.getParameter("HospitalName");		
 						String address = (String)req.getParameter("HospitalAddress");
 						String empanelledId = (String)req.getParameter("empanelledId");
@@ -1167,7 +1340,9 @@ public class MasterController {
 				    	   masteredit.setComments(comments);
 				    	   masteredit.setTableName("chss_empanelledhospital");
 				    	   
-				    	   service.AddMasterEditComments(masteredit);
+				    	   MasterEditDto masterdto = new MasterEditDto();
+				    	   masterdto.setFilePath(selectedFile);
+				    	   service.AddMasterEditComments(masteredit , masterdto);
 						
 						if (result != 0) {
 							 redir.addAttribute("result", "Empanelled Hospital Updated Successfully");
@@ -1175,13 +1350,11 @@ public class MasterController {
 							 redir.addAttribute("resultfail", "Empanelled Hospital Updated Unsuccessfull");
 						}
 						
-					}
-					 return "redirect:/EmpanneledHospitalList.htm";
+						 return "redirect:/EmpanneledHospitalList.htm";
 				} catch (Exception e) {
 					e.printStackTrace();
 					 redir.addAttribute("resultfail", "Internal Error!");
 					 return "redirect:/EmpanneledHospitalList.htm";
 				}
-				                                                                     
 			}
 }

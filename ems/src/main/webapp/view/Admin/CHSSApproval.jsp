@@ -76,8 +76,11 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 			<div class="card" >
 			
 					<div class="card-body main-card">
-        			
-        		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  > 	 						
+        			<%if(approval!=null){ %>
+        		  <form action="ChssApprovalEdit.htm" method="POST" name="myfrm1" id="myfrm1" enctype="multipart/form-data" >
+        		  <%}else{%> 	 						
+        		  <form action="ChssApproval.htm" method="POST" name="myfrm1" id="myfrm1"  >
+        		  <%}%>
                	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                    <div class="row"> 
                 		<div class="col-md-1"></div>
@@ -121,9 +124,9 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                         		<input type="hidden" name="AuthId" value="<%if(approval!=null){%><%=approval[0]%><%}%>"> 
                             		<label class="control-label"></label>
                             		<input type="hidden" name="type" value="AD"/>
-                                         <button class="btn btn-sm submit-btn AddItem" type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
+                                         <button class="btn btn-sm submit-btn " type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return CommentsModel();">Submit</button>
                                          <%}else{%> 
-                                          <button class="btn btn-sm submit-btn " type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
+                                          <button class="btn btn-sm submit-btn " type="submit" name="Action" value="ADD" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
                                          <%}%>
                         		</div>
                     		</div>        		
@@ -143,11 +146,18 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					       <div class="modal-body">
+					        <div class="form-inline">
+					        	<div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		</div>
+					      		</div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
 					        </div>
@@ -164,7 +174,8 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 					</div>
 					<!----------------------------- container Close ---------------------------->   
 					<%} %>
-                        </form>      
+					<%if(approval!=null){ %></form>      
+                        <%}else{%></form><%}%>
 	 		      <br>
 	  </div>
 	
@@ -173,9 +184,15 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 	        </div>
 	    
 </body>
+
 <script type="text/javascript">
-$(".AddItem").click(function(){ 	
-	 $('#myModal').modal('show');
-});
+function CommentsModel()
+{
+	
+	$('#myModal').modal('show');
+	return false;
+	
+}
 </script>
+
 </html>

@@ -25,11 +25,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.dto.UserManageAdd;
@@ -205,7 +207,10 @@ public class PisController {
 			String phoneno = req.getParameter("PhoneNo");
 			String EmpStatusDate = req.getParameter("EmpStatusDate");
 			String PermPassNo = req.getParameter("PermPassNo");
-			Employee employee=new Employee();
+			String uanno = req.getParameter("UANNo");
+					
+			
+			Employee employee = new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
 			
@@ -214,7 +219,9 @@ public class PisController {
 			employee.setSrNo(Long.parseLong("0"));
             employee.setEmpNo(PunchCardNo.trim());
 			employee.setIsActive(1);
-			
+			employee.setUANNo(uanno);
+			employee.setCreatedBy(Username);
+			employee.setExtNo(internalNo);
 			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
 		
@@ -294,7 +301,7 @@ public class PisController {
 			emp.setIsActive(1);
 			emp.setCreatedBy(Username);
 			emp.setCreatedDate(new Date().toString());
-			emp.setInternalNumber(internalNo);
+			/* emp.setInternalNumber(internalNo); */
 			emp.setSubCategary(subcategory);
 			emp.setEmpNo(PunchCardNo.trim());
 			
@@ -341,7 +348,7 @@ public class PisController {
 	}	
 	
 	@RequestMapping(value = "EmployeeEditSubmit.htm")
-	public String EmployeeEditSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) {
+	public String EmployeeEditSubmit(HttpServletRequest req, HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside EmployeeEditSubmit.htm " + Username);
 		try {
@@ -377,6 +384,7 @@ public class PisController {
 			String PermPassNo = req.getParameter("PermPassNo");
 			String phno = req.getParameter("PhoneNo");
 			String empdetailsid=req.getParameter("empdetailsid");
+			String uanno = req.getParameter("UANNo");
 			String EmpId= req.getParameter("EmpId");
 			
 			Employee employee=new Employee();
@@ -387,6 +395,10 @@ public class PisController {
 				employee.setDivisionId(Long.parseLong(divisionid));
 				employee.setEmpNo(PunchCardNo.trim());
 				employee.setEmpId(Long.parseLong(EmpId));
+				employee.setUANNo(uanno);
+				employee.setExtNo(internalNo);
+				employee.setModifiedBy(Username);
+				employee.setModifiedDate(sdtf.format(new Date()));
 			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
 			
@@ -466,7 +478,7 @@ public class PisController {
 			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setModifiedBy(Username);
-			emp.setInternalNumber(internalNo);
+//			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
 			emp.setEmpDetailsId(Long.parseLong(empdetailsid));
 
@@ -475,13 +487,18 @@ public class PisController {
 			value =service.EmployeeDetailsEditSubmit(emp);
 			}
 			String comments = (String)req.getParameter("comments");
+			
 			MasterEdit masteredit = new MasterEdit();
 			masteredit.setTableRowId(Long.parseLong(EmpId));
 			masteredit.setTableName("employee");
 			masteredit.setComments(comments);
 			masteredit.setCreatedDate(sdtf.format(new Date()));
 			masteredit.setCreatedBy(Username);
-			masterservice.AddMasterEditComments(masteredit);
+			
+			MasterEditDto masterdto = new MasterEditDto();
+			masterdto.setFilePath(selectedFile);
+			
+			masterservice.AddMasterEditComments(masteredit ,masterdto);
 			if (value != 0) {
 				redir.addAttribute("result", "Employee details Edited Successfully");
 			} else {
@@ -661,7 +678,7 @@ public class PisController {
     
   
    @RequestMapping(value = "UserManagerEditSubmit.htm", method = RequestMethod.POST)
-   public String UserManagerEditSubmit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+   public String UserManagerEditSubmit(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception
    {	String Username = (String) ses.getAttribute("Username");
         logger.info(new Date() +"Inside UserManagerEditSubmit.htm "+Username);
         try {
@@ -679,7 +696,10 @@ public class PisController {
      	   masteredit.setComments(comments);
      	   masteredit.setTableName("login");
      	   
-     	   masterservice.AddMasterEditComments(masteredit);
+     	   MasterEditDto masterdto = new MasterEditDto();
+     	   masterdto.setFilePath(selectedFile);
+     	   
+     	   masterservice.AddMasterEditComments(masteredit,masterdto);
 
         	if(count>0) {
         		redir.addAttribute("result", "LoginID Edited successfully");	
@@ -818,7 +838,7 @@ public class PisController {
    
    
    @RequestMapping(value="EditFamilyDetails.htm" , method=RequestMethod.POST)
-   public String MembereEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+   public String MembereEdit(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
 	   String Username = (String) ses.getAttribute("Username");
        logger.info(new Date() +"Inside EditFamilyDetails.htm "+Username);
        try {
@@ -871,8 +891,11 @@ public class PisController {
     	   masteredit.setTableRowId(Long.parseLong(familyid));
     	   masteredit.setComments(comments);
     	   masteredit.setTableName("pis_emp_family_details");
+    	  
+    	   MasterEditDto masterdto = new MasterEditDto();
+    	   masterdto.setFilePath(selectedFile);
     	   
-    	   masterservice.AddMasterEditComments(masteredit);
+    	   masterservice.AddMasterEditComments(masteredit , masterdto);
     	   
     	   Long result = service.EditFamilyDetails(details);
     	   if(result>0){
@@ -1006,7 +1029,51 @@ public class PisController {
         			 redir.addAttribute("resultfail", "Parmanent Address Add UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
-    	   }else if("EDIT".equalsIgnoreCase(Action)) {
+    	   }
+    	    
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+	  }  
+       return "redirect:/Address.htm";
+   }
+   
+   
+   @RequestMapping(value = "EditAddressDetails.htm" , method= RequestMethod.POST)
+   public String EditPerAddressDetails(HttpServletRequest req , HttpSession ses , @RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside EditAddressDetails.htm "+Username);  
+       String Action = (String)req.getParameter("Action");
+       try {
+    	   String state =(String)req.getParameter("state");
+    	   String city  =(String)req.getParameter("city");
+    	   String cityPin =(String)req.getParameter("cityPin");
+    	   String mobile =(String)req.getParameter("mobile");
+    	   String altMobile =(String)req.getParameter("altMobile");
+    	   String landineNo =(String)req.getParameter("landineNo");
+    	   String fromPer =(String)req.getParameter("fromPer");
+    	   String empid =(String)req.getParameter("empid");
+    	   String perAdd=(String)req.getParameter("perAdd");
+    	   
+    	
+    	   AddressPer peraddress = new AddressPer();
+    	   	if(landineNo!=null) {
+    	   	 peraddress.setLandline(landineNo);
+    	   }
+    	   if(altMobile!=null) {
+    		  peraddress.setAlt_mobile(altMobile);
+    	   }
+    	   if(fromPer!=null) {
+    		   peraddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   }   	  
+    	   peraddress.setMobile(mobile);
+    	   peraddress.setPin(cityPin);
+    	   peraddress.setState(state);
+    	   peraddress.setCity(city);  	  
+    	   peraddress.setEmpid(empid);
+    	   peraddress.setPer_addr(perAdd);
+    	   
+    	 if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
     		   peraddress.setAddress_per_id(Long.parseLong(addressid));
     		   peraddress.setModifiedBy(Username);
@@ -1021,7 +1088,9 @@ public class PisController {
         	   masteredit.setComments(comments);
         	   masteredit.setTableName("pis_address_per");
         	   
-        	   masterservice.AddMasterEditComments(masteredit);
+        	   MasterEditDto masterdto = new MasterEditDto();
+        	   masterdto.setFilePath(selectedFile);
+        	   masterservice.AddMasterEditComments(masteredit , masterdto);
 
         	   long result  =  service.EditPerAddress(peraddress); 
           	 
@@ -1084,7 +1153,7 @@ public class PisController {
 	}
            
    
-   @RequestMapping(value="AddEditResAddressDetails.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+   @RequestMapping(value="AddResAddressDetails.htm" , method= {RequestMethod.POST,RequestMethod.GET})
    public String AddResAddressDetails(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 	  
 	   String Username = (String) ses.getAttribute("Username");
@@ -1164,7 +1233,83 @@ public class PisController {
         			 redir.addAttribute("resultfail", "Residential Address ADD UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
-		}else if ("EDIT".equalsIgnoreCase(Action)) {
+		}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	   return "redirect:/Address.htm";
+   }
+   
+   @RequestMapping(value="EditResAddressDetails.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+   public String EditResAddressDetails(HttpServletRequest request , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+	  
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside EditResAddressDetails.htm "+Username);  
+       String Action = (String)request.getParameter("Action");
+	   try {
+		    String resAdd = request.getParameter("resAdd").trim().replaceAll(" +", " ");
+			String fromRes = request.getParameter("fromRes");
+			String mobile = request.getParameter("mobile").trim().replaceAll(" +", " ");
+			String altMobile = request.getParameter("altMobile").trim().replaceAll(" +", " ");
+			String landineNo = request.getParameter("landineNo").trim().replaceAll(" +", " ");
+			String extNo = request.getParameter("extNo").trim().replaceAll(" +", " ");
+			String eDrona = request.getParameter("eDrona").trim().replaceAll(" +", " ");
+			String eOfficial = request.getParameter("eOfficial").trim().replaceAll(" +", " ");
+			String ePersonal = request.getParameter("ePersonal").trim().replaceAll(" +", " ");
+			String eOutlook = request.getParameter("eOutlook").trim().replaceAll(" +", " ");
+			String qtrNo = request.getParameter("qtrNo").trim().replaceAll(" +", " ");
+			String qtrType = request.getParameter("qtrType").trim().replaceAll(" +", " ");
+			String qtrDetail = request.getParameter("qtrDetail").trim().replaceAll(" +", " ");
+			String state = request.getParameter("state").trim().replaceAll(" +", " ");
+			String city = request.getParameter("city").trim().replaceAll(" +", " ");
+			String pin = request.getParameter("cityPin").trim().replaceAll(" +", " ");
+			String empid= (String)request.getParameter("empid"); 
+			
+					
+			int pinInt = Integer.parseInt(pin);
+
+			long mobileInt = 1;
+			long altMobileInt = 1;
+			long landineNoInt = 1;
+			int extNoInt = 1;
+
+			if (!"".equalsIgnoreCase(mobile)) {
+				mobileInt = Long.parseLong(mobile);
+			}
+
+			if (!"".equalsIgnoreCase(altMobile)) {
+				altMobileInt = Long.parseLong(altMobile);
+			}
+			if (!"".equalsIgnoreCase(landineNo)) {
+				landineNoInt = Long.parseLong(landineNo);
+			}
+			if (!"".equalsIgnoreCase(extNo)) {
+				extNoInt = Integer.parseInt(extNo);
+			}
+			
+			AddressRes resadd= new AddressRes();
+			
+			resadd.setEmpid(empid);
+			resadd.setRes_addr(resAdd);
+			resadd.setFrom_res_addr(DateTimeFormatUtil.dateConversionSql(fromRes));
+			resadd.setMobile(mobile);
+			resadd.setAlt_mobile(altMobile);
+			resadd.setLandline(landineNo);
+			resadd.setExt(extNo);
+			resadd.setEmailDrona(eDrona);
+			resadd.setEmailOfficial(eOfficial);
+			resadd.setEmailPersonal(ePersonal);
+			resadd.setEmailOutlook(eOutlook);
+			resadd.setQtrNo(qtrNo);
+			resadd.setQtrType(qtrType);
+			resadd.setQtrDetails(qtrDetail);
+			resadd.setState(state);
+			resadd.setCity(city);
+			resadd.setPin(pin);
+		
+			
+	 if ("EDIT".equalsIgnoreCase(Action)) {
 			String addressresid = (String)request.getParameter("addressresid");
 			resadd.setAddress_res_id(Long.parseLong(addressresid));
 			resadd.setModifiedBy(Username);
@@ -1178,7 +1323,9 @@ public class PisController {
 	    	   masteredit.setComments(comments);
 	    	   masteredit.setTableName("pis_address_res");
 	    	   
-	    	   masterservice.AddMasterEditComments(masteredit);
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
 						
         	  long result  =  service.EditResAddress(resadd); 
         	 
@@ -1195,8 +1342,6 @@ public class PisController {
 		}
 	   return "redirect:/Address.htm";
    }
-   
-   
  
    @RequestMapping(value = "KinAddressAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
   	public String NextkinAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -1270,7 +1415,43 @@ public class PisController {
         			 redir.addAttribute("resultfail", "Next Kin Address ADD UnSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
-    	   }else if("EDIT".equalsIgnoreCase(Action)) {
+    	   }
+    	    
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+	  }  
+       return "redirect:/Address.htm";
+   }
+   
+   @RequestMapping(value = "NextKinEditAddressDetails.htm" , method= RequestMethod.POST)
+   public String EditNextKinAddressDetails(HttpServletRequest req , HttpSession ses , @RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside AddNextKinAddressDetails.htm "+Username);  
+       String Action = (String)req.getParameter("Action");
+       try {
+    	   String state =(String)req.getParameter("state");
+    	   String city  =(String)req.getParameter("city");
+    	   String cityPin =(String)req.getParameter("cityPin");
+    	   String mobile =(String)req.getParameter("mobile");
+    	   String altMobile =(String)req.getParameter("altMobile");
+    	   String landineNo =(String)req.getParameter("landineNo");
+    	   String fromPer =(String)req.getParameter("fromPer");
+    	   String empid =(String)req.getParameter("empid");
+    	   String nextKinAdd=(String)req.getParameter("nextKinAdd");
+    	   
+    	   AddressNextKin kinaddress = new AddressNextKin();
+    	   kinaddress.setLandline(landineNo);
+    	   kinaddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   kinaddress.setMobile(mobile);
+    	   kinaddress.setPin(cityPin);
+    	   kinaddress.setState(state);
+    	   kinaddress.setCity(city);
+    	   kinaddress.setAlt_mobile(altMobile);
+    	   kinaddress.setEmpid(empid);
+    	   kinaddress.setNextkin_addr(nextKinAdd);
+    	   
+    	 if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
     		   kinaddress.setAddress_kin_id(Long.parseLong(addressid));
     		   kinaddress.setModifiedBy(Username);
@@ -1284,7 +1465,10 @@ public class PisController {
         	   masteredit.setComments(comments);
         	   masteredit.setTableName("pis_address_kin");
         	   
-        	   masterservice.AddMasterEditComments(masteredit);
+        	   MasterEditDto masterdto = new MasterEditDto();
+        	   masterdto.setFilePath(selectedFile);
+        	   
+        	   masterservice.AddMasterEditComments(masteredit , masterdto);
     		      		   
         	   long result  =  service.EditNextKinAddress(kinaddress); 
           	 
@@ -1303,7 +1487,6 @@ public class PisController {
        return "redirect:/Address.htm";
    }
    
-
    
    @RequestMapping(value = "EmecAddressAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
   	public String EmecAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -1342,7 +1525,7 @@ public class PisController {
    @RequestMapping(value = "EmecAddAddressDetails.htm" , method= RequestMethod.POST)
    public String AddEmecAddressDetails(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 	   String Username = (String) ses.getAttribute("Username");
-       logger.info(new Date() +"Inside AddEmecAddressDetails.htm "+Username);  
+       logger.info(new Date() +"Inside EmecAddAddressDetails.htm "+Username);  
        String Action = (String)req.getParameter("Action");
        try {
     	   String state =(String)req.getParameter("state");
@@ -1377,7 +1560,43 @@ public class PisController {
         			 redir.addAttribute("resultfail", "Emergency Address Add UNSuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
-    	   }else if("EDIT".equalsIgnoreCase(Action)) {
+    	   }
+    	    
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+	  }  
+       return "redirect:/Address.htm";
+   }
+   
+   @RequestMapping(value = "EmecEditAddressDetails.htm" , method= RequestMethod.POST)
+   public String EditEmecAddressDetails(HttpServletRequest req , HttpSession ses , @RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+	   String Username = (String) ses.getAttribute("Username");
+       logger.info(new Date() +"Inside EmecEditAddressDetails.htm "+Username);  
+       String Action = (String)req.getParameter("Action");
+       try {
+    	   String state =(String)req.getParameter("state");
+    	   String city  =(String)req.getParameter("city");
+    	   String cityPin =(String)req.getParameter("cityPin");
+    	   String mobile =(String)req.getParameter("mobile");
+    	   String altMobile =(String)req.getParameter("altMobile");
+    	   String landineNo =(String)req.getParameter("landineNo");
+    	   String fromPer =(String)req.getParameter("fromPer");
+    	   String empid =(String)req.getParameter("empid");
+    	   String EmecAdd=(String)req.getParameter("EmecAdd");
+    	   
+    	   AddressEmec emecaddress = new AddressEmec();
+    	   emecaddress.setLandline(landineNo);
+    	   emecaddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
+    	   emecaddress.setMobile(mobile);
+    	   emecaddress.setPin(cityPin);
+    	   emecaddress.setState(state);
+    	   emecaddress.setCity(city);
+    	   emecaddress.setAlt_mobile(altMobile);
+    	   emecaddress.setEmpid(empid);
+    	   emecaddress.setEmer_addr(EmecAdd);
+    	   
+    	    if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
     		   emecaddress.setAddress_emer_id(Long.parseLong(addressid));
     		   emecaddress.setModifiedBy(Username);
@@ -1391,7 +1610,9 @@ public class PisController {
         	   masteredit.setComments(comments);
         	   masteredit.setTableName("pis_address_emer");
         	   
-        	   masterservice.AddMasterEditComments(masteredit);
+        	   MasterEditDto masterdto = new MasterEditDto();
+        	   masterdto.setFilePath(selectedFile);
+        	   masterservice.AddMasterEditComments(masteredit , masterdto);
 
         	   long result  = service.EditEmecAddress(emecaddress); 
           	 

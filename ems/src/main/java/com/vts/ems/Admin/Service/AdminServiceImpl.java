@@ -121,7 +121,7 @@ public class AdminServiceImpl implements AdminService{
 	public long EmpRequestNotification(EMSNotification notification)throws Exception
 	{
 		
-		List<Object[]> adminlist =dao.CHSSApprovalAuth2("A");
+		List<Object[]> adminlist =dao.CHSSApprovalAuth2("P");
 	
 		if(adminlist.size()>0) {
 			long id=0;

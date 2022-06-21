@@ -187,9 +187,9 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 				
 						<div class=" col-md-2 ">
-			                <label>Email<span class=" mandatory ">*</span></label>
+			                <label>Internal Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder="Enter Email " required="required" onclick=" return trim(this)"
+			                    placeholder="Enter Internal Email " required="required" onclick=" return trim(this)"
 			                    onchange="return trim(this) ">
 			            </div>
 			            
@@ -239,7 +239,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			            
 						 <div class=" col-md-2 ">
-			                <label>Phone No<span class=" mandatory ">*</span></label>
+			                <label>Mobile No<span class=" mandatory ">*</span></label>
 			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
 			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
 			                     onblur="checknegative(this) ">
@@ -306,9 +306,9 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 								
 			            <div class=" col-md-2 ">
-			                <label>Internal number<span class="mandatory"></span></label>
+			                <label>Extension number<span class="mandatory"></span></label>
 			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Internal Number " onblur=" checknegative(this) "   id="InternalNum"
+			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "   id="InternalNum"
 			                    onkeypress=" return isNumber(event) ">
 			            </div>
 			            
@@ -358,7 +358,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>      
 			            
 			            <div class=" col-md-2 ">
-			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                <label>Marital Status </label>
 			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
 			                	<option value="U">UnMarried</option>
 								<option value="M">Married</option>									
@@ -366,12 +366,18 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 		
 			            <div class=" col-md-2 ">
-			                <label>GPF/PRAN:</label>
+			                <label>GPF/PRAN</label>
 			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
+			            
+			             <div class=" col-md-2 ">
+			                <label>UAN No</label>
+			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
+			                    class=" form-control input-sm " placeholder="Enter UAN No "    onblur="checknegative(this) ">
+			            </div>
 			                
-			             <div class=" col-md-4 ">
+			             <div class=" col-md-2 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
@@ -548,6 +554,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
     <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
 setPatternFilter($("#Phoneno"), /^-?\d*$/);
+setPatternFilter($("#UANNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#InternalNum"), /^-?\d*$/);

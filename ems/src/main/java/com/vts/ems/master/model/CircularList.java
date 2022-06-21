@@ -20,6 +20,7 @@ public class CircularList implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long CircularId;
+	private String ReferenceNo;
 	private String Description;
 	private String Path;
 	private String OriginalName;

@@ -437,7 +437,7 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return model.getPasswordHistoryId(); 
 		}
-		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName, hospitaladdress FROM chss_empanelledhospital WHERE isactive='1'";
+		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName, hospitaladdress FROM chss_empanelledhospital WHERE isactive='1' order by EmpanelledHospitalId desc";
 		@Override
 		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
 		{
@@ -452,7 +452,7 @@ public class EmsDaoImpl implements EmsDao
 				return null;
 			}
 		}
-		private static final String GETCIRCULAR="SELECT circularid , description , path , CircularDate  ,OriginalName,todate FROM chss_circular_list ORDER BY circularid DESC";
+		private static final String GETCIRCULAR="SELECT circularid , description , path , CircularDate  ,OriginalName,todate FROM chss_circular_list ORDER BY CircularDate DESC";
 		@Override
 		public List<Object[]> GetCircularList()throws Exception
 		{

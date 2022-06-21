@@ -40,34 +40,45 @@
 	<div class="card-body" >			
 		<div class="card" >
 			<div class="card-body main-card  " align="center" >
-				<form name="myfrm" action="CircularADDEDIT.htm" method="POST" id="myfrm1" autocomplete="off" enctype="multipart/form-data">
+			<%if(circular!=null){ %>
+				<form name="myfrm" action="CircularEDIT.htm" method="POST" id="myfrm1" autocomplete="off" enctype="multipart/form-data">
+				<%}else{%>
+				<form name="myfrm" action="CircularADD.htm" method="POST" id="myfrm1" autocomplete="off" enctype="multipart/form-data">
+					<%}%>
 					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 					<div class="row" align="center">
 					
 				 	
-					<div class="col-md-2" >
+					<div class="col-md-2" style="margin-right: -70px;">
 						<div class="form-group">
 							<label><b>Circular Date</b><span class="mandatory"	style="color: red;">*</span></label>
-							 <input type="text" style="width: 80%;" class="form-control input-sm " value=""  id="circulardate" name="circulardate"  required="required" readonly="readonly" >
+							 <input type="text" style="width: 60%; " class="form-control input-sm " value=""  id="circulardate" name="circulardate"  required="required" readonly="readonly" >
 						</div>
 					</div>
-					<div class="col-md-2" >
+					<div class="col-md-2" style="margin-right: -65px;">
 						<div class="form-group">						
 							<label><b>To Date </b><span class="mandatory"	style="color: red;">*</span></label>
-							<input type="text"  style="width: 80%;" class="form-control input-sm " value=""  id="todate" name="todate"  required="required" readonly="readonly" > 
+							<input type="text"  style="width: 60%;" class="form-control input-sm " value=""  id="todate" name="todate"  required="required" readonly="readonly" > 
 						</div>
 					</div> 
+				
+					<div class="col-md-2" style="margin-right: -25px;">
+						<div class="form-group">						
+							<label><b>Reference No</b><span class="mandatory"	style="color: red;">*</span></label>
+							<input type="text"  style="width: 80%;" class="form-control input-sm " <%if(circular!=null && circular.getReferenceNo()!=null){%>value="<%=circular.getReferenceNo()%>" <%}%>   id="referenceno" name="referenceno"  required="required" > 
+						</div>
+					</div>
 						
-						<div class="col-md-3">
+						<div class="col-md-2" >
 							<div class="form-group">
 							<label><b>Description </b><span class="mandatory"	style="color: red;">*</span></label>
-							  <textarea  name="description" rows="2" cols="60" style="border-bottom-color: gray;" required="required" ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
+							  <textarea id="descrip" name="description" rows="2" cols="60" style="border-bottom-color: gray;" required="required" ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
 							</div>
 						</div>
-						<div class="col-md-2" style="margin-left: 15%;">
+						<div class="col-md-2" style="margin-left: 23%;">
 						<div class="form-group">
-						<label><b>File</b></label>
-						<%if(circular!=null && circular.getPath()!=null){%>
+						<label><b>File</b> <span class="mandatory"	style="color: red;">*</span></label>
+						<%if(circular!=null ){%>
 						 <input type="file"   class="form-control input-sm "  value=" <%=circular.getPath()%>"   id="file" name="selectedFile" >
 							<%}else{%>
 							 <input type="file"   class="form-control input-sm "  value="" required="required"  id="file" name="selectedFile" >
@@ -75,8 +86,7 @@
 					</div>
 					</div>
 						<%if(circular!=null && circular.getPath()!=null){%>
-						<%-- <a href="download-CircularFile-attachment?path=<%=circular.getPath()%>//<%=circular.getOriginalName() %>" title="Download" ><i style="color: #019267; margin-top: 100%;" class="fa-solid fa-download fa-2x"></i></a> <%}%> --%>
-						<button type="submit" class="btn btn-sm" style="height: 10%; width: 4%;  margin-top: 2.5%;" name="path" value="<%=circular.getPath()%>//<%=circular.getOriginalName()%>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+						<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="height: 10%; width: 4%;  margin-top: 2.5%;" name="path" value="<%=circular.getPath()%>//<%=circular.getOriginalName()%>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download fa-2x"></i>
 										    </button><%} %>
 						
@@ -107,14 +117,21 @@
 					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					        </div>
 					        <!-- Modal body -->
-					        <div class="modal-body">
+					       <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group "  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile1" > 
+					      		 </div>
+					      		 </div>
+					        	
 					        	<div class="form-inline">
 					        	<div class="form-group w-100">
 					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="text" class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" > 
+					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
 					      		</div>
 					      		</div>
-					        </div>
+					      </div>
 					      
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
@@ -130,7 +147,7 @@
 						
 						<%} %>
 						
-				</form>
+					<%if(circular!=null){ %></form><%}else{%></form><%}%>
 			</div>
 	   </div>
 	</div>
@@ -203,9 +220,18 @@ $("#circulardate").change( function(){
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm("Are You Sure To Update!")){
+	var description = $('#descrip').val();
+	var refNo = $('#referenceno').val();
+	if(description=="" || description==null || description=="null"){
+		 alert("Enter the Description!");
+		 return false;
+	}else if(refNo==''|| refNo==null || refNo=="null" ){
+		 alert("Enter the Reference No!");
+		 return false;
+	}else{
 		 $('#myModal').modal('show');
-	}	
+		 return false;
+	}
 }
 
 

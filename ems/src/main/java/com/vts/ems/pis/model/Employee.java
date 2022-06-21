@@ -24,6 +24,7 @@ public class Employee {
 	private String ExtNo;
 	private String Email;
 	private Long DivisionId;
+	private String UANNo;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
