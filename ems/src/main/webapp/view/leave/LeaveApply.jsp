@@ -55,7 +55,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 
 </style>
 </head>
-<body>
+<body style="overflow-x: hidden !important ">
        <!-- 
         <nav id="sidebar">
 
@@ -103,7 +103,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
     long roleid=(Long)session.getAttribute("FormRole");
 	   %>
-<div class="page card dashboard-card" style="margin-top: 1px;">
+<div class="page card dashboard-card">
 
 			 
    <div class="card-body" align="center" >
