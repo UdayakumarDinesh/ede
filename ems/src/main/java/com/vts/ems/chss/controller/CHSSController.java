@@ -493,6 +493,8 @@ public class CHSSController {
 			String[] billdate=req.getParameterValues("billdate");
 			String[] GSTAmt=req.getParameterValues("GSTAmt");
 			String[] DiscountAmt=req.getParameterValues("DiscountAmt");
+			String[] DiscountPer=req.getParameterValues("DiscountPer");
+			String[] finalbillamount=req.getParameterValues("finalbillamount");
 			
 			ChssBillsDto dto=new ChssBillsDto();
 			
@@ -501,7 +503,9 @@ public class CHSSController {
 			dto.setCenterName(centernames);
 			dto.setBillNo(billno);
 			dto.setBillDate(billdate);
+			dto.setFinalbillamount(finalbillamount);
 			dto.setGSTAmount(GSTAmt);
+			dto.setDiscountPer(DiscountPer);
 			dto.setDiscount(DiscountAmt);
 			dto.setCreatedBy(Username);
 			
@@ -534,21 +538,25 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSBillEdit.htm "+Username);
 		try {
-			
 			String billid = req.getParameter("billid");
 			String centername = req.getParameter("centername-"+billid);
 			String billno = req.getParameter("billno-"+billid);
 			String billdate = req.getParameter("billdate-"+billid);
 			String GSTAmt = req.getParameter("GSTAmt-"+billid);
 			String Discount = req.getParameter("Discount-"+billid);
+			String finalbillamount = req.getParameter("finalbillamount-"+billid);
+			String DiscountPer = req.getParameter("DiscountPer-"+billid);
 			
 			CHSSBill bill = new CHSSBill();
 			bill.setBillId(Long.parseLong(billid));
 			bill.setCenterName(centername);
 			bill.setBillNo(billno);
 			bill.setBillDate(sdf.format(rdf.parse(billdate)));
-			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
+//			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
+			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(Discount));
+			bill.setDiscountPercent(Double.parseDouble(DiscountPer));
+			bill.setFinalBillAmt(CropTo2Decimal(finalbillamount));
 			bill.setModifiedBy(Username);
 			
 			long count = service.CHSSBillEdit(bill);
@@ -768,7 +776,7 @@ public class CHSSController {
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Double.parseDouble(conscharge));
 			consult.setModifiedBy(Username);
-			
+			consult.setBillId(Long.parseLong(req.getParameter("billid")));
 			long count = service.ConsultationBillEdit(consult,chssapplyid,consultmainidold);
 			
 			if (count > 0) {
@@ -926,14 +934,15 @@ public class CHSSController {
 			meds.setMedQuantity(Integer.parseInt(medsquantity));
 			meds.setPresQuantity(Integer.parseInt(medspresquantity));
 			meds.setModifiedBy(Username);
+			meds.setBillId(Long.parseLong(req.getParameter("billid")));
 			
 			long count = service.MedicineBillEdit(meds,chssapplyid);
 			
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Medicines Data Updated Successfully");
+				redir.addAttribute("result", "Medicine(s) Data Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Medicines Data Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Medicine(s) Data Update Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -1054,6 +1063,7 @@ public class CHSSController {
 			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
 			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
 			test.setTestCost(Double.parseDouble(testcost));
+			test.setBillId(Long.parseLong(req.getParameter("billid")));
 			test.setModifiedBy(Username);
 			
 			long count = service.TestBillEdit(test);
@@ -1539,7 +1549,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSClaimFwdApproveAjax.htm "+Username);
-		long allow[]= {0,0,0};
+		String allow[]= {"0","0","0","0"};
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
@@ -1547,17 +1557,26 @@ public class CHSSController {
 			double claimamount=0;
 			for(Object[] bill : claimdata) 
 			{
-				if(Double.parseDouble(bill[8].toString())==0) 
+				if(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString()) != Double.parseDouble(bill[9].toString()))
 				{
-					allow[0]=1;
+					allow[2]="1";
+					allow[3]=bill[2].toString();
 					break;
 				}
-				claimamount += Double.parseDouble(bill[8].toString());
+				
+				if(Double.parseDouble(bill[9].toString())==0) 
+				{
+					allow[1]="1";
+					break;
+				}
+				claimamount += Double.parseDouble(bill[9].toString());
+				
+				
 			}
 			
-			if(claimamount>0) 
+			if(claimamount==0) 
 			{
-				allow[1]=1;
+				allow[0]="1";
 			}
 			
 		} catch (Exception e) {

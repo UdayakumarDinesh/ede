@@ -1,7 +1,6 @@
 package com.vts.ems.dao;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -258,7 +257,7 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
-	private static final String EMPHANDOVERLOGINTYPELIST="SELECT  l.logintype,  lt.LoginDesc FROM  login l,  login_type lt WHERE   l.isactive=1 AND l.LoginType=lt.LoginType AND l.empid=:empid UNION SELECT l.logintype,  lt.LoginDesc FROM  leave_ra_sa_handingover ho,  login l,  login_type lt WHERE ho.is_active = 1  AND l.isactive = 1  AND l.logintype=lt.LoginType  AND ho.from_empid = l.empid  AND ho.status = 'A'  AND (CURDATE() BETWEEN ho.from_date AND ho.to_date) AND ho.to_empid = :empid ";
+	private static final String EMPHANDOVERLOGINTYPELIST="SELECT l.logintype,  lt.LoginDesc FROM  leave_ra_sa_handingover ho,  login l,  login_type lt WHERE ho.is_active = 1  AND l.isactive = 1  AND l.logintype=lt.LoginType  AND ho.from_empid = l.empid  AND ho.status = 'A'  AND (CURDATE() BETWEEN ho.from_date AND ho.to_date) AND ho.to_empid = :empid ";
 	
 	@Override
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception
@@ -268,6 +267,42 @@ public class EmsDaoImpl implements EmsDao
 			Query query = manager.createNativeQuery(EMPHANDOVERLOGINTYPELIST);
 			
 			query.setParameter("empid", empid);
+			return (List<Object[]>)query.getResultList();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO EmpHandOverLoginTypeList "+ e);
+			return null;
+		}
+	}
+	
+	private static final String LOGINLOGINTYPE="SELECT lt.LoginType, lt.LoginDesc FROM login l, login_type lt WHERE l.LoginType = lt.logintype AND l.loginid=:loginid ";
+	
+	@Override
+	public List<Object[]> LoginLoginType(String loginid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO LoginLoginType");	
+		try {
+			Query query = manager.createNativeQuery(LOGINLOGINTYPE);
+			
+			query.setParameter("loginid", loginid);
+			return (List<Object[]>)query.getResultList();
+		}
+		catch (Exception e) {
+			logger.error(new Date() +" Inside DAO LoginLoginType "+ e);
+			return null;
+		}
+	}
+	
+	private static final String ALLOWEDlOGINTYPESlIST="SELECT lt.logintype,  lt.LoginDesc FROM login l,login_type_access lta, login_type lt WHERE l.logintype = lta.logintype AND lta.AllowedLoginTypes = lt.LoginType AND lta.isactive=1 AND l.loginid=:loginid ";
+	
+	@Override
+	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception
+	{		
+		logger.info(new Date() +"Inside DAO EmpHandOverLoginTypeList");	
+		try {
+			Query query = manager.createNativeQuery(ALLOWEDlOGINTYPESlIST);
+			
+			query.setParameter("loginid", loginid);
 			return (List<Object[]>)query.getResultList();
 		}
 		catch (Exception e) {

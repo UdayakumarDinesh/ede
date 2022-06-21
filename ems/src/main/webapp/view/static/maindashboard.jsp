@@ -56,85 +56,87 @@
 	/* counter css */
 	
 	.counter{
+    color: #628900;
+    background: linear-gradient(to bottom, #628900 49%, transparent 50%);
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-   	max-width: 200px; 
+    /* width: 200px; */
+   /*  height: 200px; */
+    padding: 19px 20px 18px;
     margin: 0 auto;
-	}
-	.counter .counter-content{
-	    height: 200px;
-	    padding: 55px 0 0;
-	    margin: 0 0 10px;
-	    position: relative;
-	    z-index: 1;
-	}
-	.counter .counter-content:before,
-	.counter .counter-content:after{
-	    content: '';
-	    background: linear-gradient(to right bottom,#e9e9e9,#fff);
-	    border-radius: 50% 50% 0 50%;
-	    border: 4px solid #fff;
-	    box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
-	    position: absolute;
-	    left: 7px;
-	    top: 7px;
-	    right: 7px;
-	    bottom: 7px;
-	    z-index: -1;
-	}
-	.counter .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #EA237E 51%);
-	    height: 70%;
-	    width: 70%;
-	    border: none;
-	    border-radius: 0;
-	    box-shadow: none;
-	    right: 0;
-	    bottom: 0;
-	    left: auto;
-	    top: auto;
-	    z-index: -2;
-	}
-	.counter .counter-icon{
-	    color:#999;
-	    font-size: 27px;
-	    line-height: 27px;
-	    position: absolute;
-	    bottom: 15px;
-	    right: 15px;
+    border: 18px solid #628900;
+    border-radius: 100% 100%;
+    box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.3);
 	}
 	.counter .counter-value{
-	    color:#fff;
-	    background: #EA237E;
-	    font-size: 25px;
+	    color: #fff;
+	    font-size: 23px; 
 	    font-weight: 600;
-	    line-height: 6rem;
-	   	width: 47%;
-    	max-width: 56%;
-	    /* height: 95px; */
-	    border-radius: 50px;
-	    display: inline-block;
+	    display: block;
+	    margin: 0 0 16px;
 	}
 	.counter h3{
-	    color: #888;
-	    font-size: 17px;
-	    font-weight: 700;
+	    font-size: 14px;
+	    font-weight: 600;
 	    text-transform: uppercase;
 	    margin: 0;
 	}
-	.counter.purple .counter-value{ background: #6D4B87; }
-	.counter.purple .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #835AA8 51%);
+	.counter.blue{
+	    color: #187498;
+	    background: linear-gradient(to bottom, #187498 49%, transparent 50%);
+	    border-color: #187498;
 	}
-	.counter.blue .counter-value{ background: #187498; }
-	.counter.blue .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #187498 51%);
+	.counter.purple{
+	    color: #6E3274;
+	    background: linear-gradient(to bottom, #6E3274 49%, transparent 50%);
+	    border-color: #6E3274;
 	}
-	.counter.skyblue .counter-value{ background: #36AE7C; ; }
-	.counter.skyblue .counter-content:after{
-	    background: linear-gradient(to right bottom, transparent 50%, #36AE7C  51%);
-	}\
-	@media screen and (max-width:990px){
+	.counter.green{
+	    color: #36AE7C;
+	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
+	    border-color: #36AE7C;
+	}
+	@media screen and (max-width:990px) {
 	    .counter{ margin-bottom: 40px; }
+	}
+
+	@media screen and (min-width: 1151px) and (max-width : 1500px){
+		.counter {
+			width : 150px;
+			height: 150px;
+		}
+	}
+	
+	@media screen and (min-width: 1501px) {
+		.counter {
+			width : 180px;
+			height: 180px;
+			padding: 49px 19px 19px;
+		}
+		
+		.counter h3{
+			font-size: 20px
+		}
+		
+		.counter .counter-value {
+		    font-size: 30px;
+		    margin: -27px 0 21px;
+		}
+	}
+
+	@media screen and (max-width : 1150px){
+		.counter h3{
+			font-size: 11px
+		}
+		.counter {
+			width : 135px;
+			height: 135px;
+		}
+		
+		.counter .counter-value{
+			font-size: 17px;
+			 margin: 0 0 18px;
+		}
 	}
 
 	
@@ -203,31 +205,7 @@
   	margin: 0px 35px !important;
   }
   
-  @media only screen and (max-width: 1600px){
-
-	.counter .counter-value{
-		line-height: 4rem;
-		font-size: 20px;
-		width: 36%;
-		
-	}
-	
-	.counter .counter-content{
-		height: 125px;
-		padding: 37px 0 0;
-	}
-
-	.counter{
-   	max-width: 165px; 
-	}
-
-  	.counter h3{
-  		font-size: 12px !important;
-  	}
-  }
-
-	
-	
+s
 	@media (max-width: 600px) {
 	    .highcharts-figure,
 	    .highcharts-data-table table {
@@ -249,7 +227,7 @@
 	<body  >
 	<%	
 	
-		List<Object[]> emplogintypelist     = (List<Object[]> )session.getAttribute("emplogintypelist");
+		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
 		String Fromdate=(String)request.getAttribute("Fromdate");
 		String Todate=(String)request.getAttribute("Todate"); 
@@ -307,43 +285,27 @@
 			  <div class="row">
 			  
 			    <div class="col-md-6">
-			   		<div class="container">
+			   		
+					<div class="container">
 					    <div class="row">
-					        <div class="col-md-4 col-sm-6">
+					        <div class="col-md-4">
 					            <div class="counter purple">
-					                <div class="counter-content ">
-					                    <div class="counter-icon">
-					                        <i class="fa fa-globe"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[2] %></span>
-					                </div>
+					                <span class="counter-value"><%=TotalCountData[2] %></span>
 					                <h3>TOTAL</h3>
 					            </div>
 					        </div>
-					        
-					        <div class="col-md-4 col-sm-6">
+					        <div class="col-md-4 ">
 					            <div class="counter blue">
-					                <div class="counter-content">
-					                    <div class="counter-icon">
-					                        <i class="fa-solid fa-clock"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[0] %></span>
-					                </div>
+					                <span class="counter-value"><%=TotalCountData[0] %></span>
 					                <h3>PENDING</h3>
 					            </div>
 					        </div>
-					        <div class="col-md-4 col-sm-6">
-					            <div class="counter skyblue">
-					                <div class="counter-content">
-					                    <div class="counter-icon">
-					                        <i class="fa-solid fa-circle-check"></i>
-					                    </div>
-					                    <span class="counter-value"><%=TotalCountData[1] %></span>
-					                </div>
+					        <div class="col-md-4 ">
+					            <div class="counter green">
+					                <span class="counter-value"><%=TotalCountData[1] %></span>
 					                <h3>APPROVED</h3>
 					            </div>
 					        </div>
-					        
 					    </div>
 					</div>
 			    </div>
@@ -615,15 +577,21 @@ $('#isself').change(function(){
 	
 	// The amount gauge
 
+	var maxamount = Math.round(<%=amountdata[0]%>);
+	
 	var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: <%=amountdata[0]%>  ,
+        max: maxamount  ,
         tickWidth: 0,
-        tickPositions: [0 , <%=amountdata[0]%> ],
+        tickPositions: [0 , maxamount ],
         title: {
             text: 'Amount Settled',
-          
+        },
+        labels : {
+        	style :{
+        		'font-size': 20	
+        	}
         }
     },
 
@@ -651,7 +619,6 @@ $('#isself').change(function(){
             condition: {
                 maxWidth: 500
             },
-            // Make the labels less space demanding on mobile
             chartOptions: {
                 xAxis: {
                     labels: {
