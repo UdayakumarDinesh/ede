@@ -362,7 +362,8 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <!-- /. Purpose of leave:-->
 	                    
 	                    
-	                    
+	                    <input  type="hidden" name="empNo"  value="<%=empNo%>">
+	                   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 	                    <!-- Leave address -->
 	                    <div class="form-group">
 	                        <div class="row">
@@ -401,9 +402,11 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                                
 	                                <option value="NotSelected">Select Employee Whom You Want To Hand Over</option>
 	                                 <%if(emplist!=null&&emplist.size()>0){
-	                                   for(Object[] ls:emplist){%>
+	                                   for(Object[] ls:emplist){
+	                                   if(!ls[0].toString().equalsIgnoreCase(empNo)){
+	                                   %>
                                        <option value="<%=ls[0]%>"><%=ls[1]%> (<%=ls[0]%>)-<%=ls[2]%></option>
-                                     <%}}%>
+                                     <%}}}%>
 	                                </select>
 	                            </div>
 	                        </div>
@@ -412,6 +415,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                   <%}else{%>  
 	                    <input type="hidden" name="HandingOverEmpid" value="NotSelected">
 	                   <%}%> 
+	                   
 	                     <!--  reset apply and check button -->
 	                    <div class="form-group">
 	                    	<div class="row">
@@ -636,6 +640,7 @@ $(fromApplyDate).on('apply.daterangepicker', function(ev, picker) {
 	   {
 		$('#toApplyDate').attr('disabled', false).daterangepicker({
 		"minDate": $(this).val(),
+		"startDate":$(this).val(),
 		"singleDatePicker": true,
 		locale: {
     	format: 'DD-MM-YYYY'
@@ -781,6 +786,17 @@ function halffull()
 	
 	 if((halforfull=="H"||halforfull=="T")&&leavetype=="0001")
 	{
+		 
+		
+			
+					$('#toApplyDate').attr('disabled', false).daterangepicker({
+					"minDate": $('#fromApplyDate').val(),
+					"startDate":$('#fromApplyDate').val(),
+					"singleDatePicker": true,
+					locale: {
+			    	format: 'DD-MM-YYYY'
+					}
+				    }); 			
 		 $("#anorfn").prop("disabled", false);
 			$(".selectpicker[data-id='anorfn']").removeClass("disabled");
 			$('.selectpicker').selectpicker('refresh');// fn/an dropdown enabled
@@ -867,8 +883,13 @@ function halffull()
 		success : function(result) {
 		var result = JSON.parse(result);
 		 var sp=document.getElementById("sp");
-	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 20px;'>"+result+"</b>";
-
+		if(result[1]=='Fail'){
+	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
+		}else if(result[1]=='Pass'){
+			 $("#check").hide();
+			 $("#submit").show();
+			 sp.innerHTML="<b style='color:green; text-align: center; font-size: 17px;'>"+result[0]+"</b><br><b style='color:orange; text-align: center; font-size: 15px;margin-left:10px;'>No Of Days: "+result[2]+"</b>";
+		}
 		
 		
 			

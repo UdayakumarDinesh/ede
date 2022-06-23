@@ -1,5 +1,6 @@
 package com.vts.ems.leave.dao;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveRegister;
+import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
 
 
@@ -40,12 +43,17 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CREDITBYID="SELECT b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.cl AS phcl,d.ph,a.ccl AS ccl,a.sl AS sl,a.month,a.year,d.gender,a.ml,a.pl   FROM leave_register a, employee b, employee_desig c,employee_details d  WHERE  a.registerid=:id AND d.empno=b.empno AND b.desigid=c.desigid AND b.empno=a.empid";
     private static final String HOLIDAYS="select holidate,holiname from leave_holiday_workingday where isactive='1' and case when 'U'=:type then holidate>=DATE(SYSDATE()) else holitype=:type end and year(holidate)=YEAR(CURDATE()) ORDER BY holidate";
     private static final String OFFICERDETAILS="SELECT d.empno,d.empname,e.designation,a.empname AS name1,b.empname AS name2 FROM employee a, employee b, leave_sa_ra c,employee d,employee_desig e WHERE a.empno=c.ra AND b.empno=c.sa AND c.empid=:empNo AND c.empid=d.empno AND e.desigid=d.desigid";
-    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation FROM employee d,employee_desig e WHERE  :empNo=d.empno AND e.desigid=d.desigid";
+    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,d.divisionid FROM employee d,employee_desig e WHERE  :empNo=d.empno AND e.desigid=d.desigid";
     private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation from  employee d,employee_desig e WHERE  e.desigid=d.desigid";
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
     private static final String LABMASTER="FROM LabMaster";
     private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
+    private static final String CHECKDAY="SELECT COUNT(*) FROM leave_holiday_workingday WHERE holidate=:inDate  AND holitype=:inType";
+    private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
+    private static final String CHECKHANDOVER="select count(*) from";
+    private static final String GETAPPLID="SELECT MAX(SUBSTRING_INDEX(applid,'/',2)) FROM leave_appl where leaveyear=:year";
+    
     
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -229,5 +237,81 @@ public class LeaveDaoImpl implements LeaveDao{
 		List<Object[]> getRegister= query.getResultList();
 		return getRegister;
 	}
+	
+
+	@Override
+	public long checkHoliday(String inDate,String inType) throws Exception {
+		logger.info(new Date() +"Inside checkHoliday");	
+		Query query = manager.createNativeQuery(CHECKDAY);
+		query.setParameter("inType", inType);
+		query.setParameter("inDate", inDate);
+		BigInteger checkHoliday=(BigInteger)query.getSingleResult();
+		return checkHoliday.longValue();
+	}
+	
+
+	@Override
+	public Object[] checkLeave(String EmpNo,String fromDate,String inDate) throws Exception {
+		logger.info(new Date() +"Inside checkLeave");	
+		Query query = manager.createNativeQuery(CHECKLEAVE);
+		query.setParameter("empno", EmpNo);
+		query.setParameter("fromDate", fromDate);
+		query.setParameter("inDate", inDate);
+		Object[] checkLeave=null;
+		try {
+		checkLeave=(Object[])query.getSingleResult();
+		}
+		catch (Exception e) {
+			
+		}
+		return checkLeave;
+	}
+
+
+	@Override
+	public long getCountHandingOver(String EmpNo, String fromDate, String ToDate) throws Exception {
+		logger.info(new Date() +"Inside checkHoliday");	
+		Query query = manager.createNativeQuery(CHECKHANDOVER);
+		query.setParameter("empno", EmpNo);
+		query.setParameter("fromDate", fromDate);
+		query.setParameter("toDate", ToDate);
+		BigInteger checkHoliday=(BigInteger)query.getSingleResult();
+		return checkHoliday.longValue();
+	}
+	
+	@Transactional
+	@Override
+	public long LeaveApplInsert(LeaveAppl appl) throws Exception {
+		logger.info(new Date() +"Inside LeaveApplInsert");	
+		manager.persist(appl);
+		manager.flush();
+		return appl.getLeaveApplId();
+	}
+	
+	@Transactional
+	@Override
+	public long LeaveTransInsert(LeaveTransaction leaveTransaction) throws Exception {
+		logger.info(new Date() +"Inside LeaveTransInsert");	
+		manager.persist(leaveTransaction);
+		manager.flush();
+		return leaveTransaction.getLeaveTransactionId();
+	}
+
+
+	@Override
+	public long getLeaveApplId(int Year) throws Exception {
+		logger.info(new Date() +"Inside getLeaveApplId");	
+		Query query = manager.createNativeQuery(GETAPPLID);
+		query.setParameter("year", Year);
+		long id=0;
+		try {
+		BigInteger checkHoliday=(BigInteger)query.getSingleResult();
+		id=checkHoliday.longValue();
+		}catch (Exception e) {
+		e.printStackTrace();
+		}
+		return id;
+	}
+	
 	
 }

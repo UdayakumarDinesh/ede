@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.vts.ems.leave.dto.LeaveCheckDto;
+import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -265,19 +265,20 @@ public class LeaveController {
 
 	@RequestMapping(value = "GetLeaveChecked.htm" , method = RequestMethod.GET)
 	public @ResponseBody String GetLeaveChecked(HttpServletRequest req ,HttpSession ses) throws Exception {
-		String Result="Please Try Again";
+		String[] Result=null;
 		Gson json = new Gson();
 		String UserId=req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside GetLeaveChecked.htm "+UserId);		
 		try {
-			LeaveCheckDto dto=new LeaveCheckDto();
+			LeaveApplyDto dto=new LeaveApplyDto();
 			dto.setEmpNo(req.getParameter("empno"));
-			dto.setElCash(req.getParameter("ELCash"));
+			dto.setLTC(req.getParameter("ELCash"));
 			dto.setFromDate(req.getParameter("fdate"));
 			dto.setToDate(req.getParameter("tdate"));
 			dto.setLeaveType(req.getParameter("leavetype"));
 			dto.setHalfOrFull(req.getParameter("halforfull"));
 			dto.setHours(req.getParameter("hours"));
+			dto.setHandingOverEmpid(req.getParameter("HandingOverEmpid"));
 			dto.setUserId(UserId);
 			Result=service.LeaveCheck(dto);
 		}
@@ -287,4 +288,35 @@ public class LeaveController {
 		}
 			return json.toJson(Result);	
 	}
+	
+	@RequestMapping(value = "apply-leave-add.htm" , method = RequestMethod.POST)
+	public  String applyLeaveAdd(HttpServletRequest req ,HttpSession ses) throws Exception {
+		String[] Result=null;
+		String UserId=req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside applyLeaveAdd.htm "+UserId);		
+		try {
+			LeaveApplyDto dto=new LeaveApplyDto();
+			dto.setEmpNo(req.getParameter("empNo"));
+			dto.setLTC(req.getParameter("elcash"));
+			dto.setFromDate(req.getParameter("startdate"));
+			dto.setToDate(req.getParameter("enddate"));
+			dto.setLeaveType(req.getParameter("leavetypecode"));
+			dto.setHalfOrFull(req.getParameter("fullhalf"));
+			dto.setHours(req.getParameter("hours"));
+			dto.setAnFN(req.getParameter("anfn"));
+			dto.setPurLeave(req.getParameter("leavepurpose"));
+			dto.setLeaveAddress(req.getParameter("leaveadd"));
+			dto.setRemarks(req.getParameter("remark"));
+			dto.setHandingOverEmpid(req.getParameter("HandingOverEmpid"));
+			dto.setUserId(UserId);
+			Result=service.applyLeaveAdd(dto);
+			
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside applyLeaveAdd.htm "+UserId, e);
+		}
+			return "redirect:/applyLeaveRedirect.htm";	
+	}
+
 }
