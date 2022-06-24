@@ -16,10 +16,17 @@ public class DateTimeFormatUtil
 {
 	private static SimpleDateFormat regularDateFormat=new SimpleDateFormat("dd-MM-yyyy");
 	private static SimpleDateFormat sqlDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-	
+	DateTimeFormatter sqlDateFormatLocalDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	public static  SimpleDateFormat getMonthNameAndYear() {
 		return new SimpleDateFormat("MMM-yyyy");
 	}
+	
+	
+	public DateTimeFormatter getSqlDateFormatLocalDate() {
+		return sqlDateFormatLocalDate;
+	}
+
+
 	public static  SimpleDateFormat getSqlDateFormat() {
 		return sqlDateFormat;
 	}
