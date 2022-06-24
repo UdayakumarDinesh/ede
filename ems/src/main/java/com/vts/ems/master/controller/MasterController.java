@@ -75,7 +75,9 @@ public class MasterController {
 				List<Object[]> otheritem = service.OtherItems(); 
 				req.setAttribute("itemlist", otheritem);
 	       }catch(Exception e){
+	    	   logger.error(new Date() +" Inside Otheritem.htm "+UserId, e);
 	    	   e.printStackTrace();
+	    	  return "static/Error";
 	       }
 			return "masters/OtherItems";
 	     }
@@ -89,7 +91,9 @@ public class MasterController {
 				List<Object[]> ChssTestMain = service.ChssTestSub(); 
 				req.setAttribute("ChssTestMain", ChssTestMain);
 	       }catch(Exception e){
+	    	   logger.error(new Date() +"Inside TestSub.htm "+UserId,e);
 	    	   e.printStackTrace();
+		    return "static/Error";
 	       }
 			return "masters/CHSSTestSub";
 	    }
@@ -139,9 +143,9 @@ public class MasterController {
 					return "redirect:/TestSub.htm";
 					 }		
 	       }catch(Exception e){
-	    	   redir.addAttribute("resultfail", "Internal Error!");
+	    	   logger.info(new Date() +"Inside ChssTestSub.htm "+UserId,e);
 	    	   e.printStackTrace();
-	    	   return "redirect:/TestSub.htm";
+	    	   return "static/Error";
 	       }
 			
 	    }
@@ -190,9 +194,9 @@ public class MasterController {
 				 	 
 				 
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside ChssTestSubEdit.htm "+UserId,e);				 
 		    	   e.printStackTrace();
-				return "redirect:/TestSub.htm";
+		    	   return "static/Error";
 			}
 	    }
 	    
@@ -209,7 +213,6 @@ public class MasterController {
 			logger.info(new Date() +"Inside OtherItemAdd.htm "+UserId);
 			try {	
 		
-				
 					String itemname = (String)req.getParameter("ItemName");
 					
 					CHSSOtherItems item = new CHSSOtherItems();
@@ -228,9 +231,9 @@ public class MasterController {
 				
 				 
 			}catch (Exception e) {
-				redir.addAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside OtherItemAdd.htm "+UserId,e);
 				e.printStackTrace();
-				return "redirect:/OtherItems.htm";
+				return "static/Error";
 			}
 			
 	    }
@@ -277,9 +280,9 @@ public class MasterController {
 				}
 			return "redirect:/OtherItems.htm";
 			}catch (Exception e) {
-				redir.addAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside OtherItemEdit.htm "+UserId,e);				
 				e.printStackTrace();
-				return "redirect:/OtherItems.htm";
+				return "static/Error";
 			}
 			
 	    }
@@ -310,8 +313,9 @@ public class MasterController {
 			
 				return "masters/CHSSMedicineList";
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside MedicineList.htm "+UserId,e);
 				e.printStackTrace();
-				return "masters/CHSSMedicineList";
+				return "static/Error";
 			}
 			
 		}
@@ -367,9 +371,9 @@ public class MasterController {
 				}	
 				return "redirect:/MedicineList.htm";
 			}catch (Exception e){
+				logger.error(new Date() +"Inside ChssMedicine.htm "+UserId ,e);
 				e.printStackTrace();
-				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
-				return "redirect:/MedicineList.htm";
+				return "static/Error";
 			}
 		}
 		
@@ -377,7 +381,7 @@ public class MasterController {
 		public String EDITMedicine(HttpServletRequest req ,HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
 		{
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside ChssMedicine.htm "+UserId);
+			logger.info(new Date() +"Inside ChssMedicineEdit.htm "+UserId);
 			try {
 				String action = (String)req.getParameter("Action");
                   if ("EDITMEDICINE".equalsIgnoreCase(action)) {
@@ -416,9 +420,9 @@ public class MasterController {
 				}
                   return "redirect:/MedicineList.htm";
 			} catch (Exception e) {
-				e.printStackTrace();
-				redir.addAttribute("resultfail", "SOME PROBLE OCCURE!");
-				return "redirect:/MedicineList.htm";
+				logger.error(new Date() +"Inside ChssMedicineEdit.htm "+UserId ,e);
+				e.printStackTrace();			
+				return "static/Error";
 			}
 		}
 		
@@ -428,7 +432,7 @@ public class MasterController {
 			int count =0;
 			Gson json = new Gson();
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside CheckDuplicateMedicine.htm()"+UserId);
+			logger.info(new Date() +"Inside DuplicateMedicine.htm"+UserId);
 			try {
 				String Medicinename = (String)req.getParameter("MedicineName");
 				String treatid = (String)req.getParameter("Treatmentid");
@@ -436,6 +440,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
+				logger.error(new Date() +"Inside DuplicateMedicine.htm"+UserId ,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -455,6 +460,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
+				logger.error(new Date() +"Inside DuplicateOtherItem.htm"+UserId,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -474,9 +480,9 @@ public class MasterController {
 					return "masters/CHSSDoctorsList";
 						
 			}catch(Exception e){
-				req.setAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside DoctorsMasters.htm "+UserId,e);
 				e.printStackTrace();
-				return "masters/CHSSDoctorsList";
+				return "static/Error";
 			}			
 		}    
 		
@@ -524,9 +530,9 @@ public class MasterController {
 					}
 				return "redirect:/DoctorsMaster.htm";
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside DoctorsMasterEdit.htm "+UserId,e);
 				e.printStackTrace();
-				return "redirect:/DoctorsMaster.htm";
+				return "static/Error";
 			}
 		}
 		
@@ -559,9 +565,9 @@ public class MasterController {
 			           
 				}
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside UnitMaster.htm "+UserId,e);
 				e.printStackTrace();
-				return "masters/LabMasterEdit";
+				return "static/Error";
 			}
 			
 		}
@@ -629,9 +635,9 @@ public class MasterController {
 					return "redirect:/UnitMaster.htm";
 				
 			} catch (Exception e) {
-				req.setAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside UnitMasterEdit.htm "+UserId ,e);
 				e.printStackTrace();
-				return "redirect:/UnitMaster.htm";
+				return "static/Error";
 			}
 		
 		}
@@ -662,7 +668,9 @@ public class MasterController {
 				req.setAttribute("itemlist", otheritem);
 				}
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside OtherItemAmount.htm "+UserId ,e);
 				e.printStackTrace();
+				return "static/Error";
 			}
 			return "masters/OtherItemAmount";
 		}
@@ -708,9 +716,9 @@ public class MasterController {
 				return "redirect:/OtherItemAmount.htm";
 				
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside AddOtherItemAmount.htm "+UserId ,e);
 				e.printStackTrace();
-				return "redirect:/OtherItemAmount.htm";
+				return "static/Error";
 			}
 			
 		}
@@ -760,9 +768,9 @@ public class MasterController {
 				}
 			
 			} catch (Exception e) {
-				 redir.addAttribute("resultfail", "Internal Error!");
+				logger.error(new Date() +"Inside EDITOtherAmt.htm "+UserId ,e);
 					e.printStackTrace();
-					return "redirect:/OtherItemAmount.htm";
+					return "static/Error";
 			}
 			
 		}
@@ -782,6 +790,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
+				logger.error(new Date() +"Inside DuplicateTest.htm"+UserId ,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -809,6 +818,7 @@ public class MasterController {
 			    return "masters/Designation";
 				}
 			}catch (Exception e){
+				logger.error(new Date() +"Inside Designation.htm "+UserId ,e);
 				e.printStackTrace();
 				return "static/Error";
 			}
@@ -873,9 +883,9 @@ public class MasterController {
 					return "redirect:/Designation.htm";
 				}				
 				}catch (Exception e){
+					logger.error(new Date() +" Inside DesignationAddEdit.htm "+UserId ,e);
 					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "redirect:/Designation.htm";
+					return "static/Error";
 				}
 		}
 		
@@ -904,9 +914,9 @@ public class MasterController {
 					return "redirect:/Designation.htm";
 							
 				}catch (Exception e){
+					logger.error(new Date() +" Inside DesignationAdd.htm "+UserId ,e);
 					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "redirect:/Designation.htm";
+					return "static/Error";
 				}
 		}
 		
@@ -924,7 +934,8 @@ public class MasterController {
 					DisDesc =service.DesignationAddCheck(desigcode,designation);
 				}
 				catch (Exception e) {
-						e.printStackTrace(); logger.error(new Date() +"Inside DesignationAddCheck.htm "+UserId,e);
+					logger.error(new Date() +"Inside DesignationAddCheck.htm "+UserId ,e);
+						e.printStackTrace(); 
 				}
 				  Gson json = new Gson();
 				  return json.toJson(DisDesc);           
@@ -945,7 +956,8 @@ public class MasterController {
 					DisDesc =service.DesignationEditCheck(desigcode,designation,desigid);
 				}
 				catch (Exception e) {
-						e.printStackTrace(); logger.error(new Date() +"Inside DesignationEditCheck.htm "+UserId,e);
+						e.printStackTrace(); 
+						logger.error(new Date() +"Inside DesignationEditCheck.htm "+UserId,e);
 				}
 				  Gson json = new Gson();
 				  return json.toJson(DisDesc); 
@@ -967,6 +979,7 @@ public class MasterController {
 					
 					 return json.toJson(count);
 				}catch (Exception e){
+					logger.error(new Date() +"Inside DuplicateTestCode.htm"+UserId ,e);
 					e.printStackTrace();
 					 return json.toJson(count);
 				}
@@ -995,8 +1008,9 @@ public class MasterController {
 						return "masters/DoctorList";
 					}		   		 
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside DoctorList.htm "+UserId ,e);
 					e.printStackTrace();
-					return "masters/DoctorList";
+					return "static/Error";
 				}
 			}
 			
@@ -1005,7 +1019,7 @@ public class MasterController {
 			public String DoctorsAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside DoctorsAddEdit.htm "+UserId);
+				logger.info(new Date() +"Inside DoctorAdd.htm "+UserId);
 				try {
 					String action = (String)req.getParameter("action");
 					
@@ -1017,7 +1031,7 @@ public class MasterController {
 					DoctorList doctor = new DoctorList();
 					doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
 					doctor.setQualification(qualification.toUpperCase());
-					doctor.setAddress(address);
+					doctor.setAddress(WordUtils.capitalizeFully(address));
 					doctor.setPhoneNo(phoneno.trim());
 					doctor.setCreatedBy(UserId);
 					doctor.setCreatedDate(sdtf.format(new Date()));
@@ -1031,9 +1045,9 @@ public class MasterController {
 					}
 					 return "redirect:/DoctorList.htm";
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside DoctorAdd.htm "+UserId ,e);
 					e.printStackTrace();
-					 redir.addAttribute("resultfail", "Internal Error!");
-					 return "redirect:/DoctorList.htm";
+					 return "static/Error";
 				}
 				
 			}	
@@ -1053,7 +1067,7 @@ public class MasterController {
 					doctor.setDoctorId(Long.parseLong(doctorId));
 					doctor.setDoctorName(WordUtils.capitalizeFully(name.trim()));
 					doctor.setQualification(qualification.toUpperCase());
-					doctor.setAddress(address);
+					doctor.setAddress(WordUtils.capitalizeFully(address));
 					doctor.setPhoneNo(phoneno.trim());
 					doctor.setModifiedBy(UserId);
 					doctor.setModifiedDate(sdtf.format(new Date()));
@@ -1080,9 +1094,9 @@ public class MasterController {
 					}
 					 return "redirect:/DoctorList.htm";
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside DoctorsEdit.htm "+UserId ,e);
 					e.printStackTrace();
-					 redir.addAttribute("resultfail", "Internal Error!");
-					 return "redirect:/DoctorList.htm";
+					 return "static/Error";
 				}
 				
 			}
@@ -1123,8 +1137,9 @@ public class MasterController {
 			   		 }
 			   		                                                      
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside CircularLists.htm "+UserId ,e);
 					e.printStackTrace();
-					return "masters/CircularList";
+					return "static/Error";
 				}
 				
 			}
@@ -1164,9 +1179,9 @@ public class MasterController {
 					}
 					return "redirect:/CircularLists.htm";
 				}catch (Exception e){
-					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "redirect:/CircularLists.htm";
+					logger.error(new Date() +"Inside CircularADD.htm "+UserId ,e);
+					e.printStackTrace();				
+					return "static/Error";
 				}
 				
 			}
@@ -1216,9 +1231,9 @@ public class MasterController {
 					}
 					return "redirect:/CircularLists.htm";
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside CircularEDIT.htm "+UserId,e);
 					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "redirect:/CircularLists.htm";
+					return "static/Error";
 				}			
 			}
 			
@@ -1226,6 +1241,8 @@ public class MasterController {
 			@RequestMapping(value = "download-CircularFile-attachment",method = {RequestMethod.GET,RequestMethod.POST})
 		    public void downloadCircularAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
 			{				
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside download-CircularFile-attachment "+UserId);
 				try {
 					
 					String path = (String)req.getParameter("path");
@@ -1235,6 +1252,7 @@ public class MasterController {
 					File my_file = new File(arr[0]);
 					 res.setHeader("Content-disposition","attachment; filename="+arr[1]);
 				      OutputStream out = res.getOutputStream();
+				     
 				        FileInputStream in = new FileInputStream(my_file);
 				        byte[] buffer = new byte[4096];
 				        int length;
@@ -1244,6 +1262,7 @@ public class MasterController {
 				        in.close();
 				        out.flush();
 				}catch(Exception e) {
+					logger.error(new Date() +"Inside download-CircularFile-attachment "+UserId,e);
 					e.printStackTrace();
 				}
 		    }
@@ -1252,7 +1271,7 @@ public class MasterController {
 			public String EmpanelledHospitalList(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside EmpanneledHospital.htm "+UserId);
+				logger.info(new Date() +"Inside EmpanneledHospitalList.htm "+UserId);
 				List<Object[]> empanelledhospital = new ArrayList<Object[]>();
 				try {
 					String action = (String)req.getParameter("action");
@@ -1271,9 +1290,9 @@ public class MasterController {
 						return "masters/EmpanelledHospitalList";
 					}	
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside EmpanneledHospitalList.htm "+UserId,e);
 					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "masters/EmpanelledHospitalList";
+					return "static/Error";
 				}
 				
 			}
@@ -1290,8 +1309,8 @@ public class MasterController {
 					String name = (String)req.getParameter("HospitalName");
 					String address = (String)req.getParameter("HospitalAddress");
 					CHSSEmpanelledHospital hospital = new CHSSEmpanelledHospital();
-					hospital.setHospitalAddress(address);
-					hospital.setHospitalName(name.trim());
+					hospital.setHospitalAddress(WordUtils.capitalizeFully(address));
+					hospital.setHospitalName(WordUtils.capitalizeFully(name.trim()));
 					hospital.setCreatedBy(UserId);
 					hospital.setCreatedDate(sdtf.format(new Date()));
 					hospital.setIsActive("1");
@@ -1304,9 +1323,9 @@ public class MasterController {
 					}
 					 return "redirect:/EmpanneledHospitalList.htm";
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside EmpanelledHospitalAdd.htm "+UserId,e);
 					e.printStackTrace();
-					 redir.addAttribute("resultfail", "Internal Error!");
-					 return "redirect:/EmpanneledHospitalList.htm";
+					 return "static/Error";
 				}
 				                                                                     
 			}
@@ -1322,9 +1341,9 @@ public class MasterController {
 						String address = (String)req.getParameter("HospitalAddress");
 						String empanelledId = (String)req.getParameter("empanelledId");
 						CHSSEmpanelledHospital hospital = new CHSSEmpanelledHospital();
-						hospital.setHospitalAddress(address);
+						hospital.setHospitalAddress(WordUtils.capitalizeFully(address));
 						hospital.setEmpanelledHospitalId(Long.parseLong(empanelledId));
-						hospital.setHospitalName(name);
+						hospital.setHospitalName(WordUtils.capitalizeFully(name.trim()));
 						hospital.setModifiedBy(UserId);
 						hospital.setModifiedDate(sdtf.format(new Date()));
 						long result =service.EmpanelledHospitalEdit(hospital);
@@ -1349,9 +1368,9 @@ public class MasterController {
 						
 						 return "redirect:/EmpanneledHospitalList.htm";
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside EmpanelledHospitalEdit.htm "+UserId,e);
 					e.printStackTrace();
-					 redir.addAttribute("resultfail", "Internal Error!");
-					 return "redirect:/EmpanneledHospitalList.htm";
+					 return "static/Error";
 				}
 			}
 }

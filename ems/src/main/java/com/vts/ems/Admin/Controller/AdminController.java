@@ -58,7 +58,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	@Autowired
 	private MasterService masterservice;
 	
-
+ 
 	
 	   @RequestMapping(value = "Role.htm" )
 			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
@@ -211,9 +211,11 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				    	return "Admin/CHSSApproval";
 		    		}
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside ChssApproval.htm "+UserId , e);
 					e.printStackTrace();
+					return "static/Error";
 				}
-		    	return "Admin/CHSSApproval";
+		    	
 		    	
 		    }
 		    
@@ -248,9 +250,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 	    				return "redirect:/ChssApproval.htm";
 				} catch (Exception e) {
+					logger.info(new Date() +"Inside ChssApprovalEdit.htm "+UserId);
 					e.printStackTrace();
-					redir.addAttribute("resultfail", "Internal Error!");
-					return "redirect:/ChssApproval.htm";
+					return "static/Error";
 				}
 		    	
 		    }
@@ -312,8 +314,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 			
 			} catch (Exception e) {
-				
+				logger.error(new Date() +"Inside EmpRequestMsg.htm"+UserId,e);
 				e.printStackTrace();
+				return "static/Error";
 				
 			}
 			return "Admin/EmpRequestMsg";
@@ -430,9 +433,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 			      }
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside HadlingOver.htm "+UserId , e);
 				e.printStackTrace();
-				req.setAttribute("resultfail", "Internal Error!");
-				return "Admin/HandlingOver";
+				return "static/Error";
 			}
 			
 		}
@@ -481,8 +484,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 				
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside AdminReplyToReqMsg.htm "+UserId , e);
 				e.printStackTrace();
-				return "Admin/ReplyToReqMsg";
+				return "static/Error";
 			}
 		}
 		
@@ -507,8 +511,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				
 				return "Admin/ReplyToReqMsg";
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside RequestMessagelist.htm "+UserId,e);
 				e.printStackTrace();
-				return "Admin/ReplyToReqMsg";
+				return "static/Error";
 			}
 	
 		}
@@ -526,8 +531,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				req.setAttribute("notificationlist", list);	
 			    return "Admin/NotificationList";
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside AllNotificationList.htm "+UserId ,e);
 				e.printStackTrace();
-				return "Admin/NotificationList";
+				return "static/Error";
 			}
 	
 		}
@@ -551,7 +557,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					redir.addFlashAttribute("logintype",LoginType);
 					redir.addFlashAttribute("moduleid",moduleid );
 				} catch (Exception e) {
+					logger.error(new Date() +"Inside UpdateRoleAcess.htm "+UserId,e);
 					e.printStackTrace();
+					return "static/Error";
 				}
 				return "redirect:/Role.htm";
 			}

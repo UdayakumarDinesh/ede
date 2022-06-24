@@ -507,7 +507,6 @@ public class PisController {
 			return "redirect:/PisAdminEmpList.htm";
 		} catch (Exception e) {
 			logger.error(new Date() + " Inside EmployeeEditSubmit.htm " + Username, e);
-			req.setAttribute("resultfail", "Some Problem Occure!");
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -516,12 +515,15 @@ public class PisController {
 	@RequestMapping(value = "/requestbypunchajax", method = RequestMethod.GET)
 	public @ResponseBody String PunchRequestData(HttpServletRequest req, HttpServletResponse response, HttpSession ses)throws Exception 
 	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside requestbypunchajax " + Username);
 		String PunchCardNo = req.getParameter("PunchCardNo");
 
 		int result = 0;
 		try {
 			result = service.PunchcardList(PunchCardNo);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside requestbypunchajax " + Username,e);
 			e.printStackTrace();
 		}
 		Gson json = new Gson();
@@ -592,32 +594,40 @@ public class PisController {
 	public String LoginAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{   
 		String Username = (String) ses.getAttribute("Username");
-		String Action =(String)req.getParameter("action");
-		String loginid = (String)req.getParameter("loginid");
-		
-		if("Add".equalsIgnoreCase(Action)){
-			req.setAttribute("emplist", service.getEmpList());
-			req.setAttribute("loginlist", service.getLoginTypeList());
-						
-			return "pis/LoginAdd";
-		}else if("Edit".equalsIgnoreCase(Action)) {
+		logger.info(new Date() + "Inside LoginMasterAddEdit.htm " + Username);
+		try {
+			String Action =(String)req.getParameter("action");
+			String loginid = (String)req.getParameter("loginid");
 			
-			
-			req.setAttribute("logineditdata", service.getLoginEditData(loginid));
-			req.setAttribute("emplist", service.getEmpList());
-			req.setAttribute("loginlist", service.getLoginTypeList());
-			
-			return "pis/LoginEdit";
-		}else {
-			
-			int count = service.UserManagerDelete(Username,loginid);
-			if (count > 0) {
-				redir.addAttribute("result", "LoginID deleted Successfully");
-			} else {
-				redir.addAttribute("resultfail", "LoginID deleted Unsuccessfull");
+			if("Add".equalsIgnoreCase(Action)){
+				req.setAttribute("emplist", service.getEmpList());
+				req.setAttribute("loginlist", service.getLoginTypeList());
+							
+				return "pis/LoginAdd";
+			}else if("Edit".equalsIgnoreCase(Action)) {
+				
+				
+				req.setAttribute("logineditdata", service.getLoginEditData(loginid));
+				req.setAttribute("emplist", service.getEmpList());
+				req.setAttribute("loginlist", service.getLoginTypeList());
+				
+				return "pis/LoginEdit";
+			}else {
+				
+				int count = service.UserManagerDelete(Username,loginid);
+				if (count > 0) {
+					redir.addAttribute("result", "LoginID deleted Successfully");
+				} else {
+					redir.addAttribute("resultfail", "LoginID deleted Unsuccessfull");
+				}
+				return "redirect:/LoginMaster.htm";
 			}
-			return "redirect:/LoginMaster.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside LoginMasterAddEdit.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
 		}
+		
 		
 	}
 	
@@ -707,7 +717,9 @@ public class PisController {
     			redir.addAttribute("resultfail", "LoginID Edited Unsuccessfull");
         	}
 		} catch (Exception e) {
+			 logger.error(new Date() +"Inside UserManagerEditSubmit.htm "+Username,e);
 			e.printStackTrace();
+			return "static/Error";
 		}
 	   return "redirect:/LoginMaster.htm";
    }
@@ -730,8 +742,9 @@ public class PisController {
 			req.setAttribute("Empdata", service.GetEmpData(empid));
 			
 		} catch (Exception e) {		
+			logger.info(new Date() +"Inside FamilyMembersList.htm "+Username);
 			e.printStackTrace();
-			 return "redirect:/PisAdminEmpList.htm";
+			 return "static/Error";
 		}
         return "pis/FamilyMemberList";
    }
@@ -740,36 +753,43 @@ public class PisController {
 	public String FamilyMemberAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside FamilyMemberAddEditDelete.htm " + Username);
-		String empid = (String) req.getParameter("empid");
-		String Action = (String) req.getParameter("Action");
-
-		if ("ADD".equalsIgnoreCase(Action)) {
-			req.setAttribute("Empdata", service.GetEmpData(empid));
-			req.setAttribute("FamilyRelation", service.getFamilyRelation());
-			req.setAttribute("FamilyStatus", service.getFamilyStatus());
-	
-			return "pis/FamilyMemberAdd";
-		} else if ("EDIT".equalsIgnoreCase(Action)) {
-			String familyid = (String) req.getParameter("familyid");
 		
-			req.setAttribute("memberdetails", service.getMemberDetails(familyid));
-			req.setAttribute("Empdata", service.GetEmpData(empid));
-			req.setAttribute("FamilyRelation", service.getFamilyRelation());
-			req.setAttribute("FamilyStatus", service.getFamilyStatus());
-
-			return "pis/FamilyMemberEdit";
-		} else {
-                                                                                        
-			String familyid = (String) req.getParameter("familyid");
-			int count = service.DeleteMeber(familyid, Username);
-			if (count > 0) {
-				redir.addAttribute("result", "Family Member deleted sucessfully");
+		try {
+			String empid = (String) req.getParameter("empid");
+			String Action = (String) req.getParameter("Action");
+			if ("ADD".equalsIgnoreCase(Action)) {
+				req.setAttribute("Empdata", service.GetEmpData(empid));
+				req.setAttribute("FamilyRelation", service.getFamilyRelation());
+				req.setAttribute("FamilyStatus", service.getFamilyStatus());
+		
+				return "pis/FamilyMemberAdd";
+			} else if ("EDIT".equalsIgnoreCase(Action)) {
+				String familyid = (String) req.getParameter("familyid");
+			
+				req.setAttribute("memberdetails", service.getMemberDetails(familyid));
+				req.setAttribute("Empdata", service.GetEmpData(empid));
+				req.setAttribute("FamilyRelation", service.getFamilyRelation());
+				req.setAttribute("FamilyStatus", service.getFamilyStatus());
+		
+				return "pis/FamilyMemberEdit";
 			} else {
-				redir.addAttribute("resultfail", "Family Member deleted Unsucessfull");
+		                                                                                    
+				String familyid = (String) req.getParameter("familyid");
+				int count = service.DeleteMeber(familyid, Username);
+				if (count > 0) {
+					redir.addAttribute("result", "Family Member deleted sucessfully");
+				} else {
+					redir.addAttribute("resultfail", "Family Member deleted Unsucessfull");
+				}
+				redir.addFlashAttribute("Employee", empid);
+				return "redirect:/FamilyMembersList.htm";
 			}
-			redir.addFlashAttribute("Employee", empid);
-			return "redirect:/FamilyMembersList.htm";
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside FamilyMemberAddEditDelete.htm " + Username ,e);
+			e.printStackTrace();
+			return "static/Error";
 		}
+		
 
 	}
    
@@ -831,7 +851,9 @@ public class PisController {
     	  
     	   redir.addFlashAttribute("Employee", empid);
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside familyDetailsAdd.htm "+Username,e);
 	  	 e.printStackTrace();
+	  	return "static/Error";
 	  }
        return "redirect:/FamilyMembersList.htm";
    }
@@ -908,7 +930,6 @@ public class PisController {
     	   
 	      } catch (Exception e) {
 	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
-				req.setAttribute("resultfail", "Internal Problem!");
 				e.printStackTrace();
 				return "static/Error";
 	      }
@@ -920,7 +941,7 @@ public class PisController {
    {
 	
 	   String Username = (String) ses.getAttribute("Username");
-       logger.info(new Date() +"Inside AddressDashboard.htm "+Username);
+       logger.info(new Date() +"Inside Address.htm "+Username);
        String empid =null;
 	   try {
 		  
@@ -946,7 +967,9 @@ public class PisController {
 		   req.setAttribute("perAddress", perAddress);
 		   
 	   }catch (Exception e){
+		   logger.error(new Date() +"Inside Address.htm "+Username,e);
 		  e.printStackTrace();
+		  return "static/Error";
 	   }
 	   
 	   return "pis/AddressList";
@@ -978,10 +1001,11 @@ public class PisController {
     	   	}
     	   	
 	    } catch (Exception e) {
+	    	 logger.error(new Date() +"Inside AddEditPerAddress.htm "+Username ,e);
 	 	    e.printStackTrace();
+	 	    return "static/Error";
 	    }
       
-       return "pis/AddEditPerAddress";
    }
    
    @RequestMapping(value = "AddAddressDetails.htm" , method= RequestMethod.POST)
@@ -1032,8 +1056,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside AddPerAddressDetails.htm "+Username,e);  
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		  return "static/Error";
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1103,8 +1128,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside EditAddressDetails.htm "+Username,e); 
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		  return "static/Error";
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1118,9 +1144,9 @@ public class PisController {
 		String empid = (String)req.getParameter("empid");
 		
 		logger.info(new Date() +"Inside ResAddressAddEdit.htm "+Username); 
-		
-		if("ADD".equalsIgnoreCase(Action)){
-			
+		try {
+			if("ADD".equalsIgnoreCase(Action)){
+				
 				 List<Object[]> States = service.getStates();
 				 req.setAttribute("Empdata", service.GetEmpData(empid));
 	   		     req.setAttribute("States", States);
@@ -1149,6 +1175,12 @@ public class PisController {
 			redir.addFlashAttribute("Employee", empid);
 			return "redirect:/Address.htm";
 		}
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside ResAddressAddEdit.htm "+Username,e); 
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
 		
 	}
            
@@ -1236,7 +1268,9 @@ public class PisController {
 		}
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside AddResAddressDetails.htm "+Username ,e);  
 			e.printStackTrace();
+			return "static/Error";
 		}
 	   return "redirect:/Address.htm";
    }
@@ -1338,7 +1372,9 @@ public class PisController {
 		}
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside EditResAddressDetails.htm "+Username ,e);
 			e.printStackTrace();
+			 return "static/Error";
 		}
 	   return "redirect:/Address.htm";
    }
@@ -1370,10 +1406,10 @@ public class PisController {
     	   	}
     	   	
 	    } catch (Exception e) {
+	    	logger.error(new Date() +"Inside KinAddressAddEdit.htm "+Username,e);
 	 	    e.printStackTrace();
+	 	    return "static/Error";
 	    }
-       
-       return "pis/AddEditNextKinAddress";
   		
   	}
    
@@ -1418,8 +1454,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside AddNextKinAddressDetails.htm "+Username,e);  
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		   return "static/Error";
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1481,8 +1518,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside AddNextKinAddressDetails.htm "+Username ,e);
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		   return "static/Error";	
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1515,11 +1553,10 @@ public class PisController {
     	   	}
     	   	
 	    } catch (Exception e) {
+	    	logger.error(new Date() +"Inside EmecAddressAddEdit.htm "+Username,e);
 	 	    e.printStackTrace();
-	    }
-       
-       return "pis/AddEditNextKinAddress";
-  		
+	 	    return "static/Error";
+	    }	
   	}
    
    @RequestMapping(value = "EmecAddAddressDetails.htm" , method= RequestMethod.POST)
@@ -1563,8 +1600,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside EmecAddAddressDetails.htm "+Username,e);
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		  return "static/Error";
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1625,8 +1663,9 @@ public class PisController {
     	   }
     	    
 	   } catch (Exception e) {
+		   logger.error(new Date() +"Inside EmecEditAddressDetails.htm "+Username , e); 
 		   e.printStackTrace();
-		   redir.addAttribute("resultfail", "Some Problem Occure !");	
+		   return "static/Error";
 	  }  
        return "redirect:/Address.htm";
    }
@@ -1644,6 +1683,7 @@ public class PisController {
 	   		EmerAddress = service.ReqEmerAddajax(empid);	
 	   		
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside ReqEmerAddajax.htm "+Username ,e);
 				e.printStackTrace();
 			}	
 	    	return EmerAddress.toArray();
@@ -1681,7 +1721,9 @@ public class PisController {
 				req.setAttribute("Todate", Todate);
 				}
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside AuditStamping.htm "+Username,e);
 				e.printStackTrace();
+				return "static/Error";
 			}
 	
 	       return "Admin/AuditStamping";
@@ -1717,9 +1759,8 @@ public class PisController {
 			}catch (Exception e) {
 					e.printStackTrace();
 					logger.error(new Date() +" Inside PasswordChange.htm "+Username, e);
-			}
-
-		return "redirect:/MainDashBoard.htm";
+					return "static/Error";
+			}	
 		
 	}
 	
@@ -1740,9 +1781,9 @@ public class PisController {
 			}
 			return "redirect:/LoginMaster.htm";
 		}catch(Exception e) {
-			redir.addAttribute("resultfail", "Some Problem Occure!");
+			logger.error(new Date() +"Inside PasswordChange.htm "+Username,e);
 			e.printStackTrace();
-			return "redirect:/LoginMaster.htm";
+			return "static/Error";
 		}		
 			
 	}
@@ -1772,9 +1813,9 @@ public class PisController {
 				   return "redirect:/PisAdminEmpList.htm";
 			}
 		} catch (Exception e) {
-			redir.addAttribute("resultfail", "Internal Error!");
+			logger.error(new Date() +"Inside UpdateEmployeeSeniority.htm "+Username,e);	
 			e.printStackTrace();
-			 return "redirect:/PisAdminEmpList.htm";
+			 return "static/Error";
 		}
 		
 	}

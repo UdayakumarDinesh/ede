@@ -178,7 +178,7 @@
 					             <div class="form-inline">
 					        	 <div class="form-group "  >
 					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" required="required" > 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
 					      		 </div>
 					      		 </div>
 					        	
