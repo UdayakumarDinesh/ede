@@ -89,7 +89,7 @@ public class PisServiceImpl implements PisService
 			File f = new File(path+"\\"+photoname);
 			if(f.exists()) {
 				result=encodeFileToBase64Binary(f);
-			}
+			}                                     
 		}catch (Exception e) {
 			e.printStackTrace();		
 		}
