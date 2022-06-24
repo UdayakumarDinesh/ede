@@ -85,8 +85,6 @@ public class CHSSController {
 	@Autowired
 	AdminService adminservice;
 	
-	@Value("${Image_uploadpath}")
-	private String uploadpath;
 	
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "CHSSDashboard.htm" )
@@ -133,7 +131,7 @@ public class CHSSController {
 			req.setAttribute("Fromdate", FromDate );
 			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
-			req.setAttribute("profilepicpath", uploadpath);
+			
 			req.setAttribute("patientname", PatientName);
 			req.setAttribute("IsSelf", IsSelf);;
 

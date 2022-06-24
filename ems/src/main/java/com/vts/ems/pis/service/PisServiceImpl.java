@@ -55,7 +55,7 @@ public class PisServiceImpl implements PisService
 	@Autowired
 	private PisDao dao;
 	
-	@Value("${Image_uploadpath}")
+	@Value("${EMSFilesPath}")
 	private String uploadpath;
 	
 	@Autowired
@@ -85,10 +85,11 @@ public class PisServiceImpl implements PisService
 		String result=null;
 		try {
 			String photoname=dao.PhotoPath(empid);
-			File f = new File(uploadpath+"\\"+photoname);
+			String path = uploadpath+"\\empimages";
+			File f = new File(path+"\\"+photoname);
 			if(f.exists()) {
 				result=encodeFileToBase64Binary(f);
-			}
+			}                                     
 		}catch (Exception e) {
 			e.printStackTrace();		
 		}

@@ -323,7 +323,7 @@ String path=(String)request.getAttribute("path");
 					<form action="##" method="POST" id="empForm2"   >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive"    >
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1" > 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2" > 
 								<thead>
 									<tr>
 										<th style=" text-align:center; width: 15%;"> SlNo. </th>
@@ -389,7 +389,7 @@ String path=(String)request.getAttribute("path");
 					<form action="##" method="POST" id="empForm3"   >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive"    >
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1" > 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable3" > 
 								<thead>
 									<tr>
 										<th style=" text-align:center; width: 15%"> SlNo. </th>
@@ -524,7 +524,7 @@ $("#error-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
     });
 </script>
 <script type="text/javascript">
-$("#myTable1").DataTable({
+$("#myTable1,#myTable2,#myTable3").DataTable({
     "lengthMenu": [10,20, 50, 75, 100],
     "pagingType": "simple",
     "language": {
@@ -533,6 +533,5 @@ $("#myTable1").DataTable({
 
 });
 </script>
-
 
 </html>

@@ -40,8 +40,7 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	MasterDao dao;
 	
-	@Value("${Circular_Files}")
-	private String CircularFilePath;
+
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
@@ -361,10 +360,10 @@ public class MasterServiceImpl implements MasterService {
 	    if(!filecirculardto.getPath().isEmpty()) {
 		String name =filecirculardto.getPath().getOriginalFilename();
 		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-		
-			circular.setPath(CircularFilePath+File.separator+filename);
+			String path = emsfilespath+"\\CircularFiles";
+			circular.setPath(path+File.separator+filename);
 			circular.setOriginalName(name);
-			saveFile(CircularFilePath, filename, filecirculardto.getPath());
+			saveFile(path, filename, filecirculardto.getPath());
 		}		
 		return dao.CircularListAdd(circular);
 	}
@@ -397,7 +396,8 @@ public class MasterServiceImpl implements MasterService {
 								
 			CircularList circularlist = dao.GetCircularToEdit(circular.getCircularId());
 			if(circular.getPath()!=null) {
-			  Path uploadPath = Paths.get(CircularFilePath);
+				String path =emsfilespath+"//CircularFiles";
+			  Path uploadPath = Paths.get(path);
 			  Path filePath = uploadPath.resolve(circular.getPath());
               File f = filePath.toFile();
               if(f.exists()) {
@@ -408,10 +408,10 @@ public class MasterServiceImpl implements MasterService {
     	    if(!filecirculardto.getPath().isEmpty()) {
     		String name =filecirculardto.getPath().getOriginalFilename();
     		String filename= "Circular-"+circularlist.getCircularId()+"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-    		
-    		circularlist.setPath(CircularFilePath+File.separator+filename);
+    		String path =emsfilespath+"\\CircularFiles";
+    		circularlist.setPath(path+File.separator+filename);
     		circularlist.setOriginalName(name);
-    			saveFile(CircularFilePath, filename, filecirculardto.getPath());
+    			saveFile(path, filename, filecirculardto.getPath());
     		}	
     	    circularlist.setCircularDate(circular.getCircularDate());
     	    circularlist.setToDate(circular.getToDate());

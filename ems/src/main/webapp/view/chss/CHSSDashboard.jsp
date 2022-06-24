@@ -251,7 +251,6 @@
 	}
 	
 	
-	String profilepicpath = (String) request.getAttribute("profilepicpath"); 
 	
 	DecimalFormat df = new DecimalFormat("0.00");
 %>
