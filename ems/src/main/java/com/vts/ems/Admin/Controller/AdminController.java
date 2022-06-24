@@ -58,8 +58,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	@Autowired
 	private MasterService masterservice;
 	
-	@Value("${Image_uploadpath}")
-	private String uploadpath;
+
 	
 	   @RequestMapping(value = "Role.htm" )
 			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)

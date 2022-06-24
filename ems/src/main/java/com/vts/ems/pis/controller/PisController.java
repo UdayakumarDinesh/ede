@@ -62,7 +62,7 @@ public class PisController {
 	@Autowired
 	MasterService masterservice;
 	
-	@Value("${Image_uploadpath}")
+	@Value("${EMSFilesPath}")
 	private String uploadpath;
 	                                                   
 
@@ -541,13 +541,13 @@ public class PisController {
 			if(empdata!=null && empdata[3]!=null) {
 				imagename = service.PhotoPath(empdata[3]+"");
 			}
+				String path = 	uploadpath + "\\empimages";
 					
-					
-			File f = new File(uploadpath + "\\" + imagename);
+			File f = new File(path + "\\" + imagename);
 			if (f.exists()) {
 				f.delete();
 			}
-			value = service.saveEmpImage(file, empdata[3]+"", uploadpath);
+			value = service.saveEmpImage(file, empdata[3]+"", path);
 			Object[] employeedetails = service.EmployeeDetails(EmpId);
 			String basevalue = service.getimage(empdata[3]+"");
 			req.setAttribute("empid", EmpId);
