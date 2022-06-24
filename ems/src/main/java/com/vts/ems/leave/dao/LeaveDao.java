@@ -33,5 +33,6 @@ public interface LeaveDao {
 	public long LeaveApplInsert(LeaveAppl appl)throws Exception;
 	public long LeaveTransInsert(LeaveTransaction transaction)throws Exception;
 	public long getLeaveApplId(int Year)throws Exception;
+	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 	
 }

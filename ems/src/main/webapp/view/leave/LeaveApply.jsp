@@ -52,7 +52,9 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
  span, label{
  font-weight: bold !important;
  }   
-
+ .appl{
+ padding: 2px 6px 2px 6px;
+ }
 </style>
 </head>
 <body style="overflow-x: hidden !important ">
@@ -475,24 +477,93 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                <span class="h6">Recent Applied Leave</span>
 	            </div>
 	            <div class="card-body">
+	            <%List<Object[]> Applied=(List<Object[]>)request.getAttribute("applied");  
+	              if(Applied!=null&&Applied.size()>0){
+	                        %> 
+	                      
+	                   <table class="table table-bordered table-hover table-striped table-condensed">
+                        <tbody style="text-align: center;"> 
+                        <tr><th style="font-size:13px !important;">LeaveType:</th><td style="font-size:10px !important;"><a class="btn btn-primary btn-sm  btn-outline appl" href="leaveprint.htm?applId=<%=Applied.get(0)[0]%>" target="_blank"><%=Applied.get(0)[2]%> </a></td></tr> 
+                        <tr><th style="font-size:13px !important;">From-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[3])%></td></tr>
+                        <tr><th style="font-size:13px !important;">To-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[4])%></td></tr>
+                        <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=Applied.get(0)[5]%></td></tr>
+                        
+                        <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
+                        <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
+                                		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
+			                        	 
+			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                         <i class="fa-solid fa-pen"></i>
+			                       </button>
+                                        <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
+                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
+                                			<i class="fa-solid fa-circle-exclamation"></i>
+                                		</button>
+                                      <%}else{%>
+                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
+                                			<i class="fa-solid fa-trash-can"></i>
+                                		</button>
+                                        <%}%>
+			                       
+			                
+			                 </form>
+			             </td></tr>
+                        </tbody>
+	                    </table>  
+	                 <%}else{%>
 	                <ul class="list-group">
 	                <li class="list-group-item list-group-item-warning"><b><i>Recent Applied  Leave Is Not Present For Edit &amp; Delete </i></b></li>
 	                </ul>
+	                 <%}%>
 
 	            </div>
 	            </div>
-	            <br>
-	            <div class="card">
+	            
+	            <div class="card" style="margin-top:10px;">
 	            <div class="card-header">
 	                <span class="h6">Recent Sanctioned Leave</span>
 	            </div>
 	            <div class="card-body">
+	             <%List<Object[]> sanction=(List<Object[]>)request.getAttribute("sanction");  
+	              if(Applied!=null&&Applied.size()>0){
+	                        %> 
+	                      
+	                   <table class="table table-bordered table-hover table-striped table-condensed" >
+                        <tbody style="text-align: center;"> 
+                        <tr><th style="font-size:13px !important;">LeaveType:</th><td style="font-size:10px !important;"><a class="btn btn-primary btn-sm  btn-outline appl" href="leaveprint.htm?applId=<%=Applied.get(0)[0]%>" target="_blank"><%=Applied.get(0)[2]%> </a></td></tr> 
+                        <tr><th style="font-size:13px !important;">From-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[3])%></td></tr>
+                        <tr><th style="font-size:13px !important;">To-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[4])%></td></tr>
+                        <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=Applied.get(0)[5]%></td></tr>
+                        
+                        <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
+                        <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
+                                		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
+			                        	 
+			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                         <i class="fa-solid fa-pen"></i>
+			                       </button>
+                                        <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
+                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
+                                			<i class="fa-solid fa-circle-exclamation"></i>
+                                		</button>
+                                      <%}else{%>
+                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
+                                			<i class="fa-solid fa-trash-can"></i>
+                                		</button>
+                                        <%}%>
+			                       
+			                
+			                 </form>
+			             </td></tr>
+			              <tr><th style="font-size:13px !important;">See More </th><td style="font-size:10px !important;"><a class="btn btn-outline-success appl" href="" data-toggle="modal" data-target="#editdelete3" style="font-size: 12px;">Click Here</a> </td></tr>
+                        </tbody>
+	                    </table>  
+	                 <%}else{%>
 	                <ul class="list-group">
 	               
 	                <li class="list-group-item list-group-item-warning"><b><i>Recent Sanctioned Leave Is Not Present For Modify &amp; Cancel</i></b></li>
-	                
-	                
-	                </ul>
+	                 </ul>
+	                   <%}%>
 	            </div>
 	            </div>
 	            

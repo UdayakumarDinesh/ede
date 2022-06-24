@@ -26,5 +26,5 @@ public interface LeaveService {
 	public String[] LeaveCheck(LeaveApplyDto dto)throws Exception;
 	public LeaveRegister getRegister(String EmpNo) throws Exception ;
 	public String[] applyLeaveAdd(LeaveApplyDto dto)throws Exception;
-	
+	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 }
