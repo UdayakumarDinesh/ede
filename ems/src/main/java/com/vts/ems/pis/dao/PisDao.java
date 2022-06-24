@@ -97,4 +97,6 @@ public interface PisDao {
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception;
 	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception;
+	public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception;
+	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
 }

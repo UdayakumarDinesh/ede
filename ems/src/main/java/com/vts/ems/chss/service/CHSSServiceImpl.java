@@ -1758,6 +1758,10 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.EmployeesList();
 	}
 	
-	
+	@Override
+	public List<Object[]> GetClaimsReport(String fromdate , String todate ,  String empid)throws Exception
+	{
+		return dao.GetClaimsReport(fromdate, todate, empid);
+	}
 	
 }

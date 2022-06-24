@@ -735,5 +735,15 @@ public class PisServiceImpl implements PisService
 			return result;
 		}
 		
+		@Override
+		public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception 
+		{
+			return dao.getFamilydetailsNotConf(empid);
+		}
 		
+		@Override
+		public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception
+		{
+			return dao.getFamilyMemberModal(familydetailsid);
+		}
 }

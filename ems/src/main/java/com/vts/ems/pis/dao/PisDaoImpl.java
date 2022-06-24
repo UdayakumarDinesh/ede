@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
+import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -59,7 +60,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate  WHERE loginid=:loginid";
-	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id AND a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
+	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id AND a.InclusionStatus = 'C' AND  a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
 	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno FROM employee a ,employee_desig b WHERE b.desigid=a.desigid AND  empid=:empid";
@@ -1132,7 +1133,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND  a.empid=:empid";
+	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus = 'C' AND a.empid=:empid";
 	@Override
 	public List<Object[]> getFamilydetails(String empid) throws Exception 
 	{
@@ -1271,5 +1272,36 @@ public class PisDaoImpl implements PisDao {
 	        updatequery.setParameter("srno", long1);  	 
 	        return updatequery.executeUpdate();
 	}
+	
+	
+	private static final String FAMILYDETAILSNOTCONF="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('A','F') AND a.empid=:empid";
+	@Override
+	public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception 
+	{
+		logger.info(new Date() + "Inside getFamilydetails()");
+		try {
+			Query query = manager.createNativeQuery(FAMILYDETAILSNOTCONF);
+			query.setParameter("empid", empid);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getFamilyMemberModal");
+		try {
+			return manager.find(EmpFamilyDetails.class, Long.parseLong(familydetailsid));			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 }
 	

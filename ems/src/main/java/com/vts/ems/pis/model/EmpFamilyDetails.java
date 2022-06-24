@@ -40,10 +40,12 @@ public class EmpFamilyDetails implements Serializable {
 	private String cghs_ben_id;
 	private String emp_unemp;
 	private String mar_unmarried;
+	private String EmpStatus;
+	private String InclusionStatus;
 	private int  IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-	private String EmpStatus;
+	
 }

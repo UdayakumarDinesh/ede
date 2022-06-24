@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
@@ -795,6 +796,7 @@ public class PisController {
     	   String emp_unemp = (String)req.getParameter("emp_unemp");
     	   String gender = (String)req.getParameter("Gender");
     	   String empid = (String)req.getParameter("empid");
+    	   String incstatus = (String)req.getParameter("incstatus");
     	   
     	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
@@ -816,6 +818,9 @@ public class PisController {
     	   details.setMar_unmarried(marriagestatus);
     	   details.setEmp_unemp(emp_unemp);
     	   details.setEmpid(empid);
+    	   
+    	   details.setInclusionStatus(incstatus);
+    	   
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
     	   details.setCreatedDate(sdf.format(new Date()));
@@ -830,6 +835,11 @@ public class PisController {
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);
+    	   
+    	   if(incstatus.equals("A")) {
+    		   return "redirect:/EmpFamilyMemberAdd.htm";
+    	   }
+    	   
 	   } catch (Exception e) {
 	  	 e.printStackTrace();
 	  }
@@ -1727,7 +1737,7 @@ public class PisController {
 	public String Resetpassword(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");	
-		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
+		logger.info(new Date() +"Inside Resetpassword.htm "+Username);		
 		try {
 			String loginid = (String) req.getParameter("loginid");
 			
@@ -1741,6 +1751,7 @@ public class PisController {
 			return "redirect:/LoginMaster.htm";
 		}catch(Exception e) {
 			redir.addAttribute("resultfail", "Some Problem Occure!");
+			logger.error(new Date() +" Inside Resetpassword.htm "+Username, e);
 			e.printStackTrace();
 			return "redirect:/LoginMaster.htm";
 		}		
@@ -1779,4 +1790,45 @@ public class PisController {
 		
 	}
 
+
+	@RequestMapping(value="EmpFamilyMemberAdd.htm" )
+	public String EmpFamilyMemberAdd(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside EmpFamilyMemberAdd.htm "+Username);		
+		try {
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
+
+			req.setAttribute("Empdata", service.GetEmpData(empid));
+			req.setAttribute("FamilyRelation", service.getFamilyRelation());
+			req.setAttribute("FamilyStatus", service.getFamilyStatus());
+			req.setAttribute("famMembersconf", service.getFamilydetails(empid));
+			req.setAttribute("famMembersPend", service.getFamilydetailsNotConf(empid));
+			return "pis/EmpFamilyMemAdd";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside EmpFamilyMemberAdd.htm "+Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "FamilyMemDataAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String FamilyMemDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside FamilyMemDataAjax.htm "+Username);
+		EmpFamilyDetails modal=new EmpFamilyDetails();
+		try {
+			String familydetailsid = req.getParameter("familydetailsid");
+			modal = service.getFamilyMemberModal(familydetailsid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside FamilyMemDataAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(modal);
+	}
+	
+	
 }

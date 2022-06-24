@@ -63,6 +63,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	Object[] Perdetails  = (Object[]) request.getAttribute("peraddressdetails");
 	String path=(String)request.getAttribute("basevalue");
 	List<Object[]> familydetails = (List<Object[]>) request.getAttribute("familydetails");
+	
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 	String LoginType = (String) session.getAttribute("LoginType");
 %>
@@ -536,20 +537,18 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Family Details</b></td>
+							<td colspan="3"  style="background-color: #0e6fb6; color: white;">
+								<b>Family Details</b> 
+								<!-- <span style="float: right;"><a class="btn btn-sm submit-btn" href="EmpFamilyMemberAdd.htm"> Include / Exclude </a></span> -->
+							</td>
 						</tr>
-						<tr></tr>
-						<tr></tr>
-						<tr></tr>
-						<tr></tr>
-						
-						
+
 						<tr>
-						<td><b>Member Name</b></td>
-						<td><b>Relation</b></td>
-						<td><b>Date Of Birth</b></td>
-				    <!-- 	<td><b>Med Dep</b></td>
-				    	<td><b>Blood Group</b></td> -->
+							<td><b>Member Name</b></td>
+							<td><b>Relation</b></td>
+							<td><b>Date Of Birth</b></td>
+					    <!-- 	<td><b>Med Dep</b></td>
+					    	<td><b>Blood Group</b></td> -->
 						</tr>
 							
 						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
@@ -569,7 +568,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	<!---------------------------------- Family Details  ---------------------------------------->	
 	</div>
 	
-	<div class="tab-pane" id="tabs-6" role="tabpanel">
+	<!-- <div class="tab-pane" id="tabs-6" role="tabpanel">
 		<p>Six Panel</p>
 	</div>
 	
@@ -583,7 +582,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	
 	<div class="tab-pane" id="tabs-9" role="tabpanel">
 		<p>Nine Panel</p>
-	</div>
+	</div> -->
 	
 	
 </div>
