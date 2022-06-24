@@ -52,10 +52,12 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
  span, label{
  font-weight: bold !important;
  }   
-
+ .appl{
+ padding: 2px 6px 2px 6px;
+ }
 </style>
 </head>
-<body>
+<body style="overflow-x: hidden !important ">
        <!-- 
         <nav id="sidebar">
 
@@ -103,7 +105,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
     long roleid=(Long)session.getAttribute("FormRole");
 	   %>
-<div class="page card dashboard-card" style="margin-top: 1px;">
+<div class="page card dashboard-card">
 
 			 
    <div class="card-body" align="center" >
@@ -362,7 +364,8 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <!-- /. Purpose of leave:-->
 	                    
 	                    
-	                    
+	                    <input  type="hidden" name="empNo"  value="<%=empNo%>">
+	                   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 	                    <!-- Leave address -->
 	                    <div class="form-group">
 	                        <div class="row">
@@ -401,9 +404,11 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                                
 	                                <option value="NotSelected">Select Employee Whom You Want To Hand Over</option>
 	                                 <%if(emplist!=null&&emplist.size()>0){
-	                                   for(Object[] ls:emplist){%>
+	                                   for(Object[] ls:emplist){
+	                                   if(!ls[0].toString().equalsIgnoreCase(empNo)){
+	                                   %>
                                        <option value="<%=ls[0]%>"><%=ls[1]%> (<%=ls[0]%>)-<%=ls[2]%></option>
-                                     <%}}%>
+                                     <%}}}%>
 	                                </select>
 	                            </div>
 	                        </div>
@@ -412,6 +417,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                   <%}else{%>  
 	                    <input type="hidden" name="HandingOverEmpid" value="NotSelected">
 	                   <%}%> 
+	                   
 	                     <!--  reset apply and check button -->
 	                    <div class="form-group">
 	                    	<div class="row">
@@ -471,24 +477,93 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                <span class="h6">Recent Applied Leave</span>
 	            </div>
 	            <div class="card-body">
+	            <%List<Object[]> Applied=(List<Object[]>)request.getAttribute("applied");  
+	              if(Applied!=null&&Applied.size()>0){
+	                        %> 
+	                      
+	                   <table class="table table-bordered table-hover table-striped table-condensed">
+                        <tbody style="text-align: center;"> 
+                        <tr><th style="font-size:13px !important;">LeaveType:</th><td style="font-size:10px !important;"><a class="btn btn-primary btn-sm  btn-outline appl" href="leaveprint.htm?applId=<%=Applied.get(0)[0]%>" target="_blank"><%=Applied.get(0)[2]%> </a></td></tr> 
+                        <tr><th style="font-size:13px !important;">From-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[3])%></td></tr>
+                        <tr><th style="font-size:13px !important;">To-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[4])%></td></tr>
+                        <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=Applied.get(0)[5]%></td></tr>
+                        
+                        <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
+                        <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
+                                		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
+			                        	 
+			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                         <i class="fa-solid fa-pen"></i>
+			                       </button>
+                                        <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
+                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
+                                			<i class="fa-solid fa-circle-exclamation"></i>
+                                		</button>
+                                      <%}else{%>
+                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
+                                			<i class="fa-solid fa-trash-can"></i>
+                                		</button>
+                                        <%}%>
+			                       
+			                
+			                 </form>
+			             </td></tr>
+                        </tbody>
+	                    </table>  
+	                 <%}else{%>
 	                <ul class="list-group">
 	                <li class="list-group-item list-group-item-warning"><b><i>Recent Applied  Leave Is Not Present For Edit &amp; Delete </i></b></li>
 	                </ul>
+	                 <%}%>
 
 	            </div>
 	            </div>
-	            <br>
-	            <div class="card">
+	            
+	            <div class="card" style="margin-top:10px;">
 	            <div class="card-header">
 	                <span class="h6">Recent Sanctioned Leave</span>
 	            </div>
 	            <div class="card-body">
+	             <%List<Object[]> sanction=(List<Object[]>)request.getAttribute("sanction");  
+	              if(Applied!=null&&Applied.size()>0){
+	                        %> 
+	                      
+	                   <table class="table table-bordered table-hover table-striped table-condensed" >
+                        <tbody style="text-align: center;"> 
+                        <tr><th style="font-size:13px !important;">LeaveType:</th><td style="font-size:10px !important;"><a class="btn btn-primary btn-sm  btn-outline appl" href="leaveprint.htm?applId=<%=Applied.get(0)[0]%>" target="_blank"><%=Applied.get(0)[2]%> </a></td></tr> 
+                        <tr><th style="font-size:13px !important;">From-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[3])%></td></tr>
+                        <tr><th style="font-size:13px !important;">To-Date:</th><td style="font-size:13px !important;"><%=sdf.format(Applied.get(0)[4])%></td></tr>
+                        <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=Applied.get(0)[5]%></td></tr>
+                        
+                        <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
+                        <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
+                                		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
+			                        	 
+			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                         <i class="fa-solid fa-pen"></i>
+			                       </button>
+                                        <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
+                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
+                                			<i class="fa-solid fa-circle-exclamation"></i>
+                                		</button>
+                                      <%}else{%>
+                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
+                                			<i class="fa-solid fa-trash-can"></i>
+                                		</button>
+                                        <%}%>
+			                       
+			                
+			                 </form>
+			             </td></tr>
+			              <tr><th style="font-size:13px !important;">See More </th><td style="font-size:10px !important;"><a class="btn btn-outline-success appl" href="" data-toggle="modal" data-target="#editdelete3" style="font-size: 12px;">Click Here</a> </td></tr>
+                        </tbody>
+	                    </table>  
+	                 <%}else{%>
 	                <ul class="list-group">
 	               
 	                <li class="list-group-item list-group-item-warning"><b><i>Recent Sanctioned Leave Is Not Present For Modify &amp; Cancel</i></b></li>
-	                
-	                
-	                </ul>
+	                 </ul>
+	                   <%}%>
 	            </div>
 	            </div>
 	            
@@ -636,6 +711,7 @@ $(fromApplyDate).on('apply.daterangepicker', function(ev, picker) {
 	   {
 		$('#toApplyDate').attr('disabled', false).daterangepicker({
 		"minDate": $(this).val(),
+		"startDate":$(this).val(),
 		"singleDatePicker": true,
 		locale: {
     	format: 'DD-MM-YYYY'
@@ -781,6 +857,17 @@ function halffull()
 	
 	 if((halforfull=="H"||halforfull=="T")&&leavetype=="0001")
 	{
+		 
+		
+			
+					$('#toApplyDate').attr('disabled', false).daterangepicker({
+					"minDate": $('#fromApplyDate').val(),
+					"startDate":$('#fromApplyDate').val(),
+					"singleDatePicker": true,
+					locale: {
+			    	format: 'DD-MM-YYYY'
+					}
+				    }); 			
 		 $("#anorfn").prop("disabled", false);
 			$(".selectpicker[data-id='anorfn']").removeClass("disabled");
 			$('.selectpicker').selectpicker('refresh');// fn/an dropdown enabled
@@ -867,8 +954,13 @@ function halffull()
 		success : function(result) {
 		var result = JSON.parse(result);
 		 var sp=document.getElementById("sp");
-	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 20px;'>"+result+"</b>";
-
+		if(result[1]=='Fail'){
+	     sp.innerHTML="<b style='color:red; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
+		}else if(result[1]=='Pass'){
+			 $("#check").hide();
+			 $("#submit").show();
+			 sp.innerHTML="<b style='color:green; text-align: center; font-size: 17px;'>"+result[0]+"</b><br><b style='color:orange; text-align: center; font-size: 15px;margin-left:10px;'>No Of Days: "+result[2]+"</b>";
+		}
 		
 		
 			

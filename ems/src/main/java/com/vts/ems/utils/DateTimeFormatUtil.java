@@ -16,10 +16,17 @@ public class DateTimeFormatUtil
 {
 	private static SimpleDateFormat regularDateFormat=new SimpleDateFormat("dd-MM-yyyy");
 	private static SimpleDateFormat sqlDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-	
+	DateTimeFormatter sqlDateFormatLocalDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	public static  SimpleDateFormat getMonthNameAndYear() {
 		return new SimpleDateFormat("MMM-yyyy");
 	}
+	
+	
+	public DateTimeFormatter getSqlDateFormatLocalDate() {
+		return sqlDateFormatLocalDate;
+	}
+
+
 	public static  SimpleDateFormat getSqlDateFormat() {
 		return sqlDateFormat;
 	}
@@ -89,6 +96,13 @@ public class DateTimeFormatUtil
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonth().getDisplayName(TextStyle.SHORT,Locale.ENGLISH);
+	}
+	
+	public static  String getMonthValFullFromRegularDate(String datestring) 
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		LocalDate ldate=LocalDate.parse(datestring,formatter);
+		return ldate.getMonth().getDisplayName(TextStyle.FULL,Locale.ENGLISH);
 	}
 	public static  String getMonthValFromSqlDate(String datestring) 
 	{

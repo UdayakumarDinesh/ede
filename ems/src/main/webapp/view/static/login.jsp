@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <c:set var="contPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -19,10 +19,15 @@
 	color:rgba(255,222,0,1);
 }
 
+.scroll {
+    max-height: 390px;
+    overflow-y: auto;
+}
 
-
-
-
+.scrollpolicy{
+ 	max-height: 515px;
+    overflow-y: auto;
+}
 </style>
 
 
@@ -30,8 +35,11 @@
 
 <body class="home" >
 <%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
-
-
+List<Object[]> circular =  (List<Object[]>)request.getAttribute("circular");
+List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
+List<Object[]> Empanelled = (List<Object[]> )request.getAttribute("Empanelled") ;
+String chss_policy_pdf=(String)request.getAttribute("chss_policy_pdf");
+String path=(String)request.getAttribute("path"); 
 %>
 
 <!--  Login Page  -->  
@@ -60,27 +68,35 @@
   		
   		
   		<ul class="nav nav-tabs justify-content-end ">
-			<li class="nav-item">
-			    <a class="nav-link active" href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
-			 </li> 
-					   <li class="nav-item">
-					    <a class="nav-link" href="CHSSPolicy.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>				   
-					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="Circulars.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" href="DoctorsList.htm" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+						   <!--  <a class="nav-link active" href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a> -->
+						 <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" ><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 					  </li> 
-					    <li class="nav-item">
-					    <a class="nav-link" href="EmpanneledHospital.htm"  ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
+					  
+					   <li class="nav-item">
+					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>				   
+					  </li>
+					  
+					  <li class="nav-item">		   
+					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
+					  </li>
+					  
+					  <li class="nav-item">					   
+					   <a class="nav-link" data-toggle="tab" href="#tab-3"  role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
+					  </li>
+
+					    <li class="nav-item">					    
+					    <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
 		</ul>
 				
   		
 	</header>
+ </section> 
+<div class="tab-content">
 
-
+<!-- -----------------------------------Home--------------------------------------------- -->
+<div class="tab-pane active " id="tab-1" role="tabpanel" style=" max-height: 360px; ">
 <!-- Login Page Content -->
 
  <div class="container" style="margin-top: 20px; ">
@@ -193,8 +209,253 @@
 			</div>
 			
 		</div>
+	</div>	
 	</div>
- </section> 
+	
+	<!-- -----------------------------------Circular--------------------------------------------- -->
+	<div class="tab-pane scroll" id="tab-2" role="tabpanel" >
+		<div align="center"  >
+		
+		<div class="card " style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
+			
+			<div class="card-header" style="height: 4rem" >
+			
+					<form action="Circulars.htm" method="POST" >
+					
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<div class="row ">
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Circulars</span></div>
+					    <div class="col-md-6">
+						 <%--    <table>
+						    	<tr>
+						    		<td><h6>From Date :&nbsp;&nbsp;</h6></td>
+									<td>							    	
+										<input type="text" style="width: 100%;"  class="form-control input-sm mydate"  onchange="this.form.submit()" readonly="readonly" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   id="fromdate" name="fromdate"  required="required"  >
+									</td>
+									<td><h6>&nbsp;&nbsp;To Date :&nbsp;&nbsp;</h6></td>
+									<td>		
+										<input type="text" style="width: 100%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
+									</td>
+								</tr>    
+							</table> --%>
+						</div>
+
+					</div>
+							 
+				   </form>
+				
+				</div>
+
+				<div class="card-body main-card " >
+				
+					<form action="##" method="POST" id="empForm1"   >
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="table-responsive "    >
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1" > 
+								<thead>
+									<tr>
+										<th style="width: 10%">SlNo.</th>
+										<th style="width: 10%">Reference No</th>
+										<th style="width: 50%" >Description </th>
+										<th style="width: 20%" >Circular Date</th>
+										<th style="width: 20%"> Download</th>
+									</tr>
+								</thead>
+								<tbody>
+									<%if(circular!=null && circular.size()>0){ 
+										int slno=0;
+										for(Object[] obj : circular){
+									%>
+										<tr>
+											<td style="text-align:center;  width: 5%;"> <%=++slno%>. </td>
+											<td style="text-align:justify; width: 10%;"><%=obj[6]%></td>
+											<td style="text-align:justify; width: 70%;"><%=obj[1]%></td>
+											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
+											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
+											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[4] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											  <i style="color: #019267" class="fa-solid fa-download"></i>
+										    </button>
+											<%}else{%>--<%}%>
+											</td>
+										</tr>
+										
+								<%} }%>
+								</tbody>
+							</table>
+							
+							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						</div>
+					
+					
+					<!-- <div class="row text-center">
+						<div class="col-md-12">
+						
+						<a href="login.jsp"   class="btn btn-sm  btn-info">HOME</a>
+								
+					    </div>						 
+					</div> -->
+					
+			   </form>		
+			  </div>
+		   	 </div>				
+	       
+	</div> 
+	</div>
+
+	<!-- -----------------------------------Doctor--------------------------------------------- -->
+	<div class="tab-pane scroll" id="tab-3" role="tabpanel">
+		<div align="center">
+		
+		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
+			
+			<div class="card-header" style="height: 4rem" >
+	           <div class="row ">
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Doctors</span></div>
+					    <div class="col-md-6">
+						 
+						</div>
+
+					</div>
+				</div>
+
+				<div class="card-body main-card " >
+				
+					<form action="##" method="POST" id="empForm2"   >
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="table-responsive"    >
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2" > 
+								<thead>
+									<tr>
+										<th style=" text-align:center; width: 15%;"> SlNo. </th>
+										<th style="width: 15%;"> Name </th>
+										<th style="width: 50%;"> Address </th>
+										<th style="width: 20%;"> Contact Details </th>									
+									</tr>
+								</thead>
+								<tbody>
+									<%if(doctorlist!=null && doctorlist.size()>0){ 
+										int slno=0;
+										for(Object[] obj : doctorlist){
+									%>
+										<tr>
+											<td style="text-align:center;  width: 10%;"> <%=++slno%>. </td>
+											<td style="text-align:justify; width: 20%;"><%=obj[1]%> (<%=obj[2]%>)</td>
+									
+											<td style="text-align:justify; width: 50%;"><%=obj[3]%></td>
+											<td style="text-align:justify; width: 20%;"><%=obj[4]%></td>
+										</tr>
+								<%} }%>
+								</tbody>
+							</table>
+							
+							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						</div>
+					
+					
+				<!-- 	<div class="row text-center">
+						<div class="col-md-12">
+						
+						<a href="login.jsp"   class="btn btn-sm  btn-info">HOME</a>
+								
+					    </div>						 
+					</div> -->
+					
+			   </form>		
+			  </div>
+		   	 </div>				
+	       
+	</div> 
+	</div>
+
+	<!-- -----------------------------------Empanelled Hospital--------------------------------------------- -->
+<div class="tab-pane scroll" id="tab-4" role="tabpanel">
+	
+	<div align="center">
+		
+		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
+			
+			<div class="card-header" style="height: 4rem" >
+	           <div class="row ">
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Empanelled Hospital</span></div>
+					    <div class="col-md-6">
+						 
+						</div>
+
+					</div>
+				</div>
+
+				<div class="card-body main-card " >
+				
+					<form action="##" method="POST" id="empForm3"   >
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="table-responsive"    >
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable3" > 
+								<thead>
+									<tr>
+										<th style=" text-align:center; width: 15%"> SlNo. </th>
+										<th style="width: 50%">Hospital Name </th>
+										<th style="width: 50%">Hospital Address</th>
+																
+									</tr>
+								</thead>
+								<tbody>
+									<%if(Empanelled!=null && Empanelled.size()>0){ 
+										int slno=0;
+										for(Object[] obj : Empanelled){
+									%>
+										<tr>
+											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
+											<td style="text-align:justify; width: 30%"><%=obj[1]%></td>
+											<td style="text-align:justify; width: 45%"><%=obj[2]%></td>
+										</tr>
+								<%} }%>
+								</tbody>
+							</table>
+							
+							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						</div>
+					
+					
+					<!-- <div class="row text-center">
+						<div class="col-md-12">
+						
+						<a href="login.jsp"   class="btn btn-sm  btn-info">HOME</a>
+								
+					    </div>						 
+					</div> -->
+					
+			   </form>		
+			  </div>
+		   	 </div>				
+	       
+	</div> 
+	</div>
+
+	
+	
+<div class="tab-pane" id="tab-5" role="tabpanel">
+    <div align="center" style="min-height: 29rem !important;">
+        	<div class="card scrollpolicy">
+        		<div class="card-body main-card" >
+                    <div class="row" align="center">
+                    	<div class="col-md-1"></div>
+                        <div class="col-md-10" align="left">
+
+                        </div>
+                    </div>
+
+                    <div class="row" align="left">
+                    	<div class="col-md-1"></div>
+                        <div class="col-md-10" >
+                            <iframe  title="dsfbds.pdf" name="application.pdf" width="100%" height="600" src="data:application/pdf;base64,<%=chss_policy_pdf%>" style="margin:15px;"> </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>	
+</div>	
+
  
 <!-- Footer -->
 
@@ -262,7 +523,15 @@ $("#error-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
         }, 250);
     });
 </script>
+<script type="text/javascript">
+$("#myTable1,#myTable2,#myTable3").DataTable({
+    "lengthMenu": [10,20, 50, 75, 100],
+    "pagingType": "simple",
+    "language": {
+	      "emptyTable": "No Record Found"
+	    }
 
-
+});
+</script>
 
 </html>

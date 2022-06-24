@@ -68,10 +68,7 @@ public class CHSSServiceImpl implements CHSSService {
 		DecimalFormat decimalformat = new DecimalFormat("0.00");
 		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
 	}
-	
-	@Value("${Circular_Files}")
-	private String CircularFilePath;
-	
+		
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
 	{

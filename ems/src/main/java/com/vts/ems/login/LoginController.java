@@ -1,5 +1,8 @@
 package com.vts.ems.login;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +56,22 @@ public class LoginController
 	    
 	     
 		   	 try {
+		   		List<Object[]> Empanelled  = service.GetEmpanelledHostpitalList();
+	        	req.setAttribute("Empanelled",Empanelled);
+	        	
+		   		 List<Object[]> doctorlist  = service.GetDoctorList();
+	        	 req.setAttribute("doctorlist",doctorlist);
+	        	 
 	   			List<Object[]> 	 circulatlist = service.CirculatList();
 	   			req.setAttribute("circularlist", circulatlist);
+	   			List<Object[]> 	circular = service.GetCircularList();
+	   			req.setAttribute("circular", circular);
+	   			String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
+				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+				req.setAttribute("Messege", "hello");
+				req.setAttribute("path", path);
+				req.setAttribute("chss_policy_pdf", chss_policy_pdf);
+	   			
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

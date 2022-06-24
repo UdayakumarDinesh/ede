@@ -329,85 +329,9 @@ public class EmsController {
 		}  
 	 }
 
-	 @RequestMapping(value ="EmpanneledHospital.htm", method = RequestMethod.GET)
-		public String EmpanneledHospital(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-		 logger.info(new Date() +"Inside EmpanneledHospital.htm ");
-			try 
-			{				
-				List<Object[]> Empanelled = new ArrayList<Object[]>();
-				Empanelled = service.GetEmpanelledHostpitalList();
-	        	req.setAttribute("Empanelled",Empanelled);
-				return "chss/CHSSEmpanelledHospital";
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() +" Inside EmpanneledHospital.htm "+ e);
-				return "chss/CHSSEmpanelledHospital";
-			}
-		}
- 
-	 @RequestMapping(value ="DoctorsList.htm", method = RequestMethod.GET)
-		public String DoctorsList(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-		 logger.info(new Date() +"Inside DoctorsList.htm ");
-			try 
-			{				
-				 List<Object[]> doctorlist = new ArrayList<Object[]>();
-				 doctorlist = service.GetDoctorList();
-	        	 req.setAttribute("doctorlist",doctorlist);
-				return "chss/CHSSDoctorList";
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() +" Inside DoctorsList.htm "+ e);
-				return "chss/CHSSDoctorList";
-			}
-		}
-	
-	 @RequestMapping(value = "CHSSPolicy.htm", method = RequestMethod.GET)
-		public String CHSSPolicy(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-		 logger.info(new Date() +"Inside CHSSPolicy.htm ");
-			try 
-			{	
-				String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
-				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
-				req.setAttribute("Messege", "hello");
-				req.setAttribute("path", path);
-				req.setAttribute("chss_policy_pdf", chss_policy_pdf);
-				return "chss/CHSSPolicy";
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() +" Inside CHSSPolicy.htm "+ e);
-				return "chss/CHSSPolicy";
-			}
-			
-		}
-	 @RequestMapping(value = "Circulars.htm", method = {RequestMethod.GET,RequestMethod.POST})
-	 public String Circulars(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
-	 
-		 logger.info(new Date() +"Inside Circulars.htm ");
-			try 
-			{
-				
-				String fromdate = (String)req.getParameter("fromdate");
-				String todate   = (String)req.getParameter("todate");
-				 List<Object[]> circulatlist = new ArrayList<Object[]>();
-				 if(fromdate==null && todate==null) {
-					 fromdate = DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat();
-		   			   todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-		   			circulatlist = service.GetCircularList();
-				 }else {
-					 circulatlist = masterservice.GetCircularList(fromdate,todate);
-				 }
 
-	        	 req.setAttribute("circulatlist",circulatlist);
-	        	 req.setAttribute("fromdate", fromdate);	
-				 req.setAttribute("todate",todate);
-				return "chss/CHSSCircularList";
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() +" Inside Circulars.htm "+ e);
-				return "chss/CHSSCircularList";
-			}
 
-	 }
+
 	 
 	    @RequestMapping(value = "CircularDownload.htm")
 		public void CircularDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 

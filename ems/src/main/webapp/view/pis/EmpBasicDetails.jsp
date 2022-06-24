@@ -166,11 +166,13 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						
 						</tr>
 						<%if(!"P".equalsIgnoreCase(LoginType)){ %>
-					<tr><td colspan="5" rowspan="2" style="background-color: white;" > 
+					<tr><td colspan="5"  style="background-color: white; " > 
 					
 					<form action="EmpRequestMsg.htm" method="GET">
 					 <div class="row" >
-					    	<div class="col-11" align="right">
+					 		<div class="col-4"></div>
+					 		<div class="col-6" align="right"> <p><b style="color: red;">Note :</b> Any changes in profile request to Admin </p></div>
+					    	<div class="col-2" align="right">
 					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
 					    	</div>  	
 			    	</div>  

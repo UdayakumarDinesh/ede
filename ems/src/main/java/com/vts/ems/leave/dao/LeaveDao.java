@@ -3,7 +3,9 @@ package com.vts.ems.leave.dao;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveRegister;
+import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
 
 public interface LeaveDao {
@@ -25,5 +27,12 @@ public interface LeaveDao {
 	public List<Object[]>   purposeList()throws Exception;
 	public List<LabMaster> getLabDetails() throws Exception; 
 	public List<Object[]> getRegister(String EmpNo)throws Exception;
+	public Object[] checkLeave(String EmpNo,String fromDate,String inDate) throws Exception;
+	public long checkHoliday(String inDate,String inType) throws Exception;
+	public long getCountHandingOver(String EmpNo,String fromDate,String ToDate)throws Exception;
+	public long LeaveApplInsert(LeaveAppl appl)throws Exception;
+	public long LeaveTransInsert(LeaveTransaction transaction)throws Exception;
+	public long getLeaveApplId(int Year)throws Exception;
+	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 	
 }

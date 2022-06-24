@@ -2,7 +2,7 @@ package com.vts.ems.leave.service;
 
 import java.util.List;
 
-import com.vts.ems.leave.dto.LeaveCheckDto;
+import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 
@@ -23,6 +23,8 @@ public interface LeaveService {
 	public List<Object[]>   EmployeeList()throws Exception;
 	public List<Object[]> LeaveCode(String EmpNo) throws Exception ;
 	public List<Object[]>   purposeList()throws Exception;
-	public String LeaveCheck(LeaveCheckDto dto)throws Exception;
+	public String[] LeaveCheck(LeaveApplyDto dto)throws Exception;
 	public LeaveRegister getRegister(String EmpNo) throws Exception ;
+	public String[] applyLeaveAdd(LeaveApplyDto dto)throws Exception;
+	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 }

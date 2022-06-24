@@ -3,6 +3,7 @@ package com.vts.ems.leave.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +13,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.vts.ems.leave.dto.LeaveCheckDto;
+import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -170,6 +172,7 @@ public class LeaveController {
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
 			 req.setAttribute("purposeList", service.purposeList());
 			 req.setAttribute("register", service.getRegister(EmpNo));
+			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -265,19 +268,20 @@ public class LeaveController {
 
 	@RequestMapping(value = "GetLeaveChecked.htm" , method = RequestMethod.GET)
 	public @ResponseBody String GetLeaveChecked(HttpServletRequest req ,HttpSession ses) throws Exception {
-		String Result="Please Try Again";
+		String[] Result=null;
 		Gson json = new Gson();
 		String UserId=req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside GetLeaveChecked.htm "+UserId);		
 		try {
-			LeaveCheckDto dto=new LeaveCheckDto();
+			LeaveApplyDto dto=new LeaveApplyDto();
 			dto.setEmpNo(req.getParameter("empno"));
-			dto.setElCash(req.getParameter("ELCash"));
+			dto.setLTC(req.getParameter("ELCash"));
 			dto.setFromDate(req.getParameter("fdate"));
 			dto.setToDate(req.getParameter("tdate"));
 			dto.setLeaveType(req.getParameter("leavetype"));
 			dto.setHalfOrFull(req.getParameter("halforfull"));
 			dto.setHours(req.getParameter("hours"));
+			dto.setHandingOverEmpid(req.getParameter("HandingOverEmpid"));
 			dto.setUserId(UserId);
 			Result=service.LeaveCheck(dto);
 		}
@@ -287,4 +291,94 @@ public class LeaveController {
 		}
 			return json.toJson(Result);	
 	}
+	
+	@RequestMapping(value = "apply-leave-add.htm" , method = RequestMethod.POST)
+	public  String applyLeaveAdd(HttpServletRequest req ,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String[] Result=null;
+		String UserId=req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside applyLeaveAdd.htm "+UserId);		
+		try {
+			LeaveApplyDto dto=new LeaveApplyDto();
+			dto.setEmpNo(req.getParameter("empNo"));
+			dto.setLTC(req.getParameter("elcash"));
+			dto.setFromDate(req.getParameter("startdate"));
+			dto.setToDate(req.getParameter("enddate"));
+			dto.setLeaveType(req.getParameter("leavetypecode"));
+			dto.setHalfOrFull(req.getParameter("fullhalf"));
+			dto.setHours(req.getParameter("hours"));
+			dto.setAnFN(req.getParameter("anfn"));
+			dto.setPurLeave(req.getParameter("leavepurpose"));
+			dto.setLeaveAddress(req.getParameter("leaveadd"));
+			dto.setRemarks(req.getParameter("remark"));
+			dto.setHandingOverEmpid(req.getParameter("HandingOverEmpid"));
+			dto.setUserId(UserId);
+			dto.setActEmpNo((String)ses.getAttribute("EmpNo"));
+			Result=service.applyLeaveAdd(dto);
+			if("Pass".equals(Result[1])) {
+				redir.addAttribute("result",Result[0]);
+				redir.addFlashAttribute("EmpNo",dto.getEmpNo());
+			}else if("Fail".equals(Result[1])) {
+				redir.addAttribute("resultfail",Result[0]);
+			}
+			
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside applyLeaveAdd.htm "+UserId, e);
+		}
+			return "redirect:/applyLeaveRedirect.htm";	
+	}
+	
+	@RequestMapping(value = "applyLeaveRedirect.htm")
+	public String applyLeaveRedirect(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,Model model) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside applyLeaveRedirect.htm "+UserId);		
+		try { 
+			 Map md=model.asMap();
+			 String EmpNo=(String)md.get("EmpNo");
+			 if(EmpNo==null) {
+				 redir.addAttribute("result", "Refresh Not Allowed");
+					return "redirect:/LeaveApply.htm";
+			 }
+			 req.setAttribute("EmpNo",EmpNo);
+			 req.setAttribute("EmpList", service.EmployeeList());
+			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
+			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
+			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
+			 req.setAttribute("purposeList", service.purposeList());
+			 req.setAttribute("register", service.getRegister(EmpNo));
+			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside applyLeaveRedirect.htm "+UserId, e);
+	       }
+	   return "leave/LeaveApply";
+
+	}
+
+	@RequestMapping(value = "LeaveRegister.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveRegister(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveRegister.htm"+UserId);		
+		try {
+			String empNo=req.getParameter("empNo");
+			String yr=req.getParameter("Year");
+			if(yr==null) {
+			yr=sdf.getCurrentYear();
+			empNo=(String)ses.getAttribute("EmpNo");
+			}
+		    //req.setAttribute("RegisterList", service.LeaveRegisterList(empNo,yr));
+		    req.setAttribute("EmpList", service.EmpList());
+		    req.setAttribute("empNo", empNo);
+		    req.setAttribute("year", yr);
+	
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside LeaveRegister.htm"+UserId, e);
+	       }
+	   return "leave/LeaveRegister";
+
+	}
+	
+	
 }

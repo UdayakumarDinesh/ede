@@ -118,7 +118,7 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 					             <div class="form-inline">
 					        	 <div class="form-group "  >
 					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" required="required" > 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
 					      		 </div>
 					      		 </div>
 					        	
@@ -216,9 +216,25 @@ function CommentsModel()
 {
 	var docName = $('#DoctorName').val();
 	var qualification = $('#Qualification').val();
-    var address = $('#Qualification').val();
-    var phoneno = $('#Qualification').val();
-		 $('#myModal').modal('show');
+    var address = $('#address').val();
+    var phoneno = $('#phoneno').val();
+    if(docName=="" || docName=="null" || docName==null){
+    	alert("Enter the Doctor Name!");
+    	return false;
+    }else if(qualification=="" || qualification=="null" || qualification==null){
+    	alert("Enter the Qualification!");
+    	return false;
+    }else if(address=="" || address=="null" || address==null){
+    	alert("Enter the Address!");
+    	return false;
+    }else if(phoneno=="" || phoneno=="null" || phoneno==null){
+    	alert("Enter the Phone Number!");
+    	return false;
+    }else{
+    	$('#myModal').modal('show');
+    	return false;
+    }
+		 
 		
 }
 </script>
