@@ -131,7 +131,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                         <tr>
 	                            <td><%=register.getCL() %></td>
 	                            <td><%=register.getEL() %></td>
-	                            <td><%=register.getHPL() %>/<%=register.getCML() %></td>
+	                            <td><%=register.getHPL() %>/<%=register.getHPL()/2 %></td>
 	                            <td><%=register.getRH() %></td>    
 	                        </tr>
 	                        

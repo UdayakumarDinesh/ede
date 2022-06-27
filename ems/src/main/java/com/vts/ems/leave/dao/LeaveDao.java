@@ -26,7 +26,7 @@ public interface LeaveDao {
 	public List<Object[]> LeaveCode(String EmpNo) throws Exception;
 	public List<Object[]>   purposeList()throws Exception;
 	public List<LabMaster> getLabDetails() throws Exception; 
-	public List<Object[]> getRegister(String EmpNo)throws Exception;
+	public List<Object[]> getRegister(String EmpNo, String yr)throws Exception;
 	public Object[] checkLeave(String EmpNo,String fromDate,String inDate) throws Exception;
 	public long checkHoliday(String inDate,String inType) throws Exception;
 	public long getCountHandingOver(String EmpNo,String fromDate,String ToDate)throws Exception;
@@ -34,5 +34,6 @@ public interface LeaveDao {
 	public long LeaveTransInsert(LeaveTransaction transaction)throws Exception;
 	public long getLeaveApplId(int Year)throws Exception;
 	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
+	public LeaveRegister getOpeningBalance(String EmpNo,String yr) throws Exception;
 	
 }

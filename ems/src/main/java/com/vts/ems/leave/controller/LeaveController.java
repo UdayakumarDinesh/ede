@@ -171,7 +171,7 @@ public class LeaveController {
 			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
 			 req.setAttribute("purposeList", service.purposeList());
-			 req.setAttribute("register", service.getRegister(EmpNo));
+			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
 			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
 	    }
 	     catch (Exception e) {
@@ -198,7 +198,7 @@ public class LeaveController {
 			register.setCL(Double.parseDouble(req.getParameter("cl")));
 			register.setEL(Integer.parseInt(req.getParameter("el")));
 			register.setHPL(Integer.parseInt(req.getParameter("hpl")));
-			register.setCML(Integer.parseInt(req.getParameter("cml")));
+			register.setCML(0);
 			register.setRH(Integer.parseInt(req.getParameter("rh")));
 			register.setEL_LAPSE(0);
 			register.setML(Integer.parseInt(req.getParameter("ml")));
@@ -346,7 +346,7 @@ public class LeaveController {
 			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
 			 req.setAttribute("purposeList", service.purposeList());
-			 req.setAttribute("register", service.getRegister(EmpNo));
+			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
 			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
 	    }
 	     catch (Exception e) {
@@ -367,7 +367,8 @@ public class LeaveController {
 			yr=sdf.getCurrentYear();
 			empNo=(String)ses.getAttribute("EmpNo");
 			}
-		    //req.setAttribute("RegisterList", service.LeaveRegisterList(empNo,yr));
+			req.setAttribute("register", service.RegisterOpening(empNo,yr));
+		    req.setAttribute("RegisterList", service.LeaveRegisterList(empNo,yr));
 		    req.setAttribute("EmpList", service.EmpList());
 		    req.setAttribute("empNo", empNo);
 		    req.setAttribute("year", yr);

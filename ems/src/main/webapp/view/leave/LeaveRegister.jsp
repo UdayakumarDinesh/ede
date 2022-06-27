@@ -44,6 +44,19 @@
     max-width:750px;
     margin: 2rem auto;
 }
+.card-body{
+padding: 0.5rem !important;
+}
+span{
+font-weight: bold;
+}
+.table td, .table th {
+font-size: 13px; !important;
+}
+.table th {
+text-align: center;
+}
+
 </style>
 </head>
 <body>
@@ -94,7 +107,7 @@ String ses=(String)request.getParameter("result");
     <div class="group-form">
     <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
     <%for(Employee emp:emplist){ %>
-    <option value="<%=emp.getEmpNo() %>" <%if(emp.getEmpId().equals(empno)){ %> selected="selected" <%} %>><%=emp.getEmpName() %></option>
+    <option value="<%=emp.getEmpNo() %>" <%if(emp.getEmpNo().equals(empno)){ %> selected="selected" <%} %>><%=emp.getEmpName() %></option>
     <%} %>
     </select>
     
@@ -113,54 +126,251 @@ String ses=(String)request.getParameter("result");
     
     
     </form>
-    <%
-    List<Object[]> RegisterList=(List<Object[]>)request.getAttribute("RegisterList");
+    <%LeaveRegister register=(LeaveRegister)request.getAttribute("register");
+    List<LeaveRegister> RegisterList=(List<LeaveRegister>)request.getAttribute("RegisterList");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	   %>
 	    <div class="row" style="margin-top:7px;"> 
-	    <div class="col-md-12">
-	 <div class="table-responsive">
-		<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
-	  <thead>
-	  <tr>
-	  <th>SN</th>
-	  <th>Employee</th>
-	  <th>CL</th>
-	  <th>EL</th>
-	  <th>HPL</th>
-	  <th>CML</th>
-	  <th>RH</th>
-	  <th>Month</th>
-	  <th>Year</th>
+	    <div class="col-md-4">
+	    <div class="card card-default border-success">
+							<div class="card-header">
+								<span>Casual Leave</span>
+							</div>
+							
+							<div class="card-body">
+								
+								<table class="table table-hover  table-striped table-condensed table-bordered" id="cl">
+									<thead>
+										<tr>
+											<th >From &nbsp; To</th>
+											<th >Appl Dt<br/>Sanc Dt</th>
+											<th >Status </th>
+											<th >Debit <br/> Credit</th>
+											<th >Balance</th>
+										</tr>
+									</thead>
+									<tbody>
+									
+									      <tr>
+											<td style="text-align: center;"> - &nbsp; -</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LOB</td>
+											<td style="text-align: right;"><%=register.getCL() %>  </td>
+											<td style="text-align: right;"><%=register.getCL() %></td>
+										 </tr>
+									      <% 
+									      double countCL=register.getCL();
+									      
+									      for(LeaveRegister cl:RegisterList){ 
+									      if(cl.getCL()>0){
+									    	  
+									      %>
+                                          <tr>
+											<td style="text-align: center;"><%=cl.getFROM_DATE() %> <br> <%=cl.getTO_DATE() %></td>
+											<td style="text-align: center;">Appl Dt<br/>Sanc Dt</td>
+											<td style="text-align: center;"><%=cl.getSTATUS() %></td>
+											<td style="text-align: right;">
+										    <%if(cl.getSTATUS().equals("LKU")){
+										    	countCL+=cl.getCL();	
+										    	%>
+										    <%=cl.getCL() %>
+										    <%}else{ %>
+										    -
+										    <%} %>
+											<br/> 
+											<%if(!cl.getSTATUS().equals("LKU")){
+										    	countCL-=cl.getCL();	
+										    	%>
+										    <%=cl.getCL() %>
+										    <%}else{ %>
+										    -
+										    <%} %> 
+											</td>
+											<td style="text-align: right;"><%=countCL %></td>
+										  </tr>
 
-	  
-	  </tr>
-	  </thead>
-	  <tbody>
-	  <%int count=1;
-	  for(Object[] hlo :RegisterList){ %>
-	  <tr>
-	  <td style="width: 100px;text-align: center;"><%=count %></td> 
-	  <td style="width: 30%;text-align: center;"><%=hlo[1] %>,<%=hlo[2] %></td>
-	  <td style="text-align: center;width: 100px;"><%=hlo[3] %></td>
-	  <td style="text-align: center;width: 100px;"><%=hlo[4] %></td>
-	   <td style="text-align: center;width: 100px;"><%=hlo[5] %></td>
-	    <td style="text-align: center;width: 100px;"><%=hlo[6] %></td>
-	     <td style="text-align: center;width: 100px;"><%=hlo[7] %></td>
-	      <td style="text-align: center;width: 100px;"><%=hlo[8] %></td>
-	       <td style="text-align: center;width: 100px;"><%=hlo[9] %></td>
+										 <%} }%>
+										 <tr>
+											<td style="text-align: center;">- &nbsp;-</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LCB </td>
+											<td style="text-align: right;"><%=countCL %> </td>
+											<td style="text-align: right;"><%=countCL %></td>
+										 </tr>
+										</tbody>
+									</table>
+								
+							</div><!-- panel-body -->
+							</div>
+						</div>
+						
+						
+						<div class="col-md-4">
+	    <div class="card card-default border-success">
+							<div class="card-header">
+								<span >Earned Leave</span>
+							</div>
+							
+							<div class="card-body">
+								
+								<table class="table table-hover  table-striped table-condensed table-bordered" id="el">
+									<thead>
+										<tr>
+											<th >From &nbsp; To</th>
+											<th >Appl Dt<br/>Sanc Dt</th>
+											<th >Status </th>
+											<th >Debit <br/> Credit</th>
+											<th >Balance</th>
+										</tr>
+									</thead>
+									<tbody>
+									      <tr>
+											<td style="text-align: center;"> - &nbsp; -</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LOB</td>
+											<td style="text-align: right;"><%=register.getEL() %> </td>
+											<td style="text-align: right;"><%=register.getEL() %></td>
+										 </tr>
+									      <% 
+									      int countEL=register.getEL();
+									      
+									      for(LeaveRegister el:RegisterList){ 
+									      if(el.getEL()>0){
+									    	  
+									      %>
+                                          <tr>
+											<td style="text-align: center;"><%=el.getFROM_DATE() %> <br> <%=el.getTO_DATE() %></td>
+											<td style="text-align: center;">Appl Dt<br/>Sanc Dt</td>
+											<td style="text-align: center;"><%=el.getSTATUS() %></td>
+											<td style="text-align: right;">
+										    <%if(el.getSTATUS().equals("LKU")){
+										    	countEL+=el.getEL();	
+										    	%>
+										    <%=el.getEL() %>
+										    <%}else{ %>
+										    -
+										    <%} %>
+											<br/> 
+											<%if(!el.getSTATUS().equals("LKU")){
+										    	countEL-=el.getEL();	
+										    	%>
+										    <%=el.getEL() %>
+										    <%}else{ %>
+										    -
+										    <%} %> 
+											</td>
+											<td style="text-align: right;"><%=countEL %></td>
+										  </tr>
 
-	  
-	  
-	  
-	  </tr>
-	  <%count++;} %>
-	  </tbody>
-	   </table>
-	   
-	   </div>
-	  
-       </div>
+										 <%} }%>
+										 <tr>
+											<td style="text-align: center;">- &nbsp;-</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LCB </td>
+											<td style="text-align: right;"><%=countEL %> </td>
+											<td style="text-align: right;"><%=countEL %></td>
+										 </tr>
+										</tbody>
+									</table>
+								
+							</div><!-- panel-body -->
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+	    <div class="card card-default border-success">
+							<div class="card-header">
+								<span >CML/HPL Leave</span>
+							</div>
+							
+							<div class="card-body">
+								
+								<table class="table table-hover  table-striped table-condensed table-bordered" id="hpl">
+									<thead>
+										<tr>
+											<th >From &nbsp; To</th>
+											<th >Appl Dt<br/>Sanc Dt</th>
+											<th >Status </th>
+											<th >Debit <br/> Credit</th>
+											<th >Balance</th>
+										</tr>
+									</thead>
+									<tbody>
+									      <tr>
+											<td style="text-align: center;"> - &nbsp; -</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LOB</td>
+											<td style="text-align: right;"><%=register.getHPL() %>  </td>
+											<td style="text-align: right;"><%=register.getHPL() %></td>
+										 </tr>
+									      <% 
+									      int countHPL=register.getHPL();
+									      
+									      for(LeaveRegister hpl:RegisterList){ 
+									      if(hpl.getHPL()>0){
+									    	  
+									      %>
+                                          <tr>
+											<td style="text-align: center;"><%=hpl.getFROM_DATE() %> <br> <%=hpl.getTO_DATE() %></td>
+											<td style="text-align: center;">Appl Dt<br/>Sanc Dt</td>
+											<td style="text-align: center;"><%=hpl.getSTATUS() %></td>
+											<td style="text-align: right;">
+										    <%if(hpl.getSTATUS().equals("LKU")){
+										    	countHPL+=hpl.getHPL();	
+										    	%>
+										    <%=hpl.getHPL()/2 %> / <%=hpl.getHPL() %>
+										    <%}else{ %>
+										    -
+										    <%} %>
+											<br/> 
+											<%if(!hpl.getSTATUS().equals("LKU")){
+										    	countHPL-=hpl.getHPL();	
+										    	%>
+										    - / <%=hpl.getHPL() %>
+										    <%}else{ %>
+										    -
+										    <%} %> 
+											</td>
+											<td style="text-align: right;"><%=countHPL %></td>
+										  </tr>
+
+										 <%}else 
+									      if(hpl.getCML()>0){
+									    	  
+										      %>
+	                                          <tr>
+												<td style="text-align: center;"><%=hpl.getFROM_DATE() %> <br> <%=hpl.getTO_DATE() %></td>
+												<td style="text-align: center;">Appl Dt<br/>Sanc Dt</td>
+												<td style="text-align: center;"><%=hpl.getSTATUS() %></td>
+												<td style="text-align: right;">
+											    -
+												<br/> 
+												<%if(!hpl.getSTATUS().equals("LKU")){
+											    	countHPL-=hpl.getCML()*2;	
+											    	%>
+											     <%=hpl.getCML()%> / <%=hpl.getCML()*2 %>
+											    <%}else{ %>
+											    -
+											    <%} %> 
+												</td>
+												<td style="text-align: right;"><%=countHPL %></td>
+											  </tr>
+
+											 <%} }%>
+									      
+										 <tr>
+											<td style="text-align: center;">- &nbsp;-</td>
+											<td style="text-align: center;">- -</td>
+											<td style="text-align: center;">LCB </td>
+											<td style="text-align: right;"><%=countHPL %> </td>
+											<td style="text-align: right;"><%=countHPL %></td>
+										 </tr>
+										</tbody>
+									</table>
+								
+							</div><!-- panel-body -->
+							</div>
+						</div>
        </div>
        
 
@@ -177,7 +387,12 @@ $('#year').datepicker({
 	    autoclose: true,
 	    todayHighlight: true
 });
-
+var tbody = $('#hpl  tbody');
+tbody.html($('tr',tbody).get().reverse());
+var el = $('#el  tbody');
+el.html($('tr',el).get().reverse());
+var cl = $('#cl  tbody');
+cl.html($('tr',cl).get().reverse());
 </script>
 </body>
 </html>

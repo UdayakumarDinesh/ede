@@ -3,6 +3,7 @@ package com.vts.ems.leave.service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class LeaveServiceImpl implements LeaveService{
 				}
 				register.setEL(Integer.parseInt(obj[4].toString()));
 				register.setHPL(Integer.parseInt(obj[5].toString()));
-				register.setCML(Integer.parseInt(obj[6].toString()));
+				register.setCML(0);
 				register.setRH(Integer.parseInt(obj[7].toString()));
 				register.setEL_LAPSE(0);
 				register.setML(0);
@@ -456,8 +457,8 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	@Override
-	public LeaveRegister getRegister(String EmpNo) throws Exception {
-		List<Object[]> regiList=dao.getRegister(EmpNo);
+	public LeaveRegister getRegister(String EmpNo,String yr) throws Exception {
+		List<Object[]> regiList=dao.getRegister(EmpNo,yr);
 		double CL=0.0;
 		int EL=0;
 		int EL_LAPSE=0;
@@ -514,7 +515,7 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	public LeaveRegister CheckRegister(String EmpNo) throws Exception {
-		List<Object[]> regiList=dao.getRegister(EmpNo);
+		List<Object[]> regiList=dao.getRegister(EmpNo,sdf.getCurrentYear());
 		double CL=0.0;
 		int EL=0;
 		int EL_LAPSE=0;
@@ -767,5 +768,54 @@ public class LeaveServiceImpl implements LeaveService{
 	
 		return dao.getAppliedLeave(EmpNo);
 	}
-	
+
+	@Override
+	public List<LeaveRegister> LeaveRegisterList(String EmpNo, String yr) throws Exception {
+		List<Object[]> regiList=dao.getRegister(EmpNo,yr);
+		List<LeaveRegister>  regiall=new ArrayList<LeaveRegister>();
+ 		if(regiList!=null&&regiList.size()>0) {
+		for(Object[] obj:regiList) {
+			if(!"LOB".equals(obj[14].toString())) {
+			LeaveRegister register=new LeaveRegister();
+			register.setSTATUS(obj[14].toString());
+			register.setTO_DATE(sdf.getRegularDateFormat().format(obj[17]));
+			register.setFROM_DATE(sdf.getRegularDateFormat().format(obj[16]));
+			register.setAPPL_ID(obj[18].toString());
+			register.setEMPID(EmpNo);
+	   		register.setCL(Double.parseDouble(obj[2].toString()));
+			register.setEL(Integer.parseInt(obj[3].toString()));
+			register.setHPL(Integer.parseInt(obj[4].toString()));
+			register.setCML(Integer.parseInt(obj[5].toString()));
+			register.setRH(Integer.parseInt(obj[6].toString()));
+			register.setCCL(Integer.parseInt(obj[7].toString()));
+			//register.setEOL(Integer.parseInt(obj[8].toString()));
+			register.setPL(Integer.parseInt(obj[10].toString()));
+			register.setML(Integer.parseInt(obj[9].toString()));
+			register.setSL(Integer.parseInt(obj[8].toString()));
+			regiall.add(register);
+			}
+		}
+		}
+		
+		return regiall;
 	}
+	
+	
+	@Override
+	public LeaveRegister RegisterOpening(String EmpNo, String yr) throws Exception {
+		LeaveRegister last=getRegister(EmpNo,String.valueOf(Integer.parseInt(yr)-1));
+		LeaveRegister opening=new LeaveRegister();
+		try {
+			opening=dao.getOpeningBalance(EmpNo, yr);
+		}catch (Exception e) {
+		}
+		LeaveRegister register=new LeaveRegister();
+		register.setEMPID(EmpNo);
+   		register.setCL(last.getCL()+opening.getCL());
+		register.setEL(last.getEL()+opening.getEL());
+		register.setHPL(last.getHPL()+opening.getHPL());
+		register.setRH(last.getRH()+opening.getRH());
+		register.setCCL(last.getCCL()+opening.getCCL());
+		return register;
+	}
+}

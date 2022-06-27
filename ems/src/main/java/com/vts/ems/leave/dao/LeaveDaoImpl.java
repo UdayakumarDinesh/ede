@@ -48,13 +48,13 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
     private static final String LABMASTER="FROM LabMaster";
-    private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND year(sysdate())>=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
+    private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr>=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
     private static final String CHECKDAY="SELECT COUNT(*) FROM leave_holiday_workingday WHERE holidate=:inDate  AND holitype=:inType";
     private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
     private static final String CHECKHANDOVER="select count(*) from";
     private static final String GETAPPLID="SELECT MAX(SUBSTR(applid,6)) FROM leave_appl where leaveyear=:year";
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU') and a.empid=:empNo order by a.leaveapplid desc";
-    
+    private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
     
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -231,10 +231,11 @@ public class LeaveDaoImpl implements LeaveDao{
 
 
 	@Override
-	public List<Object[]> getRegister(String EmpNo) throws Exception {
+	public List<Object[]> getRegister(String EmpNo, String yr) throws Exception {
 		logger.info(new Date() +"Inside getRegister");	
 		Query query = manager.createNativeQuery(REGISTER);
 		query.setParameter("empNo", EmpNo);
+		query.setParameter("yr", yr);
 		List<Object[]> getRegister= query.getResultList();
 		return getRegister;
 	}
@@ -324,5 +325,14 @@ public class LeaveDaoImpl implements LeaveDao{
 		return getAppliedLeave;
 	}
 	
+	@Override
+	public LeaveRegister getOpeningBalance(String EmpNo,String yr) throws Exception {
+		logger.info(new Date() +"Inside getOpeningBalance");	
+		Query query = manager.createQuery(OPENINGBALANCE);
+		query.setParameter("EmpNo", EmpNo);
+		query.setParameter("yr", yr);
+		LeaveRegister getAppliedLeave=(LeaveRegister) query.getSingleResult();
+		return getAppliedLeave;
+	}
 	
 }
