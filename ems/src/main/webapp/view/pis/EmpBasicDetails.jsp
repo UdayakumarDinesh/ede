@@ -541,7 +541,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td colspan="3"  style="background-color: #0e6fb6; color: white;">
 								<b>Family Details</b> 
-								<!-- <span style="float: right;"><a class="btn btn-sm submit-btn" href="EmpFamilyMemberAdd.htm"> Include / Exclude </a></span> -->
+								<span style="float: right;"><a class="btn btn-sm submit-btn" href="EmpFamilyMemberAdd.htm"> Include / Exclude </a></span>
 							</td>
 						</tr>
 

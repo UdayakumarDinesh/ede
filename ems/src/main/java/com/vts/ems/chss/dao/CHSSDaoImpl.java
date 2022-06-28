@@ -83,7 +83,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return result;
 	}
 	
-	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empid=:empid ";
+	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob,b.BasicPay,  ed.Designation from employee a, employee_details b,employee_desig ed where a.empno=b.empno AND a.DesigId = ed.DesigId AND a.isactive='1' AND a.empid=:empid ";
 	
 	@Override
 	public  Object[] getEmployee(String empid) throws Exception
@@ -101,6 +101,8 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 		return result;
 	}
+	
+	
 	
 	
 	@Override
@@ -1800,5 +1802,5 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
-	
+
 }

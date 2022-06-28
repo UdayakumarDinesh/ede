@@ -78,6 +78,23 @@ th,td
 	color: #008005;
 }
  
+ 
+ .float{
+	position:fixed;
+	width:50px;
+	height:50px;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+	margin:0px;
+	font-size: 25px;
+}
 </style>
 
 
@@ -337,11 +354,7 @@ th,td
 													<td colspan="7" style="text-align: center;padding: 0;">
 														<span><h4>MEDICAL REIMBURSEMENT DETAILS </h4></span> 
 														<span style="float: right; margin:3px 3px 0px 0px;">
-														<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("V")|| logintype.equals("K") || logintype.equals("B")) && (chssstatusid== 2  || chssstatusid== 4 || chssstatusid== 5)){ %>
-														<button type="button" data-toggle="modal" data-target=".my-disc-cal-modal" class="btn- btn-sm" style="float: right;border:0px;background-color:green; ">
-															<i class="fa-solid fa-calculator" style="color: white;"></i>
-														</button> 
-														<%} %>
+														
 														</span>
 													</td>
 												</tr> 
@@ -876,7 +889,13 @@ th,td
 		</div>
 	
 	 </div>
-	 
+
+	<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("V")|| logintype.equals("K") || logintype.equals("B")) && (chssstatusid== 2  || chssstatusid== 4 || chssstatusid== 5)){ %>
+		<button type="button" onclick="$('.my-disc-cal-modal').modal('show');" class="btn- btn-sm float" style="float: right;border:0px;background-color:green; " data-toggle="tooltip" data-placement="top" title="Discount Calculator">
+			<i class="fa-solid fa-calculator my-float" style="color: white;"></i>
+		</button> 
+	<%} %>
+ 
 	 
  <div class="modal fade my-history-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
@@ -909,7 +928,7 @@ th,td
 	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
 		<div class="modal-content" >
 			<div class="modal-header" style="background: #F5C6A5 ">
-				<div> <h4> Discount Calculator</h4> </div>
+				<div> <b style="font-size: 20px;">Discount Calculator</b>  </div>
 			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
 			    </button>
@@ -978,10 +997,31 @@ th,td
 		</div>
 	</div>
 </div>
+
+<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
+
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	  <div class="modal-header" style="">
+	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+	  </div>
+      <div class="modal-body">
+      	
+      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script type="text/javascript">
 
-$('.my-disc-cal-modal').modal('show');
-
+/* $('.my-disc-cal-modal').modal('show');
+ */
 function DiscountCalculate()
 {
 	var $disc_perc = Number( $('#disc-perc').val() );
@@ -1127,24 +1167,7 @@ function  onlyNumbers() {
 
 </script>
 	
-<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
-
-<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-	  <div class="modal-header" style="">
-	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-	  </div>
-      <div class="modal-body">
-      	
-      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
-     
-        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
-        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
-      </div>
-    </div>
-  </div>
-</div>
+	
 <script type="text/javascript">	 
 
 	$('#my_acknowledge_model').modal('show')

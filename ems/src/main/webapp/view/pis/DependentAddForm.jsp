@@ -1,3 +1,5 @@
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -90,7 +92,11 @@ ol > li::marker {
 <meta charset="ISO-8859-1">
 <title>CHSS FORM - 2</title>
 </head>
-
+<%
+List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMemberDetails");
+Object[] empdetails = (Object[])request.getAttribute("empdetails");
+Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
+%>
 <body >
 	<div id="pageborder" align="center" style="max-width:100%;margin-top: -5px;margin-left: 10px;" >
 		<div align="right">
@@ -115,16 +121,19 @@ ol > li::marker {
 					<th style="width: 12% " >Date of Appointment</th> -->
 				</tr>
 				<tr>
-					<td><br><br></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td><%=empdetails[2] %></td>
+					<td><%=empdetails[1] %></td>
+					<td><%=empdetails[12] %></td>
+					<td><%=empdetails[9] %></td>
+					<td><%=empdetails[11] %></td>
 					<!-- <td></td>
 					<td></td> -->
 				</tr>
 			</table>
 			Residential Address :
+				<%if(employeeResAddr!=null){ %>
+					<%=employeeResAddr[1] %>
+				<%} %>
 			<br>
 			<br><br><br>
 		</div>
@@ -134,19 +143,32 @@ ol > li::marker {
 				<tr>
 					<th style="width:5% " >SN</th>
 					<th style="width:20% " >Name</th>
-					<th style="width:12% " >Relationship With the Employee</th>
-					<th style="width: 10% " >Date of Birth</th>
+					<th style="width:15% " >Relationship With the Employee</th>
+					<th style="width: 15% " >Date of Birth</th>
 					<th style="width: 15% " >Occupation if Any</th>
 					<th style="width: 15% " >Income, if any, per month (Rs) </th>
 				</tr>
-				<%for(int i=0;i<4;i++){ %>
+				<%for(int i=0;i<FwdMemberDetails.size();i++)
+				{ %>
 				<tr>
-					<td><br></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td><%=i+1%></td>
+					<td><%=FwdMemberDetails.get(i)[1] %></td>
+					<td><%=FwdMemberDetails.get(i)[2] %></td>
+					<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
+					<td>
+						<%if(FwdMemberDetails.get(i)[7].toString().equalsIgnoreCase("Y")){ %>
+						<%=FwdMemberDetails.get(i)[8] %>
+						<%}else{ %>
+							NA
+						<%} %>
+					</td>
+					<td>
+						<%if(FwdMemberDetails.get(i)[7].toString().equalsIgnoreCase("Y")){ %>
+						<%=FwdMemberDetails.get(i)[9] %>
+						<%}else{ %>
+							NA
+						<%} %>
+					</td>
 				</tr>
 				<%} %>
 			</table>

@@ -123,4 +123,5 @@ public interface CHSSDao {
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	
+	
 }

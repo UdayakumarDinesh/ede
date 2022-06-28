@@ -1133,7 +1133,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus = 'C' AND a.empid=:empid";
+	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus = 'C' AND a.empid=:empid";
 	@Override
 	public List<Object[]> getFamilydetails(String empid) throws Exception 
 	{
@@ -1220,7 +1220,6 @@ public class PisDaoImpl implements PisDao {
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO loginHisAddSubmit");
-
 		try {
 			manager.persist(model);
 			manager.flush();
@@ -1248,7 +1247,7 @@ public class PisDaoImpl implements PisDao {
 			return null;
 		}
 	}
-	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
+	
 	private final static String LISTOFSENIORITYNUMBER="SELECT SrNo, EmpId FROM employee WHERE SrNo !=0 ORDER BY SrNo ASC ";
 	@Override
 	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception
@@ -1265,6 +1264,7 @@ public class PisDaoImpl implements PisDao {
 	    return listSeni;
 	}
 	
+	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
 	@Override
 	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception{
 		    Query updatequery=manager.createNativeQuery(UPDATESRNO);
@@ -1274,7 +1274,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final String FAMILYDETAILSNOTCONF="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('A','F') AND a.empid=:empid";
+	private static final String FAMILYDETAILSNOTCONF="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('A','F') AND a.empid=:empid ORDER BY FIELD( InclusionStatus , 'F', 'A') ";
 	@Override
 	public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception 
 	{
@@ -1301,6 +1301,94 @@ public class PisDaoImpl implements PisDao {
 			return null;
 		}
 		
+	}
+	
+	
+	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('F')   AND a.empid = :empid ";
+	@Override
+	public List<Object[]> getFamilydetailsFwd(String empid) throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO getFamilydetails");
+		try {
+			Query query = manager.createNativeQuery(GETFAMILYDETAILSFWD);
+			query.setParameter("empid",empid);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
+	private static final String GETEMPLOYEEINFO="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob,b.BasicPay,  ed.Designation from employee a, employee_details b,employee_desig ed where a.empno=b.empno AND a.DesigId = ed.DesigId AND a.isactive='1' AND a.empid=:empid ";
+	
+	@Override
+	public  Object[] getEmployeeInfo(String empid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getEmployeeInfo");
+		Query query =manager.createNativeQuery(GETEMPLOYEEINFO);
+		Object[] result = null;
+		query.setParameter("empid", empid);
+		
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	private static final String EMPLOYEERESADDR="SELECT empid,res_addr,mobile,landline FROM pis_address_res WHERE  empid= :empid AND isactive=1 ORDER BY from_res_addr DESC LIMIT 1;";
+	
+	@Override
+	public  Object[] employeeResAddr(String empid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO employeeResAddr");
+		Query query =manager.createNativeQuery(EMPLOYEERESADDR);
+		Object[] result = null;
+		query.setParameter("empid", empid);
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private static final String UPDATEINCLUSIONSTATUS = "UPDATE  pis_emp_family_details SET InclusionStatus = :stauts WHERE family_details_id = :familydetailid "; 
+	@Override
+	public int UpdateInclusionStatus(String familydetailid, String stauts)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO UpdateInclusionStatus");
+		try {
+		    Query updatequery=manager.createNativeQuery(UPDATEINCLUSIONSTATUS);
+		    updatequery.setParameter("familydetailid", familydetailid);
+	        updatequery.setParameter("stauts", stauts);  	 
+	        return updatequery.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
+	private static final String FAMMEMFWDEMPLIST="SELECT e.empid, e.empno, e.empname, e.DesigId, ed.designation FROM   employee e,   employee_desig ed   WHERE  e.desigid = ed.desigid AND e.empid IN (SELECT efd.empid FROM pis_emp_family_details efd WHERE efd.isactive=1 AND efd.InclusionStatus = 'F')";
+	@Override
+	public List<Object[]> FamMemFwdEmpList() throws Exception 
+	{
+		logger.info(new Date() + "Inside FamMemFwdEmpList()");
+		try {
+			Query query = manager.createNativeQuery(FAMMEMFWDEMPLIST);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
 	}
 	
 }

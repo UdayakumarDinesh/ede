@@ -41,6 +41,8 @@ public class EmpFamilyDetails implements Serializable {
 	private String emp_unemp;
 	private String mar_unmarried;
 	private String EmpStatus;
+	private String MemberOccupation;
+	private long MemberIncome;
 	private String InclusionStatus;
 	private int  IsActive;
 	private String CreatedBy;

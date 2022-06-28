@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ibm.icu.impl.UResource.Array;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.pis.dao.PisDao;
@@ -397,11 +399,15 @@ public class PisServiceImpl implements PisService
         member.setLtc_dep_from(Details.getLtc_dep_from());
  	    member.setMar_unmarried(Details.getMar_unmarried());
     	member.setEmp_unemp(Details.getEmp_unemp());
-     	member.setEmpid(Details.getEmpid());
+//     	member.setEmpid(Details.getEmpid());
      	member.setModifiedBy(Details.getModifiedBy());
  	    member.setModifiedDate(Details.getModifiedDate());
 		member.setEmpStatus(Details.getEmpStatus());
-		member.setIsActive(1);
+		member.setMemberOccupation(Details.getMemberOccupation());
+		member.setMemberIncome(Details.getMemberIncome());
+		
+			
+//		member.setIsActive(1);
 		return dao.EditFamilyDetails( member);
 	}
 	
@@ -414,7 +420,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public List<Object[]> GetAllEmployee()throws Exception
 	{
-		logger.info(new Date() +"Inside GetAllEmployee()");
+		logger.info(new Date() +"Inside SERVICE GetAllEmployee()");
 		try {
 			return dao.GetAllEmployee();
 		}catch (Exception e) {
@@ -607,7 +613,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int PasswordChange(String OldPassword, String NewPassword, String loginid,String username)throws Exception {
 
-			logger.info(new Date() +"Inside PasswordChange");
+			logger.info(new Date() +"Inside SERVICE PasswordChange");
 			String actualoldpassword=dao.OldPassword(loginid);
 
 			if(encoder.matches(OldPassword, actualoldpassword))
@@ -663,7 +669,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int ResetPassword(String loginid,String username)throws Exception
 		{
-			logger.info(new Date() +"Inside ResetPassword()");
+			logger.info(new Date() +"Inside SERVICE ResetPassword()");
 			try {
 				//Object[] empdata = dao.GetEmpPhoneNo(loginid);
 				String resetpwd = null;
@@ -697,7 +703,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public List<Object[]> GetEmployeeList()throws Exception
 		{
-			logger.info(new Date() +"Inside GetEmployeeList()");
+			logger.info(new Date() +"Inside SERVICE GetEmployeeList()");
 			try {
 				return dao.GetEmployeeList();
 			}catch (Exception e) {
@@ -747,4 +753,44 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.getFamilyMemberModal(familydetailsid);
 		}
+		
+		@Override
+		public List<Object[]> getFamilydetailsFwd(String detailids)throws Exception
+		{
+			return dao.getFamilydetailsFwd(detailids);
+		}
+		
+		@Override
+		public  Object[] getEmployeeInfo(String empid) throws Exception
+		{
+			return dao.getEmployeeInfo(empid);
+		}
+		
+		@Override
+		public  Object[] employeeResAddr(String empid) throws Exception
+		{
+			return dao.employeeResAddr(empid);
+		}
+		
+		
+		@Override
+		public int FamilyMemDetailsForward(String[] familydetailid) throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE FamilyMemDetailsForward()");
+			
+			int count=0;
+			for(String detailsid :familydetailid) {
+				count +=dao.UpdateInclusionStatus(detailsid, "F" );
+			}
+			return count;
+		}
+		
+		@Override
+		public List<Object[]> FamMemFwdEmpList() throws Exception 
+		{
+			return dao.FamMemFwdEmpList();
+		}
+		
+		
+		
 }

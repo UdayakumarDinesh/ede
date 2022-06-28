@@ -122,5 +122,6 @@ public interface CHSSService
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
+	
 
 }
