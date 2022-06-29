@@ -372,7 +372,7 @@ public class LeaveController {
 		    req.setAttribute("EmpList", service.EmpList());
 		    req.setAttribute("empNo", empNo);
 		    req.setAttribute("year", yr);
-	
+		    req.setAttribute("empDetails", service.getEmployee(empNo));
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveRegister.htm"+UserId, e);

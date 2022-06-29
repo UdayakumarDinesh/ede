@@ -55,7 +55,9 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String GETAPPLID="SELECT MAX(SUBSTR(applid,6)) FROM leave_appl where leaveyear=:year";
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
-    
+    private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
+    private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND (:fromDate BETWEEN a.fromdate AND a.todate or :toDate BETWEEN a.fromdate AND a.todate)";   
+
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
 		logger.info(new Date() +"Inside PisHolidayList");	
@@ -240,7 +242,16 @@ public class LeaveDaoImpl implements LeaveDao{
 		return getRegister;
 	}
 	
-
+	@Override
+	public List<Object[]> getRegisterByYear(String EmpNo, String yr) throws Exception {
+		logger.info(new Date() +"Inside getRegisterByYear");	
+		Query query = manager.createNativeQuery(REGISTERBYYEAR);
+		query.setParameter("empNo", EmpNo);
+		query.setParameter("yr", yr);
+		List<Object[]> getRegister= query.getResultList();
+		return getRegister;
+	}
+	
 	@Override
 	public long checkHoliday(String inDate,String inType) throws Exception {
 		logger.info(new Date() +"Inside checkHoliday");	
@@ -333,6 +344,36 @@ public class LeaveDaoImpl implements LeaveDao{
 		query.setParameter("yr", yr);
 		LeaveRegister getAppliedLeave=(LeaveRegister) query.getSingleResult();
 		return getAppliedLeave;
+	}
+	
+    private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empno=:empno ";
+	
+	@Override
+	public  Object[] getEmployee(String empno) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getEmployee");
+		Query query =manager.createNativeQuery(EMPLOYEE);
+		Object[] result = null;
+		query.setParameter("empno", empno);
+		
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception {
+		logger.info(new Date() +"Inside checkLeaveEl");	
+		Query query = manager.createNativeQuery(CHECKLEAVEEL);
+		query.setParameter("empno", EmpNo);
+		query.setParameter("fromDate", fromDate);
+		query.setParameter("toDate", toDate);
+		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
+		return checkLeave;
 	}
 	
 }

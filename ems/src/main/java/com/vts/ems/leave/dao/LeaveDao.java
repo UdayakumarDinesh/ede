@@ -35,5 +35,7 @@ public interface LeaveDao {
 	public long getLeaveApplId(int Year)throws Exception;
 	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 	public LeaveRegister getOpeningBalance(String EmpNo,String yr) throws Exception;
-	
+	public  Object[] getEmployee(String empno) throws Exception;
+	public List<Object[]> getRegisterByYear(String EmpNo, String yr)throws Exception;
+	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception;
 }

@@ -29,4 +29,5 @@ public interface LeaveService {
 	public List<Object[]> getAppliedLeave(String EmpNo)throws Exception;
 	public List<LeaveRegister>  LeaveRegisterList(String EmpNo,String yr)throws Exception;
 	public LeaveRegister RegisterOpening(String EmpNo, String yr) throws Exception;
+	public  Object[] getEmployee(String empno) throws Exception;
 }
