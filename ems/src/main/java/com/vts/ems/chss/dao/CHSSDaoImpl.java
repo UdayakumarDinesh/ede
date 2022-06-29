@@ -51,7 +51,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ORDER BY relation_id  ";
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.InclusionStatus = 'C' AND empid = :empid ORDER BY relation_id  ";
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -64,7 +64,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return resultList;
 	}
 	
-	private static final String FAMILYMEMBERDATA = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND family_details_id = :familydetailsid ";
+	private static final String FAMILYMEMBERDATA = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND family_details_id = :familydetailsid ";
 	
 	@Override
 	public Object[] familyMemberData(String familydetailsid) throws Exception
@@ -83,7 +83,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return result;
 	}
 	
-	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob from employee a, employee_details b where a.empno=b.empno and a.isactive='1' and a.empid=:empid ";
+	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob,b.BasicPay,  ed.Designation from employee a, employee_details b,employee_desig ed where a.empno=b.empno AND a.DesigId = ed.DesigId AND a.isactive='1' AND a.empid=:empid ";
 	
 	@Override
 	public  Object[] getEmployee(String empid) throws Exception
@@ -101,6 +101,8 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 		return result;
 	}
+	
+	
 	
 	
 	@Override
@@ -1353,13 +1355,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
+			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
+			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
 			+ "UNION \r\n"
-			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.desigid FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid ";
+			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid ";
 	@Override
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception
 	{
@@ -1764,6 +1766,9 @@ public class CHSSDaoImpl implements CHSSDao {
 		return list;
 	}
 	
+	
+	
+	
 	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed WHERE e.DesigId = ed.DesigId ORDER BY e.srno DESC";
 	@Override
 	public List<Object[]> EmployeesList()throws Exception
@@ -1780,5 +1785,22 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
+	@Override
+	public List<Object[]> GetClaimsReport(String fromdate , String todate ,  String empid)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO GetClaimsReport");
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery("call chss_claims_report(:empid , :fromdate , :todate );");
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			query.setParameter("empid", empid);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
+
 }

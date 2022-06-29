@@ -78,6 +78,23 @@ th,td
 	color: #008005;
 }
  
+ 
+ .float{
+	position:fixed;
+	width:50px;
+	height:50px;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+	margin:0px;
+	font-size: 25px;
+}
 </style>
 
 
@@ -110,9 +127,6 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview=(String)request.getAttribute("onlyview");
-	
-	
-	
 	
 	boolean showhistorybtn = showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y");
 	
@@ -340,9 +354,7 @@ th,td
 													<td colspan="7" style="text-align: center;padding: 0;">
 														<span><h4>MEDICAL REIMBURSEMENT DETAILS </h4></span> 
 														<span style="float: right; margin:3px 3px 0px 0px;">
-														<!-- 	<button type="button" data-toggle="modal" data-target=".my-disc-cal-modal" class="btn- btn-sm" style="float: right;border:0px;background-color:green; ">
-															<i class="fa-solid fa-calculator" style="color: white;"></i>
-															</button> -->
+														
 														</span>
 													</td>
 												</tr> 
@@ -877,7 +889,13 @@ th,td
 		</div>
 	
 	 </div>
-	 
+
+	<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("V")|| logintype.equals("K") || logintype.equals("B")) && (chssstatusid== 2  || chssstatusid== 4 || chssstatusid== 5)){ %>
+		<button type="button" onclick="$('.my-disc-cal-modal').modal('show');" class="btn- btn-sm float" style="float: right;border:0px;background-color:green; " data-toggle="tooltip" data-placement="top" title="Discount Calculator">
+			<i class="fa-solid fa-calculator my-float" style="color: white;"></i>
+		</button> 
+	<%} %>
+ 
 	 
  <div class="modal fade my-history-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
@@ -910,7 +928,7 @@ th,td
 	<div class="modal-dialog modal-lg modal-dialog-centered" style="min-width: 85% !important;min-height: 80% !important; ">
 		<div class="modal-content" >
 			<div class="modal-header" style="background: #F5C6A5 ">
-				<div> <h4> Discount Calculator</h4> </div>
+				<div> <b style="font-size: 20px;">Discount Calculator</b>  </div>
 			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
 			    </button>
@@ -922,11 +940,12 @@ th,td
 							<div class="col-md-12">
 								<table class=""  style="max-width: 70% !important;border: 0px;" >
 									<tr>	
-										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 3px;" maxlength="4" onclick="this.select();"></td> 
-										<td style="border: 0px;">Item Cost&nbsp;:&nbsp;</td>
-										<td style="border: 0px;"><input type="radio" value="Y" name="gst-plus" checked="checked"> With GST&nbsp;<input type="radio" value="N" name="gst-plus"> Without GST</td>
+										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 5px;padding : 3px;" maxlength="4" onclick="this.select();" onkeyup="DiscountCalculate();"></td> 
 										<td style="border: 0px;">Discount&nbsp;:&nbsp;</td>
-										<td style="border: 0px;"><input type="radio" value="Y" name="disc-gst-plus" checked="checked"> With GST&nbsp;<input type="radio" value="N" name="disc-gst-plus"> Without GST</td>
+										<td style="border: 0px;">
+											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();"> Including GST&nbsp;&nbsp;&nbsp;&nbsp;
+											<input type="radio" value="N" name="gst-plus"  onclick="DiscountCalculate();"  checked="checked"> Excluding GST
+										</td>
 									</tr>
 								</table>
 							</div>
@@ -935,23 +954,37 @@ th,td
 					    	<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" style="max-width: 99% !important" >
 								<thead>
 									<tr>
-										<th >Item Cost</th>
-										<th >Quantity</th>
-										<th >GST (%)</th>
-										<th >Inadmissible</th>
-										<th >Item Cost With GST<br>(Exc Disc)</th>
-										<th >Item Cost Without GST<br>(Exc Disc)</th> 
+										<th style="width: 20%">Final Price</th>
+										<th style="width: 10%"> GST (%)</th>
+										<th style="width: 10%">Qty</th>
+										<th style="width: 10%">Admissible</th>
+										<th style="width: 10%">Admissible Qty</th>
+										
+										<th style="width: 10%">Net Price</th>
+										<th style="width: 10%"> GST Amt</th>
+										<th style="width: 10%">Unit Price <br> (Inc GST)</th>
+										<th style="width: 10%">Admissible Amt <br> (Inc GST)</th>
+										<!-- <th style="width: 10%">Admissible Amt <br> (Inc GST)</th>  -->
 										<th style="width:5%;"> <button type="button" class="btn btn-sm disc-tbl-row-add" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr class="tr_clone_disc" >
-										<td ><input type="number"  class="form-control items cost-only disc-item-cost " id="disc-item-cost-1" Onchange="DiscountCalculate(1);" ></td>
-										<td ><input type="number"  class="form-control items numberonly disc-qty-cost " id="disc-qty-1" Onchange="DiscountCalculate(1);" ></td>
-										<td ><input type="number"  class="form-control items cost-only disc-gst-cost" id="disc-gst-1" maxlength="4" Onchange="DiscountCalculate(1);" ></td>
-										<td ><input type="number"  class="form-control items numberonly disc-inadm" id="disc-inadm-1" min="0" max="1" Onchange="DiscountCalculate(1);" ></td>
-										<td ><input type="text"  class="form-control items disc-icwgst " id="disc-icwgst-1" readonly="readonly" Onchange="DiscountCalculate(1);" ></td>
-										<td ><input type="text"  class="form-control items disc-icwogst" id="disc-icwogst-1" readonly="readonly" Onchange="DiscountCalculate(1);" ></td> 
+										<td ><input type="number"  class="form-control items cost-only disc-item-cost " id="disc-item-cost-1" onkeyup="DiscountCalculate();" ></td>
+										<td ><input type="number"  class="form-control items cost-only disc-gst" id="disc-gst-1" maxlength="4" onkeyup="DiscountCalculate();" ></td>
+										<td ><input type="number"  class="form-control items numberonly disc-qty " id="disc-qty-1" onkeyup="DiscountCalculate();" value="1" min="1" ></td>
+										<td >
+											<select class="form-control items numberonly disc-inadm" id="disc-inadm-1"  onchange="DiscountCalculate();" >
+												<option value="1">Yes</option>
+												<option value="0">No</option>										
+											</select>
+										</td>
+										<td ><input type="number"  class="form-control items numberonly disc-adm-qty " id="disc-adm-qty-1" onkeyup="DiscountCalculate();" value="1" min="1" ></td>										
+										
+										<td ><input type="number"  class="form-control items cost-only disc-net-amt" id="disc-net-amt-1" readonly="readonly" ></td>
+										<td ><input type="number"  class="form-control items cost-only disc-gst-amt" id="disc-gst-amt-1" readonly="readonly" ></td>
+										<td ><input type="text"  class="form-control items  disc-unitprice" id="disc-unitprice-1" readonly="readonly" ></td>
+										<td ><input type="text"  class="form-control items disc-adm-amt" id="disc-adm-amt-1" readonly="readonly" ></td>
 										<td style="width:5%;"> <button type="button" class="btn btn-sm disc-tbl-row-rem" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 									</tr>
 								</tbody>
@@ -964,32 +997,111 @@ th,td
 		</div>
 	</div>
 </div>
+
+<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
+
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	  <div class="modal-header" style="">
+	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+	  </div>
+      <div class="modal-body">
+      	
+      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script type="text/javascript">
 
-
-function DiscountCalculate(rowc)
+/* $('.my-disc-cal-modal').modal('show');
+ */
+function DiscountCalculate()
 {
 	var $disc_perc = Number( $('#disc-perc').val() );
+	
 	var $gst_plus =  $("input:radio[name=gst-plus]:checked").val();
-	var $disc_gst_plus = document.querySelector('input[name="disc-gst-plus"]:checked').value;
+	
 	var $no_rows =$('.disc-item-cost').length;
-	
-	/* for(var l=0 ; l<$no_rows ; l++)
-	{
-		var id=
-	} */
-	
-	$('.disc-item-cost').each(function(){
-		var id= $(this).attr("id").split('-')[3];
-		var itemcost = $('#disc-item-cost-'+id).val();
+
+		$('.disc-item-cost').each(function()
+		{
+			var id= $(this).attr("id").split('-')[3];
+			var itemcost =  Number ($('#disc-item-cost-'+id).val());
+			var gst =  Number ($('#disc-gst-'+id).val());
+			var qty =  Number ($('#disc-qty-'+id).val());
+			var inadmissible = Number ($('#disc-inadm-'+id).val());
+			var admqty = Number ($('#disc-adm-qty-'+id).val());
+			
+			var basicCost= 0 ;
+			if($gst_plus === 'Y')
+			{
+				var amtExcGST = 0 ;
+				var discAmt = 0;
+				var priAftDisc = 0;
+				var gstAmt = 0;
+				
+				amtExcGST = Number(((itemcost*100)/(100+gst)).toFixed(7));
+				
+				discAmt =  Number(((amtExcGST * $disc_perc )/100 ).toFixed(2));
+				
+				priAftDisc =  Number((amtExcGST - discAmt).toFixed(2));
+				
+				gstAmt =  Number( ( (priAftDisc * gst) /100 ).toFixed(2));
+				
+				basicCost = priAftDisc + gstAmt;
+				
+				var unitprice = basicCost/qty;
+				$('#disc-net-amt-'+id).val(priAftDisc);
+				$('#disc-gst-amt-'+id).val(gstAmt);
+				$('#disc-unitprice-'+id).val(unitprice);
+				$('#disc-adm-amt-'+id).val(unitprice * admqty * inadmissible);
+				
+				
+				/* basicCost = itemcost - ((itemcost * $disc_perc )/100);
+				
+				var unitprice = basicCost/qty;
+				
+				$('#disc-unitprice-'+id).val(unitprice);
+				$('#disc-unitprice-'+id).val(unitprice);
+				$('#disc-adm-amt-'+id).val(unitprice * admqty); */
+				
+			}
+			else
+			{
+				var amtExcGST = 0 ;
+				var discAmt = 0;
+				var priAftDisc = 0;
+				var gstAmt = 0;
+				
+				amtExcGST =Number(((itemcost*100)/(100+gst)).toFixed(2));
+				
+				discAmt = Number(((amtExcGST * $disc_perc )/100 ).toFixed(2));
+				
+				priAftDisc = Number(((amtExcGST - discAmt)).toFixed(2));
+				
+				gstAmt = Number(((amtExcGST * gst) /100 ).toFixed(2));
+				
+				basicCost = priAftDisc + gstAmt;
+				
+				var unitprice = basicCost/qty;
+				
+				$('#disc-net-amt-'+id).val(priAftDisc);
+				$('#disc-unitprice-'+id).val(unitprice);
+				$('#disc-adm-amt-'+id).val(Number(unitprice * admqty * inadmissible).toFixed(2));
+				$('#disc-gst-amt-'+id).val(gstAmt);
+				
+			}
 		
-		
-	});
+		});
 	
 }
-
-
-
 
 var $rowcount = 1;
 		$("table").on('click','.disc-tbl-row-add' ,function() 
@@ -999,16 +1111,16 @@ var $rowcount = 1;
 		   	var $clone = $tr.clone();
 		    $tr.after($clone);
 		    
-		    /* $clone.find(".disc-item-cost").attr("onclick", 'openMainModal(\''+count+'\',\'a\')').val("").end(); */
-		    $clone.find(".disc-item-cost").prop("id", 'disc-item-cost-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		    $clone.find(".disc-qty-cost").prop("id", 'disc-qty-cost-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		    $clone.find(".disc-gst-cost").prop("id", 'disc-gst-costt-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		    $clone.find(".disc-inadm").prop("id", 'disc-inadm-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		    $clone.find(".disc-icwgst").prop("id", 'disc-icwgst-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		    $clone.find(".disc-icwogst").prop("id", 'disc-icwogst-'+$rowcount).attr("Onchange", 'DiscountCalculate(\''+$rowcount+'\');').val("").end();
-		   			   			   	
-		  
-		 
+		    $clone.find(".disc-item-cost").prop("id", 'disc-item-cost-'+$rowcount).attr("onkeyup", 'DiscountCalculate();').val("").end();
+		    $clone.find(".disc-gst").prop("id", 'disc-gst-'+$rowcount).attr("onkeyup", 'DiscountCalculate();').val("").end();
+		    $clone.find(".disc-qty").prop("id", 'disc-qty-'+$rowcount).attr("onkeyup", 'DiscountCalculate();').val("1").end();
+		    $clone.find(".disc-adm-qty").prop("id", 'disc-adm-qty-'+$rowcount).attr("onkeyup", 'DiscountCalculate();').val("1").end();
+		    $clone.find(".disc-inadm").prop("id", 'disc-inadm-'+$rowcount).attr("onkeyup", 'DiscountCalculate();').val("1").end();
+		    
+		    $clone.find(".disc-net-amt").prop("id", 'disc-net-amt-'+$rowcount).val("").end();
+		    $clone.find(".disc-gst-amt").prop("id", 'disc-gst-amt-'+$rowcount).val("").end();
+		    $clone.find(".disc-unitprice").prop("id", 'disc-unitprice-'+$rowcount).val("").end();
+		    $clone.find(".disc-adm-amt").prop("id", 'disc-adm-amt-'+$rowcount).val("").end();
 		  	
 		  	onlyNumbers();
 		});
@@ -1027,14 +1139,6 @@ var $rowcount = 1;
 		});
 
 
-
-
-
-
-
-
-
-/* $('.my-disc-cal-modal').modal('show'); */
 
 onlyNumbers();
 function  onlyNumbers() {    
@@ -1063,24 +1167,7 @@ function  onlyNumbers() {
 
 </script>
 	
-<%if(isapproval!=null && isapproval.equalsIgnoreCase("Y") && logintype.equals("K") && chssapplydata[20].toString().equals("0") ){ %>
-
-<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-	  <div class="modal-header" style="">
-	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-	  </div>
-      <div class="modal-body">
-      	
-      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
-     
-        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
-        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
-      </div>
-    </div>
-  </div>
-</div>
+	
 <script type="text/javascript">	 
 
 	$('#my_acknowledge_model').modal('show')

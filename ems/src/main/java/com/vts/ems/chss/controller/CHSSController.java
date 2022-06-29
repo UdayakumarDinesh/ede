@@ -12,9 +12,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -127,7 +130,6 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
-			System.out.println(EmpId+" "+PatientId+" "+FromDate+" "+ToDate+" "+IsSelf);
 			req.setAttribute("Fromdate", FromDate );
 			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
@@ -1397,6 +1399,7 @@ public class CHSSController {
 	public String CHSSForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSForm.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -1419,7 +1422,7 @@ public class CHSSController {
 			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			req.setAttribute("show-edit", req.getParameter("show-edit"));
-			
+			req.setAttribute("logintype", LoginType);
 			req.setAttribute("onlyview", "Y");
 			
 			return "chss/CHSSFormEdit";
@@ -1754,6 +1757,7 @@ public class CHSSController {
 			req.setAttribute("isapproval", isapproval);
 			req.setAttribute("show-edit", showedit);
 			req.setAttribute("logintype", LoginType);
+			
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2664,7 +2668,7 @@ public class CHSSController {
 					todate=String.valueOf(today.getYear()+1);
 				}
 				fromdate +="-04-01"; 
-				todate +="-03-01";
+				todate +="-03-31";
 				empid="0";
 			}else
 			{
@@ -2685,4 +2689,53 @@ public class CHSSController {
 		}
 		
 	}
+	
+	
+	@RequestMapping(value ="ClaimsReport.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String ClaimsReport(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimsReport.htm "+Username);
+		try {
+			String fromdate = (String)req.getParameter("fromdate");
+			String todate = (String) req.getParameter("todate");
+			String empid = (String)req.getParameter("empid");
+			LocalDate today = LocalDate.now();
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+				}
+				else
+				{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-31";
+				empid="0";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("empid", empid);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("emplist", service.EmployeesList());
+			req.setAttribute("claimslist", service.GetClaimsReport(fromdate , todate , empid));
+			return "chss/CHSSClaimsReport";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimsReport.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	
 }
