@@ -9,6 +9,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
  #dis{
  text-align: center;
@@ -44,6 +45,11 @@
     max-width:750px;
     margin: 2rem auto;
 }
+
+.page-top {
+    margin: 4px 18px -10px 20px !important;
+}
+
 </style>
 </head>
 <body>
