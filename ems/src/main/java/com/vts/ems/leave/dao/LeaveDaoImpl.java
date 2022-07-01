@@ -375,5 +375,16 @@ public class LeaveDaoImpl implements LeaveDao{
 		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
 		return checkLeave;
 	}
+
+    private static final String LEAVEAPPGH="CALL leave_sa_ra_gh(:empNo)";
+	
+	@Override
+	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
+		logger.info(new Date() +"Inside checkLeaveEl");	
+		Query query = manager.createNativeQuery(LEAVEAPPGH);
+		query.setParameter("empno", empNo);
+		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
+		return checkLeave;
+	}
 	
 }
