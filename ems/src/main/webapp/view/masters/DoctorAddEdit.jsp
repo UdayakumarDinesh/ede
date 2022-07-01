@@ -63,14 +63,14 @@ DoctorList list = (DoctorList)request.getAttribute("doctor");
 											<th><label>Qualification <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Qualification" type="text" id="Qualification" name="Qualification" value="<%if(list!=null){ %><%=list.getQualification()%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
+												 maxlength="255" style="font-size: 15px; "
 												></td>
 										</tr>
 										<tr>
 											<th><label>Address <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Doctor Address" type="text" id="address" name="address" value="<%if(list!=null){ %><%=list.getAddress()%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px; text-transform:capitalize; "
+												required="required" maxlength="255" style="font-size: 15px; "
 												></td>
 										</tr>								
 											<tr>

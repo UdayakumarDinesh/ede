@@ -213,7 +213,7 @@ String path=(String)request.getAttribute("path");
 	</div>
 	
 	<!-- -----------------------------------Circular--------------------------------------------- -->
-	<div class="tab-pane scroll" id="tab-2" role="tabpanel" >
+	<div class="tab-pane scrollpolicy" id="tab-2" role="tabpanel" >
 		<div align="center"  >
 		
 		<div class="card " style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
@@ -267,12 +267,12 @@ String path=(String)request.getAttribute("path");
 										for(Object[] obj : circular){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 5%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 10%;"><%=obj[6]%></td>
-											<td style="text-align:justify; width: 70%;"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
+											<td style="text-align:center;  width: 5%;"> <b><%=++slno%></b> </td>
+											<td style="text-align:justify; width: 10%;"><b><%=obj[6]%></b></td>
+											<td style="text-align:justify; width: 70%;"><b><%=obj[1]%></b></td>
+											<td style="text-align:justify; width: 10%;"><b><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %> </b></td>
 											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[4] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download"></i>
 										    </button>
 											<%}else{%>--<%}%>
@@ -303,14 +303,14 @@ String path=(String)request.getAttribute("path");
 	</div>
 
 	<!-- -----------------------------------Doctor--------------------------------------------- -->
-	<div class="tab-pane scroll" id="tab-3" role="tabpanel">
+	<div class="tab-pane scrollpolicy" id="tab-3" role="tabpanel">
 		<div align="center">
 		
-		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
+		<div class="card " style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
 			
 			<div class="card-header" style="height: 4rem" >
 	           <div class="row ">
-						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Doctors</span></div>
+						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;"> AMO /AMA Doctors</span></div>
 					    <div class="col-md-6">
 						 
 						</div>
@@ -326,7 +326,7 @@ String path=(String)request.getAttribute("path");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2" > 
 								<thead>
 									<tr>
-										<th style=" text-align:center; width: 15%;"> SlNo. </th>
+										<th style=" text-align:center; width: 15%;"> SN </th>
 										<th style="width: 15%;"> Name </th>
 										<th style="width: 50%;"> Address </th>
 										<th style="width: 20%;"> Contact Details </th>									
@@ -338,11 +338,11 @@ String path=(String)request.getAttribute("path");
 										for(Object[] obj : doctorlist){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 10%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 20%;"><%=obj[1]%> (<%=obj[2]%>)</td>
+											<td style="text-align:center;  width: 10%;"><b> <%=++slno%></b> </td>
+											<td style="text-align:justify; width: 20%;"><b><%=obj[1]%></b> </td>
 									
-											<td style="text-align:justify; width: 50%;"><%=obj[3]%></td>
-											<td style="text-align:justify; width: 20%;"><%=obj[4]%></td>
+											<td style="text-align:justify; width: 50%;"><b><%=obj[3]%></b></td>
+											<td style="text-align:justify; width: 20%;"><b> <%=obj[4]%></b></td>
 										</tr>
 								<%} }%>
 								</tbody>
@@ -368,11 +368,11 @@ String path=(String)request.getAttribute("path");
 	</div>
 
 	<!-- -----------------------------------Empanelled Hospital--------------------------------------------- -->
-<div class="tab-pane scroll" id="tab-4" role="tabpanel">
+<div class="tab-pane scrollpolicy" id="tab-4" role="tabpanel">
 	
 	<div align="center">
 		
-		<div class="card" style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
+		<div class="card " style="width: 90%;margin: 1rem;border-radius: 20px; " align="left">
 			
 			<div class="card-header" style="height: 4rem" >
 	           <div class="row ">
@@ -404,9 +404,9 @@ String path=(String)request.getAttribute("path");
 										for(Object[] obj : Empanelled){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 15%;"> <%=++slno%>. </td>
-											<td style="text-align:justify; width: 30%"><%=obj[1]%></td>
-											<td style="text-align:justify; width: 45%"><%=obj[2]%></td>
+											<td style="text-align:center;  width: 15%;"><b><%=++slno%></b></td>
+											<td style="text-align:justify; width: 30%"><b><%=obj[1]%></b></td>
+											<td style="text-align:justify; width: 45%"><b><%=obj[2]%></b></td>
 										</tr>
 								<%} }%>
 								</tbody>

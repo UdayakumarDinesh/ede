@@ -177,7 +177,6 @@ public class PisServiceImpl implements PisService
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setDesigId(emp.getDesigId());
 		employee.setEmpNo(emp.getEmpNo());
-		employee.setUANNo(emp.getUANNo());
 		employee.setModifiedBy(emp.getModifiedBy());
 		employee.setModifiedDate(emp.getModifiedDate());
 	     return dao.EmployeeEditSubmit(employee);
@@ -190,6 +189,7 @@ public class PisServiceImpl implements PisService
 	{
 		
 		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
+		employee.setUANNo(emp.getUANNo());
 		employee.setTitle(emp.getTitle());
 		employee.setEmpNo(emp.getEmpNo());
 		employee.setDOB(emp.getDOB());

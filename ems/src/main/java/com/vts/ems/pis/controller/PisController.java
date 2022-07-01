@@ -200,13 +200,10 @@ public class PisController {
 			String religion = req.getParameter("religion");
 			String basicpay = req.getParameter("basicpay");
 			String email = req.getParameter("email");
-			String ExMan = req.getParameter("ExMan");
 			String PunchCardNo = req.getParameter("PunchCardNo");
 			String idMark = req.getParameter("idMark");
 			String empstatus = req.getParameter("empstatus");
 			String phoneno = req.getParameter("PhoneNo");
-			String EmpStatusDate = req.getParameter("EmpStatusDate");
-			String PermPassNo = req.getParameter("PermPassNo");
 			String uanno = req.getParameter("UANNo");
 					
 			
@@ -219,16 +216,15 @@ public class PisController {
 			employee.setSrNo(Long.parseLong("0"));
             employee.setEmpNo(PunchCardNo.trim());
 			employee.setIsActive(1);
-			employee.setUANNo(uanno);
 			employee.setCreatedBy(Username);
 			employee.setExtNo(internalNo);
+			System.out.println("uanno     :"+uanno);
 			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
-		
+			emp.setUANNo(uanno);
 			// date conversion
         	java.sql.Date dob = DateTimeFormatUtil.dateConversionSql(req.getParameter("dob"));
 			java.sql.Date doj = DateTimeFormatUtil.dateConversionSql(req.getParameter("doj"));
-			//java.sql.Date doa = DateTimeFormatUtil.dateConversionSql(req.getParameter("doa"));
 			
 			java.sql.Date dor;
 
@@ -301,11 +297,9 @@ public class PisController {
 			emp.setIsActive(1);
 			emp.setCreatedBy(Username);
 			emp.setCreatedDate(new Date().toString());
-			/* emp.setInternalNumber(internalNo); */
 			emp.setSubCategary(subcategory);
 			emp.setEmpNo(PunchCardNo.trim());
-			
-			
+					
 			Long value=service.EmployeeAddSubmit(employee,emp);
 			if (value != 0) {
 				redir.addAttribute("result", "Employee details added successfully");
@@ -377,11 +371,9 @@ public class PisController {
 			String religion = req.getParameter("religion");
 			String basicpay = req.getParameter("basicpay");
 			String email = req.getParameter("email");
-			String ExMan = req.getParameter("ExMan");
 			String PunchCardNo = req.getParameter("PunchCardNo");
 			String idMark = req.getParameter("idMark");
 			String empstatus = req.getParameter("empstatus");
-			String PermPassNo = req.getParameter("PermPassNo");
 			String phno = req.getParameter("PhoneNo");
 			String empdetailsid=req.getParameter("empdetailsid");
 			String uanno = req.getParameter("UANNo");
@@ -394,14 +386,15 @@ public class PisController {
 				employee.setEmail(email);
 				employee.setDivisionId(Long.parseLong(divisionid));
 				employee.setEmpNo(PunchCardNo.trim());
-				employee.setEmpId(Long.parseLong(EmpId));
-				employee.setUANNo(uanno);
+				employee.setEmpId(Long.parseLong(EmpId));			
 				employee.setExtNo(internalNo);
 				employee.setModifiedBy(Username);
 				employee.setModifiedDate(sdtf.format(new Date()));
+				
+			System.out.println("uanno     :"+uanno);		
 			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
-			
+			emp.setUANNo(uanno);
 			// date conversion
         	java.sql.Date dob = DateTimeFormatUtil.dateConversionSql(req.getParameter("dob"));
 			java.sql.Date doj = DateTimeFormatUtil.dateConversionSql(req.getParameter("doj"));
@@ -446,7 +439,6 @@ public class PisController {
 			}
 		
 			emp.setDOB(dob);
-			//emp.setDOA(doa);
 			emp.setDOJL(doj);
 			emp.setDOR(dor);
 			emp.setCategoryId(Integer.parseInt(category));
@@ -478,7 +470,6 @@ public class PisController {
 			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setModifiedBy(Username);
-//			emp.setInternalNumber(internalNo);
 			emp.setSubCategary(subcategory);
 			emp.setEmpDetailsId(Long.parseLong(empdetailsid));
 
