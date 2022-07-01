@@ -159,7 +159,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 						<tr>
 						<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
-				     	<td><%if(employeedetails[23]!=null||employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
+				     	<td><%if(employeedetails[23]!=null&&employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
 						<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
 					    <td><%if(employeedetails[14]!=null){%><%=employeedetails[14]%><%}else{%>--<%}%></td>
 					    <td><%if(employeedetails[15]!=null){%><%=employeedetails[15]%><%}else{%>--<%}%></td>
@@ -241,14 +241,14 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td> <b>Gender</b> </td>
 							<td>
-								<%if(employeedetails[9]!=null || employeedetails[9].toString().equalsIgnoreCase("M")){ %>
+								<%if(employeedetails[9]!=null && employeedetails[9].toString().equalsIgnoreCase("M")){ %>
 									Male
-								<%}else if(employeedetails[9]!=null || employeedetails[9].toString().equalsIgnoreCase("F")){ %>
+								<%}else if(employeedetails[9]!=null && employeedetails[9].toString().equalsIgnoreCase("F")){ %>
 									Female
 								<%}else{%>--<%}%> 
 							</td>
 							<td> <b>Group</b> </td>
-							<td><%if(employeedetails[25]!=null || employeedetails[26]!=null){%><%=employeedetails[25] %>(<%=employeedetails[26] %>) <%}else{%>--<%}%></td>
+							<td><%if(employeedetails[25]!=null && employeedetails[26]!=null){%><%=employeedetails[25] %>(<%=employeedetails[26] %>) <%}else{%>--<%}%></td>
 							<td> <b>PAN</b> </td>
 							<td><%if(employeedetails[13]!=null){ %><%=employeedetails[13].toString().toUpperCase()%><%}else{%>--<%}%></td>
 						</tr>
@@ -271,9 +271,9 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td><%if(employeedetails[32]!=null){%><%=employeedetails[32]%><%}else{%>--<%}%></td>
 							<td> <b>Marital Status</b> </td>
 							<td>
-								<%if(employeedetails[11]!=null || (employeedetails[11]+"").equalsIgnoreCase("M")){ %>
+								<%if(employeedetails[11]!=null && (employeedetails[11]+"").equalsIgnoreCase("M")){ %>
 									Married
-								<%}else if(employeedetails[11]!=null || (employeedetails[11]+"").equalsIgnoreCase("U")){ %>
+								<%}else if(employeedetails[11]!=null && (employeedetails[11]+"").equalsIgnoreCase("U")){ %>
 									UnMarried
 								<%}else{%>--<%}%> 
 							</td>

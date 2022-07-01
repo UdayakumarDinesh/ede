@@ -4,9 +4,12 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -52,7 +56,6 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
@@ -843,7 +846,6 @@ public class PisController {
     	   String memberOccupation = req.getParameter("memberOccupation");
     	   String memberIncome = req.getParameter("memberIncome").trim();
     	   
-    	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
     	   details.setMember_name(WordUtils.capitalize(name.trim()));
@@ -874,7 +876,7 @@ public class PisController {
         	   details.setMemberIncome(0l);
            }
     	   
-    	   details.setInclusionStatus(incstatus);
+    	   details.setMemberStatus(incstatus);
     	   
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
@@ -1956,7 +1958,7 @@ public class PisController {
 		File tofile = new File(newfilepath);
 		
 		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
-		    PdfFont helvetica = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
 		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
 		        PdfPage page = doc.getPage(pageNum);
 		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
@@ -1966,7 +1968,7 @@ public class PisController {
 		        canvas = new PdfCanvas(page);
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
-		        try (Canvas canvas2 = new Canvas(canvas, doc, page.getPageSize())) {
+		        try (Canvas canvas2 = new Canvas(canvas, page.getPageSize())) {
 		            double rotationDeg = 50d;
 		            double rotationRad = Math.toRadians(rotationDeg);
 		            Paragraph watermark = new Paragraph("STARC")
@@ -2152,5 +2154,305 @@ public class PisController {
 		}
 		
 	}
+	
+	
+	@RequestMapping(value ="DepAdmissionCreateView.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String DependentAdmissionFormView(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DependentAdmissionForm.htm "+Username);
+		try {
+			
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
+			
+//			String empid = req.getParameter("empid");
+			req.setAttribute("FwdMemberDetails",service.getFamilydetailsFwd(empid));
+			req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
+			req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
+			req.setAttribute("relationtypes" , service.familyRelationList() );
+			
+			return "pis/DependentAddFormView";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependentAdmissionFormView.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value ="DepMemAddSubmit.htm" , method =  RequestMethod.POST )
+	public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
+		try {
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+			/* mem-attach */
+			String name = req.getParameter("mem-name");
+	    	String relation  = req.getParameter("mem-relation");
+	    	String dob  = req.getParameter("mem-dob");
+	    	String occupation =  req.getParameter("mem-occupation").trim();
+	    	String income = req.getParameter("mem-income");
+	    	String comment = req.getParameter("mem-comment");
+	    	
+	    	Object[] empdetails = service.EmployeeDetails(empid);
+	    	Object[] relationdata = service.RelationshipData(relation);
+	    	   
+			EmpFamilyDetails details = new EmpFamilyDetails();
+	    	 
+			details.setMember_name(WordUtils.capitalize(name.trim()));
+	    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+	    	details.setRelation_id(Integer.parseInt(relation));
+	    	details.setEmpid(empid);
+	    	details.setCghs_ben_id(empdetails[2].toString());
+	    	details.setFamily_status_id(1);
+	    	details.setPH("0"); 
+	    	details.setBlood_group("Not Available");
+	    	details.setGender(relationdata[2].toString());
+	    	
+//	    	details.setStatus_from(new java.sql.Date());
+	    	details.setMed_dep("N");
+//	    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+	    	details.setLtc_dep("N");
+//	    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+	    	
+	    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
+	    	if( relidlist.contains(relation.trim()))
+	    	{
+	    		details.setMar_unmarried("Y");
+	    	}
+	    	else
+	    	{
+	    		details.setMar_unmarried("N");
+	    	}
+	    	
+	    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
+	    	{
+	    		details.setEmp_unemp("Y");
+	    		details.setEmpStatus("Private");
+	    		details.setMemberOccupation(occupation);
+	    		details.setMemberIncome(Long.parseLong(income));
+	    	}
+	    	else
+	    	{
+	    		details.setEmp_unemp("N");
+	    	}
+	    	details.setMemberStatus("A");
+	    	details.setCreatedBy(Username);
+	    	details.setCreatedDate(sdtf.format(new Date()));  
+	    	details.setIsActive(0);
+	    	
+	    	
+	    	long formid= Long.parseLong(req.getParameter("formid"));
+	    	if(formid==0) {
+	    		
+	    		details.setFormId(Long.parseLong(service.FamMaxFormId()[0].toString())+1);
+	    	}
+	    	else if(formid>0)
+	    	{
+	    		details.setFormId(formid);
+	    	}
+	    	
+	    	
+	    	
+	    	details.setIncComment(comment);
+	    	if(IncAttachment.getSize()>0) {
+	    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+	    	}
+	    	Long result = service.AddFamilyDetails(details);
+    	   
+	    	
+    	   
+	    	if(result>0){
+	    		redir.addAttribute("result", "Family Member Details Saved Successfully");	
+	   		} else {
+	   			redir.addAttribute("resultfail", "Family Member Details Saved UNSuccessful");
+	    	}                    
+			
+			return "redirect:/DepAdmissionCreateView.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DepMemAddSubmit.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	 public static String saveFile(String ToFilePath, String fileFullName, MultipartFile multipartFile) throws IOException 
+	 {
+		 	Path uploadPath = Paths.get(ToFilePath);
+	         if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        String fileName = fileFullName.substring(0, fileFullName.lastIndexOf("."));
+	        String ext = fileFullName.substring(fileFullName.lastIndexOf('.')+1);
+	      
+	        String destinationFilePath = uploadPath+"\\"+fileName+"."+ext;
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream())
+	        {
+	        	int count=1;
+	        	File tempFile  = new File(destinationFilePath);
+	        	
+	        	if(tempFile.exists())
+	        	{
+	        	    while(true)
+	        	    {
+	        	    	destinationFilePath = uploadPath+"\\"+fileName+"("+count+")."+ext;
+	        	        if(!tempFile.exists())
+	        	        {
+	        	            break;
+	        	        }
+	        	        else
+	        	        {
+	        	            count++;
+	        	        }
+	        	    }
+	        	}
+	        	Files.copy(inputStream, Paths.get(destinationFilePath), StandardCopyOption.REPLACE_EXISTING);
+	        	
+	        	return destinationFilePath;
+	        }catch (Exception ioe) {
+	        	ioe.printStackTrace();
+	        	return null;
+			}
+	       
+	 }
+	
+	 	@RequestMapping(value ="DepMemEditSubmit.htm" , method =  RequestMethod.POST )
+		public String DepMemEditSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach-edit") MultipartFile IncAttachment)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DepMemEditSubmit.htm "+Username);
+			try {
+							
+				String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+				
+				String familydetailsid = req.getParameter("familydetailsid");
+				
+				String name = req.getParameter("mem-name");
+		    	String relation  = req.getParameter("mem-relation");
+		    	System.out.println(relation);
+		    	String dob  = req.getParameter("mem-dob");
+		    	String occupation =  req.getParameter("mem-occupation").trim();
+		    	String income = req.getParameter("mem-income");
+		    	String comment = req.getParameter("mem-comment");
+		    	
+		    	Object[] empdetails = service.EmployeeDetails(empid);
+		    	Object[] relationdata = service.RelationshipData(relation);
+		    	   
+				EmpFamilyDetails details = new EmpFamilyDetails();
+		    	 
+				details.setMember_name(WordUtils.capitalize(name.trim()));
+		    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+		    	details.setRelation_id(Integer.parseInt(relation));
+		    	details.setEmpid(empid);
+		    	details.setCghs_ben_id(empdetails[2].toString());
+		    	details.setFamily_status_id(1);
+		    	details.setPH("0"); 
+		    	details.setBlood_group("Not Available");
+		    	details.setGender(relationdata[2].toString());
+		    	
+//		    	details.setStatus_from(new java.sql.Date());
+		    	details.setMed_dep("N");
+//		    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+		    	details.setLtc_dep("N");
+//		    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+		    	
+		    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
+		    	if( relidlist.contains(relation.trim()))
+		    	{
+		    		details.setMar_unmarried("Y");
+		    	}
+		    	else
+		    	{
+		    		details.setMar_unmarried("N");
+		    	}
+		    	
+		    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
+		    	{
+		    		details.setEmp_unemp("Y");
+		    		details.setEmpStatus("Private");
+		    		details.setMemberOccupation(occupation);
+		    		details.setMemberIncome(Long.parseLong(income));
+		    	}
+		    	else
+		    	{
+		    		details.setEmp_unemp("N");
+		    	}
+		    	details.setMemberStatus("A");
+		    	details.setCreatedBy(Username);
+		    	details.setCreatedDate(sdtf.format(new Date()));  
+		    	details.setIsActive(0);
+		    	
+		    	details.setIncComment(comment);
+		    	details.setFamily_details_id(Long.parseLong(familydetailsid));
+		    	
+		    	Object[] famMemberdata = service.getMemberdata(familydetailsid);
+		    	
+		    	
+		    	if(IncAttachment.getSize()>0) {
+		    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+		    		if(famMemberdata[12]!=null) {
+		    			new File(famMemberdata[12].toString()).delete();
+		    		}
+		    	}
+		    	
+		    	Long result = service.DepMemEditSubmit(details);
+	    	   
+		    	if(result>0){
+		    		redir.addAttribute("result", "Family Member Details Updated Successfully");	
+		   		} else {
+		   			redir.addAttribute("resultfail", "Family Member Details Update UNSuccessful");
+		    	}                    
+				
+				return "redirect:/DepAdmissionCreateView.htm";
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside DepMemEditSubmit.htm "+Username, e);
+				return "static/Error";
+			}
+			
+		}
+	 	
+	 	
+	 	
+	 	
+	 	@RequestMapping(value = "FamIncExcAttachDownload.htm", method = RequestMethod.POST)
+		public void FamIncExcAttachDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+
+			logger.info(new Date() +"Inside FamIncExcAttachDownload.htm "+UserId);
+			
+			try {	
+				String path=req.getParameter("filepath");
+                Path filepath=Path.of(path);
+                res.setContentType("application/pdf");
+                res.setHeader("Content-disposition","attachment;filename="+filepath.getFileName() ); 
+                File f=new File(path);
+                FileInputStream fis = new FileInputStream(f);
+                DataOutputStream os = new DataOutputStream(res.getOutputStream());
+                res.setHeader("Content-Length",String.valueOf(f.length()));
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = fis.read(buffer)) >= 0) {
+                    os.write(buffer, 0, len);
+                } 
+                os.close();
+                fis.close();
+
+			}
+			catch (Exception e) {
+				
+				e.printStackTrace();  
+				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e); 
+				
+			}
+
+		}
+	 	
+	 	
+	 	
 	
 }

@@ -780,7 +780,7 @@ public class PisServiceImpl implements PisService
 			
 			int count=0;
 			for(String detailsid :familydetailid) {
-				count +=dao.UpdateInclusionStatus(detailsid, "F" );
+				count +=dao.UpdateMemberStatus(detailsid, "F" );
 			}
 			return count;
 		}
@@ -791,6 +791,68 @@ public class PisServiceImpl implements PisService
 			return dao.FamMemFwdEmpList();
 		}
 		
+		@Override
+		public List<Object[]> familyRelationList()throws Exception
+		{
+			return dao.familyRelationList();
+		}
+		
+		@Override
+		public  Object[] RelationshipData(String relationid) throws Exception
+		{
+			return dao.RelationshipData(relationid);
+		}
+		
+		@Override
+		public  Object[] getMemberdata(String familydetailid) throws Exception
+		{
+			return dao.getMemberdata(familydetailid);
+		}
 		
 		
+		
+		@Override
+		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
+		{
+			
+			EmpFamilyDetails member = dao.getMember(String.valueOf(Details.getFamily_details_id()));
+
+			member.setMember_name(Details.getMember_name());
+			member.setDob(Details.getDob());
+			member.setRelation_id(Details.getRelation_id());
+			member.setCghs_ben_id(Details.getCghs_ben_id());
+			member.setFamily_status_id(Details.getFamily_status_id());
+			member.setStatus_from(Details.getStatus_from());
+			member.setBlood_group(Details.getBlood_group());
+			member.setPH(Details.getPH());
+			member.setGender(Details.getGender());
+	 	    member.setMed_dep(Details.getMed_dep());
+	 	    member.setMed_dep_from(Details.getMed_dep_from());
+	 	    member.setLtc_dep(Details.getLtc_dep());
+	        member.setLtc_dep_from(Details.getLtc_dep_from());
+	 	    member.setMar_unmarried(Details.getMar_unmarried());
+	    	member.setEmp_unemp(Details.getEmp_unemp());
+	     	member.setModifiedBy(Details.getModifiedBy());
+	 	    member.setModifiedDate(Details.getModifiedDate());
+	 	    
+			member.setEmpStatus(Details.getEmpStatus());
+			member.setMemberOccupation(Details.getMemberOccupation());
+			member.setMemberIncome(Details.getMemberIncome());
+			
+			member.setIncComment(Details.getIncComment());
+			
+			if(Details.getIncFilePath()!=null && !Details.getIncFilePath().trim().equals(""))
+			{
+				member.setIncFilePath(Details.getIncFilePath());
+			}
+			
+				
+			return dao.EditFamilyDetails( member);
+		}
+		
+		@Override
+		public  Object[] FamMaxFormId() throws Exception
+		{
+			return dao.FamMaxFormId();
+		}
 }

@@ -228,7 +228,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 														update
 													</button>
 													<%} %>
-													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;" formaction="CHSSBillDelete.htm"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
+													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
 														<!-- <i class="fa-solid fa-file-lines"></i> --> Details
 													</button>	
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" >  <!-- data-toggle="tooltip" data-placement="top" title="Delete Bill" -->
