@@ -12,12 +12,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +24,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -1506,14 +1502,13 @@ public class CHSSController {
 	}
 	
 	
-	
 	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
 	{
 		File pdffile = new File(pdffilepath);
 		File tofile = new File(newfilepath);
 		
 		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
-		    PdfFont helvetica = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
 		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
 		        PdfPage page = doc.getPage(pageNum);
 		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
@@ -1523,7 +1518,7 @@ public class CHSSController {
 		        canvas = new PdfCanvas(page);
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
-		        try (Canvas canvas2 = new Canvas(canvas, doc, page.getPageSize())) {
+		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
 		            double rotationDeg = 50d;
 		            double rotationRad = Math.toRadians(rotationDeg);
 		            Paragraph watermark = new Paragraph("STARC")

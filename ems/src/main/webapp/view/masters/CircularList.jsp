@@ -87,8 +87,7 @@ String todate = (String)request.getAttribute("todate");
 										<th>Reference No</th>
 										<th>Description </th>
 										<th>Circular Date</th>
-										<th>To Date</th>
-										<th> Action</th>
+										<th>To Date</th>										
 									</tr>
 								</thead>
 								<tbody>
@@ -97,16 +96,15 @@ String todate = (String)request.getAttribute("todate");
 									%>
 										<tr>
 											<td style="text-align:center;  width: 5%;"> <input type="radio" name="circulatId" value="<%=obj[0]%>"> </td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[6]!=null){%><%=obj[6]%><%}%></td>
+										    <td style="text-align:center;  width: 10%;">  <%if(obj[2]!=null){ %> 	
+										    <button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+											  <%if(obj[6]!=null){%><%=obj[6]%><%}%>
+										    </button>
+										    </td>
+											<%}else{%>--<%}%>
 											<td style="text-align:justify; width: 60%;"><%if(obj[1]!=null){%><%=obj[1]%><%}%></td>
 											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%> <%} %></td>								
-											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path" value="<%=obj[2]%>//<%=obj[4] %>" formaction="download-CircularFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-											  <i style="color: #019267" class="fa-solid fa-download"></i>
-										    </button>
-											<%}else{%>--<%}%>
-											</td>
+											<td style="text-align:justify; width: 10%;"><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%> <%} %></td>	
 										</tr>
 								<%} }%>
 								</tbody>
@@ -117,19 +115,16 @@ String todate = (String)request.getAttribute("todate");
 					
 					
 					<div class="row text-center">
-						<div class="col-md-12">
-						
-						<button type="submit" class="btn btn-sm add-btn" formaction="CircularLists.htm" name="action" value="ADD" >ADD</button>
-						<button type="submit" class="btn btn-sm edit-btn" formaction="CircularLists.htm" name="action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-								
+						<div class="col-md-12">					
+							<button type="submit" class="btn btn-sm add-btn" formaction="CircularLists.htm" name="action" value="ADD" >ADD</button>
+							<button type="submit" class="btn btn-sm edit-btn" formaction="CircularLists.htm" name="action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>									
 					    </div>						 
-					</div>
-					
+				</div>					
 			   </form>		
 			  </div>
 		   	 </div>				
 	        </div>
-	        </div>
+	       </div>
 </body>
 <script type="text/javascript">
 $('#fromdate').daterangepicker({

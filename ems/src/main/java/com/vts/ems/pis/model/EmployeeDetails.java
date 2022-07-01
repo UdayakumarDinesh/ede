@@ -39,7 +39,8 @@ public class EmployeeDetails {
 	private String Religion;
 	private String EmpStatus;
 	private String GPFNo;
-	private String PAN;	
+	private String PAN;
+	private String UANNo;
 	private String PINNo;
 	private String PRANNo;
 	private String LabEmpId;

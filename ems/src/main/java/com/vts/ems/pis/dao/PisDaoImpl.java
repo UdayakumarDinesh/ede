@@ -56,11 +56,11 @@ public class PisDaoImpl implements PisDao {
 	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
 	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
 	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.desigid=d.desigid AND a.logintype=lt.logintype order by a.username asc";
-	private static final String EMPLIST = "SELECT empid,empname FROM employee e WHERE e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
+	private static final String EMPLIST = " SELECT empid,empname FROM employee e WHERE e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate  WHERE loginid=:loginid";
-	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id AND a.InclusionStatus = 'C' AND  a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
+	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id AND a.MemberStatus = 'C' AND  a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
 	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno FROM employee a ,employee_desig b WHERE b.desigid=a.desigid AND  empid=:empid";
@@ -1133,7 +1133,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus = 'C' AND a.empid=:empid";
+	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.MemberStatus = 'C' AND a.empid=:empid";
 	@Override
 	public List<Object[]> getFamilydetails(String empid) throws Exception 
 	{
@@ -1274,7 +1274,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final String FAMILYDETAILSNOTCONF="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('A','F') AND a.empid=:empid ORDER BY FIELD( InclusionStatus , 'F', 'A') ";
+	private static final String FAMILYDETAILSNOTCONF="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.MemberStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.MemberStatus IN ('A','F') AND a.empid=:empid ORDER BY FIELD( MemberStatus , 'F', 'A') ";
 	@Override
 	public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception 
 	{
@@ -1304,7 +1304,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.InclusionStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1' AND a.InclusionStatus IN ('F')   AND a.empid = :empid ";
+	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.MemberStatus, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome,a.IncDate,  a.IncComment,  a.IncFilePath,  a.ExcDate,  a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.FormId FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.MemberStatus IN ('A')   AND a.empid = :empid ";
 	@Override
 	public List<Object[]> getFamilydetailsFwd(String empid) throws Exception 
 	{
@@ -1358,13 +1358,13 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String UPDATEINCLUSIONSTATUS = "UPDATE  pis_emp_family_details SET InclusionStatus = :stauts WHERE family_details_id = :familydetailid "; 
+	private static final String UPDATEMEMBERSTATUS = "UPDATE  pis_emp_family_details SET MemberStatus = :stauts WHERE family_details_id = :familydetailid "; 
 	@Override
-	public int UpdateInclusionStatus(String familydetailid, String stauts)throws Exception
+	public int UpdateMemberStatus(String familydetailid, String stauts)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateInclusionStatus");
+		logger.info(new Date() +"Inside DAO UpdateMemberStatus");
 		try {
-		    Query updatequery=manager.createNativeQuery(UPDATEINCLUSIONSTATUS);
+		    Query updatequery=manager.createNativeQuery(UPDATEMEMBERSTATUS);
 		    updatequery.setParameter("familydetailid", familydetailid);
 	        updatequery.setParameter("stauts", stauts);  	 
 	        return updatequery.executeUpdate();
@@ -1376,7 +1376,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final String FAMMEMFWDEMPLIST="SELECT e.empid, e.empno, e.empname, e.DesigId, ed.designation FROM   employee e,   employee_desig ed   WHERE  e.desigid = ed.desigid AND e.empid IN (SELECT efd.empid FROM pis_emp_family_details efd WHERE efd.isactive=1 AND efd.InclusionStatus = 'F')";
+	private static final String FAMMEMFWDEMPLIST="SELECT e.empid, e.empno, e.empname, e.DesigId, ed.designation FROM   employee e,   employee_desig ed   WHERE  e.desigid = ed.desigid AND e.empid IN (SELECT efd.empid FROM pis_emp_family_details efd WHERE efd.isactive=1 AND efd.MemberStatus = 'F')";
 	@Override
 	public List<Object[]> FamMemFwdEmpList() throws Exception 
 	{
@@ -1390,6 +1390,69 @@ public class PisDaoImpl implements PisDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+	
+	
+	private static final String FAMILYRELATIONLIST="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE isactive=1 AND relation_name NOT LIKE 'self'";
+	@Override
+	public List<Object[]> familyRelationList()throws Exception
+	{
+		logger.info(new Date() +"Inside DAO familyRelationList");
+		Query query = manager.createNativeQuery(FAMILYRELATIONLIST);
+		List<Object[]> List=(List<Object[]>) query.getResultList();
+		return  List;
+	}
+	
+	
+	private static final String RELATIONSHIPDATA="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE relation_id= :relationid ";
+	
+	@Override
+	public  Object[] RelationshipData(String relationid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO RelationshipData");
+		Query query =manager.createNativeQuery(RELATIONSHIPDATA);
+		Object[] result = null;
+		query.setParameter("relationid", relationid);
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private static final String GETMEMBERDATA="SELECT   a.family_details_id,  a.member_name,  b.relation_name,  a.dob,  a.med_dep,  a.blood_group,  a.MemberStatus,  a.emp_unemp,  a.MemberOccupation,  a.MemberIncome,   a.IncDate,  a.IncComment,  a.IncFilePath,  a.ExcDate,  a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.FormId  FROM  pis_emp_family_details a,  pis_emp_family_relation b WHERE a.relation_id = b.relation_id  AND a.family_details_id = :familydetailid";
+	
+	@Override
+	public  Object[] getMemberdata(String familydetailid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getMemberdata");
+		Query query =manager.createNativeQuery(GETMEMBERDATA);
+		Object[] result = null;
+		query.setParameter("familydetailid", familydetailid);
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private static final String FAMMAXFORMID="SELECT   MAX(formid), 'max' FROM pis_emp_family_details";
+	
+	@Override
+	public  Object[] FamMaxFormId() throws Exception
+	{
+		logger.info(new Date() +"Inside DAO FamMaxFormId");
+		Query query =manager.createNativeQuery(FAMMAXFORMID);
+		Object[] result = null;
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 }
 	

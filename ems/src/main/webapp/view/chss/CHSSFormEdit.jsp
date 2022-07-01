@@ -1017,7 +1017,40 @@ th,td
   </div>
 </div>
 
+	
+<script type="text/javascript">	 
 
+	$('#my_acknowledge_model').modal('show')
+ 	  function acknowledgeFunction(yesorno){
+		
+		 if(yesorno)
+		 {
+			 $.ajax({
+
+					type : "GET",
+					url : "POAcknowledgeUpdateAjax.htm",
+					data : {
+							
+						chssapplyid : $chssapplyid,
+					},
+					datatype : 'json',
+					success : function(result) {
+	
+					}
+				}); 
+		}else
+		{
+			window.location = "CHSSApprovalsList.htm";
+		}
+	 	
+	 
+	 }
+	 
+	 
+</script>
+<%} %>	 
+	 
+	 
 <script type="text/javascript">
 
 /* $('.my-disc-cal-modal').modal('show');
@@ -1153,52 +1186,21 @@ function  onlyNumbers() {
 
 		});
 
- $('.cost-only').keypress( function (evt) {
-
-    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
-    {
-        evt.preventDefault();
-    } 
-    
-});
+	 $('.cost-only').keypress( function (evt) {
+	
+	    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
+	    {
+	        evt.preventDefault();
+	    } 
+	    
+	});
  
 }
 
 
 </script>
 	
-	
-<script type="text/javascript">	 
-
-	$('#my_acknowledge_model').modal('show')
- 	  function acknowledgeFunction(yesorno){
-		
-		 if(yesorno)
-		 {
-			 $.ajax({
-
-					type : "GET",
-					url : "POAcknowledgeUpdateAjax.htm",
-					data : {
-							
-						chssapplyid : $chssapplyid,
-					},
-					datatype : 'json',
-					success : function(result) {
-	
-					}
-				}); 
-		}else
-		{
-			window.location = "CHSSApprovalsList.htm";
-		}
-	 	
 	 
-	 }
-	 
-	 
-</script>
-<%} %>	 
 	 
 <script type="text/javascript">
 $("#modal-history-table").DataTable({

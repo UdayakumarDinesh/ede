@@ -96,56 +96,14 @@
 		    			<div class="col-12" align="center">
 		    			<%if(circular!=null ){%>
 		    			<input type="hidden" name="circular" value="<%if(circular.getCircularId()!=null){%><%=circular.getCircularId()%><%}%>">
-		    				<button type="submit" class="btn btn-sm submit-btn AddItem"  onclick="return CommentsModel();" name="action" value="CircularEdit" >UPDATE</button>
+		    				<button type="submit" class="btn btn-sm submit-btn "  onclick="return confirm('Are You Sure To Submit?');" name="action" value="CircularEdit" >UPDATE</button>
 		    			<%}else{ %>
 		    				<button type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are You Sure To Submit?');" name="action" value="CircularAdd" >SUBMIT</button>
 		    				<%} %>
 		    			</div>
 		    		</div> 
-						<%if(circular!=null ){%>
-				<!--------------------------- container ------------------------->
-			<div class="container">
-					
-				<!-- The Modal -->
-				<div class="modal" id="myModal">
-					 <div class="modal-dialog">
-					    <div class="modal-content">
-					     
-					        <!-- Modal Header -->
-					        <div class="modal-header">
-					          <h4 class="modal-title">The Reason For Edit</h4>
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        </div>
-					        <!-- Modal body -->
-					       <div class="modal-body">
-					             <div class="form-inline">
-					        	 <div class="form-group "  >
-					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile1" > 
-					      		 </div>
-					      		 </div>
-					        	
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
-					      		</div>
-					      		</div>
-					      </div>
-					      
-					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					        <!-- Modal footer -->
-					        <div class="modal-footer" >
-					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="CircularEdit" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
-					        </div>
-					       
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					<!----------------------------- container Close ---------------------------->
-						
-						<%} %>
+				
+			
 						
 					<%if(circular!=null){ %></form><%}else{%></form><%}%>
 			</div>
@@ -213,26 +171,6 @@ $("#circulardate").change( function(){
 	
 });						
 
-
-
-</script>
-
-<script type="text/javascript">
-function CommentsModel()
-{
-	var description = $('#descrip').val();
-	var refNo = $('#referenceno').val();
-	if(description=="" || description==null || description=="null"){
-		 alert("Enter the Description!");
-		 return false;
-	}else if(refNo==''|| refNo==null || refNo=="null" ){
-		 alert("Enter the Reference No!");
-		 return false;
-	}else{
-		 $('#myModal').modal('show');
-		 return false;
-	}
-}
 
 
 </script>

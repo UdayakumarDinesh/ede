@@ -78,7 +78,7 @@
 .profile-card-container{
 	border-radius: 12px;
     background-color: white;
-    max-height: 20rem !important;
+    /* max-height: 20rem !important; */
     padding: 0px 20px;
     margin: 10px 20px 25px 20px;
 }
@@ -303,8 +303,8 @@
 						if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))) 
 						{ %>	
 											
-						<div class="col-md-3" >
-							<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
+						<div class="col-md-3"  >
+							<button type="submit" style="margin: 5px 5px 10px 5px;" class=" db-button w-100"  formaction="<%=obj[1]%>" ><%=obj[0]%></button>
 						</div>
 						
 					<%	} 

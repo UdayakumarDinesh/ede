@@ -8,8 +8,7 @@
 <meta charset="ISO-8859-1">
 
 <title>EMS</title>
-<jsp:include page="dependancy.jsp"></jsp:include>
-
+	
 <style type="text/css">
 
 
@@ -24,89 +23,17 @@
 }
 
 #sidebar {
-    min-width: 250px;
+    min-width: 200px;
     max-width: 250px;
-    background: #7386D5;
+    /* background: #7386D5; */
     color: #fff;
     transition: all 0.3s;
 }
 
 #sidebar.active {
-    margin-left: -250px;
+    /* toggle-collapse handle margin-left: -250px; */
 }
 
-#sidebar .sidebar-header {
-    padding: 20px;
-    background: #6d7fcc;
-}
-
-#sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #47748b;
-}
-
-#sidebar ul p {
-    color: #fff;
-    padding: 10px;
-}
-
-#sidebar ul li a {
-    padding: 10px;
-    font-size: 1.1em;
-    display: block;
-}
-
-#sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
-}
-
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
-}
-
-a[data-toggle="collapse"] {
-    position: relative;
-}
-
-.dropdown-toggle::after {
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
-
-ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #6d7fcc;
-}
-
-ul.CTAs {
-    padding: 20px;
-}
-
-ul.CTAs a {
-    text-align: center;
-    font-size: 0.9em !important;
-    display: block;
-    border-radius: 5px;
-    margin-bottom: 5px;
-}
-
-a.download {
-    background: #fff;
-    color: #7386D5;
-}
-
-a.article,
-a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
-}
 
 /* ---------------------------------------------------
     CONTENT STYLE
@@ -114,8 +41,8 @@ a.article:hover {
 
 #content {
     width: 100%;
-    padding: 20px;
-    min-height: 100vh;
+    /* padding: 20px; */
+    min-height: 90vh;
     transition: all 0.3s;
 }
 
@@ -135,75 +62,111 @@ a.article:hover {
     }
 }
 
+/* ---------------------------------------------------
+   NEW SIDEBAR
+----------------------------------------------------- */
+
+.nav-pills-custom .nav-link {
+    color: #717488;
+    background: #dddde8;
+    position: relative;
+}
+
+.nav-pills-custom .nav-link.active {
+    color: white;
+    background: #055C9D;
+    /* border:2px solid #45b649; */
+}
+
+.nav-pills{
+	    background-color: #e9ecef;
+    /* height: 600px; */
+    padding: 11px;
+    border-radius: 6px;
+}
+
+/* Add indicator arrow for the active tab */
+@media (min-width: 992px) {
+    .nav-pills-custom .nav-link::before {
+        content: '';
+        display: block;
+        border-top: 8px solid transparent;
+        border-left: 10px solid #fff;
+        border-bottom: 8px solid transparent;
+        position: absolute;
+        top: 50%;
+        right: -10px;
+        transform: translateY(-50%);
+        opacity: 0;
+        border-color: transparent transparent transparent #055C9D;
+        
+    }
+}
+
+.nav-pills-custom .nav-link.active::before {
+    opacity: 1;
+}
+
+.nav-link{
+	font-family: 'Muli',sans-serif;
+}
+
 </style>
 </head>
 <body>
 
+	<%String formmoduleid=(String)request.getAttribute("formmoduleid");
+	  String SessionVal =(String)session.getAttribute("sesval"); 
+	%>
+
   <div class="wrapper">
+  
           <!-- Sidebar  -->
           <nav id="sidebar">
-              <div class="sidebar-header">
-                  <h3> Sidebar</h3>
-              </div>
+          
+          		<div class="nav flex-column nav-pills nav-pills-custom sidebar-container" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+		
+					<div id="sidebarmodule">
+					
 
-              <ul class="list-unstyled components">
-                  <p>Dummy Heading</p>
-                  <li class="active">
-                      <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                      <ul class="collapse list-unstyled" id="homeSubmenu">
-                          <li>
-                              <a href="#">Home 1</a>
-                          </li>
-                          <li>
-                              <a href="#">Home 2</a>
-                          </li>
-                          <li>
-                              <a href="#">Home 3</a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a href="#">About</a>
-                  </li>
-                  <li>
-                      <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                      <ul class="collapse list-unstyled" id="pageSubmenu">
-                          <li>
-                              <a href="#">Page 1</a>
-                          </li>
-                          <li>
-                              <a href="#">Page 2</a>
-                          </li>
-                          <li>
-                              <a href="#">Page 3</a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a href="#">Portfolio</a>
-                  </li>
-                  <li>
-                      <a href="#">Contact</a>
-                  </li>
-              </ul>
+						<!--  <a class="nav-link mb-3 shadow custom_width " id="LeaveDashBoard_htm" href="LeaveDashBoard.htm" >
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large ">Dashboard</span>
+	                     </a>
+	                      <a class="nav-link mb-3 shadow custom_width" id="LeaveCredit_htm" href="LeaveCredit.htm" >
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large ">Credit</span>
+	                     </a>
+						 <a class="nav-link mb-3 shadow custom_width" id="v-pills-authority-tab" data-toggle="pill" href="#v-pills-authority" role="tab" aria-controls="v-pills-authority" aria-selected="false">
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large ">Authority</span>
+	                     </a>
+						<a class="nav-link mb-3 shadow custom_width" id="v-pills-authority-tab" data-toggle="pill" href="#v-pills-cost" role="tab" aria-controls="v-pills-authority" aria-selected="false">
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large ">Cost</span>
+	                     </a>
+	                     <a class="nav-link mb-3 shadow custom_width" id="v-pills-authority-tab" data-toggle="pill" href="#v-pills-print" role="tab" aria-controls="v-pills-authority" aria-selected="false">
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large ">Prints</span>
+	                     </a>
+	                     <a class="nav-link mb-3 shadow custom_width" id="v-pills-authority-tab" data-toggle="pill" href="#v-pills-print" role="tab" aria-controls="v-pills-authority" aria-selected="false">
+	                        <i class="fa fa-id-badge mr-2" ></i>
+	                        <span class="font-weight-bold large " id="url">  </span>
+	                     </a>
+	                      -->
+                     </div>
 
-              <ul class="list-unstyled CTAs">
-                  <li>
-                      <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-                  </li>
-                  <li>
-                      <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
-                  </li>
-              </ul>
+            	</div>
+     
           </nav> 
 
           <!-- Page Content  -->
           <div id="content">
 
-			 <button type="button" id="sidebarCollapse" class="btn btn-info">
+			 <!-- <button type="button" id="sidebarCollapse" class="btn btn-info">
                           <i class="fas fa-align-left"></i>
                           <span>Toggle Sidebar</span>
-                      </button>
+                      </button> -->
 
 
      
@@ -214,9 +177,40 @@ a.article:hover {
 
 <script>
 $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
+   /*  $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
-    });
+    }); */
+  
+    console.log(<%=SessionVal%>)
+    
+    var formmoduleid = <%=formmoduleid%>;
+    $.ajax({
+		type : "GET",
+		url : "SidebarModuleList.htm",
+		data : {
+			formmoduleid:formmoduleid,				
+		},
+		datatype : 'json',
+		success : function(result) {
+			
+			var result = JSON.parse(result);
+			var values = Object.keys(result).map(function(e) {
+				  return result[e]
+				});
+			var sidebarmodule = "";
+			for (i = 0; i < values.length; i++) {
+		
+				sidebarmodule+="<a class='nav-link mb-3 shadow custom_width' id='"+values[i][1].replace('.','_') +"'  href='"+values[i][1]+"'><i class='fa fa-id-badge mr-2' ></i><span class='font-weight-bold large ' >"+values[i][0]+"</span></a>";
+				 
+ 
+			}
+			$('#sidebarmodule').html(sidebarmodule); 
+			$('#'+ window.location.href.split('/')[4].replace('.','_')).addClass('active')
+		}
+	});
+    
+   
+    
 });
 </script>
 </body>

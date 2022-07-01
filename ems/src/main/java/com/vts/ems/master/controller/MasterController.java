@@ -1187,7 +1187,7 @@ public class MasterController {
 			}
 			
 			@RequestMapping(value ="CircularEDIT.htm" , method = RequestMethod.POST)
-			public String CirculatEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile,@RequestPart("selectedFile1") MultipartFile selectedFile1, RedirectAttributes redir) throws Exception
+			public String CirculatEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
 			{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside CircularEDIT.htm "+UserId);
@@ -1211,18 +1211,6 @@ public class MasterController {
 				
 					filecircular.setPath(selectedFile);
 					long result = service.CircularListEdit(circular , filecircular);
-					
-					String comments = (String)req.getParameter("comments");
-			    	   MasterEdit masteredit  = new MasterEdit();
-			    	   masteredit.setCreatedBy(UserId);
-			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-			    	   masteredit.setTableRowId(Long.parseLong(circularid));
-			    	   masteredit.setComments(comments);
-			    	   masteredit.setTableName("chss_circular_list");
-			    	   
-			    	   MasterEditDto masteredto = new MasterEditDto();
-			    	   masteredto.setFilePath(selectedFile1);
-			    	   service.AddMasterEditComments(masteredit , masteredto);
 											
 					if (result != 0) {
 						 redir.addAttribute("result", "Circular Updated Successfully");
@@ -1266,6 +1254,41 @@ public class MasterController {
 					e.printStackTrace();
 				}
 		    }
+			
+			@RequestMapping(value = "CircularAttachmentView.htm",method = {RequestMethod.GET,RequestMethod.POST})
+		    public void ViewCircularAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
+			{				
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside CircularAttachmentView.htm "+UserId);
+				try {
+					
+						String path = (String)req.getParameter("path1");
+						String arr[] = path.split("//");
+						res.setContentType("Application/octet-stream");	
+
+				    	//String path = req.getServletContext().getRealPath("/manuals/" + "User-Manual-chss.pdf");
+
+						res.setContentType("application/pdf");
+						res.setHeader("Content-Disposition", String.format("inline; filename=\"" + arr[1] + "\""));
+				
+						File my_file = new File(arr[0]);
+				
+						OutputStream out = res.getOutputStream();
+						FileInputStream in = new FileInputStream(my_file);
+						byte[] buffer = new byte[4096];
+						int length;
+						while ((length = in.read(buffer)) > 0) {
+							out.write(buffer, 0, length);
+						}
+						in.close();
+						out.flush();
+		        
+				}catch(Exception e) {
+					logger.error(new Date() +"Inside CircularAttachmentView.htm "+UserId,e);
+					e.printStackTrace();
+				}
+		    }
+			
 			
 			@RequestMapping(value="EmpanneledHospitalList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 			public String EmpanelledHospitalList(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception

@@ -53,7 +53,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="row justify-content-end">
 					 <div class="col-1" align="right"></div>
-						<div class="col-2"><h6>Employee </h6></div>
+						<div class="col-2"><h6>Employee : </h6></div>
 						<div class="col-2" align="left" style="margin-left: -10%;">
 							<select class="form-control form-control select2" name="empid"   required="required" onchange="this.form.submit();" >
 								<option value="0"<% if("0".toString().equalsIgnoreCase(empid)){%> selected<%}%> >All</option>

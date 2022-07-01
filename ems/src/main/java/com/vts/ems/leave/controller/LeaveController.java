@@ -67,6 +67,7 @@ public class LeaveController {
 		    req.setAttribute("EmpList", service.EmpList());
 		    req.setAttribute("month", month);
 		    req.setAttribute("year", yr);
+		    req.setAttribute("formmoduleid", "5");
 	
 	    }
 	     catch (Exception e) {
