@@ -19,4 +19,5 @@ public class LeaveApplyDto {
 	   private String Remarks;
 	   private String HandingOverEmpid;
 	   private String UserId;
+	   private String ActEmpNo;
 }

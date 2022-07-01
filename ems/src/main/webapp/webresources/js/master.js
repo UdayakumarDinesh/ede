@@ -24,5 +24,11 @@ $(document).ready(function() {
         });
     }, 4000);
 
+	
+
+	var windowheight= $(window).height(); 
+	$('.dashboard-card').css('min-height',(windowheight - 140) +'px'  );
+	$('.sidebar-container').css('min-height',(windowheight - 75) +'px'  );
+
 
 });

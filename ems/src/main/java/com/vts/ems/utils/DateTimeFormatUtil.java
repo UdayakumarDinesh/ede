@@ -97,6 +97,13 @@ public class DateTimeFormatUtil
 		LocalDate ldate=LocalDate.parse(datestring,formatter);
 		return ldate.getMonth().getDisplayName(TextStyle.SHORT,Locale.ENGLISH);
 	}
+	
+	public static  String getMonthValFullFromRegularDate(String datestring) 
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		LocalDate ldate=LocalDate.parse(datestring,formatter);
+		return ldate.getMonth().getDisplayName(TextStyle.FULL,Locale.ENGLISH);
+	}
 	public static  String getMonthValFromSqlDate(String datestring) 
 	{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

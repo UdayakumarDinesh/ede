@@ -1,10 +1,20 @@
 package com.vts.ems.pis.controller;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +42,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
+import com.itextpdf.layout.Canvas;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
@@ -43,6 +68,7 @@ import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.service.PisService;
+import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
@@ -785,28 +811,31 @@ public class PisController {
 	}
    
    @RequestMapping(value="AddFamilyDetails.htm" ,  method=RequestMethod.POST)  
-   public String familyDetailsAdd(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+   public String AddFamilyDetails(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+   {
 	   String Username = (String) ses.getAttribute("Username");
-       logger.info(new Date() +"Inside familyDetailsAdd.htm "+Username);
+       logger.info(new Date() +"Inside AddFamilyDetails.htm "+Username);
        
        try {
-    	   String name = (String)req.getParameter("memberName");
-    	   String dob  = (String)req.getParameter("dob");
-    	   String relation = (String)req.getParameter("relation");
-    	   String benId =  (String)req.getParameter("benId");
-    	   String status = (String)req.getParameter("status");
-    	   String statusdate = (String)req.getParameter("statusDate");
-    	   String bloodgroup = (String)req.getParameter("bloodgroup");
-    	   String Phone = (String)req.getParameter("PH");
-    	   String medicaldep = (String)req.getParameter("medicaldep");
-    	   String medicaldepdate = (String)req.getParameter("medicaldepdate");
-    	   String ltcdep  = (String)req.getParameter("ltcdep");
-    	   String LTC = (String)req.getParameter("LTC");
-    	   String marriagestatus = (String)req.getParameter("married_unmarried");
-    	   String emp_unemp = (String)req.getParameter("emp_unemp");
-    	   String gender = (String)req.getParameter("Gender");
-    	   String empid = (String)req.getParameter("empid");
-    	   
+    	   String name = req.getParameter("memberName");
+    	   String dob  = req.getParameter("dob");
+    	   String relation = req.getParameter("relation");
+    	   String benId =  req.getParameter("benId");
+    	   String status = req.getParameter("status");
+    	   String statusdate = req.getParameter("statusDate");
+    	   String bloodgroup = req.getParameter("bloodgroup");
+    	   String Phone = req.getParameter("PH");
+    	   String medicaldep = req.getParameter("medicaldep");
+    	   String medicaldepdate = req.getParameter("medicaldepdate");
+    	   String ltcdep  = req.getParameter("ltcdep");
+    	   String LTC = req.getParameter("LTC");
+    	   String marriagestatus = req.getParameter("married_unmarried");
+    	   String emp_unemp = req.getParameter("emp_unemp");
+    	   String gender = req.getParameter("Gender");
+    	   String empid = req.getParameter("empid");
+    	   String incstatus = req.getParameter("incstatus");
+    	   String memberOccupation = req.getParameter("memberOccupation");
+    	   String memberIncome = req.getParameter("memberIncome").trim();
     	   
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
@@ -827,22 +856,41 @@ public class PisController {
     	   details.setMar_unmarried(marriagestatus);
     	   details.setEmp_unemp(emp_unemp);
     	   details.setEmpid(empid);
+
+           if(emp_unemp.equalsIgnoreCase("Y")) {
+    	   	   details.setMemberOccupation(memberOccupation);
+    	   	   if(memberIncome!=null) {
+    	   		   details.setMemberIncome(Long.parseLong(memberIncome));
+    	   	   }
+           }else {
+        	   details.setMemberOccupation(null);
+        	   details.setMemberIncome(0l);
+           }
+    	   
+    	   details.setMemberStatus(incstatus);
+    	   
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
     	   details.setCreatedDate(sdf.format(new Date()));
-    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+    	   if(emp_unemp.equalsIgnoreCase("Y")) 
+    	   {
     		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
     	   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "Family Member Saved Successfully");	
+    		   redir.addAttribute("result", "Family Member Details Saved Successfully");	
    		   } else {
-   			redir.addAttribute("resultfail", "Family Member Saved UNSuccessful");
+   			redir.addAttribute("resultfail", "Family Member Details Saved UNSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);
+    	   
+    	   if(incstatus.equals("A")) {
+    		   return "redirect:/EmpFamilyMemberAdd.htm";
+    	   }
+    	   
 	   } catch (Exception e) {
-		   logger.error(new Date() +"Inside familyDetailsAdd.htm "+Username,e);
+		   logger.error(new Date() +"Inside AddFamilyDetails.htm "+Username,e);
 	  	 e.printStackTrace();
 	  	return "static/Error";
 	  }
@@ -872,6 +920,8 @@ public class PisController {
     	   String empid = (String)req.getParameter("empid");
     	   String familyid = (String)req.getParameter("familyid");
     	   String gender   = (String)req.getParameter("Gender");
+    	   String memberOccupation = req.getParameter("memberOccupation");
+    	   String memberIncome = req.getParameter("memberIncome").trim();
     	   EmpFamilyDetails details = new EmpFamilyDetails();
     	 
     	   details.setMember_name(WordUtils.capitalize(name.trim()));
@@ -892,6 +942,15 @@ public class PisController {
 		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
 	       }
     	   details.setGender(gender);
+    	   if(emp_unemp.equalsIgnoreCase("Y")) {
+	    	   details.setMemberOccupation(memberOccupation);
+	    	   if(memberIncome!=null) {
+	    		   details.setMemberIncome(Long.parseLong(memberIncome));
+	    	   }
+    	   }else {
+    		   details.setMemberOccupation(null);
+    		   details.setMemberIncome(0l);
+    	   }
     	   details.setEmpid(empid);
     	   details.setModifiedBy(Username);
     	   details.setModifiedDate(sdtf.format(new Date()));  
@@ -912,12 +971,17 @@ public class PisController {
     	   
     	   Long result = service.EditFamilyDetails(details);
     	   if(result>0){
-    		   redir.addAttribute("result", "Family member Edited sucessfully");	
+    		   redir.addAttribute("result", "Family member Details Edited sucessfully");	
    		   } else {
-   			redir.addAttribute("resultfail", "Family Member Edited UnSuccessful");
+   			   redir.addAttribute("resultfail", "Family Member Details Edited UnSuccessful");
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);   
+    	   
+    	   if(req.getParameter("useredit").equals("Y")) {
+    		   return "redirect:/EmpFamilyMemberAdd.htm";
+    	   }
+    	   
     	   
 	      } catch (Exception e) {
 	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
@@ -1759,7 +1823,7 @@ public class PisController {
 	public String Resetpassword(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");	
-		logger.info(new Date() +"Inside PasswordChange.htm "+Username);		
+		logger.info(new Date() +"Inside Resetpassword.htm "+Username);		
 		try {
 			String loginid = (String) req.getParameter("loginid");
 			
@@ -1772,6 +1836,7 @@ public class PisController {
 			}
 			return "redirect:/LoginMaster.htm";
 		}catch(Exception e) {
+
 			logger.error(new Date() +"Inside PasswordChange.htm "+Username,e);
 			e.printStackTrace();
 			return "static/Error";
@@ -1811,4 +1876,574 @@ public class PisController {
 		
 	}
 
+
+	@RequestMapping(value="EmpFamilyMemberAdd.htm" )
+	public String EmpFamilyMemberAdd(Model model,HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside EmpFamilyMemberAdd.htm "+Username);		
+		try {
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
+			
+			req.setAttribute("Empdata", service.GetEmpData(empid));
+			req.setAttribute("FamilyRelation", service.getFamilyRelation());
+			req.setAttribute("FamilyStatus", service.getFamilyStatus());
+			req.setAttribute("famMembersconf", service.getFamilydetails(empid));
+			req.setAttribute("famMembersPend", service.getFamilydetailsNotConf(empid));
+			req.setAttribute("empid", empid);
+			
+			return "pis/EmpFamilyMemAdd";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside EmpFamilyMemberAdd.htm "+Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "FamilyMemDataAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody EmpFamilyDetails FamilyMemDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside FamilyMemDataAjax.htm "+Username);
+		EmpFamilyDetails modal=new EmpFamilyDetails();
+		try {
+			String familydetailsid = req.getParameter("familydetailsid");
+			modal = service.getFamilyMemberModal(familydetailsid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside FamilyMemDataAjax.htm "+Username, e);
+		}
+		return modal;
+	}
+	
+	@RequestMapping(value="FamilyMembersForward.htm" )
+	public String FamilyMembersForward(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside FamilyMembersForward.htm "+Username);		
+		try {
+			String[] familydetailsid = req.getParameterValues("familydetailid");
+			
+			
+			int result= service.FamilyMemDetailsForward(familydetailsid);
+			if(result>0) {
+				redir.addAttribute("result", "Member Details Forwarded Successfully ");
+			}
+			else {
+				redir.addAttribute("resultfail", "Member Details Forward Unsuccessful");
+			}		
+			
+			return "redirect:/EmpFamilyMemberAdd.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside FamilyMembersForward.htm "+Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
+	{
+		File pdffile = new File(pdffilepath);
+		File tofile = new File(newfilepath);
+		
+		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
+		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
+		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
+		        PdfPage page = doc.getPage(pageNum);
+		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
+	
+		        PdfExtGState gstate = new PdfExtGState();
+		        gstate.setFillOpacity(.05f);
+		        canvas = new PdfCanvas(page);
+		        canvas.saveState();
+		        canvas.setExtGState(gstate);
+		        try (Canvas canvas2 = new Canvas(canvas, page.getPageSize())) {
+		            double rotationDeg = 50d;
+		            double rotationRad = Math.toRadians(rotationDeg);
+		            Paragraph watermark = new Paragraph("STARC")
+		                    .setFont(helvetica)
+		                    .setFontSize(150f)
+		                    .setTextAlignment(TextAlignment.CENTER)
+		                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+		                    .setRotationAngle(rotationRad)
+		                    .setFixedPosition(200, 110, page.getPageSize().getWidth());
+		            canvas2.add(watermark);
+		        }
+		        canvas.restoreState();
+		    }
+		 }
+		
+		pdffile.delete();
+		tofile.renameTo(pdffile);
+		
+	}
+	
+	
+	@RequestMapping(value ="DependentAdmissionForm.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String DependentAdmissionForm(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DependentAdmissionForm.htm "+Username);
+		try {
+//			String filename="Dependent Admission Form";
+//			String path=req.getServletContext().getRealPath("/view/temp");
+//			req.setAttribute("path",path);
+//				        
+//	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+//			req.getRequestDispatcher("/view/pis/DependentAdmissionForm.jsp").forward(req, customResponse);
+//			String html1 = customResponse.getOutput();        
+//	        
+//	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+//	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+//	        res.setContentType("application/pdf");
+//	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+//	        File f=new File(path +File.separator+ filename+".pdf");
+//	         
+//	        
+//	        FileInputStream fis = new FileInputStream(f);
+//	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+//	        res.setHeader("Content-Length",String.valueOf(f.length()));
+//	        byte[] buffer = new byte[1024];
+//	        int len = 0;
+//	        while ((len = fis.read(buffer)) >= 0) {
+//	            os.write(buffer, 0, len);
+//	        } 
+//	        os.close();
+//	        fis.close();
+//	       
+//	       
+//	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+//	        Files.delete(pathOfFile);	
+			
+			
+			return "pis/DependentAdmissionForm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependentAdmissionForm.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value ="DependentAddForm.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public void DependentAddForm(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DependentAddForm.htm "+Username);
+		try {
+//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			
+			String empid = req.getParameter("empid");
+			req.setAttribute("FwdMemberDetails",service.getFamilydetailsFwd(empid));
+			req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
+			req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
+			
+			String filename="Dependent Addition Form";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+				        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/pis/DependentAddForm.jsp").forward(req, customResponse);
+			String html1 = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        File f=new File(path +File.separator+ filename+".pdf");
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);	
+			
+			
+//			return "pis/DependentAddForm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependentAddForm.htm "+Username, e);
+//			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value ="DependentDeleteForm.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String DependentDeleteForm(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DependentDeleteForm.htm "+Username);
+		try {
+			
+//			String filename="Dependent Exclusion Form";
+//			String path=req.getServletContext().getRealPath("/view/temp");
+//			req.setAttribute("path",path);
+//				        
+//	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+//			req.getRequestDispatcher("/view/pis/DependentDeleteForm.jsp").forward(req, customResponse);
+//			String html1 = customResponse.getOutput();        
+//	        
+//	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+//	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+//	        res.setContentType("application/pdf");
+//	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+//	        File f=new File(path +File.separator+ filename+".pdf");
+//	         
+//	        
+//	        FileInputStream fis = new FileInputStream(f);
+//	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+//	        res.setHeader("Content-Length",String.valueOf(f.length()));
+//	        byte[] buffer = new byte[1024];
+//	        int len = 0;
+//	        while ((len = fis.read(buffer)) >= 0) {
+//	            os.write(buffer, 0, len);
+//	        } 
+//	        os.close();
+//	        fis.close();
+//	       
+//	       
+//	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+//	        Files.delete(pathOfFile);	
+						
+			
+			return "pis/DependentDeleteForm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependentDeleteForm.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value="FamilyForwardedList.htm" )
+	public String FamilyForwardedList(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");	
+		logger.info(new Date() +"Inside FamilyForwardedList.htm "+Username);		
+		try {
+			
+			req.setAttribute("empFwdList", service.FamMemFwdEmpList());
+			
+			return "pis/FamilyMemApprovalList";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside FamilyForwardedList.htm "+Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value ="DepAdmissionCreateView.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String DependentAdmissionFormView(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DependentAdmissionForm.htm "+Username);
+		try {
+			
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
+			
+//			String empid = req.getParameter("empid");
+			req.setAttribute("FwdMemberDetails",service.getFamilydetailsFwd(empid));
+			req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
+			req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
+			req.setAttribute("relationtypes" , service.familyRelationList() );
+			
+			return "pis/DependentAddFormView";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependentAdmissionFormView.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value ="DepMemAddSubmit.htm" , method =  RequestMethod.POST )
+	public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
+		try {
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+			/* mem-attach */
+			String name = req.getParameter("mem-name");
+	    	String relation  = req.getParameter("mem-relation");
+	    	String dob  = req.getParameter("mem-dob");
+	    	String occupation =  req.getParameter("mem-occupation").trim();
+	    	String income = req.getParameter("mem-income");
+	    	String comment = req.getParameter("mem-comment");
+	    	
+	    	Object[] empdetails = service.EmployeeDetails(empid);
+	    	Object[] relationdata = service.RelationshipData(relation);
+	    	   
+			EmpFamilyDetails details = new EmpFamilyDetails();
+	    	 
+			details.setMember_name(WordUtils.capitalize(name.trim()));
+	    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+	    	details.setRelation_id(Integer.parseInt(relation));
+	    	details.setEmpid(empid);
+	    	details.setCghs_ben_id(empdetails[2].toString());
+	    	details.setFamily_status_id(1);
+	    	details.setPH("0"); 
+	    	details.setBlood_group("Not Available");
+	    	details.setGender(relationdata[2].toString());
+	    	
+//	    	details.setStatus_from(new java.sql.Date());
+	    	details.setMed_dep("N");
+//	    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+	    	details.setLtc_dep("N");
+//	    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+	    	
+	    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
+	    	if( relidlist.contains(relation.trim()))
+	    	{
+	    		details.setMar_unmarried("Y");
+	    	}
+	    	else
+	    	{
+	    		details.setMar_unmarried("N");
+	    	}
+	    	
+	    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
+	    	{
+	    		details.setEmp_unemp("Y");
+	    		details.setEmpStatus("Private");
+	    		details.setMemberOccupation(occupation);
+	    		details.setMemberIncome(Long.parseLong(income));
+	    	}
+	    	else
+	    	{
+	    		details.setEmp_unemp("N");
+	    	}
+	    	details.setMemberStatus("A");
+	    	details.setCreatedBy(Username);
+	    	details.setCreatedDate(sdtf.format(new Date()));  
+	    	details.setIsActive(0);
+	    	
+	    	
+	    	long formid= Long.parseLong(req.getParameter("formid"));
+	    	if(formid==0) {
+	    		
+	    		details.setFormId(Long.parseLong(service.FamMaxFormId()[0].toString())+1);
+	    	}
+	    	else if(formid>0)
+	    	{
+	    		details.setFormId(formid);
+	    	}
+	    	
+	    	
+	    	
+	    	details.setIncComment(comment);
+	    	if(IncAttachment.getSize()>0) {
+	    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+	    	}
+	    	Long result = service.AddFamilyDetails(details);
+    	   
+	    	
+    	   
+	    	if(result>0){
+	    		redir.addAttribute("result", "Family Member Details Saved Successfully");	
+	   		} else {
+	   			redir.addAttribute("resultfail", "Family Member Details Saved UNSuccessful");
+	    	}                    
+			
+			return "redirect:/DepAdmissionCreateView.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DepMemAddSubmit.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	 public static String saveFile(String ToFilePath, String fileFullName, MultipartFile multipartFile) throws IOException 
+	 {
+		 	Path uploadPath = Paths.get(ToFilePath);
+	         if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        String fileName = fileFullName.substring(0, fileFullName.lastIndexOf("."));
+	        String ext = fileFullName.substring(fileFullName.lastIndexOf('.')+1);
+	      
+	        String destinationFilePath = uploadPath+"\\"+fileName+"."+ext;
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream())
+	        {
+	        	int count=1;
+	        	File tempFile  = new File(destinationFilePath);
+	        	
+	        	if(tempFile.exists())
+	        	{
+	        	    while(true)
+	        	    {
+	        	    	destinationFilePath = uploadPath+"\\"+fileName+"("+count+")."+ext;
+	        	        if(!tempFile.exists())
+	        	        {
+	        	            break;
+	        	        }
+	        	        else
+	        	        {
+	        	            count++;
+	        	        }
+	        	    }
+	        	}
+	        	Files.copy(inputStream, Paths.get(destinationFilePath), StandardCopyOption.REPLACE_EXISTING);
+	        	
+	        	return destinationFilePath;
+	        }catch (Exception ioe) {
+	        	ioe.printStackTrace();
+	        	return null;
+			}
+	       
+	 }
+	
+	 	@RequestMapping(value ="DepMemEditSubmit.htm" , method =  RequestMethod.POST )
+		public String DepMemEditSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach-edit") MultipartFile IncAttachment)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DepMemEditSubmit.htm "+Username);
+			try {
+							
+				String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+				
+				String familydetailsid = req.getParameter("familydetailsid");
+				
+				String name = req.getParameter("mem-name");
+		    	String relation  = req.getParameter("mem-relation");
+		    	System.out.println(relation);
+		    	String dob  = req.getParameter("mem-dob");
+		    	String occupation =  req.getParameter("mem-occupation").trim();
+		    	String income = req.getParameter("mem-income");
+		    	String comment = req.getParameter("mem-comment");
+		    	
+		    	Object[] empdetails = service.EmployeeDetails(empid);
+		    	Object[] relationdata = service.RelationshipData(relation);
+		    	   
+				EmpFamilyDetails details = new EmpFamilyDetails();
+		    	 
+				details.setMember_name(WordUtils.capitalize(name.trim()));
+		    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+		    	details.setRelation_id(Integer.parseInt(relation));
+		    	details.setEmpid(empid);
+		    	details.setCghs_ben_id(empdetails[2].toString());
+		    	details.setFamily_status_id(1);
+		    	details.setPH("0"); 
+		    	details.setBlood_group("Not Available");
+		    	details.setGender(relationdata[2].toString());
+		    	
+//		    	details.setStatus_from(new java.sql.Date());
+		    	details.setMed_dep("N");
+//		    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+		    	details.setLtc_dep("N");
+//		    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+		    	
+		    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
+		    	if( relidlist.contains(relation.trim()))
+		    	{
+		    		details.setMar_unmarried("Y");
+		    	}
+		    	else
+		    	{
+		    		details.setMar_unmarried("N");
+		    	}
+		    	
+		    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
+		    	{
+		    		details.setEmp_unemp("Y");
+		    		details.setEmpStatus("Private");
+		    		details.setMemberOccupation(occupation);
+		    		details.setMemberIncome(Long.parseLong(income));
+		    	}
+		    	else
+		    	{
+		    		details.setEmp_unemp("N");
+		    	}
+		    	details.setMemberStatus("A");
+		    	details.setCreatedBy(Username);
+		    	details.setCreatedDate(sdtf.format(new Date()));  
+		    	details.setIsActive(0);
+		    	
+		    	details.setIncComment(comment);
+		    	details.setFamily_details_id(Long.parseLong(familydetailsid));
+		    	
+		    	Object[] famMemberdata = service.getMemberdata(familydetailsid);
+		    	
+		    	
+		    	if(IncAttachment.getSize()>0) {
+		    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+		    		if(famMemberdata[12]!=null) {
+		    			new File(famMemberdata[12].toString()).delete();
+		    		}
+		    	}
+		    	
+		    	Long result = service.DepMemEditSubmit(details);
+	    	   
+		    	if(result>0){
+		    		redir.addAttribute("result", "Family Member Details Updated Successfully");	
+		   		} else {
+		   			redir.addAttribute("resultfail", "Family Member Details Update UNSuccessful");
+		    	}                    
+				
+				return "redirect:/DepAdmissionCreateView.htm";
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside DepMemEditSubmit.htm "+Username, e);
+				return "static/Error";
+			}
+			
+		}
+	 	
+	 	
+	 	
+	 	
+	 	@RequestMapping(value = "FamIncExcAttachDownload.htm", method = RequestMethod.POST)
+		public void FamIncExcAttachDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+
+			logger.info(new Date() +"Inside FamIncExcAttachDownload.htm "+UserId);
+			
+			try {	
+				String path=req.getParameter("filepath");
+                Path filepath=Path.of(path);
+                res.setContentType("application/pdf");
+                res.setHeader("Content-disposition","attachment;filename="+filepath.getFileName() ); 
+                File f=new File(path);
+                FileInputStream fis = new FileInputStream(f);
+                DataOutputStream os = new DataOutputStream(res.getOutputStream());
+                res.setHeader("Content-Length",String.valueOf(f.length()));
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = fis.read(buffer)) >= 0) {
+                    os.write(buffer, 0, len);
+                } 
+                os.close();
+                fis.close();
+
+			}
+			catch (Exception e) {
+				
+				e.printStackTrace();  
+				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e); 
+				
+			}
+
+		}
+	 	
+	 	
+	 	
+	
 }

@@ -78,7 +78,7 @@
 .profile-card-container{
 	border-radius: 12px;
     background-color: white;
-    max-height: 20rem !important;
+    /* max-height: 20rem !important; */
     padding: 0px 20px;
     margin: 10px 20px 25px 20px;
 }
@@ -303,8 +303,8 @@
 						if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))) 
 						{ %>	
 											
-						<div class="col-md-3" >
-							<button type="submit" class=" db-button w-100" formaction="<%=obj[1]%>" ><%=obj[0]%></button>
+						<div class="col-md-3"  >
+							<button type="submit" style="margin: 5px 5px 10px 5px;" class=" db-button w-100"  formaction="<%=obj[1]%>" ><%=obj[0]%></button>
 						</div>
 						
 					<%	} 
@@ -392,15 +392,15 @@
 </div>
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
-
-		<div class="col-md-3"></div>
+		<div class="col-md-3"><!-- <a class="btn btn-sm " href="DependentAdmissionForm.htm" target="_blank"> Form</a> --></div>
+		<!-- <div class="col-md-3"><a class="btn btn-sm " href="DependentAddForm.htm" target="_blank"> Form</a></div>
+		<div class="col-md-3"><a class="btn btn-sm " href="DependentDeleteForm.htm" target="_blank"> Form</a></div> -->
 		<div class="col-md-5 d-flex justify-content-center">
 			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
 		</div>
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
 		<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;"
 		<%if(Fromdate!=null){%> value="<%=(Fromdate) %>" <%} %> onchange="changeform('<%=patientname %>')" >
-					  
 	
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"

@@ -109,6 +109,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				List<Object[]> admindashboard = service.HeaderSchedulesList("1" ,logintype); 
 			
 				req.setAttribute("dashboard", admindashboard);
+				ses.setAttribute("sesval", "46");
 				return "pis/PisDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PisAdminDashboard.htm "+Username, e);
@@ -130,6 +131,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				List<Object[]> admindashboard = service.HeaderSchedulesList("5" ,logintype); 
 			
 				req.setAttribute("dashboard", admindashboard);
+				req.setAttribute("formmoduleid", "5");
+				ses.setAttribute("sesval", "45");
 				return "leave/LeaveDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside LeaveDashboard.htm "+Username, e);
@@ -138,6 +141,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 			
 		}
+		
 		@RequestMapping(value = "HeaderModuleList.htm" , method = RequestMethod.GET)
 		public @ResponseBody String HeaderModuleList(HttpServletRequest request ,HttpSession ses) throws Exception {
 			
@@ -147,8 +151,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			logger.info(new Date() +"Inside HeaderModuleList.htm "+UserId);		
 			try {
 				String LoginType = ((String) ses.getAttribute("LoginType"));
-				
-				
+
 			    HeaderModuleList =service.FormModuleList(LoginType);
 			    request.setAttribute("ProjectInitiationList", "");    
 			}
@@ -158,6 +161,29 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			}
 				return json.toJson(HeaderModuleList);	
 		}
+		
+		@RequestMapping(value ="SidebarModuleList.htm", method = RequestMethod.GET)
+		public @ResponseBody String SidebarModuleList(HttpServletRequest req, HttpSession ses) throws Exception{
+			
+			String UserId = (String) ses.getAttribute("Username");
+			String logintype = (String)ses.getAttribute("LoginType");
+			logger.info(new Date() +"Inside SidebarModuleList.htm "+UserId);	
+			Gson json = new Gson();
+			List<Object[]> FormDetailList =null;
+			try {
+				
+				String Formmoduleid = req.getParameter("formmoduleid");
+				FormDetailList = service.HeaderSchedulesList(Formmoduleid ,logintype);
+				
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		
+			return json.toJson(FormDetailList);
+			
+		}
+		
 		
 	    @RequestMapping(value = "FormRoleActive.htm", method = RequestMethod.GET)
 		public @ResponseBody String FormRoleActive(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception 

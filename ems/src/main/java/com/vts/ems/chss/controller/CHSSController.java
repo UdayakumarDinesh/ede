@@ -24,7 +24,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -127,7 +126,6 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
-			System.out.println(EmpId+" "+PatientId+" "+FromDate+" "+ToDate+" "+IsSelf);
 			req.setAttribute("Fromdate", FromDate );
 			req.setAttribute("Todate", ToDate );
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
@@ -1397,6 +1395,7 @@ public class CHSSController {
 	public String CHSSForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSForm.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -1419,7 +1418,7 @@ public class CHSSController {
 			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			req.setAttribute("show-edit", req.getParameter("show-edit"));
-			
+			req.setAttribute("logintype", LoginType);
 			req.setAttribute("onlyview", "Y");
 			
 			return "chss/CHSSFormEdit";
@@ -1503,14 +1502,13 @@ public class CHSSController {
 	}
 	
 	
-	
 	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
 	{
 		File pdffile = new File(pdffilepath);
 		File tofile = new File(newfilepath);
 		
 		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
-		    PdfFont helvetica = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
 		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
 		        PdfPage page = doc.getPage(pageNum);
 		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
@@ -1520,7 +1518,7 @@ public class CHSSController {
 		        canvas = new PdfCanvas(page);
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
-		        try (Canvas canvas2 = new Canvas(canvas, doc, page.getPageSize())) {
+		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
 		            double rotationDeg = 50d;
 		            double rotationRad = Math.toRadians(rotationDeg);
 		            Paragraph watermark = new Paragraph("STARC")
@@ -1754,6 +1752,7 @@ public class CHSSController {
 			req.setAttribute("isapproval", isapproval);
 			req.setAttribute("show-edit", showedit);
 			req.setAttribute("logintype", LoginType);
+			
 			return "chss/CHSSFormEdit";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2664,7 +2663,7 @@ public class CHSSController {
 					todate=String.valueOf(today.getYear()+1);
 				}
 				fromdate +="-04-01"; 
-				todate +="-03-01";
+				todate +="-03-31";
 				empid="0";
 			}else
 			{
@@ -2685,4 +2684,53 @@ public class CHSSController {
 		}
 		
 	}
+	
+	
+	@RequestMapping(value ="ClaimsReport.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String ClaimsReport(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimsReport.htm "+Username);
+		try {
+			String fromdate = (String)req.getParameter("fromdate");
+			String todate = (String) req.getParameter("todate");
+			String empid = (String)req.getParameter("empid");
+			LocalDate today = LocalDate.now();
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+				}
+				else
+				{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-31";
+				empid="0";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("empid", empid);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("emplist", service.EmployeesList());
+			req.setAttribute("claimslist", service.GetClaimsReport(fromdate , todate , empid));
+			return "chss/CHSSClaimsReport";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimsReport.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	
 }

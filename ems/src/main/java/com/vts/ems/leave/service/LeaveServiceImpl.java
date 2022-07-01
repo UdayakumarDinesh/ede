@@ -3,6 +3,7 @@ package com.vts.ems.leave.service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class LeaveServiceImpl implements LeaveService{
 				}
 				register.setEL(Integer.parseInt(obj[4].toString()));
 				register.setHPL(Integer.parseInt(obj[5].toString()));
-				register.setCML(Integer.parseInt(obj[6].toString()));
+				register.setCML(0);
 				register.setRH(Integer.parseInt(obj[7].toString()));
 				register.setEL_LAPSE(0);
 				register.setML(0);
@@ -164,15 +165,16 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public String[] LeaveCheck(LeaveApplyDto dto) throws Exception {
-		String[] Result=new String[3]; 
+		String[] Result=new String[5]; 
 		LabMaster lab=dao.getLabDetails().get(0);
 		LeaveRegister register=CheckRegister(dto.getEmpNo());
 		long days=0;
+		long dayslast =0;
+		long daysfirst =0;
 		Date startDate=sdf.getRegularDateFormat().parse(dto.getFromDate());
 		Date endDate=sdf.getRegularDateFormat().parse(dto.getToDate());
 		LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		System.out.println(sdf.getSqlDateFormatLocalDate().format(end));
 		  if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(end), "G")>0||dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(start), "G")>0) {
 			Result[0]="From/To date should be on working day!";
 			Result[1]="Fail";
@@ -192,10 +194,12 @@ public class LeaveServiceImpl implements LeaveService{
 	
 		
 		if(!lab.getLabCode().equalsIgnoreCase("STARC")) {
+			//Leave Check for CL
 		   if(dto.getLeaveType().equalsIgnoreCase("0001")) {
 				
 				
 				int rhcount=0;
+				//Leave Check for previous date
 				for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
 					
 					if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
@@ -246,10 +250,13 @@ public class LeaveServiceImpl implements LeaveService{
 					}
 					
 				}
-				
-
-				
-				for (LocalDate date = start; date.isBefore(end)|| date.isEqual(end) ; date = date.plusDays(1)) {
+				//Leave Check for year split
+				if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+					LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+					LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+					
+					//Leave Check for applied  date in this yaer
+				for (LocalDate date = start; date.isBefore(lastdate)|| date.isEqual(lastdate) ; date = date.plusDays(1)) {
 				    if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
 					       
 						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
@@ -261,14 +268,16 @@ public class LeaveServiceImpl implements LeaveService{
 	               				Result[1]="Fail";
 	               				return Result;
 			                  }
-							 days++;
+							dayslast++;
+							days++;
 						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
 							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
 								Result[0]="Leave Already Exist";
 	               				Result[1]="Fail";
 	               				return Result;
 			                 }
-							 days++;
+							dayslast++;
+							days++;
 						}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {      
 						}else {
 							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
@@ -276,12 +285,86 @@ public class LeaveServiceImpl implements LeaveService{
 	               				Result[1]="Fail";
 	               				return Result;
 				            }else {
+				            	dayslast++;
+				            	days++;
+				            	 
+				            }
+						}
+				}
+				//Leave Check for applied next year
+				for (LocalDate date = firstdate; date.isBefore(end)|| date.isEqual(end) ; date = date.plusDays(1)) {
+				    if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+					       
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+							
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+			                  
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(firstdate), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								Result[0]="Leave Already Exist";
+	               				Result[1]="Fail";
+	               				return Result;
+			                  }
+							daysfirst++;
+							days++;
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(firstdate), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								Result[0]="Leave Already Exist";
+	               				Result[1]="Fail";
+	               				return Result;
+			                 }
+							daysfirst++;
+							days++;
+						}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {      
+						}else {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(firstdate), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								Result[0]="Leave Already Exist";
+	               				Result[1]="Fail";
+	               				return Result;
+				            }else {
+				            	daysfirst++;
 				            	days++;
 				            	 
 				            }
 						}
 				}
 				
+				}else {
+					//Leave Check for no year split case
+					for (LocalDate date = start; date.isBefore(end)|| date.isEqual(end) ; date = date.plusDays(1)) {
+					    if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+						       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="Leave Already Exist";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }
+								 days++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="Leave Already Exist";
+		               				Result[1]="Fail";
+		               				return Result;
+				                 }
+								 days++;
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {      
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="Leave Already Exist";
+		               				Result[1]="Fail";
+		               				return Result;
+					            }else {
+					            	days++;
+					            	 
+					            }
+							}
+					}
+					
+				}
+				//Leave Check for post date
 				for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
 					   
 					if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
@@ -337,6 +420,8 @@ public class LeaveServiceImpl implements LeaveService{
 				   Result[0]="You can Apply CL";
       				Result[1]="Pass";
       				Result[2]=String.valueOf(dto.getHalfOrFull().equalsIgnoreCase("X")?(double)days:(double)days/2);
+      				Result[3]=String.valueOf(dayslast);
+      				Result[4]=String.valueOf(daysfirst);
       				return Result;
 			   }else {
 				   Result[0]="Insufficient Balance";
@@ -345,88 +430,140 @@ public class LeaveServiceImpl implements LeaveService{
 			   }
 			   
 		   }else if(dto.getLeaveType().equalsIgnoreCase("0002")&&register.getEL()>=days) {
-				
+			 //Leave Check for EL
 				
 				long holidayCount=0;
+				//Leave Check for pre date
 				for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
 					
 					if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
-				       holidayCount++;
-					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
 						holidayCount++;
+					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+						holidayCount++;	
 					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
 		                  
 						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-		                	 break; 
+							Result[0]="EL Cannot Be Clubbed With  RH";
+               				Result[1]="Fail";
+               				return Result;
+							
+		                  }else {
+		                	  holidayCount=0;
+		                	  break;
+		                	  	
 		                  }
+						
 					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
 						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-		               	 break; 
+		               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+		               	          break;
+		               	    }else {
+		               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+			               	    	break;
+			               	    }else {
+			               	    	Result[0]="EL Cannot Be Clubbed With  CL";
+		               				Result[1]="Fail";
+		               				return Result;
+			               	    }
+		               	    }
+							
+		                 }else {
+		                	  holidayCount=0;
+		                	  break;
 		                 }
-					}else if(date.getDayOfWeek().equals("SATURDAY")||date.getDayOfWeek().equals("SUNDAY")) {
+					}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
 						holidayCount++;
 					}else {
 						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-			               	 break; 
-			            }else {
-			            	holidayCount=0;
-			            	 break;
-			            	 
-			            }
+							 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+		               	          break;
+		               	    }else {
+		               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+			               	    	break;
+			               	    }else {
+			               	    	Result[0]="EL Cannot Be Clubbed With  CL";
+		               				Result[1]="Fail";
+		               				return Result;
+			               	    }
+		               	    }
+							
+							
+		                 }else {
+		                	 holidayCount=0;
+		                	  break; 
+		                 }
 					}
 					
 				}
-				
+				List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+				//Leave Check for applied date
+				if(list!=null&&list.size()>0) {
+                       
+					Result[0]="Already Leave Exist";
+       				Result[1]="Fail";
+       				return Result;
+				}else{
+					//Leave Check for split year
+					if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+						LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+						LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+						dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+						daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+						Result[2]=String.valueOf(dayslast+daysfirst);
+	      				Result[3]=String.valueOf(dayslast);
+	      				Result[4]=String.valueOf(daysfirst);
+						
+					}else {
+						days= ChronoUnit.DAYS.between(start, end)+1;
 
+					}
 				
-				for (LocalDate date = start; date.isBefore(end)|| date.isEqual(end) ; date = date.plusDays(1)) {
-				   
-				    if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
-					       if(!"0001".equalsIgnoreCase(dto.getLeaveType())) {
-					    	   days++;
-					       }
-						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
-							if(!"0001".equalsIgnoreCase(dto.getLeaveType())) {
-						    	   days++;
-						       }
-						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
-			                  
-							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-								Result[0]="Leave Already Exist.";
-	               				Result[1]="Fail";
-	               				return Result;
-			                  }else if("0005".equalsIgnoreCase(dto.getLeaveType())) {
-						    	   days++;
-						       }else if(!"0005".equalsIgnoreCase(dto.getLeaveType())) {
-						    	   Result[0]="Its not RH Leave";
-		               				Result[1]="Fail";
-		               				return Result;  
-						       }
-						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
-							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-								Result[0]="Leave Already Exist";
-	               				Result[1]="Fail";
-	               				return Result;
-			                 }
-							 days++;
-						}else if(date.getDayOfWeek().equals("SATURDAY")||date.getDayOfWeek().equals("SUNDAY")) {
-							if(!"0001".equalsIgnoreCase(dto.getLeaveType())) {
-						    	   days++;
-						       }
-						}else {
-							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
-								Result[0]="Leave Already Exist.";
-	               				Result[1]="Fail";
-	               				return Result;
-				            }else {
-				            	days++;
-				            	 
-				            }
-						}
 				}
 				
+				//Leave Check for post date
 				for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
-					   
+					if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+					       
+					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+						
+					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+		                  
+						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+							Result[0]="You Should Modify Future Leave";
+               				Result[1]="Fail";
+               				return Result;
+		                  }else {
+		                	  break;
+		                  }
+					}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+		               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+		               	    	break;
+		               	    }else {
+		               	    	Result[0]="You Should Modify Future Leave";
+	               				Result[1]="Fail";
+	               				return Result;
+		               	    }
+							
+		                 }else {
+		                	 break; 
+		                 }
+					}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+						
+					}else {
+						if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+							 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+			               	    	break;
+			               	    }else {
+			               	    	Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+			               	    }
+							
+		                 }else {
+		                	 break; 
+		                 }
+					}   
 				   
 				}
 				Result[0]="You Can Apply EL";
@@ -456,8 +593,8 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	@Override
-	public LeaveRegister getRegister(String EmpNo) throws Exception {
-		List<Object[]> regiList=dao.getRegister(EmpNo);
+	public LeaveRegister getRegister(String EmpNo,String yr) throws Exception {
+		List<Object[]> regiList=dao.getRegister(EmpNo,yr);
 		double CL=0.0;
 		int EL=0;
 		int EL_LAPSE=0;
@@ -514,7 +651,7 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	public LeaveRegister CheckRegister(String EmpNo) throws Exception {
-		List<Object[]> regiList=dao.getRegister(EmpNo);
+		List<Object[]> regiList=dao.getRegister(EmpNo,sdf.getCurrentYear());
 		double CL=0.0;
 		int EL=0;
 		int EL_LAPSE=0;
@@ -575,12 +712,12 @@ public class LeaveServiceImpl implements LeaveService{
 		String [] leaveChecked=LeaveCheck(dto);
 		if(leaveChecked[1].equalsIgnoreCase("Pass")) {
 			LeaveAppl appl=new LeaveAppl();
-			long id=dao.getLeaveApplId(sdf.getYearFromRegularDate(dto.getFromDate()));
-				appl.setApplId(sdf.getYearFromRegularDate(dto.getFromDate())+"/"+id+1);
+			long id=dao.getLeaveApplId(sdf.getYearFromRegularDate(dto.getFromDate()))+1;
+				appl.setApplId(sdf.getYearFromRegularDate(dto.getFromDate())+"/"+id);
 				appl.setCreatedBy(dto.getUserId());
 				appl.setCreatedDate(sdf.getSqlDateAndTimeFormat().format(new Date()));
 				appl.setEmpId(dto.getEmpNo());
-				appl.setFnAn(dto.getAnFN());
+				appl.setFnAn(dto.getAnFN()!=null?dto.getAnFN():"X");
 				appl.setFromDate(sdf.dateConversionSql(dto.getFromDate()));
 				appl.setToDate(sdf.dateConversionSql(dto.getToDate()));
 				appl.setLeaveAddress(dto.getLeaveAddress());
@@ -594,54 +731,240 @@ public class LeaveServiceImpl implements LeaveService{
 				appl.setStatus("LAU");
 				appl.setDivId(dao.EmpDetails(dto.getEmpNo()).get(0)[3].toString());
 				if(dao.LeaveApplInsert(appl)>0) {
-					
-				 	
 					Date startDate=sdf.getRegularDateFormat().parse(dto.getFromDate());
 					Date endDate=sdf.getRegularDateFormat().parse(dto.getToDate());
+					  LeaveRegister register=new LeaveRegister();
+				      register.setEMPID(dto.getEmpNo());
+				      register.setCL(0);
+					  register.setEL(0);
+					  register.setHPL(0);
+					  register.setCML(0);
+					  register.setRH(0);
+					  register.setEL_LAPSE(0);
+					  register.setML(0);
+					  register.setPL(0);
+					  register.setSL(0);
+					  register.setCCL(0);
+					  register.setADV_EL(0);
+					  register.setADV_HPL(0);
+					  register.setEOL(0);
+					  register.setMONTH(sdf.getMonthValFullFromRegularDate(dto.getFromDate()));
+					  register.setYEAR(String.valueOf(sdf.getYearFromRegularDate(dto.getFromDate())));
+					  register.setSTATUS("LAU");
+					  register.setAPPL_ID(appl.getApplId());
+					  register.setCREDITED_BY("SYSTEM");
+					  register.setCREDITED_ON(sdf.getSqlDateAndTimeFormat().format(new Date()));
+					  register.setREMARKS("APPLIED");
+					  register.setFROM_DATE(sdf.getSqlDateFormat().format(startDate));
+					  register.setTO_DATE(sdf.getSqlDateFormat().format(endDate));			
+				 	
+					try {
 					LocalDate start =LocalDate.parse(sdf.getSqlDateFormat().format(startDate));
 					LocalDate end =LocalDate.parse(sdf.getSqlDateFormat().format(endDate));
 					if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
 						LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
 						LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
-						long dayslast = ChronoUnit.DAYS.between(start, lastdate)+1;
-						long daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
-
+						long dayslast =Long.parseLong(leaveChecked[3]);
+						long daysfirst =Long.parseLong(leaveChecked[4]);		
+						//long dayslast = ChronoUnit.DAYS.between(start, lastdate)+1;
+						//long daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+                        if(dayslast>0) {
+                        	if("0001".equals(dto.getLeaveType())) {
+                          	  register.setCL((double)dayslast);
+                            }else  if("0002".equals(dto.getLeaveType())) {
+                          	  register.setEL((int)dayslast);
+                            }else  if("0003".equals(dto.getLeaveType())) {
+                          	  register.setCML((int)dayslast);
+                            }else  if("0004".equals(dto.getLeaveType())) {
+                          	  register.setHPL((int)dayslast);
+                            }else  if("0005".equals(dto.getLeaveType())) {
+                          	  register.setRH((int)dayslast);
+                            }else  if("0006".equals(dto.getLeaveType())) {
+                          	  register.setML((int)dayslast);
+                            }else  if("0007".equals(dto.getLeaveType())) {
+                          	  register.setCCL((int)dayslast);
+                            }else  if("0008".equals(dto.getLeaveType())) {
+                          	  register.setSL((int)dayslast);
+                            }else  if("0009".equals(dto.getLeaveType())) {
+                          	  register.setEOL((int)dayslast);
+                            }else  if("0010".equals(dto.getLeaveType())) {
+                          	  register.setPL((int)dayslast);
+                            }else  if("0011".equals(dto.getLeaveType())) {
+                          	  register.setEL((int)dayslast);
+                            }
+                        	
+                        	register.setMONTH(sdf.getMonthValFullFromRegularDate(dto.getFromDate()));
+      					    register.setYEAR(String.valueOf(sdf.getYearFromRegularDate(dto.getFromDate())));
+      					    register.setFROM_DATE(sdf.getSqlDateFormat().format(startDate));
+    					    register.setTO_DATE(sdf.getSqlDateFormatLocalDate().format(lastdate));			
+    				 	 
+                        	 long result=dao.LeaveCreditInsert(register);
+                        }
+                        if(daysfirst>0) {
+                        	LeaveRegister registernew=new LeaveRegister();
+                        	registernew.setEMPID(dto.getEmpNo());
+                        	registernew.setCL(0);
+                        	registernew.setEL(0);
+                        	registernew.setHPL(0);
+                        	registernew.setCML(0);
+                        	registernew.setRH(0);
+                        	registernew.setEL_LAPSE(0);
+                        	registernew.setML(0);
+                        	registernew.setPL(0);
+                        	registernew.setSL(0);
+                        	registernew.setCCL(0);
+                        	registernew.setADV_EL(0);
+                        	registernew.setADV_HPL(0);
+                        	registernew.setEOL(0);
+                        	registernew.setSTATUS("LAU");
+                        	registernew.setAPPL_ID(appl.getApplId());
+                        	registernew.setCREDITED_BY("SYSTEM");
+                        	registernew.setCREDITED_ON(sdf.getSqlDateAndTimeFormat().format(new Date()));
+                        	registernew.setREMARKS("APPLIED");
+                        	if("0001".equals(dto.getLeaveType())) {
+                        		registernew.setCL((double)daysfirst);
+                              }else  if("0002".equals(dto.getLeaveType())) {
+                            	  registernew.setEL((int)daysfirst);
+                              }else  if("0003".equals(dto.getLeaveType())) {
+                            	  registernew.setCML((int)daysfirst);
+                              }else  if("0004".equals(dto.getLeaveType())) {
+                            	  registernew.setHPL((int)daysfirst);
+                              }else  if("0005".equals(dto.getLeaveType())) {
+                            	  registernew.setRH((int)daysfirst);
+                              }else  if("0006".equals(dto.getLeaveType())) {
+                            	  registernew.setML((int)daysfirst);
+                              }else  if("0007".equals(dto.getLeaveType())) {
+                            	  registernew.setCCL((int)daysfirst);
+                              }else  if("0008".equals(dto.getLeaveType())) {
+                            	  registernew.setSL((int)daysfirst);
+                              }else  if("0009".equals(dto.getLeaveType())) {
+                            	  registernew.setEOL((int)daysfirst);
+                              }else  if("0010".equals(dto.getLeaveType())) {
+                            	  registernew.setPL((int)daysfirst);
+                              }else  if("0011".equals(dto.getLeaveType())) {
+                            	  registernew.setEL((int)daysfirst);
+                              }
+                        	registernew.setMONTH(sdf.getMonthValFullFromRegularDate(dto.getToDate()));
+                        	registernew.setYEAR(String.valueOf(sdf.getYearFromRegularDate(dto.getToDate())));
+                        	registernew.setFROM_DATE(sdf.getSqlDateFormatLocalDate().format(firstdate));
+                        	registernew.setTO_DATE(sdf.getSqlDateFormat().format(endDate));
+                        	  long result=dao.LeaveCreditInsert(registernew);	
+                        }
 						
 						
 					}else {
-						LeaveRegister register=new LeaveRegister();
-					      register.setEMPID(dto.getEmpNo());
-					      register.setCL(0);
-						  register.setEL(0);
-						  register.setHPL(0);
-						  register.setCML(0);
-						  register.setRH(0);
-						  register.setEL_LAPSE(0);
-						  register.setML(0);
-						  register.setPL(0);
-						  register.setSL(0);
-						  register.setCCL(0);
-						  register.setADV_EL(0);
-						  register.setADV_HPL(0);
-						  register.setEOL(0);
-						  register.setMONTH(sdf.getMonthValFromRegularDate(dto.getFromDate()));
-						  register.setYEAR(String.valueOf(sdf.getYearFromRegularDate(dto.getFromDate())));
-						  register.setSTATUS("LAU");
-							register.setAPPL_ID(appl.getApplId());
-							register.setCREDITED_BY("SYSTEM");
-							register.setCREDITED_ON(sdf.getSqlDateAndTimeFormat().format(new Date()));
-							register.setREMARKS("APPLIED");
-						    register.setFROM_DATE(sdf.getSqlDateFormat().format(startDate));
-							register.setTO_DATE(sdf.getSqlDateFormat().format(endDate));
-							long result=dao.LeaveCreditInsert(register);
+                          if("0001".equals(dto.getLeaveType())) {
+                        	  register.setCL(Double.parseDouble(leaveChecked[2]));
+                          }else  if("0002".equals(dto.getLeaveType())) {
+                        	  register.setEL(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0003".equals(dto.getLeaveType())) {
+                        	  register.setCML(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0004".equals(dto.getLeaveType())) {
+                        	  register.setHPL((int)Math.round(Double.parseDouble(leaveChecked[2])));
+                          }else  if("0005".equals(dto.getLeaveType())) {
+                        	  register.setRH(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0006".equals(dto.getLeaveType())) {
+                        	  register.setML(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0007".equals(dto.getLeaveType())) {
+                        	  register.setCCL(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0008".equals(dto.getLeaveType())) {
+                        	  register.setSL(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0009".equals(dto.getLeaveType())) {
+                        	  register.setEOL(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0010".equals(dto.getLeaveType())) {
+                        	  register.setPL(Integer.parseInt(leaveChecked[2]));
+                          }else  if("0011".equals(dto.getLeaveType())) {
+                        	  register.setEL(Integer.parseInt(leaveChecked[2]));
+                          }
+						  long result=dao.LeaveCreditInsert(register);
 					}
 					
 					
 			
 			        LeaveTransaction transaction=new LeaveTransaction();
+			        transaction.setActionBy(dto.getActEmpNo());
+			        transaction.setActionDate(appl.getCreatedDate());
+			        transaction.setLeaveApplId(appl.getApplId());
+			        transaction.setLeaveStatus(appl.getStatus());
+			        transaction.setLeaveRemarks(appl.getRemarks());
+			        long trns=dao.LeaveTransInsert(transaction);
+			        leaveChecked[0]="Leave Applied Successfully";
+					}
+					catch (Exception e) {
+						 e.printStackTrace();
+				         leaveChecked[1]="Fail";
+				         leaveChecked[0]="Leave Apply unsuccessful, if added delete that leave please.";
+					}
+			        
 				}   
 		}
 		return leaveChecked;
 	}
+
+	@Override
+	public List<Object[]> getAppliedLeave(String EmpNo) throws Exception {
 	
+		return dao.getAppliedLeave(EmpNo);
 	}
+
+	@Override
+	public List<LeaveRegister> LeaveRegisterList(String EmpNo, String yr) throws Exception {
+		List<Object[]> regiList=dao.getRegisterByYear(EmpNo,yr);
+		List<LeaveRegister>  regiall=new ArrayList<LeaveRegister>();
+ 		if(regiList!=null&&regiList.size()>0) {
+		for(Object[] obj:regiList) {
+			if(!"LOB".equals(obj[14].toString())) {
+			LeaveRegister register=new LeaveRegister();
+			register.setSTATUS(obj[14].toString());
+			register.setTO_DATE(sdf.getRegularDateFormat().format(obj[17]));
+			register.setFROM_DATE(sdf.getRegularDateFormat().format(obj[16]));
+			register.setAPPL_ID(obj[18].toString());
+			register.setEMPID(EmpNo);
+	   		register.setCL(Double.parseDouble(obj[2].toString()));
+			register.setEL(Integer.parseInt(obj[3].toString()));
+			register.setHPL(Integer.parseInt(obj[4].toString()));
+			register.setCML(Integer.parseInt(obj[5].toString()));
+			register.setRH(Integer.parseInt(obj[6].toString()));
+			register.setCCL(Integer.parseInt(obj[7].toString()));
+			//register.setEOL(Integer.parseInt(obj[8].toString()));
+			register.setPL(Integer.parseInt(obj[10].toString()));
+			register.setML(Integer.parseInt(obj[9].toString()));
+			register.setSL(Integer.parseInt(obj[8].toString()));
+			regiall.add(register);
+			}
+		}
+		}
+		
+		return regiall;
+	}
+	
+	
+	@Override
+	public LeaveRegister RegisterOpening(String EmpNo, String yr) throws Exception {
+		LeaveRegister last=getRegister(EmpNo,String.valueOf(Integer.parseInt(yr)-1));
+		LeaveRegister opening=new LeaveRegister();
+		try {
+			opening=dao.getOpeningBalance(EmpNo, yr);
+		}catch (Exception e) {
+		}
+		LeaveRegister register=new LeaveRegister();
+		register.setEMPID(EmpNo);
+   		register.setCL(opening.getCL());
+		register.setEL(last.getEL()+opening.getEL());
+		register.setHPL(last.getHPL()+opening.getHPL());
+		register.setRH(opening.getRH());
+		register.setCCL(last.getCCL()+opening.getCCL());
+		register.setML(last.getML()+opening.getML());
+		register.setPL(last.getPL()+opening.getPL());
+		register.setEOL(last.getEOL()+opening.getEOL());
+		register.setSL(last.getSL()+opening.getSL());
+		
+		return register;
+	}
+
+	@Override
+	public Object[] getEmployee(String empno) throws Exception {
+		
+		return dao.getEmployee(empno);
+	}
+}
