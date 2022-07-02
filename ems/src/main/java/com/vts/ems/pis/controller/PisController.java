@@ -119,6 +119,7 @@ public class PisController {
 			List<Object[]> EmployeeDetailsList =new ArrayList<Object[]>();
 			EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);				
 			req.setAttribute("EmployeeDetailsList", EmployeeDetailsList);
+			ses.setAttribute("SidebarActive","PisAdminEmpList_htm");
 			return "pis/EmployeeList";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside PisAdminEmpList.htm "+Username, e);
@@ -184,7 +185,6 @@ public class PisController {
 			req.setAttribute("piscaderlist", service.PisCaderList());
 			req.setAttribute("empstatuslist", service.EmpStatusList());
 			req.setAttribute("paylevellist", service.PayLevelList());	
-			
 			req.setAttribute("divisionlist", service.DivisionList());			
 			return "pis/EmployeeAdd";
 		}catch (Exception e) {
@@ -607,6 +607,8 @@ public class PisController {
 				loginmaster = service.LoginMasterList();
 						
 			req.setAttribute("loginmaster", loginmaster);
+			ses.setAttribute("SidebarActive","LoginMaster_htm");
+			
 			return "pis/LoginMaster";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside LoginMasters.htm "+Username, e);

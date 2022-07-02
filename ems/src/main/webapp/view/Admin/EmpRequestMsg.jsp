@@ -12,7 +12,12 @@
 <body>
 <%
 List<Object[]> Reqlist = (List<Object[]>)request.getAttribute("msglist");
+String LoginType = (String) session.getAttribute("LoginType");	
 %>
+
+<%if(LoginType.equalsIgnoreCase("A")){ %>
+<jsp:include page="../static/sidebar.jsp"></jsp:include> 
+ <%} %>
 
 <div class="col page card">
 	<div class="card-header page-top">

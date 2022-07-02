@@ -8,7 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>Address List</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 .card{
     margin-bottom: 10px;

@@ -29,20 +29,12 @@ body,html {
 	width: 100% !important ;
 }
 
-.page
+/* .page
 {
 	padding: 0px;
 	
-}
+} */
 
-.page-top{
-	
-	height : 3rem;
-	border-bottom: none;
-	margin: 5px 12px;
-    background-color: #e9ecef;
-	
-}
 
 .card-header h5{
 	font-weight: 800;
@@ -105,7 +97,7 @@ hr{
 
 
 .dashboard-margin{
-	margin: 0px 20px !important;
+	margin: 0px 2px !important;
 }
 
 #myTable , #myTable1
@@ -113,11 +105,7 @@ hr{
 	max-width: 100% !important;	
 }
 
-.dashboard-card{
-	border: none;
-    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
-    margin: 20px;
-}
+
 
 .table thead tr{
 	background-color: #0e6fb6;
@@ -128,12 +116,6 @@ hr{
     padding: 0.5rem !important;
 }
 
-
-.page-top
-{
-	margin: 0px 0px -5px 0px;
-}
-
 .main-card
 {
 	padding-top: 0px;
@@ -142,4 +124,34 @@ hr{
 
 .dashboard-container{
 	margin-top: 1rem;
+}
+
+/* old */
+
+
+/* .page-top
+{
+	margin: 0px 0px -5px 0px;
+} */
+
+/* .dashboard-card{
+	border: none;
+    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
+    margin: 20px;
+} */
+
+/*new  */
+
+.page-top {
+   margin: 7px 6px 6px 1px !important;
+    border-radius: 5px;
+    height : 3rem;
+	border-bottom: none;
+    background-color: #e9ecef;
+}
+
+.dashboard-card{
+	    margin: 7px 6px 6px 1px !important;
+	    border: none;
+    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
 }

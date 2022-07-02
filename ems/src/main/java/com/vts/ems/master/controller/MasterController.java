@@ -74,6 +74,7 @@ public class MasterController {
 			try {				
 				List<Object[]> otheritem = service.OtherItems(); 
 				req.setAttribute("itemlist", otheritem);
+				ses.setAttribute("SidebarActive","OtherItems_htm");
 	       }catch(Exception e){
 	    	   logger.error(new Date() +" Inside Otheritem.htm "+UserId, e);
 	    	   e.printStackTrace();
@@ -90,6 +91,7 @@ public class MasterController {
 			try {				 
 				List<Object[]> ChssTestMain = service.ChssTestSub(); 
 				req.setAttribute("ChssTestMain", ChssTestMain);
+				ses.setAttribute("SidebarActive", "TestSub_htm");
 	       }catch(Exception e){
 	    	   logger.error(new Date() +"Inside TestSub.htm "+UserId,e);
 	    	   e.printStackTrace();
@@ -309,7 +311,7 @@ public class MasterController {
 					req.setAttribute("treatment", treatment);
 					req.setAttribute("MedicineList", list);
 					req.setAttribute("treat", name);
-				}
+					ses.setAttribute("SidebarActive", "MedicineList_htm");				}
 			
 				return "masters/CHSSMedicineList";
 			} catch (Exception e) {
@@ -477,6 +479,7 @@ public class MasterController {
 				
 					List<Object[]> doctorlist = service.GetDoctorList();
 					req.setAttribute("doctorlist", doctorlist);
+					ses.setAttribute("SidebarActive", "DoctorsMaster_htm");
 					return "masters/CHSSDoctorsList";
 						
 			}catch(Exception e){
@@ -541,6 +544,7 @@ public class MasterController {
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			logger.info(new Date() +"Inside UnitMaster.htm "+UserId);
+			ses.setAttribute("SidebarActive", "UnitMaster_htm");
 			try {
 				String action =(String)req.getParameter("Action");
 			

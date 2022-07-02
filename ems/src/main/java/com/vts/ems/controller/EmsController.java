@@ -151,6 +151,7 @@ public class EmsController {
 			req.setAttribute("isself", IsSelf);
 			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			ses.setAttribute("SidebarActive","Home");
 			return "static/maindashboard";
     	}catch (Exception e) {
     		e.printStackTrace();

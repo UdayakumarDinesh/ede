@@ -9,6 +9,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
  #dis{
  text-align: center;
@@ -54,6 +55,10 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
  }   
  .appl{
  padding: 2px 6px 2px 6px;
+ }
+ 
+ .nav-link span{
+ 	font-weight: 100 !important;
  }
 </style>
 </head>

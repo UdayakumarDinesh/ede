@@ -9,6 +9,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
  #dis{
  text-align: center;
@@ -56,6 +57,9 @@ font-size: 13px; !important;
 .table th {
 text-align: center;
 }
+.nav-link span{
+ 	font-weight: 100 !important;
+ }
 
 </style>
 </head>

@@ -43,6 +43,7 @@ public class LeaveController {
 			if(yr==null)
 			yr=sdf.getCurrentYear();	
 		    req.setAttribute("HoliList", service.PisHolidayList(yr));
+		    ses.setAttribute("SidebarActive", "PisHolidayList_htm");
 	
 	    }
 	     catch (Exception e) {
@@ -67,7 +68,7 @@ public class LeaveController {
 		    req.setAttribute("EmpList", service.EmpList());
 		    req.setAttribute("month", month);
 		    req.setAttribute("year", yr);
-		    req.setAttribute("formmoduleid", "5");
+		    ses.setAttribute("SidebarActive", "LeaveCredit_htm");
 	
 	    }
 	     catch (Exception e) {
@@ -162,6 +163,7 @@ public class LeaveController {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside LeaveApply.htm "+UserId);		
 		try { 
+			 ses.setAttribute("SidebarActive", "LeaveApply_htm");
 			 String EmpNo=req.getParameter("EmpNo");
 			 if(EmpNo==null) {
 				 EmpNo=(String)ses.getAttribute("EmpNo");
@@ -174,6 +176,7 @@ public class LeaveController {
 			 req.setAttribute("purposeList", service.purposeList());
 			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
 			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
+			
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -362,6 +365,7 @@ public class LeaveController {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside LeaveRegister.htm"+UserId);		
 		try {
+			ses.setAttribute("SidebarActive", "LeaveRegister_htm");
 			String empNo=req.getParameter("empNo");
 			String yr=req.getParameter("Year");
 			if(yr==null) {
@@ -374,6 +378,7 @@ public class LeaveController {
 		    req.setAttribute("empNo", empNo);
 		    req.setAttribute("year", yr);
 		    req.setAttribute("empDetails", service.getEmployee(empNo));
+		    
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveRegister.htm"+UserId, e);

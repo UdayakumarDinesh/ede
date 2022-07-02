@@ -68,6 +68,10 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	String LoginType = (String) session.getAttribute("LoginType");
 %>
  
+ <%if(LoginType.equalsIgnoreCase("A")){ %>
+<jsp:include page="../static/sidebar.jsp"></jsp:include> 
+ <%} %>
+ 
   <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">

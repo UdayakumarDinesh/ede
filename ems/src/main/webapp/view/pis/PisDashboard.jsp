@@ -5,10 +5,11 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 <body>
 <%List<Object[]> list = (List<Object[]>)request.getAttribute("dashboard"); %>
- <div class="col page">
+
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
@@ -44,9 +45,12 @@
 		</div>
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<div class="card dashboard-card" >
-				<div class="card-body " >
-					<div class="row" > 
+			<div class="page card dashboard-card" >
+				<div class="card-body " align="center">
+				
+						<h3>Admin Dashboard Details</h3>
+				
+					<%-- <div class="row" > 
 						<!-- <div class="col-md-3">
 							<button type="submit" class=" db-button w-100" formaction="PisAdminEmpList.htm" >Employee Details</button>
 						</div>
@@ -65,7 +69,7 @@
 						</div>
 						
 						<%}}%>
-					</div>
+					</div> --%>
 				</div>
 			</div>		
 		</form>
@@ -73,7 +77,6 @@
 	
 	
 
- </div>
 
 </body>
 </html>

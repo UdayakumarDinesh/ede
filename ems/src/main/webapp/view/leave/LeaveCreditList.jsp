@@ -47,7 +47,12 @@
 }
 
 .page-top {
-    margin: 4px 18px -10px 20px !important;
+   margin: 7px 6px 6px 1px !important;
+    border-radius: 5px;
+}
+
+.dashboard-card{
+	    margin: 7px 6px 6px 1px !important;
 }
 
 </style>
@@ -106,13 +111,13 @@ String ses=(String)request.getParameter("result");
     </div>
     </div>
     <div class="col-md-1">
-    <div class="group-form">
- 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-    <input class="form-control  form-control" type="text" id="year"  value="<%=year %>" name="Year">
+	    <div class="group-form">
+		 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+		    <input class="form-control  form-control" type="text" id="year"  value="<%=year %>" name="Year">
+	    </div>
     </div>
-    </div>
-    <div class="col-md-1">
-    <input type="submit" value="Submit" class="btn btn-success btn-sm" style="margin-top: 3px;">
+    <div class="col-md-	1">
+    	<input type="submit" value="SUBMIT" class="btn btn-success btn-sm" style="margin-top: 3px;">
     </div>
     </div>
     

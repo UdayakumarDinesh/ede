@@ -27,7 +27,7 @@ $(document).ready(function() {
 	
 
 	var windowheight= $(window).height(); 
-	$('.dashboard-card').css('min-height',(windowheight - 140) +'px'  );
+	$('.dashboard-card').css('min-height',(windowheight - 130) +'px'  );
 	$('.sidebar-container').css('min-height',(windowheight - 75) +'px'  );
 
 
