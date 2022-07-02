@@ -1,7 +1,6 @@
 package com.vts.ems.login;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +32,10 @@ public class LoginController
     
 	@Autowired
 	EMSMainService service;
+	
+	@Value("${ProjectFiles}")
+	private String projectfilespath;
+
 
 	 @RequestMapping(value = "/login", method = RequestMethod.GET)
 	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
@@ -66,7 +70,7 @@ public class LoginController
 	   			req.setAttribute("circularlist", circulatlist);
 	   			List<Object[]> 	circular = service.GetCircularList();
 	   			req.setAttribute("circular", circular);
-	   			String path = req.getServletContext().getRealPath("/manuals/" + "chss-policy.pdf");
+	   			String path = projectfilespath+ "/ProjectManuals/chss-policy.pdf";
 				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
 				req.setAttribute("Messege", "hello");
 				req.setAttribute("path", path);

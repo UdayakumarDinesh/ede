@@ -175,6 +175,8 @@ public class LeaveServiceImpl implements LeaveService{
 		Date endDate=sdf.getRegularDateFormat().parse(dto.getToDate());
 		LocalDate start = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		if(dto.getLeaveType().equalsIgnoreCase("0001")||dto.getLeaveType().equalsIgnoreCase("0005")) {
+
 		  if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(end), "G")>0||dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(start), "G")>0) {
 			Result[0]="From/To date should be on working day!";
 			Result[1]="Fail";
@@ -191,7 +193,9 @@ public class LeaveServiceImpl implements LeaveService{
 		    if(dto.getHandingOverEmpid()!=null&&!dto.getHandingOverEmpid().equalsIgnoreCase("NotSelected")) {
 				
 			}
-	
+			
+			}else {
+		     }
 		
 		if(!lab.getLabCode().equalsIgnoreCase("STARC")) {
 			//Leave Check for CL
@@ -966,5 +970,11 @@ public class LeaveServiceImpl implements LeaveService{
 	public Object[] getEmployee(String empno) throws Exception {
 		
 		return dao.getEmployee(empno);
+	}
+
+	@Override
+	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
+		
+		return dao.LeaveApprovalGh(empNo);
 	}
 }

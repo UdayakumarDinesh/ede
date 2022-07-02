@@ -54,7 +54,7 @@ function validateform(){
 		       return false;
 		}else if(internalnum.length<4){
 			
-			 alert("Check Internal Number!");
+			 alert("Check Extension Number!");
 		       event.preventDefault();
 		       return false;
 		}else if(empname==null || empname =="" || empname =="null"){
@@ -175,8 +175,15 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    <div class="form-group">
 			        <div class="row">
 	
-			
-			 <div class="col-md-2">
+						 <div class="col-md-2">
+			                <label>Gender<span class="mandatory">*</span></label>
+			                <select name="gender" class="form-control input-sm" required>
+			                    <option value="M" <%if(employee!=null && employee.getGender()!=null  && employee.getGender().equalsIgnoreCase("M")){ %>selected  <%} %> >Male</option>
+			                    <option value="F" <%if(employee!=null && employee.getGender()!=null  && employee.getGender().equalsIgnoreCase("F")){ %>selected  <%} %>>Female</option>
+			                </select>
+			            </div>
+			            
+			             <div class="col-md-2">
 						 	<label>DOB<span class="mandatory">*</span></label>
 							<div class=" input-group">
 							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOB()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOB().toString())%><%}%>" placeholder=""  id="dob" name="dob"  required="required"  > 
@@ -185,140 +192,8 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 							    </label>                    
 							</div>
 						 </div>
-		
-			        <%--     <div class="col-md-2">
-			                <label>DOA<span class="mandatory">*</span></label>
-			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOA()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOA().toString()) %><%}%>" placeholder=""  id="doa" name="doa"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
-							      
-							    </label>                    
-							</div>
-			            </div> --%>
-			
-			
-			            <div class="col-md-2">
-			                <label>DOJ<span class="mandatory">*</span></label>
-			                <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOJL().toString()) %><%}%>" placeholder=""  id="doj" name="doj"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
-							    </label>                    
-							</div>
-			            </div>
-
-			            <div class="col-md-2">
-			                <label>Gender<span class="mandatory">*</span></label>
-			                <select name="gender" class="form-control input-sm" required>
-			                    <option value="M" <%if(employee!=null && employee.getGender()!=null  && employee.getGender().equalsIgnoreCase("M")){ %>selected  <%} %> >Male</option>
-			                    <option value="F" <%if(employee!=null && employee.getGender()!=null  && employee.getGender().equalsIgnoreCase("F")){ %>selected  <%} %>>Female</option>
-			                </select>
-			            </div>
-	       
-			
-						<div class=" col-md-2 ">
-			                <label>Internal Email<span class=" mandatory ">*</span></label>
-			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
-			                  value="<%if(emp!=null && emp.getEmail()!=null){%><%=emp.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
-			                    onchange=" return trim(this) ">
-			            </div>
-			            
-			           <div class="col-md-2">
-			                <label>PAN<span class="mandatory">*</span></label>
-			                <input type="text" id="PAN" name="pan" style="text-transform:uppercase" value="<%if(employee!=null && employee.getPAN()!=null){%><%=employee.getPAN()%><%}%>" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
-			            </div>
-			
-			
-			            <div class="col-md-2">
-			                <label>UID<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="<%if(employee!=null){%><%=employee.getUID()%><%}%>" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
-			            </div>
-		
-			        </div>
-			    </div>
-			   
-			    <div class="form-group">
-			        <div class="row">
-			        
-						 <div class=" col-md-2 ">
-			                <label>Religion<span class=" mandatory ">*</span></label>
-			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			              
-			                    <option value="Christian" <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
-			                    <option value="Hindu"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
-			                    <option value="Islam"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
-			                    <option value="Jain"      <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Jain")){%>selected<%}%>>Jain </option>
-			                    <option value="Parsi"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Parsi")){%>selected<%}%>>Parsi </option>
-			                    <option value="Sikh"      <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Sikh")){%>selected<%}%>>Sikh</option>
-			                    <option value="Others"    <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Others")){%>selected<%}%>>Others</option>
-			
-			                </select>
-			            </div>
-			            
-
-						<div class=" col-md-2 ">
-			                <label>Service Status<span class=" mandatory ">*</span></label>
-			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
-			                    data-live-search=" true ">		
-			                    <option value=" Confirmed " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Confirmed")){%>selected<%}%>>Confirmed</option>
-			                    <option value=" Probation " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Probation")){%>selected<%}%>>Probation</option>
-			                    <option value=" Adhoc "     <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Adhoc"))    {%>selected<%}%>>Adhoc</option>
-			                    <option value=" Temporary " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Temporary")){%>selected<%}%>>Temporary</option>
-			                    <option value=" Contract "  <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Contract")) {%>selected<%}%>>Contract</option>
-			                </select>
-			            </div>
-			            
-			            <div class=" col-md-2 ">
-			                <label>Mobile No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="PhoneNo" <%if(employee!=null && employee.getPhoneNo()!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
-			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
-			                     onblur="checknegative(this) ">
-			            </div>
-			            
-			            <div class=" col-md-2 ">
-			                <label>SBI Account<span class=" mandatory ">*</span></label>
-			                <input type="text" id="SBITextBox" value="<%if(employee!=null && employee.getSBIAccNo()!=null ){%><%=employee.getSBIAccNo()%><%}%>" name="SBI" class=" form-control input-sm " required
-			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
-			            </div>
-			            
-						 <%-- <div class=" col-md-2 ">
-			                <label>PunchCard No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
-			                    class=" form-control input-sm " placeholder="Enter PunchCard " required="required"
-			                     onblur="checknegative(this)">
-			            </div> --%>
-
-                        <div class=" col-md-2 ">
-			                <label>PayLevel<span class=" mandatory ">*</span></label>
-			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
-								<%for( PisPayLevel paylevel: paylevellist){ %>
-									<option value="<%=paylevel.getPayLevelId()%>"  <%if(paylevel.getPayLevelId()==employee.getPayLevelId()){%>selected<%}%>><%=paylevel.getPayLevel()%></option>
-								<%} %>
-			
-			                </select>
-			            </div>
-			 			
-			 			<div class=" col-md-2 ">
-			                <label>Basic Pay<span class=" mandatory ">*</span></label>
-			                <input type="text" id="basicpaybox" 
-			                <%if(employee.getBasicPay()!=null ){ %>
-			                
-			                value="<%=employee.getBasicPay() %>" 
-			                <%}else{ %>
-			                
-			                 value="0" 
-			                <%} %>
-			                
-			                name="basicpay" class=" form-control input-sm " maxlength="12"
-			                    placeholder="Basic Pay" required="required">
-			            </div>
-			
-			        </div>
-			    </div>
-			
-			    <div class=" form-group ">
-			        <div class=" row ">
-
-     				<div class="col-md-2">
+						 
+						<div class="col-md-2">
 			                <label class="text-nowrap">Blood Group<span class="mandatory">*</span></label>
 			                <select name="bloodgroup" class="form-control input-sm select2" required data-live-search="true">
 			
@@ -333,43 +208,164 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                    <option value="NOT" <%if(employee!=null && employee.getBloodGroup()!=null && employee.getBloodGroup().equalsIgnoreCase("NOT")){%>selected<%}%>  >Not Available</option>
 			                </select>
 			            </div>
-			
-						
 			            
 			            <div class=" col-md-2 ">
-			                <label>Category<span class=" mandatory ">*</span></label>
+			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
+			                	<option value="U" <%if(employee!=null && employee.getMaritalStatus()!=null && employee.getMaritalStatus().equalsIgnoreCase("U")){%>selected<%}%>>UnMarried</option>
+								<option value="M" <%if(employee!=null && employee.getMaritalStatus()!=null && employee.getMaritalStatus().equalsIgnoreCase("M")){%>selected<%}%>>Married</option>									
+			                </select>			                
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>DOJ<span class="mandatory">*</span></label>
+			                <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%if(employee!=null&&employee.getDOJL()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOJL().toString()) %><%}%>" placeholder=""  id="doj" name="doj"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							    </label>                    
+							</div>
+			            </div>
+			            
+			             <div class=" col-md-2 ">
+			                <label> Home Town </label>
+			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value="<%if(employee!=null && employee.getHomeTown()!=null ){%><%=employee.getHomeTown()%><%} %>"
+			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " 
+			                    onclick=" Validate() ">
+			               </div>					
+		
+			        </div>
+			    </div>
+			   
+			    <div class="form-group">
+			        <div class="row">
+			        
+			         <div class=" col-md-2 ">
+			                <label>Mobile No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="PhoneNo" id="PhoneNo" <%if(employee!=null && employee.getPhoneNo()!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
+			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                     onblur="checknegative(this) ">
+			        </div>
+			        
+			        <div class=" col-md-2 ">
+			                <label>Extension Number<span class="mandatory">*</span></label>
+			                <input type="text" id="internalNo" name="internalNo" value="<%if(emp!=null && emp.getExtNo()!=null){%><%=emp.getExtNo()%><%}%>" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "
+			                    onkeypress=" return isNumber(event) " required="required">
+			         </div>
+			        
+			        <div class=" col-md-2 ">
+			                <label>Internal Email<span class=" mandatory ">*</span></label>
+			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
+			                  value="<%if(emp!=null && emp.getEmail()!=null){%><%=emp.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
+			                    onchange=" return trim(this) " >
+			       </div>
+			            				
+			            <div class="col-md-2">
+			                <label>AAdhar No<span class="mandatory">*</span></label>
+			                <input id="UIDTextBox" type="text" name="uid" value="<%if(employee!=null){%><%=employee.getUID()%><%}%>" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>PAN<span class="mandatory">*</span></label>
+			                <input type="text" id="PAN" name="pan" required="required" style="text-transform:uppercase" value="<%if(employee!=null && employee.getPAN()!=null){%><%=employee.getPAN()%><%}%>" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
+			            </div>
+			            
+                        <div class=" col-md-2 ">
+			                <label>UAN No</label>
+			                <input type="text"  name="UANNo" id="UANNo" value="<%if(employee!=null && employee.getUANNo()!=null){%><%=employee.getUANNo()%><%}%>" maxlength="12"
+			                    class=" form-control input-sm " placeholder="Enter UAN No " 
+			                     onblur="checknegative(this) ">
+			            </div>
+			        
+						 
+			
+			        </div>
+			    </div>
+ 
+			    <div class=" form-group ">
+			        <div class=" row ">
+						
+						 <div class=" col-md-2 ">
+			                <label>SBI Account<span class=" mandatory ">*</span></label>
+			                <input type="text" id="SBITextBox" value="<%if(employee!=null && employee.getSBIAccNo()!=null ){%><%=employee.getSBIAccNo()%><%}%>" name="SBI" class=" form-control input-sm " required
+			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
+			            </div>						
+						
+						<div class=" col-md-2 ">
+			                <label>PayLevel<span class=" mandatory ">*</span></label>
+			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true " required="required">
+								<%for( PisPayLevel paylevel: paylevellist){ %>
+									<option value="<%=paylevel.getPayLevelId()%>"  <%if(paylevel.getPayLevelId()==employee.getPayLevelId()){%>selected<%}%>><%=paylevel.getPayLevel()%></option>
+								<%} %>
+			
+			                </select>
+			            </div>
+			            
+			            <div class=" col-md-2 ">
+			                <label>Basic Pay<span class=" mandatory ">*</span></label>
+			                <input type="text" id="basicpaybox"  
+			                <%if(employee.getBasicPay()!=null ){ %>
+			                
+			                value="<%=employee.getBasicPay() %>" 
+			                <%}else{ %>
+			                
+			                 value="0" 
+			                <%} %>
+			                
+			                name="basicpay" class=" form-control input-sm " maxlength="12"
+			                    placeholder="Basic Pay" required="required">
+			            </div>
+			            
+			             <div class=" col-md-2 ">
+			                <label>GPF/PRAN:</label>
+			                <input type="text" name="gpf" value="<%if(employee!=null && employee.getGPFNo()!=null){%><%=employee.getGPFNo()%><%}%>" class=" form-control input-sm " maxlength=" 12 "
+			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
+			            </div>
+						
+						<div class=" col-md-2 ">
+			                <label>Service Status<span class=" mandatory ">*</span></label>
+			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
+			                    data-live-search=" true ">		
+			                    <option value=" Confirmed " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Confirmed")){%>selected<%}%>>Confirmed</option>
+			                    <option value=" Probation " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Probation")){%>selected<%}%>>Probation</option>
+			                    <option value=" Adhoc "     <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Adhoc"))    {%>selected<%}%>>Adhoc</option>
+			                    <option value=" Temporary " <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Temporary")){%>selected<%}%>>Temporary</option>
+			                    <option value=" Contract "  <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Contract")) {%>selected<%}%>>Contract</option>
+			                </select>
+			            </div>
+									            
+						<div class=" col-md-2 ">
+			                <label>Religion </label>
+			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
+			              
+			                    <option value="Christian" <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
+			                    <option value="Hindu"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
+			                    <option value="Islam"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
+			                    <option value="Jain"      <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Jain")){%>selected<%}%>>Jain </option>
+			                    <option value="Parsi"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Parsi")){%>selected<%}%>>Parsi </option>
+			                    <option value="Sikh"      <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Sikh")){%>selected<%}%>>Sikh</option>
+			                    <option value="Others"    <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Others")){%>selected<%}%>>Others</option>
+			
+			                </select>
+			            </div>
+			            
+					</div>
+				</div>
+			         
+			          <div class=" form-group ">
+			        <div class=" row ">
+
+			            
+			            <div class=" col-md-2 ">
+			                <label>Category </label>
 			                <select name="category" class=" form-control input-sm select2 " required data-live-search="true">
 								<%for( PisCategory category: piscategorylist){ %>
 									<option value="<%=category.getCategory_id()%>" <%if(category.getCategory_id()==employee.getCategoryId()){%> selected <%}%>><%=category.getCategory_desc()%></option>
 								<%} %>				
 			                </select>
 			            </div>
-			
-			
-			            <!-- <div class=" col-md-2 ">
-			                <label> Sub Category/Caste <span class=" mandatory ">*</span></label>
-			                <input type="text" id="subcategory1 " name="subcategory" value="" maxlength=" 20 "
-			                    class=" form-control input-sm " placeholder="Enter Sub Category ">
-			
-			            </div> -->
-			
-			               <div class=" col-md-2 ">
-			                <label>Home Town<span class=" mandatory ">*</span></label>
-			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value="<%if(employee!=null && employee.getHomeTown()!=null ){%><%=employee.getHomeTown()%><%} %>"
-			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
-			                    onclick=" Validate() ">
-			               </div>
-						
-						
-			            
-			            <div class=" col-md-2 ">
-			                <label>Extension Number<span class="mandatory"></span></label>
-			                <input type="text" id="internalNo" name="internalNo" value="<%if(emp!=null && emp.getExtNo()!=null){%><%=emp.getExtNo()%><%}%>" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "
-			                    onkeypress=" return isNumber(event) ">
-			            </div>
-			            
-			                        <div class="col-md-2">
+			            			            
+			             <div class="col-md-2">
 			                <label class="text-nowrap  ">Cadre Name<span class="mandatory">*</span></label>
 			                <select name="caderid" id="CadreId" class="form-control select2">
 								<%for( PisCadre cadre: piscaderlist){ %>
@@ -380,29 +376,12 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			            <div class="col-md-2">
 			                <label>CAT CLASS<span class="mandatory">*</span></label>
-			                <select name="catcode" class="form-control select2" required data-live-search="true">
+			                <select name="catcode" class="form-control select2"  data-live-search="true">
 								<%for( PisCatClass catclass: piscatclasslist){ %>
 									<option value="<%=catclass.getCat_id()%>"   <%if(employee.getCatId()!=null && employee.getCatId().equalsIgnoreCase(catclass.getCat_id()) ){ %>selected  <%} %>    ><%=catclass.getCat_name()%></option>
 								<%} %>
 			
 			                </select>
-			            </div>
-			
-			        </div>
-			    </div>
-					    
-			    
-			    
-			    <div class=" form-group ">
-			        <div class=" row ">
-
-						<div class="col-md-2">
-			                <label>Availed Govt Quarters</label>
-			                
-			                <select name="gq" class=" form-control input-sm select2 " >
-			                	<option value="N" <%if(employee!=null && employee.getQuarters()!=null  && employee.getQuarters().equalsIgnoreCase("N")){%>selected<%}%>>No</option>
-								<option value="Y" <%if(employee!=null && employee.getQuarters()!=null  && employee.getQuarters().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
-			                </select>	
 			            </div>
 			            
 			             <div class=" col-md-2 ">
@@ -415,105 +394,24 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 			            </div>
 			            
-			           
-			            
-			            
-			            <div class=" col-md-2 ">
-			                <label>Marital Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
-			                	<option value="U" <%if(employee!=null && employee.getMaritalStatus()!=null && employee.getMaritalStatus().equalsIgnoreCase("U")){%>selected<%}%>>UnMarried</option>
-								<option value="M" <%if(employee!=null && employee.getMaritalStatus()!=null && employee.getMaritalStatus().equalsIgnoreCase("M")){%>selected<%}%>>Married</option>									
-			                </select>			                
-			            </div>
-			            
-			            
-			            <!-- <div class=" col-md-2 ">
-			                <label>PIN DRONA:</label>
-			                <input type="text" name="drona" value="" class=" form-control input-sm " maxlength="10" placeholder="Enter DRONA " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div> -->
-			
-			
-			
-			            <div class=" col-md-2 ">
-			                <label>GPF/PRAN:</label>
-			                <input type="text" name="gpf" value="<%if(employee!=null && employee.getGPFNo()!=null){%><%=employee.getGPFNo()%><%}%>" class=" form-control input-sm " maxlength=" 12 "
-			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
-						
-						 <div class=" col-md-2 ">
-			                <label>UAN No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="UANNo" id="UANNo" value="<%if(emp!=null && emp.getUANNo()!=null){%><%=emp.getUANNo()%><%}%>" maxlength="12"
-			                    class=" form-control input-sm " placeholder="Enter UAN no " 
-			                     onblur="checknegative(this) ">
-			            </div>
-						
-			            <div class=" col-md-2 ">
+			            <div class=" col-md-4 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="<%if(employee!=null && employee.getIdMark()!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-			            
-					</div>
-				</div>
-			            
-			            
-			  <!--   <div class=" form-group ">
-			        <div class=" row "> -->
-			
-			
-			          
-			
-			           <%--  <div class=" col-md-2 ">
-			                <label>Emp Status<span class=" mandatory ">*</span></label>
-			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
-                   				<%for( EmpStatus status: empstatuslist){ %>
-								<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
-								<%} %>
-								
-								<option value="1">PRESENT</option>
-			
-			                </select>
-			            </div> --%>
-			
-			          <%--   <div class=" col-md-2 " id=" EmpHide ">
-			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
-			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="Enter EmpStatus Date ">
-			            </div> --%>
-			            
-			             <!-- <div class=" col-md-2 ">
-			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-			                
-			                 <select name="ExMan" class=" form-control input-sm select2 " >
-			                	<option value="N">No</option>
-								<option value="Y">Yes</option>	
-								
-			                </select>	
-			                
-			            </div>
-			
-			            <div class=" col-md-2 ">
-			                <label>Per Pass No</label>
-			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
-			                    placeholder="Enter Permanent Pass No">
-			            </div> -->
-			      <!--   </div>
-			    </div> -->
-			     <div class=" form-group ">
-			        <div class="row">
-			        
-			    
 			
 			        </div>
-    			</div>
+			    </div>   
 
-			    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-					<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
-					<input type="hidden" value="<%=employee.getEmpDetailsId()%>" name="empdetailsid">
-					<button type="submit" class="btn btn-sm submit-btn" name="action"  value="submit"  Onclick="return validateform();" >SUBMIT</button>
+						<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
+						<input type="hidden" value="<%=employee.getEmpDetailsId()%>" name="empdetailsid">
+						<button type="submit" class="btn btn-sm submit-btn" name="action"  value="submit"  Onclick="return validateform();" >SUBMIT</button>
 			    	</div>
 			    </div> 
+
+			    
 					<!--------------------------- container ------------------------->
 					<div class="container">
 					

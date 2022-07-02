@@ -387,5 +387,18 @@ public class LeaveController {
 
 	}
 	
-	
+	@RequestMapping(value = "LeaveApproval.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveApproval(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside GhApprovalList.htm"+UserId);		
+		try {
+			String empNo=empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside GhApprovalList.htm"+UserId, e);
+	       }
+	   return "leave/LeaveGhApproval";
+
+	}
 }

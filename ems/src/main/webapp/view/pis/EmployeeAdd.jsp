@@ -42,7 +42,7 @@ function validateform(){
 		       return false;
 		}
 		if(internalnum.length<4){
-			 alert("Check Internal Number!");
+			 alert("Check Extension Number!");
 		       event.preventDefault();
 		       return false;
 		}
@@ -148,6 +148,13 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    <div class="form-group">
 			        <div class="row">
 			
+			           <div class="col-md-2">
+			                <label>Gender<span class="mandatory">*</span></label>
+			                <select name="gender" class="form-control input-sm" required>
+			                    <option value="M">Male</option>
+			                    <option value="F">Female</option>
+			                </select>
+			            </div>
 			
 						 <div class="col-md-2">
 						 	<label>DOB<span class="mandatory">*</span></label>
@@ -159,121 +166,6 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</div>
 						 </div>
 		
-			          <%--   <div class="col-md-2">
-			                <label>DOA<span class="mandatory">*</span></label>
-			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doa" name="doa"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
-							      
-							    </label>                    
-							</div>
-			            </div> --%>
-			
-			
-			            <div class="col-md-2">
-			                <label>DOJ<span class="mandatory">*</span></label>
-			                <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doj" name="doj"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
-							    </label>                    
-							</div>
-			            </div>
-			
-			            <div class="col-md-2">
-			                <label>Gender<span class="mandatory">*</span></label>
-			                <select name="gender" class="form-control input-sm" required>
-			                    <option value="M">Male</option>
-			                    <option value="F">Female</option>
-			                </select>
-			            </div>
-				
-						<div class=" col-md-2 ">
-			                <label>Internal Email<span class=" mandatory ">*</span></label>
-			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder="Enter Internal Email " required="required" onclick=" return trim(this)"
-			                    onchange="return trim(this) ">
-			            </div>
-			            
-			            <div class="col-md-2">
-			                <label>PAN<span class="mandatory">*</span></label>
-			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
-			            </div>
-			
-			
-			            <div class="col-md-2">
-			                <label>UID<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
-			            </div>
-			
-			
-			        </div>
-			    </div>
-			   
-			    <div class="form-group">
-			        <div class="row">
-        
-						 <div class=" col-md-2 ">
-			                <label>Religion<span class=" mandatory ">*</span></label>
-			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
-			                    <option value="Christian">Christian</option>
-			                    <option value="Hindu">Hindu</option>
-			                    <option value="Islam">Islam</option>
-			                    <option value="Jain">Jain</option>
-			                    <option value="Parsi">Parsi </option>
-			                    <option value="Sikh">Sikh</option>
-			                    <option value="Others">Others</option>
-			
-			                </select>
-			            </div>
-		
-						<div class="col-md-2">
-			                <label>Service Status<span class=" mandatory ">*</span></label>
-			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
-			                    data-live-search=" true ">
-			
-			                    <option value="Confirmed"> Confirmed</option>
-			                    <option value="Probation"> Probation</option>
-			                    <option value="Adhoc">     Adhoc</option>
-			                    <option value="Temporary"> Temporary</option>
-			                    <option value="Contract">  Contract</option>
-			                </select>
-			            </div>
-			            
-						 <div class=" col-md-2 ">
-			                <label>Mobile No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
-			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
-			                     onblur="checknegative(this) ">
-			            </div>
-			            
-			            <div class=" col-md-2 ">
-			                <label>SBI Account<span class=" mandatory ">*</span></label>
-			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
-			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
-			            </div>
-			            
-			            	<div class="col-md-2">
-			                <label>PayLevel<span class=" mandatory ">*</span></label>
-			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
-								<%for( PisPayLevel paylevel: paylevellist){ %>
-									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
-								<%} %>
-			
-			                </select>
-			            </div>
-			 			
-			 			<div class=" col-md-2 ">
-			                <label>Basic Pay<span class=" mandatory ">*</span></label>
-			                <input type="text" id="basicpaybox" value="" name="basicpay" class=" form-control input-sm " maxlength="12"
-			                    placeholder="Basic Pay" required="required">
-			            </div>
-		
-			        </div>
-			    </div>
-			
-			    <div class="form-group">
-			        <div class="row">
-		           
 			          <div class="col-md-2">
 			                <label class="text-nowrap">Blood Group<span class="mandatory">*</span></label>
 			                <select name="bloodgroup" class="form-control input-sm select2" required data-live-search="true">
@@ -288,31 +180,152 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    <option value="O+">O+</option>
 			                    <option value="NOT">Not Available</option>
 			                </select>
-			            </div>	 			
+			            </div>
+			
+			 		  <div class=" col-md-2 ">
+			                <label>Marital Status </label>
+			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
+			                	<option value="U">UnMarried</option>
+								<option value="M">Married</option>									
+			                </select>			                
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>DOJ<span class="mandatory">*</span></label>
+			                <div class=" input-group">
+							    <input type="text" class="form-control input-sm mydate" readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="doj" name="doj"  required="required"  > 
+							    <label class="input-group-addon btn" for="testdate">
+							    </label>                    
+							</div>
+			            </div>
+					          
+						<div class=" col-md-2 ">
+			                <label>Home Town </label>
+			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
+			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " 
+			                    onclick=" Validate() ">
+			            </div>
+			            
+			            
+			          </div>
+			        </div>
+			   
+			    <div class="form-group">
+			        <div class="row">
+			            
+			             <div class=" col-md-2 ">
+			                <label>Mobile No<span class=" mandatory ">*</span></label>
+			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
+			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                     onblur="checknegative(this) ">
+			              </div>
+			            
+			              <div class=" col-md-2 ">
+			                <label>Extension number<span class="mandatory">*</span></label>
+			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
+			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "   id="InternalNum"
+			                    onkeypress=" return isNumber(event) " required="required">
+			             </div>
+			            
+						<div class=" col-md-2 ">
+			                <label>Internal Email<span class=" mandatory ">*</span></label>
+			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
+			                    placeholder="Enter Internal Email " required="required" onclick=" return trim(this)"
+			                    onchange="return trim(this) ">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>AAdhanr No<span class="mandatory">*</span></label>
+			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>PAN<span class="mandatory">*</span></label>
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
+			            </div>
+        
+                        <div class=" col-md-2 ">
+			                <label>UAN No</label>
+			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
+			                    class=" form-control input-sm " placeholder="Enter UAN No "    onblur="checknegative(this) ">
+			            </div>
+			            
+			     </div>
+			    </div>
+			
+			    <div class="form-group">
+			        <div class="row">
+			        
+			           <div class=" col-md-2 ">
+			                <label>SBI Account<span class=" mandatory ">*</span></label>
+			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
+			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>PayLevel<span class=" mandatory ">*</span></label>
+			                <select name="payLevel" class=" form-control input-sm select2 " data-live-search=" true ">
+								<%for( PisPayLevel paylevel: paylevellist){ %>
+									<option value="<%=paylevel.getPayLevelId() %>"><%=paylevel.getPayLevel()%></option>
+								<%} %>
+			
+			                </select>
+			            </div>
 			            
 			            <div class=" col-md-2 ">
-			                <label>Category<span class=" mandatory ">*</span></label>
-			                <select name="category" class=" form-control input-sm select2 " required data-live-search="true">
+			                <label>Basic Pay<span class=" mandatory ">*</span></label>
+			                <input type="text" id="basicpaybox" value="" name="basicpay" class=" form-control input-sm " maxlength="12"
+			                    placeholder="Basic Pay" required="required">
+			            </div>
+			            
+			             <div class=" col-md-2 ">
+			                <label>GPF/PRAN</label>
+			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
+			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>Service Status<span class=" mandatory ">*</span></label>
+			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
+			                    data-live-search=" true ">
+			
+			                    <option value="Confirmed"> Confirmed</option>
+			                    <option value="Probation"> Probation</option>
+			                    <option value="Adhoc">     Adhoc</option>
+			                    <option value="Temporary"> Temporary</option>
+			                    <option value="Contract">  Contract</option>
+			                </select>
+			            </div>
+			            
+						 <div class=" col-md-2 ">
+			                <label>Religion</label>
+			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
+			                    <option value="Christian">Christian</option>
+			                    <option value="Hindu">Hindu</option>
+			                    <option value="Islam">Islam</option>
+			                    <option value="Jain">Jain</option>
+			                    <option value="Parsi">Parsi </option>
+			                    <option value="Sikh">Sikh</option>
+			                    <option value="Others">Others</option>
+			
+			                </select>
+			            </div>			            
+			
+			        </div>
+			    </div>
+			    
+				    <div class=" form-group ">
+				        <div class="row">
+    
+    					<div class=" col-md-2 ">
+			                <label>Category</label>
+			                <select name="category" class=" form-control input-sm select2 "  data-live-search="true">
 								<%for( PisCategory category: piscategorylist){ %>
 									<option value="<%=category.getCategory_id()%>"><%=category.getCategory_desc()%></option>
 								<%} %>				
 			                </select>
 			            </div>
-					
-			            <div class=" col-md-2 ">
-			                <label>Home Town<span class=" mandatory ">*</span></label>
-			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
-			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " required="required"
-			                    onclick=" Validate() ">
-			            </div>
-								
-			            <div class=" col-md-2 ">
-			                <label>Extension number<span class="mandatory"></span></label>
-			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "   id="InternalNum"
-			                    onkeypress=" return isNumber(event) ">
-			            </div>
-			            
+	            
 			              <div class="col-md-2">
 			                <label class="text-nowrap  ">Cadre Name</label>
 			                <select name="caderid" id="CadreId" class="form-control select2">
@@ -331,22 +344,15 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 								<%} %>
 			
 			                </select>
-			            </div>
-			
-			        </div>
-			    </div>
-			    
-				    <div class=" form-group ">
-				        <div class="row">
-    
-						<div class="col-md-2">
-			                <label>Availed Govt Quarters</label>
-			                
+			            </div>		
+    						
+						<!-- <div class="col-md-2">
+			                <label>Availed Govt Quarters</label>          
 			                <select name="gq" class=" form-control input-sm select2 " >
 			                	<option value="N">No</option>
 								<option value="Y">YES</option>								
 			                </select>	
-			            </div>
+			            </div> -->
 			            
 			             <div class=" col-md-2 ">
 			                <label>Physically Handicap</label>
@@ -357,28 +363,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>	
 
 			            </div>      
-			            
-			            <div class=" col-md-2 ">
-			                <label>Marital Status </label>
-			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
-			                	<option value="U">UnMarried</option>
-								<option value="M">Married</option>									
-			                </select>			                
-			            </div>
-		
-			            <div class=" col-md-2 ">
-			                <label>GPF/PRAN</label>
-			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
-			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
-			            </div>
-			            
-			             <div class=" col-md-2 ">
-			                <label>UAN No</label>
-			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
-			                    class=" form-control input-sm " placeholder="Enter UAN No "    onblur="checknegative(this) ">
-			            </div>
 			                
-			             <div class=" col-md-2 ">
+			             <div class=" col-md-4 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
