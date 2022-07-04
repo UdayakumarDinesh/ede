@@ -12,6 +12,8 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 
+<jsp:include page="../static/sidebar.jsp"></jsp:include> 
+
 <style>
 
 
@@ -82,6 +84,7 @@
     /* max-height: 20rem !important; */
     padding: 0px 20px;
     margin: 6px 8px 14px 2px;
+    max-width:50rem;
 }
 
 .fa-angle-left, .fa-angle-right{
@@ -223,7 +226,7 @@
 
 </style>
 </head>
-<body style="overflow-x:hidden !important ">
+<body >
 
 <% String logintype = (String) session.getAttribute("LoginType"); 
 	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
@@ -256,11 +259,9 @@
 	DecimalFormat df = new DecimalFormat("0.00");
 %>
 
-<%if(dashboard!=null)
-				{ if(dashboard.size()>0){ %>
-<jsp:include page="../static/sidebar.jsp"></jsp:include> 
 
-<%} }%>
+
+
 
 	<div class="card-header page-top ">
 		<div class="row">
@@ -562,6 +563,9 @@ function submitform(value,patientid,patientname){
 
 $(document).ready(function(){
 	
+	
+	
+	
     $("#datepicker1").daterangepicker({
         minDate: 0,
         maxDate: 0,
@@ -595,6 +599,11 @@ $(document).ready(function(){
 			format : 'DD-MM-YYYY'
 		}
     }); 
+    
+	var windowwidth= $(window).width(); 
+	$('.profile-card-container').css('max-width',(windowwidth - 230) +'px'  );
+    
+    
 
 });
 
@@ -606,6 +615,8 @@ $("#myTable1").DataTable({
 	    }
 
 });
+
+
 
 
 </script>
