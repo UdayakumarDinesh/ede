@@ -6,11 +6,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-
-<title>EMS</title>
-	
+<title>CHSS</title>
 <style type="text/css">
-
 
 /* ---------------------------------------------------
     SIDEBAR STYLE

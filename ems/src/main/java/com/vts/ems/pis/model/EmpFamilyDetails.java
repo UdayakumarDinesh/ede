@@ -43,11 +43,10 @@ public class EmpFamilyDetails implements Serializable {
 	private String EmpStatus;
 	private String MemberOccupation;
 	private long MemberIncome;
-	private long FormId;
-	private String MemberStatus;
-	private String IncDate;
+	private long IncFormId;
 	private String IncComment;
 	private String IncFilePath;
+	private long ExcFormId;
 	private String ExcDate;
 	private String ExcComment;
 	private String ExcFilePath;

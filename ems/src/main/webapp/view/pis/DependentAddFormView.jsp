@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Address List</title>
+<title>CHSS</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 
 <style type="text/css">
@@ -47,10 +47,22 @@ th,td
 <title>CHSS FORM - 2</title>
 </head>
 <%
-List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMemberDetails");
-List<Object[]> relationtypes = (List<Object[]>)request.getAttribute("relationtypes");
-Object[] empdetails = (Object[])request.getAttribute("empdetails");
-Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
+	List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMemberDetails");
+	List<Object[]> relationtypes = (List<Object[]>)request.getAttribute("relationtypes");
+	Object[] empdetails = (Object[])request.getAttribute("empdetails");
+	Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
+	Object[] formdetails = (Object[])request.getAttribute("formdetails");
+	
+	String isapproval = (String)request.getAttribute("isApprooval");
+	
+	String formid="0";
+	String empid=empdetails[0].toString();
+	String status="C";
+	if(formdetails!=null)
+	{
+		formid=formdetails[0].toString();
+		status=formdetails[3].toString();
+	}
 %>
 <body >
 	<div class="card-header page-top">
@@ -61,14 +73,19 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 				<div class="col-md-7">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item  " aria-current="page"><a href="EmployeeDetails.htm">Profile</a></li>
+						<li class="breadcrumb-item " aria-current="page"><a href="EmployeeDetails.htm">Profile</a></li>
+						<%if(isapproval.equalsIgnoreCase("N")){ %>
+						<li class="breadcrumb-item " aria-current="page"><a href="FamIncExcFwdList.htm">Include / Exclude</a></li>
+						<%}else if(isapproval.equalsIgnoreCase("Y")){ %>
+						<li class="breadcrumb-item " aria-current="page"><a href="FamFormsApproveList.htm">CHSS Forms Approval</a></li>
+						<%} %>
 						<li class="breadcrumb-item active " aria-current="page">CHSS FORM -2</li>
 					</ol>
 				</div>
 		</div>
 	</div>
 
-<div align="center" style="margin-top: 15px;">
+	<div align="center" style="margin-top: 15px;">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
 		if(ses1!=null){ %>
@@ -126,7 +143,6 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 			<div align="left">
 				<b style="text-decoration: underline; ">Particulars of family members</b><br>
 				
-				
 				<table>
 					<tr>
 						<th style="width:3%;text-align: center; " >SN</th>
@@ -137,59 +153,59 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 						<th style="width: 8% " >Income, if any, per month (Rs) </th>
 						<th style="width: 15% " >Comments </th>
 						<th style="width: 15% " >Attachment </th>
+						<%if(status.equalsIgnoreCase("C")){ %>
 						<th style="width: 10% " >
-							<!-- <button type="button" class="btn btn-sm tbl-add-row"  data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> -->
 							Action  
 						</th>
+						<%} %>
 					</tr>
 					<%int i=0;
 					for(;i<FwdMemberDetails.size();i++)
 					{ %>
 					
-					<form action="DepMemEditSubmit.htm" method="POST" enctype="multipart/form-data" autocomplete="off"  >
+					<%-- <%if(status.equalsIgnoreCase("C")){ %> --%>
 						<tr id="show-edit-<%=FwdMemberDetails.get(i)[0] %>" style="display: none;" >
-						
-							
-							<td style="text-align: center;" ><%=i+1%></td>
+							<td style="text-align: center;" ><form action="DepMemEditSubmit.htm" method="POST" enctype="multipart/form-data" autocomplete="off" id="edit-form-<%=FwdMemberDetails.get(i)[0] %>" ><%=i+1%></form></td>
 							<td>
-								<input type="text" class="form-control" name="mem-name" value="<%=FwdMemberDetails.get(i)[1] %>" maxlength="255" required >
+								<input type="text" form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" class="form-control" name="mem-name" value="<%=FwdMemberDetails.get(i)[1] %>" maxlength="255" required >
 							</td>
 							<td>
-								<select class="form-control select2 " style="width: 100%" name="mem-relation" data-live-search="true" data-size="6" required>
+								<select form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" class="form-control select2 " style="width: 100%" name="mem-relation" data-live-search="true" data-size="6" required>
 									<%for(Object[] relation : relationtypes){ %>
-										<option value="<%=relation[0]%>" <%if(FwdMemberDetails.get(i)[16].toString().equalsIgnoreCase(relation[0].toString())){ %> selected <%} %> ><%=relation[1]%></option>
+										<option value="<%=relation[0]%>" <%if(FwdMemberDetails.get(i)[14].toString().equalsIgnoreCase(relation[0].toString())){ %> selected <%} %> ><%=relation[1]%></option>
 									<%} %>
 								</select>							
 							</td>
 							<td>
-								<input type="text" class="form-control mem-dob-edit" name="mem-dob" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-dob-edit" name="mem-dob" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
-								<input type="text" class="form-control" name="mem-occupation"  <%if(FwdMemberDetails.get(i)[8]!=null){ %>value="<%=FwdMemberDetails.get(i)[8] %>" <%}else{ %>value="" <%} %> maxlength="255"  required>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-occupation" id="mem-occupation-<%=FwdMemberDetails.get(i)[0] %>" <%if(FwdMemberDetails.get(i)[7]!=null){ %>value="<%=FwdMemberDetails.get(i)[7] %>" <%}else{ %>value="" <%} %> maxlength="255" onchange = "IncomeRequired('<%=FwdMemberDetails.get(i)[0] %>');" >
 							</td>
 							<td>
-								<input type="number" class="form-control numberonly" name="mem-income"  <%if(FwdMemberDetails.get(i)[9]!=null){ %>value="<%=FwdMemberDetails.get(i)[9] %>" <%}else{ %>value="" <%} %>min="0" required >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="number" class="form-control numberonly" name="mem-income" id="mem-income-<%=FwdMemberDetails.get(i)[0] %>"  <%if(FwdMemberDetails.get(i)[8]!=null && !FwdMemberDetails.get(i)[8].toString().equals("0")){ %>value="<%=FwdMemberDetails.get(i)[8] %>" <%}else{ %>value="" <%} %>min="0"  >
 							</td>
 							<td>
 								
-								<input type="text" class="form-control" name="mem-comment" <%if(FwdMemberDetails.get(i)[11]!=null){ %>value="<%=FwdMemberDetails.get(i)[11] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(FwdMemberDetails.get(i)[9]!=null ){ %>value="<%=FwdMemberDetails.get(i)[9] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
 								
 							</td>
 							<td>
-								<input type="file" class="form-control" name="mem-attach-edit"  >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit"  >
 							</td>
 							<td>	
-								<button type="submit" class="btn btn-sm update-btn" name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>"  onclick="return confirm('Are You Sure to Update ?');" title="update">
+								<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm update-btn" name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>"  onclick="return confirm('Are You Sure to Update ?');" title="update">
 									Update
 								</button>
-								<button type="button" class="btn btn-sm "  onclick="hideEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Cancel"> 
+								<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="button" class="btn btn-sm "  onclick="hideEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Cancel"> 
 									<i class="fa-solid fa-xmark"  style="color: red;"></i>
 								</button>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="formid" value="<%=formid%>"/>
 							</td>
 							
 						</tr>
-					
+					<%-- <%} %> --%>
 						<tr id="show-view-<%=FwdMemberDetails.get(i)[0] %>"   >
 						
 							<td style="text-align: center;" ><%=i+1%></td>
@@ -197,54 +213,58 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 							<td><%=FwdMemberDetails.get(i)[2] %></td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
 							<td>
-								<%if(FwdMemberDetails.get(i)[8]!=null){ %>
-									<%=FwdMemberDetails.get(i)[8] %>
+								<%if(FwdMemberDetails.get(i)[7]!=null){ %>
+									<%=FwdMemberDetails.get(i)[7] %>
 								<%}else{ %>
 									-
 								<% } %>
 							</td>
 							<td>
-								<%if(FwdMemberDetails.get(i)[9]!=null){ %>
-								<%=FwdMemberDetails.get(i)[9] %>
+								<%if(FwdMemberDetails.get(i)[8]!=null && !FwdMemberDetails.get(i)[8].toString().equals("0")){ %>
+								<%=FwdMemberDetails.get(i)[8] %>
 								<%}else{ %>
 									-
 								<%} %>
 							</td>
 							<td>
-								<%if(FwdMemberDetails.get(i)[11]!=null){ %>
-									<%=FwdMemberDetails.get(i)[11] %>
+								<%if(FwdMemberDetails.get(i)[9]!=null){ %>
+									<%=FwdMemberDetails.get(i)[9] %>
 								<%}else{ %>
 									-
 								<%} %>
 							</td>
 							<td style="text-align: center;">
-								<%if(FwdMemberDetails.get(i)[12]!=null){ %>
-									<button type="submit" class="btn btn-sm" name="filepath" value="<%=FwdMemberDetails.get(i)[12] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
+								<%if(FwdMemberDetails.get(i)[10]!=null){ %>
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="familydetailid" value="<%=FwdMemberDetails.get(i)[0] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
 								<%}%>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="I"/>		
 							</td>
-							<td>
-								<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
-									<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
-								</button> 
-								<button type="submit" class="btn btn-sm " name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>" formaction="#"  onclick="return confirm('Are You Sure to Delete ?');" title="Delete">
-									<i class="fa-solid fa-trash-can" style="color: red;"></i>
-								</button>		
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>					
-							</td>
+							<%if(status.equalsIgnoreCase("C")){ %>
+								<td>
+									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
+										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
+									</button> 
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>" formaction="FamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Delete ?');" title="Delete">
+										<i class="fa-solid fa-trash-can" style="color: red;"></i>
+									</button>
+								</td>
+							<%} %>			
 						</tr>
-					</form>
+					
 					
 					<%} %>
-					<form method="post" action="DepMemAddSubmit.htm" enctype="multipart/form-data" autocomplete="off" >
+					<%if(status.equalsIgnoreCase("C")){ %>
+					
 						<tr>
-							<td style="text-align: center;" ><%=i+1%></td>
+							<td style="text-align: center;" ><form method="post" action="DepMemAddSubmit.htm" enctype="multipart/form-data" autocomplete="off" id="add-form" ><%=i+1%></form></td>
 							<td>
-								<input type="text" class="form-control" name="mem-name" value="" maxlength="255" required >
+								<input form ="add-form" type="text" class="form-control" name="mem-name" value="" maxlength="255" required >
 							</td>
 							<td>
-								<select class="form-control select2 w-100" name="mem-relation" data-live-search="true" data-size="6" required>
+								<select form ="add-form" class="form-control select2 w-100" name="mem-relation" data-live-search="true" data-size="6" required>
 									<option  disabled="disabled" selected value="">Choose..</option>
 									<%for(Object[] relation : relationtypes){ %>
 										<option value="<%=relation[0]%>"><%=relation[1]%></option>
@@ -252,41 +272,33 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 								</select>							
 							</td>
 							<td>
-								<input type="text" class="form-control mem-dob" name="mem-dob" value="" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form ="add-form" type="text" class="form-control mem-dob" name="mem-dob" value="" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
-								<input type="text" class="form-control" name="mem-occupation" value="" maxlength="255"  required>
+								<input form ="add-form" type="text" class="form-control" name="mem-occupation" id="mem-occupation-0"  value="" maxlength="255" onchange="IncomeRequired(0);"  >
 							</td>
 							<td>
-								<input type="number" class="form-control numberonly" name="mem-income" value="" min="0" required >
+								<input form ="add-form" type="number" class="form-control numberonly" name="mem-income" id="mem-income-0" value="" min="0"  >
 							</td>
 							<td>
-								<input type="text" class="form-control" name="mem-comment" value="" maxlength="255" required >
+								<input form ="add-form" type="text" class="form-control" name="mem-comment" value="" maxlength="255" required >
 							</td>
 							<td>
-								<input type="file" class="form-control" name="mem-attach"  >
+								<input form ="add-form" type="file" class="form-control" name="mem-attach"  required="required">
 							</td>
 							<td>	
-								<button type="submit" class="btn btn-sm add-btn">add</button>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<button form ="add-form" type="submit" class="btn btn-sm add-btn" onclick="return confirm('Are You Sure to Add?');">add</button>
+								<input form ="add-form" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<%if(FwdMemberDetails.size()>0){ %>
-								<input type="hidden" name="formid" value="<%=FwdMemberDetails.get(0)[18]%>"/>
+								<input form ="add-form" type="hidden" name="formid" value="<%=formid%>"/>
 								<%}else{ %>
-								<input type="hidden" name="formid" value="0"/>
+								<input form ="add-form" type="hidden" name="formid" value="0"/>
 								<%} %>
 							</td>
 						</tr>
-					</form>
+					<%} %>
 				</table>
-				
-				
-				
-				<!-- <p style="text-indent: 50px;">I have read the instructions on the reverse side very carefully and have understood their
-					meaning. I certify that the persons mentioned above fulfil the conditions prescribed and that they are
-					eligible for registration under CHSS.
-				</p> -->
-				
-					
+
 				<p style="text-indent: 50px;">
 					<input type="checkbox"  class="TCBox" > &nbsp;
 					I hereby undertake to declare at the beginning of each calendar year and as soon as necessary
@@ -305,7 +317,7 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 							<p><input type="checkbox"  class="TCBox" > &nbsp; 
 							<b > The term Parents for the purpose of CHSS benefits does not include 'Step Parents'. Parent
 							should have actually resided at least for 60 days with the employee before they are proposed for
-							inclusion under the CHSS, and should continue to reside with the employee and be mainlyY
+							inclusion under the CHSS, and should continue to reside with the employee and be mainly
 							dependant on him / her.</b> If the total income of the parents from all sources does not exceed thE ay
 							of the employee, subject to the maximum income of the parents being Rs. 18,000/- per month, such
 							parents may be treated as mainly dependant on the employee. Income from land holdings, houses,
@@ -346,12 +358,22 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 				</div>
 				
 				<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependant </b> </div> 
-				<p style="text-indent: 50px;"><input type="checkbox"  class="TCBox" > &nbsp;
+				<p style="text-indent: 21px; "><input type="checkbox"  class="TCBox" > &nbsp;
 				I certify that the family members whose names are mentioned above are mainly dependant on and
 					residing with me.
 				</p>
 				
-				<div align="right"> 
+				<div align="left"> 
+					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
+					<table style="float: left;">
+						<tr>
+							<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
+						</tr>
+						<tr>
+							<td style="border: 0"> <%=formdetails[9] %></td>
+						</tr>
+					</table>
+					<%} %>
 					<table style="float: right;">
 						<tr>
 							<td style="border: 0"><b><%=empdetails[2] %>,</b></td>
@@ -363,14 +385,44 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 				</div>
 				
 				<br>
-				
-				<div align="center"><button type="button" class="btn btn-sm submit-btn" id="fwd-btn" disabled="disabled"> Forward</button></div>
+				<form action="FamilyMembersForward.htm" method="Post">	
+					<%if(FwdMemberDetails.size()>0 && status.equalsIgnoreCase("C")){ %>
+						<div align="center">
+							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="formid" value="<%=formid%>" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
+						</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="empid" value="<%=empid %>">
+					
+					<% } %>
+					
+					<%if(status.equalsIgnoreCase("F") && isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>
+						<div align="center">
+							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" formaction="FamilyMembersFormApprove.htm" name="familyformid" value="<%=formid%>" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+						</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="empid" value="<%=empid %>">
+					
+					<% } %>
+				</form>
 				<br><br><br><br><br>
 			</div>
 		</div>
 	</div>
 
 
+<script type="text/javascript">
+	function IncomeRequired(detailid)
+	{
+		if($('#mem-occupation-'+detailid).val().trim() === '')
+		{
+			$('#mem-income-'+detailid).prop('required',false);
+		}
+		else
+		{
+			$('#mem-income-'+detailid).prop('required',true);
+		}
+	}			
+</script>
 <script type="text/javascript">
 
 
@@ -391,58 +443,53 @@ $(document).ready(function(){
 
 </script>
 <script type="text/javascript">
+		
+	$('.mem-dob').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"startDate" : new Date(),
+		"maxDate" :new Date(),					 
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+		
+	$('.mem-dob-edit').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,					
+		"maxDate" :new Date(),					 
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+		
+	$('.numberonly').keypress(function (e) {    
+        var charCode = (e.which) ? e.which : event.keyCode    
+        if (String.fromCharCode(charCode).match(/[^0-9]/g))    
+        return false;                        
+	});
+	
+			
 				
-				$('.mem-dob').daterangepicker({
-					"singleDatePicker" : true,
-					"linkedCalendars" : false,
-					"showCustomRangeLabel" : true,
-					"startDate" : new Date(),
-					"maxDate" :new Date(),					 
-					"cancelClass" : "btn-default",
-					showDropdowns : true,
-					locale : {
-						format : 'DD-MM-YYYY'
-					}
-				});
+	function showEdit(famdetailid)
+	{
+		$('#show-edit-'+famdetailid).show();
+		$('#show-view-'+famdetailid).hide();
+	}
+		
+	function hideEdit(famdetailid)
+	{
+		$('#show-edit-'+famdetailid).hide();
+		$('#show-view-'+famdetailid).show();
+	}
 				
-				$('.mem-dob-edit').daterangepicker({
-					"singleDatePicker" : true,
-					"linkedCalendars" : false,
-					"showCustomRangeLabel" : true,					
-					"maxDate" :new Date(),					 
-					"cancelClass" : "btn-default",
-					showDropdowns : true,
-					locale : {
-						format : 'DD-MM-YYYY'
-					}
-				});
-				
-				$('.numberonly').keypress(function (e) {    
-
-			        var charCode = (e.which) ? e.which : event.keyCode    
-
-			        if (String.fromCharCode(charCode).match(/[^0-9]/g))    
-
-			            return false;                        
-
-			  		});
-				
-				
-				
-				function showEdit(famdetailid)
-				{
-					$('#show-edit-'+famdetailid).show();
-					$('#show-view-'+famdetailid).hide();
-				}
-				
-				function hideEdit(famdetailid)
-				{
-					$('#show-edit-'+famdetailid).hide();
-					$('#show-view-'+famdetailid).show();
-				}
-				
-				
-				</script>
+</script>
 
 </body>
 </html>

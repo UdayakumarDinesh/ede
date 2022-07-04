@@ -44,6 +44,7 @@ import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
+import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -743,21 +744,15 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception 
-		{
-			return dao.getFamilydetailsNotConf(empid);
-		}
-		
-		@Override
 		public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception
 		{
 			return dao.getFamilyMemberModal(familydetailsid);
 		}
 		
 		@Override
-		public List<Object[]> getFamilydetailsFwd(String detailids)throws Exception
+		public List<Object[]> GetFormMembersList(String empid,String formid)throws Exception
 		{
-			return dao.getFamilydetailsFwd(detailids);
+			return dao.GetFormMembersList(empid, formid);
 		}
 		
 		@Override
@@ -774,16 +769,20 @@ public class PisServiceImpl implements PisService
 		
 		
 		@Override
-		public int FamilyMemDetailsForward(String[] familydetailid) throws Exception
+		public int FamilyMemDetailsForward(String formid) throws Exception
 		{
-			logger.info(new Date() +"Inside SERVICE FamilyMemDetailsForward()");
 			
-			int count=0;
-			for(String detailsid :familydetailid) {
-				count +=dao.UpdateMemberStatus(detailsid, "F" );
-			}
-			return count;
+			
+			return dao.UpdateMemberStatus(formid, "F" );
 		}
+		
+		
+		@Override
+		public int FamilyMemIncConfirm(String formid,String empid,String username ) throws Exception
+		{
+			return dao.FamilyMemIncConfirm(formid, empid, username);
+		}
+		
 		
 		@Override
 		public List<Object[]> FamMemFwdEmpList() throws Exception 
@@ -814,7 +813,6 @@ public class PisServiceImpl implements PisService
 		@Override
 		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
 		{
-			
 			EmpFamilyDetails member = dao.getMember(String.valueOf(Details.getFamily_details_id()));
 
 			member.setMember_name(Details.getMember_name());
@@ -851,8 +849,27 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public  Object[] FamMaxFormId() throws Exception
+		public List<Object[]> EmpFamFormsList(String empid,String status) throws Exception
 		{
-			return dao.FamMaxFormId();
+			return dao.EmpFamFormsList(empid, status);
 		}
+		
+		@Override
+		public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception
+		{
+			return dao.EmpFamilyFormAdd(form);
+		}
+		
+		@Override
+		public Object[] GetFamFormData(String familyformid) throws Exception
+		{
+			return dao.GetFamFormData(familyformid);
+		}
+		
+		@Override
+		public int FamilyMemberDelete(String familydetailsid)throws Exception
+		{
+			return dao.FamilyMemberDelete(familydetailsid);
+		}
+		
 }

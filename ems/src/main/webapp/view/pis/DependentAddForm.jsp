@@ -151,22 +151,22 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 				<%for(int i=0;i<FwdMemberDetails.size();i++)
 				{ %>
 				<tr>
-					<td><%=i+1%></td>
+					<td><%=i+1%>     </td>
 					<td><%=FwdMemberDetails.get(i)[1] %></td>
 					<td><%=FwdMemberDetails.get(i)[2] %></td>
 					<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
 					<td>
-						<%if(FwdMemberDetails.get(i)[7].toString().equalsIgnoreCase("Y")){ %>
-						<%=FwdMemberDetails.get(i)[8] %>
+						<%if(FwdMemberDetails.get(i)[7]!=null){ %>
+							<%=FwdMemberDetails.get(i)[7] %>
 						<%}else{ %>
-							NA
+							-
 						<%} %>
 					</td>
 					<td>
-						<%if(FwdMemberDetails.get(i)[7].toString().equalsIgnoreCase("Y")){ %>
-						<%=FwdMemberDetails.get(i)[9] %>
+						<%if(FwdMemberDetails.get(i)[8]!=null && !FwdMemberDetails.get(i)[8].toString().equals("0")){ %>
+						<%=FwdMemberDetails.get(i)[8] %>
 						<%}else{ %>
-							NA
+							-
 						<%} %>
 					</td>
 				</tr>
@@ -209,7 +209,7 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 					<li>
 						<p><b> The term Parents for the purpose of CHSS benefits does not include 'Step Parents'. Parent
 						should have actually resided at least for 60 days with the employee before they are proposed for
-						inclusion under the CHSS, and should continue to reside with the employee and be mainlyY
+						inclusion under the CHSS, and should continue to reside with the employee and be mainly
 						dependant on him / her.</b> If the total income of the parents from all sources does not exceed thE ay
 						of the employee, subject to the maximum income of the parents being Rs. 18,000/- per month, such
 						parents may be treated as mainly dependant on the employee. Income from land holdings, houses,

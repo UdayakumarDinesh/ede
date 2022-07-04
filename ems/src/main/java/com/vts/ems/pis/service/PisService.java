@@ -19,6 +19,7 @@ import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
+import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisPayLevel;
 
 public interface PisService {
@@ -90,16 +91,19 @@ public interface PisService {
 	public List<Object[]> GetEmployeeList()throws Exception;
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception;
-	public List<Object[]> getFamilydetailsNotConf(String empid) throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
-	public int FamilyMemDetailsForward(String[] familydetailid) throws Exception;
+	public int FamilyMemDetailsForward(String formid) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
-	public List<Object[]> getFamilydetailsFwd(String detailids) throws Exception;
+	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
 	public Object[] employeeResAddr(String empid) throws Exception;
+	public Long DepMemEditSubmit(EmpFamilyDetails Details) throws Exception;
 	public List<Object[]> familyRelationList() throws Exception;
 	public Object[] RelationshipData(String relationid) throws Exception;
 	public Object[] getMemberdata(String familydetailid) throws Exception;
-	public Long DepMemEditSubmit(EmpFamilyDetails Details) throws Exception;
-	public Object[] FamMaxFormId() throws Exception;
+	public List<Object[]> EmpFamFormsList(String empid, String status) throws Exception;
+	public int FamilyMemIncConfirm(String formid,String empid,String username) throws Exception;
+	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
+	public Object[] GetFamFormData(String familyformid) throws Exception;
+	public int FamilyMemberDelete(String familydetailsid) throws Exception;
 }
