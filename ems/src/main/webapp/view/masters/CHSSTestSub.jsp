@@ -6,6 +6,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>CHSS Test Sub </title>
 </head>
 <body>
@@ -75,7 +76,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 											<td style="text-align: center;"><input type="radio" name="SubId" value="<%=obj[0] %>"> </td>
 											<td><%=obj[4] %> </td>
 											<td><%=obj[1] %></td>
-											<td><%=obj[2] %></td>
+											<td style="text-align: right ;"><%=obj[2] %></td>
 										</tr>
 									 <%} %> 
 								</tbody>

@@ -11,44 +11,7 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
- #dis{
- text-align: center;
- }
- 
-.btn-group1 button {
-  background-color: #344b8a; /* Green background */
-  color: white; /* White text */
-  padding: 10px 24px; /* Some padding */
-  cursor: pointer; /* Pointer/hand icon */
-  float: left; /* Float the buttons side by side */
-}
 
-/* Clear floats (clearfix hack) */
-.btn-group1:after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.btn-group1 button:not(:last-child) {
-  border-right:thin;
-}
-
-/* Add a background color on hover */
-.btn-group1 button:hover {
-  background-color: #3e8e41;
-}
-.dataTables_info, .dataTables_length{
-  text-align: left !important;
-}
-.modal-dialog {
-    max-width:750px;
-    margin: 2rem auto;
-}
-
-.page-top {
-    margin: 4px 18px -10px 20px !important;
-}
 
 </style>
 </head>
@@ -87,7 +50,7 @@ String ses=(String)request.getParameter("result");
 
 <div class="page card dashboard-card">
    <div class="card-body" align="center" >
-  
+  		<h3>Leave Dashboard</h3>
    
 
    </div>
@@ -97,7 +60,7 @@ String ses=(String)request.getParameter("result");
 
 <script>
 
-document.getElementById('url').innerHTML="asss"
+
 	   
 
 </script>

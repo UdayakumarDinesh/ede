@@ -94,6 +94,10 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
 		
 		try {
+			
+			ses.setAttribute("formmoduleid", "4");
+			ses.setAttribute("SidebarActive","CHSSDashboard_htm");
+			
 			String logintype = (String)ses.getAttribute("LoginType");
 
 			SimpleDateFormat sf= new SimpleDateFormat("yyyy");
@@ -131,8 +135,8 @@ public class CHSSController {
 			req.setAttribute("patientidvalue", req.getParameter("patientidvalue"));
 			
 			req.setAttribute("patientname", PatientName);
-			req.setAttribute("IsSelf", IsSelf);;
-
+			req.setAttribute("IsSelf", IsSelf);
+			
 			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
@@ -1693,7 +1697,8 @@ public class CHSSController {
 		try {
 						
 			req.setAttribute("chssclaimlist", service.CHSSApproveClaimList(LoginType,EmpId));
-			
+			ses.setAttribute("formmoduleid", "4");
+			ses.setAttribute("SidebarActive", "CHSSApprovalsList_htm");
 			return "chss/CHSSApprovalList";
 		} catch (Exception e) {
 			
@@ -2179,6 +2184,7 @@ public class CHSSController {
 			req.setAttribute("todate", todate);
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType,fromdate,todate));
 			req.setAttribute("logintype", LoginType);
+			ses.setAttribute("SidebarActive", "ContingentApprovals_htm");
 			
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {

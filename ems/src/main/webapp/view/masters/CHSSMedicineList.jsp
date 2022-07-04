@@ -7,7 +7,7 @@
 <meta charset="ISO-8859-1">
 <title>Medicine List</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 
 <style>
 	.card-header{
@@ -91,7 +91,7 @@ String treat = (String)request.getAttribute("treat");
 								<thead>
 									<tr>
 										<th>Select</th>
-										<th>SlNo.</th>
+										<th>SN</th>
 										<th>Treatment Type</th>
 										<th> Medicine Name </th>
 									</tr>
@@ -102,7 +102,7 @@ String treat = (String)request.getAttribute("treat");
 									%>
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="MedicineId" value="<%=obj[0] %>"> </td>
-											<td><%=obj[3] %> </td>
+											<td><%=obj[3] %>. </td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											

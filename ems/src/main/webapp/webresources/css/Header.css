@@ -39,24 +39,6 @@ a,a:hover,a:focus {
     transition: all 0.3s;
 }
 
-/* .card-header{
-background-color: #139ca3;
-color: white;
-}
-.card-footer{
-background-color: ##253b80;
-} */
-
-
-.navbar {
- 	
-    background: #750550; 
-    border: none;
-    border-radius: 0;
-    margin: 0px; 
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    
-}
 
 .navbar-btn {
     box-shadow: none;

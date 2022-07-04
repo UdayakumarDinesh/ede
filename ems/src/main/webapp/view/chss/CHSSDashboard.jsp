@@ -11,6 +11,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+
 <style>
 
 
@@ -80,7 +81,7 @@
     background-color: white;
     /* max-height: 20rem !important; */
     padding: 0px 20px;
-    margin: 10px 20px 25px 20px;
+    margin: 6px 8px 14px 2px;
 }
 
 .fa-angle-left, .fa-angle-right{
@@ -222,7 +223,7 @@
 
 </style>
 </head>
-<body>
+<body style="overflow-x:hidden !important ">
 
 <% String logintype = (String) session.getAttribute("LoginType"); 
 	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
@@ -255,7 +256,12 @@
 	DecimalFormat df = new DecimalFormat("0.00");
 %>
 
- <div class="col page">
+<%if(dashboard!=null)
+				{ if(dashboard.size()>0){ %>
+<jsp:include page="../static/sidebar.jsp"></jsp:include> 
+
+<%} }%>
+
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3  ">
@@ -289,9 +295,9 @@
 		<%} %>
 	</div>
 	
-<div class="card profile-card-container" >
+<div class=" card profile-card-container " >
  
-<div style="margin:0px 0px 0px 0px !important;padding-top: 15px;">
+<%-- <div style="margin:0px 0px 0px 0px !important;padding-top: 15px;">
  		<form action="#" method="post" >
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
  				<div class="row"> 
@@ -314,7 +320,7 @@
 			</div>
 		</form>
 	</div> 	
-	
+	 --%>
 
 	<div class="row" >
 		<div class="col-md-2">
@@ -412,8 +418,8 @@
 	<div class="card-body "  style="padding: 1rem !important;">				
 		<form action="#" method="post" id="ClaimForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<div class="table-responsive">
-					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
+				<div class="table-responsive" style="max-height: 200px !important" >
+					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable"  > 
 						<thead>
 							<tr>
 								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
@@ -491,7 +497,8 @@
 			</form>
 		</div>
 	</div>
- </div> </div></div>
+ </div> 
+</div>
 <form action="CHSSApplyDetails.htm" method="post" id="myform" >
 	<input type="hidden" name="isself" id="isself" >
 	<input type="hidden" name="patientid" id="patientid" >

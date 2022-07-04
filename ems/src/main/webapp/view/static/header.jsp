@@ -204,7 +204,7 @@
 								    <a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> &nbsp;&nbsp;Hi <%=EmpName%>!! </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
-								 	<a class="dropdown-item" href="AuditStamping.htm" target="blank"> &nbsp;&nbsp;<i class="fa fa-history" aria-hidden="true" style="color: purple"></i> &nbsp;&nbsp;Audit Stamping </a>     
+								 	<a class="dropdown-item" href="AuditStamping.htm"> &nbsp;&nbsp;<i class="fa fa-history" aria-hidden="true" style="color: purple"></i> &nbsp;&nbsp;Audit Stamping </a>     
 								    <div class="dropdown-divider logoutdivider"></div>
 								 
 								 	<a class="dropdown-item" href="PasswordChange.htm" >&nbsp;<i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
@@ -216,8 +216,8 @@
 								    <a class="dropdown-item" href="WorkFlow.htm" target="blank" ><img src="view/images/work.png"/>&nbsp;&nbsp; Work Flow</a>
 								    <div class="dropdown-divider logoutdivider"></div>
 						
-								   	<a class="dropdown-item" href="#" target="blank"> &nbsp;<i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
-								  	<div class="dropdown-divider logoutdivider"></div>
+								   	<!-- <a class="dropdown-item" href="#" target="blank"> &nbsp;<i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
+								  	<div class="dropdown-divider logoutdivider"></div> -->
 									
 									<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
 								            

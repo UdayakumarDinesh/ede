@@ -7,6 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
  #dis{
  text-align: center;
@@ -113,7 +114,7 @@
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											<td><%=obj[4] %></td>
-											<td><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%><%} %></td>
+											<td style="text-align: center;"><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%><%} %></td>
 				
 											<%-- <td>
 												<button type="submit" name="empid" value="<%=obj[0] %>"  class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="View Employee Details" > 

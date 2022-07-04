@@ -6,6 +6,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>CHSS Approval Authority</title>
 <style type="text/css">
 
@@ -124,9 +125,9 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
                         		<input type="hidden" name="AuthId" value="<%if(approval!=null){%><%=approval[0]%><%}%>"> 
                             		<label class="control-label"></label>
                             		<input type="hidden" name="type" value="AD"/>
-                                         <button class="btn btn-sm submit-btn " type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return CommentsModel();">Submit</button>
+                                         <button class="btn btn-sm submit-btn " type="submit" name="Action" value="EDIT" style="margin-top: 2.15rem;" onclick="return CommentsModel();">SUBMIT</button>
                                          <%}else{%> 
-                                          <button class="btn btn-sm submit-btn " type="submit" name="Action" value="ADD" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">Submit</button>
+                                          <button class="btn btn-sm submit-btn " type="submit" name="Action" value="ADD" style="margin-top: 2.15rem;" onclick="return confirm('Are you sure to submit');">SUBMIT</button>
                                          <%}%>
                         		</div>
                     		</div>        		

@@ -47,7 +47,12 @@
 }
 
 .page-top {
-    margin: 4px 18px -10px 20px !important;
+   margin: 7px 6px 6px 1px !important;
+    border-radius: 5px;
+}
+
+.dashboard-card{
+	    margin: 7px 6px 6px 1px !important;
 }
 
 </style>
@@ -86,43 +91,131 @@ String ses=(String)request.getParameter("result");
                    </div></center>
                     <%} %>
 
-<div class="page card dashboard-card">
-
-			 
-   <div class="card-body" align="center" >
-   <form action="LeaveCredit.htm" method="POST" name="myfrm">
-    <div class="row">
-    <div class="col-md-9">
-    
-    </div>
-    
-    <div class="col-md-1">
-    <div class="group-form">
-    <select class="form-control  selectpicker" required="required" name="month"  title="Select" data-live-search="true">
-    <option value="January" <%if("January".equalsIgnoreCase(month)){ %> selected="selected" <%} %>>Jan</option>
-    <option value="July" <%if("July".equalsIgnoreCase(month)){ %> selected="selected" <%} %>>Jul</option>
-    </select>
-    
-    </div>
-    </div>
-    <div class="col-md-1">
-    <div class="group-form">
- 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-    <input class="form-control  form-control" type="text" id="year"  value="<%=year %>" name="Year">
-    </div>
-    </div>
-    <div class="col-md-1">
-    <input type="submit" value="Submit" class="btn btn-success btn-sm" style="margin-top: 3px;">
-    </div>
-    </div>
-    
-    
-    </form>
-    <%
+ <%
     List<Object[]> clist=(List<Object[]>)request.getAttribute("CreditList");
     List<Employee> emplist=(List<Employee>)request.getAttribute("EmpList");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	   %>
+
+<div class="page card dashboard-card">
+
+			 
+   <div class="card-body" align="center" >
+   
+   	<div class="row">
+   		
+   		<div class="col-md-6">
+   			<form action="CreditPreview.htm" method="POST" id="preview">
+			    <div class="row" style="margin-top: 8px;">
+				    
+				    <div class="col-md-2" style="margin-top: 4px;font-weight: bold;">
+				             Leave Credit :
+				    </div>
+				    <div class="col-md-3">
+					    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
+					    <option value="A">All</option>
+					    <%for(Employee emp:emplist){ %>
+					    <option value="<%=emp.getEmpNo() %>"><%=emp.getEmpName() %></option>
+					    <%} %>
+					    </select>
+				    </div>
+			    
+				    <div class="col-md-3">
+					    <div class="group-form">
+						    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
+						    <option value="LOB">Opening</option>
+						    <option value="January">Jan</option>
+						    <option value="July">Jul</option>
+						    </select>
+					    </div>
+				    </div>
+				    <div class="col-md-2">
+					    <div class="group-form">
+					 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+					    <input class="form-control  form-control" type="text" id="year1"  name="Year">
+					    </div>
+				    </div>
+				    <div class="col-md-2">
+					    <input type="button" value="Preview Credit" class="btn  btn-sm misc1-btn" onclick="leaveCredit()" style="margin-top: 3px;">
+					</div>
+				</div>
+    		</form>
+   		</div>
+   		
+   		<div class="col-md-6">
+   			<form action="LeaveCredit.htm" method="POST" name="myfrm">
+			    <div class="row justify-content-end">
+
+				    <div class="col-md-3">
+					    <div class="group-form">
+					    <select class="form-control  selectpicker" required="required" name="month"  title="Select" data-live-search="true">
+					    <option value="January" <%if("January".equalsIgnoreCase(month)){ %> selected="selected" <%} %>>Jan</option>
+					    <option value="July" <%if("July".equalsIgnoreCase(month)){ %> selected="selected" <%} %>>Jul</option>
+					    </select>
+					    
+					    </div>
+				    </div>
+				    <div class="col-md-3">
+					    <div class="group-form">
+						 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						    <input class="form-control  form-control" type="text" id="year"  value="<%=year %>" name="Year">
+					    </div>
+				    </div>
+				    <div class="col-md-	1">
+				    	<input type="submit" value="SUBMIT" class="btn btn-success btn-sm submit-btn" style="margin-top: 3px;">
+				    </div>
+			    </div>
+		   </form>
+   		</div>
+   	
+   	</div>
+   
+   
+ <%--   <form action="CreditPreview.htm" method="POST" id="preview">
+	    <div class="row" style="margin-top: 8px;">
+		    <div class="col-md-2">
+		    
+		    </div>
+		    <div class="col-md-1" style="margin-top: 4px;font-weight: bold;">
+		             Leave Credit :
+		    </div>
+		    <div class="col-md-4">
+			    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
+			    <option value="A">All</option>
+			    <%for(Employee emp:emplist){ %>
+			    <option value="<%=emp.getEmpNo() %>"><%=emp.getEmpName() %></option>
+			    <%} %>
+			    </select>
+		    </div>
+	    
+		    <div class="col-md-1">
+			    <div class="group-form">
+				    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
+				    <option value="LOB">Opening</option>
+				    <option value="January">Jan</option>
+				    <option value="July">Jul</option>
+				    </select>
+			    </div>
+		    </div>
+		    <div class="col-md-1">
+			    <div class="group-form">
+			 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+			    <input class="form-control  form-control" type="text" id="year1"  name="Year">
+			    </div>
+		    </div>
+		    <div class="col-md-1">
+			    <input type="button" value="Preview Credit" class="btn btn-success btn-sm" onclick="leaveCredit()" style="margin-top: 3px;">
+			</div>
+		</div>
+    </form> --%>
+   
+   
+   
+   
+   
+   
+   
+   
 	    <div class="row" style="margin-top:7px;"> 
 	    <div class="col-md-12">
 	 <div class="table-responsive">
@@ -157,7 +250,7 @@ String ses=(String)request.getParameter("result");
 	       <td style="text-align: center;width: 100px;"><%=hlo[9] %></td>
 	        <td style="text-align: center;width: 100px;">
 	             
-	         	 <button type="button" class="btn btn-warning btn-sm" name="sub" value="edit" onclick="leaveCreditEdit('<%=hlo[0] %>')"  >EDIT</button>
+	         	 <button type="button" class="btn edit-btn btn-sm" name="sub" value="edit" onclick="leaveCreditEdit('<%=hlo[0] %>')"  >EDIT</button>
 	        
 	         </td>
 	  
@@ -174,47 +267,44 @@ String ses=(String)request.getParameter("result");
 
 	   </div>
 	   </div>
-	<form action="CreditPreview.htm" method="POST" id="preview">
-    <div class="row" style="margin-top: 8px;">
-    <div class="col-md-2">
+	<%-- <form action="CreditPreview.htm" method="POST" id="preview">
+	    <div class="row" style="margin-top: 8px;">
+		    <div class="col-md-2">
+		    
+		    </div>
+		    <div class="col-md-1" style="margin-top: 4px;font-weight: bold;">
+		             Leave Credit :
+		    </div>
+		    <div class="col-md-4">
+			    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
+			    <option value="A">All</option>
+			    <%for(Employee emp:emplist){ %>
+			    <option value="<%=emp.getEmpNo() %>"><%=emp.getEmpName() %></option>
+			    <%} %>
+			    </select>
+		    </div>
+	    
+		    <div class="col-md-1">
+			    <div class="group-form">
+				    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
+				    <option value="LOB">Opening</option>
+				    <option value="January">Jan</option>
+				    <option value="July">Jul</option>
+				    </select>
+			    </div>
+		    </div>
+		    <div class="col-md-1">
+			    <div class="group-form">
+			 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+			    <input class="form-control  form-control" type="text" id="year1"  name="Year">
+			    </div>
+		    </div>
+		    <div class="col-md-1">
+			    <input type="button" value="Preview Credit" class="btn btn-success btn-sm" onclick="leaveCredit()" style="margin-top: 3px;">
+			</div>
+		</div>
+    </form> --%>
     
-    </div>
-    <div class="col-md-1" style="margin-top: 4px;font-weight: bold;">
-             Leave Credit :
-    </div>
-     <div class="col-md-4">
-    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
-    <option value="A">All</option>
-    <%for(Employee emp:emplist){ %>
-    <option value="<%=emp.getEmpNo() %>"><%=emp.getEmpName() %></option>
-    <%} %>
-    </select>
-
-    </div>
-    
-    <div class="col-md-1">
-    <div class="group-form">
-    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
-    <option value="LOB">Opening</option>
-    <option value="January">Jan</option>
-    <option value="July">Jul</option>
-    </select>
-    
-    </div>
-    </div>
-    <div class="col-md-1">
-    <div class="group-form">
- 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-    <input class="form-control  form-control" type="text" id="year1"  name="Year">
-    </div>
-    </div>
-    <div class="col-md-1">
-    <input type="button" value="Preview Credit" class="btn btn-success btn-sm" onclick="leaveCredit()" style="margin-top: 3px;">
-    </div>
-    </div>
-    
-    
-    </form>
    </div>
    </div>
 

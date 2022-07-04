@@ -6,6 +6,7 @@
 <meta charset="ISO-8859-1">
 <title>Other Item Amount</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 
 <body>

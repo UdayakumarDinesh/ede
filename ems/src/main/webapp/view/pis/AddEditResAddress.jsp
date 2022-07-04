@@ -9,6 +9,7 @@
 <meta charset="ISO-8859-1">
 <title>Residential Address</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <script type="text/javascript">
  function trim (el) {
 	    el.value = el.value.

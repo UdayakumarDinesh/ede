@@ -64,7 +64,7 @@ public class AdminDaoImpl implements AdminDao{
 		
 		return FormModulesList;
 	}
-	private static final String HEADERSCHEDULELIST="SELECT a.formname,a.formurl,a.formdetailid FROM form_detail a , form_role_access b WHERE a.formdetailid=b.formdetailid AND a.formmoduleid=:formmoduleid AND  b.isactive='1'AND b.logintype=:logintype";
+	private static final String HEADERSCHEDULELIST="SELECT a.formname,a.formurl,a.formdetailid,a.formserialno FROM form_detail a , form_role_access b WHERE a.formdetailid=b.formdetailid AND a.formmoduleid=:formmoduleid AND  b.isactive='1'AND b.logintype=:logintype AND a.isactive=1 ORDER BY formserialno ";
 	@Override
 	public List<Object[]> HeaderSchedulesList(String FormModuleId,String Logintype) throws Exception {
 

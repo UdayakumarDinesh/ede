@@ -9,7 +9,13 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
+
+.dashboard-card{
+	overflow-x:hidden !important ; 
+}
+
  #dis{
  text-align: center;
  }
@@ -56,6 +62,9 @@ font-size: 13px; !important;
 .table th {
 text-align: center;
 }
+.nav-link span{
+ 	font-weight: 100 !important;
+ }
 
 </style>
 </head>
@@ -126,7 +135,7 @@ String ses=(String)request.getParameter("result");
     </div>
     </div>
     <div class="col-md-1">
-    <input type="submit" value="Submit" class="btn btn-success btn-sm" style="margin-top: 3px;">
+    <input type="submit" value="Submit" class="btn submit-btn btn-sm" style="margin-top: 3px;">
     </div>
     </div>
     

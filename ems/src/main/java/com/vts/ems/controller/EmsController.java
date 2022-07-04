@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,8 @@ public class EmsController {
 	@Autowired
 	MasterService masterservice;
 	  
-
+	@Value("${ProjectFiles}")
+	private String projectfilespath;
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -151,6 +153,7 @@ public class EmsController {
 			req.setAttribute("isself", IsSelf);
 			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			ses.setAttribute("SidebarActive","Home");
 			return "static/maindashboard";
     	}catch (Exception e) {
     		e.printStackTrace();
@@ -387,7 +390,7 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside UserManualDoc.htm "+UserId);		
 		try {
-			String path = req.getServletContext().getRealPath("/manuals/" + "User-Manual-chss.pdf");
+			String path = projectfilespath+ "/ProjectManuals/User-Manual-chss.pdf";
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
@@ -417,8 +420,8 @@ public class EmsController {
 		logger.info(new Date() +"Inside WorkFlow.htm "+UserId);		
 		try {
 
-		String path = req.getServletContext().getRealPath("/manuals/" + "Work-Flow-chss.pdf");
-
+		String path =projectfilespath +"/ProjectManuals/Work-Flow-chss.pdf";
+	
 		res.setContentType("application/pdf");
 		res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
 

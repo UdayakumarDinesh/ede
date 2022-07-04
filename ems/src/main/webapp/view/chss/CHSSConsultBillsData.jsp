@@ -18,6 +18,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include> 
+<jsp:include page="../static/sidebar.jsp"></jsp:include> 
 
 <style type="text/css">
 input::-webkit-outer-spin-button,
@@ -68,6 +69,13 @@ p {
 	background-color: #F5C6A5;
 	
 }
+
+
+.nav-pills-custom .nav-link.active{
+	background-color: #FC9918 !important;
+}
+
+
 </style>
 </head>
 <body>

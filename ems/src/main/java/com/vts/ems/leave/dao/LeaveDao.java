@@ -38,4 +38,6 @@ public interface LeaveDao {
 	public  Object[] getEmployee(String empno) throws Exception;
 	public List<Object[]> getRegisterByYear(String EmpNo, String yr)throws Exception;
 	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception;
+	public List<Object[]> LeaveApprovalGh(String empNo)throws Exception;
+	
 }

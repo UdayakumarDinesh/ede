@@ -9,7 +9,7 @@
 <meta charset="ISO-8859-1">
 <title>Handling Over</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 <body>
 <%
@@ -112,9 +112,9 @@ String treat = (String)request.getAttribute("treat");
 											<%} %>
 											<td><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
-											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%></td>
-											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%></td>
-											<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%></td>
+											<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%></td>
+											<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%></td>
+											<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString())%></td>
 											<td><%if("A".equalsIgnoreCase(obj[6].toString())){%>Created <%}else if("R".equalsIgnoreCase(obj[6].toString())){%>Revoked<%}else{ %> Santioned<%} %></td>
 										</tr>
 									<%}%>

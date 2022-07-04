@@ -18,7 +18,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -73,6 +73,11 @@ table th:first-child{
 
 table th:last-child{
   border-radius:0 8px 0 0;
+}
+
+
+.nav-pills-custom .nav-link.active{
+	background-color: #FC9918 !important;
 }
 
 </style>

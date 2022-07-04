@@ -91,6 +91,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					req.setAttribute("FormModulesList", service.FormModulesList());
 					req.setAttribute("logintype", logintype);
 					req.setAttribute("moduleid", moduleid);
+					ses.setAttribute("SidebarActive","Role_htm");
 				}
 				catch (Exception e) {
 						e.printStackTrace(); logger.error(new Date() +" Inside RoleFormAccess.htm "+UserId, e);
@@ -109,7 +110,8 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				List<Object[]> admindashboard = service.HeaderSchedulesList("1" ,logintype); 
 			
 				req.setAttribute("dashboard", admindashboard);
-				ses.setAttribute("sesval", "46");
+				ses.setAttribute("formmoduleid", "1");
+				ses.setAttribute("SidebarActive","PisAdminDashboard_htm");
 				return "pis/PisDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PisAdminDashboard.htm "+Username, e);
@@ -130,9 +132,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 				List<Object[]> admindashboard = service.HeaderSchedulesList("5" ,logintype); 
 			
+				ses.setAttribute("formmoduleid", "5"); 
+				ses.setAttribute("SidebarActive", "LeaveDashBoard_htm");
 				req.setAttribute("dashboard", admindashboard);
-				req.setAttribute("formmoduleid", "5");
-				ses.setAttribute("sesval", "45");
+
 				return "leave/LeaveDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside LeaveDashboard.htm "+Username, e);
@@ -209,6 +212,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		    	String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside ChssApproval.htm "+UserId);
 		    	String action = (String)req.getParameter("Action");
+		    	ses.setAttribute("SidebarActive", "ChssApproval_htm");
 		    	try {
 		    		if("ADD".equalsIgnoreCase(action)) {
 		    			String processing   = (String)req.getParameter("processing");
@@ -355,6 +359,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			String UserId = (String)ses.getAttribute("Username");
 			String logintype = (String)ses.getAttribute("LoginType");
 			logger.info(new Date() +"Inside HadlingOver.htm "+UserId);
+			ses.setAttribute("SidebarActive", "HandingOver_htm");
 			try {
 				LocalDate today= LocalDate.now();
 				String start ="";

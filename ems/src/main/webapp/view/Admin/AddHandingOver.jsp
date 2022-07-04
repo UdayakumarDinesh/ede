@@ -7,6 +7,7 @@
 <title>Add Handing Over</title>
 
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 #card
 {
