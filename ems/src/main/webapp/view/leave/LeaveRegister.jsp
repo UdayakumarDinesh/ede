@@ -11,6 +11,11 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
+
+.dashboard-card{
+	overflow-x:hidden !important ; 
+}
+
  #dis{
  text-align: center;
  }
@@ -130,7 +135,7 @@ String ses=(String)request.getParameter("result");
     </div>
     </div>
     <div class="col-md-1">
-    <input type="submit" value="Submit" class="btn btn-success btn-sm" style="margin-top: 3px;">
+    <input type="submit" value="Submit" class="btn submit-btn btn-sm" style="margin-top: 3px;">
     </div>
     </div>
     

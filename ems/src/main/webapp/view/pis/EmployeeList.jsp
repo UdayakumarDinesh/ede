@@ -114,7 +114,7 @@
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											<td><%=obj[4] %></td>
-											<td><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%><%} %></td>
+											<td style="text-align: center;"><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%><%} %></td>
 				
 											<%-- <td>
 												<button type="submit" name="empid" value="<%=obj[0] %>"  class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="View Employee Details" > 

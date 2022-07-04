@@ -132,9 +132,10 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 				List<Object[]> admindashboard = service.HeaderSchedulesList("5" ,logintype); 
 			
+				ses.setAttribute("formmoduleid", "5"); 
+				ses.setAttribute("SidebarActive", "LeaveDashBoard_htm");
 				req.setAttribute("dashboard", admindashboard);
-				ses.setAttribute("formmoduleid", "5");
-				ses.setAttribute("SidebarActive", "LeaveDashboard_htm");
+
 				return "leave/LeaveDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside LeaveDashboard.htm "+Username, e);

@@ -177,7 +177,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 					 		<div class="col-4"></div>
 					 		<div class="col-6" align="right"> <p><b style="color: red;">Note :</b> Any changes in profile request to Admin </p></div>
 					    	<div class="col-2" align="right">
-					    		<button type="submit" class="btn btn-sm submit-btn"  name="action" value="msg" >REQUEST MESSGAE</button>
+					    		<button type="submit" class="btn btn-sm misc-btn"  name="action" value="msg" >REQUEST MESSAGE</button>
 					    	</div>  	
 			    	</div>  
 			    	</form>

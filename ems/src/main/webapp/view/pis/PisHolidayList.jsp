@@ -89,7 +89,7 @@
     </div>
     </div>
     <div class="col-md-1">
-    <input type="submit" value="Submit" class="btn btn-success btn-sm">
+    <input type="submit" value="Submit" class="btn submit-btn btn-sm">
     </div>
     </div>
     
@@ -107,9 +107,9 @@
 	  <thead>
 	  <tr>
 	  <th>SELECT</th>
-	  <th>HOLIDAY DATE</th>
-	  <th>HOLIDAY NAME</th>
-	  <th>HOLIDAY TYPE</th>
+	  <th>Holiday Date</th>
+	  <th>Holiday Name</th>
+	  <th>Holiday Type</th>
 	  
 	  </tr>
 	  </thead>

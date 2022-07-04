@@ -76,7 +76,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 											<td style="text-align: center;"><input type="radio" name="SubId" value="<%=obj[0] %>"> </td>
 											<td><%=obj[4] %> </td>
 											<td><%=obj[1] %></td>
-											<td><%=obj[2] %></td>
+											<td style="text-align: right ;"><%=obj[2] %></td>
 										</tr>
 									 <%} %> 
 								</tbody>

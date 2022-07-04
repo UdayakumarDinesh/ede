@@ -268,7 +268,7 @@ String path=(String)request.getAttribute("path");
 									%>
 										<tr>
 											<td style="text-align:center;  width: 5%;"> <b><%=++slno%></b> </td>
-											<td style="text-align:justify; width: 10%;"><b><%=obj[6]%></b></td>
+											<td style="text-align:justify; width: 10%;"><b><%if(obj[6]!=null){%><%=obj[6]%><%}else{ %>-<%} %></b></td>
 											<td style="text-align:justify; width: 70%;"><b><%=obj[1]%></b></td>
 											<td style="text-align:justify; width: 10%;"><b><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %> </b></td>
 											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 

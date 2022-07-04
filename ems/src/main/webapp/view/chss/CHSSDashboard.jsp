@@ -418,8 +418,8 @@
 	<div class="card-body "  style="padding: 1rem !important;">				
 		<form action="#" method="post" id="ClaimForm">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<div class="table-responsive">
-					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
+				<div class="table-responsive" style="max-height: 200px !important" >
+					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable"  > 
 						<thead>
 							<tr>
 								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>

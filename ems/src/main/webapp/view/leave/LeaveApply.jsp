@@ -11,6 +11,11 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
+
+.dashboard-card{
+	overflow-x:hidden !important ; 
+}
+
  #dis{
  text-align: center;
  }
@@ -428,7 +433,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    	<div class="row">
 	                    		<div class="col-sm-1"></div>
 	                    		<div class="col-sm-2">
-	                    			<button class="btn btn-warning btn-block" type="reset" onclick="resetform()" >Reset</button>
+	                    			<button class="btn  btn-block reset-btn" type="reset" onclick="resetform()" >Reset</button>
 	                    		</div>
 	                    		
 	                    		<div id="submit" class="col-sm-8">
@@ -497,7 +502,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                         <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
                                 		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
 			                        	 
-			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                       <button class="btn  btn-sm appl edit-btn" type="submit" name="edit"  value="edit" >
 			                         <i class="fa-solid fa-pen"></i>
 			                       </button>
                                         <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
@@ -544,7 +549,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                         <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
                                 		<input type="hidden" value="<%=Applied.get(0)[0]%>" name="appl_id">
 			                        	 
-			                       <button class="btn btn-warning btn-sm appl" type="submit" name="edit"  value="edit" >
+			                       <button class="btn edit-btn btn-sm appl" type="submit" name="edit"  value="edit" >
 			                         <i class="fa-solid fa-pen"></i>
 			                       </button>
                                         <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
