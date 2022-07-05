@@ -26,7 +26,7 @@
 }
 
 #sidebar {
-    min-width: 200px;
+    min-width: 210px;
     max-width: 250px;
     /* background: #7386D5; */
     color: #fff;

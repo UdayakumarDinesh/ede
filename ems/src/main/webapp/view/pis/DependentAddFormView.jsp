@@ -8,7 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>CHSS</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 
 
@@ -73,7 +73,7 @@ th,td
 				<div class="col-md-7">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item " aria-current="page"><a href="EmployeeDetails.htm">Profile</a></li>
+						<!-- <li class="breadcrumb-item " aria-current="page"><a href="EmployeeDetails.htm">Profile</a></li> -->
 						<%if(isapproval.equalsIgnoreCase("N")){ %>
 						<li class="breadcrumb-item " aria-current="page"><a href="FamIncExcFwdList.htm">Include / Exclude</a></li>
 						<%}else if(isapproval.equalsIgnoreCase("Y")){ %>
@@ -99,8 +99,8 @@ th,td
 				<%=ses %>
 			</div>
 		<%} %>
-	</div>
-	<div align="center">	
+	</div> 
+	<div class="card dashboard-card" align="center">	
 		<div id="pageborder" align="center" style="max-width:95%;margin-top: 5px;margin-left: 10px;" >
 			<div align="right">
 				<h3 style="text-decoration: underline;">CHSS FORM - 2</h3>

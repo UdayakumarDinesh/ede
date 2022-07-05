@@ -143,7 +143,7 @@ th,td
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<%if(chssstatusid==3 || chssstatusid==1){ %>
+						<%-- <%if(chssstatusid==3 || chssstatusid==1){ %>
 						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->
 						<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5  ){ %>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
@@ -151,7 +151,7 @@ th,td
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
 						<%}else if(chssstatusid==7 ||   chssstatusid==8 ||   chssstatusid==11 ||   chssstatusid==12){ %>
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
-						<%} %>
+						<%} %> --%>
 						<li class="breadcrumb-item active " aria-current="page">Claim</li>
 					</ol>
 				</div>
