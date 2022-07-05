@@ -34,7 +34,7 @@
 {
 	color: #ffffff;
 	background: green;
-	text-transform: uppercase;
+	/* text-transform: uppercase; */
 }
 
 .apply-btn{

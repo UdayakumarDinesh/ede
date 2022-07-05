@@ -810,6 +810,7 @@ public class PisServiceImpl implements PisService
 		
 		
 		
+		
 		@Override
 		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
 		{
@@ -870,6 +871,12 @@ public class PisServiceImpl implements PisService
 		public int FamilyMemberDelete(String familydetailsid)throws Exception
 		{
 			return dao.FamilyMemberDelete(familydetailsid);
+		}
+		
+		@Override
+		public int IncFormReturn(String familyformid, String remarks)throws Exception
+		{
+			return dao.IncFormReturn(familyformid, remarks);
 		}
 		
 }

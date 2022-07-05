@@ -153,7 +153,7 @@ th,td
 						<th style="width: 8% " >Income, if any, per month (Rs) </th>
 						<th style="width: 15% " >Comments </th>
 						<th style="width: 15% " >Attachment </th>
-						<%if(status.equalsIgnoreCase("C")){ %>
+						<%if((status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 						<th style="width: 10% " >
 							Action  
 						</th>
@@ -242,7 +242,7 @@ th,td
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="I"/>		
 							</td>
-							<%if(status.equalsIgnoreCase("C")){ %>
+							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
@@ -256,7 +256,7 @@ th,td
 					
 					
 					<%} %>
-					<%if(status.equalsIgnoreCase("C")){ %>
+					<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 					
 						<tr>
 							<td style="text-align: center;" ><form method="post" action="DepMemAddSubmit.htm" enctype="multipart/form-data" autocomplete="off" id="add-form" ><%=i+1%></form></td>
@@ -363,7 +363,8 @@ th,td
 					residing with me.
 				</p>
 				
-				<div align="left"> 
+				<div class="row" align="left"> 
+					<div class="col-md-12">
 					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
 					<table style="float: left;">
 						<tr>
@@ -382,13 +383,23 @@ th,td
 							<td style="border: 0"> <%=empdetails[12] %></td>
 						</tr>
 					</table>
+					</div>
 				</div>
 				
 				<br>
 				<form action="FamilyMembersForward.htm" method="Post">	
-					<%if(FwdMemberDetails.size()>0 && status.equalsIgnoreCase("C")){ %>
+					<div class="row">
+						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
+							<%if(formdetails[10]!=null || !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
+							<br>
+						</div>
+						<div class="col-md-12">
+							<textarea rows="5" style="width: 100%;" name="remarks" maxlength="400" required="required"></textarea>
+						</div>
+					</div>
+					<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="formid" value="<%=formid%>" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
+							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="formid" formnovalidate="formnovalidate" value="<%=formid%>" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<input type="hidden" name="empid" value="<%=empid %>">
@@ -397,7 +408,8 @@ th,td
 					
 					<%if(status.equalsIgnoreCase("F") && isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" formaction="FamilyMembersFormApprove.htm" name="familyformid" value="<%=formid%>" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyMembersFormApprove.htm" name="familyformid" formnovalidate="formnovalidate" value="<%=formid%>" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+							<button type="submit" class="btn btn-sm delete-btn" formaction="FamilyIncFormReturn.htm" name="formid" value="<%=formid%>" onclick="return confirm('Are you Sure to Return ?');" >Return</button>
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<input type="hidden" name="empid" value="<%=empid %>">

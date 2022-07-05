@@ -545,7 +545,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr>
 							<td colspan="3"  style="background-color: #0e6fb6; color: white;">
 								<b>Family Details</b> 
-								<span style="float: right;"><a class="btn btn-sm submit-btn" href="FamIncExcFwdList.htm"> Include / Exclude </a></span>
+								<!-- <span style="float: right;"><a class="btn btn-sm submit-btn" href="FamIncExcFwdList.htm"> Include / Exclude </a></span> -->
 							</td>
 						</tr>
 
@@ -553,21 +553,15 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td><b>Member Name</b></td>
 							<td><b>Relation</b></td>
 							<td><b>Date Of Birth</b></td>
-					    <!-- 	<td><b>Med Dep</b></td>
-					    	<td><b>Blood Group</b></td> -->
 						</tr>
 							
 						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
 						<tr>
 							<td><%if(O[0]!=null){%><%=O[0]%><%}else{%>--<%}%></td>
 							<td><%if(O[1]!=null){%><%=O[1]%><%}else{%>--<%}%></td>
-							<td><%if(O[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>
-						  <%--   <td><%=O[3]%></td>
-							<td><%=O[4]%></td> --%>
-						
-						</tr>	
-						
-					<%}} %>
+							<td><%if(O[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>						
+						</tr>						
+						<%}} %>
 					</tbody>
 				</table>
 			
@@ -578,7 +572,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 		<p>Six Panel</p>
 	</div>
 	
-	<div class="tab-pane" id="tabs-7" role="tabpanel">
+	<div class="tab-pane" id="tabs-7" role="tabpanel">  
 		<p>Seven Panel</p>
 	</div>
 	

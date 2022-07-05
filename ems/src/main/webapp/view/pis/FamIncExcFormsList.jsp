@@ -92,6 +92,8 @@
 											Created
 										<%}else if(form[3].toString().equals("F") ){  %>
 											Forwarded
+										<%}else if(form[3].toString().equals("R") ){  %>
+											Returned
 										<%} %>	
 									</td>
 									<td><%if(form[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(form[4].toString()) %><%}else{ %>-<%} %></td>
