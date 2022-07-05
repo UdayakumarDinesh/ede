@@ -2393,12 +2393,12 @@ public class PisController {
                 } 
                 os.close();
                 fis.close();
-
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				
 				e.printStackTrace();  
-				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e); 
+				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e);
 				
 			}
 
@@ -2554,8 +2554,7 @@ public class PisController {
 				}else {
 					redir.addAttribute("resultfail", "Form Return Unsuccessful");
 				}		
-				
-				
+								
 				return "redirect:/FamIncExcFwdList.htm";
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside FamilyIncFormReturn.htm "+Username, e);
