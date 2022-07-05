@@ -2301,6 +2301,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
 			
+			ses.setAttribute("SidebarActive", "ApprovedBills_htm");
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
 			
@@ -2647,12 +2648,13 @@ public class CHSSController {
 		}
 		
 	}
-	@RequestMapping(value ="ClaimsList.htm" , method =RequestMethod.POST )
+	@RequestMapping(value ="ClaimsList.htm" , method = {RequestMethod.POST , RequestMethod.GET } )
 	public String CHSSClaimsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ClaimsList.htm "+Username);
 		try {
+			ses.setAttribute("SidebarActive", "ClaimsList_htm");
 			String fromdate = (String)req.getParameter("fromdate");
 			String todate = (String) req.getParameter("todate");
 			String empid = (String)req.getParameter("empid");

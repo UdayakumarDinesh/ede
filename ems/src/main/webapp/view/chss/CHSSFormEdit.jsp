@@ -132,6 +132,7 @@ th,td
 	boolean showhistorybtn = showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y");
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
+	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 %>
 
 	<div class="card-header page-top">
@@ -142,8 +143,22 @@ th,td
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+						
+						<%if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<%if(chssstatusid==3 || chssstatusid==1){ %>
+						<%} %>
+						<%if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
+						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">Pending Approval List</a></li>
+						<%} %>
+						<%if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
+						<li class="breadcrumb-item "><a href="ClaimsList.htm">Claims List</a></li>
+						<%} %>
+						<%if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
+						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Bills List</a></li>
+						<%} %>
+						
+					
+						<%-- <%if(chssstatusid==3 || chssstatusid==1){ %>
 						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->
 						<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5  ){ %>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
@@ -151,7 +166,7 @@ th,td
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
 						<%}else if(chssstatusid==7 ||   chssstatusid==8 ||   chssstatusid==11 ||   chssstatusid==12){ %>
 						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
-						<%} %>
+						<%} %> --%>
 						<li class="breadcrumb-item active " aria-current="page">Claim</li>
 					</ol>
 				</div>
