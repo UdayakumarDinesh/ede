@@ -132,6 +132,7 @@ th,td
 	boolean showhistorybtn = showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y");
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
+	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 %>
 
 	<div class="card-header page-top">
@@ -142,6 +143,8 @@ th,td
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+						
+						
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
 						<%-- <%if(chssstatusid==3 || chssstatusid==1){ %>
 						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->

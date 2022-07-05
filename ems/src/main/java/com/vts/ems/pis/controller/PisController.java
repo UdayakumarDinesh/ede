@@ -2430,7 +2430,7 @@ public class PisController {
 			String Username = (String) ses.getAttribute("Username");	
 			logger.info(new Date() +"Inside FamFormsApproveList.htm "+Username);		
 			try {
-				
+				ses.setAttribute("SidebarActive", "FamFormsApproveList_htm");
 				req.setAttribute("FamFwdFormsList", service.FamMemFwdEmpList());
 				
 				return "pis/FamIncExcFormsApproveList";

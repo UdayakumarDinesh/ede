@@ -806,7 +806,8 @@ public class MasterController {
 			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +"Inside Designation.htm "+UserId);
 			
-			try {			
+			try {
+				ses.setAttribute("SidebarActive", "Designation_htm");
 				String action = (String)req.getParameter("action");
 				if("ADD".equalsIgnoreCase(action)) {
 					
@@ -995,8 +996,11 @@ public class MasterController {
 			{
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside DoctorList.htm "+UserId);
+				
 				List<Object[]> doctorlist = new ArrayList<Object[]>();
 			   	 try {
+			   		 
+			   		ses.setAttribute("SidebarActive", "DoctorList_htm"); 
 					String action = (String)req.getParameter("action");
 					if("ADD".equalsIgnoreCase(action)) {
 						
@@ -1110,7 +1114,9 @@ public class MasterController {
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside CircularLists.htm "+UserId);
 				List<Object[]> circulatlist = new ArrayList<Object[]>();
+				
 			   	 try {
+			   		 ses.setAttribute("SidebarActive", "CircularLists_htm");
 			   		 String action = (String)req.getParameter("action");
 			   		 if("ADD".equalsIgnoreCase(action)){
 			   			 
@@ -1301,6 +1307,7 @@ public class MasterController {
 				logger.info(new Date() +"Inside EmpanneledHospitalList.htm "+UserId);
 				List<Object[]> empanelledhospital = new ArrayList<Object[]>();
 				try {
+					ses.setAttribute("SidebarActive", "EmpanneledHospitalList_htm");
 					String action = (String)req.getParameter("action");
 					if("ADD".equalsIgnoreCase(action)) {
 						return "masters/EmpanelledHospitalAddEdit";

@@ -32,6 +32,7 @@
     color: #fff;
     transition: all 0.3s;
     margin:6px;
+    
 }
 
 #sidebar.active {
@@ -117,6 +118,14 @@
 
 .custom_width{
 	padding: 0.5rem 0.5rem !important;
+}
+
+.sidebar-container{
+	overflow-y:auto !important; 
+}
+
+#sidebarmodule .nav-link span{
+	font-size: 14px !important;
 }
 
 </style>
