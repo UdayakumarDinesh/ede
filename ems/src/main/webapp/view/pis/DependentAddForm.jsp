@@ -191,14 +191,14 @@ Object[] formdetails = (Object[])request.getAttribute("formdetails");
 				<div  align="left"> 
 					<div >
 					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
-					<table style="float: left;">
-						<tr>
-							<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
-						</tr>
-						<tr>
-							<td style="border: 0"> <%=formdetails[9] %></td>
-						</tr>
-					</table>
+						<table style="float: left;">
+							<tr>
+								<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
+							</tr>
+							<tr>
+								<td style="border: 0"> <%=formdetails[9] %></td>
+							</tr>
+						</table>
 					<%} %>
 					<table style="float: right;">
 						<tr>
