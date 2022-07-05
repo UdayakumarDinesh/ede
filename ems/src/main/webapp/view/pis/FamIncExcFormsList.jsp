@@ -8,6 +8,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
+
 <title>CHSS Claims List</title>
 </head>
 <body>
@@ -17,9 +19,14 @@
 	String empid = (String)request.getAttribute("empid");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	String formmoduleid =(String) session.getAttribute("formmoduleid");
 %>
 
+<%-- <%if(!formmoduleid.equalsIgnoreCase("3")){ %>
 
+
+
+<%} %> --%>
 
 	<div class="card-header page-top">
 		<div class="row">

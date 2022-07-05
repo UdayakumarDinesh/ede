@@ -137,6 +137,8 @@ public class PisController {
 		logger.info(new Date() +"Inside EmployeeDetails.htm "+Username);		
 		try {
 			
+			//ses.setAttribute("formmoduleid", "3");
+			
 			String empid=req.getParameter("empid");
 			if(empid==null) {
 				empid=String.valueOf((Long)ses.getAttribute("EmpId"));
@@ -2410,6 +2412,7 @@ public class PisController {
 			try {
 				String empid = ((Long) ses.getAttribute("EmpId")).toString();	
 				
+				ses.setAttribute("SidebarActive", "FamIncExcFwdList_htm");
 				req.setAttribute("formslist",service.EmpFamFormsList(empid, ""));
 				req.setAttribute("empid", empid);
 				return "pis/FamIncExcFormsList";
