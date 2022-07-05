@@ -2491,7 +2491,7 @@ public class PisController {
 				}
 				
 						
-				req.setAttribute("formdetails" , service.GetFamFormData(formid));
+				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("FwdMemberDetails",service.GetFormMembersList(empid,formid));
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
@@ -2525,7 +2525,6 @@ public class PisController {
 					redir.addAttribute("resultfail", "Member Delete Unsuccessful");
 				}		
 				
-				
 				redir.addFlashAttribute("formid",req.getParameter("formid"));
 				return "redirect:/DepAdmissionCreateView.htm";
 			} catch (Exception e) {
@@ -2536,6 +2535,31 @@ public class PisController {
 			
 		} 	
 	 	
+	 	
+	 	@RequestMapping(value="FamilyIncFormReturn.htm" )
+		public String FamilyIncFormReturn(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");	
+			logger.info(new Date() +"Inside FamilyIncFormReturn.htm "+Username);		
+			try {
+				String formid = req.getParameter("formid");
+				String remarks = req.getParameter("remarks");
+				
+				int result= service.FamilyMemDetailsForward(formid);
+				if(result>0) {
+					redir.addAttribute("result", "Form Returned Successfully ");
+				}else {
+					redir.addAttribute("resultfail", "Form Return Unsuccessful");
+				}		
+				
+				
+				return "redirect:/FamIncExcFwdList.htm";
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside FamilyIncFormReturn.htm "+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
 	 	
 	
 }
