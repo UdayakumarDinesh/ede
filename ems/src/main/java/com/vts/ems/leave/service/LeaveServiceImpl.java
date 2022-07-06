@@ -574,7 +574,994 @@ public class LeaveServiceImpl implements LeaveService{
    				Result[1]="Pass";
    				Result[2]=String.valueOf(days);
    				return Result;
-		   }else {
+		   }else if(dto.getLeaveType().equalsIgnoreCase("0003")&&(register.getHPL()/2)>=days) {
+				 //Leave Check for EL
+				
+					long holidayCount=0;
+					//Leave Check for pre date
+					for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+						
+						if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							holidayCount++;
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+							holidayCount++;	
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+			                  
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								Result[0]="CML Cannot Be Clubbed With  RH";
+	               				Result[1]="Fail";
+	               				return Result;
+								
+			                  }else {
+			                	  holidayCount=0;
+			                	  break;
+			                	  	
+			                  }
+							
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+			               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+			               	          break;
+			               	    }else {
+			               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="CML Cannot Be Clubbed With  CL";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+			               	    }
+								
+			                 }else {
+			                	  holidayCount=0;
+			                	  break;
+			                 }
+						}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+							holidayCount++;
+						}else {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+			               	          break;
+			               	    }else {
+			               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="CML Cannot Be Clubbed With  CL";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+			               	    }
+								
+								
+			                 }else {
+			                	 holidayCount=0;
+			                	  break; 
+			                 }
+						}
+						
+					}
+					List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+					//Leave Check for applied date
+					if(list!=null&&list.size()>0) {
+	                       
+						Result[0]="Already Leave Exist";
+	       				Result[1]="Fail";
+	       				return Result;
+					}else{
+						//Leave Check for split year
+						if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+							LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+							LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+							dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+							daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+							Result[2]=String.valueOf(dayslast+daysfirst);
+		      				Result[3]=String.valueOf(dayslast);
+		      				Result[4]=String.valueOf(daysfirst);
+							
+						}else {
+							days= ChronoUnit.DAYS.between(start, end)+1;
+
+						}
+					
+					}
+					
+					//Leave Check for post date
+					for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+						if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+						       
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+							
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+			                  
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								Result[0]="You Should Modify Future Leave";
+	               				Result[1]="Fail";
+	               				return Result;
+			                  }else {
+			                	  break;
+			                  }
+						}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+			               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+			               	    	break;
+			               	    }else {
+			               	    	Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+			               	    }
+								
+			                 }else {
+			                	 break; 
+			                 }
+						}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+							
+						}else {
+							if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+								 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+								
+			                 }else {
+			                	 break; 
+			                 }
+						}   
+					   
+					}
+					Result[0]="You Can Apply CML";
+	   				Result[1]="Pass";
+	   				Result[2]=String.valueOf(days);
+	   				return Result;
+			   }else if(dto.getLeaveType().equalsIgnoreCase("0004")&&register.getHPL()>=days) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="HPL Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="HPL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="HPL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply HPL";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else if(dto.getLeaveType().equalsIgnoreCase("0005")&&register.getRH()>=days) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="RH Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="RH Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="RH Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply RH";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else if(dto.getLeaveType().equalsIgnoreCase("0006")) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="CCL Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="CCL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="CCL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply CCL";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else if(dto.getLeaveType().equalsIgnoreCase("0008")) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="SL Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="SL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="SL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply SL";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else if(dto.getLeaveType().equalsIgnoreCase("0010")) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="PL Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="PL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="PL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply PL";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else if(dto.getLeaveType().equalsIgnoreCase("0009")) {
+						 //Leave Check for EL
+						
+						long holidayCount=0;
+						//Leave Check for pre date
+						for (LocalDate date = start.minusDays(1); date.isAfter(start.minusDays(5)); date = date.minusDays(1)) {
+							
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+								holidayCount++;
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								holidayCount++;	
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="EOL Cannot Be Clubbed With  RH";
+		               				Result[1]="Fail";
+		               				return Result;
+									
+				                  }else {
+				                	  holidayCount=0;
+				                	  break;
+				                	  	
+				                  }
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="EOL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+				                 }else {
+				                	  holidayCount=0;
+				                	  break;
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								holidayCount++;
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(!dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[1].equals("0001")) {
+				               	          break;
+				               	    }else {
+				               	    	if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("F")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="EOL Cannot Be Clubbed With  CL";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+				               	    }
+									
+									
+				                 }else {
+				                	 holidayCount=0;
+				                	  break; 
+				                 }
+							}
+							
+						}
+						List<Object[]> list=dao.checkLeaveEl(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(end));
+						//Leave Check for applied date
+						if(list!=null&&list.size()>0) {
+		                       
+							Result[0]="Already Leave Exist";
+		       				Result[1]="Fail";
+		       				return Result;
+						}else{
+							//Leave Check for split year
+							if(sdf.getYearFromRegularDate(dto.getToDate())>sdf.getYearFromRegularDate(dto.getFromDate())) {
+								LocalDate lastdate=LocalDate.parse(start.getYear()+"-12-31");
+								LocalDate firstdate=LocalDate.parse(end.getYear()+"-01-01");
+								dayslast = ChronoUnit.DAYS.between(start, lastdate)+1+holidayCount;
+								daysfirst = ChronoUnit.DAYS.between(firstdate,end)+1;
+								Result[2]=String.valueOf(dayslast+daysfirst);
+			      				Result[3]=String.valueOf(dayslast);
+			      				Result[4]=String.valueOf(daysfirst);
+								
+							}else {
+								days= ChronoUnit.DAYS.between(start, end)+1;
+
+							}
+						
+						}
+						
+						//Leave Check for post date
+						for (LocalDate date = end.plusDays(1); date.isBefore(end.plusDays(5)) ; date = date.plusDays(1)) {
+							if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "G")>0) {
+							       
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "H")>0) {
+								
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "R")>0) {
+				                  
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									Result[0]="You Should Modify Future Leave";
+		               				Result[1]="Fail";
+		               				return Result;
+				                  }else {
+				                	  break;
+				                  }
+							}else if(dao.checkHoliday(sdf.getSqlDateFormatLocalDate().format(date), "W")>0) {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+				               	    if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+				               	    	break;
+				               	    }else {
+				               	    	Result[0]="You Should Modify Future Leave";
+			               				Result[1]="Fail";
+			               				return Result;
+				               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}else if(date.getDayOfWeek().toString().equals("SATURDAY")||date.getDayOfWeek().toString().equals("SUNDAY")) {
+								
+							}else {
+								if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))!=null) {
+									 if(dao.checkLeave(dto.getEmpNo(),sdf.getSqlDateFormatLocalDate().format(start), sdf.getSqlDateFormatLocalDate().format(date))[2].equals("A")) {
+					               	    	break;
+					               	    }else {
+					               	    	Result[0]="You Should Modify Future Leave";
+				               				Result[1]="Fail";
+				               				return Result;
+					               	    }
+									
+				                 }else {
+				                	 break; 
+				                 }
+							}   
+						   
+						}
+						Result[0]="You Can Apply EOL";
+		   				Result[1]="Pass";
+		   				Result[2]=String.valueOf(days);
+		   				return Result;
+				   }else {
 			   Result[0]="Insufficient Balance";
   				Result[1]="Fail";
   				return Result;
@@ -976,5 +1963,23 @@ public class LeaveServiceImpl implements LeaveService{
 	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
 		
 		return dao.LeaveApprovalGh(empNo);
+	}
+
+	@Override
+	public List<Object[]> LeaveTransaction(String applid) throws Exception {
+		
+		return dao.LeaveTransaction(applid);
+	}
+
+	@Override
+	public Object[] LeavePrint(String applid) throws Exception {
+		
+		return dao.LeavePrint(applid);
+	}
+
+	@Override
+	public Object[] getLabCode() throws Exception {
+		
+		return dao.getLabCode();
 	}
 }

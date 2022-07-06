@@ -392,6 +392,7 @@ public class LeaveController {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside GhApprovalList.htm"+UserId);		
 		try {
+			ses.setAttribute("SidebarActive", "LeaveApproval_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
 	    }
@@ -400,5 +401,28 @@ public class LeaveController {
 	       }
 	   return "leave/LeaveGhApproval";
 
+	}
+	
+	@RequestMapping(value = "/leaveprint.htm")
+	public String leavePrint(HttpServletRequest req) {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside leavePrint.htm"+UserId);
+		String LeaveApplId = req.getParameter("applId");
+		try {
+		req.setAttribute("print", service.LeavePrint(LeaveApplId));
+		req.setAttribute("trans", service.LeaveTransaction(LeaveApplId));
+		req.setAttribute("Lab", service.getLabCode());
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside leavePrint.htm"+UserId, e);
+	       }
+	return "leave/LeavePrint";	
+	}
+	
+	@RequestMapping(value = "/leaveApprovals.htm")
+	public String leaveApprovals(HttpServletRequest req) {
+		String LeaveApplId = req.getParameter("applId");
+
+	return "redirect:/LeaveApproval.htm";	
 	}
 }

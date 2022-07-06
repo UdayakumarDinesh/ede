@@ -376,15 +376,66 @@ public class LeaveDaoImpl implements LeaveDao{
 		return checkLeave;
 	}
 
-    private static final String LEAVEAPPGH="CALL leave_sa_ra_gh(:empNo)";
+    private static final String LEAVEAPPGH="CALL leave_ra_sa_gh(:empNo)";
 	
 	@Override
 	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
 		logger.info(new Date() +"Inside checkLeaveEl");	
 		Query query = manager.createNativeQuery(LEAVEAPPGH);
-		query.setParameter("empno", empNo);
+		query.setParameter("empNo", empNo);
 		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
 		return checkLeave;
+	}
+	
+	private static final String LEAVEPRINT="CALL leave_print(:applid)";
+	
+	@Override
+	public Object[] LeavePrint(String applid) throws Exception {
+		logger.info(new Date() +"Inside LeavePrint");	
+		Query query =manager.createNativeQuery(LEAVEPRINT);
+		Object[] result = null;
+		query.setParameter("applid", applid);
+		
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	private static final String LEAVETRANSCTION="SELECT a.description,b.empname,c.designation,d.actiondate,d.leaveremarks,a.shortname FROM leave_status_desc a,employee b,employee_desig c,leave_transaction d WHERE a.status=d.leavestatus AND d.actionby=b.empno AND c.desigid=b.desigid AND  d.leaveapplid=:applid";
+	@Override
+	public List<Object[]> LeaveTransaction(String applid) throws Exception {
+		logger.info(new Date() +"Inside LeaveTransaction");	
+		Query query = manager.createNativeQuery(LEAVETRANSCTION);
+		query.setParameter("applid", applid);
+		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
+		return checkLeave;
+	}
+	
+	private static final String GETLABCODE  ="SELECT labcode,LabName FROM lab_master";
+	@Override
+	public Object[] getLabCode() throws Exception
+	{
+
+		logger.info(new Date() +"Inside DAO getLabCode");
+		try {
+			
+			Query query= manager.createNativeQuery(GETLABCODE);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 }

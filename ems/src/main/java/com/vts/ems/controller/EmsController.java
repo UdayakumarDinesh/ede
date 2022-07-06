@@ -390,7 +390,7 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside UserManualDoc.htm "+UserId);		
 		try {
-			String path = projectfilespath+ "/ProjectManuals/User-Manual-chss.pdf";
+			String path=projectfilespath+"/ProjectManuals/User-Manual-chss.pdf";
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
