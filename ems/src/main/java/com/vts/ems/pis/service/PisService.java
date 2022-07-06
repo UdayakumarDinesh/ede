@@ -106,4 +106,5 @@ public interface PisService {
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
 	public Object[] GetFamFormData(String familyformid) throws Exception;
 	public int FamilyMemberDelete(String familydetailsid) throws Exception;
+	public int IncFormReturn(String familyformid, String remarks) throws Exception;
 }

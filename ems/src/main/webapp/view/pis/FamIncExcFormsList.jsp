@@ -36,7 +36,7 @@
 			<div class="col-md-9 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item "><a href="EmployeeDetails.htm"> Profile </a></li>
+					<!-- <li class="breadcrumb-item "><a href="EmployeeDetails.htm"> Profile </a></li> -->
 					<li class="breadcrumb-item active " aria-current="page">Include / Exclude</li>
 				</ol>
 			</div>
@@ -92,6 +92,8 @@
 											Created
 										<%}else if(form[3].toString().equals("F") ){  %>
 											Forwarded
+										<%}else if(form[3].toString().equals("R") ){  %>
+											Returned
 										<%} %>	
 									</td>
 									<td><%if(form[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(form[4].toString()) %><%}else{ %>-<%} %></td>

@@ -2019,6 +2019,9 @@ public class PisController {
 			
 			String empid = req.getParameter("empid");
 			String formid = req.getParameter("formid");
+			
+			Object[] formdata = service.GetFamFormData(formid);
+			req.setAttribute("formdetails" , formdata);
 			req.setAttribute("FwdMemberDetails",service.GetFormMembersList(empid,formid));
 			req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 			req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
@@ -2393,12 +2396,12 @@ public class PisController {
                 } 
                 os.close();
                 fis.close();
-
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				
 				e.printStackTrace();  
-				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e); 
+				logger.error(new Date() +" Inside FamIncExcAttachDownload.htm "+UserId, e);
 				
 			}
 
@@ -2430,7 +2433,7 @@ public class PisController {
 			String Username = (String) ses.getAttribute("Username");	
 			logger.info(new Date() +"Inside FamFormsApproveList.htm "+Username);		
 			try {
-				
+				ses.setAttribute("SidebarActive", "FamFormsApproveList_htm");
 				req.setAttribute("FamFwdFormsList", service.FamMemFwdEmpList());
 				
 				return "pis/FamIncExcFormsApproveList";
@@ -2493,8 +2496,7 @@ public class PisController {
 					empid = ((Long) ses.getAttribute("EmpId")).toString();
 				}
 				
-						
-				req.setAttribute("formdetails" , service.GetFamFormData(formid));
+				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("FwdMemberDetails",service.GetFormMembersList(empid,formid));
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
@@ -2528,7 +2530,6 @@ public class PisController {
 					redir.addAttribute("resultfail", "Member Delete Unsuccessful");
 				}		
 				
-				
 				redir.addFlashAttribute("formid",req.getParameter("formid"));
 				return "redirect:/DepAdmissionCreateView.htm";
 			} catch (Exception e) {
@@ -2539,6 +2540,30 @@ public class PisController {
 			
 		} 	
 	 	
+	 	
+	 	@RequestMapping(value="FamilyIncFormReturn.htm" )
+		public String FamilyIncFormReturn(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");	
+			logger.info(new Date() +"Inside FamilyIncFormReturn.htm "+Username);		
+			try {
+				String familyformid = req.getParameter("formid");
+				String remarks = req.getParameter("remarks");
+				
+				int result= service.IncFormReturn(familyformid,remarks);
+				if(result>0) {
+					redir.addAttribute("result", "Form Returned Successfully ");
+				}else {
+					redir.addAttribute("resultfail", "Form Return Unsuccessful");
+				}
+								
+				return "redirect:/FamIncExcFwdList.htm";
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside FamilyIncFormReturn.htm "+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
 	 	
 	
 }

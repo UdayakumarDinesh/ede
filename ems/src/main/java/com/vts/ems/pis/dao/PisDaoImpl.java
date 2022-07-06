@@ -1253,7 +1253,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception
 	{
-		
 	    Query query=manager.createNativeQuery(LISTOFSENIORITYNUMBER);
 	    List<Object[]> listSeni=(List<Object[]>)query.getResultList();
 	    
@@ -1267,7 +1266,8 @@ public class PisDaoImpl implements PisDao {
 	
 	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
 	@Override
-	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception{
+	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception
+	{
 		    Query updatequery=manager.createNativeQuery(UPDATESRNO);
 		    updatequery.setParameter("empid", empIdL);
 	        updatequery.setParameter("srno", long1);  	 
@@ -1288,7 +1288,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus   FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND a.Incformid = :formid ";  /* AND a.MemberStatus IN ('A') */
+	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus   FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid "; 
 	@Override
 	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception 
 	{
@@ -1338,7 +1338,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 		return result;
 	}
@@ -1486,7 +1486,7 @@ public class PisDaoImpl implements PisDao {
 		return form.getFamilyFormId();
 	}
 	
-private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.FormType,ff.FormStatus,DATE(ff.ForwardedDateTime) AS 'ForwardedDateTime',ff.ApprovedBy,DATE(ff.ApprovedDateTime) AS 'ApprovedDateTime',e.empname ,e1.empname AS 'approvedby',e1.designation FROM  employee e,pis_emp_family_form ff    LEFT JOIN (SELECT e2.empid,e2.empname,e2.desigid,ed.designation FROM employee e2, employee_desig ed WHERE e2.desigid=ed.desigid )e1 ON (ff.approvedby = e1.empid) WHERE ff.isactive=1 AND ff.empid=e.empid  AND ff.FamilyFormId = :familyformid";
+private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.FormType,ff.FormStatus,DATE(ff.ForwardedDateTime) AS 'ForwardedDateTime',ff.ApprovedBy,DATE(ff.ApprovedDateTime) AS 'ApprovedDateTime',e.empname ,e1.empname AS 'approvedemp',e1.designation,ff.remarks FROM  employee e,pis_emp_family_form ff    LEFT JOIN (SELECT e2.empid,e2.empname,e2.desigid,ed.designation FROM employee e2, employee_desig ed WHERE e2.desigid=ed.desigid )e1 ON (ff.approvedby = e1.empid) WHERE ff.isactive=1 AND ff.empid=e.empid  AND ff.FamilyFormId = :familyformid";
 	
 	@Override
 	public  Object[] GetFamFormData(String familyformid) throws Exception
@@ -1511,6 +1511,23 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 		    Query query=manager.createNativeQuery(FAMILYMEMBERDELETE);
 		    query.setParameter("familydetailsid", familydetailsid);
+	        return query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String INCFORMRETURN = "UPDATE pis_emp_family_form SET formstatus = 'R', Remarks = :remarks WHERE familyformid= :familyformid"; 
+	@Override
+	public int IncFormReturn(String familyformid, String remarks)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO FamilyMemberDelete");
+		try {
+		    Query query=manager.createNativeQuery(INCFORMRETURN);
+		    query.setParameter("familyformid", familyformid);
+		    query.setParameter("remarks", remarks);
 	        return query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();

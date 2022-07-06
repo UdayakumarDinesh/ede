@@ -96,6 +96,7 @@ ol > li::marker {
 List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMemberDetails");
 Object[] empdetails = (Object[])request.getAttribute("empdetails");
 Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
+Object[] formdetails = (Object[])request.getAttribute("formdetails");
 %>
 <body >
 	<div id="pageborder" align="center" style="max-width:100%;margin-top: -5px;margin-left: 10px;" >
@@ -187,20 +188,28 @@ Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 			<p style="text-indent: 50px;">I certify that the family members whose names are mentioned above are mainly dependant on and
 				residing with me.
 			</p>
-			<div align="right"> 
-				<table style="float: right;">
-					<tr>
-						<td style="border: 0"><b>Signature ..........................................</b></td>
-					</tr>
-					<tr>
-						<td style="border: 0"> Date : ..........................................</td>
-					</tr>
-					<tr>
-						<td style="border: 0; text-align: right;"> <br>P.T.O</td>
-					</tr>
-					
-				</table>
-			</div>
+				<div  align="left"> 
+					<div >
+					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
+						<table style="float: left;">
+							<tr>
+								<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
+							</tr>
+							<tr>
+								<td style="border: 0"> <%=formdetails[9] %></td>
+							</tr>
+						</table>
+					<%} %>
+					<table style="float: right;">
+						<tr>
+							<td style="border: 0"><b><%=empdetails[2] %>,</b></td>
+						</tr>
+						<tr>
+							<td style="border: 0"> <%=empdetails[12] %></td>
+						</tr>
+					</table>
+					</div>
+				</div>
 			<h1 class="break"></h1>
 			
 			<div align="left">
