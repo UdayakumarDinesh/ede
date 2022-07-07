@@ -186,7 +186,7 @@
     position: absolute;
     right: 35px;
     top: 20px;
-    font-size: 2vw;
+    font-size: 1.5vw;
     display: block;
   }
 
@@ -198,14 +198,14 @@
     text-transform: capitalize;
     opacity: 0.5;
     display: block;
-    font-size: 18px;
+    font-size: 16px;
   }
   
   .toggle{
   	margin: 0px 35px !important;
   }
   
-s
+
 	@media (max-width: 600px) {
 	    .highcharts-figure,
 	    .highcharts-data-table table {
@@ -219,6 +219,12 @@ s
     min-width: 310px;
     max-width: 800px;
 }
+  
+  .violet{
+  	background-color: #533E85;
+  	color:white;
+  }
+  
   
 	</style>
 
@@ -337,21 +343,30 @@ s
 			    	
 			    	<div class="container" >
 					    <div class="row">
-					    <div class="col-md-6">
+					    <div class="col-md-4">
 					      <div class="card-counter primary">
 					        <i class="fa fa-code-fork"></i>
 					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[0].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name">Total Amount Claimed</span>
+					        <span class="count-name"> Amount Claimed</span>
 					      </div>
 					    </div>
 		
-					    <div class="col-md-6">
+					    <div class="col-md-4">
 					      <div class="card-counter success">
 					        <i class="fa fa-database"></i>
 					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[1].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name">Total Amount Settled </span>
+					        <span class="count-name"> Amount Settled </span>
 					      </div>
 					    </div>
+					    
+					     <div class="col-md-4">
+					      <div class="card-counter violet">
+					        <i class="fa-solid fa-list-check"></i>
+					        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
+					        <span class="count-name"> Amount InProcess </span>
+					      </div>
+					    </div>
+					    
 					  </div>
 					  
 					</div>

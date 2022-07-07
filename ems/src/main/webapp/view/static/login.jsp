@@ -25,8 +25,8 @@
 }
 
 .scrollpolicy{
- 	max-height: 515px;
-    overflow-y: auto;
+ 	/* max-height: 515px; */
+    overflow-y: auto !important;
 }
 </style>
 
@@ -432,7 +432,7 @@ String path=(String)request.getAttribute("path");
 
 	
 	
-<div class="tab-pane" id="tab-5" role="tabpanel">
+<div class="tab-pane scrollpolicy" id="tab-5" role="tabpanel">
     <div align="center" style="min-height: 29rem !important;">
         	<div class="card scrollpolicy">
         		<div class="card-body main-card" >
@@ -455,7 +455,7 @@ String path=(String)request.getAttribute("path");
 </div>	
 </div>	
 
-    <div id="footer">
+   <div id="footer">
 	<footer class="footer"  >
 	    <section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
 		  <section id="page" class="body-wrapper clearfix" style="">
@@ -478,7 +478,7 @@ String path=(String)request.getAttribute("path");
     		</div>
   		</div>
 	</footer>
-	</div>
+	</div> 
 </body>
 
 <script type="text/javascript">
@@ -500,13 +500,15 @@ $("#error-alert") .fadeTo(3000, 1000).slideUp(1000, function ( ) {
             var footerTop = $('#footer').position().top + footerHeight;
             var marginTop = (docHeight - footerTop + 10);
 
+            $('.scrollpolicy').css('max-height', docHeight-155+ 'px' )
+            
             if (footerTop < docHeight)
                 $('#footer').css('margin-top', marginTop + 'px'); // padding of 30 on footer
             else
                 $('#footer').css('margin-top', '0px');
             // console.log("docheight: " + docHeight + "\n" + "footerheight: " + footerHeight + "\n" + "footertop: " + footerTop + "\n" + "new docheight: " + $(window).height() + "\n" + "margintop: " + marginTop);
         }, 250);
-    });
+    }); 
 </script>
 <script type="text/javascript">
 $("#myTable1,#myTable2,#myTable3").DataTable({

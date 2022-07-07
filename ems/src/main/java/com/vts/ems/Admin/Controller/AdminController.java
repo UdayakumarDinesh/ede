@@ -147,6 +147,28 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 		}
 		
+		@RequestMapping(value = "MasterDashBoard.htm", method = RequestMethod.GET)
+		public String MasterDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MasterDashBoard.htm "+Username);		
+			try {
+				
+				String logintype = (String)ses.getAttribute("LoginType");
+				List<Object[]> masterdashboard = service.HeaderSchedulesList("2" ,logintype); 
+			
+				ses.setAttribute("formmoduleid", "2"); 
+				ses.setAttribute("SidebarActive", "MasterDashBoard_htm");
+				req.setAttribute("dashboard", masterdashboard);
+
+				return "masters/MasterDashBoard";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside MasterDashBoard.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+		
 		@RequestMapping(value = "HeaderModuleList.htm" , method = RequestMethod.GET)
 		public @ResponseBody String HeaderModuleList(HttpServletRequest request ,HttpSession ses) throws Exception {
 			

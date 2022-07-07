@@ -30,7 +30,7 @@ Login loginEditdata    =   (Login)request.getAttribute("logineditdata");
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>
+						<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li> -->
 						<li class="breadcrumb-item "><a href="LoginMaster.htm"> Login List </a></li>
 						<li class="breadcrumb-item active " aria-current="page">Login Edit</li>
 					</ol>

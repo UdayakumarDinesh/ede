@@ -26,7 +26,7 @@
 }
 
 #sidebar {
-    min-width: 210px;
+    min-width: 215px;
     max-width: 250px;
     /* background: #7386D5; */
     color: #fff;
@@ -79,7 +79,7 @@
 
 .nav-pills-custom .nav-link.active {
     color: white;
-    background: #FC9918;
+    background: #143F6B;
     /* border:2px solid #45b649; */
 }
 
@@ -103,7 +103,7 @@
         right: -10px;
         transform: translateY(-50%);
         opacity: 0;
-        border-color: transparent transparent transparent #FC9918;
+        border-color: transparent transparent transparent #143F6B;
         
     }
 }
