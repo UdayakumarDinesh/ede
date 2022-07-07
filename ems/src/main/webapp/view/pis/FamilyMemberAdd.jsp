@@ -223,33 +223,42 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                      <div class="col-2">
                        <div class="form-group">
 		                	<label>Employed:<span class="mandatory">*</span></label>
-		                    <select name="emp_unemp" id="EmpId" class="form-control input-sm" style="width:70px; height: 30px;">
+		                    <select name="emp_unemp"  class="form-control input-sm" id="mem-employed" style="width:70px; height: 30px;">
 		                    <option value="N">No</option>
 		                    <option value="Y">Yes</option>       
 		                    </select>
 		                 </div>
                     </div>
-     
-		          
 		           </div> 
-               
                 <!--// dependency ,Employed,Married-->
-				<div class="row">
-							 <div class="col-md-4" id = "EmpHide">
-                         <div class="form-group">
-                          <label>Employed Status:<span class="mandatory">*</span></label>
-                            <select class="form-control input-sm" name="EmpStatus" required="required">
-                              <!-- <option value="none" selected disabled hidden>Select Status</option> -->
-		                    <option value="Private">Private</option>
-		                    <option value="Central Goverment">Central Goverment.</option>
-		                    <option value="State Goverment">State Goverment</option>
-		                    <option value="PSU">PSU</option>
-		                      
-                            </select>
-                            </div>  
-                        </div>
-				</div>
-		</div>
+						<div class="row" id = "EmpHide">
+								<div class="col-md-3" >
+			                    	<div class="form-group">
+			                        <label>Employed Status:<span class="mandatory">*</span></label>
+			                        	<select class="form-control input-sm" name="EmpStatus" id="mem-employed-status">
+				                            <option value="" selected disabled >Select Status</option>
+						                    <option value="Private">Private</option>
+						                    <option value="Central Goverment">Central Goverment.</option>
+						                    <option value="State Goverment">State Goverment</option>
+						                    <option value="PSU">PSU</option>
+			                            </select>
+			                        </div>  
+			               		</div>
+			               		<div class="col-md-3" >
+			                    	<div class="form-group">
+			                        <label>Occupation:<span class="mandatory">*</span></label>
+			                        	<input type="text" class="form-control" name="memberOccupation" value="" id="mem-occupation" maxlength="100">
+			                        </div>  
+			               		</div>
+			               		
+			               		<div class="col-md-3" >
+			                    	<div class="form-group">
+			                        <label>Income (Rs / Month)<span class="mandatory">*</span></label>
+			                        	<input type="number" class="form-control numberonly" name="memberIncome" value="0" id="mem-income" min="0" max="9999999999" >
+			                        </div>  
+			               		</div>
+							</div>
+		
 						<div class="row">
 							<div class="col-12" align="center">
 							 <div class="form-group">
@@ -260,13 +269,12 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 									</div>
 							</div>
 						</div>
-						<div><div class="col-12"></div></div>		
-						<input type="hidden" name="incstatus" value="C">				
+						</div>
 			</form>
 		</div>
 		</div>
 		</div>
-		</div>
+		
 </body>
 <script type="text/javascript">
 $('.mydate').daterangepicker({
@@ -283,11 +291,30 @@ $('.mydate').daterangepicker({
 });
 
 
-
-
-$("#EmpId").on("change",function(e){
+$("#mem-employed").on("change",function(e){
 	   
-	 var EmpValue =$("#EmpId").val();
+	 var EmpValue =$("#mem-employed").val();
+	 
+	    if(!(EmpValue=="Y")){
+			
+	    	$("#EmpHide").hide();
+	    	$('#mem-employed-status').removeAttr('required');
+	    	$('#mem-occupation').removeAttr('required');
+			$('#mem-income').removeAttr('required');
+	      }else{
+	    	  
+	    	$("#EmpHide").show();
+	    	$('#mem-employed-status').attr('required','required');
+	    	$('#mem-occupation').attr('required','required');
+			$('#mem-income').attr('required','required');
+	      }
+});
+
+
+
+$("#mem-employed").on("change",function(e){
+	   
+	 var EmpValue =$("#mem-employed").val();
 	    
 	 
 	    if(!(EmpValue=="N")){

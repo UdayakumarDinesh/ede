@@ -584,7 +584,7 @@ $('.consultdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	"minDate":threeMonthsAgo, 
+	/* "minDate":threeMonthsAgo, */ 
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

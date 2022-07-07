@@ -67,28 +67,27 @@ String path=(String)request.getAttribute("path");
   		</div>
   		
   		
-  		<ul class="nav nav-tabs justify-content-end ">
-					  <li class="nav-item">
-						   <!--  <a class="nav-link active" href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a> -->
+  				<ul class="nav nav-tabs justify-content-end ">
+					  <li class="nav-item"  onclick="$('#footer').show();">
 						 <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" ><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 					  </li> 
 					  
-					   <li class="nav-item">
-					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Policy</a>				   
+					   <li class="nav-item" onclick="$('#footer').hide();">
+					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Policy</a>				   
 					  </li>
 					  
-					  <li class="nav-item">		   
-					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; CHSS Circulars</a>
+					  <li class="nav-item" onclick="$('#footer').hide();">		   
+					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  
-					  <li class="nav-item">					   
+					  <li class="nav-item" onclick="$('#footer').hide();">					   
 					   <a class="nav-link" data-toggle="tab" href="#tab-3"  role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
 					  </li>
 
-					    <li class="nav-item">					    
+					    <li class="nav-item" onclick="$('#footer').hide();">					    
 					    <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
 					  </li> 
-		</ul>
+				</ul>
 				
   		
 	</header>
@@ -456,22 +455,8 @@ String path=(String)request.getAttribute("path");
 </div>	
 </div>	
 
- 
-<!-- Footer -->
-
- <!--    <footer id="footer" class="clearfix">
-  		<div class="widget-guide clearfix">
-       		<div class="footr-rt">
-            	<div class="copyright-content"> 
-            		<p>Website maintained by Vedant Tech Solutions<br>Site best viewed at 1360 x 768 resolution in I.E 11+, Mozilla 70+, Google Chrome 79+	</p> 
-            	</div>
-    		</div>
-  	</div>
-</footer> -->
-
-    <!--/#footer-->
-    
-	<footer class="footer" id="footer">
+    <div id="footer">
+	<footer class="footer"  >
 	    <section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
 		  <section id="page" class="body-wrapper clearfix" style="">
 		    	<!-- Blue Border for Login Page -->  
@@ -493,7 +478,7 @@ String path=(String)request.getAttribute("path");
     		</div>
   		</div>
 	</footer>
-
+	</div>
 </body>
 
 <script type="text/javascript">

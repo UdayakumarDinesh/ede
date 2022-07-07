@@ -62,6 +62,7 @@ public class EmployeeDetails {
 	private Long BasicPay;
 	private Date EmpStatusDate;
 	private String PhoneNo;
+	private String AltPhoneNo;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

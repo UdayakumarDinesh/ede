@@ -95,7 +95,7 @@
 								<thead>
 									<tr>
 										<th>Select</th>
-										<th>SN</th>
+										<th>SrNo.</th>
 										<th>EmpNo</th>
 										<th>Name</th>
 										<th>Designation</th>

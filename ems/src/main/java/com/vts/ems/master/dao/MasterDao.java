@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSDoctorRates;
-import com.vts.ems.chss.model.CHSSMedicineList;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
@@ -32,9 +32,9 @@ public interface MasterDao {
 	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception;
 	public List<Object[]> GetTreatmentType()throws Exception;
 	public int Checkduplicate(String medicinename,String treatid)throws Exception;
-	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception ;
-	public Long AddMedicine(CHSSMedicineList medicine)throws Exception;
-	public Long EditMedicine(CHSSMedicineList item) throws Exception;
+	public CHSSMedicinesList getCHSSMedicine(long medicineid) throws Exception ;
+	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception;
+	public Long EditMedicine(CHSSMedicinesList item) throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
 	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception ;
 	public int EditDoctorMaster(CHSSDoctorRates Docrate) throws Exception;

@@ -555,7 +555,7 @@ public class CHSSController {
 //			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
 			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(Discount));
-			bill.setDiscountPercent(Double.parseDouble(DiscountPer));
+			bill.setDiscountPercent(CropTo2Decimal(DiscountPer));
 			bill.setFinalBillAmt(CropTo2Decimal(finalbillamount));
 			bill.setModifiedBy(Username);
 			

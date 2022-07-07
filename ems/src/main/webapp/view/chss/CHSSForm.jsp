@@ -231,7 +231,7 @@ th,td
 					<% double billstotal=0 ,discount=0 /*,  GST=0 */;
 					for(int i=0;i<chssbillslist.size();i++)
 					{
-						billstotal +=Double.parseDouble(chssbillslist.get(i)[7].toString());
+						billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[7].toString()));
 						if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 						{
 							/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
@@ -279,7 +279,7 @@ th,td
 					dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 					<br>
 					<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-						&#8226; That my Parents / Parents-in-Law Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> are wholly dependent
+						&#8226; That my Parents / Parents-in-Law Shri / Smt. <span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span> are wholly dependent
 						upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 						month.
 						<br>
@@ -289,7 +289,7 @@ th,td
 						<br>
 					<%} %>
 					
-						&#8226; That the patient Shri / Smt. <span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is not covered by the ESI Scheme / any
+						&#8226; That the patient Shri / Smt. <span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is not covered by the ESI Scheme / any
 						other medical facility.
 						<br>
 						
@@ -308,7 +308,7 @@ th,td
 						&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 						claimed in this bill has not been preferred / shall not be preferred from any other source.
 						<br>
-						&#8226; That my wife / husband Shri / Smt.<span style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is an employee in STARC and that she / he is
+						&#8226; That my wife / husband Shri / Smt.<span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span> is an employee in STARC and that she / he is
 						covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 						benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 						dependent(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -387,7 +387,7 @@ th,td
 						<%} %>
 						<tr>
 							<td  class="text-blue" ><%=consult[8] %><%-- <br>(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
-							<td class="text-blue" ><%=consult[3] %></td>
+							<td class="text-blue" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
 							<td class="text-blue" ><%=consult[2] %></td>
 							<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 							<td class="right text-blue"><%=consult[6] %></td>

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.chss.model.CHSSDoctorRates;
-import com.vts.ems.chss.model.CHSSMedicineList;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
@@ -134,21 +134,21 @@ public class MasterServiceImpl implements MasterService {
 		return dao.Checkduplicate(medicinename,treatid);
 	}
 	@Override
-	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
+	public CHSSMedicinesList getCHSSMedicine(long medicineid) throws Exception {
 		return dao.getCHSSMedicine(medicineid);
 	}
 	
 	@Override
-	public Long AddMedicine(CHSSMedicineList medicine)throws Exception
+	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
 		return dao.AddMedicine(medicine);
 	}
 	
 	@Override
-	public Long EditMedicine(CHSSMedicineList medicine)throws Exception{
+	public Long EditMedicine(CHSSMedicinesList medicine)throws Exception{
 		
 		
-		CHSSMedicineList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
+		CHSSMedicinesList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
 		
 		mlist.setMedicineId(medicine.getMedicineId());
 		mlist.setMedicineName(medicine.getMedicineName());

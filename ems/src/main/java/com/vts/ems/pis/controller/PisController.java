@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -233,6 +234,7 @@ public class PisController {
 			String idMark = req.getParameter("idMark");
 			String empstatus = req.getParameter("empstatus");
 			String phoneno = req.getParameter("PhoneNo");
+			String AltPhoneno = req.getParameter("AltPhoneno");
 			String uanno = req.getParameter("UANNo");
 					
 			
@@ -247,7 +249,6 @@ public class PisController {
 			employee.setIsActive(1);
 			employee.setCreatedBy(Username);
 			employee.setExtNo(internalNo);
-			System.out.println("uanno     :"+uanno);
 			EmployeeDetails emp= new EmployeeDetails();
 			emp.setTitle(salutation);
 			emp.setUANNo(uanno);
@@ -311,6 +312,7 @@ public class PisController {
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phoneno);
+			emp.setAltPhoneNo(AltPhoneno);
 			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
 			}
@@ -407,6 +409,7 @@ public class PisController {
 			String empdetailsid=req.getParameter("empdetailsid");
 			String uanno = req.getParameter("UANNo");
 			String EmpId= req.getParameter("EmpId");
+			String AltPhoneno = req.getParameter("AltPhoneno");
 			
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
@@ -420,7 +423,6 @@ public class PisController {
 				employee.setModifiedBy(Username);
 				employee.setModifiedDate(sdtf.format(new Date()));
 				
-			System.out.println("uanno     :"+uanno);		
 			EmployeeDetails emp = new EmployeeDetails();
 			emp.setTitle(salutation);
 			emp.setUANNo(uanno);
@@ -484,6 +486,7 @@ public class PisController {
 			emp.setPINNo(drona);
 			emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phno);
+			emp.setAltPhoneNo(AltPhoneno);
 			emp.setEmpNo(PunchCardNo);
 			if (uid != null && !uid.trim().equalsIgnoreCase("")) {
 				emp.setUID(Long.parseLong(uid));
@@ -838,7 +841,6 @@ public class PisController {
     	   String emp_unemp = req.getParameter("emp_unemp");
     	   String gender = req.getParameter("Gender");
     	   String empid = req.getParameter("empid");
-    	   String incstatus = req.getParameter("incstatus");
     	   String memberOccupation = req.getParameter("memberOccupation");
     	   String memberIncome = req.getParameter("memberIncome").trim();
     	  
@@ -891,9 +893,6 @@ public class PisController {
     	  
     	   redir.addFlashAttribute("Employee", empid);
     	   
-    	   if(incstatus.equals("A")) {
-    		   return "redirect:/EmpFamilyMemberAdd.htm";
-    	   }
     	   
 	   } catch (Exception e) {
 		   logger.error(new Date() +"Inside AddFamilyDetails.htm "+Username,e);
@@ -983,11 +982,6 @@ public class PisController {
     	   }
     	  
     	   redir.addFlashAttribute("Employee", empid);   
-    	   
-    	   if(req.getParameter("useredit").equals("Y")) {
-    		   return "redirect:/EmpFamilyMemberAdd.htm";
-    	   }
-    	   
     	   
 	      } catch (Exception e) {
 	    	  logger.error(new Date() + " Inside EditFamilyDetails.htm " + Username, e);
@@ -2025,6 +2019,7 @@ public class PisController {
 			req.setAttribute("FwdMemberDetails",service.GetFormMembersList(empid,formid));
 			req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 			req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			
 			String filename="Dependent Addition Form";
 			String path=req.getServletContext().getRealPath("/view/temp");
@@ -2277,7 +2272,6 @@ public class PisController {
 				
 				String name = req.getParameter("mem-name");
 		    	String relation  = req.getParameter("mem-relation");
-		    	System.out.println(relation);
 		    	String dob  = req.getParameter("mem-dob");
 		    	String occupation =  req.getParameter("mem-occupation").trim();
 		    	String income = req.getParameter("mem-income");
@@ -2502,6 +2496,7 @@ public class PisController {
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
 				req.setAttribute("relationtypes" , service.familyRelationList() );
 				req.setAttribute("isApprooval" , isapproval );
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				
 				return "pis/DependentAddFormView";
 			} catch (Exception e) {

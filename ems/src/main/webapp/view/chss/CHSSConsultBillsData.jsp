@@ -209,12 +209,12 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<th style="width:5%;" >SN</th>
 												<th style="width:20%;" >Hospital / Medical / Diagnostics Centre Name</th>
 												<th style="width:10%;" >Bill / Receipt No.</th>
-												<th style="width:8%;" >Bill Date</th>
+												<th style="width:10%;" >Bill Date</th>
 												<th style="width:10%; text-align: right;">Paid Amt (&#8377;)</th>
 												<!-- <th style="width:7%; text-align: right;">GST Amt (&#8377;)</th> -->
 												<th style="width:10%; text-align: right;">Discount (&#8377;)</th>
 												<th style="width:10%; text-align: right;">Discount (%)</th>
-												<th style="width:12%;" >Action  </th>
+												<th style="width:10%;" >Action  </th>
 											</tr>
 										</thead>
 										<tbody >
@@ -227,7 +227,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<td> <input type="text" class="form-control items" name="billno-<%=obj[0]%>" value="<%=obj[2] %>" style="width:100%;"   maxlength="25" required="required"></td>
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="finalbillamount-<%=obj[0]%>" id="finalbillamount-<%=obj[0]%>"  onkeyup="enableDiscount('<%=obj[0]%>')" value="<%=obj[7]%>" style="width:100%;text-align: right; " min="1" max="9999999" required="required"></td>
-												<%-- <td> <input type="number" class="form-control items cost-only " step=".01" name="GSTAmt-<%=obj[0]%>" id="GSTAmt-<%=obj[0]%>"  value="<%=obj[5] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td> --%>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
 												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
 												<td>
@@ -274,12 +273,11 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
 											<td style="width:20%;" ><input type="text" class="form-control items" name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="25" required="required"></td>
-											<td style="width:8%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
+											<td style="width:10%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
 											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="this.select();" onkeyup="enableDiscount('')" value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-											<!-- <td style="width:7%;" > <input type="number" class="form-control items cost-only" step=".01" name="GSTAmt"  id="GSTAmt-"  Onclick="this.select();" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td> -->
 											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-" Onclick="this.select();"  onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
 											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".1" name="DiscountPer" id="DiscountPer-" value="0.0" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td>
-											<td style="width:12%;" >
+											<td style="width:10%;" >
 												<button type="submit"  class="btn btn-sm add-btn "  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
 											</td>										
 										</tr>
@@ -288,7 +286,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								</div>
 							</form>
 					
-					<form action="CHSSFormEdit.htm" method="post" id="form2">
+						<form action="CHSSFormEdit.htm" method="post" id="form2">
 							<div class="row">
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
@@ -309,7 +307,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 							<input type="hidden" name="claimaction" value="F">
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					</form>
+						</form>
 					
 					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
 						<input type="hidden" name="claimaction" value="F">	
@@ -802,6 +800,8 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 
 <script type="text/javascript">
 
+
+
 function calculateDiscountPer($id)
 {
 	var disAmt = Number($('#DiscountAmt-'+$id).val());
@@ -1039,12 +1039,14 @@ function  onlyNumbers() {
 
 }
 
+var threeMonthsAgo = moment().subtract(3, 'months');
+
 $('.billdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	"minDate":new Date('<%=consultmain.getConsultDate() %>'), 
+	"minDate":threeMonthsAgo,
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

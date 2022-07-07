@@ -380,7 +380,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
 		
 		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
-		fetch.setBillNo(bill.getBillNo());
+		fetch.setBillNo(bill.getBillNo().trim().toUpperCase());
 		fetch.setBillDate(bill.getBillDate());
 		fetch.setGSTAmount(bill.getGSTAmount());
 		fetch.setDiscount(bill.getDiscount());
@@ -576,15 +576,7 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.ConsultationBillEdit(fetch);
 	}
 	
-	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
-	{
-		List<Object[]> medicinedata = dao.MedAdmissibleCheck(WordUtils.capitalize(meds.getMedicineName()).trim());
-		if(medicinedata!=null && medicinedata.size()>0)
-		{
-			meds.setMedsRemAmount(0);
-			meds.setComments("Found in inadmissible List : MedicineNo: "+medicinedata.get(0)[1]);
-		}
-	}
+	
 	
 	@Override
 	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception
@@ -630,6 +622,16 @@ public class CHSSServiceImpl implements CHSSService {
 			return 0;
 		}
 		
+	}
+	
+	public void checkMedAdmissibility(CHSSMedicine  meds ) throws Exception
+	{
+		List<Object[]> medicinedata = dao.MedAdmissibleCheck(WordUtils.capitalize(meds.getMedicineName()).trim());
+		if(medicinedata!=null && medicinedata.size()>0)
+		{
+			meds.setMedsRemAmount(0);
+			meds.setComments("Found in inadmissible List : MedicineNo: "+medicinedata.get(0)[1]);
+		}
 	}
 	
 	public void calculateMedAmount(CHSSMedicine  meds, String billid ) throws Exception
@@ -1630,7 +1632,7 @@ public class CHSSServiceImpl implements CHSSService {
 			CHSSBill bill = new CHSSBill();
 			bill.setCHSSApplyId(Long.parseLong(dto.getCHSSApplyId()));
 			bill.setCHSSConsultMainId(Long.parseLong(dto.getCHSSConsultMainId()));
-			bill.setBillNo(dto.getBillNo()[i]);
+			bill.setBillNo(dto.getBillNo()[i].trim().toUpperCase());
 			bill.setCenterName(WordUtils.capitalize(dto.getCenterName()[i]).trim());
 			bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
 //			bill.setGSTAmount(CropTo2Decimal(dto.getGSTAmount()[i]));

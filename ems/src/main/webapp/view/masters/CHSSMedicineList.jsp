@@ -21,7 +21,7 @@
 List<Object[]> medicine = (List<Object[]>)request.getAttribute("MedicineList");
 List<Object[]> main =(List<Object[]>)request.getAttribute("treatment");
 String treat = (String)request.getAttribute("treat");
-
+String LoginType = (String) session.getAttribute("LoginType"); 
 %>
 
 
@@ -72,8 +72,12 @@ String treat = (String)request.getAttribute("treat");
 			                  	<select class="form-control select2" name="tratementname" data-container="body" data-live-search="true"  onchange="this.form.submit();" style="width: 200px; align-items: center; font-size: 5px;">
 								<%-- 	<option value="A" <%if(treat!=null){if("A".equalsIgnoreCase(treat)){ %>selected <%}}%>>All</option> --%> 
 											<%if(main!=null&&main.size()>0){for(Object[] O:main){%>
-														<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
-														<%}}%>
+												<%if(O[0].toString().equalsIgnoreCase("1")){ %>
+												<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%>&nbsp; (Inadmissible)</option>
+												<%}else{ %>	
+												<option value="<%=O[0]%>" <%if(treat!=null){if(treat.equalsIgnoreCase(O[0].toString())){ %>selected <%}}%>> <%=O[1]%></option>
+												<%} %>
+											<%}}%>
 								</select>
 						        </div>
 					   </form>
@@ -94,6 +98,7 @@ String treat = (String)request.getAttribute("treat");
 										<th>SN</th>
 										<th>Treatment Type</th>
 										<th> Medicine Name </th>
+										<th>Admissible</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -105,7 +110,13 @@ String treat = (String)request.getAttribute("treat");
 											<td><%=obj[3] %>. </td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
-											
+											<td>
+												<%if(obj[2].toString().equalsIgnoreCase("Y")){ %>
+													YES
+												<%}else{%>
+													No
+												<%} %>				
+											</td>
 										</tr>
 									 <%} }%> 
 								</tbody>
@@ -114,6 +125,8 @@ String treat = (String)request.getAttribute("treat");
 						</div>
 					
 					
+					
+					<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
 					<div class="row text-center">
 						<div class="col-md-12">
 											
@@ -122,7 +135,7 @@ String treat = (String)request.getAttribute("treat");
 									
 					    </div>						 
 					</div>
-					
+					<%} %>
 			   </form>		
 			  </div>
 		   	 </div>				

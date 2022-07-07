@@ -112,7 +112,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class="col-md-4">
 			                <label>Name<span class="mandatory">*</span></label> 
-			            	<input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm"   maxlength="100"  placeholder="Enter Employee name"   onclick="return trim(this)" onchange="return trim(this)">
+			            	<input type="text" name="empname" required="required" id="empname" style="text-transform:capitalize"  class="form-control input-sm"   maxlength="100"  placeholder="Employee name"   onclick="return trim(this)" onchange="return trim(this)">
 			            </div>			
 			            <div class="col-md-2">			
 			                <label>Designation<span class="mandatory">*</span></label>
@@ -128,7 +128,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            <div class=" col-md-2 ">
 			                <label>Employee No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="4"
-			                    class=" form-control input-sm " placeholder="Enter Employee No " required="required"
+			                    class=" form-control input-sm " placeholder="Employee No " required="required"
 			                     onblur="checknegative(this)">
 			            </div>
 				
@@ -202,7 +202,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 						<div class=" col-md-2 ">
 			                <label>Home Town </label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
-			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " 
+			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Home Town " 
 			                    onclick=" Validate() ">
 			            </div>
 			            
@@ -215,51 +215,57 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            
 			             <div class=" col-md-2 ">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="Phoneno" value="" maxlength="10"
-			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                <input type="text" name="PhoneNo"  value="" maxlength="10"
+			                    class=" form-control input-sm Phoneno" placeholder="Phone no " required="required"
 			                     onblur="checknegative(this) ">
+			              </div>
+			              
+			               <div class=" col-md-2 ">
+			                <label>Alternate Mobile No</label>
+			                <input type="text" name="AltPhoneno" value=""  maxlength="10"
+			                    class=" form-control input-sm Phoneno" placeholder="Alternate Phone no "   onblur="checknegative(this) ">
 			              </div>
 			            
 			              <div class=" col-md-2 ">
 			                <label>Extension number<span class="mandatory">*</span></label>
 			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
-			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "   id="InternalNum"
+			                    placeholder="Extension Number " onblur=" checknegative(this) "   id="InternalNum"
 			                    onkeypress=" return isNumber(event) " required="required">
 			             </div>
 			            
 						<div class=" col-md-2 ">
 			                <label>Internal Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
-			                    placeholder="Enter Internal Email " required="required" onclick=" return trim(this)"
+			                    placeholder="Internal Email " required="required" onclick=" return trim(this)"
 			                    onchange="return trim(this) ">
 			            </div>
 			            
-			             <div class="col-md-2">
-			                <label>AAdhanr No<span class="mandatory">*</span></label>
-			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
+			            <div class="col-md-2">
+			                <label>Aadhaar No<span class="mandatory">*</span></label>
+			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Aadhaar No" required>
 			            </div>
 			            
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
-			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="Enter PAN">
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="PAN">
 			            </div>
-        
-                        <div class=" col-md-2 ">
-			                <label>UAN No</label>
-			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
-			                    class=" form-control input-sm " placeholder="Enter UAN No "    onblur="checknegative(this) ">
-			            </div>
-			            
-			     </div>
+
+			    	</div>
 			    </div>
+			
 			
 			    <div class="form-group">
 			        <div class="row">
 			        
+			        	 <div class=" col-md-2 ">
+			                <label>UAN No</label>
+			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
+			                    class=" form-control input-sm " placeholder="UAN No "    onblur="checknegative(this) ">
+			            </div>
 			           <div class=" col-md-2 ">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
 			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
-			                    maxlength=" 11 " placeholder="Enter Account Number " onblur=" checknegative(this) ">
+			                    maxlength=" 11 " placeholder="Account Number " onblur=" checknegative(this) ">
 			            </div>
 			            
 			            <div class="col-md-2">
@@ -281,7 +287,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			             <div class=" col-md-2 ">
 			                <label>GPF/PRAN</label>
 			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
-			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                    placeholder="GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			            
 			            <div class="col-md-2">
@@ -297,7 +303,15 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>
 			            
-						 <div class=" col-md-2 ">
+						            
+			
+			        </div>
+			    </div>
+			    
+				    <div class=" form-group ">
+				        <div class="row">
+    
+    					 <div class=" col-md-2 ">
 			                <label>Religion</label>
 			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
 			                    <option value="Christian">Christian</option>
@@ -309,14 +323,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    <option value="Others">Others</option>
 			
 			                </select>
-			            </div>			            
-			
-			        </div>
-			    </div>
-			    
-				    <div class=" form-group ">
-				        <div class="row">
-    
+			            </div>			
+			            
     					<div class=" col-md-2 ">
 			                <label>Category</label>
 			                <select name="category" class=" form-control input-sm select2 "  data-live-search="true">
@@ -364,10 +372,10 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 
 			            </div>      
 			                
-			             <div class=" col-md-4 ">
+			             <div class=" col-md-2 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
-			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
+			                    placeholder="Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 					</div>
 				</div>
@@ -393,7 +401,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			          <%--   <div class=" col-md-2 " id=" EmpHide ">
 			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
-			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="Enter EmpStatus Date ">
+			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="EmpStatus Date ">
 			            </div>
 			             --%>
 			             <!-- <div class=" col-md-2 ">
@@ -410,7 +418,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            <div class=" col-md-2 ">
 			                <label>Per Pass No</label>
 			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
-			                    placeholder="Enter Permanent Pass No">
+			                    placeholder="Permanent Pass No">
 			            </div> -->
 			     <!--    </div>
 			    </div> -->
@@ -540,7 +548,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 </script>
     <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
-setPatternFilter($("#Phoneno"), /^-?\d*$/);
+setPatternFilter($(".Phoneno"), /^-?\d*$/);
 setPatternFilter($("#UANNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);

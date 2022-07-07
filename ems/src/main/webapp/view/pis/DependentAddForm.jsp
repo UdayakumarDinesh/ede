@@ -97,17 +97,26 @@ List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMembe
 Object[] empdetails = (Object[])request.getAttribute("empdetails");
 Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 Object[] formdetails = (Object[])request.getAttribute("formdetails");
+String LabLogo = (String)request.getAttribute("LabLogo");
 %>
 <body >
+		<div style="width: 100%;">
+			<div style="width: 20%; border: 0;float:left;" >
+				<img style="width: 80px; height: 90px; margin-left:0px;margin-top: 5px;"   src="data:image/png;base64,<%=LabLogo%>">
+			</div>
+		</div>	
 	<div id="pageborder" align="center" style="max-width:100%;margin-top: -5px;margin-left: 10px;" >
-		<div align="right">
+	
+		<!-- <div align="right">
 			<h3 style="text-decoration: underline;">CHSS FORM - 2</h3>
-		</div>
+		</div> -->
 		<div align="center">
+			<br>
 			<h3>Contributory Health Service Scheme of SITAR Society</h3>
 			<span style="text-decoration: underline; font-size: 15px;"><b>Application for addition of names of beneficiaries</b></span>
 		</div>
 		<div align="left">
+			<br>
 			<h3>UNIT : STARC</h3>
 		</div>
 		<div align="left">

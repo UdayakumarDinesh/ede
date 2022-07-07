@@ -53,6 +53,8 @@ th,td
 	Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 	Object[] formdetails = (Object[])request.getAttribute("formdetails");
 	
+	String LabLogo = (String)request.getAttribute("LabLogo");
+	
 	String isapproval = (String)request.getAttribute("isApprooval");
 	
 	String formid="0";
@@ -100,15 +102,21 @@ th,td
 			</div>
 		<%} %>
 	</div> 
-	<div class="card dashboard-card" align="center">	
+	<div class="card dashboard-card" >
+		<div style="width: 100%;">
+			<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;float:left;" ><img style="width: 80px; height: 90px; margin: 5px;"   src="data:image/png;base64,<%=LabLogo%>"></div>
+			<h3 style="text-decoration: underline; float: right;margin: 15px 15px 0px 0px;">CHSS FORM - 2</h3>
+		</div>	
 		<div id="pageborder" align="center" style="max-width:95%;margin-top: 5px;margin-left: 10px;" >
-			<div align="right">
+		
+		<!-- 	<div align="right">
 				<h3 style="text-decoration: underline;">CHSS FORM - 2</h3>
-			</div>
+			</div> -->
 			<div align="center">
 				<h3>Contributory Health Service Scheme of SITAR Society</h3>
 				<span style="text-decoration: underline; font-size: 15px;"><b>Application for addition of names of beneficiaries</b></span>
 			</div>
+			
 			<div align="left">
 				<h3>UNIT : STARC</h3>
 			</div>
@@ -120,8 +128,6 @@ th,td
 						<th style="width:20% " >Designation</th>
 						<th style="width: 10% " >Level In Pay Matrix</th>
 						<th style="width: 25% " >Basic Pay</th>
-						<!-- <th style="width: 12% " >Date of Birth</th>
-						<th style="width: 12% " >Date of Appointment</th> -->
 					</tr>
 					<tr>
 						<td><%=empdetails[2] %></td>
@@ -129,8 +135,6 @@ th,td
 						<td><%=empdetails[12] %></td>
 						<td><%=empdetails[9] %></td>
 						<td><%=empdetails[11] %></td>
-						<!-- <td></td>
-						<td></td> -->
 					</tr>
 				</table>
 				Residential Address :
@@ -390,10 +394,11 @@ th,td
 				<form action="FamilyMembersForward.htm" method="Post">	
 					<div class="row">
 						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
-							<%if(formdetails[10]!=null || !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
+							<%if(formdetails!=null && formdetails[10]!=null && !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
 							<br>
 						</div>
 						<div class="col-md-12">
+							<b>Remark :</b>
 							<textarea rows="5" style="width: 100%;" name="remarks" maxlength="400" required="required"></textarea>
 						</div>
 					</div>

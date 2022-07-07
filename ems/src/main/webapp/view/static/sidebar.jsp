@@ -186,13 +186,12 @@ $(document).ready(function () {
 			
 			var result = JSON.parse(result);
 			var values = Object.keys(result).map(function(e) {
-				  return result[e]
+				  return result[e];
 				});
 			var sidebarmodule = "";
 			for (i = 0; i < values.length; i++) {
 		
 				sidebarmodule+="<a class='nav-link mb-3 shadow custom_width' id='"+values[i][1].replace('.','_') +"'  href='"+values[i][1]+"'><i class='fa-solid fa-star'></i>&nbsp; <span class=' large ' >"+values[i][0]+"</span></a>";
-				 
  
 			}
 			$('#sidebarmodule').html(sidebarmodule); 

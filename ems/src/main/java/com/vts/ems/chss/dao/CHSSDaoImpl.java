@@ -51,7 +51,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND empid = :empid ORDER BY relation_id  ";
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.med_dep ='Y' AND empid = :empid ORDER BY fr.SerialNo ASC ";
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -947,7 +947,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 
 	
-	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate, cc.Comments  FROM  chss_consultation cc, chss_bill cb WHERE cc.isactive = 1 AND cb.isactive=1 AND cb.BillId = cc.BillId  AND cb.CHSSApplyId = :CHSSApplyId ";
+	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate, cc.Comments , cdr.docQualification AS 'Qualification'  FROM  chss_consultation cc, chss_bill cb ,chss_doctor_rates cdr WHERE cc.isactive = 1 AND cb.isactive=1 AND cb.BillId = cc.BillId AND cc.docQualification=cdr.docrateid  AND cb.CHSSApplyId = :CHSSApplyId ";
 
 	@Override
 	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception
@@ -1584,7 +1584,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND MedicineName LIKE :medicinename ";
+	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND IsActive=1 AND MedicineName LIKE :medicinename ";
 	@Override
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception
 	{
@@ -1593,7 +1593,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		try {
 			
 			Query query= manager.createNativeQuery(MEDADMISSIBLECHECK);
-			query.setParameter("medicinename", medicinename.trim()+"%");
+			query.setParameter("medicinename", medicinename.trim());
 			
 			list=  ( List<Object[]>)query.getResultList();
 			
@@ -1606,7 +1606,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return  list;
 	}
 	
-	private static final String MEDADMISSIBLELIST  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName,IsAdmissible FROM chss_medicines_list WHERE IsActive=1  AND TreatTypeId=:treattype  AND MedicineName LIKE :medicinename ";
+	private static final String MEDADMISSIBLELIST  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName,IsAdmissible FROM chss_medicines_list WHERE IsActive=1  AND TreatTypeId=:treattype AND IsActive=1 AND MedicineName LIKE :medicinename ";
 	@Override
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype)throws Exception
 	{

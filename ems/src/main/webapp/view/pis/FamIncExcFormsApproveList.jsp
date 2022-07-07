@@ -95,6 +95,9 @@
 							</tr>
 							</form>
 							<%} %>
+							<%if(formslist.size()==0){ %>
+								<tr><td  colspan="6" style="text-align: center;"> No Pending Forms </td></tr>
+							<%} %>
 						</tbody>
 					</table>
 				</div>	

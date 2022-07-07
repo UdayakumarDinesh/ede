@@ -43,12 +43,12 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 	<div class=" page card dashboard-card">
 
 		<div class="card-body">
-		
+		<div class="card" >
 		<div class="row">
 		<div class="col-3"></div>
 		<form action="EditFamilyDetails.htm" method="POST" enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card" > 
+		 
 		<div class="card-header">
 		<h5>Fill Family Member Details</h5>
 		</div>
@@ -120,7 +120,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
                          <div class="form-group">
                           <label>Status<span class="mandatory">*</span></label>
                             <select class="form-control input-sm select2" name="status" required="required">
-                              <option value="none" selected disabled hidden>Select Status</option> 
+                              <option value="none" selected disabled >Select Status</option> 
                               
                                <%for(Object[] statusLs:StatusList){ %> 
 		                       <option value="<%=statusLs[0]%>" <%if(memberdata!=null && memberdata.getFamily_status_id()==Integer.parseInt(statusLs[0].toString())){%>selected<%}%>><%=statusLs[1]%></option>
@@ -237,24 +237,36 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		          
 		           </div> 
                
-                 <!--// dependency ,Employed,Married-->
-				<div class="row">
 				
-							 <div class="col-md-4" id ="EmpHide">
-                         <div class="form-group">
-                          <label>Employed Status:  <span class="mandatory">*</span></label>
-                            <select class="form-control input-sm" name="EmpStatus" required="required">
-                              
-		                    <option value="Private" <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}%>>Private</option>
-		                    <option value="Central Goverment"  <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}%>>Central Goverment.</option>
-		                    <option value="State Goverment" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}%>>State Goverment</option>
-		                    <option value="PSU" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}%>>PSU</option>
-		                      
-                            </select>
-                            </div>  
-                        </div>
-                      
-				</div> 
+							<div class="row" id = "EmpHide">
+								<div class="col-md-3" >
+			                    	 <div class="form-group">
+		                         		<label>Employed Status:  <span class="mandatory">*</span></label>
+		                           		<select class="form-control input-sm" name="EmpStatus" required="required">
+						                    <option value="Private" <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}%>>Private</option>
+						                    <option value="Central Goverment"  <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}%>>Central Goverment.</option>
+						                    <option value="State Goverment" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}%>>State Goverment</option>
+						                    <option value="PSU" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}%>>PSU</option>
+		                          		</select>
+		                            </div>  
+			               		</div>
+			               		<div class="col-md-3" >
+			                    	<div class="form-group">
+			                        <label>Occupation:<span class="mandatory">*</span></label>
+			                        	<input type="text" class="form-control" name="memberOccupation" <%if(memberdata!=null && memberdata.getMemberOccupation()!=null){%> value="<%=memberdata.getMemberOccupation() %>" <%}else{ %> value="" <%} %> id="mem-occupation" maxlength="100">
+			                        </div>  
+			               		</div>
+			               		
+			               		<div class="col-md-3" >
+			                    	<div class="form-group">
+			                        <label>Income (Rs / Month)<span class="mandatory">*</span></label>
+			                        	<input type="number" class="form-control numberonly" name="memberIncome" <%if(memberdata!=null && memberdata.getMemberIncome()!=0){%> value="<%=memberdata.getMemberIncome() %>" <%}else{ %> value="0" <%} %> id="mem-income" max="9999999999" >
+			                        </div>  
+			               		</div>
+							</div>
+				
+				
+				 
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">
@@ -388,11 +400,11 @@ $('#DOB').daterangepicker({
 
 $(document).ready(function(){
 	
-	   $("#EmpHide").hide();
+	employementstatus();
 });
 
 
-$("#EmpId").on("change",function(e){
+$("#EmpId").on("change",function (e){
 	 
 	 var EmpValue =$("#EmpId").val();	   
 
@@ -407,7 +419,21 @@ $("#EmpId").on("change",function(e){
 	    	  
 	      }
 });
- 
+function employementstatus(e){
+	 
+	 var EmpValue =$("#EmpId").val();	   
+
+	 
+	    if(!(EmpValue=="N")){
+		
+	    	  $("#EmpHide").show();
+	    	  
+	      }else{
+	    	  
+	    	  $("#EmpHide").hide();
+	    	  
+	      }
+}
 
 
 </script>

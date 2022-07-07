@@ -61,11 +61,11 @@ public class PisDaoImpl implements PisDao {
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate  WHERE loginid=:loginid";
-	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id  AND  a.IsActive='1' AND a.empid=:empid ORDER BY   a.family_details_id DESC";
+	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id  AND  a.IsActive='1' AND a.empid=:empid ORDER BY b.SerialNo ASC  ";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
 	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno FROM employee a ,employee_desig b WHERE b.desigid=a.desigid AND  empid=:empid";
-	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1'";
+	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1' ORDER BY SerialNo ASC  ";
 	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
 	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";
 	private static final String MEMBEREDITDATA="FROM EmpFamilyDetails WHERE family_details_id=:familyid";
@@ -79,7 +79,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeeDetails()");
+		logger.info(new Date() + "Inside DAO EmployeeDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEDETAILS);
 			query.setParameter("empid", empid);
@@ -92,7 +92,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<DivisionMaster> DivisionList() throws Exception {
-		logger.info(new Date() + "Inside DivisionList()");
+		logger.info(new Date() + "Inside DAO DivisionList()");
 		List<DivisionMaster> divlist = new ArrayList<DivisionMaster>();
 		try {
 
@@ -115,7 +115,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<EmployeeDesig> DesigList() throws Exception {
-		logger.info(new Date() + "Inside DesigList()");
+		logger.info(new Date() + "Inside DAO DesigList()");
 		List<EmployeeDesig> desiglist = new ArrayList<EmployeeDesig>();
 		try {
 
@@ -137,7 +137,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisPayLevel> PayLevelList() throws Exception {
-		logger.info(new Date() + "Inside PayLevelList");
+		logger.info(new Date() + "Inside DAO PayLevelList");
 		List<PisPayLevel> pispaylevel = new ArrayList<PisPayLevel>();
 		try {
 
@@ -156,7 +156,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCadre> PisCaderList() throws Exception {
-		logger.info(new Date() + "Inside PisCaderList()");
+		logger.info(new Date() + "Inside DAO PisCaderList()");
 		List<PisCadre> pispaylevel = new ArrayList<PisCadre>();
 		try {
 
@@ -175,7 +175,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCatClass> PisCatClassList() throws Exception {
-		logger.info(new Date() + "Inside PisCatClassList()");
+		logger.info(new Date() + "Inside DAO PisCatClassList()");
 		List<PisCatClass> pispaylevel = new ArrayList<PisCatClass>();
 		try {
 
@@ -195,7 +195,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCategory> PisCategoryList() throws Exception {
-		logger.info(new Date() + "Inside PisCategoryList()");
+		logger.info(new Date() + "Inside DAO PisCategoryList()");
 		List<PisCategory> pispaylevel = new ArrayList<PisCategory>();
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -212,7 +212,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<EmpStatus> EmpStatusList() throws Exception {
-		logger.info(new Date() + "Inside EmpStatusList()");
+		logger.info(new Date() + "Inside DAO EmpStatusList()");
 		List<EmpStatus> pispaylevel = new ArrayList<EmpStatus>();
 		try {
 
@@ -232,7 +232,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long EmployeeAddSubmit(Employee emp) throws Exception
 	{
-		logger.info(new Date() +"Inside EmployeeAddSubmit()");
+		logger.info(new Date() +"Inside DAO EmployeeAddSubmit()");
 
 		try {
 			manager.persist(emp);
@@ -246,7 +246,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long EmployeeEditSubmit(Employee emp) throws Exception {
-		logger.info(new Date() + "Inside EmployeeEditSubmit()");
+		logger.info(new Date() + "Inside DAO EmployeeEditSubmit()");
 		try {
 			manager.merge(emp);
 			manager.flush();
@@ -260,7 +260,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long EmployeeDetailsAddSubmit(EmployeeDetails emp) throws Exception
 	{
-		logger.info(new Date() +"Inside EmployeeDetailsDetailsAddSubmit()");
+		logger.info(new Date() +"Inside DAO EmployeeDetailsDetailsAddSubmit()");
 
 		try {
 			manager.persist(emp);
@@ -274,7 +274,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception {
-		logger.info(new Date() + "Inside EmployeeDetailsEditSubmit()");
+		logger.info(new Date() + "Inside DAO EmployeeDetailsEditSubmit()");
 		try {
 			manager.merge(emp);
 			manager.flush();
@@ -287,7 +287,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long getempno() throws Exception {
-		logger.info(new Date() + "Inside EmployeeEditSubmit()");
+		logger.info(new Date() + "Inside DAO EmployeeEditSubmit()");
 		long result = 0;
 		try {
 			Query query = manager.createNativeQuery("SELECT max(empno) FROM employee");
@@ -303,7 +303,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Employee getEmp(String empid) throws Exception {
-		logger.info(new Date() + "Inside PisCaderList()");
+		logger.info(new Date() + "Inside DAO PisCaderList()");
 		Employee employee = null;
 		try {
 			Query query = manager.createQuery("FROM Employee WHERE EmpId=:empid AND IsActive='1'");
@@ -318,7 +318,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public EmployeeDetails getEmployee(String empdetailsid) throws Exception {
-		logger.info(new Date() + "Inside getEmployee()");
+		logger.info(new Date() + "Inside DAO getEmployee()");
 		EmployeeDetails employee = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -339,7 +339,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
 	{
-		logger.info(new Date() + "Inside getEmployeeDetailsData()");
+		logger.info(new Date() + "Inside DAO getEmployeeDetailsData()");
 		EmployeeDetails employee = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -359,7 +359,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int PunchcardList(String Punchcard) throws Exception {
 		
-		logger.info(new Date() + "Inside PunchcardList()");
+		logger.info(new Date() + "Inside DAO PunchcardList()");
 		
 		
 		try {
@@ -380,7 +380,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public String PhotoPath(String empno) throws Exception {
-		logger.info(new Date() + "Inside PhotoPath()");
+		logger.info(new Date() + "Inside DAO PhotoPath()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOPATH);
 			query.setParameter("empno", empno);
@@ -395,7 +395,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public int PhotoPathUpdate(String Path, String empno) throws Exception {
-		logger.info(new Date() + "Inside PhotoPathUpdate()");
+		logger.info(new Date() + "Inside DAO PhotoPathUpdate()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOUPDATE);
 			query.setParameter("Path", Path);
@@ -412,7 +412,7 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<Object[]> LoginMasterList() throws Exception {
-		logger.info(new Date() + "Inside LoginMasterList()");
+		logger.info(new Date() + "Inside DAO LoginMasterList()");
 		try {
 			Query query = manager.createNativeQuery(LOGINMASTER);
 			return (List<Object[]>) query.getResultList();
@@ -427,7 +427,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getEmpList() throws Exception {
-		logger.info(new Date() + "Inside EmployeeList()");
+		logger.info(new Date() + "Inside DAO EmployeeList()");
 		try {
 			Query query = manager.createNativeQuery(EMPLIST);
 			return (List<Object[]>) query.getResultList();
@@ -441,7 +441,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getLoginTypeList()throws Exception{
-		logger.info(new Date() + "Inside getLoginTypeList()");
+		logger.info(new Date() + "Inside DAO getLoginTypeList()");
 		try {
 			Query query = manager.createNativeQuery(LOGINLIST);
 			return (List<Object[]>) query.getResultList();
@@ -456,7 +456,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int UserManagerDelete(String username , String loginid)throws Exception{
-		logger.info(new Date() + "Inside UserManagerDelete()");
+		logger.info(new Date() + "Inside DAO UserManagerDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEUSERMANAGER);
@@ -478,7 +478,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int UserNamePresentCount(String UserName)throws Exception{
-		logger.info(new Date() + "Inside UserNamePresentCount()");
+		logger.info(new Date() + "Inside DAO UserNamePresentCount()");
 		try {
 			Query query = manager.createNativeQuery(USERNAMEPRESENTCOUNT);
 			query.setParameter("username", UserName);
@@ -495,7 +495,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long UserManagerAdd(Login login) throws Exception {
 	
-		logger.info(new Date() + "Inside UserManagerAdd()");
+		logger.info(new Date() + "Inside DAO UserManagerAdd()");
 		try {
 			manager.persist(login);
 			manager.flush();
@@ -509,7 +509,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Login getLoginEditData(Long LoginId)throws Exception{
-		logger.info(new Date() + "Inside UserManagerAdd()");
+		logger.info(new Date() + "Inside DAO UserManagerAdd()");
 		Login UserManagerEditData =null;
 		try {
 			Query query = manager.createQuery(LOGINEDITDATA);
@@ -525,7 +525,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int UserManagerEdit(Login login)throws Exception{
 		
-		logger.info(new Date() + "Inside UserManagerEdit()"); 
+		logger.info(new Date() + "Inside DAO UserManagerEdit()"); 
 		try {
 			Query query = manager.createNativeQuery(EDITUSERMANAGER);
 			query.setParameter("modifiedby", login.getModifiedBy());
@@ -544,7 +544,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyMembersList(String empid)throws Exception{
-		logger.info(new Date() + "Inside getFamilyMembersList()");
+		logger.info(new Date() + "Inside DAO getFamilyMembersList()");
 		
 		try {
 			Query query = manager.createNativeQuery(FAMILYLIST);
@@ -559,7 +559,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Object[] GetEmpData(String empid)throws Exception{
-		logger.info(new Date() + "Inside GetEmpData()");
+		logger.info(new Date() + "Inside DAO GetEmpData()");
 		try {
 			Query query = manager.createNativeQuery(EMPDATA);
 			query.setParameter("empid", empid);
@@ -574,7 +574,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyRelation()throws Exception{
-		logger.info(new Date() + "Inside getFamilyRelation()");
+		logger.info(new Date() + "Inside DAO getFamilyRelation()");
 		
 		try {
 			Query query = manager.createNativeQuery(FAMILYRELATION);	
@@ -590,7 +590,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyStatus()throws Exception{
-		logger.info(new Date() + "Inside getFamilyStatus()");
+		logger.info(new Date() + "Inside DAO getFamilyStatus()");
 		try {
 			Query query = manager.createNativeQuery(FAMILYSTATUS);	
 			return (List<Object[]>) query.getResultList();
@@ -605,7 +605,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long AddFamilyDetails(EmpFamilyDetails Details) throws Exception {
 	
-		logger.info(new Date() + "Inside AddFamilyDetails()");
+		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
 		try {
 			manager.persist(Details);
 			manager.flush();
@@ -618,7 +618,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int DeleteMeber(String familyid , String Username)throws Exception{
-		logger.info(new Date() + "Inside UserManagerDelete()");
+		logger.info(new Date() + "Inside DAO UserManagerDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEMEMBER);
@@ -637,8 +637,9 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	@Override
-	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception{
-		logger.info(new Date() + "Inside getMemberDetails()");
+	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getMemberDetails()");
 		EmpFamilyDetails memberEditData =null;
 		try {
 			Query query = manager.createQuery(MEMBEREDITDATA);
@@ -647,14 +648,13 @@ public class PisDaoImpl implements PisDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return memberEditData;
 	}
 	
 	
 	@Override
 	public EmpFamilyDetails getMember(String familyid) throws Exception {
-		logger.info(new Date() + "Inside PisCaderList()");
+		logger.info(new Date() + "Inside DAO PisCaderList()");
 		EmpFamilyDetails memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -674,7 +674,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditFamilyDetails(EmpFamilyDetails Details) throws Exception {
 	
-		logger.info(new Date() + "Inside EditFamilyDetails()");
+		logger.info(new Date() + "Inside DAO EditFamilyDetails()");
 		try {
 			manager.merge(Details);
 			manager.flush();
@@ -687,7 +687,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERMNENTADDRESS="SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid";
 	@Override
 	public Object[] getPerAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside GetPerAddress()");
+		logger.info(new Date() + "Inside DAO GetPerAddress()");
 		try {
 			Query query = manager.createNativeQuery(PERMNENTADDRESS);
 			query.setParameter("empid", Empid);
@@ -707,7 +707,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String STATE="SELECT StateId,StateName FROM pis_states";
 	@Override
 	public List<Object[]> getStates()throws Exception{
-		logger.info(new Date() + "Inside GetStates()");
+		logger.info(new Date() + "Inside DAO GetStates()");
 		try {
 			Query query = manager.createNativeQuery(STATE);		
 			return (List<Object[]>) query.getResultList();
@@ -718,7 +718,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	@Override
 	public Long AddPerAddress(AddressPer peraddress)throws Exception{
-		logger.info(new Date() + "Inside AddPerAddress()");
+		logger.info(new Date() + "Inside DAO AddPerAddress()");
 		try {
 			manager.persist(peraddress);
 			manager.flush();
@@ -731,7 +731,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERADDRESS="FROM AddressPer WHERE empid=:empid";
 	@Override
 	public AddressPer getPerAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside getMemberDetails()");
+		logger.info(new Date() + "Inside DAO getMemberDetails()");
 		AddressPer addres=null;
 		try {
 			Query query = manager.createQuery(PERADDRESS);
@@ -745,7 +745,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressPer getPeraddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside getPeraddress()");
+		logger.info(new Date() + "Inside DAO getPeraddress()");
 		AddressPer memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -765,7 +765,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditPerAddress(AddressPer address) throws Exception {
 	
-		logger.info(new Date() + "Inside EditPerAddress()");
+		logger.info(new Date() + "Inside DAO EditPerAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
@@ -779,7 +779,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive='1'";
 	@Override
 	public List<Object[]> getResAddress(String empid)throws Exception{
-		logger.info(new Date() + "Inside GetStates()");
+		logger.info(new Date() + "Inside DAO GetStates()");
 		try {
 			Query query = manager.createNativeQuery(RESADDRESS);	
 			query.setParameter("empid", empid);
@@ -794,7 +794,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String KINADDRESS="SELECT empid,address_kin_id,nextkin_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_kin  WHERE empid=:empid";
 	@Override
 	public Object[] getKinAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside GetKinAddress()");
+		logger.info(new Date() + "Inside DAO GetKinAddress()");
 		try {
 			Query query = manager.createNativeQuery(KINADDRESS);
 			query.setParameter("empid", Empid);
@@ -813,7 +813,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMEADDRESS="SELECT empid,address_emer_id,emer_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_emer  WHERE empid=:empid";
 	@Override
 	public Object[] getEmeAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside GetEmeAddress()");
+		logger.info(new Date() + "Inside DAO GetEmeAddress()");
 		try {
 			Query query = manager.createNativeQuery(EMEADDRESS);
 			query.setParameter("empid", Empid);
@@ -831,7 +831,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Long AddResAddress(AddressRes resaddress)throws Exception{
-		logger.info(new Date() + "Inside AddPerAddress()");
+		logger.info(new Date() + "Inside DAO AddPerAddress()");
 		try {
 			manager.persist(resaddress);
 			manager.flush();
@@ -844,7 +844,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressRes getResAddressData(String addressid) throws Exception {
-		logger.info(new Date() + "Inside getResAddressData()");
+		logger.info(new Date() + "Inside DAO getResAddressData()");
 		AddressRes memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -864,7 +864,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditResAddress(AddressRes address) throws Exception {
 	
-		logger.info(new Date() + "Inside EditResAddress()");
+		logger.info(new Date() + "Inside DAO EditResAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
@@ -877,7 +877,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String DELETERES="UPDATE pis_address_res  SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE address_res_id=:addressid";
 	@Override
 	public int deleteResAdd(String addressid , String Username)throws Exception{
-		logger.info(new Date() + "Inside deleteResAdd()");
+		logger.info(new Date() + "Inside DAO deleteResAdd()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETERES);
@@ -898,7 +898,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Long AddNextAddress(AddressNextKin nextkinaddress)throws Exception{
-		logger.info(new Date() + "Inside AddNextAddress()");
+		logger.info(new Date() + "Inside DAO AddNextAddress()");
 		try {
 			manager.persist(nextkinaddress);
 			manager.flush();
@@ -910,7 +910,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	@Override
 	public AddressNextKin getNextKinaddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside getNextKinaddress()");
+		logger.info(new Date() + "Inside DAO getNextKinaddress()");
 		AddressNextKin memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -930,7 +930,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditNextKinAddress(AddressNextKin address) throws Exception {
 	
-		logger.info(new Date() + "Inside EditNextKinAddress()");
+		logger.info(new Date() + "Inside DAO EditNextKinAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
@@ -943,7 +943,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String NEXTKINADDRESS="FROM AddressNextKin WHERE empid=:empid";
 	@Override
 	public AddressNextKin getNextKinAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside getMemberDetails()");
+		logger.info(new Date() + "Inside DAO getMemberDetails()");
 		AddressNextKin addres=null;
 		try {
 			Query query = manager.createQuery(NEXTKINADDRESS);
@@ -956,7 +956,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	@Override
 	public Long AddEmecAddress(AddressEmec Emecaddress)throws Exception{
-		logger.info(new Date() + "Inside AddEmecAddress()");
+		logger.info(new Date() + "Inside DAO AddEmecAddress()");
 		try {
 			manager.persist(Emecaddress);
 			manager.flush();
@@ -969,7 +969,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressEmec getEmecaddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside getEmecaddress()");
+		logger.info(new Date() + "Inside DAO getEmecaddress()");
 		AddressEmec memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -989,7 +989,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditEmecAddress(AddressEmec address) throws Exception {
 	
-		logger.info(new Date() + "Inside EditEmecAddress()");
+		logger.info(new Date() + "Inside DAO EditEmecAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
@@ -1012,7 +1012,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMECADDRESS="FROM AddressEmec WHERE empid=:empid";
 	@Override
 	public AddressEmec getEmecAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside getEmecAddressData()");
+		logger.info(new Date() + "Inside DAO getEmecAddressData()");
 		AddressEmec addres=null;
 		try {
 			Query query = manager.createQuery(EMECADDRESS);
@@ -1041,7 +1041,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
 	@Override
 	public String OldPassword(String UserId) throws Exception {
-		logger.info(new Date() +"Inside OldPassword");
+		logger.info(new Date() +"Inside DAO OldPassword");
 		Query query = manager.createNativeQuery(OLDPASSWORD);
 		query.setParameter("loginid", UserId);
 		
@@ -1052,7 +1052,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int PasswordChange(String OldPassword, String NewPassword ,String loginid, String ModifiedDate,String UserName)throws Exception {
 		
-		logger.info(new Date() +"Inside PasswordChange");
+		logger.info(new Date() +"Inside DAO PasswordChange");
 		Query query = manager.createNativeQuery(PASSWORDUPDATECHANGE);
 		
 		query.setParameter("newpassword", NewPassword);
@@ -1066,7 +1066,7 @@ public class PisDaoImpl implements PisDao {
     private static final String NEXTKINADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , nextkin_addr , pin ,state FROM pis_address_kin WHERE empid =:empid";
 	@Override
 	public Object[] EmployeeNextAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeeNextAddressDetails()");
+		logger.info(new Date() + "Inside DAO EmployeeNextAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(NEXTKINADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1084,7 +1084,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , per_addr , pin ,state FROM pis_address_per WHERE empid =:empid";
 	@Override
 	public Object[] EmployeePerAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeePerAddressDetails()");
+		logger.info(new Date() + "Inside DAO EmployeePerAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(PERADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1102,7 +1102,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state FROM pis_address_res WHERE empid =:empid";
 	@Override
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeeResAddressDetails()");
+		logger.info(new Date() + "Inside DAO EmployeeResAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(RESADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1117,7 +1117,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMECADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , emer_addr , pin ,state FROM pis_address_emer WHERE empid =:empid";
 	@Override
 	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside EmployeeEmeAddressDetails()");
+		logger.info(new Date() + "Inside DAO EmployeeEmeAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMECADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1134,11 +1134,11 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1'  AND a.empid=:empid";
+	private static final String FAMILYDETAILS="SELECT a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp,   a.MemberOccupation,  a.MemberIncome FROM  pis_emp_family_details a,pis_emp_family_relation b WHERE a.relation_id=b.relation_id AND a.isactive='1'  AND a.empid=:empid ORDER BY b.SerialNo ASC ;  ";
 	@Override
 	public List<Object[]> getFamilydetails(String empid) throws Exception 
 	{
-		logger.info(new Date() + "Inside getFamilydetails()");
+		logger.info(new Date() + "Inside DAO getFamilydetails()");
 		try {
 			Query query = manager.createNativeQuery(FAMILYDETAILS);
 			query.setParameter("empid", empid);
@@ -1156,7 +1156,7 @@ public class PisDaoImpl implements PisDao {
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception
 	{
 		
-		logger.info(new Date() +"Inside ResetPassword()");
+		logger.info(new Date() +"Inside DAO ResetPassword()");
 		Query query = manager.createNativeQuery(RESETPASSWORD);
 		
 		query.setParameter("resetpwd", password);
@@ -1172,7 +1172,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetAllEmployee()throws Exception
 	{
-		logger.info(new Date() + "Inside GetAllEmployee()");
+		logger.info(new Date() + "Inside DAO GetAllEmployee()");
 		try {
 			Query query = manager.createNativeQuery(ALLEMPLIST);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
@@ -1186,7 +1186,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception
 	{
-		logger.info(new Date() + "Inside GetEmpPhoneNo()");
+		logger.info(new Date() + "Inside DAO GetEmpPhoneNo()");
 		try {
 			Query query = manager.createNativeQuery(GETPHONENO);
 			query.setParameter("loginid", loginid);
@@ -1205,7 +1205,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetEmployeeList()throws Exception
 	{
-		logger.info(new Date() + "Inside GetAllEmployee()");
+		logger.info(new Date() + "Inside DAO GetAllEmployee()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLIST);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
@@ -1234,7 +1234,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] GetEmpDetails(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside GetEmpDetails()");
+		logger.info(new Date() + "Inside DAO GetEmpDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMPDETAILS);
 			query.setParameter("empid", empid);
@@ -1288,7 +1288,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus   FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid "; 
+	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus   FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid ORDER BY b.SerialNo ASC; "; 
 	@Override
 	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception 
 	{
@@ -1366,7 +1366,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> FamMemFwdEmpList() throws Exception 
 	{
-		logger.info(new Date() + "Inside FamMemFwdEmpList()");
+		logger.info(new Date() + "Inside DAO FamMemFwdEmpList()");
 		try {
 			Query query = manager.createNativeQuery(FAMMEMFWDEMPLIST);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
@@ -1378,7 +1378,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final String FAMILYRELATIONLIST="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE isactive=1 AND relation_name NOT LIKE 'self'";
+	private static final String FAMILYRELATIONLIST="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE isactive=1 AND relation_name NOT LIKE 'self' ORDER BY SerialNo ASC";
 	@Override
 	public List<Object[]> familyRelationList()throws Exception
 	{
@@ -1452,11 +1452,8 @@ public class PisDaoImpl implements PisDao {
 		    query.setParameter("formid", formid);
 		    query.setParameter("empid", empid);  	 
 		    query.setParameter("ApprovedDateTime", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
-	         query.executeUpdate();
-	        
-	        
-	        
-	        
+	        query.executeUpdate();
+	        	        
 	        query=manager.createNativeQuery(FAMTABLEUPDATE);
 		    query.setParameter("formid", formid);
 		    query.setParameter("username", username);

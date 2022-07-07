@@ -12,10 +12,8 @@
 <body>
 <%
 List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
+String LoginType = (String) session.getAttribute("LoginType");
 %>
-
-
-
 
 	<div class="card-header page-top">
 		<div class="row">
@@ -84,7 +82,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
 					
-					
+					<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
 					<div class="row text-center">
 						<div class="col-md-12">
 						
@@ -94,7 +92,7 @@ List<Object[]> testmain = (List<Object[]>)request.getAttribute("ChssTestMain");
 								
 					    </div>						 
 					</div>
-					
+					<%} %>
 			   </form>		
 			  </div>
 		   	 </div>				

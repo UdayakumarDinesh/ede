@@ -228,6 +228,7 @@ public class PisServiceImpl implements PisService
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
 		employee.setModifiedDate(sdtf.format(new Date()));
 		employee.setPhoneNo(emp.getPhoneNo());
+		employee.setAltPhoneNo(emp.getAltPhoneNo());
 		return dao.EmployeeDetailsEditSubmit(employee);
 	}
 	

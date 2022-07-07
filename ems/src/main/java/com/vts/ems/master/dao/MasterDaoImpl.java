@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSDoctorRates;
-import com.vts.ems.chss.model.CHSSMedicineList;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
@@ -171,7 +171,7 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 
-	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid ORDER BY a.medicineid DESC";
+	private static final String MEDICINELIST="SELECT a.medicineid , b.treatmentname , a.medicinename,a.medno, isadmissible FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.isactive=1 ORDER BY a.medicineid DESC";
 	@Override
 	public List<Object[]>  getMedicineList()throws Exception
 	{
@@ -185,7 +185,7 @@ public class MasterDaoImpl implements MasterDao{
 			return null;
 		}
 	}
-	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename,a.medno  FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.treattypeid =:treatmentid";
+	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename,a.medno, isadmissible FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.isactive=1 AND a.treattypeid =:treatmentid";
 	@Override
 	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception
 	{
@@ -235,16 +235,16 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 	@Override
-	public CHSSMedicineList getCHSSMedicine(long medicineid) throws Exception {
+	public CHSSMedicinesList getCHSSMedicine(long medicineid) throws Exception {
 		logger.info(new Date() + "Inside getCHSSMedicine()");
-		CHSSMedicineList memeber = null;
+		CHSSMedicinesList memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
-			CriteriaQuery<CHSSMedicineList> cq = cb.createQuery(CHSSMedicineList.class);
-			Root<CHSSMedicineList> root = cq.from(CHSSMedicineList.class);
+			CriteriaQuery<CHSSMedicinesList> cq = cb.createQuery(CHSSMedicinesList.class);
+			Root<CHSSMedicinesList> root = cq.from(CHSSMedicinesList.class);
 			Predicate p1 = cb.equal(root.get("MedicineId"), medicineid);
 			cq = cq.select(root).where(p1);
-			TypedQuery<CHSSMedicineList> allquery = manager.createQuery(cq);
+			TypedQuery<CHSSMedicinesList> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
@@ -255,7 +255,7 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 	@Override
-	public Long AddMedicine(CHSSMedicineList medicine)throws Exception
+	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
 		logger.info(new Date() + "Inside AddMedicine()");
 		try {
@@ -270,7 +270,7 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 	@Override
-	public Long EditMedicine(CHSSMedicineList item) throws Exception
+	public Long EditMedicine(CHSSMedicinesList item) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO EditMedicine()");
 		try {

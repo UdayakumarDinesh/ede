@@ -116,7 +116,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 											<td><%=obj[21] %></td>
 											<td style="text-align: center ;"><%=obj[16] %></td>
 											<td><%=obj[19] %></td>
-											<td><%=obj[12] %>(<%=obj[14] %>)</td>
+											<td><%=obj[12] %>&nbsp;(<%=obj[14] %>)</td>
 											<td><%=rdf.format(sdf.parse(obj[15].toString())) %></td>
 											
 											<%-- <td>

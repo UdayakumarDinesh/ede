@@ -238,27 +238,33 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			   
 			    <div class="form-group">
 			        <div class="row">
-			        
-			         <div class=" col-md-2 ">
+			    
+			      	  <div class=" col-md-2 ">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
-			                <input type="text"  name="PhoneNo" id="PhoneNo" <%if(employee!=null && employee.getPhoneNo()!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
-			                    class=" form-control input-sm " placeholder="Enter Phone no " required="required"
+			                <input type="text" name="PhoneNo"  <%if(employee!=null && employee.getPhoneNo()!=null){%> value="<%=employee.getPhoneNo()%>"<%}%> maxlength="10"
+			                    class=" form-control input-sm Phoneno" placeholder="Phone no " required="required"
 			                     onblur="checknegative(this) ">
-			        </div>
+			              </div>
+			              
+			               <div class=" col-md-2 ">
+			                <label>Alternate Mobile No</label>
+			                <input type="text" name="AltPhoneno" <%if(employee!=null && employee.getAltPhoneNo()!=null){%> value="<%=employee.getAltPhoneNo()%>"<%}%> maxlength="10"
+			                    class=" form-control input-sm Phoneno" placeholder="Alternate Phone no "  onblur="checknegative(this) ">
+			              </div>
 			        
-			        <div class=" col-md-2 ">
+			      		  <div class=" col-md-2 ">
 			                <label>Extension Number<span class="mandatory">*</span></label>
 			                <input type="text" id="internalNo" name="internalNo" value="<%if(emp!=null && emp.getExtNo()!=null){%><%=emp.getExtNo()%><%}%>" maxlength="4" class=" form-control input-sm "
 			                    placeholder="Enter Extension Number " onblur=" checknegative(this) "
 			                    onkeypress=" return isNumber(event) " required="required">
-			         </div>
+			        	 </div>
 			        
-			        <div class=" col-md-2 ">
+			       		<div class=" col-md-2 ">
 			                <label>Internal Email<span class=" mandatory ">*</span></label>
 			                <input type="email"  name="email" class=" form-control input-sm " maxlength="100"
 			                  value="<%if(emp!=null && emp.getEmail()!=null){%><%=emp.getEmail()%><%}%>"  placeholder="Enter Email " required="required" onclick=" return trim(this) "
 			                    onchange=" return trim(this) " >
-			       </div>
+			    	   </div>
 			            				
 			            <div class="col-md-2">
 			                <label>AAdhar No<span class="mandatory">*</span></label>
@@ -270,12 +276,6 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <input type="text" id="PAN" name="pan" required="required" style="text-transform:uppercase" value="<%if(employee!=null && employee.getPAN()!=null){%><%=employee.getPAN()%><%}%>" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
 			            </div>
 			            
-                        <div class=" col-md-2 ">
-			                <label>UAN No</label>
-			                <input type="text"  name="UANNo" id="UANNo" value="<%if(employee!=null && employee.getUANNo()!=null){%><%=employee.getUANNo()%><%}%>" maxlength="12"
-			                    class=" form-control input-sm " placeholder="Enter UAN No " 
-			                     onblur="checknegative(this) ">
-			            </div>
 			        
 						 
 			
@@ -285,6 +285,13 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    <div class=" form-group ">
 			        <div class=" row ">
 						
+						 <div class=" col-md-2 ">
+			                <label>UAN No</label>
+			                <input type="text"  name="UANNo" id="UANNo" value="<%if(employee!=null && employee.getUANNo()!=null){%><%=employee.getUANNo()%><%}%>" maxlength="12"
+			                    class=" form-control input-sm " placeholder="Enter UAN No " 
+			                     onblur="checknegative(this) ">
+			            </div>
+			            
 						 <div class=" col-md-2 ">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
 			                <input type="text" id="SBITextBox" value="<%if(employee!=null && employee.getSBIAccNo()!=null ){%><%=employee.getSBIAccNo()%><%}%>" name="SBI" class=" form-control input-sm " required
@@ -334,10 +341,14 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                </select>
 			            </div>
 									            
-						<div class=" col-md-2 ">
+					</div>
+				</div>
+			         
+			          <div class=" form-group ">
+			        <div class=" row ">
+			        	<div class=" col-md-2 ">
 			                <label>Religion </label>
 			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
-			              
 			                    <option value="Christian" <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Christian")){%>selected<%}%>>Christian</option>
 			                    <option value="Hindu"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Hindu")){%>selected<%}%> >Hindu</option>
 			                    <option value="Islam"     <%if(employee!=null && employee.getReligion()!=null  && employee.getReligion().equalsIgnoreCase("Islam")){%>selected<%}%> >Islam</option>
@@ -348,12 +359,6 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			                </select>
 			            </div>
-			            
-					</div>
-				</div>
-			         
-			          <div class=" form-group ">
-			        <div class=" row ">
 
 			            
 			            <div class=" col-md-2 ">
@@ -394,7 +399,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 
 			            </div>
 			            
-			            <div class=" col-md-4 ">
+			            <div class=" col-md-2 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="<%if(employee!=null && employee.getIdMark()!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
@@ -475,7 +480,7 @@ $(".AddItem").click(function(){
 
 <script type="text/javascript">
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
-setPatternFilter($("#PhoneNo"), /^-?\d*$/);
+setPatternFilter($(".PhoneNo"), /^-?\d*$/);
 setPatternFilter($("#UANNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
