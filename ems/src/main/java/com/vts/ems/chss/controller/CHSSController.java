@@ -1622,7 +1622,6 @@ public class CHSSController {
 			long contingentid=claim1.getContingentId();
 			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
 			
-			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
 				String enclosurecount = req.getParameter("enclosurecount");
@@ -2173,7 +2172,7 @@ public class CHSSController {
 					todate=String.valueOf(today.getYear()+1);
 				}
 				fromdate +="-04-01"; 
-				todate +="-03-01";
+				todate +="-03-31";
 			}else
 			{
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
@@ -2319,7 +2318,7 @@ public class CHSSController {
 					todate=String.valueOf(today.getYear()+1);
 				}
 				fromdate +="-04-01"; 
-				todate +="-03-01";
+				todate +="-03-31";
 			}else
 			{
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
@@ -2517,7 +2516,11 @@ public class CHSSController {
 			
 			if (count > 0) {
 				redir.addAttribute("result", "Claim Revoked Successfully");
-			} else {
+			}else if(count==-1) 
+			{
+				redir.addAttribute("resultfail", "Claim Already Acknowledged by Processing Officer");	
+			}
+			else {
 				redir.addAttribute("resultfail", "Claim Revoke Unsuccessful");	
 			}	
 			

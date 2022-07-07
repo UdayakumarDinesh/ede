@@ -56,7 +56,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 
 <%
 	String empid = (String) request.getAttribute("empid");
-	Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
+Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
+	Object[] empdata = (Object[]) request.getAttribute("empdata");
 	Object[] Emecdetails = (Object[]) request.getAttribute("emeaddressdetails");
 	Object[] Nextdetails = (Object[]) request.getAttribute("nextaddressdetails");
 	List<Object[]> Resdetails  = (List<Object[]>) request.getAttribute("resaddressdetails");
@@ -93,24 +94,25 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	
 	
 	
-<% String ses=(String)request.getAttribute("result"); 
-   String ses1=(String)request.getAttribute("resultfail");
- %>
-	
 	
 	<div class="card-body" >
-	<%if(ses1!=null){%>
+		
+			<div align="center" style="margin-top: 15px;">
+				<%String ses=(String)request.getParameter("result"); 
+				String ses1=(String)request.getParameter("resultfail");
+				if(ses1!=null){ %>
+					<div class="alert alert-danger" role="alert">
+						<%=ses1 %>
+					</div>
+					
+				<%}if(ses!=null){ %>
+					
+					<div class="alert alert-success" role="alert">
+						<%=ses %>
+					</div>
+				<%} %>
+			</div> 
 	
-	<div align="center">
-	<div class="alert alert-danger" role="alert">
-                     <%=ses1 %>
-                    </div></div>
-	<%}  if(ses!=null){ %>
-	<div align="center">
-	<div class="alert alert-success" role="alert" >
-                     <%=ses %>
-                   </div> </div>
-                    <%} %>
 		<div class="card" >
 			<div class="card-body " >
 				<div class="row">
@@ -287,7 +289,33 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td> <b>SBI AccNo.</b> </td>
 							<td><%if(employeedetails[20]!=null){%><%=employeedetails[20]%><%}else{%>--<%}%></td>
 							<td> <b>Blood Group</b> </td>
-							<td><%if(employeedetails[10]!=null){%><%=employeedetails[10]%><%}else{%>--<%}%></td>
+							<td style="max-width: 30%;">
+								<form action="EmpBloodGropuEdit.htm" method="post"> 
+									<table style="width: 100%; border: 0px;margin: -5px 0px 0px 0px;" >
+										<tr>
+											<td  style="width: 75%; border: 0px;padding: 0px;">
+												 <select name="bloodgroup" class="form-control selectpicker" style="max-width: 50% !important;" required data-live-search="true">
+												 	<option value="NOT" <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("NOT")){%>selected<%}%>  >Not Available</option>			
+								                    <option value="A-"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("A-")){%>selected<%}%>   >A-</option>
+								                    <option value="A+"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("A+")){%>selected<%}%>   >A+</option>
+								                    <option value="B-"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("B-")){%>selected<%}%>   >B-</option>
+								                    <option value="B+"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("B+")){%>selected<%}%>   >B+</option>
+								                    <option value="AB-" <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("AB-")){%>selected<%}%>  >AB-</option>
+								                    <option value="AB+" <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("AB+")){%>selected<%}%>  >AB+</option>
+								                    <option value="O-"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("O-")){%>selected<%}%>   >O-</option>
+								                    <option value="O+"  <%if(employeedetails[10]!=null  && employeedetails[10].toString().equalsIgnoreCase("O+")){%>selected<%}%>   >O+</option>
+								                </select>
+							                </td>
+							                <td style="width:25%; border: 0px;padding: 0px;">
+							                	<button type="submit" class="btn btn-sm update-btn" style="float: right;" name="" value="" onclick="return confirm('Are You Sure to Update?');">Update</button>
+							                </td>
+						                </tr>
+						           	</table>
+					                <input type="hidden" name="empid" value="<%=employeedetails[0]%>">
+					                <input type="hidden" name="empno" value="<%=employeedetails[2]%>">
+					                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								</form> 
+							</td>
 							<td> <b>Home Town</b> </td>
 							<td><%if(employeedetails[27]!=null){%><%=employeedetails[27]%><%}else{%>--<%}%></td>
 						</tr>

@@ -368,7 +368,7 @@ public class MasterController {
 					} else {
 						redir.addAttribute("resultfail", "Medicine added UnSuccessful");
 					}
-					return "redirect:/MedicineList.htm";
+//					return "redirect:/MedicineList.htm";
 				}	
 				return "redirect:/MedicineList.htm";
 			}catch (Exception e){
@@ -397,6 +397,8 @@ public class MasterController {
 					medicinelist.setMedicineName( WordUtils.capitalizeFully(MedicineName.trim()) );
 					medicinelist.setTreatTypeId(Long.parseLong(tratementname));
 					medicinelist.setIsAdmissible(IsAdmissible);
+					medicinelist.setModifiedBy(UserId);
+					medicinelist.setModifiedDate(sdtf.format(new Date()));
 					long result =service.EditMedicine(medicinelist);
 					
 					
@@ -422,6 +424,50 @@ public class MasterController {
                   return "redirect:/MedicineList.htm";
 			} catch (Exception e) {
 				logger.error(new Date() +"Inside ChssMedicineEdit.htm "+UserId ,e);
+				e.printStackTrace();			
+				return "static/Error";
+			}
+		}
+		
+		
+		@RequestMapping(value="ChssMedicineDelete.htm", method= {RequestMethod.POST,RequestMethod.GET})
+		public String ChssMedicineDelete(HttpServletRequest req ,HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside ChssMedicineDelete.htm "+UserId);
+			try {
+					
+					String medicineId = (String)req.getParameter("MedicineId");
+					
+					
+					CHSSMedicinesList  medicinelist = new CHSSMedicinesList();
+					medicinelist.setMedicineId(Long.parseLong(medicineId));
+					medicinelist.setModifiedBy(UserId);
+					medicinelist.setModifiedDate(sdtf.format(new Date()));
+					long result =service.EditDelete(medicinelist);
+					
+					
+					String comments = (String)req.getParameter("comments");
+					MasterEdit masteredit = new MasterEdit();
+					masteredit.setTableRowId(Long.parseLong(medicineId));
+					masteredit.setTableName("chss_medicines_list");
+					masteredit.setCreatedBy(UserId);
+					masteredit.setCreatedDate(sdtf.format(new Date()));
+					masteredit.setComments(comments);
+					
+					MasterEditDto masterdto = new MasterEditDto();
+					masterdto.setFilePath(selectedFile);
+					
+					service.AddMasterEditComments(masteredit , masterdto);
+					if (result != 0) {
+		    			redir.addAttribute("result", "Medicine Deleted Successfully");
+					}else{
+						redir.addAttribute("resultfail", "Medicine Delete UnSuccessful");
+					}
+	
+                  return "redirect:/MedicineList.htm";
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside ChssMedicineDelete.htm "+UserId ,e);
 				e.printStackTrace();			
 				return "static/Error";
 			}
@@ -1406,4 +1452,6 @@ public class MasterController {
 					 return "static/Error";
 				}
 			}
+			
+			
 }

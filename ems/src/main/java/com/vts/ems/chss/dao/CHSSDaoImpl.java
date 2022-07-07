@@ -351,12 +351,10 @@ public class CHSSDaoImpl implements CHSSDao {
 		logger.info(new Date() +"Inside DAO getCHSSConsultMainEdit");
 		try {
 			return manager.find(CHSSConsultMain.class, Long.parseLong(ConsultMainId));
-			
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
 	@Override

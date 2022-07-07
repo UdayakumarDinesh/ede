@@ -25,6 +25,10 @@ public class CHSSMedicinesList implements Serializable {
 		private String MedicineName;
 		private String IsAdmissible; 
 		private Integer IsActive;
+		private String CreatedBy;
+		private String CreatedDate;
+		private String ModifiedBy;
+		private String ModifiedDate;
 
 	
 

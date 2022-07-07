@@ -84,7 +84,7 @@ public interface PisDao {
 	public List<Object[]> ReqEmerAddajax(String Empid) throws Exception ;
 	public AddressEmec getEmecAddressData(String empid)throws Exception;
 	public String OldPassword(String UserId) throws Exception;
-	public List<Object[]> AuditStampingList(String Username,LocalDate Fromdate,LocalDate Todate) throws Exception;
+	public List<Object[]> AuditStampingList(String Username,String Fromdate,String Todate) throws Exception;
 	public int PasswordChange(String OldPassword, String NewPassword ,String UserName, String ModifiedDate,String username)throws Exception;
 	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception;
 	public Object[] EmployeeNextAddressDetails(String empid) throws Exception;
@@ -113,5 +113,7 @@ public interface PisDao {
 	public Object[] GetFamFormData(String familyformid) throws Exception;
 	public int FamilyMemberDelete(String familydetailsid) throws Exception;
 	public int IncFormReturn(String familyformid, String remarks) throws Exception;
+	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
+	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
 	
 }

@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -145,15 +146,25 @@ public class MasterServiceImpl implements MasterService {
 	}
 	
 	@Override
-	public Long EditMedicine(CHSSMedicinesList medicine)throws Exception{
-		
-		
+	public Long EditMedicine(CHSSMedicinesList medicine)throws Exception
+	{
 		CHSSMedicinesList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
 		
-		mlist.setMedicineId(medicine.getMedicineId());
 		mlist.setMedicineName(medicine.getMedicineName());
 		mlist.setTreatTypeId(medicine.getTreatTypeId());
+		mlist.setModifiedBy(mlist.getModifiedBy());
+		mlist.setModifiedDate(mlist.getModifiedDate());
+		return dao.EditMedicine(mlist);
+	}
+	
+	@Override
+	public Long EditDelete(CHSSMedicinesList medicine)throws Exception
+	{
+		CHSSMedicinesList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
 		
+		mlist.setIsActive(0);
+		mlist.setModifiedBy(mlist.getModifiedBy());
+		mlist.setModifiedDate(mlist.getModifiedDate());
 		return dao.EditMedicine(mlist);
 	}
 	

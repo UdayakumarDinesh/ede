@@ -589,25 +589,9 @@ public class PisServiceImpl implements PisService
 	
 	
 	  @Override
-		public List<Object[]> AuditStampingList(String Username,String Fromdateparam,String Todateparam)  throws Exception {
+		public List<Object[]> AuditStampingList(String Username,String Fromdate,String Todate)  throws Exception {
 			
-			 LocalDate Fromdate = null;
-			 LocalDate Todate = null;
 			 
-			 if(Fromdateparam == null || Todateparam == null) 
-			 { 
-				 Todate = LocalDate.now();
-				 Fromdate= Todate.minusMonths(1); 
-			 }
-			  
-			 else { 
-				 
-			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-			 Fromdate = LocalDate.parse(Fromdateparam,formatter);
-			 Todate = LocalDate.parse(Todateparam,formatter);
-			 
-			 }
-		
 			return dao.AuditStampingList(Username,Fromdate,Todate);
 			
 		}
@@ -701,6 +685,12 @@ public class PisServiceImpl implements PisService
 			}
 		}
 		
+		@Override
+		public List<Object[]> GetEmployeeLoginData(String loginid)throws Exception
+		{
+			return dao.GetEmployeeLoginData(loginid);
+		}
+		
 	
 		@Override
 		public List<Object[]> GetEmployeeList()throws Exception
@@ -727,7 +717,10 @@ public class PisServiceImpl implements PisService
 			return dao.GetEmpDetails(empid);
 		}
 		@Override
-		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception{
+		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE UpdateSeniorityNumber");
+			try {
 			
 			Long empId=Long.parseLong(empid);
 			Long SeniorityNumber=Long.parseLong(newSeniorityNumber);
@@ -742,6 +735,10 @@ public class PisServiceImpl implements PisService
 			}
 			
 			return result;
+			}catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
 		}
 		
 		@Override
@@ -880,4 +877,9 @@ public class PisServiceImpl implements PisService
 			return dao.IncFormReturn(familyformid, remarks);
 		}
 		
+		@Override
+		public int EmpBloodGropuEdit(String empno , String bloodgroup)throws Exception
+		{
+			return dao.EmpBloodGropuEdit(empno, bloodgroup);
+		}
 }

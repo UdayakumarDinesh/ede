@@ -107,4 +107,6 @@ public interface PisService {
 	public Object[] GetFamFormData(String familyformid) throws Exception;
 	public int FamilyMemberDelete(String familydetailsid) throws Exception;
 	public int IncFormReturn(String familyformid, String remarks) throws Exception;
+	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
+	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
 }

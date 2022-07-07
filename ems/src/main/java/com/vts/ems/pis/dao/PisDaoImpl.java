@@ -1025,17 +1025,17 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 
-	private static final String  AUDITSTAMPING="SELECT a.username,a.logindate, a.logindatetime,a.ipaddress, a.macaddress,(CASE WHEN a.logouttype='L' THEN 'Logout' ELSE 'Session Expired' END) AS logouttype,  a.logoutdatetime FROM audit_stamping a , login b WHERE a.LoginDate BETWEEN :fromdate AND :todate AND  a.username=b.username AND a.loginid=:loginid ORDER BY a.LoginDateTime DESC";
+	private static final String  AUDITSTAMPING="SELECT a.username,a.logindate, a.logindatetime,a.ipaddress, a.macaddress,(CASE WHEN a.logouttype='L' THEN 'Logout' ELSE 'Session Expired' END) AS logouttype,  a.logoutdatetime FROM audit_stamping a , login b WHERE a.LoginDate BETWEEN :fromdate AND :todate AND  a.username=b.username AND CASE WHEN :loginid=0 THEN 1=1 ELSE a.loginid=:loginid END ORDER BY a.LoginDateTime DESC";
 	@Override
-	public List<Object[]> AuditStampingList(String loginid,LocalDate Fromdate,LocalDate Todate) throws Exception {
-		
+	public List<Object[]> AuditStampingList(String loginid,String Fromdate,String Todate) throws Exception 
+	{
 		Query query = manager.createNativeQuery(AUDITSTAMPING);
 		query.setParameter("loginid", loginid);
 		query.setParameter("fromdate", Fromdate);
 		query.setParameter("todate", Todate);
 		 
 		List<Object[]> AuditStampingList=(List<Object[]>) query.getResultList();
-
+		System.out.println(AuditStampingList.size());
 		return AuditStampingList;
 	}
 	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
@@ -1208,6 +1208,23 @@ public class PisDaoImpl implements PisDao {
 		logger.info(new Date() + "Inside DAO GetAllEmployee()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLIST);
+			List<Object[]> list=(List<Object[]>) query.getResultList();
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
+	private static final String GETEMPLOYEELOGINDATA="SELECT a.loginid, a.empid,a.username, e.EmpName FROM login a , employee e WHERE e.isactive=1 AND a.EmpId=e.EmpId AND a.loginid= :loginid";
+	@Override
+	public List<Object[]> GetEmployeeLoginData(String loginid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO GetEmployeeLoginData");
+		try {
+			Query query = manager.createNativeQuery(GETEMPLOYEELOGINDATA);
+			query.setParameter("loginid", loginid);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
@@ -1532,6 +1549,25 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		}
 		
 	}
+	
+	private static final String  EMPBLOODGROPUEDIT = "UPDATE employee_details SET bloodgroup  =:bloodgroup WHERE empno=:empno";
+	
+	@Override
+	public int EmpBloodGropuEdit(String empno , String bloodgroup)throws Exception {
+		logger.info(new Date() + "Inside DAO EmpBloodGropuEdit");
+		try {
+			Query query = manager.createNativeQuery(EMPBLOODGROPUEDIT);
+			query.setParameter("empno", empno);
+			query.setParameter("bloodgroup", bloodgroup);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 	
 }
 	

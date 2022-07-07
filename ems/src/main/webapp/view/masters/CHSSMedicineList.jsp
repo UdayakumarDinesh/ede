@@ -130,24 +130,73 @@ String LoginType = (String) session.getAttribute("LoginType");
 					<div class="row text-center">
 						<div class="col-md-12">
 											
-							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD" >ADD</button>
-							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
-									
+							<button type="submit" class="btn btn-sm add-btn" name="Action" formnovalidate="formnovalidate"  value="ADD" >add</button>
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT" formnovalidate="formnovalidate"  Onclick="Edit(empForm)" >edit </button>
+							<button type="button" class="btn btn-sm delete-btn" name="Action" value="DELETE"  Onclick="Delete(empForm);" >Delete </button>
+							 
 					    </div>						 
 					</div>
 					<%} %>
-			   </form>		
+			  
+	        
+	        
+	        <div class="container">
+				
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">The Reason For Delete</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        
+					        <!-- Modal body -->
+					      <div class="modal-body">
+					             <div class="form-inline">
+					        	 <div class="form-group"  >
+					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
+					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
+					      		 </div>
+					      		 </div>
+					        	
+					        	<div class="form-inline">
+					        	<div class="form-group w-100">
+					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
+					               <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
+					      		</div>
+					      		</div>
+					      		
+					     </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="Action" formaction="ChssMedicineDelete.htm" formenctype="multipart/form-data" value="DELETE" onclick="return confirm('Are You Sure To Delete ?');" >SUBMIT</button>
+					        </div>		
+					        		       
+					      </div>
+					    </div>
+					  </div>
+					  
+			</div>
+	        
+	  			</form>		
 			  </div>
 		   	 </div>				
 	        </div>
 	        </div>
+	        
+	        
+	        
 	        <script type="text/javascript">
 	        function Edit(myfrm) {
 
 	        	var fields = $("input[name='MedicineId']").serializeArray();
 
 	        	if (fields.length === 0) {
-	        		alert("Please Select Atleast One ");
+	        		alert("Please Select Atleast One Medicine");
 
 	        		event.preventDefault();
 	        		return false;
@@ -155,6 +204,21 @@ String LoginType = (String) session.getAttribute("LoginType");
 	        	return true;
 	        }
 	        
+	        function Delete(myfrm) {
+
+	        	var fields = $("input[name='MedicineId']").serializeArray();
+
+	        	if (fields.length === 0) {
+	        		alert("Please Select Atleast One Medicine");
+
+	        		event.preventDefault();
+	        		return false;
+	        	}else
+	        	{
+	        		$('#myModal').modal('show');	
+	        	}
+	        	
+	        }
 	        </script>
 </body>
 </html>

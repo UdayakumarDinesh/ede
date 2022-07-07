@@ -132,15 +132,18 @@ public class PisController {
 	
 	
 	@RequestMapping(value = "EmployeeDetails.htm", method = {RequestMethod.POST , RequestMethod.GET})
-	public String EmployeeDetails(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
+	public String EmployeeDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EmployeeDetails.htm "+Username);		
 		try {
 			
-			//ses.setAttribute("formmoduleid", "3");
-			
 			String empid=req.getParameter("empid");
+			if(empid==null)  {
+				Map md=model.asMap();
+				empid=(String)md.get("empid");
+			}
+			
 			if(empid==null) {
 				empid=String.valueOf((Long)ses.getAttribute("EmpId"));
 			}
@@ -1746,35 +1749,55 @@ public class PisController {
      }
 	
 	@RequestMapping(value="AuditStamping.htm" , method= {RequestMethod.GET,RequestMethod.POST})
-	 public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+	public String AuditStampling(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	{
 		  String Username = (String) ses.getAttribute("Username");
 	       logger.info(new Date() +"Inside AuditStamping.htm "+Username); 
-	       long LoginId = (long) ses.getAttribute("LoginId");
+	       String LoginId = String.valueOf((long) ses.getAttribute("LoginId"));
 	       try {
-	    	   String Usernameparam=req.getParameter("username");
+	    	   String LoginType = (String) ses.getAttribute("LoginType");
 	    	   
-				String Fromdate=req.getParameter("fromdate");
-				String Todate=req.getParameter("todate");
-	    	   List<Object[]> list=null;
-	    	  
-	    	   req.setAttribute("list", list);
-	    	   req.setAttribute("emplist", service.GetEmployeeList());
+	    	   String loginid=req.getParameter("loginid");
+	    	   String Fromdate=req.getParameter("fromdate");
+	    	   String Todate=req.getParameter("todate");
+	    	
+	    	   if(Fromdate == null || Todate == null) 
+	    	   { 
+	    		   Todate = LocalDate.now().toString();
+	    		   Fromdate= LocalDate.now().minusMonths(1).toString(); 
+	    	   }
+	    	   else { 
+					 
+	    		   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	    		   Fromdate = LocalDate.parse(Fromdate,formatter).toString();
+	    		   Todate = LocalDate.parse(Todate,formatter).toString();
+				 
+	    	   }
 	    	   
-	    		if(Usernameparam == null) {
-					
-					req.setAttribute("auditstampinglist", service.AuditStampingList(String.valueOf(LoginId) ,Fromdate, Todate));
-					req.setAttribute("Fromdate", LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-					req.setAttribute("Todate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-					req.setAttribute("loginid", String.valueOf(LoginId));
-					req.setAttribute("Username",(String) ses.getAttribute("EmpName"));
-				}else {
-				String[] userName=Usernameparam.split("-");	
-				req.setAttribute("auditstampinglist", service.AuditStampingList(userName[0],Fromdate, Todate));
-				req.setAttribute("Username", userName[1]);
-				req.setAttribute("loginid", userName[0]);
-				req.setAttribute("Fromdate", Fromdate);
-				req.setAttribute("Todate", Todate);
-				}
+	    	   if(LoginType.equalsIgnoreCase("A")) 
+	    	   {
+	    		   if(loginid==null) {
+	    			   loginid = "0";
+	    		   }
+	    		   System.out.println(loginid);
+	    		   req.setAttribute("emplist", service.GetEmployeeList());
+		    	   req.setAttribute("auditstampinglist", service.AuditStampingList(loginid,Fromdate, Todate));
+		    	  
+	    	   }else
+	    	   {
+	    		   loginid = LoginId;
+	    		   System.out.println(loginid);
+	    		   req.setAttribute("emplist", service.GetEmployeeLoginData(LoginId));
+		    	   req.setAttribute("auditstampinglist", service.AuditStampingList(loginid,Fromdate, Todate));
+		    	   
+	    	   }
+	    	   
+	    	   req.setAttribute("loginid", loginid);
+	    	   req.setAttribute("Fromdate", Fromdate);
+	    	   req.setAttribute("Todate", Todate);
+	    	   req.setAttribute("LoginType", LoginType);
+
+	    	   
 			} catch (Exception e) {
 				logger.error(new Date() +"Inside AuditStamping.htm "+Username,e);
 				e.printStackTrace();
@@ -2560,5 +2583,34 @@ public class PisController {
 			}
 		}
 	 	
+	 	
+	 	@RequestMapping(value = "EmpBloodGropuEdit.htm" , method= {RequestMethod.POST})
+		public String EmpBloodGropuEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{   
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside EmpBloodGropuEdit.htm " + Username);
+			try {
+				String bloodgroup =req.getParameter("bloodgroup");
+				String empid = req.getParameter("empid");
+				String empno = req.getParameter("empno");
+			
+				int count = service.EmpBloodGropuEdit(empno, bloodgroup);
+				if (count > 0) {
+					redir.addAttribute("result", "Blood Group updated Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Blood Group update Unsuccessfull");
+				}
+				
+				redir.addFlashAttribute("empid",empid);
+				return "redirect:/EmployeeDetails.htm";
+			
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside EmpBloodGropuEdit.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+			
+		}
 	
 }

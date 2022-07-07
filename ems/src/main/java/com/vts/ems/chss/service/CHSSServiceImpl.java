@@ -136,7 +136,7 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setCreatedDate(sdtf.format(new Date()));
 				apply.setCHSSApplyDate(sdf.format(new Date()));
 				apply.setRemarks(dto.getRemarks());
-				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
+				apply.setCHSSApplyNo("-");
 				apply.setPOAcknowledge(0);
 				apply.setPOId(0L);
 				apply.setVOId(0L);
@@ -186,87 +186,6 @@ public class CHSSServiceImpl implements CHSSService {
 		}
 		
 	}
-	
-	
-	
-	
-//	@Override
-//	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception
-//	{
-//		logger.info(new Date() +"Inside SERVICE CHSSApplySubmit");		
-//		try {
-//			long applyid=0;
-//			if(dto.getCHSSApplyId()==null) {
-//				CHSSApply apply= new CHSSApply();
-//				apply.setEmpId(Long.parseLong(dto.getEmpId()));
-//				apply.setPatientId(Long.parseLong(dto.getPatientId()));
-//				
-//				if(dto.getRelationId().equalsIgnoreCase("0")) {
-//					apply.setIsSelf("Y");
-//				}else {
-//					apply.setIsSelf("N");
-//				}
-//				
-//				apply.setFollowUp("N");
-//				apply.setCHSSNewId(0L);
-//				apply.setCHSSType(dto.getCHSSType());
-//				apply.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
-//				apply.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
-//				apply.setAilment(dto.getAilment());
-//				apply.setCHSSStatusId(1);
-//				apply.setIsActive(1);
-//				apply.setCreatedBy(dto.getCreatedBy());
-//				apply.setCreatedDate(sdtf.format(new Date()));
-//				apply.setCHSSApplyDate(sdf.format(new Date()));
-//				apply.setRemarks(dto.getRemarks());
-//				apply.setCHSSApplyNo(GenerateCHSSClaimNo());
-//				apply.setContingentId(0L);
-//				applyid=dao.CHSSApplyAdd(apply);
-//				
-//				CHSSApplyTransaction transac =new CHSSApplyTransaction();
-//				transac.setCHSSApplyId(applyid);
-//				transac.setCHSSStatusId(1);
-//				transac.setRemark("");
-//				transac.setActionBy(Long.parseLong(dto.getEmpId()));
-//				transac.setActionDate(sdtf.format(new Date()));
-//				dao.CHSSApplyTransactionAdd(transac);
-//				
-//			}else
-//			{
-//				applyid=Long.parseLong(dto.getCHSSApplyId());
-//			}
-//			
-//			long billid =0;
-//			for(int i=0 ; i<dto.getCenterName().length && applyid>0 ; i++)
-//			{
-//				CHSSBill bill = new CHSSBill();
-//				bill.setCHSSApplyId(applyid);
-//				bill.setCenterName(dto.getCenterName()[i].trim());
-//				bill.setBillNo(dto.getBillNo()[i]);
-//				bill.setBillDate(sdf.format(rdf.parse(dto.getBillDate()[i])));
-//				bill.setIsActive(1);
-//				bill.setCreatedBy(dto.getCreatedBy());
-//				bill.setCreatedDate(sdtf.format(new Date()));
-//				
-//				billid = dao.CHSSBillAdd(bill);
-//			}
-//			
-//			if(dto.getCHSSApplyId()==null) {
-//				return applyid;
-//			}
-//			
-//			return billid;
-//			
-//			
-//						
-//			
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			logger.error(new Date() +" Inside SERVICE CHSSApplySubmit");
-//			return 0;
-//		}
-//		
-//	}
 	
 	
 	public String GenerateCHSSClaimNo() throws Exception
@@ -1023,8 +942,10 @@ public class CHSSServiceImpl implements CHSSService {
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				
-				
-				
+				if(claim.getCHSSApplyNo().trim().equals("-")) {
+					
+					claim.setCHSSApplyNo(GenerateCHSSClaimNo());
+				}
 			}
 			else if(claimstatus==2 || claimstatus==5 ) 
 			{
@@ -1689,20 +1610,28 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		
-		claim.setCHSSStatusId(1);
-		claim.setModifiedBy(Username);
-		claim.setModifiedDate(sdtf.format(new Date()));
+		if(claim.getPOAcknowledge()==0) 
+		{
 		
-		CHSSApplyTransaction transac =new CHSSApplyTransaction();
-		transac.setCHSSApplyId(claim.getCHSSApplyId());
-		transac.setCHSSStatusId(100);
-		transac.setActionBy(Long.parseLong(EmpId));
-		transac.setActionDate(sdtf.format(new Date()));
-		dao.CHSSApplyTransactionAdd(transac);
-		
-		long count= dao.CHSSApplyEdit(claim);
-		
-		return count;
+			claim.setCHSSStatusId(1);
+			claim.setModifiedBy(Username);
+			claim.setModifiedDate(sdtf.format(new Date()));
+			
+			
+			
+			CHSSApplyTransaction transac =new CHSSApplyTransaction();
+			transac.setCHSSApplyId(claim.getCHSSApplyId());
+			transac.setCHSSStatusId(100);
+			transac.setActionBy(Long.parseLong(EmpId));
+			transac.setActionDate(sdtf.format(new Date()));
+			dao.CHSSApplyTransactionAdd(transac);
+			
+			long count= dao.CHSSApplyEdit(claim);
+			
+			return count;
+		}else {
+			return -1;
+		}
 	}
 	
 	@Override

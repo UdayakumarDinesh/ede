@@ -14,7 +14,7 @@
 
 <%
 List<Object[]> main =(List<Object[]>)request.getAttribute("treatment");
-CHSSMedicineList list = (CHSSMedicineList)request.getAttribute("medicinelist");
+CHSSMedicinesList list = (CHSSMedicinesList)request.getAttribute("medicinelist");
 %>
 
 	<div class="card-header page-top">

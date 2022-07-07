@@ -69,6 +69,7 @@ public interface MasterService {
 	public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception;
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
 	public Long AddMasterEditComments(MasterEdit masteredit ,MasterEditDto masterdto)throws Exception;
+	public Long EditDelete(CHSSMedicinesList medicine) throws Exception;
 
 
 
