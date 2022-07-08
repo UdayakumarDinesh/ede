@@ -97,14 +97,14 @@ String todate = (String)request.getAttribute("todate");
 									%>
 										<tr>
 											<td style="text-align:center;  width: 5%;"> <input type="radio" name="circulatId" value="<%=obj[0]%>"> </td>
-										    <td style="text-align:center;  width: 10%;">  <%if(obj[2]!=null){ %> 	
+										    <td style="text-align:center;  width: 15%;">  <%if(obj[2]!=null){ %> 	
 										    <button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											  <%if(obj[6]!=null){%><%=obj[6]%><%}%>
 										    </button>
 										    </td>
 											<%}else{%>--<%}%>
-											<td style="text-align:justify; width: 60%;"><%if(obj[1]!=null){%><%=obj[1]%><%}%></td>
-											<td style="text-align:justify; width: 10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
+											<td style="text-align:justify; width: 50%;"><%if(obj[1]!=null){%><%=obj[1]%><%}%></td>
+											<td style="text-align:justify; width: 15%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
 											<td style="text-align:justify; width: 10%;"><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5].toString())%> <%} %></td>	
 										</tr>
 								<%} }%>

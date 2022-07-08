@@ -254,10 +254,10 @@ String path=(String)request.getAttribute("path");
 								<thead>
 									<tr>
 										<th style="width: 10%">SlNo.</th>
-										<th style="width: 10%">Reference No</th>
+										<th style="width: 20%">Reference No</th>
 										<th style="width: 50%" >Description </th>
-										<th style="width: 20%" >Circular Date</th>
-										<th style="width: 20%"> Download</th>
+										<th style="width: 10%" >Circular Date</th>
+										<th style="width: 10%"> Download</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -266,11 +266,11 @@ String path=(String)request.getAttribute("path");
 										for(Object[] obj : circular){
 									%>
 										<tr>
-											<td style="text-align:center;  width: 5%;"> <b><%=++slno%></b> </td>
-											<td style="text-align:justify; width: 10%;"><b><%if(obj[6]!=null){%><%=obj[6]%><%}else{ %>-<%} %></b></td>
-											<td style="text-align:justify; width: 70%;"><b><%=obj[1]%></b></td>
+											<td style="text-align:center;  width: 10%;"> <b><%=++slno%></b> </td>
+											<td style="text-align:justify; width: 20%;"><b><%if(obj[6]!=null){%><%=obj[6]%><%}else{ %>-<%} %></b></td>
+											<td style="text-align:justify; width: 50%;"><b><%=obj[1]%></b></td>
 											<td style="text-align:justify; width: 10%;"><b><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %> </b></td>
-											<td style="text-align:center;  width: 5%;"> <%if(obj[2]!=null){ %> 
+											<td style="text-align:center;  width: 10%;"> <%if(obj[2]!=null){ %> 
 											<button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download"></i>
 										    </button>

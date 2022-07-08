@@ -151,16 +151,17 @@ th,td
 					<tr>
 						<th style="width:3%;text-align: center; " >SN</th>
 						<th style="width:15% " >Name</th>
-						<th style="width:12% " >Relationship With the Employee</th>
+						<th style="width:10% " >Relationship With the Employee</th>
 						<th style="width: 10% " >Date of Birth</th>
-						<th style="width: 12% " >Occupation if Any</th>
+						<th style="width: 10% " >Date of Inclusion</th>
+						<th style="width: 10% " >Occupation if Any</th>
 						<th style="width: 8% " >Income, if any, per month (Rs) </th>
-						<th style="width: 15% " >Comments </th>
+						<th style="width: 12% " >Comments </th>
 						<th style="width: 15% " >Attachment </th>
 						<%if((status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
-						<th style="width: 10% " >
-							Action  
-						</th>
+							<th style="width: 10% " >
+								Action  
+							</th>
 						<%} %>
 					</tr>
 					<%int i=0;
@@ -182,6 +183,9 @@ th,td
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-dob-edit" name="mem-dob" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+							</td>
+							<td>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit" name="mem-IncDate" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-occupation" id="mem-occupation-<%=FwdMemberDetails.get(i)[0] %>" <%if(FwdMemberDetails.get(i)[7]!=null){ %>value="<%=FwdMemberDetails.get(i)[7] %>" <%}else{ %>value="" <%} %> maxlength="255" onchange = "IncomeRequired('<%=FwdMemberDetails.get(i)[0] %>');" >
@@ -277,6 +281,9 @@ th,td
 							</td>
 							<td>
 								<input form ="add-form" type="text" class="form-control mem-dob" name="mem-dob" value="" style="width:100%;"  maxlength="10" readonly required="required">
+							</td>
+							<td>
+								<input form ="add-form" type="text" class="form-control mem-IncDate" name="mem-IncDate" value="" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
 								<input form ="add-form" type="text" class="form-control" name="mem-occupation" id="mem-occupation-0"  value="" maxlength="255" onchange="IncomeRequired(0);"  >
@@ -485,6 +492,33 @@ $(document).ready(function(){
 			format : 'DD-MM-YYYY'
 		}
 	});
+	
+	$('.mem-IncDate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"startDate" : new Date(),
+		"maxDate" :new Date(),					 
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	
+	$('.mem-IncDate-edit').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,					
+							 
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	
+	
 		
 	$('.numberonly').keypress(function (e) {    
         var charCode = (e.which) ? e.which : event.keyCode    

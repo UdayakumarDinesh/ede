@@ -1557,7 +1557,7 @@ public class CHSSController {
 			double claimamount=0;
 			for(Object[] bill : claimdata) 
 			{
-				if(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString()) != Double.parseDouble(bill[9].toString()))
+				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
 					allow[3]=bill[2].toString();

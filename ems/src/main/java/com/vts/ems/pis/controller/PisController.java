@@ -2136,7 +2136,7 @@ public class PisController {
 	
 	
 	@RequestMapping(value ="DepMemAddSubmit.htm" , method =  RequestMethod.POST )
-		public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+	public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
@@ -2149,6 +2149,7 @@ public class PisController {
 	    	String occupation =  req.getParameter("mem-occupation").trim();
 	    	String income = req.getParameter("mem-income");
 	    	String comment = req.getParameter("mem-comment");
+	    	String IncDate = req.getParameter("mem-IncDate");
 	    	
 	    	Object[] empdetails = service.EmployeeDetails(empid);
 	    	Object[] relationdata = service.RelationshipData(relation);
@@ -2165,9 +2166,9 @@ public class PisController {
 	    	details.setBlood_group("Not Available");
 	    	details.setGender(relationdata[2].toString());
 	    	
-//	    	details.setStatus_from(new java.sql.Date());
-	    	details.setMed_dep("N");
-//	    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+//	    	details.setStatus_from(new Date());
+	    	details.setMed_dep("Y");
+	    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(IncDate));
 	    	details.setLtc_dep("N");
 //	    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
 	    	
@@ -2255,13 +2256,14 @@ public class PisController {
 	        try (InputStream inputStream = multipartFile.getInputStream())
 	        {
 	        	int count=1;
-	        	File tempFile  = new File(destinationFilePath);
 	        	
+	        	File tempFile  = new File(destinationFilePath);
 	        	if(tempFile.exists())
 	        	{
 	        	    while(true)
 	        	    {
 	        	    	destinationFilePath = uploadPath+"\\"+fileName+"("+count+")."+ext;
+	        	    	tempFile  = new File(destinationFilePath);
 	        	        if(!tempFile.exists())
 	        	        {
 	        	            break;
@@ -2299,6 +2301,8 @@ public class PisController {
 		    	String occupation =  req.getParameter("mem-occupation").trim();
 		    	String income = req.getParameter("mem-income");
 		    	String comment = req.getParameter("mem-comment");
+		    	String IncDate = req.getParameter("mem-IncDate");
+		    	
 		    	
 		    	Object[] empdetails = service.EmployeeDetails(empid);
 		    	Object[] relationdata = service.RelationshipData(relation);
@@ -2311,13 +2315,13 @@ public class PisController {
 		    	details.setEmpid(empid);
 		    	details.setCghs_ben_id(empdetails[2].toString());
 		    	details.setFamily_status_id(1);
-		    	details.setPH("N"); 
+		    	details.setPH("N");
 		    	details.setBlood_group("Not Available");
 		    	details.setGender(relationdata[2].toString());
 		    	
-//		    	details.setStatus_from(new java.sql.Date());
-		    	details.setMed_dep("N");
-//		    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(medicaldepdate));
+//		    	details.setStatus_from(new Date());
+		    	details.setMed_dep("Y");
+		    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(IncDate));
 		    	details.setLtc_dep("N");
 //		    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
 		    	
@@ -2399,7 +2403,7 @@ public class PisController {
 					path = Memberdata[10].toString().trim();
 				}
 				
-                Path filepath=Path.of(path);
+                Path filepath=Paths.get(path);
                 res.setContentType("Application/octet-stream");
                 res.setHeader("Content-disposition","attachment;filename="+filepath.getFileName() ); 
                 File f=new File(path);
