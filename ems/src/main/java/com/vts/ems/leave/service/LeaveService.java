@@ -2,6 +2,9 @@ package com.vts.ems.leave.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
@@ -34,4 +37,9 @@ public interface LeaveService {
 	public List<Object[]> LeaveTransaction(String applid) throws Exception;
 	public Object[] LeavePrint(String applid) throws Exception;
 	public Object[] getLabCode() throws Exception;
+	public int getApproved(ApprovalDto dto,HttpServletRequest req)throws Exception;
+	public List<Object[]> getSanctionedLeave(String EmpNo)throws Exception;
+	public int deleteLeave(ApprovalDto dto)throws Exception;
+	public Object[] getLeaveData(String applid) throws Exception;
+
 }

@@ -3,6 +3,7 @@ package com.vts.ems.leave.dao;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
@@ -42,5 +43,10 @@ public interface LeaveDao {
 	public List<Object[]> LeaveTransaction(String applid) throws Exception;
 	public Object[] LeavePrint(String applid) throws Exception;
 	public Object[] getLabCode() throws Exception;
+	public int getUpdateAppl(ApprovalDto dto)throws Exception;
+	public int getUpdateRegister(ApprovalDto dto)throws Exception;
+	public List<Object[]> getSanctionedLeave(String EmpNo)throws Exception;
+	public int deleteLeave(ApprovalDto dto)throws Exception;
+	public Object[] getLeaveData(String applid) throws Exception;
 	
 }

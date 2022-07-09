@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LabMaster;
+import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
@@ -53,10 +54,11 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
     private static final String CHECKHANDOVER="select count(*) from";
     private static final String GETAPPLID="SELECT MAX(SUBSTR(applid,6)) FROM leave_appl where leaveyear=:year";
-    private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU') and a.empid=:empNo order by a.leaveapplid desc";
+    private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU','LR1','LR2','LR3','LRO','LVA') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
     private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
     private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND (:fromDate BETWEEN a.fromdate AND a.todate or :toDate BETWEEN a.fromdate AND a.todate)";   
+    private static final String LEAVESANC="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LSO','LDO') and a.empid=:empNo order by a.leaveapplid desc";
 
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -436,6 +438,97 @@ public class LeaveDaoImpl implements LeaveDao{
 			return null;
 		}
 		
+	}
+
+	private static final String UPDATEAPPL ="Update leave_appl set status=:status where applid=:applid";
+	@Transactional
+	@Override
+	public int getUpdateAppl(ApprovalDto dto) throws Exception {
+       logger.info(new Date() + "Inside getUpdateAppl()");
+		
+		try {
+			Query query = manager.createNativeQuery(UPDATEAPPL);
+			query.setParameter("applid",dto.getApplId());
+			query.setParameter("status",dto.getStatus());
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+
+	private static final String UPDATEREGISTER  ="Update leave_register set status=:status where appl_id=:applid";
+	@Transactional
+	@Override
+	public int getUpdateRegister(ApprovalDto dto) throws Exception {
+		 logger.info(new Date() + "Inside getUpdateRegister()");
+			
+			try {
+				Query query = manager.createNativeQuery(UPDATEREGISTER);
+				query.setParameter("applid",dto.getApplId());
+				query.setParameter("status",dto.getStatus());
+				int count = (int) query.executeUpdate();
+				return count;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+	}
+
+
+	@Override
+	public List<Object[]> getSanctionedLeave(String EmpNo) throws Exception {
+		logger.info(new Date() +"Inside getSanctionedLeave");	
+		Query query = manager.createNativeQuery(LEAVESANC);
+		query.setParameter("empNo", EmpNo);
+		List<Object[]> getAppliedLeave= query.getResultList();
+		return getAppliedLeave;
+	}
+
+	private static final String REMOVEAPPLID="delete from  leave_appl where  status='LAU' and applid=:applid";
+	private static final String REMOVEAPPLIDREGI="delete from  leave_register where  status='LAU' and appl_id=:applid";
+	private static final String REMOVEAPPLIDTRANSC="delete from  leave_transaction where   leaveapplid=:applid";
+	@Transactional
+	@Override
+	public int deleteLeave(ApprovalDto dto) throws Exception {
+		logger.info(new Date() + "Inside deleteLeave()");
+		
+		try {
+			int count =0;
+			Query query = manager.createNativeQuery(REMOVEAPPLID);
+			query.setParameter("applid",dto.getApplId());
+			count = (int) query.executeUpdate();
+			Query query1 = manager.createNativeQuery(REMOVEAPPLIDREGI);
+			query1.setParameter("applid",dto.getApplId());
+			count = (int) query1.executeUpdate();
+			Query query2 = manager.createNativeQuery(REMOVEAPPLIDTRANSC);
+			query2.setParameter("applid",dto.getApplId());
+			count = (int) query2.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+}
+	
+     private static final String LEAVEDATA="SELECT  a.EMPID,a.PURLEAVE,a.LEAVEADDress,a.fromDATE,a.toDATE,a.TOTALDAYS,a.createddate,a.LEAVECODE, a.STATUS,a.FNAN,a.APPLID,a.REMARKS,a.LTC  FROM Leave_Appl a WHERE  a.APPLID=:applid";
+	
+	@Override
+	public Object[] getLeaveData(String applid) throws Exception {
+		logger.info(new Date() +"Inside LeaveData");	
+		Query query =manager.createNativeQuery(LEAVEDATA);
+		Object[] result = null;
+		query.setParameter("applid", applid);
+		
+		try {
+			result = (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dao.LeaveDaoImpl;
+import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveRegister;
@@ -1981,5 +1984,71 @@ public class LeaveServiceImpl implements LeaveService{
 	public Object[] getLabCode() throws Exception {
 		
 		return dao.getLabCode();
+	}
+
+	@Override
+	public int getApproved(ApprovalDto dto,HttpServletRequest req) throws Exception {
+		int count=0;
+		if(dto.getApprove()!=null) {
+			for(int i=0;i<dto.getApprove().length;i++) {
+				try {
+					dto.setStatus(dto.getApprove()[i].split("_")[1]);
+					dto.setApplId(dto.getApprove()[i].split("_")[0]);
+					dao.getUpdateAppl(dto);
+					dao.getUpdateRegister(dto);
+					    LeaveTransaction transaction=new LeaveTransaction();
+				        transaction.setActionBy(dto.getEmpNo());
+				        transaction.setActionDate(sdf.getSqlDateAndTimeFormat().format(new Date()));
+				        transaction.setLeaveApplId(dto.getApplId());
+				        transaction.setLeaveStatus(dto.getStatus());
+				        transaction.setLeaveRemarks(req.getParameter(dto.getApplId()));
+				        long trns=dao.LeaveTransInsert(transaction);
+				        count=1;
+				}catch (Exception e) {
+					count=0;
+				}
+			}
+		}
+		if(dto.getReject()!=null) {
+			for(int i=0;i<dto.getReject().length;i++) {
+				try {
+					StringBuilder myName = new StringBuilder(dto.getReject()[i].split("_")[1]);
+					myName.setCharAt(1, 'C');
+					dto.setStatus(myName.toString());
+					dto.setApplId(dto.getReject()[i].split("_")[0]);
+					dao.getUpdateAppl(dto);
+					dao.getUpdateRegister(dto);
+					    LeaveTransaction transaction=new LeaveTransaction();
+				        transaction.setActionBy(dto.getEmpNo());
+				        transaction.setActionDate(sdf.getSqlDateAndTimeFormat().format(new Date()));
+				        transaction.setLeaveApplId(dto.getApplId());
+				        transaction.setLeaveStatus(dto.getStatus());
+				        transaction.setLeaveRemarks(req.getParameter(dto.getApplId()));
+				        long trns=dao.LeaveTransInsert(transaction);
+				        count=1;
+				}catch (Exception e) {
+					count=0;
+				}
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public List<Object[]> getSanctionedLeave(String EmpNo) throws Exception {
+	
+		return dao.getSanctionedLeave(EmpNo);
+	}
+
+	@Override
+	public int deleteLeave(ApprovalDto dto) throws Exception {
+		
+		return dao.deleteLeave(dto);
+	}
+
+	@Override
+	public Object[] getLeaveData(String applid) throws Exception {
+	
+		return dao.getLeaveData(applid);
 	}
 }

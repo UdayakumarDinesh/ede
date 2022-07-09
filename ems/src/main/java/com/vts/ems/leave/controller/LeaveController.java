@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
@@ -176,7 +177,7 @@ public class LeaveController {
 			 req.setAttribute("purposeList", service.purposeList());
 			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
 			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
-			
+			 req.setAttribute("sanction", service.getSanctionedLeave(EmpNo));
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside LeaveApply.htm "+UserId, e);
@@ -352,6 +353,8 @@ public class LeaveController {
 			 req.setAttribute("purposeList", service.purposeList());
 			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
 			 req.setAttribute("applied", service.getAppliedLeave(EmpNo));
+			 req.setAttribute("sanction", service.getSanctionedLeave(EmpNo));
+
 	    }
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside applyLeaveRedirect.htm "+UserId, e);
@@ -420,9 +423,107 @@ public class LeaveController {
 	}
 	
 	@RequestMapping(value = "/leaveApprovals.htm")
-	public String leaveApprovals(HttpServletRequest req) {
-		String LeaveApplId = req.getParameter("applId");
-
-	return "redirect:/LeaveApproval.htm";	
+	public String leaveApprovals(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside leaveApprovals.htm"+UserId);
+		try {
+        ApprovalDto dto=new ApprovalDto();
+        dto.setApprove( req.getParameterValues("approve"));
+        dto.setReject( req.getParameterValues("reject"));
+        dto.setEmpNo((String)ses.getAttribute("EmpNo"));
+		dto.setUserName(UserId);
+		int result=service.getApproved(dto,req);
+		if(result>0) {
+			redir.addAttribute("result","Leave Transaction Successfull");
+		}else{
+			redir.addAttribute("resultfail","Leave Transaction Unsuccessful");
+		}
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside leaveApprovals.htm"+UserId, e);
+	       }
+		return "redirect:/LeaveApproval.htm";	
+		}
+	
+	@RequestMapping(value = "/delete-leave.htm", method = RequestMethod.POST)
+	public String leaveDelete(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside delete-leave.htm"+UserId);
+		try {
+		ApprovalDto dto=new ApprovalDto();
+        dto.setApplId(req.getParameter("appl_id"));
+        dto.setEmpNo(req.getParameter("EmpNo"));
+		dto.setUserName(UserId);
+		int result = service.deleteLeave(dto);
+		redir.addFlashAttribute("EmpNo",dto.getEmpNo());
+		if(result>0) {
+			redir.addAttribute("result","Leave Deleted Successfull");
+		}else{
+			redir.addAttribute("resultfail","Leave Delete Unsuccessful");
+		}
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside delete-leave.htm"+UserId, e);
+	       }
+		return "redirect:/applyLeaveRedirect.htm";
 	}
+	
+	
+	@RequestMapping(value = "/edit-leave.htm", method = RequestMethod.POST)
+	public String leaveEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside edit-leave.htm"+UserId);
+		try {
+			String EmpNo=req.getParameter("EmpNo");
+			String applid = req.getParameter("appl_id");
+			req.setAttribute("EmpNo",EmpNo);
+			Object[] obj=service.getLeaveData(applid);
+			 if(obj[8].toString().equals("LAU")) {
+				 
+			 }else if(obj[8].toString().equals("LSO")||obj[8].toString().equals("LDO")) {
+				 
+			 }else {
+				 redir.addFlashAttribute("EmpNo",EmpNo);
+				 redir.addAttribute("resultfail","Leave Modification Not Allowed");
+				 return "redirect:/applyLeaveRedirect.htm";
+			 }
+			 req.setAttribute("leavedetails",obj);
+			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
+			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
+			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
+			 req.setAttribute("purposeList", service.purposeList());
+			 req.setAttribute("register", service.getRegister(EmpNo,sdf.getCurrentYear()));
+
+
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside edit-leave.htm"+UserId, e);
+	       }
+		return "leave/LeaveEdit";
+	}
+
+	
+	@RequestMapping(value = "/edited-leave.htm", method = RequestMethod.POST)
+	public String leaveEdited(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside edit-leave.htm"+UserId);
+		try {
+		ApprovalDto dto=new ApprovalDto();
+        dto.setApplId(req.getParameter("appl_id"));
+        dto.setEmpNo(req.getParameter("EmpNo"));
+		dto.setUserName(UserId);
+		int result = service.deleteLeave(dto);
+		redir.addFlashAttribute("EmpNo",dto.getEmpNo());
+		if(result>0) {
+			redir.addAttribute("result","Leave Deleted Successfull");
+		}else{
+			redir.addAttribute("resultfail","Leave Delete Unsuccessful");
+		}
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside edit-leave.htm"+UserId, e);
+	       }
+		return "leave/LeaveEdit";
+	}
+
 }

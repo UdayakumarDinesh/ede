@@ -66,8 +66,19 @@ String ses=(String)request.getParameter("result");
 			 
    <div class="card-body" align="center" >
 
-    <%
+    <% int applied=0;
+    int modified=0;
+    int cancelled=0;
     List<Object[]> ghlist=(List<Object[]>)request.getAttribute("GhApprovalList");
+    for(Object[] ls:ghlist){ 
+    if("LAU".equalsIgnoreCase(ls[15].toString())||"LRO".equalsIgnoreCase(ls[15].toString())||"LSO".equalsIgnoreCase(ls[15].toString()) ){
+    	applied++;
+    }else if("LAM".equalsIgnoreCase(ls[15].toString())||"LRM".equalsIgnoreCase(ls[15].toString())||"LSM".equalsIgnoreCase(ls[15].toString()) ){
+    	modified++;
+    }else  if("LCU".equalsIgnoreCase(ls[15].toString())||"LCR".equalsIgnoreCase(ls[15].toString()) ){
+    	
+    }
+    }
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	   %>
 	    <div class="row" style="margin-top:7px;"> 
@@ -81,7 +92,7 @@ String ses=(String)request.getParameter("result");
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
           </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><%=ghlist.size()%></span>
+           <span class="badge badge-danger badge-counter badge-success" ><%=applied%></span>
           Applied Leaves  For Recommendation  and Sanction </span></a>
         </h5>
       </div>
@@ -107,8 +118,8 @@ String ses=(String)request.getParameter("result");
             <%int count=0; %>
             <%for(Object[] ls:ghlist){ %>
             <% 
-              String Status=ls[11].toString();
-              if("LAU".equalsIgnoreCase(Status)||"LRO".equalsIgnoreCase(Status) )
+              String Status=ls[15].toString();
+              if("LAU".equalsIgnoreCase(Status)||"LRO".equalsIgnoreCase(Status)||"LSO".equalsIgnoreCase(Status) )
               {
 
             %>
@@ -136,13 +147,13 @@ String ses=(String)request.getParameter("result");
          <!-- CBY:checkbox yes -->
         <span class="app ghapp">
 		<label for="ResponseSaidCBY<%=count%>">Approve</label> 
-		<input type="checkbox" class="ghapp"  id="ResponseSaidCBY<%=count%>" name="approve" value="<%=ls[10]%>_<%=ls[11]%>" onclick="changemyclick('<%=count%>')" >
+		<input type="checkbox" class="ghapp"  id="ResponseSaidCBY<%=count%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=count%>')" >
         </span>
         
          <!-- CBY:checkbox No -->
         <span class="disapp ghappdis" style="margin-right: -10px;"> 
 		<label for="ResponseSaidCBN<%=count%>">DisApprove</label> 
-		<input type="checkbox" class="ghappdis" id="ResponseSaidCBN<%=count%>" name="reject" value="<%=ls[10]%>_<%=ls[11]%>"  onclick="changemyclick('<%=count%>')" >
+		<input type="checkbox" class="ghappdis" id="ResponseSaidCBN<%=count%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=count%>')" >
          </span> 
          
           <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
@@ -178,7 +189,7 @@ String ses=(String)request.getParameter("result");
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
           </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><%=0%></span>
+           <span class="badge badge-danger badge-counter badge-success" ><%=modified %></span>
           Amended Leaves  For Recommendation  and Sanction </span></a>
         </h5>
       </div>
@@ -204,8 +215,8 @@ String ses=(String)request.getParameter("result");
             <%int countm=0; %>
             <%for(Object[] ls:ghlist){ %>
             <% 
-              String Status=ls[16].toString();
-              if("LAM".equalsIgnoreCase(Status)||"LRM".equalsIgnoreCase(Status) )
+              String Status=ls[15].toString();
+              if("LAM".equalsIgnoreCase(Status)||"LRM".equalsIgnoreCase(Status)||"LSM".equalsIgnoreCase(Status) )
               {
 
             %>
@@ -233,13 +244,13 @@ String ses=(String)request.getParameter("result");
          <!-- CBY:checkbox yes -->
         <span class="app ghmapp">
 		<label for="ResponseSaidCBY<%=ls[10]%>">Approve</label> 
-		<input type="checkbox" class="ghmapp"  id="ResponseSaidCBY<%=ls[10]%>" name="approve" value="<%=ls[10]%>_<%=ls[11]%>" onclick="changemyclick('<%=ls[10]%>')" >
+		<input type="checkbox" class="ghmapp"  id="ResponseSaidCBY<%=ls[10]%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=ls[10]%>')" >
         </span>
         
          <!-- CBY:checkbox No -->
         <span class="disapp ghmappdis" style="margin-right: -10px;"> 
 		<label for="ResponseSaidCBN<%=ls[10]%>">DisApprove</label> 
-		<input type="checkbox" class="ghmappdis" id="ResponseSaidCBN<%=ls[10]%>" name="reject" value="<%=ls[10]%>_<%=ls[11]%>"  onclick="changemyclick('<%=ls[10]%>')" >
+		<input type="checkbox" class="ghmappdis" id="ResponseSaidCBN<%=ls[10]%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=ls[10]%>')" >
          </span> 
          
           <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
@@ -274,7 +285,7 @@ String ses=(String)request.getParameter("result");
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
           </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><%=0%></span>
+           <span class="badge badge-danger badge-counter badge-success" ><%=cancelled%></span>
          Cancelled Leaves  For Recommendation  and Sanction </span></a>
         </h5>
       </div>
@@ -300,8 +311,8 @@ String ses=(String)request.getParameter("result");
             <% %>
             <%for(Object[] ls:ghlist){ %>
             <% 
-              String Status=ls[11].toString();
-              if("LAM".equalsIgnoreCase(Status)||"LRM".equalsIgnoreCase(Status) )
+              String Status=ls[15].toString();
+              if("LCU".equalsIgnoreCase(Status)||"LCR".equalsIgnoreCase(Status) )
               {
 
             %>
@@ -329,13 +340,13 @@ String ses=(String)request.getParameter("result");
          <!-- CBY:checkbox yes -->
         <span class="app ghcapp">
 		<label for="ResponseSaidCBY<%=ls[10]%>">Approve</label> 
-		<input type="checkbox" class="ghcapp"  id="ResponseSaidCBY<%=ls[10]%>" name="approve" value="<%=ls[10]%>_<%=ls[11]%>" onclick="changemyclick('<%=ls[10]%>')" >
+		<input type="checkbox" class="ghcapp"  id="ResponseSaidCBY<%=ls[10]%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=ls[10]%>')" >
         </span>
         
          <!-- CBY:checkbox No -->
         <span class="disapp ghcappdis" style="margin-right: -10px;"> 
 		<label for="ResponseSaidCBN<%=ls[10]%>">DisApprove</label> 
-		<input type="checkbox" class="ghcappdis" id="ResponseSaidCBN<%=ls[10]%>" name="reject" value="<%=ls[10]%>_<%=ls[11]%>"  onclick="changemyclick('<%=ls[10]%>')" >
+		<input type="checkbox" class="ghcappdis" id="ResponseSaidCBN<%=ls[10]%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=ls[10]%>')" >
          </span> 
          
           <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
