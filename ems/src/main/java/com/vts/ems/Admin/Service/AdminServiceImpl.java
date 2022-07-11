@@ -171,7 +171,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	
 	@Override
-	public int AddHandingOver(LeaveHandingOver addhanding)throws Exception
+	public long AddHandingOver(LeaveHandingOver addhanding)throws Exception
 	{
 		return dao.AddHandingOver(addhanding);
 	}

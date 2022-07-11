@@ -392,7 +392,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    </div>
 	                    <!-- / Remarks -->    
 	                    <!-- HandingOver To -->
-	              <%if(roleid==1||roleid==2){%>
+
 	                 
 	                    <div class="form-group">
 	                        <div class="row">
@@ -402,7 +402,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                            <div class="col-sm-8">
 	                                <select name="HandingOverEmpid" class="form-control input-sm selectpicker" data-live-search="true">
 	                                
-	                                <option value="NotSelected">Select Employee Whom You Want To Hand Over</option>
+	                                 <option value="NotSelected" selected="selected">Not Applicable</option>
 	                                 <%if(emplist!=null&&emplist.size()>0){
 	                                   for(Object[] ls:emplist){
 	                                   if(!ls[0].toString().equalsIgnoreCase(empNo)){
@@ -413,10 +413,6 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                            </div>
 	                        </div>
 	                    </div>
-	                   
-	                   <%}else{%>  
-	                    <input type="hidden" name="HandingOverEmpid" value="NotSelected">
-	                   <%}%> 
 	                   
 	                     <!--  reset apply and check button -->
 	                    <div class="form-group">
