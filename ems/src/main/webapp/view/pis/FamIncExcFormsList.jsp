@@ -132,7 +132,7 @@
 									<th style="width: 5%">SN</th>
 									<th> Inclusion/Exclusion </th>
 									<th>Status</th>
-									<th>Date</th>
+									<th>Approved Date</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -148,7 +148,7 @@
 									<td>
 										Confirmed
 									</td>
-									<td><%=DateTimeFormatUtil.SqlToRegularDate(form[4].toString()) %></td>
+									<td><%=DateTimeFormatUtil.SqlToRegularDate(form[6].toString()) %></td>
 									<td>
 										<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepAdmissionCreateView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>

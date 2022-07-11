@@ -30,10 +30,6 @@ input[type=number]{
     -moz-appearance: textfield;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show>.nav-link 
-{
-	background-color: #750550;
-}
 .table thead{
     background: #9AD0EC;
 }
@@ -75,10 +71,6 @@ table th:last-child{
   border-radius:0 8px 0 0;
 }
 
-
-.nav-pills-custom .nav-link.active{
-	background-color: #FC9918 !important;
-}
 
 </style>
 </head>

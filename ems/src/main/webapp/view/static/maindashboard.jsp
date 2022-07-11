@@ -341,8 +341,17 @@
 			    		<br>
 			    	</div>
 			    	
-			    	<div class="container" >
+			    	<div class="container">
 					    <div class="row">
+					    
+					     <div class="col-md-4">
+					      <div class="card-counter violet">
+					        <i class="fa-solid fa-list-check"></i>
+					        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
+					        <span class="count-name"> Amount InProcess </span>
+					      </div>
+					    </div>
+					    
 					    <div class="col-md-4">
 					      <div class="card-counter primary">
 					        <i class="fa fa-code-fork"></i>
@@ -359,13 +368,7 @@
 					      </div>
 					    </div>
 					    
-					     <div class="col-md-4">
-					      <div class="card-counter violet">
-					        <i class="fa-solid fa-list-check"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name"> Amount InProcess </span>
-					      </div>
-					    </div>
+					    
 					    
 					  </div>
 					  

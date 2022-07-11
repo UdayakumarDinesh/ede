@@ -2241,7 +2241,7 @@ public class PisController {
 		
 	}
 	
-		public static String saveFile(String ToFilePath, String fileFullName, MultipartFile multipartFile) throws IOException 
+	public static String saveFile(String ToFilePath, String fileFullName, MultipartFile multipartFile) throws IOException 
 	{
 		 	Path uploadPath = Paths.get(ToFilePath);
 	         if (!Files.exists(uploadPath)) {
@@ -2405,6 +2405,7 @@ public class PisController {
 				
                 Path filepath=Paths.get(path);
                 res.setContentType("Application/octet-stream");
+                System.out.println(filepath.getFileName());
                 res.setHeader("Content-disposition","attachment;filename="+filepath.getFileName() ); 
                 File f=new File(path);
                 FileInputStream fis = new FileInputStream(f);
@@ -2516,6 +2517,7 @@ public class PisController {
 				{
 					empid = ((Long) ses.getAttribute("EmpId")).toString();
 				}
+				
 				
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("FwdMemberDetails",service.GetFormMembersList(empid,formid));

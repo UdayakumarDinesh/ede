@@ -461,19 +461,19 @@ String path=(String)request.getAttribute("path");
 		  <section id="page" class="body-wrapper clearfix" style="">
 		    	<!-- Blue Border for Login Page -->  
 		    <div class="support-row clearfix" id="swapper-border" style="">
-		      		  <div class="widget-guide clearfix">
-		                	    <%if(circularlist!=null  && circularlist.size()>0) {%>
-								<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1rem;margin-bottom: 0px !important"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
-								<%}%> 
-		              </div>
-		    	</div> 
+		      	<div class="widget-guide clearfix">
+		        	<%if(circularlist!=null  && circularlist.size()>0) {%>
+						<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1rem;margin-bottom: 0px !important"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
+					<%}%> 
+		        </div>
+		    </div> 
 		    	
 		  </section>  
 		</section> 
 		<div class="widget-guide clearfix">
        		<div class="footr-rt">
             	<div class="copyright-content"> 
-            		<p>Website maintained by Vedant Tech Solutions<br>Site best viewed at 1360 x 768 resolution in I.E 11+, Mozilla 70+, Google Chrome 79+	</p> 
+            		<p>Website maintained by Vedant Tech Solutions<br><b>Site best viewed at 1360 x 768 resolution in I.E 11+, Mozilla 70+, Google Chrome 79+</b>	</p> 
             	</div>
     		</div>
   		</div>

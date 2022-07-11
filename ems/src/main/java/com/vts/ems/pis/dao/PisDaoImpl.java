@@ -1305,7 +1305,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus   FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid ORDER BY b.SerialNo ASC; "; 
+	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus,a.med_dep_from  FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid ORDER BY b.SerialNo ASC; "; 
 	@Override
 	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception 
 	{

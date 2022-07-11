@@ -932,7 +932,14 @@ public class CHSSServiceImpl implements CHSSService {
 				dao.POAcknowldgedUpdate(CHSSApplyId,"0");
 				
 				claim.setCHSSStatusId(2);
-				claim.setCHSSApplyDate(LocalDate.now().toString());
+				if(claimstatus==1)
+				{
+					claim.setCHSSApplyDate(LocalDate.now().toString());
+					claim.setCHSSForwardDate(LocalDate.now().toString());
+				}else if(claimstatus==1)
+				{
+					claim.setCHSSForwardDate(LocalDate.now().toString());
+				}
 				claim.setPOAcknowledge(0);
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
@@ -942,7 +949,7 @@ public class CHSSServiceImpl implements CHSSService {
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				
-				if(claim.getCHSSApplyNo().trim().equals("-")) {
+				if(claimstatus==1 && claim.getCHSSApplyNo().trim().equals("-")) {
 					
 					claim.setCHSSApplyNo(GenerateCHSSClaimNo());
 				}
@@ -1693,4 +1700,92 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.GetClaimsReport(fromdate, todate, empid);
 	}
 	
+	@Override
+	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception
+	{
+		return dao.ClaimConsultMainList(CHSSApplyId);
+	}
+	
+//	@Override
+//	public int DeleteClaimData(String chssapplyid) throws Exception
+//	{
+//		return 1;
+//	}
+	
+	
+	
+	@Override
+	public int claimBillDeleteAll(String chssapplyid) throws Exception
+	{
+		return dao.claimBillDeleteAll(chssapplyid);
+	}
+	
+	@Override
+	public int billMiscDeleteAll(String billid) throws Exception
+	{
+		return dao.billMiscDeleteAll(billid);
+	}
+	
+	@Override
+	public int billMedsDeleteAll(String billid) throws Exception
+	{
+		return dao.billMedsDeleteAll(billid);
+	}
+	
+	@Override
+	public int billTestsDeleteAll(String billid) throws Exception
+	{
+		return dao.billTestsDeleteAll(billid);
+	}
+	
+	@Override
+	public int billConsultDeleteAll(String billid) throws Exception
+	{
+		return dao.billConsultDeleteAll(billid);
+	}
+	
+	@Override
+	public int claimConsultMainDeleteAll(String chssapplyid) throws Exception
+	{
+		return dao.claimConsultMainDeleteAll(chssapplyid);
+	}
+	
+	@Override
+	public int billOthersDeleteAll(String billid) throws Exception
+	{
+		return dao.billOthersDeleteAll(billid);
+	}
+
+	@Override
+	public int DeleteClaimData(String chssapplyid) throws Exception 
+	{
+		
+		List<Object[]> billslist = dao.CHSSBillsList(chssapplyid);
+		for(Object[] obj : billslist)
+		{
+			deleteBillItems(obj[0].toString());
+			CHSSBillDelete(chssapplyid, chssapplyid);
+		}
+			
+		return 0;
+	}
+
+//	@Override
+	public int deleteBillItems(String billid) throws Exception 
+	{
+		int count=0;
+		try {
+			dao.billConsultDeleteAll(billid);
+			dao.billTestsDeleteAll(billid);
+			dao.billMedsDeleteAll(billid);
+			dao.billOthersDeleteAll(billid);
+			dao.billMiscDeleteAll(billid);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+
+
 }

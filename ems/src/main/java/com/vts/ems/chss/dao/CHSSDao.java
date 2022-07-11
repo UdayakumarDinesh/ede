@@ -122,6 +122,14 @@ public interface CHSSDao {
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
+	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;
+	public int claimBillDeleteAll(String chssapplyid) throws Exception;
+	public int billMiscDeleteAll(String billid) throws Exception;
+	public int billMedsDeleteAll(String billid) throws Exception;
+	public int billTestsDeleteAll(String billid) throws Exception;
+	public int billConsultDeleteAll(String billid) throws Exception;
+	public int claimConsultMainDeleteAll(String chssapplyid) throws Exception;
+	public int billOthersDeleteAll(String billid) throws Exception;
 	
 	
 }

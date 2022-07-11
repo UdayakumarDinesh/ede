@@ -1,3 +1,6 @@
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.math.MathContext"%>
+<%@page import="java.math.BigDecimal"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="java.util.Arrays"%>
@@ -113,6 +116,8 @@ th,td
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
 	
+	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
+	
 	
 	Object[] employee = (Object[])request.getAttribute("employee");
 	
@@ -133,6 +138,10 @@ th,td
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
+	
+	
+	MathContext mc0 = new MathContext(0);
+	
 %>
 
 	<div class="card-header page-top">
@@ -215,11 +224,9 @@ th,td
 											<th>Grade</th>
 										</tr>
 										<tr>
-
 											<td class="text-blue" style="text-transform: capitalize;"><%=employee[2] %></td>
 											<td class="text-blue" ><%=employee[1] %></td>
 											<td class="text-blue" ><%=employee[9] %></td>
-
 										</tr>
 									</tbody>
 								</table>
@@ -241,6 +248,8 @@ th,td
 										
 									</tbody>
 								</table>
+								
+								
 								<table style="margin-bottom: 0px;">	
 									<tbody>
 										<tr>
@@ -261,14 +270,16 @@ th,td
 											<th style="text-align: right;">Discount (&#8377;)</th>
 											<th style="text-align: right;">Total (&#8377;)</th>
 										</tr>
-										<% double billstotal=0 ,discount=0 /*,  GST=0 */;
+										<% 	BigDecimal billstotal = new BigDecimal(0);
+											BigDecimal discount = new BigDecimal(0);/*,  GST=0 */;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[7].toString()));
+												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
 												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 												{
 													/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-													discount +=Double.parseDouble(chssbillslist.get(i)[6].toString());
+													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+													/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 												}
 										%>
 											<tr>
@@ -276,7 +287,7 @@ th,td
 												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
 												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
 												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=Double.parseDouble(chssbillslist.get(i)[6].toString())+Double.parseDouble(chssbillslist.get(i)[7].toString()) %></td>
+												<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
 												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
 												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
 											</tr>
@@ -285,13 +296,35 @@ th,td
 											<tr>
 												<td colspan="5"></td>
 												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(billstotal))) %></td>
+												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.round(mc0).longValue())) %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
 												<td colspan="7" class="center" >Bills Not Added</td>
 											</tr>
 										<% } %>
+									</tbody>
+								</table>
+								
+								
+								<table style="margin-bottom: 0px;">	
+									<thead>
+										<tr>
+											<th style="text-align: center;width: 5%">SN</th>
+											<th style="width: 50%">Doctor</th>
+											<th style="width: 30%">Qualification</th>
+											<th style="text-align: center;width: 15%">Consultation Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%for(Object[] consultmain : consultmainlist){ %>
+										<tr>
+											<td style="text-align: center;" ><%=consultmainlist.indexOf(consultmain)+1 %></td>
+											<td><%=consultmain[1] %></td>
+											<td><%=consultmain[4] %></td>
+											<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(consultmain[3].toString()) %></td>		
+										</tr>
+										<%} %>
 									</tbody>
 								</table>
 								
@@ -371,7 +404,8 @@ th,td
 													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
-												<%double itemstotal=0, totalremamount=0;
+												<% 	BigDecimal itemstotal=new BigDecimal("0.0");
+													BigDecimal totalremamount=new BigDecimal("0.0"); 
 												int i=1;
 												for(Object[] consult :ConsultDataList)
 												{ %>
@@ -437,8 +471,8 @@ th,td
 																											
 													</tr>					
 												<%	i++;
-													itemstotal += Double.parseDouble(consult[6].toString());
-													totalremamount +=Double.parseDouble(consult[7].toString());
+													itemstotal =itemstotal.add (new BigDecimal(consult[6].toString()));
+													totalremamount =totalremamount.add (new BigDecimal(consult[7].toString()));
 												} %>
 										
 											<% i=1;
@@ -501,8 +535,10 @@ th,td
 													<%} %>											
 												</tr>					
 											<%i++;
-											itemstotal += Double.parseDouble(test[4].toString());
-											totalremamount +=Double.parseDouble(test[7].toString());
+																						
+											itemstotal =itemstotal.add (new BigDecimal(test[4].toString()));
+											totalremamount =totalremamount.add (new BigDecimal(test[7].toString()));
+											
 											} %>
 																	
 											<% i=1;
@@ -576,8 +612,9 @@ th,td
 														
 												</tr>					
 											<%i++;
-											itemstotal += Double.parseDouble(medicine[3].toString());
-											totalremamount +=Double.parseDouble(medicine[6].toString());
+											
+											itemstotal =itemstotal.add (new BigDecimal(medicine[3].toString()));
+											totalremamount =totalremamount.add (new BigDecimal(medicine[6].toString()));
 											}%>
 											
 											<% i=1;
@@ -640,8 +677,8 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Double.parseDouble(other[3].toString());
-											totalremamount +=Double.parseDouble(other[5].toString());
+											itemstotal =itemstotal.add (new BigDecimal(other[3].toString()));
+											totalremamount =totalremamount.add (new BigDecimal(other[5].toString()));
 											} %>
 											<% i=1;
 											for(Object[] misc : MiscDataList)
@@ -705,20 +742,18 @@ th,td
 													
 												</tr>					
 											<%i++;
-											itemstotal += Double.parseDouble(misc[3].toString());
-											totalremamount +=Double.parseDouble(misc[4].toString());
+											itemstotal =itemstotal.add (new BigDecimal(misc[3].toString()));
+											totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 											}%>
-										
-										
 										<tr>
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+												&#8377; <b><%=totalremamount%></b>
 												<%} %>
 											</td>
-											<td ></td>
+											<td></td>
 										</tr>
 															
 									<%-- 	<tr>
@@ -736,18 +771,18 @@ th,td
 															
 										<tr>
 											<td colspan="4" class="right"><b>Rounded Total</b></td>
-											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal -discount))) %></b></td>
+											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).round(mc0).longValue())) %></b></td>
 															
 											<td class="right text-green">
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %></b>
 												<%} %>
 											</td>
 											<td ></td>
 										</tr>
 																				
 										<tr>
-											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal -discount)) %> Only)</td> 
+											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).round(mc0).longValue()) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -757,7 +792,7 @@ th,td
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>
-												<%= nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)
+												<%= nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.round(mc0).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
 												<%} %>
@@ -847,11 +882,8 @@ th,td
 								<input type="hidden" name="claimaction" value="F" >	
 									
 							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
-							
 								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
-								
 							<%} %>
-								
 							</div>
 						</div>
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
@@ -949,7 +981,7 @@ th,td
 										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 5px;padding : 3px;" maxlength="4" onclick="this.select();" onkeyup="DiscountCalculate();"></td> 
 										<td style="border: 0px;">Discount&nbsp;:&nbsp;</td>
 										<td style="border: 0px;">
-											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();"> Including GST&nbsp;&nbsp;&nbsp;&nbsp;
+											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();"> Including GST &nbsp;&nbsp;&nbsp;&nbsp;
 											<input type="radio" value="N" name="gst-plus"  onclick="DiscountCalculate();"  checked="checked"> Excluding GST
 										</td>
 									</tr>
@@ -964,8 +996,7 @@ th,td
 										<th style="width: 10%"> GST (%)</th>
 										<th style="width: 10%">Qty</th>
 										<th style="width: 10%">Admissible</th>
-										<th style="width: 10%">Admissible Qty</th>
-										
+										<th style="width: 10%">Admissible Qty</th>										
 										<th style="width: 10%">Net Price</th>
 										<th style="width: 10%"> GST Amt</th>
 										<th style="width: 10%">Unit Price <br> (Inc GST)</th>
@@ -1608,12 +1639,17 @@ function CheckClaimAmount($chssapplyid)
 		datatype : 'json',
 		success : function(result) {
 		var result = JSON.parse(result);
-					
-			 if(Number(result[2])===1)
+				
+		
+			if(Number(result[4])===1)
+			{
+				alert('Cannot Forward Claim Since Bill No : \''+result[5]+'\' is older then 90 Days');
+			}
+			else if(Number(result[2])===1)
 			{
 				alert('Sum of Items Cost in Bill \''+result[3]+'\' does not Tally with Amount Paid.');
 			}
-			 else if(Number(result[1])===1)
+			else if(Number(result[1])===1)
 			{
 				alert('Please Enter Atleast One Item in All the bills');
 			}
