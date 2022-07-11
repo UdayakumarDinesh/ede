@@ -104,14 +104,14 @@ String ses=(String)request.getParameter("result");
    
    	<div class="row">
    		
-   		<div class="col-md-6">
+   		<div class="col-md-8">
    			<form action="CreditPreview.htm" method="POST" id="preview">
-			    <div class="row" style="margin-top: 8px;">
+			    <div class="row">
 				    
 				    <div class="col-md-2" style="margin-top: 4px;font-weight: bold;">
-				             Leave Credit :
+				             Credit :
 				    </div>
-				    <div class="col-md-3">
+				    <div class="col-md-4">
 					    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
 					    <option value="A">All</option>
 					    <%for(Employee emp:emplist){ %>
@@ -120,7 +120,7 @@ String ses=(String)request.getParameter("result");
 					    </select>
 				    </div>
 			    
-				    <div class="col-md-3">
+				    <div class="col-md-2">
 					    <div class="group-form">
 						    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
 						    <option value="LOB">Opening</option>
@@ -142,7 +142,7 @@ String ses=(String)request.getParameter("result");
     		</form>
    		</div>
    		
-   		<div class="col-md-6">
+   		<div class="col-md-4">
    			<form action="LeaveCredit.htm" method="POST" name="myfrm">
 			    <div class="row justify-content-end">
 

@@ -420,8 +420,9 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String fromdate = (String)req.getParameter("fromdate");
 				
 					LeaveHandingOver ho = new LeaveHandingOver();
-					
-					ho.setFromEmpId(fromemp);
+					ho.setApplId("0");
+					ho.setDivisionId(Long.parseLong(fromemp.split("_")[1]));
+					ho.setFromEmpId(fromemp.split("_")[0]);
 					ho.setToEmpId(toeme.split("//")[0]);
 					ho.setFromDate(DateTimeFormatUtil.dateConversionSql(fromdate));
 					ho.setToDate(DateTimeFormatUtil.dateConversionSql(todate));
