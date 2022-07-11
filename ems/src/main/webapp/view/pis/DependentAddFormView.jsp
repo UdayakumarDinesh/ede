@@ -396,7 +396,7 @@ th,td
 							<td class="nobordertd"  > <%=empdetails[12] %></td>
 						</tr>
 						<tr>
-							<td class="nobordertd" >Date: &nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.</td>
+							<td class="nobordertd" >Date: &nbsp; <%if(formdetails[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.<%} %></td>
 						</tr>
 					</table>
 					
