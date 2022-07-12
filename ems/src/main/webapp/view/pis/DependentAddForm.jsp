@@ -88,6 +88,15 @@ ol > li::marker {
   font-weight: bold;
 }
 
+.nobordertd
+{
+	border: 0px;
+	margin: 0px;
+	padding : 0px;
+}
+
+
+
 </style>
 <meta charset="ISO-8859-1">
 <title>CHSS FORM - 2</title>
@@ -199,24 +208,38 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 			</p>
 				<div  align="left"> 
 					<div >
-					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
-						<table style="float: left;">
-							<tr>
-								<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
-							</tr>
-							<tr>
-								<td style="border: 0"> <%=formdetails[9] %></td>
-							</tr>
-						</table>
-					<%} %>
-					<table style="float: right;">
+					<br><br><br><br><br>
+					<table style="float: left;">
 						<tr>
-							<td style="border: 0"><b><%=empdetails[2] %>,</b></td>
+							<td class="nobordertd" ><b style="text-decoration: underline;" >APPLIED BY</b></td>
 						</tr>
 						<tr>
-							<td style="border: 0"> <%=empdetails[12] %></td>
+							<td class="nobordertd"><b><%=empdetails[2] %>,</b></td>
+						</tr>
+						<tr>
+							<td class="nobordertd"> <%=empdetails[12] %></td>
+						</tr>
+						<tr>
+							<td class="nobordertd" >Date: &nbsp; <%if(formdetails[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.<%} %></td>
 						</tr>
 					</table>
+					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
+						<table style="float: right;">
+							<tr>
+							<td class="nobordertd"  ><b style="text-decoration: underline;" >APPROVED BY</b></td>
+						</tr>
+							<tr>
+								<td class="nobordertd" ><b><%=formdetails[8] %>,</b></td>
+							</tr>
+							<tr>
+								<td class="nobordertd"  > <%=formdetails[9] %></td>
+							</tr>
+							<tr>
+							<td class="nobordertd" >Date: &nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[6].toString()) %>.</td>
+						</tr>
+						</table>
+					<%} %>
+					
 					</div>
 				</div>
 			<h1 class="break"></h1>

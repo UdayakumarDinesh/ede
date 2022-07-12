@@ -420,17 +420,18 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					String fromdate = (String)req.getParameter("fromdate");
 				
 					LeaveHandingOver ho = new LeaveHandingOver();
-					
-					ho.setFrom_empid(fromemp);
-					ho.setTo_empid(toeme.split("//")[0]);
-					ho.setFrom_date(DateTimeFormatUtil.dateConversionSql(fromdate));
-					ho.setTo_date(DateTimeFormatUtil.dateConversionSql(todate));
+					ho.setApplId("0");
+					ho.setDivisionId(Long.parseLong(fromemp.split("_")[1]));
+					ho.setFromEmpId(fromemp.split("_")[0]);
+					ho.setToEmpId(toeme.split("//")[0]);
+					ho.setFromDate(DateTimeFormatUtil.dateConversionSql(fromdate));
+					ho.setToDate(DateTimeFormatUtil.dateConversionSql(todate));
 					ho.setStatus("A");
-					ho.setLogin_type(logintype);
-					ho.setApplied_date(DateTimeFormatUtil.dateConversionSql(DateApplied));
-					ho.setCreatedby(UserId);
-					ho.setCreatedate(sdtf.format(new Date()));
-					ho.setIs_active(1);
+					ho.setLoginType(logintype);
+					ho.setAppliedDate(DateTimeFormatUtil.dateConversionSql(DateApplied));
+					ho.setCreatedBy(UserId);
+					ho.setCreateDate(sdtf.format(new Date()));
+					ho.setIsActive(1);
 					
 					Object[] checkAlreadyPresentForSameEmpidAndSameDates = service.checkAlreadyPresentForSameEmpidAndSameDates(fromemp, toeme.split("//")[0], fromdate, todate);
 					
@@ -439,7 +440,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					}else if(checkAlreadyPresentForSameEmpidAndSameDates!=null) {
 						redir.addAttribute("resultfail", toeme.split("//")[1]+" is not available  for the related date ");
 					}else{
-						int result = service.AddHandingOver(ho);
+						long result = service.AddHandingOver(ho);
 						if (result != 0) {
 							redir.addAttribute("result", "Handing Over officers added successfully");
 						} else {

@@ -197,7 +197,7 @@
     color: #005C97;
     font-weight: 600;
     text-align: left;
-    padding: 0px 0px 0px 2rem;
+    padding: 0px 0px 0px 0rem;
 }
 
  .heading-breadcrumb{
@@ -253,8 +253,6 @@
 	if(request.getAttribute("IsSelf")!=null){
 		IsSelf=(String)request.getAttribute("IsSelf");
 	}
-	
-	
 	
 	DecimalFormat df = new DecimalFormat("0.00");
 %>
@@ -380,10 +378,8 @@
 					</div>
 					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(obj[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
 						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;" >(<%=obj[7] %>)</span></h3>
-						<p class="employee-details">	&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
-						<%-- <p class="employee-details"> 	&#9679; Blood Group : <%if(obj[6]!=null){ %> <%=obj[6]%> <%}else{ %> - <%} %></p> --%>
-						
-						
+						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
+						<p class="employee-details">&#9679;Dep from : <%=rdf.format(sdf.parse(obj[9].toString()))%></p>						
 						<%if(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString())){ %>
 							<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
 								&nbsp;&nbsp;Apply&nbsp;

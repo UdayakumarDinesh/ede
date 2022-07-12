@@ -42,6 +42,15 @@ th,td
 	border : 1px solid black;
 	padding: 5px;
 }
+
+
+.nobordertd
+{
+	border: 0px;
+	margin: 0px;
+	padding : 0px;
+}
+
 </style>
 <meta charset="ISO-8859-1">
 <title>CHSS FORM - 2</title>
@@ -185,7 +194,7 @@ th,td
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-dob-edit" name="mem-dob" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit" name="mem-IncDate" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit" name="mem-IncDate" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[18].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-occupation" id="mem-occupation-<%=FwdMemberDetails.get(i)[0] %>" <%if(FwdMemberDetails.get(i)[7]!=null){ %>value="<%=FwdMemberDetails.get(i)[7] %>" <%}else{ %>value="" <%} %> maxlength="255" onchange = "IncomeRequired('<%=FwdMemberDetails.get(i)[0] %>');" >
@@ -194,9 +203,7 @@ th,td
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="number" class="form-control numberonly" name="mem-income" id="mem-income-<%=FwdMemberDetails.get(i)[0] %>"  <%if(FwdMemberDetails.get(i)[8]!=null && !FwdMemberDetails.get(i)[8].toString().equals("0")){ %>value="<%=FwdMemberDetails.get(i)[8] %>" <%}else{ %>value="" <%} %>min="0"  >
 							</td>
 							<td>
-								
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(FwdMemberDetails.get(i)[9]!=null ){ %>value="<%=FwdMemberDetails.get(i)[9] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
-								
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit"  >
@@ -220,6 +227,7 @@ th,td
 							<td><%=FwdMemberDetails.get(i)[1] %></td>
 							<td><%=FwdMemberDetails.get(i)[2] %></td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[18].toString()) %></td>
 							<td>
 								<%if(FwdMemberDetails.get(i)[7]!=null){ %>
 									<%=FwdMemberDetails.get(i)[7] %>
@@ -309,7 +317,7 @@ th,td
 						</tr>
 					<%} %>
 				</table>
-
+				<% if(isapproval!=null && isapproval.equalsIgnoreCase("N")){ %>
 				<p style="text-indent: 50px;">
 					<input type="checkbox"  class="TCBox" > &nbsp;
 					I hereby undertake to declare at the beginning of each calendar year and as soon as necessary
@@ -373,31 +381,44 @@ th,td
 				I certify that the family members whose names are mentioned above are mainly dependant on and
 					residing with me.
 				</p>
-				
+				<%} %>
 				<div class="row" align="left"> 
 					<div class="col-md-12">
-					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
+					<br><br><br><br>
 					<table style="float: left;">
 						<tr>
-							<td style="border: 0"><b><%=formdetails[8] %>,</b></td>
+							<td class="nobordertd" ><b style="text-decoration: underline;">APPLIED BY</b></td>
 						</tr>
 						<tr>
-							<td style="border: 0"> <%=formdetails[9] %></td>
+							<td class="nobordertd" ><b><%=empdetails[2] %>,</b></td>
+						</tr>
+						<tr>
+							<td class="nobordertd"  > <%=empdetails[12] %></td>
+						</tr>
+						<tr>
+							<td class="nobordertd" >Date: &nbsp; <%if(formdetails[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.<%} %></td>
+						</tr>
+					</table>
+					
+					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>
+					<table style="float: right;">
+						<tr >
+							<td class="nobordertd" ><b style="text-decoration: underline;" >APPROVED BY</b></td>
+						</tr>
+						<tr>
+							<td class="nobordertd" ><b><%=formdetails[8] %>,</b></td>
+						</tr>
+						<tr>
+							<td class="nobordertd" > <%=formdetails[9] %></td>
+						</tr>
+						<tr>
+							<td class="nobordertd" >Date: &nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[6].toString()) %>.</td>
 						</tr>
 					</table>
 					<%} %>
-					<table style="float: right;">
-						<tr>
-							<td style="border: 0"><b><%=empdetails[2] %>,</b></td>
-						</tr>
-						<tr>
-							<td style="border: 0"> <%=empdetails[12] %></td>
-						</tr>
-					</table>
 					</div>
 				</div>
-				
-				<br>
+			
 				<form action="FamilyMembersForward.htm" method="Post">	
 					<div class="row">
 						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
@@ -544,4 +565,3 @@ $(document).ready(function(){
 
 </body>
 </html>
-

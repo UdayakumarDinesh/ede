@@ -202,14 +202,13 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 
                                   <!-- Recc -->  
                      <%if(empdetails!=null&&empdetails.size()>0){ 
-                       for(Object[] obj:empdetails){ 
                        %>       <div class="row" style="margin-top:0px;" >
                                 <div class="col-sm-1"></div>
 	                            <div class="col-sm-4" style="margin-top:10px; text-align: left;; color: green;"><b class="h5">Leave Application </b>  </div>  
-	                            <div class="col-sm-6" style="margin-top:10px; text-align: right; color: green;"> <b class="h6" style="margin-left: 10px;"><%=obj[1] %></b>, <small> <%=obj[2] %> </small> </div>
+	                            <div class="col-sm-6" style="margin-top:10px; text-align: right; color: green;"> <b class="h6" style="margin-left: 10px;"><%=empdetails.get(0)[1] %></b>, <small> <%=empdetails.get(0)[2] %> </small> </div>
 	                            </div>         
                               
-	                  <%}} %>
+	                  <%} %>
 	                    <!-- / Recc -->
 	                  <!-- // reset apply and check button -->
 	                    </div>
@@ -392,7 +391,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    </div>
 	                    <!-- / Remarks -->    
 	                    <!-- HandingOver To -->
-	              <%if(roleid==1||roleid==2){%>
+
 	                 
 	                    <div class="form-group">
 	                        <div class="row">
@@ -402,7 +401,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                            <div class="col-sm-8">
 	                                <select name="HandingOverEmpid" class="form-control input-sm selectpicker" data-live-search="true">
 	                                
-	                                <option value="NotSelected">Select Employee Whom You Want To Hand Over</option>
+	                                 <option value="NotSelected" selected="selected">Not Applicable</option>
 	                                 <%if(emplist!=null&&emplist.size()>0){
 	                                   for(Object[] ls:emplist){
 	                                   if(!ls[0].toString().equalsIgnoreCase(empNo)){
@@ -413,10 +412,6 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                            </div>
 	                        </div>
 	                    </div>
-	                   
-	                   <%}else{%>  
-	                    <input type="hidden" name="HandingOverEmpid" value="NotSelected">
-	                   <%}%> 
 	                   
 	                     <!--  reset apply and check button -->
 	                    <div class="form-group">

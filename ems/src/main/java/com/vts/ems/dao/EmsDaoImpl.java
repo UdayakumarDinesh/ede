@@ -293,7 +293,7 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
-	private static final String ALLOWEDlOGINTYPESlIST="SELECT lt.logintype,  lt.LoginDesc FROM login l,login_type_access lta, login_type lt WHERE l.logintype = lta.logintype AND lta.AllowedLoginTypes = lt.LoginType AND lta.isactive=1 AND l.loginid=:loginid ";
+	private static final String ALLOWEDlOGINTYPESlIST="CALL handingover_logintype_access(:loginid)";
 	
 	@Override
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception

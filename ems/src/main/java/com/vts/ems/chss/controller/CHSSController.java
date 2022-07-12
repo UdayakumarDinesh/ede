@@ -435,7 +435,6 @@ public class CHSSController {
 				Map md=model.asMap();
 				billid=(String)md.get("billid");
 			}	
-			
 			String tab = req.getParameter("tab");
 			if (tab == null) 
 			{
@@ -1407,6 +1406,7 @@ public class CHSSController {
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Object[] employee = service.getEmployee(chssapplicationdata[1].toString());
 			
+			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
@@ -1452,7 +1452,7 @@ public class CHSSController {
 			
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-			
+			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
@@ -1549,7 +1549,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSClaimFwdApproveAjax.htm "+Username);
-		String allow[]= {"0","0","0","0"};
+		String allow[]= {"0","0","0","0","0","0"};
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
@@ -1557,6 +1557,14 @@ public class CHSSController {
 			double claimamount=0;
 			for(Object[] bill : claimdata) 
 			{
+				LocalDate billdate = LocalDate.parse(bill[4].toString());
+				if(!billdate.isAfter(LocalDate.now().minusDays(90))) 
+				{
+					allow[4]="1";
+					allow[5]=bill[2].toString();
+					break;
+				}
+				
 				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
@@ -1570,8 +1578,6 @@ public class CHSSController {
 					break;
 				}
 				claimamount += Double.parseDouble(bill[9].toString());
-				
-				
 			}
 			
 			if(claimamount==0) 
@@ -1603,7 +1609,6 @@ public class CHSSController {
 		Gson json = new Gson();
 		return json.toJson(docrates);
 	}
-
 	
 	@RequestMapping(value = "CHSSUserForward.htm", method = RequestMethod.POST)
 	public String CHSSUserForward(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
@@ -1625,13 +1630,13 @@ public class CHSSController {
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
 				String enclosurecount = req.getParameter("enclosurecount");
-				if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) {
+				if(enclosurecount!= null && Integer.parseInt(enclosurecount)>0) 
+				{
 					CHSSApplyDto dto =new CHSSApplyDto();
 					dto.setCHSSApplyId(chssapplyid);
 					dto.setNoEnclosures(enclosurecount);
 					
 					service.CHSSApplyEncCountEdit(dto);
-				
 				}
 				
 				if (count > 0) {
@@ -1700,7 +1705,6 @@ public class CHSSController {
 			ses.setAttribute("SidebarActive", "CHSSApprovalsList_htm");
 			return "chss/CHSSApprovalList";
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSApprovalsList.htm "+Username, e);
 			return "static/Error";
@@ -1740,8 +1744,12 @@ public class CHSSController {
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
 			Object[] employee = service.getEmployee(chssapplydata[1].toString());
 			
+			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
 			
+			
+			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
+						
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
@@ -2739,6 +2747,27 @@ public class CHSSController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ClaimsReport.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value ="ClaimDeleteEmp.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	public String ClaimDeleteEmp(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimDeleteEmp.htm "+Username);
+		try {
+			String chssapplyid = (String)req.getParameter("chssapplyid");
+			
+			
+		
+			
+			return "chss/CHSSClaimsReport";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimDeleteEmp.htm "+Username, e);
 			return "static/Error";
 		}
 		

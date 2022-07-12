@@ -51,7 +51,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.med_dep ='Y' AND empid = :empid ORDER BY fr.SerialNo ASC ";
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender,fd.med_dep_from FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.med_dep ='Y' AND empid = :empid ORDER BY fr.SerialNo ASC ";
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -64,7 +64,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return resultList;
 	}
 	
-	private static final String FAMILYMEMBERDATA = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND family_details_id = :familydetailsid ";
+	private static final String FAMILYMEMBERDATA = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name ,fd.med_dep_from FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND family_details_id = :familydetailsid ";
 	
 	@Override
 	public Object[] familyMemberData(String familydetailsid) throws Exception
@@ -1056,7 +1056,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	{
 		logger.info(new Date() +"Inside DAO CHSSApproveClaimList");
 		try {
-			Query query= manager.createNativeQuery("CALL chss_claims_verify (:logintype, :empid);");
+			Query query= manager.createNativeQuery("CALL chss_claims_pending (:logintype, :empid);");
 			query.setParameter("logintype", logintype);
 			query.setParameter("empid", empid);
 			return (List<Object[]>)query.getResultList();
@@ -1101,8 +1101,6 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
-	
-	
 	
 	private static final String CHSSCONTINGENTNOCOUNT = "SELECT COUNT(ContingentId),'count' AS 'count' FROM chss_contingent WHERE ContingentBillNo LIKE :finYear ";
 
@@ -1795,6 +1793,140 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
+	
+	
+	private static final String CLAIMCONSULTMAINLIST = "SELECT DISTINCT ccm.chssconsultmainid,ccm.docname,ccm.docQualification,ccm.consultdate,cdr.docqualification as 'Qualification' FROM chss_apply ca, chss_bill cb,chss_consult_main ccm,chss_doctor_rates cdr WHERE cb.isactive=1 AND cb.chssconsultmainid = ccm.chssconsultmainid AND ca.chssapplyid=cb.chssapplyid AND ccm.docqualification = cdr.docrateid AND ca.chssapplyid= :CHSSApplyId";
+
+	@Override
+	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimConsultMainList");
+		try {
+			Query query= manager.createNativeQuery(CLAIMCONSULTMAINLIST);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
+	private static final String CLAIMCONSULTMAINDELETEALL  ="UPDATE chss_consult_main SET isactive=1 WHERE chssapplyid=:chssapplyid";
+	@Override
+	public int claimConsultMainDeleteAll(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO claimConsultMainDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(CLAIMCONSULTMAINDELETEALL);
+			query.setParameter("chssapplyid", chssapplyid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	
+	private static final String BILLCONSULTDELETEALL  ="UPDATE chss_consultation SET isactive=1 WHERE billid=:billid";
+	@Override
+	public int billConsultDeleteAll(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billConsultDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLCONSULTDELETEALL);
+			query.setParameter("billid", billid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	
+	private static final String BILLTESTSDELETEALL  ="UPDATE chss_tests SET isactive=1 WHERE billid=:billid";
+	@Override
+	public int billTestsDeleteAll(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billTestsDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLTESTSDELETEALL);
+			query.setParameter("billid", billid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	private static final String BILLMEDSDELETEALL  ="UPDATE chss_medicine SET isactive=1 WHERE billid=:billid";
+	@Override
+	public int billMedsDeleteAll(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billMedsDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLMEDSDELETEALL);
+			query.setParameter("billid", billid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	private static final String BILLOTHERSDELETEALL  ="UPDATE chss_other SET isactive=1 WHERE billid=:billid";
+	@Override
+	public int billOthersDeleteAll(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billOthersDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLOTHERSDELETEALL);
+			query.setParameter("billid", billid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	private static final String BILLMISCDELETEALL  ="UPDATE chss_misc SET isactive=1 WHERE billid=:billid";
+	@Override
+	public int billMiscDeleteAll(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billMiscDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLMISCDELETEALL);
+			query.setParameter("billid", billid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	
+	private static final String CLAIMBILLDELETEALL  ="UPDATE chss_bill SET isactive=1 WHERE chssapplyid=:chssapplyid";
+	@Override
+	public int claimBillDeleteAll(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO claimBillDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(CLAIMBILLDELETEALL);
+			query.setParameter("chssapplyid", chssapplyid);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
 	
 
 }

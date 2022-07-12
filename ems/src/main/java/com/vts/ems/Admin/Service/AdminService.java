@@ -27,7 +27,7 @@ public interface AdminService {
 	public long EmpRequestNotification1(EMSNotification notification)throws Exception;
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception;
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception;
-	public int AddHandingOver(LeaveHandingOver addhanding)throws Exception;
+	public long AddHandingOver(LeaveHandingOver addhanding)throws Exception;
 	public int updateRevokeInHandingOver(long empid,String userid , String HandingOverId)throws Exception;
 	public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;

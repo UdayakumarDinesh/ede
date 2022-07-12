@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.chss.model.CHSSConsultMain"%>
 <%@page import="com.vts.ems.chss.model.CHSSApply"%>
 <%@page import="com.vts.ems.chss.model.CHSSApproveAuthority"%>
@@ -31,10 +32,6 @@ input[type=number]{
     -moz-appearance: textfield;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show>.nav-link 
-{
-	background-color: #750550;
-}
 .table thead{
     background: #9AD0EC;
 }
@@ -71,10 +68,10 @@ p {
 }
 
 
-.nav-pills-custom .nav-link.active{
-	background-color: #FC9918 !important;
+.nav-pills .nav-link.show, .nav-pills .show>.nav-link 
+{
+	background-color: #750550;
 }
-
 
 </style>
 </head>
@@ -116,7 +113,12 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	String billid =(String)request.getAttribute("billid");
 	String consultmainid =(String)request.getAttribute("consultmainid");
 	String tab =(String)request.getAttribute("tab");
+	
+	LocalDate minbilldate = LocalDate.now().minusDays(90); 
+	
 %>
+
+
 
 	<div class="card-header page-top">
 		<div class="row">
@@ -164,7 +166,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								
 								<%if(isself.equalsIgnoreCase("N")){
 									Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
-									
 									<div class="col-3" >
 										<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
 									</div>
@@ -172,7 +173,12 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
 										
 									</div>
-								<%}else{ %>
+								<% 
+									if(familyMemberData[8]!=null && LocalDate.parse(familyMemberData[8].toString()).isAfter(minbilldate)){
+										minbilldate = LocalDate.parse(familyMemberData[8].toString());
+									}
+								
+								}else{ %>
 									<div class="col-3">
 										<b> Patient Name : &nbsp;</b><%=employee[2] %>
 									</div>
@@ -402,7 +408,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										</div>
 									<%} %>
 								</div>   
-				   		<div class="tab-pane fade show active" id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
+				   		<div class="tab-pane fade show " id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
 				   			
 					   		<div class="col-md-12" >
 					    		<form action="#" method="post" autocomplete="off" style="width: 100%;">
@@ -800,6 +806,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 
 <script type="text/javascript">
 
+var threeMonthsAgo = new Date('<%=minbilldate%>');
 
 
 function calculateDiscountPer($id)
@@ -911,7 +918,12 @@ function itemAddEligibleCheck(itemtype)
 	$('.'+itemtype+'-cost').each(function(i, obj) {		    
 	    total += Number(obj.value);
 	});
-	if((itemstotal+total)<=billamount){
+	
+	console.log(Math.round(itemstotal+total)<=Math.round(billamount));
+	console.log(Math.round(itemstotal+total));
+	console.log(Math.round(billamount));
+	
+	if(Math.round(itemstotal+total)<=Math.round(billamount)){
 		return true;
 	}else
 	{
@@ -1013,8 +1025,7 @@ function CheckClaimAmount($chssapplyid)
 }
 
 
-var threeMonthsAgo = moment().subtract(3, 'months');
-
+console.log(threeMonthsAgo);
 function  onlyNumbers() {    
     	
 	 	$('.numberonly').keypress(function (e) {    
@@ -1039,7 +1050,6 @@ function  onlyNumbers() {
 
 }
 
-var threeMonthsAgo = moment().subtract(3, 'months');
 
 $('.billdate').daterangepicker({
 	"singleDatePicker" : true,

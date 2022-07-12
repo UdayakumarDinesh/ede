@@ -1,3 +1,5 @@
+<%@page import="java.math.MathContext"%>
+<%@page import="java.math.BigDecimal"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="com.vts.ems.utils.NFormatConvertion"%>
@@ -135,7 +137,7 @@ th,td
 	List<Object[]> MedicineDataList = (List<Object[]>)request.getAttribute("MedicineDataList");
 	List<Object[]> OtherDataList = (List<Object[]>)request.getAttribute("OtherDataList");
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
-	
+	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
 	
 	Object[] employee = (Object[])request.getAttribute("employee");
 	
@@ -154,6 +156,7 @@ th,td
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	
+	MathContext mc0 = new MathContext(0);
 %>
 
 <div align="center">
@@ -228,14 +231,16 @@ th,td
 						<th style="text-align: right;">Discount (&#8377;)</th>
 						<th style="text-align: right;">Total (&#8377;)</th>
 					</tr>
-					<% double billstotal=0 ,discount=0 /*,  GST=0 */;
+					<%	BigDecimal billstotal = new BigDecimal(0);
+					BigDecimal discount = new BigDecimal(0); /*,  GST=0 */;
 					for(int i=0;i<chssbillslist.size();i++)
 					{
-						billstotal +=Math.round(Double.parseDouble(chssbillslist.get(i)[7].toString()));
+						billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
 						if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 						{
 							/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-							discount +=Double.parseDouble(chssbillslist.get(i)[6].toString());
+							discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+							/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 						}
 					%>
 						<tr>
@@ -243,7 +248,7 @@ th,td
 							<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
 							<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
 							<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-							<td class="text-blue" style="text-align: right;"><%=Double.parseDouble(chssbillslist.get(i)[6].toString())+Double.parseDouble(chssbillslist.get(i)[7].toString()) %></td>
+							<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
 							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
 							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
 						</tr>
@@ -262,7 +267,7 @@ th,td
 						<tr>
 							<td colspan="5"></td>
 							<td style="text-align: right;"><b>Rounded Total </b></td>
-							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(billstotal))) %></td>
+							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.round(mc0).longValue())) %></td>
 						</tr>
 					<%}else{ %>
 						<tr>
@@ -271,7 +276,26 @@ th,td
 					<%} %>
 				</tbody>
 			</table>
-			
+			<table style="margin-bottom: 0px;">	
+									<thead>
+										<tr>
+											<th style="text-align: center;width: 5%">SN</th>
+											<th style="width: 50%">Doctor</th>
+											<th style="width: 30%">Qualification</th>
+											<th style="text-align: center;width: 15%">Consultation Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%for(Object[] consultmain : consultmainlist){ %>
+										<tr>
+											<td style="text-align: center;" ><%=consultmainlist.indexOf(consultmain)+1 %></td>
+											<td><%=consultmain[1] %></td>
+											<td><%=consultmain[4] %></td>
+											<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(consultmain[3].toString()) %></td>		
+										</tr>
+										<%} %>
+									</tbody>
+								</table>
 			<div style="margin-left: 10px;">
 				<p>
 						
@@ -364,7 +388,8 @@ th,td
 						<th class="right" style="width: 5%;">Reimbursable under CHSS  (&#8377;)</th>
 						<th class="center" style="width: 25%;">Comments</th>
 					</tr>
-					<%double itemstotal=0,totalremamount=0; %>
+					<%	BigDecimal itemstotal=new BigDecimal("0.0");
+					BigDecimal totalremamount=new BigDecimal("0.0");  %>
 					<% int i=1;
 					for(Object[] consult :ConsultDataList)
 					{%>
@@ -407,8 +432,8 @@ th,td
 							
 						</tr>					
 					<%	i++;
-						itemstotal += Double.parseDouble(consult[6].toString());
-						totalremamount +=Double.parseDouble(consult[7].toString());
+					itemstotal =itemstotal.add (new BigDecimal(consult[6].toString()));
+					totalremamount =totalremamount.add (new BigDecimal(consult[7].toString()));
 					} %>
 					
 					<% i=1;
@@ -450,8 +475,8 @@ th,td
 							
 						</tr>					
 					<%i++;
-					itemstotal += Double.parseDouble(test[4].toString());
-					totalremamount +=Double.parseDouble(test[7].toString());
+					itemstotal =itemstotal.add (new BigDecimal(test[4].toString()));
+					totalremamount =totalremamount.add (new BigDecimal(test[7].toString()));
 					} %>
 					
 					<% i=1;
@@ -497,8 +522,8 @@ th,td
 
 						</tr>					
 					<%i++;
-					itemstotal += Double.parseDouble(medicine[3].toString());
-					totalremamount +=Double.parseDouble(medicine[6].toString());
+					itemstotal =itemstotal.add (new BigDecimal(medicine[3].toString()));
+					totalremamount =totalremamount.add (new BigDecimal(medicine[6].toString()));
 					}%>
 					
 					
@@ -541,8 +566,8 @@ th,td
 							
 						</tr>					
 					<%i++;
-					itemstotal += Double.parseDouble(other[3].toString());
-					totalremamount +=Double.parseDouble(other[5].toString());
+					itemstotal =itemstotal.add (new BigDecimal(other[3].toString()));
+					totalremamount =totalremamount.add (new BigDecimal(other[5].toString()));
 					} %>
 					
 					
@@ -585,8 +610,8 @@ th,td
 								<%} %>
 						</tr>					
 					<%i++;
-					itemstotal += Double.parseDouble(misc[3].toString());
-					totalremamount +=Double.parseDouble(misc[4].toString());
+					itemstotal =itemstotal.add (new BigDecimal(misc[3].toString()));
+					totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 					}%>
 					
 					<tr>
@@ -594,7 +619,7 @@ th,td
 						<td class="right text-blue"><b> <%=itemstotal %></b></td>
 						<td class="right text-green">
 							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-								&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+								&#8377; <b><%=totalremamount %></b>
 							<%} %>
 						</td>
 						<td ></td>
@@ -615,18 +640,18 @@ th,td
 										
 					<tr>
 						<td colspan="4" class="right"><b>Rounded Total</b></td>
-						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(Math.round(itemstotal -discount))) %></b></td>
+						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).round(mc0).longValue())) %></b></td>
 										
 						<td class="right text-green">
 							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-							&#8377; <b><%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %></b>
+							&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %></b>
 							<%} %>
 						</td>
 						<td ></td>
 					</tr>
 					
 					<tr>
-						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(Math.round(itemstotal-discount)) %> Only)</td>
+						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).round(mc0).longValue()) %> Only)</td>
 					</tr>
 					
 					<tr>
@@ -635,7 +660,8 @@ th,td
 					
 					<tr>
 						<%if(show){ %>
-								<td colspan="7" class="text-green">Admitted to &#8377;  <%=nfc.rupeeFormat(String.valueOf(Math.round(totalremamount))) %> (Rupees  <%=awc.convert1(Math.round(totalremamount)) %> Only)</td>
+								<td colspan="7" class="text-green">Admitted to &#8377;  
+								<%= nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.round(mc0).longValue()) %> Only)</td>
 						<%}else{ %>
 							<td colspan="7">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
 						<%} %>

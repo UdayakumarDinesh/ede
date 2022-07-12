@@ -196,6 +196,9 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" >Basic Details</a>
 	</li>
 	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Family</a>
+	</li>
+	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
 	</li>
 	<!-- <li class="nav-item">
@@ -204,9 +207,6 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Awards</a>
 	</li> -->
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Family</a>
-	</li>
    <!--<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Property</a>
 	</li>
