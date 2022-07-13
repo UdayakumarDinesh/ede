@@ -41,5 +41,7 @@ public interface LeaveService {
 	public List<Object[]> getSanctionedLeave(String EmpNo)throws Exception;
 	public int deleteLeave(ApprovalDto dto)throws Exception;
 	public Object[] getLeaveData(String applid) throws Exception;
+	public int getUpdateAppl(ApprovalDto dto)throws Exception;
+	public int getUpdateRegister(ApprovalDto dto)throws Exception;	
 
 }

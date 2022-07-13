@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
@@ -44,7 +45,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CREDITBYID="SELECT b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.cl AS phcl,d.ph,a.ccl AS ccl,a.sl AS sl,a.month,a.year,d.gender,a.ml,a.pl   FROM leave_register a, employee b, employee_desig c,employee_details d  WHERE  a.registerid=:id AND d.empno=b.empno AND b.desigid=c.desigid AND b.empno=a.empid";
     private static final String HOLIDAYS="select holidate,holiname from leave_holiday_workingday where isactive='1' and case when 'U'=:type then holidate>=DATE(SYSDATE()) else holitype=:type end and year(holidate)=YEAR(CURDATE()) ORDER BY holidate";
     private static final String OFFICERDETAILS="SELECT d.empno,d.empname,e.designation,a.empname AS name1,b.empname AS name2 FROM employee a, employee b, leave_sa_ra c,employee d,employee_desig e WHERE a.empno=c.ra AND b.empno=c.sa AND c.empid=:empNo AND c.empid=d.empno AND e.desigid=d.desigid";
-    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,d.divisionid FROM employee d,employee_desig e WHERE  :empNo=d.empno AND e.desigid=d.desigid";
+    private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,d.divisionid,l.logintype FROM employee d,employee_desig e,login l WHERE l.empid=d.empid  and :empNo=d.empno AND e.desigid=d.desigid";
     private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation from  employee d,employee_desig e WHERE  e.desigid=d.desigid";
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
@@ -490,13 +491,14 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String REMOVEAPPLID="delete from  leave_appl where  status='LAU' and applid=:applid";
 	private static final String REMOVEAPPLIDREGI="delete from  leave_register where  status='LAU' and appl_id=:applid";
 	private static final String REMOVEAPPLIDTRANSC="delete from  leave_transaction where   leaveapplid=:applid";
+	private static final String REMOVEAPPLIDHO="delete from  leave_ra_sa_handingover where   applid=:applid";
 	@Transactional
 	@Override
 	public int deleteLeave(ApprovalDto dto) throws Exception {
 		logger.info(new Date() + "Inside deleteLeave()");
-		
+		int count =0;
 		try {
-			int count =0;
+			
 			Query query = manager.createNativeQuery(REMOVEAPPLID);
 			query.setParameter("applid",dto.getApplId());
 			count = (int) query.executeUpdate();
@@ -506,11 +508,14 @@ public class LeaveDaoImpl implements LeaveDao{
 			Query query2 = manager.createNativeQuery(REMOVEAPPLIDTRANSC);
 			query2.setParameter("applid",dto.getApplId());
 			count = (int) query2.executeUpdate();
-			return count;
+			Query query3 = manager.createNativeQuery(REMOVEAPPLIDHO);
+			query3.setParameter("applid",dto.getApplId());
+			query3.executeUpdate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
 		}
+		return count;
 }
 	
      private static final String LEAVEDATA="SELECT  a.EMPID,a.PURLEAVE,a.LEAVEADDress,a.fromDATE,a.toDATE,a.TOTALDAYS,a.createddate,a.LEAVECODE, a.STATUS,a.FNAN,a.APPLID,a.REMARKS,a.LTC  FROM Leave_Appl a WHERE  a.APPLID=:applid";
@@ -529,6 +534,20 @@ public class LeaveDaoImpl implements LeaveDao{
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception
+	{
+		logger.info(new Date() + "Inside AddHandingOver()");
+		try {
+			manager.persist(handinfover);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return handinfover.getHandingoverId();
 	}
 	
 }

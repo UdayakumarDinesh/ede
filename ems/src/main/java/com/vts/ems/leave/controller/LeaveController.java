@@ -478,10 +478,18 @@ public class LeaveController {
 			String applid = req.getParameter("appl_id");
 			req.setAttribute("EmpNo",EmpNo);
 			Object[] obj=service.getLeaveData(applid);
-			 if(obj[8].toString().equals("LAU")) {
-				 
-			 }else if(obj[8].toString().equals("LSO")||obj[8].toString().equals("LDO")) {
-				 
+			 if(obj[8].toString().equals("LAU")&&"LEU".equals(req.getParameter("Type"))) {
+				 ApprovalDto dto=new ApprovalDto();
+				 dto.setApplId(applid);
+				 dto.setStatus(req.getParameter("Type"));
+				 service.getUpdateAppl(dto);
+				 service.getUpdateRegister(dto);
+			 }else if("LME".equals(req.getParameter("Type"))&&(obj[8].toString().equals("LSO")||obj[8].toString().equals("LDO"))) {
+				 ApprovalDto dto=new ApprovalDto();
+				 dto.setApplId(applid);
+				 dto.setStatus(req.getParameter("Type"));
+				 service.getUpdateAppl(dto);
+				 service.getUpdateRegister(dto);
 			 }else {
 				 redir.addFlashAttribute("EmpNo",EmpNo);
 				 redir.addAttribute("resultfail","Leave Modification Not Allowed");

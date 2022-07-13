@@ -272,7 +272,7 @@ public class AdminDaoImpl implements AdminDao{
 		
 	}
 	
-	private static final String HANDLINGOVERLIST="SELECT a.handingover_id , b.empname as 'fromemp' ,c.empname as 'toemp',a.from_date, a.to_date , a.applied_date , a.status FROM leave_ra_sa_handingover a , employee b ,employee c WHERE a.from_empid=b.empid AND a.to_empid=c.empid AND is_active='1' AND(( a.from_date BETWEEN  :fromdate AND  :todate ) OR( a.to_date BETWEEN  :fromdate AND  :todate )OR ( a.from_date > :fromdate AND a.to_date < :todate )) ORDER BY a.handingover_id DESC";
+	private static final String HANDLINGOVERLIST="SELECT a.handingoverid , b.empname as 'fromemp' ,c.empname as 'toemp',a.fromdate, a.todate , a.applieddate , a.status FROM leave_ra_sa_handingover a , employee b ,employee c WHERE a.fromempid=b.empid AND a.toempid=c.empid AND a.isactive='1' AND(( a.fromdate BETWEEN  :fromdate AND  :todate ) OR( a.todate BETWEEN  :fromdate AND  :todate )OR ( a.fromdate > :fromdate AND a.todate < :todate )) ORDER BY a.handingoverid DESC";
 	@Override
 	public List<Object[]> GethandlingOverList(LocalDate FromDate, LocalDate Todate)throws Exception
 	{
@@ -292,7 +292,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String  CHECKHANDINGDATA="SELECT login_type, from_empid FROM leave_ra_sa_handingover  WHERE  to_empid=:toemp AND STATUS='A' AND (:fromDate BETWEEN from_date  AND to_date  OR :toDate BETWEEN from_date  AND to_date  OR from_date BETWEEN :fromDate AND :toDate) AND is_active='1'";
+	private static final String  CHECKHANDINGDATA="SELECT logintype, fromempid FROM leave_ra_sa_handingover  WHERE  toempid=:toemp AND STATUS='A' AND (:fromDate BETWEEN fromdate  AND todate  OR :toDate BETWEEN fromdate  AND todate  OR fromdate BETWEEN :fromDate AND :toDate) AND isactive='1'";
 	@Override
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception
 	{
@@ -318,7 +318,7 @@ public class AdminDaoImpl implements AdminDao{
 	
 	
 	@Override
-	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception
+	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception
 	{
 		logger.info(new Date() + "Inside AddHandingOver()");
 		try {
@@ -328,10 +328,10 @@ public class AdminDaoImpl implements AdminDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return handinfover.getHandingover_id();
+		return handinfover.getHandingoverId();
 	}
 	
-	private static final String REVOKEHANDINGOVER="UPDATE leave_ra_sa_handingover SET revokedate=:revokedate , revokeempid=:revokeempId , revokestatus=:revokestatus ,status=:status ,modifiedby=:modifiedby , modifieddate=:modifieddate WHERE handingover_id=:HandingOverId";
+	private static final String REVOKEHANDINGOVER="UPDATE leave_ra_sa_handingover SET revokedate=:revokedate , revokeempid=:revokeempId , revokestatus=:revokestatus ,status=:status ,modifiedby=:modifiedby , modifieddate=:modifieddate WHERE handingoverid=:HandingOverId";
 	@Override
 	public int updateRevokeInHandingOver(long empid ,String UserId, String HandingOverId)throws Exception
 	{
@@ -438,7 +438,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
-	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
+	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
 	
 	@Override
 	public List<Object[]> GetFromemployee()throws Exception
@@ -448,7 +448,7 @@ public class AdminDaoImpl implements AdminDao{
 		return list; 
 	}
 	
-	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid NOT IN (SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1'))";
+	private static final String TOEMPLOYEE="SELECT a.empid,a.empname,b.designation,a.empno FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid NOT IN (SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1'))";
 	@Override
 	public List<Object[]> GetToemployee()throws Exception
 	{

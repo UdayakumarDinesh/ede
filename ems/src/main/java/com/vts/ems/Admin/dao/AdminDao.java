@@ -30,7 +30,7 @@ public interface AdminDao {
 	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception;
 	public List<Object[]> GethandlingOverList(LocalDate FromDate, LocalDate Todate)throws Exception;
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception;
-	public int AddHandingOver(LeaveHandingOver handinfover)throws Exception;
+	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception;
 	public int updateRevokeInHandingOver(long empid ,String UserId , String HandingOverId)throws Exception;
     public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;

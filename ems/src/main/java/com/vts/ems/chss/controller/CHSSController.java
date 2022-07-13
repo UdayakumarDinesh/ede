@@ -2110,6 +2110,7 @@ public class CHSSController {
 			req.setAttribute("todate", todate);
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType,fromdate,todate));
 			req.setAttribute("logintype", LoginType);
+			ses.setAttribute("formmoduleid", "4");
 			ses.setAttribute("SidebarActive", "ContingentApprovals_htm");
 			
 			return "chss/ContingentBillsList";
@@ -2229,6 +2230,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
 			
+			ses.setAttribute("formmoduleid", "4");
 			ses.setAttribute("SidebarActive", "ApprovedBills_htm");
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");

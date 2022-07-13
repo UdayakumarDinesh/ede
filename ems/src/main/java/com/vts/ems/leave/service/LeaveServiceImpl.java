@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.vts.ems.leave.dao.LeaveDaoImpl;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveAppl;
+import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
@@ -1883,6 +1885,22 @@ public class LeaveServiceImpl implements LeaveService{
 			        transaction.setLeaveRemarks(appl.getRemarks());
 			        long trns=dao.LeaveTransInsert(transaction);
 			        leaveChecked[0]="Leave Applied Successfully";
+			        if(dto.getHandingOverEmpid()!=null&&!dto.getHandingOverEmpid().equalsIgnoreCase("NotSelected")) {
+			        	LeaveHandingOver ho = new LeaveHandingOver();
+						ho.setApplId(appl.getApplId());
+						ho.setDivisionId(Long.parseLong(appl.getDivId()));
+						ho.setFromEmpId(appl.getEmpId());
+						ho.setToEmpId(dto.getHandingOverEmpid());
+						ho.setFromDate(appl.getFromDate());
+						ho.setToDate(appl.getToDate());
+						ho.setStatus("A");
+						ho.setLoginType(dao.EmpDetails(dto.getEmpNo()).get(0)[4].toString());
+						ho.setAppliedDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+						ho.setCreatedBy(dto.getUserId());
+						ho.setCreateDate(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
+						ho.setIsActive(1);
+						dao.AddHandingOver(ho);
+					}
 					}
 					catch (Exception e) {
 						 e.printStackTrace();
@@ -2050,5 +2068,17 @@ public class LeaveServiceImpl implements LeaveService{
 	public Object[] getLeaveData(String applid) throws Exception {
 	
 		return dao.getLeaveData(applid);
+	}
+
+	@Override
+	public int getUpdateAppl(ApprovalDto dto) throws Exception {
+		
+		return dao.getUpdateAppl(dto);
+	}
+
+	@Override
+	public int getUpdateRegister(ApprovalDto dto) throws Exception {
+		
+		return dao.getUpdateRegister(dto);
 	}
 }
