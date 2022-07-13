@@ -79,10 +79,9 @@ p {
 
 <%
 	
-Object[] employee = (Object[] )request.getAttribute("employee") ;
+	Object[] employee = (Object[] )request.getAttribute("employee") ;
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
-	/* List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist"); */
 	List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist");	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
@@ -90,9 +89,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	List<CHSSOtherItems> otheritemslist = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
 	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
 	List<CHSSMedicinesList> allowedmeds =(List<CHSSMedicinesList>)request.getAttribute("allowedmed");
-	
-	/* List<Object[]> consulthistory=(List<Object[]>)request.getAttribute("consulthistory"); */
-	
 	
 	CHSSConsultMain consultmain =(CHSSConsultMain) request.getAttribute("consultmain");
 	Object[] consultcount = (Object[])request.getAttribute("consultcount");
@@ -129,7 +125,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->
 						<li class="breadcrumb-item active " aria-current="page">CHSS Data</li>
 					</ol>
 				</div>
@@ -160,41 +155,41 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 	
 			<div class="card" >
 				<div class="card-body main-card " >
-						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
+					<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 						
-							<div class="row">
+						<div class="row">
 								
-								<%if(isself.equalsIgnoreCase("N")){
-									Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
-									<div class="col-3" >
-										<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
-									</div>
-									<div class="col-3">
-										<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
-										
-									</div>
-								<% 
-									if(familyMemberData[8]!=null && LocalDate.parse(familyMemberData[8].toString()).isAfter(minbilldate)){
-										minbilldate = LocalDate.parse(familyMemberData[8].toString());
-									}
-								
-								}else{ %>
-									<div class="col-3">
-										<b> Patient Name : &nbsp;</b><%=employee[2] %>
-									</div>
-									<div class="col-3">
-										<b>Relation : &nbsp;</b>SELF
-									</div>
-								<%} %>
-								<div class="col-3">
-									<b>Treatment Type : </b> <%=chssapplydata[10] %>																	
+							<%if(isself.equalsIgnoreCase("N")){
+								Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
+								<div class="col-3" >
+									<b>Patient Name : &nbsp;</b> <%=familyMemberData[1] %>
 								</div>
 								<div class="col-3">
-									<b>Ailment/Disease/Accident : </b><%=chssapplydata[17] %>
+									<b>Relation : &nbsp;</b><%=familyMemberData[7] %>
+									
 								</div>
+							<% 
+								if(familyMemberData[8]!=null && LocalDate.parse(familyMemberData[8].toString()).isAfter(minbilldate)){
+									minbilldate = LocalDate.parse(familyMemberData[8].toString());
+								}
+							
+							}else{ %>
+								<div class="col-3">
+									<b> Patient Name : &nbsp;</b><%=employee[2] %>
+								</div>
+								<div class="col-3">
+									<b>Relation : &nbsp;</b>SELF
+								</div>
+							<%} %>
+							<div class="col-3">
+								<b>Treatment Type : </b> <%=chssapplydata[10] %>																	
 							</div>
-							<br>
-							<div class="row">
+							<div class="col-3">
+								<b>Ailment/Disease/Accident : </b><%=chssapplydata[17] %>
+							</div>
+						</div>
+						<br>
+						<div class="row">
 								<div class="col-3">
 									<b>Claim Id : </b><%=chssapplydata[16] %>
 								</div>
@@ -206,7 +201,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 								</div>
 							</div>
 						</div>
-						<!-- <b style="margin-bottom: 5px;"><span style="color: blue;">Note : &nbsp;&nbsp;</span><span style="color: red;">Please Update GST and Discount Details without Fail.</span></b> -->
 							<form method="post" action="#" autocomplete="off"  >
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover">
@@ -217,7 +211,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												<th style="width:10%;" >Bill / Receipt No.</th>
 												<th style="width:10%;" >Bill Date</th>
 												<th style="width:10%; text-align: right;">Paid Amt (&#8377;)</th>
-												<!-- <th style="width:7%; text-align: right;">GST Amt (&#8377;)</th> -->
 												<th style="width:10%; text-align: right;">Discount (&#8377;)</th>
 												<th style="width:10%; text-align: right;">Discount (%)</th>
 												<th style="width:10%;" >Action  </th>
@@ -242,7 +235,7 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 													</button>
 													<%} %>
 													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
-														<!-- <i class="fa-solid fa-file-lines"></i> --> Details
+														details
 													</button>	
 													<button type="submit"  class="btn btn-sm" formaction="CHSSBillDelete.htm" Onclick="return confirm('Are You Sure To Delete?');" name="billid" value="<%=obj[0]%>" >  <!-- data-toggle="tooltip" data-placement="top" title="Delete Bill" -->
 														<i class="fa-solid fa-trash-can" style="color: red;"></i>
@@ -365,49 +358,24 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" Onclick="getOthersDetails()" >Others</a>
 				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" Onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
-				    	
-				    	<%-- <form action="CHSSFormEdit.htm" method="post" id="form2">
-							<div class="row">
-								
-								<div class="col-md-12" align="center" style="margin-top: 5px;">
-									<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
-										Back	
-									</button>
-									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F" data-toggle="tooltip" data-placement="top" title="Preview and Forward">
-										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
-									</button>
-									<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
-										<i class="fa-solid fa-eye"></i>
-									</button>
-									<input type="hidden" name="isapproval" value="N">
-										<input type="hidden" name="show-edit" value="N">
-									<input type="hidden" name="consultmainid" value="<%=consultmainid%>">
-									<input type="hidden" name="claimaction" value="F">
-									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								</div>
-							</div>
-						</form> --%>
-				    	
+				    				    	
 				    </div>
 			   <div class="col-10" style="padding:0px;  " >
 				   <div class="tab-content card-body " id="nav-tabContent" style="padding: 0px;" >
 	<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		
 						<div align="center">
-							<%/* String ses-1=(String)request.getParameter("result"); 
-									String ses1=(String)request.getParameter("resultfail"); */
-									if(ses1!=null){ %>
-										<div class="alert alert-danger" role="alert">
-											<%=ses1 %>
-										</div>
-										
-									<%}if(ses!=null){ %>
-										
-										<div class="alert alert-success" role="alert">
-											<%=ses %>
-										</div>
-									<%} %>
-								</div>   
+							<%if(ses1!=null){ %>
+								<div class="alert alert-danger" role="alert">
+									<%=ses1 %>
+								</div>
+								
+							<%}if(ses!=null){ %>
+								
+								<div class="alert alert-success" role="alert">
+									<%=ses %>
+								</div>
+							<%} %>
+						</div>   
 				   		<div class="tab-pane fade show " id="nav-consultation" role="tabpanel" aria-labelledby="nav-consultation-tab">
 				   			
 					   		<div class="col-md-12" >
@@ -416,7 +384,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
-												<!-- <th style="width:12%;"> Consultation </th> -->
 												<th style="width:30%;">Doctor's Name</th>
 												<th style="width:15%;">Qualification</th>
 												<th style="width:15%;">Consult Date</th>
@@ -441,24 +408,14 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 										<thead>
 											<tr>
-												<!-- <th style="width:15%;"> Consultation </th> -->
 												<th style="width:30%;">Name of the Doctor</th>
 												<th style="width:20%;">Qualification</th>
 												<th style="width:15%;">Date</th>
 												<th style="width:15%; text-align: right;">Amount  (&#8377;)</th> 
-												<!-- <th style="width:5%;" > <button type="button" class="btn btn-sm tbl-row-add-cons" data-toggle="tooltip" data-placement="top" title="Add Row"><i class="fa-solid fa-plus " style="color: green;"></i></button> </th> -->
 											</tr>
 										</thead>
 										<tbody>
 											<tr class="tr_clone_cons" >
-												<%-- <td>
-													<select class="form-control w-100" name="consult-type" id="consult-type" required="required" >
-														<%if(consultmain.getCHSSApplyId()==Long.parseLong(chssapplydata[0].toString())){ %>
-														<option value="Fresh">Fresh</option>
-														<%} %>
-														<option value="FollowUp">FollowUp</option>
-													</select>
-												</td> --%>
 												<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 												<td>
 													<select class="form-control w-100" name="doc-qualification-view" id="doc-qualification" disabled="disabled" >
@@ -471,7 +428,6 @@ Object[] employee = (Object[] )request.getAttribute("employee") ;
 												</td>
 												<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
 												<td><input type="number" class="form-control items cost-only co-cost"  step=".01"  name="cons-charge" id="cons-charge" value="0" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-												<!-- <td><button type="button" class="btn btn-sm tbl-row-rem_cons"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td> -->
 											</tr>
 										</tbody>							
 										
@@ -876,8 +832,7 @@ function showBillDetails($billid)
 			$('#modal-billno').html(result[2]);
 			$('#modal-centername').html(result[3]);
 			$('#modal-billdate').html(result[4]);
-			/* $('#modal-items-total').html(result[8]+'-'+result[7]+'='+(result[8]-result[7])); */
-			
+						
 			$('#modal-items-total').html(result[8]);
 			itemstotal = Number(result[8]);
 			billamount = result[5]+result[7];
@@ -888,16 +843,7 @@ function showBillDetails($billid)
 			}else{
 				$('#modal-billamount').html('0');
 			}
-			
-			/* if(Number(result[8]-result[7]) < Number(result[5]))
-			{
-				$('.new-item-add-btn').prop('disabled', false);
-				$('.new-item-add-btn').removeAttr('Onclick');
-			}else
-			{
-				$('.new-item-add-btn').prop('disabled', true);
-			} */
-			
+									
 			if(tab=='null'){
 				$('.co').click();
 			}else
@@ -905,7 +851,7 @@ function showBillDetails($billid)
 				$('.'+tab).click();
 				tab= 'null';
 			}
-			/* ConsultMainConsultCount($billid); */
+			
 			$('.my-bill-modal').modal('toggle');
 		}
 	});
@@ -919,9 +865,6 @@ function itemAddEligibleCheck(itemtype)
 	    total += Number(obj.value);
 	});
 	
-	console.log(Math.round(itemstotal+total)<=Math.round(billamount));
-	console.log(Math.round(itemstotal+total));
-	console.log(Math.round(billamount));
 	
 	if(Math.round(itemstotal+total)<=Math.round(billamount)){
 		return true;
@@ -939,10 +882,8 @@ function itemEditEligibleCheck(itemtype,itemid)
 	var itemoldcost=Number( $('#'+itemtype+'-cost-org-'+itemid).val());
 	var itemnewcost=Number( $('#'+itemtype+'-cost-'+itemid).val());
 	
-	console.log(itemoldcost);
-	console.log(itemnewcost);
-	console.log(itemstotal+itemnewcost-itemoldcost);
-	if((itemstotal+itemnewcost-itemoldcost)<=billamount){
+	
+	if(Math.round(itemstotal+itemnewcost-itemoldcost)<=Math.round(billamount)){
 		return confirm ('Are You Sure To Update ?');
 	}else
 	{
@@ -1024,8 +965,6 @@ function CheckClaimAmount($chssapplyid)
 	
 }
 
-
-console.log(threeMonthsAgo);
 function  onlyNumbers() {    
     	
 	 	$('.numberonly').keypress(function (e) {    

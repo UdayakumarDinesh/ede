@@ -29,6 +29,7 @@ import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
@@ -337,6 +338,9 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("fromdate", FromDate);
 			query.setParameter("todate", Todate);
 			query.setParameter("isself", IsSelf);
+			
+//			System.out.println(empid+", "+PatientId+", "+FromDate+", "+Todate+", "+IsSelf);
+			
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1812,14 +1816,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CLAIMCONSULTMAINDELETEALL  ="UPDATE chss_consult_main SET isactive=1 WHERE chssapplyid=:chssapplyid";
+	private static final String CLAIMCONSULTMAINDELETEALL  ="UPDATE chss_consult_main SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE chssapplyid=:chssapplyid";
 	@Override
-	public int claimConsultMainDeleteAll(String chssapplyid) throws Exception
+	public int claimConsultMainDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO claimConsultMainDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(CLAIMCONSULTMAINDELETEALL);
 			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1829,14 +1835,16 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String BILLCONSULTDELETEALL  ="UPDATE chss_consultation SET isactive=1 WHERE billid=:billid";
+	private static final String BILLCONSULTDELETEALL  ="UPDATE chss_consultation SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
 	@Override
-	public int billConsultDeleteAll(String billid) throws Exception
+	public int billConsultDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO billConsultDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLCONSULTDELETEALL);
 			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1846,14 +1854,16 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String BILLTESTSDELETEALL  ="UPDATE chss_tests SET isactive=1 WHERE billid=:billid";
+	private static final String BILLTESTSDELETEALL  ="UPDATE chss_tests SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
 	@Override
-	public int billTestsDeleteAll(String billid) throws Exception
+	public int billTestsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO billTestsDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLTESTSDELETEALL);
 			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1862,14 +1872,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String BILLMEDSDELETEALL  ="UPDATE chss_medicine SET isactive=1 WHERE billid=:billid";
+	private static final String BILLMEDSDELETEALL  ="UPDATE chss_medicine SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
 	@Override
-	public int billMedsDeleteAll(String billid) throws Exception
+	public int billMedsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO billMedsDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLMEDSDELETEALL);
 			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1878,14 +1890,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String BILLOTHERSDELETEALL  ="UPDATE chss_other SET isactive=1 WHERE billid=:billid";
+	private static final String BILLOTHERSDELETEALL  ="UPDATE chss_other SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
 	@Override
-	public int billOthersDeleteAll(String billid) throws Exception
+	public int billOthersDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO billOthersDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLOTHERSDELETEALL);
 			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1894,14 +1908,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String BILLMISCDELETEALL  ="UPDATE chss_misc SET isactive=1 WHERE billid=:billid";
+	private static final String BILLMISCDELETEALL  ="UPDATE chss_misc SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
 	@Override
-	public int billMiscDeleteAll(String billid) throws Exception
+	public int billMiscDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO billMiscDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLMISCDELETEALL);
 			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1911,14 +1927,16 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CLAIMBILLDELETEALL  ="UPDATE chss_bill SET isactive=1 WHERE chssapplyid=:chssapplyid";
+	private static final String CLAIMBILLDELETEALL  ="UPDATE chss_bill SET isactive=0, modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE chssapplyid=:chssapplyid";
 	@Override
-	public int claimBillDeleteAll(String chssapplyid) throws Exception
+	public int claimBillDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO claimBillDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(CLAIMBILLDELETEALL);
 			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1928,5 +1946,105 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
+	private static final String CLAIMDELETE  ="UPDATE chss_apply SET isactive=0, modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE chssapplyid=:chssapplyid";
+	@Override
+	public int claimDelete(String chssapplyid,String modifiedby,String modifieddate) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO claimDelete");
+		try {
+			Query query= manager.createNativeQuery(CLAIMDELETE);
+			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+	}
+	
+	private static final String UPDATEBILLADMISSIBLEAMT  ="UPDATE chss_bill SET AdmissibleTotal = :admissibleAmt WHERE billid= :billid";
+	@Override
+	public int UpdateBillAdmissibleTotal(String billid,String admissibleAmt) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO UpdateBillAdmissibleAmt");
+		try {
+			Query query= manager.createNativeQuery(UPDATEBILLADMISSIBLEAMT);
+			query.setParameter("billid", billid);
+			query.setParameter("admissibleAmt", admissibleAmt);
+			
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
 
+	@Override
+	public CHSSIPDClaimsInfo IpdClaimInfo(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO IpdClaimInfo");
+		CHSSIPDClaimsInfo returnlist= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSIPDClaimsInfo> cq= cb.createQuery(CHSSIPDClaimsInfo.class);
+			Root<CHSSIPDClaimsInfo> root= cq.from(CHSSIPDClaimsInfo.class);					
+			Predicate p1=cb.equal(root.get("CHSSApplyId") , Long.parseLong(chssapplyid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			cq=cq.select(root).where(p1,p2);
+			TypedQuery<CHSSIPDClaimsInfo> claiminfo = manager.createQuery(cq);
+			returnlist = claiminfo.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return returnlist;
+	}
+	
+	@Override
+	public long CHSSIPDBasicInfoAdd(CHSSIPDClaimsInfo model ) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSIPDBasicInfoAdd");
+		try {
+			manager.persist(model);
+			manager.flush();
+			
+			return model.getIPDClaimInfoId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public CHSSIPDClaimsInfo getIpcClaimInfo(String ipdclaiminfoid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getIpcClaimInfo");
+		try {
+			return manager.find(CHSSIPDClaimsInfo.class, Long.parseLong(ipdclaiminfoid));
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo claimsinfo) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
+		try {
+			manager.merge(claimsinfo);
+			manager.flush();
+			
+			return claimsinfo.getIPDClaimInfoId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 }

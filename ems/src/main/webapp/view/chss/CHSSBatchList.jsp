@@ -140,8 +140,7 @@
 											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[26].toString())) %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formtarget="_blank" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">

@@ -72,6 +72,7 @@ import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
+import com.vts.ems.utils.EmsFileUtils;
 
 
 
@@ -1941,43 +1942,6 @@ public class PisController {
 		}
 	}
 	
-	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
-	{
-		File pdffile = new File(pdffilepath);
-		File tofile = new File(newfilepath);
-		
-		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
-		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
-		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
-		        PdfPage page = doc.getPage(pageNum);
-		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
-	
-		        PdfExtGState gstate = new PdfExtGState();
-		        gstate.setFillOpacity(.05f);
-		        canvas = new PdfCanvas(page);
-		        canvas.saveState();
-		        canvas.setExtGState(gstate);
-		        try (Canvas canvas2 = new Canvas(canvas, page.getPageSize())) {
-		            double rotationDeg = 50d;
-		            double rotationRad = Math.toRadians(rotationDeg);
-		            Paragraph watermark = new Paragraph("STARC")
-		                    .setFont(helvetica)
-		                    .setFontSize(150f)
-		                    .setTextAlignment(TextAlignment.CENTER)
-		                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
-		                    .setRotationAngle(rotationRad)
-		                    .setFixedPosition(200, 110, page.getPageSize().getWidth());
-		            canvas2.add(watermark);
-		        }
-		        canvas.restoreState();
-		    }
-		 }
-		
-		pdffile.delete();
-		tofile.renameTo(pdffile);
-		
-	}
-	
 	
 	@RequestMapping(value ="DependentAdmissionForm.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
 	public String DependentAdmissionForm(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
@@ -2053,7 +2017,9 @@ public class PisController {
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
-	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
+	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	        File f=new File(path +File.separator+ filename+".pdf");

@@ -109,8 +109,8 @@ String todate  =  (String)request.getAttribute("todate");
 											<td><input type="hidden" id="employeeid" name="<%=employeeid%>" value="<%=obj[4]%>"> <%=obj[1] %></td>
 											<td align="left"><%=obj[2]%></td>		
 											<td align="center"><%if(obj[7]!=null && obj[7]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[7].toString()) %><br><%=obj[8]%><%}else{%>--<%}%></td>
-											<td> <textarea class="form-control"  name="<%=respose%>"  rows="5" cols="60" required="required"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
-											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" name="action" value="<%=obj[0]%>" onclick="return confirm('Are You Sure To Submit!')">SUBMIT</button><%}%></td>		
+											<td> <textarea class="form-control"  name="<%=respose%>"  id="<%=respose%>" rows="5" cols="60"><%if(obj[3]!=null){%><%=obj[3]%><%}%></textarea></td>
+											<td><%if(obj[3]==null){ %> <button type="submit" class="btn btn-sm submit-btn" style="margin-top: 70%;" name="action" value="<%=obj[0]%>" onclick="return checkEmptyReply('<%=respose%>')">Submit</button><%}%></td>		
 										</tr>	
 										
 								<%}} %>							
@@ -127,6 +127,27 @@ String todate  =  (String)request.getAttribute("todate");
 </body>
 
 <script type="text/javascript">
+
+
+
+function checkEmptyReply(inputid)
+{
+	var reply = $('#'+inputid).val();
+	console.log(reply);
+	
+	if(reply.trim()===''){
+		alert('Please Enter a Valid Reply to  Submit');
+		return false;
+	}else
+	{
+		return confirm('Are You Sure to Submit?');
+	}
+}
+
+
+
+
+
 
 	$('#fromdate').daterangepicker({
 		"singleDatePicker" : true,
