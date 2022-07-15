@@ -274,11 +274,11 @@ th,td
 											BigDecimal discount = new BigDecimal(0);/*,  GST=0 */;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
+												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
 												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 												{
 													/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
 													/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 												}
 										%>
@@ -296,7 +296,7 @@ th,td
 											<tr>
 												<td colspan="5"></td>
 												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.round(mc0).longValue())) %></td>
+												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
 											</tr>
 										<%}else{ %>
 											<tr>
@@ -750,18 +750,12 @@ th,td
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-												&#8377; <b><%=totalremamount%></b>
+												<b><%=totalremamount%></b>
 												<%} %>
 											</td>
 											<td></td>
 										</tr>
-															
-									<%-- 	<tr>
-											<td colspan="4" class="right"><b>Total GST (+)</b></td>
-											<td class="right text-blue"><b><%=GST %></b></td>
-											<td class="right text-green"></td>
-											<td ></td>
-										</tr>  --%>
+							
 										<tr>
 											<td colspan="4" class="right"><b>Total Discount (-)</b></td>
 											<td class="right text-blue"><b><%=discount %></b></td>
@@ -771,18 +765,19 @@ th,td
 															
 										<tr>
 											<td colspan="4" class="right"><b>Rounded Total</b></td>
-											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).round(mc0).longValue())) %></b></td>
+											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
 											<td class="right text-green">
+												
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %></b>
+												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
 											<td ></td>
 										</tr>
 																				
 										<tr>
-											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).round(mc0).longValue()) %> Only)</td> 
+											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td> 
 										</tr>
 										
 										<tr>
@@ -792,7 +787,7 @@ th,td
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
 												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>
-												<%= nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.round(mc0).longValue()) %> Only)
+												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
 												<%} %>

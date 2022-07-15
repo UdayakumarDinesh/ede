@@ -18,6 +18,7 @@ import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
@@ -123,13 +124,9 @@ public interface CHSSService
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;
-	public int claimBillDeleteAll(String chssapplyid) throws Exception;
-	public int billMiscDeleteAll(String billid) throws Exception;
-	public int billMedsDeleteAll(String billid) throws Exception;
-	public int billTestsDeleteAll(String billid) throws Exception;
-	public int billConsultDeleteAll(String billid) throws Exception;
-	public int claimConsultMainDeleteAll(String chssapplyid) throws Exception;
-	public int billOthersDeleteAll(String billid) throws Exception;
-	public int DeleteClaimData(String chssapplyid) throws Exception;
+	public int DeleteClaimData(String chssapplyid,String username) throws Exception;
+	public CHSSIPDClaimsInfo IpdClaimInfo(String chssapplyid) throws Exception;
+	public long CHSSIPDBasicInfoAdd(CHSSIPDClaimsInfo model) throws Exception;
+	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo model) throws Exception;
 
 }

@@ -88,8 +88,8 @@ public class PisServiceImpl implements PisService
 		String result=null;
 		try {
 			String photoname=dao.PhotoPath(empid);
-			String path = uploadpath+"\\empimages";
-			File f = new File(path+"\\"+photoname);
+			String path = uploadpath+"//empimages";
+			File f = new File(path+"//"+photoname);
 			if(f.exists()) {
 				result=encodeFileToBase64Binary(f);
 			}                                     

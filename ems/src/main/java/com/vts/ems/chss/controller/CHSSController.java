@@ -33,19 +33,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfPage;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
-import com.itextpdf.layout.Canvas;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
@@ -60,6 +47,7 @@ import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSConsultation;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSMisc;
@@ -70,6 +58,7 @@ import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
+import com.vts.ems.utils.EmsFileUtils;
 
 @Controller
 public class CHSSController {
@@ -83,7 +72,6 @@ public class CHSSController {
 	CHSSService service;
 	@Autowired
 	AdminService adminservice;
-	
 	
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "CHSSDashboard.htm" )
@@ -209,6 +197,7 @@ public class CHSSController {
 			String treatmenttype=req.getParameter("treatmenttype");
 			String noenclosures=req.getParameter("enclosurecount");
 			String ailment = req.getParameter("ailment");
+			String chsstype = req.getParameter("chsstype");
 			
 			String[] consulttype=req.getParameterValues("consult-type");
 			String[] docname=req.getParameterValues("doc-name");
@@ -224,7 +213,7 @@ public class CHSSController {
 			dto.setConsultDate(consdate);
 
 			dto.setTreatTypeId(treatmenttype);
-			dto.setCHSSType("OPD");
+			dto.setCHSSType(chsstype);
 			dto.setCreatedBy(Username);
 			dto.setNoEnclosures(noenclosures);
 			dto.setAilment(ailment);
@@ -233,8 +222,19 @@ public class CHSSController {
 			
 			
 			long count= service.CHSSApplySubmit(dto);
-			if (count > 0) {
+			if (count > 0) 
+			{
 				redir.addAttribute("result", "Claim Created Successfully");
+				
+				if(chsstype.equalsIgnoreCase("OPD")) {
+					redir.addFlashAttribute("chssapplyid",String.valueOf(count));
+					return "redirect:/CHSSConsultMainData.htm";
+				}else if(chsstype.equalsIgnoreCase("IPD"))
+				{
+					redir.addFlashAttribute("chssapplyid",String.valueOf(count));
+					return "redirect:/CHSSConsultMainData.htm";
+				}
+				
 			} else {
 				redir.addAttribute("resultfail", "Internal Error !");	
 				return "redirect:/CHSSDashboard.htm";
@@ -248,49 +248,7 @@ public class CHSSController {
 		}
 	}
 	
-	@RequestMapping(value = "CHSSConsultMainData.htm" )
-	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		logger.info(new Date() +"Inside CHSSConsultMainData.htm "+Username);
-		try {
-			
-			String chssapplyid = req.getParameter("chssapplyid");
-			if (chssapplyid == null) 
-			{
-				Map md=model.asMap();
-				chssapplyid=(String)md.get("chssapplyid");
-			}	
-
-			
-			if(chssapplyid==null) {
-				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSDashboard.htm";
-			}
-						
-			Object[] apply= service.CHSSAppliedData(chssapplyid);
-			req.setAttribute("chssapplydata", apply);
-			req.setAttribute("employee", service.getEmployee(EmpId));
-			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
-			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
-			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
-			req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
-			req.setAttribute("consultmainlist", service.getCHSSConsultMainList(chssapplyid));
-			req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
-			
-			if(apply[3].toString().equalsIgnoreCase("N")) 
-			{
-				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
-			}
-			
-			return "chss/CHSSConsultMain";
-		}catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSConsultMainData.htm "+Username, e);
-			return "static/Error";
-		}
-	}
+	
 
 	@RequestMapping(value = "CHSSMedicinesListAjax.htm", method = RequestMethod.GET)
 	public @ResponseBody String CHSSMedicinesListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
@@ -603,9 +561,6 @@ public class CHSSController {
 		}
 	}
 	
-
-	
-	
 	
 	@RequestMapping(value = "CHSSApplyEdit.htm", method = RequestMethod.POST )
 	public String CHSSApplyEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -626,9 +581,9 @@ public class CHSSController {
 			dto.setTreatTypeId(treatmenttype);
 			dto.setModifiedBy(Username);
 			dto.setAilment(ailment);
+			dto.setCHSSType(req.getParameter("chsstype"));
 			long count = service.CHSSApplyEdit(dto);
-			
-			
+						
 			if (count > 0) {
 				redir.addAttribute("result", "CHSS Updated Successfully");
 			} else {
@@ -1479,7 +1434,7 @@ public class CHSSController {
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	       
 	       
-	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        
 	        File f=new File(path +File.separator+ filename+".pdf");
 	        FileInputStream fis = new FileInputStream(f);
@@ -1506,42 +1461,6 @@ public class CHSSController {
 	}
 	
 	
-	public void addwatermark(String pdffilepath,String newfilepath) throws Exception
-	{
-		File pdffile = new File(pdffilepath);
-		File tofile = new File(newfilepath);
-		
-		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
-		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
-		    for (int pageNum = 1; pageNum <= doc.getNumberOfPages(); pageNum++) {
-		        PdfPage page = doc.getPage(pageNum);
-		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), doc);
-	
-		        PdfExtGState gstate = new PdfExtGState();
-		        gstate.setFillOpacity(.05f);
-		        canvas = new PdfCanvas(page);
-		        canvas.saveState();
-		        canvas.setExtGState(gstate);
-		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
-		            double rotationDeg = 50d;
-		            double rotationRad = Math.toRadians(rotationDeg);
-		            Paragraph watermark = new Paragraph("STARC")
-		                    .setFont(helvetica)
-		                    .setFontSize(150f)
-		                    .setTextAlignment(TextAlignment.CENTER)
-		                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
-		                    .setRotationAngle(rotationRad)
-		                    .setFixedPosition(200, 110, page.getPageSize().getWidth());
-		            canvas2.add(watermark);
-		        }
-		        canvas.restoreState();
-		    }
-		 }
-		
-		pdffile.delete();
-		tofile.renameTo(pdffile);
-		
-	}
 	
 	
 	@RequestMapping(value = "CHSSClaimFwdApproveAjax.htm", method = RequestMethod.GET)
@@ -2191,6 +2110,7 @@ public class CHSSController {
 			req.setAttribute("todate", todate);
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType,fromdate,todate));
 			req.setAttribute("logintype", LoginType);
+			ses.setAttribute("formmoduleid", "4");
 			ses.setAttribute("SidebarActive", "ContingentApprovals_htm");
 			
 			return "chss/ContingentBillsList";
@@ -2274,7 +2194,9 @@ public class CHSSController {
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
-	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
+	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	        File f=new File(path +File.separator+ filename+".pdf");
@@ -2308,6 +2230,7 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
 			
+			ses.setAttribute("formmoduleid", "4");
 			ses.setAttribute("SidebarActive", "ApprovedBills_htm");
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
@@ -2588,7 +2511,9 @@ public class CHSSController {
 			String html1 = customResponse.getOutput();        
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
-	        addwatermark(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
+	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	        File f=new File(path +File.separator+ filename+".pdf");
@@ -2647,7 +2572,7 @@ public class CHSSController {
 			if (count > 0) {
 				redir.addAttribute("result", "Bill Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Bill DeleteUnsuccessful");	
+				redir.addAttribute("resultfail", "Bill Delete Unsuccessful");	
 			}	
 			
 			
@@ -2751,18 +2676,21 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value ="ClaimDeleteEmp.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+	@RequestMapping(value ="ClaimDeleteEmp.htm" , method = { RequestMethod.POST} )
 	public String ClaimDeleteEmp(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ClaimDeleteEmp.htm "+Username);
 		try {
-			String chssapplyid = (String)req.getParameter("chssapplyid");
+			String chssapplyid =req.getParameter("chssapplyid");
 			
-			
-		
-			
-			return "chss/CHSSClaimsReport";
+			int count = service.DeleteClaimData(chssapplyid, Username);
+			if (count > 0) {
+				redir.addAttribute("result", "Claim Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim Delete Unsuccessful");	
+			}	
+			return "redirect:/CHSSDashboard.htm";
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ClaimDeleteEmp.htm "+Username, e);
@@ -2772,5 +2700,165 @@ public class CHSSController {
 	}
 	
 	
+	@RequestMapping(value = "CHSSConsultMainData.htm" )
+	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSConsultMainData.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			if (chssapplyid == null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+			}	
+			
+			if(chssapplyid==null) {
+				redir.addAttribute("result", "Refresh Not Allowed");
+				return "redirect:/CHSSDashboard.htm";
+			}
+						
+			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			req.setAttribute("chssapplydata", apply);
+			req.setAttribute("employee", service.getEmployee(EmpId));
+			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
+			
+			
+			if(apply[3].toString().equalsIgnoreCase("N")) 
+			{
+				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
+			}
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
+				req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
+				req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
+				req.setAttribute("consultmainlist", service.getCHSSConsultMainList(chssapplyid));
+				req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
+				
+				return "chss/CHSSConsultMain";
+			}
+			else
+			{
+				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+				
+				
+				return "chss/CHSSIPDDataPage";
+			}
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSConsultMainData.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "CHSSIPDBasicInfoAdd.htm" )
+	public String CHSSIPDBasicInfoAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDBasicInfoAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String hospitalname = req.getParameter("hospitalname");
+			String roomtype = req.getParameter("room-type");
+			String admitteddate = req.getParameter("admitted-date");
+			String admittedtime = req.getParameter("admitted-time");
+			String dischargeddate = req.getParameter("discharged-date");
+			String dischargedtime = req.getParameter("discharged-time");
+			String DomicHospi = req.getParameter("DomicHospi");
+			String DayCare = req.getParameter("DayCare");
+			String ExtCareRehab = req.getParameter("ExtCareRehab");
+			
+			
+			CHSSIPDClaimsInfo claiminfo= new CHSSIPDClaimsInfo();
+			claiminfo.setCHSSApplyId(Long.parseLong(chssapplyid));
+			claiminfo.setHospitalName(hospitalname);
+			claiminfo.setRoomType(roomtype);
+			claiminfo.setAdmissionDate(DateTimeFormatUtil.RegularToSqlDate(admitteddate) );
+			claiminfo.setAdmissionTime(admittedtime);
+			claiminfo.setDischargeDate(DateTimeFormatUtil.RegularToSqlDate(dischargeddate));
+			claiminfo.setDischargeTime(dischargedtime);
+			claiminfo.setDomiciliaryHosp(Integer.parseInt(DomicHospi));
+			claiminfo.setDayCare(Integer.parseInt(DayCare));
+			claiminfo.setExtCareRehab(Integer.parseInt(ExtCareRehab));
+			claiminfo.setIsActive(1);
+			claiminfo.setCreatedBy(Username);
+			claiminfo.setCreatedDate(sdtf.format(new Date()));
+			
+			
+			long count=service.CHSSIPDBasicInfoAdd(claiminfo);
+			if (count > 0) {
+				redir.addAttribute("result", "Claim Info Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim Info Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("consultmainid",String.valueOf(count));
+			return "redirect:/CHSSConsultMainData.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDBasicInfoAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "CHSSIPDBasicInfoEdit.htm" )
+	public String CHSSIPDBasicInfoEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDBasicInfoEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String ipdclaiminfoid = req.getParameter("ipdclaiminfoid");
+			
+			String hospitalname = req.getParameter("hospitalname");
+			String roomtype = req.getParameter("room-type");
+			String admitteddate = req.getParameter("admitted-date");
+			String admittedtime = req.getParameter("admitted-time");
+			String dischargeddate = req.getParameter("discharged-date");
+			String dischargedtime = req.getParameter("discharged-time");
+			String DomicHospi = req.getParameter("DomicHospi");
+			String DayCare = req.getParameter("DayCare");
+			String ExtCareRehab = req.getParameter("ExtCareRehab");
+			
+			
+			CHSSIPDClaimsInfo claiminfo= new CHSSIPDClaimsInfo();
+			claiminfo.setIPDClaimInfoId(Long.parseLong(ipdclaiminfoid));
+			claiminfo.setHospitalName(hospitalname);
+			claiminfo.setRoomType(roomtype);
+			claiminfo.setAdmissionDate(DateTimeFormatUtil.RegularToSqlDate(admitteddate) );
+			claiminfo.setAdmissionTime(admittedtime);
+			claiminfo.setDischargeDate(DateTimeFormatUtil.RegularToSqlDate(dischargeddate));
+			claiminfo.setDischargeTime(dischargedtime);
+			claiminfo.setDomiciliaryHosp(Integer.parseInt(DomicHospi));
+			claiminfo.setDayCare(Integer.parseInt(DayCare));
+			claiminfo.setExtCareRehab(Integer.parseInt(ExtCareRehab));
+			claiminfo.setModifiedBy(Username);
+			
+			
+			
+			long count=service.CHSSIPDBasicInfoEdit(claiminfo);
+			if (count > 0) {
+				redir.addAttribute("result", "Claim Info Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim Updated Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("consultmainid",String.valueOf(count));
+			return "redirect:/CHSSConsultMainData.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDBasicInfoEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 }

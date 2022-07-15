@@ -220,7 +220,7 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 							<td class="nobordertd"> <%=empdetails[12] %></td>
 						</tr>
 						<tr>
-							<td class="nobordertd" >Date: &nbsp; <%if(formdetails[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.<%} %></td>
+							<td class="nobordertd" >Date: &nbsp; <%if(formdetails!=null && formdetails[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(formdetails[4].toString()) %>.<%} %></td>
 						</tr>
 					</table>
 					<%if(formdetails!=null && formdetails[3].toString().equals("A")){ %>

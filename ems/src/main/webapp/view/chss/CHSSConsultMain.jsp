@@ -82,15 +82,8 @@ table th:last-child{
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	String isself = chssapplydata[3].toString();
 	List<CHSSTreatType> treattypelist=(List<CHSSTreatType>)request.getAttribute("treattypelist");
-	/* List<Object[]> chssbillslist=(List<Object[]>)request.getAttribute("chssbillslist"); */	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();	
-	/* 	
-	List<CHSSTestSub> testmainlist1 = (List<CHSSTestSub>)request.getAttribute("testmainlist");	
-	List<CHSSOtherItems> otheritemslist1 = (List<CHSSOtherItems>)request.getAttribute("otheritemslist");
-	
-	List<CHSSMedicinesList> allowedmeds1 =(List<CHSSMedicinesList>)request.getAttribute("allowedmed");
-	 */
 	 
 	List<CHSSDoctorRates> doctorrates = (List<CHSSDoctorRates>)request.getAttribute("doctorrates");
 	List<Object[]> consultmainlist =(List<Object[]>)request.getAttribute("consultmainlist");
@@ -110,9 +103,6 @@ table th:last-child{
 	{
 		mcount = Integer.parseInt(medicinecount[0].toString());
 	}
-	
-/* 	String billid =(String)request.getAttribute("billid");
-	String tab =(String)request.getAttribute("tab"); */
 %>
 
 	<div class="card-header page-top">
@@ -124,7 +114,6 @@ table th:last-child{
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->
 						<li class="breadcrumb-item active " aria-current="page">Claim Data</li>
 					</ol>
 				</div>
@@ -167,6 +156,11 @@ table th:last-child{
 						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 						<div class="row">
 							
+							<b> &nbsp; Claim Id : </b><%=chssapplydata[16] %>
+							
+						</div>
+						<div class="row">
+							
 							<%if(isself.equalsIgnoreCase("N")){
 								Object[] familyMemberData = (Object[])request.getAttribute("familyMemberData") ; %>
 								
@@ -203,10 +197,19 @@ table th:last-child{
 									<%} %>								
 								</select>
 							</div>
+							<div class="col-2">
+								<b>Claim Type : </b> 
+								<br>
+								<select class="form-control" name="chsstype" id="chsstype">
+									<option value="OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("OPD")){ %>Selected<%} %> >OPD</option>
+									<%-- <option value="IPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option> --%>
+								</select>
+							</div>
 							<div class="col-3">
 								<b>Ailment/Disease/Accident : </b><br>
 								<input type="text" class="form-control w-100" name="ailment" value="<%=chssapplydata[17] %>" required="required" maxlength="255" >
 							</div>
+							
 							
 							<div class="col-1">
 								<button type="submit" class="btn btn-sm update-btn " style="margin-top: 20px;"  data-toggle="tooltip" data-placement="top" title="Update"> Update <!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"> --></i></button>  <!-- Onclick="return confirm ('Are You Sure To Update?');" --> 
@@ -262,22 +265,20 @@ table th:last-child{
 													<td>
 														<%if(Integer.parseInt(cmain[5].toString())==0){ %>
 															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details">														
-																<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
 																update
 															</button>
 															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-																<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+																Bills
 															</button>		
 															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 																<i class="fa-solid fa-trash-can" style="color: red;"></i>
 															</button>		
 														<%}else{ %>
 															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details" disabled>														
-																<!-- <i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i> -->
 																update
 															</button>
 															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-																<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+																Bills
 															</button>		
 															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
 																<i class="fa-solid fa-trash-can" style="color: red;"></i>
@@ -300,7 +301,7 @@ table th:last-child{
 													</td>
 													<td>
 													<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-															<!-- <i class="fa-solid fa-receipt"></i> --> Bills
+															Bills
 														</button>											
 													</td>				
 												
@@ -427,13 +428,10 @@ table th:last-child{
 									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward"  >
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
-									<%-- <button type="submit" class="btn btn-sm view-icon" name="chssapplyid" formnovalidate="formnovalidate" formaction="CHSSForm.htm" value="<%=chssapplydata[0] %>" formaction="CHSSForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Form Preview">
-										<i class="fa-solid fa-eye"></i>
-									</button> --%>
+									
 									<%} %>
 								</div>
 							</div>
-							
 							
 							<input type="hidden" name="isapproval" value="n">
 							<input type="hidden" name="show-edit" value="N">
@@ -455,52 +453,6 @@ table th:last-child{
 		</div>
 	
 	 </div>
-<script type="text/javascript">
-
-
-/* 
-function CheckClaimAmount($chssapplyid)
-{
-	$.ajax({
-
-		type : "GET",
-		url : "CHSSClaimFwdApproveAjax.htm",
-		data : {
-				
-			chssapplyid : $chssapplyid,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-						
-			if(result===1){
-				
-						if(Number($('#enclosurecount').val())<1){
-							alert('Total No. of Enclosures should not be zero !');
-						}else{
-							
-							$('#form2').submit();
-						}	
-						
-			}else if(result===-1){
-				alert('Please Add Atleast one Consultation details.');
-				return false;	
-			}else if(result===0){
-				alert('Total claim amount should not be zero !');
-				return false;	
-			}
-		
-		}
-	});
-	
-}
-
- */
-
-
-
-</script>
-	 
 
 <script type="text/javascript">
 
@@ -510,51 +462,11 @@ $(document).ready( function() {
 	
 	<%if(consultmainlist.size()>0){%>
 		$('#treatmenttype').prop('disabled', true);
+		$('#chsstype').prop('disabled', true);
 	<%}%> 
-
-
 });   
 
 
-
-
-/* function CheckClaimAmount($chssapplyid)
-{
-	$.ajax({
-
-		type : "GET",
-		url : "CHSSClaimFwdApproveAjax.htm",
-		data : {
-				
-			chssapplyid : $chssapplyid,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-						
-			if(result===1){
-				
-						if(Number($('#enclosurecount').val())<1){
-							alert('Total No. of Enclosures should not be zero !');
-						}else{
-							
-							$('#form2').submit();
-						}	
-						
-			}else if(result===-1){
-				alert('Please Add Atleast one Consultation details.');
-				return false;	
-			}else if(result===0){
-				alert('Total claim amount should not be zero !');
-				return false;	
-			}
-		
-		}
-	});
-	
-}
-
- */
 var threeMonthsAgo = moment().subtract(3, 'months');
 
 function  onlyNumbers() {    
@@ -576,7 +488,6 @@ $('.consultdate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"maxDate" :new Date(), 
-	/* "minDate":threeMonthsAgo, */ 
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

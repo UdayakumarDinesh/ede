@@ -422,6 +422,7 @@
 								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
 								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
+								<td style="padding-top:5px; padding-bottom: 5px;" >Type</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amt (&#8377;)</td>
 								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amt (&#8377;)</td>
@@ -437,11 +438,12 @@
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
+									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[24].toString()))))%></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[26].toString()))))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
 										<%if("14".equals(obj[9].toString())){ %>
-											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[25].toString()))))%>
+											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString()))))%>
 										<%}else{ %>
 											-
 										<%} %>
@@ -466,18 +468,23 @@
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 											<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-												<!-- <i class="fa-solid fa-pen-to-square" style="color: #E45826"></i> -->
 												Edit
 											</button>	
-										<%} %>
+											
+											<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
+												<i class="fa-solid fa-trash-can " style="color: red"></i>
+											</button>	
+										<% } %>
 											
 										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
-										</button>	
+										</button>
+										<%if(Integer.parseInt(obj[9].toString())>1){ %>	
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
-										<%if(Integer.parseInt(obj[9].toString())==2 && obj[26].toString().equalsIgnoreCase("0")){ %>
+										<%} %>
+										<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
 											<i class="fa-solid fa-backward" style="color: #333C83"></i>
 										</button>
