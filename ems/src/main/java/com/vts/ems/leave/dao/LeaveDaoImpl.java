@@ -50,9 +50,9 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
     private static final String LABMASTER="FROM LabMaster";
-    private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr>=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
+    private static final String REGISTER="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status and a.status not in('LEU','LME') AND :yr>=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
     private static final String CHECKDAY="SELECT COUNT(*) FROM leave_holiday_workingday WHERE holidate=:inDate  AND holitype=:inType";
-    private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
+    private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.status not in('LEU','LME','LCO') and a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
     private static final String CHECKHANDOVER="select count(*) from";
     private static final String GETAPPLID="SELECT MAX(SUBSTR(applid,6)) FROM leave_appl where leaveyear=:year";
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU','LR1','LR2','LR3','LRO','LVA') and a.empid=:empNo order by a.leaveapplid desc";
@@ -60,7 +60,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
     private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND (:fromDate BETWEEN a.fromdate AND a.todate or :toDate BETWEEN a.fromdate AND a.todate)";   
     private static final String LEAVESANC="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LSO','LDO') and a.empid=:empNo order by a.leaveapplid desc";
-
+    private static final String LEAVEYRS="SELECT DISTINCT(YEAR) FROM leave_register WHERE YEAR<=:yr AND empid=:empNo ORDER BY YEAR ASC";
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
 		logger.info(new Date() +"Inside PisHolidayList");	
@@ -245,6 +245,17 @@ public class LeaveDaoImpl implements LeaveDao{
 		return getRegister;
 	}
 	
+	
+	@Override
+	public List<String> getRegisterYrs(String EmpNo, String yr) throws Exception {
+		logger.info(new Date() +"Inside getRegisterYrs");	
+		Query query = manager.createNativeQuery(LEAVEYRS);
+		query.setParameter("empNo", EmpNo);
+		query.setParameter("yr", yr);
+		List<String> getRegister= query.getResultList();
+		return getRegister;
+	}
+	
 	@Override
 	public List<Object[]> getRegisterByYear(String EmpNo, String yr) throws Exception {
 		logger.info(new Date() +"Inside getRegisterByYear");	
@@ -408,7 +419,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		return result;
 	}
 	
-	private static final String LEAVETRANSCTION="SELECT a.description,b.empname,c.designation,d.actiondate,d.leaveremarks,a.shortname FROM leave_status_desc a,employee b,employee_desig c,leave_transaction d WHERE a.status=d.leavestatus AND d.actionby=b.empno AND c.desigid=b.desigid AND  d.leaveapplid=:applid";
+	private static final String LEAVETRANSCTION="SELECT a.description,b.empname,c.designation,d.actiondate,d.leaveremarks,a.shortname,a.status FROM leave_status_desc a,employee b,employee_desig c,leave_transaction d WHERE a.status=d.leavestatus AND d.actionby=b.empno AND c.desigid=b.desigid AND  d.leaveapplid=:applid order by d.actiondate";
 	@Override
 	public List<Object[]> LeaveTransaction(String applid) throws Exception {
 		logger.info(new Date() +"Inside LeaveTransaction");	
@@ -489,8 +500,8 @@ public class LeaveDaoImpl implements LeaveDao{
 	}
 
 	private static final String REMOVEAPPLID="delete from  leave_appl where  status='LAU' and applid=:applid";
-	private static final String REMOVEAPPLIDREGI="delete from  leave_register where  status='LAU' and appl_id=:applid";
 	private static final String REMOVEAPPLIDTRANSC="delete from  leave_transaction where   leaveapplid=:applid";
+	private static final String REMOVEAPPLIDREGI="delete from  leave_register where  status in('LAU','LME','LEU')  and appl_id=:applid";
 	private static final String REMOVEAPPLIDHO="delete from  leave_ra_sa_handingover where   applid=:applid";
 	@Transactional
 	@Override
@@ -502,14 +513,27 @@ public class LeaveDaoImpl implements LeaveDao{
 			Query query = manager.createNativeQuery(REMOVEAPPLID);
 			query.setParameter("applid",dto.getApplId());
 			count = (int) query.executeUpdate();
-			Query query1 = manager.createNativeQuery(REMOVEAPPLIDREGI);
-			query1.setParameter("applid",dto.getApplId());
-			count = (int) query1.executeUpdate();
 			Query query2 = manager.createNativeQuery(REMOVEAPPLIDTRANSC);
 			query2.setParameter("applid",dto.getApplId());
 			count = (int) query2.executeUpdate();
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+}
+	@Transactional
+	@Override
+	public int deleteLeaveRegiHo(String applid) throws Exception {
+		logger.info(new Date() + "Inside deleteLeaveRegiHo()");
+		int count =0;
+		try {
+			Query query1 = manager.createNativeQuery(REMOVEAPPLIDREGI);
+			query1.setParameter("applid",applid);
+			count = (int) query1.executeUpdate();
 			Query query3 = manager.createNativeQuery(REMOVEAPPLIDHO);
-			query3.setParameter("applid",dto.getApplId());
+			query3.setParameter("applid",applid);
 			query3.executeUpdate();
 			
 		} catch (Exception e) {
@@ -548,6 +572,65 @@ public class LeaveDaoImpl implements LeaveDao{
 			e.printStackTrace();
 		}
 		return handinfover.getHandingoverId();
+	}
+	
+	private static final String  EDITTOAPPL="update   leave_appl set status='LAU' where   empid=:empno and status='LEU'";
+	private static final String  MODIFYTOSANC="update  leave_appl set status='LSO' where  empid=:empno and status='LME'";
+	private static final String  EDITTOAPPLREGI="update   leave_register set status='LAU' where   empid=:empno and status='LEU'";
+	private static final String  MODIFYTOSANCREGI="update  leave_register set status='LSO' where  empid=:empno and status='LME'";
+	@Transactional
+	@Override
+	public int laeveNotModified(String empno) throws Exception {
+		logger.info(new Date() + "Inside deleteLeave()");
+		int count =0;
+		try {
+			
+			Query query = manager.createNativeQuery(EDITTOAPPL);
+			query.setParameter("empno",empno);
+			count = (int) query.executeUpdate();
+			Query query1 = manager.createNativeQuery(MODIFYTOSANC);
+			query1.setParameter("empno",empno);
+			count = (int) query1.executeUpdate();
+			Query query2 = manager.createNativeQuery(EDITTOAPPLREGI);
+			query2.setParameter("empno",empno);
+			count = (int) query2.executeUpdate();
+			Query query3 = manager.createNativeQuery(MODIFYTOSANCREGI);
+			query3.setParameter("empno",empno);
+			count = (int) query3.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+    }
+	
+	private static final String UPDATETRANS="update leave_transaction set leaveapplid=:mApplId where leaveapplid=:applid";
+	
+	@Transactional
+	@Override
+	public int updateTransaction(String applid,String modifiedAppId) throws Exception {
+		logger.info(new Date() + "Inside updateTransaction()");
+		int count =0;
+		try {
+			Query query1 = manager.createNativeQuery(UPDATETRANS);
+			query1.setParameter("applid",applid);
+			query1.setParameter("mApplId",modifiedAppId);
+			count = (int) query1.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+    }
+     
+	private static final String LEAVESTATUS="Select a.leaveapplid,c.empname,d.designation,b.leave_name,a.fromdate,a.todate,e.description,a.purleave,a.createddate,a.applid,a.fnan,a.totaldays from leave_appl a , leave_code b,employee c,employee_desig d,leave_status_desc e where b.leave_code=a.leavecode and c.empno=a.empid and c.desigid=d.desigid and a.status=e.status  and a.empid=:empNo order by a.leaveapplid desc";
+    
+	@Override
+	public List<Object[]> LeaveStatusList(String empNo) throws Exception {
+		logger.info(new Date() +"Inside LeaveStatusList");	
+		Query query = manager.createNativeQuery(LEAVESTATUS);
+		query.setParameter("empNo", empNo);
+		List<Object[]> getAppliedLeave= query.getResultList();
+		return getAppliedLeave;
 	}
 	
 }

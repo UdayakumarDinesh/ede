@@ -499,16 +499,16 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			                        	 <input type="hidden" value="<%=empNo%>" name="EmpNo">
 			                        	 <input type="hidden" value="LEU" name="Type">
 			                        	 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-			                       <button class="btn  btn-sm appl edit-btn" type="submit" name="edit"  value="edit" >
+			                       <button class="btn  btn-sm appl edit-btn" type="submit" name="act"  value="edit" >
 			                         <i class="fa-solid fa-pen"></i>
 			                       </button>
 			                       <%if("LAU".equalsIgnoreCase(Applied.get(0)[5].toString())){%>
-                                        <%if("1".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
-                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
-                                			<i class="fa-solid fa-circle-exclamation"></i>
-                                		</button>
+                                        <%if(!"0".equalsIgnoreCase(Applied.get(0)[8].toString())){%>
+                                            <button class="cancel  btn-danger" type="submit" name="act"   value="cancel" onclick="return confirm('Are you sure To Cancel ?')" >
+                                			<i class="fa-solid fa-trash-can"></i>
+                                		</button>    
                                       <%}else{%>
-                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
+                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="act"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
                                 			<i class="fa-solid fa-trash-can"></i>
                                 		</button>
                                         <%}%>
@@ -551,21 +551,20 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                         <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=sanction.get(0)[5]%></td></tr>
                         
                         <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
-                        <td style="font-size:10px !important;"><form action="edit-leave.htm" class="lv-action" method="post">
-                                		<input type="hidden" value="<%=sanction.get(0)[0]%>" name="appl_id">
-			                        	  <input type="hidden" value="LME" name="Type">
-			                       <button class="btn edit-btn btn-sm appl" type="submit" name="edit"  value="edit" >
-			                         <i class="fa-solid fa-pen"></i>
-			                       </button>
-                                        <%if("1".equalsIgnoreCase(sanction.get(0)[8].toString())){%>
-                                		<button class="btn  btn-danger btn-sm appl" type="submit" name="cancelAfterModifiedWhenItBecomeApplied"  value="cancelAfterModifiedWhenItBecomeApplied"  onclick="return  FunctionToCheckCancel()" formaction="leave-cancel-after-modified" >
-                                			<i class="fa-solid fa-circle-exclamation"></i>
+                        <td style="font-size:10px !important;">
+                                 <form class="lv-action" action="edit-leave.htm" method="POST">
+                                		
+                                		<button class="appl btn-sm  btn-warning" type="submit" name="act"  value="modify">
+                                		    <i class="fa-solid  fa-pen" aria-hidden="true"></i>
                                 		</button>
-                                      <%}else{%>
-                                		<button class="btn    btn-danger btn-sm appl" type="submit" name="delete"  value="delete" onclick="return  FunctionToCheckDelete()" formaction="delete-leave.htm">
-                                			<i class="fa-solid fa-trash-can"></i>
+                                		
+                                		<button class="appl  btn-sm btn-danger" type="submit" name="act"   value="cancel" onclick="return confirm('Are you sure To Cancel ?')" >
+                                			<i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                                 		</button>
-                                        <%}%>
+			                        	 <input type="hidden" value="<%=empNo%>" name="EmpNo">
+			                        	 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+                                		<input type="hidden" value="<%=sanction.get(0)[10]%>" name="appl_id">
+                                		 <input type="hidden" value="LME" name="Type">
 			                       
 			                
 			                 </form>
@@ -644,11 +643,11 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 <td>
                                 	<form class="lv-action" action="edit-leave.htm" method="POST">
                                 		
-                                		<button class="edit  btn-warning" type="submit" name="edit"  value="edit">
+                                		<button class="edit  btn-warning" type="submit" name="act"  value="edit">
                                 		    <i class=" fa fa-2x fa-pencil-square-o" aria-hidden="true"></i>
                                 		</button>
                                 		
-                                		<button class="cancel  btn-danger" type="submit" name="edit" formaction="delete-leave.htm"  value="delete" onclick="return confirm('Are you sure To Delete?')" >
+                                		<button class="cancel  btn-danger" type="submit" name="act" formaction="delete-leave.htm"  value="delete" onclick="return confirm('Are you sure To Delete?')" >
                                 			<i class="fa fa-2x 	 fa-trash-o" aria-hidden="true"></i>
                                 		</button>
                                 		<input type="hidden" value="<%=hlo[10]%>" name="appl_id">
@@ -706,15 +705,17 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	  
 	 
                                 <td>
-                                	<form class="lv-action" action="modifycancel.htm" method="POST">
+                                	<form class="lv-action" action="edit-leave.htm" method="POST">
                                 		
-                                		<button class="edit  btn-warning" type="submit" name="modify"  value="modify">
+                                		<button class="edit  btn-warning" type="submit" name="act"  value="modify">
                                 		    <i class=" fa fa-2x fa-exclamation-circle" aria-hidden="true"></i>
                                 		</button>
                                 		
-                                		<button class="cancel  btn-danger" type="submit" name="cancel"   value="cancel" onclick="return confirm('Are you sure To Delete?')" >
+                                		<button class="cancel  btn-danger" type="submit" name="act"   value="cancel" onclick="return confirm('Are you sure To Cancel ?')" >
                                 			<i class="fa fa-2x 	 fa-times-circle-o" aria-hidden="true"></i>
                                 		</button>
+			                        	 <input type="hidden" value="<%=empNo%>" name="EmpNo">
+			                        	 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
                                 		<input type="hidden" value="<%=hlo[10]%>" name="appl_id">
                                 		 <input type="hidden" value="LME" name="Type">
                                 	</form>

@@ -50,5 +50,9 @@ public interface LeaveDao {
 	public int deleteLeave(ApprovalDto dto)throws Exception;
 	public Object[] getLeaveData(String applid) throws Exception;
 	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception;
-	
+	public int laeveNotModified(String empno) throws Exception; 
+	public int deleteLeaveRegiHo(String applid) throws Exception; 
+	public int updateTransaction(String applid,String applIdModified) throws Exception; 
+	public List<Object[]> LeaveStatusList(String empNo)throws Exception;
+	public List<String> getRegisterYrs(String EmpNo, String yr) throws Exception;
 }

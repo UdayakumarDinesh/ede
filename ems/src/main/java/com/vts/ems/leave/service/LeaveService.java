@@ -43,5 +43,12 @@ public interface LeaveService {
 	public Object[] getLeaveData(String applid) throws Exception;
 	public int getUpdateAppl(ApprovalDto dto)throws Exception;
 	public int getUpdateRegister(ApprovalDto dto)throws Exception;	
-
+	public int getCancelLeave(ApprovalDto dto)throws Exception;
+	public int laeveNotModified(String empno) throws Exception; 
+	public int deleteLeaveRegiHo(String applid) throws Exception;
+	public List<Object[]> LeaveStatusList(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalDir(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalDirRecc(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalDirNR(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalAdm(String empNo)throws Exception;
 }

@@ -20,4 +20,6 @@ public class LeaveApplyDto {
 	   private String HandingOverEmpid;
 	   private String UserId;
 	   private String ActEmpNo;
+	   private String ApplId;
+	   private String Type;
 }

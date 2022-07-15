@@ -113,11 +113,11 @@
         </table>
          <% List<Object[]> transleave=(List<Object[]>)request.getAttribute("trans" );%>
         <%for(Object[] obj:transleave ){
-	
+	      if(!"LUE".equals(obj[6].toString())){
          %>
         <span><b> <%=obj[5] %> : </b>   <%=obj[1]%>, <%=obj[2]%>  <b> On </b> <%=obj[3] %>   </span><br>
         
-        <%} %>
+        <%}} %>
         <br>
         <br>
           

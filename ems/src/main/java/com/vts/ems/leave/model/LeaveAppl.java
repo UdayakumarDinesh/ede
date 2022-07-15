@@ -29,7 +29,7 @@ public class LeaveAppl {
 	 private String DivId;
 	 private String LeaveCode;
 	 private String FnAn;
-	 private String ApplId;
+	 private String applId;
 	 private String Ltc;
 	 private String Status;
 	 private String Remarks;

@@ -93,6 +93,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
     List<Object[]> emplist=(List<Object[]>)request.getAttribute("EmpList");
     LeaveRegister register=(LeaveRegister)request.getAttribute("register");
     String empNo=(String)request.getAttribute("EmpNo");
+    String type=(String)request.getAttribute("type");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
     long roleid=(Long)session.getAttribute("FormRole");
 	   %>	
@@ -213,7 +214,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                  <!-- // reset apply and check button -->
 	                    </div>
 	                  <div class="card-body">
-                           <form action="apply-leave-add.htm" method="post">
+                           <form action="edited-leave.htm" method="post">
 	                    
 	                    
 	                    <!-- Leave Type-->
@@ -361,8 +362,8 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                        </div>    
 	                    </div>
 	                    <!-- /. Purpose of leave:-->
-	                    
-	                    
+	                     <input  type="hidden" name="appl_id"  value="<%=leav[10]%>">
+	                    <input  type="hidden" name="type"  value="<%=type%>">
 	                    <input  type="hidden" name="empNo"  value="<%=empNo%>">
 	                   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 	                    <!-- Leave address -->
@@ -417,8 +418,8 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <div class="form-group">
 	                    	<div class="row">
 	                    		<div class="col-sm-1"></div>
-	                    		<div class="col-sm-2">
-	                    			<button class="btn  btn-block reset-btn" type="reset" onclick="resetform()" >Reset</button>
+	                    		<div class="col-sm-2" align="right">
+	                    			 <label for="submit">Action:</label>
 	                    		</div>
 	                    		
 	                    		<div id="submit" class="col-sm-8">
@@ -612,7 +613,6 @@ function toDatefun()
 }
 
 $(document).ready(function(){
-
 	$("#submit").hide();
 	$("#hours").hide();
 	$("#anorfn").prop("disabled", true);

@@ -169,6 +169,7 @@ public class LeaveController {
 			 if(EmpNo==null) {
 				 EmpNo=(String)ses.getAttribute("EmpNo");
 			 }
+			 service.laeveNotModified(EmpNo);
 			 req.setAttribute("EmpNo",EmpNo);
 			 req.setAttribute("EmpList", service.EmployeeList());
 			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
@@ -345,6 +346,7 @@ public class LeaveController {
 				 redir.addAttribute("result", "Refresh Not Allowed");
 					return "redirect:/LeaveApply.htm";
 			 }
+			 service.laeveNotModified(EmpNo);
 			 req.setAttribute("EmpNo",EmpNo);
 			 req.setAttribute("EmpList", service.EmployeeList());
 			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
@@ -375,6 +377,8 @@ public class LeaveController {
 			yr=sdf.getCurrentYear();
 			empNo=(String)ses.getAttribute("EmpNo");
 			}
+			
+			service.laeveNotModified(empNo);
 			req.setAttribute("register", service.RegisterOpening(empNo,yr));
 		    req.setAttribute("RegisterList", service.LeaveRegisterList(empNo,yr));
 		    req.setAttribute("EmpList", service.EmpList());
@@ -476,26 +480,57 @@ public class LeaveController {
 		try {
 			String EmpNo=req.getParameter("EmpNo");
 			String applid = req.getParameter("appl_id");
+			String type=req.getParameter("Type");
 			req.setAttribute("EmpNo",EmpNo);
 			Object[] obj=service.getLeaveData(applid);
-			 if(obj[8].toString().equals("LAU")&&"LEU".equals(req.getParameter("Type"))) {
-				 ApprovalDto dto=new ApprovalDto();
-				 dto.setApplId(applid);
-				 dto.setStatus(req.getParameter("Type"));
-				 service.getUpdateAppl(dto);
-				 service.getUpdateRegister(dto);
-			 }else if("LME".equals(req.getParameter("Type"))&&(obj[8].toString().equals("LSO")||obj[8].toString().equals("LDO"))) {
-				 ApprovalDto dto=new ApprovalDto();
-				 dto.setApplId(applid);
-				 dto.setStatus(req.getParameter("Type"));
-				 service.getUpdateAppl(dto);
-				 service.getUpdateRegister(dto);
+			 if(obj[8].toString().equals("LAU")&&"LEU".equals(type)) {
+                   if("cancel".equals(req.getParameter("act"))) {
+                	   ApprovalDto dto=new ApprovalDto();
+                       dto.setApplId(applid);
+                       dto.setEmpNo(EmpNo);
+               		   dto.setUserName(UserId);
+               	    int	result= service.getCancelLeave(dto);
+             		redir.addFlashAttribute("EmpNo",dto.getEmpNo());
+            		if(result>0) {
+            			redir.addAttribute("result","Leave Cancelled Successfull");
+            		}else{
+            			redir.addAttribute("resultfail","Leave Cancel Unsuccessful");
+            		}
+				    }else {
+					 ApprovalDto dto=new ApprovalDto();
+					 dto.setApplId(applid);
+					 dto.setStatus(req.getParameter("Type"));
+					 service.getUpdateAppl(dto);
+					 service.getUpdateRegister(dto);
+				   }
+			 }else if("LME".equals(type)&&(obj[8].toString().equals("LSO")||obj[8].toString().equals("LDO"))) {
+				 if("cancel".equals(req.getParameter("act"))) {
+					    ApprovalDto dto=new ApprovalDto();
+					       dto.setApplId(applid);
+	                       dto.setEmpNo(EmpNo);
+	               		   dto.setUserName(UserId);
+	               		int	result= service.getCancelLeave(dto);
+	             		redir.addFlashAttribute("EmpNo",dto.getEmpNo());
+	            		if(result>0) {
+	            			redir.addAttribute("result","Leave Cancelled Successfull");
+	            		}else{
+	            			redir.addAttribute("resultfail","Leave Cancel Unsuccessful");
+	            		}
+				 }else {
+					 ApprovalDto dto=new ApprovalDto();
+					 dto.setApplId(applid);
+					 dto.setStatus(req.getParameter("Type"));
+					 service.getUpdateAppl(dto);
+					 service.getUpdateRegister(dto);
+				 }
 			 }else {
 				 redir.addFlashAttribute("EmpNo",EmpNo);
 				 redir.addAttribute("resultfail","Leave Modification Not Allowed");
 				 return "redirect:/applyLeaveRedirect.htm";
 			 }
+			 req.setAttribute("type",type);
 			 req.setAttribute("leavedetails",obj);
+			 req.setAttribute("EmpList", service.EmployeeList());
 			 req.setAttribute("empdetails", service.EmpDetails(EmpNo));
 			 req.setAttribute("officerdetails", service.OfficerDetails(EmpNo));
 			 req.setAttribute("leaveType", service.LeaveCode(EmpNo));
@@ -516,22 +551,105 @@ public class LeaveController {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside edit-leave.htm"+UserId);
 		try {
-		ApprovalDto dto=new ApprovalDto();
+	    LeaveApplyDto dto=new LeaveApplyDto();
+	    dto.setType(req.getParameter("type"));
         dto.setApplId(req.getParameter("appl_id"));
-        dto.setEmpNo(req.getParameter("EmpNo"));
-		dto.setUserName(UserId);
-		int result = service.deleteLeave(dto);
+		dto.setEmpNo(req.getParameter("empNo"));
+		dto.setLTC(req.getParameter("elcash"));
+		dto.setFromDate(req.getParameter("startdate"));
+		dto.setToDate(req.getParameter("enddate"));
+		dto.setLeaveType(req.getParameter("leavetypecode"));
+		dto.setHalfOrFull(req.getParameter("fullhalf"));
+		dto.setHours(req.getParameter("hours"));
+		dto.setAnFN(req.getParameter("anfn"));
+		dto.setPurLeave(req.getParameter("leavepurpose"));
+		dto.setLeaveAddress(req.getParameter("leaveadd"));
+		dto.setRemarks(req.getParameter("remark"));
+		dto.setHandingOverEmpid(req.getParameter("HandingOverEmpid"));
+		dto.setUserId(UserId);
+		dto.setActEmpNo((String)ses.getAttribute("EmpNo"));
+		service.deleteLeaveRegiHo(dto.getApplId());
+		String[] Result = service.applyLeaveAdd(dto);
 		redir.addFlashAttribute("EmpNo",dto.getEmpNo());
-		if(result>0) {
-			redir.addAttribute("result","Leave Deleted Successfull");
-		}else{
-			redir.addAttribute("resultfail","Leave Delete Unsuccessful");
+		if("Pass".equals(Result[1])) {
+			if(dto.getType().equals("LEU")) {
+			redir.addAttribute("result","Leave Updated Successfully");
+			}else if(dto.getType().equals("LME")) {
+			redir.addAttribute("result","Leave Modified Successfully");
+			}
+     	}else if("Fail".equals(Result[1])) {
+			redir.addAttribute("resultfail",Result[0]);
 		}
 		}
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside edit-leave.htm"+UserId, e);
 	       }
-		return "leave/LeaveEdit";
+		return "redirect:/applyLeaveRedirect.htm";
 	}
+	
+	@RequestMapping(value = "LeaveStatusList.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveStatusList(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveStatusList.htm"+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "LeaveStatusList_htm");
+			String empNo=empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("StatusList", service.LeaveStatusList(empNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside LeaveStatusList.htm"+UserId, e);
+	       }
+	   return "leave/LeaveStatusList";
+
+	}
+	
+	@RequestMapping(value = "/leavestatus.htm")
+	public String leaveStatus(HttpServletRequest req) {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside leavestatus.htm"+UserId);
+		String LeaveApplId = req.getParameter("applId");
+		try {
+		req.setAttribute("print", service.LeavePrint(LeaveApplId));
+		req.setAttribute("trans", service.LeaveTransaction(LeaveApplId));
+		}
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside leavestatus.htm"+UserId, e);
+	       }
+	return "leave/LeaveStatus";	
+	}
+	
+	@RequestMapping(value = "LeaveApprovalAdm.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveApprovalAdm(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveApprovalAdm.htm"+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "LeaveApprovalAdm_htm");
+			String empNo=empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside LeaveApprovalAdm.htm"+UserId, e);
+	       }
+	   return "leave/LeaveApprovalAdm";
+
+	}
+	
+	@RequestMapping(value = "LeaveApprovalDir.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveApprovalDir(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveApprovalDir.htm"+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "LeaveApprovalDir_htm");
+			String empNo=empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("LeaveApprovalDir", service.LeaveApprovalDir(empNo));
+		    req.setAttribute("LeaveApprovalDirRecc", service.LeaveApprovalDirRecc(empNo));
+		    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside LeaveApprovalDir.htm"+UserId, e);
+	       }
+	   return "leave/LeaveApprovalDir";
+
+	}	
 
 }
