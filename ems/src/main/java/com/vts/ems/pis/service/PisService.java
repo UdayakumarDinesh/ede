@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -92,7 +93,7 @@ public interface PisService {
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
-	public int FamilyMemDetailsForward(String formid) throws Exception;
+	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String Remarks) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
 	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
@@ -106,7 +107,9 @@ public interface PisService {
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
 	public Object[] GetFamFormData(String familyformid) throws Exception;
 	public int FamilyMemberDelete(String familydetailsid) throws Exception;
-	public int IncFormReturn(String familyformid, String remarks) throws Exception;
 	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
 	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
+	public List<Object[]> EmpFamMembersList(String empid) throws Exception;
+	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
+	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception;
 }

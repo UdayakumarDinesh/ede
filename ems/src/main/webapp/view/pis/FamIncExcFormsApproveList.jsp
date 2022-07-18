@@ -84,7 +84,7 @@
 								
 								<td><%=DateTimeFormatUtil.SqlToRegularDate(form[4].toString()) %></td>
 								<td>
-									<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepAdmissionCreateView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+									<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 										<i class="fa-solid fa-eye"></i>
 									</button>			
 									<input type="hidden" name="empid" value="<%=form[1]%>">

@@ -73,6 +73,9 @@ public class CHSSController {
 	@Autowired
 	AdminService adminservice;
 	
+	@Autowired
+	EmsFileUtils emsfileutils ;
+	
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "CHSSDashboard.htm" )
 	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
@@ -1434,7 +1437,7 @@ public class CHSSController {
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	       
 	       
-	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        
 	        File f=new File(path +File.separator+ filename+".pdf");
 	        FileInputStream fis = new FileInputStream(f);
@@ -2195,7 +2198,7 @@ public class CHSSController {
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
 	        
-	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
@@ -2512,7 +2515,7 @@ public class CHSSController {
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
 	        
-	        EmsFileUtils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
 	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");

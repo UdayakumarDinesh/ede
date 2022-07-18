@@ -24,6 +24,8 @@ import org.springframework.stereotype.Repository;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.login.Login;
+import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
@@ -1362,20 +1364,41 @@ public class PisDaoImpl implements PisDao {
 	
 	private static final String UPDATEMEMBERSTATUS = "UPDATE  pis_emp_family_form SET FormStatus = :status ,ForwardedDateTime = :ForwardedDateTime WHERE FamilyFormId = :formid "; 
 	@Override
-	public int UpdateMemberStatus(String formid, String status)throws Exception
+	public long UpdateMemberStatus(PisEmpFamilyForm famform)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO UpdateMemberStatus");
 		try {
-		    Query query=manager.createNativeQuery(UPDATEMEMBERSTATUS);
-		    query.setParameter("formid", formid);
-		    query.setParameter("status", status);  	 
-	        query.setParameter("ForwardedDateTime", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
-	        return query.executeUpdate();
+			manager.persist(famform);	
+			manager.flush();
+			
+			return famform.getFamilyFormId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
 		
+	}
+	
+	
+	
+	@Override
+	public PisEmpFamilyForm getPisEmpFamilyForm(String familyformid) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPisEmpFamilyForm");
+		PisEmpFamilyForm famform = null;
+		try {
+			
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<PisEmpFamilyForm> cq = cb.createQuery(PisEmpFamilyForm.class);
+			cq.from(PisEmpFamilyForm.class);
+
+			TypedQuery<PisEmpFamilyForm> allquery = manager.createQuery(cq);
+			famform = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return famform;
 	}
 	
 	
@@ -1458,20 +1481,13 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String FAMILYMEMCONFIRM = "UPDATE pis_emp_family_form SET ApprovedBy = :empid , ApprovedDateTime = :ApprovedDateTime , FormStatus ='A'  WHERE FamilyFormId=:formid"; 
 	private static final String FAMTABLEUPDATE = "UPDATE pis_emp_family_details SET ModifiedBy=:username ,ModifiedDate = :ModifiedDate, IsActive=1  WHERE Incformid=:formid";
 	@Override
 	public int FamilyMemIncConfirm(String formid, String empid,String username)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO UpdateMemberStatus");
 		try {
-		    Query query=manager.createNativeQuery(FAMILYMEMCONFIRM);
-		    query.setParameter("formid", formid);
-		    query.setParameter("empid", empid);  	 
-		    query.setParameter("ApprovedDateTime", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
-	        query.executeUpdate();
-	        	        
-	        query=manager.createNativeQuery(FAMTABLEUPDATE);
+		    Query query=manager.createNativeQuery(FAMTABLEUPDATE);
 		    query.setParameter("formid", formid);
 		    query.setParameter("username", username);
 		    query.setParameter("ModifiedDate", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
@@ -1533,22 +1549,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		
 	}
 	
-	private static final String INCFORMRETURN = "UPDATE pis_emp_family_form SET formstatus = 'R', Remarks = :remarks WHERE familyformid= :familyformid"; 
-	@Override
-	public int IncFormReturn(String familyformid, String remarks)throws Exception
-	{
-		logger.info(new Date() +"Inside DAO FamilyMemberDelete");
-		try {
-		    Query query=manager.createNativeQuery(INCFORMRETURN);
-		    query.setParameter("familyformid", familyformid);
-		    query.setParameter("remarks", remarks);
-	        return query.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
-		
-	}
+	
 	
 	private static final String  EMPBLOODGROPUEDIT = "UPDATE employee_details SET bloodgroup  =:bloodgroup WHERE empno=:empno";
 	
@@ -1568,6 +1569,96 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		
 	}
 	
+	@Override
+	public long NotificationAdd(EMSNotification notification ) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO NotificationAdd");
+		try {
+			manager.persist(notification);
+			manager.flush();
+			
+			return notification.getNotificationId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String LOGINTYPEEMPDATA="SELECT loginid, empid, username, logintype FROM login WHERE isactive=1 AND  logintype=:logintype ";
+	
+	@Override
+	public List<Object[]> loginTypeEmpData(String logintype) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO loginTypeEmpData");
+		Query query =manager.createNativeQuery(LOGINTYPEEMPDATA);
+		query.setParameter("logintype", logintype);
+		List<Object[]> result = new ArrayList<>();
+		try {
+			result = (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+private static final String EMPFAMMEMBERSLIST="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND fd.empid = :empid";
+	
+	@Override
+	public List<Object[]> EmpFamMembersList(String empid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EmpFamMembersList");
+		Query query =manager.createNativeQuery(EMPFAMMEMBERSLIST);
+		query.setParameter("empid", empid);
+		List<Object[]> result = new ArrayList<>();
+		try {
+			result = (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private static final  String GETEXCFORMMEMBERSLIST="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus,a.med_dep_from  FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff WHERE a.relation_id=b.relation_id AND a.isactive=1 AND ff.Familyformid = a.ExcFormId AND  a.Excformid = :formid";
+	
+	@Override
+	public List<Object[]> GetExcFormMembersList(String formid) throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO GetExcFormMembersList");
+		try {
+			Query query = manager.createNativeQuery(GETEXCFORMMEMBERSLIST);
+			query.setParameter("formid",formid);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	private static final  String ADDMEMBERTOEXCFORM="UPDATE pis_emp_family_details SET ExcFormId =:ExcFormId , ExcComment =:ExcComment ,ExcDate=:ExcDate, Excfilepath =:Excfilepath  WHERE  family_details_id= :familydetailsid";
+	
+	@Override
+	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO AddMemberToExcForm");
+		try {
+			Query query = manager.createNativeQuery(ADDMEMBERTOEXCFORM);
+			query.setParameter("ExcFormId",formdto.getExcFormId());
+			query.setParameter("ExcComment",formdto.getComment());
+			query.setParameter("ExcDate",formdto.getExcDate());
+			query.setParameter("Excfilepath",formdto.getExcFilePath());
+			query.setParameter("familydetailsid",formdto.getFamilyDetailsId());
+			return query.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 	
 }
 	

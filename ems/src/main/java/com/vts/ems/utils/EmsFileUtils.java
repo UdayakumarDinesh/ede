@@ -3,6 +3,7 @@ package com.vts.ems.utils;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -18,13 +19,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 
+@Component 
 public class EmsFileUtils 
 {
 	@Value("${LabCode}")
-	private static String LabCode;
+	private String labcode;
 	 
 	
-	public static void addWatermarktoPdf(String pdffilepath,String newfilepath) throws Exception
+	public void addWatermarktoPdf(String pdffilepath,String newfilepath) throws Exception
 	{
 		File pdffile = new File(pdffilepath);
 		File tofile = new File(newfilepath);
@@ -43,7 +45,7 @@ public class EmsFileUtils
 		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
 		            double rotationDeg = 50d;
 		            double rotationRad = Math.toRadians(rotationDeg);
-		            Paragraph watermark = new Paragraph(LabCode.toUpperCase())
+		            Paragraph watermark = new Paragraph(labcode.toUpperCase())
 		                    .setFont(helvetica)
 		                    .setFontSize(150f)
 		                    .setTextAlignment(TextAlignment.CENTER)

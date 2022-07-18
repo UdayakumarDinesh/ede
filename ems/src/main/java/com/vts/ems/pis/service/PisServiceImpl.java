@@ -29,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ibm.icu.impl.UResource.Array;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.dao.PisDao;
+import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -767,11 +769,80 @@ public class PisServiceImpl implements PisService
 		
 		
 		@Override
-		public int FamilyMemDetailsForward(String formid) throws Exception
+		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks) throws Exception
 		{
 			
+			long count=0;
 			
-			return dao.UpdateMemberStatus(formid, "F" );
+			Object[] formdata =  dao.GetFamFormData(formid);
+			String formtype= formdata[2].toString();
+			
+			PisEmpFamilyForm familyform =dao.getPisEmpFamilyForm(formid);
+			
+			familyform.setFormStatus(action);
+			familyform.setRemarks(Remarks);
+			
+			
+			EMSNotification notify = new EMSNotification();
+			if(action.equalsIgnoreCase("F")) 
+			{
+				familyform.setForwardedDateTime(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()).toString());
+				
+				List<Object[]> loginTypeEmpData = dao.loginTypeEmpData("P");
+				if(loginTypeEmpData.size()>0) 
+				{
+					notify.setNotificationUrl("FamFormsApproveList.htm");
+					notify.setNotificationDate(LocalDate.now().toString());
+					notify.setEmpId(Long.parseLong(loginTypeEmpData.get(0)[1].toString()));
+					notify.setNotificationBy(Long.parseLong(formdata[1].toString()));
+					
+					if(formtype.equalsIgnoreCase("I")) {
+						notify.setNotificationMessage("Family Member(s) Inclusion Form Recieved");
+					}else if(formtype.equalsIgnoreCase("E")) {
+						notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
+					}
+					
+				}
+			}else if(action.equalsIgnoreCase("R") || action.equalsIgnoreCase("A")) 
+			{
+				
+				if(action.equalsIgnoreCase("A")) {
+					familyform.setApprovedBy(Long.parseLong(empid));
+					familyform.setApprovedDateTime(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()).toString());
+					FamilyMemIncConfirm(formid, empid, usernmae);
+				}
+				
+				notify.setNotificationUrl("FamIncExcFwdList.htm");
+				notify.setNotificationDate(LocalDate.now().toString());
+				notify.setEmpId(Long.parseLong(formdata[1].toString()));
+				notify.setNotificationBy(Long.parseLong(empid));
+
+				if(formtype.equalsIgnoreCase("I")) {
+					if(action.equalsIgnoreCase("R")) {
+						notify.setNotificationMessage("Family Member(s) Inclusion Form Returned");
+					}else if(action.equalsIgnoreCase("A")) {
+						notify.setNotificationMessage("Family Member(s) Inclusion Form Approved");
+					}
+				}else if(formtype.equalsIgnoreCase("E")) {
+					if(action.equalsIgnoreCase("R")) {
+						notify.setNotificationMessage("Family Member(s) Exclusion Form Returned");
+					}else if(action.equalsIgnoreCase("A")) {
+						notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
+					}
+				}
+			}
+				
+			
+			count =dao.UpdateMemberStatus(familyform);
+			
+			notify.setIsActive(1);
+			notify.setCreatedBy(usernmae);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			if(notify.getEmpId()>0 && count>0) {
+				dao.NotificationAdd(notify);
+			}
+		
+			return count;
 		}
 		
 		
@@ -872,14 +943,27 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public int IncFormReturn(String familyformid, String remarks)throws Exception
-		{
-			return dao.IncFormReturn(familyformid, remarks);
-		}
-		
-		@Override
 		public int EmpBloodGropuEdit(String empno , String bloodgroup)throws Exception
 		{
 			return dao.EmpBloodGropuEdit(empno, bloodgroup);
 		}
+		
+		@Override
+		public List<Object[]> EmpFamMembersList(String empid) throws Exception
+		{
+			return dao.EmpFamMembersList(empid);
+		}
+		
+		@Override
+		public List<Object[]> GetExcFormMembersList(String formid) throws Exception 
+		{
+			return dao.GetExcFormMembersList(formid);
+		}
+		
+		@Override
+		public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception 
+		{
+			return dao.AddMemberToExcForm(formdto);
+		}
+		
 }
