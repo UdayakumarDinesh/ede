@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>   
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>   
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@page import="java.util.List"%>
 <!DOCTYPE html>
@@ -308,18 +307,14 @@ th,td
 							<td>	
 								<button form ="add-form" type="submit" class="btn btn-sm add-btn" onclick="return confirm('Are You Sure to Add?');">add</button>
 								<input form ="add-form" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								<%if(FwdMemberDetails.size()>0){ %>
 								<input form ="add-form" type="hidden" name="formid" value="<%=formid%>"/>
-								<%}else{ %>
-								<input form ="add-form" type="hidden" name="formid" value="0"/>
-								<%} %>
 							</td>
 						</tr>
 					<%} %>
 				</table>
 				<% if(isapproval!=null && isapproval.equalsIgnoreCase("N")){ %>
 				<p style="text-indent: 50px;">
-					<input type="checkbox"  class="TCBox" > &nbsp;
+					
 					I hereby undertake to declare at the beginning of each calendar year and as soon as necessary
 					thereafter about the eligibility or otherwise to the CHSS benefits of myself and my parents/ family
 					members whose names are mentioned above. It shall be my responsibility to notify the Unit when any
@@ -333,7 +328,7 @@ th,td
 				<div align="center"> <h4 style="text-decoration: underline; ">Instructions for the employee</h4></div>
 					<ol class="list-group">
 						<li class="list-group-item">
-							<p><input type="checkbox"  class="TCBox" > &nbsp; 
+							<p> 
 							<b > The term Parents for the purpose of CHSS benefits does not include 'Step Parents'. Parent
 							should have actually resided at least for 60 days with the employee before they are proposed for
 							inclusion under the CHSS, and should continue to reside with the employee and be mainly
@@ -346,14 +341,14 @@ th,td
 							of CHSS facilities.</p>
 						</li>
 						<li class="list-group-item">
-							<p><input type="checkbox"  class="TCBox" > &nbsp;
+							<p>
 								Married / divorced or legally separated daughters of employees, though dependant on the
 								employee, are not eligible for medical benefits under CHSS. In the case of adopted children, only
 								legally adopted sons and daughters are eligible for the benefits of the CHSS.
 							</p>
 						</li>
 						<li class="list-group-item">
-							<p><input type="checkbox"  class="TCBox" > &nbsp;
+							<p>
 								If any of the family members / dependants for whom the registration is sought is eligible to
 								receive medical aid/ facility, cash subsidy, cash allowances or reimbursement for medical care from
 								sources other than the CHSS of SITAR Society, particulars of such benefits should be furnished on a
@@ -361,14 +356,14 @@ th,td
 							</p>
 						</li>
 						<li class="list-group-item">
-							<p><input type="checkbox"  class="TCBox" > &nbsp;
+							<p>
 								If any of the members of the family proposed for registration is engaged in trade/business or is employed outside SITAR on part / full time basis, full particulars of such occupation should be
 								furnished on a separate sheet duly supported by documentary evidence so that their eligibility for
 								CHSS beneficiaries could be determined.
 							</p>
 						</li>
 						<li class="list-group-item">
-							<p><input type="checkbox"  class="TCBox" > &nbsp;
+							<p>
 								Employees giving false or misleading information will be liable for disciplinary action.
 							</p>
 						</li>
@@ -377,10 +372,13 @@ th,td
 				</div>
 				
 				<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependant </b> </div> 
-				<p style="text-indent: 21px; "><input type="checkbox"  class="TCBox" > &nbsp;
+				<p style="text-indent: 21px; ">
 				I certify that the family members whose names are mentioned above are mainly dependant on and
 					residing with me.
 				</p>
+				<br><br>
+				
+				 &nbsp; &nbsp; &nbsp;<input type="checkbox"  class="TCBox" > &nbsp; I have read the instructions, terms and condition mentioned above and I agree to them.
 				<%} %>
 				<div class="row" align="left"> 
 					<div class="col-md-12">
@@ -418,8 +416,8 @@ th,td
 					<%} %>
 					</div>
 				</div>
-			
-				<form action="FamilyMembersForward.htm" method="Post">	
+				<br><br>
+				<form action="FamilyFormForwardRet.htm" method="Post">	
 					<div class="row">
 						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
 							<%if(formdetails!=null && formdetails[10]!=null && !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
@@ -432,22 +430,21 @@ th,td
 					</div>
 					<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="formid" formnovalidate="formnovalidate" value="<%=formid%>" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
+							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="action" formnovalidate="formnovalidate" value="F" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
 						</div>
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<input type="hidden" name="empid" value="<%=empid %>">
 					
 					<% } %>
 					
 					<%if(status.equalsIgnoreCase("F") && isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyMembersFormApprove.htm" name="familyformid" formnovalidate="formnovalidate" value="<%=formid%>" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
-							<button type="submit" class="btn btn-sm delete-btn" formaction="FamilyIncFormReturn.htm" name="formid" value="<%=formid%>" onclick="return confirm('Are you Sure to Return ?');" >Return</button>
+							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyFormForwardRet.htm" name="action" value="A" formnovalidate="formnovalidate" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+							<button type="submit" class="btn btn-sm delete-btn" formaction="FamilyFormForwardRet.htm" name="action" value="R" onclick="return confirm('Are you Sure to Return ?');" >Return</button>
 						</div>
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<input type="hidden" name="empid" value="<%=empid %>">
 					
 					<% } %>
+					<input type="hidden" name="formid" value="<%=formid%>">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<input type="hidden" name="empid" value="<%=empid %>">
 				</form>
 				<br><br><br><br><br>
 			</div>

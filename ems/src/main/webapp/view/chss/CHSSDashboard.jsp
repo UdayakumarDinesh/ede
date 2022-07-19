@@ -395,9 +395,7 @@
 </div>
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
-		<div class="col-md-3"><!-- <a class="btn btn-sm " href="DependentAdmissionForm.htm" target="_blank"> Form</a> --></div>
-		<!-- <div class="col-md-3"><a class="btn btn-sm " href="DependentAddForm.htm" target="_blank"> Form</a></div>
-		<div class="col-md-3"><a class="btn btn-sm " href="DependentDeleteForm.htm" target="_blank"> Form</a></div> -->
+		<div class="col-md-3"></div>
 		<div class="col-md-5 d-flex justify-content-center">
 			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
 		</div>

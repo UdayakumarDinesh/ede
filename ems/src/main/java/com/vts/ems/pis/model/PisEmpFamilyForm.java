@@ -24,7 +24,7 @@ public class PisEmpFamilyForm implements Serializable {
 	private long Empid;
 	private String FormType;
 	private String FormStatus;
-	private Date ForwardedDateTime;
+	private String ForwardedDateTime;
 	private long ApprovedBy;
 	private String ApprovedDateTime;
 	private String Remarks;
