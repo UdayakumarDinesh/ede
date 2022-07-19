@@ -12,4 +12,5 @@ public class ApprovalDto {
         private String UserName;
         private String ApplId;
         private String Status;
+        private String Type;
 }

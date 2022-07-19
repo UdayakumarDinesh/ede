@@ -2096,8 +2096,8 @@ public class LeaveServiceImpl implements LeaveService{
 			for(int i=0;i<dto.getReject().length;i++) {
 				try {
 					StringBuilder myName = new StringBuilder(dto.getReject()[i].split("_")[1]);
-					myName.setCharAt(1, 'C');
-					dto.setStatus(myName.toString());
+					myName.setCharAt(1, 'N');
+					dto.setStatus(dto.getType().equals("DIR")?"DND":myName.toString());
 					dto.setApplId(dto.getReject()[i].split("_")[0]);
 					dao.getUpdateAppl(dto);
 					dao.getUpdateRegister(dto);
@@ -2187,26 +2187,26 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public List<Object[]> LeaveApprovalDir(String empNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return dao.LeaveApprovalGh(empNo);
 	}
 
 	@Override
 	public List<Object[]> LeaveApprovalDirRecc(String empNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return dao.LeaveApprovalDirRecc(empNo);
 	}
 
 	@Override
 	public List<Object[]> LeaveApprovalDirNR(String empNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.LeaveApprovalDirNR(empNo);
 	}
 
 	@Override
 	public List<Object[]> LeaveApprovalAdm(String empNo) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.LeaveApprovalAdm(empNo);
 	}
 
 	

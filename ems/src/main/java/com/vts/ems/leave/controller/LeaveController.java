@@ -406,7 +406,7 @@ public class LeaveController {
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside GhApprovalList.htm"+UserId, e);
 	       }
-	   return "leave/LeaveGhApproval";
+	   return "leave/LeaveApprovalGh";
 
 	}
 	
@@ -430,11 +430,13 @@ public class LeaveController {
 	public String leaveApprovals(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside leaveApprovals.htm"+UserId);
+		 ApprovalDto dto=new ApprovalDto();
+		 String returnType=null;
 		try {
-        ApprovalDto dto=new ApprovalDto();
         dto.setApprove( req.getParameterValues("approve"));
         dto.setReject( req.getParameterValues("reject"));
         dto.setEmpNo((String)ses.getAttribute("EmpNo"));
+        dto.setType(req.getParameter("Type"));
 		dto.setUserName(UserId);
 		int result=service.getApproved(dto,req);
 		if(result>0) {
@@ -446,7 +448,14 @@ public class LeaveController {
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside leaveApprovals.htm"+UserId, e);
 	       }
-		return "redirect:/LeaveApproval.htm";	
+		if(dto.getType().equals("GH")) {
+			returnType="redirect:/LeaveApproval.htm";
+		}else if(dto.getType().equals("DIR")) {
+			returnType="redirect:/LeaveApprovalDir.htm";
+		}else if(dto.getType().equals("ADM")) {
+			returnType="redirect:/LeaveApprovalAdm.htm";
+		}
+		return returnType;
 		}
 	
 	@RequestMapping(value = "/delete-leave.htm", method = RequestMethod.POST)

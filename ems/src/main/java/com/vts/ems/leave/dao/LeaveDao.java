@@ -55,4 +55,7 @@ public interface LeaveDao {
 	public int updateTransaction(String applid,String applIdModified) throws Exception; 
 	public List<Object[]> LeaveStatusList(String empNo)throws Exception;
 	public List<String> getRegisterYrs(String EmpNo, String yr) throws Exception;
+	public List<Object[]> LeaveApprovalDirRecc(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalDirNR(String empNo)throws Exception;
+	public List<Object[]> LeaveApprovalAdm(String empNo)throws Exception;
 }

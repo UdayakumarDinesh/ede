@@ -8,7 +8,7 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <meta charset="ISO-8859-1">
-<title>Approval</title>
+<title>Dir Approval</title>
 <style type="text/css">
 .app:hover{background-color:#008000; color:white;}
 .app{ border: 1px solid #2E8B57 ; padding: 2px 2px 2px 2px; width:50%;  border-radius: 5px;}
@@ -41,7 +41,7 @@
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="LeaveDashBoard.htm">Leave</a></li>
-						<li class="breadcrumb-item active " aria-current="page">GH Approval</li>
+						<li class="breadcrumb-item active " aria-current="page">Director Approval</li>
 					</ol>
 				</div>
 			</div>
@@ -69,14 +69,14 @@ String ses=(String)request.getParameter("result");
     <% int applied=0;
     int modified=0;
     int cancelled=0;
-    List<Object[]> ghlist=(List<Object[]>)request.getAttribute("GhApprovalList");
+    List<Object[]> ghlist=(List<Object[]>)request.getAttribute("LeaveApprovalDir");
     for(Object[] ls:ghlist){ 
-    if("LAU".equalsIgnoreCase(ls[15].toString())||"LRO".equalsIgnoreCase(ls[15].toString())||"LSO".equalsIgnoreCase(ls[15].toString()) ){
+    if("LRO".equalsIgnoreCase(ls[15].toString())){
     	applied++;
-    }else if("LAM".equalsIgnoreCase(ls[15].toString())||"LRM".equalsIgnoreCase(ls[15].toString())||"LSM".equalsIgnoreCase(ls[15].toString()) ){
+    }else if("LMO".equalsIgnoreCase(ls[15].toString())){
     	modified++;
-    }else  if("LCU".equalsIgnoreCase(ls[15].toString())||"LCR".equalsIgnoreCase(ls[15].toString()) ){
-    	
+    }else  if("LCO".equalsIgnoreCase(ls[15].toString())){
+    	cancelled++;
     }
     }
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
@@ -87,7 +87,7 @@ String ses=(String)request.getParameter("result");
 <div class="card">
       <div class="card-header" align="left">
         <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span  style="font-size:14px">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="applcollapse"><span  style="font-size:14px">
           
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
@@ -108,7 +108,7 @@ String ses=(String)request.getParameter("result");
                     <th>Leave Type</th>
                     <th>From : To</th>
                     <th>Applied On</th>
-                    <th>Recommended By</th>
+                    <th>Last Action</th>
                     <th>Comment</th>
                     <th>
                     All <input type="checkbox" id="ghapp"  onclick="changemyapp('ghapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
@@ -119,7 +119,7 @@ String ses=(String)request.getParameter("result");
             <%for(Object[] ls:ghlist){ %>
             <% 
               String Status=ls[15].toString();
-              if("LAU".equalsIgnoreCase(Status)||"LRO".equalsIgnoreCase(Status)||"LSO".equalsIgnoreCase(Status) )
+              if("LRO".equalsIgnoreCase(Status) )
               {
 
             %>
@@ -140,7 +140,7 @@ String ses=(String)request.getParameter("result");
                     
                     <td><%=ls[6] %><br><%=ls[7] %></td>
                     <td><%=ls[12] %><br>for <%=ls[8]%> Day(s)</td> 
-                    <td style="text-align:left;"><%if(ls[9]!=null){out.println(ls[9]);}else{out.println("--");}%></td>
+                    <td style="text-align:left;"><%=ls[17] %><br><%=ls[9] %></td>
                     <td><textarea name="<%=ls[10]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
                     <td> 
         
@@ -168,7 +168,7 @@ String ses=(String)request.getParameter("result");
            </tbody>
      </table>
       <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-      <input type="hidden" id="countresult" value="<%=count%>">
+      <input type="hidden" name="Type" value="DIR">
  </form>
 
 <!-- //Applied  leaves -->
@@ -205,7 +205,7 @@ String ses=(String)request.getParameter("result");
                     <th>Leave Type</th>
                     <th>From : To</th>
                     <th>Applied On</th>
-                    <th>Recommended By</th>
+                    <th>Last Action</th>
                     <th>Comment</th>
                     <th>
                     All <input type="checkbox" id="ghmapp"  onclick="changemyapp('ghmapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
@@ -216,7 +216,7 @@ String ses=(String)request.getParameter("result");
             <%for(Object[] ls:ghlist){ %>
             <% 
               String Status=ls[15].toString();
-              if("LAM".equalsIgnoreCase(Status)||"LRM".equalsIgnoreCase(Status)||"LSM".equalsIgnoreCase(Status) )
+              if("LMO".equalsIgnoreCase(Status) )
               {
 
             %>
@@ -237,7 +237,7 @@ String ses=(String)request.getParameter("result");
                     
                     <td><%=ls[6] %><br><%=ls[7] %></td>
                     <td><%=ls[12] %><br>for <%=ls[8]%> Day(s)</td> 
-                    <td style="text-align:left;"><%if(ls[9]!=null){out.println(ls[9]);}else{out.println("--");}%></td>
+                    <td style="text-align:left;"><%=ls[17] %><br><%=ls[9] %></td>
                     <td><textarea name="<%=ls[10]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
                     <td> 
         
@@ -265,7 +265,7 @@ String ses=(String)request.getParameter("result");
            </tbody>
      </table>
       <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-      <input type="hidden" id="countresult" value="<%=countm%>">
+      <input type="hidden" name="Type" value="DIR">
  </form>
 
 <!-- //Applied  leaves -->
@@ -301,7 +301,7 @@ String ses=(String)request.getParameter("result");
                     <th>Leave Type</th>
                     <th>From : To</th>
                     <th>Applied On</th>
-                    <th>Recommended By</th>
+                    <th>Last Action</th>
                     <th>Comment</th>
                     <th>
                     All <input type="checkbox" id="ghcapp"  onclick="changemyapp('ghcapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
@@ -312,7 +312,7 @@ String ses=(String)request.getParameter("result");
             <%for(Object[] ls:ghlist){ %>
             <% 
               String Status=ls[15].toString();
-              if("LCU".equalsIgnoreCase(Status)||"LCR".equalsIgnoreCase(Status) )
+              if("LCO".equalsIgnoreCase(Status))
               {
 
             %>
@@ -333,7 +333,7 @@ String ses=(String)request.getParameter("result");
                     
                     <td><%=ls[6] %><br><%=ls[7] %></td>
                     <td><%=ls[12] %><br>for <%=ls[8]%> Day(s)</td> 
-                    <td style="text-align:left;"><%if(ls[9]!=null){out.println(ls[9]);}else{out.println("--");}%></td>
+                    <td style="text-align:left;"><%=ls[17] %><br><%=ls[9] %></td>
                     <td><textarea name="<%=ls[10]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
                     <td> 
         
@@ -343,11 +343,7 @@ String ses=(String)request.getParameter("result");
 		<input type="checkbox" class="ghcapp"  id="ResponseSaidCBY<%=ls[10]%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=ls[10]%>')" >
         </span>
         
-         <!-- CBY:checkbox No -->
-        <span class="disapp ghcappdis" style="margin-right: -10px;"> 
-		<label for="ResponseSaidCBN<%=ls[10]%>">DisApprove</label> 
-		<input type="checkbox" class="ghcappdis" id="ResponseSaidCBN<%=ls[10]%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=ls[10]%>')" >
-         </span> 
+
          
           <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
           <input type="hidden" name="leaveCode<%=ls[10]%>" value="<%=ls[3]%>">
@@ -361,24 +357,212 @@ String ses=(String)request.getParameter("result");
            </tbody>
      </table>
       <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-      <input type="hidden" id="countresult" value="<%=countm%>">
+      <input type="hidden" name="Type" value="DIR">
  </form>
 
 <!-- //Applied  leaves -->
 
 
 </div>
-<!-- //Applied  leaves accordion group -->
+<!-- //canceledd  leaves accordion group -->
 
 	   
 	   </div>
+	
+	
+	  <%List<Object[]> relist=(List<Object[]>)request.getAttribute("LeaveApprovalDirRecc"); %>
+	   <div class="card" style="margin-top:7px;">
+      <div class="card-header" align="left" >
+        <h5>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"><span  style="font-size:14px">
+          
+          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
+         
+          </i> 
+           <span class="badge badge-danger badge-counter badge-success" ><%=relist.size()%></span>
+           Recommended Leaves  For Sanction </span></a>
+        </h5>
+      </div>
+  <div id="collapse4" class="card-collapse collapse in" style="padding: 10px;">
+
+<!-- Applied  leaves -->
+<form action="leaveApprovals.htm" method="post">
+   
+        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;">
+            <thead>
+                <tr>
+                    <th>Name &amp; Designation </th>
+                    <th>Leave Type</th>
+                    <th>From : To</th>
+                    <th>Applied On</th>
+                    <th>Last Action</th>
+                    <th>Comment</th>
+                    <th>
+                    All <input type="checkbox" id="reapp"  onclick="changemyapp('reapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
+                </tr>
+            </thead>
+            <tbody>
+            <%int countre=0; %>
+            <%for(Object[] ls:relist){ %>
+            <% 
+
+
+            %>
+             <tr>
+                    <td style="text-align:left;"><%= ls[1]%><br> <%=ls[2]%></td>
+                    <td style="text-align:center;"><button class="btn btn-primary btn-sm btn-outline" formaction="leaveprint.htm" name="applId" value="<%=ls[10]%>" formtarget="_blank"><%=ls[14] %><%if("F".equalsIgnoreCase(ls[4].toString())||"A".equalsIgnoreCase(ls[4].toString())){out.println(" ("+ls[4]+")");} %></button>
+                    <%if(ls[3].toString().equals("0003")){%>
+                    <br>
+                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">MC</a>
+                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">FC</a>
+                    <%}%>
+                    
+                    
+                    </td>
+                    
+                    
+                    
+                    
+                    <td><%=ls[6] %><br><%=ls[7] %></td>
+                    <td><%=ls[12] %><br>for <%=ls[8]%> Day(s)</td> 
+                    <td style="text-align:left;"><%=ls[17] %><br><%=ls[9] %></td>
+                    <td><textarea name="<%=ls[10]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
+                    <td> 
+        
+         <!-- CBY:checkbox yes -->
+        <span class="app reapp">
+		<label for="ResponseSaidCBY<%=countre%>">Approve</label> 
+		<input type="checkbox" class="reapp"  id="ResponseSaidCBY<%=countre%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=count%>')" >
+        </span>
+        
+         <!-- CBY:checkbox No -->
+        <span class="disapp reappdis" style="margin-right: -10px;"> 
+		<label for="ResponseSaidCBN<%=countre%>">DisApprove</label> 
+		<input type="checkbox" class="reappdis" id="ResponseSaidCBN<%=countre%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=count%>')" >
+         </span> 
+         
+          <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
+          <input type="hidden" name="leaveCode<%=ls[10]%>" value="<%=ls[3]%>">
+         <input type="hidden" name="NoDays<%=ls[10]%>" value="<%=ls[8]%>">
+         <input type="hidden" name="Cat_Id<%=ls[10]%>" value="<%=ls[13]%>">
+            </td>
+           </tr>
+           <% ++countre;} %> <!-- if closed -->
+           
+           <% %><!-- for closed -->
+           </tbody>
+     </table>
+      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+      <input type="hidden" name="Type" value="DIR">
+ </form>
+
+<!-- //Recc  leaves -->
+
+
+</div>
+<!-- //Reecc  leaves accordion group -->
+
 	   
+	   </div>   
+	   <%List<Object[]> nrlist=(List<Object[]>)request.getAttribute("LeaveApprovalDirNr"); %>
+	   <div class="card" style="margin-top:7px;">
+      <div class="card-header" align="left">
+        <h5>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5"><span  style="font-size:14px">
+          
+          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
+         
+          </i> 
+           <span class="badge badge-danger badge-counter badge-success" ><% if(nrlist!=null){%><%=nrlist.size()%> <%}else{ %> 0<%} %></span>
+           Not Recommended Leaves  For Sanction </span></a>
+        </h5>
+      </div>
+  <div id="collapse5" class="card-collapse collapse in" style="padding: 10px;">
+
+<!-- Applied  leaves -->
+<form action="leaveApprovals.htm" method="post">
+   
+        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;">
+            <thead>
+                <tr>
+                    <th>Name &amp; Designation </th>
+                    <th>Leave Type</th>
+                    <th>From : To</th>
+                    <th>Applied On</th>
+                    <th>Last Action</th>
+                    <th>Comment</th>
+                    <th>
+                    All <input type="checkbox" id="nrapp"  onclick="changemyapp('nrapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
+                </tr>
+            </thead>
+            <tbody>
+            <%int countnr=0;
+            if(nrlist!=null){
+            for(Object[] ls:nrlist){ 
+            %>
+             <tr>
+                    <td style="text-align:left;"><%= ls[1]%><br> <%=ls[2]%></td>
+                    <td style="text-align:center;"><button class="btn btn-primary btn-sm btn-outline" formaction="leaveprint.htm" name="applId" value="<%=ls[10]%>" formtarget="_blank"><%=ls[14] %><%if("F".equalsIgnoreCase(ls[4].toString())||"A".equalsIgnoreCase(ls[4].toString())){out.println(" ("+ls[4]+")");} %></button>
+                    <%if(ls[3].toString().equals("0003")){%>
+                    <br>
+                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">MC</a>
+                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">FC</a>
+                    <%}%>
+                    
+                    
+                    </td>
+                    
+                    
+                    
+                    
+                    <td><%=ls[6] %><br><%=ls[7] %></td>
+                    <td><%=ls[12] %><br>for <%=ls[8]%> Day(s)</td> 
+                    <td style="text-align:left;"><%=ls[17] %><br><%=ls[9] %></td>
+                    <td><textarea name="<%=ls[10]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
+                    <td> 
+        
+         <!-- CBY:checkbox yes -->
+        <span class="app nrapp">
+		<label for="ResponseSaidCBY<%=count%>">Approve</label> 
+		<input type="checkbox" class="nrapp"  id="ResponseSaidCBY<%=countnr%>" name="approve" value="<%=ls[10]%>_<%=ls[16]%>" onclick="changemyclick('<%=count%>')" >
+        </span>
+        
+         <!-- CBY:checkbox No -->
+        <span class="disapp nrappdis" style="margin-right: -10px;"> 
+		<label for="ResponseSaidCBN<%=countnr%>">DisApprove</label> 
+		<input type="checkbox" class="nrappdis" id="ResponseSaidCBN<%=countnr%>" name="reject" value="<%=ls[10]%>_<%=ls[16]%>"  onclick="changemyclick('<%=count%>')" >
+         </span> 
+         
+          <input type="hidden" name="empid<%=ls[10]%>" value="<%=ls[0]%>"> 
+          <input type="hidden" name="leaveCode<%=ls[10]%>" value="<%=ls[3]%>">
+         <input type="hidden" name="NoDays<%=ls[10]%>" value="<%=ls[8]%>">
+         <input type="hidden" name="Cat_Id<%=ls[10]%>" value="<%=ls[13]%>">
+            </td>
+           </tr>
+           <% ++countnr;}} %> <!-- if closed -->
+           
+           <% %><!-- for closed -->
+           </tbody>
+     </table>
+      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+      <input type="hidden" name="Type" value="DIR">
+ </form>
+
+<!-- //Nr  leaves -->
+
+
+</div>
+<!-- //Nr  leaves accordion group -->
+
+	   
+	   </div>
 	   
 	   </div>
 	   </div>		
 			
 	</div>	
 	<script type="text/javascript">
+	$('#applcollapse').click();
 	function changemyclick(a)
 	{
 	      

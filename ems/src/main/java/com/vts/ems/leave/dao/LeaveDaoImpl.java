@@ -58,10 +58,13 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU','LR1','LR2','LR3','LRO','LVA') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
     private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
-    private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND (:fromDate BETWEEN a.fromdate AND a.todate or :toDate BETWEEN a.fromdate AND a.todate)";   
+    private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND  (a.fromdate BETWEEN  :fromDate AND :toDate OR a.todate BETWEEN :fromDate AND :toDate)";   
     private static final String LEAVESANC="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LSO','LDO') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String LEAVEYRS="SELECT DISTINCT(YEAR) FROM leave_register WHERE YEAR<=:yr AND empid=:empNo ORDER BY YEAR ASC";
-	@Override
+	private static final String LEAVEDIRRECC="CALL leave_dir_recc(:empNo)";
+	private static final String LEAVEDIRNR="CALL leave_dir_nr(:empNo)";
+	private static final String LEAVEADM="CALL leav_adm(:empNo)";
+    @Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
 		logger.info(new Date() +"Inside PisHolidayList");	
 		Query query = manager.createNativeQuery(HOLIDAYLIST);
@@ -390,7 +393,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		return checkLeave;
 	}
 
-    private static final String LEAVEAPPGH="CALL leave_ra_sa_gh(:empNo)";
+    private static final String LEAVEAPPGH="CALL leave_gh(:empNo)";
 	
 	@Override
 	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
@@ -628,6 +631,36 @@ public class LeaveDaoImpl implements LeaveDao{
 	public List<Object[]> LeaveStatusList(String empNo) throws Exception {
 		logger.info(new Date() +"Inside LeaveStatusList");	
 		Query query = manager.createNativeQuery(LEAVESTATUS);
+		query.setParameter("empNo", empNo);
+		List<Object[]> getAppliedLeave= query.getResultList();
+		return getAppliedLeave;
+	}
+
+
+	@Override
+	public List<Object[]> LeaveApprovalDirRecc(String empNo) throws Exception {
+		logger.info(new Date() +"Inside LeaveApprovalDirRecc");	
+		Query query = manager.createNativeQuery(LEAVEDIRRECC);
+		query.setParameter("empNo", empNo);
+		List<Object[]> getAppliedLeave= query.getResultList();
+		return getAppliedLeave;
+	}
+
+
+	@Override
+	public List<Object[]> LeaveApprovalDirNR(String empNo) throws Exception {
+		logger.info(new Date() +"Inside LeaveApprovalDirNR");	
+		Query query = manager.createNativeQuery(LEAVEDIRNR);
+		query.setParameter("empNo", empNo);
+		List<Object[]> getAppliedLeave= query.getResultList();
+		return getAppliedLeave;
+	}
+
+
+	@Override
+	public List<Object[]> LeaveApprovalAdm(String empNo) throws Exception {
+		logger.info(new Date() +"Inside LeaveApprovalAdm");	
+		Query query = manager.createNativeQuery(LEAVEADM);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
 		return getAppliedLeave;
