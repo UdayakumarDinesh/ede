@@ -110,7 +110,7 @@ p {
 	String consultmainid =(String)request.getAttribute("consultmainid");
 	String tab =(String)request.getAttribute("tab");
 	
-	LocalDate minbilldate = LocalDate.now().minusDays(90); 
+	LocalDate minbilldate = LocalDate.now().minusMonths(3);
 	
 %>
 
@@ -732,7 +732,7 @@ p {
 		    	<div class="row w-100" >
 		    		<div class="col-md-9">
 		    			<form action="CHSSFormEdit.htm" method="post" id="form2">
-							<button type="submit" class="btn btn-sm back-btn" formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" style="background-color: #541690;color: white;" name="claimaction" >
+							<button type="button" class=" btn btn-sm " data-dismiss="modal" aria-label="Close" style="background-color: #541690;color: white;" name="claimaction" >
 								Back	
 							</button>
 							<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F" data-toggle="tooltip" data-placement="top" title="Preview and Forward">

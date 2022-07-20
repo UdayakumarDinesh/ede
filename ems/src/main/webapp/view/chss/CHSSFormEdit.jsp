@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.math.BigInteger"%>
 <%@page import="java.math.MathContext"%>
 <%@page import="java.math.BigDecimal"%>
@@ -182,28 +183,30 @@ th,td
 			</div>
 	</div>	
 	
-	 <div class="page card dashboard-card">
 	
-	<div class="card-body" >
+	
+	<div class="page card dashboard-card">
 		
-	<div align="center">
-		<%String ses=(String)request.getParameter("result"); 
-		String ses1=(String)request.getParameter("resultfail");
-		if(ses1!=null){ %>
-			<div class="alert alert-danger" role="alert">
-				<%=ses1 %>
-			</div>
-			
-		<%}if(ses!=null){ %>
-			
-			<div class="alert alert-success" role="alert">
-				<%=ses %>
-			</div>
-		<%} %>
-	</div>
-				
+			<div align="center">
+					<%String ses=(String)request.getParameter("result"); 
+					String ses1=(String)request.getParameter("resultfail");
+					if(ses1!=null){ %>
+						<div class="alert alert-danger" role="alert"  style="margin-top: 5px;">
+							<%=ses1 %>
+						</div>
+						
+					<%}if(ses!=null){ %>
+						
+						<div class="alert alert-success" role="alert"  style="margin-top: 5px;">
+							<%=ses %>
+						</div>
+					<%} %>
+				</div>
+			<div class="card-body" >
 			<div class="card" style="padding-top:0px;margin-top: -15px;">
 				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="center">
+				
+				
 							
 								<table style="border: 0px; width: 100%">
 									<tr>
@@ -226,7 +229,7 @@ th,td
 										<tr>
 											<td class="text-blue" style="text-transform: capitalize;"><%=employee[2] %></td>
 											<td class="text-blue" ><%=employee[1] %></td>
-											<td class="text-blue" ><%=employee[9] %></td>
+											<td class="text-blue" ><%=employee[13] %></td>
 										</tr>
 									</tbody>
 								</table>
@@ -391,7 +394,7 @@ th,td
 											
 												<tr>
 													<td colspan="7" style="text-align: center;padding: 0;">
-														<span><h4>MEDICAL REIMBURSEMENT DETAILS </h4></span> 
+														<h4><span>MEDICAL REIMBURSEMENT DETAILS</span>  </h4>
 														<span style="float: right; margin:3px 3px 0px 0px;">
 														
 														</span>
@@ -414,7 +417,7 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation Charges </b>
 																<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History">       
+																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																</button>
 																<%} %>
@@ -580,7 +583,7 @@ th,td
 														<%} %>
 													</td>
 													<td  class="text-blue" style="text-align: center;"><%=medicine[5] %></td>
-													<td class="text-blue"  style="text-align: center;" ><%=medicine[4] %></td> 
+													<td  class="text-blue" style="text-align: center;"><%=medicine[4] %></td> 
 													<td  class="text-blue right"><%=medicine[3] %></td>
 												
 													
@@ -591,19 +594,25 @@ th,td
 														<td class="text-green">
 															<%if(medicine[9]!=null){ %>
 																<%=medicine[9]%>
-															<%} %>
+															<% } %>
+															
 															
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
 															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
 														</td>
-														<td >
-															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="text-align: right;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
+														<td>
+															<input type="text" maxlength="255" style="width: 75%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="text-align: right;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
 																
 															<button type="submit" class="btn btn-sm editbtn" formaction="MedRemAmountEdit.htm" name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
+															<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
+															<button type="button" class="btn btn-sm editbtn"  onclick="InAdmCommentModel('<%=medicine[2]%>') " data-toggle="tooltip" data-placement="top" title="Add Medicine to Inadmissible List" >
+																<i class="fa-solid fa-folder-plus"  style="color: #EB1D36;" ></i>
+															</button>
+															<%} %>
 														</td>
 													<%} else {%>
 														<td class="">
@@ -828,10 +837,10 @@ th,td
 								</form>
 							</div>
 					
-				<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
+				
 					<form action="CHSSUserForward.htm" method="post" id="fwdform">
 						<div class="row">
-						
+						<%if(ClaimRemarksHistory.size()>0){ %>
 							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
 								<%if(ClaimRemarksHistory.size()>0){ %>
 									<table style="margin: 3px;padding: 0px">
@@ -851,7 +860,10 @@ th,td
 									</table>
 								<%} %>
 							</div>
-							
+							<%}else {%>
+								<div class="col-md-5"></div>
+							<%} %>
+							<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
 							
 							<%if(chssstatusid!=8 ){ %>
@@ -880,6 +892,7 @@ th,td
 								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 							<%} %>
 							</div>
+							<%} %>
 						</div>
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -914,7 +927,7 @@ th,td
 							</div>
 							
 					</form>
-				<%} %>
+				
 
 				</div>
 			</div>		
@@ -1030,6 +1043,86 @@ th,td
 	</div>
 </div>
 
+
+
+		<div class="modal fade med-rem-modal" tabindex="-2" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"  style="left: 15%;">
+			<div class="modal-dialog modal-lg modal-dialog-centered"  >
+				<div class="modal-content" style="width: 80%;">
+					<div class="modal-header">				
+						<h4 style="color: #EF5B0C ">Add Medicine to Inadmissible List</h4>						
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
+					    </button>
+					</div>	
+					<div class="modal-body" >
+						<form action="AddMedicineToInadmissible.htm" method="post" autocomplete="off" id="add-med-inadmissible">
+					       	<div class="row">
+					       		<div class="col-12">
+							    	<b>Medicine Name </b><br>
+									<input type="text" class="form-control w-100" name="medicinename" id="inadm-med-name" value="" readonly="readonly" required="required" >
+								</div>	
+							    <div class="col-12">
+							    	<b>Comments </b><br>
+									<textarea class="form-control w-100" name="comment" maxlength="500"  required="required" ></textarea>
+								</div>												
+								<div class="col-12 w-100" align="center">
+									<br>
+									<button type="button" class="btn btn-sm submit-btn" name="action" value="submit"  onclick="return checkMedImadmissibleList()" >
+										submit
+									</button>
+								</div>
+							</div>
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>"/>
+							<input type="hidden" id="trattypeid" name="trattypeid" value="<%=chssapplydata[7] %>" >
+						</form>
+					</div>
+				</div>
+			</div>	
+		</div>
+
+<script type="text/javascript">
+
+
+function InAdmCommentModel(medName)
+{
+	$('#inadm-med-name').val(medName);
+	$('.med-rem-modal').modal('toggle');
+}
+
+
+function checkMedImadmissibleList()
+{
+	var $name = $('#inadm-med-name').val();	
+	var $treatid = $("#trattypeid").val();
+		$.ajax({
+			type : "GET",
+			url : "DuplicateMedicine.htm",	
+			datatype : 'json',
+			data : {
+				MedicineName : $name,
+				Treatmentid : $treatid
+			},
+			success :  function(result){
+				 var rr=result;
+                 var a = parseInt(rr) ;
+				
+				if(a > 0){					
+					alert("Medicine Already Exist in the list!");
+					return false;
+				}
+				else if(confirm("Are you sure to Submit!"))
+				{
+					$('#add-med-inadmissible').submit();
+				}
+			}
+		});	
+}
+
+
+</script>
+
+
 <%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
 
 <div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -1048,6 +1141,9 @@ th,td
     </div>
   </div>
 </div>
+
+
+
 
 	
 <script type="text/javascript">	 

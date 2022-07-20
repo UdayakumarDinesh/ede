@@ -41,12 +41,13 @@ public class LoginController
 	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
 	 {	 
 		logger.info(new Date() +"Inside login ");
-	    if (error != null) 
+	    if (error != null) {
 	        model.addAttribute("error", "Your username or password is invalid.");
-
-	    if (logout != null)
+	        return "static/login";
+	    }
+	    if (logout != null) {
 	        model.addAttribute("message", "You have been logged out successfully.");
-	    
+	    }
 	    
 //	    error= req.getParameter("error");
 //		if (error == null) {

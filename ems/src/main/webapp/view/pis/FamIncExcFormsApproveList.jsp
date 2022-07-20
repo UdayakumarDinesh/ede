@@ -54,8 +54,8 @@
 				<%} %>
 			</div>
 			<div class="card-body main-card">
-				
 				<div class="table-responsive">
+				<form method="Post" >
 				   	<table class="table table-bordered table-hover table-striped table-condensed"  id=""> 
 						<thead>
 							<tr>
@@ -69,37 +69,45 @@
 						</thead>
 						<tbody>
 							<%for( Object[] form:formslist){ %>
-							<form method="Post" >
+							
 							<tr>
 								<td style="width: 5%"><%=formslist.indexOf(form)+1 %></td>
 								<td style="width: 5%"><%=form[5] %></td>
 								<td style="width: 5%"><%=form[2] %></td>
 								<td>
-									<%if(form[3].toString().equals("A") || form[3].toString().equals("F")){ %>
+									<%if(form[6].toString().equals("I") ){ %>
 										Inclusion
-									<%}else{ %>
+									<%}else if(form[6].toString().equals("E") ){  %>
 										Exclusion
 									<%} %>					
 								</td>
 								
 								<td><%=DateTimeFormatUtil.SqlToRegularDate(form[4].toString()) %></td>
 								<td>
+									<%if(form[6].toString().equals("I") ){ %>
 									<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 										<i class="fa-solid fa-eye"></i>
-									</button>			
+									</button>	
+									<%}else if(form[6].toString().equals("E") ){  %>
+										<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepExclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+											<i class="fa-solid fa-eye"></i>
+										</button>	
+									<%} %>	
+											
 									<input type="hidden" name="empid" value="<%=form[1]%>">
 									<input type="hidden" name="isApprooval" value="Y">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									
 								</td>
 							</tr>
-							</form>
+							
 							<%} %>
 							<%if(formslist.size()==0){ %>
 								<tr><td  colspan="6" style="text-align: center;"> No Pending Forms </td></tr>
 							<%} %>
 						</tbody>
 					</table>
+					</form>
 				</div>	
 				
 				

@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>   
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@page import="java.util.List"%>
@@ -171,8 +172,12 @@ th,td
 					</tr>
 					
 					<%int i=0;
+					ArrayList<String> addedlist = new ArrayList<String>();
 					for(;i<ExcMemberDetails.size();i++)
-					{ %>
+					{
+						addedlist.add(ExcMemberDetails.get(i)[0].toString());
+						
+						%>
 					
 						<tr id="show-edit-<%=ExcMemberDetails.get(i)[0] %>" style="display: none;" >
 							<td style="text-align: center;" ><form action="ExclusionFormMemberEdit.htm" method="POST" enctype="multipart/form-data" autocomplete="off" id="edit-form-<%=ExcMemberDetails.get(i)[0] %>" ><%=i+1%></form></td>
@@ -186,17 +191,16 @@ th,td
 								</select> --%>
 								
 								<%=ExcMemberDetails.get(i)[1] %>
-								<input type="hidden">
 								
 							</td>
 							<td>
-								<span id="mem-rel-<%=ExcMemberDetails.get(i)[0]%>"></span>															
+								<span id="mem-rel-<%=ExcMemberDetails.get(i)[0]%>"><%=ExcMemberDetails.get(i)[2] %></span>															
 							</td>
 							<td>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control mem-exc-date-edit" name="mem-exc-date" value="<%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control mem-exc-date-edit" name="mem-exc-date" value="<%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[11].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>							
 							<td>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(ExcMemberDetails.get(i)[9]!=null ){ %>value="<%=ExcMemberDetails.get(i)[9] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(ExcMemberDetails.get(i)[12]!=null ){ %>value="<%=ExcMemberDetails.get(i)[12] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
 							</td>
 							<td>
 								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit"  >
@@ -219,29 +223,29 @@ th,td
 							<td style="text-align: center;" ><%=i+1%></td>
 							<td><%=ExcMemberDetails.get(i)[1] %></td>
 							<td><%=ExcMemberDetails.get(i)[2] %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[3].toString()) %></td>							
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[11].toString()) %></td>							
 							<td>
-								<%if(ExcMemberDetails.get(i)[9]!=null){ %>
-									<%=ExcMemberDetails.get(i)[9] %>
+								<%if(ExcMemberDetails.get(i)[12]!=null){ %>
+									<%=ExcMemberDetails.get(i)[12] %>
 								<%}else{ %>
 									-
 								<%} %>
 							</td>
 							<td style="text-align: center;">
-								<%if(ExcMemberDetails.get(i)[10]!=null){ %>
+								<%if(ExcMemberDetails.get(i)[13]!=null){ %>
 									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="familydetailid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
 								<%}%>
 								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="I"/>		
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="E"/>		
 							</td>
 							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=ExcMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
-									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="FamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Delete ?');" title="Delete">
+									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="ExcFormRemoveMember.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Delete">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>
 								</td>
@@ -257,9 +261,10 @@ th,td
 						<td>
 							<select class="form-control selectpicker dropdown" form="add-form" id="familydetailsid-0" name="familydetailsid" onchange="changeReletion('0')" data-dropup-auto="false" data-live-search="true" data-container="body" data-show-subtext="false" required="required" >
 								<option disabled="disabled" selected="selected" value="0">Choose..</option>
-								<%for(Object[] member : FamilymemDropdown){ %>
+								<%for(Object[] member : FamilymemDropdown){
+									if(!addedlist.contains(member[0].toString())){%>
 									<option value="<%=member[0]%>" data-subtext="(<%=member[4]%>)" data-relation="<%=member[4]%>" ><%=member[2]%></option>
-								<%} %>
+								<%} } %>
 							</select>
 						</td>
 						<td >
@@ -334,7 +339,7 @@ th,td
 					</div>
 					<%if(ExcMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="action" formnovalidate="formnovalidate" value="F" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
+							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="action" formnovalidate="formnovalidate" value="F" onclick="return confirm('Are you Sure to Submit ?');" >Forward</button>
 						</div>
 					
 					<% } %>

@@ -119,7 +119,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 			<div class="col-md-2" style="padding-bottom: 10px;" >
 			<div class="card" style="background-color: #ebf0f2;">
 			<div class="card-body text-center"  >
-			 <form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
+			<form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
 			<%if(employeedetails[29]!=null){ %>
 			
 			
@@ -196,43 +196,21 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" >Basic Details</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Family</a>
+		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Family</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
+		<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Address</a>
 	</li>
-	<!-- <li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Appointment</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Awards</a>
-	</li> -->
-   <!--<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Property</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Publications</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-8" role="tab">Qualifications</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">Passport</a>
-	</li> -->
 	
 
 	
 </ul>
-<%-- <form action="EmpRequestMsg.htm" method="post" style="float: right;">
-	<button type="submit" class="btn btn-sm submit-btn" style="margin: 3px;"  name="action" value="msg" >REQUEST MESSGAE</button>
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
- --%>
+
 <!-- Tab panes -->
 <div class="tab-content">
 
 			
-			<div class="tab-pane active" id="tabs-1" role="tabpanel">
+	<div class="tab-pane active" id="tabs-1" role="tabpanel">
 		
 		<!-- -----------------------------------Basic Details--------------------------------------------- -->
 			 <table class="table table-striped table-bordered" >
@@ -327,7 +305,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 	
 	
 	<!------------------------------------- Permanent Address ---------------------------------------------->
-	<div class="tab-pane" id="tabs-2" role="tabpanel">
+	<div class="tab-pane" id="tabs-3" role="tabpanel">
 	<%if(Perdetails!=null){ %> 
 		 <table class="table table-striped table-bordered" >
 					<tbody>
@@ -470,7 +448,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 							<td> <b>State</b> </td>
 							<td><%if(Nextdetails[8]!=null){%><%=Nextdetails[8]%><%}else{%>--<%}%></td>
 							<td> <b>From_Res_Address</b> </td>
-							<td><%if(Nextdetails[8]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(Nextdetails[8].toString())%><%}else{%>--<%}%></td>
+							<td><%if(Nextdetails[8]!=null){%><%=Nextdetails[8].toString()%><%}else{%>--<%}%></td>
 						</tr>
 						
 						<tr>
@@ -556,15 +534,8 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 				
 	</div>
 	
-	<div class="tab-pane" id="tabs-3" role="tabpanel">
 		
-	</div>
-	
-	<div class="tab-pane" id="tabs-4" role="tabpanel">
-		<p>Four Panel</p>
-	</div>
-	
-	<div class="tab-pane" id="tabs-5" role="tabpanel">
+	<div class="tab-pane" id="tabs-2" role="tabpanel">
 		<!---------------------------------- Family Details  ---------------------------------------->	
 				
 				<table class="table table-striped table-bordered" >

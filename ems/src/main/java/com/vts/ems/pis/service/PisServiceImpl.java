@@ -788,6 +788,7 @@ public class PisServiceImpl implements PisService
 			{
 				familyform.setForwardedDateTime(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()).toString());
 				
+				
 				List<Object[]> loginTypeEmpData = dao.loginTypeEmpData("P");
 				if(loginTypeEmpData.size()>0) 
 				{
@@ -799,40 +800,53 @@ public class PisServiceImpl implements PisService
 					if(formtype.equalsIgnoreCase("I")) {
 						notify.setNotificationMessage("Family Member(s) Inclusion Form Recieved");
 					}else if(formtype.equalsIgnoreCase("E")) {
-						notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
+						notify.setNotificationMessage("Family Member(s) Exclusion Form Recieved");
 					}
 					
 				}
-			}else if(action.equalsIgnoreCase("R") || action.equalsIgnoreCase("A")) 
+				
+			}else if(action.equalsIgnoreCase("R") ) 
 			{
 				
-				if(action.equalsIgnoreCase("A")) {
-					familyform.setApprovedBy(Long.parseLong(empid));
-					familyform.setApprovedDateTime(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()).toString());
-					FamilyMemIncConfirm(formid, empid, usernmae);
+				if(formtype.equalsIgnoreCase("I")) 
+				{
+					notify.setNotificationMessage("Family Member(s) Inclusion Form Returned");
+				}
+				else if(formtype.equalsIgnoreCase("E")) 
+				{
+					notify.setNotificationMessage("Family Member(s) Exclusion Form Returned");
 				}
 				
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
 				notify.setEmpId(Long.parseLong(formdata[1].toString()));
 				notify.setNotificationBy(Long.parseLong(empid));
-
-				if(formtype.equalsIgnoreCase("I")) {
-					if(action.equalsIgnoreCase("R")) {
-						notify.setNotificationMessage("Family Member(s) Inclusion Form Returned");
-					}else if(action.equalsIgnoreCase("A")) {
-						notify.setNotificationMessage("Family Member(s) Inclusion Form Approved");
-					}
-				}else if(formtype.equalsIgnoreCase("E")) {
-					if(action.equalsIgnoreCase("R")) {
-						notify.setNotificationMessage("Family Member(s) Exclusion Form Returned");
-					}else if(action.equalsIgnoreCase("A")) {
-						notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
-					}
+				
+			}
+			else if(action.equalsIgnoreCase("A"))
+			{
+				
+				familyform.setApprovedBy(Long.parseLong(empid));
+				familyform.setApprovedDateTime(DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()).toString());
+				
+				if(formtype.equalsIgnoreCase("I")) 
+				{
+					FamilyMemIncConfirm(formid, empid, usernmae);
+					notify.setNotificationMessage("Family Member(s) Inclusion Form Approved");
 				}
+				else if(formtype.equalsIgnoreCase("E")) 
+				{
+					ExcFormApprove(formid);
+					notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
+				}
+				notify.setNotificationUrl("FamIncExcFwdList.htm");
+				notify.setNotificationDate(LocalDate.now().toString());
+				notify.setEmpId(Long.parseLong(formdata[1].toString()));
+				notify.setNotificationBy(Long.parseLong(empid));
 			}
 				
 			
+			System.out.println(familyform);
 			count =dao.UpdateMemberStatus(familyform);
 			
 			notify.setIsActive(1);
@@ -876,9 +890,6 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.getMemberdata(familydetailid);
 		}
-		
-		
-		
 		
 		@Override
 		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
@@ -949,9 +960,9 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public List<Object[]> EmpFamMembersList(String empid) throws Exception
+		public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception
 		{
-			return dao.EmpFamMembersList(empid);
+			return dao.EmpFamMembersListMedDep(empid);
 		}
 		
 		@Override
@@ -966,4 +977,9 @@ public class PisServiceImpl implements PisService
 			return dao.AddMemberToExcForm(formdto);
 		}
 		
+		@Override
+		public int ExcFormApprove( String ExcFormId) throws Exception 
+		{
+			return dao.ExcFormApprove("N", ExcFormId);
+		}
 }

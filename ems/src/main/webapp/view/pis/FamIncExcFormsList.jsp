@@ -128,7 +128,7 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div align="center">
 						<button type="submit" class="btn btn-sm " style=" background: #231955; color: #ffffff " name="formid" value="0" formaction="DepInclusionFormView.htm"  name="action" value="add" >Inclusion Form</button>
-						<!-- <button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button> -->
+						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button> 
 					</div>
 					
 				</form>

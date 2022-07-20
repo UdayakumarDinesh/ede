@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,8 @@ import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.service.CHSSService;
+import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
@@ -1480,7 +1483,7 @@ public class CHSSController {
 			for(Object[] bill : claimdata) 
 			{
 				LocalDate billdate = LocalDate.parse(bill[4].toString());
-				if(!billdate.isAfter(LocalDate.now().minusDays(90))) 
+				if(!billdate.isAfter(LocalDate.now().minusMonths(3))) 
 				{
 					allow[4]="1";
 					allow[5]=bill[2].toString();
@@ -2863,5 +2866,64 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	@RequestMapping(value = "AddMedicineToInadmissible.htm" )
+	public String AddMedicineToInadmissible(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside AddMedicineToInadmissible.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String medicinename = req.getParameter("medicinename");
+			String trattypeid = req.getParameter("trattypeid");
+			
+			String comment = req.getParameter("comment");
+			
+			int  MedNo = service.GetMaxMedNo(trattypeid);
+			CHSSMedicinesList  medicinelist = new CHSSMedicinesList();
+			
+			medicinelist.setMedNo(String.valueOf(++MedNo));
+			medicinelist.setMedicineName(WordUtils.capitalizeFully(medicinename.trim()));
+			medicinelist.setTreatTypeId(Long.parseLong(trattypeid));
+			medicinelist.setCategoryId(0l);
+			medicinelist.setIsActive(1);
+			long count = service.AddMedicine(medicinelist);
+			
+			
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Medicine Info Added to List Successfully");
+				
+				MasterEdit masteredit = new MasterEdit();
+				masteredit.setTableRowId(count);
+				masteredit.setTableName("chss_medicines_list");
+				masteredit.setCreatedBy(Username);
+				masteredit.setCreatedDate(sdtf.format(new Date()));
+				masteredit.setComments(comment);
+				
+				MasterEditDto masterdto = new MasterEditDto();
+				masterdto.setFilePath(null);
+				
+				service.AddMasterEditComments(masteredit , masterdto);
+				
+				
+			} else {
+				redir.addAttribute("resultfail", "Medicine Info Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","N");
+			return "redirect:/CHSSFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside AddMedicineToInadmissible.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	
 	
 }
