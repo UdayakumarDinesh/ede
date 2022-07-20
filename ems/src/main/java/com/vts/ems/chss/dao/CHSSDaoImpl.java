@@ -40,6 +40,7 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.model.EMSNotification;
 
 
@@ -84,7 +85,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		return result;
 	}
 	
-	private static final String EMPLOYEE="Select a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob,b.BasicPay,  ed.Designation from employee a, employee_details b,employee_desig ed where a.empno=b.empno AND a.DesigId = ed.DesigId AND a.isactive='1' AND a.empid=:empid ";
+	private static final String EMPLOYEE="SELECT a.empid,a.empno,a.empname,a.desigid,b.basicpay,b.gender,b.bloodgroup,a.email,b.phoneno,b.paylevelid,b.dob,b.BasicPay,  ed.Designation,epl.paygrade FROM employee a, employee_details b,employee_desig ed, pis_pay_level epl WHERE a.empno=b.empno AND b.paylevelid=epl.paylevelid AND a.DesigId = ed.DesigId AND a.isactive='1' AND a.empid=:empid ";
 	
 	@Override
 	public  Object[] getEmployee(String empid) throws Exception
@@ -1584,16 +1585,16 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND IsActive=1 AND MedicineName LIKE :medicinename ";
+//	private static final String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND IsActive=1 AND MedicineName LIKE :medicinename ";
 	@Override
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO MedAdmissibleCheck");
 		 List<Object[]> list = null;
 		try {
-			
+			String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND IsActive=1 AND MedicineName LIKE '"+medicinename.trim()+"%' ;";
 			Query query= manager.createNativeQuery(MEDADMISSIBLECHECK);
-			query.setParameter("medicinename", medicinename.trim());
+//			query.setParameter("medicinename", medicinename.trim());
 			
 			list=  ( List<Object[]>)query.getResultList();
 			
@@ -2047,4 +2048,43 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	private static final String MAXMEDNO="SELECT MAX(medno) FROM chss_medicines_list WHERE treattypeid=:treattype";
+	@Override
+	public int GetMaxMedNo(String treatmenttype)throws Exception
+	{
+		Query query = manager.createNativeQuery(MAXMEDNO);
+		query.setParameter("treattype", treatmenttype);
+		Integer result = (Integer) query.getSingleResult();
+		return result;
+	}
+	
+	@Override
+	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
+	{
+		logger.info(new Date() + "Inside AddMedicine()");
+		try {
+			manager.persist(medicine);
+			manager.flush();
+			return medicine.getMedicineId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0l;
+		}
+		
+	}
+	
+	
+	@Override
+	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
+	{
+		logger.info(new Date() + "Inside AddMasterEditComments()");
+		try {
+			manager.persist(masteredit);
+			manager.flush();
+			return (long)masteredit.getMasterEditId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0l;
+		}
+	}
 }

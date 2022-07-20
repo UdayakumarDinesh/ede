@@ -283,8 +283,8 @@ public class PisController {
 
 				dor = DateTimeFormatUtil.dateConversionSql(DorInStringForm);
 
-			} catch (Exception e) {
-
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 				dor = DateTimeFormatUtil.dateConversionSql("31-12-2050");
 			}
@@ -2073,8 +2073,8 @@ public class PisController {
 	
 	
 		
-		@RequestMapping(value="FamilyFormForwardRet.htm" )
-		public String FamilyMembersForward(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+	@RequestMapping(value="FamilyFormForwardRet.htm" )
+	public String FamilyMembersForward(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -2085,10 +2085,12 @@ public class PisController {
 			String remarks = req.getParameter("remarks");
 			
 			long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,remarks);
-			if(result>0) {
+			if(result>0) 
+			{
 				redir.addAttribute("result", "Member Details Forwarded Successfully ");
 			}
-			else {
+			else 
+			{
 				redir.addAttribute("resultfail", "Member Details Forward Unsuccessful");
 			}		
 			
@@ -2492,7 +2494,7 @@ public class PisController {
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );				
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
-				req.setAttribute("FamilymemDropdown",service.EmpFamMembersList(empid));
+				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				
 				req.setAttribute("relationtypes" , service.familyRelationList() );				
@@ -2588,27 +2590,26 @@ public class PisController {
 		    	excDto.setExcDate(DateTimeFormatUtil.RegularToSqlDate(ExcDate));
 		    	Object[] famMemberdata = service.getMemberdata(familydetailsid);
 		    	
-		    	if( IncAttachment.getSize()>0 && IncAttachment.getOriginalFilename()!=null ) {
-		    		if(famMemberdata[10]!=null) {
-		    		excDto.setExcFilePath(famMemberdata[10].toString());
-		    		}
-		    	}
-		    	else if(IncAttachment.getSize()>0) 
+		    	if( IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()>0 &&  famMemberdata[13]!=null) 
 		    	{
-		    		if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
-			    	{
-		    			excDto.setExcFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
-			    		if(famMemberdata[10]!=null) {
-			    			new File(famMemberdata[10].toString()).delete();
-			    		}
-			    	}else
-			    	{
-			    		if(famMemberdata[10]!=null) {
-				    		excDto.setExcFilePath(famMemberdata[10].toString());
-				    		}
-			    	}
-			    		    		
+		    		new File(famMemberdata[13].toString()).delete();
+		    		excDto.setExcFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
 		    	}
+		    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()>0)
+		    	{
+		    		excDto.setExcFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+		    	}
+		    	else if(famMemberdata[13].toString()!=null)
+		    	{
+		    		excDto.setExcFilePath(famMemberdata[13].toString());
+		    	}
+		    	else
+		    	{
+		    		excDto.setExcFilePath(null);
+		    	}
+		    	
+		    	
+		    	
 		    	
 		    	long result = service.AddMemberToExcForm(excDto);
 	    	   
@@ -2676,6 +2677,47 @@ public class PisController {
 			
 		}
 
+	 	
+	 	@RequestMapping(value ="ExcFormRemoveMember.htm" , method =  RequestMethod.POST )
+		public String ExcFormRemoveMember(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach-edit") MultipartFile IncAttachment)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside ExcFormRemoveMember.htm "+Username);
+			try {
+				String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+				
+				String familydetailsid = req.getParameter("familydetailsid");
+				String ExcFormId = req.getParameter("formid");
+		    	
+		    	CHSSExclusionFormDto excDto =new CHSSExclusionFormDto();
+		    	excDto.setExcFormId(0);
+		    	excDto.setFamilyDetailsId(familydetailsid);
+		    	excDto.setComment(null);
+		    	excDto.setExcDate(null);
+		    	Object[] famMemberdata = service.getMemberdata(familydetailsid);
+		    	
+		    	if(famMemberdata[13]!=null) 
+		    	{
+		    		new File(famMemberdata[13].toString()).delete();
+		    	}
+		    	
+		    	long result = service.AddMemberToExcForm(excDto);
+	    	   
+		    	if(result>0){
+		    		redir.addAttribute("result", "Family Member Removed from Exclusion Form Successfully");	
+		   		} else {
+		   			redir.addAttribute("resultfail", "Family Member Removal from Exclusion Form Unsuccessful");
+		    	}                    
+				
+		    	redir.addFlashAttribute("formid",ExcFormId);
+				return "redirect:/DepExclusionFormView.htm";
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside ExcFormRemoveMember.htm "+Username, e);
+				return "static/Error";
+			}
+			
+		}
 	 	
 	 	
 	 	

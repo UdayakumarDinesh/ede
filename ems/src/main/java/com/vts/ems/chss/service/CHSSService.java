@@ -28,6 +28,8 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.MasterEdit;
 
 public interface CHSSService 
 {
@@ -128,5 +130,8 @@ public interface CHSSService
 	public CHSSIPDClaimsInfo IpdClaimInfo(String chssapplyid) throws Exception;
 	public long CHSSIPDBasicInfoAdd(CHSSIPDClaimsInfo model) throws Exception;
 	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo model) throws Exception;
+	public int GetMaxMedNo(String treatmenttype) throws Exception;
+	public Long AddMedicine(CHSSMedicinesList medicine) throws Exception;
+	public Long AddMasterEditComments(MasterEdit masteredit, MasterEditDto masterdto) throws Exception;
 
 }

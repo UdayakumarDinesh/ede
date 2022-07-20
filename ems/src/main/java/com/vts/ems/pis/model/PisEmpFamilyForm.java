@@ -1,7 +1,6 @@
 package com.vts.ems.pis.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,4 +28,14 @@ public class PisEmpFamilyForm implements Serializable {
 	private String ApprovedDateTime;
 	private String Remarks;
 	private int IsActive;
+	
+	@Override
+	public String toString() {
+		return "PisEmpFamilyForm [FamilyFormId=" + FamilyFormId + ", Empid=" + Empid + ", FormType=" + FormType
+				+ ", FormStatus=" + FormStatus + ", ForwardedDateTime=" + ForwardedDateTime + ", ApprovedBy="
+				+ ApprovedBy + ", ApprovedDateTime=" + ApprovedDateTime + ", Remarks=" + Remarks + ", IsActive="
+				+ IsActive + "]";
+	}
+	
+	
 }

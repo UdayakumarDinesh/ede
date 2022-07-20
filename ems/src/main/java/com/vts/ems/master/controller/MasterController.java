@@ -483,7 +483,7 @@ public class MasterController {
 			try {
 				String Medicinename = (String)req.getParameter("MedicineName");
 				String treatid = (String)req.getParameter("Treatmentid");
-				count = service.Checkduplicate( Medicinename ,treatid);
+				count = service.Checkduplicate( Medicinename.trim() ,treatid);
 				
 				 return json.toJson(count);
 			}catch (Exception e){

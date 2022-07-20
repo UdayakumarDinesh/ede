@@ -189,7 +189,7 @@ th,td
 					<tr>
 						<td class="text-blue" style="text-transform: capitalize;" ><%=employee[2] %></td>
 						<td class="text-blue" ><%=employee[1] %></td>
-						<td class="text-blue" ><%=employee[9] %></td>
+						<td class="text-blue" ><%=employee[13] %></td>
 
 					</tr>
 				</tbody>
@@ -276,7 +276,7 @@ th,td
 					<%} %>
 				</tbody>
 			</table>
-			<table style="margin-bottom: 0px;">	
+			<%-- <table style="margin-bottom: 0px;">	
 									<thead>
 										<tr>
 											<th style="text-align: center;width: 5%">SN</th>
@@ -295,7 +295,8 @@ th,td
 										</tr>
 										<%} %>
 									</tbody>
-								</table>
+								</table> --%>
+								
 			<div style="margin-left: 10px;">
 				<p>
 						

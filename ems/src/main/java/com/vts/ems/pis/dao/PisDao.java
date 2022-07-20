@@ -119,8 +119,9 @@ public interface PisDao {
 	public List<Object[]> loginTypeEmpData(String logintype) throws Exception;
 	public PisEmpFamilyForm getPisEmpFamilyForm(String familyformid) throws Exception;
 	public long UpdateMemberStatus(PisEmpFamilyForm famform) throws Exception;
-	public List<Object[]> EmpFamMembersList(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
 	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception;
+	public int ExcFormApprove(String depStatus, String ExcFormId) throws Exception;
 	
 }

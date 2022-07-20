@@ -109,7 +109,8 @@ public interface PisService {
 	public int FamilyMemberDelete(String familydetailsid) throws Exception;
 	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
 	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
-	public List<Object[]> EmpFamMembersList(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
 	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception;
+	public int ExcFormApprove(String ExcFormId) throws Exception;
 }

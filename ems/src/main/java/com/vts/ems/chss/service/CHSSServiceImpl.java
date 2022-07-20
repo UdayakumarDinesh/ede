@@ -1,7 +1,16 @@
 package com.vts.ems.chss.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,12 +18,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
@@ -44,6 +56,8 @@ import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTests;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -53,7 +67,12 @@ public class CHSSServiceImpl implements CHSSService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
+	@Value("${EMSFilesPath}")
+	private String emsfilespath;
 	
+	
+	private static final DecimalFormat df = new DecimalFormat("#.##");
+	 
 	private static final Logger logger = LogManager.getLogger(CHSSServiceImpl.class);
 	
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
@@ -419,7 +438,7 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setCreatedDate(sdtf.format(new Date()));		
 				
 				getConsultEligibleAmount(consult,chssapplyid,consultmainidold,dto.getBillId());
-				consult.setComments(consult.getConsultRemAmount()+" is admitted.");
+				consult.setComments(df.format(consult.getConsultRemAmount())+" is admitted.");
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
@@ -506,7 +525,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		fetch.setConsultRemAmount(getConsultEligibleAmount(fetch,chssapplyid,consultmainidold,String.valueOf(fetch.getBillId())));      
-		fetch.setComments(fetch.getConsultRemAmount()+" is admitted.");
+		fetch.setComments(df.format(fetch.getConsultRemAmount())+" is admitted.");
 		
 		long count= dao.ConsultationBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
@@ -562,7 +581,7 @@ public class CHSSServiceImpl implements CHSSService {
 						checkMedAdmissibility(meds);
 					}					
 					if(meds.getMedsRemAmount()>0) {
-						meds.setComments(meds.getMedsRemAmount()+" is admitted.");
+						meds.setComments(df.format(meds.getMedsRemAmount())+" is admitted.");
 					}					
 					count += dao.MedicinesBillAdd(meds);
 				}
@@ -633,7 +652,7 @@ public class CHSSServiceImpl implements CHSSService {
 			checkMedAdmissibility(fetch);
 		}
 		if(fetch.getMedsRemAmount()>0) {
-			fetch.setComments(fetch.getMedsRemAmount()+" is admitted.");
+			fetch.setComments(df.format(fetch.getMedsRemAmount())+" is admitted.");
 		}
 		
 		long count =dao.MedicineBillEdit(fetch);
@@ -686,7 +705,7 @@ public class CHSSServiceImpl implements CHSSService {
 					test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
 					test.setIsActive(1);
 					getTestEligibleAmount(test);
-					test.setComments(test.getTestRemAmount()+" is admitted.");
+					test.setComments(df.format(test.getTestRemAmount())+" is admitted.");
 					test.setCreatedBy(dto.getCreatedBy());
 					test.setCreatedDate(sdtf.format(new Date()));
 					
@@ -743,7 +762,7 @@ public class CHSSServiceImpl implements CHSSService {
 		getTestEligibleAmount(fetch);
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setComments(fetch.getTestRemAmount()+" is admitted.");
+		fetch.setComments(df.format(fetch.getTestRemAmount())+" is admitted.");
 		
 		
 		long count =dao.TestBillEdit(fetch);
@@ -877,7 +896,7 @@ public class CHSSServiceImpl implements CHSSService {
 				getOtherItemRemAmount(dto.getEmpid(),other);
 				other.setCreatedBy(dto.getCreatedBy());
 				other.setCreatedDate(sdtf.format(new Date()));
-				other.setComments(other.getOtherRemAmount()+" is admitted.");
+				other.setComments(df.format(other.getOtherRemAmount())+" is admitted.");
 				count = dao.OtherBillAdd(other);
 			}
 					
@@ -934,7 +953,7 @@ public class CHSSServiceImpl implements CHSSService {
 		getOtherItemRemAmount(String.valueOf(empid),fetch);
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		fetch.setComments(fetch.getOtherRemAmount()+" is admitted.");
+		fetch.setComments(df.format(fetch.getOtherRemAmount())+" is admitted.");
 		
 		long count =dao.OtherBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
@@ -1892,5 +1911,55 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		return dao.CHSSIPDBasicInfoEdit(fetch);
 	}
+	
+	
+	@Override
+	public int GetMaxMedNo(String treatmenttype)throws Exception
+	{
+		return dao.GetMaxMedNo(treatmenttype);
+	}
+	
+	@Override
+	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
+	{
+		return dao.AddMedicine(medicine);
+	}
 
+	 public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
+	   {
+	        Path uploadPath = Paths.get(CircularFilePath);
+	          
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream()) {
+	            Path filePath = uploadPath.resolve(fileName);
+	            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	        } catch (IOException ioe) {       
+	            throw new IOException("Could not save image file: " + fileName, ioe);
+	        }     
+	    }
+	
+	@Override
+	public Long AddMasterEditComments(MasterEdit masteredit , MasterEditDto masterdto )throws Exception
+	{
+		Timestamp instant= Timestamp.from(Instant.now());
+		String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
+		
+		   if(masterdto.getFilePath()!=null && !masterdto.getFilePath().isEmpty()) {
+				String name =masterdto.getFilePath().getOriginalFilename();
+				String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
+				String filepath=emsfilespath+"MastersEditFilePath";
+						
+				masteredit.setFilePath(filepath+File.separator+filename);
+				masteredit.setOriginalName(name);
+			    saveFile(filepath , filename, masterdto.getFilePath());
+				
+			}	
+		return dao.AddMasterEditComments(masteredit);
+	}
+	
+	
+	
 }
