@@ -1,12 +1,10 @@
 package com.vts.ems.pis.dao;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
@@ -15,12 +13,13 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
-import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
+import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 
 public interface PisDao {
@@ -102,17 +101,17 @@ public interface PisDao {
 	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
-	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception;
+	public List<Object[]> GetFormMembersList(String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
 	public Object[] employeeResAddr(String empid) throws Exception;
 	public List<Object[]> familyRelationList() throws Exception;
 	public Object[] RelationshipData(String relationid) throws Exception;
-	public Object[] getMemberdata(String familydetailid) throws Exception;
+	public Object[] getMemberdata(String formmemberid) throws Exception;
 	public List<Object[]> EmpFamFormsList(String empid, String status) throws Exception;
-	public int FamilyMemIncConfirm(String formid, String empid, String username) throws Exception;
+	public int FamilyMemIncConfirm(String formid, String empid, String username,String medDepStatus) throws Exception;
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
 	public Object[] GetFamFormData(String familyformid) throws Exception;
-	public int FamilyMemberDelete(String familydetailsid) throws Exception;
+	public int FormFamilyMemberDelete(String formmemberid) throws Exception;
 	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
 	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
 	public long NotificationAdd(EMSNotification notification) throws Exception;
@@ -121,7 +120,9 @@ public interface PisDao {
 	public long UpdateMemberStatus(PisEmpFamilyForm famform) throws Exception;
 	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
-	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception;
-	public int ExcFormApprove(String depStatus, String ExcFormId) throws Exception;
+	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
+	public PisFamFormMembers getPisFamFormMembers(String formmemberid) throws Exception;
+	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
+	public int FormFamilyMemberHardDelete(String familydetailsid) throws Exception;
 	
 }

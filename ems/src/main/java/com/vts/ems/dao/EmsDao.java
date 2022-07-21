@@ -3,6 +3,7 @@ package com.vts.ems.dao;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -35,4 +36,5 @@ public interface EmsDao
 	public List<Object[]> GetCircularList()throws Exception;
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception;
 	public List<Object[]> LoginLoginType(String loginid) throws Exception;
+	public LabMaster getLabDetails() throws Exception;
 }

@@ -1440,7 +1440,7 @@ public class CHSSController {
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 	       
 	       
-	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
 	        
 	        File f=new File(path +File.separator+ filename+".pdf");
 	        FileInputStream fis = new FileInputStream(f);
@@ -2201,7 +2201,7 @@ public class CHSSController {
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
 	        
-	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
 	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
@@ -2518,7 +2518,7 @@ public class CHSSController {
 	        
 	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
 	        
-	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf");
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
 	        
 	        res.setContentType("application/pdf");
 	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");

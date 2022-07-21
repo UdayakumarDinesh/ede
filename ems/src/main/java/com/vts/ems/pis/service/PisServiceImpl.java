@@ -10,8 +10,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -26,12 +24,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ibm.icu.impl.UResource.Array;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.dao.PisDao;
-import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -47,6 +43,7 @@ import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
+import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -373,6 +370,21 @@ public class PisServiceImpl implements PisService
 	}
 	
 	@Override
+	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception 
+	{
+		formmember.setCreatedDate(sdtf.format(new Date()));
+		return dao.PisFamFormMembersAdd(formmember);
+	}
+	
+	@Override
+	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception 
+	{
+//		PisFamFormMembers fetch = dao.getPisFamFormMembers(String.valueOf(formmember.getFormMemberId()));
+		formmember.setCreatedDate(sdtf.format(new Date()));
+		return dao.PisFamFormMemberEdit(formmember);
+	}
+	
+	@Override
 	public int DeleteMeber(String familyid,String Username)throws Exception{
 		return dao.DeleteMeber(familyid,Username);
 		
@@ -598,6 +610,14 @@ public class PisServiceImpl implements PisService
 			
 		}
 		
+		
+		@Override
+		public String ExistingPassword(String loginid) throws Exception 
+		{
+			return dao.OldPassword(loginid);
+		}
+		
+		
 		@Override
 		public int PasswordChange(String OldPassword, String NewPassword, String loginid,String username)throws Exception {
 
@@ -750,9 +770,9 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public List<Object[]> GetFormMembersList(String empid,String formid)throws Exception
+		public List<Object[]> GetFormMembersList(String formid)throws Exception
 		{
-			return dao.GetFormMembersList(empid, formid);
+			return dao.GetFormMembersList(formid);
 		}
 		
 		@Override
@@ -782,7 +802,7 @@ public class PisServiceImpl implements PisService
 			familyform.setFormStatus(action);
 			familyform.setRemarks(Remarks);
 			
-			
+			int approvalcount=0;
 			EMSNotification notify = new EMSNotification();
 			if(action.equalsIgnoreCase("F")) 
 			{
@@ -831,12 +851,12 @@ public class PisServiceImpl implements PisService
 				
 				if(formtype.equalsIgnoreCase("I")) 
 				{
-					FamilyMemIncConfirm(formid, empid, usernmae);
+					approvalcount = FamilyMemIncConfirm(formid, empid, usernmae);
 					notify.setNotificationMessage("Family Member(s) Inclusion Form Approved");
 				}
 				else if(formtype.equalsIgnoreCase("E")) 
 				{
-					ExcFormApprove(formid);
+					ExcFormApprove(formid, empid,usernmae);
 					notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
 				}
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
@@ -846,7 +866,6 @@ public class PisServiceImpl implements PisService
 			}
 				
 			
-			System.out.println(familyform);
 			count =dao.UpdateMemberStatus(familyform);
 			
 			notify.setIsActive(1);
@@ -863,9 +882,14 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int FamilyMemIncConfirm(String formid,String empid,String username ) throws Exception
 		{
-			return dao.FamilyMemIncConfirm(formid, empid, username);
+			return dao.FamilyMemIncConfirm(formid, empid, username,"Y");
 		}
 		
+		@Override
+		public int ExcFormApprove(String formid,String empid,String username) throws Exception 
+		{
+			return dao.FamilyMemIncConfirm(formid, empid, username,"N");
+		}
 		
 		@Override
 		public List<Object[]> FamMemFwdEmpList() throws Exception 
@@ -886,10 +910,12 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public  Object[] getMemberdata(String familydetailid) throws Exception
+		public  Object[] getMemberdata(String formmemberid) throws Exception
 		{
-			return dao.getMemberdata(familydetailid);
+			return dao.getMemberdata(formmemberid);
 		}
+		
+		
 		
 		@Override
 		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
@@ -918,12 +944,12 @@ public class PisServiceImpl implements PisService
 			member.setMemberOccupation(Details.getMemberOccupation());
 			member.setMemberIncome(Details.getMemberIncome());
 			
-			member.setIncComment(Details.getIncComment());
-			
-			if(Details.getIncFilePath()!=null && !Details.getIncFilePath().trim().equals(""))
-			{
-				member.setIncFilePath(Details.getIncFilePath());
-			}
+//			member.setIncComment(Details.getIncComment());
+//			
+//			if(Details.getIncFilePath()!=null && !Details.getIncFilePath().trim().equals(""))
+//			{
+//				member.setIncFilePath(Details.getIncFilePath());
+//			}
 			
 				
 			return dao.EditFamilyDetails( member);
@@ -948,9 +974,14 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public int FamilyMemberDelete(String familydetailsid)throws Exception
+		public int FormFamilyMemberDelete(String formmemberid)throws Exception
 		{
-			return dao.FamilyMemberDelete(familydetailsid);
+//			Object[] member =dao.getMemberdata(formmemberid);
+//			if(member[14].toString().equals("0")) {
+//				dao.FormFamilyMemberHardDelete(member[0].toString());
+//			}
+			
+			return dao.FormFamilyMemberDelete(formmemberid);
 		}
 		
 		@Override
@@ -971,15 +1002,5 @@ public class PisServiceImpl implements PisService
 			return dao.GetExcFormMembersList(formid);
 		}
 		
-		@Override
-		public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception 
-		{
-			return dao.AddMemberToExcForm(formdto);
-		}
 		
-		@Override
-		public int ExcFormApprove( String ExcFormId) throws Exception 
-		{
-			return dao.ExcFormApprove("N", ExcFormId);
-		}
 }

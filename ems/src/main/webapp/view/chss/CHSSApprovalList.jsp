@@ -33,13 +33,12 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Pending Approvals List</h5>
+				<h5>Claims Pending</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<!-- <li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li> -->
-						<li class="breadcrumb-item active " aria-current="page">CHSS Approval List</li>
+						<li class="breadcrumb-item active " aria-current="page">Claims Pending</li>
 					</ol>
 				</div>
 			</div>
