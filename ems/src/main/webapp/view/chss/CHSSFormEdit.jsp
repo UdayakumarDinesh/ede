@@ -337,7 +337,7 @@ th,td
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
 										<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my Parents / Parents-in-Law  <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %></span> are wholly dependent
+											&#8226; That my Parents / Parents-in-Law  <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%-- <%=chssapplydata[12] %> --%> </span> are wholly dependent
 											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
 											month.
 											<br>
@@ -347,7 +347,7 @@ th,td
 											<br>
 										<%} %>
 										
-											&#8226; That the patient <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is not covered by the ESI Scheme / any
+											&#8226; That the patient <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%-- <%=chssapplydata[12] %> --%> </span> is not covered by the ESI Scheme / any
 											other medical facility.
 											<br>
 											
@@ -366,7 +366,7 @@ th,td
 											&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.
 											<br>
-											&#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
+											&#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%-- <%=chssapplydata[12] %> --%> </span> is an employee in STARC and that she / he is
 											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
@@ -457,7 +457,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;text-align: right; " name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="text-align: right;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
@@ -523,7 +523,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" style="text-align: right;" value="<%=test[7]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" style="text-align: right;" value="<%=test[7]%>">
 														</td>
 														<td >
 														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="text-align: right;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
@@ -600,7 +600,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
 														</td>
 														<td>
 															<input type="text" maxlength="255" style="width: 75%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="text-align: right;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
@@ -670,7 +670,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
 														</td>
 														<td >
 															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="text-align: right;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
@@ -736,7 +736,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="numberonly" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >

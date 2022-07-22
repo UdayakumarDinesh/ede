@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.dao.EmsDao;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -275,5 +276,11 @@ public class EMSMainServiceImpl implements EMSMainService
 	public List<Object[]> GetCircularList()throws Exception
 	{
 		return dao.GetCircularList();
+	}
+	
+	@Override
+	public LabMaster getLabDetails()throws Exception
+	{
+		return dao.getLabDetails();
 	}
 }

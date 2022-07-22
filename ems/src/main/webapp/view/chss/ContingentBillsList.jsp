@@ -36,13 +36,13 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-4">
-				<h5>Pending Contingent Bills List</h5>
+				<h5>Pending Contingent Bills</h5>
 			</div>
 				<div class="col-md-8 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS Contingent List</li>
+						<li class="breadcrumb-item active " aria-current="page">Pending Contingent Bills</li>
 					</ol>
 				</div>
 			</div>

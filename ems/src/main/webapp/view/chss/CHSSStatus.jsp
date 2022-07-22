@@ -65,8 +65,8 @@
     font-weight: 900;
     text-transform: uppercase;
     background: #25303B;
-    color: rgba(255,255,255,0.5);
-    border: 2px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,255);
+   /*  border: 2px solid rgba(255,255,255,0.2); */
     box-shadow: 0 0 0 7px #5c6166;
   }
   section#timeline article div.inner span.date span {

@@ -2,7 +2,6 @@ package com.vts.ems.pis.dao;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +21,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
-import com.vts.ems.chss.model.CHSSDoctorRates;
-import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.login.Login;
 import com.vts.ems.model.EMSNotification;
-import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
@@ -41,6 +37,7 @@ import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
+import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -620,6 +617,22 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	@Override
+	public long PisFamFormMembersAdd(PisFamFormMembers Details) throws Exception 
+	{
+	
+		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
+		try {
+			manager.persist(Details);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Details.getFormMemberId();
+	}
+	
+	
+	@Override
 	public int DeleteMeber(String familyid , String Username)throws Exception{
 		logger.info(new Date() + "Inside DAO UserManagerDelete()");
 		
@@ -677,6 +690,41 @@ public class PisDaoImpl implements PisDao {
 		}
 		return memeber;
 	}
+	
+	@Override
+	public PisFamFormMembers getPisFamFormMembers(String formmemberid) throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO getPisFamFormMembers()");
+		PisFamFormMembers formmemeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<PisFamFormMembers> cq = cb.createQuery(PisFamFormMembers.class);
+			Root<PisFamFormMembers> root = cq.from(PisFamFormMembers.class);
+			Predicate p1 = cb.equal(root.get("FormMemberId"), Long.parseLong(formmemberid));
+			cq = cq.select(root).where(p1);
+			TypedQuery<PisFamFormMembers> allquery = manager.createQuery(cq);
+			formmemeber = allquery.getResultList().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return formmemeber;
+	}
+	
+	@Override
+	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO getPisFamFormMembers()");
+		try {
+			manager.merge(formmember);
+			manager.flush();
+			return formmember.getFamilyFormId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
 	
 	@Override
 	public Long EditFamilyDetails(EmpFamilyDetails Details) throws Exception {
@@ -1312,14 +1360,13 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus,a.med_dep_from  FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff   WHERE a.relation_id=b.relation_id AND (ff.Familyformid = a.IncFormId OR ff.Familyformid = a.ExcFormId) AND  a.Incformid = :formid ORDER BY b.SerialNo ASC; "; 
+	private static final  String GETFAMILYDETAILSFWD="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr  WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  "; 
 	@Override
-	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception 
+	public List<Object[]> GetFormMembersList(String formid) throws Exception 
 	{
 		logger.info(new Date() + "Inside DAO getFamilydetails");
 		try {
 			Query query = manager.createNativeQuery(GETFAMILYDETAILSFWD);
-//			query.setParameter("empid",empid);
 			query.setParameter("formid",formid);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
@@ -1452,15 +1499,15 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String GETMEMBERDATA="SELECT   a.family_details_id,  a.member_name,  b.relation_name,  a.dob,  a.med_dep,  a.blood_group,  a.emp_unemp,  a.MemberOccupation,  a.MemberIncome,     a.IncComment,  a.IncFilePath,  a.ExcDate,  a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId     FROM  pis_emp_family_details a,  pis_emp_family_relation b WHERE a.relation_id = b.relation_id  AND a.family_details_id = :familydetailid";
+	private static final String GETMEMBERDATA="SELECT   a.family_details_id,  a.member_name,  b.relation_name,  a.dob,  a.med_dep,  a.blood_group,  a.emp_unemp,   a.MemberOccupation,  a.MemberIncome,     ffm.Comments ,  ffm.AttachFilePath,  ffm.IncExcDate,   a.relation_id,a.empid, a.isactive   FROM  pis_emp_family_details a,  pis_emp_family_relation b , pis_fam_form_members ffm WHERE a.relation_id = b.relation_id AND ffm.familydetailsid=a.family_details_id  AND ffm.formmemberid = :formmemberid";
 	
 	@Override
-	public  Object[] getMemberdata(String familydetailid) throws Exception
+	public  Object[] getMemberdata(String formmemberid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getMemberdata");
 		Query query =manager.createNativeQuery(GETMEMBERDATA);
 		Object[] result = null;
-		query.setParameter("familydetailid", familydetailid);
+		query.setParameter("formmemberid", formmemberid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
@@ -1487,19 +1534,18 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String FAMTABLEUPDATE = "UPDATE pis_emp_family_details SET ModifiedBy=:username ,ModifiedDate = :ModifiedDate, IsActive=1  WHERE Incformid=:formid";
+	private static final String FAMTABLEUPDATE = "UPDATE pis_emp_family_details fd, pis_fam_form_members  ff SET fd.isactive=1 , fd.med_dep=:medDepStatus, fd.modifiedby =:username ,fd.modifieddate=:ModifiedDate   WHERE ff.FamilyDetailsId = fd.family_details_id AND ff.isactive=1 AND ff.FamilyFormId=:formid ;";
 	@Override
-	public int FamilyMemIncConfirm(String formid, String empid,String username)throws Exception
+	public int FamilyMemIncConfirm(String formid, String empid,String username,String medDepStatus)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateMemberStatus");
+		logger.info(new Date() +"Inside DAO FamilyMemIncConfirm");
 		try {
 		    Query query=manager.createNativeQuery(FAMTABLEUPDATE);
 		    query.setParameter("formid", formid);
+		    query.setParameter("medDepStatus", medDepStatus);
 		    query.setParameter("username", username);
 		    query.setParameter("ModifiedDate", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
 	        return query.executeUpdate();
-	        
-	        
 		}catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -1539,13 +1585,29 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return result;
 	}
 	
-	private static final String FAMILYMEMBERDELETE = "DELETE FROM pis_emp_family_details WHERE family_details_id = :familydetailsid"; 
+	private static final String FAMILYMEMBERDELETE = "DELETE FROM `pis_fam_form_members` WHERE formmemberid = :formmemberid"; 
 	@Override
-	public int FamilyMemberDelete(String familydetailsid)throws Exception
+	public int FormFamilyMemberDelete(String formmemberid)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO FamilyMemberDelete");
 		try {
 		    Query query=manager.createNativeQuery(FAMILYMEMBERDELETE);
+		    query.setParameter("formmemberid", formmemberid);
+	        return query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String FORMFAMILYMEMBERHARDDELETE = "DELETE FROM pis_emp_family_details WHERE family_details_id =:familydetailsid; "; 
+	@Override
+	public int FormFamilyMemberHardDelete(String familydetailsid)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO FormFamilyMemberHardDelete");
+		try {
+		    Query query=manager.createNativeQuery(FORMFAMILYMEMBERHARDDELETE);
 		    query.setParameter("familydetailsid", familydetailsid);
 	        return query.executeUpdate();
 		}catch (Exception e) {
@@ -1627,7 +1689,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return result;
 	}
 	
-	private static final  String GETEXCFORMMEMBERSLIST="SELECT a.family_details_id, a.member_name, b.relation_name, a.dob, a.med_dep, a.blood_group, a.emp_unemp, a.MemberOccupation,  a.MemberIncome , a.IncComment, a.IncFilePath,  a.ExcDate, a.ExcComment,  a.ExcFilePath, a.relation_id,a.empid,a.IncFormId, ff.FormStatus,a.med_dep_from  FROM  pis_emp_family_details a,pis_emp_family_relation b ,pis_emp_family_form ff WHERE a.relation_id=b.relation_id AND a.isactive=1 AND ff.Familyformid = a.ExcFormId AND  a.Excformid = :formid";
+	private static final  String GETEXCFORMMEMBERSLIST="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr   WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND fd.isactive=1 AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  ";
 	
 	@Override
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception 
@@ -1645,48 +1707,8 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		}
 	}
 	
-	private static final  String ADDMEMBERTOEXCFORM="UPDATE pis_emp_family_details SET ExcFormId =:ExcFormId , ExcComment =:ExcComment ,ExcDate=:ExcDate, Excfilepath =:Excfilepath  WHERE  family_details_id= :familydetailsid";
-	
-	@Override
-	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception 
-	{
-		logger.info(new Date() + "Inside DAO AddMemberToExcForm");
-		try {
-		
-			Query query = manager.createNativeQuery(ADDMEMBERTOEXCFORM);
-			query.setParameter("ExcFormId",formdto.getExcFormId());
-			query.setParameter("ExcComment",formdto.getComment());
-			query.setParameter("ExcDate",formdto.getExcDate());
-			query.setParameter("Excfilepath",formdto.getExcFilePath());
-			query.setParameter("familydetailsid",formdto.getFamilyDetailsId());
-			return query.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
 	
 	
-	private static final  String EXCFORMAPPROVE="UPDATE  pis_emp_family_details SET med_dep = :depStatus WHERE ExcformId=:ExcFormId ";
-	
-	@Override
-	public int ExcFormApprove(String depStatus, String ExcFormId) throws Exception 
-	{
-		logger.info(new Date() + "Inside DAO ExcFormApprove");
-		try {
-			
-			Query query = manager.createNativeQuery(EXCFORMAPPROVE);
-			query.setParameter("depStatus",depStatus);
-			query.setParameter("ExcFormId",ExcFormId);
-			
-			return query.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
 	
 }
 	

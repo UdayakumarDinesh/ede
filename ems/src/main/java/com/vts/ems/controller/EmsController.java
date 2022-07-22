@@ -36,12 +36,12 @@ import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.CharArrayWriterResponse;
-import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class EmsController {
@@ -73,7 +73,14 @@ public class EmsController {
 			ses.setAttribute("LoginType", login.getLoginType());
 			ses.setAttribute("EmpId", login.getEmpId());
 			ses.setAttribute("FormRole", login.getFormRoleId());
-
+			
+			LabMaster labinfo =service.getLabDetails();
+			if(labinfo!=null && labinfo.getLabCode()!=null) {
+				ses.setAttribute("LabCode", labinfo.getLabCode());
+			}else
+			{
+				ses.setAttribute("LabCode", "");
+			}
 			Employee employee = service.EmployeeInfo(login.getEmpId());
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
@@ -81,7 +88,7 @@ public class EmsController {
 			long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
 			if(pwdCount==0) 
 			{
-				return "redirect:/PasswordChange.htm";
+				return "redirect:/ForcePasswordChange.htm";
 			}
 			
 		} catch (Exception e) {
@@ -91,6 +98,17 @@ public class EmsController {
 		return "redirect:/MainDashBoard.htm";
 	}
 
+	
+	
+	
+	@RequestMapping(value = "ForcePasswordChange.htm", method = RequestMethod.GET)
+	public String ForcePasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
+		
+		req.setAttribute("ForcePwd", "Y");
+		return "pis/PasswordChange";
+	}
+	
+	
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
 	{

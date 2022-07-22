@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -503,4 +504,22 @@ public class EmsDaoImpl implements EmsDao
 			}
 		}
 	
+		@Override
+		public LabMaster getLabDetails()throws Exception
+		{
+			logger.info(new Date() + "Inside getCHSSDocRate()");
+			LabMaster memeber = null;
+			try {
+				CriteriaBuilder cb = manager.getCriteriaBuilder();
+				CriteriaQuery<LabMaster> cq = cb.createQuery(LabMaster.class);
+				Root<LabMaster> root = cq.from(LabMaster.class);
+				cq = cq.select(root);
+				TypedQuery<LabMaster> allquery = manager.createQuery(cq);
+				memeber = allquery.getResultList().get(0);
+				return memeber;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 }

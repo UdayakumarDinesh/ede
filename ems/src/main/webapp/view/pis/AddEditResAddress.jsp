@@ -74,14 +74,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
           <div class="row">   
                      <div class="col-md-6">
 		                <div class="form-group">
-		                	<label>Residential  Address<span class="mandatory">*</span></label>
+		                	<label>Residential  Address</label>
 		                    <input type="text"  value="<%if(addres!=null&&addres.getRes_addr()!=null){%><%=addres.getRes_addr()%><%}%>" class="form-control input-sm" maxlength="4000" name="resAdd" required="required" placeholder="Enter Residential  Address" onclick="return trim(this)" onchange="return trim(this)">
 		                </div>
 		                </div>
          
                    <div class="col-md-3">
                         <div class="form-group">
-                          <label>State:<span class="mandatory">*</span></label>
+                          <label>State:</label>
                            <select  name="state" class="form-control input-sm selectpicker" data-live-search="true">
 
 								<%if(States!=null){ 
@@ -97,7 +97,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                                
 		            <div class="col-md-3">
                         <div class="form-group">
-                            <label>City:<span class="mandatory">*</span></label>
+                            <label>City:</label>
                             <input type="text"  name="city" class="form-control input-sm" maxlength="49"  value="<%if(addres!=null&&addres.getCity()!=null){%> <%=addres.getCity()%> <%}%>"    required="required" onclick="return trim(this)" onchange="return trim(this)">
                         </div>
                       </div>
@@ -106,11 +106,9 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
             
                 
          	  <div class="row">
-                 
-                        
                          <div class="col-md-2">
                         <div class="form-group">
-                            <label>City PIN:<span class="mandatory">*</span></label>
+                            <label>City PIN:</label>
                             <input id="CityPinTextBox" type="text" class="form-control input-sm "  value="<%if(addres!=null&&addres.getPin()!=null){%> <%=addres.getPin()%> <%}%>" name="cityPin"  required="required" maxlength="6"  placeholder="Enter PIN" onblur="checknegative(this)">
                         </div>
                     </div>

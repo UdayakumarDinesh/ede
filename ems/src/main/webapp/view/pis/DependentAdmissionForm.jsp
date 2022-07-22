@@ -161,8 +161,8 @@ ol > li::marker {
 				person referred to above becomes ineligible to the CHSS benefits. I realise that the onus of proving
 				eligibility of the members mentioned above to the benefits of the scheme rests on me.
 			</p>
-			<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependant </b> </div> 
-			<p style="text-indent: 50px;">I certify that the family members whose names are mentioned above are mainly dependant on and
+			<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependent </b> </div> 
+			<p style="text-indent: 50px;">I certify that the family members whose names are mentioned above are mainly dependent on and
 				residing with me.
 			</p>
 			<div align="right"> 
@@ -188,9 +188,9 @@ ol > li::marker {
 						<p><b> The term Parents for the purpose of CHSS benefits does not include 'Step Parents'. Parent
 						should have actually resided at least for 60 days with the employee before they are proposed for
 						inclusion under the CHSS, and should continue to reside with the employee and be mainly
-						dependant on him / her.</b> If the total income of the parents from all sources does not exceed thE ay
+						dependent on him / her.</b> If the total income of the parents from all sources does not exceed the pay
 						of the employee, subject to the maximum income of the parents being Rs. 18,000/- per month, such
-						parents may be treated as mainly dependant on the employee. Income from land holdings, houses,
+						parents may be treated as mainly dependent on the employee. Income from land holdings, houses,
 						fixed deposits, dividends, securities, deposits, employment, pension etc., should be taken into account
 						for the purpose of total income of both the parents. If the parents of an employee move out for more
 						than 60 days continuously, the Unit should be notified by the employee for suspension / cancellation
@@ -198,14 +198,14 @@ ol > li::marker {
 					</li>
 					<li>
 						<p>
-							Married / divorced or legally separated daughters of employees, though dependant on the
+							Married / divorced or legally separated daughters of employees, though dependent on the
 							employee, are not eligible for medical benefits under CHSS. In the case of adopted children, only
 							legally adopted sons and daughters are eligible for the benefits of the CHSS.
 						</p>
 					</li>
 					<li>
 						<p>
-							If any of the family members / dependants for whom the registration is sought is eligible to
+							If any of the family members / dependents for whom the registration is sought is eligible to
 							receive medical aid/ facility, cash subsidy, cash allowances or reimbursement for medical care from
 							sources other than the CHSS of SITAR Society, particulars of such benefits should be furnished on a
 							separate sheet.

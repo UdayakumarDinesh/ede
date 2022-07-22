@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
-import com.vts.ems.pis.dto.CHSSExclusionFormDto;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -15,12 +14,13 @@ import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
-import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
+import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 
 public interface PisService {
@@ -95,22 +95,24 @@ public interface PisService {
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
 	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String Remarks) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
-	public List<Object[]> GetFormMembersList(String empid,String formid) throws Exception;
+	public List<Object[]> GetFormMembersList(String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
 	public Object[] employeeResAddr(String empid) throws Exception;
 	public Long DepMemEditSubmit(EmpFamilyDetails Details) throws Exception;
 	public List<Object[]> familyRelationList() throws Exception;
 	public Object[] RelationshipData(String relationid) throws Exception;
-	public Object[] getMemberdata(String familydetailid) throws Exception;
+	public Object[] getMemberdata(String formmemberid) throws Exception;
 	public List<Object[]> EmpFamFormsList(String empid, String status) throws Exception;
 	public int FamilyMemIncConfirm(String formid,String empid,String username) throws Exception;
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
 	public Object[] GetFamFormData(String familyformid) throws Exception;
-	public int FamilyMemberDelete(String familydetailsid) throws Exception;
+	public int FormFamilyMemberDelete(String formmemberid) throws Exception;
 	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
 	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
 	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
-	public int AddMemberToExcForm(CHSSExclusionFormDto formdto) throws Exception;
-	public int ExcFormApprove(String ExcFormId) throws Exception;
+	public int ExcFormApprove(String formid,String empid,String username) throws Exception;
+	public String ExistingPassword(String loginid) throws Exception;
+	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
+	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
 }

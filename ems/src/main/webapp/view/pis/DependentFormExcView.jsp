@@ -56,6 +56,9 @@ th,td
 <title>CHSS FORM - 3</title>
 </head>
 <%
+
+	String labcode=(String) session.getAttribute("LabCode");
+
 	List<Object[]> ExcMemberDetails = (List<Object[]>)request.getAttribute("ExcMemberDetails");
 	List<Object[]> FamilymemDropdown = (List<Object[]>)request.getAttribute("FamilymemDropdown");
 	List<Object[]> relationtypes = (List<Object[]>)request.getAttribute("relationtypes");
@@ -80,7 +83,7 @@ th,td
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
-				<h5>CHSS FORM -2</h5>
+				<h5>CHSS FORM -3</h5>
 			</div>
 				<div class="col-md-7">
 					<ol class="breadcrumb ">
@@ -90,7 +93,7 @@ th,td
 						<%}else if(isapproval.equalsIgnoreCase("Y")){ %>
 						<li class="breadcrumb-item " aria-current="page"><a href="FamFormsApproveList.htm">CHSS Forms Approval</a></li>
 						<%} %>
-						<li class="breadcrumb-item active " aria-current="page">CHSS FORM -2</li>
+						<li class="breadcrumb-item active " aria-current="page">CHSS FORM -3</li>
 					</ol>
 				</div>
 		</div>
@@ -127,7 +130,7 @@ th,td
 			</div>
 			
 			<div align="left">
-				<h3>UNIT : STARC</h3>
+				<h3>UNIT : <%=labcode.toUpperCase() %></h3>
 			</div>
 			<div align="left">
 				<table style="width:100%; ">
@@ -197,10 +200,10 @@ th,td
 								<span id="mem-rel-<%=ExcMemberDetails.get(i)[0]%>"><%=ExcMemberDetails.get(i)[2] %></span>															
 							</td>
 							<td>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control mem-exc-date-edit" name="mem-exc-date" value="<%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[11].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control mem-exc-date-edit" name="mem-exc-date" value="<%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[17].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>							
 							<td>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(ExcMemberDetails.get(i)[12]!=null ){ %>value="<%=ExcMemberDetails.get(i)[12] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(ExcMemberDetails.get(i)[16]!=null ){ %>value="<%=ExcMemberDetails.get(i)[16] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
 							</td>
 							<td>
 								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit"  >
@@ -214,6 +217,8 @@ th,td
 								</button>
 								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="formid" value="<%=formid%>"/>
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="formmemberid" value="<%=ExcMemberDetails.get(i)[15]%>"/>
+								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="Excformid" value="<%=ExcMemberDetails.get(i)[13]%>"/>
 							</td>
 							
 						</tr>
@@ -223,29 +228,28 @@ th,td
 							<td style="text-align: center;" ><%=i+1%></td>
 							<td><%=ExcMemberDetails.get(i)[1] %></td>
 							<td><%=ExcMemberDetails.get(i)[2] %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[11].toString()) %></td>							
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[17].toString()) %></td>							
 							<td>
-								<%if(ExcMemberDetails.get(i)[12]!=null){ %>
-									<%=ExcMemberDetails.get(i)[12] %>
+								<%if(ExcMemberDetails.get(i)[16]!=null){ %>
+									<%=ExcMemberDetails.get(i)[16] %>
 								<%}else{ %>
 									-
 								<%} %>
 							</td>
 							<td style="text-align: center;">
-								<%if(ExcMemberDetails.get(i)[13]!=null){ %>
-									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="familydetailid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
+								<%if(ExcMemberDetails.get(i)[18]!=null){ %>
+									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="formmemberid" value="<%=ExcMemberDetails.get(i)[15] %>"  formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
 								<%}%>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								<input form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="E"/>		
+								
 							</td>
 							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=ExcMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
-									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="ExcFormRemoveMember.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Delete">
+									<button form="edit-form-<%=ExcMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=ExcMemberDetails.get(i)[0] %>" formaction="ExcFormRemoveMember.htm"  onclick="return confirm('Are You Sure to Remove ?');"  title="Remove">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>
 								</td>

@@ -105,7 +105,6 @@ th,td
 			
 </style>
 		<meta charset="ISO-8859-1">
-		<title>Bill</title>
 	</head>
 
 <body>

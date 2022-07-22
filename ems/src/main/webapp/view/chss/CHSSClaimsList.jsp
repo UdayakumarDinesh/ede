@@ -9,7 +9,6 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
-<title>CHSS Claims List</title>
 </head>
 <body>
 <body>
@@ -29,13 +28,13 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Claims List</h5>
+				<h5>Claims</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm"> CHSS </a></li>
-						<li class="breadcrumb-item active " aria-current="page">CHSS Claims List</li>
+						<li class="breadcrumb-item active " aria-current="page">Claims</li>
 					</ol>
 				</div>
 			</div>

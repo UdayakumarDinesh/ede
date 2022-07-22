@@ -55,6 +55,8 @@ th,td
 <title>CHSS FORM - 2</title>
 </head>
 <%
+	String labcode=(String) session.getAttribute("LabCode");
+
 	List<Object[]> FwdMemberDetails = (List<Object[]>)request.getAttribute("FwdMemberDetails");
 	List<Object[]> relationtypes = (List<Object[]>)request.getAttribute("relationtypes");
 	Object[] empdetails = (Object[])request.getAttribute("empdetails");
@@ -126,7 +128,7 @@ th,td
 			</div>
 			
 			<div align="left">
-				<h3>UNIT : STARC</h3>
+				<h3>UNIT : <%=labcode.toUpperCase() %></h3>
 			</div>
 			<div align="left">
 				<table style="width:100%; ">
@@ -176,7 +178,6 @@ th,td
 					for(;i<FwdMemberDetails.size();i++)
 					{ %>
 					
-					<%-- <%if(status.equalsIgnoreCase("C")){ %> --%>
 						<tr id="show-edit-<%=FwdMemberDetails.get(i)[0] %>" style="display: none;" >
 							<td style="text-align: center;" ><form action="DepMemEditSubmit.htm" method="POST" enctype="multipart/form-data" autocomplete="off" id="edit-form-<%=FwdMemberDetails.get(i)[0] %>" ><%=i+1%></form></td>
 							<td>
@@ -185,7 +186,7 @@ th,td
 							<td>
 								<select form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" class="form-control select2 " style="width: 100%" name="mem-relation" data-live-search="true" data-size="6" required>
 									<%for(Object[] relation : relationtypes){ %>
-										<option value="<%=relation[0]%>" <%if(FwdMemberDetails.get(i)[14].toString().equalsIgnoreCase(relation[0].toString())){ %> selected <%} %> ><%=relation[1]%></option>
+										<option value="<%=relation[0]%>" <%if(FwdMemberDetails.get(i)[9].toString().equalsIgnoreCase(relation[0].toString())){ %> selected <%} %> ><%=relation[1]%></option>
 									<%} %>
 								</select>							
 							</td>
@@ -193,7 +194,7 @@ th,td
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-dob-edit" name="mem-dob" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit" name="mem-IncDate" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[18].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit" name="mem-IncDate" value="<%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[11].toString()) %>" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-occupation" id="mem-occupation-<%=FwdMemberDetails.get(i)[0] %>" <%if(FwdMemberDetails.get(i)[7]!=null){ %>value="<%=FwdMemberDetails.get(i)[7] %>" <%}else{ %>value="" <%} %> maxlength="255" onchange = "IncomeRequired('<%=FwdMemberDetails.get(i)[0] %>');" >
@@ -202,7 +203,7 @@ th,td
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="number" class="form-control numberonly" name="mem-income" id="mem-income-<%=FwdMemberDetails.get(i)[0] %>"  <%if(FwdMemberDetails.get(i)[8]!=null && !FwdMemberDetails.get(i)[8].toString().equals("0")){ %>value="<%=FwdMemberDetails.get(i)[8] %>" <%}else{ %>value="" <%} %>min="0"  >
 							</td>
 							<td>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(FwdMemberDetails.get(i)[9]!=null ){ %>value="<%=FwdMemberDetails.get(i)[9] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" <%if(FwdMemberDetails.get(i)[16]!=null ){ %>value="<%=FwdMemberDetails.get(i)[16] %>" <%}else{ %>value="" <%} %> maxlength="255" required >
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit"  >
@@ -216,17 +217,18 @@ th,td
 								</button>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="formid" value="<%=formid%>"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="incformid" value="<%=FwdMemberDetails.get(i)[13]%>"/>
 							</td>
 							
 						</tr>
-					<%-- <%} %> --%>
 						<tr id="show-view-<%=FwdMemberDetails.get(i)[0] %>"   >
 						
 							<td style="text-align: center;" ><%=i+1%></td>
 							<td><%=FwdMemberDetails.get(i)[1] %></td>
 							<td><%=FwdMemberDetails.get(i)[2] %></td>
 							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[18].toString()) %></td>
+							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[11].toString()) %></td>
 							<td>
 								<%if(FwdMemberDetails.get(i)[7]!=null){ %>
 									<%=FwdMemberDetails.get(i)[7] %>
@@ -242,31 +244,30 @@ th,td
 								<%} %>
 							</td>
 							<td>
-								<%if(FwdMemberDetails.get(i)[9]!=null){ %>
-									<%=FwdMemberDetails.get(i)[9] %>
+								<%if(FwdMemberDetails.get(i)[16]!=null){ %>
+									<%=FwdMemberDetails.get(i)[16] %>
 								<%}else{ %>
 									-
 								<%} %>
 							</td>
 							<td style="text-align: center;">
-								<%if(FwdMemberDetails.get(i)[10]!=null){ %>
-									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="familydetailid" value="<%=FwdMemberDetails.get(i)[0] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
+								<%if(FwdMemberDetails.get(i)[18]!=null){ %>
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
 								<%}%>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="FileFor" value="I"/>		
 							</td>
 							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
-									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>" formaction="FamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Delete ?');" title="Delete">
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>" formaction="FormFamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Remove">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>
 								</td>
-							<%} %>			
+							<% } %>			
 						</tr>
 					
 					
@@ -332,9 +333,9 @@ th,td
 							<b > The term Parents for the purpose of CHSS benefits does not include 'Step Parents'. Parent
 							should have actually resided at least for 60 days with the employee before they are proposed for
 							inclusion under the CHSS, and should continue to reside with the employee and be mainly
-							dependant on him / her.</b> If the total income of the parents from all sources does not exceed thE ay
+							dependent on him / her.</b> If the total income of the parents from all sources does not exceed the pay
 							of the employee, subject to the maximum income of the parents being Rs. 18,000/- per month, such
-							parents may be treated as mainly dependant on the employee. Income from land holdings, houses,
+							parents may be treated as mainly dependent on the employee. Income from land holdings, houses,
 							fixed deposits, dividends, securities, deposits, employment, pension etc., should be taken into account
 							for the purpose of total income of both the parents. If the parents of an employee move out for more
 							than 60 days continuously, the Unit should be notified by the employee for suspension / cancellation
@@ -342,14 +343,14 @@ th,td
 						</li>
 						<li class="list-group-item">
 							<p>
-								Married / divorced or legally separated daughters of employees, though dependant on the
+								Married / divorced or legally separated daughters of employees, though dependent on the
 								employee, are not eligible for medical benefits under CHSS. In the case of adopted children, only
 								legally adopted sons and daughters are eligible for the benefits of the CHSS.
 							</p>
 						</li>
 						<li class="list-group-item">
 							<p>
-								If any of the family members / dependants for whom the registration is sought is eligible to
+								If any of the family members / dependents for whom the registration is sought is eligible to
 								receive medical aid/ facility, cash subsidy, cash allowances or reimbursement for medical care from
 								sources other than the CHSS of SITAR Society, particulars of such benefits should be furnished on a
 								separate sheet.
@@ -371,14 +372,15 @@ th,td
 				
 				</div>
 				
-				<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependant </b> </div> 
+				<div align="center" ><b style="text-decoration: underline; text-align: center;" >Certificate in respect of dependent </b> </div> 
 				<p style="text-indent: 21px; ">
-				I certify that the family members whose names are mentioned above are mainly dependant on and
+				I certify that the family members whose names are mentioned above are mainly dependent on and
 					residing with me.
 				</p>
 				<br><br>
-				
+				<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 				 &nbsp; &nbsp; &nbsp;<input type="checkbox"  class="TCBox" > &nbsp; I have read the instructions, terms and condition mentioned above and I agree to them.
+				 <%} %>
 				<%} %>
 				<div class="row" align="left"> 
 					<div class="col-md-12">
