@@ -124,5 +124,6 @@ public interface PisDao {
 	public PisFamFormMembers getPisFamFormMembers(String formmemberid) throws Exception;
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
 	public int FormFamilyMemberHardDelete(String familydetailsid) throws Exception;
+	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception;
 	
 }

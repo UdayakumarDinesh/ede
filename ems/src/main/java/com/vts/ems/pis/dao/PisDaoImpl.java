@@ -1360,7 +1360,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr  WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  "; 
+	private static final  String GETFAMILYDETAILSFWD="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath,fd.isactive FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr  WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  "; 
 	@Override
 	public List<Object[]> GetFormMembersList(String formid) throws Exception 
 	{
@@ -1601,7 +1601,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		
 	}
 	
-	private static final String FORMFAMILYMEMBERHARDDELETE = "DELETE FROM pis_emp_family_details WHERE family_details_id =:familydetailsid; "; 
+	private static final String FORMFAMILYMEMBERHARDDELETE = "DELETE FROM pis_emp_family_details WHERE family_details_id =:familydetailsid ; "; 
 	@Override
 	public int FormFamilyMemberHardDelete(String familydetailsid)throws Exception
 	{
@@ -1679,6 +1679,23 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	{
 		logger.info(new Date() +"Inside DAO EmpFamMembersListMedDep");
 		Query query =manager.createNativeQuery(EMPFAMMEMBERSLISTMEDDEP);
+		query.setParameter("empid", empid);
+		List<Object[]> result = new ArrayList<>();
+		try {
+			result = (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private static final String EMPFAMMEMBERSNOTMEDDEP="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name,fd.dob,fd.memberoccupation, fd.memberincome FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND med_dep= 'N' AND fd.empid = :empid ;";
+	
+	@Override
+	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EmpFamMembersNotMedDep");
+		Query query =manager.createNativeQuery(EMPFAMMEMBERSNOTMEDDEP);
 		query.setParameter("empid", empid);
 		List<Object[]> result = new ArrayList<>();
 		try {

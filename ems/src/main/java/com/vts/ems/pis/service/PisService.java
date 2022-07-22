@@ -115,4 +115,5 @@ public interface PisService {
 	public String ExistingPassword(String loginid) throws Exception;
 	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
+	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception;
 }

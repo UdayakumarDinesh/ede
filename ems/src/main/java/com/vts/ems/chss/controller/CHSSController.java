@@ -1375,7 +1375,6 @@ public class CHSSController {
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			req.setAttribute("starctext",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\starctext.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));

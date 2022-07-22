@@ -769,6 +769,8 @@ public class PisServiceImpl implements PisService
 			return dao.getFamilyMemberModal(familydetailsid);
 		}
 		
+		
+		
 		@Override
 		public List<Object[]> GetFormMembersList(String formid)throws Exception
 		{
@@ -976,10 +978,10 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int FormFamilyMemberDelete(String formmemberid)throws Exception
 		{
-//			Object[] member =dao.getMemberdata(formmemberid);
-//			if(member[14].toString().equals("0")) {
-//				dao.FormFamilyMemberHardDelete(member[0].toString());
-//			}
+			Object[] member =dao.getMemberdata(formmemberid);
+			if(member[14].toString().equals("0")) {
+				dao.FormFamilyMemberHardDelete(member[0].toString());
+			}
 			
 			return dao.FormFamilyMemberDelete(formmemberid);
 		}
@@ -995,6 +997,13 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.EmpFamMembersListMedDep(empid);
 		}
+		
+		@Override
+		public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception
+		{
+			return dao.EmpFamMembersNotMedDep(empid);
+		}
+		
 		
 		@Override
 		public List<Object[]> GetExcFormMembersList(String formid) throws Exception 

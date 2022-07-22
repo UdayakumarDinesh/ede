@@ -284,28 +284,28 @@ th,td
 													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
 													/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 												}
-										%>
-											<tr>
-												<td class="center text-blue"><%=i+1 %></td>
-												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
-												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
-												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
-											</tr>
-										<%} %>
-										<%if(chssbillslist.size()>0){ %>
-											<tr>
-												<td colspan="5"></td>
-												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
-											</tr>
-										<%}else{ %>
-											<tr>
-												<td colspan="7" class="center" >Bills Not Added</td>
-											</tr>
-										<% } %>
+											%>
+												<tr>
+													<td class="center text-blue"><%=i+1 %></td>
+													<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
+													<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
+													<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+													<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
+													<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
+													<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
+												</tr>
+											<%} %>
+											<%if(chssbillslist.size()>0){ %>
+												<tr>
+													<td colspan="5"></td>
+													<td style="text-align: right;"><b>Rounded Total </b></td>
+													<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
+												</tr>
+											<%}else{ %>
+												<tr>
+													<td colspan="7" class="center" >Bills Not Added</td>
+												</tr>
+											<% } %>
 									</tbody>
 								</table>
 								
@@ -417,9 +417,13 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation Charges </b>
 																<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
-																	<i class="fa-solid fa-clock-rotate-left"></i>
-																</button>
+																	<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																		Tests
+																	</button>
+																	
+																	<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
+																		<i class="fa-solid fa-clock-rotate-left"></i>
+																	</button>
 																<%} %>
 															</td>
 															<td class="right"> 
@@ -486,10 +490,15 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(showhistorybtn){ %>
+																
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																	Medicines
+																</button>
+																
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
-																 </button>
-															 <%} %>
+																</button>
+															 <% } %>
 														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -555,7 +564,7 @@ th,td
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
-															 <%} %>
+															 <% } %>
 														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
