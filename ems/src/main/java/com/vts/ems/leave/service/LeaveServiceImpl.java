@@ -19,10 +19,12 @@ import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dao.LeaveApplRepo;
 import com.vts.ems.leave.dao.LeaveDaoImpl;
 import com.vts.ems.leave.dao.LeaveRegiRepo;
+import com.vts.ems.leave.dao.LeaveSaRaRepo;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
@@ -39,6 +41,9 @@ public class LeaveServiceImpl implements LeaveService{
 	LeaveApplRepo applrepo;
 	@Autowired
 	private LeaveDaoImpl dao;
+	
+	@Autowired
+	private LeaveSaRaRepo saRaRepo;
 	
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -2207,6 +2212,46 @@ public class LeaveServiceImpl implements LeaveService{
 	public List<Object[]> LeaveApprovalAdm(String empNo) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.LeaveApprovalAdm(empNo);
+	}
+
+	@Override
+	public List<Object[]> AssignReccSanc() throws Exception {
+		
+		return dao.AssignReccSanc();
+	}
+
+	@Override
+	public List<Object[]> getReccSanc(String empNo) throws Exception {
+		
+		return dao.getReccSanc(empNo);
+	}
+
+	@Override
+	public LeaveRaSa getReccSancById(String Id) throws Exception {
+		LeaveRaSa raSa=new LeaveRaSa();
+		try {
+		raSa=saRaRepo.findByEMPID(Id);
+		}catch (Exception e) {
+		}
+		return raSa;
+	}
+
+	@Override
+	public List<Object[]> getRaSaStatus() throws Exception {
+		
+		return dao.getRaSaStatus();
+	}
+
+	@Override
+	public long saveRaSa(LeaveRaSa raSa) throws Exception {
+		
+		return saRaRepo.save(raSa).getLeaveSaRaId();
+	}
+
+	@Override
+	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception {
+		
+		return dao.UploadMcFc(EmpId,Year);
 	}
 
 	

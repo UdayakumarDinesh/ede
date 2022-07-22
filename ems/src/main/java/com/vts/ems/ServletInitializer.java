@@ -113,8 +113,9 @@ public class ServletInitializer extends SpringBootServletInitializer {
 		        subject = msg.getSubject();
  
 		        System.out.println("Subject: " + subject);
-		        javax.mail.internet.MimeMultipart msger=(javax.mail.internet.MimeMultipart)msg.getContent();
-		        System.out.println(msger.getBodyPart(1).getContent().toString());
+		        //javax.mail.internet.MimeMultipart msger=(javax.mail.internet.MimeMultipart)msg.getContent();
+		        System.out.println(msg.getContent());
+		        System.out.println(msg.getReceivedDate());
 		        System.out.println("From: " + msg.getFrom()[0]);
 		        System.out.println("To: "+msg.getAllRecipients()[0]);
 		        msg.setFlag(Flag.SEEN, true);

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
+import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.pis.model.Employee;
 
@@ -51,4 +52,10 @@ public interface LeaveService {
 	public List<Object[]> LeaveApprovalDirRecc(String empNo)throws Exception;
 	public List<Object[]> LeaveApprovalDirNR(String empNo)throws Exception;
 	public List<Object[]> LeaveApprovalAdm(String empNo)throws Exception;
+	public List<Object[]> AssignReccSanc() throws Exception;
+	public List<Object[]> getReccSanc(String empNo) throws Exception ;
+	public LeaveRaSa getReccSancById(String Id) throws Exception ;
+	public List<Object[]> getRaSaStatus() throws Exception;
+	public long saveRaSa(LeaveRaSa raSa) throws Exception;
+	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception;
 }

@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
+import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -660,5 +661,84 @@ public class LeaveController {
 	   return "leave/LeaveApprovalDir";
 
 	}	
+	
+	@RequestMapping(value = "AssignReccSanc.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String AssignReccSanc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside AssignReccSanc.htm"+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "AssignReccSanc_htm");
+			req.setAttribute("AllRaSaAssignEmployee", service.AssignReccSanc());
+
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside AssignReccSanc.htm"+UserId, e);
+	       }
+	   return "leave/AssignReccSanc";
+
+	}
+	
+	@RequestMapping(value = "assign-recc-sanc.htm", method = RequestMethod.POST)
+	public String assignReccSancAddEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		String returnPage="leave/AssignReccSancAddEdit";
+		String empid = req.getParameter("selecRadioForEmpid");
+			if (req.getParameter("Add") != null) {
+				empid =EmpNo;
+				
+			}else if (req.getParameter("add") != null) {
+
+             LeaveRaSa saRa=new LeaveRaSa();
+             saRa.setTD_STATUS(req.getParameter("TdStatus"));
+             saRa.setLeave_Status(req.getParameter("LeaveStatus"));
+             saRa.setRA(req.getParameter("RA1"));
+             saRa.setRA2(req.getParameter("RA2"));
+             saRa.setRA3(req.getParameter("RA3"));
+             saRa.setSA(req.getParameter("SA"));
+             saRa.setTD_RA(req.getParameter("TDRA"));
+             saRa.setTD_SA(req.getParameter("TDSA"));
+             saRa.setRANO(Integer.parseInt(req.getParameter("RANO")));
+             saRa.setEMPID(empid);
+             saRa.setCreatedBy(UserId);
+             saRa.setCreatedDate(sdf.getSqlDateAndTimeFormat().format(new Date()));
+             if(!"0".equals(req.getParameter("saRaId"))) {
+            	 saRa.setLeaveSaRaId(Long.parseLong(req.getParameter("saRaId")));
+             }
+
+ 			
+ 			long result=service.saveRaSa(saRa);
+ 		    if (result>0) {
+ 				redir.addAttribute("result", "Assigned   Successfully");
+ 			} else {
+ 				redir.addAttribute("resultfail", "Assign  unsuccessful");
+ 			}
+            returnPage="redirect:/AssignReccSanc.htm"; 
+
+		}
+	    req.setAttribute("RaSaStatus", service.getRaSaStatus());
+	    req.setAttribute("ReccSancById", service.getReccSancById(empid));
+		req.setAttribute("ReccSanc", service.getReccSanc(empid));
+		req.setAttribute("empNo", empid);
+		req.setAttribute("AllEmployee", service.EmpList());
+
+		return returnPage;
+	}
+	
+	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String UploadMcFc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside UploadMcFc.htm"+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "UploadMcFc_htm");
+			req.setAttribute("UploadMcFc", service.UploadMcFc((String) ses.getAttribute("EmpNo"),req.getParameter("yr")));
+
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside UploadMcFc.htm"+UserId, e);
+	       }
+	   return "leave/UploadMcFc";
+
+	}
 
 }

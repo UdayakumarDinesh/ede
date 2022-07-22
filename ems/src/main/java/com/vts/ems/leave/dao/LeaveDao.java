@@ -58,4 +58,8 @@ public interface LeaveDao {
 	public List<Object[]> LeaveApprovalDirRecc(String empNo)throws Exception;
 	public List<Object[]> LeaveApprovalDirNR(String empNo)throws Exception;
 	public List<Object[]> LeaveApprovalAdm(String empNo)throws Exception;
+	public List<Object[]> AssignReccSanc() throws Exception ;
+	public List<Object[]> getReccSanc(String empNo) throws Exception ;
+	public List<Object[]> getRaSaStatus() throws Exception;
+	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception;
 }

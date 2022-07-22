@@ -550,7 +550,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                         <tr><th style="font-size:13px !important;">To-Date:</th><td style="font-size:13px !important;"><%=sdf.format(sanction.get(0)[4])%></td></tr>
                         <tr><th style="font-size:13px !important;">Status:</th><td style="font-size:13px !important;"><%=sanction.get(0)[5]%></td></tr>
                         
-                        <tr><th style="font-size:13px !important;">Edit &amp; Delete</th>
+                        <tr><th style="font-size:13px !important;">Modify &amp; Cancel</th>
                         <td style="font-size:10px !important;">
                                  <form class="lv-action" action="edit-leave.htm" method="POST">
                                 		
@@ -658,7 +658,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 </td>
                             </tr>       <%}}else{ %>  
                               <tr style="font-size: 12px; line-height: 0px;"><td colspan="6">
-                             <span class="badge badge-warning">No ApplyData Present For Modify And Delete</span>
+                             <span class="badge badge-warning">No ApplyData Present For Edit And Delete</span>
                              </td></tr>
                             <%} %>
                          
@@ -722,7 +722,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 </td>
                             </tr>   <%}}else{ %>  
                               <tr style="font-size: 12px; line-height: 0px;"><td colspan="6">
-                             <span class="badge badge-warning">No ApplyData Present For Modify And Delete</span>
+                             <span class="badge badge-warning">No ApplyData Present For Modify And Cancel</span>
                              </td></tr>
                             <%} %>
                          

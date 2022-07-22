@@ -665,5 +665,42 @@ public class LeaveDaoImpl implements LeaveDao{
 		List<Object[]> getAppliedLeave= query.getResultList();
 		return getAppliedLeave;
 	}
+	private static final String RECCSANC="SELECT  l.empid AS empid,a.empname,b.empname AS rname,c.empname AS sname,l.leave_status,d.empname AS tdra,e.empname AS tdsa,l.td_status,a.srno FROM employee a,employee b,employee c,employee d,employee e, leave_sa_ra l WHERE a.empno=l.empid AND b.empno=l.ra AND c.empno=l.sa AND d.empno=l.td_ra AND e.empno=l.td_sa   AND a.isactive='1' ORDER BY srno ";
+	@Override
+	public List<Object[]> AssignReccSanc() throws Exception {
+		logger.info(new Date() +"Inside AssignReccSanc");	
+		Query query = manager.createNativeQuery(RECCSANC);
+		List<Object[]> AssignReccSanc= query.getResultList();
+		return AssignReccSanc;
+	}
 	
+	private static final String RECCSANCLIST="call leave_sa_ra(:empNo)";
+	@Override
+	public List<Object[]> getReccSanc(String empNo) throws Exception {
+		logger.info(new Date() +"Inside getReccSanc");	
+		Query query = manager.createNativeQuery(RECCSANCLIST);
+		query.setParameter("empNo", empNo);
+		List<Object[]> getReccSanc= query.getResultList();
+		return getReccSanc;
+	}
+	
+	private static final String RASASTATUS="select * from leave_sa_ra_status";
+	@Override
+	public List<Object[]> getRaSaStatus() throws Exception {
+		logger.info(new Date() +"Inside getRaSaStatus");	
+		Query query = manager.createNativeQuery(RASASTATUS);
+		List<Object[]> getRaSaStatus= query.getResultList();
+		return getRaSaStatus;
+	}
+
+	private static final String UPLAODMCFC="SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,c.mc_file AS mcfile,c.fc_file AS fcfile  FROM leave_appl  a, leave_code b, leave_mc_fc c WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid=c.applid AND a.empid=:empno  AND a.leaveyear=:yr UNION SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,'0' AS mcfile,'0' AS fcfile  FROM leave_appl  a, leave_code b WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid NOT IN (SELECT applid FROM leave_mc_fc WHERE  empid=:empno  AND leaveyear=:yr) AND a.empid=:empno  AND a.leaveyear=:yr";
+	@Override
+	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception {
+		logger.info(new Date() +"Inside getRaSaStatus");	
+		Query query = manager.createNativeQuery(UPLAODMCFC);
+		query.setParameter("empno", EmpId);
+		query.setParameter("yr", Year);
+		List<Object[]> getRaSaStatus= query.getResultList();
+		return getRaSaStatus;
+	}
 }

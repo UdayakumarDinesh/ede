@@ -22,18 +22,15 @@ public class LeaveRaSa {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long LeaveSaRaId;
 	private String EMPID;
+	private Integer RANO;
 	private String RA;
+	private String RA2;
+	private String RA3;
 	private String SA;
-	private String STATUS;
+	private String Leave_Status;
 	private String TD_RA;
 	private String TD_SA;
 	private String TD_STATUS;
-	private String MT_STATUS;
-	private String HR_STATUS;
-	private String MMG_STATUS;
-	private String PIS_STATUS;
-	private String DO_STATUS;
-	private String ATTND_STATUS;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
