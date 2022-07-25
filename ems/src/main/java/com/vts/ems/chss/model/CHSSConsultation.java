@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "chss_consultation")
+@Entity(name = "chss_bill_consultation")
 public class CHSSConsultation implements Serializable {
 
 	private static final long serialVersionUID = 1L;

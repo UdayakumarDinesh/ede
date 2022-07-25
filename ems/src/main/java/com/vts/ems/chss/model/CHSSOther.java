@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "chss_other")
+@Table(name = "chss_bill_other")
 public class CHSSOther implements Serializable {
 
 	private static final long serialVersionUID = 1L;

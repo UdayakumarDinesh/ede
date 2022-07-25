@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="chss_tests")
+@Table(name="chss_bill_tests")
 public class CHSSTests implements Serializable {
 
 	private static final long serialVersionUID = 1L;
