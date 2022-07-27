@@ -396,7 +396,7 @@
 
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 		<div class="col-md-3"></div>
-		<div class="col-md-5 d-flex justify-content-center">
+		<div class="col-md-4 d-flex justify-content-center">
 			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
 		</div>
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
@@ -465,10 +465,18 @@
 									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
 										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
-											<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-												Edit
-											</button>	
 											
+											<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>	
+												<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+													Edit
+												</button>
+											
+											<%}else{ %>
+												<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDApply.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+													Edit
+												</button>
+											
+											<%} %>
 											<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
 												<i class="fa-solid fa-trash-can " style="color: red"></i>
 											</button>	

@@ -154,36 +154,34 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 			 <div class="col-md-10"  >
 			 <table class="table table-striped table-bordered" >
 					<tbody>
-					<tr ><td colspan="5" rowspan="2" style="background-color: #0e6fb6; color: white;"><h3 style="text-align: center;"> <%=employeedetails[3]%> (<%=employeedetails[22]%>)</h3></td></tr>
-					<tr></tr>
+					<tr ><td colspan="6" style="background-color: #0e6fb6; color: white;"><h3 style="text-align: center;margin: 0px;"> <%=employeedetails[3]%> (<%=employeedetails[22]%>)</h3></td></tr>
 						<tr>
 						     <th>Designation</th>
 	                         <th>Department</th>
 	                         <th>DOB</th>
 	                         <th>Employee No</th>
-	                         <th>UID</th>
+	                         <th>Pay Grade</th>
+	                         <th>Basic Pay</th>
 						</tr>
 						<tr>
-						<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
-				     	<td><%if(employeedetails[23]!=null&&employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
-						<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
-					    <td><%if(employeedetails[14]!=null){%><%=employeedetails[14]%><%}else{%>--<%}%></td>
-					    <td><%if(employeedetails[15]!=null){%><%=employeedetails[15]%><%}else{%>--<%}%></td>
-						
+							<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
+					     	<td><%if(employeedetails[23]!=null&&employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
+							<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
+						    <td><%if(employeedetails[14]!=null){%><%=employeedetails[14]%><%}else{%>--<%}%></td>
+						    <td><%if(employeedetails[33]!=null){%><%=employeedetails[33]%><%}else{%>--<%}%></td>
+							<td><%if(employeedetails[34]!=null){%><%=employeedetails[34]%><%}else{%>--<%}%></td>
 						</tr>
 						<%if(!"P".equalsIgnoreCase(LoginType)){ %>
-					<tr><td colspan="5"  style="background-color: white; " > 
-					
-					<form action="EmpRequestMsg.htm" method="GET">
-					 <div class="row" >
-					 		<div class="col-4"></div>
-					 		<div class="col-6" align="right"> <p><b style="color: red;">Note :</b> Any changes in profile request to Admin </p></div>
-					    	<div class="col-2" align="right">
-					    		<button type="submit" class="btn btn-sm misc-btn"  name="action" value="msg" >REQUEST MESSAGE</button>
-					    	</div>  	
-			    	</div>  
-			    	</form>
-			       </td></tr> <%}%>
+							<tr>
+								<td colspan="6"  style="background-color: white; " > 
+									<form action="EmpRequestMsg.htm" method="GET" style="float: right;">
+								 		<span><b style="color: red;">Note :</b> Any changes in profile request to Admin  &nbsp;&nbsp;&nbsp;&nbsp;
+											<button type="submit" class="btn btn-sm misc-btn"  name="action" value="msg" >REQUEST MESSAGE</button>
+								    	</span>
+							    	</form>
+						       </td>
+					       </tr> 
+					    <%}%>
 					</tbody>
 				</table>
 			 </div>
@@ -192,19 +190,16 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 			<div class="col-12">
 			
 		<ul class="nav nav-tabs" role="tablist">
-	<li class="nav-item">
-		<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" >Basic Details</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Family</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Address</a>
-	</li>
-	
-
-	
-</ul>
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" >Basic Details</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Family</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Address</a>
+			</li>
+		</ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
@@ -351,7 +346,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 				<table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Permanent Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;" > <b>Permanent Address</b></td>
 						</tr>
 			        	<tr></tr>
 						<tr></tr>
@@ -465,7 +460,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 				<table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Next kin  Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Next kin  Address</b></td>
 						</tr>
 			        	<tr></tr>
 						<tr></tr>
@@ -521,7 +516,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 				<table class="table table-striped table-bordered" >
 					<tbody>
 						<tr>
-							<td colspan="6" rowspan="3"> <b>Emergency Address</b></td>
+							<td colspan="6" rowspan="3" style="background-color: #0e6fb6; color: white;"> <b>Emergency Address</b></td>
 						</tr>
 			        	<tr></tr>
 						<tr></tr>

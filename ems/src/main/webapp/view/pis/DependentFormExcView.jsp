@@ -175,7 +175,7 @@ th,td
 					</tr>
 					
 					<%int i=0;
-					ArrayList<String> addedlist = new ArrayList<String>();
+					ArrayList<String> addedlist = new ArrayList<String>();  
 					for(;i<ExcMemberDetails.size();i++)
 					{
 						addedlist.add(ExcMemberDetails.get(i)[0].toString());
@@ -260,7 +260,7 @@ th,td
 					
 					<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 						
-						<tr>
+					<tr>
 						<td style="text-align: center;" ><form method="post" action="DepExcusionFormMemAdd.htm" enctype="multipart/form-data" autocomplete="off" id="add-form" ><%=i+1%></form></td>
 						<td>
 							<select class="form-control selectpicker dropdown" form="add-form" id="familydetailsid-0" name="familydetailsid" onchange="changeReletion('0')" data-dropup-auto="false" data-live-search="true" data-container="body" data-show-subtext="false" required="required" >

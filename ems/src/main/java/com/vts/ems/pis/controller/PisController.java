@@ -1726,7 +1726,8 @@ public class PisController {
    
    
 	@RequestMapping(value="ReqEmerAddajax.htm",method=RequestMethod.GET)
-	public  @ResponseBody Object[] ReqEmerAddajax(HttpServletRequest req,HttpServletResponse response,HttpSession ses) throws Exception {
+	public  @ResponseBody Object[] ReqEmerAddajax(HttpServletRequest req,HttpServletResponse response,HttpSession ses) throws Exception 
+	{
 		   String Username = (String) ses.getAttribute("Username");
 	       logger.info(new Date() +"Inside ReqEmerAddajax.htm "+Username);  
 	       List<Object[]> EmerAddress=null;
@@ -1741,7 +1742,6 @@ public class PisController {
 				e.printStackTrace();
 			}	
 	    	return EmerAddress.toArray();
-
      }
 	
 	@RequestMapping(value="AuditStamping.htm" , method= {RequestMethod.GET,RequestMethod.POST})
@@ -2058,8 +2058,6 @@ public class PisController {
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside DependentExcForm.htm "+Username);
 			try {
-				
-				
 				String formid = req.getParameter("formid");
 				
 				Object[] formdata = service.GetFamFormData(formid);
@@ -2069,7 +2067,7 @@ public class PisController {
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );				
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
-				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid));
+//				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid,formid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				
 				req.setAttribute("relationtypes" , service.familyRelationList() );				
@@ -2115,7 +2113,53 @@ public class PisController {
 			}
 			
 		}
-
+	 	
+	 	@RequestMapping(value="FamilyFormForwardRet.htm" )
+		public String FamilyFormForwardRet(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			logger.info(new Date() +"Inside FamilyFormForwardRet.htm "+Username);		
+			try {
+				String formid = req.getParameter("formid");
+				String action = req.getParameter("action");
+				String remarks = req.getParameter("remarks");
+				
+				long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,remarks);
+				if(result>0) 
+				{
+					if(action.equalsIgnoreCase("F")) {
+						redir.addAttribute("result", "Form Forwarded Successfully ");
+					}if(action.equalsIgnoreCase("R")) {
+						redir.addAttribute("result", "Form  Returned Successfully ");
+					}if(action.equalsIgnoreCase("A")) {
+						redir.addAttribute("result", "Form  Approved Successfully ");
+					}
+				}
+				else 
+				{
+					if(action.equalsIgnoreCase("F")) {
+						redir.addAttribute("resultfail", "Form Forward Unsuccessful");
+					}if(action.equalsIgnoreCase("R")) {
+						redir.addAttribute("resultfail", "Form Return Unsuccessful");
+					}if(action.equalsIgnoreCase("A")) {
+						redir.addAttribute("resultfail", "Form Approval Unsuccessful");
+					}
+				}		
+				
+				if(action.equalsIgnoreCase("F")) {
+					return "redirect:/FamIncExcFwdList.htm";
+				}else
+				{
+					return "redirect:/FamFormsApproveList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside FamilyFormForwardRet.htm "+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
+		
 	
 	 	@RequestMapping(value ="DepInclusionFormView.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
 		public String DepInclusionFormView(Model model,HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
@@ -2153,6 +2197,9 @@ public class PisController {
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
 				req.setAttribute("relationtypes" , service.familyRelationList() );
+				
+				req.setAttribute("FamilymemDropdown" , service.EmpFamMembersNotMedDep(empid,formid));
+				
 				req.setAttribute("isApprooval" , isapproval );
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				
@@ -2166,181 +2213,202 @@ public class PisController {
 		}
 	
 	
-
-	
-	
-		
-	@RequestMapping(value="FamilyFormForwardRet.htm" )
-	public String FamilyFormForwardRet(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		logger.info(new Date() +"Inside FamilyFormForwardRet.htm "+Username);		
-		try {
-			String formid = req.getParameter("formid");
-			String action = req.getParameter("action");
-			String remarks = req.getParameter("remarks");
-			
-			long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,remarks);
-			if(result>0) 
-			{
-				if(action.equalsIgnoreCase("F")) {
-					redir.addAttribute("result", "Form Forwarded Successfully ");
-				}if(action.equalsIgnoreCase("R")) {
-					redir.addAttribute("result", "Form  Returned Successfully ");
-				}if(action.equalsIgnoreCase("A")) {
-					redir.addAttribute("result", "Form  Approved Successfully ");
-				}
-			}
-			else 
-			{
-				if(action.equalsIgnoreCase("F")) {
-					redir.addAttribute("resultfail", "Form Forward Unsuccessful");
-				}if(action.equalsIgnoreCase("R")) {
-					redir.addAttribute("resultfail", "Form Return Unsuccessful");
-				}if(action.equalsIgnoreCase("A")) {
-					redir.addAttribute("resultfail", "Form Approval Unsuccessful");
-				}
-			}		
-			
-			if(action.equalsIgnoreCase("F")) {
-				return "redirect:/FamIncExcFwdList.htm";
-			}else
-			{
-				return "redirect:/FamFormsApproveList.htm";
-			}
-		} catch (Exception e) {
-			logger.error(new Date() +" Inside FamilyFormForwardRet.htm "+Username, e);
-			e.printStackTrace();
-			return "static/Error";
-		}
-	}
-	
-	
-		
-	@RequestMapping(value ="DepMemAddSubmit.htm" , method =  RequestMethod.POST )
-	public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
-		try {
-			String empid = ((Long) ses.getAttribute("EmpId")).toString();			
-			/* mem-attach */
-			String name = req.getParameter("mem-name");
-	    	String relation  = req.getParameter("mem-relation");
-	    	String dob  = req.getParameter("mem-dob");
-	    	String occupation =  req.getParameter("mem-occupation").trim();
-	    	String income = req.getParameter("mem-income");
-	    	String comment = req.getParameter("mem-comment");
-	    	String IncDate = req.getParameter("mem-IncDate");
-	    	
-	    	Object[] empdetails = service.EmployeeDetails(empid);
-	    	Object[] relationdata = service.RelationshipData(relation);
-	    	
-	    	String filepath =  null;	    	
-			EmpFamilyDetails details = new EmpFamilyDetails();
-	    	 
-			details.setMember_name(WordUtils.capitalize(name.trim()));
-	    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
-	    	details.setRelation_id(Integer.parseInt(relation));
-	    	details.setEmpid(empid);
-	    	details.setCghs_ben_id(empdetails[2].toString());
-	    	details.setFamily_status_id(1);
-	    	details.setPH("N"); 
-	    	details.setBlood_group("Not Available");
-	    	details.setGender(relationdata[2].toString());
-	    	
-//	    	details.setStatus_from(new Date());
-	    	details.setMed_dep("Y");
-	    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(IncDate));
-	    	details.setLtc_dep("N");
-//	    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
-	    	
-	    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
-	    	if( relidlist.contains(relation.trim()))
-	    	{
-	    		details.setMar_unmarried("Y");
-	    	}
-	    	else
-	    	{
-	    		details.setMar_unmarried("N");
-	    	}
-	    	
-	    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
-	    	{
-	    		details.setEmp_unemp("Y");
-	    		details.setEmpStatus("Private");
-	    		details.setMemberOccupation(occupation);
-	    		details.setMemberIncome(Long.parseLong(income));
-	    	}
-	    	else
-	    	{
-	    		details.setEmp_unemp("N");
-	    	}
-	    	details.setCreatedBy(Username);
-	    	details.setCreatedDate(sdtf.format(new Date()));  
-	    	details.setIsActive(0);
-	    	
-	    	
-	    	String IncFormId = req.getParameter("formid");
-	        if(IncFormId.equals("0")) 
-	        {
-	        	PisEmpFamilyForm form = new PisEmpFamilyForm();
-	        	form.setEmpid(Long.parseLong(empid));
-	        	form.setFormStatus("C");
-	        	form.setFormType("I");
-	        	form.setIsActive(1);
-//	        	details.setIncFormId(service.EmpFamilyFormAdd(form));
-	        	IncFormId = String.valueOf(service.EmpFamilyFormAdd(form));
-	        	
-	        }
-//	        else
-//	        {
-//	        	details.setIncFormId(Long.parseLong(IncFormId));
-//	        }
-	    	
-//	    	details.setIncComment(comment);
-	  
-	    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
-	    	{
-//	    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
-	    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
-	    	}
-	    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()==0)
-	    	{
-	    		redir.addAttribute("resultfail", "Invalid File, Please Check the file");
-	    		redir.addFlashAttribute("formid",IncFormId);
+	 	@RequestMapping(value ="ExistingMemAddSubmit.htm" , method =  RequestMethod.POST )
+		public String ExistingMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();	
+			logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
+			try {
+				String familydetailsid = req.getParameter("familydetailsid");
+		    	String IncDate  = req.getParameter("mem-IncDate");
+		    	String comment  = req.getParameter("mem-comment");
+		    	String IncFormId  = req.getParameter("incformid");
+		    	
+		    	EmpFamilyDetails member =  service.getFamilyMemberModal(familydetailsid);
+		    	member.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(IncDate));
+		    	member.setMed_dep("N");
+		    	service.EditFamilyDetails(member);
+		    	
+		    	
+		    	String filepath=null;
+		    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
+		    	{
+		    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+		    	}
+		    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()==0)
+		    	{
+		    		redir.addAttribute("resultfail", "Invalid File, Please Check the file");
+		    		redir.addFlashAttribute("formid",IncFormId);
+			    	
+					return "redirect:/DepInclusionFormView.htm";
+		    	}
+		    	
+		    	if(IncFormId.equals("0")) 
+		        {
+		        	PisEmpFamilyForm form = new PisEmpFamilyForm();
+		        	form.setEmpid(Long.parseLong(empid));
+		        	form.setFormStatus("C");
+		        	form.setFormType("I");
+		        	form.setIsActive(1);
+	//	        	details.setIncFormId(service.EmpFamilyFormAdd(form));
+		        	IncFormId = String.valueOf(service.EmpFamilyFormAdd(form));
+		        	
+		        }
+	    	   
+		    	PisFamFormMembers formmember = new PisFamFormMembers();
+		    	formmember.setFamilyFormId(Long.parseLong(IncFormId));
+		    	formmember.setFamilyDetailsId(Long.parseLong(familydetailsid));
+		    	formmember.setIncExcDate(DateTimeFormatUtil.RegularToSqlDate(IncDate));
+		    	formmember.setComments(comment);
+		    	formmember.setAttachFilePath(filepath);
+		    	formmember.setIsActive(1);
+		    	formmember.setCreatedBy(Username);
+		    	long count=service.PisFamFormMembersAdd(formmember);
+		    	
+		    	
+		    	if(count>0){
+		    		redir.addAttribute("result", "Adding Member to Form Successfully");	
+		   		} else {
+		   			redir.addAttribute("resultfail", "Adding Member to Form Unsuccessful");
+		    	}                    
+				
+		    	redir.addFlashAttribute("formid",IncFormId);
 		    	
 				return "redirect:/DepInclusionFormView.htm";
-	    	}
-	    	long familydetailsid = service.AddFamilyDetails(details);
-    	   
-	    	PisFamFormMembers formmember = new PisFamFormMembers();
-	    	formmember.setFamilyFormId(Long.parseLong(IncFormId));
-	    	formmember.setFamilyDetailsId(familydetailsid);
-	    	formmember.setIncExcDate(DateTimeFormatUtil.RegularToSqlDate(IncDate));
-	    	formmember.setComments(comment);
-	    	formmember.setAttachFilePath(filepath);
-	    	formmember.setIsActive(1);
-	    	formmember.setCreatedBy(Username);
-	    	service.PisFamFormMembersAdd(formmember);
-	    	
-	    	if(familydetailsid>0){
-	    		redir.addAttribute("result", "Family Member Details Saved Successfully");	
-	   		} else {
-	   			redir.addAttribute("resultfail", "Family Member Details Saved Unsuccessful");
-	    	}                    
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside ExistingMemAddSubmit.htm "+Username, e);
+				return "static/Error";
+			}
 			
-	    	redir.addFlashAttribute("formid",IncFormId);
-	    	
-			return "redirect:/DepInclusionFormView.htm";
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside DepMemAddSubmit.htm "+Username, e);
-			return "static/Error";
 		}
 		
-	}
+	
+	
+		
+		@RequestMapping(value ="DepMemAddSubmit.htm" , method =  RequestMethod.POST )
+		public String DepMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DepMemAddSubmit.htm "+Username);
+			try {
+				String empid = ((Long) ses.getAttribute("EmpId")).toString();			
+				String name = req.getParameter("mem-name");
+		    	String relation  = req.getParameter("mem-relation");
+		    	String dob  = req.getParameter("mem-dob");
+		    	String occupation =  req.getParameter("mem-occupation").trim();
+		    	String income = req.getParameter("mem-income");
+		    	String comment = req.getParameter("mem-comment");
+		    	String IncDate = req.getParameter("mem-IncDate");
+		    	
+		    	Object[] empdetails = service.EmployeeDetails(empid);
+		    	Object[] relationdata = service.RelationshipData(relation);
+		    	
+		    	String filepath =  null;	    	
+				EmpFamilyDetails details = new EmpFamilyDetails();
+		    	 
+				details.setMember_name(WordUtils.capitalize(name.trim()));
+		    	details.setDob(DateTimeFormatUtil.dateConversionSql(dob));
+		    	details.setRelation_id(Integer.parseInt(relation));
+		    	details.setEmpid(empid);
+		    	details.setCghs_ben_id(empdetails[2].toString());
+		    	details.setFamily_status_id(1);
+		    	details.setPH("N"); 
+		    	details.setBlood_group("Not Available");
+		    	details.setGender(relationdata[2].toString());
+		    	
+	//	    	details.setStatus_from(new Date());
+		    	details.setMed_dep("Y");
+		    	details.setMed_dep_from(DateTimeFormatUtil.dateConversionSql(IncDate));
+		    	details.setLtc_dep("N");
+	//	    	details.setLtc_dep_from(DateTimeFormatUtil.dateConversionSql(LTC));
+		    	
+		    	List<String> relidlist = Arrays.asList("1","2","3","4","5","8","11","12","15","16");
+		    	if( relidlist.contains(relation.trim()))
+		    	{
+		    		details.setMar_unmarried("Y");
+		    	}
+		    	else
+		    	{
+		    		details.setMar_unmarried("N");
+		    	}
+		    	
+		    	if(occupation!=null && !occupation.equals("") && Long.parseLong(income)>0 ) 
+		    	{
+		    		details.setEmp_unemp("Y");
+		    		details.setEmpStatus("Private");
+		    		details.setMemberOccupation(occupation);
+		    		details.setMemberIncome(Long.parseLong(income));
+		    	}
+		    	else
+		    	{
+		    		details.setEmp_unemp("N");
+		    	}
+		    	details.setCreatedBy(Username);
+		    	details.setCreatedDate(sdtf.format(new Date()));  
+		    	details.setIsActive(0);
+		    	
+		    	
+		    	String IncFormId = req.getParameter("formid");
+		        if(IncFormId.equals("0")) 
+		        {
+		        	PisEmpFamilyForm form = new PisEmpFamilyForm();
+		        	form.setEmpid(Long.parseLong(empid));
+		        	form.setFormStatus("C");
+		        	form.setFormType("I");
+		        	form.setIsActive(1);
+	//	        	details.setIncFormId(service.EmpFamilyFormAdd(form));
+		        	IncFormId = String.valueOf(service.EmpFamilyFormAdd(form));
+		        	
+		        }
+	//	        else
+	//	        {
+	//	        	details.setIncFormId(Long.parseLong(IncFormId));
+	//	        }
+		    	
+	//	    	details.setIncComment(comment);
+		  
+		    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
+		    	{
+	//	    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+		    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+		    	}
+		    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()==0)
+		    	{
+		    		redir.addAttribute("resultfail", "Invalid File, Please Check the file");
+		    		redir.addFlashAttribute("formid",IncFormId);
+			    	
+					return "redirect:/DepInclusionFormView.htm";
+		    	}
+		    	long familydetailsid = service.AddFamilyDetails(details);
+	    	   
+		    	PisFamFormMembers formmember = new PisFamFormMembers();
+		    	formmember.setFamilyFormId(Long.parseLong(IncFormId));
+		    	formmember.setFamilyDetailsId(familydetailsid);
+		    	formmember.setIncExcDate(DateTimeFormatUtil.RegularToSqlDate(IncDate));
+		    	formmember.setComments(comment);
+		    	formmember.setAttachFilePath(filepath);
+		    	formmember.setIsActive(1);
+		    	formmember.setCreatedBy(Username);
+		    	service.PisFamFormMembersAdd(formmember);
+		    	
+		    	if(familydetailsid>0){
+		    		redir.addAttribute("result", "Family Member Details Saved Successfully");	
+		   		} else {
+		   			redir.addAttribute("resultfail", "Family Member Details Saved Unsuccessful");
+		    	}                    
+				
+		    	redir.addFlashAttribute("formid",IncFormId);
+		    	
+				return "redirect:/DepInclusionFormView.htm";
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside DepMemAddSubmit.htm "+Username, e);
+				return "static/Error";
+			}
+			
+		}
 
 	 	@RequestMapping(value ="DepMemEditSubmit.htm" , method =  RequestMethod.POST )
 		public String DepMemEditSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach-edit") MultipartFile IncAttachment)throws Exception
@@ -2467,7 +2535,7 @@ public class PisController {
 	 	
 	 	
 	 	@RequestMapping(value ="FormFamilyMemberDelete.htm" , method =  RequestMethod.POST )
-		public String FormFamilyMemberDelete(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach-edit") MultipartFile IncAttachment)throws Exception
+		public String FormFamilyMemberDelete(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside FormFamilyMemberDelete.htm "+Username);
@@ -2620,7 +2688,7 @@ public class PisController {
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );				
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
-				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid));
+				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid,formid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				
 				req.setAttribute("relationtypes" , service.familyRelationList() );				

@@ -12,23 +12,25 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "chss_misc")
-public class CHSSMisc implements Serializable {
+@Entity(name = "chss_bill_equipment")
+public class CHSSBillEquipment implements Serializable {
+
 
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long ChssMiscId;
-	private Long BillId;
-	private String MiscItemName;
-	private Integer MiscCount;
-	private double MiscItemCost;
+	private long CHSSEquipmentId;
+	private long BillId;
+	private String EquipmentName;
+	private double EquipmentCost;
 	private double AmountPaid;
-	private double MiscRemAmount;
+	private double EquipmentRemAmt;
 	private String Comments;
-	private Integer IsActive;
+	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
+	
 }

@@ -1,29 +1,33 @@
 package com.vts.ems.chss.model;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@Entity
-@Table(name="chss_tests")
-public class CHSSTests implements Serializable {
+@Getter
+@Setter
+@Entity(name = "chss_bill_consultation")
+public class CHSSBillConsultation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long CHSSTestId;
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
+	private Long ConsultationId;
 	private Long BillId;
-	private Long TestMainId;
-	private Long TestSubId;
-	private double TestCost;
+	private String ConsultType; 
+	private String DocName;
+	private int DocQualification;
+	private String ConsultDate;
+	private double ConsultCharge;
+	private double ConsultRemAmount;
 	private double AmountPaid;
-	private double TestRemAmount;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

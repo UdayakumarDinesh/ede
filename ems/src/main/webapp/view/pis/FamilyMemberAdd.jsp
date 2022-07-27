@@ -238,9 +238,9 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 			                        	<select class="form-control input-sm" name="EmpStatus" id="mem-employed-status">
 				                            <option value="" selected disabled >Select Status</option>
 						                    <option value="Private">Private</option>
-						                    <option value="Central Goverment">Central Goverment.</option>
-						                    <option value="State Goverment">State Goverment</option>
-						                    <option value="PSU">PSU</option>
+						                    <option value="Central Goverment">Central Government</option>
+						                    <option value="State Goverment">State Government</option>
+						                    <option value="PSU">PSUs</option>
 			                            </select>
 			                        </div>  
 			               		</div>

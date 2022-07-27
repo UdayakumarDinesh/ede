@@ -9,29 +9,26 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.Setter;
-
 @Getter
 @Setter
-@Entity(name = "chss_consultation")
-public class CHSSConsultation implements Serializable {
+@Entity(name = "chss_bill_ipdheads")
+public class CHSSBillIPDheads implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long ConsultationId;
-	private Long BillId;
-	private String ConsultType; 
-	private String DocName;
-	private String DocQualification;
-	private String ConsultDate;
-	private double ConsultCharge;
-	private double ConsultRemAmount;
+	private long CHSSItemHeadId;
+	private long BillId;
+	private int IPDBillHeadId;
+	private double BillHeadCost;
 	private double AmountPaid;
+	private double BillHeadRemAmt;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
+	
 }

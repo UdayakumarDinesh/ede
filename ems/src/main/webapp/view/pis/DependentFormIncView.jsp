@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>   
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <%@page import="java.util.List"%>
@@ -42,6 +43,10 @@ th,td
 	padding: 5px;
 }
 
+th
+{
+	text-align: center;
+}
 
 .nobordertd
 {
@@ -62,7 +67,7 @@ th,td
 	Object[] empdetails = (Object[])request.getAttribute("empdetails");
 	Object[] employeeResAddr = (Object[])request.getAttribute("employeeResAddr");
 	Object[] formdetails = (Object[])request.getAttribute("formdetails");
-	
+	List<Object[]> FamilymemDropdown = (List<Object[]>)request.getAttribute("FamilymemDropdown");
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	
 	String isapproval = (String)request.getAttribute("isApprooval");
@@ -175,7 +180,12 @@ th,td
 						<%} %>
 					</tr>
 					<%int i=0;
+					ArrayList<String> addedlist = new ArrayList<String>(); 
 					for(;i<FwdMemberDetails.size();i++)
+					{
+						 addedlist.add(FwdMemberDetails.get(i)[0].toString());
+					%>
+					<%if(FwdMemberDetails.get(i)[19].toString().equals("0"))
 					{ %>
 					
 						<tr id="show-edit-<%=FwdMemberDetails.get(i)[0] %>" style="display: none;" >
@@ -222,6 +232,68 @@ th,td
 							</td>
 							
 						</tr>
+					<%}else { %>
+					
+					
+						<tr id="show-edit-<%=FwdMemberDetails.get(i)[0] %>" style="display: none;" >
+							<td style="text-align: center;" >
+								<%=i+1%>
+							</td>
+							<td>
+								<form action="ExistingMemAddSubmit.htm" method="post" id="edit-form-<%=FwdMemberDetails.get(i)[0] %>" enctype="multipart/form-data" autocomplete="off" > </form>
+								<select class="form-control selectpicker dropdown" form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" id="familydetailsid-<%=FwdMemberDetails.get(i)[0] %>" name="familydetailsid" onchange="changeReletion('<%=FwdMemberDetails.get(i)[0] %>')" data-dropup-auto="false" data-live-search="true" data-container="body" data-show-subtext="false" required="required" >
+									<option disabled="disabled" selected="selected" value="0">Choose..</option>
+									<%for(Object[] member : FamilymemDropdown){
+										if(!addedlist.contains(member[0].toString())){%>
+										<option value="<%=member[0]%>" 
+										data-subtext="(<%=member[4]%>)" 
+										data-relation="<%=member[4]%>" 
+										data-relationid="<%=member[3]%>" 
+										data-dob="<%=DateTimeFormatUtil.SqlToRegularDate(member[5].toString())%>" 
+										data-occupation="<%if(member[6]!=null){ %><%=member[6]%> <%} %>"
+										data-income=<%if(member[7]!=null){ %><%=member[7]%> <%}%>
+										><%=member[2]%></option>
+									<%} } %>
+								</select>
+							</td>
+							<td>
+								<span id="mem-rel-0"></span>	
+							</td>
+							<td>
+								<span id="mem-dob-0" ></span>
+							</td>
+							<td>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit"  name="mem-IncDate" value="" style="width:100%;"  maxlength="10" readonly required="required">
+							</td>
+							<td>
+								<span id="mem-occu-0"></span>
+							</td>
+							<td>
+								<span  id="mem-inc-0"></span>
+							</td>
+							<td>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" value="" maxlength="255" required >
+							</td>
+							<td>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit" required="required" >
+							</td>
+							
+							<td>	
+								<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm update-btn" name="familydetailsid" value="<%=FwdMemberDetails.get(i)[0] %>"  onclick="return confirm('Are You Sure to Update ?');" title="update">
+									Update
+								</button>
+								<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="button" class="btn btn-sm "  onclick="hideEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Cancel"> 
+									<i class="fa-solid fa-xmark"  style="color: red;"></i>
+								</button>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="formid" value="<%=formid%>"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>"/>
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="hidden" name="incformid" value="<%=FwdMemberDetails.get(i)[13]%>"/>
+							</td>
+							
+						</tr>
+					
+					<%} %>	
+						
 						<tr id="show-view-<%=FwdMemberDetails.get(i)[0] %>"   >
 						
 							<td style="text-align: center;" ><%=i+1%></td>
@@ -252,7 +324,7 @@ th,td
 							</td>
 							<td style="text-align: center;">
 								<%if(FwdMemberDetails.get(i)[18]!=null){ %>
-									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15] %>" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" name="formmemberid" formnovalidate="formnovalidate" value="<%=FwdMemberDetails.get(i)[15] %>" formenctype="application/x-www-form-urlencoded" formaction="FamIncExcAttachDownload.htm" formtarget="_blank"  data-toggle="tooltip" data-placement="top" title="Download">
 										<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button>
 								<%}%>
@@ -263,7 +335,7 @@ th,td
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
-									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>" formaction="FormFamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Remove">
+									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" formmethod="post" formenctype="application/x-www-form-urlencoded" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>" formaction="FormFamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Remove">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>
 								</td>
@@ -272,11 +344,94 @@ th,td
 					
 					
 					<%} %>
-					<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 					
+					<%if(i==0){ %>
 						<tr>
-							<td style="text-align: center;" ><form method="post" action="DepMemAddSubmit.htm" enctype="multipart/form-data" autocomplete="off" id="add-form" ><%=i+1%></form></td>
+						<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
+							<td colspan="10" style="text-align: center;">Member(s) Not Added</td>
+						<%}else{ %>
+							<td colspan="9" style="text-align: center;">Member(s) Not Added</td>
+						<%} %>
+						</tr>
+					<%} %>
+					
+					</table>
+					<br>
+					
+					
+					<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
+						<table>
+					<tr>
+						
+						<th style="width:15% " >Name</th>
+						<th style="width:10% " >Relationship With the Employee</th>
+						<th style="width: 10% " >Date of Birth</th>
+						<th style="width: 10% " >Date of Inclusion</th>
+						<th style="width: 10% " >Occupation if Any</th>
+						<th style="width: 8% " >Income, if any, per month (Rs) </th>
+						<th style="width: 12% " >Comments </th>
+						<th style="width: 15% " >Attachment </th>
+						<%if((status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
+							<th style="width: 10% " >
+								Action  
+							</th>
+						<%} %>
+					</tr>
+						<tr  >
 							<td>
+								<form action="ExistingMemAddSubmit.htm" method="post" id="add-form-0" enctype="multipart/form-data" autocomplete="off" > </form>
+								<select class="form-control selectpicker dropdown" form="add-form-0" id="familydetailsid-0" name="familydetailsid" onchange="changeReletion('0')" data-dropup-auto="false" data-live-search="true" data-container="body" data-show-subtext="false" required="required" >
+									<option disabled="disabled" selected="selected" value="0">Choose..</option>
+									<%for(Object[] member : FamilymemDropdown){
+										if(!addedlist.contains(member[0].toString())){%>
+										<option value="<%=member[0]%>" 
+										data-subtext="(<%=member[4]%>)" 
+										data-relation="<%=member[4]%>" 
+										data-relationid="<%=member[3]%>" 
+										data-dob="<%=DateTimeFormatUtil.SqlToRegularDate(member[5].toString())%>" 
+										data-occupation="<%if(member[6]!=null){ %><%=member[6]%> <%} %>"
+										data-income=<%if(member[7]!=null){ %><%=member[7]%> <%}%>
+										><%=member[2]%></option>
+									<%} } %>
+								</select>
+							</td>
+							<td>
+								<span id="mem-rel-0"></span>	
+							</td>
+							<td>
+								<span id="mem-dob-0" ></span>
+							</td>
+							<td>
+								<input form="add-form-0" type="text" class="form-control mem-IncDate-edit"  name="mem-IncDate" value="" style="width:100%;"  maxlength="10" readonly required="required">
+							</td>
+							<td>
+								<span id="mem-occu-0"></span>
+							</td>
+							<td>
+								<span  id="mem-inc-0"></span>
+							</td>
+							<td>
+								<input form="add-form-0" type="text" class="form-control" name="mem-comment" value="" maxlength="255" required >
+							</td>
+							<td>
+								<input form="add-form-0" type="file" class="form-control" name="mem-attach" required="required" >
+							</td>
+							<td>	
+								<button form="add-form-0" type="submit" class="btn btn-sm add-btn"  onclick="return confirm('Are You Sure to Add ?');" title="Add">
+									add
+								</button>
+								
+								<input form="add-form-0" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input form="add-form-0" type="hidden" name="incformid" value="<%=formid%>"/>
+							</td>
+							
+						</tr>
+						<tr>
+							<td colspan="9" style="text-align: center;"> <b>Add New Family Member to Profile </b></td>
+						</tr>
+						<tr>
+							<td>
+								<form action="DepMemAddSubmit.htm" method="post" id="add-form" enctype="multipart/form-data" autocomplete="off" > </form>
 								<input form ="add-form" type="text" class="form-control" name="mem-name" value="" maxlength="255" required >
 							</td>
 							<td>
@@ -311,8 +466,24 @@ th,td
 								<input form ="add-form" type="hidden" name="formid" value="<%=formid%>"/>
 							</td>
 						</tr>
+					
 					<%} %>
 				</table>
+				
+				<script type="text/javascript">
+				function changeReletion(selectid)
+				{
+					$('#mem-rel-'+selectid).html($('#familydetailsid-'+selectid+' option:selected').attr('data-relation'));
+					$('#mem-dob-'+selectid).html($('#familydetailsid-'+selectid+' option:selected').attr('data-dob'));
+					$('#mem-occu-'+selectid).html($('#familydetailsid-'+selectid+' option:selected').attr('data-occupation'));
+					$('#mem-inc-'+selectid).html($('#familydetailsid-'+selectid+' option:selected').attr('data-income'));
+					
+					
+				}
+
+				</script>
+				
+				
 				<% if(isapproval!=null && isapproval.equalsIgnoreCase("N")){ %>
 				<p style="text-indent: 50px;">
 					

@@ -124,7 +124,7 @@
 								<br>
 								<select class="form-control" name="chsstype" >
 									<option value="OPD">OPD</option>
-									<!-- <option value="IPD">IPD</option> -->
+									<option value="IPD">IPD</option>
 								</select>
 							</div>
 							<div class="col-3">

@@ -284,28 +284,28 @@ th,td
 													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
 													/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 												}
-										%>
-											<tr>
-												<td class="center text-blue"><%=i+1 %></td>
-												<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
-												<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
-												<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
-												<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
-											</tr>
-										<%} %>
-										<%if(chssbillslist.size()>0){ %>
-											<tr>
-												<td colspan="5"></td>
-												<td style="text-align: right;"><b>Rounded Total </b></td>
-												<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
-											</tr>
-										<%}else{ %>
-											<tr>
-												<td colspan="7" class="center" >Bills Not Added</td>
-											</tr>
-										<% } %>
+											%>
+												<tr>
+													<td class="center text-blue"><%=i+1 %></td>
+													<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
+													<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
+													<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+													<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
+													<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
+													<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
+												</tr>
+											<%} %>
+											<%if(chssbillslist.size()>0){ %>
+												<tr>
+													<td colspan="5"></td>
+													<td style="text-align: right;"><b>Rounded Total </b></td>
+													<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
+												</tr>
+											<%}else{ %>
+												<tr>
+													<td colspan="7" class="center" >Bills Not Added</td>
+												</tr>
+											<% } %>
 									</tbody>
 								</table>
 								
@@ -402,9 +402,9 @@ th,td
 												</tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
-													<th class="center" colspan="4" style="width: 60%;">Particulars</th>
+													<th class="center" colspan="4" style="width: 55%;">Particulars</th>
 													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
-													<th class="right" style="width: 5%;">Reimbursable under CHSS (&#8377;)</th>
+													<th class="right" style="width: 10%;">Reimbursable under CHSS (&#8377;)</th>
 													<th class="center" style="width: 25%;">Comments</th>
 												</tr>
 												<% 	BigDecimal itemstotal=new BigDecimal("0.0");
@@ -417,9 +417,13 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation Charges </b>
 																<%if(showhistorybtn){ %>
-																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
-																	<i class="fa-solid fa-clock-rotate-left"></i>
-																</button>
+																	<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																		Tests
+																	</button>
+																	
+																	<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
+																		<i class="fa-solid fa-clock-rotate-left"></i>
+																	</button>
 																<%} %>
 															</td>
 															<td class="right"> 
@@ -457,7 +461,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=consult[6] %>" name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="text-align: right;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
@@ -486,10 +490,15 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(showhistorybtn){ %>
+																
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																	Medicines
+																</button>
+																
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
-																 </button>
-															 <%} %>
+																</button>
+															 <% } %>
 														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -523,7 +532,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" style="text-align: right;" value="<%=test[7]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" max="<%=test[4] %>" style="text-align: right;" value="<%=test[7]%>">
 														</td>
 														<td >
 														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="text-align: right;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
@@ -555,7 +564,7 @@ th,td
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
-															 <%} %>
+															 <% } %>
 														</td>
 														<td class="right">
 															<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -600,7 +609,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" max="<%=medicine[3] %>" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
 														</td>
 														<td>
 															<input type="text" maxlength="255" style="width: 75%;word-break: break-word;" placeholder="Comments" name="medscomment-<%=medicine[0]%>" style="text-align: right;" <%if(medicine[9]!=null){ %> value="<%=medicine[9] %>" <%}else{ %> value="" <%} %> >
@@ -670,7 +679,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" max="<%=other[3] %>" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
 														</td>
 														<td >
 															<input type="text"maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="otherscomment-<%=other[0]%>" style="text-align: right;" <%if(other[8]!=null){ %> value="<%=other[8] %>" <%}else{ %> value="" <%} %>>
@@ -736,7 +745,7 @@ th,td
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" value="<%=misc[4]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" max="<%=misc[3] %>" value="<%=misc[4]%>">
 														</td>
 														<td >
 															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >

@@ -46,16 +46,17 @@ import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultMain;
-import com.vts.ems.chss.model.CHSSConsultation;
+import com.vts.ems.chss.model.CHSSBillConsultation;
+import com.vts.ems.chss.model.CHSSBillIPDheads;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
-import com.vts.ems.chss.model.CHSSMedicine;
+import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
-import com.vts.ems.chss.model.CHSSMisc;
-import com.vts.ems.chss.model.CHSSOther;
+import com.vts.ems.chss.model.CHSSBillMisc;
+import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.chss.model.CHSSTests;
+import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
@@ -238,7 +239,7 @@ public class CHSSController {
 				}else if(chsstype.equalsIgnoreCase("IPD"))
 				{
 					redir.addFlashAttribute("chssapplyid",String.valueOf(count));
-					return "redirect:/CHSSConsultMainData.htm";
+					return "redirect:/CHSSIPDApply.htm";
 				}
 				
 			} else {
@@ -260,7 +261,7 @@ public class CHSSController {
 	public @ResponseBody String CHSSMedicinesListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetTestSubListAjax.htm "+Username);
+		logger.info(new Date() +"Inside CHSSMedicinesListAjax.htm "+Username);
 		List<CHSSMedicinesList> list=new ArrayList<CHSSMedicinesList>();
 		try {
 			String treattypeid = req.getParameter("treattypeid");
@@ -406,7 +407,7 @@ public class CHSSController {
 				tab=(String)md.get("tab");
 			}	
 			
-			if(consultmainid==null) {
+			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
 				return "redirect:/CHSSDashboard.htm";
 			}
@@ -416,8 +417,8 @@ public class CHSSController {
 			req.setAttribute("employee", service.getEmployee(EmpId));
 //			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
 			req.setAttribute("chssbillslist", service.CHSSConsultMainBillsList(consultmainid,chssapplyid));
-			req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
 			req.setAttribute("otheritemslist", service.OtherItemsList());
+			req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
 			req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 			req.setAttribute("billid", billid);
 			req.setAttribute("tab", tab);
@@ -433,7 +434,16 @@ public class CHSSController {
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
 			}
 			
-			return "chss/CHSSConsultBillsData";
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "chss/CHSSConsultBillsData";
+			}
+			else 
+			{
+				redir.addFlashAttribute("chssapplyid",chssapplyid);
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSConsultBills.htm "+Username, e);
@@ -728,11 +738,11 @@ public class CHSSController {
 			String conscharge = req.getParameter("cons-charge-"+consultationid);
 			String consultmainidold=req.getParameter("consultmainid-old");
 			
-			CHSSConsultation consult= new CHSSConsultation();
+			CHSSBillConsultation consult= new CHSSBillConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
 			consult.setConsultType(consulttype);
 			consult.setDocName(docname);
-//			consult.setDocQualification(docqualification);
+//			consult.setDocQualification(Integer.parseInt(docqualification));
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Double.parseDouble(conscharge));
 			consult.setModifiedBy(Username);
@@ -765,8 +775,8 @@ public class CHSSController {
 	public @ResponseBody String ChssConsultationListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetChssConsultationList.htm "+Username);
-		List<CHSSConsultation> list=new ArrayList<CHSSConsultation>();
+		logger.info(new Date() +"Inside ChssConsultationListAjax.htm "+Username);
+		List<CHSSBillConsultation> list=new ArrayList<CHSSBillConsultation>();
 		try {
 			String billid = req.getParameter("billid");
 			list = service.CHSSConsultationList(billid);
@@ -805,7 +815,20 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","co");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
+			
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ConsultationBillDelete.htm "+Username, e);
@@ -859,7 +882,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ChssMedicinesListAjax.htm "+Username);
-		List<CHSSMedicine> list=new ArrayList<CHSSMedicine>();
+		List<CHSSBillMedicine> list=new ArrayList<CHSSBillMedicine>();
 		try {
 			String billid = req.getParameter("billid");
 			list = service.CHSSMedicineList(billid);
@@ -887,7 +910,7 @@ public class CHSSController {
 			String medsquantity = req.getParameter("meds-quantity-"+medicineid);
 			String medspresquantity = req.getParameter("meds-presquantity-"+medicineid);
 			
-			CHSSMedicine meds= new CHSSMedicine();
+			CHSSBillMedicine meds= new CHSSBillMedicine();
 			meds.setCHSSMedicineId(Long.parseLong(medicineid));
 			meds.setMedicineName(medsname);
 			meds.setMedicineCost(Double.parseDouble(medscost));
@@ -979,7 +1002,17 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",billid);
 			redir.addFlashAttribute("tab","te");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside TestsBillAdd.htm "+Username, e);
@@ -992,7 +1025,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ChssTestsListAjax.htm "+Username);
-		List<CHSSTests> list=new ArrayList<CHSSTests>();
+		List<CHSSBillTests> list=new ArrayList<CHSSBillTests>();
 		try {
 			String billid = req.getParameter("billid");
 			list = service.CHSSTestsList(billid);
@@ -1018,7 +1051,7 @@ public class CHSSController {
 			String testsubid = req.getParameter("test-subid-"+testid);
 			String testcost = req.getParameter("test-cost-"+testid);
 			
-			CHSSTests test= new CHSSTests();
+			CHSSBillTests test= new CHSSBillTests();
 			test.setCHSSTestId(Long.parseLong(testid));
 			test.setTestMainId(Long.parseLong(testsubid.split("_")[0]));
 			test.setTestSubId(Long.parseLong(testsubid.split("_")[1]));
@@ -1028,18 +1061,30 @@ public class CHSSController {
 			
 			long count = service.TestBillEdit(test);
 			
-			
 			if (count > 0) {
-				redir.addAttribute("result", "Tests/Procedures Details Updated Successfully");
+				redir.addAttribute("result", "Test/Procedure/Investigation Details Updated Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Tests/Procedures Details Update Unsuccessful");	
+				redir.addAttribute("resultfail", "Test/Procedure/Investigation Details Update Unsuccessful");	
 			}	
+			
+			
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","te");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside TestBillEdit.htm "+Username, e);
@@ -1060,16 +1105,27 @@ public class CHSSController {
 			long count = service.TestBillDelete(testid, Username);
 			
 			if (count > 0) {
-				redir.addAttribute("result", "Tests/Procedures Details Deleted Successfully");
+				redir.addAttribute("result", "Test/Procedure/Investigation Details Deleted Successfully");
 			} else {
-				redir.addAttribute("resultfail", "Tests/Procedures Details Delete Unsuccessful");	
+				redir.addAttribute("resultfail", "Test/Procedure/Investigation Details Delete Unsuccessful");	
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","te");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside TestBillDelete.htm "+Username, e);
@@ -1110,7 +1166,16 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",billid);
 			redir.addFlashAttribute("tab","mi");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside MiscBillAdd.htm "+Username, e);
@@ -1123,7 +1188,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ChssMiscListAjax.htm "+Username);
-		List<CHSSMisc> list=new ArrayList<CHSSMisc>();
+		List<CHSSBillMisc> list=new ArrayList<CHSSBillMisc>();
 		try {
 			String billid = req.getParameter("billid");
 			list = service.CHSSMiscList(billid);
@@ -1150,7 +1215,7 @@ public class CHSSController {
 			String micscost = req.getParameter("misc-cost-"+chssmiscid);
 			String micscount = req.getParameter("misc-count-"+chssmiscid);
 			
-			CHSSMisc meds= new CHSSMisc();
+			CHSSBillMisc meds= new CHSSBillMisc();
 			meds.setChssMiscId(Long.parseLong(chssmiscid));
 			meds.setMiscItemName(medsname);
 			meds.setMiscCount(Integer.parseInt(micscount));
@@ -1170,7 +1235,16 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","mi");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside MiscBillEdit.htm "+Username, e);
@@ -1201,7 +1275,16 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","mi");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			Object[] apply=service.CHSSAppliedData(chssapplyid);
+			
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside MiscBillDelete.htm "+Username, e);
@@ -1230,7 +1313,7 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ChssOtherListAjax.htm "+Username);
-		List<CHSSOther> list=new ArrayList<CHSSOther>();
+		List<CHSSBillOther> list=new ArrayList<CHSSBillOther>();
 		try {
 			String billid = req.getParameter("billid");
 			list = service.CHSSOtherList(billid);
@@ -1297,7 +1380,7 @@ public class CHSSController {
 			String otheritemid = req.getParameter("otheritemid-"+chssotherid);
 			String otheritemcost = req.getParameter("otheritemcost-"+chssotherid);
 			
-			CHSSOther meds= new CHSSOther();
+			CHSSBillOther meds= new CHSSBillOther();
 			meds.setCHSSOtherId(Long.parseLong(chssotherid));
 			meds.setOtherItemId(Integer.parseInt(otheritemid));
 			meds.setOtherItemCost(Double.parseDouble(otheritemcost));
@@ -1375,7 +1458,6 @@ public class CHSSController {
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			req.setAttribute("starctext",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\starctext.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
@@ -1490,7 +1572,7 @@ public class CHSSController {
 					break;
 				}
 				
-				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
+				if(Math.floor(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.floor(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
 					allow[3]=bill[2].toString();
@@ -1712,7 +1794,7 @@ public class CHSSController {
 			String consultremamount = req.getParameter("consultremamount-"+consultationid);
 			String consultcomment = req.getParameter("consultcomment-"+consultationid);
 			
-			CHSSConsultation consult= new CHSSConsultation();
+			CHSSBillConsultation consult= new CHSSBillConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
 			consult.setConsultRemAmount(Double.parseDouble(consultremamount));
 			consult.setComments(consultcomment);
@@ -1753,7 +1835,7 @@ public class CHSSController {
 			String testcomment = req.getParameter("testcomment-"+testid);
 			
 			
-			CHSSTests test= new CHSSTests();
+			CHSSBillTests test= new CHSSBillTests();
 			test.setCHSSTestId(Long.parseLong(testid));
 			test.setTestRemAmount(Double.parseDouble(testremamount));
 			test.setComments(testcomment);
@@ -1793,7 +1875,7 @@ public class CHSSController {
 			String medicineremamount = req.getParameter("medicineremamount-"+medicineid);
 			String medscomment = req.getParameter("medscomment-"+medicineid);
 			
-			CHSSMedicine medicine= new CHSSMedicine();
+			CHSSBillMedicine medicine= new CHSSBillMedicine();
 			medicine.setCHSSMedicineId(Long.parseLong(medicineid));
 			medicine.setMedsRemAmount(Double.parseDouble(medicineremamount));
 			medicine.setComments(medscomment);
@@ -1835,7 +1917,7 @@ public class CHSSController {
 			String otheridremamount = req.getParameter("otherremamount-"+otherid);
 			String otherscomment = req.getParameter("otherscomment-"+otherid);
 			
-			CHSSOther other= new CHSSOther();
+			CHSSBillOther other= new CHSSBillOther();
 			other.setCHSSOtherId(Long.parseLong(otherid));
 			other.setOtherRemAmount(Double.parseDouble(otheridremamount));
 			other.setComments(otherscomment);
@@ -1876,7 +1958,7 @@ public class CHSSController {
 			String miscremamount = req.getParameter("miscremamount-"+miscid);
 			String miscomment = req.getParameter("miscomment-"+miscid);
 			
-			CHSSMisc misc= new CHSSMisc();
+			CHSSBillMisc misc= new CHSSBillMisc();
 			misc.setChssMiscId(Long.parseLong(miscid));
 			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
 			misc.setComments(miscomment);
@@ -2666,7 +2748,8 @@ public class CHSSController {
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
 				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
-		
+			
+			
 			req.setAttribute("empid", empid);
 			req.setAttribute("fromdate", fromdate);
 			req.setAttribute("todate", todate);
@@ -2707,7 +2790,7 @@ public class CHSSController {
 	
 	
 	@RequestMapping(value = "CHSSConsultMainData.htm" )
-	public String CHSSAppliedDetails(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
+	public String CHSSConsultMainData(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -2737,23 +2820,43 @@ public class CHSSController {
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
 			}
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
+//			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+//			{
 				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 				req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
+				
 				req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
 				req.setAttribute("consultmainlist", service.getCHSSConsultMainList(chssapplyid));
 				req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
 				
 				return "chss/CHSSConsultMain";
-			}
-			else
-			{
-				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+//			}
+//			else
+//			{
+//				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
+//				String billid ="0";
+//				if(chssbill.size()>0){
+//					billid = chssbill.get(0)[0].toString();
+//				}
+//				
+//				req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
+//				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
+//				req.setAttribute("miscitems", service.CHSSMiscList(billid));
+//				
+//				req.setAttribute("consultations", service.CHSSConsultationList(billid));
+//				req.setAttribute("billtests", service.CHSSTestsList(billid));
+//				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+//				req.setAttribute("chssbill", chssbill );
+//				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
+//				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+//				
+//				return "chss/CHSSIPDDataPage";
 				
 				
-				return "chss/CHSSIPDDataPage";
-			}
+//				return "redirect:/CHSSIPDApply.htm";
+				
+				
+//			}
 			
 			
 		}catch (Exception e) {
@@ -2762,6 +2865,77 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	
+	@RequestMapping(value = "CHSSIPDApply.htm" )
+	public String CHSSIPDApply(Model model,HttpServletRequest req, HttpSession ses,  RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSIPDApply.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			if (chssapplyid == null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+			}	
+			
+			if(chssapplyid==null) {
+				redir.addAttribute("result", "Refresh Not Allowed");
+				return "redirect:/CHSSDashboard.htm";
+			}
+			
+			String tab = req.getParameter("tab");
+			if (tab == null) 
+			{
+				Map md=model.asMap();
+				tab=(String)md.get("tab");
+			}	
+			
+			
+			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			req.setAttribute("chssapplydata", apply);
+			req.setAttribute("employee", service.getEmployee(EmpId));
+			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
+			
+			
+			if(apply[3].toString().equalsIgnoreCase("N")) 
+			{
+				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
+			}
+			
+			
+				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
+				String billid ="0";
+				if(chssbill.size()>0){
+					billid = chssbill.get(0)[0].toString();
+				}
+				
+				req.setAttribute("tab", tab);
+				req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
+				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
+				req.setAttribute("miscitems", service.CHSSMiscList(billid));
+				
+				req.setAttribute("consultations", service.CHSSConsultationList(billid));
+				req.setAttribute("billtests", service.CHSSTestsList(billid));
+				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+				req.setAttribute("chssbill", chssbill );
+				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
+				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				
+				return "chss/CHSSIPDDataPage";
+					
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDApply.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	
 	
 	
 	@RequestMapping(value = "CHSSIPDBasicInfoAdd.htm" )
@@ -2785,7 +2959,7 @@ public class CHSSController {
 			
 			CHSSIPDClaimsInfo claiminfo= new CHSSIPDClaimsInfo();
 			claiminfo.setCHSSApplyId(Long.parseLong(chssapplyid));
-			claiminfo.setHospitalName(hospitalname);
+			claiminfo.setHospitalName(WordUtils.capitalize(hospitalname).trim());
 			claiminfo.setRoomType(roomtype);
 			claiminfo.setAdmissionDate(DateTimeFormatUtil.RegularToSqlDate(admitteddate) );
 			claiminfo.setAdmissionTime(admittedtime);
@@ -2807,7 +2981,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("consultmainid",String.valueOf(count));
-			return "redirect:/CHSSConsultMainData.htm";
+			return "redirect:/CHSSIPDApply.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSIPDBasicInfoAdd.htm "+Username, e);
@@ -2859,7 +3033,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("consultmainid",String.valueOf(count));
-			return "redirect:/CHSSConsultMainData.htm";
+			return "redirect:/CHSSIPDApply.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSIPDBasicInfoEdit.htm "+Username, e);
@@ -2923,6 +3097,126 @@ public class CHSSController {
 		}
 	}
 	
+	@RequestMapping(value = "IPDBillHeadDataAdd.htm" )
+	public String IPDBillHeadDataAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside IPDBillHeadDataAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String billheadid = req.getParameter("billheadid");
+			String billid = req.getParameter("billid");
+			String billheadcost = req.getParameter("billheadcost");
+			
+			CHSSBillIPDheads billhead = new CHSSBillIPDheads();
+			billhead.setIPDBillHeadId(Integer.parseInt(billheadid));
+			billhead.setBillId(Long.parseLong(billid));
+			billhead.setBillHeadCost(Double.parseDouble(billheadcost));
+			billhead.setCreatedBy(Username);
+			
+			
+			
+			long count= service.IPDBillHeadDataAddEdit(billhead);
+			if (count > 0) {
+				redir.addAttribute("result", "BillHead Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "BillHead Update Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("consultmainid",String.valueOf(count));
+			return "redirect:/CHSSIPDApply.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside IPDBillHeadDataAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "IPDConsultAdd.htm", method = RequestMethod.POST )
+	public String IPDConsultAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside IPDConsultAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			
+			String[] consulttype=req.getParameterValues("consult-type");
+			String[] docname=req.getParameterValues("doc-name");
+			String[] docqualification=req.getParameterValues("doc-qualification");
+			String[] consdate=req.getParameterValues("cons-date");
+			String[] conscharge=req.getParameterValues("cons-charge");
+			String consultmainidold=req.getParameter("consultmainid-old");
+			CHSSConsultationDto dto=new CHSSConsultationDto();
+			
+			dto.setBillId(billid);
+			dto.setConsultType(consulttype);
+			dto.setDocName(docname);
+			dto.setDocQualification(docqualification);
+			dto.setConsultDate(consdate);
+			dto.setConsultCharge(conscharge);
+			dto.setCreatedBy(Username);
+			
+			long count= service.IPDConsultAdd(dto,chssapplyid,consultmainidold);
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Details Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Details Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("tab","co");
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSIPDApply.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside IPDConsultAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "IPDConsultEdit.htm", method = RequestMethod.POST )
+	public String IPDConsultEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside IPDConsultEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String consultationid = req.getParameter("consultationid"); 
+			
+			String docname = req.getParameter("doc-name-"+consultationid);
+			String docqualification = req.getParameter("doc-qualification-"+consultationid);
+			String consdate = req.getParameter("cons-date-"+consultationid);
+			String conscharge = req.getParameter("cons-charge-"+consultationid);
+			String consultmainidold=req.getParameter("consultmainid-old");
+			
+			CHSSBillConsultation consult= new CHSSBillConsultation();
+			consult.setConsultationId(Long.parseLong(consultationid));
+			consult.setDocName(docname);
+			consult.setDocQualification(Integer.parseInt(docqualification));
+			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
+			consult.setConsultCharge(Double.parseDouble(conscharge));
+			consult.setModifiedBy(Username);
+			consult.setBillId(Long.parseLong(req.getParameter("billid")));
+			long count = service.IPDConsultEdit(consult,chssapplyid,consultmainidold);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Consultation Data Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Consultation Data Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("tab","co");
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			return "redirect:/CHSSIPDApply.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside IPDConsultEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 	
 	
