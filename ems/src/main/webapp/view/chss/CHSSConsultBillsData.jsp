@@ -119,7 +119,7 @@ p {
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS Apply</h5>
+				<h5>CHSS Apply - <%=chssapplydata[6] %></h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
@@ -207,7 +207,7 @@ p {
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
-												<th style="width:20%;" >Hospital / Medical / Diagnostics Centre Name</th>
+												<th style="width:20%;" >Hospital / Medical / Diagnostics Center Name</th>
 												<th style="width:10%;" >Bill / Receipt No.</th>
 												<th style="width:10%;" >Bill Date</th>
 												<th style="width:10%; text-align: right;">Paid Amt (&#8377;)</th>
@@ -866,7 +866,7 @@ function itemAddEligibleCheck(itemtype)
 	});
 	
 	
-	if(Math.round(itemstotal+total)<=Math.round(billamount)){
+	if(Math.floor(itemstotal+total)<=Math.floor(billamount)){
 		return true;
 	}else
 	{
@@ -883,7 +883,7 @@ function itemEditEligibleCheck(itemtype,itemid)
 	var itemnewcost=Number( $('#'+itemtype+'-cost-'+itemid).val());
 	
 	
-	if(Math.round(itemstotal+itemnewcost-itemoldcost)<=Math.round(billamount)){
+	if(Math.floor(itemstotal+itemnewcost-itemoldcost)<=Math.floor(billamount)){
 		return confirm ('Are You Sure To Update ?');
 	}else
 	{

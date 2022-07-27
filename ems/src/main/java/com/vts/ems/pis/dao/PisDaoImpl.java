@@ -52,7 +52,7 @@ public class PisDaoImpl implements PisDao {
 	EntityManager manager;
 
 	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,eds.dob FROM employee e, employee_desig ed,employee_details eds WHERE  e.empno=eds.empno  AND   e.isactive=1 AND e.desigid=ed.desigid ORDER BY e.srno=0,e.srno ";
-	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid AND e.empno=ee.empno and ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
+	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno ,pp.paygrade,ee.basicpay FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid AND e.empno=ee.empno and ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
 	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee_details WHERE PunchCard=:punchCard";
 	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
 	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
@@ -1672,14 +1672,15 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	
 	
 	
-	private static final String EMPFAMMEMBERSLISTMEDDEP="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND med_dep= 'Y' AND fd.empid = :empid";
+	private static final String EMPFAMMEMBERSLISTMEDDEP="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND med_dep= 'Y' AND fd.empid = :empid AND  fd.family_details_id NOT IN  (SELECT fm.familydetailsid FROM  pis_emp_family_form ff,pis_fam_form_members fm WHERE ff.isactive=1 AND ff.formtype='E' AND fm.isactive=1 AND fm.FamilyFormId = ff.FamilyFormId AND ff.Formstatus IN ('C','F','R') AND ff.empid=6 AND ff.FamilyFormId <> :formid );";
 	
 	@Override
-	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception
+	public List<Object[]> EmpFamMembersListMedDep(String empid,String formid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO EmpFamMembersListMedDep");
 		Query query =manager.createNativeQuery(EMPFAMMEMBERSLISTMEDDEP);
 		query.setParameter("empid", empid);
+		query.setParameter("formid", formid);
 		List<Object[]> result = new ArrayList<>();
 		try {
 			result = (List<Object[]>)query.getResultList();
@@ -1689,14 +1690,15 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return result;
 	}
 	
-	private static final String EMPFAMMEMBERSNOTMEDDEP="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name,fd.dob,fd.memberoccupation, fd.memberincome FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND med_dep= 'N' AND fd.empid = :empid ;";
+	private static final String EMPFAMMEMBERSNOTMEDDEP="SELECT fd.family_details_id, fd.empid,fd.member_name,fd.relation_id,fr.relation_name,fd.dob,fd.memberoccupation, fd.memberincome FROM pis_emp_family_details fd, pis_emp_family_relation fr WHERE fd.isactive=1 AND fd.relation_id=fr.relation_id AND med_dep= 'N' AND fd.empid = :empid  AND  fd.family_details_id NOT IN  (SELECT fm.familydetailsid FROM  pis_emp_family_form ff,pis_fam_form_members fm WHERE ff.isactive=1 AND ff.formtype='I' AND fm.isactive=1 AND fm.FamilyFormId = ff.FamilyFormId AND ff.Formstatus IN ('C','F','R') AND ff.empid=6 AND ff.FamilyFormId <> :formid );";
 	
 	@Override
-	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception
+	public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO EmpFamMembersNotMedDep");
 		Query query =manager.createNativeQuery(EMPFAMMEMBERSNOTMEDDEP);
 		query.setParameter("empid", empid);
+		query.setParameter("formid", formid);
 		List<Object[]> result = new ArrayList<>();
 		try {
 			result = (List<Object[]>)query.getResultList();

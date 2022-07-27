@@ -2067,7 +2067,7 @@ public class PisController {
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );				
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
-				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid));
+//				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid,formid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				
 				req.setAttribute("relationtypes" , service.familyRelationList() );				
@@ -2198,7 +2198,7 @@ public class PisController {
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
 				req.setAttribute("relationtypes" , service.familyRelationList() );
 				
-				req.setAttribute("FamilymemDropdown" , service.EmpFamMembersNotMedDep(empid));
+				req.setAttribute("FamilymemDropdown" , service.EmpFamMembersNotMedDep(empid,formid));
 				
 				req.setAttribute("isApprooval" , isapproval );
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
@@ -2688,7 +2688,7 @@ public class PisController {
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );				
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
-				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid));
+				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid,formid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				
 				req.setAttribute("relationtypes" , service.familyRelationList() );				

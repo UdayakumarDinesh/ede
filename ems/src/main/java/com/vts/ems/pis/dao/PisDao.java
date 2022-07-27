@@ -118,12 +118,12 @@ public interface PisDao {
 	public List<Object[]> loginTypeEmpData(String logintype) throws Exception;
 	public PisEmpFamilyForm getPisEmpFamilyForm(String familyformid) throws Exception;
 	public long UpdateMemberStatus(PisEmpFamilyForm famform) throws Exception;
-	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersListMedDep(String empid,String formid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
 	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
 	public PisFamFormMembers getPisFamFormMembers(String formmemberid) throws Exception;
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
 	public int FormFamilyMemberHardDelete(String familydetailsid) throws Exception;
-	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception;
 	
 }

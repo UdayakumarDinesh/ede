@@ -109,11 +109,11 @@ public interface PisService {
 	public int FormFamilyMemberDelete(String formmemberid) throws Exception;
 	public int EmpBloodGropuEdit(String empno, String bloodgroup) throws Exception;
 	public List<Object[]> GetEmployeeLoginData(String loginid) throws Exception;
-	public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersListMedDep(String empid,String formid) throws Exception;
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception;
 	public int ExcFormApprove(String formid,String empid,String username) throws Exception;
 	public String ExistingPassword(String loginid) throws Exception;
 	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
-	public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception;
+	public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception;
 }
