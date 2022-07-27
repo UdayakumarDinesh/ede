@@ -244,9 +244,9 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                         		<label>Employed Status:  <span class="mandatory">*</span></label>
 		                           		<select class="form-control input-sm" name="EmpStatus" required="required">
 						                    <option value="Private" <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Private")){%> selected <%}%>>Private</option>
-						                    <option value="Central Goverment"  <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}%>>Central Goverment.</option>
-						                    <option value="State Goverment" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}%>>State Goverment</option>
-						                    <option value="PSU" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}%>>PSU</option>
+						                    <option value="Central Goverment"  <% if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("Central Goverment")){%> selected <%}%>>Central Government</option>
+						                    <option value="State Goverment" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("State Goverment")){%> selected <%}%>>State Government</option>
+						                    <option value="PSU" <%if(memberdata!=null && memberdata.getEmpStatus()!=null && memberdata.getEmpStatus().equalsIgnoreCase("PSU")){%> selected <%}%>>PSUs</option>
 		                          		</select>
 		                            </div>  
 			               		</div>

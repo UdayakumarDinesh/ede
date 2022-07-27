@@ -139,7 +139,7 @@ CHSSEmpanelledHospital list = (CHSSEmpanelledHospital)request.getAttribute("empa
 <script type="text/javascript">
 
 $('#HospitalName').keypress(function (e) {
-    var regex = new RegExp("^[a-zA-Z \s]+$");
+    //var regex = new RegExp("^[a-zA-Z \s]+$");
     var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
     if (regex.test(str)) {
         return true;
@@ -147,7 +147,7 @@ $('#HospitalName').keypress(function (e) {
     else
     {
     e.preventDefault();
-    alert('Please Enter Alphabate');
+    alert('Please Enter Alphabets only');
     return false;
     }
 });

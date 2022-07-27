@@ -24,7 +24,7 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Approved Contingent Bills</h5>
+				<h4>Approved Contingent Bills</h4>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
