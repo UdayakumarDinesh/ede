@@ -6,25 +6,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@Entity(name = "chss_bill_misc")
-public class CHSSMisc implements Serializable {
+@Data
+@Entity
+@Table(name = "chss_bill_other")
+public class CHSSBillOther implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Long ChssMiscId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long CHSSOtherId;
 	private Long BillId;
-	private String MiscItemName;
-	private Integer MiscCount;
-	private double MiscItemCost;
+	private Integer OtherItemId;
+	private double OtherItemCost;
 	private double AmountPaid;
-	private double MiscRemAmount;
+	private double OtherRemAmount;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

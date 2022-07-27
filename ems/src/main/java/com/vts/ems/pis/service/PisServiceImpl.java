@@ -993,15 +993,15 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
-		public List<Object[]> EmpFamMembersListMedDep(String empid) throws Exception
+		public List<Object[]> EmpFamMembersListMedDep(String empid,String formid) throws Exception
 		{
-			return dao.EmpFamMembersListMedDep(empid);
+			return dao.EmpFamMembersListMedDep(empid,formid);
 		}
 		
 		@Override
-		public List<Object[]> EmpFamMembersNotMedDep(String empid) throws Exception
+		public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception
 		{
-			return dao.EmpFamMembersNotMedDep(empid);
+			return dao.EmpFamMembersNotMedDep(empid,formid);
 		}
 		
 		

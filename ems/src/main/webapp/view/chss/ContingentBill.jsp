@@ -243,7 +243,7 @@ th,td
 								<span style="text-transform: capitalize;"> <%=auth[2] %><br>
 								<%=auth[4] %></span>
 							
-						<% }} %>
+						<% break;}} %>
 			
 					</td>
 				</tr>
@@ -259,7 +259,7 @@ th,td
 						<span style="text-transform: capitalize;"><%=auth[2] %><br>
 						<%=auth[4] %></span>
 					
-				<% }} %>
+				<% break;}} %>
 				</td>
 			</tr>
 		</table>
@@ -268,14 +268,31 @@ th,td
 		<div align="center">
 		<br><br><span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
 				<span><b>
-					<%for(Object[] auth : ApprovalAuth)
+					<% int flag=0;
+					for(Object[] auth : ApprovalAuth)
 					{
 						if(auth[1].toString().equalsIgnoreCase("CEO")){
 					%>
 							<span style="text-transform: capitalize;"><%=auth[2] %><br>
 							CEO, <%=labdata[0] %></span>
 						
-					<% }} %></b>
+					<% flag=1;
+					break;}} %>
+					
+					<%if(flag==0){ %>
+					
+						<%	for(Object[] auth : ApprovalAuth)
+						{
+							if(auth[1].toString().equalsIgnoreCase("CEO-L")){
+						%>
+								<span style="text-transform: capitalize;"><%=auth[2] %><br>
+								CEO, <%=labdata[0] %></span>
+							
+						<% 	break; }} %>
+					
+					<%} %>
+					
+					</b>
 				</span>
 			
 			
