@@ -1,5 +1,16 @@
 package com.vts.ems.leave.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -9,26 +20,35 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dao.LeaveApplRepo;
 import com.vts.ems.leave.dao.LeaveDaoImpl;
-import com.vts.ems.leave.dao.LeaveRegiRepo;
 import com.vts.ems.leave.dao.LeaveSaRaRepo;
+import com.vts.ems.leave.dao.McFcRepo;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
+import com.vts.ems.leave.dto.LeaveAttachmentDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.leave.model.LeaveMC_FC;
 import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.utils.DateTimeFormatUtil;
+
 
 
 @Service
@@ -44,6 +64,12 @@ public class LeaveServiceImpl implements LeaveService{
 	
 	@Autowired
 	private LeaveSaRaRepo saRaRepo;
+	
+	@Autowired
+	private McFcRepo mcFcRepo;
+	
+	@Value("${EMSFilesPath}")
+	private String emsfilespath;
 	
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
@@ -2254,5 +2280,70 @@ public class LeaveServiceImpl implements LeaveService{
 		return dao.UploadMcFc(EmpId,Year);
 	}
 
+	 public static void saveFile(String FilePath, String fileName, MultipartFile multipartFile) throws IOException 
+	   {
+	        Path uploadPath = Paths.get(FilePath);
+	          
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	        }
+	        
+	        try (InputStream inputStream = multipartFile.getInputStream()) {
+	            Path filePath = uploadPath.resolve(fileName);
+	            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	        } catch (IOException ioe) {       
+	            throw new IOException("Could not save image file: " + fileName, ioe);
+	        }   catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	    }
+
+	@Override
+	public long McFcAttachmentFile(LeaveAttachmentDto dto) throws Exception {
+		long result=0;
+		String Path= emsfilespath+"\\MC_FC\\";
+		
+
+		File theDir = new File(Path);
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
+		LeaveMC_FC model = new LeaveMC_FC();
+        try {
+        	model=mcFcRepo.findByApplId(dto.getApplId());
+        }catch (Exception e) {
+
+		}
+        if(model==null) {
+        	model = new LeaveMC_FC();
+    		model.setCreatedBy(dto.getCreatedBy());
+    		model.setCreatedDate(dto.getCreatedDate());
+    		model.setIsActive(1);
+        }
+		model.setApplId(dto.getApplId());
+		if(dto.getMcFc().equals("M")) {
+		model.setMC_file(dto.getMcFc()+"_"+dto.getApplId().replace("/", "_")+"."+FilenameUtils.getExtension(dto.getFile().getOriginalFilename()));
+		}else if(dto.getMcFc().equals("F")) {
+		model.setFC_file(dto.getMcFc()+"_"+dto.getApplId().replace("/", "_")+"."+FilenameUtils.getExtension(dto.getFile().getOriginalFilename()));
+		}
+		model.setModifiedBy(dto.getCreatedBy());
+		model.setModifiedDate(dto.getCreatedDate());
+		saveFile(Path, dto.getMcFc()+"_"+dto.getApplId().replace("/", "_")+"."+FilenameUtils.getExtension(dto.getFile().getOriginalFilename()), dto.getFile());
+        result=mcFcRepo.save(model).getMcFcId();
+		
+		
 	
+		return result;
+	}
+
+	@Override
+	public LeaveMC_FC getMcFc(String ApplId) throws Exception {
+		return mcFcRepo.findByApplId(ApplId);
+	}
+	 
+
+	
+
+		
+		
 }

@@ -1,6 +1,9 @@
 package com.vts.ems.leave.controller;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,20 +15,27 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.dto.LeaveApplyDto;
+import com.vts.ems.leave.dto.LeaveAttachmentDto;
+import com.vts.ems.leave.model.LeaveMC_FC;
 import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
+import com.vts.ems.utils.MailReciever;
 
 @Controller
 public class LeaveController {
@@ -35,6 +45,11 @@ public class LeaveController {
 	@Autowired
 	private LeaveService service;
 	
+	@Value("${EMSFilesPath}")
+	private String emsfilespath;
+
+	@Autowired
+    private Environment env;
 	
 	@RequestMapping(value = "PisHolidayList.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String PisHolidayList(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
@@ -725,13 +740,19 @@ public class LeaveController {
 		return returnPage;
 	}
 	
-	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.GET})
 	public String UploadMcFc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside UploadMcFc.htm"+UserId);		
 		try {
+
+			String yr=req.getParameter("yr");
+			if(yr==null) {
+			yr=sdf.getCurrentYear();
+			}
 			ses.setAttribute("SidebarActive", "UploadMcFc_htm");
-			req.setAttribute("UploadMcFc", service.UploadMcFc((String) ses.getAttribute("EmpNo"),req.getParameter("yr")));
+			req.setAttribute("UploadMcFc", service.UploadMcFc((String) ses.getAttribute("EmpNo"),yr));
+			req.setAttribute("yr", yr);
 
 	    }
 	     catch (Exception e) {
@@ -740,5 +761,72 @@ public class LeaveController {
 	   return "leave/UploadMcFc";
 
 	}
+	
+	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.POST})
+	public String UploadMcFcSubmit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestParam(name = "document" ,required = false) MultipartFile document) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside UploadMcFc.htm"+UserId);		
+        long count =0;	
+		try {
+						
+			LeaveAttachmentDto dto = new LeaveAttachmentDto();
+			dto.setApplId(req.getParameter("applid"));
+			dto.setMcFc(req.getParameter("mcFc"));
+			dto.setCreatedBy(req.getUserPrincipal().getName());
+			dto.setCreatedDate(sdf.getSqlDateAndTimeFormat().format(new Date()));
+		    dto.setFile(document);
+			
+			
+			count=service.McFcAttachmentFile(dto);
 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(count>0) 
+		{
+			redir.addAttribute("result","Document Added Successfully");
+		}
+		else
+		{
+			redir.addAttribute("resultfail","Document Add Unsuccessful");
+		}
+	   return "redirect:/UploadMcFc.htm";
+
+	}
+	@RequestMapping(value = {"downloadMcFc.htm"})
+	public void downloadMcFc(HttpServletRequest req, HttpSession ses, HttpServletResponse res)throws Exception 
+	{
+
+		logger.info(new Date() +"Inside downloadMcFc "+ req.getUserPrincipal().getName());
+		try
+		{
+			String path= emsfilespath+"\\MC_FC\\";
+		    String mcFc="MC";
+			String applid=req.getParameter("MC");
+			if(applid==null) {
+				applid=req.getParameter("FC");
+				mcFc="FC";
+			}
+			res.setContentType("Application/octet-stream");	
+			LeaveMC_FC mcFcdto=service.getMcFc(applid);
+			File my_file=null;
+		
+			my_file = new File(path+File.separator+("MC".equals(mcFc)?mcFcdto.getMC_file():mcFcdto.getFC_file())); 
+	        res.setHeader("Content-disposition","attachment; filename="+("MC".equals(mcFc)?mcFcdto.getMC_file():mcFcdto.getFC_file())); 
+	        OutputStream out = res.getOutputStream();
+	        FileInputStream in = new FileInputStream(my_file);
+	        byte[] buffer = new byte[4096];
+	        int length;
+	        while ((length = in.read(buffer)) > 0){
+	           out.write(buffer, 0, length);
+	        }
+	        in.close();
+	        out.flush();
+			
+		}catch (Exception e) {
+				e.printStackTrace(); 
+				logger.error(new Date() +"Inside downloadMcFc "+ req.getUserPrincipal().getName(),e);
+		}
+	}
 }

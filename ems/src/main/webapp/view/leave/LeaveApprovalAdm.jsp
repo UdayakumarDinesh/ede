@@ -113,8 +113,12 @@ String ses=(String)request.getParameter("result");
                     <td style="text-align:center;"><button class="btn btn-primary btn-sm btn-outline" formaction="leaveprint.htm" name="applId" value="<%=ls[10]%>" formtarget="_blank"><%=ls[14] %><%if("F".equalsIgnoreCase(ls[4].toString())||"A".equalsIgnoreCase(ls[4].toString())){out.println(" ("+ls[4]+")");} %></button>
                     <%if(ls[3].toString().equals("0003")){%>
                     <br>
-                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">MC</a>
-                    <a class="btn btn-danger btn-xs btn-outline" href="<%=ls[15]%>" target="_blank">FC</a>
+                      <button class="btn btn-link btn-sm btn-outline" formaction="downloadMcFc.htm"  formnovalidate="formnovalidate" name="MC" value="<%=ls[0]%>" >
+	                            MC
+	                  </button>
+	                   <button class="btn btn-link btn-sm btn-outline" formaction="downloadMcFc.htm"   formnovalidate="formnovalidate" name="FC" value="<%=ls[0]%>" >
+	                    FC
+	                   </button>                    
                     <%}%>
                     
                     

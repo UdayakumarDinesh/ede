@@ -17,11 +17,7 @@ public class LeaveMC_FC {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long McFcId;
-	private String EmpId;
-	private String ApplId;
-	private String MC;
-	private String FC;
-	private String NC;
+	private String applId;
 	private String MC_file;
 	private String FC_file;
 	
@@ -29,7 +25,7 @@ public class LeaveMC_FC {
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-    private String IsActive;
+    private int IsActive;
 	
 	
 }

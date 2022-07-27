@@ -54,7 +54,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String CHECKDAY="SELECT COUNT(*) FROM leave_holiday_workingday WHERE holidate=:inDate  AND holitype=:inType";
     private static final String CHECKLEAVE="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.status not in('LEU','LME','LCO') and a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND :inDate BETWEEN a.fromdate AND a.todate";   
     private static final String CHECKHANDOVER="select count(*) from";
-    private static final String GETAPPLID="SELECT MAX(SUBSTR(applid,6)) FROM leave_appl where leaveyear=:year";
+    private static final String GETAPPLID="SELECT MAX(CONVERT(SUBSTR(applid,6),SIGNED)) FROM leave_appl where leaveyear=:year";
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU','LR1','LR2','LR3','LRO','LVA') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
     private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
@@ -693,7 +693,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		return getRaSaStatus;
 	}
 
-	private static final String UPLAODMCFC="SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,c.mc_file AS mcfile,c.fc_file AS fcfile  FROM leave_appl  a, leave_code b, leave_mc_fc c WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid=c.applid AND a.empid=:empno  AND a.leaveyear=:yr UNION SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,'0' AS mcfile,'0' AS fcfile  FROM leave_appl  a, leave_code b WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid NOT IN (SELECT applid FROM leave_mc_fc WHERE  empid=:empno  AND leaveyear=:yr) AND a.empid=:empno  AND a.leaveyear=:yr";
+	private static final String UPLAODMCFC="SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,IF(c.mc_file IS NULL , '0', c.mc_file )  AS mcfile,IF(c.fc_file IS NULL , '0', c.fc_file ) AS fcfile  FROM leave_appl  a, leave_code b, leave_mc_fc c WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid=c.applid AND a.empid=:empno  AND a.leaveyear=:yr UNION SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,'0' AS mcfile,'0' AS fcfile  FROM leave_appl  a, leave_code b WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid NOT IN (SELECT applid FROM leave_mc_fc WHERE  empid=:empno  AND leaveyear=:yr) AND a.empid=:empno  AND a.leaveyear=:yr";
 	@Override
 	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception {
 		logger.info(new Date() +"Inside getRaSaStatus");	
