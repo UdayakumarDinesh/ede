@@ -462,7 +462,7 @@ $(document).ready( function() {
 	
 	<%if(consultmainlist.size()>0){%>
 		$('#treatmenttype').prop('disabled', true);
-		$('#chsstype').prop('disabled', true);
+		/* $('#chsstype').prop('disabled', true); */
 	<%}%> 
 });   
 
