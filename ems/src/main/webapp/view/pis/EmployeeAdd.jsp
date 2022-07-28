@@ -127,7 +127,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			            <div class=" col-md-2 ">
 			                <label>Employee No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="4"
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="5"
 			                    class=" form-control input-sm " placeholder="Employee No " required="required"
 			                     onblur="checknegative(this)">
 			            </div>
@@ -599,8 +599,8 @@ function checknegative(str) {
                             
                       if (a == 1){
                  	    
-                 		alert("Punch Card No. already Exist!");
-
+                 		alert("Employee No. already Exist!");
+                 		 $("#PunchcardTextBox").val("");
                      	}
             }
              });
@@ -608,7 +608,7 @@ function checknegative(str) {
 
         }else{
         	
-     	   $("#awailable").html(" ");
+     	   $("#awailable").html("");
 
             }
       }); 

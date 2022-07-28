@@ -53,7 +53,7 @@ public class PisDaoImpl implements PisDao {
 
 	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,eds.dob FROM employee e, employee_desig ed,employee_details eds WHERE  e.empno=eds.empno  AND   e.isactive=1 AND e.desigid=ed.desigid ORDER BY e.srno=0,e.srno ";
 	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno ,pp.paygrade,ee.basicpay FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid AND e.empno=ee.empno and ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
-	private static final String PUNCHCARD = "SELECT COUNT(PunchCard) FROM employee_details WHERE PunchCard=:punchCard";
+	private static final String EMPLOYEENO = "SELECT COUNT(empno) FROM employee_details WHERE empno=:empno";
 	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
 	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
 	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.desigid=d.desigid AND a.logintype=lt.logintype order by a.username asc";
@@ -357,14 +357,14 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	@Override
-	public int PunchcardList(String Punchcard) throws Exception {
+	public int PunchcardList(String empno) throws Exception {
 		
 		logger.info(new Date() + "Inside DAO PunchcardList()");
 		
 		
 		try {
-			Query query = manager.createNativeQuery(PUNCHCARD);
-			query.setParameter("punchCard", Punchcard);
+			Query query = manager.createNativeQuery(EMPLOYEENO);
+			query.setParameter("empno", empno);
 			Object o = query.getSingleResult();
 
 			Integer value = Integer.parseInt(o.toString());

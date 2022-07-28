@@ -154,7 +154,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			            <div class=" col-md-2 ">
 			                <label>Employee No<span class=" mandatory ">*</span></label>
-			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null&employee.getPunchCard()!=null){%><%=employee.getPunchCard()%><%}%>" maxlength="4"
+			                <input type="text" id="PunchcardTextBox" name="PunchCardNo" id="PunchCard" value="<%if(employee!=null&employee.getEmpNo()!=null){%><%=employee.getEmpNo()%><%}%>" maxlength="5"
 			                    class=" form-control input-sm " placeholder="Enter Employee No" required="required"
 			                     onblur="checknegative(this) ">
 			            </div>
@@ -632,11 +632,10 @@ $("#PunchcardTextBox").blur(function(){
                    success:function(data){
                       var rr=data;
                       var a = parseInt(rr) ;
-                            
-                      if (a > 1){
+                      if (a >= 1){
                  	    
-                 		alert("Punch Card No. All ready Taken!");
-
+                    	  alert("Employee No. Already Exist!");
+                 		 $("#PunchcardTextBox").val("");
                      	}
             }
              });

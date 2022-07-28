@@ -167,7 +167,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 							<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
 					     	<td><%if(employeedetails[23]!=null&&employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
 							<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
-						    <td><%if(employeedetails[14]!=null){%><%=employeedetails[14]%><%}else{%>--<%}%></td>
+						    <td><%if(employeedetails[2]!=null){%><%=employeedetails[2]%><%}else{%>--<%}%></td>
 						    <td><%if(employeedetails[33]!=null){%><%=employeedetails[33]%><%}else{%>--<%}%></td>
 							<td><%if(employeedetails[34]!=null){%><%=employeedetails[34]%><%}else{%>--<%}%></td>
 						</tr>

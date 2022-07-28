@@ -309,7 +309,7 @@ public class PisController {
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-			emp.setPunchCard(PunchCardNo);
+			//emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phoneno);
 			emp.setAltPhoneNo(AltPhoneno);
 			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
@@ -483,7 +483,7 @@ public class PisController {
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-			emp.setPunchCard(PunchCardNo);
+			//emp.setPunchCard(PunchCardNo);
 			emp.setPhoneNo(phno);
 			emp.setAltPhoneNo(AltPhoneno);
 			emp.setEmpNo(PunchCardNo);
@@ -1843,7 +1843,7 @@ public class PisController {
 		{
 			String Username = (String) ses.getAttribute("Username");
 			long LoginId = (long) ses.getAttribute("LoginId");
-			logger.info(new Date() + "Inside requestbypunchajax " + Username);
+			logger.info(new Date() + "Inside NewPasswordChangeCheck " + Username);
 
 			int retVar = 0;
 			try {
@@ -1856,7 +1856,7 @@ public class PisController {
 				}
 				
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside requestbypunchajax " + Username,e);
+				logger.error(new Date() + "Inside NewPasswordChangeCheck " + Username,e);
 				e.printStackTrace();
 			}
 			Gson json = new Gson();
