@@ -335,8 +335,8 @@ public class LeaveDaoImpl implements LeaveDao{
 		query.setParameter("year", Year);
 		long id=0;
 		try {
-		String checkHoliday=(String)query.getSingleResult();
-		id=Long.parseLong(checkHoliday);
+			BigInteger checkHoliday=(BigInteger)query.getSingleResult();
+		id=checkHoliday.longValue();
 		}catch (Exception e) {
 		e.printStackTrace();
 		}
