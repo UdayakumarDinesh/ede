@@ -3061,10 +3061,7 @@ public class CHSSController {
 			medicinelist.setCategoryId(0l);
 			medicinelist.setIsActive(1);
 			long count = service.AddMedicine(medicinelist);
-			
-			
-			
-			
+					
 			if (count > 0) {
 				redir.addAttribute("result", "Medicine Info Added to List Successfully");
 				
@@ -3086,7 +3083,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","N");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -1456,8 +1456,7 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				continstatus=13;
 				notify.setNotificationUrl("ContingentApprovals.htm");
-				
-								
+												
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto!=null && notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) 
 				{
@@ -1479,7 +1478,6 @@ public class CHSSServiceImpl implements CHSSService {
 			}else 
 			{
 				notify.setEmpId(Long.parseLong(notifyto[0].toString()));
-				
 				if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 			}
 			
@@ -1507,8 +1505,8 @@ public class CHSSServiceImpl implements CHSSService {
 			// update claimed and settled amount in each claim of this bill
 			if(continstatus==14) 
 			{
-				claim.setAmountClaimed(Double.parseDouble(claimslist.get(i)[27].toString()) );
-				claim.setAmountSettled(Double.parseDouble(claimslist.get(i)[28].toString()) );
+				claim.setAmountClaimed(Double.parseDouble(continclaim[27].toString()) );
+				claim.setAmountSettled(Double.parseDouble(continclaim[28].toString()) );
 			}
 			
 			claim.setCHSSStatusId(continstatus);
