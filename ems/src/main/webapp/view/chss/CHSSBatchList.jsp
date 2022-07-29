@@ -71,7 +71,7 @@
 					<div class="row justify-content-end">
 		
 						
-							<div class="col-sm-1half">	
+							<%-- <div class="col-sm-1half">	
 								<h6 class="control-label" style="color: #145374;"> From : </h6>
 							</div>		
 								
@@ -79,10 +79,10 @@
 								<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								
-							</div>
+							</div> --%>
 							
 							<div class="col-sm-1half">	
-								<h6 class="control-label"  style="color: #145374; margin-bottom: 10px;"> To : </h6> 						
+								<h6 class="control-label"  style="color: #145374; margin-bottom: 10px;"> Till Date : </h6> 						
 							</div>
 							
 							<div class="col-md-2">	
@@ -134,10 +134,16 @@
 											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;">
+												<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
+													<%=obj[12] %> (<%=obj[14] %>)
+												<%}else{ %>
+													<%=obj[14] %>
+												<%} %>
+											</td>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[25].toString())) %></td>
 											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[26].toString())) %></td>
+											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formtarget="_blank" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
@@ -151,14 +157,14 @@
 											</td>
 										</tr>
 									<%
-									itemstotal += Math.round(Double.parseDouble(obj[25].toString()));
-									totalremamount += Math.round(Double.parseDouble(obj[26].toString()));
+									itemstotal += Math.round(Double.parseDouble(obj[26].toString()));
+									totalremamount += Math.round(Double.parseDouble(obj[27].toString()));
 									} %>
 									
 									<%if(chssclaimlist.size()>0){ %>
 										<tr>
-											<td colspan="5" style="text-align: center;">
-												
+											<td colspan="5" style="text-align: right;">
+													<b>Total</b>
 											</td>
 											<td style="text-align: right ;">
 												<%=itemstotal %>
@@ -213,7 +219,7 @@ Put up for approval.</textarea>
 <script type="text/javascript">
 					
 					
-	$('#fromdate').daterangepicker({
+	<%-- $('#fromdate').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
@@ -224,14 +230,13 @@ Put up for approval.</textarea>
 		locale : {
 			format : 'DD-MM-YYYY'
 		}
-	});	
+	});	 --%>
 	
 	$('#todate').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		"maxDate" :new Date(), 		
-		"minDate" :new Date('<%=fromdate%>'),
+		
 		"startDate" : new Date('<%=todate%>'),
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
@@ -241,7 +246,7 @@ Put up for approval.</textarea>
 	});
 	
 	
-	var fromDate=null;
+/* 	var fromDate=null;
 	$("#fromdate").change( function(){
 		fromDate = $("#fromdate").val();
 		
@@ -258,7 +263,7 @@ Put up for approval.</textarea>
 			}
 		});	
 		
-	});						
+	});	 */					
 					
 </script>
 	

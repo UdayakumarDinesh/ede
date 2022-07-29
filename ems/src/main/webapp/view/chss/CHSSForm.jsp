@@ -641,11 +641,11 @@ th,td
 										
 					<tr>
 						<td colspan="4" class="right"><b>Rounded Total</b></td>
-						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).round(mc0).longValue())) %></b></td>
+						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 										
 						<td class="right text-green">
 							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
-							&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %></b>
+							&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 							<%} %>
 						</td>
 						<td ></td>
@@ -674,20 +674,48 @@ th,td
 					<tr>
 						<td  colspan="3" style="border-top: 0px;border-right : 0px;height:120px;padding: 0px;margin:0px;">
 							<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
-								<%for(Object[] obj:ClaimapprovedPOVO){
+								<% int flag=0;
+								for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("PO")){%>
 									<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
 									<li style="text-transform: capitalize;"><%=obj[4] %> </li>
-								<% } } %>
+									<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(obj[6].toString().substring(0, 10))  +" "+obj[6].toString().substring(11,19) %>]</span></li>
+								<%flag=1;
+								break;} } %>
+								
+								<%if(flag==0){ %>
+								
+									<%for(Object[] obj:ClaimapprovedPOVO){
+										if(obj[1].toString().equalsIgnoreCase("authority") &&  obj[5].toString().equalsIgnoreCase("K")){%>
+										<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+										<li style="text-transform: capitalize;"><%=obj[4] %> </li>
+									<%
+									break;} } %>								
+								<%} %>
+								
+								
 							</ul>
 						</td>				
 						<td colspan="4" style="border-top: 0px;border-left : 0px;padding: 0px;margin:0px;height:120px;">
 							<ul style="float: right;list-style-type: none; margin:10px 5px -35px 0px; ">
-								<%for(Object[] obj:ClaimapprovedPOVO){
+								<%  flag=0;
+								for(Object[] obj:ClaimapprovedPOVO){
 									if(obj[1].toString().equalsIgnoreCase("VO")){%>
 									<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
-									<li style="text-transform: capitalize;"><%=obj[4] %></li>
-								<% } } %>
+									<li style="text-transform: capitalize;"><%=obj[4] %> </li>
+									<li><span style="font-size:10px; ">[Verified On:&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(obj[6].toString().substring(0, 10))  +" "+obj[6].toString().substring(11,19) %>]</span></li>
+								<%flag=1;
+								break;} } %>
+								
+								<%if(flag==0){ %>
+								
+									<%for(Object[] obj:ClaimapprovedPOVO){
+										if(obj[1].toString().equalsIgnoreCase("authority") &&  obj[5].toString().equalsIgnoreCase("V")){%>
+										<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
+										<li style="text-transform: capitalize;"><%=obj[4] %> </li>
+									<%
+									break;} } %>								
+								<%} %>
 							</ul>
 							
 						</td>	

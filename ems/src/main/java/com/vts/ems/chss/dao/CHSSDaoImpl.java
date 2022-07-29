@@ -1091,13 +1091,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	@Override
-	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid)throws Exception
+	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO CHSSBatchApproval");
 		try {
-			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype, :fromdate , :todate,:contingentid);");
+			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype, :todate,:contingentid);");
 			query.setParameter("logintype", logintype);
-			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
 			query.setParameter("contingentid", contingentid);
 			return (List<Object[]>)query.getResultList();
@@ -1213,6 +1212,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		logger.info(new Date() +"Inside DAO getCHSSContingentList");
 		
 		try {
+			
 			Query query= manager.createNativeQuery("call chss_contingent_bills_list(:logintype,:fromdate,:todate)");
 			query.setParameter("logintype", logintype);
 			query.setParameter("fromdate", fromdate);
@@ -1353,25 +1353,15 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String CHSSAPPROVALAUTHLIST  ="SELECT e.empid,  'PO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.PO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"
-			+ "UNION \r\n"
-			+ "SELECT e.empid,  'VO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.VO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
-			+ "UNION \r\n"
-			+ "SELECT e.empid,  'AO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,  employee_desig ed WHERE cc.AO = e.EmpId AND e.desigid = ed.DesigId  AND cc.ContingentId = :contingentid \r\n"  
-			+ "UNION \r\n"
-			+ "SELECT e.empid,  'CEO',  e.EmpName,  ed.DesigCode,  ed.designation FROM  chss_contingent cc,  employee e,   employee_desig ed WHERE cc.CEO = e.EmpId AND e.desigid = ed.DesigId AND cc.ContingentId = :contingentid \r\n"
-			+ "UNION \r\n"
-			+ "SELECT e.empid,  'CEO-L',  e.EmpName,  ed.DesigCode,  ed.designation FROM  login l,  employee e,   employee_desig ed WHERE l.empid = e.EmpId AND e.desigid = ed.DesigId AND l.isactive=1 AND l.logintype='Z' LIMIT 1";
 	@Override
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
 		try {
 			
-			Query query= manager.createNativeQuery(CHSSAPPROVALAUTHLIST);
+			Query query= manager.createNativeQuery("call chss_contingent_approve_stamp(:contingentid); ");
 			query.setParameter("contingentid", contingentid);
 			return (List<Object[]>)query.getResultList();
-			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1662,7 +1652,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		logger.info(new Date() +"Inside DAO ClaimApprovedPOVOData");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
-			Query query= manager.createNativeQuery(CLAIMAPPROVEDPOVODATA);
+			Query query= manager.createNativeQuery(" CALL chss_claim_approve_stamp(:chssapplyid);");
 			query.setParameter("chssapplyid", chssapplyid);
 			list= (List<Object[]>)query.getResultList();
 			
@@ -1750,15 +1740,17 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 
 	@Override
-	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception
 	{
 		logger.info(new Date() +"Inside DAO GetClaimsList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
-			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate );");
+			System.out.println(status+"  "+fromdate+"  "+todate);
+			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate , :status);");
 			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
 			query.setParameter("empid", empid);
+			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

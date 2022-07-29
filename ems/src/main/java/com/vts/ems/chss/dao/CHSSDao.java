@@ -76,7 +76,7 @@ public interface CHSSDao {
 	public CHSSTestSub getCHSSTestSub(String testsubid) throws Exception;
 	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid) throws Exception;
 	public String CHSSContingentNoCount(String finYear) throws Exception;
 	public long ContingentAdd(CHSSContingent other) throws Exception;
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception;
@@ -122,7 +122,7 @@ public interface CHSSDao {
 	public long CHSSContingentTransactionAdd(CHSSContingentTransaction transaction) throws Exception;
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
-	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;

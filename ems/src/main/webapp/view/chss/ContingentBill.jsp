@@ -1,3 +1,6 @@
+<%@page import="java.time.LocalTime"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -155,7 +158,7 @@ th,td
 	</div>
 	
 	
-	<table>
+	<table style="margin-top: 5px;">
 		<tr>
 			<th style="text-align: center;" >SN</th>
 			<th style="text-align: center;width: 10%;">Emp. No.</th>
@@ -197,6 +200,7 @@ th,td
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString())) )) %></td>
 											
 			</tr>
+			
 		<%	k++;
 			claimamt += Math.round(Double.parseDouble(obj[27].toString()));
 			allowedamt +=Math.round(Double.parseDouble(obj[28].toString())) ;
@@ -225,41 +229,94 @@ th,td
 			<table style="width: 100%;margin: 60px 5px 5px 10px;">
 				<tr>
 					<td style="border: 0px;">
-						<%for(Object[] auth : ApprovalAuth)
+						<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
+						<% int flag=0;
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+						for(Object[] auth : ApprovalAuth)
 						{
 							if(auth[1].toString().equalsIgnoreCase("PO")){
 						%>
-								<%=auth[2] %><br>
-								<%=auth[4] %>
-							
-						<% }} %>
+								<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+								<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+								<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
+															
+						<% flag=1;
+						break;}} %>
+						
+						<%if(flag==0){ %>
+						
+							<%	for(Object[] auth : ApprovalAuth)
+							{
+								if(auth[1].toString().equalsIgnoreCase("authority") && auth[5].toString().equalsIgnoreCase("K") ){
+							%>
+									<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+									<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+									
+							<% 	break; }} %>
+						
+						<%} %>						
+						</ul>
+
 					</td>
-					<td style="border: 0px;text-align: right;" >
-		
-						<%for(Object[] auth : ApprovalAuth)
-						{
-							if(auth[1].toString().equalsIgnoreCase("VO")){
-						%>
-								<span style="text-transform: capitalize;"> <%=auth[2] %><br>
-								<%=auth[4] %></span>
+					<td style="border: 0px;" >
+						<ul style="float: right;list-style-type: none;margin:10px 5px -35px -35px;">
+							<%  flag=0;
+							for(Object[] auth : ApprovalAuth)
+							{
+								if(auth[1].toString().equalsIgnoreCase("VO")){
+							%>
+								<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+								<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+								<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
+							<% flag=1;
+							break;}} %>
 							
-						<% break;}} %>
-			
+							<%if(flag==0){ %>
+							
+								<%	for(Object[] auth : ApprovalAuth)
+								{
+									if(auth[1].toString().equalsIgnoreCase("authority") && auth[5].toString().equalsIgnoreCase("V") ){
+								%>
+									<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+									<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+									
+								<% 	break; }} %>
+							
+							<%} %>						
+						</ul>
 					</td>
 				</tr>
 			</table>
 		
-		<table style="width: 100%;margin: 60px 5px 5px 10px;">
+		<table style="width: 100%;margin: 90px 5px 5px 10px;">
 			<tr>
 				<td style="border: 0px;">
-				<%for(Object[] auth : ApprovalAuth)
-				{
-					if(auth[1].toString().equalsIgnoreCase("AO")){
-				%>
-						<span style="text-transform: capitalize;"><%=auth[2] %><br>
-						<%=auth[4] %></span>
-					
-				<% break;}} %>
+					<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
+					<%  flag=0;
+						for(Object[] auth : ApprovalAuth)
+						{
+							if(auth[1].toString().equalsIgnoreCase("AO")){
+						%>
+							<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+							<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+							<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
+							
+						<% flag=1;
+						break;}} %>
+						
+						<%if(flag==0){ %>
+						
+							<%	for(Object[] auth : ApprovalAuth)
+							{
+								if(auth[1].toString().equalsIgnoreCase("authority") && auth[5].toString().equalsIgnoreCase("W") ){
+							%>
+								<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
+								<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
+								
+							<% 	break; }} %>
+						
+						<%} %>						
+					</ul>
 				</td>
 			</tr>
 		</table>
@@ -268,14 +325,14 @@ th,td
 		<div align="center">
 		<br><br><span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
 				<span><b>
-					<% int flag=0;
+					<%  flag=0;
 					for(Object[] auth : ApprovalAuth)
 					{
 						if(auth[1].toString().equalsIgnoreCase("CEO")){
 					%>
-							<span style="text-transform: capitalize;"><%=auth[2] %><br>
-							CEO, <%=labdata[0] %></span>
-						
+							<span style="text-transform: capitalize;"><%=auth[2] %>,<br>
+							CEO</span><br>
+							<span style="font-size:10px; ">[Approved On: &nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span>
 					<% flag=1;
 					break;}} %>
 					
@@ -283,14 +340,15 @@ th,td
 					
 						<%	for(Object[] auth : ApprovalAuth)
 						{
-							if(auth[1].toString().equalsIgnoreCase("CEO-L")){
+							if(auth[1].toString().equalsIgnoreCase("authority") && auth[5].toString().equalsIgnoreCase("Z") ){
 						%>
-								<span style="text-transform: capitalize;"><%=auth[2] %><br>
-								CEO, <%=labdata[0] %></span>
+								<span style="text-transform: capitalize;"><%=auth[2] %>,<br>
+								CEO</span>
 							
 						<% 	break; }} %>
 					
 					<%} %>
+					
 					
 					</b>
 				</span>

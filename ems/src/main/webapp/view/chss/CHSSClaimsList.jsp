@@ -18,6 +18,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 String fromdate = (String)request.getAttribute("fromdate");
 String todate   = (String)request.getAttribute("todate");
 String empid = (String)request.getAttribute("empid");
+String status   = (String)request.getAttribute("status");
 
 SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -42,44 +43,51 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 		 
 	
 	
- <div class="page card dashboard-card">	
+ 		<div class="page card dashboard-card">	
 
 			<div class="card" >
 			
 				<div class="card-header" style="height: 4rem">
 					<form action="ClaimsList.htm" method="POST" id="myform">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					<div class="row justify-content-end">
-					 <div class="col-1" align="right"></div>
+					<div class="row ">
+					
 						<div class="col-2"><h6>Employee </h6></div>
 						<div class="col-2" align="left" style="margin-left: -10%;">
-							<select class="form-control form-control select2" name="empid"   required="required" onchange="this.form.submit();" >
-							<option value="0"<% if("0".toString().equalsIgnoreCase(empid)){%> selected<%}%> >All</option>
-					    	<%if(emplist!=null){ %>
-						    <%for(Object[] obj:emplist){%>
-							<option value="<%=obj[0]%>"<% if(obj[0].toString().equalsIgnoreCase(empid)){%> selected<%}%> ><%=obj[1]%></option>
-							<%}}%>
+							<select class="form-control select2" name="empid"   required="required" onchange="this.form.submit();" >
+								<option value="0"<% if("0".toString().equalsIgnoreCase(empid)){%> selected<%}%> >All</option>
+							    	<%if(emplist!=null){ %>
+									    <%for(Object[] obj:emplist){%>
+											<option value="<%=obj[0]%>"<% if(obj[0].toString().equalsIgnoreCase(empid)){%> selected<%}%> ><%=obj[1]%></option>
+										<%}%>
+									<%} %>
 							</select>
 					   </div>
 					
-						     <div class="col-2"  ><h6>From Date :</h6></div>
-					         <div class="col-1" style="margin-left: -10%;"> 
-								    <input type="text" style="width: 145%;"  class="form-control input-sm mydate"   readonly="readonly"  value=""  id="fromdate" name="fromdate"  required="required"   > 
-								    <label class="input-group-addon btn" for="testdate"></label>              
-							 </div>
+						    <div class="col-2"  ><h6>From Date :</h6></div>
+					        <div class="col-1" style="margin-left: -10%;"> 
+								<input type="text" style="width: 145%;"  class="form-control input-sm mydate"   readonly="readonly"  value=""  id="fromdate" name="fromdate"  required="required"   > 
+							</div>
 							 
-							  <div class="col-2"  style="margin-left: 1%;"><h6>To Date :</h6></div>
-							  <div class="col-1" style="margin-left: -10%;">						
-								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate"  readonly="readonly"   value=""  id="todate" name="todate"  required="required"  > 							
-							 		 <label class="input-group-addon btn" for="testdate"></label>    
-							 </div>
-
-							 <div class="col-3" align="right"></div>
-						
+							<div class="col-2"  style="margin-left: 1%;"><h6>To Date :</h6></div>
+							<div class="col-1" style="margin-left: -10%;">						
+								<input type="text" style="width: 145%;"  class="form-control input-sm mydate"  readonly="readonly"   value=""  id="todate" name="todate"  required="required"  > 							
+							</div>
+							
+							<div class="col-1"  style="margin-left: 1%;"><h6>Status :</h6></div>
+							<div class="col-2" style="margin-left: -3%;">						
+								<select class="form-control"  name="status" style="width: 100%;"   required="required" onchange="this.form.submit();">
+										<option value="I" <%if(status.equalsIgnoreCase("I")){ %>selected <%} %>> In Progress</option>
+										<option value="A" <%if(status.equalsIgnoreCase("A")){ %>selected <%} %>> Approved</option>
+								</select> 							
+							</div>
+							
+							
+					
 							
 					</div>
 							 
-				   </form>
+				   </form>   
 				
 				</div>
 			
@@ -95,6 +103,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 								<thead>
 									<tr>
 										<th>SN</th>
+										<th>Claim No</th>
 										<th>Applicant</th>
 										<th>Patient </th>
 										<th>Applied Date</th>
@@ -109,6 +118,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 										{i++; %>
 										<tr>
 											<td><%=i %></td>
+											<td><%=obj[16] %></td>
 											<td><%=obj[19] %></td>
 											<td><%=obj[12] %>&nbsp;(<%=obj[14] %>)</td>
 											<td><%=rdf.format(sdf.parse(obj[15].toString())) %></td>

@@ -1242,9 +1242,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception
+	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid) throws Exception
 	{
-		return dao.CHSSBatchApproval(logintype, fromdate, todate,contingentid);
+		return dao.CHSSBatchApproval(logintype,  todate,contingentid);
 	}
 	
 	@Override
@@ -1796,9 +1796,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception
 	{
-		return dao.GetClaimsList(fromdate , todate , empid);
+		return dao.GetClaimsList(fromdate , todate , empid,status);
 	}
 	
 	@Override

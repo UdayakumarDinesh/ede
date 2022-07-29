@@ -85,7 +85,7 @@ public interface CHSSService
 	public long MedRemAmountEdit(CHSSBillMedicine modal) throws Exception;
 	public long MiscRemAmountEdit(CHSSBillMisc modal) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype,String fromdate, String todate,String contingentid) throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype,String todate,String contingentid) throws Exception;
 	public long CHSSClaimsApprove(CHSSContingentDto dto)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception;
@@ -123,7 +123,7 @@ public interface CHSSService
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception;
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 	public long CHSSContingentDelete(String contingentid, String Username) throws Exception;
-	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid)throws Exception;
+	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
 	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;

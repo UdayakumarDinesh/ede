@@ -151,7 +151,7 @@ table th:last-child{
 					</div>
 				<%} %>
 				
-					<form action="CHSSApplyEdit.htm" method="post" autocomplete="off"  >
+					<form action="CHSSApplyEdit.htm" method="post" autocomplete="off" id="claim-update-form" >
 						
 						<div class="card" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 						<div class="row">
@@ -200,7 +200,7 @@ table th:last-child{
 							<div class="col-2">
 								<b>Claim Type : </b> 
 								<br>
-								<select class="form-control" name="chsstype" id="chsstype">
+								<select class="form-control  select2 w-100" name="chsstype" id="chsstype">
 									<option value="OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("OPD")){ %>Selected<%} %> >OPD</option>
 									<%-- <option value="IPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option> --%>
 								</select>
@@ -462,10 +462,15 @@ $(document).ready( function() {
 	
 	<%if(consultmainlist.size()>0){%>
 		$('#treatmenttype').prop('disabled', true);
-		/* $('#chsstype').prop('disabled', true); */
+		$('#chsstype').prop('disabled', true);
 	<%}%> 
 });   
 
+jQuery(function ($) {        
+	  $('#claim-update-form').bind('submit', function () {
+	    $(this).find('#chsstype').prop('disabled', false);
+	  });
+	});
 
 var threeMonthsAgo = moment().subtract(3, 'months');
 

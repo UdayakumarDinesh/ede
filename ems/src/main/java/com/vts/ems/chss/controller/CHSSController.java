@@ -1993,21 +1993,25 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSBatchList.htm "+Username);
 		try {
 
-			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
 			
-			if(fromdate == null || todate == null) 
+			
+			if(todate == null) 
 			{
-				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
-				todate = LocalDate.now().withDayOfMonth(20).toString();
+				if(LocalDate.now().getDayOfMonth()<20) {
+					todate = LocalDate.now().minusMonths(1).withDayOfMonth(20).toString();
+				}else
+				{
+					todate = LocalDate.now().withDayOfMonth(20).toString();
+				}
+				
 			}else {
-				fromdate = sdf.format(rdf.parse(fromdate));
 				todate = sdf.format(rdf.parse(todate));				
 			}
 			
-			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType, fromdate, todate,"0");
+			List<Object[]> claimslist = service.CHSSBatchApproval(LoginType, todate,"0");
 			req.setAttribute("chssclaimlist", claimslist);
-			req.setAttribute("fromdate", fromdate);
+//			req.setAttribute("fromdate", fromdate);
 			req.setAttribute("todate", todate);
 			
 			return "chss/CHSSBatchList";
@@ -2354,7 +2358,7 @@ public class CHSSController {
 			logger.error(new Date() +" Inside ApprovedBills.htm "+UserId, e); 
 			return "static/Error";
 		}
-		return "chss/CHSSApprovedBills";
+		return "chss/ContingentApprovedBills";
 	}
 	
 	
@@ -2679,35 +2683,29 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ClaimsList.htm "+Username);
 		try {
 			ses.setAttribute("SidebarActive", "ClaimsList_htm");
-			String fromdate = (String)req.getParameter("fromdate");
-			String todate = (String) req.getParameter("todate");
-			String empid = (String)req.getParameter("empid");
-			LocalDate today = LocalDate.now();
-			if(fromdate==null) 
+			
+			String empid = req.getParameter("empid");
+			String status =  req.getParameter("status");
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			if(fromdate == null || todate == null) 
 			{
-				if(today.getMonthValue()<4) 
-				{
-					fromdate = String.valueOf(today.getYear()-1);
-					todate=String.valueOf(today.getYear());
-					
-				}else{
-					fromdate = String.valueOf(today.getYear());
-					todate=String.valueOf(today.getYear()+1);
-				}
-				fromdate +="-04-01"; 
-				todate +="-03-31";
-				empid="0";
-			}else
-			{
-				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
-				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
+				todate = LocalDate.now().withDayOfMonth(20).toString();
+				status = "I";
+				empid = "0";
+			}else {
+				fromdate = sdf.format(rdf.parse(fromdate));
+				todate = sdf.format(rdf.parse(todate));				
 			}
 		
 			req.setAttribute("empid", empid);
+			req.setAttribute("status", status);
 			req.setAttribute("fromdate", fromdate);
 			req.setAttribute("todate", todate);
 			req.setAttribute("emplist", service.EmployeesList());
-			req.setAttribute("claimslist", service.GetClaimsList(fromdate , todate , empid));
+			req.setAttribute("claimslist", service.GetClaimsList(fromdate , todate , empid,status));
 			return "chss/CHSSClaimsList";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -3218,6 +3216,52 @@ public class CHSSController {
 		}
 	}
 	
-	
+	@RequestMapping(value ="ContingentBillsList.htm" )
+	public String ContingentBillsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside ContingentBillsList.htm "+Username);
+		try {
+			ses.setAttribute("SidebarActive", "ContingentBillsList.htm");
+			
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-31";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+		
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("ContingentList", service.getCHSSContingentList("1",fromdate,todate));
+			req.setAttribute("logintype", LoginType);
+			ses.setAttribute("formmoduleid", "4");
+			
+			return "chss/ContingentBillsAll";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingentBillsList.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 	
 }
