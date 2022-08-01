@@ -25,6 +25,8 @@ public class CHSSBillTests implements Serializable {
 	private double AmountPaid;
 	private double TestRemAmount;
 	private String Comments;
+	private Long UpdateByEmpId;
+	private String UpdateByRole;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

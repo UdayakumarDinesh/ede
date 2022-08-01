@@ -26,6 +26,8 @@ public class CHSSBillMisc implements Serializable {
 	private double AmountPaid;
 	private double MiscRemAmount;
 	private String Comments;
+	private Long UpdateByEmpId;
+	private String UpdateByRole;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

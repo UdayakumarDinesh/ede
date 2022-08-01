@@ -578,8 +578,8 @@ p {
 														</select>
 													<%} %>
 												</td>
-												<td><input type="number" class="form-control items numberonly" name="meds-presquantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
-												<td><input type="number" class="form-control items numberonly" name="meds-quantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items numberonly med-qty" name="meds-presquantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items numberonly med-qty" name="meds-quantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
 												<td><input type="number" class="form-control items cost-only me-cost"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; "  max="9999999"  ></td>
 												<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 											</tr>
@@ -967,6 +967,12 @@ function CheckClaimAmount($chssapplyid)
 
 function  onlyNumbers() {    
     	
+	
+	  $('.cost-only').on("click", function() {
+          $(this).select();
+      });
+	  
+	
 	 	$('.numberonly').keypress(function (e) {    
 
         var charCode = (e.which) ? e.which : event.keyCode    
@@ -1579,6 +1585,7 @@ $("table").on('click','.tbl-row-add-meds' ,function()
    	var $clone = $tr.clone();
    	$tr.after($clone);
    	$clone.find(".items").val("").end();
+   	$clone.find(".med-qty").val("0").end();
     $clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
     $clone.find('.selectpicker').selectpicker('render'); 
   	setTooltip();

@@ -477,9 +477,9 @@
 												</button>
 											
 											<%} %>
-											<%-- <button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
+											<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
 												<i class="fa-solid fa-trash-can " style="color: red"></i>
-											</button>	 --%>
+											</button>
 										<% } %>
 											
 										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">

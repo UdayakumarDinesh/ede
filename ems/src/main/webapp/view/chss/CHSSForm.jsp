@@ -269,7 +269,7 @@ th,td
 						</tr> --%>
 						<tr>
 							<td colspan="5"></td>
-							<td style="text-align: right;"><b>Rounded Total </b></td>
+							<td style="text-align: right;"><b>Total </b></td>
 							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
 						</tr>
 					<%}else{ %>
@@ -441,11 +441,23 @@ th,td
 							<td class="right text-blue"><%=consult[6] %></td>
 							<%if(show){ %>
 								<td class="right text-green">	
-									<%=consult[7]%>		
+										<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
+											<span style="color: #008005"><%=consult[7]%></span>		
+										<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"><%=consult[7]%></span>		
+										<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"><%=consult[7]%></span>		
+										<%} %>	
 								</td>	
 								<td class="text-green">	
 									<%if(consult[10]!=null){ %>
-										<%=consult[10]%>
+										<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
+											<span style="color: #008005"><%=consult[10]%></span>		
+										<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"><%=consult[10]%></span>		
+										<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"><%=consult[10]%></span>		
+										<%} %>	
 									<%} %>
 								</td>
 							<%}else{ %>
@@ -484,11 +496,23 @@ th,td
 							
 							<%if(show){ %>
 								<td class="right text-green">	
-									<%=test[7]%>		
+									<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
+										<span style="color: #008005"><%=test[7]%>	</span>		
+									<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+										<span style="color: #D40BEA"><%=test[7]%>	</span>		
+									<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
+										<span style="color: #DB0202"><%=test[7]%>	</span>		
+									<%} %>	
 								</td>	
 								<td class="text-green">
 									<%if(test[11]!=null){ %>
-										<%=test[11]%>
+										<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
+											<span style="color: #008005"><%=test[11]%>	</span>		
+										<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"><%=test[11]%>	</span>		
+										<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"><%=test[11]%>	</span>		
+										<%} %>	
 									<%} %>
 								</td>
 							<%}else{ %>
@@ -531,11 +555,23 @@ th,td
 							
 							<%if(show){ %>
 								<td class="right text-green">	
-									<%=medicine[6]%>		
+									<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
+										<span style="color: #008005"> <%=medicine[6]%>	</span>		
+									<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+										<span style="color: #D40BEA"> <%=medicine[6]%>	</span>		
+									<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
+										<span style="color: #DB0202"> <%=medicine[6]%>	</span>		
+									<%} %>		
 								</td>	
 								<td class="text-green">
 									<%if(medicine[9]!=null){ %>
-										<%=medicine[9]%>
+										<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
+											<span style="color: #008005"> <%=medicine[9]%>	</span>		
+										<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"> <%=medicine[9]%>	</span>		
+										<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"> <%=medicine[9]%>	</span>		
+										<%} %>	
 									<%} %>
 								</td>
 							<%}else{ %>
@@ -575,11 +611,23 @@ th,td
 							
 							<%if(show){ %>
 								<td class="right text-green">	
-									<%=other[5]%>		
+									<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
+										<span style="color: #008005"> <%=other[5]%>	</span>		
+									<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+										<span style="color: #D40BEA"> <%=other[5]%>	</span>		
+									<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
+										<span style="color: #DB0202"> <%=other[5]%>	</span>		
+									<%} %>	
 								</td>	
 								<td class="text-green">
 									<%if(other[8]!=null){ %>
-										<%=other[8]%>
+										<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
+											<span style="color: #008005"> <%=other[8]%>	</span>		
+										<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"> <%=other[8]%>	</span>		
+										<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"> <%=other[8]%>	</span>		
+										<%} %>	
 									<%} %>
 								</td>
 							<%}else{ %>
@@ -620,11 +668,23 @@ th,td
 							<td class="right text-blue"><%=misc[3] %></td>
 								<%if(show){ %>
 									<td class="right text-green">	
-										<%=misc[4]%>		
+										<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
+											<span style="color: #008005"> <%=misc[4]%>	</span>		
+										<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+											<span style="color: #D40BEA"> <%=misc[4]%></span>		
+										<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
+											<span style="color: #DB0202"> <%=misc[4]%>	</span>		
+										<%} %>	
 									</td>	
 									<td class="text-green">
 										<%if(misc[7]!=null){ %>
-											<%=misc[7]%>
+											<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
+												<span style="color: #008005"> <%=misc[7]%>	</span>		
+											<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+												<span style="color: #D40BEA"> <%=misc[7]%></span>		
+											<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
+												<span style="color: #DB0202"> <%=misc[7]%>	</span>		
+											<%} %>	
 										<%} %>
 									</td>
 								<%}else{ %>
@@ -662,7 +722,7 @@ th,td
 					</tr>
 										
 					<tr>
-						<td colspan="4" class="right"><b>Rounded Total</b></td>
+						<td colspan="4" class="right"><b>Total</b></td>
 						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 										
 						<td class="right text-green">

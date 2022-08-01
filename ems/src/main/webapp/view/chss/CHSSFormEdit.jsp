@@ -110,11 +110,14 @@ th,td
 <%
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 	List<Object[]> chssbillslist = (List<Object[]>)request.getAttribute("chssbillslist");
+	
 	List<Object[]> ConsultDataList = (List<Object[]>)request.getAttribute("ConsultDataList");
 	List<Object[]> TestsDataList = (List<Object[]>)request.getAttribute("TestsDataList");
 	List<Object[]> MedicineDataList = (List<Object[]>)request.getAttribute("MedicineDataList");
 	List<Object[]> OtherDataList = (List<Object[]>)request.getAttribute("OtherDataList");
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
+	
+	
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
 	
 	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
@@ -122,7 +125,7 @@ th,td
 	
 	Object[] employee = (Object[])request.getAttribute("employee");
 	
-	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yy");//DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
@@ -298,7 +301,7 @@ th,td
 											<%if(chssbillslist.size()>0){ %>
 												<tr>
 													<td colspan="5"></td>
-													<td style="text-align: right;"><b>Rounded Total </b></td>
+													<td style="text-align: right;"><b>Total </b></td>
 													<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
 												</tr>
 											<%}else{ %>
@@ -410,7 +413,7 @@ th,td
 												<% 	BigDecimal itemstotal=new BigDecimal("0.0");
 													BigDecimal totalremamount=new BigDecimal("0.0"); 
 												int i=1;
-												for(Object[] consult :ConsultDataList)
+												for(Object[] consult :ConsultDataList)	
 												{ %>
 													<%if(i==1){ %>
 														<tr>
@@ -451,12 +454,27 @@ th,td
 														<td class="right text-blue"><%=consult[6] %></td>
 														
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
-														<td class="right text-green">	
-															<%=consult[7]%>		
-														</td>	
-														<td class="text-green">
+														<td class="right ">
+															
+															<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
+																<span style="color: #008005"><%=consult[7]%></span>		
+															<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+																<span style="color: #D40BEA"><%=consult[7]%></span>		
+															<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
+																<span style="color: #DB0202"><%=consult[7]%></span>		
+															<%} %>
+															
+															
+														</td>
+														<td class="">
 															<%if(consult[10]!=null){ %>
-																<%=consult[10]%>
+																<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
+																	<span style="color: #008005"><%=consult[10]%></span>		
+																<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+																	<span style="color: #D40BEA"><%=consult[10]%></span>		
+																<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
+																	<span style="color: #DB0202"><%=consult[10]%></span>		
+																<%} %>
 															<%} %>
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
@@ -522,12 +540,24 @@ th,td
 												
 													
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
-														<td class="right text-green">	
-															<%=test[7]%>	
+														<td class="right ">	
+															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
+																<span style="color: #008005"><%=test[7]%>	</span>		
+															<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+																<span style="color: #D40BEA"><%=test[7]%>	</span>		
+															<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
+																<span style="color: #DB0202"><%=test[7]%>	</span>		
+															<%} %>
 														</td>	
-														<td class="text-green">
+														<td class="">
 															<%if(test[11]!=null){ %>
-																<%=test[11]%>
+																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
+																	<span style="color: #008005"><%=test[11]%>	</span>		
+																<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+																	<span style="color: #D40BEA"><%=test[11]%>	</span>		
+																<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
+																	<span style="color: #DB0202"><%=test[11]%>	</span>		
+																<%} %>
 															<%} %>
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
@@ -597,12 +627,24 @@ th,td
 												
 													
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
-														<td class="right text-green">	
-															<%=medicine[6]%>
+														<td class="right ">	
+															<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
+																<span style="color: #008005"> <%=medicine[6]%>	</span>		
+															<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+																<span style="color: #D40BEA"> <%=medicine[6]%>	</span>		
+															<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
+																<span style="color: #DB0202"> <%=medicine[6]%>	</span>		
+															<%} %>
 														</td>	
-														<td class="text-green">
+														<td class="">
 															<%if(medicine[9]!=null){ %>
-																<%=medicine[9]%>
+																<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
+																	<span style="color: #008005"> <%=medicine[9]%>	</span>		
+																<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+																	<span style="color: #D40BEA"> <%=medicine[9]%>	</span>		
+																<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
+																	<span style="color: #DB0202"> <%=medicine[9]%>	</span>		
+																<%} %>
 															<% } %>
 															
 															
@@ -669,12 +711,24 @@ th,td
 													<td class="right text-blue"><%=other[3] %></td>
 													
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
-														<td class="right text-green">	
-															<%=other[5]%>
+														<td class="right ">	
+															<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
+																<span style="color: #008005"> <%=other[5]%>	</span>		
+															<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+																<span style="color: #D40BEA"> <%=other[5]%>	</span>		
+															<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
+																<span style="color: #DB0202"> <%=other[5]%>	</span>		
+															<%} %>
 														</td>	
-														<td class="text-green">
+														<td class="">
 															<%if(other[8]!=null){ %>
-																<%=other[8]%>
+																<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
+																	<span style="color: #008005"> <%=other[8]%>	</span>		
+																<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+																	<span style="color: #D40BEA"> <%=other[8]%>	</span>		
+																<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
+																	<span style="color: #DB0202"> <%=other[8]%>	</span>		
+																<%} %>
 															<%} %>
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
@@ -735,12 +789,24 @@ th,td
 													
 																										
 													<% if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
-														<td class="right text-green">	
-															<%=misc[4]%>
+														<td class="right ">	
+															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
+																<span style="color: #008005"> <%=misc[4]%>	</span>		
+															<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+																<span style="color: #D40BEA"> <%=misc[4]%></span>		
+															<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
+																<span style="color: #DB0202"> <%=misc[4]%>	</span>		
+															<%} %>
 														</td>	
-														<td class="text-green">
+														<td class="">
 															<%if(misc[7]!=null){ %>
-																<%=misc[7]%>
+																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
+																	<span style="color: #008005"> <%=misc[7]%>	</span>		
+																<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+																	<span style="color: #D40BEA"> <%=misc[7]%></span>		
+																<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
+																	<span style="color: #DB0202"> <%=misc[7]%>	</span>		
+																<%} %>
 															<%} %>
 														</td>
 													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
@@ -782,7 +848,7 @@ th,td
 										</tr>
 															
 										<tr>
-											<td colspan="4" class="right"><b>Rounded Total</b></td>
+											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
 											<td class="right text-green">
@@ -1317,16 +1383,18 @@ var $rowcount = 1;
 
 onlyNumbers();
 function  onlyNumbers() {    
+
+	
 	
  	$('.numberonly').keypress(function (e) {    
 
-    var charCode = (e.which) ? e.which : event.keyCode    
-
-    if (String.fromCharCode(charCode).match(/[^0-9]/g))    
+	    var charCode = (e.which) ? e.which : event.keyCode    
+	
+	    if (String.fromCharCode(charCode).match(/[^0-9]/g))    
 
         return false;                        
 
-		});
+	});
 
 	 $('.cost-only').keypress( function (evt) {
 	
@@ -1336,7 +1404,12 @@ function  onlyNumbers() {
 	    } 
 	    
 	});
- 
+	 
+	 
+	  $('.cost-only').on("click", function() {
+          $(this).select();
+      });
+	  
 }
 
 

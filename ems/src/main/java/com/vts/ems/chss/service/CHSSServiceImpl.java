@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -41,22 +40,22 @@ import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
-import com.vts.ems.chss.model.CHSSBillMedicine;
-import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSBillConsultation;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
+import com.vts.ems.chss.model.CHSSBillMedicine;
+import com.vts.ems.chss.model.CHSSBillMisc;
+import com.vts.ems.chss.model.CHSSBillOther;
+import com.vts.ems.chss.model.CHSSBillTests;
+import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
-import com.vts.ems.chss.model.CHSSBillMisc;
-import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
@@ -309,8 +308,14 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultMainDelete(String consultmainid, String modifiedby) throws Exception
 	{
-	
-		dao.ConsultBillsDelete(consultmainid);
+		
+		List<Object[]> billids = dao.consultMainBillIds(consultmainid);
+		
+		for(Object[] obj : billids)
+		{
+			CHSSBillDelete(obj[0].toString(), modifiedby);
+		}
+		
 		return dao.CHSSConsultMainDelete(consultmainid);
 	}
 	
@@ -336,7 +341,6 @@ public class CHSSServiceImpl implements CHSSService {
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception
 	{
 		CHSSBill fetch = dao.getCHSSBill(billid);
-		System.out.println(billid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
 		fetch.setModifiedDate(sdtf.format(new Date()));
@@ -462,7 +466,6 @@ public class CHSSServiceImpl implements CHSSService {
 		double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
 		consult.setAmountPaid(applyamount);
 		int speciality=consult.getDocQualification();
-		System.out.println(consult.getDocQualification());
 		String consultdate=consult.getConsultDate();
 		CHSSDoctorRates rate  = dao.getDocterRate(String.valueOf(speciality));
 		int allowedamt=0;
@@ -523,7 +526,6 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultType(modal.getConsultType());
 		fetch.setDocName(WordUtils.capitalize(modal.getDocName()).trim());
 //		fetch.setDocQualification(modal.getDocQualification());
-		System.out.println(fetch.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
@@ -1151,7 +1153,6 @@ public class CHSSServiceImpl implements CHSSService {
 //			}
 //		}
 		
-		
 		return count;
 	}
 		
@@ -1170,6 +1171,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
 		long count =dao.ConsultationBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
 		return count;
@@ -1184,6 +1191,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setComments(modal.getComments());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
 		
 		long count =dao.TestBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
@@ -1200,6 +1213,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
 		long count =dao.OtherBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
 		return count;
@@ -1215,6 +1234,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
 		long count =dao.MedicineBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
 		return count;
@@ -1229,6 +1254,12 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setComments(modal.getComments());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
 		
 		long count =dao.MiscBillEdit(fetch);
 		UpdateBillAdmissibleTotal(fetch.getBillId().toString());

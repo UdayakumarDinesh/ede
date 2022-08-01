@@ -147,6 +147,7 @@ public interface CHSSDao {
 	public CHSSBillIPDheads getCHSSBillIPDheads(long ItemHeadId, long billid, int billheadid) throws Exception;
 	public long CHSSBillIPDheadsAdd(CHSSBillIPDheads bhead) throws Exception;
 	public long CHSSBillIPDheadsEdit(CHSSBillIPDheads bhead) throws Exception;
+	public List<Object[]> consultMainBillIds(String consultmainid) throws Exception;
 	
 	
 }

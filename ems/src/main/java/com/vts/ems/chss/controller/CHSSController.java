@@ -1452,11 +1452,13 @@ public class CHSSController {
 			
 			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
 			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+		
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
@@ -1783,6 +1785,8 @@ public class CHSSController {
 	public String ConsultRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		logger.info(new Date() +"Inside ConsultRemAmountEdit.htm "+Username);
 		try {
 			
@@ -1797,9 +1801,10 @@ public class CHSSController {
 			consult.setConsultRemAmount(Double.parseDouble(consultremamount));
 			consult.setComments(consultcomment);
 			consult.setModifiedBy(Username);
+			consult.setUpdateByEmpId(EmpId);
+			consult.setUpdateByRole(LoginType);
 			
 			long count = service.ConsultRemAmountEdit(consult);
-			
 			
 			if (count > 0) {
 				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
@@ -1823,6 +1828,8 @@ public class CHSSController {
 	public String TestRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		logger.info(new Date() +"Inside TestRemAmountEdit.htm "+Username);
 		try {
 			
@@ -1838,15 +1845,18 @@ public class CHSSController {
 			test.setTestRemAmount(Double.parseDouble(testremamount));
 			test.setComments(testcomment);
 			test.setModifiedBy(Username);
+			test.setUpdateByEmpId(EmpId);
+			test.setUpdateByRole(LoginType);
+
+
 			
 			long count = service.TestRemAmountEdit(test);
-			
-			
+						
 			if (count > 0) {
 				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
 			} else {
 				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
-			}	
+			}
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
@@ -1865,6 +1875,8 @@ public class CHSSController {
 	public String MedRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		logger.info(new Date() +"Inside MedRemAmountEdit.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -1878,6 +1890,9 @@ public class CHSSController {
 			medicine.setMedsRemAmount(Double.parseDouble(medicineremamount));
 			medicine.setComments(medscomment);
 			medicine.setModifiedBy(Username);
+			
+			medicine.setUpdateByEmpId(EmpId);
+			medicine.setUpdateByRole(LoginType);
 			
 			long count = service.MedRemAmountEdit(medicine);
 			
@@ -1906,6 +1921,8 @@ public class CHSSController {
 	public String OtherRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		logger.info(new Date() +"Inside OtherRemAmountEdit.htm "+Username);
 		try {
 			
@@ -1920,6 +1937,10 @@ public class CHSSController {
 			other.setOtherRemAmount(Double.parseDouble(otheridremamount));
 			other.setComments(otherscomment);
 			other.setModifiedBy(Username);
+			
+			other.setUpdateByEmpId(EmpId);
+			other.setUpdateByRole(LoginType);
+			
 			long count = service.OtherRemAmountEdit(other);
 			
 			
@@ -1947,6 +1968,8 @@ public class CHSSController {
 	public String MiscRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		logger.info(new Date() +"Inside MiscRemAmountEdit.htm "+Username);
 		try {
 			
@@ -1961,6 +1984,9 @@ public class CHSSController {
 			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
 			misc.setComments(miscomment);
 			misc.setModifiedBy(Username);
+			misc.setUpdateByEmpId(EmpId);
+			misc.setUpdateByRole(LoginType);
+			
 			long count = service.MiscRemAmountEdit(misc);
 			
 			
@@ -2690,7 +2716,7 @@ public class CHSSController {
 			if(fromdate == null || todate == null) 
 			{
 				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
-				todate = LocalDate.now().withDayOfMonth(20).toString();
+				todate = LocalDate.now().toString();
 				status = "I";
 				empid = "0";
 			}else {

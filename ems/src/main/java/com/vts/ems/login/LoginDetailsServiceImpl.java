@@ -45,7 +45,10 @@ public class LoginDetailsServiceImpl implements UserDetailsService
         for (Role role : login.getRoles()){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
-        String IpAddress="Not Available";
+        
+        if(login!=null && login.getIsActive()==1) {
+        
+        	String IpAddress="Not Available";
      		try{
      		
      		 IpAddress = request.getRemoteAddr();
@@ -62,19 +65,19 @@ public class LoginDetailsServiceImpl implements UserDetailsService
      		IpAddress="Not Available";	
      		e.printStackTrace();	
      		}
-     	try{
-        AuditStamping stamping=new AuditStamping();
-        stamping.setLoginId(login.getLoginId());
-        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-        stamping.setUsername(login.getUsername());
-        stamping.setIpAddress(IpAddress);
-        stamping.setLoginDateTime(sdf1.format(new Date()));
-        emsService.LoginStampingInsert(stamping);
+		  try{
+		        AuditStamping stamping=new AuditStamping();
+		        stamping.setLoginId(login.getLoginId());
+		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+		        stamping.setUsername(login.getUsername());
+		        stamping.setIpAddress(IpAddress);
+		        stamping.setLoginDateTime(sdf1.format(new Date()));
+		        emsService.LoginStampingInsert(stamping);
      		}catch (Exception e) {
 				e.printStackTrace();
 			}
        
-        
+        }
         return new org.springframework.security.core.userdetails.User(login.getUsername(), login.getPassword(), grantedAuthorities);
     }
         else {
