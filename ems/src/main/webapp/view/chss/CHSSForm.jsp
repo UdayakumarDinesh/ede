@@ -9,7 +9,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*" %>
 	<!DOCTYPE html>
 <html>
-<%Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata"); %>
+<%	
+	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
+	Object[] employee = (Object[])request.getAttribute("employee");
+%>
 	<head>
 <style type="text/css">
 		
@@ -49,7 +52,7 @@
 				@top-left {
 					margin-top: 30px;
 					margin-left: 10px;
-					content: "";
+					content: "Emp No: <%=employee[1] %>";
 				}
 
 				@top-center {
@@ -139,7 +142,7 @@ th,td
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
 	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
 	
-	Object[] employee = (Object[])request.getAttribute("employee");
+	
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
@@ -267,7 +270,7 @@ th,td
 						<tr>
 							<td colspan="5"></td>
 							<td style="text-align: right;"><b>Rounded Total </b></td>
-							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.round(mc0).longValue())) %></td>
+							<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
 						</tr>
 					<%}else{ %>
 						<tr>
@@ -352,9 +355,28 @@ th,td
 				<div style="max-width: 650px;padding-top:45px ;" align="left">
 					
 						
-					Date : 							<span style="float: right;">(Signature of Employee) </span>
+					<!-- Date : 							<span style="float: right;">(Signature of Employee) </span> -->
+					
+					<table style="border:0px;border-collapse: collapse;width: 100%; "  >
+						<tr>
+							<td style="border:0px;width: 50%;"> Date : </td>
+							<td style="border:0px;width: 50%; text-align: right;"> (Signature of Employee) </td>
+						</tr>
+						<tr>
+							<td style="border:0px;width: 50%;"> </td>
+							<td style="border:0px;width: 50%; text-align: right;"> 
+								<%=employee[2] %>,<br>
+								<span style="font-size:10px; ">[Forwarded On:&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString()) %>]</span>
+							</td>
+						</tr>
+					</table>
+					
+					
+					
+					
+					
 				</div>
-				<%if(ClaimRemarksHistory.size()>0){ %>
+				<%-- <%if(ClaimRemarksHistory.size()>0){ %>
 					<table style="max-width: 650px;margin-left:0px;">
 						<tr>
 							<td style="border:none;">
@@ -374,7 +396,7 @@ th,td
 						</tr>
 						<%} %>
 					</table>
-				<%} %>
+				<%} %> --%>
 				
 			</div>
 

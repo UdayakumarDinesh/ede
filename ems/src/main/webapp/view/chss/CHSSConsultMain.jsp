@@ -270,9 +270,9 @@ table th:last-child{
 															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 																Bills
 															</button>		
-															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
+															<%-- <button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
 																<i class="fa-solid fa-trash-can" style="color: red;"></i>
-															</button>		
+															</button> --%>		
 														<%}else{ %>
 															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details" disabled>														
 																update
@@ -280,9 +280,9 @@ table th:last-child{
 															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 																Bills
 															</button>		
-															<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
+															<%-- <button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill" disabled>
 																<i class="fa-solid fa-trash-can" style="color: red;"></i>
-															</button>	
+															</button>	 --%>
 														<%} %>																								
 																								
 													</td>										

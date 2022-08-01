@@ -1869,7 +1869,6 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public int DeleteClaimData(String chssapplyid,String username) throws Exception 
 	{
-		
 		List<Object[]> billslist = dao.CHSSBillsList(chssapplyid);
 				
 		for(Object[] obj : billslist)

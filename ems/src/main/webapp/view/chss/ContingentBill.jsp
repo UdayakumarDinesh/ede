@@ -129,7 +129,7 @@ th,td
 	
 %>
 
-<div align="center" style="margin-top: -15px" >
+<div align="center" style="margin-top: 0px" >
 	<table style="margin-bottom: 10px;margin-top: 0px">
 		<tr>
 			<td style="width: 80px; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 90px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
@@ -226,7 +226,7 @@ th,td
 	</div>
 	</div>
 		<div style="position: relative;margin-bottom: 0;page-break-inside: avoid !important;  page-break-before: auto !important;">
-			<table style="width: 100%;margin: 60px 5px 5px 10px;">
+			<table style="width: 100%;margin: 40px 5px 5px 10px;">
 				<tr>
 					<td style="border: 0px;">
 						<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
@@ -267,7 +267,7 @@ th,td
 							%>
 								<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
 								<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
-								<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
+								<li><span style="font-size:10px; ">[Verified On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
 							<% flag=1;
 							break;}} %>
 							
@@ -288,7 +288,7 @@ th,td
 				</tr>
 			</table>
 		
-		<table style="width: 100%;margin: 90px 5px 5px 10px;">
+		<table style="width: 100%;margin: 60px 5px 5px 10px;">
 			<tr>
 				<td style="border: 0px;">
 					<ul style="list-style-type: none;margin:10px 5px -35px -35px;">
@@ -299,7 +299,7 @@ th,td
 						%>
 							<li><span style="text-transform: capitalize;"><%=auth[2] %>,</span></li>
 							<li><span style="text-transform: capitalize;"><%=auth[4] %></span></li>
-							<li><span style="font-size:10px; ">[Processed On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
+							<li><span style="font-size:10px; ">[Authorised On :&nbsp; <%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span></li>
 							
 						<% flag=1;
 						break;}} %>
@@ -323,14 +323,14 @@ th,td
 		
 		
 		<div align="center">
-		<br><br><span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br>
+		<br><br><span ><b>Sanctioned / Not Sanctioned</b></span><br><br><br><br><br>
 				<span><b>
 					<%  flag=0;
 					for(Object[] auth : ApprovalAuth)
 					{
 						if(auth[1].toString().equalsIgnoreCase("CEO")){
 					%>
-							<span style="text-transform: capitalize;"><%=auth[2] %>,<br>
+							<span style="text-transform: capitalize;">
 							CEO</span><br>
 							<span style="font-size:10px; ">[Approved On: &nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(auth[6].toString().substring(0, 10))  +" "+auth[6].toString().substring(11,19) %>]</span>
 					<% flag=1;
@@ -342,7 +342,7 @@ th,td
 						{
 							if(auth[1].toString().equalsIgnoreCase("authority") && auth[5].toString().equalsIgnoreCase("Z") ){
 						%>
-								<span style="text-transform: capitalize;"><%=auth[2] %>,<br>
+								<span style="text-transform: capitalize;">
 								CEO</span>
 							
 						<% 	break; }} %>

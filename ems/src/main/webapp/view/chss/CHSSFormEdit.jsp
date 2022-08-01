@@ -281,7 +281,7 @@ th,td
 												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 												{
 													/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
+													discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()));
 													/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 												}
 											%>
