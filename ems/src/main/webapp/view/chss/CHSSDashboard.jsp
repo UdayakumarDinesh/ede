@@ -228,7 +228,8 @@
 </head>
 <body >
 
-<% String logintype = (String) session.getAttribute("LoginType"); 
+<% 	
+	String logintype = (String) session.getAttribute("LoginType"); 
 	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
 	List<Object[]> empfamilylist = (List<Object[]>)request.getAttribute("empfamilylist");
 	Object[] employee = (Object[])request.getAttribute("employee") ;

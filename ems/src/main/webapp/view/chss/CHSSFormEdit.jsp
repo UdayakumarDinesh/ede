@@ -882,7 +882,12 @@ th,td
 								</div>
 							<%} %>
 							
-							<%if(chssstatusid==2 || chssstatusid==4 ||  chssstatusid==5 ){ %>
+							<%if(chssstatusid==2 ||  chssstatusid==5 ){ %>
+								
+								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Process</button>
+								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
+							
+							<%}else if( chssstatusid==4 ){ %>
 								
 								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Verify</button>
 								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
