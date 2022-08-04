@@ -22,13 +22,13 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 %>
 	<div class="card-header page-top">
 			<div class="row">
-				<div class="col-5">
+				<div class="col-6">
 					<h5>
 						Family Members Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%=empdata[0]%> (<%=empdata[1]%>)
 						</b></small>
 					</h5>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
@@ -43,9 +43,10 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 	<div class=" page card dashboard-card">
 
 		<div class="card-body">
-		<div class="card" >
+		
 		<div class="row">
 		<div class="col-3"></div>
+		<div class="card" >
 		<form action="EditFamilyDetails.htm" method="POST" enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		 
@@ -260,7 +261,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 			               		<div class="col-md-3" >
 			                    	<div class="form-group">
 			                        <label>Income (Rs / Month)<span class="mandatory">*</span></label>
-			                        	<input type="number" class="form-control numberonly" name="memberIncome" <%if(memberdata!=null && memberdata.getMemberIncome()!=0){%> value="<%=memberdata.getMemberIncome() %>" <%}else{ %> value="0" <%} %> id="mem-income" max="9999999999" >
+			                        	<input type="number" class="form-control numberonly" name="memberIncome" <%if(memberdata!=null && memberdata.getMemberIncome()!=null){%> value="<%=memberdata.getMemberIncome() %>" <%}else{ %> value="0" <%} %> id="mem-income" max="9999999999" >
 			                        </div>  
 			               		</div>
 							</div>

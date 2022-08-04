@@ -40,13 +40,14 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 	<div class="page card dashboard-card">
 		
 		
-		<div class="card-body">
+		<div class="card-body" >
 		
-		<div class="row">
-		<div class="col-3"></div>
-		<form action="AddFamilyDetails.htm" method="POST" autocomplete="off">
+		<div class="row" >
+		<div class="col-1"></div>
+		<div class="col-9">
+		<form action="AddFamilyDetails.htm" method="POST" autocomplete="off" >
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="card"  > 
+		<div class="card" > 
 		<div class="card-header">
 		<h5>Fill Family Member Details</h5>
 		</div>
@@ -271,6 +272,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 						</div>
 						</div>
 			</form>
+			</div>
 		</div>
 		</div>
 		</div>

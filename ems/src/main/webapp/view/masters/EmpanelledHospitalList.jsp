@@ -14,7 +14,7 @@
 %>
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-5">
 				<h5>Empanelled Hospital List</h5>
 			</div>
 				<div class="col-md-9 ">
