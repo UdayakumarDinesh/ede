@@ -57,14 +57,14 @@ String todate = (String)request.getAttribute("todate");
 					<div class="row justify-content-end">
 					
 						     <div class="col-2"  align="right"><h6>From Date :</h6></div>
-					         <div class="col-1"> 
-								    <input type="text" style="width: 145%;"  class="form-control input-sm mydate"  onchange="this.form.submit()" readonly="readonly" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   id="fromdate" name="fromdate"  required="required"  > 
+					         <div class="col-2"> 
+								    <input type="text" style="width: 80%;"  class="form-control input-sm mydate"  onchange="this.form.submit()" readonly="readonly" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>   id="fromdate" name="fromdate"  required="required"  > 
 								    <label class="input-group-addon btn" for="testdate"></label>              
 							 </div>
 							 
 							  <div class="col-2" align="right" ><h6>To Date :</h6></div>
-							  <div class="col-1">						
-								     <input type="text" style="width: 145%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly"  <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
+							  <div class="col-2">						
+								     <input type="text" style="width: 80%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly"  <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
 							 		 <label class="input-group-addon btn" for="testdate"></label>    
 							 </div>
 

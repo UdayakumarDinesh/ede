@@ -212,7 +212,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                  <%}} %> 
                                 </select>
                                 
-                                  <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+                                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                   <button class="btn btn-success" type="submit">
                                   <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                   </button>
@@ -473,7 +473,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 			<div class="col-md-3">
 			<div class="card">
 	            <div class="card-header">
-	                <span class="h6"><a class="btn  btn-link" href="" data-toggle="modal" data-target="#editdelete3">Recent Applied Leave</a></span>
+	                <span class="h6"><a class="btn  btn-link" href="" data-toggle="modal" data-target="#editdelete3">Recently Applied Leaves</a></span>
 	            </div>
 	            <div class="card-body">
 	            <%List<Object[]> Applied=(List<Object[]>)request.getAttribute("applied");  
@@ -522,7 +522,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    </table>  
 	                 <%}else{%>
 	                <ul class="list-group">
-	                <li class="list-group-item list-group-item-warning"><b><i>Recent Applied  Leave Is Not Present For Edit &amp; Delete </i></b></li>
+	                <li class="list-group-item list-group-item-warning"><b><i>No any Recently Applied Leaves Available to Edit &amp; Delete </i></b></li>
 	                </ul>
 	                 <%}%>
 
@@ -531,7 +531,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	            
 	            <div class="card" style="margin-top:10px;">
 	            <div class="card-header">
-	                <span class="h6"><a class="btn  btn-link" href="" data-toggle="modal" data-target="#editdelete3">Recent Sanctioned Leave</a></span>
+	                <span class="h6"><a class="btn  btn-link" href="" data-toggle="modal" data-target="#editdelete3">Recently Sanctioned Leaves</a></span>
 	            </div>
 	            <div class="card-body">
 	             <%List<Object[]> sanction=(List<Object[]>)request.getAttribute("sanction");  
@@ -575,7 +575,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                 <%}else{%>
 	                <ul class="list-group">
 	               
-	                <li class="list-group-item list-group-item-warning"><b><i>Recent Sanctioned Leave Is Not Present For Modify &amp; Cancel</i></b></li>
+	                <li class="list-group-item list-group-item-warning"><b><i>No any Sanctioned Leaves Available For Modification &amp; To Cancel</i></b></li>
 	                 </ul>
 	                   <%}%>
 	            </div>
@@ -598,14 +598,14 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
            <div class="modal-dialog modal-lg" >
               <div class="modal-content">
                    <div class="modal-header">
-                       <h4 class="modal-litle">List Leave Request</h4>
+                       <h4 class="modal-litle">List Leave Requests</h4>
                        <button  type="button" class="close" data-dismiss="modal">&times;</button>
                     
                    </div>
               
               <div class="modal-body">
              <div class="table-responsive">
-             <div><span class="" style="font-size:16px; color: #446b7f">List of Applied Leave</span></div>
+             <div><span class="" style="font-size:16px; color: #446b7f">List of Applied Leaves</span></div>
                     <table class="table table-bordered table-hover table-striped table-condensed" id="MyTable2">
                         <thead>
                             <tr style="font-size: 12px; line-height: 0px;">
@@ -658,7 +658,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                 </td>
                             </tr>       <%}}else{ %>  
                               <tr style="font-size: 12px; line-height: 0px;"><td colspan="6">
-                             <span class="badge badge-warning">No ApplyData Present For Edit And Delete</span>
+                             <span class="badge badge-warning">No ApplyData Available to Edit And Delete</span>
                              </td></tr>
                             <%} %>
                          

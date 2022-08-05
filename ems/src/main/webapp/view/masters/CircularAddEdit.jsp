@@ -53,27 +53,27 @@
 					<div class="col-md-2" style="margin-right: -70px;">
 						<div class="form-group">
 							<label><b>Circular Date</b><span class="mandatory"	style="color: red;">*</span></label>
-							 <input type="text" style="width: 60%; " class="form-control input-sm " value=""  id="circulardate" name="circulardate"  required="required" readonly="readonly" >
+							 <input type="text" style="width: 70%; " class="form-control input-sm " value=""  id="circulardate" name="circulardate"  required="required" readonly="readonly" >
 						</div>
 					</div>
 					<div class="col-md-2" style="margin-right: -65px;">
 						<div class="form-group">						
 							<label><b>To Date </b><span class="mandatory"	style="color: red;">*</span></label>
-							<input type="text"  style="width: 60%;" class="form-control input-sm " value=""  id="todate" name="todate"  required="required" readonly="readonly" > 
+							<input type="text"  style="width: 70%;" class="form-control input-sm " value=""  id="todate" name="todate"  required="required" readonly="readonly" > 
 						</div>
 					</div> 
 				
 					<div class="col-md-2" style="margin-right: -25px;">
 						<div class="form-group">						
-							<label><b>Reference No</b><span class="mandatory"	style="color: red;">*</span></label>
+							<label><b>Reference No.</b><span class="mandatory"	style="color: red;">*</span></label>
 							<input type="text"  style="width: 80%;" class="form-control input-sm " <%if(circular!=null && circular.getReferenceNo()!=null){%>value="<%=circular.getReferenceNo()%>" <%}%>   id="referenceno" name="referenceno"  required="required" > 
 						</div>
 					</div>
 						
 						<div class="col-md-2" >
 							<div class="form-group">
-							<label><b>Description </b><span class="mandatory"	style="color: red;">*</span></label>
-							  <textarea id="descrip" name="description" rows="2" cols="60" style="border-bottom-color: gray;" required="required" ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
+							<label><b>Description</b><span class="mandatory"	style="color: red;">*</span></label>
+							  <textarea id="descrip" name="description" rows="2" cols="50" style="border-bottom-color: gray;" required="required" ><%if(circular!=null && circular.getDescription()!=null){%> <%=circular.getDescription()%><%}%></textarea>
 							</div>
 						</div>
 						<div class="col-md-2" style="margin-left: 23%;">
