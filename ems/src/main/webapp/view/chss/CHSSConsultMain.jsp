@@ -237,7 +237,7 @@ table th:last-child{
 												<th style="width:5%;" >SN</th>
 												<th style="width:30%;" >Doctor Name</th>
 												<th style="width:20%;" > Date </th>
-												<th style="width:25%;" >Qualifications  </th>
+												<th style="width:25%;" >Qualification  </th>
 												<th style="width:20%;" >Action  </th>
 											</tr>
 										</thead>
@@ -263,26 +263,16 @@ table th:last-child{
 														</select>
 													</td>
 													<td>
-														<%if(Integer.parseInt(cmain[5].toString())==0){ %>
-															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details">														
-																update
-															</button>
-															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-																Bills
-															</button>		
-																
-														<%}else{ %>
-															<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details" disabled>														
-																update
-															</button>
-															<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
-																Bills
-															</button>		
-															
-														<%} %>			
+														
+														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details">														
+															update
+														</button>
+														<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
+															Bills
+														</button>		
 														<button type="submit"  class="btn btn-sm" formaction="CHSSConsultMainDelete.htm"  Onclick="return confirm('Are You Sure To Delete?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill">
-																<i class="fa-solid fa-trash-can" style="color: red;"></i>
-															</button>																						
+															<i class="fa-solid fa-trash-can" style="color: red;"></i>
+														</button>																						
 																								
 													</td>										
 												<%}else{

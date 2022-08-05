@@ -18,10 +18,12 @@
 </head>
 <body>
 <%
+
 List<Object[]> medicine = (List<Object[]>)request.getAttribute("MedicineList");
 List<Object[]> main =(List<Object[]>)request.getAttribute("treatment");
 String treat = (String)request.getAttribute("treat");
 String LoginType = (String) session.getAttribute("LoginType"); 
+
 %>
 
 
@@ -94,7 +96,9 @@ String LoginType = (String) session.getAttribute("LoginType");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
+									<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
 										<th>Select</th>
+									<%} %>
 										<th>SN</th>
 										<th>Treatment Type</th>
 										<th> Medicine Name </th>
@@ -106,7 +110,9 @@ String LoginType = (String) session.getAttribute("LoginType");
 									for(Object[] obj : medicine){ 
 									%>
 										<tr>
-											<td style="text-align: center;"><input type="radio" name="MedicineId" value="<%=obj[0] %>"> </td>
+											<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
+												<td style="text-align: center;"><input type="radio" name="MedicineId" value="<%=obj[0] %>"> </td>
+											<%} %>
 											<td><%=obj[3] %>. </td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>

@@ -86,7 +86,7 @@
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;max-width: 15% !important">Action</td>
+										<td style="padding-top:5px; padding-bottom: 5px;max-width: 20% !important">Action</td>
 									</tr>
 								</thead>
 								<tbody>
@@ -112,6 +112,10 @@
 												</button>
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
 													<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
+												</button>
+												
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ConsolidatedExcelDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report in Excel">
+													<i class="fa-solid fa-table"></i>
 												</button>
 												<input type="hidden" name="isapproval" value="Y">
 											</td>

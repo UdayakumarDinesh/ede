@@ -60,7 +60,9 @@ String LoginType = (String) session.getAttribute("LoginType");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
+									<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
 										<th style="width: 10%;">Select</th>
+									<%} %>
 										<th style="width: 10%;"> Code </th>
 										<th style="width: 55%;"> Name</th>
 										<th style="width: 10%;"><i class="fa fa-inr" aria-hidden="true"></i> Rate </th>
@@ -71,7 +73,9 @@ String LoginType = (String) session.getAttribute("LoginType");
 									for(Object[] obj : testmain){ 
 									%>
 										<tr>
+										<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P") || LoginType.equalsIgnoreCase("F") ){ %>
 											<td style="text-align: center;"><input type="radio" name="SubId" value="<%=obj[0] %>"> </td>
+										<%} %>
 											<td><%=obj[4] %> </td>
 											<td><%=obj[1] %></td>
 											<td style="text-align: right ;"><%=obj[2] %></td>

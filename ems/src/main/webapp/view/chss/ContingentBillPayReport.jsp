@@ -114,8 +114,6 @@ th,td
 <%
 	
 	HashMap<Long, ArrayList<Object[]>> ContingentList = (HashMap<Long, ArrayList<Object[]>>)request.getAttribute("ContingentList");
-	/* Object[]  contingentdata = (Object[])request.getAttribute("contingentdata"); */
-	List<Object[]> ApprovalAuth = (List<Object[]>)request.getAttribute("ApprovalAuth");
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	Object[] labdata = (Object[])request.getAttribute("labdata");
 	if(contingentdata[2]==null){
@@ -146,9 +144,9 @@ th,td
 	<br>
 	<div style="text-align: left ;margin: 0px 5px 0px 10px;">
 		<p>
-			The medical claim received up to <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
-			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbursement from the following
-			employees have been processed and admitted at CHSS rates.
+			The medical claims received up to <%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[10].toString()) %> during the month of 
+								<%=" "+LocalDate.parse(contingentdata[10].toString()).getMonth() %> - <%=" "+LocalDate.parse(contingentdata[10].toString()).getYear() %> for reimbursement from the following
+								employees have been processed and admitted at CHSS rates.
 		</p>
 	</div>
 	
@@ -157,7 +155,8 @@ th,td
 		<tr>
 			<th style="text-align: center;width: 10%" >SN</th>
 			<th style="text-align: center;width: 15%;">Emp. No.</th>
-			<th style="text-align: center;width: 55%;">Name</th>
+			<th style="text-align: center;width: 30%;">Name</th>
+			<th style="text-align: center;width: 25%;">Bank Account No.</th>
 			<th class="right" style="width: 20%;">Bank Transfer (&#8377;)</th>
 		</tr>
 		
@@ -170,13 +169,14 @@ th,td
 			ArrayList<Object[]> arrlist = (ArrayList<Object[]>)mapEle.getValue();%>
 			<tr>
 				<td style="text-align: center;" ><%=i %></td>
-				<td style="text-align: center;width: 15%;"><%=arrlist.get(0)[21] %></td>
-				<td style="width: 55%;"><%=arrlist.get(0)[19] %></td>
+				<td style="text-align: center;width: 15%;"><%=arrlist.get(0)[24] %></td>
 				
+				<td style="width:30%;"><%=arrlist.get(0)[22] %></td>
+				<td style="text-align: center;width: 25%;"><%=arrlist.get(0)[26] %></td>
 				<% long empallowedamount = 0;
 		          	for(Object[] obj :arrlist )
 			        {
-		          		empallowedamount += Math.round( Double.parseDouble(obj[28].toString()));
+		          		empallowedamount += Math.round( Double.parseDouble(obj[2].toString()));
 			        } 
 		          	allowedamt +=empallowedamount;
 			    %>
@@ -185,11 +185,11 @@ th,td
 		<%}%>
 	
 			<tr>
-				<td colspan="3" class="right"><b>Total</b></td>
+				<td colspan="4" class="right"><b>Total</b></td>
 				<td class="right"><b><%=nfc.rupeeFormat(String.valueOf(allowedamt)) %></b></td>
 			</tr>
 			<tr>
-				<td colspan="4">In words Rupees <%=awc.convert1(allowedamt) %> Only</td>
+				<td colspan="5">In words Rupees <b>"<%=awc.convert1(allowedamt) %>"</b> Only</td>
 			</tr>
 	</table>
 	

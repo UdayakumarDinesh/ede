@@ -229,11 +229,11 @@ p {
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
 												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
 												<td>
-													<%if(Double.parseDouble(obj[9].toString())==0){ %>
+													<%-- <%if(Double.parseDouble(obj[9].toString())==0){ %> --%>
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
 														update
 													</button>
-													<%} %>
+													<%-- <%} %> --%>
 													<button type="button"  class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  Onclick="showBillDetails('<%=obj[0]%>')" name="billid" value="<%=obj[0]%>"  > <!-- data-toggle="tooltip"  data-placement="top" title="Bill Details" -->
 														details
 													</button>	
@@ -1173,7 +1173,7 @@ function getConsultdata()
 				"linkedCalendars" : false,
 				"showCustomRangeLabel" : true,
 				"startDate" : new Date(consult.ConsultDate),
-				"maxDate" :new Date(),
+				
 				"minDate":$billdate, 
 				"cancelClass" : "btn-default",
 				showDropdowns : true,
@@ -1229,7 +1229,7 @@ function getConsultdata()
 								"linkedCalendars" : false,
 								"showCustomRangeLabel" : true,
 								"startDate" : $billdate,
-								"maxDate" :new Date(),
+								
 								"minDate":$billdate, 
 								"cancelClass" : "btn-default",
 								showDropdowns : true,
@@ -1257,89 +1257,6 @@ function getConsultdata()
 	});
 	/* $('#nav-consultation-tab').click(); */
 }
-
-
-<%-- function ConsultMainConsultCount($billid)
-{
-	$.ajax({
-
-		type : "GET",
-		url : "ConsultBillsConsultCountAjax.htm",
-		data : {
-				
-			consultmainid : <%=consultmainid%>,
-			chssapplyid : <%=chssapplydata[0]%>,
-			billid : $billid ,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-		
-			if(result==0)
-			{
-						
-				/* ------------------------------------------------------- */				
-					$.ajax({
-				
-							type : "GET",
-							url : "ConsultMainDataAjax.htm",
-							data : {
-													
-								consultmainid : <%=consultmainid%>,
-								chssapplyid : <%=chssapplydata[0]%>,
-							},
-							datatype : 'json',
-							success : function(result) {
-								var result = JSON.parse(result);
-								$('#doc-name').val(result.DocName);
-								$('#doc-name').prop('readonly','readonly');
-								
-								$('#doc-qualification-val').val(result.DocQualification);
-								$('#doc-qualification').val(result.DocQualification);
-								
-								
-								
-								/* let consdate = new Date($billdate);
-								var dateString = moment(consdate).format('DD-MM-YYYY');
-													
-								$('#cons-date').val(dateString);  */
-								
-								/* 					
-									$('.te').prop('disabled', true);
-									$('.me').prop('disabled', true);
-									$('.ot').prop('disabled', true);
-									$('.mi').prop('disabled', true); 
-								*/
-								$('.cons-date').daterangepicker({
-									"singleDatePicker" : true,
-									"linkedCalendars" : false,
-									"showCustomRangeLabel" : true,
-									"startDate" : new Date('<%=consultmain.getConsultDate()%>'),
-									"maxDate" :$billdate,
-									"minDate":threeMonthsAgo, 
-									"cancelClass" : "btn-default",
-									showDropdowns : true,
-									locale : {
-										format : 'DD-MM-YYYY'
-									}
-								});
-											
-							}
-					});
-				/* ------------------------------------------------------- */				
-				
-			}else
-			{
-				$('#consult-add-form').hide();
-			}
-			
-			
-			
-		}
-	});
-	
-}
- --%>
 
 </script>
 

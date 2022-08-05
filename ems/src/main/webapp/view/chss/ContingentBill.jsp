@@ -151,9 +151,9 @@ th,td
 	<br>
 	<div style="text-align: left ;margin: 0px 5px 0px 10px;">
 		<p>
-			The medical claim received up to <%=DateTimeFormatUtil.SqlToRegularDate(LocalDate.parse(contingentdata[2].toString()).withDayOfMonth(20).toString()) %> during the month of 
-			<%=" "+LocalDate.parse(contingentdata[2].toString()).getMonth() %> - <%=" "+LocalDate.now().getYear() %> for reimbursement from the following
-			employees have been processed and admitted at CHSS rates.
+			The medical claims received up to <%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[10].toString()) %> during the month of 
+								<%=" "+LocalDate.parse(contingentdata[10].toString()).getMonth() %> - <%=" "+LocalDate.parse(contingentdata[10].toString()).getYear() %> for reimbursement from the following
+								employees have been processed and admitted at CHSS rates.
 		</p>
 	</div>
 	
@@ -183,28 +183,28 @@ th,td
 				
 				<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%=i %></td>
 				<%if(k==0){ %>
-					<td rowspan="<%=arrlist.size() %>" style="padding-top:5px; padding-bottom: 5px;"><%=obj[21] %></td>
+					<td rowspan="<%=arrlist.size() %>" style="padding-top:5px; padding-bottom: 5px;"><%=obj[24] %></td>
 				
-					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
+					<td rowspan="<%=arrlist.size() %>"  style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
 				<%} %>
 				<td style="padding-top:5px; padding-bottom: 5px;text-transform: capitalize;">
-					<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
-						<%=obj[12] %> (<%=obj[14] %>)
+					<%if(obj[17]!=null && !obj[17].toString().equalsIgnoreCase("Self")){ %>
+						<%=obj[15] %> (<%=obj[17] %>)
 					<%}else{ %>
-						<%=obj[14] %>
+						<%=obj[17] %>
 					<%} %>
 				</td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[22] %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString())) )) %></td>
-				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString())) )) %></td>
+				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[25] %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[1].toString())) )) %></td>
+				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[2].toString())) )) %></td>
 											
 			</tr>
 			
 		<%	k++;
-			claimamt += Math.round(Double.parseDouble(obj[27].toString()));
-			allowedamt +=Math.round(Double.parseDouble(obj[28].toString())) ;
-			billscount += Integer.parseInt(obj[22].toString());
+			claimamt += Math.round(Double.parseDouble(obj[1].toString()));
+			allowedamt +=Math.round(Double.parseDouble(obj[2].toString())) ;
+			billscount += Integer.parseInt(obj[25].toString());
 			} 
 		}%>
 	

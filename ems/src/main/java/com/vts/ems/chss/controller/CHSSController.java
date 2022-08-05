@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,24 +56,26 @@ import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSBill;
-import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSBillConsultation;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
-import com.vts.ems.chss.model.CHSSDoctorRates;
-import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSBillMedicine;
-import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
+import com.vts.ems.chss.model.CHSSBillTests;
+import com.vts.ems.chss.model.CHSSConsultMain;
+import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.utils.AmountWordConveration;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
+import com.vts.ems.utils.IndianRupeeFormat;
 
 @Controller
 public class CHSSController {
@@ -1489,13 +1502,13 @@ public class CHSSController {
 		
 		try {	
 			String chssapplyid = req.getParameter("chssapplyid");
-			
+			String pagePart =  req.getParameter("pagePart");
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Object[] employee = service.getEmployee(chssapplicationdata[1].toString());
 			
 			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
-			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
+//			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
 			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
 			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
 			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
@@ -1504,7 +1517,9 @@ public class CHSSController {
 			req.setAttribute("chssapplydata", chssapplicationdata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
-			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+//			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			
+			req.setAttribute("pagePart","3" );
 			
 			req.setAttribute("isapproval", req.getParameter("isapproval"));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
@@ -1523,6 +1538,7 @@ public class CHSSController {
 	       
 	       
 	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
 	        
 	        File f=new File(path +File.separator+ filename+".pdf");
 	        FileInputStream fis = new FileInputStream(f);
@@ -2059,8 +2075,9 @@ public class CHSSController {
 			String chssapplyid[] = req.getParameterValues("chssapplyidcb");
 			String action = req.getParameter("claimaction");
 			String billcontent = req.getParameter("billcontent");
+			String genTilldate = req.getParameter("genTilldate");
 			
-			long count= service.ContingentGenerate(chssapplyid, Username, action, billcontent, LoginType,EmpId);
+			long count= service.ContingentGenerate(chssapplyid, Username, action, billcontent, LoginType,EmpId,genTilldate);
 //			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
 			
 			
@@ -2294,17 +2311,16 @@ public class CHSSController {
 		
 		try {	
 			String contingentid = req.getParameter("contingentid");
-			
+			Object[] contingentdata = service.CHSSContingentData(contingentid);
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
-			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
+			req.setAttribute("contingentdata", contingentdata);
 			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("labdata", service.getLabCode());
-			String filename="CHSSContingentList";
+			String filename="Contingent - "+contingentdata[1].toString().trim().replace("/", "-");
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
 			
-	        
 	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 			req.getRequestDispatcher("/view/chss/ContingentBill.jsp").forward(req, customResponse);
 			String html1 = customResponse.getOutput();        
@@ -2614,7 +2630,6 @@ public class CHSSController {
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", service.CHSSApprovalAuthList(contingentid));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("labdata", service.getLabCode());
 			String filename="CHSSConsolidatedBill";
@@ -2713,17 +2728,38 @@ public class CHSSController {
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
 			
-			if(fromdate == null || todate == null) 
+//			if(fromdate == null || todate == null) 
+//			{
+//				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
+//				todate = LocalDate.now().toString();
+//				status = "I";
+//				empid = "0";
+//			}else {
+//				fromdate = sdf.format(rdf.parse(fromdate));
+//				todate = sdf.format(rdf.parse(todate));				
+//			}
+			LocalDate today= LocalDate.now();
+			if(fromdate==null) 
 			{
-				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
-				todate = LocalDate.now().toString();
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+				}
 				status = "I";
 				empid = "0";
-			}else {
-				fromdate = sdf.format(rdf.parse(fromdate));
-				todate = sdf.format(rdf.parse(todate));				
+				
+				fromdate +="-04-01"; 
+				todate=today.toString();
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
 		
+			
 			req.setAttribute("empid", empid);
 			req.setAttribute("status", status);
 			req.setAttribute("fromdate", fromdate);
@@ -3110,7 +3146,7 @@ public class CHSSController {
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","N");
+			redir.addFlashAttribute("show-edit","Y");
 			return "redirect:/CHSSFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -3287,5 +3323,195 @@ public class CHSSController {
 		}
 		
 	}
+	
+	
+	@RequestMapping(value = "ConsolidatedExcelDownload.htm")
+	public void ConsolidatedExcelDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside ConsolidatedExcelDownload.htm "+UserId);
+		
+		try {	
+			String contingentid = req.getParameter("contingentid");
+			LinkedHashMap<Long, ArrayList<Object[]>> ContingentList = service.CHSSContingentClaimList(contingentid);
+			Object[] contingentdata=service.CHSSContingentData(contingentid);
+				
+			IndianRupeeFormat nfc=new IndianRupeeFormat();
+			AmountWordConveration awc = new AmountWordConveration();
+			int rowNo=0;
+			// Creating a worksheet
+			Workbook workbook = new XSSFWorkbook();
+
+			Sheet sheet = workbook.createSheet("Persons");
+			sheet.setColumnWidth(0, 1000);
+			sheet.setColumnWidth(1, 2500);
+			sheet.setColumnWidth(2, 6000);
+			sheet.setColumnWidth(3, 6000);
+			sheet.setColumnWidth(4, 4500);
+			
+			XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+			font.setFontName("Times New Roman");
+			font.setFontHeightInPoints((short) 10);
+			font.setBold(true);
+			// style for file header
+			CellStyle file_header_Style = workbook.createCellStyle();
+			file_header_Style.setLocked(true);
+			file_header_Style.setFont(font);
+			file_header_Style.setWrapText(true);
+			file_header_Style.setAlignment(HorizontalAlignment.CENTER);
+			file_header_Style.setVerticalAlignment(VerticalAlignment.CENTER);
+			// style for table header
+			CellStyle t_header_style = workbook.createCellStyle();
+			t_header_style.setLocked(true);
+			t_header_style.setFont(font);
+			t_header_style.setWrapText(true);
+			// style for table cells
+			CellStyle t_body_style = workbook.createCellStyle();
+			t_body_style.setWrapText(true);
+
+			
+			// File header Row
+			Row file_header_row = sheet.createRow(rowNo++);
+			sheet.addMergedRegion(new CellRangeAddress(0, 0,0, 4));   // Merging Header Cells 
+			Cell cell= file_header_row.createCell(0);
+			cell.setCellValue("CHSS Contingent Bill Pay Report \r\nRef: "+contingentdata[1].toString());
+			file_header_row.setHeightInPoints((3*sheet.getDefaultRowHeightInPoints()));
+			cell.setCellStyle(file_header_Style);
+
+			// Table in file header Row
+			Row t_header_row = sheet.createRow(rowNo++);
+			cell= t_header_row.createCell(0); 
+			cell.setCellValue("SN"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(1); 
+			cell.setCellValue("Emp. No."); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(2); 
+			cell.setCellValue("Name"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(3); 
+			cell.setCellValue("Bank Account No."); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(4); 
+			cell.setCellValue("Bank Transfer (₹)"); 
+			cell.setCellStyle(t_header_style);
+			
+			
+			
+			long allowedamt=0;
+			int i=0;
+			
+			for (Map.Entry mapEle : ContingentList.entrySet()) 
+			{ 
+				i++;
+				int k=0;
+				ArrayList<Object[]> arrlist = (ArrayList<Object[]>)mapEle.getValue();
+				
+				Row t_body_row = sheet.createRow(rowNo++);
+				cell= t_body_row.createCell(0); 
+				cell.setCellValue(i); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(1); 
+				cell.setCellValue(arrlist.get(0)[24].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(2); 
+				cell.setCellValue(arrlist.get(0)[22] .toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(3); 
+				cell.setCellValue(arrlist.get(0)[26].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				long empallowedamount = 0;
+			    for(Object[] obj :arrlist )
+				{
+			    	empallowedamount += Math.round( Double.parseDouble(obj[2].toString()));
+				}
+			    allowedamt +=empallowedamount;
+				    
+			    cell= t_body_row.createCell(4); 
+				cell.setCellValue(nfc.rupeeFormat(String.valueOf( empallowedamount))); 
+				cell.setCellStyle(t_body_style);   
+							
+			}
+			// table footer style
+			CellStyle t_footer_style = workbook.createCellStyle();
+			t_footer_style.setLocked(true);
+			t_footer_style.setFont(font);
+			t_footer_style.setWrapText(true);
+			t_footer_style.setFont(font);
+			
+			// table footer total
+			Row f_foot_row = sheet.createRow(rowNo++);
+			cell= f_foot_row.createCell(3); 
+			cell.setCellValue("Total"); 
+			cell.setCellStyle(t_footer_style);
+					
+		    cell= f_foot_row.createCell(4); 
+			cell.setCellValue(nfc.rupeeFormat(String.valueOf( allowedamt))); 
+			cell.setCellStyle(t_footer_style);  
+			
+			
+			//footer style
+			CellStyle file_footer_Style = workbook.createCellStyle();
+			font.setBold(true);
+			file_footer_Style.setLocked(true);
+			file_footer_Style.setWrapText(true);
+			file_footer_Style.setFont(font);
+			// footer text amount
+			Row f_foot_row2 = sheet.createRow(rowNo);
+			sheet.addMergedRegion(new CellRangeAddress(rowNo, rowNo,0, 4));   
+			cell= f_foot_row2.createCell(0);
+			cell.setCellValue("In words Rupees "+awc.convert1(allowedamt)+" Only");
+			cell.setCellStyle(file_footer_Style);
+			rowNo++;
+
+		
+			String path = req.getServletContext().getRealPath("/view/temp");
+			String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
+
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+			
+			
+			String filename="CHSSConsolidatedBill-Excel";
+			
+     
+	        res.setContentType("Application/octet-stream");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".xlsx");
+	        File f=new File(fileLocation);
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+//	        Path pathOfFile= Paths.get( path+File.separator+filename+".xlsx"); 
+//	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ConsolidatedExcelDownload.htm "+UserId, e); 
+		}
+
+	}
+	
+	
 	
 }

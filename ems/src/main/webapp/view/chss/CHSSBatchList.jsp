@@ -87,12 +87,12 @@
 							
 							<div class="col-md-2">	
 	
-									<input type="text" class="form-control todate" name="todate" id="todate" value="" required="required" readonly="readonly"  > 
+									<input type="text" class="form-control todate" name="todate" id="todate" value="<%=DateTimeFormatUtil.SqlToRegularDate(todate) %>" required="required" readonly="readonly" onchange="this.form.submit();"  > 
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />	
 						
 							</div>
 							<div class="col-md-1">	
-								<button type="submit" class="btn btn-sm submit-btn" name="submit" value="submit">submit</button>
+								<!-- <button type="submit" class="btn btn-sm submit-btn" name="submit" value="submit">submit</button> -->
 							</div>
 							
 						</div>
@@ -203,6 +203,7 @@ Put up for approval.</textarea>
 						</div>			 
 						<div class="col-md-12" align="center" style="margin-top: 5px;">
 							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " data-toggle="tooltip" data-placement="top" title="Generate New Contingent Bill">Generate</button>
+							<input type="hidden" name="genTilldate" value="<%=todate%>">
 						</div>
 					<%} %>
 					 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -237,7 +238,7 @@ Put up for approval.</textarea>
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		
-		"startDate" : new Date('<%=todate%>'),
+		
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
@@ -245,25 +246,7 @@ Put up for approval.</textarea>
 		}
 	});
 	
-	
-/* 	var fromDate=null;
-	$("#fromdate").change( function(){
-		fromDate = $("#fromdate").val();
-		
-		$('#todate').daterangepicker({
-			"singleDatePicker" : true,
-			"linkedCalendars" : false,
-			"showCustomRangeLabel" : true,
-			"maxDate" :new Date(), 		
-			"minDate" : fromDate,
-			"cancelClass" : "btn-default",
-			showDropdowns : true,
-			locale : {
-				format : 'DD-MM-YYYY'
-			}
-		});	
-		
-	});	 */					
+				
 					
 </script>
 	
@@ -308,9 +291,7 @@ $(document).ready(function(){
     });
 })
 
-/* $("#checkAll").click(function(){
-    $('input:checkbox').not(this).prop('checked', this.checked);
-}); */
+
 </script>
 
 
