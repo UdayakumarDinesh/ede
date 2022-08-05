@@ -171,7 +171,8 @@ String path=(String)request.getAttribute("path");
 															<div class="form-submit-button">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 																<button type="submit" class="btn btn-block btn-success" style="font-family: 'Montserrat', sans-serif;" >Login</button>
-																<button type="submit" class="btn btn-link" formaction="fpwd/ForgotPassword.htm" > Forgot Password?</button>
+																<!-- <button type="submit" class="btn btn-link" formaction="fpwd/ForgotPassword.htm" > Forgot Password?</button> -->
+																
 															</div>
 														</div>
 													</div>
@@ -189,6 +190,7 @@ String path=(String)request.getAttribute("path");
 												<div class="col-md-12">
 													
 													<div class="info-container text-md-left">
+														<p class="text-secondary btn btn-link">Please Contact IT Admin for Resetting Password.</p> <br>
 														<p class="text-secondary" style="font-family: 'Lato', sans-serif;font-size: 15px;">* Do not share credentials with anyone</p>
 													</div>
 													

@@ -148,6 +148,7 @@ public interface CHSSDao {
 	public long CHSSBillIPDheadsAdd(CHSSBillIPDheads bhead) throws Exception;
 	public long CHSSBillIPDheadsEdit(CHSSBillIPDheads bhead) throws Exception;
 	public List<Object[]> consultMainBillIds(String consultmainid) throws Exception;
+	public List<Object[]> CheckPrevConsultInfo(String consultationid, long consultmainid, String fromdate, String todate) throws Exception;
 	
 	
 }

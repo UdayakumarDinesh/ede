@@ -2,6 +2,7 @@ package com.vts.ems.chss.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.vts.ems.chss.Dto.CHSSApplyDto;
@@ -89,14 +90,14 @@ public interface CHSSService
 	public long CHSSClaimsApprove(CHSSContingentDto dto)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception;
-	public HashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
+	public LinkedHashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
 	public Object[] CHSSContingentData(String contingentid) throws Exception;
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception;
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception;
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
-	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId) throws Exception;
+	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId,String genTilldate) throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;

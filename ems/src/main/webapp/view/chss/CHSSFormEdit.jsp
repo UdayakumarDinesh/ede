@@ -100,6 +100,22 @@ th,td
 	margin:0px;
 	font-size: 25px;
 }
+
+.systemgen
+{
+	color: #008005;
+}
+
+.processed
+{
+	color: #A300B5;
+}
+
+.verified
+{
+	color: #0CB5ED;
+}
+
 </style>
 
 
@@ -138,11 +154,10 @@ th,td
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview=(String)request.getAttribute("onlyview");
 	
-	boolean showhistorybtn = showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y");
+	boolean showhistorybtn = (showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14;
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
-	
 	
 	MathContext mc0 = new MathContext(0);
 	
@@ -262,6 +277,7 @@ th,td
 											<td><b>Basic Pay : </b> &#8377;<span class="text-blue" ><%=employee[4] %></span>  </td>
 											<td colspan="2"><b>Level in The Pay Matrix : </b> <span class="text-blue" ><%=employee[9] %></span></td>
 											<td colspan="2"><b>Ph.No. : </b> <span class="text-blue" ><%=employee[8]%></span></td>
+											<td colspan="2"><b>Ext.No. : </b> <span class="text-blue" ><%=employee[14]%></span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -334,57 +350,60 @@ th,td
 									</tbody>
 								</table>
 								
-								<div style="margin-left: 10px;">
-									<p>											
+								<div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+																				
 										I do state that the member(s) of my family for whom reimbursement of medical expenses claimed in this bill are
 										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
 										<br>
-										<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my Parents / Parents-in-Law  <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. ...................................... <%-- <%=chssapplydata[12] %> --%> </span> are wholly dependent
+										
+										<% int numbering=0;
+											if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675; <span>That my Parents / Parents-in-Law  <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %>  </span> are wholly dependent
 											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
-											month.
+											month.</span> 
 											<br>
-											
-											&#8226; That no claim has been / will be made in respect of my parents as I opt to claim reimbursement in respect of
-											my parents-in-law (applicable in case of female employees only).
+											<%if(new ArrayList<String>( Arrays.asList("15","16")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675;  <span>That no claim has been / will be made in respect of my parents as I opt to claim reimbursement in respect of
+											my parents-in-law (applicable in  case of female employees only).</span>  
 											<br>
+											<%} %>
 										<%} %>
 										
-											&#8226; That the patient <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. ......................................<%-- <%=chssapplydata[12] %> --%> </span> is not covered by the ESI Scheme / any
-											other medical facility.
+											&#9675; <span>That the patient <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %>  </span> is not covered by the ESI Scheme / any
+											other medical facility.</span> 
 											<br>
 											
 										<%if(new ArrayList<String>( Arrays.asList("6","7")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That the claim does not relate to my married daughter(s) / son(s) above the age of 25 years. In case of my
+											&#9675; <span>  That the claim does not relate to my married daughter(s) / son(s) above the age of 25 years. In case of my
 											son(s) and unmarried daughters(s), I declare that they are not gainfully employed and are dependent upon
-											me.
+											me.</span>
 											<br>
 										<%} %>
 										
-										<%if(new ArrayList<String>( Arrays.asList("x`5","8")).contains(chssapplydata[13].toString().trim())){ %>
-											&#8226; That my wife / husband is an employee of (Orgn) ................................ and we have furnished a joint
+										<%if(new ArrayList<String>( Arrays.asList("5","8")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675; <span> That my wife / husband is an employee of (Orgn) ................................ and we have furnished a joint
 											declaration in writing that I shall prefer the claim in respect of our family except for
-											......................................... which shall be claimed by my spouse.
+											......................................... which shall be claimed by my spouse.</span>
 											<br>
-											&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
-											claimed in this bill has not been preferred / shall not be preferred from any other source.
+											&#9675;  <span>  That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
+											claimed in this bill has not been preferred / shall not be preferred from any other source.</span>
 											<br>
-											&#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt.  ......................................<%-- <%=chssapplydata[12] %> --%> </span> is an employee in STARC and that she / he is
+											<%-- &#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
 											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
 											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
 											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
-											<br>
+											<br> --%>
 										<%} %>
 										
-										&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
-										held liable, if anything is found to be incorrect later on.
+										&#9675; <span> That the bills attached herewith and the statements made in this claim are true and correct and I may be
+										held liable, if anything is found to be incorrect later on.</span>
 										<br>
-										&#8226; This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
+										&#9675;  <span> This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.</span>
 										<br>
-										&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
+										&#9675;  <span> I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.</span> 
 										<br>
-										&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
-									</p>
+										&#9675;  <span> It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.</span>
+									
 
 
 							</div>
@@ -420,9 +439,7 @@ th,td
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation Charges </b>
 																<%if(showhistorybtn){ %>
-																	<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
-																		Tests
-																	</button>
+																	
 																	
 																	<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
 																		<i class="fa-solid fa-clock-rotate-left"></i>
@@ -457,11 +474,11 @@ th,td
 														<td class="right ">
 															
 															<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
-																<span style="color: #008005"><%=consult[7]%></span>		
+																<span class="systemgen" ><%=consult[7]%></span>		
 															<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
-																<span style="color: #D40BEA"><%=consult[7]%></span>		
+																<span class="processed" ><%=consult[7]%></span>		
 															<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
-																<span style="color: #DB0202"><%=consult[7]%></span>		
+																<span class="verified" ><%=consult[7]%></span>		
 															<%} %>
 															
 															
@@ -469,11 +486,11 @@ th,td
 														<td class="">
 															<%if(consult[10]!=null){ %>
 																<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
-																	<span style="color: #008005"><%=consult[10]%></span>		
+																	<span class="systemgen" ><%=consult[10]%></span>		
 																<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
-																	<span style="color: #D40BEA"><%=consult[10]%></span>		
+																	<span class="processed" ><%=consult[10]%></span>		
 																<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
-																	<span style="color: #DB0202"><%=consult[10]%></span>		
+																	<span class="verified" ><%=consult[10]%></span>		
 																<%} %>
 															<%} %>
 														</td>
@@ -508,10 +525,9 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(showhistorybtn){ %>
-																
-																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
-																	Medicines
-																</button>
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																		Tests
+																	</button>
 																
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(2)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
@@ -542,21 +558,21 @@ th,td
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
-																<span style="color: #008005"><%=test[7]%>	</span>		
+																<span class="systemgen" ><%=test[7]%>	</span>		
 															<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
-																<span style="color: #D40BEA"><%=test[7]%>	</span>		
+																<span class="processed" ><%=test[7]%>	</span>		
 															<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
-																<span style="color: #DB0202"><%=test[7]%>	</span>		
+																<span class="verified" ><%=test[7]%>	</span>		
 															<%} %>
 														</td>	
 														<td class="">
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
-																	<span style="color: #008005"><%=test[11]%>	</span>		
+																	<span class="systemgen" ><%=test[11]%>	</span>		
 																<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
-																	<span style="color: #D40BEA"><%=test[11]%>	</span>		
+																	<span class="processed" ><%=test[11]%>	</span>		
 																<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
-																	<span style="color: #DB0202"><%=test[11]%>	</span>		
+																	<span class="verified" ><%=test[11]%>	</span>		
 																<%} %>
 															<%} %>
 														</td>
@@ -591,6 +607,10 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
 															<%if(showhistorybtn){ %>
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																	Medicines
+																</button>
+																
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(3)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -629,21 +649,21 @@ th,td
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right ">	
 															<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
-																<span style="color: #008005"> <%=medicine[6]%>	</span>		
+																<span class="systemgen" > <%=medicine[6]%>	</span>		
 															<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
-																<span style="color: #D40BEA"> <%=medicine[6]%>	</span>		
+																<span class="processed" > <%=medicine[6]%>	</span>		
 															<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
-																<span style="color: #DB0202"> <%=medicine[6]%>	</span>		
+																<span class="verified" > <%=medicine[6]%>	</span>		
 															<%} %>
 														</td>	
 														<td class="">
 															<%if(medicine[9]!=null){ %>
 																<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
-																	<span style="color: #008005"> <%=medicine[9]%>	</span>		
+																	<span class="systemgen" > <%=medicine[9]%>	</span>		
 																<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
-																	<span style="color: #D40BEA"> <%=medicine[9]%>	</span>		
+																	<span class="processed" > <%=medicine[9]%>	</span>		
 																<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
-																	<span style="color: #DB0202"> <%=medicine[9]%>	</span>		
+																	<span class="verified" > <%=medicine[9]%>	</span>		
 																<%} %>
 															<% } %>
 															
@@ -713,21 +733,21 @@ th,td
 													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right ">	
 															<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
-																<span style="color: #008005"> <%=other[5]%>	</span>		
+																<span class="systemgen" > <%=other[5]%>	</span>		
 															<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
-																<span style="color: #D40BEA"> <%=other[5]%>	</span>		
+																<span class="processed" > <%=other[5]%>	</span>		
 															<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
-																<span style="color: #DB0202"> <%=other[5]%>	</span>		
+																<span class="verified" > <%=other[5]%>	</span>		
 															<%} %>
 														</td>	
 														<td class="">
 															<%if(other[8]!=null){ %>
 																<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
-																	<span style="color: #008005"> <%=other[8]%>	</span>		
+																	<span class="systemgen" > <%=other[8]%>	</span>		
 																<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
-																	<span style="color: #D40BEA"> <%=other[8]%>	</span>		
+																	<span class="processed" > <%=other[8]%>	</span>		
 																<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
-																	<span style="color: #DB0202"> <%=other[8]%>	</span>		
+																	<span class="verified" > <%=other[8]%>	</span>		
 																<%} %>
 															<%} %>
 														</td>
@@ -791,21 +811,21 @@ th,td
 													<% if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
-																<span style="color: #008005"> <%=misc[4]%>	</span>		
+																<span class="systemgen" > <%=misc[4]%>	</span>		
 															<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
-																<span style="color: #D40BEA"> <%=misc[4]%></span>		
+																<span class="processed" > <%=misc[4]%></span>		
 															<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
-																<span style="color: #DB0202"> <%=misc[4]%>	</span>		
+																<span class="verified" > <%=misc[4]%>	</span>		
 															<%} %>
 														</td>	
 														<td class="">
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
-																	<span style="color: #008005"> <%=misc[7]%>	</span>		
+																	<span class="systemgen" > <%=misc[7]%>	</span>		
 																<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
-																	<span style="color: #D40BEA"> <%=misc[7]%></span>		
+																	<span class="processed" > <%=misc[7]%></span>		
 																<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
-																	<span style="color: #DB0202"> <%=misc[7]%>	</span>		
+																	<span class="verified" > <%=misc[7]%>	</span>		
 																<%} %>
 															<%} %>
 														</td>
@@ -1139,11 +1159,11 @@ th,td
 					       	<div class="row">
 					       		<div class="col-12">
 							    	<b>Medicine Name </b><br>
-									<input type="text" class="form-control w-100" name="medicinename" id="inadm-med-name" value="" readonly="readonly" required="required" >
+									<input type="text" class="form-control w-100" name="medicinename" id="inadm-med-name" value="" required="required" >
 								</div>	
 							    <div class="col-12">
 							    	<b>Comments </b><br>
-									<textarea class="form-control w-100" name="comment" maxlength="500"  required="required" ></textarea>
+									<textarea class="form-control w-100" name="comment" maxlength="500" id="inadm-med-comm" required="required" ></textarea>
 								</div>												
 								<div class="col-12 w-100" align="center">
 									<br>
@@ -1190,6 +1210,10 @@ function checkMedImadmissibleList()
 				if(a > 0){					
 					alert("Medicine Already Exist in the list!");
 					return false;
+				}
+				else if($('#inadm-med-comm').val().trim()==='')
+				{
+					alert('Please Enter comments!');
 				}
 				else if(confirm("Are you sure to Submit!"))
 				{
@@ -1452,9 +1476,10 @@ function ShowHistory(itemid)
 
 				$TblStr+=	'<thead><tr>';
 				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th style="width: 10%; ">Bill Date</th>';
 				$TblStr+=		'<th>Type</th>';
 				$TblStr+=		'<th>Doctor Name</th>';
-				/* $TblStr+=		'<th>Qualification</th>'; */
+				$TblStr+=		'<th style="width: 10%; ">Consult Date </th>';
 				$TblStr+=		'<th style="text-align:right;width: 10%; ">Claimed (&#8377;)</th>';
 				$TblStr+=		'<th style="text-align:right;width: 10%; ">Admitted (&#8377;)</th>';
 				$TblStr+=	'</tr></thead>';
@@ -1463,12 +1488,21 @@ function ShowHistory(itemid)
 				for(var cons=0;cons< $consulthistorylist.length;cons++)
 				{
 					$TblStr+=	'<tr>';
-					$TblStr+=		'<td style="width:15%;">'+$consulthistorylist[cons][1]+'</td>';
+					$TblStr+=		'<td style="width:15%;text-align:center;">'+$consulthistorylist[cons][1]+'</td>';
+					
+					let now = new Date($consulthistorylist[cons][10]);
+					var dateString = moment(now).format('DD-MM-YYYY');
+					
+					$TblStr+=		'<td style="width:10%;text-align:center;">'+dateString+'</td>';
 					$TblStr+=		'<td  style="width:10%;" >'+$consulthistorylist[cons][3]+'</td>';
-					$TblStr+=		'<td>'+$consulthistorylist[cons][4]+'</td>';
-					/* $TblStr+=		'<td>'+$consulthistorylist[i][7]+'</td>'; */
-					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$consulthistorylist[cons][7]+'</td>';
-					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$consulthistorylist[cons][8]+'</td>';
+					$TblStr+=		'<td>'+$consulthistorylist[cons][4]+' ('+$consulthistorylist[cons][5]+')'+'</td>';
+					
+					now = new Date($consulthistorylist[cons][9]);
+					dateString = moment(now).format('DD-MM-YYYY');
+					
+					$TblStr+=		'<td style="width:10%;text-align:center;">'+dateString+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 10%;">'+$consulthistorylist[cons][7]+'</td>';
+					$TblStr+=		'<td style="text-align:right;width: 10%;">'+$consulthistorylist[cons][8]+'</td>';
 					$TblStr+=	'</tr>';
 				}
 				
@@ -1513,6 +1547,7 @@ function ShowHistory(itemid)
 
 				$TblStr+=	'<thead><tr>';
 				$TblStr+=		'<th>Claim No</th>';
+				$TblStr+=		'<th style="width: 10%; ">Bill Date</th>';
 				$TblStr+=		'<th>Test</th>';
 				$TblStr+=		'<th style="text-align:right;">Claimed (&#8377;)</th>';
 				$TblStr+=		'<th style="text-align:right;">Admitted (&#8377;)</th>';
@@ -1523,6 +1558,11 @@ function ShowHistory(itemid)
 				{
 					$TblStr+=	'<tr>';
 					$TblStr+=		'<td style="width:15%;">'+$testshistorylist[t][1]+'</td>';
+					
+					let now = new Date($testshistorylist[t][8]);
+					var dateString = moment(now).format('DD-MM-YYYY');
+					
+					$TblStr+=		'<td style="width:10%;text-align:center;">'+dateString+'</td>';
 					$TblStr+=		'<td>'+$testshistorylist[t][4]+'  ('+$testshistorylist[t][5]+')'+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$testshistorylist[t][6]+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$testshistorylist[t][7]+'</td>';
@@ -1588,10 +1628,10 @@ function ShowHistory(itemid)
 					let now = new Date($medshistorylist[m][8]);
 					var dateString = moment(now).format('DD-MM-YYYY');
 					
-					$TblStr+=		'<td style="width:15%;">'+dateString+'</td>';
+					$TblStr+=		'<td style="width:15%;text-align:center">'+dateString+'</td>';
 					$TblStr+=		'<td>'+$medshistorylist[m][3]+'</td>';
-					$TblStr+=		'<td>'+$medshistorylist[m][4]+'</td>';
-					$TblStr+=		'<td>'+$medshistorylist[m][5]+'</td>';
+					$TblStr+=		'<td style="text-align:center">'+$medshistorylist[m][4]+'</td>';
+					$TblStr+=		'<td style="text-align:center" >'+$medshistorylist[m][5]+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$medshistorylist[m][6]+'</td>';
 					$TblStr+=		'<td style="text-align:right;width: 15%;">'+$medshistorylist[m][7]+'</td>';
 					$TblStr+=	'</tr>';

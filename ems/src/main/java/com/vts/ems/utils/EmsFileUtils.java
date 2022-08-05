@@ -2,9 +2,6 @@ package com.vts.ems.utils;
 
 import java.io.File;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.io.font.constants.StandardFonts;

@@ -38,6 +38,8 @@
 				border: 2px solid black;
 
 				@bottom-right {
+					counter-increment: page;
+  					counter-reset: page 2;
 					content: "Page "counter(page) " of "counter(pages);
 					margin-bottom: 30px;
 					margin-right: 10px;
@@ -99,7 +101,7 @@ th,td
 	text-align: left;
 	border: 1px solid black;
 	padding: 4px;
-	word-break: break-word;
+	word-break: break-all;
 	overflow-wrap: anywhere;
 }
 
@@ -122,11 +124,27 @@ th,td
 {
 	color:  #008005;
 }
+
+.systemgen
+{
+	color: #008005;
+}
+
+.processed
+{
+	color: #A300B5;
+}
+
+.verified
+{
+	color: #0CB5ED;
+}
+
  
 			
 </style>
 		<meta charset="ISO-8859-1">
-		<title>Form</title>
+		
 	</head>
 
 <body>
@@ -140,11 +158,11 @@ th,td
 	List<Object[]> MedicineDataList = (List<Object[]>)request.getAttribute("MedicineDataList");
 	List<Object[]> OtherDataList = (List<Object[]>)request.getAttribute("OtherDataList");
 	List<Object[]> MiscDataList = (List<Object[]>)request.getAttribute("MiscDataList");
-	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
+	/* List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist"); */
 	
 	
 	
-	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yy");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
@@ -157,12 +175,32 @@ th,td
 	
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
-	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
+	/* List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory"); */
+	
+	/* String pagePart = (String)request.getAttribute("pagePart"); */
 	
 	MathContext mc0 = new MathContext(0);
 %>
 
-<div align="center">
+<%
+	BigDecimal billstotal = new BigDecimal(0);
+	BigDecimal discount = new BigDecimal(0);
+	
+	for(int i=0;i<chssbillslist.size();i++)
+	{
+		billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
+		if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
+		{
+			/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
+			discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+			/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
+		}
+	}
+%>
+
+
+
+
 	<div align="center">
 		
 		
@@ -219,41 +257,42 @@ th,td
 					<tr>
 						<td><b>Basic Pay : </b> &#8377; <%=employee[4] %> </td>
 						<td colspan="2"><b>Level in The Pay Matrix : </b> <%=employee[9] %></td>
-						<td colspan="2"><b>Ph.No. : </b> <%=employee[8]%></td>
+						<td colspan="2"><b>Ph.No. : </b> <span class="text-blue" ><%=employee[8]%></span></td>
+						<td colspan="2"><b>Ext.No. : </b> <span class="text-blue" ><%=employee[14]%></span></td>
 					</tr>
 				</tbody>
 			</table>
 			<table style="margin-top: 0px;">	
 				<tbody>
 					<tr>
-						<th class="center">SN</th>
-						<th>Hospital / Medical / Diagnostics Centre Name</th>
-						<th>Bill / Receipt No.</th>
-						<th class="center">Date</th>
-						<th style="text-align: right;">MRP (&#8377;)</th>
-						<th style="text-align: right;">Discount (&#8377;)</th>
-						<th style="text-align: right;">Total (&#8377;)</th>
+						<th class="center" style="width: 5%;" >SN</th>
+						<th style="width: 25;" >Hospital / Medical / Diagnostics Centre Name</th>
+						<th style="width: 20%;" >Bill / Receipt No.</th>
+						<th class="center" style="width: 15%;" >Date</th>
+						<th style="text-align: right;width: 10%;">MRP (&#8377;)</th>
+						<th style="text-align: right;width: 10%;">Discount (&#8377;)</th>
+						<th style="text-align: right;width: 12%;">Total (&#8377;)</th>
 					</tr>
-					<%	BigDecimal billstotal = new BigDecimal(0);
-					BigDecimal discount = new BigDecimal(0); /*,  GST=0 */;
+					<%	/*  billstotal = new BigDecimal(0);
+					 discount = new BigDecimal(0); */ /*,  GST=0 */;
 					for(int i=0;i<chssbillslist.size();i++)
 					{
-						billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
+						 /* billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0)); */ 
 						if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 						{
 							/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-							discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+							/* discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0)); */
 							/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 						}
 					%>
 						<tr>
-							<td class="center text-blue"><%=i+1 %></td>
-							<td class="text-blue"><%=chssbillslist.get(i)[3] %></td>
-							<td class="text-blue"><%=chssbillslist.get(i)[2] %></td>
-							<td class="center text-blue" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-							<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
-							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
-							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
+							<td class="center text-blue" style="width: 5%;"><%=i+1 %></td>
+							<td class="text-blue" style=" width: 25%; word-wrap: break-word !important;white-space: pre-wrap;word-break: break-word; "><%=chssbillslist.get(i)[3] %></td>
+							<td class="text-blue" style="width: 20%;"><%=chssbillslist.get(i)[2] %></td>
+							<td class="center text-blue" style="width: 15%;" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+							<td class="text-blue" style="text-align: right;width: 10%;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
+							<td class="text-blue" style="text-align: right;width: 10%;"><%=chssbillslist.get(i)[6] %></td>
+							<td class="text-blue" style="text-align: right;width: 12%;"><%=chssbillslist.get(i)[7] %></td>
 						</tr>
 					<%} %>
 					<%if(chssbillslist.size()>0){ %>
@@ -300,58 +339,59 @@ th,td
 									</tbody>
 								</table> --%>
 								
-			<div style="margin-left: 10px;">
-				<p>
-						
-					I do state that the member(s) of my family for whom reimbursement of medical expenses claimed in this bill are
-					dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
-					<br>
-					<%if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
-						&#8226; That my Parents / Parents-in-Law Shri / Smt. ......................................<%-- <span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span>  --%>are wholly dependent
-						upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
-						month.
-						<br>
-						
-						&#8226; That no claim has been / will be made in respect of my parents as I opt to claim reimbursement in respect of
-						my parents-in-law (applicable in case of female employees only).
-						<br>
-					<%} %>
-					
-						&#8226; That the patient Shri / Smt. ......................................<%-- <span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span>  --%>is not covered by the ESI Scheme / any
-						other medical facility.
-						<br>
-						
-					<%if(new ArrayList<String>( Arrays.asList("6","7")).contains(chssapplydata[13].toString().trim())){ %>
-						&#8226; That the claim does not relate to my married daughter(s) / son(s) above the age of 25 years. In case of my
-						son(s) and unmarried daughters(s), I declare that they are not gainfully employed and are dependent upon
-						me.
-						<br>
-					<%} %>
-					
-					<%if(new ArrayList<String>( Arrays.asList("5","8")).contains(chssapplydata[13].toString().trim())){ %>
-						&#8226; That my wife / husband is an employee of (Orgn) ................................ and we have furnished a joint
-						declaration in writing that I shall prefer the claim in respect of our family except for
-						......................................... which shall be claimed by my spouse.
-						<br>
-						&#8226; That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
-						claimed in this bill has not been preferred / shall not be preferred from any other source.
-						<br>
-						&#8226; That my wife / husband Shri / Smt. ......................................<%-- <span class="text-blue" style="text-transform: capitalize;"><%=chssapplydata[12] %></span>  --%>is an employee in STARC and that she / he is
-						covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
-						benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
-						dependent(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
-						<br>
-					<%} %>
-					
-					&#8226; That the bills attached herewith and the statements made in this claim are true and correct and I may be
-					held liable, if anything is found to be incorrect later on.
-					<br>
-					&#8226; This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.
-					<br>
-					&#8226; I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.
-					<br>
-					&#8226; It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.
-				</p>
+						<div style="margin-left: 10px;font-size: 14px;" align="left">
+										I do state that the member(s) of my family for whom reimbursement of medical expenses claimed in this bill are
+										dependent upon me and eligible for reimbursement under CHSS Rules and declare in particular:
+										<br>
+										
+										<% int numbering=0;
+											if(new ArrayList<String>( Arrays.asList("3", "4", "15","16")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675; <span>That my Parents / Parents-in-Law  <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %>  </span> are wholly dependent
+											upon me and reside with me and that his / her total monthly incomes does not exceed Rs. 10,000/- per
+											month.</span> 
+											<br>
+											<%if(new ArrayList<String>( Arrays.asList("15","16")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675;  <span>That no claim has been / will be made in respect of my parents as I opt to claim reimbursement in respect of
+											my parents-in-law (applicable in  case of female employees only).</span>  
+											<br>
+											<%} %>
+										<%} %>
+										
+											&#9675; <span>That the patient <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %>  </span> is not covered by the ESI Scheme / any
+											other medical facility.</span> 
+											<br>
+											
+										<%if(new ArrayList<String>( Arrays.asList("6","7")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675; <span>  That the claim does not relate to my married daughter(s) / son(s) above the age of 25 years. In case of my
+											son(s) and unmarried daughters(s), I declare that they are not gainfully employed and are dependent upon
+											me.</span>
+											<br>
+										<%} %>
+										
+										<%if(new ArrayList<String>( Arrays.asList("5","8")).contains(chssapplydata[13].toString().trim())){ %>
+											&#9675; <span> That my wife / husband is an employee of (Orgn) ................................ and we have furnished a joint
+											declaration in writing that I shall prefer the claim in respect of our family except for
+											......................................... which shall be claimed by my spouse.</span>
+											<br>
+											&#9675;  <span>  That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
+											claimed in this bill has not been preferred / shall not be preferred from any other source.</span>
+											<br>
+											<%-- &#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
+											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
+											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
+											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
+											<br> --%>
+										<%} %>
+										
+										&#9675; <span> That the bills attached herewith and the statements made in this claim are true and correct and I may be
+										held liable, if anything is found to be incorrect later on.</span>
+										<br>
+										&#9675;  <span> This bill is submitted on <b class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(chssapplydata[15].toString())%></b> which is within 3 months of treatment / hospitalization.</span>
+										<br>
+										&#9675;  <span> I am not claiming the consultation fees within 7 days of preceding consultation for the same illness.</span> 
+										<br>
+										&#9675;  <span> It is certified that the reimbursement claimed in this form is genuine and not availed from any sources.</span>
+									
 				<div style="max-width: 650px;padding-top:45px ;" align="left">
 					
 						
@@ -399,7 +439,6 @@ th,td
 				<%} %> --%>
 				
 			</div>
-
 		<div class="break"></div>
 		<div align="center">
 			<table>
@@ -442,21 +481,21 @@ th,td
 							<%if(show){ %>
 								<td class="right text-green">	
 										<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
-											<span style="color: #008005"><%=consult[7]%></span>		
+											<span class="systemgen"><%=consult[7]%></span>		
 										<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"><%=consult[7]%></span>		
+											<span class="processed"><%=consult[7]%></span>		
 										<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"><%=consult[7]%></span>		
+											<span class="verified"><%=consult[7]%></span>		
 										<%} %>	
 								</td>	
 								<td class="text-green">	
 									<%if(consult[10]!=null){ %>
 										<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
-											<span style="color: #008005"><%=consult[10]%></span>		
+											<span class="systemgen"><%=consult[10]%></span>		
 										<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"><%=consult[10]%></span>		
+											<span class="processed"><%=consult[10]%></span>		
 										<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"><%=consult[10]%></span>		
+											<span class="verified"><%=consult[10]%></span>		
 										<%} %>	
 									<%} %>
 								</td>
@@ -497,21 +536,21 @@ th,td
 							<%if(show){ %>
 								<td class="right text-green">	
 									<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
-										<span style="color: #008005"><%=test[7]%>	</span>		
+										<span class="systemgen"><%=test[7]%>	</span>		
 									<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
-										<span style="color: #D40BEA"><%=test[7]%>	</span>		
+										<span class="processed"><%=test[7]%>	</span>		
 									<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
-										<span style="color: #DB0202"><%=test[7]%>	</span>		
+										<span class="verified"><%=test[7]%>	</span>		
 									<%} %>	
 								</td>	
 								<td class="text-green">
 									<%if(test[11]!=null){ %>
 										<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
-											<span style="color: #008005"><%=test[11]%>	</span>		
+											<span class="systemgen"><%=test[11]%>	</span>		
 										<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"><%=test[11]%>	</span>		
+											<span class="processed"><%=test[11]%>	</span>		
 										<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"><%=test[11]%>	</span>		
+											<span class="verified"><%=test[11]%>	</span>		
 										<%} %>	
 									<%} %>
 								</td>
@@ -556,21 +595,21 @@ th,td
 							<%if(show){ %>
 								<td class="right text-green">	
 									<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
-										<span style="color: #008005"> <%=medicine[6]%>	</span>		
+										<span class="systemgen"> <%=medicine[6]%>	</span>		
 									<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
-										<span style="color: #D40BEA"> <%=medicine[6]%>	</span>		
+										<span class="processed"> <%=medicine[6]%>	</span>		
 									<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
-										<span style="color: #DB0202"> <%=medicine[6]%>	</span>		
+										<span class="verified"> <%=medicine[6]%>	</span>		
 									<%} %>		
 								</td>	
 								<td class="text-green">
 									<%if(medicine[9]!=null){ %>
 										<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
-											<span style="color: #008005"> <%=medicine[9]%>	</span>		
+											<span class="systemgen"> <%=medicine[9]%>	</span>		
 										<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"> <%=medicine[9]%>	</span>		
+											<span class="processed"> <%=medicine[9]%>	</span>		
 										<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"> <%=medicine[9]%>	</span>		
+											<span class="verified"> <%=medicine[9]%>	</span>		
 										<%} %>	
 									<%} %>
 								</td>
@@ -612,21 +651,21 @@ th,td
 							<%if(show){ %>
 								<td class="right text-green">	
 									<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
-										<span style="color: #008005"> <%=other[5]%>	</span>		
+										<span class="systemgen"> <%=other[5]%>	</span>		
 									<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
-										<span style="color: #D40BEA"> <%=other[5]%>	</span>		
+										<span class="processed"> <%=other[5]%>	</span>		
 									<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
-										<span style="color: #DB0202"> <%=other[5]%>	</span>		
+										<span class="verified"> <%=other[5]%>	</span>		
 									<%} %>	
 								</td>	
 								<td class="text-green">
 									<%if(other[8]!=null){ %>
 										<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
-											<span style="color: #008005"> <%=other[8]%>	</span>		
+											<span class="systemgen"> <%=other[8]%>	</span>		
 										<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"> <%=other[8]%>	</span>		
+											<span class="processed"> <%=other[8]%>	</span>		
 										<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"> <%=other[8]%>	</span>		
+											<span class="verified"> <%=other[8]%>	</span>		
 										<%} %>	
 									<%} %>
 								</td>
@@ -669,21 +708,21 @@ th,td
 								<%if(show){ %>
 									<td class="right text-green">	
 										<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
-											<span style="color: #008005"> <%=misc[4]%>	</span>		
+											<span class="systemgen"> <%=misc[4]%>	</span>		
 										<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
-											<span style="color: #D40BEA"> <%=misc[4]%></span>		
+											<span class="processed"> <%=misc[4]%></span>		
 										<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
-											<span style="color: #DB0202"> <%=misc[4]%>	</span>		
+											<span class="verified"> <%=misc[4]%>	</span>		
 										<%} %>	
 									</td>	
 									<td class="text-green">
 										<%if(misc[7]!=null){ %>
 											<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
-												<span style="color: #008005"> <%=misc[7]%>	</span>		
+												<span class="systemgen"> <%=misc[7]%>	</span>		
 											<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
-												<span style="color: #D40BEA"> <%=misc[7]%></span>		
+												<span class="processed"> <%=misc[7]%></span>		
 											<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
-												<span style="color: #DB0202"> <%=misc[7]%>	</span>		
+												<span class="verified"> <%=misc[7]%>	</span>		
 											<%} %>	
 										<%} %>
 									</td>
@@ -809,7 +848,7 @@ th,td
 			</table>
 		</div>
 	</div>
-</div>
+
 </body>
 
 </html>

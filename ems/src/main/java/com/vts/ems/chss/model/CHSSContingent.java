@@ -32,6 +32,7 @@ public class CHSSContingent implements Serializable{
 	private Long AO;
 	private Long CEO;
 	private String ApprovalDate;
+	private String GenTillDate;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
