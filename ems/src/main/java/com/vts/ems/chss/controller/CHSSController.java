@@ -3343,7 +3343,7 @@ public class CHSSController {
 			// Creating a worksheet
 			Workbook workbook = new XSSFWorkbook();
 
-			Sheet sheet = workbook.createSheet("Persons");
+			Sheet sheet = workbook.createSheet("Contingent Report");
 			sheet.setColumnWidth(0, 1000);
 			sheet.setColumnWidth(1, 2500);
 			sheet.setColumnWidth(2, 6000);
