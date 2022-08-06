@@ -1146,8 +1146,8 @@ public class CHSSServiceImpl implements CHSSService {
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				
-				if(claimstatus==1 && claim.getCHSSApplyNo().trim().equals("-")) {
-					
+				if(claimstatus==1 && claim.getCHSSApplyNo().trim().equals("-")) 
+				{
 					claim.setCHSSApplyNo(GenerateCHSSClaimNo());
 				}
 			}
