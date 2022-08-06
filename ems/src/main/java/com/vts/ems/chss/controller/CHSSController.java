@@ -3329,9 +3329,7 @@ public class CHSSController {
 	public void ConsolidatedExcelDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
-
 		logger.info(new Date() +"Inside ConsolidatedExcelDownload.htm "+UserId);
-		
 		try {	
 			String contingentid = req.getParameter("contingentid");
 			LinkedHashMap<Long, ArrayList<Object[]>> ContingentList = service.CHSSContingentClaimList(contingentid);
