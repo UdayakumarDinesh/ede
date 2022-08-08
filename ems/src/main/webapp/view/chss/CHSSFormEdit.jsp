@@ -154,8 +154,8 @@ th,td
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview=(String)request.getAttribute("onlyview");
 	
-	boolean showhistorybtn = (showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14;
-	
+	boolean showhistorybtn = (showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y"));
+	boolean showRemAmtText =((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15) ;
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 	
@@ -470,7 +470,7 @@ th,td
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
 														
-													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
+													<%if(showRemAmtText){ %>
 														<td class="right ">
 															
 															<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
@@ -555,7 +555,7 @@ th,td
 													<td class="right text-blue"><%=test[4] %></td>
 												
 													
-													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
+													<%if(showRemAmtText){ %>
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=test[7]%>	</span>		
@@ -646,7 +646,7 @@ th,td
 													<td  class="text-blue right"><%=medicine[3] %></td>
 												
 													
-													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
+													<%if(showRemAmtText){ %>
 														<td class="right ">	
 															<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																<span class="systemgen" > <%=medicine[6]%>	</span>		
@@ -730,7 +730,7 @@ th,td
 													<td  class="text-blue" colspan="3"><%=other[4] %></td>
 													<td class="right text-blue"><%=other[3] %></td>
 													
-													<%if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
+													<%if(showRemAmtText){ %>
 														<td class="right ">	
 															<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=other[5]%>	</span>		
@@ -808,7 +808,7 @@ th,td
 													<td class="right text-blue"><%=misc[3] %></td>
 													
 																										
-													<% if((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14){ %>
+													<%if(showRemAmtText){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=misc[4]%>	</span>		
@@ -853,7 +853,7 @@ th,td
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>	 
 												<b><%=totalremamount%></b>
 												<%} %>
 											</td>
@@ -873,7 +873,7 @@ th,td
 															
 											<td class="right text-green">
 												
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>	 
 												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
@@ -890,7 +890,7 @@ th,td
 										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>
+												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)

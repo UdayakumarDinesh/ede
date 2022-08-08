@@ -1567,6 +1567,14 @@ public class CHSSServiceImpl implements CHSSService {
 				contingent.setCEO(Long.parseLong(dto.getEmpId()));
 				
 			}	
+			else if(continstatus==14 ) 
+			{
+				continstatus=15;
+							
+				contingent.setApprovalDate(LocalDate.now().toString());
+				contingent.setCEO(Long.parseLong(dto.getEmpId()));
+				
+			}	
 		}
 		else if(dto.getAction().equalsIgnoreCase("R")) 
 		{
@@ -1641,8 +1649,8 @@ public class CHSSServiceImpl implements CHSSService {
 			// update claimed and settled amount in each claim of this bill
 			if(continstatus==14) 
 			{
-				claim.setAmountClaimed(Double.parseDouble(claimslist.get(i)[27].toString()) );
-				claim.setAmountSettled(Double.parseDouble(claimslist.get(i)[28].toString()) );
+				claim.setAmountClaimed(Double.parseDouble(claimslist.get(i)[1].toString()) );
+				claim.setAmountSettled(Double.parseDouble(claimslist.get(i)[2].toString()) );
 			}
 			
 			claim.setCHSSStatusId(continstatus);
@@ -1673,7 +1681,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		
 		
-		if(notify.getEmpId()>0) {
+		if(notify.getEmpId()!=null && notify.getEmpId()>0) {
 			dao.NotificationAdd(notify);
 		}
 		

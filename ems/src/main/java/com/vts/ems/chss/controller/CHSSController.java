@@ -63,6 +63,7 @@ import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -2158,13 +2159,22 @@ public class CHSSController {
 			dto.setPO(billcontent);
 			
 			long count= service.CHSSClaimsApprove( dto);
-//			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
-			
 			
 			if(action.equalsIgnoreCase("F")) 
 			{
-				
-				if(LoginType.equalsIgnoreCase("Z")) 
+				CHSSContingent contingent = service.getCHSSContingent(dto.getContingentid());
+				if(contingent.getContingentStatusId()==15)
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Status Updated Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Status Update Unsuccessful");	
+					}
+					
+					return "redirect:/ApprovedBills.htm";
+					
+				}
+				else if(LoginType.equalsIgnoreCase("Z")) 
 				{
 					if (count > 0) {
 						redir.addAttribute("result", "Contingent Bill Approved Successfully");
@@ -2179,7 +2189,8 @@ public class CHSSController {
 					} else {
 						redir.addAttribute("resultfail", "Contingent Bill Recommend Unsuccessful");	
 					}
-				}else
+				}
+				else
 				{
 					if (count > 0)
 					{
@@ -2197,6 +2208,8 @@ public class CHSSController {
 					redir.addAttribute("resultfail", "Claim application(s) Return Unsuccessful");	
 				}	
 			}
+			
+			
 			
 			return "redirect:/ContingentApprovals.htm";
 		} catch (Exception e) {

@@ -169,7 +169,7 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String isapproval = (String)request.getAttribute("isapproval");
 	boolean show = false;
-	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid==14 ){
+	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15 ){
 		show = true;
 	} 
 	
