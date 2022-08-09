@@ -22,13 +22,13 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h4>Approved Contingent Bills</h4>
+				<h5>Contingent Bills</h5>
 			</div>
 				<div class="col-md-8 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item active " aria-current="page">Approved Contingent Bills</li>
+						<li class="breadcrumb-item active " aria-current="page"> Contingent Bills</li>
 					</ol>
 				</div>
 			</div>

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
@@ -149,6 +150,11 @@ public interface CHSSDao {
 	public long CHSSBillIPDheadsEdit(CHSSBillIPDheads bhead) throws Exception;
 	public List<Object[]> consultMainBillIds(String consultmainid) throws Exception;
 	public List<Object[]> CheckPrevConsultInfo(String consultationid, long consultmainid, String fromdate, String todate) throws Exception;
+	public long ClaimDisputeAdd(CHSSApplyDispute dispute) throws Exception;
+	public Object[] getClaimDisputeData(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimDisputeList(String fromdate, String todate) throws Exception;
+	public CHSSApplyDispute getCHSSApplyDispute(String chssapplyid) throws Exception;
+	public long ClaimDisputeEdit(CHSSApplyDispute dispute) throws Exception;
 	
 	
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSContingentDto;
@@ -14,6 +16,7 @@ import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSBillConsultation;
@@ -140,5 +143,9 @@ public interface CHSSService
 	public long IPDBillHeadDataAddEdit(CHSSBillIPDheads billhead) throws Exception;
 	public long IPDConsultAdd(CHSSConsultationDto dto, String chssapplyid, String consultmainidold) throws Exception;
 	public long IPDConsultEdit(CHSSBillConsultation modal, String chssapplyid, String consultmainidold) throws Exception;
+	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception;
+	public Object[] getClaimDisputeData(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimDisputeList(String fromdate, String todate) throws Exception;
+	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal, HttpSession ses) throws Exception;
 
 }

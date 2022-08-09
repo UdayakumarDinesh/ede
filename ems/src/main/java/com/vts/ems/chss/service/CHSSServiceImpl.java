@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +41,7 @@ import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
@@ -1963,6 +1966,80 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.ClaimConsultMainList(CHSSApplyId);
 	}
 	
+	@Override
+	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception
+	{
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		String Username = (String) ses.getAttribute("Username");
+		dispute.setRaisedTime(sdtf.format(new Date()));
+		dispute.setIsActive(1);
+		dispute.setDispStatus("A");		
+		dispute.setCreatedBy(Username);
+		dispute.setCreatedDate(sdtf.format(new Date()));
+		long count= dao.ClaimDisputeAdd(dispute);
+		
+		if(count>0) {
+			EMSNotification notify = new EMSNotification();
+			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
+			notify.setNotificationUrl("ClaimDisputeList.htm");
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(EmpId);
+			notify.setIsActive(1);
+			notify.setCreatedBy(Username);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			notify.setNotificationMessage("Dispute over the Claim "+apply.getCHSSApplyNo()+" Raised");
+			
+			Object[] notifyto = dao.CHSSApprovalAuth("K");
+			if(notifyto==null) {
+				notify.setEmpId(0L);
+			}else {
+				notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+				
+			}
+			
+			if(notify.getEmpId()!=null && notify.getEmpId()>0) {
+				dao.NotificationAdd(notify);
+			}
+		}
+		
+		return count;
+	}
+	
+	@Override
+	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal,HttpSession ses) throws Exception
+	{
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		String Username = (String) ses.getAttribute("Username");
+		
+		CHSSApplyDispute dispute = dao.getCHSSApplyDispute(String.valueOf(modal.getCHSSApplyId()));
+		dispute.setResponseMsg(modal.getResponseMsg());
+		dispute.setResponderEmpid(EmpId);
+		dispute.setResponseTime(sdtf.format(new Date()));
+		dispute.setModifiedBy(Username);
+		dispute.setModifiedDate(sdtf.format(new Date()));
+		long count= dao.ClaimDisputeAdd(dispute);
+		
+		if(count>0) 
+		{
+			EMSNotification notify = new EMSNotification();
+			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
+			notify.setNotificationUrl("CHSSDashboard.htm");
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(EmpId);
+			notify.setIsActive(1);
+			notify.setCreatedBy(Username);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			notify.setNotificationMessage("Response For Dispute Over Claim "+apply.getCHSSApplyNo()+"<br> Recieved");
+			
+			notify.setEmpId(apply.getEmpId());
+			
+			dao.NotificationAdd(notify);
+		}
+		
+		return count;
+	}
+	
+	
 //	@Override
 //	public int DeleteClaimData(String chssapplyid) throws Exception
 //	{
@@ -2207,4 +2284,15 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 	
+	@Override
+	public Object[] getClaimDisputeData(String chssapplyid) throws Exception
+	{
+		return dao.getClaimDisputeData(chssapplyid);
+	}
+	
+	@Override
+	public List<Object[]> ClaimDisputeList(String fromdate,String todate)throws Exception
+	{
+		return dao.ClaimDisputeList(fromdate, todate);
+	}
 }

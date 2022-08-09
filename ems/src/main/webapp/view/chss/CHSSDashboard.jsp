@@ -263,7 +263,7 @@
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3  ">
+			<div class="col-md-3 ">
 				<h5>CHSS DASHBOARD</h5>
 			</div>
 			<div class="col-md-9 " >
@@ -485,7 +485,7 @@
 										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>
-										<%if(Integer.parseInt(obj[9].toString())>1){ %>	
+										<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
@@ -497,6 +497,7 @@
 										<%} %>
 										<input type="hidden" name="isapproval" value="N">
 										<input type="hidden" name="show-edit" value="N">
+										<input type="hidden" name="ActivateDisp" value="Y">
 									</td>
 								</tr>
 							<%} %>

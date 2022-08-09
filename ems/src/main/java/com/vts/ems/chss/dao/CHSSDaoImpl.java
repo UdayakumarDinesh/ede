@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillMedicine;
@@ -456,6 +457,33 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	
+	@Override
+	public CHSSApplyDispute getCHSSApplyDispute(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSApplyDispute");
+		CHSSApplyDispute Dispute= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSApplyDispute> cq= cb.createQuery(CHSSApplyDispute.class);
+			
+			Root<CHSSApplyDispute> root=cq.from(CHSSApplyDispute.class);								
+			Predicate p1=cb.equal(root.get("CHSSApplyId") , Long.parseLong(chssapplyid));
+			
+			cq=cq.select(root).where(p1);
+			
+			
+			TypedQuery<CHSSApplyDispute> allquery = manager.createQuery(cq);
+			Dispute= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Dispute;
+	}
+	
+	
 	
 	@Override
 	public CHSSBillConsultation getCHSSConsultation(String consultationid) throws Exception
@@ -1812,6 +1840,38 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	@Override
+	public long ClaimDisputeAdd(CHSSApplyDispute dispute) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSIPDBasicInfoAdd");
+		try {
+			manager.persist(dispute);
+			manager.flush();
+			
+			return dispute.getCHSSDisputeId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long ClaimDisputeEdit(CHSSApplyDispute dispute) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ClaimDisputeEdit");
+		try {
+			manager.merge(dispute);
+			manager.flush();
+			
+			return dispute.getCHSSDisputeId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 	private static final String CLAIMCONSULTMAINDELETEALL  ="UPDATE chss_consult_main SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE chssapplyid=:chssapplyid";
 	@Override
 	public int claimConsultMainDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception
@@ -2202,16 +2262,46 @@ public class CHSSDaoImpl implements CHSSDao {
 		logger.info(new Date() + "Inside DAO CheckPrevConsultInfo");
 		try {
 			
-			System.out.println("fromdate   : "+fromdate);
-			System.out.println("todate || consultdate  : "+todate);
-			System.out.println("consultmainid   : "+consultmainid);
-			System.out.println("consultationid   : "+consultationid);
-			
 			Query query = manager.createNativeQuery(CHECKPREVCONSULTINFO);
 			query.setParameter("consultmainid",consultmainid);
 			query.setParameter("consultationid", consultationid);
 			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
+			return (List<Object[]>) query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
+	private static final String GETCLAIMDISPUTEDATA="SELECT cad.CHSSDisputeId,cad.CHSSApplyId,cad.DisputeMsg,cad.ResponseMsg,cad.RaisedTime,cad.ResponderEmpid,cad.ResponseTime,cad.DispStatus,e.empname AS 'Responder'  FROM   chss_apply_dispute cad LEFT JOIN employee e ON e.empid = cad.ResponderEmpId   WHERE cad.isactive=1 AND cad.DispStatus ='A' AND cad.chssapplyid=:chssapplyid ;";
+	
+	@Override
+	public Object[] getClaimDisputeData(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getClaimDisputeData");
+		try {
+			Query query = manager.createNativeQuery(GETCLAIMDISPUTEDATA);
+			query.setParameter("chssapplyid",chssapplyid);
+			return (Object[]) query.getResultList().get(0);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String  CLAIMDISPUTELIST = "SELECT cad.CHSSDisputeId,cad.CHSSApplyId,cad.DisputeMsg,cad.ResponseMsg,DATE(cad.RaisedTime),cad.ResponderEmpid,DATE(cad.ResponseTime),cad.DispStatus,e.empname AS 'Responder', e1.empname AS 'raisedby',ca.chssapplyno,ca.empid  FROM   chss_apply_dispute cad LEFT JOIN employee e ON e.empid = cad.ResponderEmpId , chss_apply ca, employee e1 WHERE cad.chssapplyid = ca.chssapplyid AND ca.empid=e1.empid AND cad.isactive=1 AND cad.DispStatus ='A' ORDER BY cad.ResponseMsg,cad.raisedtime ASC ";
+	
+	@Override
+	public List<Object[]> ClaimDisputeList(String fromdate,String todate)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO ClaimDisputeList");
+		try {
+			
+			Query query = manager.createNativeQuery(CLAIMDISPUTELIST);
+			
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {

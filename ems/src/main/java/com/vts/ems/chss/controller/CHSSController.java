@@ -55,6 +55,7 @@ import com.vts.ems.chss.Dto.CHSSOtherDto;
 import com.vts.ems.chss.Dto.CHSSTestsDto;
 import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
@@ -1452,14 +1453,26 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value = "CHSSForm.htm", method = RequestMethod.POST )
-	public String CHSSForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "CHSSForm.htm")
+	public String CHSSForm(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside CHSSForm.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
+			String isapproval = req.getParameter("isapproval");
+			String showedit= req.getParameter("show-edit");
+			String ActivateDisp=req.getParameter("ActivateDisp");
+			
+			if(chssapplyid==null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+				isapproval=(String)md.get("isapproval");
+				showedit=(String)md.get("show-edit");
+				ActivateDisp=(String)md.get("ActivateDisp");
+			}
 			
 			Object[] chssapplicationdata = service.CHSSAppliedData(chssapplyid);
 			Object[] employee = service.getEmployee(chssapplicationdata[1].toString());
@@ -1478,11 +1491,17 @@ public class CHSSController {
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
 			
-			req.setAttribute("isapproval", req.getParameter("isapproval"));
-			req.setAttribute("show-edit", req.getParameter("show-edit"));
-			req.setAttribute("logintype", LoginType);
+			
+			req.setAttribute("logintype", LoginType);			
+			
+			req.setAttribute("isapproval", isapproval);
+			req.setAttribute("show-edit", showedit);			
 			req.setAttribute("onlyview", "Y");
+			req.setAttribute("ActivateDisp", ActivateDisp);
+			
+			req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
 			
 			return "chss/CHSSFormEdit";
 //			return "chss/CHSSForm";
@@ -2221,6 +2240,7 @@ public class CHSSController {
 	}
 	
 	
+	
 	@RequestMapping(value = "ContingentApprovals.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public String ContingentApprovals(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -2605,6 +2625,24 @@ public class CHSSController {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSEmpClaimRevoke.htm "+Username, e);
 			return "static/Error";			
+		}
+		
+	}
+	
+	
+	@RequestMapping(value = "ClaimDisputeList.htm")
+	public String ClaimDisputeList(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimDisputeList.htm "+Username);
+		try {
+			req.setAttribute("ClaimDisputeList", service.ClaimDisputeList("",""));
+			ses.setAttribute("SidebarActive", "ClaimDisputeList_htm");
+			return "chss/ClaimDisputeList";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimDisputeList.htm "+Username, e);
+			return "static/Error";
 		}
 		
 	}
@@ -3523,6 +3561,79 @@ public class CHSSController {
 
 	}
 	
+	
+	
+	@RequestMapping(value = "ClaimDisputeSubmit.htm", method = RequestMethod.POST )
+	public String ClaimDisputeSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimDisputeSubmit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String disputemsg = req.getParameter("disputemsg"); 
+			
+			CHSSApplyDispute dispute= new CHSSApplyDispute();
+			dispute.setCHSSApplyId(Long.parseLong(chssapplyid));
+			dispute.setDisputeMsg(disputemsg);
+			
+			long count=service.ClaimDisputeSubmit(dispute, ses);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Dispute Submitted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Dispute Submission Unsuccessful");	
+			}	
+			
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","N");
+			redir.addFlashAttribute("ActivateDisp","Y");
+			
+			return "redirect:/CHSSForm.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimDisputeSubmit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "ClaimDisputeResponceSubmit.htm", method = RequestMethod.POST )
+	public String ClaimDisputeResponceSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimDisputeResponceSubmit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String disputemsg = req.getParameter("Responcemsg"); 
+			
+			CHSSApplyDispute dispute= new CHSSApplyDispute();
+			dispute.setCHSSApplyId(Long.parseLong(chssapplyid));
+			dispute.setResponseMsg(disputemsg);
+			
+			long count=service.ClaimDisputeResponseSubmit(dispute, ses);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Dispute Response Submitted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Dispute Response Submission Unsuccessful");	
+			}	
+			
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("isapproval","Y");
+			redir.addFlashAttribute("show-edit","N");
+			redir.addFlashAttribute("ActivateDisp","Y");
+			
+			return "redirect:/CHSSForm.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimDisputeResponceSubmit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 	
 }
