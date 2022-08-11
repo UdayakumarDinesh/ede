@@ -200,9 +200,9 @@ table th:last-child{
 							<div class="col-2">
 								<b>Claim Type : </b> 
 								<br>
-								<select class="form-control  select2 w-100" name="chsstype" id="chsstype">
-									<option value="OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("OPD")){ %>Selected<%} %> >OPD</option>
-									<%-- <option value="IPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option> --%>
+								<select class="form-control" name="chsstype" id="chsstype">
+									<option value="OPD" id="claim_type_IPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("OPD")){ %>Selected<%} %> >OPD</option>
+									<%-- <option value="IPD" id="claim_type_OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option> --%>
 								</select>
 							</div>
 							<div class="col-3">
@@ -451,7 +451,7 @@ $(document).ready( function() {
 	
 	<%if(consultmainlist.size()>0){%>
 		$('#treatmenttype').prop('disabled', true);
-		$('#chsstype').prop('disabled', true);
+		$('#claim_type_<%=chssapplydata[6]%>').prop('disabled', true);
 	<%}%> 
 });   
 

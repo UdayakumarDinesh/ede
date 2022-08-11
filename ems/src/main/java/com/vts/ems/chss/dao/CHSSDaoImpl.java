@@ -29,10 +29,13 @@ import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSBillConsultation;
+import com.vts.ems.chss.model.CHSSBillEquipment;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
+import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDAttachments;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSBillMisc;
@@ -861,6 +864,8 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		
 	}
+	
+	
 	
 	@Override
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception
@@ -2053,7 +2058,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			returnlist = claiminfo.getResultList().get(0);
 			
 		}catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 		return returnlist;
@@ -2150,7 +2154,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
-	private static final String  IPDBILLPACKAGEITEMS = "SELECT * FROM (SELECT ipdbillheadid, billheadname,ismultiple, ispackage FROM chss_ipd_billheads WHERE isactive=1 AND ispackage='Y' ORDER BY orderno ) a LEFT JOIN (SELECT  chssitemheadid,billid,ipdbillheadid AS 'billheadid',billheadcost,amountpaid,billheadremamt, comments  FROM chss_bill_ipdheads WHERE billid=:billid)  b ON b.billheadid = a.ipdbillheadid";
+	private static final String  IPDBILLPACKAGEITEMS = "SELECT * FROM (SELECT ipdbillheadid, billheadname,ismultiple, ispackage,orderno FROM chss_ipd_billheads WHERE isactive=1 AND ispackage='Y' ORDER BY orderno ) a LEFT JOIN (SELECT  chssitemheadid,billid,ipdbillheadid AS 'billheadid',billheadcost,amountpaid,billheadremamt, comments  FROM chss_bill_ipdheads WHERE billid=:billid)  b ON b.billheadid = a.ipdbillheadid ORDER BY a.orderno;";
 	
 	@Override
 	public List<Object[]> IPDBillPackageItems(String billid)throws Exception
@@ -2168,7 +2172,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String  IPDBILLNONPACKAGEITEMS = "SELECT * FROM (SELECT ipdbillheadid, billheadname,ismultiple, ispackage FROM chss_ipd_billheads WHERE isactive=1 AND ispackage='N' AND ismultiple ='N' ORDER BY orderno ) a LEFT JOIN (SELECT  chssitemheadid,billid,ipdbillheadid AS 'billheadid',billheadcost,amountpaid,billheadremamt, comments  FROM chss_bill_ipdheads WHERE billid=:billid)  b ON b.billheadid = a.ipdbillheadid ;";
+	private static final String  IPDBILLNONPACKAGEITEMS = "SELECT * FROM (SELECT ipdbillheadid, billheadname,ismultiple, ispackage, orderno  FROM chss_ipd_billheads WHERE isactive=1 AND ispackage='N' AND ismultiple ='N' ORDER BY orderno ) a LEFT JOIN (SELECT  chssitemheadid,billid,ipdbillheadid AS 'billheadid',billheadcost,amountpaid,billheadremamt, comments  FROM chss_bill_ipdheads WHERE billid=:billid)  b ON b.billheadid = a.ipdbillheadid ORDER BY a.orderno;";
 	
 	@Override
 	public List<Object[]> IPDBillNonPackageItems(String billid)throws Exception
@@ -2207,10 +2211,13 @@ public class CHSSDaoImpl implements CHSSDao {
 			}
 			
 			TypedQuery<CHSSBillIPDheads> allquery = manager.createQuery(cq);
-			Bhead= allquery.getResultList().get(0);
+			Bhead= allquery.getSingleResult();
 			
+		} catch (NoResultException e) {
+			return null;
 		}catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
 		return Bhead;
 	}
@@ -2276,7 +2283,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String GETCLAIMDISPUTEDATA="SELECT cad.CHSSDisputeId,cad.CHSSApplyId,cad.DisputeMsg,cad.ResponseMsg,cad.RaisedTime,cad.ResponderEmpid,cad.ResponseTime,cad.DispStatus,e.empname AS 'Responder'  FROM   chss_apply_dispute cad LEFT JOIN employee e ON e.empid = cad.ResponderEmpId   WHERE cad.isactive=1 AND cad.DispStatus ='A' AND cad.chssapplyid=:chssapplyid ;";
+	private static final String GETCLAIMDISPUTEDATA="SELECT cad.CHSSDisputeId,cad.CHSSApplyId,cad.DisputeMsg,cad.ResponseMsg,cad.RaisedTime,cad.ResponderEmpid,cad.ResponseTime,cad.DispStatus,e.empname AS 'Responder'  FROM   chss_apply_dispute cad LEFT JOIN employee e ON e.empid = cad.ResponderEmpId   WHERE cad.isactive=1  AND cad.chssapplyid=:chssapplyid ;";
 	
 	@Override
 	public Object[] getClaimDisputeData(String chssapplyid) throws Exception
@@ -2287,7 +2294,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("chssapplyid",chssapplyid);
 			return (Object[]) query.getResultList().get(0);
 		}catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -2309,4 +2315,228 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+	
+private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,cad.CHSSApplyId,cad.DisputeMsg,cad.ResponseMsg,DATE(cad.RaisedTime),cad.ResponderEmpid,DATE(cad.ResponseTime),cad.DispStatus,e.empname AS 'Responder', e1.empname AS 'raisedby',ca.chssapplyno,ca.empid  FROM   chss_apply_dispute cad LEFT JOIN employee e ON e.empid = cad.ResponderEmpId , chss_apply ca, employee e1  WHERE cad.chssapplyid = ca.chssapplyid AND ca.empid=e1.empid AND cad.isactive=1 AND cad.DispStatus ='C' AND (DATE(cad.RaisedTime) BETWEEN :fromdate AND :todate )  ORDER BY cad.ResponseMsg,cad.raisedtime ASC ";
+	
+	@Override
+	public List<Object[]> ClaimDisputeClosedList(String fromdate,String todate)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO ClaimDisputeClosedList");
+		try {
+			
+			Query query = manager.createNativeQuery(CLAIMDISPUTECLOSEDLIST);
+			query.setParameter("fromdate",fromdate);
+			query.setParameter("todate",todate);
+			return (List<Object[]>) query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
+	@Override
+	public long EquipmentBillAdd(CHSSBillEquipment equipment) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EquipmentBillAdd");
+		manager.persist(equipment);
+		manager.flush();
+		
+		return equipment.getCHSSEquipmentId();
+	}
+	
+	@Override
+	public CHSSBillEquipment getCHSSEquipment(String equipid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSEquipment");
+		try {
+			return manager.find(CHSSBillEquipment.class, Long.parseLong(equipid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSConsultationList");
+		List<CHSSBillEquipment> list= new ArrayList<CHSSBillEquipment>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSBillEquipment> cq= cb.createQuery(CHSSBillEquipment.class);
+			
+			Root<CHSSBillEquipment> root=cq.from(CHSSBillEquipment.class);								
+			Predicate p1=cb.equal(root.get("BillId") , Long.parseLong(billid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSBillEquipment> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public long EquipmentBillEdit(CHSSBillEquipment equipment) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EquipmentBillEdit");
+		try {
+			manager.merge(equipment);
+			manager.flush();
+			
+			return equipment.getCHSSEquipmentId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	
+	@Override
+	public long ImplantBillAdd(CHSSBillImplants equipment) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ImplantBillAdd");
+		manager.persist(equipment);
+		manager.flush();
+		
+		return equipment.getCHSSImplantId();
+	}
+	
+	@Override
+	public CHSSBillImplants getCHSSImplant(String implantid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSImplant");
+		try {
+			return manager.find(CHSSBillImplants.class, Long.parseLong(implantid));
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public List<CHSSBillImplants> CHSSImplantList(String billid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSImplantList");
+		List<CHSSBillImplants> list= new ArrayList<CHSSBillImplants>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSBillImplants> cq= cb.createQuery(CHSSBillImplants.class);
+			
+			Root<CHSSBillImplants> root=cq.from(CHSSBillImplants.class);								
+			Predicate p1=cb.equal(root.get("BillId") , Long.parseLong(billid));
+			Predicate p2=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1,p2);
+			
+			
+			TypedQuery<CHSSBillImplants> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public long ImplantBillEdit(CHSSBillImplants implant) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO ImplantBillEdit");
+		try {
+			manager.merge(implant);
+			manager.flush();
+			
+			return implant.getCHSSImplantId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String  IPDCLAIMATTACHMENTS = "SELECT a.IPDAttachTypeId,a.Attachmenttype,b.ipdattachid,b.chssapplyid,b.copyattached FROM  (SELECT iat.IPDAttachTypeId, iat.Attachmenttype,iat.isactive FROM chss_ipd_attachtypes iat WHERE iat.isactive=1) a LEFT JOIN (SELECT ia.ipdattachid,ia.ipdattachtypeid, ia.chssapplyid,ia.copyattached,ia.isactive FROM chss_ipd_attachments ia WHERE ia.isactive=1 AND ia.chssapplyid=:chssapplyid )b ON a.IPDAttachTypeId=b.IPDAttachTypeId ORDER BY a.IPDAttachTypeId";
+	
+	@Override
+	public List<Object[]> IPDClaimAttachments(String chssapplyid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO IPDClaimAttachments");
+		try {
+			
+			Query query = manager.createNativeQuery(IPDCLAIMATTACHMENTS);
+			query.setParameter("chssapplyid", chssapplyid);
+			return (List<Object[]>) query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
+	
+	private static final String GETIPDCLAIMATTACH="FROM chss_ipd_attachments WHERE chssapplyid=:chssapplyid AND IPDAttachtypeid=:attachtypeid  ";
+	@Override
+	public CHSSIPDAttachments getIPDClaimAttach(String chssapplyid,String attachtypeid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getIPDClaimAttach");
+		try {
+			Query query = manager.createQuery(GETIPDCLAIMATTACH);
+			query.setParameter("chssapplyid", chssapplyid);
+			query.setParameter("attachtypeid", attachtypeid);
+			return (CHSSIPDAttachments) query.getSingleResult();
+			
+		} catch (NoResultException e) {
+			return null;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	@Override
+	public long IPDClaimAttachAdd(CHSSIPDAttachments Attach) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO IPDClaimAttachAdd");
+		try {
+			manager.persist(Attach);
+			manager.flush();
+			
+			return Attach.getIPDAttachId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long IPDClaimAttachEdit(CHSSIPDAttachments Attach) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO IPDClaimAttachEdit");
+		try {
+			manager.merge(Attach);
+			manager.flush();
+			
+			return Attach.getIPDAttachId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 }

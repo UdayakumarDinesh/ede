@@ -34,6 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSContingentDto;
+import com.vts.ems.chss.Dto.CHSSEquipDto;
+import com.vts.ems.chss.Dto.CHSSImplantDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
 import com.vts.ems.chss.Dto.CHSSOtherDto;
@@ -45,7 +47,9 @@ import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
+import com.vts.ems.chss.model.CHSSBillEquipment;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
+import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
@@ -54,6 +58,7 @@ import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDAttachments;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -352,6 +357,7 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSBillEdit(fetch);
 	}
 	
+	
 	public int deleteBillItems(String billid,String username) throws Exception 
 	{
 		int count=0;
@@ -441,14 +447,12 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setDocName(WordUtils.capitalize(dto.getDocName()[i]).trim());
 				consult.setDocQualification(Integer.parseInt(dto.getDocQualification()[i]));
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
-				consult.setConsultCharge(Double.parseDouble(dto.getConsultCharge()[i]));
-				
+				consult.setConsultCharge(Double.parseDouble(dto.getConsultCharge()[i]));				
 				consult.setIsActive(1);
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));		
 				
-				
-//				CalculateConsultEligibleAmt(consult, chssapplyid, dto.getBillId());
+				CalculateConsultEligibleAmt(consult, chssapplyid, dto.getBillId());
 				
 				count = dao.ConsultationBillAdd(consult);
 					
@@ -559,7 +563,12 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				allowedamt=rate.getConsultation_1();
 				consult.setConsultType("Fresh");
-				consult.setComments(df.format(allowedamt)+" is admitted.");
+				if (allowedamt <= applyamount) {
+					consult.setComments(df.format(allowedamt)+" is admitted.");
+				} else {
+					consult.setComments(df.format(applyamount)+" is admitted.");
+				}
+				
 			}
 		}
 		
@@ -583,7 +592,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-//		CalculateConsultEligibleAmt(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
+		CalculateConsultEligibleAmt(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
 		
 		
 		long count= dao.ConsultationBillEdit(fetch);
@@ -912,6 +921,8 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 	
+	
+	
 	@Override
 	public List<CHSSOtherItems> OtherItemsList() throws Exception
 	{
@@ -1035,20 +1046,22 @@ public class CHSSServiceImpl implements CHSSService {
 		long empid =  chssapply.getEmpId();
 		List<Object[]> CHSSbillsList = dao.CHSSBillsList(chssapplyid);
 		
-		for(Object[] bill : CHSSbillsList)
+		for(Object[] billdata : CHSSbillsList)
 		{
 			BigDecimal billRemAmt = new BigDecimal(0);
-			String billid =bill[0].toString();
+			String billid =billdata[0].toString();
 			List<CHSSBillConsultation> consultationList = dao.CHSSConsultationList(billid);
 			List<CHSSBillTests> testList  = dao.CHSSTestsList(billid);
 			List<CHSSBillMedicine> medicineList  = dao.CHSSMedicineList(billid);
 			List<CHSSBillOther> otherList  = dao.CHSSOtherList(billid);
-//			List<CHSSBillMisc> miscellaneouList  = dao.CHSSMiscList(billid);
-			
+			List<CHSSBillMisc> miscellaneouList  = dao.CHSSMiscList(billid);
+			CHSSBill bill = dao.getCHSSBill(billid);
 			
 			for(CHSSBillConsultation consult : consultationList)
 			{
 				CalculateConsultEligibleAmt(consult, chssapplyid, billid);
+				
+				consult.setAmountPaid(consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100)));
 				long count= dao.ConsultationBillEdit(consult);
 				billRemAmt = billRemAmt.add (new BigDecimal(consult.getConsultRemAmount()));
 			}
@@ -1056,6 +1069,7 @@ public class CHSSServiceImpl implements CHSSService {
 			for(CHSSBillTests test:testList)
 			{
 				getTestEligibleAmount(test);
+				test.setAmountPaid(test.getTestCost()-(test.getTestCost()*(bill.getDiscountPercent()/100)));
 				long count =dao.TestBillEdit(test);
 				billRemAmt = billRemAmt.add (new BigDecimal(test.getTestRemAmount()));
 			}
@@ -1064,6 +1078,7 @@ public class CHSSServiceImpl implements CHSSService {
 			for(CHSSBillMedicine medicine :medicineList)
 			{
 				calculateMedAmount(medicine,billid,treattypeid);
+				medicine.setAmountPaid(medicine.getMedicineCost()-(medicine.getMedicineCost()*(bill.getDiscountPercent()/100)));
 				long count =dao.MedicineBillEdit(medicine);
 				billRemAmt = billRemAmt.add (new BigDecimal(medicine.getMedsRemAmount()));
 			}
@@ -1073,8 +1088,17 @@ public class CHSSServiceImpl implements CHSSService {
 			for(CHSSBillOther other :otherList)
 			{
 				getOtherItemRemAmount(String.valueOf(empid),other);		
+				other.setAmountPaid(other.getOtherItemCost()-(other.getOtherItemCost()*(bill.getDiscountPercent()/100)));
 				long count =dao.OtherBillEdit(other);
 				billRemAmt = billRemAmt.add (new BigDecimal(other.getOtherRemAmount()));
+			}
+			
+			for(CHSSBillMisc misc :miscellaneouList)
+			{
+				misc.setMiscRemAmount(0.0);
+				misc.setAmountPaid(misc.getMiscItemCost()-(misc.getMiscItemCost()*(bill.getDiscountPercent()/100)));
+				long count =dao.MiscBillEdit(misc);
+				billRemAmt = billRemAmt.add (new BigDecimal(misc.getMiscRemAmount()));
 			}
 			
 			UpdateBillAdmissibleTotal(billid);
@@ -1389,6 +1413,11 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.getCHSSContingent(contingentid);
 	}
 	
+	@Override
+	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception
+	{
+		return dao.CHSSEquipmentList(billid);
+	}
 	
 	@Override
 	public long ContingentGenerate(String CHSSApplyId[],String Username, String action,String billcontent,String logintype,String EmpId,String genTilldate) throws Exception 
@@ -2015,6 +2044,7 @@ public class CHSSServiceImpl implements CHSSService {
 		dispute.setResponseMsg(modal.getResponseMsg());
 		dispute.setResponderEmpid(EmpId);
 		dispute.setResponseTime(sdtf.format(new Date()));
+		dispute.setDispStatus("C");
 		dispute.setModifiedBy(Username);
 		dispute.setModifiedDate(sdtf.format(new Date()));
 		long count= dao.ClaimDisputeAdd(dispute);
@@ -2039,6 +2069,11 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 	
+	@Override
+	public List<Object[]> ClaimDisputeClosedList(String fromdate,String todate)throws Exception
+	{
+		return dao.ClaimDisputeClosedList(fromdate, todate);
+	}
 	
 //	@Override
 //	public int DeleteClaimData(String chssapplyid) throws Exception
@@ -2241,10 +2276,8 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setDocQualification(Integer.parseInt(dto.getDocQualification()[i]));
 				consult.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				consult.setConsultCharge(Double.parseDouble(dto.getConsultCharge()[i]));
-				consult.setAmountPaid(Double.parseDouble(dto.getConsultCharge()[i]));
-				
+//				consult.setAmountPaid(Double.parseDouble(dto.getConsultCharge()[i]));				
 				consult.setConsultRemAmount(Double.parseDouble(dto.getConsultCharge()[i]));
-				
 				consult.setIsActive(1);
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));		
@@ -2253,7 +2286,6 @@ public class CHSSServiceImpl implements CHSSService {
 				count = dao.ConsultationBillAdd(consult);
 					
 			}
-			UpdateBillAdmissibleTotal(dto.getBillId());
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2284,6 +2316,139 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 	
+	
+	
+	@Override
+	public long IPDTestsBillAdd(CHSSTestsDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE IPDTestsBillAdd");		
+		try {
+			
+			long count=0;
+			
+			for(int i=0 ; i<dto.getTestSubId().length; i++)
+			{
+				if(dto.getTestSubId()[i]!=null && dto.getTestCost()[i]!=null && !dto.getTestCost()[i].trim().equals("")) 
+				{
+					CHSSBillTests  test = new CHSSBillTests();
+					
+					test.setBillId(Long.parseLong(dto.getBillId()));
+					test.setTestMainId(Long.parseLong(dto.getTestSubId()[i].split("_")[0]));
+					test.setTestSubId(Long.parseLong(dto.getTestSubId()[i].split("_")[1]));
+					test.setTestCost(Double.parseDouble(dto.getTestCost()[i]));
+					test.setTestRemAmount(Double.parseDouble(dto.getTestCost()[i]));
+					test.setIsActive(1);
+//					getTestEligibleAmount(test);					
+					test.setCreatedBy(dto.getCreatedBy());
+					test.setCreatedDate(sdtf.format(new Date()));
+					
+					
+					count = dao.TestsBillAdd(test);
+				}
+			}
+					
+			return count;
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE TestsBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long IPDTestBillEdit(CHSSBillTests modal) throws Exception
+	{
+		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
+		fetch.setTestMainId(modal.getTestMainId());
+		fetch.setTestSubId(modal.getTestSubId());
+		fetch.setTestCost(modal.getTestCost());
+		fetch.setTestRemAmount(fetch.getTestCost());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.TestBillEdit(fetch);
+		return count;
+	}
+	
+	@Override
+	public long IPDTestBillDelete(String chsstestid, String modifiedby ) throws Exception
+	{
+		CHSSBillTests fetch = dao.getCHSSTest(chsstestid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.TestBillEdit(fetch);
+		
+		return count;
+	}
+	
+	@Override
+	public long IPDMiscBillAdd(CHSSMiscDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE IPDMiscBillAdd");		
+		try {
+			long count=0;
+			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
+			{
+				CHSSBillMisc  misc = new CHSSBillMisc();
+				CHSSBill bill = dao.getCHSSBill(dto.getBillId());
+				misc.setBillId(Long.parseLong(dto.getBillId()));
+				misc.setMiscItemName(WordUtils.capitalize(dto.getMiscItemName()[i]).trim());
+				misc.setMiscItemCost(Double.parseDouble(dto.getMiscItemCost()[i]));
+				misc.setAmountPaid(misc.getMiscItemCost()-(misc.getMiscItemCost() *(bill.getDiscountPercent()/100)));
+				misc.setMiscCount(Integer.parseInt(dto.getMiscCount()[i]));
+				misc.setMiscRemAmount(0);
+				misc.setIsActive(1);
+				misc.setCreatedBy(dto.getCreatedBy());
+				misc.setCreatedDate(sdtf.format(new Date()));
+				count = dao.MiscBillAdd(misc);
+			}
+			
+			
+			UpdateBillAdmissibleTotal(dto.getBillId());
+			
+			return count;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long IPDMiscBillEdit(CHSSBillMisc modal) throws Exception
+	{
+		CHSSBillMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
+		fetch.setMiscItemName(WordUtils.capitalize(modal.getMiscItemName()).trim());
+		fetch.setMiscItemCost(modal.getMiscItemCost());
+		fetch.setAmountPaid(modal.getMiscItemCost()-(modal.getMiscItemCost() *(bill.getDiscountPercent()/100)));
+		fetch.setMiscCount(modal.getMiscCount());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.MiscBillEdit(fetch);
+		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
+		return count;
+	}
+	
+	@Override
+	public long IPDMiscBillDelete(String chssMiscid, String modifiedby ) throws Exception
+	{
+		CHSSBillMisc fetch = dao.getCHSSMisc(chssMiscid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.MiscBillEdit(fetch);
+		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
+		return count;
+	}
+	
 	@Override
 	public Object[] getClaimDisputeData(String chssapplyid) throws Exception
 	{
@@ -2295,4 +2460,194 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		return dao.ClaimDisputeList(fromdate, todate);
 	}
+	
+	
+	@Override
+	public long EquipmentItemAdd(CHSSEquipDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE EquipmentItemAdd");		
+		try {
+			long count=0;
+			for(int i=0 ; i<dto.getEquipName().length ; i++)
+			{
+				CHSSBillEquipment  equip = new CHSSBillEquipment();
+				CHSSBill bill = dao.getCHSSBill(dto.getBillId());
+				equip.setBillId(Long.parseLong(dto.getBillId()));
+				equip.setEquipmentName(WordUtils.capitalize(dto.getEquipName()[i]).trim());
+				equip.setEquipmentCost(Double.parseDouble(dto.getEquipCost()[i]));
+				equip.setAmountPaid(equip.getEquipmentCost()-(equip.getEquipmentCost() *(bill.getDiscountPercent()/100)));
+				equip.setEquipmentRemAmt(0);
+				equip.setIsActive(1);
+				equip.setCreatedBy(dto.getCreatedBy());
+				equip.setCreatedDate(sdtf.format(new Date()));
+				count = dao.EquipmentBillAdd(equip);
+			}
+			
+			return count;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long EquipmentItemEdit(CHSSBillEquipment modal) throws Exception
+	{
+		CHSSBillEquipment fetch = dao.getCHSSEquipment(String.valueOf(modal.getCHSSEquipmentId()));
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
+		fetch.setEquipmentName(WordUtils.capitalize(modal.getEquipmentName()).trim());
+		fetch.setEquipmentCost(modal.getEquipmentCost());
+		fetch.setAmountPaid(modal.getEquipmentCost()-(modal.getEquipmentCost() *(bill.getDiscountPercent()/100)));
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.EquipmentBillEdit(fetch);
+		
+		return count;
+	}
+	
+	@Override
+	public long EquipmentBillDelete(String chssequipid, String modifiedby ) throws Exception
+	{
+		CHSSBillEquipment fetch = dao.getCHSSEquipment(chssequipid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.EquipmentBillEdit(fetch);
+		
+		return count;
+	}
+	
+	
+	
+	
+	@Override
+	public long ImplantItemAdd(CHSSImplantDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE ImplantItemAdd");		
+		try {
+			long count=0;
+			for(int i=0 ; i<dto.getImplantName().length ; i++)
+			{
+				CHSSBillImplants  equip = new CHSSBillImplants();
+				CHSSBill bill = dao.getCHSSBill(dto.getBillId());
+				equip.setBillId(Long.parseLong(dto.getBillId()));
+				equip.setImplantName(WordUtils.capitalize(dto.getImplantName()[i]).trim());
+				equip.setImplantCost(Double.parseDouble(dto.getImplantCost()[i]));
+				equip.setAmountPaid(equip.getImplantCost()-(equip.getImplantCost() *(bill.getDiscountPercent()/100)));
+				equip.setImplantRemAmount(0);
+				equip.setIsActive(1);
+				equip.setCreatedBy(dto.getCreatedBy());
+				equip.setCreatedDate(sdtf.format(new Date()));
+				count = dao.ImplantBillAdd(equip);
+			}
+			
+			return count;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public List<CHSSBillImplants> CHSSImplantList(String billid) throws Exception
+	{
+		return dao.CHSSImplantList(billid);
+	}
+	@Override
+	public long ImplantItemEdit(CHSSBillImplants modal) throws Exception
+	{
+		CHSSBillImplants fetch = dao.getCHSSImplant(String.valueOf(modal.getCHSSImplantId()));
+		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
+		fetch.setImplantName(WordUtils.capitalize(modal.getImplantName()).trim());
+		fetch.setImplantCost(modal.getImplantCost());
+		fetch.setAmountPaid(modal.getImplantCost()-(modal.getImplantCost() *(bill.getDiscountPercent()/100)));
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.ImplantBillEdit(fetch);
+		
+		return count;
+	}
+	
+	@Override
+	public long ImplantBillDelete(String chssImplantid, String modifiedby ) throws Exception
+	{
+		CHSSBillImplants fetch = dao.getCHSSImplant(chssImplantid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.ImplantBillEdit(fetch);
+		
+		return count;
+	}
+	
+	
+	@Override
+	public List<Object[]> IPDClaimAttachments(String chssapplyid)throws Exception
+	{
+		return dao.IPDClaimAttachments(chssapplyid);
+	}
+	
+	@Override
+	public long IPDAttachmentsUpdate(String chssapplyid,String attachtypeid, String value)throws Exception
+	{
+		CHSSIPDAttachments attachment = dao.getIPDClaimAttach(chssapplyid, attachtypeid);
+		
+		if(attachment==null)
+		{
+			attachment=new CHSSIPDAttachments();
+			attachment.setCHSSApplyId(Long.parseLong(chssapplyid));
+			attachment.setIPDAttachTypeId(Integer.parseInt(attachtypeid));
+			attachment.setCopyAttached(value);
+			attachment.setIsActive(1);
+			dao.IPDClaimAttachAdd(attachment);
+		}else
+		{
+			attachment.setCopyAttached(value);
+			attachment.setIsActive(1);
+			dao.IPDClaimAttachEdit(attachment);
+		}
+		
+		return 0;
+	}
+	
+	@Override
+	public long IPDClaimBillDelete(String billid, String modifiedby) throws Exception
+	{
+		CHSSBill fetch = dao.getCHSSBill(billid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		IPDBillItemsDelete(billid, modifiedby);
+		return dao.CHSSBillEdit(fetch);
+	}
+	
+	public int IPDBillItemsDelete(String billid,String username) throws Exception 
+	{
+		int count=0;
+		try {
+			
+			count += dao.billConsultDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billTestsDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billMedsDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billOthersDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+
+	
+	
 }

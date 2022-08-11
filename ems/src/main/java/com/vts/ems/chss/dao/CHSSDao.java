@@ -8,12 +8,15 @@ import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
+import com.vts.ems.chss.model.CHSSBillEquipment;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
+import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDAttachments;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSBillMisc;
@@ -155,6 +158,19 @@ public interface CHSSDao {
 	public List<Object[]> ClaimDisputeList(String fromdate, String todate) throws Exception;
 	public CHSSApplyDispute getCHSSApplyDispute(String chssapplyid) throws Exception;
 	public long ClaimDisputeEdit(CHSSApplyDispute dispute) throws Exception;
+	public long EquipmentBillAdd(CHSSBillEquipment equipment) throws Exception;
+	public CHSSBillEquipment getCHSSEquipment(String equipid) throws Exception;
+	public long EquipmentBillEdit(CHSSBillEquipment equipment) throws Exception;
+	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception;
+	public long ImplantBillAdd(CHSSBillImplants equipment) throws Exception;
+	public CHSSBillImplants getCHSSImplant(String implantid) throws Exception;
+	public List<CHSSBillImplants> CHSSImplantList(String billid) throws Exception;
+	public long ImplantBillEdit(CHSSBillImplants implant) throws Exception;
+	public List<Object[]> IPDClaimAttachments(String chssapplyid) throws Exception;
+	public CHSSIPDAttachments getIPDClaimAttach(String chssapplyid, String attachtypeid) throws Exception;
+	public long IPDClaimAttachEdit(CHSSIPDAttachments Attach) throws Exception;
+	public long IPDClaimAttachAdd(CHSSIPDAttachments Attach) throws Exception;
+	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
 	
 	
 }

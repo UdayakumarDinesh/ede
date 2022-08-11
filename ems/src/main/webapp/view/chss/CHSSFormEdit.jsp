@@ -1064,7 +1064,7 @@ th,td
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						</form>
-					<% }else if( dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y") && ClaimDisputeData[8]==null){ %>
+					<% }else if( dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y") && ClaimDisputeData!=null && ClaimDisputeData[8]==null){ %>
 						<form action="ClaimDisputeResponceSubmit.htm" method="post">
 							<div class="row">
 								<div class="col-md-12 w-100" align="left">

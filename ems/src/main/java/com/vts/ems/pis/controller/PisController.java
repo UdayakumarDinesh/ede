@@ -2019,6 +2019,10 @@ public class PisController {
 			String Username = (String) ses.getAttribute("Username");	
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
+				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
+				ses.setAttribute("formmoduleid", "4");
+				ses.setAttribute("SidebarActive",controllerMapping.replace(".", "_"));
+				
 				String empid = ((Long) ses.getAttribute("EmpId")).toString();	
 				
 				ses.setAttribute("SidebarActive", "FamIncExcFwdList_htm");
