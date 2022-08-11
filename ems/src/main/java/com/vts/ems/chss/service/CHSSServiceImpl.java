@@ -452,7 +452,7 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));		
 				
-				CalculateConsultEligibleAmt(consult, chssapplyid, dto.getBillId());
+				CalculateConsultEligibleAmtNew(consult, chssapplyid, dto.getBillId());
 				
 				count = dao.ConsultationBillAdd(consult);
 					
@@ -467,64 +467,77 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public double getConsultEligibleAmount(CHSSBillConsultation consult,String chssapplyid, String consultmainidold,String billid) throws Exception 
+	public void CalculateConsultEligibleAmtNew(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
 	{		
 		CHSSBill bill = dao.getCHSSBill(billid);
-		String isfresh="";
-		double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
+		
+		Double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
 		consult.setAmountPaid(applyamount);
 		int speciality=consult.getDocQualification();
 		String consultdate=consult.getConsultDate();
 		CHSSDoctorRates rate  = dao.getDocterRate(String.valueOf(speciality));
-		int allowedamt=0;
-		
-		CHSSConsultMain OldConsultMain = dao.getCHSSConsultMain(consultmainidold);
-		
-		LocalDate olddate= LocalDate.parse(OldConsultMain.getConsultDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		LocalDate newdate= LocalDate.parse(consultdate.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		int allowedamt=rate.getConsultation_1();
 		
 		
-		if(olddate.equals(newdate)) {
-			isfresh="Fresh" ;
-		}
-		else if(newdate.isAfter(olddate.plusDays(7)) && newdate.isBefore(olddate.plusDays(14))  ) {
-			isfresh="FollowUp" ;
-		}
-		else if( newdate.isAfter(olddate.plusDays(14))  ) {
-			isfresh="Fresh" ;
-		}
+		String fromdate = LocalDate.parse(consultdate).minusDays(6).toString();
 		
+		List<Object[]> consultlist = dao.CheckPrevConsultInfo(String.valueOf(consult.getConsultationId()), bill.getCHSSConsultMainId(), fromdate, consultdate);
 		
-		if(isfresh.equalsIgnoreCase("Fresh")) 
+		if(consultlist.size()>0) 
 		{
-			allowedamt = rate.getConsultation_1();
-			consult.setConsultType(isfresh);
-			consult.setComments(df.format(consult.getConsultRemAmount())+" is admitted.");
-		}
-		else if(isfresh.equalsIgnoreCase("FollowUp")) 
-		{
-			allowedamt = rate.getConsultation_2();
-			consult.setConsultType(isfresh);
-			consult.setComments("Followup Consultation with in 2 weeks ");
-		}
-		else if(isfresh.equalsIgnoreCase("")) 
-		{
-			allowedamt = 0;
+			allowedamt=0;
 			consult.setConsultType("FollowUp");
-			consult.setComments("Followup Consultation with in a week ");
+			consult.setComments("FollowUp Consultation with in a week ");
 		}
-		
+		else
+		{
+			fromdate = LocalDate.parse(consultdate).minusDays(13).toString();
+			String todate = LocalDate.parse(consultdate).minusDays(6).toString();
+			consultlist = dao.CheckPrevConsultInfo(String.valueOf(consult.getConsultationId()), bill.getCHSSConsultMainId(), fromdate, todate);
+			if(consultlist.size()>0) 
+			{
+				
+				
+				String consulttype = consultlist.get(0)[3].toString();
+				
+				if(consulttype.trim().equalsIgnoreCase("Fresh")) 
+				{
+					allowedamt=rate.getConsultation_2();
+					consult.setConsultType("FollowUp");
+					consult.setComments("FollowUp Consultation with in 2 weeks ");
+				}else if(consulttype.trim().equalsIgnoreCase("FollowUp"))
+				{
+					allowedamt=rate.getConsultation_1();
+					consult.setConsultType("Fresh");
+					if (allowedamt <= applyamount) {
+						consult.setComments(df.format(allowedamt)+" is admitted.");
+					} else {
+						consult.setComments(df.format(applyamount)+" is admitted.");
+					}
+				}
+				
+			}
+			else
+			{
+				allowedamt=rate.getConsultation_1();
+				consult.setConsultType("Fresh");
+				if (allowedamt <= applyamount) {
+					consult.setComments(df.format(allowedamt)+" is admitted.");
+				} else {
+					consult.setComments(df.format(applyamount)+" is admitted.");
+				}
+				
+			}
+		}
 		
 		if (allowedamt <= applyamount) {
 			consult.setConsultRemAmount(allowedamt);
-			return allowedamt;
 		} else {
 			consult.setConsultRemAmount(applyamount);
-			return applyamount;
 		}
 		
-
 	}
+	
 	
 	
 	public void CalculateConsultEligibleAmt(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
@@ -592,7 +605,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		CalculateConsultEligibleAmt(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
+		CalculateConsultEligibleAmtNew(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
 		
 		
 		long count= dao.ConsultationBillEdit(fetch);
@@ -1059,7 +1072,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			for(CHSSBillConsultation consult : consultationList)
 			{
-				CalculateConsultEligibleAmt(consult, chssapplyid, billid);
+				CalculateConsultEligibleAmtNew(consult, chssapplyid, billid);
 				
 				consult.setAmountPaid(consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100)));
 				long count= dao.ConsultationBillEdit(consult);
@@ -1153,8 +1166,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			if(claimstatus==1 || claimstatus==3 ) 
 			{
-				dao.POAcknowldgedUpdate(CHSSApplyId,"0");
-				CHSSUpdateClaimItemsRemAmount(CHSSApplyId);
+				dao.POAcknowldgedUpdate(CHSSApplyId,"0");			
 				claim.setCHSSStatusId(2);
 				if(claimstatus==1)
 				{
@@ -1260,7 +1272,10 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		long count= dao.CHSSApplyEdit(claim);
 		
-		
+		if(claim.getCHSSStatusId()==2) 
+		{
+			CHSSUpdateClaimItemsRemAmount(CHSSApplyId);
+		}
 //		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
 //		{
 //			
@@ -1299,7 +1314,9 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setComments(modal.getComments());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		
+		if(modal.getConsultType()!=null) {
+			fetch.setConsultType(modal.getConsultType());
+		}
 		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
 		{
 			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());

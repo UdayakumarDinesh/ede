@@ -2261,13 +2261,16 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
-	private static final String  CHECKPREVCONSULTINFO = "SELECT cb.billid,cb.chssconsultmainid,cc.consultationid,cc.consulttype,cc.DocQualification,cc.consultdate,cb.billdate FROM chss_bill_consultation cc, chss_bill cb WHERE cb.billid=cc.billid AND cc.isactive=1 AND cb.isactive=1 AND cc.consultationid <> :consultationid   AND cb.chssconsultmainid= :consultmainid AND  (cc.consultdate BETWEEN :fromdate AND :todate ) ";
+	private static final String  CHECKPREVCONSULTINFO = "SELECT cb.billid,cb.chssconsultmainid,cc.consultationid,cc.consulttype,cc.DocQualification,cc.consultdate,cb.billdate FROM chss_bill_consultation cc, chss_bill cb , chss_apply ca  WHERE cb.billid=cc.billid AND cc.isactive=1 AND cb.isactive=1 AND ca.chssapplyid=cb.chssapplyid AND ca.chssstatusid > 1  AND cc.consultRemAmount > 0 AND cc.consultationid <> :consultationid  AND cb.chssconsultmainid= :consultmainid AND  (cc.consultdate BETWEEN :fromdate AND :todate ) ";
 	
 	@Override
 	public List<Object[]> CheckPrevConsultInfo(String consultationid,long consultmainid,String fromdate,String todate)throws Exception
 	{
 		logger.info(new Date() + "Inside DAO CheckPrevConsultInfo");
 		try {
+			
+			System.out.println(fromdate);
+			System.out.println(todate);
 			
 			Query query = manager.createNativeQuery(CHECKPREVCONSULTINFO);
 			query.setParameter("consultmainid",consultmainid);

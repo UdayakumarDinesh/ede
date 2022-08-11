@@ -157,7 +157,7 @@ th,td
 	String ActivateDisp=(String)request.getAttribute("ActivateDisp");
 	String dispReplyEnable = (String)request.getAttribute("dispReplyEnable");
 	
-	boolean showhistorybtn = (showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y"));
+	boolean showhistorybtn = (  isapproval.equalsIgnoreCase("Y"));
 	boolean showRemAmtText =((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15) ;
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
@@ -457,7 +457,16 @@ th,td
 													<tr>
 														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
-														<td class="text-blue" ><%=consult[2] %></td>
+														<td class="text-blue" >
+															<% if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+																<select name="consulttype-<%=consult[0]%>"  class="form-control"  >
+																	<option value="Fresh" <%if(consult[2].toString().trim().equalsIgnoreCase("Fresh")){ %> selected <%} %> >Fresh</option>
+																	<option value="FollowUp" <%if(consult[2].toString().trim().equalsIgnoreCase("FollowUp")){ %> selected <%} %> >FollowUp</option>
+																</select>
+															<%}else{ %>
+																<%=consult[2] %>
+															<%} %>
+														</td>
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
 														

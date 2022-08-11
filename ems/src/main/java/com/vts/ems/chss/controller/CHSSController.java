@@ -1808,10 +1808,12 @@ public class CHSSController {
 			String consultationid = req.getParameter("consultationid"); 
 			
 			String consultremamount = req.getParameter("consultremamount-"+consultationid);
+			String consulttype = req.getParameter("consulttype-"+consultationid);
 			String consultcomment = req.getParameter("consultcomment-"+consultationid);
 			
 			CHSSBillConsultation consult= new CHSSBillConsultation();
 			consult.setConsultationId(Long.parseLong(consultationid));
+			consult.setConsultType(consulttype);
 			consult.setConsultRemAmount(Double.parseDouble(consultremamount));
 			consult.setComments(consultcomment);
 			consult.setModifiedBy(Username);
@@ -3139,12 +3141,11 @@ public class CHSSController {
 			
 			medicinelist.setMedNo(String.valueOf(++MedNo));
 			medicinelist.setMedicineName(WordUtils.capitalizeFully(medicinename.trim()));
-			medicinelist.setTreatTypeId(Long.parseLong(trattypeid));
+			medicinelist.setTreatTypeId(Long.parseLong("1"));
+			medicinelist.setIsAdmissible("N");
 			medicinelist.setCategoryId(0l);
 			medicinelist.setIsActive(1);
 			long count = service.AddMedicine(medicinelist);
-			
-			
 			
 			
 			if (count > 0) {
