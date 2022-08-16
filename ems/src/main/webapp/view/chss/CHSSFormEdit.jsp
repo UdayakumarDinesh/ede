@@ -326,7 +326,6 @@ th,td
 											<th style="text-align: center;width: 5%">SN</th>
 											<th style="width: 50%">Doctor</th>
 											<th style="width: 30%">Qualification</th>
-											<th style="text-align: center;width: 15%">Consultation Date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -334,8 +333,7 @@ th,td
 										<tr>
 											<td style="text-align: center;" ><%=consultmainlist.indexOf(consultmain)+1 %></td>
 											<td><%=consultmain[1] %></td>
-											<td><%=consultmain[4] %></td>
-											<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(consultmain[3].toString()) %></td>		
+											<td><%=consultmain[3] %></td>
 										</tr>
 										<%} %>
 									</tbody>
@@ -465,7 +463,7 @@ th,td
 																</select>
 															<%}else{ %>
 																<%=consult[2] %>
-															<%} %>
+															<% } %>
 														</td>
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
@@ -1006,7 +1004,7 @@ th,td
 									<tr>
 										<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
 											<%=employee[2] %>&nbsp; :
-											<span style="border:none;" class="text-blue" >	<%=ClaimDisputeData[2] %></span>
+											<span style="border:none; color: red;" >	<%=ClaimDisputeData[2] %></span>
 										</td>
 									</tr>
 									<%if(ClaimDisputeData[8]!=null){ %>
@@ -1017,7 +1015,7 @@ th,td
 											</td>
 										</tr>
 									
-									<%} %>
+									<% } %>
 									
 								</table>
 							<%} %>

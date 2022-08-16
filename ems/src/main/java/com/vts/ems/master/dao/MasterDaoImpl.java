@@ -185,6 +185,7 @@ public class MasterDaoImpl implements MasterDao{
 			return null;
 		}
 	}
+	
 	private static final String MEDICINELISTBYTREATMENT="SELECT a.medicineid , b.treatmentname , a.medicinename,a.medno, isadmissible FROM chss_medicines_list a ,chss_treattype b WHERE a.treattypeid=b.treattypeid AND a.isactive=1 AND a.treattypeid =:treatmentid ORDER BY medno DESC";
 	@Override
 	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception
@@ -200,6 +201,8 @@ public class MasterDaoImpl implements MasterDao{
 			return null;
 		}
 	}
+	
+	
 	private static final String TREATMENTTYPE="SELECT treattypeid , treatmentname FROM chss_treattype";
 	@Override
 	public List<Object[]> GetTreatmentType()throws Exception

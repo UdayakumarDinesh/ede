@@ -99,7 +99,6 @@ public class CHSSDaoImpl implements CHSSDao {
 		Query query =manager.createNativeQuery(EMPLOYEE);
 		Object[] result = null;
 		query.setParameter("empid", empid);
-		
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
@@ -1366,7 +1365,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		return list;
 	}
-	private static final String GETCHSSCONSULTMAINLIST = "SELECT   ccm.CHSSConsultMainId,ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM   chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSConsultMainId IN ( SELECT cb.CHSSConsultMainId FROM chss_bill cb WHERE cb.IsActive=1 AND cb.CHSSApplyId = :applyid ) AND  ccm.CHSSApplyId <> :applyid UNION SELECT ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName, ccm.ConsultDate,ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM  chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSApplyId = :applyid ";
+	private static final String GETCHSSCONSULTMAINLIST = "SELECT   ccm.CHSSConsultMainId,ccm.CHSSApplyId, ccm.DocName, ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM   chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSConsultMainId IN ( SELECT cb.CHSSConsultMainId FROM chss_bill cb WHERE cb.IsActive=1 AND cb.CHSSApplyId = :applyid ) AND  ccm.CHSSApplyId <> :applyid UNION SELECT ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName,ccm.DocQualification, (SELECT COUNT(cb1.BillId) FROM chss_bill cb1 WHERE cb1.isactive=1 AND  ccm.CHSSConsultMainId = cb1.CHSSConsultMainId AND cb1.CHSSApplyId=:applyid ) AS 'billscount' FROM  chss_consult_main ccm WHERE ccm.IsActive = 1 AND  ccm.CHSSApplyId = :applyid ";
 	
 	@Override
 	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception
@@ -1575,7 +1574,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String PATIENTCONSULTHISTORY  ="SELECT  ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.ConsultDate, ccm.DocName, ca.Ailment FROM  chss_apply ca,chss_apply ca1,  chss_consult_main ccm WHERE ca.CHSSApplyId = ccm.CHSSApplyId  AND ccm.isactive = 1  AND ca.isactive = 1  AND ccm.CHSSConsultMainId NOT IN  (SELECT     ccm1.CHSSConsultMainId  FROM    chss_consult_main ccm1  WHERE ccm1.CHSSApplyId = :chssapplyid) AND ca.TreatTypeId = ca1.TreatTypeId   AND ca.EmpId=ca1.EmpId AND ca.PatientId = ca1.PatientId AND ca.IsSelf = ca1.IsSelf  AND ca1.CHSSApplyId =:chssapplyid";   /*  AND ca.CHSSStatusId =14   */
+	private static final String PATIENTCONSULTHISTORY  ="SELECT  ccm.CHSSConsultMainId, ccm.CHSSApplyId, ccm.DocName, ca.Ailment FROM  chss_apply ca,chss_apply ca1,  chss_consult_main ccm WHERE ca.CHSSApplyId = ccm.CHSSApplyId  AND ccm.isactive = 1  AND ca.isactive = 1  AND ccm.CHSSConsultMainId NOT IN  (SELECT     ccm1.CHSSConsultMainId  FROM    chss_consult_main ccm1  WHERE ccm1.CHSSApplyId = :chssapplyid) AND ca.TreatTypeId = ca1.TreatTypeId   AND ca.EmpId=ca1.EmpId AND ca.PatientId = ca1.PatientId AND ca.IsSelf = ca1.IsSelf  AND ca1.CHSSApplyId =:chssapplyid";   /*  AND ca.CHSSStatusId =14   */
 	@Override
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception
 	{
@@ -1828,7 +1827,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	
-	private static final String CLAIMCONSULTMAINLIST = "SELECT DISTINCT ccm.chssconsultmainid,ccm.docname,ccm.docQualification,ccm.consultdate,cdr.docqualification as 'Qualification' FROM chss_apply ca, chss_bill cb,chss_consult_main ccm,chss_doctor_rates cdr WHERE cb.isactive=1 AND cb.chssconsultmainid = ccm.chssconsultmainid AND ca.chssapplyid=cb.chssapplyid AND ccm.docqualification = cdr.docrateid AND ca.chssapplyid= :CHSSApplyId";
+	private static final String CLAIMCONSULTMAINLIST = "SELECT DISTINCT ccm.chssconsultmainid,ccm.docname,ccm.docQualification,cdr.docqualification as 'Qualification' FROM chss_apply ca, chss_bill cb,chss_consult_main ccm,chss_doctor_rates cdr WHERE cb.isactive=1 AND cb.chssconsultmainid = ccm.chssconsultmainid AND ca.chssapplyid=cb.chssapplyid AND ccm.docqualification = cdr.docrateid AND ca.chssapplyid= :CHSSApplyId";
 
 	@Override
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception
@@ -2268,10 +2267,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	{
 		logger.info(new Date() + "Inside DAO CheckPrevConsultInfo");
 		try {
-			
-			System.out.println(fromdate);
-			System.out.println(todate);
-			
+		
 			Query query = manager.createNativeQuery(CHECKPREVCONSULTINFO);
 			query.setParameter("consultmainid",consultmainid);
 			query.setParameter("consultationid", consultationid);

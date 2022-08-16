@@ -114,7 +114,6 @@ public interface CHSSDao {
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public int ConsultBillsDelete(String consultmainid) throws Exception;
 	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
-	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
@@ -171,6 +170,7 @@ public interface CHSSDao {
 	public long IPDClaimAttachEdit(CHSSIPDAttachments Attach) throws Exception;
 	public long IPDClaimAttachAdd(CHSSIPDAttachments Attach) throws Exception;
 	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
+	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	
 	
 }

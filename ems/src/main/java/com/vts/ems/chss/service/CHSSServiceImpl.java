@@ -194,7 +194,7 @@ public class CHSSServiceImpl implements CHSSService {
 //				conmain.setConsultType(dto.getConsulttype()[i]);
 				conmain.setDocQualification(Integer.parseInt(dto.getDocQualification()[i]));
 				conmain.setCHSSApplyId(applyid);
-				conmain.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
+//				conmain.setConsultDate(sdf.format(rdf.parse(dto.getConsultDate()[i])));
 				conmain.setDocName(WordUtils.capitalize(dto.getDocName()[i]).trim());
 				conmain.setCreatedBy(dto.getCreatedBy());
 				conmain.setCreatedDate(sdtf.format(new Date()));
@@ -300,7 +300,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSConsultMain fetch = dao.getCHSSConsultMain(String.valueOf(consultmain.getCHSSConsultMainId()));
 		
 		fetch.setDocName(WordUtils.capitalize(consultmain.getDocName()).trim());
-		fetch.setConsultDate(consultmain.getConsultDate());
+//		fetch.setConsultDate(consultmain.getConsultDate());
 		fetch.setDocQualification(consultmain.getDocQualification());
 		fetch.setModifiedBy(consultmain.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
@@ -516,61 +516,6 @@ public class CHSSServiceImpl implements CHSSService {
 					}
 				}
 				
-			}
-			else
-			{
-				allowedamt=rate.getConsultation_1();
-				consult.setConsultType("Fresh");
-				if (allowedamt <= applyamount) {
-					consult.setComments(df.format(allowedamt)+" is admitted.");
-				} else {
-					consult.setComments(df.format(applyamount)+" is admitted.");
-				}
-				
-			}
-		}
-		
-		if (allowedamt <= applyamount) {
-			consult.setConsultRemAmount(allowedamt);
-		} else {
-			consult.setConsultRemAmount(applyamount);
-		}
-		
-	}
-	
-	
-	
-	public void CalculateConsultEligibleAmt(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
-	{		
-		CHSSBill bill = dao.getCHSSBill(billid);
-		
-		Double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
-		consult.setAmountPaid(applyamount);
-		int speciality=consult.getDocQualification();
-		String consultdate=consult.getConsultDate();
-		CHSSDoctorRates rate  = dao.getDocterRate(String.valueOf(speciality));
-		int allowedamt=rate.getConsultation_1();
-		
-		
-		String fromdate = LocalDate.parse(consultdate).minusDays(6).toString();
-		
-		List<Object[]> consultlist = dao.CheckPrevConsultInfo(String.valueOf(consult.getConsultationId()), bill.getCHSSConsultMainId(), fromdate, consultdate);
-		
-		if(consultlist.size()>0) 
-		{
-			allowedamt=0;
-			consult.setConsultType("FollowUp");
-			consult.setComments("FollowUp Consultation with in a week ");
-		}
-		else
-		{
-			fromdate = LocalDate.parse(consultdate).minusDays(13).toString();
-			consultlist = dao.CheckPrevConsultInfo(String.valueOf(consult.getConsultationId()), bill.getCHSSConsultMainId(), fromdate, consultdate);
-			if(consultlist.size()>0) 
-			{
-				allowedamt=rate.getConsultation_2();
-				consult.setConsultType("FollowUp");
-				consult.setComments("FollowUp Consultation with in 2 weeks ");
 			}
 			else
 			{

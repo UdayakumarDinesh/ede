@@ -310,7 +310,7 @@ public class CHSSController {
 			
 			dto.setCHSSApplyId(chssapplyid);
 			dto.setDocName(docname);
-			dto.setConsultDate(consultdate); 
+//			dto.setConsultDate(consultdate); 
 			dto.setDocQualification(docqualification);
 			dto.setCreatedBy(Username);
 			
@@ -344,7 +344,7 @@ public class CHSSController {
 			CHSSConsultMain consultmain = new CHSSConsultMain();
 			consultmain.setCHSSConsultMainId(Long.parseLong(consultmainid));
 			consultmain.setDocName(docname);
-			consultmain.setConsultDate(sdf.format(rdf.parse(consultdate)));
+//			consultmain.setConsultDate(sdf.format(rdf.parse(consultdate)));
 			consultmain.setModifiedBy(Username);
 			consultmain.setDocQualification(Integer.parseInt(docqualification));
 			long count = service.CHSSConsultMainEdit(consultmain);
@@ -445,7 +445,6 @@ public class CHSSController {
 			req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
 			req.setAttribute("medicinecount", service.claimMedicinesCount(chssapplyid));
 			req.setAttribute("allowedmed", service.getCHSSMedicinesList(apply[7].toString()));
-//			req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
 			
 			req.setAttribute("consultmain", service.getCHSSConsultMain(consultmainid));
 			req.setAttribute("consultmainid", consultmainid);	
@@ -2208,8 +2207,6 @@ public class CHSSController {
 				}	
 			}
 			
-			
-			
 			return "redirect:/ContingentApprovals.htm";
 		} catch (Exception e) {
 			
@@ -2260,6 +2257,7 @@ public class CHSSController {
 			req.setAttribute("todate", todate);
 			req.setAttribute("ContingentList", service.getCHSSContingentList(LoginType,fromdate,todate));
 			req.setAttribute("logintype", LoginType);
+			req.setAttribute("isapproval", "Y");
 			
 			return "chss/ContingentBillsList";
 		}catch (Exception e) {
@@ -2405,17 +2403,25 @@ public class CHSSController {
 				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
 		
-			req.setAttribute("fromdate", fromdate);
-			req.setAttribute("todate", todate);
+			redir.addFlashAttribute("fromdate", fromdate);
+			redir.addFlashAttribute("todate", todate);
+			redir.addFlashAttribute("tab","approved");
 			
-			List<Object[]> approvedlist = service.getCHSSContingentList("0",fromdate,todate);
-			req.setAttribute("ApprovedBills", approvedlist);
+			return "redirect:/ContingentBillsList.htm";
+			
+//			List<Object[]> approvedlist = service.getCHSSContingentList("0",fromdate,todate);
+//			req.setAttribute("ApprovedBills", approvedlist);
+			
+//			return "chss/ContingentApprovedBills";
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ApprovedBills.htm "+UserId, e); 
 			return "static/Error";
 		}
-		return "chss/ContingentApprovedBills";
+		
 	}
 	
 	
@@ -2897,8 +2903,6 @@ public class CHSSController {
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
 			}
 			
-//			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-//			{
 				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 				req.setAttribute("consultcount", service.claimConsultationsCount(chssapplyid));
 				
@@ -2907,34 +2911,6 @@ public class CHSSController {
 				req.setAttribute("consulthistory", service.PatientConsultHistory(chssapplyid));
 				
 				return "chss/CHSSClaimConsult";
-//			}
-//			else
-//			{
-//				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
-//				String billid ="0";
-//				if(chssbill.size()>0){
-//					billid = chssbill.get(0)[0].toString();
-//				}
-//				
-//				req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
-//				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
-//				req.setAttribute("miscitems", service.CHSSMiscList(billid));
-//				
-//				req.setAttribute("consultations", service.CHSSConsultationList(billid));
-//				req.setAttribute("billtests", service.CHSSTestsList(billid));
-//				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
-//				req.setAttribute("chssbill", chssbill );
-//				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
-//				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
-//				
-//				return "chss/CHSSIPDDataPage";
-				
-				
-//				return "redirect:/CHSSIPDApply.htm";
-				
-				
-//			}
-			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -3015,9 +2991,6 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
-	
-	
-	
 	
 	
 	@RequestMapping(value = "CHSSIPDBasicInfoAdd.htm" )
@@ -3557,7 +3530,7 @@ public class CHSSController {
 	}
 	
 	@RequestMapping(value ="ContingentBillsList.htm" )
-	public String ContingentBillsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	public String ContingentBillsList(Model model,HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
@@ -3567,6 +3540,16 @@ public class CHSSController {
 			
 			String fromdate = req.getParameter("fromdate");
 			String todate = req.getParameter("todate");
+			String tab=  req.getParameter("tab");
+			
+			if(fromdate==null) {
+				
+				Map md=model.asMap();
+				fromdate=(String)md.get("fromdate");
+				todate=(String)md.get("todate");
+				tab=(String)md.get("tab");
+			}
+			
 			
 			LocalDate today=LocalDate.now();
 			
@@ -3583,6 +3566,8 @@ public class CHSSController {
 				}
 				fromdate +="-04-01"; 
 				todate +="-03-31";
+				
+				tab="progress";
 			}else
 			{
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
@@ -3591,8 +3576,11 @@ public class CHSSController {
 		
 			req.setAttribute("fromdate", fromdate);
 			req.setAttribute("todate", todate);
-			req.setAttribute("ContingentList", service.getCHSSContingentList("1",fromdate,todate));
+			
+			req.setAttribute("ApprovedBills", service.getCHSSContingentList("0",fromdate,todate));
+			req.setAttribute("ProgressBills", service.getCHSSContingentList("1",fromdate,todate));
 			req.setAttribute("logintype", LoginType);
+			req.setAttribute("tab",tab);
 			return "chss/ContingentBillsAll";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -228,7 +228,7 @@ table th:last-child{
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
 									<div style="text-align: center;margin: 3px;width: 99%">
-										<b style="color: #F32424">Consultations in this claim</b>
+										<b style="color: #F32424">Doctor(s) Consulted for this Ailment</b>
 									</div>
 									<table class="table table-bordered table-hover table-condensed info shadow-nohover roundedCorners ">
 										
@@ -236,7 +236,7 @@ table th:last-child{
 											<tr>
 												<th style="width:5%;" >SN</th>
 												<th style="width:30%;" >Doctor Name</th>
-												<th style="width:20%;" > Date </th>
+												<!-- <th style="width:20%;" > Date </th> -->
 												<th style="width:25%;" >Qualification  </th>
 												<th style="width:20%;" >Action  </th>
 											</tr>
@@ -254,11 +254,12 @@ table th:last-child{
 											<tr class="" >
 												<%if(chssapplydata[0].toString().equalsIgnoreCase(cmain[1].toString())){ %>
 													<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
-													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%;text-transform: capitalize; "  maxlength="500" required="required"></td>													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
+													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"   value="<%=cmain[2] %>" style="width:100%;text-transform: capitalize; "  maxlength="500" required="required"></td>
+													<%-- <td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td> --%>
 													<td>
 														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
 															<%for(CHSSDoctorRates rate:doctorrates ){ %>
-																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[4].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
+																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[3].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
 															<%} %>
 														</select>
 													</td>
@@ -284,7 +285,7 @@ table th:last-child{
 													<td>
 														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
 															<%for(CHSSDoctorRates rate:doctorrates ){ %>
-																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[4].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
+																<option value="<%=rate.getDocRateId() %>" <%if(rate.getDocRateId()==Integer.parseInt(cmain[3].toString())){ %>selected  <%} %> ><%=rate.getDocQualification() %></option>
 															<%} %>
 														</select>
 													</td>
@@ -301,7 +302,7 @@ table th:last-child{
 											<%if(sno==0){ %>
 												<tr>
 													<td colspan="6" style="text-align: center ;">
-														Consultations Not Added
+														No Records Found
 													</td>
 												</tr>
 											
@@ -325,7 +326,7 @@ table th:last-child{
 										<tr class="" >
 											<td style="width:5%;text-align: center;"><span class="sno" id="sno"><%=++sno %></span> </td>
 											<td style="width:30%;" ><input type="text" class="form-control items" name="docname"  value="" style="width:100%; "  maxlength="500" required="required"></td>
-											<td style="width:20%;" ><input type="text" class="form-control consultdate " name="consultdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td>
+											<!-- <td style="width:20%;" ><input type="text" class="form-control consultdate " name="consultdate"  value="" style="width:100%; "    maxlength="10" readonly required="required"></td> -->
 											<td style="width:25%;">
 												<select class="form-control" name="doc-qualification" required="required" >
 													<%for(CHSSDoctorRates rate:doctorrates ){ %>
@@ -343,7 +344,6 @@ table th:last-child{
 						</form>
 						</div>
 				
-				
 						<div class="col-md-6">
 							
 							<form method="post" action="#" autocomplete="off"  >
@@ -351,14 +351,14 @@ table th:last-child{
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
 									<div  style="text-align: center;margin: 3px;width: 99%">
-										<b style="color: #F32424">Add From Previous Consultations</b>
+										<b style="color: #F32424">Doctor(s) Data from previous Claims</b>
 									</div>
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover roundedCorners" >
 										<thead>
 											<tr>
 												<th style="width:5%;" >SN</th>
 												<th style="width:50%;" >Doctor Name</th>
-												<th style="width:20%;" > Date </th>
+												<!-- <th style="width:20%;" > Date </th> -->
 												<th style="width:25%;" >Action  </th>
 											</tr>
 										</thead>
@@ -375,8 +375,8 @@ table th:last-child{
 											<tr class="" >
 											
 												<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno1 %></span> </td>
-												<td> <%=consult[3]%></td>
-												<td> <%=rdf.format(sdf.parse(consult[2].toString())) %></td>
+												<td> <%=consult[2]%></td>
+												<%-- <td> <%=rdf.format(sdf.parse(consult[2].toString())) %></td> --%>
 											
 												<td>
 													<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=consult[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
@@ -391,7 +391,7 @@ table th:last-child{
 											<%if(sno1==0){ %>
 												<tr>
 													<td colspan="6" style="text-align: center ;">
-														Previous Consultations Not Found
+														No Records Found
 													</td>
 												</tr>
 											
@@ -477,7 +477,7 @@ function  onlyNumbers() {
 
 }
 
-$('.consultdate').daterangepicker({
+/* $('.consultdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
@@ -488,7 +488,7 @@ $('.consultdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-
+ */
 function setTooltip()
 {
 	$('[data-toggle="tooltip"]').tooltip({
