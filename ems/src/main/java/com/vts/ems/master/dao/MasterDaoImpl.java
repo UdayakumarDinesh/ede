@@ -324,7 +324,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	
 	@Override
 	public List<Object[]> GetDoctorList()throws Exception
-	{                       
+	{                                           
 		logger.info(new Date() +"Inside DAO GetDoctorList()");
 		try {
 			
