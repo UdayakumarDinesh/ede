@@ -3625,6 +3625,7 @@ public class CHSSController {
 			file_header_Style.setWrapText(true);
 			file_header_Style.setAlignment(HorizontalAlignment.CENTER);
 			file_header_Style.setVerticalAlignment(VerticalAlignment.CENTER);
+			
 			// style for table header
 			CellStyle t_header_style = workbook.createCellStyle();
 			t_header_style.setLocked(true);
@@ -3642,6 +3643,19 @@ public class CHSSController {
 			cell.setCellValue("CHSS Contingent Bill Pay Report \r\nRef: "+contingentdata[1].toString());
 			file_header_row.setHeightInPoints((3*sheet.getDefaultRowHeightInPoints()));
 			cell.setCellStyle(file_header_Style);
+			
+			CellStyle file_header_Style2 = workbook.createCellStyle();
+			file_header_Style2.setLocked(true);
+			file_header_Style2.setFont(font);
+			file_header_Style2.setWrapText(true);
+			file_header_Style2.setAlignment(HorizontalAlignment.RIGHT);
+			file_header_Style2.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+			Row file_header_row2 = sheet.createRow(rowNo++);
+			sheet.addMergedRegion(new CellRangeAddress(1, 1,0, 4));   // Merging Header Cells 
+			cell= file_header_row2.createCell(0);
+			cell.setCellValue("Approved On : "+DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString()));
+			cell.setCellStyle(file_header_Style2);
 
 			// Table in file header Row
 			Row t_header_row = sheet.createRow(rowNo++);
