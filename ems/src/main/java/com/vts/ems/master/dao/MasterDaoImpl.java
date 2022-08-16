@@ -321,7 +321,7 @@ public class MasterDaoImpl implements MasterDao{
 		}		
 	}
 private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a.docqualification ,a.docrating ,a.consultation_1 ,a.consultation_2  FROM chss_doctor_rates a , chss_treattype b WHERE a.isactive='1' AND a.treattypeid = b.treattypeid order by a.treattypeid asc,a.docrateid desc";
-	
+	 
 	@Override
 	public List<Object[]> GetDoctorList()throws Exception
 	{                                           
