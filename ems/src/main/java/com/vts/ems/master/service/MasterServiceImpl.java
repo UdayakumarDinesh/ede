@@ -140,9 +140,20 @@ public class MasterServiceImpl implements MasterService {
 	}
 	
 	@Override
+	public CHSSDoctorRates getCHSSDoctorRates(int DocRateId) throws Exception {
+		return dao.getCHSSDoctorRates(DocRateId);
+	}
+	
+	@Override
 	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
 		return dao.AddMedicine(medicine);
+	}
+	
+	@Override
+	public int AddDocQualification(CHSSDoctorRates  DocRate)throws Exception
+	{
+		return dao.AddDocQualification(DocRate);
 	}
 	
 	@Override
@@ -186,8 +197,8 @@ public class MasterServiceImpl implements MasterService {
 	{	
 		CHSSDoctorRates doctor = dao.getCHSSDocRate(docrate.getDocRateId());
 		
-		//doctor.setTreatTypeId(docrate.getTreatTypeId());
-		//doctor.setDocQualification(docrate.getDocQualification());
+		doctor.setTreatTypeId(docrate.getTreatTypeId());
+		doctor.setDocQualification(docrate.getDocQualification());
 		//doctor.setDocRating(docrate.getDocRating());
 		doctor.setConsultation_1(docrate.getConsultation_1());
 		doctor.setConsultation_2(docrate.getConsultation_2());
@@ -355,6 +366,11 @@ public class MasterServiceImpl implements MasterService {
 	public int CheckduplicateTestCode(String testcode)throws Exception
 	{
 		return dao.CheckduplicateTestCode(testcode);
+	}
+	@Override
+	public int DuplicateDocQualification(String treatment,String qualification)throws Exception
+	{
+		return dao.DuplicateDocQualification(treatment , qualification);
 	}
 	@Override
 	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId,String basicto)throws Exception

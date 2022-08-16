@@ -25,7 +25,6 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="MasterDashBoard.htm"> Master </a></li>
-						
 						<li class="breadcrumb-item active " aria-current="page">CHSS Doctors List</li>
 					</ol>
 				</div>
@@ -52,7 +51,7 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 		 <div class="card">
 		 <div class="card-body main-card">
 		 		
-		 		<form action="DoctorsMasterEdit.htm" method="POST" id="empForm" autocomplete="off"  enctype="multipart/form-data" >
+		 		<form action="DoctorsMasterAdd.htm" method="POST" id="empForm" autocomplete="off"  enctype="multipart/form-data" >
 		 
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
@@ -61,85 +60,47 @@ List<Object[]> doctorlist = (List<Object[]>)request.getAttribute("doctorlist");
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
-										<th>SN</th>
+										<th>Select</th>
 										<th>Treatment</th>
 										<th>Doctor-Qualification</th>
 										<!-- <th>Doctor-Rating</th> -->
 										<th>Consultation-1</th>
 										<th>Consultation-2</th>
-										<th>Action</th>
+										<!-- <th>Action</th> -->
 									</tr>
 								</thead>
 								<tbody>
 									<%long slno=0;
 							for(Object[] obj : doctorlist){ 
-								slno++;
-								String  Consultation1= "Consultation1"+String.valueOf(obj[0]); 
-								String  Consultation2 = "Consultation2"+String.valueOf(obj[0]); 
+								
 								%>
 										<tr>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=slno%>.</td>
+											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"> <input type="radio" name="DocRateId" value="<%=obj[0]%>"></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1]%></td>
 											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[2]%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right"><input type="text"  class="form-control " name="<%=Consultation1%>"  value="<%=obj[4]%>"> </td>
-											<td style="padding-top:5px; padding-bottom: 5px;text-align: right"><input type="text"  class="form-control " name="<%=Consultation2%>"  value="<%=obj[5]%>"> </td>
-											<td style="padding-top:5px; padding-bottom: 5px;" align="center">
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: left;"> <%=obj[4]%></td>
+											<td style="padding-top:5px; padding-bottom: 5px;text-align: left;"> <%=obj[5]%></td>
+											<%-- <td style="padding-top:5px; padding-bottom: 5px;" align="center">
 											<input type="hidden" name="Action"	value="EDITDOCRATE" />
 											<button type="submit" class="btn btn-sm" name="Rateid" value="<%=obj[0]%>"  data-toggle="tooltip" onclick="return CommentModel('<%=obj[0]%>');" data-placement="top" title="Edit">
 												<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 											</button>
-											</td>
+											</td> --%>
 										</tr>
 									<%}%>
 								</tbody>
 							</table>
-							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+			
 						</div>	
-					<%if(doctorlist!=null){ %>	
-							<!--------------------------- container ------------------------->
-			<div class="container">
-					
-				<!-- The Modal -->
-				<div class="modal" id="myModal">
-					 <div class="modal-dialog">
-					    <div class="modal-content">
-					     
-					        <!-- Modal Header -->
-					        <div class="modal-header">
-					          <h4 class="modal-title">The Reason For Edit</h4>
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        </div>
-					        <!-- Modal body -->
-					       <div class="modal-body">
-					             <div class="form-inline">
-					        	 <div class="form-group "  >
-					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile" > 
-					      		 </div>
-					      		 </div>
-					        	
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
-					      		</div>
-					      		</div>
-					      </div>
-					      
-					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					        <!-- Modal footer -->
-					        <div class="modal-footer" >
-					        <input type="hidden" id="DocRateid" name="DocRateid" value=""> 
-					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
-					        </div>
-					       
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					<%} %>
-					<!----------------------------- container Close ---------------------------->	
-					</form>		
+		<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+			   <div class="row text-center">
+						<div class="col-md-12">					
+							<button type="submit" class="btn btn-sm add-btn"  name="Action" value="ADD" >ADD</button>
+							<button type="submit" class="btn btn-sm edit-btn"  name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>									
+					    </div>						 
+				</div>
+
+		</form>		
 		 </div>
 		 </div>
 		 </div>

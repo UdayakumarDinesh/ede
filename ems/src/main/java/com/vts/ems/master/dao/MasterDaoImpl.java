@@ -258,6 +258,27 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 	@Override
+	public CHSSDoctorRates getCHSSDoctorRates(int DocRateId) throws Exception
+	{
+		logger.info(new Date() + "Inside getCHSSDoctorRates()");
+		CHSSDoctorRates memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSDoctorRates> cq = cb.createQuery(CHSSDoctorRates.class);
+			Root<CHSSDoctorRates> root = cq.from(CHSSDoctorRates.class);
+			Predicate p1 = cb.equal(root.get("DocRateId"), DocRateId);
+			cq = cq.select(root).where(p1);
+			TypedQuery<CHSSDoctorRates> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+			return memeber;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
+	
+	@Override
 	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
 		logger.info(new Date() + "Inside AddMedicine()");
@@ -273,6 +294,20 @@ public class MasterDaoImpl implements MasterDao{
 	}
 	
 	@Override
+	public int AddDocQualification(CHSSDoctorRates  DocRate)throws Exception
+	{
+		logger.info(new Date() + "Inside AddDocQualification()");
+		try {
+			manager.persist(DocRate);
+			manager.flush();
+			return DocRate.getDocRateId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
 	public Long EditMedicine(CHSSMedicinesList item) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO EditMedicine()");
@@ -285,7 +320,7 @@ public class MasterDaoImpl implements MasterDao{
 			return 0l;
 		}		
 	}
-private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a.docqualification ,a.docrating ,a.consultation_1 ,a.consultation_2  FROM chss_doctor_rates a , chss_treattype b WHERE a.isactive='1' AND a.treattypeid = b.treattypeid";
+private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a.docqualification ,a.docrating ,a.consultation_1 ,a.consultation_2  FROM chss_doctor_rates a , chss_treattype b WHERE a.isactive='1' AND a.treattypeid = b.treattypeid order by a.treattypeid asc,a.docrateid desc";
 	
 	@Override
 	public List<Object[]> GetDoctorList()throws Exception
@@ -666,6 +701,28 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 		 try {
 			Query query = manager.createNativeQuery(CHECKTESTCODE);
 			query.setParameter("testcode", testcode);		
+			Object o = query.getSingleResult();
+			Integer value = Integer.parseInt(o.toString());
+			int result = value;
+
+			return result;
+		  }catch (Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualification) FROM chss_doctor_rates WHERE treattypeid=:treatment AND docqualification=:qualification";
+	
+	@Override
+	public int DuplicateDocQualification(String treatment,String qualification)throws Exception
+	{
+		 logger.info(new Date() +"Inside CheckduplicateTestCode()");	
+		 try {
+			Query query = manager.createNativeQuery(DUPLICATEDOCQUALIFICATION);
+			query.setParameter("treatment", treatment);	
+			query.setParameter("qualification", qualification);	
 			Object o = query.getSingleResult();
 			Integer value = Integer.parseInt(o.toString());
 			int result = value;
