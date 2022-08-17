@@ -63,8 +63,7 @@ public class MasterController {
 	
 	@Autowired
 	private PisService pisservice;
-	
-	
+		
 	   @RequestMapping(value = "OtherItems.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	    public  String Otheritem(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
 	    {
