@@ -1,4 +1,4 @@
-<%@page import="com.vts.ems.chss.model.CHSSDoctorRates"%>
+<%@page import="com.vts.ems.master.model.CHSSDoctorRates"%>
 <%@page import="com.vts.ems.chss.model.CHSSTreatType"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="java.util.List"%>

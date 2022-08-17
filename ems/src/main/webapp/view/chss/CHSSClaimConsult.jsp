@@ -4,7 +4,7 @@
 <%@page import="com.vts.ems.chss.model.CHSSApproveAuthority"%>
 <%@page import="com.vts.ems.chss.model.CHSSMedicinesList"%>
 <%@page import="com.vts.ems.chss.model.CHSSTestSub"%>
-<%@page import="com.vts.ems.chss.model.CHSSDoctorRates"%>
+<%@page import="com.vts.ems.master.model.CHSSDoctorRates"%>
 <%@page import="com.vts.ems.chss.model.CHSSOtherItems"%>
 <%@page import="com.vts.ems.chss.model.CHSSTestMain"%>
 <%@page import="java.text.SimpleDateFormat"%>
