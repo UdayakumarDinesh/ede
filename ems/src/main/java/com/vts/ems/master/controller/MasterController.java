@@ -78,7 +78,7 @@ public class MasterController {
 	    	  return "static/Error";
 	       }
 			return "masters/OtherItems";
-	     }
+	     }                                               
 	    
 	    @RequestMapping(value = "TestSub.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	    public  String ChssTestMain(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
