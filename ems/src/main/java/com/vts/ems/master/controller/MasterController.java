@@ -462,7 +462,6 @@ public class MasterController {
 					} else {
 						redir.addAttribute("resultfail", "Medicine Delete UnSuccessful");
 					}
-	
                   return "redirect:/MedicineList.htm";
 			} catch (Exception e) {
 				logger.error(new Date() +"Inside ChssMedicineDelete.htm "+UserId ,e);
