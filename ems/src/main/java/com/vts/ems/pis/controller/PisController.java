@@ -309,7 +309,7 @@ public class PisController {
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-			//emp.setPunchCard(PunchCardNo);
+			emp.setEmpStatus("P");
 			emp.setPhoneNo(phoneno);
 			emp.setAltPhoneNo(AltPhoneno);
 			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
