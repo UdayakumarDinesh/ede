@@ -197,7 +197,7 @@ p {
 									<b>Consulted Doctor : </b><%=consultmain.getDocName() %>
 								</div>
 								<div class="col-3">
-									<b>Consulted Date: </b><%=DateTimeFormatUtil.SqlToRegularDate(consultmain.getConsultDate() ) %>
+									<%-- <b>Consulted Date: </b><%=DateTimeFormatUtil.SqlToRegularDate(consultmain.getConsultDate() ) %> --%>
 								</div>
 							</div>
 						</div>

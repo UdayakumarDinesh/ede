@@ -101,6 +101,7 @@ th,td
 	AmountWordConveration awc = new AmountWordConveration();
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview = (String)request.getAttribute("onlyview");
+	String isapproval = (String)request.getAttribute("isapproval");
 	
 %>
  
@@ -113,10 +114,10 @@ th,td
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>	
-						<%if(billstatus>=14){ %>					
-						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Contingent Bills</a></li>
+						<%if(isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>					
+							<li class="breadcrumb-item "><a href="ContingentApprovals.htm">Pending Contingent Bills</a></li>
 						<%}else{ %>
-						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">Pending Contingent Bills</a></li>
+							<li class="breadcrumb-item "><a href="ContingentBillsList.htm">Contingent Bills</a></li>
 						<%} %>
 						<li class="breadcrumb-item active " aria-current="page">Contingent Bill</li>
 					</ol>
@@ -324,8 +325,9 @@ th,td
 								<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
 									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
 									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
-								<%}else if(billstatus==14  && new ArrayList<String>( Arrays.asList("K", "V", "W","Z")).contains(logintype)){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Update Status?');" >Bank Transfer Successful</button>								<%} %>
+								<%}else if(billstatus==14  && new ArrayList<String>( Arrays.asList("B", "K", "V", "W","Z")).contains(logintype)){ %>
+									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R');" >Bank Transfer Successful</button>								
+								<%} %>
 							</div>	
 						</div>
 						<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
@@ -367,7 +369,7 @@ function remarkRequired(action)
 			alert('Please Fill Remarks to Submit! ');
 			return false;
 		}else{
-				return confirm('Are You Sure To Submit?');
+			return confirm('Are You Sure To Submit?');
 		}
 		
 	}else{

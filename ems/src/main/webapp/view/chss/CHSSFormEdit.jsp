@@ -139,6 +139,7 @@ th,td
 	List<Object[]> consultmainlist = (List<Object[]>)request.getAttribute("consultmainlist");
 	
 	
+	Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 	Object[] employee = (Object[])request.getAttribute("employee");
 	
 	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yy");//DateTimeFormatUtil.getRegularDateFormat();
@@ -153,8 +154,10 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	String onlyview=(String)request.getAttribute("onlyview");
+	String ActivateDisp=(String)request.getAttribute("ActivateDisp");
+	String dispReplyEnable = (String)request.getAttribute("dispReplyEnable");
 	
-	boolean showhistorybtn = (showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y"));
+	boolean showhistorybtn = (  isapproval.equalsIgnoreCase("Y"));
 	boolean showRemAmtText =((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15) ;
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
@@ -171,30 +174,18 @@ th,td
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						
-						<%if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
+						<%if(dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y")){ %>
+						<li class="breadcrumb-item "><a href="ClaimDisputeList.htm">Claim Disputes</a></li>
+						<%}else if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<%} %>
-						<%if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
+						<%}else if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
 						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">Pending Approval List</a></li>
-						<%} %>
-						<%if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
+						<%} else if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
 						<li class="breadcrumb-item "><a href="ClaimsList.htm">Claims List</a></li>
-						<%} %>
-						<%if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
+						<%}else if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
 						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Bills List</a></li>
 						<%} %>
 						
-					
-						<%-- <%if(chssstatusid==3 || chssstatusid==1){ %>
-						<!-- <li class="breadcrumb-item "><a href="CHSSAppliedList.htm">CHSS List</a></li> -->
-						<%}else if(chssstatusid==2 || chssstatusid==4 || chssstatusid==5  ){ %>
-						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">CHSS Approval List</a></li>
-						<%}else if(chssstatusid==6 ||   chssstatusid==9 ||   chssstatusid==10 ||   chssstatusid==13){ %>
-						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
-						<%}else if(chssstatusid==7 ||   chssstatusid==8 ||   chssstatusid==11 ||   chssstatusid==12){ %>
-						<li class="breadcrumb-item "><a href="ContingentApprovals.htm">CHSS Contingent List</a></li>
-						<%} %> --%>
 						<li class="breadcrumb-item active " aria-current="page">Claim</li>
 					</ol>
 				</div>
@@ -335,7 +326,6 @@ th,td
 											<th style="text-align: center;width: 5%">SN</th>
 											<th style="width: 50%">Doctor</th>
 											<th style="width: 30%">Qualification</th>
-											<th style="text-align: center;width: 15%">Consultation Date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -343,8 +333,7 @@ th,td
 										<tr>
 											<td style="text-align: center;" ><%=consultmainlist.indexOf(consultmain)+1 %></td>
 											<td><%=consultmain[1] %></td>
-											<td><%=consultmain[4] %></td>
-											<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(consultmain[3].toString()) %></td>		
+											<td><%=consultmain[3] %></td>
 										</tr>
 										<%} %>
 									</tbody>
@@ -466,7 +455,16 @@ th,td
 													<tr>
 														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
-														<td class="text-blue" ><%=consult[2] %></td>
+														<td class="text-blue" >
+															<% if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+																<select name="consulttype-<%=consult[0]%>"  class="form-control"  >
+																	<option value="Fresh" <%if(consult[2].toString().trim().equalsIgnoreCase("Fresh")){ %> selected <%} %> >Fresh</option>
+																	<option value="FollowUp" <%if(consult[2].toString().trim().equalsIgnoreCase("FollowUp")){ %> selected <%} %> >FollowUp</option>
+																</select>
+															<%}else{ %>
+																<%=consult[2] %>
+															<% } %>
+														</td>
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
 														
@@ -955,8 +953,8 @@ th,td
 									</table>
 								<%} %>
 							</div>
-							<%}else {%>
-								<div class="col-md-5"></div>
+							<%}else { %>
+								<div class="col-md-5" ></div>
 							<%} %>
 							<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
@@ -992,13 +990,42 @@ th,td
 								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
 							<%} %>
 							</div>
+							<%}else if(chssstatusid ==15 && ClaimDisputeData !=null) { %>
+							<div class="col-md-6" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+							<%
+							if(ClaimDisputeData !=null){ %>
+								<table style="margin: 3px;padding: 0px">
+									<tr>
+										<td style="border:none;padding: 0px">
+											<h6 style="text-decoration: underline;">Dispute :</h6> 
+										</td>											
+									</tr>
+									
+									<tr>
+										<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+											<%=employee[2] %>&nbsp; :
+											<span style="border:none; color: red;" >	<%=ClaimDisputeData[2] %></span>
+										</td>
+									</tr>
+									<%if(ClaimDisputeData[8]!=null){ %>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												Response By&nbsp;<%=ClaimDisputeData[8] %>&nbsp; :
+												<span style="border:none;" class="text-blue" >	<%=ClaimDisputeData[3] %></span>
+											</td>
+										</tr>
+									
+									<% } %>
+									
+								</table>
 							<%} %>
+						</div>
+						<% } %>
 						</div>
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-							
 							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" align="center" style="left: 15%;">
 								<div class="modal-dialog  modal-dialog-centered"  >
 									<div class="modal-content" style="width: 50%;">
@@ -1027,8 +1054,40 @@ th,td
 							</div>
 							
 					</form>
-				
-
+					
+					<%if(chssstatusid==15 && ActivateDisp!=null && ActivateDisp.equalsIgnoreCase("Y") && ClaimDisputeData==null){ %>
+						
+						<form action="ClaimDisputeSubmit.htm" method="post">
+							<div class="row">
+								<div class="col-md-12 w-100" align="left">
+									<br><b>Raise Dispute:</b><br>
+									<textarea rows="5" style="width: 100%;" maxlength="1000" name="disputemsg" id="disputemsg" required="required"></textarea>
+								</div>
+								<div class="col-md-12 w-100" align="center">
+									<button type="submit" class="btn btn-sm submit-btn"  onclick="return checkDisputeMsg('disputemsg')" >submit dispute</button>
+								</div>
+								
+							</div>
+							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						</form>
+					<% }else if( dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y") && ClaimDisputeData!=null && ClaimDisputeData[8]==null){ %>
+						<form action="ClaimDisputeResponceSubmit.htm" method="post">
+							<div class="row">
+								<div class="col-md-12 w-100" align="left">
+									<br><b>Response For Dispute Raised by  : </b><br>
+									<textarea rows="5" style="width: 100%;" maxlength="1000" name="Responcemsg" id="Responcemsg" required="required"></textarea>
+								</div>
+								<div class="col-md-12 w-100" align="center">
+									<button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit dispute</button>
+								</div>
+								
+							</div>
+							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						</form>
+						
+					<% } %>			
 				</div>
 			</div>		
 			
@@ -1181,6 +1240,84 @@ th,td
 			</div>	
 		</div>
 
+
+
+<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
+
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	  <div class="modal-header" style="">
+	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+	  </div>
+      <div class="modal-body">
+      	
+      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+	
+<script type="text/javascript">	 
+
+	$('#my_acknowledge_model').modal('show')
+ 	  function acknowledgeFunction(yesorno){
+		
+		 if(yesorno)
+		 {
+			 $.ajax({
+
+					type : "GET",
+					url : "POAcknowledgeUpdateAjax.htm",
+					data : {
+							
+						chssapplyid : $chssapplyid,
+					},
+					datatype : 'json',
+					success : function(result) {
+	
+					}
+				}); 
+		}else
+		{
+			window.location = "CHSSApprovalsList.htm";
+		}
+	 	
+	 
+	 }
+	 
+	 
+</script>
+<%} %>	 
+	 
+	 
+
+
+
+<script type="text/javascript">
+	function checkDisputeMsg(textareaid)
+	{
+		var msg = $('#'+textareaid).val();
+		if(msg.trim()==='')
+		{
+			alert('Please Enter the Messege to Submit');
+			return false;
+		}
+		else
+		{
+			return confirm('Are You Sure to Submit?');
+		}
+	}
+						
+</script>
+	
+	
 <script type="text/javascript">
 
 
@@ -1226,62 +1363,6 @@ function checkMedImadmissibleList()
 
 </script>
 
-
-<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
-
-<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-	  <div class="modal-header" style="">
-	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-	  </div>
-      <div class="modal-body">
-      	
-      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
-     
-        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
-        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-	
-<script type="text/javascript">	 
-
-	$('#my_acknowledge_model').modal('show')
- 	  function acknowledgeFunction(yesorno){
-		
-		 if(yesorno)
-		 {
-			 $.ajax({
-
-					type : "GET",
-					url : "POAcknowledgeUpdateAjax.htm",
-					data : {
-							
-						chssapplyid : $chssapplyid,
-					},
-					datatype : 'json',
-					success : function(result) {
-	
-					}
-				}); 
-		}else
-		{
-			window.location = "CHSSApprovalsList.htm";
-		}
-	 	
-	 
-	 }
-	 
-	 
-</script>
-<%} %>	 
-	 
 	 
 <script type="text/javascript">
 
@@ -1861,7 +1942,7 @@ function CheckClaimAmount($chssapplyid)
 		
 			if(Number(result[4])===1)
 			{
-				alert('Cannot Forward Claim Since Bill No : \''+result[5]+'\' is older then 90 Days');
+				alert('Cannot Forward Claim Since Bill No : \''+result[5]+'\' is older than 3 months');
 			}
 			else if(Number(result[2])===1)
 			{

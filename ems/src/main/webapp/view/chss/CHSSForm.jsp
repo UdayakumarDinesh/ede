@@ -101,10 +101,10 @@ th,td
 	text-align: left;
 	border: 1px solid black;
 	padding: 4px;
-	word-break: break-all;
+	word-break: break-word;
 	overflow-wrap: anywhere;
+	
 }
-
 .center{
 
 	text-align: center;
@@ -169,7 +169,7 @@ th,td
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String isapproval = (String)request.getAttribute("isapproval");
 	boolean show = false;
-	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15 ){
+	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid>14 ){
 		show = true;
 	} 
 	
@@ -740,7 +740,7 @@ th,td
 						<td colspan="4" class="right"><b>Total</b></td>
 						<td class="right text-blue"><b> <%=itemstotal %></b></td>
 						<td class="right text-green">
-							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+							<%if(show){ %>	 
 								&#8377; <b><%=totalremamount %></b>
 							<%} %>
 						</td>
@@ -765,7 +765,7 @@ th,td
 						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 										
 						<td class="right text-green">
-							<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==14){ %>	 
+							<%if(show){ %>	 
 							&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 							<%} %>
 						</td>

@@ -23,10 +23,10 @@ public class CHSSConsultMain implements Serializable
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long CHSSConsultMainId;
 	private Long CHSSApplyId;
-	private String ConsultType;	
+//	private String ConsultType;	
 	private String DocName;
 	private Integer DocQualification;
-	private String ConsultDate;
+//	private String ConsultDate;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

@@ -1322,6 +1322,8 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	private final static String LISTOFSENIORITYNUMBER="SELECT SrNo, EmpId FROM employee WHERE SrNo !=0 ORDER BY SrNo ASC ";
+	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
+	
 	@Override
 	public List<Object[]> UpdateAndGetList(Long empId, String newSeniorityNumber)throws Exception
 	{
@@ -1336,7 +1338,7 @@ public class PisDaoImpl implements PisDao {
 	    return listSeni;
 	}
 	
-	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
+	
 	@Override
 	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception
 	{

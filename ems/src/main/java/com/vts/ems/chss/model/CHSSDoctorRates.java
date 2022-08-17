@@ -25,6 +25,8 @@ public class CHSSDoctorRates implements Serializable {
 	private Integer consultation_2;
 	private String DocRating;
 	private int IsActive;
+	private String CreatedBy;
+	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
 }

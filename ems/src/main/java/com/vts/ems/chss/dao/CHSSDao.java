@@ -4,15 +4,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSApplyTransaction;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
+import com.vts.ems.chss.model.CHSSBillEquipment;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
+import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSDoctorRates;
+import com.vts.ems.chss.model.CHSSIPDAttachments;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSBillMisc;
@@ -110,7 +114,6 @@ public interface CHSSDao {
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception;
 	public int ConsultBillsDelete(String consultmainid) throws Exception;
 	public int CHSSConsultMainDelete(String consultmainid) throws Exception;
-	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception;
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception;
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype) throws Exception;
@@ -149,6 +152,25 @@ public interface CHSSDao {
 	public long CHSSBillIPDheadsEdit(CHSSBillIPDheads bhead) throws Exception;
 	public List<Object[]> consultMainBillIds(String consultmainid) throws Exception;
 	public List<Object[]> CheckPrevConsultInfo(String consultationid, long consultmainid, String fromdate, String todate) throws Exception;
+	public long ClaimDisputeAdd(CHSSApplyDispute dispute) throws Exception;
+	public Object[] getClaimDisputeData(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimDisputeList(String fromdate, String todate) throws Exception;
+	public CHSSApplyDispute getCHSSApplyDispute(String chssapplyid) throws Exception;
+	public long ClaimDisputeEdit(CHSSApplyDispute dispute) throws Exception;
+	public long EquipmentBillAdd(CHSSBillEquipment equipment) throws Exception;
+	public CHSSBillEquipment getCHSSEquipment(String equipid) throws Exception;
+	public long EquipmentBillEdit(CHSSBillEquipment equipment) throws Exception;
+	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception;
+	public long ImplantBillAdd(CHSSBillImplants equipment) throws Exception;
+	public CHSSBillImplants getCHSSImplant(String implantid) throws Exception;
+	public List<CHSSBillImplants> CHSSImplantList(String billid) throws Exception;
+	public long ImplantBillEdit(CHSSBillImplants implant) throws Exception;
+	public List<Object[]> IPDClaimAttachments(String chssapplyid) throws Exception;
+	public CHSSIPDAttachments getIPDClaimAttach(String chssapplyid, String attachtypeid) throws Exception;
+	public long IPDClaimAttachEdit(CHSSIPDAttachments Attach) throws Exception;
+	public long IPDClaimAttachAdd(CHSSIPDAttachments Attach) throws Exception;
+	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
+	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	
 	
 }

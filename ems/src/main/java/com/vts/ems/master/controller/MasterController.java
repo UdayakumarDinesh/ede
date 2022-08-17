@@ -53,7 +53,6 @@ public class MasterController {
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
-
 	
 	@Autowired
 	MasterService service;
@@ -63,8 +62,7 @@ public class MasterController {
 	
 	@Autowired
 	private PisService pisservice;
-	
-	
+		
 	   @RequestMapping(value = "OtherItems.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	    public  String Otheritem(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
 	    {
@@ -80,7 +78,7 @@ public class MasterController {
 	    	  return "static/Error";
 	       }
 			return "masters/OtherItems";
-	     }
+	     }                                               
 	    
 	    @RequestMapping(value = "TestSub.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	    public  String ChssTestMain(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
@@ -515,7 +513,7 @@ public class MasterController {
 		
 		
 		
-		@RequestMapping(value = "DoctorsMaster.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		@RequestMapping(value ="DoctorsMaster.htm" , method= {RequestMethod.GET,RequestMethod.POST})
 		public String DoctorsMasters(HttpSession ses , HttpServletRequest req ,RedirectAttributes redir)throws Exception
 		{
 			String UserId = (String)ses.getAttribute("Username");
@@ -534,26 +532,115 @@ public class MasterController {
 			}			
 		}    
 		
-		@RequestMapping(value = "DoctorsMasterEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		@RequestMapping(value ="DoctorsMasterAdd.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		public String DoctorsMastersAdd(HttpSession ses , HttpServletRequest req ,RedirectAttributes redir)throws Exception
+		{
+			
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DoctorsMasterAdd.htm "+UserId);
+			try {
+				
+				String action = (String)req.getParameter("Action");
+			System.out.println(action);
+				if("ADD".equalsIgnoreCase(action)){
+					
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					return "masters/CHSSDoctorsAddEdit";
+					
+				} else if ("EDIT".equalsIgnoreCase(action)) {
+					
+					String DocRateId = (String)req.getParameter("DocRateId");
+					System.out.println(DocRateId);
+					CHSSDoctorRates  DoctorRates=service.getCHSSDoctorRates(Integer.parseInt(DocRateId));
+					List<Object[]> treatment = service.GetTreatmentType();
+					req.setAttribute("treatment", treatment);
+					req.setAttribute("DoctorRates", DoctorRates);
+					return "masters/CHSSDoctorsAddEdit";
+				
+			}else if ("ADDDOCRATE".equalsIgnoreCase(action)) {
+					
+					
+					
+					String Consultation1 = req.getParameter("ConsultationOne");
+					String Consultation2 = req.getParameter("ConsultationTwo");
+					String treatment = req.getParameter("Treatment"); 
+					String docQualificetion = req.getParameter("Qualification");
+					
+					
+					CHSSDoctorRates  DocRate = new CHSSDoctorRates();
+					
+								
+					DocRate.setConsultation_1(Integer.parseInt(Consultation1));
+					DocRate.setConsultation_2(Integer.parseInt(Consultation2));
+					DocRate.setTreatTypeId(Integer.parseInt(treatment));
+					DocRate.setDocQualification(docQualificetion);
+					DocRate.setIsActive(1);
+					DocRate.setCreatedBy(UserId);
+					DocRate.setCreatedDate(sdtf.format(new Date()));
+					long result = service.AddDocQualification(DocRate);
+					if (result != 0) {
+		    			redir.addAttribute("result", "Doctor Details added successfully");
+					} else {
+						redir.addAttribute("resultfail", "Doctor Details add UnSuccessful");
+					}
+					
+				}	
+				return "redirect:/DoctorsMaster.htm";
+			}catch (Exception e){
+				logger.error(new Date() +"Inside DoctorsMasterAdd.htm "+UserId ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+
+		}
+		
+		@RequestMapping(value = "DuplicateDocQualification.htm" , method= RequestMethod.GET)
+		public @ResponseBody String DuplicateDocQualification(HttpSession ses , HttpServletRequest req)throws Exception
+		{
+			int count =0;
+			Gson json = new Gson();
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DuplicateDocQualification.htm "+UserId);
+			try {
+				String treatment = (String)req.getParameter("treatment");
+				String docqualifiaction= (String)req.getParameter("docqualifiaction");
+				count = service.DuplicateDocQualification( treatment,docqualifiaction );
+				
+				return String.valueOf(count);
+			}catch (Exception e){
+				logger.error(new Date() +"Inside DuplicateDocQualification.htm"+UserId ,e);
+				e.printStackTrace();
+				return json.toJson(count);
+			}
+		}
+		
+		@RequestMapping(value ="DoctorsMasterEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
 		public String DoctorsMastersEdit(HttpSession ses , HttpServletRequest req , @RequestPart("selectedFile") MultipartFile selectedFile,RedirectAttributes redir)throws Exception
 		{
-			String UserId = (String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DoctorsMasterEdit.htm "+UserId);
+			
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside ChssMedicineEdit.htm "+UserId);
+
 			try {
 				String action = (String)req.getParameter("Action");
-								
-				if("EDITDOCRATE".equalsIgnoreCase(action)){						
-						String Rateid = (String)req.getParameter("DocRateid");
-						String con1= "Consultation1"+Rateid;
-						String con2= "Consultation2"+Rateid;
-						String Consultation1 = (String)req.getParameter(con1);
-						String Consultation2 = (String)req.getParameter(con2);
+				System.out.println(action);
+	         if("EDITDOCRATE".equalsIgnoreCase(action)){						
+						String Rateid = req.getParameter("DocRateId");
+						
+						String Consultation1 = req.getParameter("ConsultationOne");
+						String Consultation2 = req.getParameter("ConsultationTwo");
+						String treatment = req.getParameter("Treatment"); 
+						String docQualificetion = req.getParameter("Qualification");
+						
 						
 						CHSSDoctorRates  DocRate = new CHSSDoctorRates();
 						
 						DocRate.setDocRateId(Integer.parseInt(Rateid));				
 						DocRate.setConsultation_1(Integer.parseInt(Consultation1));
 						DocRate.setConsultation_2(Integer.parseInt(Consultation2));
+						DocRate.setTreatTypeId(Integer.parseInt(treatment));
+						DocRate.setDocQualification(docQualificetion);
 						DocRate.setModifiedBy(UserId);
 						DocRate.setModifiedDate(sdtf.format(new Date()));
 						int result = service.EditDoctorMaster(DocRate);

@@ -33,7 +33,9 @@ public interface MasterDao {
 	public List<Object[]> GetTreatmentType()throws Exception;
 	public int Checkduplicate(String medicinename,String treatid)throws Exception;
 	public CHSSMedicinesList getCHSSMedicine(long medicineid) throws Exception ;
+	public CHSSDoctorRates getCHSSDoctorRates(int DocRateId) throws Exception;
 	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception;
+	public int AddDocQualification(CHSSDoctorRates  DocRate)throws Exception;
 	public Long EditMedicine(CHSSMedicinesList item) throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
 	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception ;
@@ -59,6 +61,7 @@ public interface MasterDao {
 	public Object[] DesignationEditCheck(String designation,String desigid)throws Exception;
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
 	public int CheckduplicateTestCode(String testcode)throws Exception;
+	public int DuplicateDocQualification(String treatment,String qualification)throws Exception;
     public DoctorList GetDoctor(Long  doctorid)throws Exception;
 	public long DoctorsAdd(DoctorList doctor)throws Exception;
 	public long DoctorsEdit(DoctorList doctor)throws Exception;

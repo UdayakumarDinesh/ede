@@ -21,8 +21,6 @@
 <body>
 
 <%
-	
-	
 	List<Object[]> contingentlist=(List<Object[]>)request.getAttribute("ContingentList");
 	
 	String fromdate = (String)request.getAttribute("fromdate");
