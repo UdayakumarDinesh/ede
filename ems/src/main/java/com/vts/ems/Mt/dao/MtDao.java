@@ -64,4 +64,7 @@ public interface MtDao {
 	public List<Object[]> TripList(Date FromDate, Date ToDate) throws Exception;
 	public List<Object[]> DirectorTripList(Date FromDate, Date ToDate) throws Exception ;
 	public int DirectorTripAssign(MtDirectorDuty Dduty) throws Exception;
+	public int MtAdminReqDelete(String tripid)throws Exception;
+	public Object[] MtAdminReqEdit(String tripid) throws Exception ;
+	public int MtAdminReqEdit(MtUserApply apply) throws Exception;
 }

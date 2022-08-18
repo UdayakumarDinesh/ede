@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"  pageEncoding="ISO-8859-1"%>
-<%@page import="java.time.LocalDate"%>
-<%@page import="java.util.List"%>
+<%@page import="java.time.LocalDate , java.text.SimpleDateFormat"%>
+<%@page import="java.util.*"%>
 <%@page import="com.vts.ems.Mt.model.*" %>
 <!DOCTYPE html>
 <html>
@@ -184,10 +184,364 @@ MtUserApply apply=(MtUserApply)request.getAttribute("editdata");
 				</div>
 				
 			</div>
-    </div>    
+
+ <%
+ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+List<Object[]> firstapply=(List<Object[]>)request.getAttribute("firstapply"); 
+List<Object[]> secondapply=(List<Object[]>)request.getAttribute("secondapply");
+List<Object[]> thirdapply=(List<Object[]>)request.getAttribute("thirdapply");
+List<Object[]> fourthapply=(List<Object[]>)request.getAttribute("fourthapply");
+List<Object[]> fifthpply=(List<Object[]>)request.getAttribute("fifthpply");%>
+													
+   <div class="row">
+<div class="col-md-12"  style="margin-top: 10px;">
+
+     
+     <div class="col-md-3" style="margin-top: 20px;">
+				    <button style="font-size:small;margin-left: 250px; background-color: #17a2b8; height: 35px;"  class="btn  btn-info btn-xs " data-toggle="modal" data-target="#statusFullForm">Click Me To See LIST OF REQUEST FOR  NEXT 5 DAYS</button>
+				    </div>
+				    <!-- //Status Full Form Button -->
+				    <!-- Status Full Form Modal -->
+				                             
+				    <div class="modal fade" id="statusFullForm" role="dialog" >
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header"><h5 class="modal-litle" >LIST OF REQUEST FOR  NEXT 5 DAYS</h5>
+                 <button  type="button"  class="close" data-dismiss="modal">&times;</button>
+                </div>
+     
+   <div class="modal-body">
+             
+         <div class="row">
+              
+          <div class="col-md-12" >
+              <div class="row" style="margin-top: 15px;">
+    
+     <div class="col-md-12">
+<%if(firstapply.size()==0&&secondapply.size()==0&&thirdapply.size()==0&&fourthapply.size()==0&&fifthpply.size()==0){%>
+	<div align="center"><b class="badge badge-warning">No Request Found</b></div>
+	<%}else{ 
+	 
+  if(firstapply!=null&&firstapply.size()!=0){
+  
+  %>	
+	 <div align="center"><b>Requests for Date :</b><%=sdf.format(new Date()) %></div>
+	    <div class="table-responsive">
+	  <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1">
+   	
+    <thead>
+    	
+	             <tr style="color: #000080;">
+	               	
+	                 <th style="font-size: 12px;">Indentor</th>
+	        	     <th style="font-size: 12px;">Date</th>
+	        	     <th style="font-size: 12px;">Time</th>
+	                 <th style="font-size: 12px;">Source</th>
+	                 <th style="font-size: 12px;">Destination</th>
+	                 <th style="font-size: 12px;">Nature</th>
+	               	 <th style="font-size: 12px;">Specific Reason</th>
+	                 <th style="font-size: 12px;">Traveler Name and Phone Number</th>
+	               </tr>
+	         </thead>
+	  <tbody>
+		<%for(Object[] alist:firstapply){%>
+			
+	    <tr>
+
+	     	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[0]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %> ><%=sdf.format(alist[1])%> To   <%=sdf.format(alist[11])%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[2]%>-<%=alist[3]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[4]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[5]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[6]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>  style="overflow-wrap: break-word; word-break: break-all; white-space: normal;"  >
+	      	<%if(alist[7]!=null){%>
+	      	<%=alist[7]%>
+	      	<%}else{ %><span>No Reason</span><%} %>
+	      	</td>
+	      	 <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>   style="overflow-wrap: break-word; word-break: break-all; white-space: normal;" >
+	      	<%if(alist[8]!=null){%>
+	    	<%=alist[8]%>
+	      	<%}else{ %><span>No Comment</span><%} %>
+	      	</td>
+	  </tr>
+	 <%} %>
+	 
+</tbody>
+	 </table>
+	 </div>
+	 <%} 
+	if( secondapply!=null&&secondapply.size()!=0){%>	 
+	 <div align="center"><b>Requests for Date :</b><%=sdf.format(new Date().getTime()+(24*60*60*1000)) %></div>
+	    <div class="table-responsive">
+	    <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable">
+    <thead>
+    	
+	      <tr style="color: red;">
+	               	
+	                 <th style="font-size: 12px;">Indentor</th>
+	        	     <th style="font-size: 12px;">Date</th>
+	        	     <th style="font-size: 12px;">Time</th>
+	                 <th style="font-size: 12px;">Source</th>
+	                 <th style="font-size: 12px;">Destination</th>
+	                 <th style="font-size: 12px;">Nature</th>
+	                 <th style="font-size: 12px;">Reason</th>
+	                 <th style="font-size: 12px;">User Comments</th>		
+	      </tr>
+	</thead>
+	         <tbody>
+		<%for(Object[] alist:secondapply){%>
+		<tr>
+	      	
+	      	
+	     	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[0]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %> ><%=sdf.format(alist[1])%> To   <%=sdf.format(alist[11])%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[2]%>-<%=alist[3]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[4]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[5]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[6]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>  style="overflow-wrap: break-word; word-break: break-all; white-space: normal;"  >
+	      	<%if(alist[7]!=null){%>
+	      	<%=alist[7]%>
+	      	<%}else{ %><span>NO REASON</span><%} %>
+	      	</td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>   style="overflow-wrap: break-word; word-break: break-all; white-space: normal;" >
+	      	<%if(alist[8]!=null){%>
+	    	<%=alist[8]%>
+	      	<%}else{ %><span>NO COMMENT</span><%} %>
+	      	</td>
+	 </tr>
+	 <%}%>
+	 </tbody>
+	 </table>
+	 </div>
+<%} 
+	
+	
+	if( thirdapply!=null&&thirdapply.size()!=0){%>	 
+	 
+	  <div align="center"><b>Requests for Date :</b><%=sdf.format(new Date().getTime()+(2*24*60*60*1000)) %></div>
+	   <div class="table-responsive">
+	   <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable">
+    <thead>
+    	
+	             <tr>
+	               	  <th style="font-size: 12px;">Indentor</th>
+	        	      <th style="font-size: 12px;">Date</th>
+	        	      <th style="font-size: 12px;">Time</th>
+	                  <th style="font-size: 12px;">Source</th>
+	                  <th style="font-size: 12px;">Destination</th>
+	                  <th style="font-size: 12px;">Nature</th>
+	                  <th style="font-size: 12px;">Reason</th>
+	                  <th style="font-size: 12px;">User Comments</th>
+	            </tr>
+	         </thead>
+	         <tbody>
+		<%for(Object[] alist:thirdapply){%>
+		<tr>
+	      	
+	   
+	     	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[0]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %> ><%=sdf.format(alist[1])%> To   <%=sdf.format(alist[11])%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[2]%>-<%=alist[3]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[4]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[5]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"    <%} %>><%=alist[6]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>  style="overflow-wrap: break-word; word-break: break-all; white-space: normal;"  >
+	      	<%if(alist[7]!=null){%>
+	      	<%=alist[7]%>
+	      	<%}else{ %><span>No Reason</span><%} %>
+	      	</td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>   style="overflow-wrap: break-word; word-break: break-all; white-space: normal;" >
+	      	<%if(alist[8]!=null){%>
+	    	<%=alist[8]%>
+	      	<%}else{ %><span>No Comment</span><%} %>
+	      	</td>
+			
+	 </tr>
+	 <%} %>
+	 <tbody>
+	 </table>
+	 </div>
+	 <%} 
+	if( fourthapply!=null&&fourthapply.size()!=0){%>	 
+	 
+	  <div align="center"><b>Requests for Date :</b><%=sdf.format(new Date().getTime()+(3*24*60*60*1000)) %></div>
+	    <div class="table-responsive">
+	  <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable">
+    <thead>
+    	
+	             <tr>
+	                  <th style="font-size: 12px;">Indentor</th>
+	        	      <th style="font-size: 12px;">Date</th>
+	        	      <th style="font-size: 12px;">Time</th>
+	                  <th style="font-size: 12px;">Source</th>
+	                  <th style="font-size: 12px;">Destination</th>
+	                  <th style="font-size: 12px;">Nature</th>
+	               	  <th style="font-size: 12px;">Reason</th>
+	                  <th style="font-size: 12px;">User Comments</th>
+	               </tr>
+	         </thead>
+		<tbody>
+		<%for(Object[] alist:fourthapply){%>
+			
+	  <tr>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[0]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %> ><%=sdf.format(alist[1])%> To   <%=sdf.format(alist[11])%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[2]%>-<%=alist[3]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[4]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[5]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[6]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>  style="overflow-wrap: break-word; word-break: break-all; white-space: normal;"  >
+	      	<%if(alist[7]!=null){%>
+	      	<%=alist[7]%>
+	      	<%}else{ %><span>No Reason</span><%} %>
+	      	</td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>   style="overflow-wrap: break-word; word-break: break-all; white-space: normal;" >
+	      	<%if(alist[8]!=null){%>
+	    	<%=alist[8]%>
+	      	<%}else{ %><span>No Comment</span><%} %>
+	      	</td>
+			
+	 </tr>
+	 <%} %>
+	 <tbody>
+	 </table>
+	 </div>
+	<% } if( fifthpply!=null&&fifthpply.size()!=0){%>	 
+	 <div align="center"><b>Requests for Date :</b><%=sdf.format(new Date().getTime()+(4*24*60*60*1000)) %></div>
+	   <div class="table-responsive">
+	    <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable">
+   	
+    <thead>
+    	
+	             <tr>
+	               	
+	                 <th style="font-size: 12px;">Indentor</th>
+	        	     <th style="font-size: 12px;">Date</th>
+	        	     <th style="font-size: 12px;">Time</th>
+	                 <th style="font-size: 12px;">Source</th>
+	                 <th style="font-size: 12px;">Destination</th>
+	                 <th style="font-size: 12px;">Nature</th>
+	               	 <th style="font-size: 12px;">Reason</th>
+	                 <th style="font-size: 12px;">User Comments</th>
+	               </tr>
+	         </thead>
+		<tbody>
+		<%for(Object[] alist: fifthpply){%>
+		<tr>
+	      	
+	      	
+	     	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[0]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %> ><%=sdf.format(alist[1])%> To   <%=sdf.format(alist[11])%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[2]%>-<%=alist[3]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[4]%></td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[5]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue;"   <%} %>><%=alist[6]%></td>
+	        <td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>  style="overflow-wrap: break-word; word-break: break-all; white-space: normal;"  >
+	      	<%if(alist[7]!=null){%>
+	      	<%=alist[7]%>
+	      	<%}else{ %><span>No Reason</span><%} %>
+	      	</td>
+	      	<td style="font-size: 12px;" <%if(sdf.format(alist[1]).equalsIgnoreCase(sdf.format(new Date()))){ %> style="color: blue; overflow-wrap: break-word; word-break: break-all; white-space: normal;"   <%} %>   style="overflow-wrap: break-word; word-break: break-all; white-space: normal;" >
+	      	<%if(alist[8]!=null){%>
+	    	<%=alist[8]%>
+	      	<%}else{ %><span>No Comment</span><%} %>
+	      	</td>
+			
+	 </tr>
+	 <%} %>
+	 <tbody>
+	 </table>
+	 </div>
+	 <%} %>
+	 <%} %>
+
+
+
+
+
+
+
+
+
+
+
+ <div class="row">
+
+<div class="col-md-12"  >
+
+			<div align="center"><b> ALLOTED TRIP NEXT  DAYS</b></div>
+			 
+   
+   
+  
+	  <%List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist"); %>
+	 <%if(reqlinkduty!=null){ %>
+	   <div class="table-responsive">
+	   <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1">
+    <thead>
+	             <tr>
+	                
+	                  <th style="font-size: 12px;">Indentor</th>
+	        	      <th style="font-size: 12px;">Date</th>
+	                  <th style="font-size: 12px;">Source</th>
+	                  <th style="font-size: 12px;">Destination</th>
+	                  <th style="font-size: 12px;">Time</th>
+	                  <th style="font-size: 12px;">Vehicle Type</th>
+	                  <th style="font-size: 12px;">Operater</th>
+	                  <th style="font-size: 12px;">Nature</th>	
+	                  <th style="font-size: 12px;">User</th>
+	               			
+	               </tr>
+	         </thead>
+	         <tbody>
+		<%for(Object[] trip:reqlinkduty){%>
+		<tr>
+	      	 
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[0]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[1]%>  To <%=trip[14]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[2]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[3]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[4]%>-<%=trip[5]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%if(trip[6]!=null){ %> <%=trip[6]%><%}else{ %>--<%} %></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[7]%></td>
+	        <td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[8]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[9]%></td>
+		</tr>
+		 <%}%>
+	 
+	 
+	 
+	 </tbody>
+	 </table>
+	 </div>
+	  
+	  <%}else{%>
+	  <div align="center"><b class="badge badge-warning">No Trip Found</b></div>
+	  <%}%>
+	 </div>
+	 
+	 </div>
+	  
+</div>
+</div>
+</div> 
+              </div><!--//row -->
+             </div><!--//modal body -->
+                 
+             <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">close</button> 
+             </div>
+            </div>
+        </div>
+     </div>
+   </div>
 </div>
 
-
+    </div>    
+</div>
+</body>
 <script type="text/javascript">
 $('#dos').daterangepicker({
 	"singleDatePicker" : true,
@@ -331,5 +685,5 @@ function setInputFilter(obj, inputFilter) {
 	
 	
 </script>
-</body>
+
 </html>

@@ -101,10 +101,10 @@
 		<div class="col-md-3"></div>
 		
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
-		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Fdate"  name="Fromdate"  required="required"  style="width: 120px;">
+		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Fdate"  name="Fromdate"  required="required" <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate%>" <%}%>  style="width: 120px;">
 	
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
-		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Tdate"  name="Todate"  style="width: 120px;">
+		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Tdate"  name="Todate" <%if(todate!=null && todate!=""){%> value="<%=todate%>" <%}%>  style="width: 120px;">
 		
 		<div class="col-md-4 d-flex justify-content-center" >
 			<button type="submit" class="btn btn-sm submit-btn" style="margin-left: -50%;" name="action" value="submit" > Submit</button>

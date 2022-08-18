@@ -824,4 +824,73 @@ public class MtDaoImpl implements MtDao {
 			return 0;
 		}
 	}
+	
+	 private  static final  String DELETEMTREQ="UPDATE mt_appl set IsActive=:ISACTIVE WHERE MtReqNo=:mtreqno ";
+	@Override
+	public int MtAdminReqDelete(String tripid)throws Exception
+	{
+		
+		logger.info(new Date() +"Inside DAO MtAdminReqDelete()");
+		try {
+			Query query= manager.createNativeQuery(DELETEMTREQ);
+			query.setParameter("ISACTIVE", 0);
+			query.setParameter("mtreqno", tripid);
+			
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return  0;
+		}
+		
+	}
+	
+	private static final String REQUESTEDIT="SELECT mtreqno ,dateoftravel, starttime, endtime, source, destination,enddateoftravel FROM  mt_appl WHERE mtreqno=:tripid";
+
+	@Override
+	public Object[] MtAdminReqEdit(String tripid) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO MtAdminReqEdit()");
+		Object[] list=null;
+		
+		try {
+			Query query=manager.createNativeQuery(REQUESTEDIT);
+			query.setParameter("tripid", tripid);
+			List<Object[]> reportlist =(List<Object[]>)query.getResultList();		
+			if( reportlist!=null && reportlist.size()>0) {
+				list=reportlist.get(0);
+			}
+	
+			return list;
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String MTADMINEDIT="UPDATE mt_appl set DateOfTravel=:date, StartTime=:starttime,EndTime=:endtime,Source=:source,Destination=:destination,ModifiedBy=:modifiedby,ModifiedDate=:modifieddate,EndDateOfTravel=:Edate WHERE MtReqNo=:mtreqno ";
+
+	
+	@Override
+	public int MtAdminReqEdit(MtUserApply apply) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO MtAdminReqEdit()");
+		try {
+			Query query=manager.createNativeQuery(MTADMINEDIT);
+			query.setParameter("starttime", apply.getStartTime());
+			query.setParameter("endtime", apply.getEndTime());
+			query.setParameter("source", apply.getSource());
+			query.setParameter("destination", apply.getDestination());
+			query.setParameter("mtreqno", apply.getMtReqNo());
+			query.setParameter("date",apply.getDateOfTravel());
+			query.setParameter("Edate",apply.getEndDateOfTravel());
+			query.setParameter("modifiedby", apply.getModifiedBy());
+			query.setParameter("modifieddate", apply.getModifiedDate());
+			
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return  0;
+		}
+		
+	}
 }

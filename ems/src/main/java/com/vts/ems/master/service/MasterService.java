@@ -2,13 +2,13 @@ package com.vts.ems.master.service;
 
 import java.util.List;
 
-import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dto.CircularListDto;
 import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;

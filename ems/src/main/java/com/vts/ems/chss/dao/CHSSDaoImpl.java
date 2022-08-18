@@ -34,7 +34,6 @@ import com.vts.ems.chss.model.CHSSBillIPDheads;
 import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
-import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSIPDAttachments;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -45,6 +44,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTreatType;
+import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.model.EMSNotification;
 

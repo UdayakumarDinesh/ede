@@ -29,13 +29,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.chss.controller.CHSSController;
-import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dto.CircularListDto;
 import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
@@ -459,10 +459,9 @@ public class MasterController {
 					service.AddMasterEditComments(masteredit , masterdto);
 					if (result != 0) {
 		    			redir.addAttribute("result", "Medicine Deleted Successfully");
-					}else{
+					} else {
 						redir.addAttribute("resultfail", "Medicine Delete UnSuccessful");
 					}
-	
                   return "redirect:/MedicineList.htm";
 			} catch (Exception e) {
 				logger.error(new Date() +"Inside ChssMedicineDelete.htm "+UserId ,e);

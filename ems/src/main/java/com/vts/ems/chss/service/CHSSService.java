@@ -26,7 +26,6 @@ import com.vts.ems.chss.model.CHSSBillEquipment;
 import com.vts.ems.chss.model.CHSSBillIPDheads;
 import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSContingent;
-import com.vts.ems.chss.model.CHSSDoctorRates;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -38,6 +37,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.MasterEdit;
 
 public interface CHSSService 

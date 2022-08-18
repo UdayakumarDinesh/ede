@@ -59,7 +59,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 										  <%int count=1;
 										  for(Object[] obj:ghapprovelist){ %>
 										  <tr>
-											  <td><%=obj[1] %>&nbsp;<%=obj[2] %></td>
+											  <td><%=obj[1] %>&nbsp;(<%=obj[2] %>)</td>
 											  <td align="center"><%=sdf.format(obj[4]) %>  To  <%=sdf.format(obj[12]) %>  </td>
 											  <td><%=obj[7] %></td>
 											  <td><%=obj[8] %></td>

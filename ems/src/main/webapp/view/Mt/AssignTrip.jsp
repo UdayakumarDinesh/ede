@@ -30,7 +30,7 @@ float: left;
 			<%if(mttrip!=null){ %>
 				<h5>Assign Trip Edit</h5>
 			<%}else{%>
-			     <h5>Assign Trip </h5>
+			<h5>Assign Trip </h5>
 			<%}%>
 			</div>
 				<div class="col-md-9 ">
@@ -287,21 +287,21 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 			      	<%=alist[14]%>
 			      	<%}else{ %><span>No Comment</span><%} %>
 			      	</td>
-			      	<td >dfdfd
+			      	<td >
 			      	<%if(alist[13]!=null){%>
 			      	<%=alist[13]%>
 			      	<%}else{ %><span>No Comment</span><%} %>
 			      	</td>	      	
-			<%-- <td> <div  type="button" class="clickable btn btn btn-warning" onclick="window.location.href = 'DoEdit.htm?dopn=<%=driver.getDriverId() %>'"><b>EDIT</b></div></td> --%>
-	
+			
 	 
 	 <%} %>
 	  </tr>
 </tbody>
 	 </table>
 	 </div>
-	   <div align="center">	<button type="submit" class="btn btn-sm edit-btn" name="sub" value="edit"  onclick="Edit(frm2)">EDIT</button>&nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;
-		<button type="submit" class="btn btn-sm delete-btn" name="sub" value="delete" formaction="MTRequestDelete.htm"  onclick="Delete(frm2)">DELETE</button>
+	   <div align="center">	
+	   <button type="submit" class="btn btn-sm edit-btn" name="sub" value="edit"  onclick="Edit(frm2)">EDIT</button>&nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;
+		<!-- <button type="submit" class="btn btn-sm delete-btn" name="sub" value="delete" formaction="MTRequestDelete.htm"  onclick="Delete(frm2)">DELETE</button> -->
 	 </div>
 
 	   </form>
@@ -354,7 +354,7 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 	      	<%=alist[13]%>
 	      	<%}else{ %><span>No Comment</span><%} %>
 	      	</td>
-			<%-- <td> <div  type="button" class="clickable btn btn btn-warning" onclick="window.location.href = 'DoEdit.htm?dopn=<%=driver.getDriverId() %>'"><b>EDIT</b></div></td> --%>
+			 
 	 </tr>
 	 <%}%> 
 	 </tbody>
@@ -362,8 +362,7 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 	 </div>
 	<div align="center">	
 	<button type="submit" class="btn btn-sm edit-btn" name="sub" value="edit"  onclick="Edit(frm2)">EDIT</button>&nbsp; &nbsp; &nbsp; 
-	 <button type="submit" class="btn btn-sm delete-btn" name="sub" value="delete" formaction="MTRequestDelete.htm"  onclick="Delete(frm2)">DELETE</button>
-	
+	<!--  <button type="submit" class="btn btn-sm delete-btn" name="sub" value="delete" formaction="MTRequestDelete.htm"  onclick="Delete(frm2)">DELETE</button> -->
 	</div> 
 	   </form>
 <%}%><!-- second apply close -->
