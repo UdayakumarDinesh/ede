@@ -15,6 +15,7 @@ String comp=(String)request.getAttribute("comp");
 SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 List<Object[]> plist=(List<Object[]>)request.getAttribute("printlist");
+System.out.println(plist.size());
 %>
 
 <div class="card-header page-top ">

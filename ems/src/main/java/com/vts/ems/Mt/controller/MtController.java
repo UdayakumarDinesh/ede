@@ -84,6 +84,49 @@ public class MtController {
 		try {		
 			List<Object[]> typeofduty = (List<Object[]>)service.GetDutyType();
 			List<Object[]> projectlist = (List<Object[]>)service.GetProjectList();
+			 List<Object[]> listapply=service.VehiclePendingListDashBoard();
+				
+				List<Object[]> firstapply=null;
+				List<Object[]> secondapply=null;
+				List<Object[]> thirdapply=null;
+				List<Object[]> fourthapply=null;
+				List<Object[]> fifthpply=null;
+			
+			 firstapply=new ArrayList<Object[]>();
+			 secondapply=new ArrayList<Object[]>();
+			 thirdapply=new ArrayList<Object[]>();
+			 fourthapply=new ArrayList<Object[]>();
+			 fifthpply=new ArrayList<Object[]>();
+			
+			 for(Object[] list:listapply) {
+				if(sdtf.format(new Date()).equalsIgnoreCase(sdtf.format(list[1]))) {
+					firstapply.add(list);	
+				}
+				
+				if(sdtf.format(new Date(new Date().getTime()+(24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+					secondapply.add(list);	
+				}
+				
+				if(sdtf.format(new Date(new Date().getTime()+(2*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+					thirdapply.add(list);	
+				}
+				
+				if(sdtf.format(new Date(new Date().getTime()+(3*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+					fourthapply.add(list);	
+				}
+				
+				if(sdtf.format(new Date(new Date().getTime()+(4*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+					fifthpply.add(list);	
+				}
+				
+			}
+			req.setAttribute("firstapply", firstapply);
+			req.setAttribute("secondapply", secondapply);
+			req.setAttribute("thirdapply", thirdapply);
+			req.setAttribute("fourthapply", fourthapply);
+			req.setAttribute("fifthpply", fifthpply);
+			req.setAttribute("linkrequestlist",service.VehicleAssignedListDashBoard());
+
 			Object[] emp =service.getEmpData((Long)ses.getAttribute("EmpId")); 
 			String Name=emp[1]+"  "+emp[2];
 			req.setAttribute("empname",Name);
@@ -360,7 +403,7 @@ public class MtController {
 					  trx.setMtStatus("D"); 
 					  trx.setMtRemarks("Delete By User");
 					  trx.setMtApplId(Integer.parseInt(req.getParameter("MtApplyId")));
-					  trx.setActionBy(String.valueOf((Long)ses.getAttribute("EmpId")));
+					  trx.setActionBy((String)ses.getAttribute("EmpNo"));
 				      trx.setActionDate(sdtf.format(new Date()));
 				  service.MtApplyTranscation(trx);
 				  
@@ -565,7 +608,7 @@ public class MtController {
 					trx.setMtStatus("R");
 					trx.setMtRemarks(req.getParameter(str.split("-")[0]));
 					trx.setMtApplId(Integer.parseInt(str.split("-")[0]));
-					trx.setActionBy(String.valueOf((Long)ses.getAttribute("EmpId")));
+					trx.setActionBy((String)ses.getAttribute("EmpNo"));
 					trx.setActionDate(sdtf.format(new Date()));
 					service.MtApplyTranscation(trx);
 					
@@ -681,7 +724,7 @@ public class MtController {
 			duty.setMtApplId(Integer.parseInt(req.getParameter("appid")));
 			duty.setTripId(Integer.parseInt(req.getParameter("tripid")));
 			duty.setEmpId(req.getParameter("EmpId"));
-			duty.setCreatedBy(String.valueOf((Long)ses.getAttribute("EmpId")));
+			duty.setCreatedBy((String)ses.getAttribute("EmpNo"));
 			duty.setCreatedDate(sdtf.format(new Date()));
 			duty.setIsActive(1);
 			try {
@@ -691,7 +734,7 @@ public class MtController {
 						trx.setMtStatus("S");
 						trx.setMtRemarks("Link By MTO");
 						trx.setMtApplId(Integer.parseInt(req.getParameter("appid")));
-						trx.setActionBy(String.valueOf((Long)ses.getAttribute("EmpId")));
+						trx.setActionBy((String)ses.getAttribute("EmpNo"));
 						trx.setActionDate(sdtf.format(new Date()));
 						service.MtApplyTranscation(trx);
 						int tripid=Integer.parseInt(req.getParameter("tripid"));
@@ -754,7 +797,7 @@ public class MtController {
 			if(year1!=0&&month1!=0) {
 				
 				YearMonth yearMonth = YearMonth.of(year1, month1);
-				System.out.println(yearMonth+""+year1+""+month1);
+
 				int lengthOfMonth = yearMonth.lengthOfMonth();
 				
 				req.setAttribute("printlist",service.PrintList(year1+"-"+month1+"-"+"01",year1+"-"+month1+"-"+lengthOfMonth));
@@ -1042,7 +1085,7 @@ public class MtController {
 			MtLinkDuty duty=new MtLinkDuty();
 				duty.setLinkDutyId(Integer.parseInt(req.getParameter("lid")));
 				duty.setMtApplId(Integer.parseInt(req.getParameter("appid")));
-				duty.setCreatedBy((String)ses.getAttribute("EmpId"));
+				duty.setCreatedBy((String)ses.getAttribute("EmpNo"));
 				duty.setCreatedDate(sdtf.format(new Date()));
 			int count=service.UnLinkRequest(duty);
 			
@@ -1057,7 +1100,7 @@ public class MtController {
 				service.MtApplyTranscation(trx);
 				
 				EMSNotification notification=new EMSNotification();
-					notification.setEmpId(Long.parseLong(req.getParameter("EmpId")));
+					//notification.setEmpId(Long.parseLong(req.getParameter("EmpId")));
 					notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationMessage("Trip Cancle By MTO");
@@ -1065,7 +1108,7 @@ public class MtController {
 					notification.setCreatedBy(Username);
 					notification.setCreatedDate(sdtf.format(new Date()));
 					notification.setIsActive(1);
-				service.MtEmsNotification(notification);
+				//service.MtEmsNotification(notification);
 			}
 			
 			if(count!=0) {
@@ -1138,8 +1181,9 @@ public class MtController {
 				 String newDate = sdf.format(cal.getTime()); 
 				 req.setAttribute("dutylist",service.DirectorTripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(sdf.parse(newDate).getTime())));
 			}
-			ses.setAttribute("fromdate", FDate);
-			ses.setAttribute("todate", TDate);
+			
+			req.setAttribute("fromdate", FDate);
+			req.setAttribute("todate", TDate);
 			ses.setAttribute("SidebarActive", "DirectorTrip_htm");
 			return "Mt/MtDirectorTrip";
 		} catch (Exception e) {
@@ -1157,8 +1201,8 @@ public class MtController {
 			
 			MtDirectorDuty duty= new MtDirectorDuty();
 				duty.setDriverId(Integer.parseInt(req.getParameter("DriverId")));
-				duty.setFromDate(DateTimeFormatUtil.dateConversionSql(req.getParameter("FDate")));
-				duty.setToDate(DateTimeFormatUtil.dateConversionSql(req.getParameter("TDate")));
+				duty.setFromDate(DateTimeFormatUtil.dateConversionSql(req.getParameter("fromdate")));
+				duty.setToDate(DateTimeFormatUtil.dateConversionSql(req.getParameter("todate")));
 				duty.setCreatedBy((String)ses.getAttribute("EmpNo"));
 				duty.setCreatedDate(sdtf.format(new Date()));
 				duty.setIsActive(1);
@@ -1184,14 +1228,79 @@ public class MtController {
 	
 	@RequestMapping(value="MTRequestEdit.htm",method=RequestMethod.POST)
 	public String MTRequestEdit(HttpServletRequest req,HttpSession ses) throws Exception {
-	
-		String submit=req.getParameter("sub");
-		String tripid=(req.getParameter("Aid"));
-		if(submit.equalsIgnoreCase("edit")) {
-			 //req.setAttribute("requestedit",service.MtAdminReqEdit(tripid));
-			return "Mt/MTRequestEdit";
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MTRequestEdit.htm "+Username);	
+		
+		try {
+			String submit=req.getParameter("sub");
+			String tripid=(req.getParameter("Aid"));
+			if(submit.equalsIgnoreCase("edit")) {
+				 req.setAttribute("requestedit",service.MtAdminReqEdit(tripid));
+				return "Mt/MtRequestEdit";
+			}
+			return "Mt/MtRequestEdit";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside MTRequestEdit.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
 		}
-		return "Mt/MTRequestEdit";
+		
+	}
+	
+	@RequestMapping(value="MTRequestDelete.htm",method=RequestMethod.POST)
+	public String MTRequestDelete(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MTRequestDelete.htm "+Username);	
+		
+		try {
+			String tripid=(req.getParameter("Aid"));
+			int count = service.MtAdminReqDelete(tripid);
+			if(count!=0) {
+				redir.addAttribute("result","Trip Deleted Successful");
+			}else {
+				redir.addAttribute("resultfail","Trip Delete UnSuccessful");
+			}
+			return "redirect:/MTHome.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside MTRequestDelete.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	
+	}
+	
+	@RequestMapping(value="MTRequestEditSubmit.htm",method=RequestMethod.POST)
+	public String MTRequestEditSubmit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
+		
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside MTRequestEditSubmit.htm "+Username);	
+		
+		try {
+
+			MtUserApply apply=new MtUserApply();
+			apply.setStartTime(req.getParameter("Dtime"));
+			apply.setEndTime(req.getParameter("Rtime"));
+			apply.setSource(req.getParameter("Source"));
+			apply.setDestination(req.getParameter("Destination"));
+		    apply.setDateOfTravel(DateTimeFormatUtil.dateConversionSql(req.getParameter("Dtravel")));
+		    apply.setEndDateOfTravel(DateTimeFormatUtil.dateConversionSql(req.getParameter("Etravel")));
+			apply.setMtReqNo(req.getParameter("reqid1"));
+			
+			apply.setModifiedBy(Username);
+			apply.setModifiedDate(sdtf.format(new Date()));
+				int count=service.MtAdminReqEdit(apply);
+				if(count!=0){
+					redir.addAttribute("result","Request Edit Successful");
+				}else{
+					redir.addAttribute("resultfail","Request Edit  UnSuccessful");
+				}
+				return "redirect:/MTHome.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside MTRequestEditSubmit.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	
 	}
 	
 	

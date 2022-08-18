@@ -326,4 +326,22 @@ public class MtServiceImpl implements MtService {
 		
 		return dao.DirectorTripAssign(Dduty);
 	}
+	
+	@Override
+	public int MtAdminReqDelete(String tripid)throws Exception{
+		
+		return dao.MtAdminReqDelete(tripid);
+	}
+	
+	@Override
+	public Object[] MtAdminReqEdit(String tripid) throws Exception {
+		
+		return dao.MtAdminReqEdit(tripid);
+	}
+	
+	@Override
+	public int MtAdminReqEdit(MtUserApply apply) throws Exception {
+		
+		return dao.MtAdminReqEdit(apply);
+	}
 }
