@@ -57,14 +57,15 @@ public class MtController {
 		try {
 			
 			String logintype = (String)ses.getAttribute("LoginType");
-			
-		
 			List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 		
 			ses.setAttribute("formmoduleid", "6"); 
 			ses.setAttribute("SidebarActive", "MtDashboard_htm");
 			req.setAttribute("dashboard", admindashboard);
-
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
+			
 			return "Mt/MtDashboard";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside MtDashboard.htm "+Username, e);
@@ -127,9 +128,10 @@ public class MtController {
 			req.setAttribute("fifthpply", fifthpply);
 			req.setAttribute("linkrequestlist",service.VehicleAssignedListDashBoard());
 
-			Object[] emp =service.getEmpData((Long)ses.getAttribute("EmpId")); 
-			String Name=emp[1]+"  "+emp[2];
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
+			req.setAttribute("groupcode", emp[3]);
 			req.setAttribute("typedutylist", typeofduty);
 			req.setAttribute("projectlist", projectlist);
 			ses.setAttribute("SidebarActive", "MtRequestTrip_htm");
@@ -303,8 +305,13 @@ public class MtController {
 
 			req.setAttribute("Mtapplylist",service.GetApplyDataOFApplyStatus((String)ses.getAttribute("EmpNo")));
 			req.setAttribute("Mtapplysanclist",service.GetApplyDataOfSancApplyStatus((String)ses.getAttribute("EmpNo")));	
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
+			
 			ses.setAttribute("SidebarActive", "MtList_htm");
 			return "Mt/MtList";
+			
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtList.htm "+Username, e);
 			e.printStackTrace();	
@@ -370,11 +377,10 @@ public class MtController {
 				req.setAttribute("fifthpply", fifthpply);
 				req.setAttribute("linkrequestlist",service.VehicleAssignedListDashBoard());
 				  
-				  Object[] emp=service.getEmpData((Long)ses.getAttribute("EmpId")); String
-				  Name=emp[1]+""+emp[2];
+				  Object[] emp=service.getEmpData((String)ses.getAttribute("EmpId")); 
+				  String Name=emp[1]+""+emp[2];
 				  req.setAttribute("empname",Name);
-				  //req.setAttribute("groupcode",emp.getGroup_Code());
-
+				 req.setAttribute("groupcode", emp[3]);
 				return "Mt/MtUserApply";
 			
 			}
@@ -383,10 +389,10 @@ public class MtController {
 				  req.setAttribute("editdata",service.getApplySingleData(Integer.parseInt(req.getParameter("MtApplyId"))));
 				  req.setAttribute("comp","edit");
 				  req.setAttribute("typedutylist",service.GetDutyType()); 
-				  Object[] emp =service.getEmpData((Long)ses.getAttribute("EmpId")); String
-				  Name=emp[1]+" "+emp[2];
+				  Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+				  String  Name=emp[1]+" "+emp[2];
 				  req.setAttribute("empname",Name);
-				  //req.setAttribute("groupcode",emp.getGroup_Code());
+				  req.setAttribute("groupcode", emp[3]);
 				  req.setAttribute("projectlist",service.GetProjectList());
 				  ses.setAttribute("SidebarActive", "MtRequestTrip_htm");
 					return "Mt/MtUserApply";
@@ -459,6 +465,11 @@ public class MtController {
 			
 			ses.setAttribute("formmoduleid", "6"); 
 			ses.setAttribute("SidebarActive", "MTHome_htm");
+			
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
+			req.setAttribute("groupcode", emp[3]);
 			return "Mt/AssignTrip";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MTHome.htm "+Username, e);
@@ -574,6 +585,9 @@ public class MtController {
 			req.setAttribute("GhApproveList", service.GhApproveList((String)ses.getAttribute("EmpNo")));	
 			ses.setAttribute("SidebarActive", "MtGhApprove_htm");
 			ses.setAttribute("formmoduleid", "6");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtGhApprove";	
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtGhApprove.htm "+Username, e);
@@ -705,7 +719,10 @@ public class MtController {
 			req.setAttribute("triplist",service.getListOfTrip());
 			req.setAttribute("comp","link");
 			ses.setAttribute("SidebarActive", "MTTripLink_htm");
-			ses.setAttribute("formmoduleid", "6"); 
+			ses.setAttribute("formmoduleid", "6");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtLink";	
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MTTripLink.htm "+Username, e);
@@ -808,6 +825,10 @@ public class MtController {
 			
 			req.setAttribute("comp","print");
 			ses.setAttribute("SidebarActive", "MtPrint_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
+			
 			return "Mt/MtPrint";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtPrint.htm "+Username, e);
@@ -872,6 +893,9 @@ public class MtController {
 			req.setAttribute("driveremplist", driveremplist);
 			req.setAttribute("driverlist", mtdriver);
 			ses.setAttribute("SidebarActive", "MtDriver_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtDriver";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtDriver.htm "+Username, e);
@@ -935,6 +959,9 @@ public class MtController {
 			List<MtVehicle> vehiclelist = (List<MtVehicle>)service.GetVechileList();		
 			req.setAttribute("vehiclelist", vehiclelist);
 			ses.setAttribute("SidebarActive", "MtVehicle_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtVehicle";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtVehicle.htm "+Username, e);
@@ -953,6 +980,9 @@ public class MtController {
 				if(action.equalsIgnoreCase("Edit")) {
 					req.setAttribute("vehicledata",service.GetVehicleData(Integer.parseInt(req.getParameter("vehicleid"))));
 					ses.setAttribute("SidebarActive", "MtVehicle_htm");
+					Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+					String Name=emp[1]+"  ("+emp[2]+")";
+					req.setAttribute("empname",Name);
 					return "Mt/MtVehicleAddEdit";
 				}else if(action.equalsIgnoreCase("Delete")) {
 					MtVehicle vehicle=new MtVehicle();
@@ -969,6 +999,9 @@ public class MtController {
 					return "redirect:/MtVehicle.htm";
 				}else {
 					ses.setAttribute("SidebarActive", "MtVehicle_htm");
+					Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+					String Name=emp[1]+"  ("+emp[2]+")";
+					req.setAttribute("empname",Name);
 					return "Mt/MtVehicleAddEdit";
 				}
 		} catch (Exception e) {
@@ -1037,6 +1070,9 @@ public class MtController {
 			req.setAttribute("vehiclelist",service.GetVechileList());
 			req.setAttribute("ReportList",service.DateWiseProjectReport(new java.sql.Date(new Date().getTime()),new java.sql.Date(new Date().getTime()),-1,-1));
 			ses.setAttribute("SidebarActive", "TripReport_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtReport";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TripReport.htm "+Username, e);
@@ -1066,6 +1102,9 @@ public class MtController {
 			req.setAttribute("fromdate", req.getParameter("fromdate"));
 			req.setAttribute("todate", req.getParameter("todate"));
 			req.setAttribute("ReportList",DateWiseProjectReport);
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtReport";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TripReport.htm "+Username, e);
@@ -1153,6 +1192,9 @@ public class MtController {
 			req.setAttribute("fromdate",FromDate );
 			req.setAttribute("todate",ToDate );
 			ses.setAttribute("SidebarActive", "MtTripList_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
 			return "Mt/MtTripList";
 		}catch(Exception e){
 			logger.error(new Date() +" Inside MtTripList.htm "+Username, e);
@@ -1185,6 +1227,10 @@ public class MtController {
 			req.setAttribute("fromdate", FDate);
 			req.setAttribute("todate", TDate);
 			ses.setAttribute("SidebarActive", "DirectorTrip_htm");
+			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+			String Name=emp[1]+"  ("+emp[2]+")";
+			req.setAttribute("empname",Name);
+			
 			return "Mt/MtDirectorTrip";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside DirectorTrip.htm "+Username, e);
@@ -1236,6 +1282,9 @@ public class MtController {
 			String tripid=(req.getParameter("Aid"));
 			if(submit.equalsIgnoreCase("edit")) {
 				 req.setAttribute("requestedit",service.MtAdminReqEdit(tripid));
+					Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+					String Name=emp[1]+"  ("+emp[2]+")";
+					req.setAttribute("empname",Name);
 				return "Mt/MtRequestEdit";
 			}
 			return "Mt/MtRequestEdit";

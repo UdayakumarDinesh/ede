@@ -15,13 +15,15 @@
 List<Object[]> dutylist = (List<Object[]>)request.getAttribute("typedutylist"); 
 List<Object[]> projectlist = (List<Object[]>)request.getAttribute("projectlist");
 MtUserApply apply=(MtUserApply)request.getAttribute("editdata");
+String username= (String)request.getAttribute("empname");
+String groupname=(String)request.getAttribute("groupcode");
 %>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Request Trip</h5>
+			<div class="col-md-6">
+				<h5>Request Trip <small><%if(username!=null){%><%=username%><%}%></small> </h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="MtDashboard.htm">MT</a></li>

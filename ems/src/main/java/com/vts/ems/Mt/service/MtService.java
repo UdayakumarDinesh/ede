@@ -28,7 +28,7 @@ public interface MtService {
 	public List<Object[]> VehiclePendingListDashBoard() throws Exception;
 	public List<Object[]> VehicleAssignedListDashBoard() throws Exception;
 	public MtUserApply getApplySingleData(int MtApplId) throws Exception;
-	public Object[] getEmpData(Long EmpId) throws Exception;
+	public Object[] getEmpData(String EmpNo) throws Exception;
 	public int UserApplyCancel(MtUserApply apply) throws Exception;
 	public List<Object[]> getApplyList(String EmpId)throws Exception;
 	public List<Object[]> getDriverList() throws Exception;

@@ -113,9 +113,9 @@ public class MtServiceImpl implements MtService {
 	}
 	
 	@Override
-	public Object[] getEmpData(Long EmpId) throws Exception {
+	public Object[] getEmpData(String EmpNo) throws Exception {
 	
-		return dao.getEmpData(EmpId);
+		return dao.getEmpData(EmpNo);
 	}
 	
 	@Override

@@ -213,14 +213,14 @@ public class MtDaoImpl implements MtDao {
 	}
 	
 	@Override
-	public Object[] getEmpData(Long EmpId) throws Exception
+	public Object[] getEmpData(String EmpNo) throws Exception
 	{
 		logger.info(new Date() +"Inside DAO getEmpData()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		Object[] empdata=null;
 		try {
-			Query query = manager.createNativeQuery("CALL mt_employeedata(:empid);");
-			query.setParameter("empid", EmpId);
+			Query query = manager.createNativeQuery("CALL mt_employeedata(:empno);");
+			query.setParameter("empno", EmpNo);
 			list = (List<Object[]>)query.getResultList();
 		
 			if(list!=null && list.size()>0) {

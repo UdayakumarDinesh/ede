@@ -14,17 +14,17 @@
 <body>
 	    
 <%MtVehicle vehiclelist=(MtVehicle)request.getAttribute("vehicledata"); 
-	%>
+String empname = (String)request.getAttribute("empname");	%>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-6">
 			<%if(vehiclelist!=null){ %>
-				<h5>Edit Vehicle</h5>
+				<h5>Edit Vehicle <small> <%if(empname!=null){%> <%=empname %> <%}%> </small> </h5>
 				<%}else{%>
-				<h5>Add Vehicle</h5>
+				<h5>Add Vehicle <small><%if(empname!=null){%> <%=empname %> <%}%></small> </h5>
 			<%}%>	
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="MtDashboard.htm">MT</a></li>

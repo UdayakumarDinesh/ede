@@ -22,18 +22,19 @@ float: left;
 	SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	List<Object[]> driverlist=(List<Object[]>)request.getAttribute("DriverList");
 	List<MtVehicle> vehiclelist=(List<MtVehicle>)request.getAttribute("vehiclelist");
-
+	String username= (String)request.getAttribute("empname");
+	String groupname=(String)request.getAttribute("groupcode");
  %>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-			<%if(mttrip!=null){ %>
-				<h5>Assign Trip Edit</h5>
+			<div class="col-md-6">
+			<%if(mttrip!=null){%>
+				<h5>Assign Trip Edit <small> <%if(username!=null){%> <%=username%> <%}%> </small> </h5>
 			<%}else{%>
-			<h5>Assign Trip </h5>
+				<h5>Assign Trip      <small> <%if(username!=null){%> <%=username%> <%}%> </small> </h5>
 			<%}%>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="MtDashboard.htm">MT</a></li>
