@@ -297,31 +297,6 @@
 	
 <div class=" card profile-card-container " >
  
-<%-- <div style="margin:0px 0px 0px 0px !important;padding-top: 15px;">
- 		<form action="#" method="post" >
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
- 				<div class="row"> 
-						
-				<%if(dashboard!=null)
-				{ 
-					for(Object[] obj:dashboard)
-					{
-						if(!(obj[2].toString().equals("4") || obj[2].toString().equals("5"))) 
-						{ %>	
-											
-						<div class="col-md-3"  >
-							<button type="submit" style="margin: 5px 5px 10px 5px;" class=" db-button w-100"  formaction="<%=obj[1]%>" ><%=obj[0]%></button>
-						</div>
-						
-					<%	} 
-					}
-				}%>
-						
-			</div>
-		</form>
-	</div> 	
-	 --%>
-
 	<div class="row" >
 		<div class="col-md-2">
 		<%if(!IsSelf.equalsIgnoreCase("Y")){ %>
@@ -439,29 +414,17 @@
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[26].toString()))))%></td>
+									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString()))))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
 										<%if("14".equals(obj[9].toString())){ %>
-											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString()))))%>
+											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString()))))%>
 										<%}else{ %>
 											-
 										<%} %>
 									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
 									 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
-									 data-toggle="tooltip" data-placement="top" title="Transaction History"
-										<%if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) ){%>  
-										    style=" color:#2155CD; font-weight: 600;"				
-											<%}else if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString()) || "11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>
-											 style="  color:#B20600; font-weight: 600;"     
-											<%}else  if("4".equals(obj[9].toString())||"6".equals(obj[9].toString())||"8".equals(obj[9].toString())|| "10".equals(obj[9].toString()) || "12".equals(obj[9].toString())){%>
-												style=" color:#F66B0E; font-weight: 600;"
-											<%}else if("14".equals(obj[9].toString())){ %>
-											style=" color:#125C13; font-weight: 600;"
-											<%}else{ %>
-											 style=" color:#4700D8; font-weight: 600;"
-											<%} %>
-									>  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+									 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[25]%>; font-weight: 600;">  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 									
 									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
@@ -478,7 +441,7 @@
 												</button>
 											
 											<%} %>
-											<%if(Integer.parseInt(obj[9].toString())==1){ %>
+											<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
 											<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
 												<i class="fa-solid fa-trash-can " style="color: red"></i>
 											</button>

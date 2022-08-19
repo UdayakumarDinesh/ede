@@ -80,9 +80,7 @@ body
 {
 	font-size:14px !important;
 }
- table{
-	max-width: 670px !important;
-}
+
 div
 {
 	width: 650px !important;
@@ -90,6 +88,7 @@ div
 table{
 	align: left;
 	width: 650px !important;
+	max-width: 650px !important;
 	margin-top: 10px; 
 	margin-bottom: 10px;
 	margin-left:10px;
@@ -103,6 +102,16 @@ th,td
 	padding: 4px;
 	word-break: break-word;
 	overflow-wrap: anywhere;
+	
+	 -ms-word-break: break-all;
+     word-break: break-all;
+
+     /* Non standard for WebKit */
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+        hyphens: auto;
 	
 }
 .center{
@@ -261,17 +270,17 @@ th,td
 						<td colspan="2"><b>Ext.No. : </b> <span class="text-blue" ><%=employee[14]%></span></td>
 					</tr>
 				</tbody>
-			</table>
+			</table>n
 			<table style="margin-top: 0px;">	
 				<tbody>
 					<tr>
 						<th class="center" style="width: 5%;" >SN</th>
-						<th style="width: 25;" >Hospital / Medical / Diagnostics Centre Name</th>
-						<th style="width: 20%;" >Bill / Receipt No.</th>
-						<th class="center" style="width: 15%;" >Date</th>
-						<th style="text-align: right;width: 10%;">MRP (&#8377;)</th>
-						<th style="text-align: right;width: 10%;">Discount (&#8377;)</th>
-						<th style="text-align: right;width: 12%;">Total (&#8377;)</th>
+						<th style="width: 30%;" >Hospital / Medical / Diagnostics Center Name</th>
+						<th style="width: 17%;" >Bill / Receipt No.</th>
+						<th class="center" style="width: 10%;" >Date</th>
+						<th style="text-align: right;width: 11%;">MRP (&#8377;)</th>
+						<th style="text-align: right;width: 14%;">Discount (&#8377;)</th>
+						<th style="text-align: right;width: 13%;">Total (&#8377;)</th>
 					</tr>
 					<%	/*  billstotal = new BigDecimal(0);
 					 discount = new BigDecimal(0); */ /*,  GST=0 */;
@@ -286,13 +295,13 @@ th,td
 						}
 					%>
 						<tr>
-							<td class="center text-blue" style="width: 5%;"><%=i+1 %></td>
-							<td class="text-blue" style=" width: 25%; word-wrap: break-word !important;white-space: pre-wrap;word-break: break-word; "><%=chssbillslist.get(i)[3] %></td>
-							<td class="text-blue" style="width: 20%;"><%=chssbillslist.get(i)[2] %></td>
-							<td class="center text-blue" style="width: 15%;" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
-							<td class="text-blue" style="text-align: right;width: 10%;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
-							<td class="text-blue" style="text-align: right;width: 10%;"><%=chssbillslist.get(i)[6] %></td>
-							<td class="text-blue" style="text-align: right;width: 12%;"><%=chssbillslist.get(i)[7] %></td>
+							<td class="center text-blue" ><%=i+1 %></td>
+							<td class="text-blue" style=" white-space: pre-wrap;word-break: break-all; "><%=chssbillslist.get(i)[3] %></td>
+							<td class="text-blue" style=""><%=chssbillslist.get(i)[2] %></td>
+							<td class="center text-blue" style="" ><%=rdf.format(sdf.parse(chssbillslist.get(i)[4].toString())) %></td>
+							<td class="text-blue" style="text-align: right;"><%=new BigDecimal(chssbillslist.get(i)[6].toString()).add(new BigDecimal(chssbillslist.get(i)[7].toString())) %></td>
+							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[6] %></td>
+							<td class="text-blue" style="text-align: right;"><%=chssbillslist.get(i)[7] %></td>
 						</tr>
 					<%} %>
 					<%if(chssbillslist.size()>0){ %>

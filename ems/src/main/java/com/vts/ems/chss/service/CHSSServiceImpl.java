@@ -1706,11 +1706,9 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
 	{
-		List<Object[]> claims = dao.CHSSStatusDetails(chssapplyid);
-		
+		List<Object[]> claims = dao.CHSSStatusDetails(chssapplyid);		
 		return claims;
 	}
-
 	
 	@Override
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception
@@ -1886,8 +1884,17 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		if(claim.getPOAcknowledge()==0) 
 		{
-		
 			claim.setCHSSStatusId(1);
+			
+			List<CHSSApplyTransaction> transachistory = dao.claimTransactionObjects(CHSSApplyId);
+			for(CHSSApplyTransaction transaction : transachistory) {
+				if(transaction.getCHSSStatusId()==3) {
+					claim.setCHSSStatusId(3);
+					break;
+				}
+			}
+		
+			
 			claim.setModifiedBy(Username);
 			claim.setModifiedDate(sdtf.format(new Date()));
 			

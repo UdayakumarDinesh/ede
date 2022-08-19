@@ -172,6 +172,7 @@ public interface CHSSDao {
 	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception;
+	public List<CHSSApplyTransaction> claimTransactionObjects(String chssapplyid) throws Exception;
 	
 	
 }

@@ -105,19 +105,8 @@
 											<td >
 											
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
-													 data-toggle="tooltip" data-placement="top" title="Transaction History"
-														<%if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) ){%>  
-														    style=" color:#2155CD; font-weight: 600;"				
-															<%}else if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString()) || "11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>
-															 style="  color:#B20600; font-weight: 600;"     
-															<%}else  if("4".equals(obj[9].toString())||"6".equals(obj[9].toString())||"8".equals(obj[9].toString())|| "10".equals(obj[9].toString()) || "12".equals(obj[9].toString())){%>
-																style=" color:#F66B0E; font-weight: 600;"
-															<%}else if("14".equals(obj[9].toString())){ %>
-															style=" color:#125C13; font-weight: 600;"
-															<%}else{ %>
-															 style=" color:#4700D8; font-weight: 600;"
-															<%} %>
-													>  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+													 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[20] %>; font-weight: 600;" >
+												  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 											</td>
 											
 											

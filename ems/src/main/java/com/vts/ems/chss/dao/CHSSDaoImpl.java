@@ -1320,6 +1320,32 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
+	
+	@Override
+	public List<CHSSApplyTransaction> claimTransactionObjects(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSMedicineList");
+		List<CHSSApplyTransaction> list= new ArrayList<CHSSApplyTransaction>();
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSApplyTransaction> cq= cb.createQuery(CHSSApplyTransaction.class);
+			
+			Root<CHSSApplyTransaction> root=cq.from(CHSSApplyTransaction.class);								
+			Predicate p1=cb.equal(root.get("CHSSApplyId"), Long.parseLong(chssapplyid));
+			
+			cq=cq.select(root).where(p1);
+			
+			
+			TypedQuery<CHSSApplyTransaction> allquery = manager.createQuery(cq);
+			list= allquery.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
 	private static final String CONTINGENTTRANSACTIONS="SELECT a.contintransactionid,c.empname,d.designation,a.actiondate,a.remarks,b.chssstatus FROM chss_contingent_transaction a, chss_status b,employee c,employee_desig d,chss_contingent f WHERE a.statusid=b.chssstatusid  AND f.contingentid=a.contingentid AND a.actionby=c.empid  AND c.desigid=d.desigid AND a.contingentid=:contingentid ORDER BY actiondate ASC";
 	@Override
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception

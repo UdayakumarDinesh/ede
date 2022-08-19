@@ -118,26 +118,15 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 										{i++; %>
 										<tr>
 											<td><%=i %></td>
-											<td><%=obj[16] %></td>
-											<td><%=obj[19] %></td>
-											<td><%=obj[12] %>&nbsp;(<%=obj[14] %>)</td>
-											<td><%=rdf.format(sdf.parse(obj[15].toString())) %></td>
-											<td><%=obj[10] %></td>
+											<td><%=obj[20] %></td>
+											<td><%=obj[23] %></td>
+											<td><%=obj[16] %>&nbsp;(<%=obj[18] %>)</td>
+											<td><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
+											<td><%=obj[14] %></td>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
-													 data-toggle="tooltip" data-placement="top" title="Transaction History"
-														<%if("1".equals(obj[9].toString()) || "2".equals(obj[9].toString()) ){%>  
-														    style=" color:#2155CD; font-weight: 600;"				
-															<%}else if("3".equals(obj[9].toString())||"5".equals(obj[9].toString()) ||"7".equals(obj[9].toString())||"9".equals(obj[9].toString()) || "11".equals(obj[9].toString())||"13".equals(obj[9].toString())){%>
-															 style="  color:#B20600; font-weight: 600;"     
-															<%}else  if("4".equals(obj[9].toString())||"6".equals(obj[9].toString())||"8".equals(obj[9].toString())|| "10".equals(obj[9].toString()) || "12".equals(obj[9].toString())){%>
-																style=" color:#F66B0E; font-weight: 600;"
-															<%}else if("14".equals(obj[9].toString())){ %>
-															style=" color:#125C13; font-weight: 600;"
-															<%}else{ %>
-															 style=" color:#4700D8; font-weight: 600;"
-															<%} %>
-													>  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=obj[27] %>; font-weight: 600;" >
+													  &nbsp;<%=obj[22] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 											</td>
 											<td>
 												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">

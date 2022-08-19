@@ -116,6 +116,11 @@ th,td
 	color: #0CB5ED;
 }
 
+.legend { list-style: none; }
+.legend li { float: left; margin-right: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 6px 5px 2px 2px; }
+/* your colors */
+
 </style>
 
 
@@ -275,13 +280,13 @@ th,td
 								<table style="margin-top: 0px;">	
 									<tbody>
 										<tr>
-											<th class="center">SN</th>
-											<th>Hospital / Medical / Diagnostics Centre Name</th>
-											<th>Bill / Receipt No.</th>
-											<th class="center">Date</th>
-											<th style="text-align: right;">MRP (&#8377;)</th>
-											<th style="text-align: right;">Discount (&#8377;)</th>
-											<th style="text-align: right;">Total (&#8377;)</th>
+											<th class="center" style="width: 5%;" >SN</th>
+											<th style="width: 30%; max-width: 30% !important" >Hospital / Medical / Diagnostics Center Name</th>
+											<th style="width: 17%;" >Bill / Receipt No.</th>
+											<th class="center" style="width: 10%;" >Date</th>
+											<th style="text-align: right;width: 11%;">MRP (&#8377;)</th>
+											<th style="text-align: right;width: 14%;">Discount (&#8377;)</th>
+											<th style="text-align: right;width: 13%;">Total (&#8377;)</th>
 										</tr>
 										<% 	BigDecimal billstotal = new BigDecimal(0);
 											BigDecimal discount = new BigDecimal(0);/*,  GST=0 */;
@@ -396,9 +401,22 @@ th,td
 
 
 							</div>
-							<div class="break"></div>
-							<div align="center" >
 							
+							<div align="center" >
+								<hr>
+								<div class="row" style="margin-top: 5px;font-weight: bold;"    >
+										<div class="col-md-5"></div>
+										<div class="col-md-7" >
+											
+											<ul class="legend" style="float:right; ">
+												<li> Comments By :</li>	
+											    <li><span style=" background-color: #008005;" ></span> System Generated</li>
+											    <li><span style=" background-color: #A300B5;" ></span> Processing Officer</li>
+											    <li><span style=" background-color: #0CB5ED;" ></span> Verifying Officer </li>
+											</ul>
+											
+										</div>
+									</div>
 								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
 									<table>
 										<tbody>
