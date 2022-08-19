@@ -36,6 +36,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,9 +89,9 @@ public class CHSSController {
 
 	private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
-	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
-	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
-	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf = DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	@Autowired
 	CHSSService service;
 	@Autowired
@@ -518,9 +519,62 @@ public class CHSSController {
 		}
 	}
 	
+	@RequestMapping(value = "CHSSIPDBillAdd.htm" )
+	public String CHSSIPDBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDBillAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String consultmainid = req.getParameter("consultmainid");
+			
+			String[] centernames=req.getParameterValues("centername");
+			String[] billno=req.getParameterValues("billno");
+			String[] billdate=req.getParameterValues("billdate");
+			String[] GSTAmt=req.getParameterValues("GSTAmt");
+			String[] DiscountAmt=req.getParameterValues("DiscountAmt");
+			String[] DiscountPer=req.getParameterValues("DiscountPer");
+			String[] finalbillamount=req.getParameterValues("finalbillamount");
+			
+			ChssBillsDto dto=new ChssBillsDto();
+			
+			dto.setCHSSApplyId(chssapplyid);
+			dto.setCHSSConsultMainId(consultmainid);
+			dto.setCenterName(centernames);
+			dto.setBillNo(billno);
+			dto.setBillDate(billdate);
+			dto.setFinalbillamount(finalbillamount);
+			dto.setGSTAmount(GSTAmt);
+			dto.setDiscountPer(DiscountPer);
+			dto.setDiscount(DiscountAmt);
+			dto.setCreatedBy(Username);
+			
+			long count= service.CHSSConsultBillsAdd(dto);
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",String.valueOf(count));
+			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
+			return "redirect:/CHSSIPDApply.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDBillAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
 	public double CropTo2Decimal(String Amount)throws Exception
 	{
 		DecimalFormat decimalformat = new DecimalFormat("0.00");
+		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
+	}
+	
+	public double CropTo6Decimal(String Amount)throws Exception
+	{
+		DecimalFormat decimalformat = new DecimalFormat("0.000000");
 		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
 	}
 	
@@ -547,7 +601,7 @@ public class CHSSController {
 //			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
 			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(Discount));
-			bill.setDiscountPercent(CropTo2Decimal(DiscountPer));
+			bill.setDiscountPercent(CropTo6Decimal(DiscountPer));
 			bill.setFinalBillAmt(CropTo2Decimal(finalbillamount));
 			bill.setModifiedBy(Username);
 			
@@ -1570,19 +1624,30 @@ public class CHSSController {
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> claimdata = service.CHSSBillsList(chssapplyid);
-			
+			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
 			double claimamount=0;
+			
+			LocalDate applydate = LocalDate.now();
+			
+			if(Integer.parseInt(chssapplydata[9].toString())>1) 
+			{
+				applydate =LocalDate.parse(chssapplydata[15].toString());
+			}
+			
+			
+			
 			for(Object[] bill : claimdata) 
 			{
 				LocalDate billdate = LocalDate.parse(bill[4].toString());
-				if(!billdate.isAfter(LocalDate.now().minusMonths(3))) 
+				
+				if(!billdate.isAfter(applydate.minusMonths(3)) && !applydate.minusMonths(3).isEqual(billdate) ) 
 				{
 					allow[4]="1";
 					allow[5]=bill[2].toString();
 					break;
 				}
 				
-				if(Math.floor(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.floor(Double.parseDouble(bill[9].toString())))
+				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
 					allow[3]=bill[2].toString();
@@ -2313,14 +2378,29 @@ public class CHSSController {
 		}
 	}
 
+	@RequestMapping(value = "ContingentTransaction.htm" , method={RequestMethod.POST,RequestMethod.GET})
+	public String ContingentTransactions(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ContingentTransactions.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			req.setAttribute("Transactions", service.ContingentTransactions(contingentid));
+			
+			return "chss/ContingentTransaction";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingentTransactions.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
-	
-	@RequestMapping(value = "ContingetBillDownload.htm")
-	public void ContingetBillDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	@RequestMapping(value = "ContingentBillDownload.htm")
+	public void ContingentBillDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
 
-		logger.info(new Date() +"Inside ContingetBillDownload.htm "+UserId);
+		logger.info(new Date() +"Inside ContingentBillDownload.htm "+UserId);
 		
 		try {	
 			String contingentid = req.getParameter("contingentid");
@@ -2364,7 +2444,7 @@ public class CHSSController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();  
-			logger.error(new Date() +" Inside ContingetBillDownload.htm "+UserId, e); 
+			logger.error(new Date() +" Inside contingentbilldownload.htm "+UserId, e); 
 		}
 	}
 	
@@ -2379,32 +2459,6 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ApprovedBills.htm "+UserId);
 		try {
 			
-			String fromdate = req.getParameter("fromdate");
-			String todate = req.getParameter("todate");
-			
-			LocalDate today=LocalDate.now();
-			
-			if(fromdate==null) 
-			{
-				if(today.getMonthValue()<4) 
-				{
-					fromdate = String.valueOf(today.getYear()-1);
-					todate=String.valueOf(today.getYear());
-					
-				}else{
-					fromdate = String.valueOf(today.getYear());
-					todate=String.valueOf(today.getYear()+1);
-				}
-				fromdate +="-04-01"; 
-				todate +="-03-31";
-			}else
-			{
-				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
-				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
-			}
-		
-			redir.addFlashAttribute("fromdate", fromdate);
-			redir.addFlashAttribute("todate", todate);
 			redir.addFlashAttribute("tab","approved");
 			
 			return "redirect:/ContingentBillsList.htm";
@@ -3566,12 +3620,15 @@ public class CHSSController {
 				}
 				fromdate +="-04-01"; 
 				todate +="-03-31";
-				
-				tab="progress";
+							
 			}else
 			{
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
 				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+			
+			if(tab==null) {
+				tab="progress";
 			}
 		
 			req.setAttribute("fromdate", fromdate);

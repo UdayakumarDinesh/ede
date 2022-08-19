@@ -389,7 +389,7 @@ public class MtController {
 				  req.setAttribute("editdata",service.getApplySingleData(Integer.parseInt(req.getParameter("MtApplyId"))));
 				  req.setAttribute("comp","edit");
 				  req.setAttribute("typedutylist",service.GetDutyType()); 
-				  
+
 				  List<Object[]> listapply=service.VehiclePendingListDashBoard();
 					
 					List<Object[]> firstapply=null;
@@ -432,7 +432,7 @@ public class MtController {
 				req.setAttribute("fourthapply", fourthapply);
 				req.setAttribute("fifthpply", fifthpply);
 				req.setAttribute("linkrequestlist",service.VehicleAssignedListDashBoard());
-				  
+
 				  Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 				  String  Name=emp[1]+" "+emp[2];
 				  req.setAttribute("empname",Name);
@@ -466,6 +466,7 @@ public class MtController {
 				 
 				return "redirect:/MtList.htm";		
 			}
+			
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MtUserApplyC.htm "+Username, e);
 			e.printStackTrace();	

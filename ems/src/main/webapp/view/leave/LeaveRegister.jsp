@@ -193,7 +193,7 @@ String ses=(String)request.getParameter("result");
 										    -
 										    <%} %>
 											<br/> 
-											<%if(!cl.getSTATUS().equals("LKU")){
+											<%if(!cl.getSTATUS().equals("LKU")&&!cl.getSTATUS().equals("LCO")){
 										    	countCL-=cl.getCL();	
 										    	%>
 										    <%=cl.getCL() %>
@@ -266,7 +266,7 @@ String ses=(String)request.getParameter("result");
 										    -
 										    <%} %>
 											<br/> 
-											<%if(!el.getSTATUS().equals("LKU")){
+											<%if(!el.getSTATUS().equals("LKU")&&!el.getSTATUS().equals("LCO")){
 										    	countEL-=el.getEL();	
 										    	%>
 										    <%=el.getEL() %>
@@ -338,7 +338,7 @@ String ses=(String)request.getParameter("result");
 										    -
 										    <%} %>
 											<br/> 
-											<%if(!hpl.getSTATUS().equals("LKU")){
+											<%if(!hpl.getSTATUS().equals("LKU")&&!hpl.getSTATUS().equals("LCO")){
 										    	countHPL-=hpl.getHPL();	
 										    	%>
 										    - / <%=hpl.getHPL() %>
@@ -360,7 +360,7 @@ String ses=(String)request.getParameter("result");
 												<td style="text-align: right;">
 											    -
 												<br/> 
-												<%if(!hpl.getSTATUS().equals("LKU")){
+												<%if(!hpl.getSTATUS().equals("LKU")&&!hpl.getSTATUS().equals("LCO")){
 											    	countHPL-=hpl.getCML()*2;	
 											    	%>
 											     <%=hpl.getCML()%> / <%=hpl.getCML()*2 %>
@@ -436,7 +436,7 @@ String ses=(String)request.getParameter("result");
 										    -
 										    <%} %>
 											<br/> 
-											<%if(!rh.getSTATUS().equals("LKU")){
+											<%if(!rh.getSTATUS().equals("LKU")&&!rh.getSTATUS().equals("LCO")){
 										    	countRH-=rh.getRH();	
 										    	%>
 										    <%=rh.getRH() %>

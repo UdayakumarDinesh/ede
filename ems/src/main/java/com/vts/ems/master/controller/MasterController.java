@@ -623,7 +623,6 @@ public class MasterController {
 
 			try {
 				String action = (String)req.getParameter("Action");
-				System.out.println(action);
 	         if("EDITDOCRATE".equalsIgnoreCase(action)){						
 						String Rateid = req.getParameter("DocRateId");
 						
@@ -638,8 +637,8 @@ public class MasterController {
 						DocRate.setDocRateId(Integer.parseInt(Rateid));				
 						DocRate.setConsultation_1(Integer.parseInt(Consultation1));
 						DocRate.setConsultation_2(Integer.parseInt(Consultation2));
-						DocRate.setTreatTypeId(Integer.parseInt(treatment));
-						DocRate.setDocQualification(docQualificetion);
+//						DocRate.setTreatTypeId(Integer.parseInt(treatment));
+//						DocRate.setDocQualification(docQualificetion);
 						DocRate.setModifiedBy(UserId);
 						DocRate.setModifiedDate(sdtf.format(new Date()));
 						int result = service.EditDoctorMaster(DocRate);

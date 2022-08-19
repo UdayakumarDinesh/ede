@@ -127,29 +127,48 @@
 													<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1] %></td>
 													<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[2].toString()))%></td>
 													<%-- <td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><% if(obj[8]!=null){ %><%=rdf.format(sdf.parse(obj[8].toString()))%><%}else{ %>-<%} %></td> --%>
-													<td 
-														<%if("1".equals(obj[5].toString()) || "2".equals(obj[5].toString()) ){%>  
-													    style=" padding-top:5px; padding-bottom: 5px;color:#4700D8; font-weight: 600;"				
-														<%}else if("3".equals(obj[5].toString())||"5".equals(obj[5].toString()) ||"7".equals(obj[5].toString())||"9".equals(obj[5].toString()) || "11".equals(obj[5].toString())||"13".equals(obj[5].toString())){%>
-														 style="  padding-top:5px; padding-bottom: 5px;color:#B20600; font-weight: 600;"     
-														<%}else  if("4".equals(obj[5].toString())||"6".equals(obj[5].toString())||"8".equals(obj[5].toString())|| "10".equals(obj[5].toString()) || "12".equals(obj[5].toString())){%>
-															style="padding-top:5px; padding-bottom: 5px; color:#F66B0E; font-weight: 600;"
-														<%}else if("14".equals(obj[5].toString())){ %>
-														style=" padding-top:5px; padding-bottom: 5px;color:#6BCB77; font-weight: 600;"
-														<%}else{ %>
-														 style="padding-top:5px; padding-bottom: 5px; color:#4700D8; font-weight: 600;"
-														<%} %>	
-													>
-														
-														<%=obj[7] %>
 													
+													<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
+														 <button class="btn btn-sm btn-link w-100 " formaction="ContingentTransaction.htm" name="contingentid" value="<%=obj[0]%>" formtarget="_blank" 
+														 data-toggle="tooltip" data-placement="top" title="Transaction History"
+															<%if("1".equals(obj[5].toString()) || "2".equals(obj[5].toString()) ){%>  
+															    style=" color:#2155CD; font-weight: 600;"				
+																<%}else if("3".equals(obj[5].toString())||"5".equals(obj[5].toString()) ||"7".equals(obj[5].toString())||"9".equals(obj[5].toString()) || "11".equals(obj[5].toString())||"13".equals(obj[5].toString())){%>
+																 style="  color:#B20600; font-weight: 600;"     
+																<%}else  if("4".equals(obj[5].toString())||"6".equals(obj[5].toString())||"8".equals(obj[5].toString())|| "10".equals(obj[5].toString()) || "12".equals(obj[5].toString())){%>
+																	style=" color:#F66B0E; font-weight: 600;"
+																<%}else if("14".equals(obj[5].toString())){ %>
+																style=" color:#125C13; font-weight: 600;"
+																<%}else{ %>
+																 style=" color:#4700D8; font-weight: 600;"
+																<%} %>
+														>  &nbsp;<%=obj[7] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+														
 													</td>
+													
+											<%-- 	<td 
+															<%if("1".equals(obj[5].toString()) || "2".equals(obj[5].toString()) ){%>  
+														    style=" padding-top:5px; padding-bottom: 5px;color:#4700D8; font-weight: 600;"				
+															<%}else if("3".equals(obj[5].toString())||"5".equals(obj[5].toString()) ||"7".equals(obj[5].toString())||"9".equals(obj[5].toString()) || "11".equals(obj[5].toString())||"13".equals(obj[5].toString())){%>
+															 style="  padding-top:5px; padding-bottom: 5px;color:#B20600; font-weight: 600;"     
+															<%}else  if("4".equals(obj[5].toString())||"6".equals(obj[5].toString())||"8".equals(obj[5].toString())|| "10".equals(obj[5].toString()) || "12".equals(obj[5].toString())){%>
+																style="padding-top:5px; padding-bottom: 5px; color:#F66B0E; font-weight: 600;"
+															<%}else if("14".equals(obj[5].toString())){ %>
+															style=" padding-top:5px; padding-bottom: 5px;color:#6BCB77; font-weight: 600;"
+															<%}else{ %>
+															 style="padding-top:5px; padding-bottom: 5px; color:#4700D8; font-weight: 600;"
+															<%} %>	
+														>
+															
+															<%=obj[7] %>
+														
+														</td> --%>
 													<td style="padding-top:5px; padding-bottom: 5px;">
 														
 														<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 															<i style="color: #019267" class="fa-solid fa-download"></i>
 														</button>
 													</td>
@@ -179,14 +198,14 @@
 							<form action="#" method="post" id="ClaimForm">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								<div class="table-responsive">
-						   			<table class="table table-bordered table-hover table-striped table-condensed" style="min-width:100%"  id="myTable1"> 
+						   			<table class="table table-bordered table-hover table-striped table-condensed" style="width:100% !important"  id="myTable1"> 
 										<thead>
 											<tr>
-												<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
-												<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
-												<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
-												<td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td>
-												<td style="padding-top:5px; padding-bottom: 5px;max-width: 20% !important">Action</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 10% !important; text-align: center; ">SNo</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 25% !important" >ContingentBill No</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 15% !important">Bill Date</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 15% !important">Approval Date</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 25% !important">Action</td>
 											</tr>
 										</thead>
 										<tbody>
@@ -203,20 +222,25 @@
 														<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Contingent Bill View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Contingent Bill Download">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Contingent Bill PDF Download">
 															<i style="color: #019267" class="fa-solid fa-download"></i>
 														</button>
 														
 														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report View">
 															<i class="fa-regular fa-file-lines"></i>
 														</button>
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report PDF Download">
 															<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
 														</button>
 														
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ConsolidatedExcelDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Excel Download">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ConsolidatedExcelDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Excel Download">
 															<i class="fa-solid fa-table"></i>
 														</button>
+														
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0]%>" formaction="ContingentTransaction.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Transaction History">
+															<i class="fa-solid fa-clock-rotate-left"></i>
+														</button>
+																											
 														<input type="hidden" name="isapproval" value="Y">
 													</td>
 												</tr>
@@ -290,7 +314,7 @@
 												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 											</td>

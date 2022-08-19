@@ -328,52 +328,6 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSConsultMainDelete(consultmainid);
 	}
 	
-	@Override
-	public long CHSSBillEdit(CHSSBill bill) throws Exception
-	{
-		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
-		
-		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
-		fetch.setBillNo(bill.getBillNo().trim().toUpperCase());
-		fetch.setBillDate(bill.getBillDate());
-		fetch.setGSTAmount(bill.getGSTAmount());
-		fetch.setDiscount(bill.getDiscount());
-		fetch.setDiscountPercent(bill.getDiscountPercent());
-		fetch.setFinalBillAmt(bill.getFinalBillAmt());
-		fetch.setModifiedBy(bill.getModifiedBy());
-		fetch.setModifiedDate(sdtf.format(new Date()));
-		
-		return dao.CHSSBillEdit(fetch);
-	}
-	
-	@Override
-	public long CHSSBillDelete(String billid, String modifiedby) throws Exception
-	{
-		CHSSBill fetch = dao.getCHSSBill(billid);
-		fetch.setIsActive(0);
-		fetch.setModifiedBy(modifiedby);
-		fetch.setModifiedDate(sdtf.format(new Date()));
-		deleteBillItems(billid, modifiedby);
-		return dao.CHSSBillEdit(fetch);
-	}
-	
-	
-	public int deleteBillItems(String billid,String username) throws Exception 
-	{
-		int count=0;
-		try {
-			
-			count += dao.billConsultDeleteAll(billid,username,sdtf.format(new Date()));
-			count += dao.billTestsDeleteAll(billid,username,sdtf.format(new Date()));
-			count += dao.billMedsDeleteAll(billid,username,sdtf.format(new Date()));
-			count += dao.billOthersDeleteAll(billid,username,sdtf.format(new Date()));
-			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return count;
-	}
 	
 	
 	@Override
@@ -1564,10 +1518,6 @@ public class CHSSServiceImpl implements CHSSService {
 			else if(continstatus==14 ) 
 			{
 				continstatus=15;
-							
-				contingent.setApprovalDate(LocalDate.now().toString());
-				contingent.setCEO(Long.parseLong(dto.getEmpId()));
-				
 			}	
 		}
 		else if(dto.getAction().equalsIgnoreCase("R")) 
@@ -1761,6 +1711,13 @@ public class CHSSServiceImpl implements CHSSService {
 		return claims;
 	}
 
+	
+	@Override
+	public List<Object[]> ContingentTransactions(String contingentid) throws Exception
+	{
+		return dao.ContingentTransactions(contingentid);
+	}
+	
 	@Override
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception
 	{
@@ -1803,6 +1760,14 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.MiscItemsHistory(chssapplyid);
 	}
 	
+	
+	public double CropTo6Decimal(String Amount)throws Exception
+	{
+		DecimalFormat decimalformat = new DecimalFormat("0.000000");
+		return Double.parseDouble(decimalformat.format(Double.parseDouble(Amount)));
+	}
+	
+	
 	@Override
 	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception
 	{
@@ -1818,7 +1783,7 @@ public class CHSSServiceImpl implements CHSSService {
 			bill.setAdmissibleTotal(0.00);
 			bill.setGSTAmount(0.00);
 			bill.setDiscount(CropTo2Decimal(dto.getDiscount()[i]));
-			bill.setDiscountPercent(Double.parseDouble(dto.getDiscountPer()[i]));
+			bill.setDiscountPercent(CropTo6Decimal(dto.getDiscountPer()[i]));
 			bill.setFinalBillAmt(CropTo2Decimal(dto.getFinalbillamount()[i]));
 			bill.setIsActive(1);
 			bill.setCreatedBy(dto.getCreatedBy());
@@ -1829,6 +1794,57 @@ public class CHSSServiceImpl implements CHSSService {
 		return billid;
 	}
 	
+	
+	
+	@Override
+	public long CHSSBillEdit(CHSSBill bill) throws Exception
+	{
+		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
+		
+		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
+		fetch.setBillNo(bill.getBillNo().trim().toUpperCase());
+		fetch.setBillDate(bill.getBillDate());
+		fetch.setGSTAmount(bill.getGSTAmount());
+		fetch.setDiscount(bill.getDiscount());
+		fetch.setDiscountPercent(bill.getDiscountPercent());
+		fetch.setFinalBillAmt(bill.getFinalBillAmt());
+		fetch.setModifiedBy(bill.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		return dao.CHSSBillEdit(fetch);
+	}
+	
+	@Override
+	public long CHSSBillDelete(String billid, String modifiedby) throws Exception
+	{
+		CHSSBill fetch = dao.getCHSSBill(billid);
+		fetch.setIsActive(0);
+		fetch.setModifiedBy(modifiedby);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		deleteBillItems(billid, modifiedby);
+		return dao.CHSSBillEdit(fetch);
+	}
+	
+	
+	public int deleteBillItems(String billid,String username) throws Exception 
+	{
+		int count=0;
+		try {
+			
+			count += dao.billConsultDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billTestsDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billMedsDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billOthersDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
+	
+
 	@Override
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception
 	{

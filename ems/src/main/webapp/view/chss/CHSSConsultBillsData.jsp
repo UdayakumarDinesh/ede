@@ -227,7 +227,7 @@ p {
 												<td> <input type="text" class="form-control billdate" name="billdate-<%=obj[0]%>" value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="finalbillamount-<%=obj[0]%>" id="finalbillamount-<%=obj[0]%>"  onkeyup="enableDiscount('<%=obj[0]%>')" value="<%=obj[7]%>" style="width:100%;text-align: right; " min="1" max="9999999" required="required"></td>
 												<td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
+												<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=Double.parseDouble(obj[8].toString()) %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td>
 												<td>
 													<%-- <%if(Double.parseDouble(obj[9].toString())==0){ %> --%>
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
@@ -749,7 +749,7 @@ p {
 		    		
 		    		</div>
 		    		<div class="col-md-3" style="float: right;">
-			    		<b>Total  :&nbsp;&nbsp;</b>&#8377;&nbsp;<span id="modal-items-total"></span>
+			    		<b>Total :&nbsp;&nbsp;</b>&#8377;&nbsp;<span id="modal-items-total"></span>
 		    		</div>
 		    	</div>
 		    </div>
@@ -775,7 +775,7 @@ function calculateDiscountPer($id)
 		$('#DiscountAmt-'+$id).val("0.00");
 	}else{
 		var discPer = (100*disAmt)/(billAmt+disAmt);
-		$('#DiscountPer-'+$id).val(discPer.toFixed(1));
+		$('#DiscountPer-'+$id).val(parseFloat(discPer.toFixed(6)));
 		
 		$('#DiscountAmt-'+$id).attr('max',billAmt);
 		$('#GSTAmt-'+$id).attr('max',billAmt);
@@ -838,7 +838,7 @@ function showBillDetails($billid)
 			billamount = result[5]+result[7];
 			$billdate =new Date(result[4]); 
 			if(result[5]!=null){
-				$('#modal-billamount').html(result[5]+result[7]);
+				$('#modal-billamount').html(parseFloat((Number(result[5]) + Number(result[7])).toFixed(2)));
 			
 			}else{
 				$('#modal-billamount').html('0');
@@ -866,7 +866,7 @@ function itemAddEligibleCheck(itemtype)
 	});
 	
 	
-	if(Math.floor(itemstotal+total)<=Math.floor(billamount)){
+	if(Math.round(itemstotal+total)<=Math.round(billamount)){
 		return true;
 	}else
 	{
@@ -883,15 +883,13 @@ function itemEditEligibleCheck(itemtype,itemid)
 	var itemnewcost=Number( $('#'+itemtype+'-cost-'+itemid).val());
 	
 	
-	if(Math.floor(itemstotal+itemnewcost-itemoldcost)<=Math.floor(billamount)){
+	if(Math.round(itemstotal+itemnewcost-itemoldcost)<=Math.round(billamount)){
 		return confirm ('Are You Sure To Update ?');
 	}else
 	{
 		alert('Items Total Cost is Exceeding Bill Amount.\nPlease Check all Details in the Bill');
 		return false;	
 	}
-	
-	
 	return false;
 }
 

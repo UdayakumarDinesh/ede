@@ -169,5 +169,6 @@ public interface CHSSService
 	public long IPDMiscBillEdit(CHSSBillMisc modal) throws Exception;
 	public long IPDMiscBillDelete(String chssMiscid, String modifiedby) throws Exception;
 	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
+	public List<Object[]> ContingentTransactions(String contingentid) throws Exception;
 
 }

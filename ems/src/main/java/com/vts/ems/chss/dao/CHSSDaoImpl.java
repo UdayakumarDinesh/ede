@@ -981,7 +981,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 
 	
-	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate, cc.Comments , cdr.docQualification AS 'Qualification', cc.UpdateByEmpId, cc.UpdateByRole  FROM  chss_bill_consultation cc, chss_bill cb ,chss_doctor_rates cdr WHERE cc.isactive = 1 AND cb.isactive=1 AND cb.BillId = cc.BillId AND cc.docQualification=cdr.docrateid  AND cb.CHSSApplyId = :CHSSApplyId ";
+	private static final String CHSSCONSULTDATALIST = "SELECT   cc.ConsultationId,  cc.BillId,  cc.ConsultType,  cc.DocName,  cc.DocQualification,  cc.ConsultDate,  cc.ConsultCharge,  cc.ConsultRemAmount, cb.BillNo,  cb.BillDate, cc.Comments , cdr.docQualification AS 'Qualification', cc.UpdateByEmpId, cc.UpdateByRole  FROM  chss_bill_consultation cc, chss_bill cb ,chss_doctor_rates cdr WHERE cc.isactive = 1 AND cb.isactive=1 AND cb.BillId = cc.BillId AND cc.docQualification=cdr.docrateid  AND cb.CHSSApplyId = :CHSSApplyId ORDER BY cc.ConsultDate ASC";
 
 	@Override
 	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception
@@ -1319,6 +1319,24 @@ public class CHSSDaoImpl implements CHSSDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+	
+	private static final String CONTINGENTTRANSACTIONS="SELECT a.contintransactionid,c.empname,d.designation,a.actiondate,a.remarks,b.chssstatus FROM chss_contingent_transaction a, chss_status b,employee c,employee_desig d,chss_contingent f WHERE a.statusid=b.chssstatusid  AND f.contingentid=a.contingentid AND a.actionby=c.empid  AND c.desigid=d.desigid AND a.contingentid=:contingentid ORDER BY actiondate ASC";
+	@Override
+	public List<Object[]> ContingentTransactions(String contingentid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO CHSSStatusDetails");
+		try {
+			Query query= manager.createNativeQuery(CONTINGENTTRANSACTIONS);
+			query.setParameter("contingentid", contingentid);
+			return (List<Object[]>)query.getResultList();
+		}
+		catch (Exception e) 
+		{
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
 	private static final String BILLVALUE="SELECT COUNT(contingentid) FROM chss_contingent WHERE contingentbillno LIKE '=:bill%'";
 	@Override
 	public int getdata(String bill)throws Exception
