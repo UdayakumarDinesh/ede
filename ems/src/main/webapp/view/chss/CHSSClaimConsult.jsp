@@ -281,7 +281,7 @@ table th:last-child{
 													%>	
 													<td  style="text-align: center;" > <span class="sno" id="sno"><%=sno %></span> </td>
 													<td> <input type="text" class="form-control items" name="docname-<%=cmain[0]%>"  readonly="readonly" value="<%=cmain[2] %>" style="width:100%; "  maxlength="500" required="required"></td>
-													<td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td>
+													<%-- <td> <input type="text" class="form-control consultdate" name="consultdate-<%=cmain[0]%>"   value="<%=rdf.format(sdf.parse(cmain[3].toString())) %>" style="width:100%; "    maxlength="10" readonly required="required"></td> --%>
 													<td>
 														<select class="form-control" name="doc-qualification-<%=cmain[0]%>" required="required" >
 															<%for(CHSSDoctorRates rate:doctorrates ){ %>

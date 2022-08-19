@@ -197,9 +197,9 @@ public class MasterServiceImpl implements MasterService {
 	{	
 		CHSSDoctorRates doctor = dao.getCHSSDocRate(docrate.getDocRateId());
 		
-		doctor.setTreatTypeId(docrate.getTreatTypeId());
-		doctor.setDocQualification(docrate.getDocQualification());
-		//doctor.setDocRating(docrate.getDocRating());
+//		doctor.setTreatTypeId(docrate.getTreatTypeId());
+//		doctor.setDocQualification(docrate.getDocQualification());
+//		doctor.setDocRating(docrate.getDocRating());				
 		doctor.setConsultation_1(docrate.getConsultation_1());
 		doctor.setConsultation_2(docrate.getConsultation_2());
 		doctor.setModifiedBy(docrate.getModifiedBy());

@@ -7,8 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-@Entity
-@Table(name="mt_appl_transaction")
+//@Entity
+//@Table(name="mt_appl_transaction")
 public class MtApplyTransaction implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
