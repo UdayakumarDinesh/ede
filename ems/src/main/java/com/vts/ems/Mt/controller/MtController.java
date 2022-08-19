@@ -389,6 +389,50 @@ public class MtController {
 				  req.setAttribute("editdata",service.getApplySingleData(Integer.parseInt(req.getParameter("MtApplyId"))));
 				  req.setAttribute("comp","edit");
 				  req.setAttribute("typedutylist",service.GetDutyType()); 
+				  
+				  List<Object[]> listapply=service.VehiclePendingListDashBoard();
+					
+					List<Object[]> firstapply=null;
+					List<Object[]> secondapply=null;
+					List<Object[]> thirdapply=null;
+					List<Object[]> fourthapply=null;
+					List<Object[]> fifthpply=null;
+				
+				 firstapply=new ArrayList<Object[]>();
+				 secondapply=new ArrayList<Object[]>();
+				 thirdapply=new ArrayList<Object[]>();
+				 fourthapply=new ArrayList<Object[]>();
+				 fifthpply=new ArrayList<Object[]>();
+				
+				 for(Object[] list:listapply) {
+					if(sdtf.format(new Date()).equalsIgnoreCase(sdtf.format(list[1]))) {
+						firstapply.add(list);	
+					}
+					
+					if(sdtf.format(new Date(new Date().getTime()+(24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+						secondapply.add(list);	
+					}
+					
+					if(sdtf.format(new Date(new Date().getTime()+(2*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+						thirdapply.add(list);	
+					}
+					
+					if(sdtf.format(new Date(new Date().getTime()+(3*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+						fourthapply.add(list);	
+					}
+					
+					if(sdtf.format(new Date(new Date().getTime()+(4*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+						fifthpply.add(list);	
+					}
+					
+				}
+				req.setAttribute("firstapply", firstapply);
+				req.setAttribute("secondapply", secondapply);
+				req.setAttribute("thirdapply", thirdapply);
+				req.setAttribute("fourthapply", fourthapply);
+				req.setAttribute("fifthpply", fifthpply);
+				req.setAttribute("linkrequestlist",service.VehicleAssignedListDashBoard());
+				  
 				  Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 				  String  Name=emp[1]+" "+emp[2];
 				  req.setAttribute("empname",Name);

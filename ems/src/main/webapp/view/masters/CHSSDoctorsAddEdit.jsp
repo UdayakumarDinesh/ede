@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"  pageEncoding="ISO-8859-1"%>
  <%@page import="java.util.List"%>
- <%@page import="com.vts.ems.chss.model.*"%>
+ <%@page import="com.vts.ems.master.model.*"%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -305,7 +305,7 @@ public class PisController {
 			emp.setBloodGroup(bloodgroup);
 			emp.setMaritalStatus(MaritalStatus);
 			emp.setReligion(religion);
-			emp.setEmpStatus(empstatus);
+			emp.setEmpStatus("P");
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
