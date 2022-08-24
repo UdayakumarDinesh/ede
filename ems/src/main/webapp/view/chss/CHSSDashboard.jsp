@@ -416,7 +416,7 @@
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString()))))%></td>
 									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
-										<%if("14".equals(obj[9].toString())){ %>
+										<%if(Integer.parseInt(obj[9].toString())>14){ %>
 											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString()))))%>
 										<%}else{ %>
 											-
@@ -428,42 +428,67 @@
 									
 									</td>
 									<td style="padding-top:5px; padding-bottom: 5px;">
-										<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
-											
-											<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>	
-												<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-													Edit
+										<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>
+											<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
+												
+													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+														Edit
+													</button>
+												
+												<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
+												<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
+													<i class="fa-solid fa-trash-can " style="color: red"></i>
 												</button>
-											
-											<%}else{ %>
-												<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDApply.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-													Edit
-												</button>
-											
-											<%} %>
-											<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
-											<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
-												<i class="fa-solid fa-trash-can " style="color: red"></i>
+												<%} %>
+											<% } %>
+												
+											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa-solid fa-eye"></i>
+											</button>
+											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button>
 											<%} %>
-										<% } %>
-											
-										<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-											<i class="fa-solid fa-eye"></i>
-										</button>
-										<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-											<i style="color: #019267" class="fa-solid fa-download"></i>
-										</button>
+											<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
+												<i class="fa-solid fa-backward" style="color: #333C83"></i>
+											</button>
+											<%} %>
+										<%}else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
+											<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
+												
+													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDApply.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
+														Edit
+													</button>
+												
+												<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
+												<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
+													<i class="fa-solid fa-trash-can " style="color: red"></i>
+												</button>
+												<%} %>
+											<% } %>
+												
+											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa-solid fa-eye"></i>
+											</button>
+											<%-- <%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+											</button>
+											<%} %> --%>
+											<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
+													<i class="fa-solid fa-backward" style="color: #333C83"></i>
+												</button>
+											<%} %>
+										
+										
+										
 										<%} %>
-										<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
-											<i class="fa-solid fa-backward" style="color: #333C83"></i>
-										</button>
-										<%} %>
-										<input type="hidden" name="isapproval" value="N">
-										<input type="hidden" name="show-edit" value="N">
 										<input type="hidden" name="ActivateDisp" value="Y">
+										
+										<input type="hidden" name="view_mode" value="U">
 									</td>
 								</tr>
 							<%} %>

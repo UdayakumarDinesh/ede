@@ -25,8 +25,10 @@ public class CHSSBillImplants implements Serializable {
 	private String ImplantName;
 	private double ImplantCost;
 	private double AmountPaid;
-	private double ImplantRemAmount;
+	private double ImplantRemAmt;
 	private String Comments;
+	private Long UpdateByEmpId;
+	private String UpdateByRole;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

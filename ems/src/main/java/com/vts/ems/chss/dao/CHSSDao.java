@@ -76,11 +76,11 @@ public interface CHSSDao {
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	public String CHSSApplyNoCount(String finYear) throws Exception;
-	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception;
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid,String claimtype) throws Exception;
 	public CHSSTestSub getCHSSTestSub(String testsubid) throws Exception;
 	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid) throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid,String ClaimType) throws Exception;
 	public String CHSSContingentNoCount(String finYear) throws Exception;
 	public long ContingentAdd(CHSSContingent other) throws Exception;
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception;
@@ -173,6 +173,16 @@ public interface CHSSDao {
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception;
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception;
 	public List<CHSSApplyTransaction> claimTransactionObjects(String chssapplyid) throws Exception;
+	public List<Object[]> ClaimEquipmentList(String CHSSApplyId) throws Exception;
+	public List<Object[]> ClaimImplantList(String CHSSApplyId) throws Exception;
+	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception;
+	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception;
+	public int billHeadsDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
+	public int billImplantDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
+	public int billEquipmentDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
+	public List<CHSSBillIPDheads> CHSSBillIPDheadsList(String billid) throws Exception;
+	public long IPDBillHeadEdit(CHSSBillIPDheads IPDHead) throws Exception;
+	public CHSSBillIPDheads getCHSSBillIPDheads(String CHSSItemHeadId) throws Exception;
 	
 	
 }

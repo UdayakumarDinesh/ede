@@ -40,7 +40,7 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<li class="breadcrumb-item active " aria-current="page">Pending Contingent Bills</li>
+						<li class="breadcrumb-item active " aria-current="page">Pending Contingent</li>
 					</ol>
 				</div>
 			</div>
@@ -140,7 +140,8 @@
 					
 						<div class="col-12"  align="center" >
 							<form action="CHSSBatchList.htm" method="post">
-								<button class="btn btn-sm" style="background-color: #FFD36E " >Generate Contingent Bill</button>
+								<button class="btn btn-sm" style="background-color: #FFD36E " name="claims_type" value="OPD" >Generate OPD Contingent Bill</button>
+								<button class="btn btn-sm" style="background-color: #FFD36E " name="claims_type" value="IPD" >Generate IPD Contingent Bill</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 						</div>

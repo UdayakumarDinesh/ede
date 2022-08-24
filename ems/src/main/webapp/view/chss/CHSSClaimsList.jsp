@@ -104,10 +104,11 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 									<tr>
 										<th>SN</th>
 										<th>Claim No</th>
+										<th>Type</th>
 										<th>Applicant</th>
 										<th>Patient </th>
 										<th>Applied Date</th>
-										<th>Treatment Type</th>
+										<!-- <th>Treatment Type</th> -->
 										<th>Status</th>
 										<th>Action</th>
 									</tr>
@@ -119,17 +120,18 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 										<tr>
 											<td><%=i %></td>
 											<td><%=obj[20] %></td>
+											<td><%=obj[10] %></td>
 											<td><%=obj[23] %></td>
 											<td><%=obj[16] %>&nbsp;(<%=obj[18] %>)</td>
-											<td><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
-											<td><%=obj[14] %></td>
+											<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
+											<%-- <td><%=obj[14] %></td> --%>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=obj[27] %>; font-weight: 600;" >
 													  &nbsp;<%=obj[22] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 											</td>
 											<td>
-												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSForm.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
@@ -143,8 +145,8 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 							</table>
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
-						<input type="hidden" name="isapproval" value="Y">
-						<input type="hidden" name="show-edit" value="N">
+						
+						<input type="hidden" name="view_mode" value="V">
 			   </form>		
 			  </div>
 		   	 </div>				

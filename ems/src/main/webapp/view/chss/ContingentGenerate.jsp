@@ -19,6 +19,7 @@
 	
 	String fromdate = (String)request.getAttribute("fromdate");
 	String todate = (String)request.getAttribute("todate");
+	String claims_type = (String)request.getAttribute("claims_type");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -88,11 +89,12 @@
 							<div class="col-md-2">	
 	
 									<input type="text" class="form-control todate" name="todate" id="todate" value="<%=DateTimeFormatUtil.SqlToRegularDate(todate) %>" required="required" readonly="readonly" onchange="this.form.submit();"  > 
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />	
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+									<input type="hidden" name="claims_type" value="<%=claims_type %>" />	
 						
 							</div>
 							<div class="col-md-1">	
-								<!-- <button type="submit" class="btn btn-sm submit-btn" name="submit" value="submit">submit</button> -->
+								
 							</div>
 							
 						</div>
@@ -105,7 +107,6 @@
 				<div class="card-body main-card " >
 											
 					<form action="CHSSContingentGenerate.htm" method="post" id="ClaimForm">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 						<br>
 						<div class="table-responsive">
@@ -146,14 +147,26 @@
 											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formtarget="_blank" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-													<i class="fa-solid fa-eye"></i>
-												</button>
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-													<i style="color: #019267" class="fa-solid fa-download"></i>
-												</button>
-												<input type="hidden" name="isapproval" value="Y">
-												<input type="hidden" name="show-edit" value="Y">
+												
+												<%if(obj[6].toString().equals("OPD")){ %>
+													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<i class="fa-solid fa-eye"></i>
+													</button>	
+															
+													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+														<i style="color: #019267" class="fa-solid fa-download"></i>
+													</button>
+												<%}else if(obj[6].toString().equals("IPD")){ %>
+													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<i class="fa-solid fa-eye"></i>
+													</button>	
+															
+													<%-- <button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+														<i style="color: #019267" class="fa-solid fa-download"></i>
+													</button> --%>
+												<%}%>
+												
+												<input type="hidden" name="view_mode" value="A">
 											</td>
 										</tr>
 									<%
@@ -204,10 +217,11 @@ Put up for approval.</textarea>
 						<div class="col-md-12" align="center" style="margin-top: 5px;">
 							<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return checklength('F'); " data-toggle="tooltip" data-placement="top" title="Generate New Contingent Bill">Generate</button>
 							<input type="hidden" name="genTilldate" value="<%=todate%>">
+							
 						</div>
 					<%} %>
 					 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					 	<input type="hidden" id="form2-chssapplyid" name="chssapplyid" value="">
+					 	<input type="hidden" name="claims_type" value="<%=claims_type %>" />
 					 </form>
 					
 				</div>

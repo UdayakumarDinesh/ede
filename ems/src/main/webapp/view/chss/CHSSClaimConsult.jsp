@@ -414,7 +414,7 @@ table th:last-child{
 								
 								<div class="col-md-12" align="center" style="margin-top: 5px;">
 									<%if(consultmainlist.size()>0){ %>
-									<button type="submit" class="btn btn-sm misc1-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward"  >
+									<button type="submit" class="btn btn-sm preview-btn" name="claimaction" value="F"  data-toggle="tooltip" data-placement="top" title="Preview and Forward"  >
 										<i class="fa-solid fa-forward" style="color: #084594"></i> Preview	
 									</button>
 									
@@ -425,15 +425,12 @@ table th:last-child{
 							<input type="hidden" name="isapproval" value="n">
 							<input type="hidden" name="show-edit" value="N">
 							<input type="hidden" name="claimaction" value="F">
+							
+							<input type="hidden" name="view_mode" value="UF">
+							
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-					</form>
-					
-					<form action="CHSSForm.htm" method="post" id="previewform" target="_blank">	
-						<input type="hidden" name="claimaction" value="F">
-						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 					
 				</div>

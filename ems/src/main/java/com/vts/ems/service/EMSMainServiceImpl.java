@@ -28,9 +28,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	private static final Logger logger=LogManager.getLogger(EMSMainServiceImpl.class);
 	
 	private SimpleDateFormat sdtf=DateTimeFormatUtil.getSqlDateAndTimeFormat();
-//	private  SimpleDateFormat sdf=util.getRegularDateFormat();
-//	private SimpleDateFormat sdf2=util.getSqlDateFormat();
-	
+
 	@Autowired
 	EmsDao dao;
 

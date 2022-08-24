@@ -176,17 +176,17 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
-	String isapproval = (String)request.getAttribute("isapproval");
+	
+	String view_mode=(String)request.getAttribute("view_mode");
+	
+	
 	boolean show = false;
-	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid>14 ){
+	if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("E") || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A")){
 		show = true;
 	} 
 	
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
-	/* List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory"); */
-	
-	/* String pagePart = (String)request.getAttribute("pagePart"); */
 	
 	MathContext mc0 = new MathContext(0);
 %>
@@ -270,7 +270,8 @@ th,td
 						<td colspan="2"><b>Ext.No. : </b> <span class="text-blue" ><%=employee[14]%></span></td>
 					</tr>
 				</tbody>
-			</table>n
+			</table>
+			
 			<table style="margin-top: 0px;">	
 				<tbody>
 					<tr>

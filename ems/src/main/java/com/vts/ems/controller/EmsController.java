@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -38,6 +40,7 @@ import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
@@ -90,6 +93,41 @@ public class EmsController {
 			{
 				return "redirect:/ForcePasswordChange.htm";
 			}
+			
+			
+			// code for audit stamping
+			
+			        
+		        	String IpAddress="Not Available";
+		     		try{
+		     		
+		     		 IpAddress = req.getRemoteAddr();
+		     		 
+		     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
+		     		{     			
+		     			InetAddress ip = InetAddress.getLocalHost();
+		     			IpAddress= ip.getHostAddress();
+		     		}
+		     		
+		     		}
+		     		catch(Exception e)
+		     		{
+		     		IpAddress="Not Available";	
+		     		e.printStackTrace();	
+		     		}
+				  try{
+				        AuditStamping stamping=new AuditStamping();
+				        stamping.setLoginId(login.getLoginId());
+				        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+				        stamping.setUsername(login.getUsername());
+				        stamping.setIpAddress(IpAddress);
+				        stamping.setLoginDateTime(LocalDateTime.now().toString());
+				        service.LoginStampingInsert(stamping);
+		     		}catch (Exception e) {
+						e.printStackTrace();
+					}
+		       
+		       
 			
 		} catch (Exception e) {
 			logger.error(new Date() + " Login Issue Occured When Login By " + req.getUserPrincipal().getName(), e);

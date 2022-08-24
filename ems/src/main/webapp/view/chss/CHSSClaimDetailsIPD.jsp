@@ -333,7 +333,7 @@ table th:last-child{
 	<!-- -------------------------------------------------- Basic Details ------------------------------------------------------ -->
 	
 	<!-- -------------------------------------------------- Bill Details ------------------------------------------------------ -->			
-				<%if(ipdbasicinfo!=null){ %>
+			<%if(ipdbasicinfo!=null){ %>
 				<div class="row">
 					<div class="col-md-12"><br>
 						<%if(chssbill.size()>0){ %>
@@ -465,7 +465,7 @@ table th:last-child{
 											<td><%=pkgitem[1] %></td>
 											<td style="padding: 0px;">
 												<input type="number" class="form-control cost-only decimal" step=".01" min="1"  name="billheadcost" 
-												onclick="this.select();" <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
+												 <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
 												style="margin: 0px;text-align: right;"  onchange="updateBillheads('<%=billid %>','<%=pkgitem[0]%>',this);" >
 											</td>											
 										</tr>
@@ -476,7 +476,7 @@ table th:last-child{
 											<td><%=pkgitem[1] %></td>
 											<td style="padding: 0px;">
 												<input type="number" class="form-control cost-only decimal" step=".01" min="1" 
-												 name="billheadcost" onclick="this.select();" <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
+												 name="billheadcost" <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
 												 style="margin: 0px;text-align: right;"  onchange="updateBillheads('<%=billid %>','<%=pkgitem[0]%>',this);" >
 											</td>
 											
@@ -639,7 +639,8 @@ table th:last-child{
 										</tbody>							
 										
 									</table>
-									
+									<input type="hidden" class="billid" name="billid" value="<%=billid%>">
+									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<input type="hidden" name="consultmainid" value="0">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							    </form>
@@ -828,7 +829,7 @@ table th:last-child{
 											</tr>
 										</tbody>			
 									</table>
-									
+									<input type="hidden" class="billid" name="billid" value="<%=billid%>">
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							    </form>
@@ -836,7 +837,7 @@ table th:last-child{
 				   			
 				   		</div>
 			
-			<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->
+		<!-- ------------------------------------------------------- Miscellaneous --------------------------------------------------- -->
 			
 	<!-- -------------------------------------------------- multiple billheads Details ------------------------------------------------------ -->
 	
@@ -861,8 +862,8 @@ table th:last-child{
 											<td><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
 											<td><%=ClaimAttach[1] %>	</td>
 											<td style="text-align: center;">
-												<input type="radio" name="attachment_<%=ClaimAttach[0] %>" <%if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %> checked <%} %> value="Y" onclick="updateAttachments('<%=chssapplyid %>','<%=ClaimAttach[0] %>','Y');" > &nbsp; Yes &nbsp;
-												<input type="radio" name="attachment_<%=ClaimAttach[0] %>" <%if(ClaimAttach[2]==null || ClaimAttach[4].toString().equalsIgnoreCase("N")){ %> checked <%} %> value="N" onclick="updateAttachments('<%=chssapplyid %>','<%=ClaimAttach[0] %>','N');" > &nbsp; No
+												<input type="radio" class="attach_radio" name="attachment_<%=ClaimAttach[0] %>" <%if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %> checked <%} %> value="Y" onclick="updateAttachments('<%=chssapplyid %>','<%=ClaimAttach[0] %>','Y');" > &nbsp; Yes &nbsp;
+												<input type="radio" class="attach_radio" name="attachment_<%=ClaimAttach[0] %>" <%if(ClaimAttach[2]==null || ClaimAttach[4].toString().equalsIgnoreCase("N")){ %> checked <%} %> value="N" onclick="updateAttachments('<%=chssapplyid %>','<%=ClaimAttach[0] %>','N');" > &nbsp; No
 											</td>
 										</tr>
 									<%} %>
@@ -874,9 +875,19 @@ table th:last-child{
 	<!-- -------------------------------------------------- Attachments ------------------------------------------------------ -->
 		
 					<%} %>
-		
-	
-	
+					<form action="CHSSIPDFormEdit.htm">
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<button type="submit" class="btn btn-sm preview-btn" name="chssapplyid" value="<%=chssapplydata[0]%>">preview</button>
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type="hidden" name="isapproval" value="N">
+							<input type="hidden" name="show-edit" value="N">
+							
+							<input type="hidden" name="view_mode" value="UF">
+										
+						</div>	
+					</div>
+					</form>
 	
 			
 			</div>

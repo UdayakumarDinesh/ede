@@ -86,14 +86,14 @@ public interface CHSSService
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
 	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String LoginType) throws Exception;
-	public List<Object[]> CHSSApproveClaimList(String logintype,String empid) throws Exception;
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid,String claimtype) throws Exception;
 	public long ConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSBillTests modal) throws Exception;
 	public long OtherRemAmountEdit(CHSSBillOther modal) throws Exception;
 	public long MedRemAmountEdit(CHSSBillMedicine modal) throws Exception;
 	public long MiscRemAmountEdit(CHSSBillMisc modal) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
-	public List<Object[]> CHSSBatchApproval(String logintype,String todate,String contingentid) throws Exception;
+	public List<Object[]> CHSSBatchApproval(String logintype,String todate,String contingentid,String ClaimType) throws Exception;
 	public long CHSSClaimsApprove(CHSSContingentDto dto)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception;
@@ -104,7 +104,7 @@ public interface CHSSService
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception;
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception;
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception;
-	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId,String genTilldate) throws Exception;
+	public long ContingentGenerate(String[] CHSSApplyId, String Username, String action, String billcontent, String logintype,String EmpId,String genTilldate,String claims_type) throws Exception;
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception;
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception;
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception;
@@ -170,5 +170,15 @@ public interface CHSSService
 	public long IPDMiscBillDelete(String chssMiscid, String modifiedby) throws Exception;
 	public List<Object[]> ClaimDisputeClosedList(String fromdate, String todate) throws Exception;
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception;
+	public List<Object[]> ClaimEquipmentList(String CHSSApplyId) throws Exception;
+	public List<Object[]> ClaimImplantList(String CHSSApplyId) throws Exception;
+	public long CHSSUserIPDForward(String CHSSApplyId, String Username, String action, String remarks, String EmpId, String LoginType) throws Exception;
+	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception;
+	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception;
+	public long IPDConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception;
+	public long IPDBHeadRemAmountEdit(CHSSBillIPDheads modal) throws Exception;
+	public long IPDTestRemAmountEdit(CHSSBillTests modal) throws Exception;
+	public long IPDEquipmentRemEdit(CHSSBillEquipment modal) throws Exception;
+	public long IPDImplantRemEdit(CHSSBillImplants modal) throws Exception;
 
 }

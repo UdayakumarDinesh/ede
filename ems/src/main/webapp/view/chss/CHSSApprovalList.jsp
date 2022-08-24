@@ -16,18 +16,33 @@
 	body{
 		overflow-x:hidden !important; 
 	}
+	
+.count-badge {
+    position: absolute;
+    transform: scale(.8);
+    transform-origin: top right;
+    margin-left: 0rem;
+    margin-top: -0.25rem;
+    background: red;
+    font-family: 'Lato', sans-serif;
+ 	padding: 0.25em 0.5em;
+   	font-size: 13px;
+}
+    
+}
 </style>
 
 </head>
 <body>
 
 <%
-	
-	
-	List<Object[]> chssclaimlist=(List<Object[]>)request.getAttribute("chssclaimlist");
+	List<Object[]> OPDclaimlist=(List<Object[]>)request.getAttribute("OPDclaimlist");
+	List<Object[]> IPDclaimlist=(List<Object[]>)request.getAttribute("IPDclaimlist");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	
+	String tab   = (String)request.getAttribute("tab");
 %>
  
 	<div class="card-header page-top">
@@ -49,7 +64,6 @@
 	<div class="card-body" >
 	
 	
-	
 	<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
@@ -66,123 +80,239 @@
 		<%} %>
 	</div>
 				
-			<div class="card" >
-				<div class="card-body main-card " >
-					
-					<form action="CHSSApprovalForward.htm" method="post" id="ClaimForm">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-						<br>
-						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
-								<thead>
-									<tr>
-										<td style="text-align: center;padding-top:5px; padding-bottom: 5px;">
-											SN
-											<!-- <input type="checkbox" class="" name="allcheck" value="000" id="select_all" checked > -->
-										</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Claim No</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Employee</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Patient Name</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Claim Date</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
-										<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
-									</tr>
-								</thead>
-								<tbody>
-									<%long slno=0;
-									for(Object[] obj : chssclaimlist){ 
-										slno++; %>
+		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background-color: #E1E5E8;padding:0px;">
+		  <li class="nav-item" style="width: 50%;"  >
+		    <div class="nav-link active" style="text-align: center;" id="pills-OPD-tab" data-toggle="pill" data-target="#pills-OPD" role="tab" aria-controls="pills-OPD" aria-selected="true">
+			   <span>OPD Claims   
+				   <span class="badge badge-danger badge-counter count-badge">
+				   		<%if(OPDclaimlist.size()>99){ %>
+				   			99+
+				   		<%}else{ %>
+				   			<%=OPDclaimlist.size() %>
+						<%} %>				   			
+				  </span>  
+				</span> 
+		    </div>
+		  </li>
+		  <li class="nav-item"  style="width: 50%;">
+		    <div class="nav-link" style="text-align: center;" id="pills-IPD-tab" data-toggle="pill" data-target="#pills-IPD" role="tab" aria-controls="pills-IPD" aria-selected="false">
+		    	 <span>OPD Claims   
+				   <span class="badge badge-danger badge-counter count-badge">
+				   		<%if(IPDclaimlist.size()>99){ %>
+				   			99+
+				   		<%}else{ %>
+				   			<%=IPDclaimlist.size() %>
+						<%} %>				   			
+				   </span>  
+				</span> 
+		    
+		    
+		    </div>
+		  </li>
+		</ul>
+		
+		
+		<div class="tab-content" id="pills-tabContent">
+			<div class=" tab-pane  show active" id="pills-OPD" role="tabpanel" aria-labelledby="pills-OPD-tab" >
+			
+				<div class="card" >
+					<div class="card-body main-card " >
+						
+						<form action="CHSSApprovalForward.htm" method="post" id="ClaimForm">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							
+							<br>
+							<div class="table-responsive">
+					   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+									<thead>
 										<tr>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" >
-												<%=slno %>
-												<%-- <input type="checkbox" class="checkbox" name="chssapplyidcb" value="<%=obj[0] %>" checked> --%>
-											</td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td >
-											
-												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
-													 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[20] %>; font-weight: 600;" >
-												  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
-											</td>
-											
-											
-											<td style="padding-top:5px; padding-bottom: 5px;">
-												
-												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-													<i class="fa-solid fa-eye"></i>
-												</button>	
-												
-												<input type="hidden" name="isapproval" value="Y">
-												<input type="hidden" name="show-edit" value="Y">
-																
-											</td>
+											<th style="text-align: center;padding-top:5px; padding-bottom: 5px;">
+												SN
+											</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Claim No</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Employee</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Patient Name</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Claim Date</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Status</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Action</th>
 										</tr>
-									<%} %>
-									
-								</tbody>
-							</table>
-							<input type="hidden" name="isapproval" value="Y">
-						</div>
-
-					</form>
-					
-					
+									</thead>
+									<tbody>
+										<%long slno=0;
+										for(Object[] obj : OPDclaimlist){ 
+											slno++; %>
+											<tr>
+												<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" >
+													<%=slno %>
+													<%-- <input type="checkbox" class="checkbox" name="chssapplyidcb" value="<%=obj[0] %>" checked> --%>
+												</td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
+												<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
+												<td >
+												
+													 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
+														 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[20] %>; font-weight: 600;" >
+													  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+												</td>
+												
+												
+												<td style="padding-top:5px; padding-bottom: 5px;">
+													
+													<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>
+													
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+													<%} else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+													
+													<%} %>
+													<input type="hidden" name="view_mode" value="E">
+															
+												</td>
+											</tr>
+										<%} %>
+										
+									</tbody>
+								</table>
+								<input type="hidden" name="isapproval" value="Y">
+							</div>
+	
+						</form>
+						
+						
+					</div>
+				</div>		
+				
+			</div>
+			
+			
+			
+			<div class="card tab-pane " id="pills-IPD" role="tabpanel" aria-labelledby="pills-IPD-tab" >	
+			
+				<div class="card" >
+					<div class="card-body main-card " >
+						
+						<form action="CHSSApprovalForward.htm" method="post" id="ClaimForm">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							
+							<br>
+							<div class="table-responsive">
+					   			<table class="table table-bordered table-hover table-striped table-condensed" style="width:100%"  id="myTable1"> 
+									<thead>
+										<tr>
+											<th style="text-align: center;padding-top:5px; padding-bottom: 5px;">
+												SN
+											</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Claim No</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Employee</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Patient Name</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Claim Date</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Status</th>
+											<th style="padding-top:5px; padding-bottom: 5px;">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%slno=0;
+										for(Object[] obj : IPDclaimlist){ 
+											slno++; %>
+											<tr>
+												<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" >
+													<%=slno %>
+													<%-- <input type="checkbox" class="checkbox" name="chssapplyidcb" value="<%=obj[0] %>" checked> --%>
+												</td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
+												<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
+												<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
+												<td >
+												
+													 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
+														 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[20] %>; font-weight: 600;" >
+													  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+												</td>
+												
+												
+												<td style="padding-top:5px; padding-bottom: 5px;">
+													
+													<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>
+													
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+													<%} else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+													
+													<%} %>
+													<input type="hidden" name="view_mode" value="E">
+															
+												</td>
+											</tr>
+										<%} %>
+										
+									</tbody>
+								</table>
+								<input type="hidden" name="isapproval" value="Y">
+							</div>
+	
+						</form>
+						
+						
+					</div>
 				</div>
-			</div>		
+			
+			</div>
+		</div>	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 		</div>
 	
 	 </div>
-	 <form action="CHSSUserForward.htm" method="post" id="form2">
-	 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	 	<input type="hidden" name="claimaction" value="F">
-	 	<input type="hidden" id="form2-chssapplyid" name="chssapplyid" value="">
-	 </form>
-	 
+
+
 <script type="text/javascript">
 
-function checklength()
-{
-	if($('input:checked').length > 0){
-		/* if(confirm('Are you sure to Forward ? '))
-		{
-			$('#ClaimForm').submit();
-		} */
-		return confirm('Are you sure to Forward ? ');
-	}else
-	{
-		alert('Please Select Atleast One Claim!');
-		return false;
-	}
-}
 
-$(document).ready(function(){
-    $('#select_all').on('click',function(){
-        if(this.checked){
-            $('.checkbox').each(function(){
-                this.checked = true;
-            });
-        }else{
-             $('.checkbox').each(function(){
-                this.checked = false;
-            });
-        }
-    });
-    
-    $('.checkbox').on('click',function(){
-        if($('.checkbox:checked').length == $('.checkbox').length){
-            $('#select_all').prop('checked',true);
-        }else{
-            $('#select_all').prop('checked',false);
-        }
-    });
-})
+$("#myTable1").DataTable({
+    "lengthMenu": [ 50, 75, 100],
+    "pagingType": "simple",
+    "language": {
+	      "emptyTable": "No Record Found"
+	    }
+
+});
+
+
+
+<%if(tab!=null){%>
+
+	$('#pills-<%=tab%>-tab').click();
+
+<%}%>
+
 
 </script>
+
+
 
 
 </body>

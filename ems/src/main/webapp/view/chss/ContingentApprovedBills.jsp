@@ -82,7 +82,7 @@
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
-										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td>
