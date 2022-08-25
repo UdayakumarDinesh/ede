@@ -176,17 +176,17 @@ th,td
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	AmountWordConveration awc = new AmountWordConveration();
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
-	String isapproval = (String)request.getAttribute("isapproval");
+	
+	String view_mode=(String)request.getAttribute("view_mode");
+	
+	
 	boolean show = false;
-	if((isapproval!=null && isapproval.equalsIgnoreCase("Y")) || chssstatusid>14 ){
+	if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("E") || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A")){
 		show = true;
 	} 
 	
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
-	/* List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory"); */
-	
-	/* String pagePart = (String)request.getAttribute("pagePart"); */
 	
 	MathContext mc0 = new MathContext(0);
 %>
@@ -200,9 +200,7 @@ th,td
 		billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
 		if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 		{
-			/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
 			discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
-			/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
 		}
 	}
 %>
@@ -212,15 +210,6 @@ th,td
 
 	<div align="center">
 		
-		
-		<%-- 	<table style="border: 0px; width: 100%">
-				<tr>
-					<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
-					<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM </h3> </td>
-					<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<%=chssapplydata[8] %></span> </td>
-				</tr>
-			</table> --%>
-			
 			<div style="width: 100%;float:left;">
 				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
 				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM - OPD</span></h3> <section style="float: right;"><span>No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </section> </div>
@@ -270,7 +259,8 @@ th,td
 						<td colspan="2"><b>Ext.No. : </b> <span class="text-blue" ><%=employee[14]%></span></td>
 					</tr>
 				</tbody>
-			</table>n
+			</table>
+			
 			<table style="margin-top: 0px;">	
 				<tbody>
 					<tr>
@@ -282,17 +272,9 @@ th,td
 						<th style="text-align: right;width: 14%;">Discount (&#8377;)</th>
 						<th style="text-align: right;width: 13%;">Total (&#8377;)</th>
 					</tr>
-					<%	/*  billstotal = new BigDecimal(0);
-					 discount = new BigDecimal(0); */ /*,  GST=0 */;
+					<%	
 					for(int i=0;i<chssbillslist.size();i++)
 					{
-						 /* billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0)); */ 
-						if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
-						{
-							/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
-							/* discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0)); */
-							/*  discount +=Double.parseDouble(chssbillslist.get(i)[6].toString()); */
-						}
 					%>
 						<tr>
 							<td class="center text-blue" ><%=i+1 %></td>

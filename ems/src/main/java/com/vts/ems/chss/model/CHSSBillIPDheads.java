@@ -25,6 +25,8 @@ public class CHSSBillIPDheads implements Serializable {
 	private double AmountPaid;
 	private double BillHeadRemAmt;
 	private String Comments;
+	private Long UpdateByEmpId;
+	private String UpdateByRole;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

@@ -81,8 +81,14 @@
 }
 
 
-
 .misc1-btn{
+	color: #ffffff;
+	background: #1597BB; 
+}
+
+
+
+.preview-btn{
 	color: #ffffff;
 	background: #1597BB; 
 }

@@ -46,38 +46,38 @@ public class LoginDetailsServiceImpl implements UserDetailsService
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
         
-        if(login!=null && login.getIsActive()==1) {
-        
-        	String IpAddress="Not Available";
-     		try{
-     		
-     		 IpAddress = request.getRemoteAddr();
-     		 
-     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
-     		{     			
-     			InetAddress ip = InetAddress.getLocalHost();
-     			IpAddress= ip.getHostAddress();
-     		}
-     		
-     		}
-     		catch(Exception e)
-     		{
-     		IpAddress="Not Available";	
-     		e.printStackTrace();	
-     		}
-		  try{
-		        AuditStamping stamping=new AuditStamping();
-		        stamping.setLoginId(login.getLoginId());
-		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-		        stamping.setUsername(login.getUsername());
-		        stamping.setIpAddress(IpAddress);
-		        stamping.setLoginDateTime(sdf1.format(new Date()));
-		        emsService.LoginStampingInsert(stamping);
-     		}catch (Exception e) {
-				e.printStackTrace();
-			}
-       
-        }
+//        if(login!=null && login.getIsActive()==1) {
+//        
+//        	String IpAddress="Not Available";
+//     		try{
+//     		
+//     		 IpAddress = request.getRemoteAddr();
+//     		 
+//     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
+//     		{     			
+//     			InetAddress ip = InetAddress.getLocalHost();
+//     			IpAddress= ip.getHostAddress();
+//     		}
+//     		
+//     		}
+//     		catch(Exception e)
+//     		{
+//     		IpAddress="Not Available";	
+//     		e.printStackTrace();	
+//     		}
+//		  try{
+//		        AuditStamping stamping=new AuditStamping();
+//		        stamping.setLoginId(login.getLoginId());
+//		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+//		        stamping.setUsername(login.getUsername());
+//		        stamping.setIpAddress(IpAddress);
+//		        stamping.setLoginDateTime(sdf1.format(new Date()));
+//		        emsService.LoginStampingInsert(stamping);
+//     		}catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//       
+//        }
         return new org.springframework.security.core.userdetails.User(login.getUsername(), login.getPassword(), grantedAuthorities);
     }
         else {

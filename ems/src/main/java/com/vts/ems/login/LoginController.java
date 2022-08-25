@@ -1,6 +1,7 @@
 package com.vts.ems.login;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.vts.ems.model.AuditStamping;
 import com.vts.ems.service.EMSMainService;
 
 @Controller
@@ -41,8 +43,12 @@ public class LoginController
 	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
 	 {	 
 		logger.info(new Date() +"Inside login ");
-	    if (error != null) {
+		
+		System.out.println(error);
+		
+		if (error != null) {
 	        model.addAttribute("error", "Your username or password is invalid.");
+	        
 	        return "static/login";
 	    }
 	    if (logout != null) {

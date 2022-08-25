@@ -97,7 +97,7 @@
   section#timeline article div.inner h2:after {
     content: '';
     position: absolute;
-    top: 20px;
+    top: 19px;
     right: -5px;
       width: 10px; 
       height: 10px;
@@ -122,16 +122,16 @@
     left: -5px;
   }
   section#timeline article:nth-child(odd) div.inner h2 {
-    background: #bd493e;
+   background-color: var(--my-color-var);
   }
   section#timeline article:nth-child(odd) div.inner h2:after {
-    background: #bd493e;
+   background-color: var(--my-color-var);
   }
   section#timeline article:nth-child(even) div.inner h2 {
-    background: #9da61e;
+   background-color: var(--my-color-var);
   }
   section#timeline article:nth-child(even) div.inner h2:after {
-    background: #9da61e;
+    background: var(--my-color-var);
   }
 /* timeline customization */
 
@@ -176,26 +176,26 @@ List<Object[]> statuslist = (List<Object[]>)request.getAttribute("ChssStatisDeta
 			 SimpleDateFormat time=new SimpleDateFormat("HH:mm");
 			 %>
 	      
-			  <article>
-			    <div class="inner">
-			      <span class="date">
-			        <span class="day"><%=day.format(object[5]) %></span>
-			        <span class="month"><%=month.format(object[5]) %></span>
-			        <span class="year"><%=year.format(object[5]) %></span>
-			      </span>
-			      <h2><%=object[7] %> at <%=time.format(object[5]) %></h2> 
-				  <p style="background-color:  #f0f2f5;">
-				  <span class="remarks_title">Action By : </span>
-				  				<%=object[2] %>, <%=object[3] %><br>
-				  	<%if(object[6]!= null){%>
-				  		<span class="remarks_title">Remarks : </span>
-				  				<%=object[6] %>
-				  						<%}else{ %> 
-				  							<span class="remarks_title">No Remarks </span> 
-				  								<%} %>
-				  </p>
-			    </div>
-			  </article>
+			<article>
+				<div class="inner">
+					<span class="date">
+						<span class="day"><%=day.format(object[5]) %></span>
+						<span class="month"><%=month.format(object[5]) %></span>
+						<span class="year"><%=year.format(object[5]) %></span>
+					</span>
+					<h2 style="background-color: <%=object[8]%>;--my-color-var: <%=object[8]%>;" ><%=object[7] %> at <%=time.format(object[5]) %></h2> 
+					<p style="background-color:  #f0f2f5;">
+						<span class="remarks_title">Action By : </span>
+						<%=object[2] %>, <%=object[3] %><br>
+						<%if(object[6]!= null) { %>
+							<span class="remarks_title">Remarks : </span>
+							<%=object[6] %>
+						<%}else{ %> 
+							<span class="remarks_title">No Remarks </span> 
+						<%} %>
+					</p>
+				</div>
+			</article>
 			  
 			<%count++;}%> 		
 		</section>

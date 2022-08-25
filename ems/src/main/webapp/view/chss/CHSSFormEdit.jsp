@@ -152,29 +152,35 @@ th,td
 	AmountWordConveration awc = new AmountWordConveration();
 	IndianRupeeFormat nfc=new IndianRupeeFormat();
 	
-	String isapproval = (String)request.getAttribute("isapproval");
-	String showedit = (String)request.getAttribute("show-edit");
+	
 	String logintype = (String)request.getAttribute("logintype");
 	
 	int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 	String LabLogo = (String)request.getAttribute("LabLogo");
-	String onlyview=(String)request.getAttribute("onlyview");
+	
 	String ActivateDisp=(String)request.getAttribute("ActivateDisp");
 	String dispReplyEnable = (String)request.getAttribute("dispReplyEnable");
 	
-	boolean showhistorybtn = (  isapproval.equalsIgnoreCase("Y"));
-	boolean showRemAmtText =((showedit.equalsIgnoreCase("N") && isapproval.equalsIgnoreCase("Y")) || chssstatusid==15) ;
+
+	String view_mode=(String)request.getAttribute("view_mode");
+	
+	boolean showRemAmt =  ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A") ;
+	boolean allowEdit =   view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 );
+	boolean historyBtn =  view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("E")||  view_mode.equalsIgnoreCase("A")  ;
+	
+	historyBtn = historyBtn || (view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 ));
+	
+	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 	
 	MathContext mc0 = new MathContext(0);
-	
 %>
 
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>CHSS List</h5>
+				<h5>CHSS Preview - OPD</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
@@ -184,7 +190,7 @@ th,td
 						<%}else if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
 						<%}else if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
-						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">Pending Approval List</a></li>
+						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">Claims Pending</a></li>
 						<%} else if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
 						<li class="breadcrumb-item "><a href="ClaimsList.htm">Claims List</a></li>
 						<%}else if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
@@ -208,9 +214,7 @@ th,td
 						<div class="alert alert-danger" role="alert"  style="margin-top: 5px;">
 							<%=ses1 %>
 						</div>
-						
 					<%}if(ses!=null){ %>
-						
 						<div class="alert alert-success" role="alert"  style="margin-top: 5px;">
 							<%=ses %>
 						</div>
@@ -445,9 +449,7 @@ th,td
 														<tr>
 															<td colspan="4" style="text-align: center;">
 																<b>Consultation Charges </b>
-																<%if(showhistorybtn){ %>
-																	
-																	
+																<%if(allowEdit || historyBtn){ %>
 																	<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
 																		<i class="fa-solid fa-clock-rotate-left"></i>
 																	</button>
@@ -474,7 +476,7 @@ th,td
 														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
 														<td class="text-blue" >
-															<% if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+															<% if(allowEdit){ %>
 																<select name="consulttype-<%=consult[0]%>"  class="form-control"  >
 																	<option value="Fresh" <%if(consult[2].toString().trim().equalsIgnoreCase("Fresh")){ %> selected <%} %> >Fresh</option>
 																	<option value="FollowUp" <%if(consult[2].toString().trim().equalsIgnoreCase("FollowUp")){ %> selected <%} %> >FollowUp</option>
@@ -486,7 +488,7 @@ th,td
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
 														
-													<%if(showRemAmtText){ %>
+													<%if(showRemAmt){ %>
 														<td class="right ">
 															
 															<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
@@ -499,7 +501,7 @@ th,td
 															
 															
 														</td>
-														<td class="">
+														<td>
 															<%if(consult[10]!=null){ %>
 																<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=consult[10]%></span>		
@@ -510,7 +512,7 @@ th,td
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+													<%}else if(allowEdit){ %>
 														<td class="right">	
 															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=consult[6] %>" name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
 														</td>
@@ -522,8 +524,8 @@ th,td
 															</button>	
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>
 													<%} %>	
 														
 																											
@@ -540,7 +542,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
-															<%if(showhistorybtn){ %>
+															<%if(allowEdit || historyBtn){ %>
 																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																		Tests
 																	</button>
@@ -571,7 +573,7 @@ th,td
 													<td class="right text-blue"><%=test[4] %></td>
 												
 													
-													<%if(showRemAmtText){ %>
+													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=test[7]%>	</span>		
@@ -581,7 +583,7 @@ th,td
 																<span class="verified" ><%=test[7]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=test[11]%>	</span>		
@@ -592,7 +594,7 @@ th,td
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+													<%}else if(allowEdit){ %>
 														<td class="right">	
 															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" max="<%=test[4] %>" style="text-align: right;" value="<%=test[7]%>">
 														</td>
@@ -604,8 +606,8 @@ th,td
 														</button>
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>	
 													<%} %>											
 												</tr>					
 											<%i++;
@@ -622,7 +624,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
-															<%if(showhistorybtn){ %>
+															<%if(allowEdit || historyBtn){ %>
 																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																	Medicines
 																</button>
@@ -653,7 +655,7 @@ th,td
 													<td  class="text-blue" ><%=medicine[7] %><%-- &nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>) --%></td>
 													<td  class="text-blue" >	
 														<%=medicine[2] %>
-														<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
+														<% if(historyBtn && chssapplydata[7].toString().equals("1")){ %>
 														   <button type="button" class="btn btn-sm" style="float: right;background-color: #FFD24C" onclick="showsimilarmeds('<%=medicine[2]%>');" data-toggle="tooltip" data-placement="top" title="Similar Medicines List" ><i class="fa-solid fa-list-ul"></i></button> 
 														<%} %>
 													</td>
@@ -662,7 +664,7 @@ th,td
 													<td  class="text-blue right"><%=medicine[3] %></td>
 												
 													
-													<%if(showRemAmtText){ %>
+													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																<span class="systemgen" > <%=medicine[6]%>	</span>		
@@ -672,7 +674,7 @@ th,td
 																<span class="verified" > <%=medicine[6]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(medicine[9]!=null){ %>
 																<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																	<span class="systemgen" > <%=medicine[9]%>	</span>		
@@ -685,7 +687,7 @@ th,td
 															
 															
 														</td>
-													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+													<%}else if(allowEdit){ %>
 														<td class="right">	
 															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" max="<%=medicine[3] %>" name="medicineremamount-<%=medicine[0]%>" style="text-align: right;" value="<%=medicine[6]%>">
 														</td>
@@ -695,15 +697,15 @@ th,td
 															<button type="submit" class="btn btn-sm editbtn" formaction="MedRemAmountEdit.htm" name="medicineid" value="<%=medicine[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
-															<% if(showhistorybtn && chssapplydata[7].toString().equals("1")){ %>
+															<% if(historyBtn && chssapplydata[7].toString().equals("1")){ %>
 															<button type="button" class="btn btn-sm editbtn"  onclick="InAdmCommentModel('<%=medicine[2]%>') " data-toggle="tooltip" data-placement="top" title="Add Medicine to Inadmissible List" >
 																<i class="fa-solid fa-folder-plus"  style="color: #EB1D36;" ></i>
 															</button>
 															<%} %>
 														</td>
 													<%} else {%>
-														<td class="">
-														<td class="">
+														<td>
+														<td>
 													<%} %>
 														
 												</tr>					
@@ -720,7 +722,7 @@ th,td
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Others</b>
-															<%if(showhistorybtn){ %>
+															<%if(historyBtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -746,7 +748,7 @@ th,td
 													<td  class="text-blue" colspan="3"><%=other[4] %></td>
 													<td class="right text-blue"><%=other[3] %></td>
 													
-													<%if(showRemAmtText){ %>
+													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=other[5]%>	</span>		
@@ -756,7 +758,7 @@ th,td
 																<span class="verified" > <%=other[5]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(other[8]!=null){ %>
 																<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=other[8]%>	</span>		
@@ -767,7 +769,7 @@ th,td
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+													<%}else if(allowEdit){ %>
 														<td class="right">	
 															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" max="<%=other[3] %>" name="otherremamount-<%=other[0]%>" style="text-align: right;" value="<%=other[5]%>">
 														</td>
@@ -778,8 +780,8 @@ th,td
 														</button>
 														</td>
 													<%} else {%>
-														<td class="">
-														<td class="">
+														<td>
+														<td>
 													<%} %>
 														
 													
@@ -790,12 +792,12 @@ th,td
 											} %>
 											<% i=1;
 											for(Object[] misc : MiscDataList)
-											{%>
+											{ %>
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;">
 															<b>Miscellaneous</b>
-															<%if(showhistorybtn){ %>
+															<%if(historyBtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
 																	<i class="fa-solid fa-clock-rotate-left"></i>
 																 </button>
@@ -824,7 +826,7 @@ th,td
 													<td class="right text-blue"><%=misc[3] %></td>
 													
 																										
-													<%if(showRemAmtText){ %>
+													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=misc[4]%>	</span>		
@@ -834,7 +836,7 @@ th,td
 																<span class="verified" > <%=misc[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=misc[7]%>	</span>		
@@ -845,7 +847,7 @@ th,td
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") ){ %>
+													<%}else if(allowEdit){ %>
 														<td class="right">	
 															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" max="<%=misc[3] %>" value="<%=misc[4]%>">
 														</td>
@@ -855,9 +857,9 @@ th,td
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
-													<%} else { %>
-														<td class="">
-														<td class="">
+													<% } else { %>
+														<td></td>
+														<td></td>
 													<%} %>
 													
 												</tr>					
@@ -869,9 +871,9 @@ th,td
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>	 
+												<%if(showRemAmt){ %>	 
 												<b><%=totalremamount%></b>
-												<%} %>
+												<% } %>
 											</td>
 											<td></td>
 										</tr>
@@ -889,7 +891,7 @@ th,td
 															
 											<td class="right text-green">
 												
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>	 
+												<%if(showRemAmt){ %>	 
 												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
@@ -906,7 +908,7 @@ th,td
 										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(isapproval.equalsIgnoreCase("Y") || chssstatusid==15){ %>
+												<%if(showRemAmt){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
@@ -974,10 +976,10 @@ th,td
 							<%}else { %>
 								<div class="col-md-5" ></div>
 							<%} %>
-							<%if(onlyview==null || !onlyview.equalsIgnoreCase("Y")){ %>	
+							<%if(Arrays.asList("UF","E","A").contains(view_mode) && chssstatusid < 14){ %>	
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
 							
-							<%if(chssstatusid!=8 ){ %>
+							<%if(chssstatusid!=8  ){ %>
 								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
 									Remarks : <br>
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
@@ -1010,8 +1012,9 @@ th,td
 							</div>
 							<%}else if(chssstatusid ==15 && ClaimDisputeData !=null) { %>
 							<div class="col-md-6" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
-							<%
-							if(ClaimDisputeData !=null){ %>
+							
+							
+							<%if(ClaimDisputeData !=null){ %>
 								<table style="margin: 3px;padding: 0px">
 									<tr>
 										<td style="border:none;padding: 0px">
@@ -1097,7 +1100,7 @@ th,td
 									<textarea rows="5" style="width: 100%;" maxlength="1000" name="Responcemsg" id="Responcemsg" required="required"></textarea>
 								</div>
 								<div class="col-md-12 w-100" align="center">
-									<button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit dispute</button>
+									<button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit Response</button>
 								</div>
 								
 							</div>
@@ -1113,7 +1116,7 @@ th,td
 	
 	 </div>
 
-	<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("V")|| logintype.equals("K") || logintype.equals("B")) && (chssstatusid== 2  || chssstatusid== 4 || chssstatusid== 5)){ %>
+	<%if(allowEdit && (logintype.equals("V")|| logintype.equals("K") || logintype.equals("B")) && (chssstatusid== 2  || chssstatusid== 4 || chssstatusid== 5)){ %>
 		<button type="button" onclick="$('.my-disc-cal-modal').modal('show');" class="btn- btn-sm float" style="float: right;border:0px;background-color:green; " data-toggle="tooltip" data-placement="top" title="Discount Calculator">
 			<i class="fa-solid fa-calculator my-float" style="color: white;"></i>
 		</button> 
@@ -1260,7 +1263,7 @@ th,td
 
 
 
-<%if(showedit.equalsIgnoreCase("Y") && isapproval.equalsIgnoreCase("Y") && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
+<%if(allowEdit && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
 
 <div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document">

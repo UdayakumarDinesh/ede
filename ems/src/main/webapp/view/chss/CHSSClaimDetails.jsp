@@ -139,7 +139,7 @@
 							<!-- <table class="table table-bordered table-hover table-condensed  info shadow-nohover" >
 								<thead>
 									<tr>
-										<th style="width:5%;" >SNo.</th>
+										<th style="width:5%;" >SN.</th>
 										<th style="width:35%;" >Hospital / Medical / Diagnostics Centre Name</th>
 										<th style="width:25%;" >Bill / Receipt No.</th>
 										<th style="width:10%;" >Bill Date</th>

@@ -26,6 +26,8 @@ public class CHSSBillEquipment implements Serializable {
 	private double EquipmentCost;
 	private double AmountPaid;
 	private double EquipmentRemAmt;
+	private Long UpdateByEmpId;
+	private String UpdateByRole;
 	private String Comments;
 	private int IsActive;
 	private String CreatedBy;

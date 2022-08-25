@@ -91,12 +91,12 @@
 						   			<table class="table table-bordered table-hover table-striped table-condensed" style="min-width:100%" id="myTable"> 
 										<thead>
 											<tr>
-												<td style="text-align: center;width: 5%;">SN</td>
-												<td style="width: 35%;">Employee</td>
-												<td style="width: 25%;">Claim No</td>
-												<td style="width: 10%;">Raised Date</td>
-												<td style="width: 15%;">Status</td>
-												<td style="width: 10%;">Action</td>
+												<th style="text-align: center;width: 5%;">SN</th>
+												<th style="width: 35%;">Employee</th>
+												<th style="width: 25%;">Claim No</th>
+												<th style="width: 10%;">Raised Date</th>
+												<th style="width: 15%;">Status</th>
+												<th style="width: 10%;">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -113,12 +113,11 @@
 													<td ><span style="color: red;">Response Pending</span></td>
 													<td >
 															
-														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
 																
-														<input type="hidden" name="isapproval" value="Y">
-														<input type="hidden" name="show-edit" value="N">
+														<input type="hidden" name="view_mode" value="A">
 														<input type="hidden" name="dispReplyEnable" value="Y">	
 													</td>
 												</tr>
@@ -173,13 +172,13 @@
 						   			<table class="table table-bordered table-hover table-striped table-condensed" style="min-width:100%" id="myTable1"> 
 										<thead>
 											<tr>
-												<td style="text-align: center;width: 5%;">SN</td>
-												<td style="width: 35%;">Employee</td>
-												<td style="width: 25%;">Claim No</td>
-												<td style="width: 10%;">Raised Date</td>
-												<td style="width: 15%;">Status</td>
-												<td style="width: 10%;">Response Date</td>
-												<td style="width: 10%;">Action</td>
+												<th style="text-align: center;width: 5%;">SN</th>
+												<th style="width: 35%;">Employee</th>
+												<th style="width: 25%;">Claim No</th>
+												<th style="width: 10%;">Raised Date</th>
+												<th style="width: 15%;">Status</th>
+												<th style="width: 10%;">Response Date</th>
+												<th style="width: 10%;">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -197,11 +196,10 @@
 													<td ><span style="color: green;">Response Submitted</span></td>
 													<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[6].toString()) %></td> 
 													<td >
-														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
-														<input type="hidden" name="isapproval" value="Y">
-														<input type="hidden" name="show-edit" value="N">
+														<input type="hidden" name="view_mode" value="A">
 														<input type="hidden" name="dispReplyEnable" value="Y">	
 													</td>
 												</tr>

@@ -109,8 +109,8 @@
 						   			<table class="table table-bordered table-hover table-striped table-condensed" style="min-width:100%"  id="myTable"> 
 										<thead>
 											<tr>
-												<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
-												<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
+												<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
+												<td style="padding-top:5px; padding-bottom: 5px;" >Contingent No</td>
 												<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
 												<!-- <td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td> -->
 												<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
@@ -191,8 +191,8 @@
 						   			<table class="table table-bordered table-hover table-striped table-condensed" style="width:100% !important"  id="myTable1"> 
 										<thead>
 											<tr>
-												<td style="padding-top:5px; padding-bottom: 5px;min-width: 10% !important; text-align: center; ">SNo</td>
-												<td style="padding-top:5px; padding-bottom: 5px;min-width: 25% !important" >ContingentBill No</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 10% !important; text-align: center; ">SN</td>
+												<td style="padding-top:5px; padding-bottom: 5px;min-width: 25% !important" >Contingent No</td>
 												<td style="padding-top:5px; padding-bottom: 5px;min-width: 15% !important">Bill Date</td>
 												<td style="padding-top:5px; padding-bottom: 5px;min-width: 15% !important">Approval Date</td>
 												<td style="padding-top:5px; padding-bottom: 5px;min-width: 25% !important">Action</td>
@@ -264,7 +264,7 @@
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
 									<tr>
-										<td style="padding-top:5px; padding-bottom: 5px;">SNo</td>
+										<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
 										<td style="padding-top:5px; padding-bottom: 5px;" >ContingentBill No</td>
 										<td style="padding-top:5px; padding-bottom: 5px;">Bill Date</td>
 										<!-- <td style="padding-top:5px; padding-bottom: 5px;">Approval Date</td> -->

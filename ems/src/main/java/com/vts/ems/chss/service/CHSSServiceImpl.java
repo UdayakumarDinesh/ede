@@ -58,6 +58,7 @@ import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSContingentTransaction;
 import com.vts.ems.chss.model.CHSSIPDAttachments;
+import com.vts.ems.chss.model.CHSSIPDBillHeads;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
@@ -376,7 +377,6 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSConsultationList(billid);
 	}
 	
-//	@Override
 	public int UpdateBillAdmissibleTotal(String billid) throws Exception
 	{
 		Object[] bill = dao.CHSSBill(billid);
@@ -406,7 +406,7 @@ public class CHSSServiceImpl implements CHSSService {
 				consult.setCreatedBy(dto.getCreatedBy());
 				consult.setCreatedDate(sdtf.format(new Date()));		
 				
-				CalculateConsultEligibleAmtNew(consult, chssapplyid, dto.getBillId());
+				CalculateConsultEligibleAmt(consult, chssapplyid, dto.getBillId());
 				
 				count = dao.ConsultationBillAdd(consult);
 					
@@ -421,7 +421,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 	}
 	
-	public void CalculateConsultEligibleAmtNew(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
+	public void CalculateConsultEligibleAmt(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
 	{		
 		CHSSBill bill = dao.getCHSSBill(billid);
 		
@@ -504,7 +504,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
-		CalculateConsultEligibleAmtNew(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
+		CalculateConsultEligibleAmt(fetch, chssapplyid, String.valueOf(fetch.getBillId()));      
 		
 		
 		long count= dao.ConsultationBillEdit(fetch);
@@ -951,7 +951,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	
-	public void CHSSUpdateClaimItemsRemAmount(String chssapplyid) throws Exception
+	public void UpdateOPDClaimItemsRemAmount(String chssapplyid) throws Exception
 	{
 		CHSSApply chssapply =dao.getCHSSApply(chssapplyid);
 		String treattypeid= chssapply.getTreatTypeId().toString();
@@ -971,7 +971,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			for(CHSSBillConsultation consult : consultationList)
 			{
-				CalculateConsultEligibleAmtNew(consult, chssapplyid, billid);
+				CalculateConsultEligibleAmt(consult, chssapplyid, billid);
 				
 				consult.setAmountPaid(consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100)));
 				long count= dao.ConsultationBillEdit(consult);
@@ -1173,7 +1173,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		if(claim.getCHSSStatusId()==2) 
 		{
-			CHSSUpdateClaimItemsRemAmount(CHSSApplyId);
+			UpdateOPDClaimItemsRemAmount(CHSSApplyId);
 		}
 //		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
 //		{
@@ -1200,9 +1200,9 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public List<Object[]> CHSSApproveClaimList(String logintype,String empid ) throws Exception 
+	public List<Object[]> CHSSApproveClaimList(String logintype,String empid,String claimtype ) throws Exception 
 	{
-		return dao.CHSSApproveClaimList(logintype,empid);
+		return dao.CHSSApproveClaimList(logintype,empid,claimtype);
 	}
 	
 	@Override
@@ -1318,9 +1318,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid) throws Exception
+	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid,String ClaimType) throws Exception
 	{
-		return dao.CHSSBatchApproval(logintype,  todate,contingentid);
+		return dao.CHSSBatchApproval(logintype,  todate,contingentid, ClaimType);
 	}
 	
 	@Override
@@ -1336,11 +1336,18 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long ContingentGenerate(String CHSSApplyId[],String Username, String action,String billcontent,String logintype,String EmpId,String genTilldate) throws Exception 
+	public long ContingentGenerate(String CHSSApplyId[],String Username, String action,String billcontent,String logintype,String EmpId,String genTilldate,String claims_type) throws Exception 
 	{	
 		CHSSContingent continnew =new CHSSContingent();
 		long contingentid=0;
-		continnew.setContingentBillNo(GenerateContingentNo());
+		if(claims_type.equalsIgnoreCase("OPD")) 
+		{
+			continnew.setContingentBillNo(GenerateOPDContingentNo());
+		}
+		else if(claims_type.equalsIgnoreCase("IPD")) 
+		{
+			continnew.setContingentBillNo(GenerateIPDContingentNo());			
+		}
 //		continnew.setContingentDate(LocalDate.now().toString()); 
 		continnew.setClaimsCount(CHSSApplyId.length);
 		continnew.setContingentStatusId(1);
@@ -1382,7 +1389,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	
-	public String GenerateContingentNo() throws Exception
+	public String GenerateOPDContingentNo() throws Exception
 	{
 		try {
 			String value="STARC/F&A/Med-Regular/";
@@ -1408,6 +1415,44 @@ public class CHSSServiceImpl implements CHSSService {
 			if(count==0) {
 				return value;
 			}else 
+			{
+				return  value+"/VOL-"+(count+1);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public String GenerateIPDContingentNo() throws Exception
+	{
+		try {
+			String value="STARC/F&A/Med-Regular/";
+						
+			LocalDate today= LocalDate.now();
+			String start ="";
+			String end="";
+			int currentmonth= today.getMonthValue();
+			if(currentmonth<4) 
+			{
+				start = String.valueOf(today.getYear()-1);
+				end =String.valueOf(today.getYear()).substring(2);
+			}
+			else
+			{
+				start=String.valueOf(today.getYear());
+				end =String.valueOf(today.getYear()+1).substring(2);
+			}		
+			value = value+start+"-"+end+"/"+today.getMonth().toString().toUpperCase()+"-"+String.valueOf(today.getYear()).substring(2)+"/IPD";
+			
+			int count=dao.getdata(value);
+			
+			if(count==0) {
+				return value;
+			}
+			else 
 			{
 				return  value+"/VOL-"+(count+1);
 			}
@@ -1834,6 +1879,10 @@ public class CHSSServiceImpl implements CHSSService {
 			count += dao.billMedsDeleteAll(billid,username,sdtf.format(new Date()));
 			count += dao.billOthersDeleteAll(billid,username,sdtf.format(new Date()));
 			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billEquipmentDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billImplantDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billHeadsDeleteAll(billid,username,sdtf.format(new Date()));
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2222,25 +2271,27 @@ public class CHSSServiceImpl implements CHSSService {
 	public long IPDBillHeadDataAddEdit(CHSSBillIPDheads billhead)throws Exception
 	{
 		CHSSBillIPDheads fetch = dao.getCHSSBillIPDheads(0l,billhead.getBillId(),billhead.getIPDBillHeadId());
-		if(fetch==null) 
+		long count=0;
+		if(fetch==null && billhead.getBillHeadCost()>0) 
 		{
 			billhead.setAmountPaid(billhead.getBillHeadCost());
-			billhead.setBillHeadRemAmt(billhead.getBillHeadCost());
+//			billhead.setBillHeadRemAmt(billhead.getBillHeadCost());
 			billhead.setComments("");
 			billhead.setIsActive(1);
 			billhead.setCreatedDate(sdtf.format(new Date()));
-			return dao.CHSSBillIPDheadsAdd(billhead);
+			count= dao.CHSSBillIPDheadsAdd(billhead);
 		}
-		else
+		else 
 		{
 			fetch.setBillHeadCost(billhead.getBillHeadCost());
 			fetch.setAmountPaid(billhead.getBillHeadCost());
-			fetch.setBillHeadRemAmt(billhead.getBillHeadCost());
+//			fetch.setBillHeadRemAmt(billhead.getBillHeadCost());
 			fetch.setModifiedDate(sdtf.format(new Date()));
 			fetch.setModifiedBy(billhead.getCreatedBy());
-			return dao.CHSSBillIPDheadsEdit(fetch);
+			count= dao.CHSSBillIPDheadsEdit(fetch);
 		}
 		
+		return count;
 	}
 	
 	@Override
@@ -2461,6 +2512,7 @@ public class CHSSServiceImpl implements CHSSService {
 				equip.setEquipmentName(WordUtils.capitalize(dto.getEquipName()[i]).trim());
 				equip.setEquipmentCost(Double.parseDouble(dto.getEquipCost()[i]));
 				equip.setAmountPaid(equip.getEquipmentCost()-(equip.getEquipmentCost() *(bill.getDiscountPercent()/100)));
+//				equip.setEquipmentRemAmt(equip.getEquipmentCost()-(equip.getEquipmentCost() *(bill.getDiscountPercent()/100)));
 				equip.setEquipmentRemAmt(0);
 				equip.setIsActive(1);
 				equip.setCreatedBy(dto.getCreatedBy());
@@ -2486,6 +2538,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setEquipmentName(WordUtils.capitalize(modal.getEquipmentName()).trim());
 		fetch.setEquipmentCost(modal.getEquipmentCost());
 		fetch.setAmountPaid(modal.getEquipmentCost()-(modal.getEquipmentCost() *(bill.getDiscountPercent()/100)));
+//		fetch.setEquipmentRemAmt(modal.getEquipmentCost()-(modal.getEquipmentCost() *(bill.getDiscountPercent()/100)));
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -2518,17 +2571,18 @@ public class CHSSServiceImpl implements CHSSService {
 			long count=0;
 			for(int i=0 ; i<dto.getImplantName().length ; i++)
 			{
-				CHSSBillImplants  equip = new CHSSBillImplants();
+				CHSSBillImplants  implant = new CHSSBillImplants();
 				CHSSBill bill = dao.getCHSSBill(dto.getBillId());
-				equip.setBillId(Long.parseLong(dto.getBillId()));
-				equip.setImplantName(WordUtils.capitalize(dto.getImplantName()[i]).trim());
-				equip.setImplantCost(Double.parseDouble(dto.getImplantCost()[i]));
-				equip.setAmountPaid(equip.getImplantCost()-(equip.getImplantCost() *(bill.getDiscountPercent()/100)));
-				equip.setImplantRemAmount(0);
-				equip.setIsActive(1);
-				equip.setCreatedBy(dto.getCreatedBy());
-				equip.setCreatedDate(sdtf.format(new Date()));
-				count = dao.ImplantBillAdd(equip);
+				implant.setBillId(Long.parseLong(dto.getBillId()));
+				implant.setImplantName(WordUtils.capitalize(dto.getImplantName()[i]).trim());
+				implant.setImplantCost(Double.parseDouble(dto.getImplantCost()[i]));
+				implant.setAmountPaid(implant.getImplantCost()-(implant.getImplantCost() *(bill.getDiscountPercent()/100)));
+//				implant.setImplantRemAmount(implant.getImplantCost()-(implant.getImplantCost() *(bill.getDiscountPercent()/100)));
+				implant.setImplantRemAmt(0);
+				implant.setIsActive(1);
+				implant.setCreatedBy(dto.getCreatedBy());
+				implant.setCreatedDate(sdtf.format(new Date()));
+				count = dao.ImplantBillAdd(implant);
 			}
 			
 			return count;
@@ -2554,6 +2608,7 @@ public class CHSSServiceImpl implements CHSSService {
 		fetch.setImplantName(WordUtils.capitalize(modal.getImplantName()).trim());
 		fetch.setImplantCost(modal.getImplantCost());
 		fetch.setAmountPaid(modal.getImplantCost()-(modal.getImplantCost() *(bill.getDiscountPercent()/100)));
+//		fetch.setImplantRemAmount(modal.getImplantCost()-(modal.getImplantCost() *(bill.getDiscountPercent()/100)));
 		fetch.setModifiedBy(modal.getModifiedBy());
 		fetch.setModifiedDate(sdtf.format(new Date()));
 		
@@ -2633,6 +2688,412 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 
+	
+	@Override
+	public List<Object[]> ClaimEquipmentList(String CHSSApplyId) throws Exception 
+	{
+		return dao.ClaimEquipmentList(CHSSApplyId);
+	}
+	
+	@Override
+	public List<Object[]> ClaimImplantList(String CHSSApplyId) throws Exception 
+	{
+		return dao.ClaimImplantList(CHSSApplyId);
+	}
+	
+	public String GenerateCHSSIPDClaimNo() throws Exception
+	{
+		LocalDate today= LocalDate.now();
+		String start ="";
+		String end="";
+		
+		int currentmonth= today.getMonthValue();
+		if(currentmonth<4) 
+		{
+			start = String.valueOf(today.getYear()-1).substring(2);
+			end =String.valueOf(today.getYear()).substring(2);
+		}
+		else
+		{
+			start=String.valueOf(today.getYear()).substring(2);
+			end =String.valueOf(today.getYear()+1).substring(2);
+		}				
+		String CNo = start+end+"/"+today.getMonth().toString().toUpperCase().substring(0,3)+"/IPD/";
+		String applynocount=dao.CHSSApplyNoCount(CNo);
+		CNo=CNo+(Long.parseLong(applynocount)+1);
+		
+		return CNo;
+	}
+	
+	@Override
+	public long CHSSUserIPDForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
+	{
+		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
+		int claimstatus = claim.getCHSSStatusId();
+		EMSNotification notify = new EMSNotification();
+		String mailbody = "";
+		String Email="";
+		if(action.equalsIgnoreCase("F")) 
+		{
+			notify.setNotificationUrl("CHSSIPDApprovalsList.htm");
+			notify.setNotificationMessage("IPD Medical Claim Application Received");
+			
+			if(claimstatus==1 || claimstatus==3 ) 
+			{
+				dao.POAcknowldgedUpdate(CHSSApplyId,"0");			
+				claim.setCHSSStatusId(2);
+				if(claimstatus==1)
+				{
+					claim.setCHSSApplyDate(LocalDate.now().toString());
+					claim.setCHSSForwardDate(LocalDate.now().toString());
+				}else if(claimstatus==1)
+				{
+					claim.setCHSSForwardDate(LocalDate.now().toString());
+				}
+				claim.setPOAcknowledge(0);
+				Object[] notifyto = dao.CHSSApprovalAuth("K");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				
+				if(claimstatus==1 && claim.getCHSSApplyNo().trim().equals("-")) 
+				{
+					claim.setCHSSApplyNo(GenerateCHSSIPDClaimNo());
+				}
+			}
+			else if(claimstatus==2 || claimstatus==5 ) 
+			{
+				claim.setCHSSStatusId(4);	
+				
+				Object[] notifyto = dao.CHSSApprovalAuth("V");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				claim.setPOId(Long.parseLong(EmpId));
+				
+			}
+			else if(claimstatus==4) 
+			{
+				claim.setCHSSStatusId(6);
+				claim.setVOId(Long.parseLong(EmpId));
+			}
+			
+			
+			mailbody = "IPD Medical Claim Application ("+claim.getCHSSApplyNo()+") Received for Verification";
+						
+		}
+		
+		if(action.equalsIgnoreCase("R")) 
+		{
+			notify.setNotificationMessage("IPD Medical Claim Application Returned");
+			mailbody = "Medical Claim Application ("+claim.getCHSSApplyNo()+") is Returned";
+
+			if(claimstatus==2 || claimstatus==5 || claimstatus==6 || claimstatus==9 || claimstatus==11 || claimstatus==13) 
+			{
+				claim.setCHSSStatusId(3);
+			
+				notify.setEmpId(claim.getEmpId());
+				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
+				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
+				notify.setNotificationUrl("CHSSDashboard.htm");
+				claim.setPOId(0L);
+				claim.setVOId(0L);
+				
+			}
+			else if(claimstatus==4) 
+			{
+				claim.setCHSSStatusId(5);
+				Object[] notifyto = dao.CHSSApprovalAuth("K");
+				if(notifyto==null) {
+					notify.setEmpId(0L);
+				}else {
+					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				}
+				notify.setNotificationUrl("CHSSIPDApprovalsList.htm");
+			}
+			claim.setVOId(0L);
+			claim.setContingentId(0L);
+		}
+		
+		claim.setRemarks(remarks);
+		claim.setModifiedBy(Username);
+		claim.setModifiedDate(sdtf.format(new Date()));
+		
+		CHSSApplyTransaction transac =new CHSSApplyTransaction();
+		transac.setCHSSApplyId(claim.getCHSSApplyId());
+		transac.setCHSSStatusId(claim.getCHSSStatusId());
+		transac.setRemark(remarks);
+		transac.setActionBy(Long.parseLong(EmpId));
+		transac.setActionDate(sdtf.format(new Date()));
+		dao.CHSSApplyTransactionAdd(transac);
+		
+		if(claim.getCHSSStatusId()!=6 && notify.getEmpId()>0)
+		{		
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(Long.parseLong(EmpId));
+			notify.setIsActive(1);
+			notify.setCreatedBy(Username);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			dao.NotificationAdd(notify);
+		}
+		
+		long count= dao.CHSSApplyEdit(claim);
+		
+		if(claim.getCHSSStatusId()==2) 
+		{
+			UpdateIPDClaimItemsRemAmount(CHSSApplyId);
+		}
+//		if(Email!=null && !Email.equalsIgnoreCase("") && !mailbody.equalsIgnoreCase(""))
+//		{
+//			
+//			MimeMessage msg = javaMailSender.createMimeMessage();
+//			MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+//			
+//			helper.setTo(Email);	
+//			helper.setSubject( "Medical Claim Application");
+//			helper.setText( mailbody , true);
+//			try {
+//				javaMailSender.send(msg); 
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
+		return count;
+	}
+	
+	public void CalculateConsultEligibleAmtIPD(CHSSBillConsultation consult,String billid) throws Exception 
+	{		
+		CHSSBill bill = dao.getCHSSBill(billid);
+		
+		Double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
+		consult.setAmountPaid(applyamount);
+		int speciality=consult.getDocQualification();
+		CHSSDoctorRates rate  = dao.getDocterRate(String.valueOf(speciality));
+		int allowedamt=rate.getConsultation_1();
+		consult.setConsultType("Fresh");
+		if (allowedamt <= applyamount) {
+			consult.setConsultRemAmount(allowedamt);
+		} else {
+			consult.setConsultRemAmount(applyamount);
+		}
+		
+		
+	}
+	
+	public void UpdateIPDClaimItemsRemAmount(String chssapplyid) throws Exception
+	{
+		List<Object[]> CHSSbillsList = dao.CHSSBillsList(chssapplyid);
+		
+		for(Object[] billdata : CHSSbillsList)
+		{
+			String billid =billdata[0].toString();
+			List<CHSSBillConsultation> consultationList = dao.CHSSConsultationList(billid);
+			List<CHSSBillTests> testList  = dao.CHSSTestsList(billid);
+			List<CHSSBillMisc> miscellaneouList  = dao.CHSSMiscList(billid);
+			List<CHSSBillEquipment> Equipments = dao.BillEquipmentList(billid);
+			List<CHSSBillImplants> implants  = dao.BillImplantsList( billid);
+			List<CHSSBillIPDheads> billhead  = dao.CHSSBillIPDheadsList( billid);
+			
+			CHSSBill bill = dao.getCHSSBill(billid);
+			
+			long count=0;
+			for(CHSSBillIPDheads bhead :billhead)
+			{
+				if(bhead.getBillHeadCost()>0) {
+					bhead.setAmountPaid(bhead.getBillHeadCost()-(bhead.getBillHeadCost()*(bill.getDiscountPercent()/100)));
+					bhead.setBillHeadRemAmt(bhead.getBillHeadCost()-(bhead.getBillHeadCost()*(bill.getDiscountPercent()/100)));
+				}else
+				{
+					bhead.setAmountPaid(0);
+					bhead.setBillHeadRemAmt(0.00);
+				}
+				bhead.setComments(df.format(bhead.getBillHeadRemAmt())+" is admitted.");
+				count += dao.IPDBillHeadEdit(bhead);
+			}
+			
+			for(CHSSBillConsultation consult : consultationList)
+			{
+				
+				consult.setAmountPaid(consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100)));
+				consult.setConsultRemAmount(consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100)));
+				CalculateConsultEligibleAmtIPD(consult,  billid);
+				consult.setComments(df.format(consult.getConsultRemAmount())+" is admitted.");
+				count += dao.ConsultationBillEdit(consult);
+			}
+			
+			for(CHSSBillTests test:testList)
+			{
+				getTestEligibleAmount(test);
+				test.setTestRemAmount(test.getTestCost()-(test.getTestCost()*(bill.getDiscountPercent()/100)));
+				test.setAmountPaid(test.getTestCost()-(test.getTestCost()*(bill.getDiscountPercent()/100)));
+				test.setComments(df.format(test.getTestRemAmount())+" is admitted.");
+				count += dao.TestBillEdit(test);
+			}
+			
+			for(CHSSBillEquipment equip :Equipments)
+			{
+				equip.setAmountPaid(equip.getEquipmentCost()-(equip.getEquipmentCost()*(bill.getDiscountPercent()/100)));
+				equip.setEquipmentRemAmt(equip.getEquipmentCost()-(equip.getEquipmentCost()*(bill.getDiscountPercent()/100)));
+				
+				equip.setComments(df.format(equip.getEquipmentRemAmt())+" is admitted.");
+				count += dao.EquipmentBillEdit(equip);
+			}
+			
+			for(CHSSBillImplants imp :implants)
+			{
+				imp.setAmountPaid(imp.getImplantCost()-(imp.getImplantCost()*(bill.getDiscountPercent()/100)));
+				imp.setImplantRemAmt(imp.getImplantCost()-(imp.getImplantCost()*(bill.getDiscountPercent()/100)));
+				imp.setComments(df.format(imp.getImplantRemAmt())+" is admitted.");
+				count += dao.ImplantBillEdit(imp);
+			}
+			
+			
+			for(CHSSBillMisc misc :miscellaneouList)
+			{
+				misc.setMiscRemAmount(0.0);
+				misc.setAmountPaid(misc.getMiscItemCost()-(misc.getMiscItemCost()*(bill.getDiscountPercent()/100)));
+				misc.setComments(df.format(misc.getMiscRemAmount())+" is admitted.");
+				count += dao.MiscBillEdit(misc);
+			}
+			
+			UpdateBillAdmissibleTotal(billid);
+			
+		}
+		
+	}
+	
+	
+	@Override
+	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception
+	{
+		return dao.BillEquipmentList(billid);
+	}
+	
+	@Override
+	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception
+	{
+		return dao.BillImplantsList(billid);
+	}
+	
+	
+	@Override
+	public long IPDConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception
+	{
+		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
+		fetch.setConsultRemAmount(modal.getConsultRemAmount());
+		fetch.setComments(modal.getComments());
+		
+		if(modal.getConsultType()!=null) {
+			fetch.setConsultType(modal.getConsultType());
+		}
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.ConsultationBillEdit(fetch);
+		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
+		return count;
+		
+	}
+	
+	@Override
+	public long IPDBHeadRemAmountEdit(CHSSBillIPDheads modal) throws Exception
+	{
+		CHSSBillIPDheads fetch = dao.getCHSSBillIPDheads(String.valueOf(modal.getCHSSItemHeadId()));
+		fetch.setBillHeadRemAmt(modal.getBillHeadRemAmt());
+		fetch.setComments(modal.getComments());
+
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		long count =dao.IPDBillHeadEdit(fetch);
+		UpdateBillAdmissibleTotal(String.valueOf(fetch.getBillId()));
+		return count;
+		
+	}
+	
+	@Override
+	public long IPDTestRemAmountEdit(CHSSBillTests modal) throws Exception
+	{
+		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
+		fetch.setTestRemAmount(modal.getTestRemAmount());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
+		long count =dao.TestBillEdit(fetch);
+		UpdateBillAdmissibleTotal(fetch.getBillId().toString());
+		return count;
+		
+	}
+	
+	@Override
+	public long IPDEquipmentRemEdit(CHSSBillEquipment modal) throws Exception
+	{
+		CHSSBillEquipment fetch = dao.getCHSSEquipment(String.valueOf(modal.getCHSSEquipmentId()));
+		fetch.setEquipmentRemAmt(modal.getEquipmentRemAmt());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
+		long count =dao.EquipmentBillEdit(fetch);
+		UpdateBillAdmissibleTotal(String.valueOf(fetch.getBillId()));
+		return count;
+		
+	}
+	
+	@Override
+	public long IPDImplantRemEdit(CHSSBillImplants modal) throws Exception
+	{
+		CHSSBillImplants fetch = dao.getCHSSImplant(String.valueOf(modal.getCHSSImplantId()));
+		fetch.setImplantRemAmt(modal.getImplantRemAmt());
+		fetch.setComments(modal.getComments());
+		fetch.setModifiedBy(modal.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(modal.getUpdateByEmpId()!=null && modal.getUpdateByEmpId()>0)
+		{
+			fetch.setUpdateByEmpId(modal.getUpdateByEmpId());
+			fetch.setUpdateByRole(modal.getUpdateByRole());
+		}
+		
+		long count =dao.ImplantBillEdit(fetch);
+		UpdateBillAdmissibleTotal(String.valueOf(fetch.getBillId()));
+		return count;
+		
+	}
+	
+	
+	
 	
 	
 }

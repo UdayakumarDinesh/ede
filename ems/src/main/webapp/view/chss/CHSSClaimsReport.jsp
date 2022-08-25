@@ -164,8 +164,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 							</table>
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
-						<input type="hidden" name="isapproval" value="Y">
-						<input type="hidden" name="show-edit" value="N">
+						<input type="hidden" name="view_mode" value="A">
 			   </form>		
 			  </div>
 		   	 </div>				
