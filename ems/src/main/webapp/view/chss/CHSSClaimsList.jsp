@@ -131,13 +131,22 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 													  &nbsp;<%=obj[22] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 											</td>
 											<td>
+												<%if(obj[10].toString().equalsIgnoreCase("OPD")){ %>
 												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
-											
+												<%}else if(obj[10].toString().equalsIgnoreCase("IPD")){ %>
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+													<i class="fa-solid fa-eye"></i>
+												</button>
+												
+												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+													<i style="color: #019267" class="fa-solid fa-download"></i>
+												</button>
+												<%} %>
 											</td>
 										</tr>
 									<%} %>

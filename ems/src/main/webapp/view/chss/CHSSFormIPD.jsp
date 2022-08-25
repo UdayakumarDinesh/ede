@@ -21,32 +21,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<jsp:include page="../static/header.jsp"></jsp:include>
-<jsp:include page="../static/sidebar.jsp"></jsp:include>
-
+<%	
+	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
+	Object[] employee = (Object[])request.getAttribute("employee");
+%>
+	<head>
 <style type="text/css">
+		
+			.break {
+				page-break-after: always;
+			}
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+			#pageborder {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				border: 2px solid black;
+			}
 
-input[type=number]{
-    -moz-appearance: textfield;
-}
+			@page {
+				size: 790px 1120px;
+				margin-top: 49px;
+				margin-left: 72px;
+				margin-right: 39px;
+				margin-buttom: 49px;
+				border: 2px solid black;
 
+				@bottom-right {
+					counter-increment: page;
+  					counter-reset: page 2;
+					content: "Page "counter(page) " of "counter(pages);
+					margin-bottom: 30px;
+					margin-right: 10px;
+				}
+
+				@top-right {
+					content: "Claim No: <%=chssapplydata[16]%>";
+					margin-top: 30px;
+					margin-right: 10px;
+				}
+
+				@top-left {
+					margin-top: 30px;
+					margin-left: 10px;
+					content: "Emp No: <%=employee[1] %>";
+				}
+
+				@top-center {
+					margin-top: 30px;
+					content: "";
+
+				}
+
+				@bottom-center {
+					margin-bottom: 30px;
+					content: "";
+				}
+				
+				
+
+			}
 
 p {
 	text-align: justify;
 	text-justify: inter-word;
 }
+body
+{
+	font-size:14px !important;
+}
 
-
+div
+{
+	width: 650px !important;
+}
 table{
 	align: left;
-	width: 100% !important;
+	width: 650px !important;
+	max-width: 650px !important;
 	margin-top: 10px; 
 	margin-bottom: 10px;
 	margin-left:10px;
@@ -61,8 +115,17 @@ th,td
 	word-break: break-word;
 	overflow-wrap: anywhere;
 	
-}
+	 -ms-word-break: break-all;
+     word-break: break-all;
 
+     /* Non standard for WebKit */
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+        hyphens: auto;
+	
+}
 .center{
 
 	text-align: center;
@@ -72,11 +135,7 @@ th,td
 {
 	text-align: right;
 }
-.btn-history
-{
-	float: right;
-	background-color: #FFD24C;
-}
+			
 .text-blue
 {
 	color: blue;
@@ -84,25 +143,7 @@ th,td
 
 .text-green
 {
-	color: #008005;
-}
- 
- 
- .float{
-	position:fixed;
-	width:50px;
-	height:50px;
-	bottom:40px;
-	right:40px;
-	color:#FFF;
-	border-radius:50px;
-	text-align:center;
-	box-shadow: 2px 2px 3px #999;
-}
-
-.my-float{
-	margin:0px;
-	font-size: 25px;
+	color:  #008005;
 }
 
 .systemgen
@@ -120,12 +161,11 @@ th,td
 	color: #0CB5ED;
 }
 
-.legend { list-style: none; }
-.legend li { float: left; margin-right: 10px; }
-.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 6px 5px 2px 2px; }
-/* your colors */
-
+ 
+			
 </style>
+<meta charset="ISO-8859-1">
+		
 </head>
 
 <%
@@ -136,9 +176,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 AmountWordConveration awc = new AmountWordConveration();
 IndianRupeeFormat nfc=new IndianRupeeFormat();
 
-Object[] employee = (Object[] )request.getAttribute("employee") ;	
 
-Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
 CHSSIPDClaimsInfo ipdbasicinfo = (CHSSIPDClaimsInfo)request.getAttribute("ipdbasicinfo") ;
 String LabLogo = (String)request.getAttribute("LabLogo");
 
@@ -151,12 +189,13 @@ List<Object[]> consultations=(List<Object[]>)request.getAttribute("consultations
 List<Object[]> billtests=(List<Object[]>)request.getAttribute("billtests");
 List<Object[]> miscitems =(List<Object[]>)request.getAttribute("miscitems"); 
 List<Object[]> equipments =(List<Object[]>)request.getAttribute("equipments");
-List<Object[]>implants =(List<Object[]>)request.getAttribute("implants");
+List<Object[]> implants =(List<Object[]>)request.getAttribute("implants");
 List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 List<Object[]> ClaimAttachDeclare = (List<Object[]>)request.getAttribute("ClaimAttachDeclare");
 
-
 List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
+
+int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
 
 String tab = (String)request.getAttribute("tab") ;
 String isself = chssapplydata[3].toString();
@@ -166,95 +205,28 @@ long billid = 0;
 if(chssbill.size()>0){
 	billid = Long.parseLong(chssbill.get(0)[0].toString());
 }
-
-String chssapplyid=chssapplydata[0].toString();
-int chssstatusid = Integer.parseInt(chssapplydata[9].toString());
-
 	
 String view_mode=(String)request.getAttribute("view_mode");
 
-boolean showRemAmt =  ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A") ;
-boolean allowEdit =   view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 );
-boolean historyBtn =  view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("E")||  view_mode.equalsIgnoreCase("A")  ;
+boolean show = false;
+if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("E") || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A")){
+	show = true;
+} 
 
-historyBtn = historyBtn || (view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 ));
-
-String SidebarActive = (String)session.getAttribute("SidebarActive");	
-
-String ActivateDisp=(String)request.getAttribute("ActivateDisp");
-String dispReplyEnable = (String)request.getAttribute("dispReplyEnable");
-
-Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 
 %>
 
-
 <body>
-
-
-	<div class="card-header page-top">
-		<div class="row">
-			<div class="col-md-3">
-				<h5>CHSS Preview - IPD</h5>
-			</div>
-				<div class="col-md-9 ">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<%if(dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y")){ %>
-						<li class="breadcrumb-item "><a href="ClaimDisputeList.htm">Claim Disputes</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
-						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
-						<li class="breadcrumb-item "><a href="CHSSIPDApprovalsList.htm">Claims Pending</a></li>
-						<%} else if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
-						<li class="breadcrumb-item "><a href="ClaimsList.htm">Claims List</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
-						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Bills List</a></li>
-						<%} %>
-						<li class="breadcrumb-item active " aria-current="page">Claim</li>
-					</ol>S
-				</div>
-			</div>
-	</div>	
 	
-	
-	
-	<div class="page card dashboard-card">
-		
-			<div align="center">
-					<%String ses=(String)request.getParameter("result"); 
-					String ses1=(String)request.getParameter("resultfail");
-					if(ses1!=null){ %>
-						<div class="alert alert-danger" role="alert"  style="margin-top: 5px;">
-							<%=ses1 %>
-						</div>
-						
-					<%}if(ses!=null){ %>
-						
-						<div class="alert alert-success" role="alert"  style="margin-top: 5px;">
-							<%=ses %>
-						</div>
-					<%} %>
-				</div>
-			<div class="card-body" >
-				<div class="card" style="padding-top:0px;margin-top: -15px;">
-					<div class="card-body main-card " style="padding-top:0px;margin-top: -10px;"  >
-					
-						
-						<div class="" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
-							<div class="row">
-								<b> &nbsp; Claim Id : </b><%=chssapplydata[16] %>
-							</div>
-							<div class="row">
-								<table style="border: 0px; width: 100%">
-									<tr>
-										<td style="width: 20%; height: 75px;border: 0;margin-bottom: 10px;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
-										<td style="width: 60%; height: 75px;border: 0;text-align: center;vertical-align: bottom;"><h3> MEDICAL CLAIM - IPD </h3> </td>
-										<td style="width: 20%; height: 75px;border: 0;vertical-align: bottom;"> <span style="float: right;">No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </td>
-									</tr>
-								</table> 
+							<div align="center">
 							
-								<table style="margin-top: 5px;margin-bottom: 0px;">	
+								<div style="width: 100%;float:left;">
+									<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
+									<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM - IPD</span></h3> <section style="float: right;"><span>No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </section> </div>
+								</div>
+								
+								<table style="margin-top: 5px;">
+		
 									<tbody>
 										<tr>
 											<th colspan="3" style="border: 0px"> Claim No : <%=chssapplydata[16] %></th>
@@ -336,7 +308,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 							<div class="col-md-12" align="center">
 								<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Basic Details</span>
 							</div>
-							<table>
+							<table style="margin-bottom: 0px;">
 								<tr>
 									<td colspan="3">
 										<b>Hospital :&nbsp;&nbsp;</b><%=ipdbasicinfo.getHospitalName()%>
@@ -346,25 +318,27 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 									</td>
 								</tr>
 								<tr>
-									<td>
+									<td style="width:30% ">
 										<b>Admitted Date :&nbsp;&nbsp;</b><%=DateTimeFormatUtil.SqlToRegularDate(ipdbasicinfo.getAdmissionDate())%>
 									</td>											
-									<td>
+									<td style="width:20% ">
 										<b>Time :&nbsp;&nbsp;</b><%=LocalTime.parse(ipdbasicinfo.getAdmissionTime()) %>
 									</td>
-									<td>
+									<td style="width:30% ">
 										<b>Discharged Date :&nbsp;&nbsp;</b><%=DateTimeFormatUtil.SqlToRegularDate(ipdbasicinfo.getDischargeDate())%>
 									</td>
-									<td>
+									<td style="width:20% ">
 										<b>Time :&nbsp;&nbsp;</b><%=LocalTime.parse(ipdbasicinfo.getDischargeTime())%>
 									</td>
 								</tr>
-							
+							</table>
+							<table style="margin-top: 0px;">
 								<tr>
 									<td colspan="4">
 										<span style="font-weight: 600; font-size: 15px;color: #CA4E79;text-decoration: underline;"> Claim For :</span>
 									</td>
 								</tr>
+							
 								<tr>
 									<td colspan="2">
 										<b>Domiciliary Hospitalization :</b>
@@ -438,9 +412,6 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 						   	</div>
 							<div class="col-md-12">
 						
-								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<table>
 										<tbody>
 												
@@ -450,10 +421,10 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 												</td>
 											</tr> 
 											<tr>
-												<th class="center" colspan="4" style="width: 55%;">Particulars</th>
-												<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
-												<th class="right" style="width: 10%;">Reimbursable under CHSS (&#8377;)</th>
-												<th class="center" style="width: 25%;">Comments</th>
+												<th class="center" colspan="4" style="width: 54%;">Particulars</th>
+												<th class="right" style="width: 12%;">Amount Claimed (&#8377;)</th>
+												<th class="right" style="width: 12%;">Reimbursable under CHSS (&#8377;)</th>
+												<th class="center" style="width: 22%;">Comments</th>
 											</tr>
 											
 								<!-- ----------------------------- billheads ---------------------------------- -->			
@@ -461,8 +432,6 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 												BigDecimal itemstotal=new BigDecimal("0.0");
 												BigDecimal totalremamount=new BigDecimal("0.0"); 
 											%>
-											
-											
 											<%  PackageItems.addAll(NonPackageItems);
 													int i=1;
 													for(Object[] pkgIten :PackageItems)	
@@ -488,7 +457,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<tr>
 															<td class="text-blue" colspan="4"><%=pkgIten[1] %></td>
 															<td class="text-blue right" ><%=pkgIten[8] %></td>									
-														<%if(showRemAmt){ %>
+														<%if(show){ %>
 															<td class="right ">
 																<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	 
 																	<span class="systemgen" ><%=pkgIten[10]%></span>		
@@ -498,7 +467,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																	<span class="verified" ><%=pkgIten[10]%></span>		
 																<%} %>
 															</td>
-															<td class="">
+															<td>
 																<%if(pkgIten[11]!=null){ %>
 																	<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	  
 																		<span class="systemgen" ><%=pkgIten[11]%></span>		
@@ -509,20 +478,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																	<%} %>
 																<%} %>
 															</td>
-														<%}else if(allowEdit){ %>
-															<td class="right">	
-																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=pkgIten[8] %>" name="bheadremamount-<%=pkgIten[5]%>" style="text-align: right;" value="<%=pkgIten[10]%>">
-															</td>
-															<td >
-																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="bheadcomment-<%=pkgIten[5]%>" style="text-align: right;" <%if(pkgIten[11]!=null){ %> value="<%=pkgIten[11] %>" <%}else{ %> value="" <%} %> >
-																
-																<button type="submit" class="btn btn-sm editbtn" formaction="IPDBillheadRemAmountEdit.htm" name="itemheadid" value="<%=pkgIten[5]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
-																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-																</button>	
-															</td>
-														<% }else {%>
-															<td class="">
-															<td class="">		
+														<%}else {%>
+															<td></td>
+															<td></td>
 														<%} %>	
 														</tr>
 													<% 
@@ -560,20 +518,11 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<% } %>
 														<tr>
 															<td class="text-blue" colspan="2" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
-															<td class="text-blue" >
-																<% if(allowEdit){ %>
-																	<select name="consulttype-<%=consult[0]%>"  class="form-control"  >
-																		<option value="Fresh" <%if(consult[2].toString().trim().equalsIgnoreCase("Fresh")){ %> selected <%} %> >Fresh</option>
-																		<option value="FollowUp" <%if(consult[2].toString().trim().equalsIgnoreCase("FollowUp")){ %> selected <%} %> >FollowUp</option>
-																	</select>
-																<%}else{ %>
-																	<%=consult[2] %>
-																<% } %>
-															</td>
+															<td class="text-blue" ><%=consult[2] %></td>
 															<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 															<td class="right text-blue"><%=consult[6] %></td>
 															
-														<%if(showRemAmt){ %>
+														<%if(show){ %>
 															<td class="right ">
 																
 																<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
@@ -586,7 +535,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																
 																
 															</td>
-															<td class="">
+															<td>
 																<%if(consult[10]!=null){ %>
 																	<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
 																		<span class="systemgen" ><%=consult[10]%></span>		
@@ -597,20 +546,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																	<%} %>
 																<%} %>
 															</td>
-														<%}else if(allowEdit){ %>
-															<td class="right">	
-																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=consult[6] %>" name="consultremamount-<%=consult[0]%>" style="text-align: right;" value="<%=consult[7]%>">
-															</td>
-															<td >
-																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="consultcomment-<%=consult[0]%>" style="text-align: right;" <%if(consult[10]!=null){ %> value="<%=consult[10] %>" <%}else{ %> value="" <%} %> >
-																
-																<button type="submit" class="btn btn-sm editbtn" formaction="IPDConsultRemAmountEdit.htm" name="consultationid" value="<%=consult[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
-																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-																</button>	
-															</td>
-														<% }else {%>
-															<td class="">
-															<td class="">		
+														<%}else {%>
+															<td></td>
+															<td></td>
 														<%} %>	
 														</tr>
 													<%	i++;
@@ -645,7 +583,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<td class="right text-blue"><%=test[4] %></td>
 												
 													
-													<%if(showRemAmt){ %>
+													<%if(show){ %>
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=test[7]%>	</span>		
@@ -655,7 +593,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<span class="verified" ><%=test[7]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=test[11]%>	</span>		
@@ -666,20 +604,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(allowEdit){ %>
-														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=test[0]%>" max="<%=test[4] %>" style="text-align: right;" value="<%=test[7]%>">
-														</td>
-														<td >
-														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=test[0]%>" style="text-align: right;" <%if(test[11]!=null){ %> value="<%=test[11] %>" <%}else{ %> value="" <%} %> >
-															
-														<button type="submit" class="btn btn-sm editbtn" formaction="IPDTestRemAmountEdit.htm"  name="testid" value="<%=test[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>
-														</td>
-													<% }else {%>
-														<td class="">
-														<td class="">		
+													<%}else {%>
+														<td></td>
+														<td></td>
 													<%} %>											
 												</tr>					
 											<%i++;
@@ -692,7 +619,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 							
 							<!-- ----------------------------- Equipment ---------------------------------- -->
 															
-													<% i=1;
+										<% i=1;
 											for(Object[] equipment :equipments)
 											{%>
 												<%if(i==1){ %>
@@ -716,7 +643,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<td class="right text-blue"><%=equipment[3] %></td>
 												
 													
-													<%if(showRemAmt){ %>
+													<%if(show){ %>
 														<td class="right ">	
 															<%if(equipment[8]== null  || Long.parseLong(equipment[8].toString())==0){ %>	 
 																<span class="systemgen" ><%=equipment[4]%>	</span>		
@@ -726,7 +653,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<span class="verified" ><%=equipment[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(equipment[7]!=null){ %>
 																<%if(equipment[8]== null  || Long.parseLong(equipment[8].toString())==0){ %>		 
 																	<span class="systemgen" ><%=equipment[7]%>	</span>		
@@ -737,20 +664,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<%} %>
 															<%} %>
 														</td>
-													<% }else if(allowEdit){ %>
-														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="equipremamount-<%=equipment[0]%>" max="<%=equipment[3] %>" style="text-align: right;" value="<%=equipment[4]%>">
-														</td>
-														<td >
-														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="equipcomment-<%=equipment[0]%>" style="text-align: right;" <%if(equipment[7]!=null){ %> value="<%=equipment[7] %>" <%}else{ %> value="" <%} %> >
-															
-														<button type="submit" class="btn btn-sm editbtn" formaction="IPDEquipRemEdit.htm"  name="equipmentid" value="<%=equipment[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>
-														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>	
 													<% } %>											
 												</tr>					
 											<%i++;
@@ -787,7 +703,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<td class="right text-blue"><%=implant[3] %></td>
 												
 													
-													<%if(showRemAmt){ %>
+													<%if(show){ %>
 														<td class="right ">	
 															<%if(implant[8]== null  || Long.parseLong(implant[8].toString())==0){ %>	 
 																<span class="systemgen" ><%=implant[4]%>	</span>		
@@ -797,7 +713,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<span class="verified" ><%=implant[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(implant[7]!=null){ %>
 																<%if(implant[8]== null  || Long.parseLong(implant[8].toString())==0){ %>		 
 																	<span class="systemgen" ><%=implant[7]%>	</span>		
@@ -808,20 +724,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<%} %>
 															<%} %>
 														</td>
-													<% }else if(allowEdit){ %>
-														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=implant[0]%>" max="<%=implant[3] %>" style="text-align: right;" value="<%=implant[4]%>">
-														</td>
-														<td >
-														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=implant[0]%>" style="text-align: right;" <%if(implant[7]!=null){ %> value="<%=implant[7] %>" <%}else{ %> value="" <%} %> >
-															
-														<button type="submit" class="btn btn-sm editbtn" formaction="TestRemAmountEdit.htm"  name="testid" value="<%=implant[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-														</button>
-														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>	
 													<% } %>											
 												</tr>					
 											<%i++;
@@ -859,7 +764,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<td class="right text-blue"><%=misc[3] %></td>
 													
 																										
-													<%if(showRemAmt){ %>
+													<%if(show){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=misc[4]%>	</span>		
@@ -869,7 +774,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<span class="verified" > <%=misc[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=misc[7]%>	</span>		
@@ -880,19 +785,9 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<%} %>
 															<%} %>
 														</td>
-													<%}else if(allowEdit){ %>
-														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="miscremamount-<%=misc[0]%>" max="<%=misc[3] %>" value="<%=misc[4]%>">
-														</td>
-														<td >
-															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
-															<button type="submit" class="btn btn-sm editbtn" formaction="MiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
-																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
-															</button>
-														</td>
-													<%} else { %>
-														<td class="">
-														<td class="">
+													<%}else { %>
+														<td></td>
+														<td></td>
 													<%} %>
 													
 												</tr>					
@@ -908,7 +803,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 															
 											<td class="right text-green">
 												
-												<%if(showRemAmt || allowEdit){ %>	 
+												<%if(show){ %>	 
 												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
@@ -925,37 +820,34 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(showRemAmt || allowEdit){ %>
+												<%if(show){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
-												<%}else{ %>
+												<% }else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
-												<%} %>
+												<% } %>
 											</td> 
 										</tr>
 										
 										<tr>
 											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
-										<tr>
+										</tr>
 										<tr>
 											<td colspan="4" style="border-top: 0;border-right : 0;">
-											
 												<ul style="list-style-type: none;margin:10px 5px -25px -35px;">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("PO")){%>
 														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
 														<li style="text-transform: capitalize;"><%=obj[4] %> </li>
-													<% } } %>
+													<% break;} } %>
 												</ul>
-											
 											</td>
 											<td colspan="4" style="border-top: 0;border-left : 0;height: 80px;" >
-											
 												<ul style="float: right;list-style-type: none; margin:10px 5px -25px 0px; ">
 													<%for(Object[] obj:ClaimapprovedPOVO){
 														if(obj[1].toString().equalsIgnoreCase("VO")){%>
 														<li style="text-transform: capitalize;"><%=obj[2] %>,</li>
 														<li style="text-transform: capitalize;"><%=obj[4] %></li>
-													<% } } %>
+													<% break;} } %>
 												</ul>					
 											</td>
 										</tr>
@@ -963,20 +855,10 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										</tbody>						
 									</table>
 								
-								</form>
-							
-						</div>
-					</div>
-					<div class="row" id="tab-scroll-at" align="center">
-				   			<div class="col-md-12" >
-				   				<div align="center"><b>Attachments</b></div>
-				   			</div>
-				   			<div class="col-md-12" >
-				   				
-				   				<table style="width: 70%;">
+								<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" style="width: 70%;">
 									<thead>
 										<tr>
-											<th style="width:5%;text-align:center;  " >SN</th>
+											<th style="width:5%;" >SN</th>
 											<th style="width:50%;" >Type of Document(s)	</th>
 											<th style="width:20%;" >Is Attached</th>
 										</tr>
@@ -984,7 +866,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 									<tbody>
 									<%for(Object[]  ClaimAttach: ClaimAttachDeclare){ %>
 										<tr>
-											<td style="text-align:center;"><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
+											<td><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
 											<td><%=ClaimAttach[1] %>	</td>
 											<td style="text-align: center;">
 												<% if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %>
@@ -996,318 +878,19 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										</tr>
 									<%} %>
 									</tbody>
-				   				</table>				   			
-				   			</div>
-				   		</div>
-				
-				
-					<form action="CHSSUserIPDForward.htm" method="post" id="fwdform">
-						<div class="row">
-						<%if(ClaimRemarksHistory.size()>0){ %>
-							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
-								<%if(ClaimRemarksHistory.size()>0){ %>
-									<table style="margin: 3px;padding: 0px">
-										<tr>
-											<td style="border:none;padding: 0px">
-												<h6 style="text-decoration: underline;">Remarks :</h6> 
-											</td>											
-										</tr>
-										<%for(Object[] obj : ClaimRemarksHistory){%>
-										<tr>
-											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-												<%=obj[3] %>&nbsp; :
-												<span style="border:none;" class="text-blue" >	<%=obj[1] %></span>
-											</td>
-										</tr>
-										<%} %>
-									</table>
-								<%} %>
-							</div>
-							<%}else { %>
-								<div class="col-md-5" ></div>
-							<%} %>
-							<%if(Arrays.asList("UF","E","A").contains(view_mode)){ %>	
-							<div class="col-md-6" align="center" style="margin-top: 5px;">
+				   				</table>				 
+				   				
 							
-							<%if(chssstatusid!=8 ){ %>
-								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-									Remarks : <br>
-									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-								</div>
-							<%} %>
-							
-							<%if(chssstatusid==2 ||  chssstatusid==5 ){ %>
-								
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Process</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
-							
-							<%}else if( chssstatusid==4 ){ %>
-								
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Verify</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
-							
-							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
-							
-								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"   <%if(chssstatusid==3){ %> onclick="remarkscheck();" <%}else{%>data-toggle="modal" data-target=".my-encl-modal" <%} %> >
-									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
-								</button>
-								<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSIPDApply.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
-									Edit
-								</button>
-								<input type="hidden" name="claimaction" value="F" >	
-									
-							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
-								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
-							<%} %>
-							</div>
-							<%}else if(chssstatusid ==15 && ClaimDisputeData !=null) { %>
-							<div class="col-md-6" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
-							<%
-							if(ClaimDisputeData !=null){ %>
-								<table style="margin: 3px;padding: 0px">
-									<tr>
-										<td style="border:none;padding: 0px">
-											<h6 style="text-decoration: underline;">Dispute :</h6> 
-										</td>											
-									</tr>
-									
-									<tr>
-										<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-											<%=employee[2] %>&nbsp; :
-											<span style="border:none; color: red;" >	<%=ClaimDisputeData[2] %></span>
-										</td>
-									</tr>
-									<%if(ClaimDisputeData[8]!=null){ %>
-										<tr>
-											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-												Response By&nbsp;<%=ClaimDisputeData[8] %>&nbsp; :
-												<span style="border:none;" class="text-blue" >	<%=ClaimDisputeData[3] %></span>
-											</td>
-										</tr>
-									
-									<% } %>
-									
-								</table>
-							<%} %>
 						</div>
-						<% } %>
-						</div>
-						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
-						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
-							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" align="center" style="left: 15%;">
-								<div class="modal-dialog  modal-dialog-centered"  >
-									<div class="modal-content" style="width: 50%;">
-										<div class="modal-header">											
-											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										    	<i class="fa-solid fa-xmark" aria-hidden="true" ></i>
-										    </button>
-										</div>
-										<div class="modal-body" >
-									          <div class="row">
-											    <div class="col-12">
-											    	<b>No of Enclosures : </b><br>
-													<input type="number" class="form-control numberonly1 w-100" name="enclosurecount" id="enclosurecount" value="<%=chssapplydata[8] %>" min="1" max="" maxlength="2" required="required" >
-												</div>												
-												 <div class="col-12 w-100" align="center">
-												 <br>
-												<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"  onclick="return CheckClaimAmount(<%=chssapplydata[0]%>)" >
-													submit
-												</button>
-												</div>
-											</div>
-										</div>
-										
-									</div>
-								</div>	
-							</div>
-							
-					</form>
+					</div>
 					
+						
+						
 					
-					<%if(chssstatusid==15 && ActivateDisp!=null && ActivateDisp.equalsIgnoreCase("Y") && ClaimDisputeData==null){ %>
-						
-						<form action="ClaimDisputeSubmit.htm" method="post">
-							<div class="row">
-								<div class="col-md-12 w-100" align="left">
-									<br><b>Raise Dispute:</b><br>
-									<textarea rows="5" style="width: 100%;" maxlength="1000" name="disputemsg" id="disputemsg" required="required"></textarea>
-								</div>
-								<div class="col-md-12 w-100" align="center">
-									<button type="submit" class="btn btn-sm submit-btn"  onclick="return checkDisputeMsg('disputemsg')" >submit dispute</button>
-								</div>
-								
-							</div>
-							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						</form>
-					<% }else if( dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y") && ClaimDisputeData!=null && ClaimDisputeData[8]==null){ %>
-						<form action="ClaimDisputeResponceSubmit.htm" method="post">
-							<div class="row">
-								<div class="col-md-12 w-100" align="left">
-									<br><b>Response For Dispute Raised by  : </b><br>
-									<textarea rows="5" style="width: 100%;" maxlength="1000" name="Responcemsg" id="Responcemsg" required="required"></textarea>
-								</div>
-								<div class="col-md-12 w-100" align="center">
-									<button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit Response</button>
-								</div>
-								
-							</div>
-							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						</form>
-						
-					<% } %>				
 				
-			<%} %>
+				<%} %>
 			
-				</div>
-			</div>
-		</div>
-		</div>
-	</div>
-
-<script type="text/javascript">
-
-
-
-function  onlyNumbers() {    
-
-    $('.numberonly').keypress( function (evt) {
-
-	    if (evt.which > 31 &&  (evt.which < 48 || evt.which > 57) && evt.which!=46 )
-	    {
-	        evt.preventDefault();
-	    } 
-		
-	    
-	});
-
-}
-
-
-$('.numberonly1').keypress(function (e) {    
-
-    var charCode = (e.which) ? e.which : event.keyCode    
-
-    if (String.fromCharCode(charCode).match(/[^0-9]/g))    
-
-        return false;                        
-
-		});
-
-
-$(document).ready( function() {
-	onlyNumbers();
-});   
-
-
-function remarkscheck()
-{
-	event.preventDefault();
-	$('#remarks').attr('required', true);
-	if($('#remarks').val().trim()===''){
-		alert('Please Fill Remarks to Submit! ');
-	}else{
-		$('.my-encl-modal').modal('show');
-	}
-}
-
-
-function remarkRequired(action)
-{
-	if(action === 'R'){
-		$('#remarks').attr('required', true);
-		if($('#remarks').val().trim()===''){
-			alert('Please Fill Remarks to Return! ');
-			return false;
-		}else{
-				return confirm('Are You Sure To Return?');
-		}
-		
-	}else{
-		$('#remarks').attr('required', false);
-		return confirm('Are You Sure To Verify?');
-	}
 	
-}
-
-function remarkscheck()
-{
-	event.preventDefault();
-	$('#remarks').attr('required', true);
-	if($('#remarks').val().trim()===''){
-		alert('Please Fill Remarks to Submit! ');
-	}else{
-		$('.my-encl-modal').modal('show');
-	}
-}
-
-
-
-</script>
-
-<script type="text/javascript">
-
-function CheckClaimAmount($chssapplyid)
-{
-	$.ajax({
-
-		type : "GET",
-		url : "CHSSClaimFwdApproveAjax.htm",
-		data : {
-				
-			chssapplyid : $chssapplyid,
-		},
-		datatype : 'json',
-		success : function(result) {
-		var result = JSON.parse(result);
-				
-		
-			if(Number(result[4])===1)
-			{
-				alert('Cannot Forward Claim Since Bill No : \''+result[5]+'\' is older than 3 months');
-			}
-			else if(Number(result[2])===1)
-			{
-				alert('Sum of Items Cost in Bill \''+result[3]+'\' does not Tally with Amount Paid.');
-			}
-			else if(Number(result[1])===1)
-			{
-				alert('Please Enter Atleast One Item in All the bills');
-			}
-			else if(Number(result[0])===1)
-			{
-				alert('Total claim amount should not be zero !');
-			}
-			else
-			{
-				if(Number($('#enclosurecount').val())>0  )
-				{
-					if(Number($('#enclosurecount').val())>99)
-					{
-						alert(' No of Encloseres Should be less than 100 !');
-					}
-					else if(confirm("Are You Sure To Submit the bill for processing ?\nOnce submitted, data can't be changed"))
-					{
-						$('#fwdform').submit();
-					}
-				}
-				else
-				{
-					alert('Please Enter No of Encloseres.');	
-				}
-			}
-		
-		}
-	});
-	
-}
-
-
-
-</script>
 
 </body>
 </html>

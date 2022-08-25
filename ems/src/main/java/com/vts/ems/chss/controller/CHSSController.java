@@ -1487,16 +1487,12 @@ public class CHSSController {
 		logger.info(new Date() +"Inside CHSSForm.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
-			String isapproval = req.getParameter("isapproval");
-			String showedit= req.getParameter("show-edit");
 			String ActivateDisp=req.getParameter("ActivateDisp");
 			
 			if(chssapplyid==null) 
 			{
 				Map md=model.asMap();
 				chssapplyid=(String)md.get("chssapplyid");
-				isapproval=(String)md.get("isapproval");
-				showedit=(String)md.get("show-edit");
 				ActivateDisp=(String)md.get("ActivateDisp");
 			}
 			
@@ -1522,9 +1518,6 @@ public class CHSSController {
 			
 			req.setAttribute("logintype", LoginType);			
 			
-			req.setAttribute("isapproval", isapproval);
-			req.setAttribute("show-edit", showedit);			
-			req.setAttribute("onlyview", "Y");
 			req.setAttribute("ActivateDisp", ActivateDisp);
 			
 			req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
@@ -1645,6 +1638,7 @@ public class CHSSController {
 					break;
 				}
 				
+				System.out.println(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) +" = "+ Math.round(Double.parseDouble(bill[9].toString())));
 				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
@@ -1906,8 +1900,6 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -1954,8 +1946,6 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -2001,8 +1991,6 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -2050,8 +2038,6 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -2098,8 +2084,6 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -3223,8 +3207,6 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Medicine Info Adding Unsuccessful");	
 			}	
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","Y");
 			
 			redir.addFlashAttribute("view_mode","E");
 			return "redirect:/CHSSFormEdit.htm";
@@ -3947,8 +3929,6 @@ public class CHSSController {
 			
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","N");
 			redir.addFlashAttribute("ActivateDisp","Y");
 			
 			redir.addFlashAttribute("view_mode","U");
@@ -3984,8 +3964,6 @@ public class CHSSController {
 			
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			redir.addFlashAttribute("isapproval","Y");
-			redir.addFlashAttribute("show-edit","N");
 			redir.addFlashAttribute("ActivateDisp","Y");
 			
 			redir.addFlashAttribute("view_mode","A");
@@ -4295,11 +4273,12 @@ public class CHSSController {
 		long count=0; 
 		try {
 		
-			String chssapplyid = req.getParameter("chssapplyid");
-			
 			String billid = req.getParameter("billid");
 			String billheadid = req.getParameter("billheadid");
 			String billheadcost = req.getParameter("billheadcost");
+			if(billheadcost==null || billheadcost.trim().equalsIgnoreCase("")) {
+				billheadcost="0";
+			}
 			
 			CHSSBillIPDheads billhead = new CHSSBillIPDheads();
 			billhead.setIPDBillHeadId(Integer.parseInt(billheadid));
@@ -4409,9 +4388,6 @@ public class CHSSController {
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String isapproval =  req.getParameter("isapproval");
-			String showedit=req.getParameter("show-edit"); 
-			String onlyview = req.getParameter("onlyview");
 			
 			String view_mode = req.getParameter("view_mode");
 			
@@ -4426,36 +4402,17 @@ public class CHSSController {
 				return "redirect:/CHSSDashboard.htm";
 			}
 			
-			String tab = req.getParameter("tab");
-			if (tab == null) 
-			{
-				Map md=model.asMap();
-				tab=(String)md.get("tab");
-			}	
-			
-			if (isapproval == null) 
-			{
-				Map md=model.asMap();
-				isapproval=(String)md.get("isapproval");
-			}	
-			if (showedit == null) 
-			{
-				Map md=model.asMap();
-				showedit=(String)md.get("show-edit");
-			}
-			
-			if (onlyview == null) 
-			{
-				Map md=model.asMap();
-				onlyview=(String)md.get("onlyview");
-			}
+//			String tab = req.getParameter("tab");
+//			if (tab == null) 
+//			{
+//				Map md=model.asMap();
+//				tab=(String)md.get("tab");
+//			}	
 			
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
 			
 			req.setAttribute("chssapplydata", apply);
 			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
-			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
-			
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
@@ -4474,10 +4431,6 @@ public class CHSSController {
 				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
 				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
 				
-				req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
-				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
-	
-		
 				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
 				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
 				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
@@ -4488,10 +4441,6 @@ public class CHSSController {
 				
 				req.setAttribute("ClaimAttachDeclare", service.IPDClaimAttachments(chssapplyid));
 				
-				req.setAttribute("tab", tab);
-				req.setAttribute("isapproval", isapproval);
-				req.setAttribute("showedit", showedit);
-				req.setAttribute("onlyview", onlyview);
 				req.setAttribute("view_mode", view_mode);
 				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
@@ -4810,5 +4759,156 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
+	
+	
+	@RequestMapping(value = "CHSSIPDForm.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String CHSSIPDForm(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDForm.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String view_mode = req.getParameter("view_mode");
+			
+			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			
+			req.setAttribute("chssapplydata", apply);
+			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
+			
+			
+			if(apply[3].toString().equalsIgnoreCase("N")) 
+			{
+				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
+			}
+			
+				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
+				String billid ="0";
+				if(chssbill.size()>0){
+					billid = chssbill.get(0)[0].toString();
+				}
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+				req.setAttribute("chssbill", chssbill );
+				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
+				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				
+				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
+				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
+				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
+				
+				req.setAttribute("equipments", service.ClaimEquipmentList(chssapplyid));
+				req.setAttribute("implants", service.ClaimImplantList(chssapplyid));
+				
+				req.setAttribute("ClaimAttachDeclare", service.IPDClaimAttachments(chssapplyid));
+				
+				req.setAttribute("view_mode", view_mode);
+				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+				
+				
+				return "chss/CHSSFormIPD";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDForm.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "CHSSIPDFormDownload.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public void CHSSIPDFormDownload(Model model,HttpServletRequest req, HttpServletResponse res, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside CHSSIPDFormDownload.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String view_mode = req.getParameter("view_mode");
+			
+			
+			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			
+			req.setAttribute("chssapplydata", apply);
+			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
+			
+			
+			if(apply[3].toString().equalsIgnoreCase("N")) 
+			{
+				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
+			}
+			
+				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
+				String billid ="0";
+				if(chssbill.size()>0){
+					billid = chssbill.get(0)[0].toString();
+				}
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+				req.setAttribute("chssbill", chssbill );
+				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
+				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				
+				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
+				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
+				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
+				
+				req.setAttribute("equipments", service.ClaimEquipmentList(chssapplyid));
+				req.setAttribute("implants", service.ClaimImplantList(chssapplyid));
+				
+				req.setAttribute("ClaimAttachDeclare", service.IPDClaimAttachments(chssapplyid));
+				
+				req.setAttribute("view_mode", view_mode);
+				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			
+				
+				
+				String filename="Claim-"+apply[16].toString().trim().replace("/", "-");
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+		        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/chss/CHSSFormIPD.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();        
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        res.setContentType("application/pdf");
+		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		       
+		       
+		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+		        
+		        
+		        File f=new File(path +File.separator+ filename+".pdf");
+		        FileInputStream fis = new FileInputStream(f);
+		        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+		        res.setHeader("Content-Length",String.valueOf(f.length()));
+		        byte[] buffer = new byte[1024];
+		        int len = 0;
+		        while ((len = fis.read(buffer)) >= 0) {
+		            os.write(buffer, 0, len);
+		        } 
+		        os.close();
+		        fis.close();
+		       
+		       
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+				
+				
+//				return "chss/CHSSFormIPD";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDFormDownload.htm "+Username, e);
+//			return "static/Error";
+		}
+	}
+	
+	
 	
 }

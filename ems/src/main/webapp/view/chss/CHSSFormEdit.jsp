@@ -501,7 +501,7 @@ th,td
 															
 															
 														</td>
-														<td class="">
+														<td>
 															<%if(consult[10]!=null){ %>
 																<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=consult[10]%></span>		
@@ -524,8 +524,8 @@ th,td
 															</button>	
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>
 													<%} %>	
 														
 																											
@@ -583,7 +583,7 @@ th,td
 																<span class="verified" ><%=test[7]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=test[11]%>	</span>		
@@ -606,8 +606,8 @@ th,td
 														</button>
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>	
 													<%} %>											
 												</tr>					
 											<%i++;
@@ -674,7 +674,7 @@ th,td
 																<span class="verified" > <%=medicine[6]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(medicine[9]!=null){ %>
 																<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																	<span class="systemgen" > <%=medicine[9]%>	</span>		
@@ -704,8 +704,8 @@ th,td
 															<%} %>
 														</td>
 													<%} else {%>
-														<td class="">
-														<td class="">
+														<td>
+														<td>
 													<%} %>
 														
 												</tr>					
@@ -758,7 +758,7 @@ th,td
 																<span class="verified" > <%=other[5]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(other[8]!=null){ %>
 																<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=other[8]%>	</span>		
@@ -780,8 +780,8 @@ th,td
 														</button>
 														</td>
 													<%} else {%>
-														<td class="">
-														<td class="">
+														<td>
+														<td>
 													<%} %>
 														
 													
@@ -792,7 +792,7 @@ th,td
 											} %>
 											<% i=1;
 											for(Object[] misc : MiscDataList)
-											{%>
+											{ %>
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;">
@@ -836,7 +836,7 @@ th,td
 																<span class="verified" > <%=misc[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=misc[7]%>	</span>		
@@ -857,9 +857,9 @@ th,td
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>
-													<%} else { %>
-														<td class="">
-														<td class="">
+													<% } else { %>
+														<td></td>
+														<td></td>
 													<%} %>
 													
 												</tr>					
@@ -873,7 +873,7 @@ th,td
 											<td class="right text-green">
 												<%if(showRemAmt){ %>	 
 												<b><%=totalremamount%></b>
-												<%} %>
+												<% } %>
 											</td>
 											<td></td>
 										</tr>

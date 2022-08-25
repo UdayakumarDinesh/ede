@@ -2271,25 +2271,27 @@ public class CHSSServiceImpl implements CHSSService {
 	public long IPDBillHeadDataAddEdit(CHSSBillIPDheads billhead)throws Exception
 	{
 		CHSSBillIPDheads fetch = dao.getCHSSBillIPDheads(0l,billhead.getBillId(),billhead.getIPDBillHeadId());
-		if(fetch==null) 
+		long count=0;
+		if(fetch==null && billhead.getBillHeadCost()>0) 
 		{
 			billhead.setAmountPaid(billhead.getBillHeadCost());
 //			billhead.setBillHeadRemAmt(billhead.getBillHeadCost());
 			billhead.setComments("");
 			billhead.setIsActive(1);
 			billhead.setCreatedDate(sdtf.format(new Date()));
-			return dao.CHSSBillIPDheadsAdd(billhead);
+			count= dao.CHSSBillIPDheadsAdd(billhead);
 		}
-		else
+		else 
 		{
 			fetch.setBillHeadCost(billhead.getBillHeadCost());
 			fetch.setAmountPaid(billhead.getBillHeadCost());
 //			fetch.setBillHeadRemAmt(billhead.getBillHeadCost());
 			fetch.setModifiedDate(sdtf.format(new Date()));
 			fetch.setModifiedBy(billhead.getCreatedBy());
-			return dao.CHSSBillIPDheadsEdit(fetch);
+			count= dao.CHSSBillIPDheadsEdit(fetch);
 		}
 		
+		return count;
 	}
 	
 	@Override

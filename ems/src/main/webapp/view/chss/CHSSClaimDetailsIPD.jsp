@@ -367,8 +367,7 @@ table th:last-child{
 													<input type="hidden" name="Discount-<%=obj[0]%>" value="<%=chssapplydata[0]%>">
 													<input type="hidden" name="DiscountPer-<%=obj[0]%>" value="<%=chssapplydata[0]%>">	
 												</td>
-													<%-- <td> <input type="number" class="form-control items cost-only " step=".01" name="Discount-<%=obj[0]%>" id="DiscountAmt-<%=obj[0]%>" onkeyup ="calculateDiscountPer('<%=obj[0]%>');" value="<%=obj[6] %>" style="width:100%;text-align: right; " min="0" max="9999999" required="required" ></td>
-													<td> <input type="number" class="form-control items cost-only " step=".1" name="DiscountPer-<%=obj[0]%>" id="DiscountPer-<%=obj[0]%>" readonly="readonly" value="<%=obj[8] %>" style="width:100%;text-align: right; " min="0" max="100" required="required" ></td> --%>
+													
 												<td>
 													
 													<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSBillEdit.htm" Onclick="return confirm('Are You Sure To Update?');" name="billid" value="<%=obj[0]%>" > <!-- data-toggle="tooltip" data-placement="top" title="Update Bill" -->														
@@ -417,11 +416,11 @@ table th:last-child{
 										<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="25" required="required"></td>
 										<td style="width:10%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
 										<td style="width:10%;" > 
-											<input type="number" class="form-control items cost-only decimal" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="this.select();"  value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" >
+											<input type="number" class="form-control items cost-only decimal" step=".01"  name="finalbillamount"  id="finalbillamount-"   value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" >
 											<input type="hidden" name="DiscountAmt" value="0.00">
 											<input type="hidden" name="DiscountPer" value="0.00">	
 										</td>
-										<!-- <td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-" Onclick="this.select();"  onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
+										<!-- <td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-"   onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
 										<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".1" name="DiscountPer" id="DiscountPer-" value="0.0" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td> -->
 										<td style="width:10%;" >
 											<button type="submit"  class="btn btn-sm add-btn "  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
@@ -465,7 +464,7 @@ table th:last-child{
 											<td><%=pkgitem[1] %></td>
 											<td style="padding: 0px;">
 												<input type="number" class="form-control cost-only decimal" step=".01" min="1"  name="billheadcost" 
-												 <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
+												 <%if(pkgitem[8]!=null && Double.parseDouble(pkgitem[8].toString())>0){ %> value="<%=pkgitem[8] %>"<%}else{ %>value=""<%} %>  
 												style="margin: 0px;text-align: right;"  onchange="updateBillheads('<%=billid %>','<%=pkgitem[0]%>',this);" >
 											</td>											
 										</tr>
@@ -476,7 +475,7 @@ table th:last-child{
 											<td><%=pkgitem[1] %></td>
 											<td style="padding: 0px;">
 												<input type="number" class="form-control cost-only decimal" step=".01" min="1" 
-												 name="billheadcost" <%if(pkgitem[8]!=null){ %> value="<%=pkgitem[8] %>"<%}else{ %>value="0"<%} %>  
+												 name="billheadcost" <%if(pkgitem[8]!=null && Double.parseDouble(pkgitem[8].toString())>0){ %> value="<%=pkgitem[8] %>"<%}else{ %>value=""<%} %>  
 												 style="margin: 0px;text-align: right;"  onchange="updateBillheads('<%=billid %>','<%=pkgitem[0]%>',this);" >
 											</td>
 											
@@ -595,14 +594,14 @@ table th:last-child{
 												<tr>
 													<td style="text-align:center; "><%=++sn %></td>
 													<td>
-														<select class="form-control test-type  selectpicker " style="width: 100%" data-size="auto" name="test-subid-<%=tests.getCHSSTestId() %>"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8">
+														<select class="form-control test-type  selectpicker " style="width: 100%" data-size="auto" name="test-subid-<%=tests.getCHSSTestId() %>"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
 															<option value="" selected="selected" disabled="disabled">Choose..</option>
 															<%for(CHSSTestSub testsub : testmainlist){ %>
 																<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>" <%if(tests.getTestSubId() == testsub.getTestSubId()){ %>selected <%} %> ><%=testsub.getTestName()%></option>
 															<% } %>
 														</select>
 													</td>
-													<td><input type="number" class="form-control items cost-only te-cost"  step=".01"  name="test-cost-<%=tests.getCHSSTestId() %>"  value="<%=tests.getTestCost() %>" style="width:100%;text-align: right; " min="1" max="9999999" onclick="this.select();"  ></td>
+													<td><input type="number" class="form-control items cost-only te-cost"  step=".01"  name="test-cost-<%=tests.getCHSSTestId() %>"  value="<%=tests.getTestCost() %>" style="width:100%;text-align: right; " min="1" max="9999999" required="required"  ></td>
 													<td>
 														<button type="submit" class="btn btn-sm " name="testid" value="<%=tests.getCHSSTestId() %>" formaction="IPDTestBillEdit.htm" ><i class="fa-solid fa-pen-to-square" style="color: #FF7800;"  data-toggle="tooltip" data-placement="top" title="Update"   Onclick="return confirm('Are You Sure To Update ?');" ></i></button>
 														<button type="submit" class="btn btn-sm" name="testid" value="<%=tests.getCHSSTestId() %>" formaction="IPDTestBillDelete.htm" data-toggle="tooltip" data-placement="top" title="Delete"  Onclick="return confirm('Are You Sure To Delete ?');"><i class="fa-solid fa-trash-can" style="color: red;"></i></button>	
@@ -614,6 +613,7 @@ table th:last-child{
 											<%} %>
 										</tbody>
 									</table>
+									<input type="hidden" name="billid" value="<%=billid%>">
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</form>
@@ -625,14 +625,14 @@ table th:last-child{
 											<tr>
 												<td style="width:5% !important; text-align: center;"><%=++sn %></td>
 												<td style="width:55%;">
-													<select class="form-control test-type  selectpicker "  style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8">
+													<select class="form-control test-type  selectpicker "  style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
 														<option value="" selected="selected" disabled="disabled">Choose..</option>
 														<%for(CHSSTestSub testsub : testmainlist){ %>
 															<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
 														<% } %>
 													</select>
 												</td>
-												<td style="width:30%;"><input type="number" class="form-control items cost-only te-cost"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  ></td>
+												<td style="width:30%;"><input type="number" class="form-control items cost-only te-cost"  step=".01"  name="tests-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999"  required="required"  ></td>
 												<td style="width:10%;"><button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return itemAddEligibleCheck('te')">Add</button></td>
 											</tr>
 											
@@ -821,7 +821,7 @@ table th:last-child{
 											<tr class="tr_clone_misc" >
 												<td style="width:5%;text-align: center;"><%=++sn %></td>
 												<td style="width:55%;"><input type="text" class="form-control items" name="misc-name"  value="" style="width:100%; "  maxlength="255" required="required"></td>
-												<td style="width:10%;"><input type="number" class="form-control items numberonly" name="misc-count"  value="0" style="width:100%;" min="0" max="999999" required="required" ></td>
+												<td style="width:10%;"><input type="number" class="form-control items numberonly" name="misc-count"  value="0" style="width:100%;" min="1" max="999999" required="required" ></td>
 												<td style="width:20%;"><input type="number" class="form-control items cost-only mi-cost"  step=".01"  name="misc-cost"  value="" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
 												<td style="width:10%;">
 													<button type="submit" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" >Add</button>	 <!--  Onclick="return confirm('Are You Sure To Submit?');" --> 
@@ -873,22 +873,21 @@ table th:last-child{
 				   		</div>
 				
 	<!-- -------------------------------------------------- Attachments ------------------------------------------------------ -->
-		
-					<%} %>
-					<form action="CHSSIPDFormEdit.htm">
-					<div class="row" align="center">
-						<div class="col-md-12">
-							<button type="submit" class="btn btn-sm preview-btn" name="chssapplyid" value="<%=chssapplydata[0]%>">preview</button>
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							<input type="hidden" name="isapproval" value="N">
-							<input type="hidden" name="show-edit" value="N">
-							
-							<input type="hidden" name="view_mode" value="UF">
-										
-						</div>	
-					</div>
+						<form action="CHSSIPDFormEdit.htm">
+						<div class="row" align="center">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-sm preview-btn" name="chssapplyid" value="<%=chssapplydata[0]%>">preview</button>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input type="hidden" name="isapproval" value="N">
+								<input type="hidden" name="show-edit" value="N">
+								
+								<input type="hidden" name="view_mode" value="UF">
+											
+							</div>	
+						</div>
 					</form>
-	
+					
+					<%} %>
 			
 			</div>
 		</div>		

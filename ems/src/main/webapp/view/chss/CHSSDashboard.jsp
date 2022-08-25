@@ -472,11 +472,11 @@
 											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>
 											</button>
-											<%-- <%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button>
-											<%} %> --%>
+											<%} %>
 											<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
 													<i class="fa-solid fa-backward" style="color: #333C83"></i>
