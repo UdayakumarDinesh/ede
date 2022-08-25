@@ -228,7 +228,7 @@ table th:last-child{
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
 									<div style="text-align: center;margin: 3px;width: 99%">
-										<b style="color: #F32424">Doctor(s) Consulted for this Ailment</b>
+										<b style="color: #F32424">If Freshly Consulted the Doctor, Enter Doctor Details Here</b>
 									</div>
 									<table class="table table-bordered table-hover table-condensed info shadow-nohover roundedCorners ">
 										
@@ -351,7 +351,8 @@ table th:last-child{
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 									<div class="table-responsive">
 									<div  style="text-align: center;margin: 3px;width: 99%">
-										<b style="color: #F32424">Doctor(s) Data from previous Claims</b>
+										<b style="color: #F32424">If Previously Consulted the Doctor, Click on Bills Button of Concerned Doctor</b>
+										
 									</div>
 									<table class="table table-bordered table-hover table-condensed  info shadow-nohover roundedCorners" >
 										<thead>
