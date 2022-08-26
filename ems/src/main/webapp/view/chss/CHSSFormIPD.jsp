@@ -799,12 +799,11 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 							<!-- ----------------------------- miscellaneous ---------------------------------- -->
 										<tr>
 											<td colspan="4" class="right"><b>Total</b></td>
-											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
+											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
 											<td class="right text-green">
-												
 												<%if(show){ %>	 
-												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
+												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
 											<td ></td>
@@ -819,13 +818,13 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 										</tr>
 										
 										<tr>
-											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(show){ %>
-												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
-												<% }else{ %>
-													&#8377;  ............................. (Rupees ...........................................................................................Only)
-												<% } %>
-											</td> 
+											<%if(show){ %>
+													<td colspan="7" class="text-green">Admitted to &#8377;  
+													<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td>
+											<%}else{ %>
+												<td colspan="7">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
+											<%} %>
+											
 										</tr>
 										
 										<tr>

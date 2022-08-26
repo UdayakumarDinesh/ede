@@ -174,7 +174,6 @@ th,td
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 	
-	MathContext mc0 = new MathContext(0);
 %>
 
 	<div class="card-header page-top">
@@ -1166,7 +1165,7 @@ th,td
 							<div class="col-md-12">
 								<table class=""  style="max-width: 70% !important;border: 0px;" >
 									<tr>	
-										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 5px;padding : 3px;" maxlength="4" onclick="this.select();" onkeyup="DiscountCalculate();"></td> 
+										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 5px;padding : 3px;" maxlength="4"  onkeyup="DiscountCalculate();"></td> 
 										<td style="border: 0px;">Discount&nbsp;:&nbsp;</td>
 										<td style="border: 0px;">
 											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();"> Including GST &nbsp;&nbsp;&nbsp;&nbsp;
@@ -1340,7 +1339,6 @@ th,td
 	
 	
 <script type="text/javascript">
-
 
 function InAdmCommentModel(medName)
 {

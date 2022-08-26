@@ -188,7 +188,6 @@ th,td
 	String LabLogo = (String)request.getAttribute("LabLogo");
 	List<Object[]> ClaimapprovedPOVO = (List<Object[]>)request.getAttribute("ClaimapprovedPOVO");
 	
-	MathContext mc0 = new MathContext(0);
 %>
 
 <%
@@ -197,10 +196,10 @@ th,td
 	
 	for(int i=0;i<chssbillslist.size();i++)
 	{
-		billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).round(mc0));
+		billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()));
 		if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 		{
-			discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()).round(mc0));
+			discount =discount.add (new BigDecimal(chssbillslist.get(i)[6].toString()));
 		}
 	}
 %>
@@ -764,7 +763,7 @@ th,td
 					</tr>
 					
 					<tr>
-						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).round(mc0).longValue()) %> Only)</td>
+						<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td>
 					</tr>
 					
 					<tr>
@@ -772,9 +771,9 @@ th,td
 					</tr>
 					
 					<tr>
-						<%if(show){ %>
+						<%if(show){%>
 								<td colspan="7" class="text-green">Admitted to &#8377;  
-								<%= nfc.rupeeFormat(String.valueOf(totalremamount.round(mc0).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.round(mc0).longValue()) %> Only)</td>
+								<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td>
 						<%}else{ %>
 							<td colspan="7">Admitted to &#8377;  ............................. (Rupees ...........................................................................................Only)</td>
 						<%} %>
