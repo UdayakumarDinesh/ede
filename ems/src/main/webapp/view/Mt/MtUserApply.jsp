@@ -550,7 +550,7 @@ $('#dos').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,	
 	<%if(apply!=null&&apply.getDateOfTravel()!=null){%>
-	"minDate" : new Date("<%=apply.getDateOfTravel()%>"),
+	"startDate" : new Date("<%=apply.getDateOfTravel()%>"),
 	<%}%>
 	"cancelClass" : "btn-default",
 	showDropdowns : true,

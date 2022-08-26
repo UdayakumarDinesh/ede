@@ -403,7 +403,7 @@ $('#dutydate').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,	
 	<%if(mttrip!=null && mttrip.getTripDate()!=null){%>
-	"minDate" : new Date("<%=mttrip.getTripDate()%>"),
+	"startDate" : new Date("<%=mttrip.getTripDate()%>"),
 	<%}%>
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
