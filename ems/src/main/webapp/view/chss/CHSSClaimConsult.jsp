@@ -202,7 +202,7 @@ table th:last-child{
 								<br>
 								<select class="form-control" name="chsstype" id="chsstype">
 									<option value="OPD" id="claim_type_IPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("OPD")){ %>Selected<%} %> >OPD</option>
-									<%-- <option value="IPD" id="claim_type_OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option> --%>
+									<option value="IPD" id="claim_type_OPD" <%if(chssapplydata[6].toString().equalsIgnoreCase("IPD")){ %>Selected<%} %> >IPD</option>
 								</select>
 							</div>
 							<div class="col-3">
