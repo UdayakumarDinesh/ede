@@ -387,7 +387,7 @@ public class MasterServiceImpl implements MasterService {
 	    if(!filecirculardto.getPath().isEmpty()) {
 		String name =filecirculardto.getPath().getOriginalFilename();
 		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-			String path = emsfilespath+"\\CircularFiles";
+			String path = emsfilespath+ File.separator+"CircularFiles";
 			circular.setPath(path+File.separator+filename);
 			circular.setOriginalName(name);
 			saveFile(path, filename, filecirculardto.getPath());
