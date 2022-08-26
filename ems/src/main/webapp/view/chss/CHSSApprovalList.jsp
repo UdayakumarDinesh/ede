@@ -97,7 +97,7 @@
 		  </li>
 		  <li class="nav-item"  style="width: 50%;">
 		    <div class="nav-link" style="text-align: center;" id="pills-IPD-tab" data-toggle="pill" data-target="#pills-IPD" role="tab" aria-controls="pills-IPD" aria-selected="false">
-		    	 <span>OPD Claims   
+		    	 <span>IPD Claims   
 				   <span class="badge badge-danger badge-counter count-badge">
 				   		<%if(IPDclaimlist.size()>99){ %>
 				   			99+

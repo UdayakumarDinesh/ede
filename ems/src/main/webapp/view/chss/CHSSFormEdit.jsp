@@ -889,8 +889,7 @@ th,td
 											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
 											<td class="right text-green">
-												
-												<%if(showRemAmt){ %>	 
+												<%if(showRemAmt || allowEdit){ %>	 
 												 <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
 												<%} %>
 											</td>
@@ -907,7 +906,7 @@ th,td
 										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(showRemAmt){ %>
+												<%if(showRemAmt || allowEdit){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
@@ -1168,7 +1167,7 @@ th,td
 										<td style="border: 0px;">Discount (%)&nbsp;:&nbsp;<input type="text" class="cost-only" id="disc-perc" value="0" style="border-radius: 5px;padding : 3px;" maxlength="4"  onkeyup="DiscountCalculate();"></td> 
 										<td style="border: 0px;">Discount&nbsp;:&nbsp;</td>
 										<td style="border: 0px;">
-											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();"> Including GST &nbsp;&nbsp;&nbsp;&nbsp;
+											<input type="radio" value="Y" name="gst-plus"  onclick="DiscountCalculate();" > Including GST &nbsp;&nbsp;&nbsp;&nbsp;
 											<input type="radio" value="N" name="gst-plus"  onclick="DiscountCalculate();"  checked="checked"> Excluding GST
 										</td>
 									</tr>

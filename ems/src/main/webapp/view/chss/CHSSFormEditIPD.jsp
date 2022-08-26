@@ -179,6 +179,8 @@ boolean historyBtn =  view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnore
 
 historyBtn = historyBtn || (view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 ));
 
+String logintype = (String)request.getAttribute("logintype");
+
 String SidebarActive = (String)session.getAttribute("SidebarActive");	
 
 String ActivateDisp=(String)request.getAttribute("ActivateDisp");
@@ -1168,9 +1170,69 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 		</div>
 	</div>
 
+
+<%if(allowEdit && (logintype.equals("K") || logintype.equals("B")) && chssapplydata[20].toString().equals("0") ){ %>
+
+<div class="modal fade" id="my_acknowledge_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	  <div class="modal-header" style="">
+	  	<h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+	  </div>
+      <div class="modal-body">
+      	
+      	<b><span style="color: red">Did You Receive The Physical Copy of the Claim?</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="acknowledgeFunction(true)">Yes</button>
+        <button type="button" class="btn btn-sm  btn-secondary"  onclick="acknowledgeFunction(false)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+	
+<script type="text/javascript">	 
+
+	$('#my_acknowledge_model').modal('show')
+ 	  function acknowledgeFunction(yesorno){
+		
+		 if(yesorno)
+		 {
+			 $.ajax({
+
+					type : "GET",
+					url : "POAcknowledgeUpdateAjax.htm",
+					data : {
+							
+						chssapplyid : $chssapplyid,
+					},
+					datatype : 'json',
+					success : function(result) {
+	
+					}
+				}); 
+		}else
+		{
+			window.location = "CHSSApprovalsList.htm";
+		}
+	 	
+	 
+	 }
+	 
+	 
+</script>
+<%} %>	 
+	 
+
+
+
+
+
 <script type="text/javascript">
 
-
+var $chssapplyid = <%=chssapplydata[0]%>;
 
 function  onlyNumbers() {    
 
@@ -1180,8 +1242,6 @@ function  onlyNumbers() {
 	    {
 	        evt.preventDefault();
 	    } 
-		
-	    
 	});
 
 }

@@ -273,8 +273,8 @@ p {
 											<td style="width:20%;" ><input type="text" class="form-control items" name="centername"  value="" style="width:100%; "  maxlength="500" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control items" name="billno"  value="" style="width:100%;"   maxlength="25" required="required"></td>
 											<td style="width:10%;" ><input type="text" class="form-control billdate" name="billdate"  value="" style="width:100%; "  maxlength="10" readonly required="required"></td>
-											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="this.select();" onkeyup="enableDiscount('')" value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
-											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-" Onclick="this.select();"  onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01"  name="finalbillamount"  id="finalbillamount-" Onclick="" onkeyup="enableDiscount('')" value="0.00" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
+											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".01" name="DiscountAmt" id="DiscountAmt-" Onclick=""  onkeyup="calculateDiscountPer('');" onchange="calculateDiscountPer('');" value="0.00" style="width:100%;text-align: right; " min="0" max="9999999" readonly="readonly" required="required" ></td>
 											<td style="width:10%;" > <input type="number" class="form-control items cost-only" step=".1" name="DiscountPer" id="DiscountPer-" value="0.0" style="width:100%;text-align: right; " min="0" max="9999999" required="required" readonly="readonly" ></td>
 											<td style="width:10%;" >
 												<button type="submit"  class="btn btn-sm add-btn "  name="action" value="add" >Add</button> <!-- Onclick="return confirm('Are You Sure To Add ?');" -->
@@ -579,8 +579,8 @@ p {
 														</select>
 													<%} %>
 												</td>
-												<td><input type="number" class="form-control items numberonly med-qty" name="meds-presquantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
-												<td><input type="number" class="form-control items numberonly med-qty" name="meds-quantity" id="meds-quantity" value="0" Onclick="this.select();" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items numberonly med-qty" name="meds-presquantity" id="meds-quantity" value="0" Onclick="" style="width:100%;" min="0" max="9999999"  ></td>
+												<td><input type="number" class="form-control items numberonly med-qty" name="meds-quantity" id="meds-quantity" value="0" Onclick="" style="width:100%;" min="0" max="9999999"  ></td>
 												<td><input type="number" class="form-control items cost-only me-cost"  step=".01"  name="meds-cost" id="meds-cost" value="" style="width:100%;text-align: right; "  max="9999999"  ></td>
 												<td><button type="button" class="btn btn-sm tbl-row-rem_meds"><i class="fa-solid fa-minus" style="color: red;" data-toggle="tooltip" data-placement="top" title="Remove This Row" ></i></button> </td>
 											</tr>
@@ -1583,7 +1583,7 @@ function getMedicinesData(){
 				medsHTMLStr +=	'	</select> </td>';
 			}
 			
-			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.CHSSMedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
+			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-presquantity-'+meds.CHSSMedicineId+'" id="meds-presquantity" value="'+meds.PresQuantity+'" style="width:100%;" min="0" max="9999999" required="required" ></td> ';
 			medsHTMLStr +=	'	<td><input type="number" class="form-control items numberonly" name="meds-quantity-'+meds.CHSSMedicineId+'" id="meds-quantity" value="'+meds.MedQuantity+'" style="width:100%;" min="1" max="9999999" required="required" ></td> ';
 			
 			medsHTMLStr +=	'	<td>';

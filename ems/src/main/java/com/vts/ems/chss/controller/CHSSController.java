@@ -4445,7 +4445,7 @@ public class CHSSController {
 				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
 				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 				req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
-				
+				req.setAttribute("logintype", LoginType);
 				req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
 				req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
 				
@@ -4880,9 +4880,7 @@ public class CHSSController {
 		        res.setContentType("application/pdf");
 		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
 		       
-		       
 		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
-		        
 		        
 		        File f=new File(path +File.separator+ filename+".pdf");
 		        FileInputStream fis = new FileInputStream(f);

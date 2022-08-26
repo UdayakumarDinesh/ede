@@ -2746,7 +2746,8 @@ public class CHSSServiceImpl implements CHSSService {
 				{
 					claim.setCHSSApplyDate(LocalDate.now().toString());
 					claim.setCHSSForwardDate(LocalDate.now().toString());
-				}else if(claimstatus==1)
+				}
+				else if(claimstatus==1)
 				{
 					claim.setCHSSForwardDate(LocalDate.now().toString());
 				}

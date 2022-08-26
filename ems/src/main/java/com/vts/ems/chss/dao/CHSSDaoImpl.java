@@ -1518,7 +1518,6 @@ public class CHSSDaoImpl implements CHSSDao {
 			e.printStackTrace();
 		}
 		return  list;
-		
 	}
 	
 	
