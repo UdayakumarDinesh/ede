@@ -296,7 +296,7 @@ th,td
 											BigDecimal discount = new BigDecimal(0);/*,  GST=0 */;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
-												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()).setScale(0, BigDecimal.ROUND_HALF_UP));
+												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()));
 												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 												{
 													/* GST +=Double.parseDouble(chssbillslist.get(i)[5].toString()); */
@@ -493,7 +493,7 @@ th,td
 															
 															<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=consult[7]%></span>		
-															<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(consult[13].toString().equalsIgnoreCase("K") || consult[13].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" ><%=consult[7]%></span>		
 															<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" ><%=consult[7]%></span>		
@@ -505,7 +505,7 @@ th,td
 															<%if(consult[10]!=null){ %>
 																<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=consult[10]%></span>		
-																<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(consult[13].toString().equalsIgnoreCase("K") || consult[13].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=consult[10]%></span>		
 																<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=consult[10]%></span>		
@@ -577,7 +577,7 @@ th,td
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=test[7]%>	</span>		
-															<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(test[13].toString().equalsIgnoreCase("K") || test[13].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" ><%=test[7]%>	</span>		
 															<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" ><%=test[7]%>	</span>		
@@ -587,7 +587,7 @@ th,td
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=test[11]%>	</span>		
-																<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(test[13].toString().equalsIgnoreCase("K") || test[13].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=test[11]%>	</span>		
 																<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=test[11]%>	</span>		
@@ -668,7 +668,7 @@ th,td
 														<td class="right ">	
 															<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																<span class="systemgen" > <%=medicine[6]%>	</span>		
-															<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(medicine[11].toString().equalsIgnoreCase("K") || medicine[11].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" > <%=medicine[6]%>	</span>		
 															<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" > <%=medicine[6]%>	</span>		
@@ -678,7 +678,7 @@ th,td
 															<%if(medicine[9]!=null){ %>
 																<%if(medicine[10]== null  || Long.parseLong(medicine[10].toString())==0){ %>	 
 																	<span class="systemgen" > <%=medicine[9]%>	</span>		
-																<%}else if(medicine[11].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(medicine[11].toString().equalsIgnoreCase("K") || medicine[11].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" > <%=medicine[9]%>	</span>		
 																<%}else if(medicine[11].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" > <%=medicine[9]%>	</span>		
@@ -704,8 +704,8 @@ th,td
 															<%} %>
 														</td>
 													<%} else {%>
-														<td>
-														<td>
+														<td></td>
+														<td></td>
 													<%} %>
 														
 												</tr>					
@@ -752,7 +752,7 @@ th,td
 														<td class="right ">	
 															<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=other[5]%>	</span>		
-															<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(other[10].toString().equalsIgnoreCase("K") || other[10].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" > <%=other[5]%>	</span>		
 															<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" > <%=other[5]%>	</span>		
@@ -762,7 +762,7 @@ th,td
 															<%if(other[8]!=null){ %>
 																<%if(other[9]== null  || Long.parseLong(other[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=other[8]%>	</span>		
-																<%}else if(other[10].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(other[10].toString().equalsIgnoreCase("K") || other[10].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" > <%=other[8]%>	</span>		
 																<%}else if(other[10].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" > <%=other[8]%>	</span>		
@@ -780,8 +780,8 @@ th,td
 														</button>
 														</td>
 													<%} else {%>
-														<td>
-														<td>
+														<td></td>
+														<td></td>
 													<%} %>
 														
 													
@@ -830,7 +830,7 @@ th,td
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=misc[4]%>	</span>		
-															<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(misc[10].toString().equalsIgnoreCase("K") || misc[10].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" > <%=misc[4]%></span>		
 															<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" > <%=misc[4]%>	</span>		
@@ -840,7 +840,7 @@ th,td
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=misc[7]%>	</span>		
-																<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(misc[10].toString().equalsIgnoreCase("K") || misc[10].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" > <%=misc[7]%></span>		
 																<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" > <%=misc[7]%>	</span>		

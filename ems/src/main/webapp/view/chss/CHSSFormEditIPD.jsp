@@ -492,17 +492,17 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 															<td class="right ">
 																<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	 
 																	<span class="systemgen" ><%=pkgIten[10]%></span>		
-																<%}else if(pkgIten[15].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(pkgIten[15].toString().equalsIgnoreCase("K") || pkgIten[15].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=pkgIten[10]%></span>		
 																<%}else if(pkgIten[15].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=pkgIten[10]%></span>		
 																<%} %>
 															</td>
-															<td class="">
+															<td>
 																<%if(pkgIten[11]!=null){ %>
 																	<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	  
 																		<span class="systemgen" ><%=pkgIten[11]%></span>		
-																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("K")){ %>
+																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("K") || pkgIten[15].toString().equalsIgnoreCase("B")){ %>
 																		<span class="processed" ><%=pkgIten[11]%></span>		
 																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("V")){ %>
 																		<span class="verified" ><%=pkgIten[11]%></span>		
@@ -521,8 +521,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																</button>	
 															</td>
 														<% }else {%>
-															<td class="">
-															<td class="">		
+															<td></td>
+															<td></td>	
 														<%} %>	
 														</tr>
 													<% 
@@ -578,7 +578,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																
 																<%if(consult[12]== null   || Long.parseLong(consult[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=consult[7]%></span>		
-																<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(consult[13].toString().equalsIgnoreCase("K") || consult[13].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=consult[7]%></span>		
 																<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=consult[7]%></span>		
@@ -586,11 +586,11 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																
 																
 															</td>
-															<td class="">
+															<td>
 																<%if(consult[10]!=null){ %>
 																	<%if(consult[12]== null || Long.parseLong(consult[12].toString())==0){ %>	 
 																		<span class="systemgen" ><%=consult[10]%></span>		
-																	<%}else if(consult[13].toString().equalsIgnoreCase("K")){ %>
+																	<%}else if(consult[13].toString().equalsIgnoreCase("K") || consult[13].toString().equalsIgnoreCase("B")){ %>
 																		<span class="processed" ><%=consult[10]%></span>		
 																	<%}else if(consult[13].toString().equalsIgnoreCase("V")){ %>
 																		<span class="verified" ><%=consult[10]%></span>		
@@ -609,8 +609,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																</button>	
 															</td>
 														<% }else {%>
-															<td class="">
-															<td class="">		
+															<td></td>
+															<td></td>		
 														<%} %>	
 														</tr>
 													<%	i++;
@@ -649,17 +649,17 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<td class="right ">	
 															<%if(test[12]== null  || Long.parseLong(test[12].toString())==0){ %>	 
 																<span class="systemgen" ><%=test[7]%>	</span>		
-															<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(test[13].toString().equalsIgnoreCase("K") || test[13].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" ><%=test[7]%>	</span>		
 															<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" ><%=test[7]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(test[11]!=null){ %>
 																<%if(test[12]== null || Long.parseLong(test[12].toString())==0){ %>	 
 																	<span class="systemgen" ><%=test[11]%>	</span>		
-																<%}else if(test[13].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(test[13].toString().equalsIgnoreCase("K") || test[13].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=test[11]%>	</span>		
 																<%}else if(test[13].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=test[11]%>	</span>		
@@ -678,8 +678,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														</button>
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>		
 													<%} %>											
 												</tr>					
 											<%i++;
@@ -720,17 +720,17 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<td class="right ">	
 															<%if(equipment[8]== null  || Long.parseLong(equipment[8].toString())==0){ %>	 
 																<span class="systemgen" ><%=equipment[4]%>	</span>		
-															<%}else if(equipment[9].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(equipment[9].toString().equalsIgnoreCase("K") || equipment[9].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" ><%=equipment[4]%>	</span>		
 															<%}else if(equipment[9].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" ><%=equipment[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(equipment[7]!=null){ %>
 																<%if(equipment[8]== null  || Long.parseLong(equipment[8].toString())==0){ %>		 
 																	<span class="systemgen" ><%=equipment[7]%>	</span>		
-																<%}else if(equipment[9].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(equipment[9].toString().equalsIgnoreCase("K") || equipment[9].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=equipment[7]%>	</span>		
 																<%}else if(equipment[9].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=equipment[7]%>	</span>		
@@ -749,8 +749,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														</button>
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>	
 													<% } %>											
 												</tr>					
 											<%i++;
@@ -791,17 +791,17 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<td class="right ">	
 															<%if(implant[8]== null  || Long.parseLong(implant[8].toString())==0){ %>	 
 																<span class="systemgen" ><%=implant[4]%>	</span>		
-															<%}else if(implant[9].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(implant[9].toString().equalsIgnoreCase("K") || implant[9].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" ><%=implant[4]%>	</span>		
 															<%}else if(implant[9].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" ><%=implant[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(implant[7]!=null){ %>
 																<%if(implant[8]== null  || Long.parseLong(implant[8].toString())==0){ %>		 
 																	<span class="systemgen" ><%=implant[7]%>	</span>		
-																<%}else if(implant[9].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(implant[9].toString().equalsIgnoreCase("K") || implant[9].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" ><%=implant[7]%>	</span>		
 																<%}else if(implant[9].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" ><%=implant[7]%>	</span>		
@@ -820,8 +820,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														</button>
 														</td>
 													<% }else {%>
-														<td class="">
-														<td class="">		
+														<td></td>
+														<td></td>		
 													<% } %>											
 												</tr>					
 											<%i++;
@@ -860,20 +860,20 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													
 																										
 													<%if(showRemAmt){ %>
-														<td class="right ">	
+														<td class="right">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																<span class="systemgen" > <%=misc[4]%>	</span>		
-															<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+															<%}else if(misc[10].toString().equalsIgnoreCase("K") || misc[10].toString().equalsIgnoreCase("B")){ %>
 																<span class="processed" > <%=misc[4]%></span>		
 															<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
 																<span class="verified" > <%=misc[4]%>	</span>		
 															<%} %>
 														</td>	
-														<td class="">
+														<td>
 															<%if(misc[7]!=null){ %>
 																<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
 																	<span class="systemgen" > <%=misc[7]%>	</span>		
-																<%}else if(misc[10].toString().equalsIgnoreCase("K")){ %>
+																<%}else if(misc[10].toString().equalsIgnoreCase("K") || misc[10].toString().equalsIgnoreCase("B")){ %>
 																	<span class="processed" > <%=misc[7]%></span>		
 																<%}else if(misc[10].toString().equalsIgnoreCase("V")){ %>
 																	<span class="verified" > <%=misc[7]%>	</span>		
@@ -891,8 +891,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 															</button>
 														</td>
 													<%} else { %>
-														<td class="">
-														<td class="">
+														<td></td>
+														<td></td>
 													<%} %>
 													
 												</tr>					
@@ -935,7 +935,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										
 										<tr>
 											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
-										<tr>
+										</tr>
 										<tr>
 											<td colspan="4" style="border-top: 0;border-right : 0;">
 											
