@@ -1299,7 +1299,7 @@ public class MasterController {
 						String todate = (String)req.getParameter("todate");
 						String referenceNo = (String)req.getParameter("referenceno");
 						CircularList circular = new CircularList();
-						
+						                    
 						circular.setReferenceNo(referenceNo);
 						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
 						circular.setDescription(description.trim());
