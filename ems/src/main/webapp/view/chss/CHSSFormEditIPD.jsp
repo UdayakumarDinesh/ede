@@ -925,7 +925,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										
 										<tr>
 											<td colspan="7" class="text-green">Admitted to Rs.
-												<%if(showRemAmt || allowEdit){ %>
+												<%if(showRemAmt || allowEdit){%>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
 													&#8377;  ............................. (Rupees ...........................................................................................Only)
