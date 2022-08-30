@@ -273,8 +273,8 @@ String path=(String)request.getAttribute("path");
 											<td style="text-align:justify; width: 50%;"><b><%=obj[1]%></b></td>
 											<td style="text-align:justify; width: 10%;"><b><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %> </b></td>
 											<td style="text-align:center;  width: 10%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-											  <i style="color: #019267" class="fa-solid fa-download"></i>
+											<button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>//<%=obj[4] %>" formaction="CircularAttachmentView.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+											  <i style="color: #019267" class="fa-solid fa-eye"></i>
 										    </button>
 											<%}else{%>--<%}%>
 											</td>

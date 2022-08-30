@@ -360,7 +360,7 @@ public class EmsDaoImpl implements EmsDao
 		
 	}
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,referenceno FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
+	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,referenceno , OriginalName  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
 	@Override
 	 public List<Object[]> CirculatList() throws Exception
 	 {

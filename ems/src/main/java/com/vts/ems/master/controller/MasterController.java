@@ -46,6 +46,7 @@ import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.DateTimeFormatUtil;
+import com.vts.ems.utils.EmsFileUtils;
 @Controller
 public class MasterController {
 	private static final Logger logger = LogManager.getLogger(CHSSController.class);
@@ -1537,6 +1538,55 @@ public class MasterController {
 					 return "static/Error";
 				}
 			}
+			
+			@RequestMapping(value = "Circular.htm" , method = RequestMethod.GET)
+			public String Circular(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside Circular.htm "+UserId);
+				try {
+					List<Object[]> 	 circulatlist = emsservice.CirculatList();
+		   			req.setAttribute("circularlist", circulatlist);
+					
+					return "masters/Circular";
+				} catch (Exception e) {
+					logger.error(new Date() +"Inside Circular.htm "+UserId,e);
+					e.printStackTrace();
+					 return "static/Error";
+				}
+			}
+			
+			@RequestMapping(value = "download-CircularFile",method = {RequestMethod.GET,RequestMethod.POST})
+		    public void downloadCircular(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
+			{				
+				String UserId=(String)ses.getAttribute("Username");
+				String EmpNo=(String)ses.getAttribute("EmpNo");
+				logger.info(new Date() +"Inside download-CircularFile-attachment "+UserId);
+				try {
+					
+					String path = (String)req.getParameter("path1");
+					String arr[] = path.split("//");
+					res.setContentType("Application/octet-stream");	
+					String temppath=req.getServletContext().getRealPath("/view/temp/"+arr[1]);
+					File my_file = new EmsFileUtils().addWatermarktoPdf1(arr[0],temppath,EmpNo);
+					 res.setHeader("Content-disposition","attachment; filename="+arr[1]);
+				      OutputStream out = res.getOutputStream();
+				     
+				        FileInputStream in = new FileInputStream(my_file);
+				        byte[] buffer = new byte[4096];
+				        int length;
+				        while ((length = in.read(buffer)) > 0){
+				           out.write(buffer, 0, length);
+				        }
+				        in.close();
+				        out.flush();
+				}catch(Exception e) {
+					logger.error(new Date() +"Inside download-CircularFile-attachment "+UserId,e);
+					e.printStackTrace();
+				}
+		    }
+			
+			
 			
 			
 }

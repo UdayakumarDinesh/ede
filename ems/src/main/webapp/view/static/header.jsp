@@ -210,6 +210,9 @@
 								 	<a class="dropdown-item" href="PasswordChange.htm" >&nbsp;<i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								   
+								   <a class="dropdown-item" href="Circular.htm" >&nbsp;&nbsp;<i class="fa-solid fa-file"></i> &nbsp;&nbsp;&nbsp;&nbsp;Circular </a>
+								    <div class="dropdown-divider logoutdivider"></div>
+								   
 								   <a class="dropdown-item" href="UserManualDoc.htm" target="blank"><img src="view/images/handbook.png"/> &nbsp;&nbsp;Manual </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
