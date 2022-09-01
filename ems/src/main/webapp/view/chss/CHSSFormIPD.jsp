@@ -180,9 +180,11 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 CHSSIPDClaimsInfo ipdbasicinfo = (CHSSIPDClaimsInfo)request.getAttribute("ipdbasicinfo") ;
 String LabLogo = (String)request.getAttribute("LabLogo");
 
+List<Object[]> ClaimPackages=(List<Object[]>)request.getAttribute("ClaimPackages");
+List<Object[]> ClaimPkgItems=(List<Object[]>)request.getAttribute("ClaimPkgItems");
 
 List<Object[]> chssbill=(List<Object[]>)request.getAttribute("chssbill");
-List<Object[]> PackageItems=(List<Object[]>)request.getAttribute("PackageItems");
+/* List<Object[]> PackageItems=(List<Object[]>)request.getAttribute("PackageItems"); */
 List<Object[]> NonPackageItems=(List<Object[]>)request.getAttribute("NonPackageItems");
 
 List<Object[]> consultations=(List<Object[]>)request.getAttribute("consultations");
@@ -432,9 +434,89 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 												BigDecimal itemstotal=new BigDecimal("0.0");
 												BigDecimal totalremamount=new BigDecimal("0.0"); 
 											%>
-											<%  PackageItems.addAll(NonPackageItems);
+											
+								<!-- ----------------------------- package ---------------------------------- -->			
+											<% 
 													int i=1;
-													for(Object[] pkgIten :PackageItems)	
+													for(Object[] pkg :ClaimPackages)	
+													{ %>
+													
+														<%if(i==1){ %>
+															<tr>
+																<td colspan="4" style="text-align: center;">
+																	<b>Package(s) </b>
+																</td>
+																<td></td>
+																<td ></td>
+																<td ></td>
+															</tr>
+<!-- 														<tr>
+																<th colspan="4">Package</th>
+																<th ></th>
+																<th></th>
+																<th></th>
+															</tr>			
+ -->														<% } %>
+														<tr>
+															<td class="text-blue" colspan="4"><%=pkg[3] %>&nbsp; (<%=pkg[9] %>)</td>
+															<td class="text-blue right" ><%=pkg[4] %></td>									
+														<%if(show){ %>
+															<td class="right ">
+																<%if(pkg[7]== null   || Long.parseLong(pkg[7].toString())==0){ %>	 
+																	<span class="systemgen" ><%=pkg[5]%></span>		
+																<%}else if(pkg[8].toString().equalsIgnoreCase("K") || pkg[8].toString().equalsIgnoreCase("B")){ %>
+																	<span class="processed" ><%=pkg[5]%></span>		
+																<%}else if(pkg[8].toString().equalsIgnoreCase("V")){ %>
+																	<span class="verified" ><%=pkg[5]%></span>		
+																<%} %>
+															</td>
+															<td>
+																<%if(pkg[6]!=null){ %>
+																	<%if(pkg[7]== null   || Long.parseLong(pkg[7].toString())==0){ %>	  
+																		<span class="systemgen" ><%=pkg[6]%></span>		
+																	<%}else if(pkg[8].toString().equalsIgnoreCase("K") || pkg[8].toString().equalsIgnoreCase("B")){ %>
+																		<span class="processed" ><%=pkg[6]%></span>		
+																	<%}else if(pkg[8].toString().equalsIgnoreCase("V")){ %>
+																		<span class="verified" ><%=pkg[6]%></span>		
+																	<%} %>
+																<%} %>
+															</td>
+														<%}else {%>
+															<td></td>
+															<td></td>	
+														<%} %>	
+														</tr>
+														
+														
+														<%
+														int count=1;
+														for(Object[] pkgitem : ClaimPkgItems)
+														{
+															if(Integer.parseInt(pkgitem[2].toString()) == Integer.parseInt(pkg[0].toString()) )
+															{
+														%>
+															<tr>
+																<td style="width: 5%;"><%=count++%></td>
+																<td  colspan="2"><%=pkgitem[3] %></td>
+																<td class="text-blue right" style="width: 10%;" ><%=pkgitem[4] %></td>
+																<td ></td>
+																<td ></td>
+																<td ></td>
+															</tr>														
+														<%	} %>
+														<%} %>
+													<% 
+													i++;
+													itemstotal =itemstotal.add (new BigDecimal(pkg[4].toString()));
+													
+													totalremamount =totalremamount.add (new BigDecimal(pkg[5].toString()));
+													
+													}%>
+											
+								<!-- ----------------------------- package ---------------------------------- -->
+											<%  
+													i=1;
+													for(Object[] pkgIten :NonPackageItems)	
 													{ %>
 													<%if( pkgIten[8] !=null && Double.parseDouble(pkgIten[8].toString())>0){  %>
 													
@@ -469,7 +551,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 															</td>
 															<td>
 																<%if(pkgIten[11]!=null){ %>
-																	<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	  
+																	<%if(pkgIten[14]== null || Long.parseLong(pkgIten[14].toString())==0){ %>	  
 																		<span class="systemgen" ><%=pkgIten[11]%></span>		
 																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("K")){ %>
 																		<span class="processed" ><%=pkgIten[11]%></span>		
@@ -486,7 +568,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 													<% 
 													i++;
 													itemstotal =itemstotal.add (new BigDecimal(pkgIten[8].toString()));
-													totalremamount =totalremamount.add (new BigDecimal(pkgIten[10].toString()));
+													totalremamount =totalremamount.add (new BigDecimal(pkgIten[9].toString()));
 													
 													} } %>
 											

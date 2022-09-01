@@ -192,12 +192,11 @@ th,td
 								<th style="text-align: center;">Emp. No.</th>
 								<th style="text-align: center;">Name</th>
 								<th style="text-align: center;">Relation</th>
+								<th style="text-align: center;">Claim No</th>
 								<th style="text-align: center;">No. of Bills</th>
 								<th class="right" style="width: 15%;">Amount Claimed (&#8377;)</th>
 								<th class="right" style="width: 15%;">Amount Admitted (&#8377;)</th>
-								
-								<th  style="width: 10%" >Form</th>
-								
+								<th  style="width: 10%" >Form</th>								
 							</tr>
 							
 							<%long allowedamt=0,claimamt=0,billscount=0;
@@ -225,6 +224,7 @@ th,td
 									<%} %>
 									
 									</td>
+									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[25] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[1].toString())) )) %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[2].toString())) )) %></td>

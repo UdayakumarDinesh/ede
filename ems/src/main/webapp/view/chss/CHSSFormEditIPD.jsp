@@ -144,7 +144,9 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 
 
 List<Object[]> chssbill=(List<Object[]>)request.getAttribute("chssbill");
-List<Object[]> PackageItems=(List<Object[]>)request.getAttribute("PackageItems");
+List<Object[]> ClaimPackages=(List<Object[]>)request.getAttribute("ClaimPackages");
+List<Object[]> ClaimPkgItems=(List<Object[]>)request.getAttribute("ClaimPkgItems");
+
 List<Object[]> NonPackageItems=(List<Object[]>)request.getAttribute("NonPackageItems");
 
 List<Object[]> consultations=(List<Object[]>)request.getAttribute("consultations");
@@ -458,18 +460,102 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 												<th class="center" style="width: 25%;">Comments</th>
 											</tr>
 											
-								<!-- ----------------------------- billheads ---------------------------------- -->			
+							<!-- ----------------------------- package ---------------------------------- -->			
 											<%
 												BigDecimal itemstotal=new BigDecimal("0.0");
 												BigDecimal totalremamount=new BigDecimal("0.0"); 
 											%>
-											
-											
-											<%  PackageItems.addAll(NonPackageItems);
+												
+											<% 
 													int i=1;
-													for(Object[] pkgIten :PackageItems)	
+													for(Object[] pkg :ClaimPackages)	
 													{ %>
-													<%if( pkgIten[8] !=null && Double.parseDouble(pkgIten[8].toString())>0){  %>
+													
+														<%if(i==1){ %>
+															<tr>
+																<td colspan="4" style="text-align: center;">
+																	<b>Package(s) </b>
+																</td>
+																<td></td>
+																<td ></td>
+																<td ></td>
+															</tr>
+														<% } %>
+														<tr>
+															<td class="text-blue" colspan="4"><%=pkg[3] %>&nbsp; (<%=pkg[9] %>)</td>
+															<td class="text-blue right" ><%=pkg[4] %></td>									
+														<%if(showRemAmt){ %>
+															<td class="right ">
+																<%if(pkg[7]== null   || Long.parseLong(pkg[7].toString())==0){ %>	 
+																	<span class="systemgen" ><%=pkg[5]%></span>		
+																<%}else if(pkg[8].toString().equalsIgnoreCase("K") || pkg[8].toString().equalsIgnoreCase("B")){ %>
+																	<span class="processed" ><%=pkg[5]%></span>		
+																<%}else if(pkg[8].toString().equalsIgnoreCase("V")){ %>
+																	<span class="verified" ><%=pkg[5]%></span>		
+																<%} %>
+															</td>
+															<td>
+																<%if(pkg[6]!=null){ %>
+																	<%if(pkg[7]== null   || Long.parseLong(pkg[7].toString())==0){ %>	  
+																		<span class="systemgen" ><%=pkg[6]%></span>		
+																	<%}else if(pkg[8].toString().equalsIgnoreCase("K") || pkg[8].toString().equalsIgnoreCase("B")){ %>
+																		<span class="processed" ><%=pkg[6]%></span>		
+																	<%}else if(pkg[8].toString().equalsIgnoreCase("V")){ %>
+																		<span class="verified" ><%=pkg[6]%></span>		
+																	<%} %>
+																<%} %>
+															</td>
+														<%}else if(allowEdit){ %>
+															<td class="right">	
+																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=pkg[4] %>" name="pkg_remamount-<%=pkg[0]%>" style="text-align: right;" value="<%=pkg[5]%>">
+															</td>
+															<td >
+																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="pkg_comment-<%=pkg[0]%>" style="text-align: right;" <%if(pkg[6]!=null){ %> value="<%=pkg[6] %>" <%}else{ %> value="" <%} %> >
+																
+																<button type="submit" class="btn btn-sm editbtn" formaction="IPDPkgRemAmountEdit.htm" name="chssbillpkgid" value="<%=pkg[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
+																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
+																</button>	
+															</td>
+														<% }else {%>
+															<td></td>
+															<td></td>	
+														<%} %>	
+														</tr>
+														
+														
+														<%
+														int count=1;
+														for(Object[] pkgitem : ClaimPkgItems)
+														{
+															if(Integer.parseInt(pkgitem[2].toString()) == Integer.parseInt(pkg[0].toString()) )
+															{
+														%>
+															<tr>
+																<td><%=count++%></td>
+																<td colspan="2"><%=pkgitem[3] %></td>
+																<td class="right" style="width: 10%;"><%=pkgitem[4] %></td>
+																<td ></td>
+																<td ></td>
+																<td ></td>
+															</tr>														
+														<%	} %>
+														<%} %>
+													<% 
+													i++;
+													itemstotal =itemstotal.add (new BigDecimal(pkg[4].toString()));
+													
+													totalremamount =totalremamount.add (new BigDecimal(pkg[5].toString()));
+													
+													}%>
+											
+								<!-- ----------------------------- package ---------------------------------- -->
+										
+								<!-- ----------------------------- billheads ---------------------------------- -->
+												<% 
+													i=1;
+													for(Object[] pkgIten :NonPackageItems)	
+													{ %>
+													<%if( pkgIten[4] !=null && Double.parseDouble(pkgIten[4].toString())>0){  %>
 													
 														<%if(i==1){ %>
 															<tr>
@@ -489,36 +575,36 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														<% } %>
 														<tr>
 															<td class="text-blue" colspan="4"><%=pkgIten[1] %></td>
-															<td class="text-blue right" ><%=pkgIten[8] %></td>									
+															<td class="text-blue right" ><%=pkgIten[4] %></td>									
 														<%if(showRemAmt){ %>
 															<td class="right ">
-																<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	 
-																	<span class="systemgen" ><%=pkgIten[10]%></span>		
-																<%}else if(pkgIten[15].toString().equalsIgnoreCase("K") || pkgIten[15].toString().equalsIgnoreCase("B")){ %>
-																	<span class="processed" ><%=pkgIten[10]%></span>		
-																<%}else if(pkgIten[15].toString().equalsIgnoreCase("V")){ %>
-																	<span class="verified" ><%=pkgIten[10]%></span>		
+																<%if(pkgIten[7]== null   || Long.parseLong(pkgIten[7].toString())==0){ %>	 
+																	<span class="systemgen" ><%=pkgIten[5]%></span>		
+																<%}else if(pkgIten[8].toString().equalsIgnoreCase("K") || pkgIten[8].toString().equalsIgnoreCase("B")){ %>
+																	<span class="processed" ><%=pkgIten[5]%></span>		
+																<%}else if(pkgIten[8].toString().equalsIgnoreCase("V")){ %>
+																	<span class="verified" ><%=pkgIten[5]%></span>		
 																<%} %>
 															</td>
 															<td>
-																<%if(pkgIten[11]!=null){ %>
-																	<%if(pkgIten[14]== null   || Long.parseLong(pkgIten[14].toString())==0){ %>	  
-																		<span class="systemgen" ><%=pkgIten[11]%></span>		
-																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("K") || pkgIten[15].toString().equalsIgnoreCase("B")){ %>
-																		<span class="processed" ><%=pkgIten[11]%></span>		
-																	<%}else if(pkgIten[15].toString().equalsIgnoreCase("V")){ %>
-																		<span class="verified" ><%=pkgIten[11]%></span>		
+																<%if(pkgIten[6]!=null){ %>
+																	<%if(pkgIten[7]== null   || Long.parseLong(pkgIten[7].toString())==0){ %>	  
+																		<span class="systemgen" ><%=pkgIten[6]%></span>		
+																	<%}else if(pkgIten[8].toString().equalsIgnoreCase("K") || pkgIten[8].toString().equalsIgnoreCase("B")){ %>
+																		<span class="processed" ><%=pkgIten[6]%></span>		
+																	<%}else if(pkgIten[8].toString().equalsIgnoreCase("V")){ %>
+																		<span class="verified" ><%=pkgIten[6]%></span>		
 																	<%} %>
 																<%} %>
 															</td>
 														<%}else if(allowEdit){ %>
 															<td class="right">	
-																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=pkgIten[8] %>" name="bheadremamount-<%=pkgIten[5]%>" style="text-align: right;" value="<%=pkgIten[10]%>">
+																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=pkgIten[4] %>" name="otherremamount-<%=pkgIten[5]%>" style="text-align: right;" value="<%=pkgIten[5]%>">
 															</td>
 															<td >
-																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="bheadcomment-<%=pkgIten[5]%>" style="text-align: right;" <%if(pkgIten[11]!=null){ %> value="<%=pkgIten[11] %>" <%}else{ %> value="" <%} %> >
+																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="bothercomment-<%=pkgIten[5]%>" style="text-align: right;" <%if(pkgIten[6]!=null){ %> value="<%=pkgIten[6] %>" <%}else{ %> value="" <%} %> >
 																
-																<button type="submit" class="btn btn-sm editbtn" formaction="IPDBillheadRemAmountEdit.htm" name="itemheadid" value="<%=pkgIten[5]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
+																<button type="submit" class="btn btn-sm editbtn" formaction="IPDBillheadRemAmountEdit.htm" name="chssotherid" value="<%=pkgIten[5]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
 																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 																</button>	
 															</td>
@@ -527,10 +613,12 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 															<td></td>	
 														<%} %>	
 														</tr>
+														
 													<% 
 													i++;
-													itemstotal =itemstotal.add (new BigDecimal(pkgIten[8].toString()));
-													totalremamount =totalremamount.add (new BigDecimal(pkgIten[10].toString()));
+													itemstotal =itemstotal.add (new BigDecimal(pkgIten[4].toString()));
+													
+													totalremamount =totalremamount.add (new BigDecimal(pkgIten[5].toString()));
 													
 													} } %>
 											
@@ -552,17 +640,17 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<td ></td>
 															</tr>
 															<tr>
-																<th colspan="2">Doctor</th>
-																<th style="width:10%;">Type</th>
-																<th style="width:15%;" class="center">Date</th>
+																<th colspan="3">Doctor</th>
+																<!-- <th style="width:10%;">Type</th> -->
+																<th style="width:10%;" class="center">Date</th>
 																<th></th>
 																<th></th>
 																<th></th>
 															</tr>			
 														<% } %>
 														<tr>
-															<td class="text-blue" colspan="2" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
-															<td class="text-blue" >
+															<td class="text-blue" colspan="3" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
+															<%-- <td class="text-blue" >
 																<% if(allowEdit){ %>
 																	<select name="consulttype-<%=consult[0]%>"  class="form-control"  >
 																		<option value="Fresh" <%if(consult[2].toString().trim().equalsIgnoreCase("Fresh")){ %> selected <%} %> >Fresh</option>
@@ -571,7 +659,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 																<%}else{ %>
 																	<%=consult[2] %>
 																<% } %>
-															</td>
+															</td> --%>
 															<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 															<td class="right text-blue"><%=consult[6] %></td>
 															

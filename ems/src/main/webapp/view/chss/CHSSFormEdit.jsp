@@ -823,8 +823,6 @@ th,td
 													<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 													<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 													<td class="right text-blue"><%=misc[3] %></td>
-													
-																										
 													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
@@ -870,7 +868,7 @@ th,td
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
-												<%if(showRemAmt){ %>	 
+												<%if(showRemAmt || allowEdit){ %>	 
 												<b><%=totalremamount%></b>
 												<% } %>
 											</td>

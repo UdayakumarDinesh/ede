@@ -143,8 +143,8 @@ th,td
 			<td style="font-size: 15px; vertical-align: bottom;border: 0;text-align: right;">
 			<b style="font-weight:300;margin-right: 10px;">Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %></b>
 			<%if(contingentdata[9]!=null){ %>
-									<br>	Approved On :&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
-									<% } %> 
+				<br>	Approved On :&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[9].toString())%>
+			<% } %> 
 			 </td>
 		</tr>
 	</table>
@@ -161,7 +161,7 @@ th,td
 	<table style="margin-top: 5px;">
 		<tr>
 			<th style="text-align: center;" >SN</th>
-			<th style="text-align: center;width: 10%;">Emp. No.</th>
+			<th style="text-align: center;width: 5%;">Emp. No.</th>
 			<th style="text-align: center;">Name</th>
 			<th style="text-align: center;">Relation</th>
 			<th style="text-align: center;">Claim No</th>
@@ -194,7 +194,7 @@ th,td
 						<%=obj[17] %>
 					<%} %>
 				</td>
-				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
+				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
 				<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[25] %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[1].toString())) )) %></td>
 				<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[2].toString())) )) %></td>

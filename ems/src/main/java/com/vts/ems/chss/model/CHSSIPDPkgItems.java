@@ -9,25 +9,20 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Setter
-@Entity(name = "chss_bill_ipdheads")
-public class CHSSBillIPDheads implements Serializable {
+@Entity(name = "chss_ipd_pkgitems")
+public class CHSSIPDPkgItems implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private long CHSSItemHeadId;
-	private long BillId;
-	private int IPDBillHeadId;
-	private double BillHeadCost;
-	private double AmountPaid;
-	private double BillHeadRemAmt;
-	private String Comments;
-	private Long UpdateByEmpId;
-	private String UpdateByRole;
-	private Integer IsActive;
+	private int IPDPkgItemId;
+	private String PkgItemName;
+	private int OrderNo;
+	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

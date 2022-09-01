@@ -1,7 +1,6 @@
 package com.vts.ems.chss.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSContingentDto;
 import com.vts.ems.chss.Dto.CHSSEquipDto;
+import com.vts.ems.chss.Dto.CHSSIPDPackageDto;
 import com.vts.ems.chss.Dto.CHSSImplantDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
@@ -20,21 +20,22 @@ import com.vts.ems.chss.Dto.ChssBillsDto;
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSBill;
-import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSBillConsultation;
 import com.vts.ems.chss.model.CHSSBillEquipment;
-import com.vts.ems.chss.model.CHSSBillIPDheads;
 import com.vts.ems.chss.model.CHSSBillImplants;
-import com.vts.ems.chss.model.CHSSContingent;
-import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSBillMedicine;
-import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
+import com.vts.ems.chss.model.CHSSBillPkg;
+import com.vts.ems.chss.model.CHSSBillTests;
+import com.vts.ems.chss.model.CHSSConsultMain;
+import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
+import com.vts.ems.chss.model.CHSSIPDPkgItems;
+import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSTreatType;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
@@ -142,9 +143,7 @@ public interface CHSSService
 	public int GetMaxMedNo(String treatmenttype) throws Exception;
 	public Long AddMedicine(CHSSMedicinesList medicine) throws Exception;
 	public Long AddMasterEditComments(MasterEdit masteredit, MasterEditDto masterdto) throws Exception;
-	public List<Object[]> IPDBillPackageItems(String billid) throws Exception;
-	public List<Object[]> IPDBillNonPackageItems(String billid) throws Exception;
-	public long IPDBillHeadDataAddEdit(CHSSBillIPDheads billhead) throws Exception;
+	public long IPDBillHeadDataAddEdit(CHSSBillOther billhead) throws Exception;
 	public long IPDConsultAdd(CHSSConsultationDto dto, String chssapplyid, String consultmainidold) throws Exception;
 	public long IPDConsultEdit(CHSSBillConsultation modal, String chssapplyid, String consultmainidold) throws Exception;
 	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception;
@@ -176,9 +175,20 @@ public interface CHSSService
 	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception;
 	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception;
 	public long IPDConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception;
-	public long IPDBHeadRemAmountEdit(CHSSBillIPDheads modal) throws Exception;
 	public long IPDTestRemAmountEdit(CHSSBillTests modal) throws Exception;
 	public long IPDEquipmentRemEdit(CHSSBillEquipment modal) throws Exception;
 	public long IPDImplantRemEdit(CHSSBillImplants modal) throws Exception;
+	public long CHSSIPDBillsAdd(ChssBillsDto dto) throws Exception;
+	public long CHSSIPDBillEdit(com.vts.ems.chss.model.CHSSBill bill) throws Exception;
+	public List<Object[]> IPDBillOtherItems(String billid) throws Exception;
+	public long IPDOtherRemAmountEdit(CHSSBillOther modal) throws Exception;
+	public List<CHSSIPDPkgItems> getCHSSIPDPkgItemsList() throws Exception;
+	public long IPDPackageAddService(CHSSIPDPackageDto pkgDto) throws Exception;
+	public List<CHSSIPDPkgItems> ClaimPkgItemsAddedAjax(String billid, String billpkgid) throws Exception;
+	public List<Object[]> ClaimPackagesList(String billid) throws Exception;
+	public long IPDPackageEditService(CHSSIPDPackageDto pkgDto) throws Exception;
+	public long IPDPackageDeleteService(CHSSBillPkg pkg) throws Exception;
+	public List<Object[]> ClaimAllPackageItemsList(String billid) throws Exception;
+	public long IPDPkgRemAmountEdit(CHSSBillPkg modal) throws Exception;
 
 }
