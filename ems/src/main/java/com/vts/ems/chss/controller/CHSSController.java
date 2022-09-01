@@ -4551,7 +4551,6 @@ public class CHSSController {
 				
 				req.setAttribute("ClaimPackages", service.ClaimPackagesList(billid));
 				req.setAttribute("ClaimPkgItems", service.ClaimAllPackageItemsList(billid));
-
 				
 				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
 				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));

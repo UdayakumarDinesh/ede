@@ -550,9 +550,8 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 											
 								<!-- ----------------------------- package ---------------------------------- -->
 										
-								<!-- ----------------------------- billheads ---------------------------------- -->
-												<% 
-													i=1;
+								<!-- ----------------------------- non package ---------------------------------- -->
+												<%  i=1;
 													for(Object[] pkgIten :NonPackageItems)	
 													{ %>
 													<%if( pkgIten[4] !=null && Double.parseDouble(pkgIten[4].toString())>0){  %>
@@ -617,13 +616,12 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<% 
 													i++;
 													itemstotal =itemstotal.add (new BigDecimal(pkgIten[4].toString()));
-													
 													totalremamount =totalremamount.add (new BigDecimal(pkgIten[5].toString()));
 													
 													} } %>
 											
 																						
-								<!-- ----------------------------- billheads  ---------------------------------- -->
+								<!-- ----------------------------- non package  ---------------------------------- -->
 								
 								<!-- ----------------------------- consultation ---------------------------------- -->		
 												<% 
