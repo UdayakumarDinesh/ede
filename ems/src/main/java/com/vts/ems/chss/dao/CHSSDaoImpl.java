@@ -164,6 +164,9 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
+	
+	
+	
 	@Override
 	public List<CHSSTreatType> CHSSTreatTypeList() throws Exception
 	{
@@ -2084,6 +2087,42 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
+	private static final String BILLPACKAGEDELETEALL  ="UPDATE chss_bill_pkg SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
+	@Override
+	public int billPackageDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billPackageDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLPACKAGEDELETEALL);
+			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
+	private static final String BILLPACKAGEITEMSDELETEALL  ="UPDATE chss_bill_pkgitems SET isactive=0 , modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE billid=:billid";
+	@Override
+	public int billPackageItemsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO billPackageItemsDeleteAll");
+		try {
+			Query query= manager.createNativeQuery(BILLPACKAGEITEMSDELETEALL);
+			query.setParameter("billid", billid);
+			query.setParameter("modifiedby", modifiedby);
+			query.setParameter("modifieddate", modifieddate);
+			return  query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  0;
+		
+	}
+	
 	
 	private static final String CLAIMBILLDELETEALL  ="UPDATE chss_bill SET isactive=0, modifiedby=:modifiedby ,modifieddate=:modifieddate  WHERE chssapplyid=:chssapplyid";
 	@Override
@@ -2188,6 +2227,8 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 	}
 	
+	
+	
 	@Override
 	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo claimsinfo) throws Exception
 	{
@@ -2253,7 +2294,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String  IPDBILLOTHERITEMS = "SELECT coi.OtherItemId, coi.OtherItemname, cbo.OtherItemId AS 'ItemId', cbo.Billid,cbo.otheritemcost,cbo.otherremamount,cbo.comments,cbo.UpdateByEmpId,cbo.UpdateByRole  FROM (SELECT * FROM chss_other_items WHERE isactive=1) coi LEFT JOIN (SELECT * FROM chss_bill_other WHERE isactive=1 AND billid=:billid ) cbo ON (cbo.OtherItemId = coi.OtherItemId) ORDER BY coi.OtherItemId;";
+	private static final String  IPDBILLOTHERITEMS = "SELECT coi.OtherItemId, coi.OtherItemname,cbo.CHSSOtherId, cbo.Billid,cbo.otheritemcost,cbo.otherremamount,cbo.comments,cbo.UpdateByEmpId,cbo.UpdateByRole  FROM (SELECT * FROM chss_other_items WHERE isactive=1) coi LEFT JOIN (SELECT * FROM chss_bill_other WHERE isactive=1 AND billid=:billid ) cbo ON (cbo.OtherItemId = coi.OtherItemId) ORDER BY coi.OtherItemId;";
 	
 	@Override
 	public List<Object[]> IPDBillOtherItems(String billid)throws Exception
@@ -2889,5 +2930,32 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		
 	}
 	
+	
+	@Override
+	public CHSSIPDClaimsInfo getCHSSIPDClaimsInfo(String chssapplyid) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getCHSSOtherPermitAmt");
+		CHSSIPDClaimsInfo list= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<CHSSIPDClaimsInfo> cq= cb.createQuery(CHSSIPDClaimsInfo.class);
+			Root<CHSSIPDClaimsInfo> root= cq.from(CHSSIPDClaimsInfo.class);		
+			
+			
+			Predicate p1=cb.equal(root.get("IsActive") , 1);
+			
+			cq=cq.select(root).where(p1);
+			
+			TypedQuery<CHSSIPDClaimsInfo> allquery = manager.createQuery(cq);
+			list= allquery.getResultList().get(0);
+			
+		}catch (NoResultException e) {
+			System.err.println ("No Result Exception");
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 }

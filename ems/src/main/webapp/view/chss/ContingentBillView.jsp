@@ -258,9 +258,8 @@ th,td
 								billscount += Integer.parseInt(obj[25].toString());
 								} 
 							}%>
-							
-									<tr>
-									<td colspan="4" class="right">Total</td>
+								<tr>
+									<td colspan="5" class="right">Total</td>
 									<td class="center"><%=billscount %></td>
 									<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
 									<td class="right">

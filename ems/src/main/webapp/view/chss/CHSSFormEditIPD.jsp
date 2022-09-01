@@ -342,12 +342,12 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 							</div>
 							<table>
 								<tr>
-									<td colspan="3">
+									<td colspan="4">
 										<b>Hospital :&nbsp;&nbsp;</b><%=ipdbasicinfo.getHospitalName()%>
 									</td>
-									<td>
+									<%-- <td>
 										<b>Room Type :&nbsp;&nbsp;</b><%=ipdbasicinfo.getRoomType()%>
-									</td>
+									</td> --%>
 								</tr>
 								<tr>
 									<td>
@@ -441,7 +441,20 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 				   				<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Details</span>
 						   	</div>
 							<div class="col-md-12">
-						
+								<hr>
+								<div class="row" style="margin-top: 5px;font-weight: bold;"    >
+										<div class="col-md-5"></div>
+										<div class="col-md-7" >
+											
+											<ul class="legend" style="float:right; ">
+												<li> Comments By :</li>	
+											    <li><span style=" background-color: #008005;" ></span> System Generated</li>
+											    <li><span style=" background-color: #A300B5;" ></span> Processing Officer</li>
+											    <li><span style=" background-color: #0CB5ED;" ></span> Verifying Officer </li>
+											</ul>
+											
+										</div>
+									</div>
 								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -598,12 +611,12 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 															</td>
 														<%}else if(allowEdit){ %>
 															<td class="right">	
-																<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right; " max="<%=pkgIten[4] %>" name="otherremamount-<%=pkgIten[5]%>" style="text-align: right;" value="<%=pkgIten[5]%>">
+																<input type="number" class="cost-only"   step=".01" style="width: 100%;text-align: right; "  name="otherremamount-<%=pkgIten[2]%>"  <%if(Integer.parseInt(pkgIten[0].toString())!=1){ %> max="<%=pkgIten[4] %>"  <%} %>  style="text-align: right;" value="<%=pkgIten[5]%>">
 															</td>
 															<td >
-																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="bothercomment-<%=pkgIten[5]%>" style="text-align: right;" <%if(pkgIten[6]!=null){ %> value="<%=pkgIten[6] %>" <%}else{ %> value="" <%} %> >
+																<input type="text" maxlength="255"  style="width: 85%;word-break: break-word;" placeholder="Comments" name="othercomment-<%=pkgIten[2]%>" style="text-align: right;" <%if(pkgIten[6]!=null){ %> value="<%=pkgIten[6] %>" <%}else{ %> value="" <%} %> >
 																
-																<button type="submit" class="btn btn-sm editbtn" formaction="IPDBillheadRemAmountEdit.htm" name="chssotherid" value="<%=pkgIten[5]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
+																<button type="submit" class="btn btn-sm editbtn" formaction="IPDBillheadRemAmountEdit.htm" name="chssotherid" value="<%=pkgIten[2]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update"> 
 																	<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 																</button>	
 															</td>
@@ -715,7 +728,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;">
-															<b>Tests / Procedures</b> 
+															<b>Test / Investigations</b> 
 														</td>
 														<td></td>
 														<td ></td>
@@ -898,12 +911,12 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														</td>
 													<% }else if(allowEdit){ %>
 														<td class="right">	
-															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="testremamount-<%=implant[0]%>" max="<%=implant[3] %>" style="text-align: right;" value="<%=implant[4]%>">
+															<input type="number" class="cost-only" step=".01" style="width: 100%;text-align: right;" name="implantremamount-<%=implant[0]%>" max="<%=implant[3] %>" style="text-align: right;" value="<%=implant[4]%>">
 														</td>
 														<td >
-														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="testcomment-<%=implant[0]%>" style="text-align: right;" <%if(implant[7]!=null){ %> value="<%=implant[7] %>" <%}else{ %> value="" <%} %> >
+														<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="implantcomment-<%=implant[0]%>" style="text-align: right;" <%if(implant[7]!=null){ %> value="<%=implant[7] %>" <%}else{ %> value="" <%} %> >
 															
-														<button type="submit" class="btn btn-sm editbtn" formaction="TestRemAmountEdit.htm"  name="testid" value="<%=implant[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+														<button type="submit" class="btn btn-sm editbtn" formaction="IPDImplantRemEdit.htm"  name="implantid" value="<%=implant[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 															<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 														</button>
 														</td>

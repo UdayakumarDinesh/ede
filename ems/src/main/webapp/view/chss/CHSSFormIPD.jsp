@@ -227,7 +227,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 									<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; ">MEDICAL CLAIM - IPD</span></h3> <section style="float: right;"><span>No.of ENCL : &nbsp;<span class="text-blue"><%=chssapplydata[8] %></span></span> </section> </div>
 								</div>
 								
-								<table style="margin-top: 5px;">
+								<table style="margin-top: 5px;margin-bottom: 0px;">
 		
 									<tbody>
 										<tr>
@@ -245,7 +245,6 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 										</tr>
 									</tbody>
 								</table>
-		
 								
 								<table style="margin-top: 0px;">	
 									<tbody>
@@ -312,12 +311,12 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 							</div>
 							<table style="margin-bottom: 0px;">
 								<tr>
-									<td colspan="3">
+									<td colspan="4">
 										<b>Hospital :&nbsp;&nbsp;</b><%=ipdbasicinfo.getHospitalName()%>
 									</td>
-									<td>
+									<%-- <td>
 										<b>Room Type :&nbsp;&nbsp;</b><%=ipdbasicinfo.getRoomType()%>
-									</td>
+									</td> --%>
 								</tr>
 								<tr>
 									<td style="width:30% ">
@@ -647,7 +646,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 												<%if(i==1){ %>
 													<tr>
 														<td colspan="4" style="text-align: center;">
-															<b>Tests / Procedures</b> 
+															<b>Test / Investigations</b> 
 														</td>
 														<td></td>
 														<td ></td>

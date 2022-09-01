@@ -685,7 +685,19 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",req.getParameter("chssapplyid"));
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			
+			Object[] apply=service.CHSSAppliedData(req.getParameter("chssapplyid"));
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
+			
+//			return "redirect:/CHSSConsultBills.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSBillDelete.htm "+Username, e);
@@ -3186,9 +3198,10 @@ public class CHSSController {
 			claiminfo.setIPDClaimInfoId(Long.parseLong(ipdclaiminfoid));
 			claiminfo.setHospitalName(hospitalname);
 			claiminfo.setRoomType(roomtype);
-			claiminfo.setAdmissionDate(DateTimeFormatUtil.RegularToSqlDate(admitteddate) );
+			System.out.println(admitteddate);
+			claiminfo.setAdmissionDate(admitteddate);
 			claiminfo.setAdmissionTime(admittedtime);
-			claiminfo.setDischargeDate(DateTimeFormatUtil.RegularToSqlDate(dischargeddate));
+			claiminfo.setDischargeDate(dischargeddate);
 			claiminfo.setDischargeTime(dischargedtime);
 			claiminfo.setDomiciliaryHosp(Integer.parseInt(DomicHospi));
 			claiminfo.setDayCare(Integer.parseInt(DayCare));
@@ -4716,12 +4729,12 @@ public class CHSSController {
 			String chssotherid = req.getParameter("chssotherid"); 
 			
 			String otherremamount = req.getParameter("otherremamount-"+chssotherid);
-			String bothercomment = req.getParameter("bothercomment-"+chssotherid);
+			String othercomment = req.getParameter("othercomment-"+chssotherid);
 			
 			CHSSBillOther other = new CHSSBillOther();
 			other.setCHSSOtherId(Long.parseLong(chssotherid));
 			other.setOtherRemAmount(Double.parseDouble(otherremamount));
-			other.setComments(bothercomment);
+			other.setComments(othercomment);
 			other.setModifiedBy(Username);
 			other.setUpdateByEmpId(EmpId);
 			other.setUpdateByRole(LoginType);
@@ -4888,16 +4901,16 @@ public class CHSSController {
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String equipmentid = req.getParameter("equipmentid"); 
+			String implantid = req.getParameter("implantid"); 
 			
-			String equipremamount = req.getParameter("equipremamount-"+equipmentid);
-			String equipcomment = req.getParameter("equipcomment-"+equipmentid);
+			String implantremamount = req.getParameter("implantremamount-"+implantid);
+			String implantcomment = req.getParameter("implantcomment-"+implantid);
 			
 			
 			CHSSBillImplants implant = new CHSSBillImplants();
-			implant.setCHSSImplantId(Long.parseLong(equipmentid));
-			implant.setComments(equipcomment);
-			implant.setImplantRemAmt(Double.parseDouble(equipremamount));
+			implant.setCHSSImplantId(Long.parseLong(implantid));
+			implant.setComments(implantcomment);
+			implant.setImplantRemAmt(Double.parseDouble(implantremamount));
 			implant.setModifiedBy(Username);
 			implant.setUpdateByEmpId(EmpId);
 			implant.setUpdateByRole(LoginType);

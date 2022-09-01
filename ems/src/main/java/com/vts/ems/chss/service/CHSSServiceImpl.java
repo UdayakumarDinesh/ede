@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -1932,6 +1933,8 @@ public class CHSSServiceImpl implements CHSSService {
 			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
 			count += dao.billEquipmentDeleteAll(billid,username,sdtf.format(new Date()));
 			count += dao.billImplantDeleteAll(billid,username,sdtf.format(new Date()));
+			count += dao.billPackageDeleteAll(billid, username, sdtf.format(new Date()));
+			count += dao.billPackageItemsDeleteAll(billid, username, sdtf.format(new Date()));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -2216,6 +2219,9 @@ public class CHSSServiceImpl implements CHSSService {
 			CHSSBillDelete(obj[0].toString(), username);
 		}
 		dao.claimConsultMainDeleteAll(chssapplyid, username, sdtf.format(new Date()));
+		
+		CHSSIPDClaimsInfo fetch = dao.getCHSSIPDClaimsInfo(chssapplyid);
+		dao.CHSSIPDBasicInfoEdit(fetch);
 		
 		return dao.claimDelete(chssapplyid, username, sdtf.format(new Date()));
 	}
@@ -3065,23 +3071,56 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public double getNonPkgItemRemAmount(String empid,CHSSBillOther other) throws Exception
 	{
+		
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(other.getBillId()));
-		double itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
+		
 		Object[] emp =dao.getEmployee(empid);
 //		CHSSOtherItems remlist = dao.getCHSSOtherItems(otheritemid);
 		long basicpay=0;
 		if(emp[4]!=null) {
 			 basicpay=Long.parseLong(emp[4].toString());
-		}
-		
+		}		
 		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(String.valueOf(other.getOtherItemId()),basicpay);
+		System.out.println(basicpay);
+		System.out.println(chssremamt);
 		
-		int rembamt=0;
+		CHSSIPDClaimsInfo info = dao.getCHSSIPDClaimsInfo(String.valueOf(bill.getCHSSApplyId()));
+		long hours=ChronoUnit.HOURS.between(LocalDateTime.parse(info.getAdmissionDate()+"T"+info.getAdmissionTime()), LocalDateTime.parse(info.getDischargeDate()+"T"+info.getDischargeTime()));
+		long reminder= hours%(24);
+		long days = hours/(24);
+		if(reminder>0) {
+			++days;
+		}
+		System.out.println(days);
+		double rembamt=0;
 		if(chssremamt!=null && chssremamt.getItemPermitAmt()!=null) {
-			rembamt=chssremamt.getItemPermitAmt();
+			rembamt=chssremamt.getItemPermitAmt()*days;
 		}
 		
-		if(itemcost<= rembamt)
+		// calculate item cost if 
+		double itemcost=0;
+		if(other.getOtherItemId()==2) // if the item is nursing 
+		{
+			itemcost = 0;
+		}
+		else if(other.getOtherItemId()==1) // if the item is ward/ room / bed charges it includes nursing charges 
+		{
+			itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
+			CHSSBillOther nursing =dao.getCHSSIPDOther(0,bill.getBillId(),2);
+			if(nursing != null) 
+			{
+				itemcost += nursing.getOtherItemCost()-(nursing.getOtherItemCost() * (bill.getDiscountPercent()/100));
+			}
+		}
+		else
+		{
+			itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
+		}
+		
+		System.out.println(itemcost);
+		System.out.println(rembamt);
+		
+		if(itemcost <= rembamt)
 		{
 			return RoundTo2Decimal(itemcost);
 		}

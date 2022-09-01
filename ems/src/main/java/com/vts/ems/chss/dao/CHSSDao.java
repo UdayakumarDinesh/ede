@@ -191,5 +191,8 @@ public interface CHSSDao {
 	public int ClaimPkgItemsDelete(String chssbillpkgid,String modifiedby,String modifiedDate) throws Exception;
 	public List<Object[]> ClaimAllPackageItemsList(String billid) throws Exception ;
 	public List<CHSSBillPkg> CHSSBillPkgList(String billid) throws Exception;
+	public CHSSIPDClaimsInfo getCHSSIPDClaimsInfo(String chssapplyid) throws Exception;
+	public int billPackageItemsDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
+	public int billPackageDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
 	
 }

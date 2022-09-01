@@ -385,11 +385,6 @@ th,td
 											&#9675;  <span>  That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.</span>
 											<br>
-											<%-- &#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
-											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
-											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
-											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
-											<br> --%>
 										<%} %>
 										
 										&#9675; <span> That the bills attached herewith and the statements made in this claim are true and correct and I may be
