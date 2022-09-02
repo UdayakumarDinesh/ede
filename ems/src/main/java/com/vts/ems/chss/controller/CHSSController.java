@@ -4541,7 +4541,7 @@ public class CHSSController {
 //				tab=(String)md.get("tab");
 //			}	
 			
-			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			Object[] apply = service.CHSSAppliedData(chssapplyid);
 			
 			req.setAttribute("chssapplydata", apply);
 			req.setAttribute("employee", service.getEmployee(apply[1].toString()));

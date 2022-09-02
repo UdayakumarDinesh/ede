@@ -287,7 +287,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 											<b> Gender: &nbsp;</b><%if(employee[5].toString().equalsIgnoreCase("M")){ %> Male <%}else if(employee[5].toString().equalsIgnoreCase("F")){ %> Female <%}else{ %>Other<%} %>
 										</td>
 										<td>
-											<b>DOB : &nbsp;</b><%=DateTimeFormatUtil.SqlToRegularDate(employee[3].toString()) %>
+											<b>DOB : &nbsp;</b><%=DateTimeFormatUtil.SqlToRegularDate(employee[10].toString()) %>
 										</td>
 									
 									<% } %>
