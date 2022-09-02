@@ -4935,7 +4935,49 @@ public class CHSSController {
 		}
 	}
 	
-	
+	@RequestMapping(value = "IPDMiscRemAmountEdit.htm", method = RequestMethod.POST )
+	public String IPDMiscRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		logger.info(new Date() +"Inside IPDMiscRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String miscid = req.getParameter("miscid"); 
+			
+			String miscremamount = req.getParameter("miscremamount-"+miscid);
+			String miscomment = req.getParameter("miscomment-"+miscid);
+			
+			CHSSBillMisc misc= new CHSSBillMisc();
+			misc.setChssMiscId(Long.parseLong(miscid));
+			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
+			misc.setComments(miscomment);
+			misc.setModifiedBy(Username);
+			misc.setUpdateByEmpId(EmpId);
+			misc.setUpdateByRole(LoginType);
+			
+			long count = service.MiscRemAmountEdit(misc);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			
+			redir.addFlashAttribute("view_mode","E");
+			return "redirect:/CHSSIPDFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside IPDMiscRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 	
 	@RequestMapping(value = "CHSSIPDFormDownload.htm", method = {RequestMethod.POST,RequestMethod.GET})
 	public void CHSSIPDFormDownload(Model model,HttpServletRequest req, HttpServletResponse res, HttpSession ses, RedirectAttributes redir)throws Exception

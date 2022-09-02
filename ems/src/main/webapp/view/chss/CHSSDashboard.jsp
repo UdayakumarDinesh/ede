@@ -344,11 +344,13 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<%if(obj[8].toString().equalsIgnoreCase("F")){ %>
+								<%if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("F")){ %>
 								<img src="view/images/femaleuser.png" alt="Photo Not Found">
-								<%}else{ %>
+								<%}else if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("M")){ %>
 								<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<%}%>
+								<%}else {%>
+								<img src="view/images/maleuser.png" alt="Photo Not Found">
+								<%} %>
 							</div>
 						</div>
 					</div>

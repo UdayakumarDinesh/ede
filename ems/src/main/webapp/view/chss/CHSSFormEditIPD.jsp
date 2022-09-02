@@ -987,7 +987,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 														</td>
 														<td >
 															<input type="text" maxlength="255" style="width: 85%;word-break: break-word;" placeholder="Comments" name="miscomment-<%=misc[0]%>" style="text-align: right;" <%if(misc[7]!=null){ %> value="<%=misc[7] %>" <%}else{ %> value="" <%} %> >
-															<button type="submit" class="btn btn-sm editbtn" formaction="MiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
+															<button type="submit" class="btn btn-sm editbtn" formaction="IPDMiscRemAmountEdit.htm" name="miscid" value="<%=misc[0]%>" onclick="return  confirm('Are You Sure To Update?')" data-toggle="tooltip" data-placement="top" title="Update" >
 																<i class="fa-solid fa-pen-to-square" style="color: #FF7800;"></i>
 															</button>
 														</td>

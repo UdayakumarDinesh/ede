@@ -1075,23 +1075,29 @@ function setModalPackageIdValue(billPkgid,testsubid)
 
 function checkPkgTotal(addedit)
 {
-	var pkgtotalamt = $('#model-pkgsub-cost-total').val();
-	if(pkgtotalamt==='' || Number(pkgtotalamt)==0 )
-	{
-		alert('Please Enter Valid Item Cost');
-		return false;
-	}else if(addedit==='A')
-	{
-		if(confirm('Are You Sure to Submit ?'))
+	if(Number($('#modal_pkg_id').val())>0){
+	
+		var pkgtotalamt = $('#model-pkgsub-cost-total').val();
+		if(pkgtotalamt==='' || Number(pkgtotalamt)==0 )
 		{
-			$('#package_form').attr('action', 'CHSSIPDPackageAdd.htm').submit();;
-		}
-	}else if(Number(pkgtotalamt)>0 && addedit==='E')
-	{
-		if(confirm('Are You Sure to Update ?'))
+			alert('Please Enter Valid Item Cost');
+			return false;
+		}else if(addedit==='A')
 		{
-			$('#package_form').attr('action', 'CHSSIPDPackageEdit.htm').submit();;
+			if(confirm('Are You Sure to Submit ?'))
+			{
+				$('#package_form').attr('action', 'CHSSIPDPackageAdd.htm').submit();;
+			}
+		}else if(Number(pkgtotalamt)>0 && addedit==='E')
+		{
+			if(confirm('Are You Sure to Update ?'))
+			{
+				$('#package_form').attr('action', 'CHSSIPDPackageEdit.htm').submit();;
+			}
 		}
+	}else
+	{
+		alert('Plaese Select a Package!');
 	}
 }
 function clearPkgBreakupvalues()
