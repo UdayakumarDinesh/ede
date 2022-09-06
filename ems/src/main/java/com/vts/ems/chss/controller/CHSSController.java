@@ -74,6 +74,7 @@ import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSIPDPkgItems;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.master.dto.MasterEditDto;
@@ -4457,12 +4458,14 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSIPDClaimFwdApproveAjax.htm "+Username);
-		String allow[]= {"0","0","0","0","0","0"};
+		String Msg = "";
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> billslist = service.CHSSBillsList(chssapplyid);
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
+			
 			double claimamount=0;
+			
 			
 			LocalDate applydate = LocalDate.now();
 			
@@ -4475,39 +4478,41 @@ public class CHSSController {
 			{
 				LocalDate billdate = LocalDate.parse(bill[4].toString());
 				
-				if(!billdate.isAfter(applydate.minusMonths(3)) && !applydate.minusMonths(3).isEqual(billdate) ) 
+				if( !billdate.isAfter(applydate.minusMonths(3)) && !applydate.minusMonths(3).isEqual(billdate) ) 
 				{
-					allow[4]="1";
-					allow[5]=bill[2].toString();
-					break;
-				}
-				
-				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
-				{
-					allow[2]="1";
-					allow[3]=bill[2].toString();
-					break;
+					Msg = "Cannot Forward Claim Since Bill No : '"+bill[2]+"' is older than 3 months.";
+					return Msg;
 				}
 				
 				if(Double.parseDouble(bill[9].toString())==0) 
 				{
-					allow[1]="1";
-					break;
+					Msg = "Please Enter Atleast Breakup of the Bill";
+					return Msg;
 				}
+				
+				System.out.println(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) +" = "+ Math.round(Double.parseDouble(bill[9].toString())));
+				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
+				{
+					Msg = "Sum of Items Cost in Bill No '"+bill[2]+"' does not Tally with Amount Paid. \nBill Amount ="
+							+(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString()))+"\nItems Total = "+bill[9];
+					return Msg;
+				}
+				
+				
 				claimamount += Double.parseDouble(bill[9].toString());
 			}
 			
 			if(claimamount==0) 
 			{
-				allow[0]="1";
+				Msg = "Total claim amount should not be zero !";
+				return Msg;
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSIPDClaimFwdApproveAjax.htm "+Username, e);
 		}
-		Gson json = new Gson();
-		return json.toJson(allow);
+		return Msg;
 	}
 	
 	
@@ -4542,14 +4547,20 @@ public class CHSSController {
 //			}	
 			
 			Object[] apply = service.CHSSAppliedData(chssapplyid);
-			
+			Object[] employee = service.getEmployee(apply[1].toString());
 			req.setAttribute("chssapplydata", apply);
-			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
+			req.setAttribute("employee", employee);
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
 			}
+			
+			long basicpay=0;
+			if(employee[4]!=null) {
+				 basicpay=Long.parseLong(employee[4].toString());
+			}		
+			CHSSOtherPermitAmt chssremamt = service.getCHSSOtherPermitAmt("1",basicpay);
 			
 				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
 				String billid ="0";

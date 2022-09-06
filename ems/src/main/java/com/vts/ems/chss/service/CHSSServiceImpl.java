@@ -1444,7 +1444,7 @@ public class CHSSServiceImpl implements CHSSService {
 	public String GenerateIPDContingentNo() throws Exception
 	{
 		try {
-			String value="STARC/F&A/Med-Regular/";
+			String value="STARC/F&A/Med-IPD/";
 						
 			LocalDate today= LocalDate.now();
 			String start ="";
@@ -3081,8 +3081,6 @@ public class CHSSServiceImpl implements CHSSService {
 			 basicpay=Long.parseLong(emp[4].toString());
 		}		
 		CHSSOtherPermitAmt chssremamt=dao.getCHSSOtherPermitAmt(String.valueOf(other.getOtherItemId()),basicpay);
-		System.out.println(basicpay);
-		System.out.println(chssremamt);
 		
 		CHSSIPDClaimsInfo info = dao.getCHSSIPDClaimsInfo(String.valueOf(bill.getCHSSApplyId()));
 		long hours=ChronoUnit.HOURS.between(LocalDateTime.parse(info.getAdmissionDate()+"T"+info.getAdmissionTime()), LocalDateTime.parse(info.getDischargeDate()+"T"+info.getDischargeTime()));
@@ -3091,7 +3089,6 @@ public class CHSSServiceImpl implements CHSSService {
 		if(reminder>0) {
 			++days;
 		}
-		System.out.println(days);
 		double rembamt=0;
 		if(chssremamt!=null && chssremamt.getItemPermitAmt()!=null) {
 			rembamt=chssremamt.getItemPermitAmt()*days;
@@ -3117,8 +3114,6 @@ public class CHSSServiceImpl implements CHSSService {
 			itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
 		}
 		
-		System.out.println(itemcost);
-		System.out.println(rembamt);
 		
 		if(itemcost <= rembamt)
 		{
@@ -3388,5 +3383,10 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.getCHSSIPDPkgItemsList(); 
 	}
 	
+	@Override
+	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid,long  basicpay) throws Exception
+	{
+		return dao.getCHSSOtherPermitAmt(otheritemid, basicpay);
+	}
 	
 }

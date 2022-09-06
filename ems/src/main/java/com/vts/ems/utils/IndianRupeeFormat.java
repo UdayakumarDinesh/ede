@@ -21,4 +21,20 @@ public class IndianRupeeFormat {
         return (result+lastDigit);
     }
 	
+	public static String[] getRupeePaisaSplit(String RupeeAndPaisa)
+	{
+		String[] RupeePaisaSplit=null;
+		
+		try
+		{
+			  RupeePaisaSplit=RupeeAndPaisa.split("\\.");
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	
+		return(RupeePaisaSplit);
+	}
 }

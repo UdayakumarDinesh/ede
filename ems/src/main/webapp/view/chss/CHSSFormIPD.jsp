@@ -409,7 +409,8 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 			
 						<div class="row" id="tab-scroll-sh" align="center">
 							<div class="col-md-12" >
-				   				<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Details</span>
+				   				<!-- <span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Details</span> -->
+				   				<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Breakup</span>
 						   	</div>
 							<div class="col-md-12">
 						
@@ -878,6 +879,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 											}%>
 										
 							<!-- ----------------------------- miscellaneous ---------------------------------- -->
+										
 										<tr>
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
@@ -885,7 +887,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 											<td class="right text-green">
 												<%if(show){ %>	 
 												&#8377; <b><%=nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP))) %></b>
-												<%} %>
+												<% } %>
 											</td>
 											<td ></td>
 										</tr>
@@ -908,6 +910,30 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 											
 										</tr>
 										
+										
+										<tr>
+											<th colspan="7" style="text-align: center;">Attachments </th>
+										</tr>
+										<tr>
+											<th style="width:5%;text-align:center;" >SN</th>
+											<th colspan="5" style="width:50%;" >Type of Document(s)	</th>
+											<th style="width:20%;" >Is Attached</th>
+										</tr>
+									<%for(Object[]  ClaimAttach: ClaimAttachDeclare){ %>
+										<tr>
+											<td style="text-align:center; "><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
+											<td colspan="5" ><%=ClaimAttach[1] %>	</td>
+											<td style="text-align: center;">
+												<% if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %>
+													Yes
+												<%}else{ %>
+													No
+												<%} %>
+											</td>
+										</tr>
+									<%} %>
+										
+									
 										<tr>
 											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
 										</tr>
@@ -935,10 +961,10 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 										</tbody>						
 									</table>
 								
-								<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" style="width: 70%;">
+								<%-- <table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" style="width: 70%;">
 									<thead>
 										<tr>
-											<th style="width:5%;" >SN</th>
+											<th style="width:5%;text-align:center;" >SN</th>
 											<th style="width:50%;" >Type of Document(s)	</th>
 											<th style="width:20%;" >Is Attached</th>
 										</tr>
@@ -946,7 +972,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 									<tbody>
 									<%for(Object[]  ClaimAttach: ClaimAttachDeclare){ %>
 										<tr>
-											<td><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
+											<td style="text-align:center; "><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
 											<td><%=ClaimAttach[1] %>	</td>
 											<td style="text-align: center;">
 												<% if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %>
@@ -958,7 +984,7 @@ if(view_mode!=null && ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnor
 										</tr>
 									<%} %>
 									</tbody>
-				   				</table>				 
+				   				</table>				  --%>
 				   				
 							
 						</div>

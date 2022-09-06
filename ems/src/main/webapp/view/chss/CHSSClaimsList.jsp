@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
@@ -22,6 +23,8 @@ String status   = (String)request.getAttribute("status");
 
 SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+
+IndianRupeeFormat nfc=new IndianRupeeFormat();
 %>
 
 
@@ -108,7 +111,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 										<th>Applicant</th>
 										<th>Patient </th>
 										<th>Applied Date</th>
-										<!-- <th>Treatment Type</th> -->
+										<th>Claimed Amt</th>
 										<th>Status</th>
 										<th>Action</th>
 									</tr>
@@ -124,7 +127,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 											<td><%=obj[23] %></td>
 											<td><%=obj[16] %>&nbsp;(<%=obj[18] %>)</td>
 											<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
-											<%-- <td><%=obj[14] %></td> --%>
+											<td style="text-align: right;"><%= nfc.rupeeFormat(obj[1].toString())%></td>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=obj[27] %>; font-weight: 600;" >

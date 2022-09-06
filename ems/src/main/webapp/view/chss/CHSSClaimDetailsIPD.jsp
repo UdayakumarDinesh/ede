@@ -86,7 +86,6 @@ table th:last-child{
   border-radius:0 8px 0 0;
 }
 
-
 </style>
 </head>
 <body>
@@ -212,7 +211,7 @@ table th:last-child{
 							<% } %>
 							<div class="col-2">
 								<b>Treatment Type : </b><br>
-								<select class="form-control select2 w-100" name="treatmenttype" id="treatmenttype" required="required" data-live-search="true" >
+								<select class="form-control select2 " name="treatmenttype" id="treatmenttype" required="required" data-live-search="true" >
 									<option value="" selected="selected" disabled="disabled">Choose..</option>
 									<%for(CHSSTreatType treattype : treattypelist ){ %>
 										<option value="<%=treattype.getTreatTypeId()%>" <%if(Integer.parseInt(chssapplydata[7].toString()) == treattype.getTreatTypeId()){ %>selected<%} %> ><%=treattype.getTreatmentName() %></option>
@@ -426,9 +425,7 @@ table th:last-child{
 		<!-- -------------------------------------------------- Bill Details ------------------------------------------------------ -->
 		<%if(billid>0){ %>
 		
-		
 		<!-- -------------------------------------------------- package ------------------------------------------------------ -->
-					
 					
 					<div class="row" id="tab-scroll-pk" align="center" >
 						<div class="col-md-12" >
@@ -462,7 +459,7 @@ table th:last-child{
 											<%} %>
 									
 											<tr>
-												<td colspan="4" align="center" ><button type="button" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return setModalPackageIdValue(0,0)">Add</button></td>
+												<td colspan="4" align="center" ><button type="button" class="btn btn-sm add-btn new-item-add-btn" name="action" value="submit" Onclick="return setModalPackageIdValue(0,0)">Add Package</button></td>
 											</tr>
 												
 										</tbody>							
@@ -620,7 +617,7 @@ table th:last-child{
 												<tr>
 													<td style="text-align:center; "><%=++sn %></td>
 													<td>
-														<select class="form-control test-type  selectpicker " style="width: 100%" data-size="auto" name="test-subid-<%=tests.getCHSSTestId() %>"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
+														<select class="form-control test-type  select2 "  data-size="auto" name="test-subid-<%=tests.getCHSSTestId() %>"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
 															<option value="" selected="selected" disabled="disabled">Choose..</option>
 															<%for(CHSSTestSub testsub : testmainlist){ %>
 																<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>" <%if(tests.getTestSubId() == testsub.getTestSubId()){ %>selected <%} %> ><%=testsub.getTestName()%></option>
@@ -651,7 +648,7 @@ table th:last-child{
 											<tr>
 												<td style="width:5% !important; text-align: center;"><%=++sn %></td>
 												<td style="width:55%;">
-													<select class="form-control test-type  selectpicker "  style="width: 100%" data-size="auto" name="test-id"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
+													<select class="form-control test-type  select2 "   data-size="auto" name="test-id"  data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
 														<option value="" selected="selected" disabled="disabled">Choose..</option>
 														<%for(CHSSTestSub testsub : testmainlist){ %>
 															<option value="<%= testsub.getTestMainId()%>_<%= testsub.getTestSubId() %>"><%=testsub.getTestName()%></option>
@@ -947,7 +944,7 @@ table th:last-child{
 												<tr>
 													<td style="min-width:25%;width:25%;"><span style="font-size: 20px;font-weight: 600;">Package : </span> </td>
 													<td style="width:75%">
-														<select class="form-control pkg-type  select2 "  style="max-width: 90%;width: 90%" data-size="auto" name="pkg_id"  id="modal_pkg_id" data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
+														<select class="form-control pkg-type  select2 "  style="width: 500px !important;"  data-size="auto" name="pkg_id"  id="modal_pkg_id" data-live-search="true" data-container="body" data-dropup-auto="true" data-size="8" required="required" >
 															<option value="" selected="selected" disabled="disabled">Choose..</option>
 																<%for(CHSSTestSub pkg : packageslist){ %>
 																	<option value="<%= pkg.getTestSubId() %>"><%=pkg .getTestName()%></option>
@@ -964,7 +961,7 @@ table th:last-child{
 						    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
 											<thead>
 												<tr>
-													<th>SN</th>
+													<th style="text-align:center; ">SN</th>
 													<th>Package Item</th>
 													<th>Amount  (&#8377;)</th>
 												</tr>
@@ -973,7 +970,7 @@ table th:last-child{
 												<% int sno=1;
 												for(CHSSIPDPkgItems pkgitem : pkgSubItems){ %>
 													<tr>
-														<td><%=sno++ %></td>
+														<td style="text-align:center; " ><%=sno++ %></td>
 														<td><%=pkgitem.getPkgItemName() %></td>
 														<td style="width:15%; ">
 															<input type="number" class="form-control items decimal cost-only model-pkgsub-cost"  name="pkgitem_cost" id="model-pkgitem-cost-<%=pkgitem.getIPDPkgItemId() %>"  onchange="calculatePkgTotal();"  value="" style="width:100%;text-align: right; " min="0"    step=".01">
@@ -1013,6 +1010,7 @@ table th:last-child{
 
 
 <script type="text/javascript">
+
 
 function setModalPackageIdValue(billPkgid,testsubid)
 {

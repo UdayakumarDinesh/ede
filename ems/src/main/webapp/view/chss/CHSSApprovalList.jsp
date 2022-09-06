@@ -59,7 +59,7 @@
 			</div>
 	</div>	
 	
-	 <div class="page card dashboard-card">
+	<div class="page card dashboard-card">
 	
 	<div class="card-body" >
 	

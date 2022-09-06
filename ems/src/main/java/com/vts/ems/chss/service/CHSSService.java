@@ -34,6 +34,7 @@ import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
 import com.vts.ems.chss.model.CHSSIPDPkgItems;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestMain;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.model.CHSSTreatType;
@@ -190,5 +191,6 @@ public interface CHSSService
 	public long IPDPackageDeleteService(CHSSBillPkg pkg) throws Exception;
 	public List<Object[]> ClaimAllPackageItemsList(String billid) throws Exception;
 	public long IPDPkgRemAmountEdit(CHSSBillPkg modal) throws Exception;
+	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
 
 }

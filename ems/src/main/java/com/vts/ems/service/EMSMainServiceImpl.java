@@ -21,6 +21,7 @@ import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Service
 public class EMSMainServiceImpl implements EMSMainService 
@@ -57,6 +58,12 @@ public class EMSMainServiceImpl implements EMSMainService
 	public Employee EmployeeInfo(long EmpId)throws Exception
 	{
 		return dao.EmployeeInfo(EmpId);
+	}
+	
+	@Override
+	public EmployeeDesig DesignationInfo(long DesigId)throws Exception
+	{
+		return dao.DesignationInfo(DesigId);
 	}
 	
 	@Override

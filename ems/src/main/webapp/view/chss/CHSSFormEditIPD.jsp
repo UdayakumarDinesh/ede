@@ -419,13 +419,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 													<td class="text-blue" style="text-align: right;"><%=chssbill.get(i)[7] %></td>
 												</tr>
 											<%} %>
-											<%if(chssbill.size()>0){ %>
-												<tr>
-													<td colspan="3"></td>
-													<td style="text-align: right;"><b>Total </b></td>
-													<td class="text-blue"  style="text-align: right;"><%=nfc.rupeeFormat(String.valueOf(billstotal.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></td>
-												</tr>
-											<%}else{ %>
+											<%if(chssbill.size()==0){ %>
 												<tr>
 													<td colspan="6" class="center" >Bills Not Added</td>
 												</tr>
@@ -438,7 +432,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 			
 						<div class="row" id="tab-scroll-sh" align="center">
 							<div class="col-md-12" >
-				   				<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Details</span>
+				   				<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;"> Bill Breakup</span>
 						   	</div>
 							<div class="col-md-12">
 								<hr>
@@ -1035,6 +1029,30 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 										</tr>
 										
 										<tr>
+											<th colspan="7" style="text-align: center;">Attachments </th>
+										</tr>
+										
+										<tr>
+											<th style="width:5%;text-align:center;  " >SN</th>
+											<th colspan="5" style="width:50%;" >Type of Document(s)	</th>
+											<th style="width:20%;" >Is Attached</th>
+										</tr>
+									
+									<%for(Object[]  ClaimAttach: ClaimAttachDeclare){ %>
+										<tr>
+											<td style="text-align:center;"><%=ClaimAttachDeclare.indexOf(ClaimAttach)+1 %></td>
+											<td colspan="5" ><%=ClaimAttach[1] %>	</td>
+											<td style="text-align: center;">
+												<% if(ClaimAttach[2]!=null && ClaimAttach[4].toString().equalsIgnoreCase("Y")){ %>
+													Yes
+												<%}else{ %>
+													No
+												<%} %>
+											</td>
+										</tr>
+									<%} %>
+									
+										<tr>
 											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
 										</tr>
 										<tr>
@@ -1068,7 +1086,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 							
 						</div>
 					</div>
-					<div class="row" id="tab-scroll-at" align="center">
+					<%-- <div class="row" id="tab-scroll-at" align="center">
 				   			<div class="col-md-12" >
 				   				<div align="center"><b>Attachments</b></div>
 				   			</div>
@@ -1099,7 +1117,7 @@ Object[] ClaimDisputeData = (Object[])request.getAttribute("ClaimDisputeData");
 									</tbody>
 				   				</table>				   			
 				   			</div>
-				   		</div>
+				   		</div> --%>
 				
 				
 					<form action="CHSSUserIPDForward.htm" method="post" id="fwdform">
@@ -1414,34 +1432,17 @@ function CheckClaimAmount($chssapplyid)
 	$.ajax({
 
 		type : "GET",
-		url : "CHSSClaimFwdApproveAjax.htm",
+		url : "CHSSIPDClaimFwdApproveAjax.htm",
 		data : {
 				
 			chssapplyid : $chssapplyid,
 		},
 		datatype : 'json',
 		success : function(result) {
-		var result = JSON.parse(result);
-				
 		
-			if(Number(result[4])===1)
+			if(result==="")
 			{
-				alert('Cannot Forward Claim Since Bill No : \''+result[5]+'\' is older than 3 months');
-			}
-			else if(Number(result[2])===1)
-			{
-				alert('Sum of Items Cost in Bill \''+result[3]+'\' does not Tally with Amount Paid.');
-			}
-			else if(Number(result[1])===1)
-			{
-				alert('Please Enter Atleast One Item in All the bills');
-			}
-			else if(Number(result[0])===1)
-			{
-				alert('Total claim amount should not be zero !');
-			}
-			else
-			{
+				
 				if(Number($('#enclosurecount').val())>0  )
 				{
 					if(Number($('#enclosurecount').val())>99)
@@ -1457,6 +1458,10 @@ function CheckClaimAmount($chssapplyid)
 				{
 					alert('Please Enter No of Encloseres.');	
 				}
+				
+			}else
+			{
+				alert(result);	
 			}
 		
 		}
