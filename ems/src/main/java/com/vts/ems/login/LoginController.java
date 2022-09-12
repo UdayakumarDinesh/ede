@@ -44,7 +44,6 @@ public class LoginController
 	 {	 
 		logger.info(new Date() +"Inside login ");
 		
-		System.out.println(error);
 		
 		if (error != null) {
 	        model.addAttribute("error", "Your username or password is invalid.");

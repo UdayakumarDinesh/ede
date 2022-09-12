@@ -518,7 +518,7 @@ table th:last-child{
 		
 			<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->		
 					
-				   		<div class="row" id="tab-scroll-co" align="center">
+				   		<%-- <div class="row" id="tab-scroll-co" align="center">
 					   		<div class="col-md-12" >
 					    		<form action="#" method="post" autocomplete="off" style="width: 70%;">
 					    			<table class="table table-bordered table-hover table-striped table-condensed  info shadow-nohover" >
@@ -595,7 +595,7 @@ table th:last-child{
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							    </form>
 					    	</div>
-			   			</div>
+			   			</div> --%>
 		
 			<!-- ------------------------------------------------------- consultation --------------------------------------------------- -->
 			<!-- ------------------------------------------------------- Tests --------------------------------------------------- -->			   	

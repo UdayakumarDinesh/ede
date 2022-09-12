@@ -537,7 +537,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(allowEdit || historyBtn){ %>
-																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																		Tests
 																	</button>
 																
@@ -619,7 +619,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
 															<%if(allowEdit || historyBtn){ %>
-																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																	Medicines
 																</button>
 																

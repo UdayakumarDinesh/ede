@@ -356,7 +356,7 @@ p {
 				    		<a class="nav-link nav-link-btn btn co"  data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
 				    		<a class="nav-link nav-link-btn btn te"  data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests / Procedures</a>
 				    		<a class="nav-link nav-link-btn btn me"  data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>
-				    		<a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" Onclick="getOthersDetails()" >Others</a>
+				    		<!-- <a class="nav-link nav-link-btn btn ot"  data-toggle="tab" id="nav-others-tab" href="#nav-others" role="tab" aria-controls="nav-others" Onclick="getOthersDetails()" >Others</a> -->
 				    		<a class="nav-link nav-link-btn btn mi" data-toggle="tab" id="nav-misc-tab" href="#nav-misc" role="tab" aria-controls="nav-misc" Onclick="getmiscData()" >Miscellaneous</a>
 				    	</div>
 				    				    	

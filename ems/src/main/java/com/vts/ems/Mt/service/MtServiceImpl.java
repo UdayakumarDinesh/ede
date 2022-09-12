@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.Mt.dao.MtDao;
 import com.vts.ems.Mt.model.MtApplyTransaction;
 import com.vts.ems.Mt.model.MtDirectorDuty;
@@ -18,6 +17,7 @@ import com.vts.ems.Mt.model.MtLinkDuty;
 import com.vts.ems.Mt.model.MtTrip;
 import com.vts.ems.Mt.model.MtUserApply;
 import com.vts.ems.Mt.model.MtVehicle;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 

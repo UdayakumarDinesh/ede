@@ -236,4 +236,23 @@ public class DateTimeFormatUtil
 		return (ddate);
 	}
 	
+	public static java.sql.Date  TodayDateInSqlFormat()
+	{
+ 		java.sql.Date datetodaydb =null;
+		try
+		{
+			Date dd=new Date();	
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy ");
+	     	String datetoday=sdf.format(dd);
+	        datetodaydb=dateConversionSql(datetoday);
+	 		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return datetodaydb;
+	}
+	
+
+	
 }

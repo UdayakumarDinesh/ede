@@ -2,12 +2,12 @@ package com.vts.ems.leave.dao;
 
 import java.util.List;
 
-import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.pis.model.Employee;
 
 public interface LeaveDao {

@@ -107,7 +107,7 @@
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReport.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReport.htm" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report">
 													<i class="fa-regular fa-file-lines"></i>
 												</button>
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillPayReportDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Download">

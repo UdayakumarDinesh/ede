@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.Mt.model.MtApplyTransaction;
 import com.vts.ems.Mt.model.MtDirectorDuty;
 import com.vts.ems.Mt.model.MtDriver;
@@ -27,6 +26,7 @@ import com.vts.ems.Mt.model.MtLinkDuty;
 import com.vts.ems.Mt.model.MtTrip;
 import com.vts.ems.Mt.model.MtUserApply;
 import com.vts.ems.Mt.model.MtVehicle;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 
 @Transactional

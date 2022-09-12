@@ -13,7 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name="lab_master")
-public class LabMaster implements Serializable {
+public class LabMaster implements Serializable 
+{
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,6 +36,7 @@ public class LabMaster implements Serializable {
 	private Integer LabId;
 	private Integer ClusterId;
 	private String LabLogo;
+	private String NewsTelHeader;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
