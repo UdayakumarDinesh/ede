@@ -20,6 +20,7 @@ Object[] TeleApprovalPeriodEditDetails=(Object[])request.getAttribute("TeleAppro
 
 <div class="card-header page-top">
 		<div class="row">
+		<%if(NewspaperApprovalPeriodEditDetails!=null){ %>
 			<div class="col-md-5">
 				<h5>Newspaper Approval Period Edit</h5>
 			</div>
@@ -27,9 +28,23 @@ Object[] TeleApprovalPeriodEditDetails=(Object[])request.getAttribute("TeleAppro
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="NewspaperDashBoard.htm"> Newspaper </a></li>
-						<li class="breadcrumb-item active " aria-current="page">Newspaper List</li>
+						<li class="breadcrumb-item "><a href="NewspaperApprovedList.htm"> Newspaper Approval List</a></li>
+						<li class="breadcrumb-item active " aria-current="page">Newspaper Edit</li>
 					</ol>
 				</div>
+			<%}else{ %>
+				<div class="col-md-5">
+				<h5>Telephone Approval Period Edit</h5>
+			</div>
+				<div class="col-md-7 ">
+					<ol class="breadcrumb">
+					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+					<li class="breadcrumb-item "><a href="TelephoneDashBoard.htm">Telephone</a></li>
+					<li class="breadcrumb-item "><a href="TelephoneApprovedList.htm"> Telephone Approval List</a></li>
+						<li class="breadcrumb-item active " aria-current="page">Telephone Edit</li>
+					</ol>
+				</div>
+			<%} %>
 			</div>
 		 </div>
 		 
@@ -100,14 +115,14 @@ Object[] TeleApprovalPeriodEditDetails=(Object[])request.getAttribute("TeleAppro
                    <button class="btn btn-success btn-sm"formaction="NewsApprovalPeriodEditSubmit.htm">Submit</button>
                     <input type="hidden" name="NewspaperBillId" value="<%=NewspaperApprovalPeriodEditDetails[0]%>">
                  <%}else if(TeleApprovalPeriodEditDetails!=null){%>
-                  <button class="btn btn-success btn-sm" name="TelephoneApprovalPeriodEditSave" value="TelephoneApprovalPeriodEditSave" formaction="telephone-period-edit"> Submit</button>
+                  <button class="btn btn-success btn-sm" name="TelephoneApprovalPeriodEditSave" value="TelephoneApprovalPeriodEditSave" formaction="TelephonePeriodEditSave.htm"> Submit</button>
                   <input type="hidden" name="TeleBillId" value="<%=TeleApprovalPeriodEditDetails[0]%>">
                   <%}%>
 	           	
 	           		 <%if(NewspaperApprovalPeriodEditDetails!=null){%> 
 		       		<button type="submit"  class="btn btn-sm  btn-info" formaction="NewspaperApprovedList.htm">Back</button>
 			        <%}else if(TeleApprovalPeriodEditDetails!=null){%>
-			       		<button type="submit"  class="btn btn-sm  btn-info" formaction="telephone-approved-list">Back</button>
+			       		<button type="submit"  class="btn btn-sm  btn-info" formaction="TelephoneApprovedList.htm">Back</button>
 			        <%}%>
 	            </div>
 	            

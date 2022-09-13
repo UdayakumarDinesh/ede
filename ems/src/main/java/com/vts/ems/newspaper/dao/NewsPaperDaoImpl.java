@@ -74,7 +74,11 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("empno", empno);
 			PayLevelAndNewsRectrictAmt = (Object[]) q.getSingleResult();
 
-		} catch (Exception e) {
+		} catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		catch (Exception e) {
 
 			logger.error(e);			
 			e.printStackTrace();
@@ -145,7 +149,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("empno", empno);
 			getCheckPeriodAlreadyPresentOrNot = (Object[]) q.getSingleResult();
 
-		} catch (NoResultException e) {
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
 
 			logger.error(e);
 			e.printStackTrace();
@@ -167,7 +176,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			Query q = manager.createNativeQuery(GETCHECKNEWSPAPERAPPROVEORNOT);
 			q.setParameter("NewspaperId", Integer.parseInt(NewspaperId));
 			CheckNewspaperApproveOrNot = (Object[]) q.getSingleResult();
-		} catch (Exception e) {
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 			CheckNewspaperApproveOrNot = null;
@@ -190,8 +204,13 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("NewspaperId", Integer.parseInt(NewspaperId));
 			NewspaperEditDetails = (Object[]) q.getSingleResult();
 
-		} catch (Exception e) {
-
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		catch (Exception e) 
+		{
 			logger.error(e);
 			e.printStackTrace();
 		}
@@ -272,7 +291,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("NewspaperId", Integer.parseInt(NewspaperId));
 			NewspaperUserPrintData = (Object[]) q.getSingleResult();
 
-		} catch (Exception e) {
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
 
 			logger.error(e);
 			e.printStackTrace();
@@ -464,7 +488,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("NewspaperBillId", Integer.parseInt(NewspaperBillId));
 			NewspaperApprovalPeriodEditDetails = (Object[]) q.getSingleResult();
 
-		} catch (Exception e) {
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
 
 			logger.error(e);
 			e.printStackTrace();
@@ -550,7 +579,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			q.setParameter("NewspaperBillId", Integer.parseInt(NewspaperBillId));
 			NewspaperContingentBillPrintData = (Object[]) q.getSingleResult();
 
-		} 
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		
 		catch (Exception e) 
 		{
 			logger.error(e);
@@ -680,7 +714,11 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				query.setParameter("TeleUsersId", Integer.parseInt(TeleUsersId));
 				TeleDeviceEditDetails = (Object[]) query.getSingleResult();
 
-			} 
+			}
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
 			catch (Exception e) 
 			{
 				logger.error(e);
@@ -721,7 +759,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 
-		private static final String DELETETELEUSER =  "update TelephoneUsers  set IsActive='0'  where TeleUsersId=:TeleUsersId and EmpId=:Empid ";
+		private static final String DELETETELEUSER =  "update pis_tele_users  set IsActive='0'  where TeleUsersId=:TeleUsersId and EmpId=:Empid ";
 		@Override
 		public int DeleteTeleUser(String Empid,String TeleUsersId)
 		{
@@ -779,7 +817,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("Empid", Empid);
 				PayLevelAndTeleRectrictAmt = (Object[]) q.getSingleResult();
 	
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			} 
@@ -799,7 +842,11 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("Empid", Empid);
 				TeleSpecialpermission = (Object[]) q.getSingleResult();
 
-			} catch (Exception e) {
+			}catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}			
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			} 
@@ -835,7 +882,9 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				t.setIsActive(1);
 				t.setCreatedBy(Empid);
 				t.setCreatedDate(sdtf.format(new Date()));
-
+				manager.persist(t);
+				
+				
 				for (int i = 0; i < TeleUsersId.length; i++) 
 				{
 
@@ -851,6 +900,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 					td.setTotalAmount(Double.parseDouble(TotalAmount[i]));
 					td.setCreatedBy(Empid);
 					td.setCreatedDate(sdtf.format(new Date()));
+					manager.persist(td);
 				}
 
 				result = 1;
@@ -901,7 +951,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("Empid", Empid);
 				getCheckPeriodAlreadyPresentOrNot = (Object[]) q.getSingleResult();
 		
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			} 
@@ -910,7 +965,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 
-		private static final String GETTELECLAIMEDITDETAILS = "SELECT a.TeleId,a.TotalBasic,a.TotalTax,a.GrossTotal,a.RestrictedAmt,b.TeleDId,b.TeleFromDate,b.TeleToDate,a.ClaimMonth,a.ClaimYear,b.TeleUsersId,b.TeleBillNo,b.TeleBillDate,b.BasicAmount,b.TaxAmount,b.TotalAmount,c.DeviceNo,d.DeviceId,e.fullName,f.designationName,a.PayableAmount,a.IsBroadBand,e.SBI_ACC_NO,e.OTHER_ACC_NO,e.GPFNO,g.PayLevel,a.TeleForwardId from pis_tele a ,TelephoneDetails b,TelephoneUsers c ,pis_tele_device d ,employee_details e ,Designation f,pis_pay_level g WHERE  a.TeleId=b.TeleId AND  b.TeleUsersId=c.TeleUsersId  AND c.DeviceId=d.DeviceId  AND a.EmpId=e.EMPID AND e.pDesignation=f.id AND a.PayLevelId=g.PayLevelId  AND a.TeleId=:TeleId" ;
+		private static final String GETTELECLAIMEDITDETAILS = "SELECT a.TeleId,a.TotalBasic,a.TotalTax,a.GrossTotal,a.RestrictedAmt,b.TeleDId,b.TeleFromDate,b.TeleToDate,a.ClaimMonth,a.ClaimYear,b.TeleUsersId,b.TeleBillNo,b.TeleBillDate,b.BasicAmount,b.TaxAmount,b.TotalAmount,c.DeviceNo,d.DeviceId,em.EmpName,f.designation,a.PayableAmount,a.IsBroadBand,e.SBIACCNO,e.SBIACCNO AS 'otheraccno',e.GPFNO,g.PayLevel,a.TeleForwardId FROM pis_tele a ,pis_tele_d b,pis_tele_users c ,pis_tele_device d ,employee_details e,employee em ,employee_desig f,pis_pay_level g WHERE  a.TeleId=b.TeleId AND  b.TeleUsersId=c.TeleUsersId  AND c.DeviceId=d.DeviceId AND e.empno= em.empno AND a.Empid=e.EMPno AND em.Desigid=f.desigid AND a.PayLevelId=g.PayLevelId  AND a.TeleId=:TeleId" ;
 		@Override
 		public List<Object[]> getTeleClaimEditDetails(String TeleId) 
 		{
@@ -930,8 +985,8 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 
-		private static final String UPDATETELE =  "update Telephone set TotalBasic=:TotalBasic,TotalTax=:TotalTax,GrossTotal=:GrossTotal,PayableAmount=:PayableAmount,IsBroadBand=:IsBroadBand,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate,Status=:status   where TeleId=:TeleId and EmpId=:Empid" ;
-		private static final String UPDATETELEDETAILS =  "update TelephoneDetails set TeleFromDate=:sqlFromDate,TeleToDate=:sqlTeleToDate,TeleBillNo=:TeleBillNo,TeleBillDate=:sqlTeleBillDate,BasicAmount=:BasicAmount,TaxAmount=:TaxAmount,TotalAmount=:TotalAmount,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate   where TeleDId=:TeleDId ";
+		private static final String UPDATETELE =  "update pis_tele set TotalBasic=:TotalBasic,TotalTax=:TotalTax,GrossTotal=:GrossTotal,PayableAmount=:PayableAmount,IsBroadBand=:IsBroadBand,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate,Status=:status   where TeleId=:TeleId and EmpId=:Empid" ;
+		private static final String UPDATETELEDETAILS =  "update pis_tele_d set TeleFromDate=:sqlFromDate,TeleToDate=:sqlTeleToDate,TeleBillNo=:TeleBillNo,TeleBillDate=:sqlTeleBillDate,BasicAmount=:BasicAmount,TaxAmount=:TaxAmount,TotalAmount=:TotalAmount,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate   where TeleDId=:TeleDId ";
 		@Override
 		public int  updateTele(String Empid,String TeleId,String TotalBasic,String TotalTax,double GrossTotal,double PayableAmount,String IsBroadBand,String[] TeleDId,String[] TeleFromDate,String[] TeleToDate,String[] TeleBillNo,String[] TeleBillDate,String[] BasicAmount,String[] TaxAmount,String[] TotalAmount,String UserRemark,int fid)
 		{
@@ -974,7 +1029,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		
 				if (fid > 0) {
 					Query q2 = manager.createNativeQuery(
-							"update TelephoneForward set SendBack=:SendBack,UserRemark=:UserRemark where TeleForwardId=:TeleForwardId ");
+							"update pis_tele_forward set SendBack=:SendBack,UserRemark=:UserRemark where TeleForwardId=:TeleForwardId ");
 					q2.setParameter("TeleForwardId", fid);
 					q2.setParameter("SendBack", "A");
 					q2.setParameter("UserRemark", UserRemark);
@@ -995,7 +1050,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 
 
-		private static final String DELETETELEPHONE = "update Telephone  set IsActive='0',ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate  where TeleId=:TeleId  ";
+		private static final String DELETETELEPHONE = "update pis_tele  set IsActive='0',ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate  where TeleId=:TeleId  ";
 
 		@Override
 		public int DeleteTelephone(String TeleId, String sessionEmpid) 
@@ -1064,7 +1119,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 
-
+		private static final String UPDATETELEBYTELEFORWARDID ="update pis_tele  set TeleForwardId=:MaxTeleForwardId,Status=:status  where   TeleId=:TeleId ";
 		@Override
 		public int UpdateTeleByTeleForwardId(String Empid, String[] TeleIdArray) 
 		{
@@ -1081,8 +1136,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 				for (int i = 0; i < TeleIdArray.length; i++) {
 
-					Query query = manager.createNativeQuery(
-							"update Telephone  set TeleForwardId=:MaxTeleForwardId,Status=:status  where   TeleId=:TeleId ");
+					Query query = manager.createNativeQuery(UPDATETELEBYTELEFORWARDID);
 					query.setParameter("TeleId", Integer.parseInt(TeleIdArray[i]));
 					query.setParameter("MaxTeleForwardId", tf.getTeleForwardId());
 					query.setParameter("status", "F");
@@ -1100,7 +1154,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 
 		
-		private static final String GETTELEPHONEUSERPRINTSINGLEDATA = "SELECT a.fullName,a.SBI_ACC_NO,a.GPFNO,b.designationName,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.OTHER_ACC_NO FROM employee_details a, Designation b, Telephone c WHERE a.pDesignation=b.id    AND  a.EMPID=c.EmpId AND TeleForwardId=:TeleForwardId";
+		private static final String GETTELEPHONEUSERPRINTSINGLEDATA = "SELECT em.EmpName,a.SBIACCNO,a.GPFNO,b.designation,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.SBIACCNO AS 'OTHER_ACC_NO' FROM employee_details a, employee_desig b, pis_tele c, employee em WHERE em.desigid=b.desigid AND em.empno=a.empno  AND  a.EMPno=c.Empid AND TeleForwardId=:TeleForwardId ;";
 		@Override
 		public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId) 
 		{
@@ -1121,7 +1175,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 
-		private static final String GETTELEPHONEUSERPRINTMULTIDATA =  "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.TotalAmount,b.TeleDId,b.TeleBillNo,b.TeleBillDate,c.DeviceNo,a.TeleForwardId from pis_tele a ,TelephoneDetails b,TelephoneUsers c WHERE a.TeleId=b.TeleId AND b.TeleUsersId=c.TeleUsersId AND a.TeleForwardId=:TeleForwardId";
+		private static final String GETTELEPHONEUSERPRINTMULTIDATA =  "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.TotalAmount,b.TeleDId,b.TeleBillNo,b.TeleBillDate,c.DeviceNo,a.TeleForwardId from pis_tele a ,pis_tele_d b,pis_tele_users c WHERE a.TeleId=b.TeleId AND b.TeleUsersId=c.TeleUsersId AND a.TeleForwardId=:TeleForwardId";
 		@Override
 		public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId) 
 		{
@@ -1149,7 +1203,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 ////////////////////////////////Approvals///////////////////////////////////////
 
-		private static final String GETTELEPHONECLAIMAPPROVEDLIST = "select TeleBillId,SubmitDate,FromDate,ToDate,FinalAmount from pis_teleBill";
+		private static final String GETTELEPHONECLAIMAPPROVEDLIST = "select TeleBillId,SubmitDate,FromDate,ToDate,FinalAmount from pis_tele_Bill";
 		@Override
 		public List<Object[]> getTelephoneClaimApprovedList() 
 		{
@@ -1168,7 +1222,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		
-		private static final String GETTELEPHONEAPPROVALLIST = "SELECT a.fullName, b.designationName, SUM(c.GrossTotal), SUM(c.RestrictedAmt), SUM(c.PayableAmount),c.TeleAppliedDate,d.TeleForwardId,d.SendBack,d.UserRemark,d.AdminRemark FROM employee_details a,Designation b, Telephone c, TelephoneForward d WHERE  a.pDesignation=b.id   AND  a.EMPID=c.EmpId AND  c.TeleForwardId=d.TeleForwardId AND c.IsActive='1' AND c.SubmitBy IS NULL AND c.SubmitDate IS NULL AND c.TeleBillId='0' AND d.TeleUserFlag='F' GROUP BY d.TeleForwardId " ;
+		private static final String GETTELEPHONEAPPROVALLIST = "SELECT em.EmpName, b.designation, SUM(c.GrossTotal), SUM(c.RestrictedAmt), SUM(c.PayableAmount), c.TeleAppliedDate,d.TeleForwardId,d.SendBack,d.UserRemark,d.AdminRemark  FROM employee_details a,employee_Desig b, pis_tele c, pis_Tele_Forward d, employee em WHERE  em.Desigid=b.desigid   AND  a.EMPno=c.EmpId AND a.empno=em.empno AND  c.TeleForwardId=d.TeleForwardId AND c.IsActive='1' AND c.SubmitBy IS NULL AND c.SubmitDate IS NULL AND c.TeleBillId='0' AND d.sendback <> 'B' AND d.TeleUserFlag='F' GROUP BY d.TeleForwardId ;" ;
 		
 		@Override
 		public List<Object[]> getTelephoneApprovalList() 
@@ -1188,8 +1242,8 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		
-		private static final String  TELEPHONEAPPROVE ="update Telephone  set TeleBillId=:MaxTeleBillId,Remarks=:remark,SubmitBy=:SubmitBy,SubmitDate=:sqlSubmitDate  where   TeleForwardId=:TeleForwardId ";
-		private static final String ADDTELEPHONEBILL = "update TelephoneForward  set TeleUserFlag='S',ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate  where   TeleForwardId=:TeleForwardId ";
+		private static final String  TELEPHONEAPPROVE ="update pis_tele  set TeleBillId=:MaxTeleBillId,Remarks=:remark,SubmitBy=:SubmitBy,SubmitDate=:sqlSubmitDate  where   TeleForwardId=:TeleForwardId ";
+		private static final String ADDTELEPHONEBILL = "update pis_tele_forward  set TeleUserFlag='S',ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate  where   TeleForwardId=:TeleForwardId ";
 
 		@Override
 		public int TelephoneApprove_AddTelephoneBill(String Empid, double FinalAmount, String FromDate, String ToDate, Map<String, String> map) 
@@ -1295,7 +1349,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("TeleId", Integer.parseInt(TeleId));
 				CheckTeleApproveOrNot = (Object[]) q.getSingleResult();
 
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
@@ -1317,7 +1376,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("TeleId", Integer.parseInt(TeleId));
 				CheckTeleApproveForwardOrNot = (Object[]) q.getSingleResult();
 
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
@@ -1325,7 +1389,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 
-		private static final String GETTELEPHONEAPPROVALPERIODEDITDETAILS = "SELECT   TeleBillId,FromDate,ToDate   from pis_teleBill where  TeleBillId=:TeleBillId ";
+		private static final String GETTELEPHONEAPPROVALPERIODEDITDETAILS = "SELECT   TeleBillId,FromDate,ToDate   from pis_tele_bill where  TeleBillId=:TeleBillId ";
 		
 		@Override
 		public Object[] getTelephoneApprovalPeriodEditDetails(String TeleBillId) 
@@ -1339,7 +1403,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("TeleBillId", Integer.parseInt(TeleBillId));
 				TelephoneApprovalPeriodEditDetails = (Object[]) q.getSingleResult();
 
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
@@ -1347,7 +1416,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		
-		private static final String UPDATETELEPERIOD ="update TelephoneBill set FromDate=:sqlFromDate,ToDate=:sqlToDate,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate   where TeleBillId=:TeleBillId" ;
+		private static final String UPDATETELEPERIOD ="update pis_tele_bill set FromDate=:sqlFromDate,ToDate=:sqlToDate,ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate   where TeleBillId=:TeleBillId" ;
 
 		@Override
 		public int UpdateTelePeriod(String Empid, String TeleBillId, String FromDate, String ToDate) 
@@ -1383,7 +1452,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 		
-		private static final String GETTELEPHONECONTINGENTBILLPRINTDATA ="SELECT FromDate,ToDate,FinalAmount from pis_teleBill   WHERE  TeleBillId=:TeleBillId";
+		private static final String GETTELEPHONECONTINGENTBILLPRINTDATA ="SELECT FromDate,ToDate,FinalAmount from pis_tele_bill   WHERE  TeleBillId=:TeleBillId";
 		
 		@Override
 		public Object[] getTelephoneContingentBillPrintData(String TeleBillId) 
@@ -1397,7 +1466,12 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				q.setParameter("TeleBillId", Integer.parseInt(TeleBillId));
 				TelephoneContingentBillPrintData = (Object[]) q.getSingleResult();
 
-			} catch (Exception e) {
+			} 
+			catch (NoResultException e)
+			{
+				System.err.println("No Result found Exception");
+			}	
+			catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
@@ -1405,9 +1479,8 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		
-		private static final String GETTELEPHONEPRINTREPORTSINGLEDATA = "SELECT a.fullName,a.GPFNO,a.SBI_ACC_NO,a.OTHER_ACC_NO,b.designationName,c.TeleId,c.IsBroadBand,c.GrossTotal,c.PayableAmount,c.Remarks,d.FromDate,d.ToDate,d.FinalAmount,c.ClaimMonth,c.ClaimYear,c.RestrictedAmt FROM employee_details a ,Designation b ,Telephone c,TelephoneBill d  WHERE a.pDesignation=b.id AND a.EMPID=c.EmpId  AND c.TeleBillId=d.TeleBillId  AND c.TeleBillId=:TeleBillId ORDER BY a.SRNO";
+		private static final String GETTELEPHONEPRINTREPORTSINGLEDATA = "SELECT em.EmpName,a.GPFNO,a.SBIACCNO,a.SBIACCNO AS 'OTHER_ACC_NO',b.designation,c.TeleId,c.IsBroadBand,c.GrossTotal,c.PayableAmount,c.Remarks,d.FromDate,d.ToDate,d.FinalAmount,c.ClaimMonth,c.ClaimYear,c.RestrictedAmt FROM employee_details a ,employee_Desig b ,pis_tele c,pis_tele_bill d,employee em  WHERE em.DesigId=b.desigid AND a.EMPno=c.EmpId AND em.empno=a.empno AND c.TeleBillId=d.TeleBillId  AND c.TeleBillId=:TeleBillId ORDER BY em.SRNO ";
 		
-
 		@Override
 		public List<Object[]> getTelephonePrintReportSingleData(String TeleBillId) 
 		{
@@ -1427,7 +1500,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		
-		private static final String GETTELEPHONEPRINTREPORTMULTIDATA = "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.BasicAmount,b.TaxAmount,b.TotalAmount,b.TeleDId,c.DeviceNo from pis_tele a ,TelephoneDetails b,TelephoneUsers c WHERE a.TeleId=b.TeleId AND  b.TeleUsersId=c.TeleUsersId AND a.TeleBillId=:TeleBillId";
+		private static final String GETTELEPHONEPRINTREPORTMULTIDATA = "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.BasicAmount,b.TaxAmount,b.TotalAmount,b.TeleDId,c.DeviceNo from pis_tele a ,pis_tele_d b,pis_tele_users c WHERE a.TeleId=b.TeleId AND  b.TeleUsersId=c.TeleUsersId AND a.TeleBillId=:TeleBillId";
 
 		@Override
 		public List<Object[]> getTelephonePrintReportMultiData(String TeleBillId)

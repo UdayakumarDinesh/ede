@@ -253,6 +253,50 @@ public class DateTimeFormatUtil
 		return datetodaydb;
 	}
 	
-
+	public static String fromDatabaseToActual_inNumericFormOnly(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("dd-MM-yyyy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	
+	
+	public static String fromDatabaseToActual_inNumericShortForm(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("dd/MM/yy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	
+	public static String fromDatabaseToActualInPeriodForm(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("MMM-yyyy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
 	
 }

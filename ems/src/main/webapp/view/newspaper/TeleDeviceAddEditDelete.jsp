@@ -21,12 +21,12 @@ Object[] TeleDeviceEditDetails=(Object[])request.getAttribute("TeleDeviceEditDet
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Newspaper Claims</h5>
+				<h5>Telephone Devices</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-						<li class="breadcrumb-item "><a href="TelephoneList.htm"> Telephone </a></li>
+						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+						<li class="breadcrumb-item "><a href="TelephoneDashBoard.htm">Telephone</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Telephone Devices</li>
 					</ol>
 				</div>

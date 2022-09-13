@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
 
@@ -506,21 +507,22 @@ public class NewspaperController {
 		  		@RequestMapping(value="TelephoneList.htm")
 		  		public ModelAndView telephoneList(HttpServletRequest request,HttpSession ses) throws Exception
 		  		{
-		  			    ModelAndView mv=new ModelAndView("newspaper/TelephoneList");
-
-		  				String sesEmpNo = (String) ses.getAttribute("EmpNo");
+		  		    ModelAndView mv=new ModelAndView("newspaper/TelephoneList");
+	  				String sesEmpNo = (String) ses.getAttribute("EmpNo");
 		  				
-		  				List<Object[]> TeleClaimList=service.getTeleClaimList(sesEmpNo);
-		  				request.setAttribute("TeleClaimList",TeleClaimList);
+	  				List<Object[]> TeleClaimList=service.getTeleClaimList(sesEmpNo);
+	  				request.setAttribute("TeleClaimList",TeleClaimList);
 		  				
 		  				
-		  				List<Object[]> TeleDeviceList=service.getTeleDeviceList(sesEmpNo);
-		  				request.setAttribute("TeleDeviceList",TeleDeviceList);
+	  				List<Object[]> TeleDeviceList=service.getTeleDeviceList(sesEmpNo);
+	  				request.setAttribute("TeleDeviceList",TeleDeviceList);
 		  				
-		  				List<Object[]> SendBackData=service.getTelephoneSendbackData(sesEmpNo);
-		  				request.setAttribute("Sendbackdata",SendBackData);
-		  				
-		  		 return mv;
+	  				List<Object[]> SendBackData=service.getTelephoneSendbackData(sesEmpNo);
+	  				request.setAttribute("Sendbackdata",SendBackData);
+		  			
+	  				ses.setAttribute("SidebarActive", "TelephoneList_htm");
+	  				
+	  				return mv;
 		  		} 
 		  		
 		  		
@@ -646,133 +648,41 @@ public class NewspaperController {
 		
 		
 		
-		
-		
-		
-		
-		
-		@RequestMapping(value={"/telephoneadd","/telephoneedit","/telephonedelete","/telephonedevicelist","/telephonedeviceadd","/telephonedeviceedit","/telephonedevicedelete","/telephone-approval","/telephone-period-edit","/telephone-claim-forward","/telephoneprint","/telephone-sendback",},method=RequestMethod.POST)
-		public ModelAndView telephoneAddEditDeletePrintApproval(HttpServletRequest request,HttpSession ses) throws Exception
+		@RequestMapping(value="TeleAddEditClaimSave.htm",method=RequestMethod.POST)
+		public String TeleAddClaimSave(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
 		{
-			ModelAndView mv = new ModelAndView();
-
 			String sesEmpNo = (String) ses.getAttribute("EmpNo");
-			String designation = (String) ses.getAttribute("EmpDesig");
-			String name = (String) ses.getAttribute("EmpName");
-
-			if (request.getParameter("AddTelephone") != null) {
-
-				if (request.getParameterValues("ChooseDeviceFromlist") != null) {
-
-					String ChooseDeviceFromlist[] = request.getParameterValues("ChooseDeviceFromlist");
-					Map<String, String> map = new LinkedHashMap<>();
-
-					for (String TeleUsersId : ChooseDeviceFromlist) {
-
-						String devicename = request.getParameter("devicename" + TeleUsersId);
-						String devicenumber = request.getParameter("devicenumber" + TeleUsersId);
-
-						map.put(TeleUsersId, devicename + "_" + devicenumber);
-
-					}
-
-					Object[] PayLevelAndTeleRectrictAmt = service.getPayLevelAndTeleRectrictAmt(sesEmpNo);
-					Object[] TeleSpecialpermission = service.getTeleSpecialpermission(sesEmpNo);
-
-					request.setAttribute("MapResultofDevices", map);
-					request.setAttribute("name", name);
-					request.setAttribute("desig", designation);
-					request.setAttribute("TeleSpecialpermission", TeleSpecialpermission);
-					request.setAttribute("PayLevelAndTeleRectrictAmt", PayLevelAndTeleRectrictAmt);
-
-					mv.setViewName("newspaper/TelephoneAdd");
-
-				} else {
-					request.setAttribute("PleaseSelectAtLeastOneOption", "PleaseSelectAtLeastOneOption");
-
-					List<Object[]> TeleClaimList = service.getTeleClaimList(sesEmpNo);
-					request.setAttribute("TeleClaimList", TeleClaimList);
-
-					List<Object[]> TeleDeviceList = service.getTeleDeviceList(sesEmpNo);
-					request.setAttribute("TeleDeviceList", TeleDeviceList);
-
-					List<Object[]> SendBackData = service.getTelephoneSendbackData(sesEmpNo);
-					request.setAttribute("Sendbackdata", SendBackData);
-					mv.setViewName("newspaper/TelephoneList");
-
-				}
-
-			}
-
-			if (request.getParameter("EditTeleClaim") != null) {
-
-						// split TeleId and TeleForwardId ..
-				String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
-				String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
-				String TeleId = TeleId_TeleForwardIdArray[0];
-				String TeleForwardId = TeleId_TeleForwardIdArray[1];
-
-				Object[] CheckApproveOrNot = service.getCheckTeleApproveOrNot(TeleId);
-
-				if (CheckApproveOrNot != null) {
-					List<Object[]> TeleClaimEditDetails = service.getTeleClaimEditDetails(TeleId);
-					request.setAttribute("TeleClaimEditDetails", TeleClaimEditDetails);
-					request.setAttribute("name", name);
-					request.setAttribute("desig", designation);
-
-					mv.setViewName("newspaper/TelephoneEdit");
-
-				} else {
-
-					request.setAttribute("EditRestricted", "EditRestricted");
-
-					List<Object[]> TeleClaimList = service.getTeleClaimList(sesEmpNo);
-					request.setAttribute("TeleClaimList", TeleClaimList);
-
-					List<Object[]> TeleDeviceList = service.getTeleDeviceList(sesEmpNo);
-					request.setAttribute("TeleDeviceList", TeleDeviceList);
-
-					List<Object[]> SendBackData = service.getTelephoneSendbackData(sesEmpNo);
-					request.setAttribute("Sendbackdata", SendBackData);
-					mv.setViewName("newspaper/TelephoneList");
-
-				}
-
-			}
-
-			if (request.getParameter("TeleAddClaimSave") != null || request.getParameter("EditTeleClaimSave") != null) {
-
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside TeleAddEditClaimSave.htm " + Username);
+			try {
 				String BasicAmount[] = request.getParameterValues("BasicAmount");
-
-				try {
-
+	
 					int length = BasicAmount.length;
 					int count = 0;
-
+	
 					for (String s : BasicAmount) {
 						if (Double.parseDouble(s) > 0) {
 							++count;
 						}
-
 					}
-
+	
 					if (length == count) {
 						String TeleFromDate[] = request.getParameterValues("FromDate");
 						String TeleToDate[] = request.getParameterValues("ToDate");
-
+	
 						String TeleUsersId[] = request.getParameterValues("TeleUsersId");
 						String TeleBillNo[] = request.getParameterValues("BillNo");
 						String TeleBillDate[] = request.getParameterValues("BillDate");
-
+	
 						String TaxAmount[] = request.getParameterValues("TaxAmount");
 						String TotalAmount[] = request.getParameterValues("TotalAmount");
-
+	
 						String RestrictedAmount = request.getParameter("RestrictedAmount");
 						String TotalBasic = request.getParameter("TotalBasic");
 						String TotalTax = request.getParameter("TotalTax");
 						String GrossTotal = request.getParameter("GrossTotal");
 						String PayLevelId = request.getParameter("PayLevelId");
-
+	
 						String ClaimMonth = request.getParameter("ClaimMonth");
 						String ClaimYear = request.getParameter("ClaimYear");
 						String IsBroadBand;
@@ -781,322 +691,600 @@ public class NewspaperController {
 						} else {
 							IsBroadBand = "N";
 						}
-
+	
 						if (request.getParameter("TeleAddClaimSave") != null) 
 						{
 							Object[] CheckPeriodAlreadyPresentOrNot = service
-											.getCheckPeriodOfTeleAlreadyPresentOrNot(sesEmpNo, ClaimMonth, ClaimYear);
-									if (CheckPeriodAlreadyPresentOrNot != null) {
-										request.setAttribute("SamePeriodRestricted", ClaimMonth + "/" + ClaimYear);
-									} else {
-										int AddTelephoneClaimResult = service.AddTelephoneClaim(sesEmpNo, TotalBasic,
-												TotalTax, GrossTotal, RestrictedAmount, TeleFromDate, TeleToDate,
-												TeleUsersId, TeleBillNo, TeleBillDate, BasicAmount, TaxAmount,
-												TotalAmount, PayLevelId, ClaimMonth, ClaimYear, IsBroadBand);
-										request.setAttribute("AddTelephoneClaimResult", AddTelephoneClaimResult);
-									}
-
+									.getCheckPeriodOfTeleAlreadyPresentOrNot(sesEmpNo, ClaimMonth, ClaimYear);
+							if (CheckPeriodAlreadyPresentOrNot != null) {
+								redir.addAttribute("resultfail", "You Already Applied Claim For "+ClaimMonth + "/" + ClaimYear);
+							} 
+							else 
+							{
+								int AddTelephoneClaimResult = service.AddTelephoneClaim(sesEmpNo, TotalBasic, TotalTax,
+										GrossTotal, RestrictedAmount, TeleFromDate, TeleToDate, TeleUsersId, TeleBillNo,
+										TeleBillDate, BasicAmount, TaxAmount, TotalAmount, PayLevelId, ClaimMonth,
+										ClaimYear, IsBroadBand);
+								
+								if(AddTelephoneClaimResult>0) 
+								{
+									redir.addAttribute("result", "Claim adding Successful");
 								}
-
-								if (request.getParameter("EditTeleClaimSave") != null) {
-									String TeleDId[] = request.getParameterValues("TeleDId");
-									String TeleId = request.getParameter("TeleId");
-									String UserRemark = request.getParameter("UserRemark");
-									String id = request.getParameter("ForwardId");
-									int EditTelephoneResult = service.EditTelephoneResult(sesEmpNo, TeleId, TotalBasic,
-											TotalTax, GrossTotal, RestrictedAmount, TeleDId, TeleFromDate, TeleToDate,
-											TeleBillNo, TeleBillDate, BasicAmount, TaxAmount, TotalAmount, IsBroadBand,
-											UserRemark, id);
-									request.setAttribute("EditTelephoneResult", EditTelephoneResult);
+								else
+								{
+									redir.addAttribute("resultfail", "Claim adding Unsuccessful");
 								}
-							} else {
-								request.setAttribute("EnterBalanceCorrectly", "EnterBalanceCorrectly");
+								
 							}
-						} catch (Exception e) {
-							request.setAttribute("EnterBalanceCorrectly", "EnterBalanceCorrectly");
+	
 						}
-
-						List<Object[]> TeleClaimList = service.getTeleClaimList(sesEmpNo);
-						request.setAttribute("TeleClaimList", TeleClaimList);
-
-						List<Object[]> TeleDeviceList = service.getTeleDeviceList(sesEmpNo);
-						request.setAttribute("TeleDeviceList", TeleDeviceList);
-
-						List<Object[]> SendBackData = service.getTelephoneSendbackData(sesEmpNo);
-						request.setAttribute("Sendbackdata", SendBackData);
-
-						mv.setViewName("newspaper/TelephoneList");
-
-					}
-
-					if (request.getParameter("DeleteTelephone") != null) {
-
-						// split TeleId and TeleForwardId ..
-						String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
-						String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
-						String TeleId = TeleId_TeleForwardIdArray[0];
-						String TeleForwardId = TeleId_TeleForwardIdArray[1];
-
-						Object[] CheckApproveForwardOrNot = service.getCheckTeleApproveForwardOrNot(TeleId);
-
-						if (CheckApproveForwardOrNot != null) {
-							int DeleteTelephoneResult = service.DeleteTelephone(TeleId, sesEmpNo);
-							request.setAttribute("DeleteTelephoneResult", DeleteTelephoneResult);
-						} else {
-							request.setAttribute("DeleteRestricted", "DeleteRestricted");
-						}
-
-						List<Object[]> TeleClaimList = service.getTeleClaimList(sesEmpNo);
-						request.setAttribute("TeleClaimList", TeleClaimList);
-
-						List<Object[]> TeleDeviceList = service.getTeleDeviceList(sesEmpNo);
-						request.setAttribute("TeleDeviceList", TeleDeviceList);
-
-						List<Object[]> SendBackData = service.getTelephoneSendbackData(sesEmpNo);
-						request.setAttribute("Sendbackdata", SendBackData);
-
-						mv.setViewName("newspaper/TelephoneList");
-
-					}
-
-					if (request.getParameter("TeleClaimForward") != null) {
-
-						if (request.getParameterValues("TeleId") != null) {
-
-							String TeleId[] = request.getParameterValues("TeleId");
-
-							if (TeleId.length >= 3) {
-
-								int UpdateTeleByTeleForwardId = service.UpdateTeleByTeleForwardId(sesEmpNo, TeleId);
-								request.setAttribute("ForwardToAdminResult", UpdateTeleByTeleForwardId);
-
-							} else {
-								request.setAttribute("PleaseSelectAtLeastThreeMonthClaim",
-										"PleaseSelectAtLeastThreeMonthClaim");
-
+	
+						if (request.getParameter("EditTeleClaimSave") != null) {
+							String TeleDId[] = request.getParameterValues("TeleDId");
+							String TeleId = request.getParameter("TeleId");
+							String UserRemark = request.getParameter("UserRemark");
+							String id = request.getParameter("ForwardId");
+							int EditTelephoneResult = service.EditTelephoneResult(sesEmpNo, TeleId, TotalBasic,
+									TotalTax, GrossTotal, RestrictedAmount, TeleDId, TeleFromDate, TeleToDate,
+									TeleBillNo, TeleBillDate, BasicAmount, TaxAmount, TotalAmount, IsBroadBand,
+									UserRemark, id);
+	
+							if(EditTelephoneResult>0) 
+							{
+								redir.addAttribute("result", "Claim Update Successful");
 							}
-
-						} else {
-							request.setAttribute("PleaseSelectAtLeastThreeMonthClaim",
-									"PleaseSelectAtLeastThreeMonthClaim");
-
+							else
+							{
+								redir.addAttribute("resultfail", "Claim Update Unsuccessful");
+							}
 						}
-
-						List<Object[]> TeleClaimList = service.getTeleClaimList(sesEmpNo);
-						request.setAttribute("TeleClaimList", TeleClaimList);
-
-						List<Object[]> TeleDeviceList = service.getTeleDeviceList(sesEmpNo);
-						request.setAttribute("TeleDeviceList", TeleDeviceList);
-
-						List<Object[]> SendBackData = service.getTelephoneSendbackData(sesEmpNo);
-						request.setAttribute("Sendbackdata", SendBackData);
-
-						mv.setViewName("newspaper/TelephoneList");
-
+					} else {
+						redir.addAttribute("resultfail", "Please Enter Balance Properly");
 					}
-
-					if (request.getParameter("TeleClaimPrint") != null) {
-
-						// split TeleId and TeleForwardId ..
-						String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
-						String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
-						String TeleId = TeleId_TeleForwardIdArray[0];
-						String TeleForwardId = TeleId_TeleForwardIdArray[1];
-
-						// Object[] CheckApproveOrNot=service.getCheckTeleApproveOrNot(TeleId);
-
-						if (!("0".equalsIgnoreCase(TeleForwardId))) {
-							List<Object[]> TelephoneUserPrintSingleData = service
-									.getTelephoneUserPrintSingleData(TeleForwardId);
-							List<Object[]> TelephoneUserPrintMultiData = service
-									.getTelephoneUserPrintMultiData(TeleForwardId);
-
-							request.setAttribute("TelephoneUserPrintSingleData", TelephoneUserPrintSingleData);
-							request.setAttribute("TelephoneUserPrintMultiData", TelephoneUserPrintMultiData);
-
-							mv.setViewName("newspaper/TeleClaimPrint");
-
-						} else {
-							request.setAttribute("PrintRestricted", "PrintRestricted");
-							mv.setViewName("newspaper/PrintError");
-
+				
+	
+				return "redirect:/TelephoneList.htm";
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TeleAddEditClaimSave.htm " + Username, e);
+				return "static/Error";
+			}
+			
+		}
+		
+		
+		@RequestMapping(value="TeleClaimDelete.htm",method=RequestMethod.POST)
+		public String TeleClaimDelete(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside TeleClaimDelete.htm " + Username);
+			try {
+				// split TeleId and TeleForwardId ..
+				String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
+				String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
+				String TeleId = TeleId_TeleForwardIdArray[0];
+	
+				Object[] CheckApproveForwardOrNot = service.getCheckTeleApproveForwardOrNot(TeleId);
+	
+				if (CheckApproveForwardOrNot != null) {
+					int DeleteTelephoneResult = service.DeleteTelephone(TeleId, sesEmpNo);
+					if(DeleteTelephoneResult>0) 
+					{
+						redir.addAttribute("result", "Claim Delete Successful");
+					}
+					else
+					{
+						redir.addAttribute("resultfail", "Claim Delete Unsuccessful");
+					}
+				} else {
+					redir.addAttribute("resultfail", "Delete Restricted");
+				}
+	
+				return "redirect:/TelephoneList.htm";
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TeleClaimDelete.htm " + Username, e);
+				return "static/Error";
+			}
+		}
+		
+		
+		@RequestMapping(value="TelephoneClaimForward.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneClaimForward(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneClaimForward.htm " + Username);
+			try {
+		
+				if (request.getParameterValues("TeleId") != null) {
+	
+					String TeleId[] = request.getParameterValues("TeleId");
+	
+					if (TeleId.length >= 3) 
+					{
+	
+						int UpdateTeleByTeleForwardId = service.UpdateTeleByTeleForwardId(sesEmpNo, TeleId);
+						
+						if(UpdateTeleByTeleForwardId>0) 
+						{
+							redir.addAttribute("result", "Claim Forward Successful");
 						}
-
-					}
-
-					if (request.getParameter("TelephoneApproval") != null) {
-
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
-
-						mv.setViewName("newspaper/TelephoneApproval");
-
-					}
-
-					if (request.getParameter("ApprovalSubmit") != null
-							&& request.getParameterValues("TeleApproveAction") == null) {
-
-						request.setAttribute("PleaseSelectAtLeastOneOption", "PleaseSelectAtLeastOneOption");
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
-
-						mv.setViewName("newspaper/TelephoneApproval");
-
-					}
-
-					if (request.getParameter("ApprovalSubmit") != null
-							&& request.getParameterValues("TeleApproveAction") != null) {
-
-						String[] TeleApproveAction = request.getParameterValues("TeleApproveAction");
-						String FromDate = request.getParameter("FromDate");
-						String ToDate = request.getParameter("ToDate");
-
-						Map<String, String> map = new LinkedHashMap<>();
-
-						for (String TeleForwardId : TeleApproveAction) {
-							String Textcomments = "::" + request.getParameter("remark" + TeleForwardId);
-							String PayableAmount = request.getParameter("PayableAmount" + TeleForwardId);
-							map.put(TeleForwardId, PayableAmount + "_" + Textcomments);
-
+						else
+						{
+							redir.addAttribute("resultfail", "Claim Forward Unsuccessful");
 						}
-
-						int TeleApprovalResult = service.TeleApproval(map, FromDate, ToDate, sesEmpNo);
-						request.setAttribute("TeleApprovalResult", TeleApprovalResult);
-
-						List<Object[]> TelephoneClaimApprovedList = service.getTelephoneClaimApprovedList();
-						request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
-
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TeleCount", TelephoneApprovalList.size());
-						mv.setViewName("newspaper/TelephoneApprovedList");
-
+						
+	
+					} else {
+						redir.addAttribute("resultfail", "Please Select At Least Three Months Claim");
+	
 					}
+	
+				} else {
+					redir.addAttribute("resultfail", "Please Select At Least Three Months Claim");
+				}
+	
+				mv.setViewName("redirect:/TelephoneList.htm");
+				return mv;
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneClaimForward.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
 
-					if (request.getParameter("TelephoneSendback") != null) {
+		}
+	
+		
+		
+		
+		@RequestMapping(value="TelephoneApproval.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneApproval(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneApproval.htm " + Username);
+			try {
+				
+				if (request.getParameter("TelephoneApproval") != null) {
 
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
+					List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
+					request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
 
-						mv.setViewName("newspaper/TelephoneSendBack");
-
-					}
-
-					if (request.getParameter("SendbackSubmit") != null
-							&& request.getParameterValues("TeleApproveAction") != null) {
-
-						String[] TeleApproveAction = request.getParameterValues("TeleApproveAction");
-						String FromDate = request.getParameter("FromDate");
-						String ToDate = request.getParameter("ToDate");
-
-						Map<String, String> map = new LinkedHashMap<>();
-
-						for (String TeleForwardId : TeleApproveAction) {
-							String Textcomments = "::" + request.getParameter("remark" + TeleForwardId);
-							map.put(TeleForwardId, Textcomments);
-
-						}
-
-						int TeleApprovalResult = service.TeleSendback(map, FromDate, ToDate, sesEmpNo);
-						request.setAttribute("TeleApprovalResult", TeleApprovalResult);
-
-						List<Object[]> TelephoneClaimApprovedList = service.getTelephoneClaimApprovedList();
-						request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
-
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TeleCount", TelephoneApprovalList.size());
-						mv.setViewName("newspaper/TelephoneApprovedList");
-
-					}
-
-					if (request.getParameter("TelephoneApprovalPeriodEdit") != null) {
-
-						String TeleBillId = request.getParameter("TeleBillId");
-
-						Object[] TelephoneApprovalPeriodEditDetails = service
-								.getTelephoneApprovalPeriodEditDetails(TeleBillId);
-
-						request.setAttribute("TeleApprovalPeriodEditDetails", TelephoneApprovalPeriodEditDetails);
-
-						mv.setViewName("newspaper/NewsTeleEditApprovalPeriod");
-
-					}
-
-					if (request.getParameter("TelephoneApprovalPeriodEditSave") != null) {
-
-						String TeleBillId = request.getParameter("TeleBillId");
-						String FromDate = request.getParameter("FromDate");
-						String ToDate = request.getParameter("ToDate");
-
-						int UpdateTelePeriod = service.UpdateTelePeriod(sesEmpNo, TeleBillId, FromDate, ToDate);
-
-						request.setAttribute("UpdateTelePeriod", UpdateTelePeriod);
-
-						List<Object[]> TelephoneClaimApprovedList = service.getTelephoneClaimApprovedList();
-						request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
-
-						List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
-						request.setAttribute("TeleCount", TelephoneApprovalList.size());
-						mv.setViewName("newspaper/TelephoneApprovedList");
-					}
-
-					if (request.getParameter("TelephonePrintReport") != null) {
-						String TeleBillId = request.getParameter("TeleBillId");
-
-						List<Object[]> TelephonePrintReportSingleData = service
-								.getTelephonePrintReportSingleData(TeleBillId);
-						List<Object[]> TelephonePrintReportMultiData = service
-								.getTelephonePrintReportMultiData(TeleBillId);
-
-						request.setAttribute("TelephonePrintReportSingleData", TelephonePrintReportSingleData);
-						request.setAttribute("TelephonePrintReportMultiData", TelephonePrintReportMultiData);
-
-						mv.setViewName("newspaper/TelephoneReportPrint");
-
-					}
-
-					if (request.getParameter("TelephoneContingentBill") != null) {
-
-						String TeleBillId = request.getParameter("TeleBillId");
-						Object[] TelephoneContingentBillPrint = service.getTelephoneContingentBillPrintData(TeleBillId);
-						request.setAttribute("TelephoneContingentBillPrint", TelephoneContingentBillPrint);
-
-						mv.setViewName("newspaper/TelephoneContingentBill");
-
-					}
-
-					if (request.getParameter("TelephoneExpenditureSanction") != null) {
-
-						String TeleBillId = request.getParameter("TeleBillId");
-						Object[] TeleExpSancReport = service.getTelephoneContingentBillPrintData(TeleBillId);
-						request.setAttribute("TeleExpSancReport", TeleExpSancReport);
-
-						mv.setViewName("newspaper/TeleExpSancReport");
-
-					}
-
-					if (request.getParameter("TeleApprovedReportYearWise") != null) {
-
-						mv.setViewName("newspaper/TeleApprovalReportYearWise");
-
-					}
-
+					mv.setViewName("newspaper/TelephoneApproval");
 					return mv;
-				} 
+				}
+				if ( request.getParameterValues("TeleApproveAction") == null) 
+				{
+		
+					redir.addAttribute("resultfail", "Please Select At Least One Option");
+		
+					mv.setViewName("redirect:/TelephoneApproval.htm");
+					return mv;
+				}
+				else 
+				{
+		
+					String[] TeleApproveAction = request.getParameterValues("TeleApproveAction");
+					String FromDate = request.getParameter("FromDate");
+					String ToDate = request.getParameter("ToDate");
+		
+					Map<String, String> map = new LinkedHashMap<>();
+		
+					for (String TeleForwardId : TeleApproveAction) {
+						String Textcomments = "::" + request.getParameter("remark" + TeleForwardId);
+						String PayableAmount = request.getParameter("PayableAmount" + TeleForwardId);
+						map.put(TeleForwardId, PayableAmount + "_" + Textcomments);
+		
+					}
+		
+					int TeleApprovalResult = service.TeleApproval(map, FromDate, ToDate, sesEmpNo);
+					
+					if(TeleApprovalResult>0) 
+					{
+						redir.addAttribute("result", "Claims Approval Successful");
+					}
+					else
+					{
+						redir.addAttribute("resultfail", "Claims Approval Unsuccessful");
+					}
+		
+					mv.setViewName("redirect:/TelephoneApprovedList.htm");
+					
+				}
+				
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneApproval.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		//telephone-period-edit
+		
+		@RequestMapping(value="TelephonePeriodEdit.htm",method=RequestMethod.POST)
+		public ModelAndView TelephonePeriodEdit(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephonePeriodEdit.htm " + Username);
+			try {
+				String TeleBillId = request.getParameter("TeleBillId");
+				Object[] TelephoneApprovalPeriodEditDetails = service.getTelephoneApprovalPeriodEditDetails(TeleBillId);
+				request.setAttribute("TeleApprovalPeriodEditDetails", TelephoneApprovalPeriodEditDetails);
+				mv.setViewName("newspaper/NewsTeleEditApprovalPeriod");
+				return mv;
+				
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephonePeriodEdit.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		@RequestMapping(value="TelephonePeriodEditSave.htm",method=RequestMethod.POST)
+		public ModelAndView TelephonePeriodEditSave(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephonePeriodEditSave.htm " + Username);
+			try {
+				String TeleBillId = request.getParameter("TeleBillId");
+				String FromDate = request.getParameter("FromDate");
+				String ToDate = request.getParameter("ToDate");
+
+				int UpdateTelePeriod = service.UpdateTelePeriod(sesEmpNo, TeleBillId, FromDate, ToDate);
+
+				if(UpdateTelePeriod>0) 
+				{
+					redir.addAttribute("result", "Telephone Period Update Successful");
+				}
+				else
+				{
+					redir.addAttribute("resultfail", "Telephone Period Update Unsuccessful");
+				}
+				
+				mv.setViewName("redirect:/TelephoneApprovedList.htm");
+				
+				return mv;
+				
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephonePeriodEditSave.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		
+		
+
+		@RequestMapping(value="TelephoneAdd.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneAdd(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			String designation = (String) ses.getAttribute("EmpDesig");
+			String name = (String) ses.getAttribute("EmpName");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneAdd.htm " + Username);
+			try {
+
+			if (request.getParameterValues("ChooseDeviceFromlist") != null) {
+
+				String ChooseDeviceFromlist[] = request.getParameterValues("ChooseDeviceFromlist");
+				Map<String, String> map = new LinkedHashMap<>();
+
+				for (String TeleUsersId : ChooseDeviceFromlist) {
+
+					String devicename = request.getParameter("devicename" + TeleUsersId);
+					String devicenumber = request.getParameter("devicenumber" + TeleUsersId);
+
+					map.put(TeleUsersId, devicename + "_" + devicenumber);
+
+				}
+
+				Object[] PayLevelAndTeleRectrictAmt = service.getPayLevelAndTeleRectrictAmt(sesEmpNo);
+				Object[] TeleSpecialpermission = service.getTeleSpecialpermission(sesEmpNo);
+
+				request.setAttribute("MapResultofDevices", map);
+				request.setAttribute("name", name);
+				request.setAttribute("desig", designation);
+				request.setAttribute("TeleSpecialpermission", TeleSpecialpermission);
+				request.setAttribute("PayLevelAndTeleRectrictAmt", PayLevelAndTeleRectrictAmt);
+
+				mv.setViewName("newspaper/TelephoneAdd");
+
+			} else {
+				request.setAttribute("resultfail", "Please Select At Least One Option");
+
+				mv.setViewName("redirect:/TelephoneList.htm");
+
+			}
+
+			return mv;
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			logger.error(new Date() + " Inside TelephoneAdd.htm " + Username, e);
+			return new ModelAndView("static/Error");
+		}
+		
+	}
+		
+		
+		@RequestMapping(value="TelephoneEdit.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneEdit(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			String designation = (String) ses.getAttribute("EmpDesig");
+			String name = (String) ses.getAttribute("EmpName");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneEdit.htm " + Username);
+			try {
+				// split TeleId and TeleForwardId ..
+				String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
+				String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
+				String TeleId = TeleId_TeleForwardIdArray[0];
+				
+				Object[] CheckApproveOrNot = service.getCheckTeleApproveOrNot(TeleId);
+				
+				if (CheckApproveOrNot != null) {
+					List<Object[]> TeleClaimEditDetails = service.getTeleClaimEditDetails(TeleId);
+					request.setAttribute("TeleClaimEditDetails", TeleClaimEditDetails);
+					request.setAttribute("name", name);
+					request.setAttribute("desig", designation);
+				
+					mv.setViewName("newspaper/TelephoneEdit");
+				
+				} else 
+				{
+					redir.addAttribute("resultfail", "Editing this Claim is Restricted");
+					mv.setViewName("redirect:/TelephoneList.htm");
+				}
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneEdit.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+
+		@RequestMapping(value="TeleClaimPrint.htm",method=RequestMethod.POST)
+		public ModelAndView TeleClaimPrint(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneEdit.htm " + Username);
+			try {
+				// split TeleId and TeleForwardId ..
+				String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
+				String[] TeleId_TeleForwardIdArray = TeleId_TeleForwardId.split("_");
+				String TeleForwardId = TeleId_TeleForwardIdArray[1];
+
+
+				if (!("0".equalsIgnoreCase(TeleForwardId))) {
+					List<Object[]> TelephoneUserPrintSingleData = service
+							.getTelephoneUserPrintSingleData(TeleForwardId);
+					List<Object[]> TelephoneUserPrintMultiData = service
+							.getTelephoneUserPrintMultiData(TeleForwardId);
+
+					request.setAttribute("TelephoneUserPrintSingleData", TelephoneUserPrintSingleData);
+					request.setAttribute("TelephoneUserPrintMultiData", TelephoneUserPrintMultiData);
+
+					mv.setViewName("newspaper/TeleClaimPrint");
+
+				} else {
+					redir.addAttribute("resultfail", "Print Restricted");
+					mv.setViewName("redirect:/TelephoneList.htm");
+
+				}
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TeleClaimPrint.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		
+		@RequestMapping(value="TelephonePrintReport.htm",method=RequestMethod.POST)
+		public ModelAndView TelephonePrintReport(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephonePrintReport.htm " + Username);
+			try {
+				String TeleBillId = request.getParameter("TeleBillId");
+
+				List<Object[]> TelephonePrintReportSingleData = service.getTelephonePrintReportSingleData(TeleBillId);
+				List<Object[]> TelephonePrintReportMultiData = service.getTelephonePrintReportMultiData(TeleBillId);
+
+				request.setAttribute("TelephonePrintReportSingleData", TelephonePrintReportSingleData);
+				request.setAttribute("TelephonePrintReportMultiData", TelephonePrintReportMultiData);
+
+				mv.setViewName("newspaper/TelephoneReportPrint");
+
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephonePrintReport.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		@RequestMapping(value="TelephoneContingentBill.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneContingentBill(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneContingentBill.htm " + Username);
+			try {
+				String TeleBillId = request.getParameter("TeleBillId");
+				Object[] TelephoneContingentBillPrint = service.getTelephoneContingentBillPrintData(TeleBillId);
+				request.setAttribute("TelephoneContingentBillPrint", TelephoneContingentBillPrint);
+
+				mv.setViewName("newspaper/TelephoneContingentBill");
+
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneContingentBill.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		
+		@RequestMapping(value="TelephoneSendback.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneSendback(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneContingentBill.htm " + Username);
+			try {
+				List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
+				request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
+
+				mv.setViewName("newspaper/TelephoneSendBack");
+
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneSendback.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		
+		@RequestMapping(value="TelephoneSendbackSubmit.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneSendbackSubmit(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String sesEmpNo = (String) ses.getAttribute("EmpNo");
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneSendbackSubmit.htm " + Username);
+			try {
+				String[] TeleApproveAction = request.getParameterValues("TeleApproveAction");
+				String FromDate = request.getParameter("FromDate");
+				String ToDate = request.getParameter("ToDate");
+
+				Map<String, String> map = new LinkedHashMap<>();
+
+				for (String TeleForwardId : TeleApproveAction) {
+					String Textcomments = "::" + request.getParameter("remark" + TeleForwardId);
+					map.put(TeleForwardId, Textcomments);
+
+				}
+
+				int TeleApprovalResult = service.TeleSendback(map, FromDate, ToDate, sesEmpNo);
+				if(TeleApprovalResult>0) 
+				{
+					redir.addAttribute("result", "Telephone Claim send Back Successful");
+				}
+				else
+				{
+					redir.addAttribute("resultfail", "Telephone Claim send Back Unsuccessful");
+				}
+				
+				mv.setViewName("redirect:/TelephoneApprovedList.htm");
+
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneSendbackSubmit.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		
+		@RequestMapping(value={"/telephonedeviceadd","/telephonedeviceedit","/telephonedevicedelete","/telephone-claim-forward","/telephone-sendback",},method=RequestMethod.POST)
+		public ModelAndView telephoneAddEditDeletePrintApproval(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			ModelAndView mv = new ModelAndView();
+			if (request.getParameter("TeleApprovedReportYearWise") != null) 
+			{
+				mv.setViewName("newspaper/TeleApprovalReportYearWise");
+			}
+			return mv;
+		} 
 		        
-		  		@RequestMapping(value="/telephone-approved-list",method=RequestMethod.POST)
-		  		public ModelAndView telephoneApprovedList(HttpServletRequest request)
-		  		{
-		  			 ModelAndView mv=new ModelAndView("newspaper/TelephoneApprovedList");
-		  			 List<Object[]> TelephoneClaimApprovedList=service.getTelephoneClaimApprovedList();
-		  			 request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
+		@RequestMapping(value="TelephoneExpenditureSanction.htm",method=RequestMethod.POST)
+		public ModelAndView TelephoneExpenditureSanction(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneExpenditureSanction.htm " + Username);
+			try {
+				String TeleBillId = request.getParameter("TeleBillId");
+				Object[] TeleExpSancReport = service.getTelephoneContingentBillPrintData(TeleBillId);
+				request.setAttribute("TeleExpSancReport", TeleExpSancReport);
+
+				mv.setViewName("newspaper/TeleExpSancReport");
+
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneExpenditureSanction.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		@RequestMapping(value="TelephoneApprovedList.htm")
+  		public ModelAndView telephoneApprovedList(HttpServletRequest request,HttpSession ses)
+  		{
+  			ModelAndView mv=new ModelAndView("newspaper/TelephoneApprovedList");
+  			List<Object[]> TelephoneClaimApprovedList=service.getTelephoneClaimApprovedList();
+  			request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
 		  			
-		  			
-		  			List<Object[]> TelephoneApprovalList=service.getTelephoneApprovalList();
-		       	    request.setAttribute("TeleCount",TelephoneApprovalList.size());
+		  	
+  			List<Object[]> TelephoneApprovalList=service.getTelephoneApprovalList();
+       	    request.setAttribute("TeleCount",TelephoneApprovalList.size());
 		       	  	
-		  			
-		  		 return mv;
-		  		} 
+       	    ses.setAttribute("SidebarActive", "TelephoneApprovedList_htm");
+       	 
+	       	return mv;
+  		} 
 		        
 		  		@RequestMapping(value="/telephone-approval-individualclaim-details")
 		  		public ModelAndView telephoneIndividualClaimDetailsPrint(HttpServletRequest request)

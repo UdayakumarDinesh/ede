@@ -12,7 +12,7 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 <body>
-<body>
+
 <%
 List<Object[]> TeleClaimList=(List<Object[]>)request.getAttribute("TeleClaimList");
 List<Object[]> TeleDeviceList=(List<Object[]>)request.getAttribute("TeleDeviceList");
@@ -55,134 +55,13 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
 			
 			<div class="card-body" >
  
- 
-<%--      <!-- message -->
-        <div class="col-md-4 col-md-offset-4">
- 
-     <!-- add message -->
-     
-      
-     
-     
-        <%
-	    if(request.getAttribute("AddTelephoneClaimResult")!=null){
-	    Integer AddTelephoneClaimResult=(Integer)request.getAttribute("AddTelephoneClaimResult");	
-		if(AddTelephoneClaimResult==1){%>
-		<div class="alert alert-success"><p class="text-center">Successfully  Added</p></div>
-		<%}else{ %>
-		<div class="alert alert-danger"><p class="text-center">Some Error Occur While Adding</p></div>
-		<%}
-	    }%>
-    
-    
-       
-       <%
-       if(request.getAttribute("PleaseSelectAtLeastOneOption")!=null)
-       {%>
-       <div class="alert alert-info"><p class="text-center">Please Select At least One Device While Claiming</p></div>
-      <%}%> 
-    
-    
-    
-    
-    
-    
-    <!-- edit message -->
-       
-        <%
-	    if(request.getAttribute("EditTelephoneResult")!=null){
-	    Integer EditTelephoneResult=(Integer)request.getAttribute("EditTelephoneResult");	
-		if(EditTelephoneResult==2){%>
-		<div class="alert alert-success"><p class="text-center">Successfully  Edited</p></div>
-		<%}else{ %>
-		<div class="alert alert-danger"><p class="text-center">Some Error Occur While Editing</p></div>
-		<%}
-	    }%>
-
-   <!-- delete message -->
-
-        <%
-	    if(request.getAttribute("DeleteTelephoneResult")!=null){
-	    Integer DeleteTelephoneResult=(Integer)request.getAttribute("DeleteTelephoneResult");	
-		if(DeleteTelephoneResult==1){%>
-		<div class="alert alert-success"><p class="text-center">Successfully  Deleted</p></div>
-		<%}else{ %>
-		<div class="alert alert-danger"><p class="text-center">Some Error Occur While Deleting</p></div>
-		<%}
-	    }%>
-
-
-      <!-- edit restriction -->
-
-       <%
-       if(request.getAttribute("EditRestricted")!=null)
-       {%>
-       <div class="alert alert-danger"><p class="text-center">Claim Already Approved You Cannot Edit</p></div>
-      <%}%> 
-
-      <!-- Delete restriction -->
-
-       <%
-       if(request.getAttribute("DeleteRestricted")!=null)
-       {%>
-       <div class="alert alert-danger"><p class="text-center">Claim Already Forwarded/Approved You Cannot Delete</p></div>
-      <%}%> 
-
-
-
-       <!-- PleaseSelectAtLeastThreeMonthClaim -->
-       <%
-       if(request.getAttribute("PleaseSelectAtLeastThreeMonthClaim")!=null)
-       {%>
-       <div class="alert alert-info"><p class="text-center">Please Select At Least Three Month Claim</p></div>
-      <%}%> 
-
-
-<!-- ForwardToAdminResult  -->
-
-      <%
-	    if(request.getAttribute("ForwardToAdminResult")!=null){
-	    Integer ForwardToAdminResult=(Integer)request.getAttribute("ForwardToAdminResult");	
-		if(ForwardToAdminResult==2){%>
-		<div class="alert alert-success"><p class="text-center">Successfully  Forwarded</p></div>
-		<%}else{ %>
-		<div class="alert alert-danger"><p class="text-center">Some Error Occur While Forwarding</p></div>
-		<%}
-	    }%>
-
-     <!-- SamePeriodRestricted -->
-     <%
-       if(request.getAttribute("SamePeriodRestricted")!=null){
-       String SamePeriodRestricted=(String)request.getAttribute("SamePeriodRestricted");
-       %>
-       <div class="alert alert-danger"><p class="text-center">You Already Applied For <%=SamePeriodRestricted%></p></div>
-      <%}%> 
-
-
-    <!-- EnterBalanceCorrectly -->
-       <%
-       if(request.getAttribute("EnterBalanceCorrectly")!=null){
-       %>
-       <div class="alert alert-danger"><p class="text-center">Please Enter Balance Correctly</p></div>
-      <%}%>
-       <%
-       if(Sendbackdata.size()>0){
-    	   for(Object[] sb:Sendbackdata){
-       %>
-      <div align="center" class="alert alert-danger">
-       <h5>Send Back Message From Admin</h5>
-       <p><%=sb[3] %></p>
-        </div>
-       <%break;}}%>
-
-     </div><!-- //message --> --%>
- 
-
-  <form action="telephoneedit" method="post" >
-                          <table id="addDataTable" class="table table-hover table-striped  table-condensed  table-bordered  " >
-                              <thead> 
+  				<form action="telephoneadd" method="post" >
+                          <div class="table-responsive">
+						
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1"> 				   			
+								<thead>
                                 <tr>            
-                                   <th>Select</th>
+                                   <th style="width: 5%;">Select</th>
                                    <th>Claim Date</th>
                                    <th>Month</th>
                                    <th>Year</th>
@@ -193,12 +72,12 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                                   </tr>
                                </thead>
                                <tbody>
-                                <%if(TeleClaimList!=null&&TeleClaimList.size()>0){ 
+                                <%if(TeleClaimList!=null && TeleClaimList.size()>0){ 
 		                        for(Object ls[]:TeleClaimList){%>
                                <tr>
-                                <td><input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required"></td>
+                                <td style="text-align: center;" ><input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required"></td>
                      
-                                <td><%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[1].toString()));%></td>
+                                <td ><%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[1].toString()));%></td>
                                 <td><%=ls[2]%></td>
                                 <td><%=ls[3]%></td>
                                 <td><%=ls[4]%></td>
@@ -209,50 +88,42 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                               <%}} %>
                            </tbody> 
                           </table>
+                          </div>
                      
-	   <div  style="margin-left:65px; margin-top:0px;"> 
+	   <div  align="center"> 
+	   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
        <%if(TeleClaimList!=null&&TeleClaimList.size()!=0){%>
-        <button type="submit" name="EditTeleClaim"  value="EditTeleClaim" class="btn btn-warning" >Edit</button> 
-        <button type="submit" name="DeleteTelephone"  value="DeleteTelephone" class="btn btn-danger" formaction="telephonedelete" onclick="return  FunctionToCheckDelete()">Delete</button> 
-        <button type="submit" name="TeleClaimPrint" value="TeleClaimPrint" class="btn btn-info" formaction="telephoneprint" formtarget="_blank" >Print</button>
-       <%}else{%>
-          <button disabled="disabled" class="btn btn-warning">Edit</button> 
-          <button disabled="disabled" class="btn btn-danger">Delete</button> 
-          <button disabled="disabled" class="btn btn-info">Print</button> 
+        <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
+        <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
+        <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
+        <button type="button" class="btn btn-sm " style="background-color: #8758FF;color: white;"  data-toggle="modal" data-target="#ForwardToAdmin"">Forward To Admin</button>
        <%}%>
        </div> 
+       
+       	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
+		<div  class="text-center" style="color:black;text-align: center; font-size:15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
+       
       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
 
 <!-- add button -->
 
-
-  
-   <div  style="margin-left:10px; margin-top:-34px;">
-     <button type="button" class="btn btn-primary"  data-toggle="modal" onclick="check()">Add</button>
-   </div>
- 
-
-
-
 <!-- -add button -->
-                     
-
-
-
-<!--      Add Telephone model form -->
+        
+<!--  Add Telephone model form -->
   
       
      <div class="modal fade" id="add" role="dialog" >
            <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <button  type="button" class="close" data-dismiss="modal">&times;</button>
+                      
                       <h4 class="modal-litle">List of Devices</h4>
+                      <button  type="button" class="close" data-dismiss="modal">&times;</button>
                      
                     </div>
-              <form  action="telephoneadd" method="post">       
+              <form  action="TelephoneAdd.htm" method="post">       
              <div class="modal-body">
              
                  <%
@@ -328,18 +199,19 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <button  type="button" class="close" data-dismiss="modal">&times;</button>
+                      
                       <h4 class="modal-litle">Forward To Admin</h4>
+                      <button  type="button" class="close" data-dismiss="modal">&times;</button>
                      
                     </div>
-              <form  action="telephone-claim-forward" method="post">       
+              <form  action="TelephoneClaimForward.htm" method="post">       
              <div class="modal-body">
              
                  <%
                  if(TeleClaimList!=null&&TeleClaimList.size()>0){
                 	
                   %>
-                      <table id="addDataTable" class="table table-hover table-striped  table-condensed  table-bordered  " >
+                      <table class="table table-hover table-striped  table-condensed  table-bordered  " >
                               <thead> 
                                 <tr>            
                                    <th>Select</th>
@@ -403,14 +275,20 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
 <!--      Forward To Admin model-->
 
 
-<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
-<div  class="text-center" style="color:black;text-align: center; font-size:15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
-</div>
-</div>
 
-<script src="${pageContext.request.contextPath}/stresource/dist/js/app.min.js"></script>
+</div>
+</div>
 
 <script type="text/javascript">
+
+    $("#myTable1").DataTable({
+        "lengthMenu": [5,10,15,25, 50, 75, 100],
+        "pagingType": "simple",
+        "language": {
+		      "emptyTable": "No Record Found"
+		    }
+
+    })
 
 function check(){
 	var today = new Date();
