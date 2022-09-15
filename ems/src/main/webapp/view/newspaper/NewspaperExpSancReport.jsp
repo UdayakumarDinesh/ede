@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -8,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>exp sanc</title>
+<title>Newspaper Expenditure Sanction</title>
 <style type="text/css">
 h1 {
     border-bottom: 2px solid black;
@@ -30,6 +31,10 @@ h1 {
 <%
 AmountWordConveration nw = new AmountWordConveration();
 Object[] NewsPaperExpSancReport=(Object[])request.getAttribute("NewsPaperExpSancReport");
+
+String LabCode =(String)request.getAttribute("LabCode");
+String NewsExpSacGOI =(String)request.getAttribute("NewsExpSacGOI");
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
 
 String RUPEES="Not Available";
 String PAISA="Not Available";
@@ -55,14 +60,14 @@ if(NewsPaperExpSancReport!=null)
 <div align="center"><h2><font size="+1"><br><br>EXPENDITURE SANCTION</font></h2></div>
 <br><br><br>
 In exercise of the power vested vide Re-imbursement of newspaper bills (Residential & Mobile)to the entitled GOs and Service Officers
-of DARE for the various months in accordance with GOI/MOF/DOE OM F.No.24(3)/:Coord/----- dated 
+of <%=LabCode%> for the various months in accordance with <%=NewsExpSacGOI %>----- dated 
 ,I hereby accord sanction for re-imbursement of newspaper bills as per attached list.
  <br><br><br>
  <b>Description of items / services: </b>Re-imbursement of newspaper bills (Residential & Mobile)
- to entitled GOs of DARE and Service Officers.<br><br><br><br>
+ to entitled GOs of <%=LabCode%> and Service Officers.<br><br><br><br>
  The Expenditure involved is debitable to Major Head : 2080 Minor Head : 800 Code Head 
  858/01 of Defence Services Estimates,Research & Development, and payment shall be released by CDA
-  (R&D),CV Raman Nagar,Bangalore with unit code No.320000007.
+  (R&D),CV Raman Nagar,Bangalore with unit code No.<%=LabDetails.getLabCode() %>.
   <br><br><br><br>
   Period:<b> from <%if(NewsPaperExpSancReport!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewsPaperExpSancReport[0].toString()));} %>to <%if(NewsPaperExpSancReport!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewsPaperExpSancReport[1].toString()));} %>. </b>
   <br>Value: Rs <b><%=RUPEES%>.<%=PAISA%></b><br>
@@ -70,7 +75,11 @@ of DARE for the various months in accordance with GOI/MOF/DOE OM F.No.24(3)/:Coo
   <br><br><br><br>
   <center><b>SANCTIONED</b></center>
   <br><br><br><br><br>
-  <center><b>DIRECTOR</b></center>
+  <%if(LabDetails.getLabCode().equalsIgnoreCase("STARC")){ %>
+  <center><b>CEO</b></center>
+  <%}else{ %>
+   <center><b>DIRECTOR</b></center>
+  <%} %>
   <br><br>
   <p>
   <b>Copy to :</b><br>

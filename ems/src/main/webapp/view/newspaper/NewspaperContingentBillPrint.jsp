@@ -1,4 +1,5 @@
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="java.text.DecimalFormat"%>
@@ -8,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>contingent bill</title>
+<title>Newspaper Contingent Bill</title>
 <style type="text/css">
  @media print {
   #printPageButton {
@@ -17,8 +18,7 @@
 }
  
  
- </style>  
-<style>
+
 /* css buttom border */
 h1 {
     border-bottom: 2px solid black;
@@ -89,6 +89,14 @@ String RUPEES="Not Available";
 String PAISA="Not Available";
 String RupeeInWords="Not Available";
 
+String LabCode =(String)request.getAttribute("LabCode");
+
+String NewspaperAuthority =(String)request.getAttribute("NewspaperAuthority");
+LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
+
+String NewsContingentVoucherNo =(String)request.getAttribute("NewsContingentVoucherNo");
+String PublicFundNo =(String)request.getAttribute("PublicFundNo");
+
 if(NewspaperContingentBillPrint!=null)
 {
 	String total=NewspaperContingentBillPrint[2].toString();
@@ -116,7 +124,7 @@ if(NewspaperContingentBillPrint!=null)
 <center><input type="button"  class="btn btn-sm print-btn"  id="printPageButton" value="Print" onClick="window.print()"></center>
 <center><h1><font size="+1">MISCELLANEOUS</font></h1></center>
 
-<p><font size="+0"><b>Voucher No.:&nbsp;&nbsp;DARE/MISC/NEWSPAPER/CB NO.&nbsp;&nbsp;&nbsp;&nbsp;/</b></font></p>
+<p><font size="+0"><b>Voucher No.:&nbsp;&nbsp;<%=NewsContingentVoucherNo %>&nbsp;&nbsp;&nbsp;&nbsp;/</b></font></p>
 
 <div class="r">
 <p>Minor Head - 800(A)<br>Code Head - 858/01</p>
@@ -128,9 +136,11 @@ if(NewspaperContingentBillPrint!=null)
 Amount of Allotment ................................................................................................................. Rs.<br>
 Amount expended existing the amount of this bill..................................................................... Rs.  <br> 
 Balance of allotment existing the amount of this bill................................................................. Rs.<br> 
-Expenditure on account of <h>Re-imbursement of Newspaper bills</h> incurred by DARE CGO's & Service<br> 
+Expenditure on account of <h>Re-imbursement of Newspaper bills</h> incurred by <%=LabCode%> CGO's & Service<br> 
 Officers for the period <b>from <h><%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[0].toString()));} %>to <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[1].toString()));} %>. </b></h><br>
-Authority - GOI/MOF/DOE F.No.24(3)/E.Coord/2018 dated 26 March 2018
+<%if(NewspaperAuthority != null && !NewspaperAuthority.trim().equalsIgnoreCase("")){ %>
+Authority - <%=NewspaperAuthority %>
+<%} %>
 </p>
 
 
@@ -148,7 +158,7 @@ Authority - GOI/MOF/DOE F.No.24(3)/E.Coord/2018 dated 26 March 2018
  <br>
  &nbsp;&nbsp;Expenditure incurred towards re-imbursement of<br>
  &nbsp;&nbsp;Newspaper bills (Residential & Mobile) to entitled<br>
- &nbsp;&nbsp;GOs and Service Officers of DARE for various <br>
+ &nbsp;&nbsp;GOs and Service Officers of <%=LabCode%> for various <br>
  &nbsp;&nbsp;months as effective during the period <b>from <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[0].toString()));} %> <br>
  &nbsp;&nbsp;to <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[1].toString()));} %></b> as per the list attached.<br>
  <br>
@@ -156,8 +166,8 @@ Authority - GOI/MOF/DOE F.No.24(3)/E.Coord/2018 dated 26 March 2018
  bonafide Government purposes.<br>
  <br>
  &nbsp;&nbsp;MODE OF PAYMENT : ECS Credit to<br>
-&nbsp;&nbsp; DARE Public Fund Account<br>
-&nbsp;&nbsp; No. 11901101346<br>
+&nbsp;&nbsp; <%=LabCode%> Public Fund Account<br>
+&nbsp;&nbsp; No. <%=PublicFundNo %><br>
  <br> 
  </td>
  <td> </td>
@@ -194,7 +204,7 @@ Authority - GOI/MOF/DOE F.No.24(3)/E.Coord/2018 dated 26 March 2018
 </div>
  
   <p>
-  Place :DARE,Bangalore <br>
+  Place :<%=LabCode%>, <%=LabDetails.getLabCity() %> <br>
   Date : 
   </p>
   

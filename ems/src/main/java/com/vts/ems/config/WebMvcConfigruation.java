@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @ComponentScan(basePackages = "com.vts.*")
 @ConfigurationProperties
-@PropertySource(value= "file:///${app.properties.path}")
+@PropertySource(value= { "file:///${app.properties.path}", "file:///${NewsTele.properties.path}"})
 
 public class WebMvcConfigruation {
 

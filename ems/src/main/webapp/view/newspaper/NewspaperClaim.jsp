@@ -17,6 +17,9 @@ String designation=(String)request.getAttribute("desig");
 Object[] PayLevelAndNewsRectrictAmt=(Object[])request.getAttribute("PayLevelAndNewsRectrictAmt");
 Object[] NewspaperEditDetails=(Object[])request.getAttribute("NewspaperEditDetails");
 
+String LabCode =(String)request.getAttribute("LabCode");
+String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader");
+
 LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
 
 %>
@@ -43,11 +46,12 @@ LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
 				<div >		 
 					 <form action="#" method="post"> 		
 						 <div class="col-sm-12 text-center" align="center" >
-				           <%	String[] headerStr=LabDetails.getNewsTelHeader().split("/");
+				           <%	if(NewsClaimHeader!=null && !NewsClaimHeader.trim().equalsIgnoreCase("")){
+				        	   String[] headerStr=NewsClaimHeader.split("/");
 				           
 				           	for(int i=0 ; i<headerStr.length ; i++){ %>
 				             	<b> <%=headerStr[i] %> </b><br>
-				             <% } %>
+				             <% } }%>
 				            <%--  <b><%=LabDetails.getLabName() %></b> --%>
 				           </div>
 			         

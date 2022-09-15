@@ -1,4 +1,5 @@
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -36,7 +37,7 @@
  
  </style>   
 
-<title>Insert title here</title>
+<title>Newspaper Report</title>
 </head>
 <body>
 <%
@@ -47,6 +48,9 @@ String ToDate="Not Available";
 String TotalAmountInRupee="Not Available";
 String TotalAmountInPaisa="Not Available";
 String TotalAmountInRupeeWords="Not Available";
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
+
+
 if(NewspaperReportPrintData!=null&&NewspaperReportPrintData.size()>0){ 
 for(Object ls[]:NewspaperReportPrintData){
 FromDate=DateTimeFormatUtil.SqlToRegularDate(ls[7].toString());
@@ -56,7 +60,10 @@ String TotalAmountRsPaisA[]=new IndianRupeeFormat().getRupeePaisaSplit(ls[9].toS
 TotalAmountInRupee=IndianRupeeFormat.rupeeFormat(TotalAmountRsPaisA[0]);
 TotalAmountInPaisa=TotalAmountRsPaisA[1];
 
+String LabCode =(String)request.getAttribute("LabCode");
+
 TotalAmountInRupeeWords=nw.convert1(Integer.parseInt(TotalAmountRsPaisA[0].toString()));
+
 
 break;
 }}%>
@@ -69,7 +76,7 @@ break;
         <table id="excelId" class="table table-hover table-striped  table-condensed  table-bordered ">
                               <tbody > 
                               <tr>
-                              <th class="text-center" colspan="10">DEFENCE RESEARCH & DEVELOPMENT ESTABLISHMENT</th>
+                              <th class="text-center" colspan="10"><%=LabDetails.getLabName().toUpperCase() %></th>
                               </tr>   
                               
                                <tr>

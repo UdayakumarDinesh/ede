@@ -17,10 +17,10 @@ List<Object[]> TelephoneClaimApprovedList=(List<Object[]>)request.getAttribute("
 
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Telephone Claims</h5>
+			<div class="col-md-5">
+				<h5>Telephone Approved Claims</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-7 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="TelephoneDashBoard.htm">Telephone</a></li>

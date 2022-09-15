@@ -36,7 +36,6 @@ public class LabMaster implements Serializable
 	private Integer LabId;
 	private Integer ClusterId;
 	private String LabLogo;
-	private String NewsTelHeader;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

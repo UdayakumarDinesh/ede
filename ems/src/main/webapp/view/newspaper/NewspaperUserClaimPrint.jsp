@@ -31,6 +31,8 @@ String PayableRupee="Not Available";
 String AdmissibleRupee="Not Available";
 String ClaimRupee="Not Available";
 
+String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader");
+
 if(NewspaperUserPrintData!=null)
 {
 	 String ClaimAmountRsPaisA[]=IndianRupeeFormat.getRupeePaisaSplit(NewspaperUserPrintData[2].toString());
@@ -54,11 +56,12 @@ if(NewspaperUserPrintData!=null)
 <div class="row">
 
            <div class="col-sm-12 text-center" align="center" >
-           <%	String[] headerStr=LabDetails.getNewsTelHeader().split("/");
-           
-           	for(int i=0 ; i<headerStr.length ; i++){ %>
-             	<b> <%=headerStr[i] %> </b><br>
-             <% } %>
+           <%	if(NewsClaimHeader!=null && !NewsClaimHeader.trim().equalsIgnoreCase("")){
+				        	   String[] headerStr=NewsClaimHeader.split("/");
+				           
+				           	for(int i=0 ; i<headerStr.length ; i++){ %>
+				             	<b> <%=headerStr[i] %> </b><br>
+				             <% } }%>
             <%--  <b><%=LabDetails.getLabName() %></b> --%>
            </div>
      <div class="col-sm-12">
@@ -78,10 +81,10 @@ if(NewspaperUserPrintData!=null)
               <td><%=designation%></td>
            </tr>
        
-           <tr>
+           <!-- <tr>
              <td>Department:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
              <td>Defence Research & Development Establishment</td>
-           </tr>
+           </tr> -->
        
            <tr>
              <td>Pay Level:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

@@ -1,5 +1,6 @@
 
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -44,6 +45,9 @@ AmountWordConveration nw=new AmountWordConveration();
 List<Object[]> TelephoneUserPrintSingleData=(List)request.getAttribute("TelephoneUserPrintSingleData");
 List<Object[]> TelephoneUserPrintMultiData=(List)request.getAttribute("TelephoneUserPrintMultiData");
 
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
+
+
 String name="Not Available";
 String designation="Not Available";
 String SbiAcc="Not Available";
@@ -70,7 +74,7 @@ if(request.getAttribute("TelephoneUserPrintSingleData")!=null){
 <center><h1><font size="+1">RE-IMBURSEMENT OF TELEPHONE BILL</font></h1></center>
  स्थापना / Estt.: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-वायु वाहित प्रणाली केंद्र,बंगलोर / CABS, Bangalore 
+वायु वाहित प्रणाली केंद्र,बंगलोर / <%=LabDetails.getLabCode() %>, <%=LabDetails.getLabCity() %>
 <br><br>
  नाम / Name:<%=name %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

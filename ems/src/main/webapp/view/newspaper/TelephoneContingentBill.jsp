@@ -1,4 +1,5 @@
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -107,8 +108,13 @@ if(TelephoneContingentBillPrint!=null)
 
 
 
+String LabCode =(String)request.getAttribute("LabCode");
 
+String TelephoneAuthority =(String)request.getAttribute("TelephoneAuthority");
+LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
+String TeleContingentVoucherNo =(String)request.getAttribute("TeleContingentVoucherNo");
 
+String PublicFundNo =(String)request.getAttribute("PublicFundNo");
 
 
 %>
@@ -116,7 +122,7 @@ if(TelephoneContingentBillPrint!=null)
 <center><input type="button"  class="btn btn-info btn-xs center-block"  id="printPageButton" value="Print" onClick="window.print()"></center>
 <center><h1><font size="+1">MISCELLANEOUS</font></h1></center>
 
-<p><font size="+0"><b>Voucher No.:&nbsp;&nbsp;CABS/Misc/CB-&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;</b></font></p>
+<p><font size="+0"><b>Voucher No.:&nbsp;&nbsp;<%=TeleContingentVoucherNo %>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;</b></font></p>
 
 <div class="r">
 <p>Minor Head - 800(a)<br>Code Head - 858/01</p>
@@ -128,9 +134,11 @@ if(TelephoneContingentBillPrint!=null)
 Amount of Allotment ................................................................................................................. Rs.<br>
 Amount expended existing the amount of this bill..................................................................... Rs.  <br> 
 Balance of allotment existing the amount of this bill................................................................. Rs.<br> 
-Expenditure on account of <h>Re-imbursement of telephone bills</h> incurred by CABS CGO's <br> 
+Expenditure on account of <h>Re-imbursement of telephone bills</h> incurred by <%=LabCode%> CGO's <br> 
  for the period <b> from <%if(TelephoneContingentBillPrint!=null){out.println(DateTimeFormatUtil.fromDatabaseToActualInPeriodForm(TelephoneContingentBillPrint[0].toString()));} %>to <%if(TelephoneContingentBillPrint!=null){out.println(DateTimeFormatUtil.fromDatabaseToActualInPeriodForm(TelephoneContingentBillPrint[1].toString()));} %>. </b></h><br>
-Authority - DRDO/DFMM/BE/82003/M/01/2021-22 dated 31 March 2021 
+<%if(TelephoneAuthority != null && !TelephoneAuthority.trim().equalsIgnoreCase("")){ %>
+Authority - <%=TelephoneAuthority %>
+<%} %>
 </p>
 
 
@@ -148,7 +156,7 @@ Authority - DRDO/DFMM/BE/82003/M/01/2021-22 dated 31 March 2021
  <br>
  &nbsp;&nbsp;Expenditure incurred towards re-imbursement of<br>
  &nbsp;&nbsp;Telephone bills (Residential & Mobile) to entitled<br>
- &nbsp;&nbsp;GOs  of CABS for various <br>
+ &nbsp;&nbsp;GOs  of <%=LabCode%> for various <br>
 &nbsp;&nbsp;months as effective during the period <b>from <%if(TelephoneContingentBillPrint!=null){out.println(DateTimeFormatUtil.fromDatabaseToActualInPeriodForm(TelephoneContingentBillPrint[0].toString()));} %> <br>
  &nbsp;&nbsp;to <%if(TelephoneContingentBillPrint!=null){out.println(DateTimeFormatUtil.fromDatabaseToActualInPeriodForm(TelephoneContingentBillPrint[1].toString()));} %> </b>as per the list attached.<br>
   <br>
@@ -156,8 +164,8 @@ Authority - DRDO/DFMM/BE/82003/M/01/2021-22 dated 31 March 2021
  bonafide Government purposes.<br>
  <br>
 &nbsp;&nbsp;MODE OF PAYMENT : ECS Credit to<br>
-&nbsp;&nbsp; CABS Public Fund Account<br>
-&nbsp;&nbsp; No. 11901101346<br>
+&nbsp;&nbsp; <%=LabCode%> Public Fund Account<br>
+&nbsp;&nbsp; No. <%=PublicFundNo %><br>
  <br> 
  </td>
  <td> </td>
@@ -194,7 +202,7 @@ Authority - DRDO/DFMM/BE/82003/M/01/2021-22 dated 31 March 2021
 </div>
  
   <p>
-  Place :CABS,Bangalore <br>
+  Place :<%=LabCode%>,<%=LabDetails.getLabCity() %> <br>
   Date : 
   </p>
   

@@ -1,4 +1,5 @@
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -52,6 +53,10 @@ if(TeleExpSancReport!=null)
 
 
 
+String TeleExpSncFileNo =(String)request.getAttribute("TeleExpSncFileNo");
+String TelephoneAuthority =(String)request.getAttribute("TelephoneAuthority");
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
+
 
 SimpleDateFormat sdf2=new SimpleDateFormat("MMM-yyyy");
 java.util.Date date=new java.util.Date();
@@ -61,7 +66,7 @@ java.util.Date date=new java.util.Date();
 <center><h2><font size="+1"><br><br>EXPENDITURE SANCTION</font></h2></center>
 
  <br><br><br>
- <b> File No.CABS/Accts/Tele/1135/01/     </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <b><%=TeleExpSncFileNo %>    </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -71,11 +76,11 @@ java.util.Date date=new java.util.Date();
 <br>
 
 In exercise of the power vested vide Re-imbursement of telephone bills (Residential & Mobile)to the entitled GOs 
-of CABS for the various months in accordance with DRDO/DFMM/BE/82003/M/01/2021-22 dated 31 March 2021 
+of <%=LabDetails.getLabCode() %> for the various months in accordance with <%=TelephoneAuthority %> 
 ,sanction is  hereby accorded  for re-imbursement of telephone bills as per attached list.
  <br><br><br>
  <b>Description of items / services: </b>Re-imbursement of telephone bills (Residential & Mobile)
- to entitled GOs of CABS.<br><br><br><br>
+ to entitled GOs of <%=LabDetails.getLabCode() %>.<br><br><br><br>
  The Expenditure involved is debitable to Major Head : 2080 Minor Head : 800 Code Head 
  858/01 of Defence Services Estimates,Research & Development, and payment shall be released by CDA
   (R&D),CV Raman Nagar,Bangalore with unit code No.320000007.
@@ -86,7 +91,11 @@ of CABS for the various months in accordance with DRDO/DFMM/BE/82003/M/01/2021-2
   <br><br><br><br>
   <center><b>SANCTIONED</b></center>
   <br><br><br><br><br>
-  <center><b>Joint Director(Admin)<br>For Director, CABS</b></center>
+  <%if(LabDetails.getLabCode().equalsIgnoreCase("STARC")){ %>
+  <center><b>CEO</b></center>
+  <%}else{ %>
+  <center><b>Joint Director(Admin)<br>For Director, <%=LabDetails.getLabCode() %></b></center>
+  <%} %>
   <br><br>
   <p>
   <b>Copy to :</b><br>

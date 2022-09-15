@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
@@ -20,6 +21,8 @@
 	String name = (String) request.getAttribute("name");
 	String designation = (String) request.getAttribute("desig");
 
+	LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
+	
 	Map<String, String> MapResultofDevices = (Map<String, String>) request.getAttribute("MapResultofDevices");
 	Object[] PayLevelAndTeleRectrictAmt = (Object[]) request.getAttribute("PayLevelAndTeleRectrictAmt");
 	Object[] TeleSpecialpermission = (Object[]) request.getAttribute("TeleSpecialpermission");
@@ -121,7 +124,7 @@
 				<div class="card" align="left">
 					<div class="card-body" style="padding: 0px;">
 						<div class="col-md-12 text-center">
-							<br> <b>RE-IMBURSEMENT OF TELEPHONE BILL</b><br> <b>CABS,Bangalore</b>
+							<br> <b>RE-IMBURSEMENT OF TELEPHONE BILL</b><br> <b><%=LabDetails.getLabCode() %>, <%=LabDetails.getLabCity() %></b>
 						</div>
 
 

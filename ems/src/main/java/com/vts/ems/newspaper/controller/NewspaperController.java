@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,9 +20,37 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
 
+// newspaper and Telephone claim controller
+
 @Controller
 public class NewspaperController {
 
+	@Value("${NewspaperAuthority}")
+	private String NewspaperAuthority;
+	
+	@Value("${TelephoneAuthority}")
+	private String TelephoneAuthority;
+	
+	@Value("${PublicFundNo}")
+	private String PublicFundNo;
+	
+	@Value("${NewsContingentVoucherNo}")
+	private String NewsContingentVoucherNo;
+	
+	@Value("${TeleContingentVoucherNo}")
+	private String TeleContingentVoucherNo;
+	
+	@Value("${NewsClaimHeader}")
+	private String NewsClaimHeader;
+	
+	@Value("${NewsExpSacGOI}")
+	private String NewsExpSacGOI;
+
+	@Value("${TeleExpSncFileNo}")
+	private String TeleExpSncFileNo;
+	
+	
+	
 	@Autowired
 	private NewPaperServiceImpl service;
 
@@ -84,6 +113,8 @@ public class NewspaperController {
 				req.setAttribute("desig", designation);
 				req.setAttribute("PayLevelAndNewsRectrictAmt", PayLevelAndNewsRectrictAmt);
 				req.setAttribute("LabDetails", service.getLabDetails());
+				req.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+				req.setAttribute("NewsClaimHeader",NewsClaimHeader);
 				return "newspaper/NewspaperClaim";
 			}
 			catch (Exception e)
@@ -154,36 +185,36 @@ public class NewspaperController {
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() + "Inside NewspaperEdit.htm " + Username);
 			
-				ModelAndView mv = new ModelAndView();
+			ModelAndView mv = new ModelAndView();
 			
-				String ClaimAmount = request.getParameter("ClaimAmount");
-				String RestrictedAmount = request.getParameter("RestrictedAmount");
-				String NewspaperId = request.getParameter("NewspaperId");
+			String ClaimAmount = request.getParameter("ClaimAmount");
+			String RestrictedAmount = request.getParameter("RestrictedAmount");
+			String NewspaperId = request.getParameter("NewspaperId");
 			
-				try {
-					if (Double.parseDouble(ClaimAmount) > 0) {
-						int EditNewspaperClaimResult = service.EditNewspaperClaim(sesEmpNo, ClaimAmount,NewspaperId, RestrictedAmount);
-						if(EditNewspaperClaimResult>0) 
-						{
-							mv.addObject("result", "Claim Updated Successfully");
-						}
-						else 
-						{
-							mv.addObject("resultfail", "Claim Updat Unsuccessfully");
-						}
-						
-					} else {
-						mv.addObject("resultfail", "Please Enter Balance Correctly");
+			try {
+				if (Double.parseDouble(ClaimAmount) > 0) {
+					int EditNewspaperClaimResult = service.EditNewspaperClaim(sesEmpNo, ClaimAmount,NewspaperId, RestrictedAmount);
+					if(EditNewspaperClaimResult>0) 
+					{
+						mv.addObject("result", "Claim Updated Successfully");
+					}
+					else 
+					{
+						mv.addObject("resultfail", "Claim Update Unsuccessfully");
 					}
 					
-					mv.setViewName("redirect:/NewspaperList.htm");
-					return mv;
-					
-				}catch (Exception e) {
-					logger.error(new Date() + " Inside NewspaperEdit.htm " + Username, e);
-					e.printStackTrace();
-					return new ModelAndView("static/Error");
+				} else {
+					mv.addObject("resultfail", "Please Enter Balance Correctly");
 				}
+				
+				mv.setViewName("redirect:/NewspaperList.htm");
+				return mv;
+			
+			}catch (Exception e) {
+				logger.error(new Date() + " Inside NewspaperEdit.htm " + Username, e);
+				e.printStackTrace();
+					return new ModelAndView("static/Error");
+			}
 			
 		}
 	
@@ -200,14 +231,18 @@ public class NewspaperController {
 			try {
 				String NewspaperId = request.getParameter("NewspaperId");
 				Object[] CheckApproveOrNot = service.getCheckNewspaperApproveOrNot(NewspaperId);
-				if (CheckApproveOrNot != null) {
+				if (CheckApproveOrNot != null) 
+				{
 					Object[] NewspaperEditDetails = service.getNewspaperEditDetails(NewspaperId);
 					mv.addObject("NewspaperEditDetails", NewspaperEditDetails);
 					mv.addObject("name", name);
 					mv.addObject("desig", designation);
 					mv.addObject("LabDetails", service.getLabDetails());
+					mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
 					mv.setViewName("newspaper/NewspaperClaim");
-				} else {
+				} 
+				else 
+				{
 					mv.addObject("resultfail", "Claim Already Approved You Cannot Edit");
 					mv.setViewName("redirect:/NewspaperList.htm");
 				}
@@ -231,17 +266,20 @@ public class NewspaperController {
 			
 			ModelAndView mv = new ModelAndView();
 			try {
-
 				String NewspaperId = request.getParameter("NewspaperId");
 				Object[] NewspaperUserPrintData = service.getNewspaperUserPrintData(NewspaperId);
 				mv.addObject("name", name);
 				mv.addObject("desig", designation);
 				mv.addObject("NewspaperUserPrintData", NewspaperUserPrintData);
 				mv.addObject("LabDetails", service.getLabDetails());
+				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+				mv.addObject("NewsClaimHeader",NewsClaimHeader);
 				mv.setViewName("newspaper/NewspaperUserClaimPrint");
-				return mv;
 				
-			} catch (Exception e) {
+				return mv;				
+			} 
+			catch (Exception e) 
+			{
 				logger.error(new Date() + " Inside NewspaperPrint.htm " + Username, e);
 				e.printStackTrace();
 				return new ModelAndView("static/Error");
@@ -360,7 +398,8 @@ public class NewspaperController {
 
 				List<Object[]> NewspaperReportPrintData = service.getNewspaperReportPrintData(NewspaperBillId);
 				mv.addObject("NewspaperReportPrintData", NewspaperReportPrintData);
-
+				mv.addObject("LabDetails", service.getLabDetails());
+				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
 				mv.setViewName("newspaper/NewspaperReportPrint");
 				
 				return mv;
@@ -383,9 +422,12 @@ public class NewspaperController {
 				String NewspaperBillId = request.getParameter("NewspaperBillId");
 				Object[] NewspaperContingentBillPrint = service.getNewspaperContingentBillPrintData(NewspaperBillId);
 				mv.addObject("NewspaperContingentBillPrint", NewspaperContingentBillPrint);
-
+				mv.addObject("LabDetails", service.getLabDetails());
+				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+				mv.addObject("NewspaperAuthority",NewspaperAuthority);
+				mv.addObject("PublicFundNo",PublicFundNo);
+				mv.addObject("NewsContingentVoucherNo",NewsContingentVoucherNo);
 				mv.setViewName("newspaper/NewspaperContingentBillPrint");
-				
 				
 				return mv;
 			} catch (Exception e) {
@@ -407,7 +449,9 @@ public class NewspaperController {
 				String NewspaperBillId = request.getParameter("NewspaperBillId");
 				Object[] NewsPaperExpSancReport = service.getNewspaperContingentBillPrintData(NewspaperBillId);
 				mv.addObject("NewsPaperExpSancReport", NewsPaperExpSancReport);
-
+				mv.addObject("LabDetails", service.getLabDetails());
+				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+				mv.addObject("NewsExpSacGOI",NewsExpSacGOI);
 				mv.setViewName("newspaper/NewspaperExpSancReport");
 				
 				return mv;
@@ -666,6 +710,7 @@ public class NewspaperController {
 						}
 					}
 	
+					
 					if (length == count) {
 						String TeleFromDate[] = request.getParameterValues("FromDate");
 						String TeleToDate[] = request.getParameterValues("ToDate");
@@ -1011,7 +1056,10 @@ public class NewspaperController {
 				request.setAttribute("desig", designation);
 				request.setAttribute("TeleSpecialpermission", TeleSpecialpermission);
 				request.setAttribute("PayLevelAndTeleRectrictAmt", PayLevelAndTeleRectrictAmt);
-
+				
+				request.setAttribute("LabDetails", service.getLabDetails());
+				request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+				
 				mv.setViewName("newspaper/TelephoneAdd");
 
 			} else {
@@ -1054,7 +1102,11 @@ public class NewspaperController {
 					request.setAttribute("TeleClaimEditDetails", TeleClaimEditDetails);
 					request.setAttribute("name", name);
 					request.setAttribute("desig", designation);
-				
+					
+					request.setAttribute("LabDetails", service.getLabDetails());
+					request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+					
+					
 					mv.setViewName("newspaper/TelephoneEdit");
 				
 				} else 
@@ -1095,6 +1147,9 @@ public class NewspaperController {
 					request.setAttribute("TelephoneUserPrintSingleData", TelephoneUserPrintSingleData);
 					request.setAttribute("TelephoneUserPrintMultiData", TelephoneUserPrintMultiData);
 
+					request.setAttribute("LabDetails", service.getLabDetails());
+					request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+					
 					mv.setViewName("newspaper/TeleClaimPrint");
 
 				} else {
@@ -1128,7 +1183,9 @@ public class NewspaperController {
 
 				request.setAttribute("TelephonePrintReportSingleData", TelephonePrintReportSingleData);
 				request.setAttribute("TelephonePrintReportMultiData", TelephonePrintReportMultiData);
-
+				request.setAttribute("LabDetails", service.getLabDetails());
+				request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+				
 				mv.setViewName("newspaper/TelephoneReportPrint");
 
 				return mv;
@@ -1152,7 +1209,11 @@ public class NewspaperController {
 				String TeleBillId = request.getParameter("TeleBillId");
 				Object[] TelephoneContingentBillPrint = service.getTelephoneContingentBillPrintData(TeleBillId);
 				request.setAttribute("TelephoneContingentBillPrint", TelephoneContingentBillPrint);
-
+				request.setAttribute("LabDetails", service.getLabDetails());
+				request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+				request.setAttribute("TeleContingentVoucherNo", TeleContingentVoucherNo);
+				request.setAttribute("TelephoneAuthority", TelephoneAuthority);
+				request.setAttribute("PublicFundNo",PublicFundNo);
 				mv.setViewName("newspaper/TelephoneContingentBill");
 
 				return mv;
@@ -1256,7 +1317,10 @@ public class NewspaperController {
 				String TeleBillId = request.getParameter("TeleBillId");
 				Object[] TeleExpSancReport = service.getTelephoneContingentBillPrintData(TeleBillId);
 				request.setAttribute("TeleExpSancReport", TeleExpSancReport);
-
+				request.setAttribute("LabDetails", service.getLabDetails());
+				request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+				request.setAttribute("TeleExpSncFileNo",TeleExpSncFileNo);
+				request.setAttribute("TelephoneAuthority",TelephoneAuthority);
 				mv.setViewName("newspaper/TeleExpSancReport");
 
 				return mv;
@@ -1276,7 +1340,6 @@ public class NewspaperController {
   			ModelAndView mv=new ModelAndView("newspaper/TelephoneApprovedList");
   			List<Object[]> TelephoneClaimApprovedList=service.getTelephoneClaimApprovedList();
   			request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
-		  			
 		  	
   			List<Object[]> TelephoneApprovalList=service.getTelephoneApprovalList();
        	    request.setAttribute("TeleCount",TelephoneApprovalList.size());

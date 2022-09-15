@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
@@ -29,6 +30,8 @@ String ClaimYear="Not Available";
 int id=0;
 
 List<Object[]> TeleClaimEditDetails=(List<Object[]>)request.getAttribute("TeleClaimEditDetails");
+
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
 
 if(request.getAttribute("TeleClaimEditDetails")!=null){
 for(Object ls[]:TeleClaimEditDetails){
@@ -97,8 +100,7 @@ for(Object ls[]:TeleClaimEditDetails){
 		<div class="row">
              <div class="col-sm-12 text-center" >
              <br>
-             <b>RE-IMBURSEMENT OF TELEPHONE BILL</b><br>
-             <b>CABS,Banglore</b>
+            <br> <b>RE-IMBURSEMENT OF TELEPHONE BILL</b><br> <b><%=LabDetails.getLabCode() %>, <%=LabDetails.getLabCity() %></b>
              </div>
      
      

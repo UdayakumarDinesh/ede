@@ -1151,8 +1151,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}
 			return (result);
 		}
-
-
 		
 		private static final String GETTELEPHONEUSERPRINTSINGLEDATA = "SELECT em.EmpName,a.SBIACCNO,a.GPFNO,b.designation,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.SBIACCNO AS 'OTHER_ACC_NO' FROM employee_details a, employee_desig b, pis_tele c, employee em WHERE em.desigid=b.desigid AND em.empno=a.empno  AND  a.EMPno=c.Empid AND TeleForwardId=:TeleForwardId ;";
 		@Override
@@ -1195,11 +1193,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}
 		 
-
-
-
-
-
 
 ////////////////////////////////Approvals///////////////////////////////////////
 

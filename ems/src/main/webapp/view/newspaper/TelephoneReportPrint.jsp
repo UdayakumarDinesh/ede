@@ -1,4 +1,5 @@
 
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
@@ -55,13 +56,15 @@ for(Object ls[]:TelephonePrintReportSingleData){
  String RUPEES=IndianRupeeFormat.rupeeFormat(RupeeInNonFormat);
  String RupeeInWords  = nw.convert1(Integer.parseInt(RupeeInNonFormat));
 int value=0;
+
+LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
 %>
 
 
 
         
         <table  id="excelId"  class="table table-hover table-striped  table-condensed  table-bordered ">
-         <caption><div class="text-center"><b>CONSOLIDATED LIST FOR RE-IMBURSEMENT OF TELEPHONE/MOBILE PHONES</b></div><div class="text-center"><small>CABS/Misc/CB- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  / Dated <b> From <%=FromDate%> to <%=ToDate%> </b></small></div></caption><colgroup align="center"></colgroup><colgroup align="left"></colgroup><colgroup span="2" align="center"></colgroup><colgroup span="3" align="center"></colgroup><thead valign="top">
+         <caption><div class="text-center"><b>CONSOLIDATED LIST FOR RE-IMBURSEMENT OF TELEPHONE/MOBILE PHONES</b></div><div class="text-center"><small><%=LabDetails.getLabCode() %>/Misc/CB- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  / Dated <b> From <%=FromDate%> to <%=ToDate%> </b></small></div></caption><colgroup align="center"></colgroup><colgroup align="left"></colgroup><colgroup span="2" align="center"></colgroup><colgroup span="3" align="center"></colgroup><thead valign="top">
         <thead>
         <tr>
         <th style="text-align:center;width:1% !important;">S.NO.</th>
