@@ -1239,7 +1239,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		private static final String ADDTELEPHONEBILL = "update pis_tele_forward  set TeleUserFlag='S',ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate  where   TeleForwardId=:TeleForwardId ";
 
 		@Override
-		public int TelephoneApprove_AddTelephoneBill(String Empid, double FinalAmount, String FromDate, String ToDate, Map<String, String> map) 
+		public int TelephoneApprove_AddTelephoneBill( String Empid, double FinalAmount, String FromDate, String ToDate, Map<String, String> map ) 
 		{
 			logger.info(new Date() + "Inside DAO TelephoneApprove_AddTelephoneBill");
 			int result = 0;
@@ -1310,6 +1310,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 					String Comment = comments;
 
 					Query query1 = manager.createNativeQuery(TELEPHONESENDBACK);
+					
 					query1.setParameter("TeleForwardId", Integer.parseInt(TeleForwardId));
 					query1.setParameter("ModifiedBy", Empid);
 					query1.setParameter("remark", Comment);
@@ -1362,7 +1363,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		{
 			logger.info(new Date() + "Inside DAO getCheckTeleApproveForwardOrNot");
 			Object[] CheckTeleApproveForwardOrNot = null;
-
 			try {
 
 				Query q = manager.createNativeQuery(GETCHECKTELEAPPROVEFORWARDORNOT);

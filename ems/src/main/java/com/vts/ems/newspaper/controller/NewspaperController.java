@@ -896,7 +896,7 @@ public class NewspaperController {
 			String sesEmpNo = (String) ses.getAttribute("EmpNo");
 			String Username = (String) ses.getAttribute("Username");
 			ModelAndView mv = new ModelAndView();
-			logger.info(new Date() + "Inside TelephoneApproval.htm " + Username);
+			logger.info(new Date() + "Inside TelephoneApproval.htm" + Username);
 			try {
 				
 				if (request.getParameter("TelephoneApproval") != null) {
@@ -1234,9 +1234,7 @@ public class NewspaperController {
 			try {
 				List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
 				request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
-
 				mv.setViewName("newspaper/TelephoneSendBack");
-
 				return mv;
 			}
 			catch (Exception e) 
@@ -1347,14 +1345,12 @@ public class NewspaperController {
   		} 
 		        
 		  		@RequestMapping(value="/telephone-approval-individualclaim-details")
-		  		public ModelAndView telephoneIndividualClaimDetailsPrint(HttpServletRequest request)
+		  		public ModelAndView telephoneIndividualClaimDetailsPrint(HttpServletRequest request,HttpSession ses) throws Exception
 		  		{
 		  			  ModelAndView mv=new ModelAndView();
 		  		
-		  			  if(request.getParameter("TeleForwardId")!=null)
+		  			if(request.getParameter("TeleForwardId")!=null)
 		  			{
-		  			
-
 		  				String TeleForwardId=request.getParameter("TeleForwardId");	
 		  			   
 		  				List<Object[]> TelephoneUserPrintSingleData=service.getTelephoneUserPrintSingleData(TeleForwardId);
@@ -1363,8 +1359,10 @@ public class NewspaperController {
 		  				request.setAttribute("TelephoneUserPrintSingleData", TelephoneUserPrintSingleData);
 		  			    request.setAttribute("TelephoneUserPrintMultiData", TelephoneUserPrintMultiData);
 		  				
+		  			    request.setAttribute("LabDetails", service.getLabDetails());
+						request.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
+						
 		  			    mv.setViewName("newspaper/TeleClaimPrint");
-		  				
 		  				
 		  			}
 		  			else
@@ -1373,23 +1371,9 @@ public class NewspaperController {
 					    mv.setViewName("newspaper/PrintError");
 		  				
 		  			}
-		      	  
-		      	  
 		  			    
-		  		 return mv;
+		  			return mv;
 		  		} 
 		    
-	     /////////////////////*Telephone*////////////////////////////
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 }

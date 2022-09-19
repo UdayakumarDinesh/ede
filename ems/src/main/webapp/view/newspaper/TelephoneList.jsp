@@ -77,22 +77,22 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                                <tr>
                                 <td style="text-align: center;" ><input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required"></td>
                      
-                                <td ><%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[1].toString()));%></td>
+                                <td><%=DateTimeFormatUtil.SqlToRegularDate(ls[1].toString())%></td>
                                 <td><%=ls[2]%></td>
                                 <td><%=ls[3]%></td>
                                 <td><%=ls[4]%></td>
                                 <td><%=ls[5]%></td>
                                 <td><%=ls[6]%></td>
-                                <td><%if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))==0&&ls[8]==null){%><span class="label label-warning">Forwarded</span><%}else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%><span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span><%}%></td>
+                                <td><%if( Integer.parseInt(ls[9].toString())!=0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null ){ %><span class="label label-warning">Forwarded</span><% }else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%><span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span><%}%></td>
                               </tr>
                               <%}} %>
                            </tbody> 
                           </table>
-                          </div>
+                        </div>
                      
 	   <div  align="center"> 
 	   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
-       <%if(TeleClaimList!=null&&TeleClaimList.size()!=0){%>
+       <%if(TeleClaimList!=null && TeleClaimList.size()!=0){%>
         <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
         <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
         <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
@@ -158,7 +158,7 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                    <%}else{ %> <!--  //for close -->
                  
                  <div class="alert alert-info"><p class="text-center">No Device Present Please Add Device First</p></div>
-                   <%} %>
+                   <% } %>
                   </div>
              
              <div class="modal-footer">
@@ -208,7 +208,7 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
              <div class="modal-body">
              
                  <%
-                 if(TeleClaimList!=null&&TeleClaimList.size()>0){
+                 if(TeleClaimList!=null && TeleClaimList.size()>0){
                 	
                   %>
                       <table class="table table-hover table-striped  table-condensed  table-bordered  " >
@@ -227,19 +227,17 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                                <tbody>
                                 <%
 		                        for(Object ls[]:TeleClaimList){
-		                       if((Integer.parseInt(ls[9].toString()))==0&&(Integer.parseInt(ls[7].toString()))==0&&ls[8]==null){
+		                       if(Integer.parseInt(ls[9].toString())==0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null){
 		                       %>
 		                     
                                <tr>
-                                <td><input type="checkbox" name="TeleId" value="<%=ls[0]%>"  checked></td>
-                     
-                                <td><%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[1].toString()));%></td>
-                                <td><%=ls[2]%></td>
-                                <td><%=ls[3]%></td>
-                                <td><%=ls[4]%></td>
-                                <td><%=ls[5]%></td>
-                                <td><%=ls[6]%></td>
-                                
+	                                <td><input type="checkbox" name="TeleId" value="<%=ls[0]%>"  checked></td>
+	                                <td><%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[1].toString()));%></td>
+	                                <td><%=ls[2]%></td>
+	                                <td><%=ls[3]%></td>
+	                                <td><%=ls[4]%></td>
+	                                <td><%=ls[5]%></td>
+	                                <td><%=ls[6]%></td>
                               </tr>
                               <%}}%>
                            </tbody> 
