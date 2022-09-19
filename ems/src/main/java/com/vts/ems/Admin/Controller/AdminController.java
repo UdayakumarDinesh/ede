@@ -113,7 +113,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				req.setAttribute("dashboard", admindashboard);
 				ses.setAttribute("formmoduleid", "1");
 				ses.setAttribute("SidebarActive","PisAdminDashboard_htm");
-				return "pis/PisDashboard";
+				return "Admin/AdminDashboard";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PisAdminDashboard.htm "+Username, e);
 				e.printStackTrace();	

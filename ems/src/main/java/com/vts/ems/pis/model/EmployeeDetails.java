@@ -63,6 +63,8 @@ public class EmployeeDetails {
 	private Date EmpStatusDate;
 	private String PhoneNo;
 	private String AltPhoneNo;
+	private String PerPassNo;
+	private String ExServiceMan; 
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

@@ -13,13 +13,13 @@
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>ADMIN DASHBOARD</h5>
+				<h5>PIS DASHBOARD</h5>
 			</div>
 			<div class="col-md-9 " >
 				<nav aria-label="breadcrumb">
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-				    <li class="breadcrumb-item active " aria-current="page">Admin</li>
+				    <li class="breadcrumb-item active " aria-current="page">PIS</li>
 				    <!-- <li class="breadcrumb-item"><a href="#">Library</a></li>
 				    <li class="breadcrumb-item active " aria-current="page">Data</li> -->
 				  </ol>
@@ -48,7 +48,7 @@
 			<div class="page card dashboard-card" >
 				<div class="card-body " align="center">
 				
-						<h3>Admin Dashboard Details</h3>
+						<h3>PIS Dashboard Details</h3>
 				
 					<%-- <div class="row" > 
 						<!-- <div class="col-md-3">
@@ -73,10 +73,5 @@
 				</div>
 			</div>		
 		</form>
-		
-	
-	
-
-
 </body>
 </html>

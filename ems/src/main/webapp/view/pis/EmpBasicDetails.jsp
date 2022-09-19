@@ -119,7 +119,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 			<div class="col-md-2" style="padding-bottom: 10px;" >
 			<div class="card" style="background-color: #ebf0f2;">
 			<div class="card-body text-center"  >
-			<form action="PisImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
+			<form action="PisEmployeeImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
 			<%if(employeedetails[29]!=null){ %>
 			
 			
@@ -263,7 +263,7 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 							<td><%if(employeedetails[20]!=null){%><%=employeedetails[20]%><%}else{%>--<%}%></td>
 							<td> <b>Blood Group</b> </td>
 							<td style="max-width: 30%;">
-								<form action="EmpBloodGropuEdit.htm" method="post"> 
+								<form action="UserBloodGropuEdit.htm" method="post"> 
 									<table style="width: 100%; border: 0px;margin: -5px 0px 0px 0px;" >
 										<tr>
 											<td  style="width: 75%; border: 0px;padding: 0px;">

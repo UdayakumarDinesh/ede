@@ -107,7 +107,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<td><%=perAddress[4]%></td>
 							<td><%=perAddress[7]%></td>
 							<td><%=perAddress[8]%></td>	
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(perAddress[3].toString())%></td>
+							<td><%if(perAddress[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(perAddress[3].toString())%><%}else{%>--<%}%></td>
 							<td style="padding-top:5px; padding-bottom: 5px;">
 							<form action="AddEditPerAddress.htm" method="GET">
 							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
@@ -149,7 +149,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<tr align="center">
 							<td style="text-align: center;"><input type="radio" name="addressid" value="<%=obj[1]%>"> </td>					    
 						    <td><%=obj[2]%></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%></td>
+							<td><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>
 							<td><%=obj[4]%></td>
 							<td><%=obj[6]%></td>
 							<td><%=obj[7]%></td>		
@@ -194,7 +194,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<td><%=kinAddress[4]%></td>
 							<td><%=kinAddress[7]%></td>
 							<td><%=kinAddress[8]%></td>	
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(kinAddress[3].toString())%></td>
+							<td><%if(kinAddress[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(kinAddress[3].toString())%><%}else{%>--<%}%></td>
 							<td style="padding-top:5px; padding-bottom: 5px;">
 							<form action="KinAddressAddEdit.htm" method="GET">
 							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">
@@ -233,7 +233,7 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<td><%=EmeAddress[4]%></td>
 							<td><%=EmeAddress[7]%></td>
 							<td><%=EmeAddress[8]%></td>	
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(EmeAddress[3].toString())%></td>
+							<td><%if(EmeAddress[3]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(EmeAddress[3].toString())%> <%}else{%>--<%}%></td>
 							<td style="padding-top:5px; padding-bottom: 5px;">
 							<form action="EmecAddressAddEdit.htm" method="GET">
 							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>">

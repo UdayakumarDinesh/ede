@@ -10,18 +10,27 @@ import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.Appointments;
+import com.vts.ems.pis.model.Awards;
+import com.vts.ems.pis.model.DisciplineCode;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.Passport;
+import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
+import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.Publication;
+import com.vts.ems.pis.model.Qualification;
+import com.vts.ems.pis.model.QualificationCode;
 
 public interface PisService {
 
@@ -116,4 +125,78 @@ public interface PisService {
 	public long PisFamFormMembersAdd(PisFamFormMembers formmember) throws Exception;
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception;
 	public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception;
+	public List<Object[]> getEducationList(String empid)throws Exception;
+	public List<Object[]> getQualificationList()throws Exception;
+	public List<Object[]> getDiscipline()throws Exception;
+	public Qualification getQualificationDetails(int qualificationid)throws Exception;
+	public int DeleteQualification(String qualificationid,String Username)throws Exception;
+	public int AddQualification(Qualification Details)throws Exception;
+	public int EditQualification(Qualification Details)throws Exception;
+	public List<Object[]> getAppointmentList(String empid)throws Exception;
+	public List<Object[]> getDesignationList()throws Exception;
+	public List<Object[]> getRecruitment()throws Exception;
+	public int DeleteAppointment(String appointmentid,String Username)throws Exception;
+	public int AddAppointment(Appointments app)throws Exception;
+	public int EditAppointment(Appointments app)throws Exception;
+	public Appointments getAppointmentsDetails(int appointmentsid)throws Exception;
+	public List<Object[]> getAwardsList(String empid)throws Exception;
+	public List<Object[]> getPisAwardsList()throws Exception;
+	public int DeleteAwards(String awardsid,String Username)throws Exception;
+	public Awards getAwardsDetails(int awardsid)throws Exception;
+	public int AddAwards(Awards app)throws Exception;
+	public int EditAwards(Awards app)throws Exception;
+	public List<Object[]> getPropertyList(String empid)throws Exception;
+	public Property getPropertyDetails(int awardsid)throws Exception;
+	public int DeleteProperty(String propertyid,String Username)throws Exception;
+	public int AddProperty(Property app)throws Exception;
+	public int EditProperty(Property app)throws Exception;
+	public List<Object[]> getPublicationList(String empid)throws Exception;
+	public List<Object[]> getPisStateList()throws Exception;
+	public Publication getPublicationDetails(int publicationid)throws Exception;
+	public int AddPublication(Publication app)throws Exception;
+	public int EditPublication(Publication app)throws Exception;
+	public List<Object[]> getPassportVisitList(String empid) throws Exception;
+	public Object[] getPassportList(String empid) throws Exception;
+	public Passport getPassportData(String empid)throws Exception;	
+	public int AddPassport(Passport passport)throws Exception;
+	public int EditPassport(Passport passport)throws Exception;
+	public PassportForeignVisit getForeignVisitData(int foreignvisitid)throws Exception;
+	public int deleteForeignVisit(String addresid,String Username)throws Exception;
+	public int AddForeignVisit(PassportForeignVisit pfv)throws Exception;
+	public int EditForeignVisit(PassportForeignVisit pfv)throws Exception;
+	public int DeleteEducationQualification(String id,String Username)throws Exception;
+	public int EditEducationQualification(String id,String qualification,String Username)throws Exception;
+	public int AddEducationQualification(QualificationCode qc)throws Exception;
+	public int DeleteDiscipline(String id,String Username)throws Exception;
+	public int EditDiscipline(String id,String discipline,String Username)throws Exception;
+	public int AddDiscipline(DisciplineCode dc)throws Exception;
+	public Object[] getEmpData(String EmpNo) throws Exception ;
+	public List<Object[]> GetEmpStatusList() throws Exception;
+	public List<Object[]> getGroupName() throws Exception;
+	public List<Object[]> getDesignation() throws Exception;
+	public List<Object[]> fetchAllEmployeeDetail() throws Exception;
+	public List<Object[]> getEmployeeStatusWise(String empstatus) throws Exception;
+	public List<Object[]> getEmployeeDivOrGroupWise(int id) throws Exception;
+	public List<Object[]> getEmployeeDesignationWise(int id) throws Exception;
+	public List<Object[]> getEmployeeGenderWise(String id) throws Exception;
+	public List<Object[]> fetchAllPersonalDetail() throws Exception;
+	public List<Object[]> fetchPersonalDetailsNGOorCGO(String cattype) throws Exception;
+	public Object[] GetAllEmployeeDetails(String empid) throws Exception;
+	public List<Object[]> getAllEmployeeList()throws Exception;
+	public List<Object[]> getConfigurableReportList(String name,String DesigId,String GroupId,String CatId,String Gender,String CadreId,String ServiceStatus,String CategoryId,String BG,String modeOfRecruitId,String AwardId)throws Exception;
+	public List<Object[]> getconfigurablereportselectionwise(String name, String designation, String groupDivision,
+			String catClass, String gender, String cadre, String serviceStatus, String pay_Level, String qualification,
+			String propertyType, String pubType, String category, String bG, String quarter, String physicalHandicap,
+			String religion, String appointment, String awards)throws Exception;
+	
+	public List<Object[]> getDefaultReport()throws Exception;
+	public List<Object[]> getDobReport(int year, int month)throws Exception;
+	public List<Object[]> getDoaReport(int year, int month)throws Exception;
+	public List<Object[]> getDorReport(int year, int month)throws Exception;
+	public List<Object[]> getDojReport(int year, int month)throws Exception;
+	public List<Object[]> fetchCadreNameCode()throws Exception;
+	public List<Object[]> EmployeeList(String cadreid)throws Exception;
+	public int GetMaxSeniorityNo()throws Exception;
+	
+	
 }

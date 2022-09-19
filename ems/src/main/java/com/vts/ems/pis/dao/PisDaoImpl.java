@@ -27,18 +27,27 @@ import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.Appointments;
+import com.vts.ems.pis.model.Awards;
+import com.vts.ems.pis.model.DisciplineCode;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.Passport;
+import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
+import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.Publication;
+import com.vts.ems.pis.model.Qualification;
+import com.vts.ems.pis.model.QualificationCode;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Repository
@@ -83,7 +92,31 @@ public class PisDaoImpl implements PisDao {
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEDETAILS);
 			query.setParameter("empid", empid);
-			return (Object[]) query.getResultList().get(0);
+			List<Object[]> list =(List<Object[]>)query.getResultList();
+			Object[] result=null;
+			if(list!=null && list.size()>0) {
+				result=list.get(0);
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String GETALLDETAILS="SELECT e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,     ee.SBIAccNo,  c.Category_type,   ed.designation,  dm.divisionname,  dm.DivisionCode, ee.gpfno, dg.GroupCode,ee.hometown,  ee.quarters ,  ee.photo,   ee.phoneno ,   pp.paylevel,  ee.pranno ,  pp.paygrade,  ee.basicpay,  cat.cat_name,  cad.cadre  ,  ee.perpassno,  ee.exserviceman, ee.servicestatus,  ee.empstatus ,  ee.ph FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp ,pis_category c, pis_cat_class cat ,pis_cadre cad WHERE cat.cat_id=ee.catid AND ee.categoryid=c.category_id AND ee.cadreid=cad.cadreid AND  e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND  dm.groupid = dg.groupid AND e.empno=ee.empno AND ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
+	@Override
+	public Object[] GetAllEmployeeDetails(String empid) throws Exception {
+		logger.info(new Date() + "Inside DAO GetAllEmployeeDetails()");
+		try {
+			Query query = manager.createNativeQuery(GETALLDETAILS);
+			query.setParameter("empid", empid);
+			List<Object[]> list =(List<Object[]>) query.getResultList();
+			Object[] result=null;
+			if(list!=null &&list.size()>0) {
+				result =list.get(0);
+			}
+			return result;
+					
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -786,7 +819,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERADDRESS="FROM AddressPer WHERE empid=:empid";
 	@Override
 	public AddressPer getPerAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getMemberDetails()");
+		logger.info(new Date() + "Inside DAO getPerAddressData()");
 		AddressPer addres=null;
 		try {
 			Query query = manager.createQuery(PERADDRESS);
@@ -834,7 +867,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive='1'";
 	@Override
 	public List<Object[]> getResAddress(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO GetStates()");
+		logger.info(new Date() + "Inside DAO getResAddress()");
 		try {
 			Query query = manager.createNativeQuery(RESADDRESS);	
 			query.setParameter("empid", empid);
@@ -886,7 +919,7 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Long AddResAddress(AddressRes resaddress)throws Exception{
-		logger.info(new Date() + "Inside DAO AddPerAddress()");
+		logger.info(new Date() + "Inside DAO AddResAddress()");
 		try {
 			manager.persist(resaddress);
 			manager.flush();
@@ -998,7 +1031,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String NEXTKINADDRESS="FROM AddressNextKin WHERE empid=:empid";
 	@Override
 	public AddressNextKin getNextKinAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getMemberDetails()");
+		logger.info(new Date() + "Inside DAO getNextKinAddressData()");
 		AddressNextKin addres=null;
 		try {
 			Query query = manager.createQuery(NEXTKINADDRESS);
@@ -1090,13 +1123,13 @@ public class PisDaoImpl implements PisDao {
 		query.setParameter("todate", Todate);
 		 
 		List<Object[]> AuditStampingList=(List<Object[]>) query.getResultList();
-		System.out.println(AuditStampingList.size());
+		
 		return AuditStampingList;
 	}
 	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
 	@Override
 	public String OldPassword(String UserId) throws Exception {
-		logger.info(new Date() +"Inside DAO OldPassword");
+		logger.info(new Date() +"Inside DAO OldPassword()");
 		Query query = manager.createNativeQuery(OLDPASSWORD);
 		query.setParameter("loginid", UserId);
 		
@@ -1107,7 +1140,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int PasswordChange(String OldPassword, String NewPassword ,String loginid, String ModifiedDate,String UserName)throws Exception {
 		
-		logger.info(new Date() +"Inside DAO PasswordChange");
+		logger.info(new Date() +"Inside DAO PasswordChange()");
 		Query query = manager.createNativeQuery(PASSWORDUPDATECHANGE);
 		
 		query.setParameter("newpassword", NewPassword);
@@ -1154,7 +1187,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state FROM pis_address_res WHERE empid =:empid";
+	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state,ext,qtrno,qtrtype,emailofficial FROM pis_address_res WHERE empid =:empid";
 	@Override
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception {
 		logger.info(new Date() + "Inside DAO EmployeeResAddressDetails()");
@@ -1260,7 +1293,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetEmployeeList()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetAllEmployee()");
+		logger.info(new Date() + "Inside DAO GetEmployeeList()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLIST);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
@@ -1276,7 +1309,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetEmployeeLoginData(String loginid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetEmployeeLoginData");
+		logger.info(new Date() + "Inside DAO GetEmployeeLoginData()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLOYEELOGINDATA);
 			query.setParameter("loginid", loginid);
@@ -1292,7 +1325,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO loginHisAddSubmit");
+		logger.info(new Date() +"Inside DAO loginHisAddSubmit()");
 		try {
 			manager.persist(model);
 			manager.flush();
@@ -1321,7 +1354,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private final static String LISTOFSENIORITYNUMBER="SELECT SrNo, EmpId FROM employee WHERE SrNo !=0 ORDER BY SrNo ASC ";
+	private final static String LISTOFSENIORITYNUMBER="SELECT SrNo, EmpId FROM employee WHERE SrNo !=0 and isactive=1 ORDER BY SrNo ASC ";
 	private final static String UPDATESRNO="UPDATE employee SET SrNo=:srno WHERE EmpId=:empid";
 	
 	@Override
@@ -1330,14 +1363,13 @@ public class PisDaoImpl implements PisDao {
 	    Query query=manager.createNativeQuery(LISTOFSENIORITYNUMBER);
 	    List<Object[]> listSeni=(List<Object[]>)query.getResultList();
 	    
-	    Query updatequery=manager.createNativeQuery(UPDATESRNO);
-	    updatequery.setParameter("empid", empId);
-        updatequery.setParameter("srno", newSeniorityNumber);  	   
-        updatequery.executeUpdate();
+	   // Query updatequery=manager.createNativeQuery(UPDATESRNO);
+	   // updatequery.setParameter("empid", empId);
+       // updatequery.setParameter("srno", newSeniorityNumber);  	   
+       // updatequery.executeUpdate();
         
 	    return listSeni;
 	}
-	
 	
 	@Override
 	public int UpdateAllSeniority(Long empIdL, Long long1)throws Exception
@@ -1366,7 +1398,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetFormMembersList(String formid) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO getFamilydetails");
+		logger.info(new Date() + "Inside DAO GetFormMembersList()");
 		try {
 			Query query = manager.createNativeQuery(GETFAMILYDETAILSFWD);
 			query.setParameter("formid",formid);
@@ -1385,7 +1417,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] getEmployeeInfo(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmployeeInfo");
+		logger.info(new Date() +"Inside DAO getEmployeeInfo()");
 		Query query =manager.createNativeQuery(GETEMPLOYEEINFO);
 		Object[] result = null;
 		query.setParameter("empid", empid);
@@ -1404,7 +1436,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] employeeResAddr(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO employeeResAddr");
+		logger.info(new Date() +"Inside DAO employeeResAddr()");
 		Query query =manager.createNativeQuery(EMPLOYEERESADDR);
 		Object[] result = null;
 		query.setParameter("empid", empid);
@@ -1420,7 +1452,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long UpdateMemberStatus(PisEmpFamilyForm famform)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateMemberStatus");
+		logger.info(new Date() +"Inside DAO UpdateMemberStatus()");
 		try {
 			manager.persist(famform);	
 			manager.flush();
@@ -1438,7 +1470,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public PisEmpFamilyForm getPisEmpFamilyForm(String familyformid1) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPisEmpFamilyForm");
+		logger.info(new Date() + "Inside DAO getPisEmpFamilyForm()");
 		PisEmpFamilyForm famform = null;
 		try {
 			
@@ -1477,7 +1509,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> familyRelationList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO familyRelationList");
+		logger.info(new Date() +"Inside DAO familyRelationList()");
 		Query query = manager.createNativeQuery(FAMILYRELATIONLIST);
 		List<Object[]> List=(List<Object[]>) query.getResultList();
 		return  List;
@@ -1489,7 +1521,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] RelationshipData(String relationid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO RelationshipData");
+		logger.info(new Date() +"Inside DAO RelationshipData()");
 		Query query =manager.createNativeQuery(RELATIONSHIPDATA);
 		Object[] result = null;
 		query.setParameter("relationid", relationid);
@@ -1506,7 +1538,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] getMemberdata(String formmemberid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getMemberdata");
+		logger.info(new Date() +"Inside DAO getMemberdata()");
 		Query query =manager.createNativeQuery(GETMEMBERDATA);
 		Object[] result = null;
 		query.setParameter("formmemberid", formmemberid);
@@ -1524,7 +1556,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> EmpFamFormsList(String empid,String status) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmpFamFormsList");
+		logger.info(new Date() +"Inside DAO EmpFamFormsList()");
 		Query query =manager.createNativeQuery(EMPFAMFORMSLIST);
 		query.setParameter("empid", empid);
 		List<Object[]> result = new ArrayList<>();
@@ -1540,7 +1572,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int FamilyMemIncConfirm(String formid, String empid,String username,String medDepStatus)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FamilyMemIncConfirm");
+		logger.info(new Date() +"Inside DAO FamilyMemIncConfirm()");
 		try {
 		    Query query=manager.createNativeQuery(FAMTABLEUPDATE);
 		    query.setParameter("formid", formid);
@@ -1575,7 +1607,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public  Object[] GetFamFormData(String familyformid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetFamFormData");
+		logger.info(new Date() +"Inside DAO GetFamFormData()");
 		Query query =manager.createNativeQuery(GETFAMFORMDATA);
 		Object[] result = null;
 		query.setParameter("familyformid", familyformid);
@@ -1591,7 +1623,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int FormFamilyMemberDelete(String formmemberid)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FamilyMemberDelete");
+		logger.info(new Date() +"Inside DAO FormFamilyMemberDelete()");
 		try {
 		    Query query=manager.createNativeQuery(FAMILYMEMBERDELETE);
 		    query.setParameter("formmemberid", formmemberid);
@@ -1607,7 +1639,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int FormFamilyMemberHardDelete(String familydetailsid)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FormFamilyMemberHardDelete");
+		logger.info(new Date() +"Inside DAO FormFamilyMemberHardDelete()");
 		try {
 		    Query query=manager.createNativeQuery(FORMFAMILYMEMBERHARDDELETE);
 		    query.setParameter("familydetailsid", familydetailsid);
@@ -1728,8 +1760,1132 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		}
 	}
 	
+	private static final String EDUCATIONLIST="SELECT A.qualification_id, A.empid, B.quali_title,C.disci_title,A.university,A.yearofpassing,A.cgpa,A.division,A.specialization,A.sponsored,A.acq_bef_aft FROM pis_qualification A, pis_quali_code B,pis_disci_code C WHERE A.quali_id = B.quali_id AND A.disci_id=C.disci_id AND A.empid=:empid AND A.is_active='1' order by A.qualification_id desc";
+	@Override
+	public List<Object[]> getEducationList(String empid)throws Exception{
+		logger.info(new Date() + "Inside DAO getEducationList()");
+		
+		try {
+			Query query = manager.createNativeQuery(EDUCATIONLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM pis_quali_code WHERE is_active='1'";
+	@Override
+	public List<Object[]> getQualificationList()throws Exception{
+		logger.info(new Date() + "Inside DAO getQualificationList()");
+		
+		try {
+			Query query = manager.createNativeQuery(QUALIFICATIONLIST);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String DISCILIST="SELECT disci_id,disci_title FROM pis_disci_code WHERE is_active='1'";
+	@Override
+	public List<Object[]> getDiscipline()throws Exception{
+		logger.info(new Date() + "Inside DAO getDiscipline()");
+		try {
+			Query query = manager.createNativeQuery(DISCILIST);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public Qualification getQualificationDetails(int qualificationid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getQualificationDetails()");
+		Qualification memeber = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<Qualification> cq = cb.createQuery(Qualification.class);
+			Root<Qualification> root = cq.from(Qualification.class);
+			Predicate p1 = cb.equal(root.get("qualification_id"), qualificationid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<Qualification> allquery = manager.createQuery(cq);
+			memeber = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memeber;
+	}
+	private static final String DELETEQUALIFICATION="  UPDATE  pis_qualification SET is_active=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE qualification_id=:qualificationid";
+	@Override
+	public int DeleteQualification(String qualificationid,String Username)throws Exception
+	{
+			logger.info(new Date() + "Inside DAO DeleteQualification()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEQUALIFICATION);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("qualificationid",qualificationid );
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+
+	@Override
+	public int AddQualification(Qualification Details) throws Exception {
+	
+		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
+		try {
+			manager.persist(Details);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Details.getQualification_id();
+	}
+	
+	@Override
+	public int EditQualification(Qualification Details) throws Exception {
+	
+		logger.info(new Date() + "Inside DAO EditQualification()");
+		try {
+			manager.merge(Details);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Details.getQualification_id();
+	}
+	
+	private static final String APPOINTMENTLIST="SELECT A.appointment_id,A.empid,A.org_lab,A.drdo_others,A.mode_recruitment,B.mode_recruitment_title,A.desig_id,C.Designation,A.from_date,A.to_date FROM pis_appointments A, pis_mode_recruitment_code B, employee_desig C WHERE A.mode_recruitment=B.recruitment_id AND A.desig_id=C.DesigId AND A.empid=:empid AND A.is_active='1' ORDER BY A.appointment_id desc";
+	@Override
+	public List<Object[]> getAppointmentList(String empid)throws Exception{
+		logger.info(new Date() + "Inside DAO getAppointmentList()");
+		
+		try {
+			Query query = manager.createNativeQuery(APPOINTMENTLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String RECRUITMENTLIST="SELECT recruitment_id,mode_recruitment_title FROM pis_mode_recruitment_code";
+	@Override
+	public List<Object[]> getRecruitment()throws Exception{
+		logger.info(new Date() + "Inside DAO getRecruitment()");
+		
+		try {
+			Query query = manager.createNativeQuery(RECRUITMENTLIST);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String PisAwardsList="SELECT  DesigId,Designation  FROM employee_desig";
+	@Override
+	public List<Object[]> getDesignationList()throws Exception{
+		logger.info(new Date() + "Inside DAO getDesignationList()");
+		
+		try {
+			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String DELETEAPPOINTMENT="UPDATE  pis_appointments SET is_active=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE appointment_id=:appointmentid";
+	@Override
+	public int DeleteAppointment(String appointmentid,String Username)throws Exception
+	{
+			logger.info(new Date() + "Inside DAO DeleteAppointment()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEAPPOINTMENT);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("appointmentid",appointmentid );
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public Appointments getAppointmentsDetails(int appointmentsid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getAppointmentsDetails()");
+		Appointments list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<Appointments> cq = cb.createQuery(Appointments.class);
+			Root<Appointments> root = cq.from(Appointments.class);
+			Predicate p1 = cb.equal(root.get("appointment_id"), appointmentsid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<Appointments> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public int AddAppointment(Appointments app)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO AddAppointment()");
+		try {
+			manager.persist(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getAppointment_id();
+	}
+	
+	@Override
+	public int EditAppointment(Appointments app)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO EditAppointment()");
+		try {
+			manager.merge(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getAppointment_id();
+	}
+	
+	private static final String AWARDSLIST="SELECT a.awards_id,a.empid,b.AwardName,a.award_by,a.details,a.award_date,a.certificate,CASE WHEN a.certificate='Y' THEN 'YES' ELSE 'NO' END,a.citation,CASE WHEN a.citation='Y' THEN 'YES' ELSE 'NO' END,a.medallion,CASE WHEN medallion='Y' THEN 'YES' ELSE 'NO' END,a.award_cat,a.cash ,CASE WHEN a.cash='Y' THEN 'YES' ELSE 'NO' END,a.cash_amt  FROM pis_awards a ,pis_award_list b  WHERE a.empid=:empid AND a.AwardListId=b.AwardListId  AND a.is_active='1' ";
+	@Override
+	public List<Object[]> getAwardsList(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getAwardsList()");
+		
+		try {
+			Query query = manager.createNativeQuery(AWARDSLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String DESIGNATIONLIST="SELECT AwardListId,AwardName FROM pis_award_list";
+	@Override
+	public List<Object[]> getPisAwardsList()throws Exception{
+		logger.info(new Date() + "Inside DAO getPisAwardsList()");
+		
+		try {
+			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String DELETEAWARDS="UPDATE  pis_awards SET is_active=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE awards_id=:awardsid";
+	@Override
+	public int DeleteAwards(String awardsid,String Username)throws Exception
+	{
+			logger.info(new Date() + "Inside DAO DeleteAwards()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEAWARDS);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("awardsid",awardsid );
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public Awards getAwardsDetails(int awardsid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getAwardsDetails()");
+		Awards list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<Awards> cq = cb.createQuery(Awards.class);
+			Root<Awards> root = cq.from(Awards.class);
+			Predicate p1 = cb.equal(root.get("awards_id"), awardsid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<Awards> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public int AddAwards(Awards app)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO AddAwards()");
+		try {
+			manager.persist(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getAwards_id();
+	}
+	
+	@Override
+	public int EditAwards(Awards app)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO EditAwards()");
+		try {
+			manager.merge(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getAwards_id();
+	}
+	
+	private static final String PROPERTYLIST="SELECT a.empid ,a.property_id, a.movable, a.value,a.details,a.dop,a.acquired_type,a.noting_on , a.remarks FROM  pis_property a WHERE a.empid=:empid AND a.is_active='1'";
+	@Override
+	public List<Object[]> getPropertyList(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPropertyList()");
+		
+		try {
+			Query query = manager.createNativeQuery(PROPERTYLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public Property getPropertyDetails(int propertyid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPropertyDetails()");
+		Property list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<Property> cq = cb.createQuery(Property.class);
+			Root<Property> root = cq.from(Property.class);
+			Predicate p1 = cb.equal(root.get("property_id"), propertyid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<Property> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	private static final String DELETEPROPERTY="UPDATE  pis_property SET is_active=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE property_id=:propertyid";
+	@Override
+	public int DeleteProperty(String propertyid,String Username)throws Exception
+	{
+			logger.info(new Date() + "Inside DAO DeleteProperty()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEPROPERTY);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("propertyid",propertyid );
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public int AddProperty(Property app)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO AddProperty()");
+		try {
+			manager.persist(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getProperty_id();
+	}
+	
+	@Override
+	public int EditProperty(Property app)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO EditProperty()");
+		try {
+			manager.merge(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getProperty_id();
+	}
+	
+	private static final String PUBLICATIONLIST="SELECT a.empid,a.publication_id,a.pub_type,a.authors,a.discipline,a.title,b.statename,a.pub_date ,a.pub_name_vno_pno,a.patent_no FROM pis_publication  a ,pis_states b WHERE a.country =b.stateid AND a.empid=:empid AND a.is_active='1' ORDER BY a.publication_id DESC";
+	@Override
+	public List<Object[]> getPublicationList(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPublicationList()");
+		
+		try {
+			Query query = manager.createNativeQuery(PUBLICATIONLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	private static final String PISSTATELIST="SELECT a.stateid , a.statename FROM pis_states a";
+	@Override
+	public List<Object[]> getPisStateList()throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPisStateList()");
+		
+		try {
+			Query query = manager.createNativeQuery(PISSTATELIST);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public Publication getPublicationDetails(int publicationid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPublicationDetails()");
+		Publication list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<Publication> cq = cb.createQuery(Publication.class);
+			Root<Publication> root = cq.from(Publication.class);
+			Predicate p1 = cb.equal(root.get("publication_id"), publicationid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<Publication> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public int AddPublication(Publication app)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO AddPublication()");
+		try {
+			manager.persist(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getPublication_id();
+	}
+	@Override
+	public int EditPublication(Publication app)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO EditPublication()");
+		try {
+			manager.merge(app);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return app.getPublication_id();
+	}
+	
+	private static final String PASSPORTVISITLIST="SELECT PassportVisitId,EmpId,CountryName,NocLetterNo,NocIssuedFrom,Purpose,visitfromdate,visittodate  FROM pis_passport_visit  WHERE  empid=:empid AND IsActive='1'";
+	@Override
+	public List<Object[]> getPassportVisitList(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPassportVisitList()");
+		
+		try {
+			Query query = manager.createNativeQuery(PASSPORTVISITLIST);
+			query.setParameter("empid", empid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
+	
+	private static final String PASSPORTLIST="SELECT EmpId,PassportType,ValidFrom,ValidTo,PassportNo,STATUS FROM pis_passport  WHERE empid=:empid ";
+	@Override
+	public Object[] getPassportList(String empid) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPassportList()");
+		
+		try {
+			Query query = manager.createNativeQuery(PASSPORTLIST);
+			query.setParameter("empid", empid);
+			List<Object[]> list= (List<Object[]>) query.getResultList();
+			Object[] result = null;
+			if(list!=null && list.size()>0){
+				result=list.get(0);
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
 	
 	
 	
+	private static final String PASSPORT="FROM Passport WHERE empid=:empid";
+	@Override
+	public Passport getPassportData(String empid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getPassportData()");
+		Passport passport=null;
+		try {
+			Query query = manager.createQuery(PASSPORT);
+			query.setParameter("empid", empid);
+			passport = (Passport) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return passport;
+	}
+	
+	@Override
+	public int AddPassport(Passport passport)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO AddResAddress()");
+		try {
+			manager.persist(passport);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return passport.getPassportId();
+	}
+	
+	private static final String EDITPASSPORT="UPDATE  pis_passport SET  status=:status,passportno=:passportno ,validto=:validto, validfrom=:validfrom, passporttype=:passporttype  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE passportid=:passportid";
+	@Override
+	public int EditPassport(Passport passport)throws Exception
+	{
+			logger.info(new Date() + "Inside DAO EditPassport()");
+		
+		try {
+			Query query = manager.createNativeQuery(EDITPASSPORT);
+			
+			query.setParameter("modifiedby", passport.getModifiedBy());
+			query.setParameter("modifieddate",passport.getModifiedDate());
+			query.setParameter("passporttype",passport.getPassportType());
+			query.setParameter("validfrom",passport.getValidFrom());
+			query.setParameter("validto",passport.getValidTo());
+			query.setParameter("passportno",passport.getPassportNo());
+			query.setParameter("status",passport.getStatus());
+			query.setParameter("passportid",passport.getPassportId());
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public PassportForeignVisit getForeignVisitData(int foreignvisitid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getForeignVisitData()");
+		PassportForeignVisit list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<PassportForeignVisit> cq = cb.createQuery(PassportForeignVisit.class);
+			Root<PassportForeignVisit> root = cq.from(PassportForeignVisit.class);
+			Predicate p1 = cb.equal(root.get("PassportVisitId"), foreignvisitid);
+			cq = cq.select(root).where(p1);
+			TypedQuery<PassportForeignVisit> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String DELETEFOREIGNVISIT="UPDATE pis_passport_visit  SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE passportvisitid=:passportvisitid";
+	@Override
+	public int deleteForeignVisit(String foreignvisitid , String Username)throws Exception{
+		logger.info(new Date() + "Inside DAO deleteForeignVisit()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEFOREIGNVISIT);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("passportvisitid",foreignvisitid);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	@Override
+	public int AddForeignVisit(PassportForeignVisit pfv)throws Exception{
+	
+		logger.info(new Date() + "Inside DAO AddForeignVisit()");
+		try {
+			manager.persist(pfv);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pfv.getPassportVisitId();
+	}
+	
+	@Override
+	public int EditForeignVisit(PassportForeignVisit pfv)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO EditForeignVisit()");
+		try {
+			manager.merge(pfv);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pfv.getPassportVisitId();
+	}
+	
+	private static final String DELETEEDUCATIONQUALIFICATION="UPDATE pis_quali_code  SET is_active=:IsActive  , modified_by =:modifiedby , modified_date=:modifieddate  WHERE quali_id=:qualiid";
+	@Override
+	public int DeleteEducationQualification(String id,String Username)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO DeleteEducationQualification()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEEDUCATIONQUALIFICATION);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("qualiid",id);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String EDITEDUCATIONQUALIFICATION="UPDATE pis_quali_code  SET quali_title=:qualititle , modified_by =:modifiedby , modified_date=:modifieddate  WHERE quali_id=:qualiid";
+	@Override
+	public int EditEducationQualification(String id,String qualification,String Username)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO EditEducationQualification()");
+		
+		try {
+			Query query = manager.createNativeQuery(EDITEDUCATIONQUALIFICATION);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("qualititle",qualification);
+			query.setParameter("qualiid",id);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	@Override
+	public int AddEducationQualification(QualificationCode qc)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO AddEducationQualification()");
+		try {
+			manager.persist(qc);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return qc.getQuali_id();
+	}
+	
+
+	private static final String DELETEEDISCIPLINE="UPDATE pis_disci_code  SET is_active=:IsActive  , modified_by =:modifiedby , modified_date=:modifieddate  WHERE disci_id=:id";
+	@Override
+	public int DeleteDiscipline(String id,String Username)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO DeleteDiscipline()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETEEDISCIPLINE);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("IsActive",0);
+			query.setParameter("id",id);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	private static final String EDITDISCIPLINE="UPDATE pis_disci_code  SET disci_title=:discititle , modified_by =:modifiedby , modified_date=:modifieddate  WHERE disci_id=:id";
+	@Override
+	public int EditDiscipline(String id,String discipline,String Username)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO EditDiscipline()");
+		
+		try {
+			Query query = manager.createNativeQuery(EDITDISCIPLINE);
+			
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate",sdf.format(new Date()) );
+			query.setParameter("discititle",discipline);
+			query.setParameter("id",id);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	@Override
+	public int AddDiscipline(DisciplineCode dc)throws Exception
+	{
+	
+		logger.info(new Date() + "Inside DAO AddDiscipline()");
+		try {
+			manager.persist(dc);
+			manager.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dc.getDisci_id();
+	}
+	
+	@Override
+	public Object[] getEmpData(String EmpNo) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO getEmpData()");
+		List<Object[]> list =new ArrayList<Object[]>();
+		Object[] empdata=null;
+		try {
+			Query query = manager.createNativeQuery("CALL mt_employeedata(:empno);");
+			query.setParameter("empno", EmpNo);
+			list = (List<Object[]>)query.getResultList();
+		
+			if(list!=null && list.size()>0) {
+				empdata=list.get(0);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return empdata;
+	}
+	
+	private static  final String GETEMPSTATUS="select emp_status ,emp_status_name  from emp_status";
+	@Override
+	public List<Object[]> GetEmpStatusList() throws Exception {
+		logger.info(new Date() + "Inside DAO GetEmpStatusList()");
+		try {
+			Query query = manager.createNativeQuery(GETEMPSTATUS);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+				
+		}
+		
+	}
+	
+	private static  final String GETGROUPNAME="SELECT  divisionID,divisionname FROM division_master";
+	@Override
+	public List<Object[]> getGroupName() throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getGroupName()");
+		try {
+			Query query = manager.createNativeQuery(GETGROUPNAME);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;	
+		}
+	}
+	
+	private static  final String GETDESIGNATION="SELECT  DesigId,Designation  FROM employee_desig";
+	@Override
+	public List<Object[]> getDesignation() throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDesignation()");
+		try {
+			Query query = manager.createNativeQuery(GETDESIGNATION);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;	
+		}
+	}
+
+	private static final String ALLEMPLOYEEDETAIL="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b,employee_details c WHERE a.empno=c.empno AND  a.DesigId=b.DesigId AND c.EmpStatus='P' AND c.CatId<>'Z' ORDER BY SrNo";
+	@Override
+	public List<Object[]> fetchAllEmployeeDetail() throws Exception {
+		logger.info(new Date() + "Inside DAO fetchAllEmployeeDetail()");
+		try {
+			Query query = manager.createNativeQuery(ALLEMPLOYEEDETAIL);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+				
+		}
+		
+	}
+	
+	private static final String EMPLOYEESTATUSWISE ="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b ,employee_details c WHERE a.empno=c.empno AND a.DesigId=b.DesigId AND c.EmpStatus=:empStatus AND c.CatId<>'Z'  ORDER BY SrNo";
+	@Override
+	public List<Object[]> getEmployeeStatusWise(String empstatus) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getEmployeeStatusWise()");
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEESTATUSWISE);
+			query.setParameter("empStatus", empstatus);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String EMPLOYEEGROUPORDIVISIONWISE="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b,employee_details c WHERE a.empno=c.empno AND a.DesigId=b.DesigId AND a.divisionId=:divisionid AND c.EmpStatus='P' AND c.CatId<>'Z' ORDER BY SrNo";
+	@Override
+	public List<Object[]> getEmployeeDivOrGroupWise(int id) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getEmployeeDivOrGroupWise()");
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEEGROUPORDIVISIONWISE);
+			query.setParameter("divisionid", id);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;	
+		}	
+	}
+	
+	private static final String EMPLOYEEDESIGNATIONWISE="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b,employee_details c WHERE a.empno=c.empno AND a.DesigId=b.desigid AND a.DesigId=:desigid  AND c.EmpStatus='P' AND c.CatId<>'Z' ORDER BY SrNo";
+	@Override
+	public List<Object[]> getEmployeeDesignationWise(int id) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getEmployeeDesignationWise()");
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEEDESIGNATIONWISE);
+			query.setParameter("desigid", id);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;	
+		}	
+	}
+
+	private static final String EMPLOYEEGENDERWISE="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b,employee_details c WHERE a.empno=c.empno AND a.DesigId=b.desigid AND c.Gender=:gender AND c.EmpStatus='P' AND c.CatId<>'Z' ORDER BY SrNo";
+	@Override
+	public List<Object[]> getEmployeeGenderWise(String gender) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getEmployeeGenderWise()");
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEEGENDERWISE);
+			query.setParameter("gender", gender);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	private static final String FETCHALLPERSONALDETAIL="SELECT  a.EmpId,a.empName,c.Designation,b.divisionname,a.empno,a.SrNo FROM employee a ,division_master b,employee_desig c ,employee_details d WHERE a.empno=d.empno AND a.divisionid=b.divisionid  AND a.DesigId=c.DesigId AND d.EmpStatus='P' AND d.CatId<>'Z' ORDER BY a.SrNo";
+	@Override
+	public List<Object[]> fetchAllPersonalDetail() throws Exception
+	{
+		logger.info(new Date() + "Inside DAO fetchAllPersonalDetail()");
+		try {
+			Query query = manager.createNativeQuery(FETCHALLPERSONALDETAIL);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	@Override
+	public List<Object[]> fetchPersonalDetailsNGOorCGO(String cattype) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO fetchAllPersonalDetail()");
+         List<Object[]> PersonalDetailsNGOorCGO=new ArrayList<>();
+      try
+      {
+	        if("N".equalsIgnoreCase(cattype)) { 
+	         Query q=manager.createNativeQuery("SELECT  a.EmpId,a.empName,c.Designation,b.divisionname,a.empno  FROM employee a ,division_master b,employee_desig c ,employee_details d WHERE a.empno=d.empno AND a.divisionid=b.divisionid  AND a.DesigId=c.DesigId AND d.EmpStatus='P' AND d.CatId IN('N','p','T') ORDER BY a.SrNo");
+	         PersonalDetailsNGOorCGO=(List<Object[]>) q.getResultList();
+	        }else {  
+	      	   Query q=manager.createNativeQuery("SELECT  a.EmpId,a.empName,c.Designation,b.divisionname,a.empno FROM employee a ,division_master b,employee_desig c ,employee_details d WHERE a.empno=d.empno AND a.divisionid=b.divisionid  AND a.DesigId=c.DesigId AND d.EmpStatus='P' AND d.CatId IN ('C','Q','S') ORDER BY SrNo");
+		           PersonalDetailsNGOorCGO=(List<Object[]>) q.getResultList();  
+	        }
+	        return PersonalDetailsNGOorCGO;
+        }catch(Exception e){
+    	  e.printStackTrace();
+			return null;	                   
+		}
+		
+           
+	}
+	
+	@Override
+	public List<Object[]> getConfigurableReportList(String ConfigurableReportQuery)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getConfigurableReportList()");
+		try {
+			Query query = manager.createNativeQuery(ConfigurableReportQuery);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	private static final String ALLEMPLOYEELIST="SELECT a.EmpId,a.empName,c.Designation,a.empno FROM employee a, employee_details b, employee_desig c WHERE a.empno=b.empno AND b.EmpStatus='P' AND b.CatId<>'Z' AND a.DesigId=c.DesigId ORDER BY a.SrNo";
+	@Override
+	public List<Object[]> getAllEmployeeList()throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getAllEmployeeList()");
+		try {
+			Query query = manager.createNativeQuery(ALLEMPLOYEELIST);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	private static final String DATEREPORT="SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.DOB)=:years AND d.CatId<>'Z'";
+	@Override
+	public List<Object[]> getDefaultReport(int year)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDefaultReport()");
+		try {
+			Query query = manager.createNativeQuery(DATEREPORT);
+			query.setParameter("years", year);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> getDobReport(int year, int month)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDobReport()");
+		List<Object[]> dobreports = new ArrayList<>();
+		try {
+			
+			if (year != 0 & month == 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.DOB)=:years AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					dobreports = q.getResultList();
+			}else if(year != 0 & month != 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.DOB)=:years AND MONTH(d.DOB)=:months AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					q.setParameter("months", month);
+					dobreports = q.getResultList();
+			}
+			
+			return dobreports;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> getDoaReport(int year, int month)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDoaReport()");
+		List<Object[]> doareports = new ArrayList<>();
+		try {
+			
+			if (year != 0 & month == 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.doa)=:years AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					doareports = q.getResultList();
+			}else if(year != 0 & month != 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.doa)=:years AND MONTH(d.doa)=:months AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					q.setParameter("months", month);
+					doareports = q.getResultList();
+			}
+			
+			return doareports;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> getDorReport(int year, int month)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDorReport()");
+		List<Object[]> dorreports = new ArrayList<>();
+		try {
+			
+			if (year != 0 & month == 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.dor)=:years AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					dorreports = q.getResultList();
+			}else if(year != 0 & month != 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.dor)=:years AND MONTH(d.dor)=:months AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					q.setParameter("months", month);
+					dorreports = q.getResultList();
+			}
+			
+			return dorreports;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> getDojReport(int year, int month)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO getDojReport()");
+		List<Object[]> dojreports = new ArrayList<>();
+		try {
+			
+			if (year != 0 & month == 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.dojl)=:years AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					dojreports = q.getResultList();
+			}else if(year != 0 & month != 0) {
+					Query q = manager.createNativeQuery("SELECT  d.DOB,d.doa,d.DOR,d.DOJL,a.EmpId,a.empName,c.Designation,b.divisionname,d.PunchCard FROM Employee a ,division_master b, employee_desig c ,employee_details d WHERE a.DivisionId=b.DivisionId  AND a.DesigId=c.DesigId AND a.empno =d.empno AND d.EmpStatus='P' AND YEAR(d.dojl)=:years AND MONTH(d.dojl)=:months AND d.CatId<>'Z'");
+					q.setParameter("years", year);
+					q.setParameter("months", month);
+					dojreports = q.getResultList();
+			}
+			
+			return dojreports;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> fetchCadreNameCode()throws Exception
+	{
+		logger.info(new Date() + "Inside DAO fetchCadreNameCode()");
+		try {
+			Query query = manager.createNativeQuery("SELECT CadreId,Cadre FROM pis_cadre WHERE IsActive='1'");
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	
+	@Override
+	public List<Object[]> EmployeeList(String cadreid)throws Exception
+	{
+		logger.info(new Date() + "Inside DAO EmployeeList()");
+		try {
+			Query query = manager.createNativeQuery("CALL employee_rptStrength(:cadreId);");
+			query.setParameter("cadreId",cadreid);
+			return (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;		
+		}
+	}
+	private static final String MAXSENIORNO = "SELECT MAX(srno) FROM employee WHERE isactive=1";
+
+	@Override
+	public int GetMaxSeniorityNo()throws Exception
+	{
+		logger.info(new Date() + "Inside DAO GetMaxSeniorityNo()");
+				try {
+					Query query = manager.createNativeQuery(MAXSENIORNO);
+					Object o = query.getSingleResult();
+					Integer value =0;
+					if(o!=null) {
+						value = Integer.parseInt(o.toString());
+					} 
+					int result = value;
+		
+					return result;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return 0;
+				}
+	}
 }
 	

@@ -22,10 +22,10 @@ String LoginType = (String) session.getAttribute("LoginType");
 <div class="col page card">
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h4>Employee Request Message</h4>
+			<div class="col-md-6">
+				<h5>Employee Request Message</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a	href="EmployeeDetails.htm">Profile  </a></li>											

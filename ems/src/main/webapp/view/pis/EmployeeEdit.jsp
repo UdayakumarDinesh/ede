@@ -344,7 +344,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 					</div>
 				</div>
 			         
-			          <div class=" form-group ">
+			      <div class=" form-group ">
 			        <div class=" row ">
 			        	<div class=" col-md-2 ">
 			                <label>Religion </label>
@@ -407,11 +407,55 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			
 			        </div>
 			    </div>   
+			    
+			    <div class="form-group">
+			        <div class="row"> 
+			        
+			            <div class="col-md-2">
+			                <label>Emp Status<span class="mandatory">*</span></label>
+			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
+                   				<%for( EmpStatus status: empstatuslist){ %>
+								<option value="<%=status.getEmp_status_id()%>" <%if(employee!=null && employee.getEmpStatus()!=null &&employee.getEmpStatus().equalsIgnoreCase(String.valueOf(status.getEmp_status_id()))){%>selected<%}%>><%=status.getEmp_status_name()%></option>
+								<%}%>
+			                </select>
+			            </div> 
+			            <div class="col-md-2">
+			                <label>Availed Govt Quarters</label>          
+			                <select name="gq" class=" form-control input-sm select2" >
+			                	<option value="N" <%if(employee!=null && employee.getQuarters()!=null &&employee.getQuarters().equalsIgnoreCase("N")){%>selected<%}%>>No</option>
+								<option value="Y" <%if(employee!=null && employee.getQuarters()!=null  &&employee.getQuarters().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
+			                </select>	
+			            </div> 
+			
+			            <div class="col-md-2" id="EmpHide">
+			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
+			                <input type="text" readonly="readonly" required="required" id="EmpStatusDate"name="EmpStatusDate" value="<%if(employee!=null&&employee.getEmpStatusDate()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getEmpStatusDate().toString()) %><%}%>" class=" form-control input-sm " >
+			            </div>
+			            
+			            <div class="col-md-2" >
+			            	<label> Height(In Centimeters) <span class=" mandatory ">*</span></label>
+			            	<input id="height" name="Height" maxlength="3" class=" form-control input-sm " <%if(employee!=null && employee.getHeight()!=null){%> value="<%=employee.getHeight()%>" <%}%> placeholder="Enter Height">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                 <select name="ExMan" class=" form-control input-sm select2 " >
+			                	<option value="N" <%if(employee!=null && employee.getExServiceMan()!=null && employee.getExServiceMan().equalsIgnoreCase("N")){%>selected<%}%>>No</option>
+								<option value="Y" <%if(employee!=null && employee.getExServiceMan()!=null  && employee.getExServiceMan().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
+			                 </select>	
+			            </div>
+			
+			            <div class="col-md-2">
+			                <label>Per Pass No</label>
+			                <input type="text" id="permpassno" name="PermPassNo" <%if(employee!=null && employee.getPerPassNo()!=null){%> value="<%=employee.getPerPassNo()%>" <%}%> class=" form-control input-sm " maxlength="10"  placeholder="Permanent Pass No">
+			            </div> 
+			         </div>
+			    </div> 
 
 			    <div class="row" >
 			    	<div class="col-12" align="center">
-						<input type="hidden" value="<%=emp.getEmpId()%>" name="EmpId">
-						<input type="hidden" value="<%=employee.getEmpDetailsId()%>" name="empdetailsid">
+						<input type="hidden" <%if(emp.getEmpId()!=null){%> value="<%=emp.getEmpId()%>" <%}%> name="EmpId">
+						<input type="hidden"  value="<%=employee.getEmpDetailsId()%>"  name="empdetailsid">
 						<button type="submit" class="btn btn-sm submit-btn" name="action"  value="submit"  Onclick="return validateform();" >SUBMIT</button>
 			    	</div>
 			    </div> 
@@ -477,10 +521,13 @@ $(".AddItem").click(function(){
 
 </script>
 
-
 <script type="text/javascript">
+
+setPatternFilter($("#permpassno"), /^-?\d*$/);
+setPatternFilter($("#InternalNum"), /^-?\d*$/);
+setPatternFilter($("#height"), /^[0-9]*(\.[0-9]{0,2})?$/);
 setPatternFilter($("#PunchcardTextBox"), /^-?\d*$/);
-setPatternFilter($(".PhoneNo"), /^-?\d*$/);
+setPatternFilter($(".Phoneno"), /^-?\d*$/);
 setPatternFilter($("#UANNo"), /^-?\d*$/);
 setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
@@ -517,6 +564,16 @@ function checknegative(str) {
 
 <script type="text/javascript">
 
+$('#EmpStatusDate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,  
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
 
 $(document).ready(function () {
 	
