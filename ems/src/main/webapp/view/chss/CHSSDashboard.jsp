@@ -344,11 +344,13 @@
 					<div class="img-container">
 						<div class="img-inner">
 							<div class="inner-skew">
-								<%if(obj[8].toString().equalsIgnoreCase("F")){ %>
+								<%if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("F")){ %>
 								<img src="view/images/femaleuser.png" alt="Photo Not Found">
-								<%}else{ %>
+								<%}else if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("M")){ %>
 								<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<%}%>
+								<%}else {%>
+								<img src="view/images/maleuser.png" alt="Photo Not Found">
+								<%} %>
 							</div>
 						</div>
 					</div>
@@ -446,7 +448,7 @@
 												<i class="fa-solid fa-eye"></i>
 											</button>
 											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button>
 											<%} %>
@@ -473,7 +475,7 @@
 												<i class="fa-solid fa-eye"></i>
 											</button>
 											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button>
 											<%} %>

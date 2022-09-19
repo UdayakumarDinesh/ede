@@ -846,7 +846,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			Query query = manager.createNativeQuery("SELECT MAX(circularid)  FROM chss_circular_list");	
 			
 			BigInteger result = (BigInteger) query.getSingleResult();
-			return result.intValue();
+			return result.longValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

@@ -385,11 +385,6 @@ th,td
 											&#9675;  <span>  That my wife/ husband is employed in (Orgn) .........................................and is certified that medical benefit
 											claimed in this bill has not been preferred / shall not be preferred from any other source.</span>
 											<br>
-											<%-- &#8226; That my wife / husband <span class="text-blue" style="text-transform: capitalize;">Shri / Smt. <%=chssapplydata[12] %> </span> is an employee in STARC and that she / he is
-											covered by ESI Scheme / ............................ Scheme and I certify that no claim for her / him for any medical
-											benefit has been preferred / will be preferred, for such benefit received in respect of ineligible
-											dependant(s) for whom the claim has been made against ESI Corporation / ............................... (Orgn).
-											<br> --%>
 										<%} %>
 										
 										&#9675; <span> That the bills attached herewith and the statements made in this claim are true and correct and I may be
@@ -542,7 +537,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Tests / Procedures</b> 
 															<%if(allowEdit || historyBtn){ %>
-																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																		Tests
 																	</button>
 																
@@ -624,7 +619,7 @@ th,td
 														<td colspan="4" style="text-align: center;">
 															<b>Medicines</b>
 															<%if(allowEdit || historyBtn){ %>
-																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
+																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
 																	Medicines
 																</button>
 																
@@ -823,8 +818,6 @@ th,td
 													<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 													<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
 													<td class="right text-blue"><%=misc[3] %></td>
-													
-																										
 													<%if(showRemAmt){ %>
 														<td class="right ">	
 															<%if(misc[9]== null  || Long.parseLong(misc[9].toString())==0){ %>	 
@@ -870,7 +863,7 @@ th,td
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
-												<%if(showRemAmt){ %>	 
+												<%if(showRemAmt || allowEdit){ %>	 
 												<b><%=totalremamount%></b>
 												<% } %>
 											</td>

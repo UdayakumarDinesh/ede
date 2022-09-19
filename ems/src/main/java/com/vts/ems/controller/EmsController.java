@@ -55,7 +55,6 @@ public class EmsController {
 
 	@Autowired
 	EMSMainService service;
-	
 
 	@Autowired
 	MasterService masterservice;
@@ -87,17 +86,15 @@ public class EmsController {
 			Employee employee = service.EmployeeInfo(login.getEmpId());
 			ses.setAttribute("EmpNo", employee.getEmpNo());
 			ses.setAttribute("EmpName", employee.getEmpName());
+			ses.setAttribute("EmpDesigId", String.valueOf(employee.getDesigId()) );
+			ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
 			
 			long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
 			if(pwdCount==0) 
 			{
 				return "redirect:/ForcePasswordChange.htm";
 			}
-			
-			
 			// code for audit stamping
-			
-			        
 		        	String IpAddress="Not Available";
 		     		try{
 		     		
@@ -115,7 +112,7 @@ public class EmsController {
 		     		IpAddress="Not Available";	
 		     		e.printStackTrace();	
 		     		}
-				  try{
+		     	try{
 				        AuditStamping stamping=new AuditStamping();
 				        stamping.setLoginId(login.getLoginId());
 				        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
@@ -123,10 +120,10 @@ public class EmsController {
 				        stamping.setIpAddress(IpAddress);
 				        stamping.setLoginDateTime(LocalDateTime.now().toString());
 				        service.LoginStampingInsert(stamping);
-		     		}catch (Exception e) {
-						e.printStackTrace();
-					}
-		       
+		     	}
+				catch (Exception e) {
+					e.printStackTrace();
+				}	       
 		       
 			
 		} catch (Exception e) {

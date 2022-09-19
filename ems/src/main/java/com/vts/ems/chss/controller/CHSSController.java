@@ -50,6 +50,7 @@ import com.vts.ems.chss.Dto.CHSSApplyDto;
 import com.vts.ems.chss.Dto.CHSSConsultationDto;
 import com.vts.ems.chss.Dto.CHSSContingentDto;
 import com.vts.ems.chss.Dto.CHSSEquipDto;
+import com.vts.ems.chss.Dto.CHSSIPDPackageDto;
 import com.vts.ems.chss.Dto.CHSSImplantDto;
 import com.vts.ems.chss.Dto.CHSSMedicineDto;
 import com.vts.ems.chss.Dto.CHSSMiscDto;
@@ -61,17 +62,19 @@ import com.vts.ems.chss.model.CHSSApplyDispute;
 import com.vts.ems.chss.model.CHSSBill;
 import com.vts.ems.chss.model.CHSSBillConsultation;
 import com.vts.ems.chss.model.CHSSBillEquipment;
-import com.vts.ems.chss.model.CHSSBillIPDheads;
 import com.vts.ems.chss.model.CHSSBillImplants;
 import com.vts.ems.chss.model.CHSSBillMedicine;
 import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
+import com.vts.ems.chss.model.CHSSBillPkg;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.chss.model.CHSSIPDClaimsInfo;
+import com.vts.ems.chss.model.CHSSIPDPkgItems;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
+import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.chss.service.CHSSService;
 import com.vts.ems.master.dto.MasterEditDto;
@@ -547,7 +550,7 @@ public class CHSSController {
 			dto.setDiscount(DiscountAmt);
 			dto.setCreatedBy(Username);
 			
-			long count= service.CHSSConsultBillsAdd(dto);
+			long count= service.CHSSIPDBillsAdd(dto);
 			if (count > 0) {
 				redir.addAttribute("result", "Bill Added Successfully");
 			} else {
@@ -622,6 +625,49 @@ public class CHSSController {
 		}
 	}
 	
+	@RequestMapping(value = "CHSSIPDBillEdit.htm", method = RequestMethod.POST )
+	public String CHSSIPDBillEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDBillEdit.htm "+Username);
+		try {
+			String billid = req.getParameter("billid");
+			String centername = req.getParameter("centername-"+billid);
+			String billno = req.getParameter("billno-"+billid);
+			String billdate = req.getParameter("billdate-"+billid);
+			String finalbillamount = req.getParameter("finalbillamount-"+billid);
+			
+			CHSSBill bill = new CHSSBill();
+			bill.setBillId(Long.parseLong(billid));
+			bill.setCenterName(centername);
+			bill.setBillNo(billno);
+			bill.setBillDate(sdf.format(rdf.parse(billdate)));
+//			bill.setGSTAmount(CropTo2Decimal(GSTAmt));
+//			bill.setGSTAmount(0.00);
+//			bill.setDiscount(CropTo2Decimal(Discount));
+//			bill.setDiscountPercent(CropTo6Decimal(DiscountPer));
+			bill.setFinalBillAmt(CropTo2Decimal(finalbillamount));
+			bill.setModifiedBy(Username);
+			
+			long count = service.CHSSIPDBillEdit(bill);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",req.getParameter("chssapplyid"));
+			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
+			return "redirect:/CHSSConsultBills.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDBillEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
 	@RequestMapping(value = "CHSSBillDelete.htm", method = RequestMethod.POST )
 	public String CHSSBillDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -640,7 +686,19 @@ public class CHSSController {
 			
 			redir.addFlashAttribute("chssapplyid",req.getParameter("chssapplyid"));
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			return "redirect:/CHSSConsultBills.htm";
+			
+			Object[] apply=service.CHSSAppliedData(req.getParameter("chssapplyid"));
+			if(apply[6].toString().equalsIgnoreCase("OPD")) 
+			{
+				return "redirect:/CHSSConsultBills.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+			
+			
+//			return "redirect:/CHSSConsultBills.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSBillDelete.htm "+Username, e);
@@ -661,14 +719,14 @@ public class CHSSController {
 			String ailment = req.getParameter("ailment");
 			String enclosurecount = req.getParameter("enclosurecount");
 			String treatmenttype = req.getParameter("treatmenttype");
-			
+			String claimtype = req.getParameter("chsstype");
 			CHSSApplyDto dto= new CHSSApplyDto();
 			dto.setCHSSApplyId(chssapplyid);
 			dto.setNoEnclosures(enclosurecount);
 			dto.setTreatTypeId(treatmenttype);
 			dto.setModifiedBy(Username);
 			dto.setAilment(ailment);
-			dto.setCHSSType(req.getParameter("chsstype"));
+			dto.setCHSSType(claimtype);
 			long count = service.CHSSApplyEdit(dto);
 						
 			if (count > 0) {
@@ -678,7 +736,15 @@ public class CHSSController {
 			}	
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			return "redirect:/CHSSConsultMainData.htm";
+			if(claimtype.equalsIgnoreCase("OPD")) {
+				return "redirect:/CHSSConsultMainData.htm";
+			}
+			else 
+			{
+				return "redirect:/CHSSIPDApply.htm";
+			}
+						
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSApplyEdit.htm "+Username, e);
@@ -1625,8 +1691,6 @@ public class CHSSController {
 				applydate =LocalDate.parse(chssapplydata[15].toString());
 			}
 			
-			
-			
 			for(Object[] bill : claimdata) 
 			{
 				LocalDate billdate = LocalDate.parse(bill[4].toString());
@@ -2157,7 +2221,6 @@ public class CHSSController {
 			long count= service.ContingentGenerate(chssapplyid, Username, action, billcontent, LoginType,EmpId,genTilldate,claims_type);
 //			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
 			
-			
 				if (count > 0) {
 					redir.addAttribute("result", "Contingent Bill Generated Successfully");
 				} else {
@@ -2585,7 +2648,7 @@ public class CHSSController {
 	public @ResponseBody String ConsultBillsConsultCountAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetBillDataAjax.htm "+Username);
+		logger.info(new Date() +"Inside ConsultBillsConsultCountAjax.htm "+Username);
 		int count=0;
 		try {
 			String consultmainid = req.getParameter("consultmainid");
@@ -2605,7 +2668,7 @@ public class CHSSController {
 	public @ResponseBody String ConsultMainDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside GetBillDataAjax.htm "+Username);
+		logger.info(new Date() +"Inside ConsultMainDataAjax.htm "+Username);
 		CHSSConsultMain consultmain=new CHSSConsultMain();;
 		try {
 			String consultmainid = req.getParameter("consultmainid");
@@ -3034,12 +3097,13 @@ public class CHSSController {
 				
 				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
 				req.setAttribute("chssbill", chssbill );
-				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
-				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				req.setAttribute("pkgSubItems", service.getCHSSIPDPkgItemsList());
+				req.setAttribute("NonPackageItems", service.IPDBillOtherItems(billid));
 				
 				req.setAttribute("testmainlist", service.CHSSTestSubList(apply[7].toString()));
 				req.setAttribute("doctorrates", service.getCHSSDoctorRates(apply[7].toString()));
 				
+				req.setAttribute("ClaimPackages", service.ClaimPackagesList(billid));
 				req.setAttribute("miscitems", service.CHSSMiscList(billid));
 				req.setAttribute("consultations", service.CHSSConsultationList(billid));
 				req.setAttribute("billtests", service.CHSSTestsList(billid));
@@ -3135,9 +3199,10 @@ public class CHSSController {
 			claiminfo.setIPDClaimInfoId(Long.parseLong(ipdclaiminfoid));
 			claiminfo.setHospitalName(hospitalname);
 			claiminfo.setRoomType(roomtype);
-			claiminfo.setAdmissionDate(DateTimeFormatUtil.RegularToSqlDate(admitteddate) );
+			System.out.println(admitteddate);
+			claiminfo.setAdmissionDate(admitteddate);
 			claiminfo.setAdmissionTime(admittedtime);
-			claiminfo.setDischargeDate(DateTimeFormatUtil.RegularToSqlDate(dischargeddate));
+			claiminfo.setDischargeDate(dischargeddate);
 			claiminfo.setDischargeTime(dischargedtime);
 			claiminfo.setDomiciliaryHosp(Integer.parseInt(DomicHospi));
 			claiminfo.setDayCare(Integer.parseInt(DayCare));
@@ -3216,43 +3281,7 @@ public class CHSSController {
 			return "static/Error";
 		}
 	}
-	
-	@RequestMapping(value = "IPDBillHeadDataAdd.htm" )
-	public String IPDBillHeadDataAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
-	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside IPDBillHeadDataAdd.htm "+Username);
-		try {
-			String chssapplyid = req.getParameter("chssapplyid");
-			
-			String billheadid = req.getParameter("billheadid");
-			String billid = req.getParameter("billid");
-			String billheadcost = req.getParameter("billheadcost");
-			
-			CHSSBillIPDheads billhead = new CHSSBillIPDheads();
-			billhead.setIPDBillHeadId(Integer.parseInt(billheadid));
-			billhead.setBillId(Long.parseLong(billid));
-			billhead.setBillHeadCost(Double.parseDouble(billheadcost));
-			billhead.setCreatedBy(Username);
-			
-			
-			
-			long count= service.IPDBillHeadDataAddEdit(billhead);
-			if (count > 0) {
-				redir.addAttribute("result", "BillHead Updated Successfully");
-			} else {
-				redir.addAttribute("resultfail", "BillHead Update Unsuccessful");	
-			}	
-			redir.addFlashAttribute("chssapplyid",chssapplyid);
-			redir.addFlashAttribute("consultmainid",String.valueOf(count));
-			return "redirect:/CHSSIPDApply.htm";
-		}catch (Exception e) {
-			e.printStackTrace();
-			logger.error(new Date() +" Inside IPDBillHeadDataAdd.htm "+Username, e);
-			return "static/Error";
-		}
-	}
-	
+
 	@RequestMapping(value = "IPDConsultAdd.htm", method = RequestMethod.POST )
 	public String IPDConsultAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -4004,16 +4033,9 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",billid);
 			redir.addFlashAttribute("tab","eq");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
+		
+			return "redirect:/CHSSIPDApply.htm";
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside EquipmentItemAdd.htm "+Username, e);
@@ -4053,16 +4075,9 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","eq");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
+		
+			return "redirect:/CHSSIPDApply.htm";
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside EquipmentBillEdit.htm "+Username, e);
@@ -4093,16 +4108,9 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","eq");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
+			return "redirect:/CHSSIPDApply.htm";
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside EquipmentBillDelete.htm "+Username, e);
@@ -4139,16 +4147,9 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",billid);
 			redir.addFlashAttribute("tab","im");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
+		
+			return "redirect:/CHSSIPDApply.htm";
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ImplantItemAdd.htm "+Username, e);
@@ -4188,16 +4189,9 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","im");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
+		
+			return "redirect:/CHSSIPDApply.htm";
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ImplantBillEdit.htm "+Username, e);
@@ -4228,22 +4222,161 @@ public class CHSSController {
 			redir.addFlashAttribute("billid",req.getParameter("billid"));
 			redir.addFlashAttribute("tab","im");
 			redir.addFlashAttribute("consultmainid",req.getParameter("consultmainid"));
-			Object[] apply=service.CHSSAppliedData(chssapplyid);
+		
+			return "redirect:/CHSSIPDApply.htm";
 			
-			if(apply[6].toString().equalsIgnoreCase("OPD")) 
-			{
-				return "redirect:/CHSSConsultBills.htm";
-			}
-			else 
-			{
-				return "redirect:/CHSSIPDApply.htm";
-			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ImplantBillDelete.htm "+Username, e);
 			return "static/Error";
 		}
 	}
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "CHSSIPDPackageAdd.htm", method = RequestMethod.POST )
+	public String CHSSIPDPackageAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDPackageAdd.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			String pkg_id = req.getParameter("pkg_id");
+			String pkg_total_cost = req.getParameter("pkg_total_cost");
+			
+			String[] pkgitem_id=req.getParameterValues("pkgitem_id");
+			String[] pkgitem_cost=req.getParameterValues("pkgitem_cost");
+			
+			CHSSIPDPackageDto pkgdto =  new CHSSIPDPackageDto();
+			pkgdto.setBillid(billid);
+			pkgdto.setPkg_id(pkg_id);
+			pkgdto.setPkg_total_cost(pkg_total_cost);
+			pkgdto.setPkgitem_id(pkgitem_id);
+			pkgdto.setPkgitem_cost(pkgitem_cost);
+			pkgdto.setCreatedBy(Username);
+			
+			long count=service.IPDPackageAddService(pkgdto);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Package Added Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Package Adding Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","pk");
+		
+			return "redirect:/CHSSIPDApply.htm";
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDPackageAdd.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "CHSSIPDPackageEdit.htm", method = RequestMethod.POST )
+	public String CHSSIPDPackageEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDPackageEdit.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String billid = req.getParameter("billid");
+			
+			String bill_pkg_id = req.getParameter("bill_pkg_id");
+			String pkg_id = req.getParameter("pkg_id");
+			String pkg_total_cost = req.getParameter("pkg_total_cost");
+			
+			String[] pkgitem_id=req.getParameterValues("pkgitem_id");
+			String[] pkgitem_cost=req.getParameterValues("pkgitem_cost");
+			
+			CHSSIPDPackageDto pkgdto =  new CHSSIPDPackageDto();
+			pkgdto.setCHSSBillPkgId(bill_pkg_id);
+			pkgdto.setBillid(billid);
+			pkgdto.setPkg_id(pkg_id);
+			pkgdto.setPkg_total_cost(pkg_total_cost);
+			pkgdto.setPkgitem_id(pkgitem_id);
+			pkgdto.setPkgitem_cost(pkgitem_cost);
+			pkgdto.setModifiedBy(Username);
+			
+			long count=service.IPDPackageEditService(pkgdto);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Package Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Package Update Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",billid);
+			redir.addFlashAttribute("tab","pk");
+		
+			return "redirect:/CHSSIPDApply.htm";
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDPackageEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "CHSSIPDPackageDelete.htm", method = RequestMethod.POST )
+	public String CHSSIPDPackageDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDPackageDelete.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String bill_pkg_id = req.getParameter("bill_pkg_id");
+		
+			CHSSBillPkg pkg = new CHSSBillPkg();
+			pkg.setCHSSBillPkgId(Long.parseLong(bill_pkg_id));
+			pkg.setModifiedBy(Username);
+			long count=service.IPDPackageDeleteService(pkg);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Package Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Package Delete Unsuccessful");	
+			}	
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+//			redir.addFlashAttribute("tab","pk");
+			return "redirect:/CHSSIPDApply.htm";
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSIPDPackageDelete.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+
+	@RequestMapping(value = "ClaimPkgItemsListAjax.htm", method = RequestMethod.GET)
+	public @ResponseBody String ClaimPkgItemsListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimPkgItemsListAjax.htm "+Username);
+		List<CHSSIPDPkgItems> pkgitems = new ArrayList<CHSSIPDPkgItems>();
+		try {
+			String billid = req.getParameter("billid");
+			String billpkgid = req.getParameter("billpkgid");
+			
+			pkgitems = service.ClaimPkgItemsAddedAjax(billid, billpkgid);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimPkgItemsListAjax.htm "+Username, e);
+		}
+		Gson json = new Gson();
+		return json.toJson(pkgitems);
+	}
+	
 	
 	
 	@RequestMapping(value = "IPDAttachmentsUpdateAjax.htm", method = RequestMethod.GET)
@@ -4280,12 +4413,12 @@ public class CHSSController {
 				billheadcost="0";
 			}
 			
-			CHSSBillIPDheads billhead = new CHSSBillIPDheads();
-			billhead.setIPDBillHeadId(Integer.parseInt(billheadid));
-			billhead.setBillId(Long.parseLong(billid));
-			billhead.setBillHeadCost(Double.parseDouble(billheadcost));
-			billhead.setCreatedBy(Username);
-			count= service.IPDBillHeadDataAddEdit(billhead);
+			CHSSBillOther other = new CHSSBillOther();
+			other.setOtherItemId(Integer.parseInt(billheadid));
+			other.setBillId(Long.parseLong(billid));
+			other.setOtherItemCost(Double.parseDouble(billheadcost));
+			other.setCreatedBy(Username);
+			count= service.IPDBillHeadDataAddEdit(other);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside IPDSingleBillHeadsAjax.htm "+Username, e);
@@ -4325,12 +4458,14 @@ public class CHSSController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSIPDClaimFwdApproveAjax.htm "+Username);
-		String allow[]= {"0","0","0","0","0","0"};
+		String Msg = "";
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			List<Object[]> billslist = service.CHSSBillsList(chssapplyid);
 			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
+			
 			double claimamount=0;
+			
 			
 			LocalDate applydate = LocalDate.now();
 			
@@ -4343,39 +4478,41 @@ public class CHSSController {
 			{
 				LocalDate billdate = LocalDate.parse(bill[4].toString());
 				
-				if(!billdate.isAfter(applydate.minusMonths(3)) && !applydate.minusMonths(3).isEqual(billdate) ) 
+				if( !billdate.isAfter(applydate.minusMonths(3)) && !applydate.minusMonths(3).isEqual(billdate) ) 
 				{
-					allow[4]="1";
-					allow[5]=bill[2].toString();
-					break;
-				}
-				
-				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
-				{
-					allow[2]="1";
-					allow[3]=bill[2].toString();
-					break;
+					Msg = "Cannot Forward Claim Since Bill No : '"+bill[2]+"' is older than 3 months.";
+					return Msg;
 				}
 				
 				if(Double.parseDouble(bill[9].toString())==0) 
 				{
-					allow[1]="1";
-					break;
+					Msg = "Please Enter Atleast Breakup of the Bill";
+					return Msg;
 				}
+				
+				System.out.println(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) +" = "+ Math.round(Double.parseDouble(bill[9].toString())));
+				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
+				{
+					Msg = "Sum of Items Cost in Bill No '"+bill[2]+"' does not Tally with Amount Paid. \nBill Amount ="
+							+(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString()))+"\nItems Total = "+bill[9];
+					return Msg;
+				}
+				
+				
 				claimamount += Double.parseDouble(bill[9].toString());
 			}
 			
 			if(claimamount==0) 
 			{
-				allow[0]="1";
+				Msg = "Total claim amount should not be zero !";
+				return Msg;
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSIPDClaimFwdApproveAjax.htm "+Username, e);
 		}
-		Gson json = new Gson();
-		return json.toJson(allow);
+		return Msg;
 	}
 	
 	
@@ -4409,15 +4546,21 @@ public class CHSSController {
 //				tab=(String)md.get("tab");
 //			}	
 			
-			Object[] apply= service.CHSSAppliedData(chssapplyid);
-			
+			Object[] apply = service.CHSSAppliedData(chssapplyid);
+			Object[] employee = service.getEmployee(apply[1].toString());
 			req.setAttribute("chssapplydata", apply);
-			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
+			req.setAttribute("employee", employee);
 			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
 			}
+			
+			long basicpay=0;
+			if(employee[4]!=null) {
+				 basicpay=Long.parseLong(employee[4].toString());
+			}		
+			CHSSOtherPermitAmt chssremamt = service.getCHSSOtherPermitAmt("1",basicpay);
 			
 				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
 				String billid ="0";
@@ -4428,13 +4571,14 @@ public class CHSSController {
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
 				req.setAttribute("chssbill", chssbill );
-				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
-				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				req.setAttribute("NonPackageItems", service.IPDBillOtherItems(billid));
+				
+				req.setAttribute("ClaimPackages", service.ClaimPackagesList(billid));
+				req.setAttribute("ClaimPkgItems", service.ClaimAllPackageItemsList(billid));
 				
 				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
 				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
 				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
-				
 				
 				req.setAttribute("equipments", service.ClaimEquipmentList(chssapplyid));
 				req.setAttribute("implants", service.ClaimImplantList(chssapplyid));
@@ -4593,21 +4737,21 @@ public class CHSSController {
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String itemheadid = req.getParameter("itemheadid"); 
+			String chssotherid = req.getParameter("chssotherid"); 
 			
-			String bheadremamount = req.getParameter("bheadremamount-"+itemheadid);
-			String bheadcomment = req.getParameter("bheadcomment-"+itemheadid);
+			String otherremamount = req.getParameter("otherremamount-"+chssotherid);
+			String othercomment = req.getParameter("othercomment-"+chssotherid);
 			
-			CHSSBillIPDheads billhead = new CHSSBillIPDheads();
-			billhead.setCHSSItemHeadId(Long.parseLong(itemheadid));
-			billhead.setBillHeadRemAmt(Double.parseDouble(bheadremamount));
-			billhead.setComments(bheadcomment);
-			billhead.setModifiedBy(Username);
-			billhead.setUpdateByEmpId(EmpId);
-			billhead.setUpdateByRole(LoginType);
+			CHSSBillOther other = new CHSSBillOther();
+			other.setCHSSOtherId(Long.parseLong(chssotherid));
+			other.setOtherRemAmount(Double.parseDouble(otherremamount));
+			other.setComments(othercomment);
+			other.setModifiedBy(Username);
+			other.setUpdateByEmpId(EmpId);
+			other.setUpdateByRole(LoginType);
 			
 			
-			long count = service.IPDBHeadRemAmountEdit(billhead);
+			long count = service.IPDOtherRemAmountEdit(other);
 			if (count > 0) {
 				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
 			} else {
@@ -4621,6 +4765,48 @@ public class CHSSController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside IPDConsultRemAmountEdit.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "IPDPkgRemAmountEdit.htm", method = RequestMethod.POST )
+	public String IPDPkgRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		logger.info(new Date() +"Inside IPDPkgRemAmountEdit.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			String chssbillpkgid = req.getParameter("chssbillpkgid"); 
+			
+			String pkg_remamount = req.getParameter("pkg_remamount-"+chssbillpkgid);
+			String pkg_comment = req.getParameter("pkg_comment-"+chssbillpkgid);
+			
+			CHSSBillPkg pkg = new CHSSBillPkg();
+			pkg.setCHSSBillPkgId(Long.parseLong(chssbillpkgid));
+			pkg.setPkgRemAmt(Double.parseDouble(pkg_remamount));
+			pkg.setComments(pkg_comment);
+			pkg.setModifiedBy(Username);
+			pkg.setUpdateByEmpId(EmpId);
+			pkg.setUpdateByRole(LoginType);
+			
+			
+			long count = service.IPDPkgRemAmountEdit(pkg);
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			redir.addFlashAttribute("view_mode","E");
+			return "redirect:/CHSSIPDFormEdit.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside IPDPkgRemAmountEdit.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -4726,16 +4912,16 @@ public class CHSSController {
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String equipmentid = req.getParameter("equipmentid"); 
+			String implantid = req.getParameter("implantid"); 
 			
-			String equipremamount = req.getParameter("equipremamount-"+equipmentid);
-			String equipcomment = req.getParameter("equipcomment-"+equipmentid);
+			String implantremamount = req.getParameter("implantremamount-"+implantid);
+			String implantcomment = req.getParameter("implantcomment-"+implantid);
 			
 			
 			CHSSBillImplants implant = new CHSSBillImplants();
-			implant.setCHSSImplantId(Long.parseLong(equipmentid));
-			implant.setComments(equipcomment);
-			implant.setImplantRemAmt(Double.parseDouble(equipremamount));
+			implant.setCHSSImplantId(Long.parseLong(implantid));
+			implant.setComments(implantcomment);
+			implant.setImplantRemAmt(Double.parseDouble(implantremamount));
 			implant.setModifiedBy(Username);
 			implant.setUpdateByEmpId(EmpId);
 			implant.setUpdateByRole(LoginType);
@@ -4760,58 +4946,46 @@ public class CHSSController {
 		}
 	}
 	
-	
-	@RequestMapping(value = "CHSSIPDForm.htm", method = {RequestMethod.POST,RequestMethod.GET})
-	public String CHSSIPDForm(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "IPDMiscRemAmountEdit.htm", method = RequestMethod.POST )
+	public String IPDMiscRemAmountEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CHSSIPDForm.htm "+Username);
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		logger.info(new Date() +"Inside IPDMiscRemAmountEdit.htm "+Username);
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
-			String view_mode = req.getParameter("view_mode");
+			String miscid = req.getParameter("miscid"); 
 			
-			Object[] apply= service.CHSSAppliedData(chssapplyid);
+			String miscremamount = req.getParameter("miscremamount-"+miscid);
+			String miscomment = req.getParameter("miscomment-"+miscid);
 			
-			req.setAttribute("chssapplydata", apply);
-			req.setAttribute("employee", service.getEmployee(apply[1].toString()));
+			CHSSBillMisc misc= new CHSSBillMisc();
+			misc.setChssMiscId(Long.parseLong(miscid));
+			misc.setMiscRemAmount(Double.parseDouble(miscremamount));
+			misc.setComments(miscomment);
+			misc.setModifiedBy(Username);
+			misc.setUpdateByEmpId(EmpId);
+			misc.setUpdateByRole(LoginType);
+			
+			long count = service.MiscRemAmountEdit(misc);
 			
 			
-			if(apply[3].toString().equalsIgnoreCase("N")) 
-			{
-				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
-			}
+			if (count > 0) {
+				redir.addAttribute("result", "Reimbursable Amount Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Reimbursable Amount Update Unsuccessful");	
+			}	
 			
-				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
-				String billid ="0";
-				if(chssbill.size()>0){
-					billid = chssbill.get(0)[0].toString();
-				}
-				
-				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
-				req.setAttribute("chssbill", chssbill );
-				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
-				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
-				
-				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
-				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
-				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
-				
-				req.setAttribute("equipments", service.ClaimEquipmentList(chssapplyid));
-				req.setAttribute("implants", service.ClaimImplantList(chssapplyid));
-				
-				req.setAttribute("ClaimAttachDeclare", service.IPDClaimAttachments(chssapplyid));
-				
-				req.setAttribute("view_mode", view_mode);
-				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
-				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
-				
-				
-				return "chss/CHSSFormIPD";
+			redir.addFlashAttribute("chssapplyid",chssapplyid);
+			redir.addFlashAttribute("billid",req.getParameter("billid"));
+			
+			redir.addFlashAttribute("view_mode","E");
+			return "redirect:/CHSSIPDFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSIPDForm.htm "+Username, e);
+			logger.error(new Date() +" Inside IPDMiscRemAmountEdit.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -4849,8 +5023,10 @@ public class CHSSController {
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
 				req.setAttribute("chssbill", chssbill );
-				req.setAttribute("PackageItems", service.IPDBillPackageItems(billid));
-				req.setAttribute("NonPackageItems", service.IPDBillNonPackageItems(billid));
+				req.setAttribute("NonPackageItems", service.IPDBillOtherItems(billid));
+				
+				req.setAttribute("ClaimPackages", service.ClaimPackagesList(billid));
+				req.setAttribute("ClaimPkgItems", service.ClaimAllPackageItemsList(billid));
 				
 				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
 				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));

@@ -200,8 +200,6 @@
 							<input type="hidden" name="isapproval" value="N">
 						</div>
 						
-						<!-- The Covid vaccination charges and the breakup for the same has been considered for reimbursement as per the ION ref:  STARC/P&A/1625-292/2021 dated 03-09-2021 for those employees who were vaccinated on or before 08-06-2021.
- -->
 						
 					<%if(chssclaimlist.size()>0){ %>		
 						<div class="row">

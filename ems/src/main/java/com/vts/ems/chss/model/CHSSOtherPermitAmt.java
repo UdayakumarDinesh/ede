@@ -9,9 +9,11 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity(name = "chss_other_perm_amt")
 public class CHSSOtherPermitAmt  implements Serializable 
 {

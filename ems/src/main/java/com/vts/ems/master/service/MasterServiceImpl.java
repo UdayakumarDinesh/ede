@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -381,15 +382,17 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public long CircularListAdd(CircularList circular ,CircularListDto filecirculardto)throws Exception
 	{
-		                 
+		
 		long value = dao.GetCircularMaxId();
 	    if(!filecirculardto.getPath().isEmpty()) {
 		String name =filecirculardto.getPath().getOriginalFilename();
 		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-			String path = emsfilespath+ File.separator+"CircularFiles";
-			circular.setPath(path+File.separator+filename);
-			circular.setOriginalName(name);
-			saveFile(path, filename, filecirculardto.getPath());
+		
+		String path = emsfilespath+"CircularFiles";
+				
+		circular.setPath(path+"//"+filename);
+		circular.setOriginalName(name);
+		saveFile(path, filename, filecirculardto.getPath());
 		}		
 		return dao.CircularListAdd(circular);
 	}
@@ -434,8 +437,8 @@ public class MasterServiceImpl implements MasterService {
     	    if(!filecirculardto.getPath().isEmpty()) {
     		String name =filecirculardto.getPath().getOriginalFilename();
     		String filename= "Circular-"+circularlist.getCircularId()+"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-    		String path =emsfilespath+"\\CircularFiles";
-    		circularlist.setPath(path+File.separator+filename);
+    		String path =emsfilespath+"CircularFiles";
+    		circularlist.setPath(path+"//"+filename);
     		circularlist.setOriginalName(name);
     			saveFile(path, filename, filecirculardto.getPath());
     		}	

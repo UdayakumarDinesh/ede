@@ -24,6 +24,7 @@ import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDesig;
 
 
 @Transactional
@@ -85,6 +86,28 @@ public class EmsDaoImpl implements EmsDao
 			return null;
 		}
 	}
+	
+	@Override
+	public EmployeeDesig DesignationInfo(long DesigId)throws Exception
+	{
+		logger.info(new Date() +"Inside DAO DesignationInfo");
+		try {
+			EmployeeDesig emloyee = null;
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EmployeeDesig> cq= cb.createQuery(EmployeeDesig.class);
+			Root<EmployeeDesig> root= cq.from(EmployeeDesig.class);
+			Predicate p1 = cb.equal(root.get("DesigId"), DesigId);			
+			cq=cq.select(root).where(p1);
+			TypedQuery<EmployeeDesig> allQuery = manager.createQuery(cq);
+			emloyee = allQuery.getSingleResult();
+			return emloyee;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 	private static final String EMPLOYEEDATA = "SELECT e.empid,e.empname,ed.designation FROM employee e, employee_desig ed WHERE e.desigid=ed.desigid AND e.empid=:empid";
 	
 	@Override

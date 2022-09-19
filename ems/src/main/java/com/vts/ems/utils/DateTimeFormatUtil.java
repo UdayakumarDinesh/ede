@@ -236,4 +236,67 @@ public class DateTimeFormatUtil
 		return (ddate);
 	}
 	
+	public static java.sql.Date  TodayDateInSqlFormat()
+	{
+ 		java.sql.Date datetodaydb =null;
+		try
+		{
+			Date dd=new Date();	
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy ");
+	     	String datetoday=sdf.format(dd);
+	        datetodaydb=dateConversionSql(datetoday);
+	 		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return datetodaydb;
+	}
+	
+	public static String fromDatabaseToActual_inNumericFormOnly(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("dd-MM-yyyy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	
+	
+	public static String fromDatabaseToActual_inNumericShortForm(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("dd/MM/yy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	
+	public static String fromDatabaseToActualInPeriodForm(String databaseDate)
+	{
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("MMM-yyyy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	
 }

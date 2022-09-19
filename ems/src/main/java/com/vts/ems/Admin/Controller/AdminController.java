@@ -146,6 +146,49 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			
 		}
 		
+		
+		@RequestMapping(value = "NewspaperDashBoard.htm")
+		public String NewspaperDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside NewspaperDashBoard.htm "+Username);		
+			try {
+				
+				String logintype = (String)ses.getAttribute("LoginType");
+				List<Object[]> admindashboard = service.HeaderSchedulesList("7" ,logintype); 
+				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("SidebarActive", "NewspaperDashBoard_htm");
+				req.setAttribute("dashboard", admindashboard);
+
+				return "newspaper/NewspaperDashboard";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside NewspaperDashBoard.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+		
+		@RequestMapping(value = "TelephoneDashBoard.htm")
+		public String TelephoneDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside TelephoneDashBoard.htm "+Username);		
+			try {
+				
+				String logintype = (String)ses.getAttribute("LoginType");
+				List<Object[]> admindashboard = service.HeaderSchedulesList("8" ,logintype); 
+				ses.setAttribute("formmoduleid", "8"); 
+				ses.setAttribute("SidebarActive", "TelephoneDashBoard_htm");
+				req.setAttribute("dashboard", admindashboard);
+
+				return "newspaper/TelephoneDashboard";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside TelephoneDashBoard.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+		
 		@RequestMapping(value = "MasterDashBoard.htm", method = RequestMethod.GET)
 		public String MasterDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 			String Username = (String) ses.getAttribute("Username");

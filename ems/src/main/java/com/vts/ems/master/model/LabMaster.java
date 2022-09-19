@@ -13,7 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name="lab_master")
-public class LabMaster implements Serializable {
+public class LabMaster implements Serializable 
+{
 
 	private static final long serialVersionUID = 1L;
 

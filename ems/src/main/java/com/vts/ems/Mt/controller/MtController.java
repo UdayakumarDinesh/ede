@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vts.ems.Admin.Service.AdminService;
-import com.vts.ems.Admin.model.LabMaster;
 import com.vts.ems.Mt.model.MtApplyTransaction;
 import com.vts.ems.Mt.model.MtDirectorDuty;
 import com.vts.ems.Mt.model.MtDriver;
@@ -31,6 +30,7 @@ import com.vts.ems.Mt.model.MtUserApply;
 import com.vts.ems.Mt.model.MtVehicle;
 import com.vts.ems.Mt.service.MtService;
 import com.vts.ems.leave.controller.LeaveController;
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 

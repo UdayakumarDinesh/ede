@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
@@ -22,6 +23,8 @@ String status   = (String)request.getAttribute("status");
 
 SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+
+IndianRupeeFormat nfc=new IndianRupeeFormat();
 %>
 
 
@@ -108,7 +111,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 										<th>Applicant</th>
 										<th>Patient </th>
 										<th>Applied Date</th>
-										<!-- <th>Treatment Type</th> -->
+										<th>Claimed Amt</th>
 										<th>Status</th>
 										<th>Action</th>
 									</tr>
@@ -124,7 +127,7 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 											<td><%=obj[23] %></td>
 											<td><%=obj[16] %>&nbsp;(<%=obj[18] %>)</td>
 											<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
-											<%-- <td><%=obj[14] %></td> --%>
+											<td style="text-align: right;"><%= nfc.rupeeFormat(obj[1].toString())%></td>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=obj[27] %>; font-weight: 600;" >
@@ -132,14 +135,14 @@ SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 											</td>
 											<td>
 												<%if(obj[10].toString().equalsIgnoreCase("OPD")){ %>
-												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												<%}else if(obj[10].toString().equalsIgnoreCase("IPD")){ %>
-												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												

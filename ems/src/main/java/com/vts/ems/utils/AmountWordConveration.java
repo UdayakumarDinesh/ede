@@ -24,6 +24,10 @@ public class AmountWordConveration {
 	    };
 
 	    public static String convert1(final long n) {
+	    	if(n == 0) {
+	    		return "Zero";
+	    	}
+	    	
 	        if (n < 0) {
 	            return "Minus " + convert1(-n);
 	        }

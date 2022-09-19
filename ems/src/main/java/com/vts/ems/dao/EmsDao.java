@@ -7,6 +7,7 @@ import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface EmsDao
 {
@@ -37,4 +38,5 @@ public interface EmsDao
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception;
 	public List<Object[]> LoginLoginType(String loginid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
+	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
 }
