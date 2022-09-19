@@ -1368,7 +1368,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				Query q = manager.createNativeQuery(GETCHECKTELEAPPROVEFORWARDORNOT);
 				q.setParameter("TeleId", Integer.parseInt(TeleId));
 				CheckTeleApproveForwardOrNot = (Object[]) q.getSingleResult();
-
 			} 
 			catch (NoResultException e)
 			{
