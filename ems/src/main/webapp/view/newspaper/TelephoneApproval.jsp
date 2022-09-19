@@ -48,7 +48,7 @@
 	 	<div class="page card dashboard-card">
 			
 			<div class="card-body" >
-  			<form action="TelephoneApproval.htm" method="post">
+  			<form action="TelephoneApprovalSubmit.htm" method="post">
    
            <table  class="table table-bordered  table-striped  table-hover table-condensed ">
             <thead>

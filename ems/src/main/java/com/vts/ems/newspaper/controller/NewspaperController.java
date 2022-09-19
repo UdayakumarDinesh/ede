@@ -889,14 +889,34 @@ public class NewspaperController {
 	
 		
 		
-		
 		@RequestMapping(value="TelephoneApproval.htm")
 		public ModelAndView TelephoneApproval(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			ModelAndView mv = new ModelAndView();
+			logger.info(new Date() + "Inside TelephoneApproval.htm" + Username);
+			try {
+				List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
+				request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
+				mv.setViewName("newspaper/TelephoneApproval");
+				return mv;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+				logger.error(new Date() + " Inside TelephoneApproval.htm " + Username, e);
+				return new ModelAndView("static/Error");
+			}
+			
+		}
+		
+		@RequestMapping(value="TelephoneApprovalSubmit.htm", method = RequestMethod.POST )
+		public ModelAndView TelephoneApprovalSubmit(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
 		{
 			String sesEmpNo = (String) ses.getAttribute("EmpNo");
 			String Username = (String) ses.getAttribute("Username");
 			ModelAndView mv = new ModelAndView();
-			logger.info(new Date() + "Inside TelephoneApproval.htm" + Username);
+			logger.info(new Date() + "Inside TelephoneApprovalSubmit.htm" + Username);
 			try {
 				
 				if (request.getParameter("TelephoneApproval") != null) {
@@ -949,7 +969,7 @@ public class NewspaperController {
 			catch (Exception e) 
 			{
 				e.printStackTrace();
-				logger.error(new Date() + " Inside TelephoneApproval.htm " + Username, e);
+				logger.error(new Date() + " Inside TelephoneApprovalSubmit.htm " + Username, e);
 				return new ModelAndView("static/Error");
 			}
 			
