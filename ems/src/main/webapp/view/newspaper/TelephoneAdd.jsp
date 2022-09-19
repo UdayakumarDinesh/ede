@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
@@ -103,7 +104,7 @@
 					<div class="col-md-2" style="margin-top: -10px; margin-bottom: -10px;">
 						<div class="form-group">
 							<label>Year</label>
-							<input type="text" name="ClaimYear" class="form-control input-sm selectYear" style="width: 100px;" maxlength="4" required="required">
+							<input type="text" name="ClaimYear" class="form-control input-sm selectYear" value="<%=LocalDate.now().getYear() %>" readonly="readonly" style="width: 100px;" maxlength="4" required="required">
 						</div>
 					</div>
 					<div class="col-md-2" style="margin-top: -10px; margin-bottom: -10px;">

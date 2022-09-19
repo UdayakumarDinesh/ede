@@ -50,31 +50,30 @@ public class NewspaperController {
 	private String TeleExpSncFileNo;
 	
 	
-	
 	@Autowired
 	private NewPaperServiceImpl service;
 
 	private static final Logger logger = LogManager.getLogger(NewspaperController.class);
 
-		@RequestMapping(value = "NewspaperList.htm")
-		public String NewsPaperList(HttpServletRequest req) 
-		{
-			HttpSession ses = req.getSession(false);
-			String sesEmpNo = (String) ses.getAttribute("EmpNo");
-			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() + "Inside NewspaperList.htm " + Username);
-			try {
-				List<Object[]> NewspaperClaimList = service.getNewspaperClaimList(sesEmpNo);
-				req.setAttribute("NewspaperClaimList", NewspaperClaimList);
-				ses.setAttribute("SidebarActive", "NewspaperList_htm");
-				
-				return "newspaper/Newspaperlist";
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(new Date() + " Inside NewspaperList.htm " + Username, e);
-				return "static/Error";
-			}
+	@RequestMapping(value = "NewspaperList.htm")
+	public String NewsPaperList(HttpServletRequest req) 
+	{
+		HttpSession ses = req.getSession(false);
+		String sesEmpNo = (String) ses.getAttribute("EmpNo");
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside NewspaperList.htm " + Username);
+		try {
+			List<Object[]> NewspaperClaimList = service.getNewspaperClaimList(sesEmpNo);
+			req.setAttribute("NewspaperClaimList", NewspaperClaimList);
+			ses.setAttribute("SidebarActive", "NewspaperList_htm");
+			
+			return "newspaper/Newspaperlist";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + " Inside NewspaperList.htm " + Username, e);
+			return "static/Error";
 		}
+	}
 
 		@RequestMapping(value = "NewspaperApprovedList.htm", method = { RequestMethod.GET, RequestMethod.POST })
 		public ModelAndView NewspaperApprovedList(HttpServletRequest request)
@@ -891,7 +890,7 @@ public class NewspaperController {
 		
 		
 		
-		@RequestMapping(value="TelephoneApproval.htm",method=RequestMethod.POST)
+		@RequestMapping(value="TelephoneApproval.htm")
 		public ModelAndView TelephoneApproval(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
 		{
 			String sesEmpNo = (String) ses.getAttribute("EmpNo");
@@ -910,9 +909,8 @@ public class NewspaperController {
 				}
 				if ( request.getParameterValues("TeleApproveAction") == null) 
 				{
-		
 					redir.addAttribute("resultfail", "Please Select At Least One Option");
-		
+					redir.addAttribute("TelephoneApproval","TelephoneApproval");
 					mv.setViewName("redirect:/TelephoneApproval.htm");
 					return mv;
 				}
@@ -944,10 +942,9 @@ public class NewspaperController {
 					}
 		
 					mv.setViewName("redirect:/TelephoneApprovedList.htm");
-					
+					return mv;
 				}
 				
-				return mv;
 			}
 			catch (Exception e) 
 			{

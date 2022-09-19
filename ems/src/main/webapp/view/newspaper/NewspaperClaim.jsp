@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@ page language="java" %>
 <!DOCTYPE html >
@@ -113,9 +114,9 @@ LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
 					
 										                                     
 					 		<%if(NewspaperEditDetails!=null){%>
-								<input type="text" id="selectYear" required="required" class="form-control input-sm" style="width:70px;margin-left:475px;margin-top: -35px;" name="ClaimYear" value= "<%=NewspaperEditDetails[2]%>"/>
+								<input type="text" id="selectYear" required="required" class="form-control input-sm" style="width:70px;margin-left:475px;margin-top: -35px;" name="ClaimYear" value= "<%=NewspaperEditDetails[2]%>"  readonly="readonly"/>
 					        <%}else{%>
-					        	<input type="text" id="selectYear" required="required" class="form-control input-sm" style="width:70px;margin-left:475px;margin-top: -35px;" name="ClaimYear" value= "" placeholder="Year" />
+					        	<input type="text" id="selectYear" required="required" class="form-control input-sm" style="width:70px;margin-left:475px;margin-top: -35px;" name="ClaimYear" value="<%=LocalDate.now().getYear() %>" readonly="readonly"  placeholder="Year" />
 					        <% }%>
 					                                                        
 					     </div> 
