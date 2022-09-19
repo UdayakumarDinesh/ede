@@ -1363,10 +1363,10 @@ public class PisDaoImpl implements PisDao {
 	    Query query=manager.createNativeQuery(LISTOFSENIORITYNUMBER);
 	    List<Object[]> listSeni=(List<Object[]>)query.getResultList();
 	    
-	   // Query updatequery=manager.createNativeQuery(UPDATESRNO);
-	   // updatequery.setParameter("empid", empId);
-       // updatequery.setParameter("srno", newSeniorityNumber);  	   
-       // updatequery.executeUpdate();
+//	    Query updatequery=manager.createNativeQuery(UPDATESRNO);
+//	    updatequery.setParameter("empid", empId);
+//        updatequery.setParameter("srno", newSeniorityNumber);  	   
+//        updatequery.executeUpdate();
         
 	    return listSeni;
 	}
@@ -1378,6 +1378,22 @@ public class PisDaoImpl implements PisDao {
 		    updatequery.setParameter("empid", empIdL);
 	        updatequery.setParameter("srno", long1);  	 
 	        return updatequery.executeUpdate();
+	}
+	
+	private static final String VALIDATESRNO="select SrNo, EmpId FROM employee where empId=:empId";
+	@Override
+	public Object[] Getemp(Long empId)throws Exception
+	{
+		 Query query=manager.createNativeQuery(VALIDATESRNO);
+		 query.setParameter("empId", empId);
+		    List<Object[]> listSeni=(List<Object[]>)query.getResultList();
+		   
+		    Object[] result=null;
+		    if(listSeni!=null && listSeni.size()>0) {
+		    	result=listSeni.get(0);
+		    }
+		    
+		    return result;
 	}
 	
 	@Override

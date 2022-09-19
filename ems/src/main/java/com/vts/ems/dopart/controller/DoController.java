@@ -26,7 +26,8 @@ public class DoController {
 	private static final Logger logger = LogManager.getLogger(DoController.class);
 	
 	@RequestMapping(value = "DoDashboard.htm", method = RequestMethod.GET)
-	public String DoDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+	public String DoDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DoDashboard.htm "+Username);		
 		try {
@@ -41,6 +42,25 @@ public class DoController {
 			
 			return "DoPart/DoDashboard";
 		}catch (Exception e) {
+			logger.error(new Date() +" Inside DoDashboard.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "DoHome.htm" ,method = RequestMethod.GET)
+	public String DOHome(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DoDashboard.htm "+Username);	
+		try {
+			
+			
+			
+			ses.setAttribute("SidebarActive", "DoHome_htm");
+			return "";
+		} catch (Exception e) {
 			logger.error(new Date() +" Inside DoDashboard.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
