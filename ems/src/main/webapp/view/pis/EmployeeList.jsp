@@ -16,7 +16,7 @@
 .btn-group1 button {
   background-color: #344b8a; /* Green background */
   color: white; /* White text */
-  padding: 10px 24px; /* Some padding */
+  padding: 5px 20px; /* Some padding */
   cursor: pointer; /* Pointer/hand icon */
   float: left; /* Float the buttons side by side */
 }
@@ -53,13 +53,12 @@
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li> -->
+						 <li class="breadcrumb-item "><a href="PIS.htm">PIS</a></li> 
 						<li class="breadcrumb-item active " aria-current="page">Employee List</li>
 					</ol>
 				</div>
-			</div>
-	</div>	
-
+		</div>
+</div>
 
  <div class="page card dashboard-card">
 	<div class="card-body" >		
@@ -79,10 +78,8 @@
 		<%} %>
 	</div>
 		
-			<div class="card" >
-			
+		<div class="card" >
 				<div class="card-body " >
-			
 					<form action="#" method="post" id="empForm">
 				<div align="right">
 				<%if("P".equalsIgnoreCase(logintype)){ %>
@@ -100,7 +97,6 @@
 										<th>Name</th>
 										<th>Designation</th>
 										<th>DOB</th>
-									
 										<!-- <th>Action</th> -->
 									</tr>
 								</thead>
@@ -131,47 +127,37 @@
 					
 					<div class="row text-center" >
 						<div class="col-md-12" >
-						
 							<button type="submit" class="btn btn-sm add-btn" style="margin-right: 5px;" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" style="margin-right: 5px;" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
 
 							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
-							<button type="submit" class="btn btn-sm view-btn" style="margin-right: 5px;" name="action" value="view" formaction="EmployeeDetails.htm"  Onclick="Edit(empForm)" >VIEW </button>
+							<!-- <button type="submit" class="btn btn-sm view-btn" style="margin-right: 5px;" name="action" value="view" formaction="EmployeeDetails.htm"  Onclick="Edit(empForm)" >VIEW </button> -->
 							<button type="submit" class="btn btn-sm view-btn" style="background-color: #4b6a9c;" name="action"  value="UpdateSeniority" formaction="UpdateEmployeeSeniority.htm"  Onclick="Edit(empForm)" >UPDATE SENIORITY </button>
 							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>
 							<button type="button" class="btn btn-sm submit-btn" name="action" value="view"  >SUBMIT </button>
 							<button type="button" class="btn btn-sm delete-btn" name="action" value="view"  >DELETE </button>
 							<button type="button" class="btn btn-sm print-btn" name="action" value="view"  >print </button> -->
 
-						</div>
-						 
+						</div> 
 					</div>
 					
-					<div  class="btn-group1" id = "dis" style="margin-top:20px;" align="center">
+				 <div  class="btn-group1" id = "dis" style="margin-top:20px;" align="center">
 					<div class="col-md-12">
-				 	<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;"  name="family" value="family" formaction="FamilyMembersList.htm" Onclick="Edit(empForm)"><i class="fa-solid fa-user-group"></i> &nbsp;&nbsp;Family</button>
-			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Education</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Appointment</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Awards</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Property</button> -->
-					<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address" value="address" formaction="Address.htm" Onclick="Edit(empForm)"><i class="fa-solid fa-map-location-dot"></i> &nbsp;&nbsp;Address</button>
-			   <!-- <button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)"> Publication</button>
-					<button type="submit" class="btn btnclr"  style="margin-left: 5px;" Onclick="Edit(empForm)">Passport</button> -->
-					
+					 	<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="family"      value="family"      formaction="FamilyMembersList.htm" Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-user-group"></i> &nbsp;&nbsp;Family</button>
+				        <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Education"   value="Education"   formaction="EducationList.htm"     Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-user-graduate"></i>&nbsp;&nbsp; Education</button>
+					    <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Appointment" value="Appointment" formaction="AppointmentList.htm"   Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-calendar-check"></i> &nbsp;&nbsp;Appointment</button>
+					    <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Awards"      value="Awards"      formaction="AwardsList.htm"        Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-award"></i> &nbsp;&nbsp;Awards</button>
+					    <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Property"    value="Property"    formaction="PropertyList.htm"      Onclick="Edit(empForm)" formmethod="post"><i class="fa-regular fa-building"></i>&nbsp;&nbsp;Property</button> 
+						<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address"     value="address"     formaction="Address.htm"           Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-map-location-dot"></i> &nbsp;&nbsp;Address</button>
+				        <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Publication" value="Publication" formaction="PublicationList.htm"   Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-earth-asia"></i>&nbsp;&nbsp; Publication</button>
+						<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Passport"    value="Passport"    formaction="PassportList.htm"      Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-passport"></i>&nbsp;&nbsp; Passport</button> 
 					</div>
 				</div> 
-					
-					
 				</form>	
-				
-				
 			</div>
-
-			</div>		
-		
+		</div>		
 	</div>
-
  </div>
 
 <script type="text/javascript">
@@ -224,7 +210,5 @@
 
 	}
 </script>
-
-
 </body>
 </html>

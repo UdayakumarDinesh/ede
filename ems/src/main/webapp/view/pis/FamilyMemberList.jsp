@@ -80,7 +80,7 @@ Object[] empdata = (Object[]) request.getAttribute("Empdata");
 	     					<td style="text-align: center;"><input type="radio" name="familyid" value="<%=list[0]%>"></td>
 	     					<td><%=list[1]%></td>
 	     					<td><%=list[2]%></td>
-	     					<td><%=DateTimeFormatUtil.SqlToRegularDate(list[3].toString())%></td>
+	     					<td align="center"><%=DateTimeFormatUtil.SqlToRegularDate(list[3].toString())%></td>
 	     			</tr>
 	     			<%}}%>
 	     			</tbody>

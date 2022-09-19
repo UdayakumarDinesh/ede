@@ -1565,11 +1565,11 @@ public class MasterController {
 				try {
 					
 					String path = (String)req.getParameter("path1");
-					String arr[] = path.split("//");
+					File f = new File(path);
 					res.setContentType("Application/octet-stream");	
-					String temppath=req.getServletContext().getRealPath("/view/temp/"+arr[1]);
-					File my_file = new EmsFileUtils().addWatermarktoPdf1(arr[0],temppath,EmpNo);
-					 res.setHeader("Content-disposition","attachment; filename="+arr[1]);
+					String temppath=req.getServletContext().getRealPath("/view/temp/"+f.getName());
+					File my_file = new EmsFileUtils().addWatermarktoPdf1(path,temppath,EmpNo);
+					 res.setHeader("Content-disposition","attachment; filename="+f.getName());
 				      OutputStream out = res.getOutputStream();
 				     
 				        FileInputStream in = new FileInputStream(my_file);

@@ -22,14 +22,14 @@
 
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-6">
 			<%if(nextkin!=null){ %>
 				<h5>Next Kin  Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}else{ %>
 						<h5>Next Kin  Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}%>
 			</div>
-			   <div class="col-md-7">
+			   <div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
@@ -46,7 +46,7 @@
 	<div class="card-body">
 		
 		<div class="row">
-		<div class="col-2"></div>
+		<div class="col-1"></div>
 		<%if(nextkin!=null){%>
 		<form action="NextKinEditAddressDetails.htm" method="POST" autocomplete="off" enctype="multipart/form-data" >
 		<%}else{%>
@@ -65,7 +65,7 @@
 				        <div class="col-md-8">
 				        <div class="form-group">
 		                     <label>Next Kin Address:<span class="mandatory">*</span></label>
-		                     <input type="text" value="<%if(nextkin!=null&&nextkin.getNextkin_addr()!=null){%><%=nextkin.getNextkin_addr()%><%}%>" class="form-control input-sm" maxlength="4000" name="nextKinAdd" required="required" placeholder="Enter Permanent Address" onclick="return trim(this)" onchange="return trim(this)"> 
+		                     <input type="text" value="<%if(nextkin!=null&&nextkin.getNextkin_addr()!=null){%><%=nextkin.getNextkin_addr()%><%}%>" class="form-control input-sm" maxlength="255" id="nextKinAdd" name="nextKinAdd" required="required" placeholder="Enter Permanent Address" onclick="return trim(this)" onchange="return trim(this)"> 
 		                </div>
 		                </div>
 		                
@@ -93,7 +93,7 @@
          	        <div class="col-md-4">
                     <div class="form-group">
                             <label>City:<span class="mandatory">*</span></label>
-                            <input type="text"  name="city" class="form-control input-sm" maxlength="49"  value="<%if(nextkin!=null&&nextkin.getCity()!=null){%><%=nextkin.getCity()%><%}%>" placeholder="Enter City."   required="required" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text" id="city" name="city" class="form-control input-sm" maxlength="49"  value="<%if(nextkin!=null&&nextkin.getCity()!=null){%><%=nextkin.getCity()%><%}%>" placeholder="Enter City."   required="required" onclick="return trim(this)" onchange="return trim(this)">
                     </div>
                     </div> 
                          
@@ -212,11 +212,37 @@
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm('Are you sure to submit')){
-		 $('#myModal').modal('show');
-	}else{
-		return false;
-	}
+
+	  var NextKinAdd =$("#nextKinAdd").val();
+	  var City =$("#city").val();
+	  var CityPin= $("#CityPinTextBox").val();
+	  var Mobile = $("#MobileTextBox").val();
+	  var AltMobile = $("#AltMobileTextBox").val();
+	  var LandLine = $("#LandLineTextBox").val();
+	 
+	  
+	  if(NextKinAdd==null || NextKinAdd=='' || NextKinAdd=="null" ){
+			alert('Enter the Next Kin Address!');
+			return false;
+		}else if(City==null || City=='' || City=="null" ){
+			alert('Enter the City Name!');
+			return false;
+		}else if(CityPin==null || CityPin=='' || CityPin=="null" ){
+			alert('Enter the City Pin!');
+			return false;
+		}else if(Mobile==null || Mobile=='' || Mobile=="null" ){
+			alert('Enter the Mobile Number!');
+			return false;
+		}else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
+			alert('Enter the Alt Mobile Number!');
+			return false;
+		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
+			alert('Enter the LandLine Number!');
+			return false;
+		}else{
+			$('#myModal').modal('show');
+		}
+
 }
 </script>
 <script type="text/javascript">

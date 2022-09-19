@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,11 +31,27 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +62,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
@@ -53,15 +71,30 @@ import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.Appointments;
+import com.vts.ems.pis.model.Awards;
+import com.vts.ems.pis.model.DisciplineCode;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.Passport;
+import com.vts.ems.pis.model.PassportForeignVisit;
+import com.vts.ems.pis.model.PisCadre;
+import com.vts.ems.pis.model.PisCatClass;
+import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
+import com.vts.ems.pis.model.PisPayLevel;
+import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.Publication;
+import com.vts.ems.pis.model.Qualification;
+import com.vts.ems.pis.model.QualificationCode;
 import com.vts.ems.pis.service.PisService;
+import com.vts.ems.utils.AgeCalculations;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
+
 
 
 
@@ -85,6 +118,9 @@ public class PisController {
 	
 	@Autowired
 	MasterService masterservice;
+	
+	@Autowired
+	AdminService adminservice;
 	
 	@Value("${EMSFilesPath}")
 	private String uploadpath;
@@ -231,11 +267,16 @@ public class PisController {
 			String email = req.getParameter("email");
 			String PunchCardNo = req.getParameter("PunchCardNo");
 			String idMark = req.getParameter("idMark");
-			String empstatus = req.getParameter("empstatus");
 			String phoneno = req.getParameter("PhoneNo");
 			String AltPhoneno = req.getParameter("AltPhoneno");
 			String uanno = req.getParameter("UANNo");
-					
+			
+			String empstatus = req.getParameter("empstatus");
+			
+			String empstatusdate = req.getParameter("EmpStatusDate");
+			String height = req.getParameter("Height");
+			String exman = req.getParameter("ExMan");
+			String permpassno =  req.getParameter("PermPassNo");
 			
 			Employee employee = new Employee();
 			employee.setEmail(email);
@@ -249,6 +290,14 @@ public class PisController {
 			employee.setCreatedBy(Username);
 			employee.setExtNo(internalNo);
 			EmployeeDetails emp= new EmployeeDetails();
+			
+			emp.setEmpStatus(empstatus);
+
+			emp.setEmpStatusDate(DateTimeFormatUtil.dateConversionSql(empstatusdate));
+			emp.setHeight(height);
+			emp.setExServiceMan(exman);
+			emp.setPerPassNo(permpassno);
+			
 			emp.setTitle(salutation);
 			emp.setUANNo(uanno);
 			// date conversion
@@ -305,11 +354,9 @@ public class PisController {
 			emp.setBloodGroup(bloodgroup);
 			emp.setMaritalStatus(MaritalStatus);
 			emp.setReligion(religion);
-			emp.setEmpStatus("P");
 			emp.setGPFNo(gpf);
 			emp.setPAN(pan);
 			emp.setPINNo(drona);
-			emp.setEmpStatus("P");
 			emp.setPhoneNo(phoneno);
 			emp.setAltPhoneNo(AltPhoneno);
 			if(uid!=null && !uid.trim().equalsIgnoreCase("")) {
@@ -322,7 +369,6 @@ public class PisController {
 			emp.setPayLevelId(Integer.parseInt(payLevel));
 			emp.setSBIAccNo(SBI);
 			emp.setIdMark(idMark);
-			emp.setHeight("0");
 			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setCreatedBy(Username);
@@ -376,6 +422,7 @@ public class PisController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside EmployeeEditSubmit.htm " + Username);
 		try {
+			
 			String salutation = req.getParameter("salutation");
 			String empname = req.getParameter("empname");
 			String Designationid = req.getParameter("Designationid");
@@ -403,12 +450,16 @@ public class PisController {
 			String email = req.getParameter("email");
 			String PunchCardNo = req.getParameter("PunchCardNo");
 			String idMark = req.getParameter("idMark");
-			String empstatus = req.getParameter("empstatus");
 			String phno = req.getParameter("PhoneNo");
 			String empdetailsid=req.getParameter("empdetailsid");
 			String uanno = req.getParameter("UANNo");
 			String EmpId= req.getParameter("EmpId");
 			String AltPhoneno = req.getParameter("AltPhoneno");
+			String empstatus = req.getParameter("empstatus");
+			String empstatusdate = req.getParameter("EmpStatusDate");
+			String height = req.getParameter("Height");
+			String exman = req.getParameter("ExMan");
+			String permpassno =  req.getParameter("PermPassNo");
 			
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
@@ -423,6 +474,12 @@ public class PisController {
 				employee.setModifiedDate(sdtf.format(new Date()));
 				
 			EmployeeDetails emp = new EmployeeDetails();
+			
+			emp.setEmpStatus(empstatus);
+			emp.setEmpStatusDate(DateTimeFormatUtil.dateConversionSql(empstatusdate));
+			emp.setHeight(height);
+			emp.setExServiceMan(exman);
+			emp.setPerPassNo(permpassno);
 			emp.setTitle(salutation);
 			emp.setUANNo(uanno);
 			// date conversion
@@ -497,7 +554,6 @@ public class PisController {
 			emp.setPayLevelId(Integer.parseInt(payLevel));
 			emp.setSBIAccNo(SBI);
 			emp.setIdMark(idMark);
-			emp.setHeight("0");
 			emp.setBasicPay(Long.parseLong(basicpay));
 			emp.setIsActive(1);
 			emp.setModifiedBy(Username);
@@ -574,20 +630,64 @@ public class PisController {
 			value = service.saveEmpImage(file, empdata[3]+"", path);
 			Object[] employeedetails = service.EmployeeDetails(EmpId);
 			String basevalue = service.getimage(empdata[3]+"");
-			req.setAttribute("empid", EmpId);
+			
 			req.setAttribute("employeedetails", employeedetails);
 			req.setAttribute("basevalue", basevalue);
 			if (value != 0) {
-				req.setAttribute("result", "Photo Upload Successful");
+				redir.addAttribute("result", "Photo Upload Successful");
 			} else {
-				req.setAttribute("resultfail", "Photo Upload Unsuccessful");
+				redir.addAttribute("resultfail", "Photo Upload Unsuccessful");
 			}
+			
+			
+			redir.addFlashAttribute("empid",EmpId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			req.setAttribute("resultfail", "Photo Upload Unsuccessful");
-			logger.error(new Date() + " Inside EmployeeEditSubmit.htm " + Username, e);
+			logger.error(new Date() + " Inside PisImageUpload.htm " + Username, e);
 		}
-		return "pis/EmpBasicDetails";
+		return "redirect:/IndividualDetails.htm";
+	}
+	
+	@RequestMapping(value = "PisEmployeeImageUpload.htm", headers = ("content-type=multipart/*"), method = RequestMethod.POST)
+	public String PisEmployeeImageUpload(HttpSession ses, RedirectAttributes redir, HttpServletRequest req,HttpServletResponse res, @RequestParam("photo1") MultipartFile file) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside PisImageUpload.htm " + Username);
+		int value = 0;
+		String EmpId = (String) req.getParameter("empid");
+		try {
+			Object[] empdata = service.GetEmpData(EmpId);
+			String imagename = null;
+			if(empdata!=null && empdata[3]!=null) {
+				imagename = service.PhotoPath(empdata[3]+"");
+			}
+				String path = 	uploadpath + "\\empimages";
+					
+			File f = new File(path + "\\" + imagename);
+			if (f.exists()) {
+				f.delete();
+			}
+			value = service.saveEmpImage(file, empdata[3]+"", path);
+			Object[] employeedetails = service.EmployeeDetails(EmpId);
+			String basevalue = service.getimage(empdata[3]+"");
+			
+			req.setAttribute("employeedetails", employeedetails);
+			req.setAttribute("basevalue", basevalue);
+			if (value != 0) {
+				redir.addAttribute("result", "Photo Upload Successful");
+			} else {
+				redir.addAttribute("resultfail", "Photo Upload Unsuccessful");
+			}
+			
+			
+			redir.addFlashAttribute("empid",EmpId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			req.setAttribute("resultfail", "Photo Upload Unsuccessful");
+			logger.error(new Date() + " Inside PisImageUpload.htm " + Username, e);
+		}
+		return "redirect:/EmployeeDetails.htm";
 	}
 	
 	@RequestMapping(value = "LoginMaster.htm", method = {RequestMethod.POST,RequestMethod.GET})
@@ -1905,6 +2005,7 @@ public class PisController {
 			}else {
 				String empid= req.getParameter("empid");
 				String newSeniorityNumber=req.getParameter("UpdatedSrNo");
+				
 		        int result= service.UpdateSeniorityNumber(empid,newSeniorityNumber);
 				   if(result>0) {
 						redir.addAttribute("result", "Emlpoyee Seniority Number Updated Successfully ");
@@ -1957,7 +2058,7 @@ public class PisController {
 				}
 				
 				redir.addFlashAttribute("empid",empid);
-				return "redirect:/EmployeeDetails.htm";
+				return "redirect:/IndividualDetails.htm";
 			
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside EmpBloodGropuEdit.htm "+Username, e);
@@ -1967,6 +2068,35 @@ public class PisController {
 			
 			
 		}
+	
+	@RequestMapping(value = "UserBloodGropuEdit.htm" , method= {RequestMethod.POST})
+	public String UserBloodGropuEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{   
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside UserBloodGropuEdit.htm " + Username);
+		try {
+			String bloodgroup =req.getParameter("bloodgroup");
+			String empid = req.getParameter("empid");
+			String empno = req.getParameter("empno");
+		
+			int count = service.EmpBloodGropuEdit(empno, bloodgroup);
+			if (count > 0) {
+				redir.addAttribute("result", "Blood Group updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Blood Group update Unsuccessfull");
+			}
+			
+			redir.addFlashAttribute("empid",empid);
+			return "redirect:/EmployeeDetails.htm";
+		
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside UserBloodGropuEdit.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+		
+		
+	}
 		
 	
 		public static String saveFile(String ToFilePath, String fileFullName, MultipartFile multipartFile) throws IOException 
@@ -2863,7 +2993,3108 @@ public class PisController {
 			
 		}
 	 	
+	 	@RequestMapping(value = "EducationList.htm" , method = {RequestMethod.POST,RequestMethod.GET })
+	 	public String EducationList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	    {	
+	 	   String Username = (String) ses.getAttribute("Username");
+	         logger.info(new Date() +"Inside EducationList.htm "+Username);
+	         String empid =null;
+	         	
+	         try {
+	         	  empid = (String)req.getParameter("empid");
+	         	if(empid==null)  {
+	 				Map md=model.asMap();
+	 				empid=(String)md.get("Employee");
+	 				
+	 			}
+	 			req.setAttribute("Educationlist", service.getEducationList(empid));
+	 			req.setAttribute("Empdata", service.GetEmpData(empid));
+	 			
+	 		} catch (Exception e) {		
+	 			logger.info(new Date() +"Inside EducationList.htm "+Username);
+	 			e.printStackTrace();
+	 			 return "static/Error";
+	 		}
+	         return "pis/EducationList";
+	    }
 	 	
+	 	@RequestMapping(value = "EducationAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
+		public String EducationAddEditDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside EducationAddEditDelete.htm " + Username);
+			
+			try {
+				String empid = (String) req.getParameter("empid");
+				String Action = (String) req.getParameter("Action");
+				if ("ADD".equalsIgnoreCase(Action)) {
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("QualificationList", service.getQualificationList());
+					req.setAttribute("DisciplineList", service.getDiscipline());
+			
+					return "pis/EducationAdd";
+				} else if ("EDIT".equalsIgnoreCase(Action)) {
+					String qualiid = (String) req.getParameter("qualificationId");
+				
+					req.setAttribute("QualificationDetails", service.getQualificationDetails(Integer.parseInt(qualiid)));
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("QualificationList", service.getQualificationList());
+					req.setAttribute("DisciplineList", service.getDiscipline());
+			
+					return "pis/EducationEdit";
+				} else {
+			                                                                                    
+					String qualiid = (String) req.getParameter("qualificationId");
+					int count = service.DeleteQualification(qualiid, Username);
+					if (count > 0) {
+						redir.addAttribute("result", "Qualification Details deleted Sucessfully");
+					} else {
+						redir.addAttribute("resultfail", "Qualification Details deleted UnSucessfull");
+					}
+					redir.addFlashAttribute("Employee", empid);
+					return "redirect:/EducationList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside EducationAddEditDelete.htm " + Username ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+			
+
+		}
+	   
+	   @RequestMapping(value="AddEducation.htm" ,  method=RequestMethod.POST)  
+	   public String AddEducation(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddEducation.htm "+Username);
+	       
+	       try {
+	    	   String qualification = req.getParameter("Qualification");
+	    	   String sponsored  = req.getParameter("Sponsored");
+	    	   String discipline = req.getParameter("Discipline");
+	    	   String hindiprof =  req.getParameter("HindiProf");
+	    	   String university = req.getParameter("University");
+	    	   String division = req.getParameter("Division");
+	    	   String specialization = req.getParameter("Specialization");
+	    	   String honours = req.getParameter("Honours");
+	    	   String acquired = req.getParameter("Acquired");
+	    	   String yearofpassing = req.getParameter("yearofpassing");
+	    	   String cgpa  = req.getParameter("CGPA");
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	  Qualification quali = new Qualification();
+	    	  
+	    	  quali.setQuali_id(Integer.valueOf(qualification));
+	    	  quali.setSponsored(sponsored);
+	    	  quali.setDisci_id(Integer.valueOf(discipline));
+	    	  quali.setHindi_prof(hindiprof);
+	    	  quali.setUniversity(university);
+	    	  quali.setDivision(division);
+	    	  quali.setSpecialization(specialization);
+	    	  quali.setHonours(honours);
+	    	  quali.setAcq_bef_aft(acquired);
+	    	  quali.setYearofpassing(yearofpassing);
+	    	  quali.setCgpa(cgpa);
+	    	  quali.setEmpid(empid);
+	    	  quali.setIs_active(1);
+	    	  quali.setCreatedby(Username);
+	    	  quali.setCreateddate(sdtf.format(new Date()));
+	    	  
+	    	   int result = service.AddQualification(quali);
+	    	   if(result>0){
+	    		   redir.addAttribute("result", "Qualification Details Saved Successfully");	
+	   		   } else {
+	   			redir.addAttribute("resultfail", "Qualification Details Saved Unsuccessful");
+	    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);
+	    	   
+	    	   
+		   } catch (Exception e) {
+			   logger.error(new Date() +"Inside AddEducation.htm "+Username,e);
+		  	 e.printStackTrace();
+		  	return "static/Error";
+		  }
+	       return "redirect:/EducationList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value="EditEducation.htm" , method=RequestMethod.POST)
+	   public String EducationEdit(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditEducation.htm "+Username);
+	       try {
+	    	   String qualification = req.getParameter("Qualification");
+	    	   String sponsored  = req.getParameter("Sponsored");
+	    	   String discipline = req.getParameter("Discipline");
+	    	   String hindiprof =  req.getParameter("HindiProf");
+	    	   String university = req.getParameter("University");
+	    	   String division = req.getParameter("Division");
+	    	   String specialization = req.getParameter("Specialization");
+	    	   String honours = req.getParameter("Honours");
+	    	   String acquired = req.getParameter("Acquired");
+	    	   String yearofpassing = req.getParameter("yearofpassing");
+	    	   String cgpa  = req.getParameter("CGPA");
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   
+	    	   String qualificationid = req.getParameter("qualificationid");
+	    	  Qualification quali = new Qualification();
+	    	  
+	    	  quali.setQualification_id(Integer.valueOf(qualificationid));
+	    	  quali.setQuali_id(Integer.valueOf(qualification));
+	    	  quali.setSponsored(sponsored);
+	    	  quali.setDisci_id(Integer.valueOf(discipline));
+	    	  quali.setHindi_prof(hindiprof);
+	    	  quali.setUniversity(university);
+	    	  quali.setDivision(division);
+	    	  quali.setSpecialization(specialization);
+	    	  quali.setHonours(honours);
+	    	  quali.setAcq_bef_aft(acquired);
+	    	  quali.setYearofpassing(yearofpassing);
+	    	  quali.setCgpa(cgpa);
+	    	  quali.setEmpid(empid);
+	    	  quali.setModifiedby(Username);
+	    	  quali.setModifieddate(sdtf.format(new Date()));
+	    	   
+	    	   String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(qualificationid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_qualification");
+	    	  
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    	   
+	    	   int result = service.EditQualification(quali);
+		    	   if(result>0){
+		    		   redir.addAttribute("result", "Qualification Details Edited Sucessfully");	
+		   		   } else {
+		   			   redir.addAttribute("resultfail", "Qualification Details Edited UnSuccessful");
+		    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);   
+	    	   
+		      } catch (Exception e) {
+		    	  logger.error(new Date() + " Inside EditEducation.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+		      }
+	       return "redirect:/EducationList.htm";
+	   }
 	 	
-	 	
+	   
+	   @RequestMapping(value = "AppointmentList.htm" , method = {RequestMethod.GET, RequestMethod.POST})
+	   public String AppointmentList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AppointmentList.htm "+Username);
+			try {
+				String empid =null;
+				 empid = (String)req.getParameter("empid");
+		         	if(empid==null)  {
+		 				Map md=model.asMap();
+		 				empid=(String)md.get("Employee");
+		 			}
+		         	
+		 			req.setAttribute("Appointmentlist", service.getAppointmentList(empid));
+		 			req.setAttribute("Empdata", service.GetEmpData(empid));
+		 			 return "pis/AppointmentList";
+			} catch (Exception e) {
+				 logger.error(new Date() + " Inside AppointmentList.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "AppointmentAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
+		public String AppointmentAddEditDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside AppointmentAddEditDelete.htm " + Username);
+			
+			try {
+				String empid = (String) req.getParameter("empid");
+				String Action = (String) req.getParameter("Action");
+				if ("ADD".equalsIgnoreCase(Action)) {
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("DesignationList", service.getDesignationList());
+					req.setAttribute("Recruitment", service.getRecruitment());
+			
+					return "pis/AppointmentAdd";
+				} else if ("EDIT".equalsIgnoreCase(Action)) {
+					String appointmentid = (String) req.getParameter("AppointmentId");
+				
+					req.setAttribute("AppointmentsDetails", service.getAppointmentsDetails(Integer.parseInt(appointmentid)));
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("DesignationList", service.getDesignationList());
+					req.setAttribute("Recruitment", service.getRecruitment());
+			
+					return "pis/AppointmentEdit";
+				} else {
+			                                                                                    
+					String qualiid = (String) req.getParameter("AppointmentId");
+					int count = service.DeleteAppointment(qualiid, Username);
+					if (count > 0) {
+						redir.addAttribute("result", "Appointment Details deleted Sucessfully");
+					} else {
+						redir.addAttribute("resultfail", "Appointment Details deleted Unsucessfull");
+					}
+					redir.addFlashAttribute("Employee", empid);
+					return "redirect:/AppointmentList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside AppointmentAddEditDelete.htm " + Username ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
+	  
+	   @RequestMapping(value="AddAppointment.htm" ,  method=RequestMethod.POST)  
+	   public String AddAppointment(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddAppointment.htm "+Username);
+	       
+	       try {
+	    	   String recruitmentid = req.getParameter("Recruitmentid");
+	    	   String drdo  = req.getParameter("drdo");
+	    	   String designation = req.getParameter("Designation");
+	    	   String orglab =  req.getParameter("OrgLab");
+	    	   String fromdate = req.getParameter("fromdate");
+	    	   String todate = req.getParameter("todate");
+	    	   String ceptamcycle = req.getParameter("CeptamCycle");
+	    	   String vacancyyear = req.getParameter("vacancyyear");
+	    	   String recruitmentyear = req.getParameter("recruitmentyear");
+	    	
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	  Appointments app = new Appointments();
+	    	  
+	    	  app.setMode_recruitment(recruitmentid);
+	    	  app.setDrdo_others(drdo);
+	    	  app.setDesig_id(Integer.parseInt(designation));
+	    	  app.setOrg_lab(orglab);
+	    	  app.setFrom_date(DateTimeFormatUtil.dateConversionSql(fromdate));
+	    	  app.setTo_date(DateTimeFormatUtil.dateConversionSql(todate));
+	    	  app.setCeptam_cycle(ceptamcycle);
+	    	  app.setVacancy_year(vacancyyear);
+	    	  app.setRecruitment_year(recruitmentyear);
+	    	  app.setEmpid(empid);
+	    	  app.setIs_active(1);
+	    	  app.setCreatedby(Username);
+	    	  app.setCreateddate(sdtf.format(new Date()));
+	    	  
+	    	   int result = service.AddAppointment(app);
+	    	   if(result>0){
+	    		   redir.addAttribute("result", "Appointment Details Saved Successfully");	
+	   		   } else {
+	   			redir.addAttribute("resultfail", "Appointment Details Saved Unsuccessful");
+	    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);
+	    	   
+	    	   
+		   } catch (Exception e) {
+			   logger.error(new Date() +"Inside AddAppointment.htm "+Username,e);
+		  	 e.printStackTrace();
+		  	return "static/Error";
+		  }
+	       return "redirect:/AppointmentList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value="EditAppointment.htm" , method=RequestMethod.POST)
+	   public String EditAppointment(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditAppointment.htm "+Username);
+	       try {
+	    	   String recruitmentid = req.getParameter("Recruitmentid");
+	    	   String drdo  = req.getParameter("drdo");
+	    	   String designation = req.getParameter("Designation");
+	    	   String orglab =  req.getParameter("OrgLab");
+	    	   String fromdate = req.getParameter("fromdate");
+	    	   String todate = req.getParameter("todate");
+	    	   String ceptamcycle = req.getParameter("CeptamCycle");
+	    	   String vacancyyear = req.getParameter("vacancyyear");
+	    	   String recruitmentyear = req.getParameter("recruitmentyear");
+	    	   String appointmentid = req.getParameter("appointmentid");
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	  Appointments app = new Appointments();
+	    	  
+	    	  app.setMode_recruitment(recruitmentid);
+	    	  app.setDrdo_others(drdo);
+	    	  app.setDesig_id(Integer.parseInt(designation));
+	    	  app.setOrg_lab(orglab);
+	    	  app.setFrom_date(DateTimeFormatUtil.dateConversionSql(fromdate));
+	    	  app.setTo_date(DateTimeFormatUtil.dateConversionSql(todate));
+	    	  app.setCeptam_cycle(ceptamcycle);
+	    	  app.setVacancy_year(vacancyyear);
+	    	  app.setRecruitment_year(recruitmentyear);	    	  
+	    	  app.setAppointment_id(Integer.parseInt(appointmentid));
+	    	  app.setEmpid(empid);
+	    	  app.setModifiedby(Username);
+	    	  app.setModifieddate(sdtf.format(new Date()));
+	    	   
+	    	   String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(appointmentid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_appointments");
+	    	  
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    	   
+	    	   int result = service.EditAppointment(app);
+		    	   if(result>0){
+		    		   redir.addAttribute("result", "Appointment Details Edited Sucessfully");	
+		   		   } else {
+		   			   redir.addAttribute("resultfail", "Appointment Details Edited UnSuccessful");
+		    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);   
+	    	   
+		      } catch (Exception e) {
+		    	  logger.error(new Date() + " Inside EditAppointment.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+		      }
+	       return "redirect:/AppointmentList.htm";
+	   }
+	   
+	   
+	   
+	   @RequestMapping(value = "AwardsList.htm" , method = {RequestMethod.GET, RequestMethod.POST})
+	   public String AwardsList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AwardsList.htm "+Username);
+			try {
+				String empid =null;
+				 empid = (String)req.getParameter("empid");
+		         	if(empid==null)  {
+		 				Map md=model.asMap();
+		 				empid=(String)md.get("Employee");
+		 			}
+		         	
+		 			req.setAttribute("Awardslist", service.getAwardsList(empid));
+		 			req.setAttribute("Empdata", service.GetEmpData(empid));
+		 			 return "pis/AwardsList";
+			} catch (Exception e) {
+				 logger.error(new Date() + " Inside AwardsList.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "AwardsAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
+		public String AwardsAddEditDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside AwardsAddEditDelete.htm " + Username);
+			
+			try {
+				String empid = (String) req.getParameter("empid");
+				String Action = (String) req.getParameter("Action");
+				if ("ADD".equalsIgnoreCase(Action)) {
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("PisAwardsList", service.getPisAwardsList());
+					return "pis/AwardsAdd";
+				} else if ("EDIT".equalsIgnoreCase(Action)) {
+					String appointmentid = (String) req.getParameter("AwardId");
+				
+					req.setAttribute("AwardssDetails", service.getAwardsDetails(Integer.parseInt(appointmentid)));
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("PisAwardsList", service.getPisAwardsList());
+					
+			
+					return "pis/AwardsEdit";
+				} else {
+			                                                                                    
+					String qualiid = (String) req.getParameter("AwardId");
+					int count = service.DeleteAwards(qualiid, Username);
+					if (count > 0) {
+						redir.addAttribute("result", "Awards Details deleted Sucessfully");
+					} else {
+						redir.addAttribute("resultfail", "Awards Details deleted Unsucessfull");
+					}
+					redir.addFlashAttribute("Employee", empid);
+					return "redirect:/AwardsList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside AwardsAddEditDelete.htm " + Username ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
+	  
+	   @RequestMapping(value="AddAwards.htm" ,  method=RequestMethod.POST)  
+	   public String AddAwards(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddAwards.htm "+Username);
+	       
+	       try {
+	    	   String awardname = req.getParameter("Awardname");
+	    	   String certificate  = req.getParameter("certificate");
+	    	   String awardfrom = req.getParameter("AwardFrom");
+	    	   String citation =  req.getParameter("Citation");
+	    	   String awarddetails = req.getParameter("AwardDetails");
+	    	   String cash = req.getParameter("Cash");
+	    	   String awardcategory = req.getParameter("AwardCategory");
+	    	   String awardyear = req.getParameter("AwardYear");
+	    	   String cashamount = req.getParameter("CashAmount");
+	    	   String medallion = req.getParameter("Medallion");
+	    	   String awarddate = req.getParameter("AwardDate");
+	    	
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Awards app = new Awards();
+	    	  
+	    	  app.setAwardListId(Integer.parseInt(awardname));
+	    	  app.setCertificate(certificate);
+	    	  app.setAward_by(awardfrom);
+	    	  app.setCitation(citation);
+	    	  app.setAward_date(DateTimeFormatUtil.dateConversionSql(awarddate));
+	    	  app.setDetails(awarddetails);
+	    	  app.setAward_cat(awardcategory);
+	    	  app.setCash(cash);
+	    	  app.setCash_amt(cashamount);
+	    	  app.setAward_year(awardyear);
+	    	  app.setMedallion(medallion);
+	    	  app.setEmpid(empid);
+	    	  app.setIs_active(1);
+	    	  app.setCreatedby(Username);
+	    	  app.setCreateddate(sdtf.format(new Date()));
+	    	  
+	    	   int result = service.AddAwards(app);
+	    	   if(result>0){
+	    		   redir.addAttribute("result", "Awards Details Saved Successfully");	
+	   		   } else {
+	   			redir.addAttribute("resultfail", "Awards Details Saved Unsuccessful");
+	    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);
+	    	   
+	    	   
+		   } catch (Exception e) {
+			   logger.error(new Date() +"Inside AddAwards.htm "+Username,e);
+		  	 e.printStackTrace();
+		  	return "static/Error";
+		  }
+	       return "redirect:/AwardsList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value="EditAwards.htm" , method=RequestMethod.POST)
+	   public String EditAwards(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditAwards.htm "+Username);
+	       try {
+	    	   String awardname = req.getParameter("AwardName");
+	    	   String certificate  = req.getParameter("certificate");
+	    	   String awardfrom = req.getParameter("AwardFrom");
+	    	   String citation =  req.getParameter("Citation");
+	    	   String awarddetails = req.getParameter("AwardDetails");
+	    	   String cash = req.getParameter("Cash");
+	    	   String awardcategory = req.getParameter("AwardCategory");
+	    	   String awardyear = req.getParameter("AwardYear");
+	    	   String cashamount = req.getParameter("CashAmount");
+	    	   String medallion = req.getParameter("Medallion");
+	    	   String awarddate = req.getParameter("AwardDate");
+	    	   String  awardsid = req.getParameter("awardsid");
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Awards app = new Awards();
+	    	  
+	    	  app.setAwards_id(Integer.parseInt(awardsid));
+	    	  app.setAwardListId(Integer.parseInt(awardname));
+	    	  app.setCertificate(certificate);
+	    	  app.setAward_by(awardfrom);
+	    	  app.setCitation(citation);
+	    	  app.setAward_date(DateTimeFormatUtil.dateConversionSql(awarddate));
+	    	  app.setDetails(awarddetails);
+	    	  app.setAward_cat(awardcategory);
+	    	  app.setCash(cash);
+	    	  app.setCash_amt(cashamount);
+	    	  app.setAward_year(awardyear);
+	    	  app.setMedallion(medallion);
+	    	  app.setEmpid(empid);
+	    	  app.setIs_active(1);
+	    	  app.setModifiedby(Username);
+	    	  app.setModifieddate(sdtf.format(new Date()));
+	    	   
+	    	   String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(awardsid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_appointments");
+	    	  
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    	   
+	    	   int result = service.EditAwards(app);
+		    	   if(result>0){
+		    		   redir.addAttribute("result", "Awards Details Edited Sucessfully");	
+		   		   } else {
+		   			   redir.addAttribute("resultfail", "Awards Details Edited UnSuccessful");
+		    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);   
+	    	   
+		      } catch (Exception e) {
+		    	  logger.error(new Date() + " Inside EditAwards.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+		      }
+	       return "redirect:/AwardsList.htm";
+	   }
+	   
+  
+	   
+	   @RequestMapping(value = "PropertyList.htm" , method = {RequestMethod.GET, RequestMethod.POST})
+	   public String PropertyList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside PropertyList.htm "+Username);
+			try {
+				String empid =null;
+				 empid = (String)req.getParameter("empid");
+		         	if(empid==null)  {
+		 				Map md=model.asMap();
+		 				empid=(String)md.get("Employee");
+		 			}
+		         	
+		 			req.setAttribute("Propertylist", service.getPropertyList(empid));
+		 			req.setAttribute("Empdata", service.GetEmpData(empid));
+		 			 return "pis/PropertyList";
+			} catch (Exception e) {
+				 logger.error(new Date() + " Inside PropertyList.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "PropertyAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
+		public String PropertyAddEditDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception 
+	   {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside PropertyAddEditDelete.htm " + Username);
+			
+			try {
+				String empid = (String) req.getParameter("empid");
+				String Action = (String) req.getParameter("Action");
+				if ("ADD".equalsIgnoreCase(Action)) {
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					
+					return "pis/PropertyAdd";
+				} else if ("EDIT".equalsIgnoreCase(Action)) {
+					String appointmentid = (String) req.getParameter("PropertyId");
+				
+					req.setAttribute("PropertyDetails", service.getPropertyDetails(Integer.parseInt(appointmentid)));
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+
+					return "pis/PropertyEdit";
+				} else {
+			                                                                                    
+					String qualiid = (String) req.getParameter("PropertyId");
+					int count = service.DeleteProperty(qualiid, Username);
+					if (count > 0) {
+						redir.addAttribute("result", "Property Details deleted Sucessfully");
+					} else {
+						redir.addAttribute("resultfail", "Property Details deleted Unsucessfull");
+					}
+					redir.addFlashAttribute("Employee", empid);
+					return "redirect:/PropertyList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside PropertyAddEditDelete.htm " + Username ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
+	  
+	   @RequestMapping(value="AddProperty.htm" ,  method=RequestMethod.POST)  
+	   public String AddProperty(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddProperty.htm "+Username);
+	       
+	       try {
+	    	   String movable = req.getParameter("Movable");
+	    	   String acquired  = req.getParameter("Acquired");
+	    	   String details = req.getParameter("Details");
+	    	   String remark =  req.getParameter("Remark");
+	    	   String dop = req.getParameter("DOP");
+	    	   String notingon = req.getParameter("NotingOn");
+	    	   String value = req.getParameter("Value");
+	    	  
+	    	
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Property app = new Property();
+	    	  
+	    	  app.setMovable(movable);
+	    	  app.setAcquired_type(acquired);
+	    	  app.setDetails(details);
+	    	  app.setRemarks(remark);
+	    	  app.setDop(DateTimeFormatUtil.dateConversionSql(dop));
+	    	  app.setNoting_on(DateTimeFormatUtil.dateConversionSql(notingon));
+	    	  app.setValue(value);
+	    	  app.setEmpid(empid);
+	    	  app.setIs_active(1);
+	    	  app.setCreatedby(Username);
+	    	  app.setCreateddate(sdtf.format(new Date()));
+	    	  
+	    	   int result = service.AddProperty(app);
+	    	   if(result>0){
+	    		   redir.addAttribute("result", "Property Details Saved Successfully");	
+	   		   } else {
+	   			redir.addAttribute("resultfail", "Property Details Saved Unsuccessful");
+	    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);
+	    	   
+	    	   
+		   } catch (Exception e) {
+			   logger.error(new Date() +"Inside AddProperty.htm "+Username,e);
+		  	 e.printStackTrace();
+		  	return "static/Error";
+		  }
+	       return "redirect:/PropertyList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value="EditProperty.htm" , method=RequestMethod.POST)
+	   public String EditProperty(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditProperty.htm "+Username);
+	       try {
+	    	   String movable = req.getParameter("Movable");
+	    	   String acquired  = req.getParameter("Acquired");
+	    	   String details = req.getParameter("Details");
+	    	   String remark =  req.getParameter("Remark");
+	    	   String dop = req.getParameter("DOP");
+	    	   String notingon = req.getParameter("NotingOn");
+	    	   String value = req.getParameter("Value");
+	    	  String propertyid = req.getParameter("PropertyId");
+	    	
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Property app = new Property();
+	    	  
+	    	      app.setProperty_id(Integer.parseInt(propertyid));
+		    	  app.setMovable(movable);
+		    	  app.setAcquired_type(acquired);
+		    	  app.setDetails(details);
+		    	  app.setRemarks(remark);
+		    	  app.setDop(DateTimeFormatUtil.dateConversionSql(dop));
+		    	  app.setNoting_on(DateTimeFormatUtil.dateConversionSql(notingon));
+		    	  app.setValue(value);
+		    	  app.setEmpid(empid);
+		    	  app.setIs_active(1);
+		    	  app.setModifiedby(Username);
+		    	  app.setModifieddate(sdtf.format(new Date()));
+	    	   
+	    	   String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(propertyid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_property");
+	    	  
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    	   
+	    	   int result = service.EditProperty(app);
+		    	   if(result>0){
+		    		   redir.addAttribute("result", "Property Details Edited Sucessfully");	
+		   		   } else {
+		   			   redir.addAttribute("resultfail", "Property Details Edited UnSuccessful");
+		    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);   
+	    	   
+		      } catch (Exception e) {
+		    	  logger.error(new Date() + " Inside EditProperty.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+		      }
+	       return "redirect:/PropertyList.htm";
+	   }
+	   
+	   @RequestMapping(value = "PublicationList.htm" , method = {RequestMethod.GET, RequestMethod.POST})
+	   public String PublicationList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside PublicationList.htm "+Username);
+			try {
+				String empid =null;
+				 empid = (String)req.getParameter("empid");
+		         	if(empid==null)  {
+		 				Map md=model.asMap();
+		 				empid=(String)md.get("Employee");
+		 			}
+		         	
+		 			req.setAttribute("Publicationlist", service.getPublicationList(empid));
+		 			req.setAttribute("Empdata", service.GetEmpData(empid));
+		 			 return "pis/PublicationList";
+			} catch (Exception e) {
+				 logger.error(new Date() + " Inside PublicationList.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "PublicationAddEditDelete.htm", method = {RequestMethod.GET ,RequestMethod.POST})
+		public String PublicationAddEditDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception 
+	   {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside PublicationAddEditDelete.htm " + Username);
+			
+			try {
+				String empid = (String) req.getParameter("empid");
+				String Action = (String) req.getParameter("Action");
+				if ("ADD".equalsIgnoreCase(Action)) {
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("PisStateList", service.getPisStateList());
+					return "pis/PublicationAdd";
+				} else if ("EDIT".equalsIgnoreCase(Action)) {
+					String appointmentid = (String) req.getParameter("PublicationId");
+				
+					req.setAttribute("PublicationDetails", service.getPublicationDetails(Integer.parseInt(appointmentid)));
+					req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("PisStateList", service.getPisStateList());
+					return "pis/PublicationEdit";
+				} else {
+			                                                                                    
+					String qualiid = (String) req.getParameter("PublicationId");
+					int count = service.DeleteProperty(qualiid, Username);
+					if (count > 0) {
+						redir.addAttribute("result", "Publication Details deleted Sucessfully");
+					} else {
+						redir.addAttribute("resultfail", "Publication Details deleted Unsucessfull");
+					}
+					redir.addFlashAttribute("Employee", empid);
+					return "redirect:/PublicationList.htm";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside PublicationAddEditDelete.htm " + Username ,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		}
+	  
+	   @RequestMapping(value="AddPublication.htm" ,  method=RequestMethod.POST)  
+	   public String AddPublication(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddPublication.htm "+Username);
+	       
+	       try {
+	    	   String publicationtype = req.getParameter("PublicationType");
+	    	   String author  = req.getParameter("Author");
+	    	   String discipline = req.getParameter("Discipline");
+	    	   String title =  req.getParameter("Title");
+	    	   String publication = req.getParameter("Publication");
+	    	   String publicationdate = req.getParameter("PublicationDate");
+	    	   String patentno = req.getParameter("PatentNo");
+	    	   String country = req.getParameter("Country");
+	    	
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Publication app = new Publication();
+	    	  
+	    	  app.setPub_type(publicationtype);
+	    	  app.setAuthors(author);
+	    	  app.setDiscipline(discipline);
+	    	  app.setTitle(title);
+	    	  app.setPub_name_vno_pno(publication);
+	    	  app.setPub_date(DateTimeFormatUtil.dateConversionSql(publicationdate));
+	    	  app.setPatent_no(patentno);
+	    	  app.setCountry(country);
+	    	  app.setEmpid(empid);
+	    	  app.setIs_active(1);
+	    	  app.setCreatedby(Username);
+	    	  app.setCreateddate(sdtf.format(new Date()));
+	    	  
+	    	   int result = service.AddPublication(app);
+	    	   if(result>0){
+	    		   redir.addAttribute("result", "Publication Details Saved Successfully");	
+	   		   } else {
+	   			redir.addAttribute("resultfail", "Publication Details Saved Unsuccessful");
+	    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);
+	    	   
+	    	   
+		   } catch (Exception e) {
+			   logger.error(new Date() +"Inside AddPublication.htm "+Username,e);
+		  	 e.printStackTrace();
+		  	return "static/Error";
+		  }
+	       return "redirect:/PublicationList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value="EditPublication.htm" , method=RequestMethod.POST)
+	   public String EditPublication(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditPublication.htm "+Username);
+	       try {
+	    	   String publicationtype = req.getParameter("PublicationType");
+	    	   String author  = req.getParameter("Author");
+	    	   String discipline = req.getParameter("Discipline");
+	    	   String title =  req.getParameter("Title");
+	    	   String publication = req.getParameter("Publication");
+	    	   String publicationdate = req.getParameter("PublicationDate");
+	    	   String patentno = req.getParameter("PatentNo");
+	    	   String country = req.getParameter("Country");
+	    	
+	    	   String publicationid = req.getParameter("publicationid");
+	    	   String empid = req.getParameter("empid");
+	    	  
+	    	   Publication app = new Publication();
+	    	   		
+	    	      app.setPublication_id(Integer.parseInt(publicationid));
+		    	  app.setPub_type(publicationtype);
+		    	  app.setAuthors(author);
+		    	  app.setDiscipline(discipline);
+		    	  app.setTitle(title);
+		    	  app.setPub_name_vno_pno(publication);
+		    	  app.setPub_date(DateTimeFormatUtil.dateConversionSql(publicationdate));
+		    	  app.setPatent_no(patentno);
+		    	  app.setCountry(country);
+		    	  app.setModifiedby(Username);
+		    	  app.setModifieddate(sdtf.format(new Date()));
+	    	   
+	    	   String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(Username);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(publicationid));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_publication");
+	    	  
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+	    	   
+	    	   int result = service.EditPublication(app);
+		    	   if(result>0){
+		    		   redir.addAttribute("result", "Publication Details Edited Sucessfully");	
+		   		   } else {
+		   			   redir.addAttribute("resultfail", "Publication Details Edited UnSuccessful");
+		    	   }
+	    	  
+	    	   redir.addFlashAttribute("Employee", empid);   
+	    	   
+		      } catch (Exception e) {
+		    	  logger.error(new Date() + " Inside EditPublication.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+		      }
+	       return "redirect:/PublicationList.htm";
+	   }
+	   
+	   @RequestMapping(value = "PassportList.htm" , method = {RequestMethod.GET, RequestMethod.POST})
+	   public String PassportList(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside PassportList.htm "+Username);
+			try {
+				String empid =null;
+				 empid = (String)req.getParameter("empid");
+		         	if(empid==null)  {
+		 				Map md=model.asMap();
+		 				empid=(String)md.get("Employee");
+		 			}
+		         	
+		 			req.setAttribute("PassportVisitList", service.getPassportVisitList(empid));
+		 			req.setAttribute("PassportList", service.getPassportList(empid));
+		 			req.setAttribute("Empdata", service.GetEmpData(empid));
+		 			 return "pis/PassportList";
+			} catch (Exception e) {
+				 logger.error(new Date() + " Inside PassportList.htm " + Username, e);
+					e.printStackTrace();
+					return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value ="AddEditPassport.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+	   public String AddEditPassport(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddEditPassport.htm "+Username);
+	       try {
+
+	    	   String Action = (String) req.getParameter("Action");
+	    	   String empid =(String)req.getParameter("empid");
+	    	   
+	    	   	if("PassportEdit".equalsIgnoreCase(Action)) {
+	    	   	
+	    	   		Passport passport = service.getPassportData(empid);
+	    	   		req.setAttribute("Empdata", service.GetEmpData(empid));
+	    	   		 req.setAttribute("passport", passport);
+	    	     
+	    	   	      return "pis/PassportAddEdit";
+	           }else{
+	    	   	    req.setAttribute("Empdata", service.GetEmpData(empid));
+	    	   	 return "pis/PassportAddEdit";
+	    	   	}
+	    	   	
+		    } catch (Exception e) {
+		    	 logger.error(new Date() +"Inside AddEditPassport.htm "+Username ,e);
+		 	    e.printStackTrace();
+		 	    return "static/Error";
+		    }
+	      
+	   }
+	   
+	   
+	   @RequestMapping(value="AddPassport.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+	   public String AddPassport(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		  
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddPassport.htm "+Username);  
+	       String Action = (String)request.getParameter("Action");
+		   try {
+			    String passporttype = request.getParameter("PassportType").trim().replaceAll(" +", " ");
+				String status = request.getParameter("Status");
+				String passportno = request.getParameter("PassportNo").trim().replaceAll(" +", " ");
+				String validfrom = request.getParameter("ValidFrom").trim().replaceAll(" +", " ");
+				String validto = request.getParameter("ValidTo").trim().replaceAll(" +", " ");
+		
+				String empid= request.getParameter("empid"); 
+
+				Passport pport= new Passport();
+
+				pport.setEmpId(empid);
+				pport.setPassportType(passporttype);
+				pport.setStatus(status);
+				pport.setPassportNo(passportno);
+				pport.setValidFrom(DateTimeFormatUtil.dateConversionSql(validfrom));
+				pport.setValidTo(DateTimeFormatUtil.dateConversionSql(validto));
+
+			if("ADD".equalsIgnoreCase(Action)) {
+				
+				pport.setCreatedBy(Username);
+				pport.setCreatedDate(sdf.format(new Date()));
+	        	  long result  =  service.AddPassport(pport); 
+	        	 
+	        	    if(result>0) {
+	        	    	 redir.addAttribute("result", "Passport details Add Successfull");	
+	        		} else {
+	        			 redir.addAttribute("resultfail", "Passport details  ADD Unsuccessful");	
+	        	    }
+	        	    redir.addFlashAttribute("Employee", empid);
+			}
+				
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside AddPassport.htm "+Username ,e);  
+				e.printStackTrace();
+				return "static/Error";
+			}
+		   return "redirect:/PassportList.htm";
+	   }
+	   
+	   @RequestMapping(value="EditPassport.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+	   public String EditPassport(HttpServletRequest request , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+		  
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside EditPassport.htm "+Username);  
+	       String Action = (String)request.getParameter("Action");
+		   try {
+			   String passporttype = request.getParameter("PassportType").trim().replaceAll(" +", " ");
+				String status = request.getParameter("Status");
+				String passportno = request.getParameter("PassportNo").trim().replaceAll(" +", " ");
+				String validfrom = request.getParameter("ValidFrom").trim().replaceAll(" +", " ");
+				String validto = request.getParameter("ValidTo").trim().replaceAll(" +", " ");
+		
+				String empid= request.getParameter("empid"); 
+
+				Passport pport= new Passport();
+
+				pport.setEmpId(empid);
+				pport.setPassportType(passporttype);
+				pport.setStatus(status);
+				pport.setPassportNo(passportno);
+				pport.setValidFrom(DateTimeFormatUtil.dateConversionSql(validfrom));
+				pport.setValidTo(DateTimeFormatUtil.dateConversionSql(validto));
+				
+			
+
+		 if ("EDIT".equalsIgnoreCase(Action)) {
+				String passportid = (String)request.getParameter("passportid");
+				pport.setPassportId(Integer.parseInt(passportid));
+				pport.setModifiedBy(Username);
+				pport.setModifiedDate(sdtf.format(new Date()));
+				
+				   String comments = (String)request.getParameter("comments");
+		    	   MasterEdit masteredit  = new MasterEdit();
+		    	   masteredit.setCreatedBy(Username);
+		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+		    	   masteredit.setTableRowId(Long.parseLong(passportid));
+		    	   masteredit.setComments(comments);
+		    	   masteredit.setTableName("pis_passport");
+		    	   
+		    	   MasterEditDto masterdto = new MasterEditDto();
+		    	   masterdto.setFilePath(selectedFile);
+		    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+							
+	        	  long result  =  service.EditPassport(pport); 
+	        	 
+	        	    if(result>0) {
+	        	    	 redir.addAttribute("result", "Passport Details Edit Successfull");	
+	        		} else {
+	        			 redir.addAttribute("resultfail", "Passport Details Edit Unsuccessful");	
+	        	    }
+	        	    redir.addFlashAttribute("Employee", empid);
+			}
+				
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside EditPassport.htm "+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+		   return "redirect:/PassportList.htm";
+	   }
+	   
+	   @RequestMapping(value = "ForeignVisitAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		public String ForeignVisitAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{   
+			String Username = (String) ses.getAttribute("Username");
+			String Action =(String)req.getParameter("Action");
+			String empid = (String)req.getParameter("empid");
+			
+			logger.info(new Date() +"Inside ForeignVisitAddEdit.htm "+Username); 
+			try {
+				if("ADD".equalsIgnoreCase(Action)){
+					 req.setAttribute("Empdata", service.GetEmpData(empid));
+					req.setAttribute("States", service.getPisStateList());
+							
+			  return "pis/PassportForeignVisitAddEdit";
+			}else if("EDIT".equalsIgnoreCase(Action)) {
+				
+				  String pasportid = (String)req.getParameter("PassportVisitId"); 	
+				  PassportForeignVisit foreignvisit = service.getForeignVisitData(Integer.parseInt(pasportid) );
+				  req.setAttribute("foreignvisit", foreignvisit);
+				  req.setAttribute("Empdata", service.GetEmpData(empid));				
+				  req.setAttribute("States", service.getPisStateList());
+				  
+			   return "pis/PassportForeignVisitAddEdit";
+			}else{
+				
+				String passportvisitid = (String)req.getParameter("PassportVisitId");
+						
+				int count =service.deleteForeignVisit(passportvisitid,Username);
+				if (count > 0) {
+					redir.addAttribute("result", "Foreign Visit Details Deleted Sucessfully");
+				} else {
+					redir.addAttribute("resultfail", "Foreign Visit Details Delete Unsuccessful");
+				}
+				redir.addFlashAttribute("Employee", empid);
+				return "redirect:/PassportList.htm";
+			}
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside ForeignVisitAddEdit.htm "+Username,e); 
+				e.printStackTrace();
+				return "static/Error";
+			}
+			
+			
+		}
+	           
+	   
+	   @RequestMapping(value="ForeignVisitAdd.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+	   public String ForeignVisitAdd(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		  
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ForeignVisitAdd.htm "+Username);  
+	       String Action = (String)request.getParameter("Action");
+		   try {
+			    String state = request.getParameter("state").trim().replaceAll(" +", " ");
+				String visitfrom = request.getParameter("VisitFrom");
+				String visitto = request.getParameter("VisitTo");
+				String nocno = request.getParameter("NOCNo");
+				String nocdate = request.getParameter("NOCDate");
+				String purpose = request.getParameter("Purpose");
+				String nocissuedfrom = request.getParameter("NOCIssuedFrom");
+				String remark = request.getParameter("Remark");
+			
+				
+				String empid= request.getParameter("empid"); 
+
+				PassportForeignVisit pfv= new PassportForeignVisit();
+				
+				pfv.setEmpId(empid);
+				pfv.setCountryName(state);
+				pfv.setVisitFromDate(DateTimeFormatUtil.dateConversionSql(visitfrom));
+				pfv.setVisitToDate(DateTimeFormatUtil.dateConversionSql(visitto));
+				pfv.setNocLetterNo(nocno);
+				pfv.setNocLetterDate(DateTimeFormatUtil.dateConversionSql(nocdate));
+				pfv.setPurpose(purpose);
+				pfv.setNocIssuedFrom(nocissuedfrom);
+				pfv.setRemarks(remark);
+				
+			if("ADD".equalsIgnoreCase(Action)) {
+				pfv.setIsActive(1);
+				pfv.setCreatedBy(Username);
+				pfv.setCreatedDate(sdf.format(new Date()));
+	        	  long result  =  service.AddForeignVisit(pfv); 
+	        	 
+	        	    if(result>0) {
+	        	    	 redir.addAttribute("result", "Foreign Visit Details Add Successfull");	
+	        		} else {
+	        			 redir.addAttribute("resultfail", "Foreign Visit Details ADD Unsuccessful");	
+	        	    }
+	        	    redir.addFlashAttribute("Employee", empid);
+			}
+				
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside ForeignVisitAdd.htm "+Username ,e);  
+				e.printStackTrace();
+				return "static/Error";
+			}
+		   return "redirect:/PassportList.htm";
+	   }
+	   
+	   @RequestMapping(value="ForeignVisitEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+	   public String ForeignVisitEdit(HttpServletRequest request , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)throws Exception{
+		  
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ForeignVisitEdit.htm "+Username);  
+	       String Action = (String)request.getParameter("Action");
+		   try {
+			   String state = request.getParameter("state").trim().replaceAll(" +", " ");
+				String visitfrom = request.getParameter("VisitFrom");
+				String visitto = request.getParameter("VisitTo");
+				String nocno = request.getParameter("NOCNo");
+				String nocdate = request.getParameter("NOCDate");
+				String purpose = request.getParameter("Purpose");
+				String nocissuedfrom = request.getParameter("NOCIssuedFrom");
+				String remark = request.getParameter("Remark");
+				String passportvisitid = request.getParameter("foreignvisitid");
+				
+				String empid= request.getParameter("empid"); 
+
+				PassportForeignVisit pfv= new PassportForeignVisit();
+				
+				pfv.setPassportVisitId(Integer.parseInt(passportvisitid));
+				pfv.setEmpId(empid);
+				pfv.setCountryName(state);
+				pfv.setVisitFromDate(DateTimeFormatUtil.dateConversionSql(visitfrom));
+				pfv.setVisitToDate(DateTimeFormatUtil.dateConversionSql(visitto));
+				pfv.setNocLetterNo(nocno);
+				pfv.setNocLetterDate(DateTimeFormatUtil.dateConversionSql(nocdate));
+				pfv.setPurpose(purpose);
+				pfv.setNocIssuedFrom(nocissuedfrom);
+				pfv.setRemarks(remark);
+			
+				
+		 if ("EDIT".equalsIgnoreCase(Action)) {
+				
+				pfv.setPassportVisitId(Integer.parseInt(passportvisitid));
+				pfv.setModifiedBy(Username);
+				pfv.setModifiedDate(sdtf.format(new Date()));
+				
+				   String comments = (String)request.getParameter("comments");
+		    	   MasterEdit masteredit  = new MasterEdit();
+		    	   masteredit.setCreatedBy(Username);
+		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+		    	   masteredit.setTableRowId(Long.parseLong(passportvisitid));
+		    	   masteredit.setComments(comments);
+		    	   masteredit.setTableName("pis_passport_visit");
+		    	   
+		    	   MasterEditDto masterdto = new MasterEditDto();
+		    	   masterdto.setFilePath(selectedFile);
+		    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+							
+	        	  long result  =  service.EditForeignVisit(pfv); 
+	        	 
+	        	    if(result>0) {
+	        	    	 redir.addAttribute("result", "Foreign Visit Details Edit Successfull");	
+	        		} else {
+	        			 redir.addAttribute("resultfail", "Foreign Visit Details Edit Unsuccessful");	
+	        	    }
+	        	    redir.addFlashAttribute("Employee", empid);
+			}
+				
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside ForeignVisitEdit.htm "+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+		   return "redirect:/PassportList.htm";
+	   }
+	   
+	   
+	   @RequestMapping(value = "QualificationListAddEditDelete.htm" , method = {RequestMethod.GET ,RequestMethod.POST})
+	   public String QualificationList(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside QualificationListAddEditDelete.htm "+Username);  
+	       
+		try {
+			String delete =req.getParameter("DeleteQualification"); 
+			String edit = req.getParameter("EditQuali");
+			ses.setAttribute("SidebarActive","QualificationListAddEditDelete_htm");
+			
+			
+			if(delete!=null){
+				
+				long result  =  service.DeleteEducationQualification(delete,Username); 
+	        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "Educational Qualification Delete Successfull");	
+        		} else {
+        			 redir.addAttribute("resultfail", "Educational Qualification Delete Unsuccessful");	
+        	    }
+				return	"redirect:/QualificationListAddEditDelete.htm";
+			}else if(edit!=null){
+			
+				String qualification = req.getParameter("qualification");
+				
+				long result  =  service.EditEducationQualification(edit,qualification,Username); 
+	        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "Educational Qualification Edit Successfull");	
+        		} else {
+        			 redir.addAttribute("resultfail", "Educational Qualification Edit Unsuccessful");	
+        	    }
+				return "redirect:/QualificationListAddEditDelete.htm";
+			}else{ 
+				req.setAttribute("QualificationList", service.getQualificationList());
+				return "pis/QualificationCodeListAddEditDelete";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside QualificationListAddEditDelete.htm "+Username ,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		   
+	   }
+	   
+	   @RequestMapping(value = "AddQualification.htm" , method = {RequestMethod.GET ,RequestMethod.POST})
+	   public String AddQualification(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddQualification.htm "+Username);  
+	       try {
+	    	   QualificationCode qc = new QualificationCode();
+	    	   String qualification = req.getParameter("Addqualification");
+	    	   
+	    	   qc.setQuali_title(qualification);
+	    	   qc.setIs_active(1);
+	    	   qc.setCreated_by(Username);
+	    	   qc.setModified_date(sdtf.format(new Date()));
+	    	   
+	    	   long result  =  service.AddEducationQualification(qc); 
+	        	 
+       	    if(result>0) {
+       	    	 redir.addAttribute("result", "Educational Qualification Add Successfull");	
+       		} else {
+       			 redir.addAttribute("resultfail", "Educational Qualification Add Unsuccessful");	
+       	    }
+	    	   
+	    	   return "redirect:/QualificationListAddEditDelete.htm";
+			}catch (Exception e){
+				logger.error(new Date() +"Inside AddQualification.htm "+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "DisciplineListAddEditDelete.htm" , method = {RequestMethod.GET ,RequestMethod.POST})
+	   public String DisciplineList(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside DisciplineListAddEditDelete.htm "+Username);  
+	       
+		try {
+			String delete =req.getParameter("DeleteDiscipline"); 
+			String edit = req.getParameter("EditDisci");
+			ses.setAttribute("SidebarActive","DisciplineListAddEditDelete_htm");
+			
+			
+			if(delete!=null){
+				
+				long result  =  service.DeleteDiscipline(delete,Username); 
+	        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "Discipline Delete Successfull");	
+        		} else {
+        			 redir.addAttribute("resultfail", "Discipline Delete Unsuccessful");	
+        	    }
+				return	"redirect:/DisciplineListAddEditDelete.htm";
+			}else if(edit!=null){
+			
+				String discipline = req.getParameter("Discipline");
+				
+				long result  =  service.EditDiscipline(edit,discipline,Username); 
+	        	 
+        	    if(result>0) {
+        	    	 redir.addAttribute("result", "Discipline Edit Successfull");	
+        		} else {
+        			 redir.addAttribute("resultfail", "Discipline Edit Unsuccessful");	
+        	    }
+				return "redirect:/DisciplineListAddEditDelete.htm";
+			}else{ 
+				req.setAttribute("DisciplineList", service.getDiscipline());
+				return "pis/DisciplineListAddEditDelete";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DisciplineListAddEditDelete.htm "+Username ,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		   
+	   }
+	   
+	   @RequestMapping(value = "AddDiscipline.htm" , method = {RequestMethod.GET ,RequestMethod.POST})
+	   public String AddDiscipline(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside AddDiscipline.htm "+Username);  
+	       try {
+	    	   DisciplineCode qc = new DisciplineCode();
+	    	   String qualification = req.getParameter("Adddiscipline");
+	    	   
+	    	   qc.setDisci_title(qualification);
+	    	   qc.setIs_active(1);
+	    	   qc.setCreated_by(Username);
+	    	   qc.setModified_date(sdtf.format(new Date()));
+	    	   
+	    	   long result  =  service.AddDiscipline(qc); 
+	        	 
+       	    if(result>0) {
+       	    	 redir.addAttribute("result", "Discipline Add Successfull");	
+       		} else {
+       			 redir.addAttribute("resultfail", "Discipline Add Unsuccessful");	
+       	    }
+	    	   
+	    	   return "redirect:/DisciplineListAddEditDelete.htm";
+			}catch (Exception e){
+				logger.error(new Date() +"Inside AddDiscipline.htm "+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+	   }
+	   @RequestMapping(value = "PIS.htm", method = { RequestMethod.GET,RequestMethod.POST})
+		public String PisDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside Pis.htm "+Username);		
+			try {
+				
+				String logintype = (String)ses.getAttribute("LoginType");
+				List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
+			
+				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("SidebarActive", "PIS_htm");
+				req.setAttribute("dashboard", admindashboard);
+				Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
+				String Name=emp[1]+"  ("+emp[2]+")";
+				req.setAttribute("empname",Name);
+				
+				return "pis/PisDashboard";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside Pis.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+		}
+	   
+	   @RequestMapping(value ="GroupDetails.htm" , method = {RequestMethod.GET ,RequestMethod.POST})
+	   public String GroupDetails(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside GroupDetails.htm "+Username); 
+		   try {
+			  
+			
+				String choice = request.getParameter("Mainlist");
+				
+				if (request.getParameter("Mainlist") != null) {
+
+					List<Object[]> stusOrDesigOrGrpOrGenList = null;
+					String GenderChoice = null;
+
+					switch (choice) {
+
+					case "Employee Status Wise":
+						stusOrDesigOrGrpOrGenList = service.GetEmpStatusList();
+						break;
+					case "Group/Division Wise":
+						stusOrDesigOrGrpOrGenList = service.getGroupName();
+						break;
+					case "Designation Wise":
+						stusOrDesigOrGrpOrGenList = service.getDesignation();
+						break;
+					case "Gender Wise":
+						GenderChoice = "GenderChoice";
+						break;
+						default:
+
+					}
+
+					request.setAttribute("stusOrDesigOrGrpOrGenList", stusOrDesigOrGrpOrGenList);
+					request.setAttribute("GenderChoice", GenderChoice);
+					request.setAttribute("choice", choice);
+
+				}
+
+				if (request.getParameter("SubList") != null) {
+
+					
+
+					// split Id and value ..
+					String SubList = request.getParameter("SubList");
+					String[] DropDownOption = SubList.split("_");
+					String DropDownOption0 = DropDownOption[0];
+					String DropDownOption1 = DropDownOption[1];
+
+					List<Object[]> ResultedList = null;
+
+					if ("All".equalsIgnoreCase(DropDownOption0)) {
+						ResultedList = service.fetchAllEmployeeDetail();
+					} else {
+
+						switch (choice) {
+
+						case "Employee Status Wise":
+							ResultedList = service.getEmployeeStatusWise(DropDownOption0);
+							break;
+
+						case "Group/Division Wise":
+							
+							int GroupId = Integer.parseInt(DropDownOption0);
+							ResultedList = service.getEmployeeDivOrGroupWise(GroupId);
+							break;
+
+						case "Designation Wise":
+							int DesigId = Integer.parseInt(DropDownOption0);
+							ResultedList = service.getEmployeeDesignationWise(DesigId);
+							break;
+
+						case "Gender Wise":
+							ResultedList = service.getEmployeeGenderWise(DropDownOption0);
+							break;
+						default:
+						}
+					}
+					request.setAttribute("ResultedList", ResultedList);
+					request.setAttribute("DropDownOption1", DropDownOption1);
+					request.setAttribute("DropDownOption0", DropDownOption0);
+				}
+			
+			   ses.setAttribute("SidebarActive","GroupDetails_htm");
+			   return "pis/GroupDetails";
+		   }catch (Exception e) {
+				logger.error(new Date() +"Inside GroupDetails.htm"+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+		  }
+	   }
+	   
+	   @RequestMapping(value ="NominalRollReport.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+	   public String NominalRollReport(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside NominalRollReport.htm "+Username); 
+		   try {
+			   String catType = req.getParameter("catType");
+			 
+			   List<Object[]> PersonalDetailsAll=null;
+			   if(catType!=null) {
+				   PersonalDetailsAll = service.fetchPersonalDetailsNGOorCGO(catType);
+			   }else{
+				   PersonalDetailsAll = service.fetchAllPersonalDetail();
+			   }
+			 req.setAttribute("catType", catType);
+			  req.setAttribute("personaldetailsall", PersonalDetailsAll);
+			   ses.setAttribute("SidebarActive","NominalRollReport_htm");
+			   return "pis/NominalRollList";
+			}catch (Exception e){
+				logger.error(new Date() +"Inside NominalRollReport.htm"+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value ="ConfigurableReport.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+	   public String ConfigurableReport(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ConfigurableReport.htm "+Username); 
+		   try {
+			   
+			   if (request.getParameter("submit") != null || request.getParameter("Details") != null) {
+
+				String name = request.getParameter("name");
+
+				// split DesigId And Designation ..
+				String DesigIdAndDesignation = request.getParameter("Designation");
+				String[] DesigIdAndDesignationArray = DesigIdAndDesignation.split("#");
+				String DesigId = DesigIdAndDesignationArray[0];
+				String DesigName = DesigIdAndDesignationArray[1];
+
+				// split GroupId And GroupName ..
+				String GroupIdAndGroupName = request.getParameter("GroupDivision");
+				String[] GroupIdAndGroupNameArray = GroupIdAndGroupName.split("#");
+				String GroupId = GroupIdAndGroupNameArray[0];
+				String GroupName1 = GroupIdAndGroupNameArray[1];
+
+				// split CatId And CatClass ..
+				String CatIdAndCatClass = request.getParameter("CatClass");
+				String[] CatIdAndCatClassArray = CatIdAndCatClass.split("#");
+				String CatId = CatIdAndCatClassArray[0];
+				String CatClass1 = CatIdAndCatClassArray[1];
+
+				// split GenderId And GenderName ..
+				String GenderIdAndGenderName = request.getParameter("Gender");
+				String[] GenderIdAndGenderNameArray = GenderIdAndGenderName.split("#");
+				String Gender = GenderIdAndGenderNameArray[0];
+				String GenderName = GenderIdAndGenderNameArray[1];
+
+				// split CadreId And CadreName ..
+				String CadreIdAndCadreName = request.getParameter("Cadre");
+				String[] CadreIdAndCadreNameArray = CadreIdAndCadreName.split("#");
+				String CadreId = CadreIdAndCadreNameArray[0];
+				String CadreName1 = CadreIdAndCadreNameArray[1];
+
+				String ServiceStatus = request.getParameter("ServiceStatus");
+
+				// split CategoryId And CategoryName ..
+				String CategoryIdAndCategoryName = request.getParameter("Category");
+				String[] CategoryIdAndCategoryNameArray = CategoryIdAndCategoryName.split("#");
+				String CategoryId = CategoryIdAndCategoryNameArray[0];
+				String CategoryName = CategoryIdAndCategoryNameArray[1];
+
+				String BG = request.getParameter("BG");
+
+				// split modeOfRecruitId And modeOfRecruitName ..
+				String modeOfRecruitIdAndmodeOfRecruitName = request.getParameter("Appointment");
+				String[] modeOfRecruitIdAndmodeOfRecruitNameArray = modeOfRecruitIdAndmodeOfRecruitName.split("#");
+				String modeOfRecruitId = modeOfRecruitIdAndmodeOfRecruitNameArray[0];
+				String modeOfRecruitName = modeOfRecruitIdAndmodeOfRecruitNameArray[1];
+
+				// split AwardId And AwardName..
+
+				String AwardIdAndName = request.getParameter("Awards");
+				String[] AwardIdAndNameArray = AwardIdAndName.split("#");
+				String AwardId = AwardIdAndNameArray[0];
+				String AwardName = AwardIdAndNameArray[1];
+				
+				List<Object[]> ConfigurableReportList = service.getConfigurableReportList(name, DesigId, GroupId, CatId,
+						Gender, CadreId, ServiceStatus, CategoryId, BG, modeOfRecruitId, AwardId);
+
+				// System.out.println(name+" "+DesigName+" "+DesigId+" "+GroupId+" "+CatId+"
+				// "+Gender+" "+CadreId+" "+ServiceStatus+" "+CategoryId+" "+BG+"
+				// "+modeOfRecruitId+" "+Awards);
+				request.setAttribute("ConfigurableReportList", ConfigurableReportList);
+
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("name", name);
+				map.put("DesigId", DesigId);
+				map.put("DesigName", DesigName);
+				map.put("GroupId", GroupId);
+				map.put("GroupName1", GroupName1);
+				map.put("CatId", CatId);
+				map.put("CatClass1", CatClass1);
+				map.put("Gender", Gender);
+				map.put("GenderName", GenderName);
+				map.put("CadreId", CadreId);
+				map.put("CadreName1", CadreName1);
+				map.put("ServiceStatus", ServiceStatus);
+				map.put("CategoryId", CategoryId);
+				map.put("CategoryName", CategoryName);
+				map.put("BG", BG);
+				map.put("modeOfRecruitId", modeOfRecruitId);
+				map.put("modeOfRecruitName", modeOfRecruitName);
+				map.put("AwardId", AwardId);
+				map.put("AwardName", AwardName);
+				request.setAttribute("map", map);
+
+				if (request.getParameter("Details") != null) {
+
+					String empid = request.getParameter("Details");
+					Object[] empdata = service.GetEmpData(empid);
+					Object[] employeedetails = service.GetAllEmployeeDetails(empid);	
+					Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
+					List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
+					List<Object[]> familydetails = service.getFamilydetails(empid);
+					 String basevalue=null;
+			            if(empdata!=null && empdata[3]!=null) {
+			            	basevalue=service.getimage(empdata[3].toString());
+			            }
+			
+			            request.setAttribute("empid", empid);
+			            request.setAttribute("employeedetails", employeedetails);
+			            request.setAttribute("resaddressdetails", resaddressdetails);
+			            request.setAttribute("peraddressdetails", peraddressdetails);
+						request.setAttribute("familydetails", familydetails);
+						request.setAttribute("basevalue", basevalue);
+						request.setAttribute("Educationlist", service.getEducationList(empid));
+						request.setAttribute("Appointmentlist", service.getAppointmentList(empid));
+						request.setAttribute("Awardslist", service.getAwardsList(empid));
+						request.setAttribute("Propertylist", service.getPropertyList(empid));
+						request.setAttribute("Publicationlist", service.getPublicationList(empid));
+						request.setAttribute("PassportVisitList", service.getPassportVisitList(empid));
+						request.setAttribute("PassportList", service.getPassportList(empid));
+				
+				}
+		   }
+			    request.setAttribute("AwardsNamelist", service.getPisAwardsList());
+			    request.setAttribute("modeOfRecruit", service.getRecruitment());
+			    request.setAttribute("desiglist", service.DesigList());		
+			    request.setAttribute("piscategorylist", service.PisCategoryList());
+				request.setAttribute("piscatclasslist", service.PisCatClassList());
+				request.setAttribute("piscaderlist", service.PisCaderList());
+				request.setAttribute("empstatuslist", service.EmpStatusList());
+				request.setAttribute("paylevellist", service.PayLevelList());	
+				request.setAttribute("divisionlist", service.DivisionList());
+				  ses.setAttribute("SidebarActive","ConfigurableReport_htm");
+				  
+			   return "pis/ConfigurableReport";
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside ConfigurableReport.htm"+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+	   }
+	   
+	   @RequestMapping(value = "/Configurableselectionwise.htm" ,method = {RequestMethod.POST,RequestMethod.GET})
+		public String Democonfigurablereport(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside ConfigurableReport.htm "+Username); 
+		   
+		   try {
+				
+			   ses.setAttribute("SidebarActive","Configurableselectionwise_htm");
+			   return "pis/ConfigurableReportSelectionWise";
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside Configurableselectionwise.htm"+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+			
+
+		}
+	   
+	   @RequestMapping(value ="configurablereportselectionwise.htm" ,method = {RequestMethod.POST,RequestMethod.GET})
+		public String selectionwiseReport(HttpServletRequest request , HttpSession ses)throws Exception {
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside configurablereportselectionwise.htm "+Username); 
+		   try {
+			   
+			    String DesignationModal = request.getParameter("DesignationModal");
+				String GroupModal = request.getParameter("GroupModal");
+				String CatClassModal = request.getParameter("CatClassModal");
+				String GenderModal = request.getParameter("GenderModal");
+				String CadreModal = request.getParameter("CadreModal");
+				String ServiceStatusModal = request.getParameter("ServiceStatusModal");
+				String CategoryModal = request.getParameter("CategoryModal");
+				String BloodModal = request.getParameter("BloodModal");
+				String ReligionModal = request.getParameter("ReligionModal");
+				String QuarterModal = request.getParameter("QuarterModal");
+				String HandicapModal = request.getParameter("HandicapModal");
+				String PayLevelModal = request.getParameter("PayLevelModal");
+				String QualificationModal = request.getParameter("QualificationModal");
+				String PublicationModal = request.getParameter("PublicationModal");
+				String PropertyModal = request.getParameter("PropertyModal");
+				String AppointmentModal = request.getParameter("AppointmentModal");
+				String AwardsModal = request.getParameter("AwardsModal");
+
+				request.setAttribute("ServiceStatuslist", ServiceStatusModal);
+				request.setAttribute("BGlist", BloodModal);
+				request.setAttribute("Propertylist", PropertyModal);
+				request.setAttribute("Handicap", HandicapModal);
+				request.setAttribute("Religionlist", ReligionModal);
+				request.setAttribute("QuarterAvailable", QuarterModal);
+				request.setAttribute("Publicationlist", PublicationModal);
+				// Getting Dropdown values from DB
+				if (null != DesignationModal) {
+					List<Object[]> Designation = service.getDesignation();
+					request.setAttribute("Designation", Designation);
+				}
+				request.setAttribute("Genderlist", GenderModal);
+				if (null != GroupModal) {
+					List<Object[]> GroupName = service.getGroupName();
+					request.setAttribute("GroupName", GroupName);
+				}
+				if (null != CatClassModal) {
+					List<PisCatClass> CatClass = service.PisCatClassList();
+					request.setAttribute("Catclass", CatClass);
+				}
+				if (null != CadreModal) {
+					List<PisCadre> cadreNames = service.PisCaderList();
+					request.setAttribute("CadreNames", cadreNames);
+				}
+				if (null != CategoryModal) {
+					List<PisCategory> Category = service.PisCategoryList();
+					request.setAttribute("Category", Category);
+				}
+				if (null != PayLevelModal) {
+					List<PisPayLevel> payLevel = service.PayLevelList();
+					request.setAttribute("PayLevel", payLevel);
+				}
+				if (null != QualificationModal) {
+					List<Object[]> qulaficationList = service.getQualificationList();
+					request.setAttribute("qualification", qulaficationList);
+				}
+				if (null != AppointmentModal) {
+					List<Object[]> modeOfRecruit = service.getRecruitment();
+					request.setAttribute("ModeOfRecruit", modeOfRecruit);
+				}
+				if (null != AwardsModal) {
+					List<Object[]> awardslist = service.getPisAwardsList();
+					request.setAttribute("awardslist", awardslist);
+				}
+				return "pis/ConfigurableReportSelectionWise";
+				
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside Configurableselectionwise.htm"+Username ,e);
+				e.printStackTrace();
+				 return "static/Error";
+			}
+		}
+	   
+	   @RequestMapping(value = "getconfigurablereportselectionwise.htm" ,method = {RequestMethod.POST,RequestMethod.GET})
+		public String getselectionwiseCfReport(HttpServletRequest request , HttpSession ses) throws Exception {
+			
+		   String Username = (String) ses.getAttribute("Username");
+	       logger.info(new Date() +"Inside configurablereportselectionwise.htm "+Username); 
+				try {
+					Map<String, String> selects = new HashMap<>();
+					List<String> tblheadings = new ArrayList<String>();
+					tblheadings.add("EMPID");
+					tblheadings.add("NAME");
+
+					String name = request.getParameter("name");
+					String designation = request.getParameter("Designation");
+					String groupDivision = request.getParameter("GroupDivision");
+					String catClass = request.getParameter("CatClass");
+					String gender = request.getParameter("Gender");
+					String cadre = request.getParameter("Cadre");
+					String serviceStatus = request.getParameter("ServiceStatus");
+					String category = request.getParameter("Category");
+					String BG = request.getParameter("BG");
+					String religion = request.getParameter("religion");
+					String quarter = request.getParameter("Quarter");
+					String physicalHandicap = request.getParameter("PhysicalHandicap");
+					String pay_Level = request.getParameter("PayLevel");
+					String qualification = request.getParameter("qualification");
+					String pubType = request.getParameter("pubType");
+					String propertyType = request.getParameter("PropertyAcquiredType");
+					String appointment = request.getParameter("Appointment");
+					String awards = request.getParameter("Awards");
+
+					if (name != null && !("".equals(name.trim()))) {
+						selects.put("name", name);
+					}
+
+					if (null != designation && !("".equals(designation))) {
+						List<Object[]> Designation = service.getDesignation();
+						request.setAttribute("Designation", Designation);
+						tblheadings.add("Designation");
+						selects.put("desigId", designation.split("#")[0]);
+						selects.put("desigName", designation.split("#")[1]);
+
+					}
+					if (null != groupDivision && !("".equals(groupDivision))) {
+						List<Object[]> GroupName = service.getGroupName();
+						request.setAttribute("GroupName", GroupName);
+						tblheadings.add("GROUP");
+						selects.put("groupId", groupDivision.split("#")[0]);
+						selects.put("groupName", groupDivision.split("#")[1]);
+					}
+
+					if (null != catClass && !("".equals(catClass))) {
+						List<PisCatClass> CatClass = service.PisCatClassList();
+						request.setAttribute("Catclass", CatClass);
+						tblheadings.add("Category Class");
+						selects.put("CatId", catClass.split("#")[0]);
+						selects.put("CatName", catClass.split("#")[1]);
+
+					}
+					if (gender != null && !("".equals(gender))) {
+						request.setAttribute("Genderlist", "GenderModal");
+						tblheadings.add("Gender");
+						selects.put("genderId", gender.split("#")[0]);
+						selects.put("genderName", gender.split("#")[1]);
+					}
+
+					if (null != cadre && !("".equals(cadre))) {
+						
+						List<PisCadre> cadreNames = service.PisCaderList();
+						request.setAttribute("CadreNames", cadreNames);
+						tblheadings.add("Cadre");
+						selects.put("cadreId", cadre.split("#")[0]);
+						selects.put("cadreName", cadre.split("#")[1]);
+					}
+					if (serviceStatus != null && !("".equals(serviceStatus))) {
+						request.setAttribute("ServiceStatuslist", "ServiceStatusModal");
+						tblheadings.add("Service Status");
+						selects.put("serviceStatus", serviceStatus);
+					}
+					if (null != category && !("".equals(category))) {
+						
+						List<PisCategory> Category = service.PisCategoryList();
+						request.setAttribute("Category", Category);
+						tblheadings.add("Category");
+						selects.put("categoryId", category.split("#")[0]);
+						selects.put("categoryName", category.split("#")[1]);
+					}
+					if (BG != null && !("".equals(BG))) {
+						request.setAttribute("BGlist", "BloodModal");
+						tblheadings.add("Blood Group");
+						selects.put("BG", BG);
+					}
+					if (religion != null && !("".equals(religion))) {
+						request.setAttribute("Religionlist", "ReligionModal");
+						tblheadings.add("RELIGION");
+						selects.put("religion", religion);
+					}
+					if (quarter != null && !("".equals(quarter))) {
+						request.setAttribute("QuarterAvailable", "QuarterModal");
+						tblheadings.add("Govt.QUARTER");
+						selects.put("quarterId", quarter.split("#")[0]);
+						selects.put("quarterName", quarter.split("#")[1]);
+					}
+					if (physicalHandicap != null && !("".equals(physicalHandicap))) {
+						request.setAttribute("Handicap", "HandicapModal");
+						tblheadings.add("HANDICAPPED");
+						selects.put("physicalHandicapId", physicalHandicap.split("#")[0]);
+						selects.put("physicalHandicapName", physicalHandicap.split("#")[1]);
+					}
+					if (null != pay_Level && !("".equals(pay_Level))) {
+						
+						List<PisPayLevel> payLevel = service.PayLevelList();
+						request.setAttribute("PayLevel", payLevel);
+						tblheadings.add("PAYLEVEL");
+						selects.put("pay_LevelId", pay_Level.split("#")[0]);
+						selects.put("pay_LevelName", pay_Level.split("#")[1]);
+					}
+					if (null != qualification && !("".equals(qualification))) {
+						List<Object[]> qulaficationList = service.getQualificationList();
+						request.setAttribute("qualification", qulaficationList);
+						tblheadings.add("QUALIFICATION");
+						selects.put("qualificationId", qualification.split("#")[0]);
+						selects.put("qualificationName", qualification.split("#")[1]);
+					}
+					if (pubType != null && !("".equals(pubType))) {
+						request.setAttribute("Publicationlist", "PublicationModal");
+						tblheadings.add("PUBLICATION");
+						selects.put("pubType", pubType);
+					}
+					if (propertyType != null && !("".equals(propertyType))) {
+						request.setAttribute("Propertylist", "PropertyModal");
+						tblheadings.add("PROPERTY");
+						selects.put("propertyType", propertyType);
+					}
+					if (null != appointment && !("".equals(appointment))) {
+						List<Object[]> modeOfRecruit = service.getRecruitment();
+						request.setAttribute("ModeOfRecruit", modeOfRecruit);
+						tblheadings.add("APPOINTMENT");
+						selects.put("appointmentId", appointment.split("#")[0]);
+						selects.put("appointmentName", appointment.split("#")[1]);
+					}
+					if (null != awards && !("".equals(awards))) {
+						List<Object[]> awardslist = service.getPisAwardsList();
+						request.setAttribute("awardslist", awardslist);
+						tblheadings.add("AWARDS");
+						selects.put("awardsId", awards.split("#")[0]);
+						selects.put("awardsName", awards.split("#")[1]);
+					}
+
+					List<Object[]> confreports = service.getconfigurablereportselectionwise(name, designation, groupDivision,
+							catClass, gender, cadre, serviceStatus, pay_Level, qualification, propertyType, pubType, category, BG,
+							quarter, physicalHandicap, religion, appointment, awards);
+
+					request.setAttribute("confreports", confreports);
+					request.setAttribute("tblheadings", tblheadings);
+					request.setAttribute("selects", selects);
+					if (CollectionUtils.isEmpty(confreports)) {
+						String norecords = "norecords";
+						request.setAttribute("norecords", norecords);
+					}
+
+					return "pis/ConfigurableReportSelectionWise";
+
+				} catch (Exception e) {
+					logger.error(new Date() +"Inside getconfigurablereportselectionwise.htm"+Username ,e);
+					e.printStackTrace();
+					 return "static/Error";
+				}
+			
+		}
+	   
+	   @RequestMapping(value = "IndividualDetails.htm", method = {RequestMethod.POST , RequestMethod.GET})
+		public String IndividualDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside IndividualDetails.htm "+Username);		
+			try {
+				
+				String empid=req.getParameter("empid");
+				if(empid==null)  {
+					Map md=model.asMap();
+					empid=(String)md.get("empid");
+				}
+				if(empid==null) {
+					empid=String.valueOf((Long)ses.getAttribute("EmpId"));
+				}
+				
+				Object[] empdata = service.GetEmpData(empid);
+				Object[] employeedetails = service.EmployeeDetails(empid);	
+				Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
+				Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
+				Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
+				List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
+				List<Object[]> familydetails = service.getFamilydetails(empid);
+							
+				List<Object[]> employeelist =service.getAllEmployeeList();
+	            String basevalue=null;
+	            if(empdata!=null && empdata[3]!=null) {
+	            	basevalue=service.getimage(empdata[3].toString());
+
+	            }        		
+	            
+				req.setAttribute("empid", empid);
+				req.setAttribute("employeedetails", employeedetails);
+				req.setAttribute("emeaddressdetails", emeaddressdetails);
+				req.setAttribute("nextaddressdetails", nextaddressdetails);
+				req.setAttribute("resaddressdetails", resaddressdetails);
+				req.setAttribute("peraddressdetails", peraddressdetails);
+				req.setAttribute("familydetails", familydetails);
+	            req.setAttribute("basevalue", basevalue);
+	            req.setAttribute("EmployeeList", employeelist);
+	            
+	            req.setAttribute("Educationlist", service.getEducationList(empid));
+	            req.setAttribute("Appointmentlist", service.getAppointmentList(empid));
+	            req.setAttribute("Awardslist", service.getAwardsList(empid));
+	            req.setAttribute("Propertylist", service.getPropertyList(empid));
+	            req.setAttribute("Publicationlist", service.getPublicationList(empid));
+	            req.setAttribute("PassportVisitList", service.getPassportVisitList(empid));
+	            req.setAttribute("PassportList", service.getPassportList(empid));
+	            
+	            ses.setAttribute("SidebarActive","IndividualDetails_htm");
+				return "pis/IndividualDetails";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside IndividualDetails.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+		}
+	   
+	   
+	   @RequestMapping(value ="DobDorDoaDojReport.htm" , method = { RequestMethod.POST , RequestMethod.GET})
+		public String showDatereport(HttpServletRequest req,HttpSession ses)throws Exception 
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DobDorDoaDojReport.htm "+Username);		
+				try {
+					List<String> rages = new ArrayList<>();
+					List<String> serviceyears = new ArrayList<>();
+
+					Calendar now = Calendar.getInstance();
+					int year = now.get(Calendar.YEAR);
+
+					List<Object[]> reportobjs = service.getDefaultReport();
+
+					serviceyears = AgeCalculations.getServiceYears(reportobjs);
+					rages = AgeCalculations.calages(reportobjs, "DOB");
+
+					req.setAttribute("reportobjs", reportobjs);
+					req.setAttribute("msg", "DOB Report of " + year);
+					req.setAttribute("rages", rages);
+					req.setAttribute("serviceyears", serviceyears);
+					req.setAttribute("type", "DOB");
+					req.setAttribute("cyear", now.get(Calendar.YEAR));
+					  ses.setAttribute("SidebarActive","DobDorDoaDojReport_htm");
+					return "pis/DobDorDoaDojReport";
+				} catch (Exception e) {
+					logger.error(new Date() +" Inside DobDorDoaDojReport.htm "+Username, e);
+					e.printStackTrace();	
+					return "static/Error";
+				}
+		}
+	   
+	   @RequestMapping(value="dobdordoadojreports.htm" ,method = {RequestMethod.GET,RequestMethod.POST})
+		public String getReports(HttpServletRequest req , HttpSession ses)throws Exception 
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside dobdordoadojreports.htm "+Username);		
+		   try {
+			   String reporttype = req.getParameter("dvalue");
+				String mon =  req.getParameter("month");
+				String ye = req.getParameter("year");
+				
+				int month = Integer.valueOf(mon);
+				
+				int year;
+				if(ye=="") {
+					 year = LocalDate.now().getYear();
+				}else {
+					 year = Integer.valueOf(ye);
+					
+				}
+				
+
+				List<String> rages = new ArrayList<>();
+				List<String> serviceyears = new ArrayList<>();
+				List<Object[]> reportobjs = new ArrayList<>();
+
+				if("DOB".equals(reporttype)) {
+
+					reportobjs = service.getDobReport(year, month);
+
+					serviceyears = AgeCalculations.getServiceYears(reportobjs);
+					rages = AgeCalculations.calages(reportobjs, reporttype);
+					req.setAttribute( "reportobjs", reportobjs);
+					if (month > 0) {
+						req.setAttribute("msg", "DOB Report of " + AgeCalculations.getMonthName(month) + " " + year);
+					} else {
+						req.setAttribute("msg", "DOB Report of " + year);
+					}
+					req.setAttribute("rages", rages);
+					req.setAttribute("serviceyears", serviceyears);
+					req.setAttribute("type", "DOB");
+
+				}
+
+				if("DOA".equals(reporttype)){
+
+					reportobjs = service.getDoaReport(year, month);
+					serviceyears = AgeCalculations.getServiceYears(reportobjs);
+					rages = AgeCalculations.calages(reportobjs, reporttype);
+					req.setAttribute("reportobjs", reportobjs);
+					if (month > 0) {
+						req.setAttribute("msg", "DOA Report of " + AgeCalculations.getMonthName(month) + " " + year);
+					} else {
+						req.setAttribute("msg", "DOA Report of " + year);
+					}
+					req.setAttribute("rages", rages);
+					req.setAttribute("serviceyears", serviceyears);
+					req.setAttribute("type", "DOA");
+				}
+
+				if("DOR".equals(reporttype)){
+
+					reportobjs = service.getDorReport(year, month);
+					serviceyears = AgeCalculations.getServiceYears(reportobjs);
+					rages = AgeCalculations.calages(reportobjs, reporttype);
+					req.setAttribute("reportobjs", reportobjs);
+					if (month > 0) {
+						req.setAttribute("msg", "DOR Report of " + AgeCalculations.getMonthName(month) + " " + year);
+					} else {
+						req.setAttribute("msg", "DOR Report of " + year);
+					}
+					req.setAttribute("serviceyears", serviceyears);
+					req.setAttribute("rages", rages);
+					req.setAttribute("type", "DOR");
+				}
+
+				if("DOJ".equals(reporttype)){
+
+					//reportobjs = service.getDojReport(year, month);
+					serviceyears = AgeCalculations.getServiceYears(reportobjs);
+					rages = AgeCalculations.calages(reportobjs, reporttype);
+					req.setAttribute("reportobjs", reportobjs);
+					if (month > 0) {
+						req.setAttribute("msg", "DOJ Report of " + AgeCalculations.getMonthName(month) + " " + year);
+					} else {
+						req.setAttribute("msg", "DOJ Report of " + year);
+					}
+					req.setAttribute("rages", rages);
+					req.setAttribute("serviceyears", serviceyears);
+					req.setAttribute("type", "DOJ");
+
+				}
+				req.setAttribute("cyear", year);
+				req.setAttribute("cmonth", AgeCalculations.getMonthName(month));
+				req.setAttribute("cmonthvalue", month);
+				return "pis/DobDorDoaDojReport";
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside dobdordoadojreports.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+
+		}
+	   
+	   
+	   @RequestMapping(value = "QuarterlyStrength.htm" ,method = {RequestMethod.GET,RequestMethod.POST})
+		public String  DareEmployeeList(Model model,HttpServletRequest req , HttpSession ses)throws Exception {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside QuarterlyStrength.htm "+Username);	
+
+			try {
+				ses.setAttribute("SidebarActive","EmployeeList_htm");
+				String CadreIdAndCadreName= req.getParameter("CadreId");
+				
+				 List<Object[]> a = service.fetchCadreNameCode();
+				 
+				 if(CadreIdAndCadreName==null) {
+					 
+					 String cadreId= "0";
+					List<Object[]> EmployeeList = service.EmployeeList(cadreId);
+					req.setAttribute("EmployeeList", EmployeeList);
+				 }else{
+					 
+					 List<Object[]> EmployeeList = service.EmployeeList(CadreIdAndCadreName);
+					 req.setAttribute("EmployeeList", EmployeeList);
+				 }
+				 req.setAttribute("cadreNames", a);
+				 req.setAttribute("CadreIdAndCadreName", CadreIdAndCadreName);	
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside QuarterlyStrength.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			return "pis/EmployeeQuarterlyStrengthReport";
+		}
+	   
+	   @RequestMapping(value = "QuarterlyStrengthReportDownload.htm", method = {RequestMethod.POST,RequestMethod.GET})
+		public void QuarterlyStrengthReportDownload(Model model,HttpServletRequest req, HttpServletResponse res, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			
+			logger.info(new Date() +"Inside QuarterlyStrengthReportDownload.htm "+Username);
+			try {
+
+				String CadreIdAndCadreName= req.getParameter("CadreValue");
+
+					Object[] labdetails = masterservice.getLabDetails();
+					 if(CadreIdAndCadreName==null || CadreIdAndCadreName=="") {
+						 
+						 String cadreId= "0";
+						List<Object[]> EmployeeList = service.EmployeeList(cadreId);
+						req.setAttribute("EmployeeList", EmployeeList);
+					 }else{
+						 
+						 List<Object[]> EmployeeList = service.EmployeeList(CadreIdAndCadreName);
+						 req.setAttribute("EmployeeList", EmployeeList);
+					 }
+				
+					 req.setAttribute("labdetails", labdetails);
+					String filename="QuarterlyStrengthReport";
+					String path=req.getServletContext().getRealPath("/view/temp");
+					req.setAttribute("path",path);
+			        
+			        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+					req.getRequestDispatcher("/view/pis/QuarterlyStrengthReport.jsp").forward(req, customResponse);
+					String html = customResponse.getOutput();        
+			        
+			        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+			         
+			        res.setContentType("application/pdf");
+			        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+			       
+			        emsfileutils.addWatermarktoPdf2(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+			        
+			        File f=new File(path +File.separator+ filename+".pdf");
+			        FileInputStream fis = new FileInputStream(f);
+			        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			        res.setHeader("Content-Length",String.valueOf(f.length()));
+			        byte[] buffer = new byte[1024];
+			        int len = 0;
+			        while ((len = fis.read(buffer)) >= 0) {
+			            os.write(buffer, 0, len);
+			        } 
+			        os.close();
+			        fis.close();
+			       
+			       
+			        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			        Files.delete(pathOfFile);		
+					
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside QuarterlyStrengthReportDownload.htm "+Username, e);
+
+			}
+		} 
+
+	   @RequestMapping(value = "PrintEmployeeReportDownload.htm", method = {RequestMethod.POST,RequestMethod.GET})
+			public void PrintEmployeeReportDownload(Model model,HttpServletRequest req, HttpServletResponse res, HttpSession ses, RedirectAttributes redir)throws Exception
+			{
+				String Username = (String) ses.getAttribute("Username");
+				logger.info(new Date() +"Inside PrintEmployeeReportDownload.htm "+Username);
+				try {
+
+					String empid= req.getParameter("Empid");
+
+							Object[] employeedetails = service.EmployeeDetails(empid);	
+							Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
+							Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
+							Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
+							List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
+							List<Object[]> familydetails = service.getFamilydetails(empid);
+						   
+						   req.setAttribute("employeedetails", employeedetails);
+						   req.setAttribute("emeaddressdetails", emeaddressdetails);
+						   req.setAttribute("nextaddressdetails", nextaddressdetails);
+						   req.setAttribute("resaddressdetails", resaddressdetails);
+						   req.setAttribute("peraddressdetails", peraddressdetails);
+						   req.setAttribute("familydetails", familydetails);
+						   req.setAttribute("Educationlist", service.getEducationList(empid));
+					       req.setAttribute("Appointmentlist", service.getAppointmentList(empid));
+					       req.setAttribute("Awardslist", service.getAwardsList(empid));
+					       req.setAttribute("Propertylist", service.getPropertyList(empid));
+					       req.setAttribute("Publicationlist", service.getPublicationList(empid));
+					       req.setAttribute("PassportVisitList", service.getPassportVisitList(empid));
+					       req.setAttribute("PassportList", service.getPassportList(empid));
+					
+						 req.setAttribute("labdetails", masterservice.getLabDetails());
+						String filename="QuarterlyStrengthReport";
+						String path=req.getServletContext().getRealPath("/view/temp");
+						req.setAttribute("path",path);
+				        
+				        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+						req.getRequestDispatcher("/view/pis/PrintEmployeeReport.jsp").forward(req, customResponse);
+						String html = customResponse.getOutput();        
+				        
+				        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+				       
+				        res.setContentType("application/pdf");
+				        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+				       
+				        emsfileutils.addWatermarktoPdf2(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+				        
+				        File f=new File(path +File.separator+ filename+".pdf");
+				        FileInputStream fis = new FileInputStream(f);
+				        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+				        res.setHeader("Content-Length",String.valueOf(f.length()));
+				        byte[] buffer = new byte[1024];
+				        int len = 0;
+				        while ((len = fis.read(buffer)) >= 0) {
+				            os.write(buffer, 0, len);
+				        } 
+				        os.close();
+				        fis.close();
+				       
+				       
+				        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+				        Files.delete(pathOfFile);		
+						
+						
+				}catch (Exception e) {
+					e.printStackTrace();
+					logger.error(new Date() +" Inside PrintEmployeeReportDownload.htm "+Username, e);
+				}
+			} 
+	   
+	   
+	   @RequestMapping(value ="DownloadQuarterlyStrengthExcel.htm" , method = { RequestMethod.POST,RequestMethod.GET})
+	   public void DownloadExcel(HttpServletRequest req, HttpServletResponse res, HttpSession ses )throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DownloadQuarterlyStrengthExcel.htm "+Username);
+		   
+		   try {
+			   
+			  
+			   String CadreIdAndCadreName= req.getParameter("CadreValue");
+			
+			   List<Object[]> reportlist = null;
+			   if(CadreIdAndCadreName==null || CadreIdAndCadreName=="") {
+					  CadreIdAndCadreName= "0";
+					 reportlist = service.EmployeeList(CadreIdAndCadreName);
+					req.setAttribute("EmployeeList", reportlist);
+				 }else{
+					  reportlist = service.EmployeeList(CadreIdAndCadreName);
+					 req.setAttribute("EmployeeList", reportlist);
+				 }
+			   
+			    XSSFWorkbook workbook = new XSSFWorkbook();
+				XSSFSheet sheet =  workbook.createSheet("Quarterly Strength Report");
+				XSSFRow row=sheet.createRow(0);
+				
+				CellStyle unlockedCellStyle = workbook.createCellStyle();
+				unlockedCellStyle.setLocked(true);
+				
+				row.createCell(0).setCellValue("Name Of Post");
+				row.createCell(1).setCellValue("RE");
+				row.createCell(2).setCellValue("Corporate Pool");
+				row.createCell(3).setCellValue("Authorised Transaction Trans In");
+				row.createCell(4).setCellValue("Authorised Transaction Trans Out");
+				row.createCell(5).setCellValue("Total RE");
+				row.createCell(6).setCellValue("SC");
+				row.createCell(7).setCellValue("ST");
+				row.createCell(8).setCellValue("OBC");
+				row.createCell(9).setCellValue("EXSM");
+				row.createCell(10).setCellValue("HEL PHY HND");
+				row.createCell(11).setCellValue("SPRT");
+				row.createCell(12).setCellValue("OTH");
+				row.createCell(13).setCellValue("Total Held");
+				row.createCell(14).setCellValue("VAC");
+				row.createCell(15).setCellValue("Male");
+				row.createCell(16).setCellValue("FeMale");
+
+               
+             
+				int r=0;
+				
+				for(Object[] obj : reportlist){
+							row=sheet.createRow(++r);
+							int TotalRE=0;
+	if(obj[5]!=null){row.createCell(0).setCellValue(String.valueOf(obj[5].toString()));}else {row.createCell(0).setCellValue("");}
+	if(obj[8]!=null){row.createCell(1).setCellValue(String.valueOf(obj[8].toString()));}else {row.createCell(1).setCellValue("");}
+	if(obj[9]!=null){row.createCell(2).setCellValue(String.valueOf(obj[9].toString()));}else {row.createCell(2).setCellValue("");}
+	if(obj[10]!=null){row.createCell(3).setCellValue(String.valueOf(obj[10].toString()));}else {row.createCell(3).setCellValue("");}
+	if(obj[11]!=null){row.createCell(4).setCellValue(String.valueOf(obj[11].toString()));}else {row.createCell(4).setCellValue("");}
+	if(obj[8]!=null && obj[9]!=null && obj[10]!=null && obj[11]!=null) {
+		
+		int value =  Integer.parseInt(obj[8].toString());
+        int value2 = Integer.parseInt(obj[9].toString());
+        int value3 =Integer.parseInt(obj[10].toString());
+        int value4 = Integer.parseInt(obj[11].toString());
+         TotalRE = value+value2+value3-value4;
+        row.createCell(5).setCellValue(String.valueOf(TotalRE));
+	}else {
+		row.createCell(5).setCellValue("");
+	}
+	if(obj[13]!=null){row.createCell(6).setCellValue(String.valueOf(obj[13].toString()));}else {row.createCell(6).setCellValue("");}
+	if(obj[14]!=null){row.createCell(7).setCellValue(String.valueOf(obj[14].toString()));}else {row.createCell(7).setCellValue("");}
+	if(obj[15]!=null){row.createCell(8).setCellValue(String.valueOf(obj[15].toString()));}else {row.createCell(8).setCellValue("");}
+	if(obj[16]!=null){row.createCell(9).setCellValue(String.valueOf(obj[16].toString()));}else {row.createCell(9).setCellValue("");}
+	if(obj[17]!=null){row.createCell(10).setCellValue(String.valueOf(obj[17].toString()));}else {row.createCell(10).setCellValue("");}
+	if(obj[18]!=null){row.createCell(11).setCellValue(String.valueOf(obj[18].toString()));}else {row.createCell(11).setCellValue("");}
+	if(obj[19]!=null){row.createCell(12).setCellValue(String.valueOf(obj[19].toString()));}else {row.createCell(12).setCellValue("");}
+	if(obj[13]!=null && obj[14]!=null && obj[15]!=null&& obj[16]!=null&& obj[17]!=null && obj[18]!=null&& obj[19]!=null){
+      	int data1 =  Integer.parseInt(obj[13].toString());
+       	int data2 =  Integer.parseInt(obj[14].toString());
+       	int data3 =  Integer.parseInt(obj[15].toString());
+       	int data4 =  Integer.parseInt(obj[16].toString());
+       	int data5 =  Integer.parseInt(obj[17].toString());
+    	int data6 =  Integer.parseInt(obj[18].toString());
+    	int data7 =  Integer.parseInt(obj[19].toString());
+    	int TotalHeld = data1+data2+data3+data4+data5+data6+data7;
+    	int VAC = TotalRE-TotalHeld;
+		row.createCell(13).setCellValue(String.valueOf(TotalHeld));
+		row.createCell(14).setCellValue(String.valueOf(TotalHeld));
+		}else {
+			row.createCell(13).setCellValue("");
+			row.createCell(14).setCellValue("");
+		}
+		if(obj[20]!=null){row.createCell(15).setCellValue(String.valueOf(obj[20].toString()));}else {row.createCell(15).setCellValue("");}
+		if(obj[21]!=null){row.createCell(16).setCellValue(String.valueOf(obj[21].toString()));}else {row.createCell(16).setCellValue("");}		
+					
+	}
+				
+				
+				
+				 res.setContentType("application/vnd.ms-excel");
+		            res.setHeader("Content-Disposition", "attachment; filename=QuarterlyStrength.xls");			           
+		            workbook.write(res.getOutputStream());
+		            workbook.close();
+		            
+		            
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside DownloadQuarterlyStrengthExcel.htm "+Username, e);
+				
+			}
+		   
+	   }
+	   
+	  
+	   @RequestMapping(value ="DownloadEmpdetailsExcel.htm" , method = { RequestMethod.POST,RequestMethod.GET})
+	   public void DownloadEmpdetailsExcel(HttpServletRequest req, HttpServletResponse res, HttpSession ses )throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside DownloadEmpdetailsExcel.htm "+Username);
+		   
+		   try {
+			   	String empid =  req.getParameter("Empid");
+			   
+			   	
+			    XSSFWorkbook workbook = new XSSFWorkbook();
+				XSSFSheet sheet =  workbook.createSheet("Quarterly Strength Report");
+				sheet.setDefaultColumnWidth(12);
+				int rowsnum=0;
+				XSSFRow row=sheet.createRow(rowsnum);
+				XSSFFont font = workbook.createFont();
+				font.setFontName(XSSFFont.DEFAULT_FONT_NAME);
+				font.setFontHeightInPoints((short)10);
+				font.setBold(true);
+				
+				CellStyle unlockedCellStyle = workbook.createCellStyle();
+				unlockedCellStyle.setFont(font);
+				unlockedCellStyle.setLocked(true);
+				unlockedCellStyle.setWrapText(true);
+				
+				Object[] labdata = (Object[])masterservice.getLabDetails();
+				
+				if(labdata!=null && labdata[1]!=null && labdata[2]!=null) {
+					row.createCell(1).setCellValue(labdata[2].toString()+"("+labdata[1].toString()+")");
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B1:E1"));
+					row.getCell(1).setCellStyle(unlockedCellStyle);
+				}else {
+					row.createCell(1).setCellValue("");
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B1:E1"));
+				}
+				
+				++rowsnum;
+
+				Object[] employeedetails = service.EmployeeDetails(empid);	
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Personal Details Of :-"+employeedetails[3].toString());
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A3:F3"));
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				     // employee details
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Designation");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[22]!=null) {row.createCell(1).setCellValue(employeedetails[22].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Department");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[23]!=null && employeedetails[24]!=null) {row.createCell(3).setCellValue(employeedetails[23].toString()+"("+employeedetails[24].toString()+")");}else { row.createCell(3).setCellValue("--");}				
+					row.createCell(4).setCellValue("DOB");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[5]!=null) {row.createCell(5).setCellValue(employeedetails[5].toString());}else { row.createCell(6).setCellValue("--");}
+					
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Employee No");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[2]!=null) {row.createCell(1).setCellValue(employeedetails[2].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Pay Grade");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[33]!=null) {row.createCell(3).setCellValue(employeedetails[33].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Basic Pay");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[34]!=null) {row.createCell(5).setCellValue(employeedetails[34].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Gender");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[9]!=null) {row.createCell(1).setCellValue(employeedetails[9].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Group");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[25]!=null && employeedetails[26]!=null) {row.createCell(3).setCellValue(employeedetails[25].toString()+"("+employeedetails[26].toString()+")");}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("PAN");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[13]!=null) {row.createCell(5).setCellValue(employeedetails[13].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("DOJ");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[6]!=null) {row.createCell(1).setCellValue(DateTimeFormatUtil.SqlToRegularDate(employeedetails[6].toString()));}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("DOR");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[8]!=null ) {row.createCell(3).setCellValue(DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString()));}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Mobile No");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[30]!=null) {row.createCell(5).setCellValue(employeedetails[30].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Internal Email");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[16]!=null) {row.createCell(1).setCellValue(employeedetails[16].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Extension No");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[32]!=null) {row.createCell(3).setCellValue(employeedetails[32].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Marital Status");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[11]!=null) {row.createCell(5).setCellValue(employeedetails[11].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("SBI AccNo.");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[20]!=null) {row.createCell(1).setCellValue(employeedetails[20].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("	Blood Group"); 
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[10]!=null ) {row.createCell(3).setCellValue(employeedetails[10].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Home Town"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(employeedetails!=null && employeedetails[27]!=null) {row.createCell(5).setCellValue(employeedetails[27].toString());}else { row.createCell(5).setCellValue("--");}
+					
+
+				++rowsnum;
+	               
+				//<--------------closed employee details----------------------->
+				
+				
+				//<--------------Permanent Address----------------------->
+				
+				
+				Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
+				
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Permanent Address :-");
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A11:F11"));
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				
+				if(peraddressdetails!=null) {
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Per Address");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[6]!=null) {row.createCell(1).setCellValue(peraddressdetails[6].toString());}else { row.createCell(1).setCellValue("--");}
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B12:D12"));
+					row.createCell(4).setCellValue("City"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[1]!=null) {row.createCell(5).setCellValue(peraddressdetails[1].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Mobile");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[5]!=null) {row.createCell(1).setCellValue(peraddressdetails[5].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("State"); 
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[8]!=null ) {row.createCell(3).setCellValue(peraddressdetails[8].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("From_Per_Add"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[2]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(peraddressdetails[2].toString()));}else { row.createCell(5).setCellValue("--");}
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Alt_Mobile");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[0]!=null) {row.createCell(1).setCellValue(peraddressdetails[0].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Landline"); 
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[4]!=null ) {row.createCell(3).setCellValue(peraddressdetails[4].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Pin"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(peraddressdetails!=null && peraddressdetails[7]!=null) {row.createCell(5).setCellValue(peraddressdetails[7].toString());}else { row.createCell(5).setCellValue("--");}
+					
+				}else {
+					    row=sheet.createRow(++rowsnum);
+						row.createCell(1).setCellValue("Permanent Address Not Added!");
+						row.getCell(1).setCellStyle(unlockedCellStyle);
+						sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));	
+				}
+				
+				++rowsnum;
+				//<--------------Closed Permanent Address----------------------->
+				
+				List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
+				
+				//<------------------ Residential Address ----------------------->
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Residential Address :-");
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A16:F16"));
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				
+				if(resaddressdetails!=null && resaddressdetails.size()>0) {
+					for(Object[] resadd : resaddressdetails) {
+						
+						row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Res Address");
+						row.getCell(0).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[5]!=null) {row.createCell(1).setCellValue(resadd[5].toString());}else { row.createCell(1).setCellValue("--");}
+						sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));
+						row.createCell(4).setCellValue("City"); 
+						row.getCell(4).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[1]!=null) {row.createCell(5).setCellValue(resadd[1].toString());}else { row.createCell(5).setCellValue("--");}
+						
+						row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Mobile");
+						row.getCell(0).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[4]!=null) {row.createCell(1).setCellValue(resadd[4].toString());}else { row.createCell(1).setCellValue("--");}
+						row.createCell(2).setCellValue("State"); 
+						row.getCell(2).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[7]!=null ) {row.createCell(3).setCellValue(resadd[7].toString());}else { row.createCell(3).setCellValue("--");}
+						row.createCell(4).setCellValue("From_Res_Add"); 
+						row.getCell(4).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[2]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(peraddressdetails[2].toString()));}else { row.createCell(5).setCellValue("--");}
+						
+						row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Alt_Mobile");
+						row.getCell(0).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[0]!=null) {row.createCell(1).setCellValue(resadd[0].toString());}else { row.createCell(1).setCellValue("--");}
+						row.createCell(2).setCellValue("Landline"); 
+						row.getCell(2).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[3]!=null ) {row.createCell(3).setCellValue(resadd[3].toString());}else { row.createCell(3).setCellValue("--");}
+						row.createCell(4).setCellValue("Pin"); 
+						row.getCell(4).setCellStyle(unlockedCellStyle);
+						if(resaddressdetails!=null && resadd[6]!=null) {row.createCell(5).setCellValue(resadd[6].toString());}else { row.createCell(5).setCellValue("--");}
+						
+						row=sheet.createRow(++rowsnum);
+						//sheet.addMergedRegion(CellRangeAddress.valueOf("A11:F11"));
+					}
+				}else {
+					    row=sheet.createRow(++rowsnum);
+						row.createCell(1).setCellValue("Residential  Address Not Added!");
+						row.getCell(1).setCellStyle(unlockedCellStyle);
+						sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));	
+				}
+				++rowsnum;
+
+				//<------------------ Residential Address ----------------------->
+				
+				Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);
+				
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Next kin Address :-");
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+				
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				
+				if(nextaddressdetails!=null) {
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Next kin Add");
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[6]!=null) {row.createCell(1).setCellValue(nextaddressdetails[6].toString());}else { row.createCell(1).setCellValue("--");}
+				
+				sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));
+				row.createCell(4).setCellValue("City"); 
+				row.getCell(4).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[1]!=null) {row.createCell(5).setCellValue(nextaddressdetails[1].toString());}else { row.createCell(5).setCellValue("--");}
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Mobile");
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[5]!=null) {row.createCell(1).setCellValue(nextaddressdetails[5].toString());}else { row.createCell(1).setCellValue("--");}
+				row.createCell(2).setCellValue("State"); 
+				row.getCell(2).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[8]!=null ) {row.createCell(3).setCellValue(nextaddressdetails[8].toString());}else { row.createCell(3).setCellValue("--");}
+				row.createCell(4).setCellValue("From_Kin_Add"); 
+				row.getCell(4).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[2]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(nextaddressdetails[2].toString()));}else { row.createCell(5).setCellValue("--");}
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Alt_Mobile");
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[0]!=null) {row.createCell(1).setCellValue(nextaddressdetails[0].toString());}else { row.createCell(1).setCellValue("--");}
+				row.createCell(2).setCellValue("Landline"); 
+				row.getCell(2).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[4]!=null ) {row.createCell(3).setCellValue(nextaddressdetails[4].toString());}else { row.createCell(3).setCellValue("--");}
+				row.createCell(4).setCellValue("Pin"); 
+				row.getCell(4).setCellStyle(unlockedCellStyle);
+				if(nextaddressdetails!=null && nextaddressdetails[7]!=null) {row.createCell(5).setCellValue(nextaddressdetails[7].toString());}else { row.createCell(5).setCellValue("--");}
+				
+		   }else {
+			   row=sheet.createRow(++rowsnum);
+				row.createCell(1).setCellValue("Next kin  Address Not Added!");
+				row.getCell(1).setCellStyle(unlockedCellStyle);
+				sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));	
+		   }
+				++rowsnum;
+				//<------------------closed Residential Address ----------------------->
+			
+				Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);
+				
+				//<------------------ Emergency Address ----------------------->
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Emergency Address :-");
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+				
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				
+				if(emeaddressdetails!=null) {
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Emergency Add");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[6]!=null) {row.createCell(1).setCellValue(emeaddressdetails[6].toString());}else { row.createCell(1).setCellValue("--");}
+					
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));
+					row.createCell(4).setCellValue("City"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[1]!=null) {row.createCell(5).setCellValue(emeaddressdetails[1].toString());}else { row.createCell(5).setCellValue("--");}
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Mobile");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[5]!=null) {row.createCell(1).setCellValue(emeaddressdetails[5].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("State"); 
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[8]!=null ) {row.createCell(3).setCellValue(emeaddressdetails[8].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("From_Emec_Add"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[2]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(emeaddressdetails[2].toString()));}else { row.createCell(5).setCellValue("--");}
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Alt_Mobile");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[0]!=null) {row.createCell(1).setCellValue(emeaddressdetails[0].toString());}else { row.createCell(1).setCellValue("--");}
+					row.createCell(2).setCellValue("Landline"); 
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[4]!=null ) {row.createCell(3).setCellValue(emeaddressdetails[4].toString());}else { row.createCell(3).setCellValue("--");}
+					row.createCell(4).setCellValue("Pin"); 
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					if(emeaddressdetails!=null && emeaddressdetails[7]!=null) {row.createCell(5).setCellValue(emeaddressdetails[7].toString());}else { row.createCell(5).setCellValue("--");}
+					
+				}else {
+					row=sheet.createRow(++rowsnum);
+					row.createCell(1).setCellValue("Emergency Address Not Added!");
+					row.getCell(1).setCellStyle(unlockedCellStyle);
+					sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));	
+				}
+				
+				
+				++rowsnum;
+				//<------------------Closed Emergency Address ----------------------->
+				
+				 List<Object[]> appointmentlist= (List<Object[]>) service.getAppointmentList(empid);
+				//<------------------ Appointment Address ----------------------->
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Appointment Detail List :-");
+				sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+				
+				row=sheet.createRow(++rowsnum);
+				row.createCell(0).setCellValue("Designation");
+				row.getCell(0).setCellStyle(unlockedCellStyle);
+				row.createCell(1).setCellValue("Org/Lab");
+				row.getCell(1).setCellStyle(unlockedCellStyle);
+				row.createCell(2).setCellValue("DRDO/Others");
+				row.getCell(2).setCellStyle(unlockedCellStyle);
+				row.createCell(3).setCellValue("From Date");
+				row.getCell(3).setCellStyle(unlockedCellStyle);
+				row.createCell(4).setCellValue("To Date");
+				row.getCell(4).setCellStyle(unlockedCellStyle);
+				
+				  
+				   
+				   if(appointmentlist!=null &&  appointmentlist.size()>0) {
+					   for(Object[] list:appointmentlist) {
+							
+							row=sheet.createRow(++rowsnum);
+							if(list!=null && list[7]!=null) {row.createCell(0).setCellValue(list[7].toString());}else { row.createCell(0).setCellValue("--");}
+							if(list!=null && list[2]!=null) {row.createCell(1).setCellValue(list[2].toString());}else { row.createCell(1).setCellValue("--");}
+							if(list!=null && list[5]!=null) {row.createCell(2).setCellValue(list[5].toString());}else { row.createCell(2).setCellValue("--");}
+							if(list!=null && list[8]!=null) {row.createCell(3).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[8].toString()));}else { row.createCell(3).setCellValue("--");}
+							if(list!=null && list[9]!=null) {row.createCell(4).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[9].toString()));}else { row.createCell(4).setCellValue("--");}
+						}
+				   }else {
+					   row=sheet.createRow(++rowsnum);
+						row.createCell(1).setCellValue("Awards Details Not Added!");
+						row.getCell(1).setCellStyle(unlockedCellStyle);
+						sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));	
+				   }
+				++rowsnum;
+				
+				//<------------------Closed Appointment Address ----------------------->
+				
+				
+				//<------------------ Award Address ----------------------->
+				 List<Object[]> awardslist= (List<Object[]>) service.getAwardsList(empid);
+				 
+				 
+				 row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Award Detail List :-");
+					sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+					
+					row=sheet.createRow(++rowsnum);
+					row.createCell(0).setCellValue("Award Name");
+					row.getCell(0).setCellStyle(unlockedCellStyle);
+					row.createCell(1).setCellValue("Award By");
+					row.getCell(1).setCellStyle(unlockedCellStyle);
+					row.createCell(2).setCellValue("Details");
+					row.getCell(2).setCellStyle(unlockedCellStyle);
+					row.createCell(3).setCellValue("Award Date");
+					row.getCell(3).setCellStyle(unlockedCellStyle);
+					row.createCell(4).setCellValue("Certificate");
+					row.getCell(4).setCellStyle(unlockedCellStyle);
+					row.createCell(5).setCellValue("Citation");
+					row.getCell(5).setCellStyle(unlockedCellStyle);
+					row.createCell(6).setCellValue("Medallian");
+					row.getCell(6).setCellStyle(unlockedCellStyle);
+					row.createCell(7).setCellValue("Award Category");
+					row.getCell(7).setCellStyle(unlockedCellStyle);
+					row.createCell(8).setCellValue("Cash Ammount");
+					row.getCell(8).setCellStyle(unlockedCellStyle);
+				 
+				 if(awardslist!=null &&  awardslist.size()>0) {
+					 for(Object[] list:awardslist) {
+							
+							row=sheet.createRow(++rowsnum);
+							if(list!=null && list[2]!=null) {row.createCell(0).setCellValue(list[2].toString());}else { row.createCell(0).setCellValue("--");}
+							if(list!=null && list[3]!=null) {row.createCell(1).setCellValue(list[3].toString());}else { row.createCell(1).setCellValue("--");}
+							if(list!=null && list[4]!=null) {row.createCell(2).setCellValue(list[4].toString());}else { row.createCell(2).setCellValue("--");}
+							if(list!=null && list[5]!=null) {row.createCell(3).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[5].toString()));}else { row.createCell(3).setCellValue("--");}
+							if(list!=null && list[7]!=null) {row.createCell(4).setCellValue(list[7].toString());}else { row.createCell(4).setCellValue("--");}
+							if(list!=null && list[9]!=null) {row.createCell(5).setCellValue(list[9].toString());}else { row.createCell(5).setCellValue("--");}
+							if(list!=null && list[11]!=null) {row.createCell(6).setCellValue(list[11].toString());}else { row.createCell(6).setCellValue("--");}
+							if(list!=null && list[12]!=null) {row.createCell(7).setCellValue(list[12].toString());}else { row.createCell(7).setCellValue("--");}
+							if(list!=null && list[15]!=null) {row.createCell(8).setCellValue(list[15].toString());}else { row.createCell(8).setCellValue("--");}
+						
+						}
+				 }else {
+					    row=sheet.createRow(++rowsnum);
+						row.createCell(2).setCellValue("Awards Details Not Added!");
+						row.getCell(2).setCellStyle(unlockedCellStyle);
+						sheet.addMergedRegion(CellRangeAddress.valueOf("C"+(rowsnum+1)+":F"+(rowsnum+1)));
+						
+				 }
+
+					++rowsnum;
+					//<------------------Closed Award Address ----------------------->
+					
+					 List<Object[]> propertylist= (List<Object[]>) service.getPropertyList(empid);
+					 
+					//<------------------ Property Address ----------------------->
+					 row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Property Detail List :-");
+						sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+						
+					
+						row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Movable");
+						row.getCell(0).setCellStyle(unlockedCellStyle);
+						row.createCell(1).setCellValue("value");
+						row.getCell(1).setCellStyle(unlockedCellStyle);
+						row.createCell(2).setCellValue("Details");
+						row.getCell(2).setCellStyle(unlockedCellStyle);
+						row.createCell(3).setCellValue("DOP");
+						row.getCell(3).setCellStyle(unlockedCellStyle);
+						row.createCell(4).setCellValue("Acquired Type");
+						row.getCell(4).setCellStyle(unlockedCellStyle);
+						row.createCell(5).setCellValue("Noting On");
+						row.getCell(5).setCellStyle(unlockedCellStyle);
+						row.createCell(6).setCellValue("Remarks");
+						row.getCell(6).setCellStyle(unlockedCellStyle);
+
+						if(propertylist!=null && propertylist.size()>0) {
+							for(Object[] list:propertylist) {
+								
+								row=sheet.createRow(++rowsnum);
+								if(list!=null && list[2]!=null) {row.createCell(0).setCellValue(list[2].toString());}else { row.createCell(0).setCellValue("--");}
+								if(list!=null && list[3]!=null) {row.createCell(1).setCellValue(list[3].toString());}else { row.createCell(1).setCellValue("--");}
+								if(list!=null && list[4]!=null) {row.createCell(2).setCellValue(list[4].toString());}else { row.createCell(2).setCellValue("--");}
+								if(list!=null && list[5]!=null) {row.createCell(3).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[5].toString()));}else { row.createCell(3).setCellValue("--");}
+								if(list!=null && list[6]!=null) {row.createCell(4).setCellValue(list[6].toString());}else { row.createCell(4).setCellValue("--");}
+								if(list!=null && list[7]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[7].toString()));}else { row.createCell(5).setCellValue("--");}
+								if(list!=null && list[8]!=null) {row.createCell(6).setCellValue(list[8].toString());}else { row.createCell(6).setCellValue("--");}
+								
+							}
+						}else {
+							row=sheet.createRow(++rowsnum);
+							row.createCell(2).setCellValue("Property Details Not Added!");
+							row.getCell(2).setCellStyle(unlockedCellStyle);
+							sheet.addMergedRegion(CellRangeAddress.valueOf("C"+(rowsnum+1)+":E"+(rowsnum+1)));
+							
+						}
+
+						++rowsnum;
+						//<------------------Closed Property Address ----------------------->
+
+						 List<Object[]> publicationlist= (List<Object[]>) service.getPublicationList(empid);
+						//<------------------ Publication Address ----------------------->
+						 
+						 row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Publication Detail List :-");
+						sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+						
+						row=sheet.createRow(++rowsnum);
+						row.createCell(0).setCellValue("Publication Type");
+						row.getCell(0).setCellStyle(unlockedCellStyle);
+						row.createCell(1).setCellValue("Authors");
+						row.getCell(1).setCellStyle(unlockedCellStyle);
+						row.createCell(2).setCellValue("Discipline");
+						row.getCell(2).setCellStyle(unlockedCellStyle);
+						row.createCell(3).setCellValue("Title");
+						row.getCell(3).setCellStyle(unlockedCellStyle);
+						row.createCell(4).setCellValue("Publication Name");
+						row.getCell(4).setCellStyle(unlockedCellStyle);
+						row.createCell(5).setCellValue("Publication Date");
+						row.getCell(5).setCellStyle(unlockedCellStyle);
+						row.createCell(6).setCellValue("Patent No");
+						row.getCell(6).setCellStyle(unlockedCellStyle);
+						
+						if(publicationlist!=null && publicationlist.size()>0){
+							for(Object[] list:publicationlist) {
+								
+								row=sheet.createRow(++rowsnum);
+								if(list!=null && list[0]!=null) {row.createCell(0).setCellValue(list[0].toString());}else { row.createCell(0).setCellValue("--");}
+								if(list!=null && list[1]!=null) {row.createCell(1).setCellValue(list[1].toString());}else { row.createCell(1).setCellValue("--");}
+								if(list!=null && list[2]!=null) {row.createCell(2).setCellValue(list[2].toString());}else { row.createCell(2).setCellValue("--");}
+								if(list!=null && list[3]!=null) {row.createCell(3).setCellValue(list[3].toString());}else { row.createCell(3).setCellValue("--");}
+								if(list!=null && list[8]!=null) {row.createCell(4).setCellValue(list[8].toString());}else { row.createCell(4).setCellValue("--");}
+								if(list!=null && list[7]!=null) {row.createCell(5).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[7].toString()));}else { row.createCell(5).setCellValue("--");}
+								if(list!=null && list[9]!=null) {row.createCell(6).setCellValue(list[9].toString());}else { row.createCell(6).setCellValue("--");}
+								
+							}
+						}else {
+							row=sheet.createRow(++rowsnum);
+							row.createCell(2).setCellValue("Publication Details Not Added!");
+							row.getCell(2).setCellStyle(unlockedCellStyle);
+							sheet.addMergedRegion(CellRangeAddress.valueOf("C"+(rowsnum+1)+":E"+(rowsnum+1)));
+							
+						}
+
+						++rowsnum;
+						//<------------------Closed Publication Address ----------------------->
+						
+					    List<Object[]> educationlist= (List<Object[]>) service.getEducationList(empid);
+					  //<------------------ Qualification Address ----------------------->
+						 
+						 row=sheet.createRow(++rowsnum);
+							row.createCell(0).setCellValue("Qualification Detail List :-");
+							sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+							
+							row=sheet.createRow(++rowsnum);
+							row.createCell(0).setCellValue("Quali Title");
+							row.getCell(0).setCellStyle(unlockedCellStyle);
+							row.createCell(1).setCellValue("Disci Title");
+							row.getCell(1).setCellStyle(unlockedCellStyle);
+							row.createCell(2).setCellValue("University");
+							row.getCell(2).setCellStyle(unlockedCellStyle);
+							row.createCell(3).setCellValue("Year Of Passing");
+							row.getCell(3).setCellStyle(unlockedCellStyle);
+							row.createCell(4).setCellValue("CGPA");
+							row.getCell(4).setCellStyle(unlockedCellStyle);
+							row.createCell(5).setCellValue("Specialization");
+							row.getCell(5).setCellStyle(unlockedCellStyle);
+							row.createCell(6).setCellValue("Sponsored");
+							row.getCell(6).setCellStyle(unlockedCellStyle);
+							row.createCell(7).setCellValue("Acq_Bef_Aft");
+							row.getCell(7).setCellStyle(unlockedCellStyle);
+							
+						 if(educationlist!=null && educationlist.size()>0) {
+							 for(Object[] list:educationlist) {
+									
+									row=sheet.createRow(++rowsnum);
+									if(list!=null && list[2]!=null) {row.createCell(0).setCellValue(list[2].toString());}else { row.createCell(0).setCellValue("--");}
+									if(list!=null && list[3]!=null) {row.createCell(1).setCellValue(list[3].toString());}else { row.createCell(1).setCellValue("--");}
+									if(list!=null && list[4]!=null) {row.createCell(2).setCellValue(list[4].toString());}else { row.createCell(2).setCellValue("--");}
+									if(list!=null && list[5]!=null) {row.createCell(3).setCellValue(list[5].toString());}else { row.createCell(3).setCellValue("--");}
+									if(list!=null && list[6]!=null) {row.createCell(4).setCellValue(list[6].toString());}else { row.createCell(4).setCellValue("--");}
+									if(list!=null && list[8]!=null) {row.createCell(5).setCellValue(list[8].toString());}else { row.createCell(5).setCellValue("--");}
+									if(list!=null && list[7]!=null) {row.createCell(6).setCellValue(list[7].toString());}else { row.createCell(6).setCellValue("--");}
+									if(list!=null && list[9]!=null) {row.createCell(7).setCellValue(list[9].toString());}else { row.createCell(7).setCellValue("--");}
+									
+								}
+						 }else {
+							    row=sheet.createRow(++rowsnum);
+								row.createCell(2).setCellValue("Qualification Details Not Added!");
+								row.getCell(2).setCellStyle(unlockedCellStyle);
+								sheet.addMergedRegion(CellRangeAddress.valueOf("C"+(rowsnum+1)+":F"+(rowsnum+1)));
+								
+						 }
+							++rowsnum;
+			//<------------------Closed Qualification Address ----------------------->
+							
+							    Object[] passportlist= (Object[]) service.getPassportList(empid);
+			 //<------------------ Passport Address ----------------------->
+							    
+								 row=sheet.createRow(++rowsnum);
+									row.createCell(0).setCellValue("Passport Detail List :-");
+									sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+									
+									row=sheet.createRow(++rowsnum);
+									row.createCell(0).setCellValue("Passport Type");
+									row.getCell(0).setCellStyle(unlockedCellStyle);
+									row.createCell(1).setCellValue("Disci Title");
+									row.getCell(1).setCellStyle(unlockedCellStyle);
+									row.createCell(2).setCellValue("University");
+									row.getCell(2).setCellStyle(unlockedCellStyle);
+									row.createCell(3).setCellValue("Year Of Passing");
+									row.getCell(3).setCellStyle(unlockedCellStyle);
+									
+									if(passportlist!=null) {
+										row=sheet.createRow(++rowsnum);
+										if(passportlist!=null && passportlist[1]!=null) {row.createCell(0).setCellValue(passportlist[1].toString());}else { row.createCell(0).setCellValue("--");}
+										if(passportlist!=null && passportlist[2]!=null) {row.createCell(1).setCellValue(DateTimeFormatUtil.SqlToRegularDate(passportlist[2].toString()));}else { row.createCell(1).setCellValue("--");}
+										if(passportlist!=null && passportlist[3]!=null) {row.createCell(2).setCellValue(DateTimeFormatUtil.SqlToRegularDate(passportlist[3].toString()));}else { row.createCell(2).setCellValue("--");}
+										if(passportlist!=null && passportlist[4]!=null) {row.createCell(3).setCellValue(passportlist[4].toString());}else { row.createCell(3).setCellValue("--");}
+										
+									}else {
+										row=sheet.createRow(++rowsnum);
+										row.createCell(1).setCellValue("Passport Details Not Added!");
+										row.getCell(1).setCellStyle(unlockedCellStyle);
+										sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));
+										
+									}
+
+									++rowsnum;
+				//<------------------Closed Passport Address ----------------------->
+							
+			List<Object[]> passportvisitlist= (List<Object[]>) service.getPassportVisitList(empid);
+			//<------------------ Foreign Visit Address ----------------------->
+			
+			row=sheet.createRow(++rowsnum);
+			row.createCell(0).setCellValue("Foreign Visit Detail List :-");
+			sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(rowsnum+1)+":F"+(rowsnum+1)));
+			
+			row=sheet.createRow(++rowsnum);
+			row.createCell(0).setCellValue("Country Name");
+			row.getCell(0).setCellStyle(unlockedCellStyle);
+			row.createCell(1).setCellValue("Visit From");
+			row.getCell(1).setCellStyle(unlockedCellStyle);
+			row.createCell(2).setCellValue("Visit To");
+			row.getCell(2).setCellStyle(unlockedCellStyle);
+			row.createCell(3).setCellValue("Purpose");
+			row.getCell(3).setCellStyle(unlockedCellStyle);
+			row.createCell(4).setCellValue("NOC Letter No");
+			row.getCell(4).setCellStyle(unlockedCellStyle);
+			
+			if(passportvisitlist!=null && passportvisitlist.size()>0) {
+				for(Object[] list:passportvisitlist) {
+					row=sheet.createRow(++rowsnum);
+					if(list!=null && list[2]!=null) {row.createCell(0).setCellValue(list[2].toString());}else { row.createCell(0).setCellValue("--");}
+					if(list!=null && list[6]!=null) {row.createCell(1).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[6].toString()));}else { row.createCell(1).setCellValue("--");}
+					if(list!=null && list[7]!=null) {row.createCell(2).setCellValue(DateTimeFormatUtil.SqlToRegularDate(list[7].toString()));}else { row.createCell(2).setCellValue("--");}
+					if(list!=null && list[5]!=null) {row.createCell(3).setCellValue(list[5].toString());}else { row.createCell(3).setCellValue("--");}
+					if(list!=null && list[3]!=null) {row.createCell(4).setCellValue(list[3].toString());}else { row.createCell(4).setCellValue("--");}
+					
+				}
+			}else {
+				row=sheet.createRow(++rowsnum);
+				row.createCell(1).setCellValue("Foreign Visit Details Not Added!");
+				row.getCell(1).setCellStyle(unlockedCellStyle);
+				sheet.addMergedRegion(CellRangeAddress.valueOf("B"+(rowsnum+1)+":D"+(rowsnum+1)));
+			}
+			//<------------------Closed Foreign Visit Address ----------------------->
+				
+				 res.setContentType("application/vnd.ms-excel");
+		            res.setHeader("Content-Disposition", "attachment; filename=QuarterlyStrength.xls");			           
+		            workbook.write(res.getOutputStream());
+		            workbook.close();
+		            
+		            
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside DownloadEmpdetailsExcel.htm "+Username, e);
+				
+			}
+		   
+	   }
+	   
+	   @RequestMapping(value ="CheckSenirity.htm" , method = RequestMethod.GET)
+	   public @ResponseBody String CheckSenirity(HttpSession ses , HttpServletRequest req , HttpServletResponse res)throws Exception
+	   {
+		   String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside CheckSenirity.htm " + Username);
+			
+
+			int result = 0;
+			try {
+				result = service.GetMaxSeniorityNo();
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside CheckSenirity.htm " + Username,e);
+				e.printStackTrace();
+			}
+			Gson json = new Gson();
+			return json.toJson(result);
+		   
+	   }
 }

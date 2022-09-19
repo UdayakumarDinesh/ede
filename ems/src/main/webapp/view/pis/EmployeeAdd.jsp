@@ -26,6 +26,9 @@ function validateform(){
 		  var uid =$("#UIDTextBox").val();
 		  var sbiAccount = $("#SBITextBox").val();
 		  var internalnum = $("#InternalNum").val();
+		  var height = $("#height").val();
+		  var permpassno = $("#permpassno").val();
+
 		if(pan.length<10){
 			 alert("Check PAN Number!");
 		       event.preventDefault();
@@ -43,6 +46,16 @@ function validateform(){
 		}
 		if(internalnum.length<4){
 			 alert("Check Extension Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(height==null || height=="" || height=="null"){
+			 alert("Enter Height");
+		       event.preventDefault();
+		       return false;
+		}
+		if(permpassno==null || permpassno=="" || permpassno=="null"){
+			 alert("Check Permanent Pass Number!");
 		       event.preventDefault();
 		       return false;
 		}
@@ -77,7 +90,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 				<h5>Employee Add</h5>
 			</div>
 			<div class="col-md-9 ">
-				<ol class="breadcrumb ">
+				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li> -->
 					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li>
@@ -125,7 +138,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</select>
 			            </div>
 			
-			            <div class=" col-md-2 ">
+			            <div class="col-md-2">
 			                <label>Employee No<span class=" mandatory ">*</span></label>
 			                <input type="text" id="PunchcardTextBox" name="PunchCardNo"  value="" maxlength="5"
 			                    class=" form-control input-sm " placeholder="Employee No " required="required"
@@ -182,7 +195,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>
 			
-			 		  <div class=" col-md-2 ">
+			 		  <div class="col-md-2">
 			                <label>Marital Status </label>
 			                <select name="MaritalStatus" class=" form-control input-sm select2 " >
 			                	<option value="U">UnMarried</option>
@@ -199,7 +212,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</div>
 			            </div>
 					          
-						<div class=" col-md-2 ">
+						<div class="col-md-2">
 			                <label>Home Town </label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Home Town " 
@@ -213,27 +226,27 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			    <div class="form-group">
 			        <div class="row">
 			            
-			             <div class=" col-md-2 ">
+			             <div class="col-md-2">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
 			                <input type="text" name="PhoneNo"  value="" maxlength="10"
 			                    class=" form-control input-sm Phoneno" placeholder="Phone no " required="required"
 			                     onblur="checknegative(this) ">
 			              </div>
 			              
-			               <div class=" col-md-2 ">
+			               <div class="col-md-2">
 			                <label>Alternate Mobile No</label>
 			                <input type="text" name="AltPhoneno" value=""  maxlength="10"
 			                    class=" form-control input-sm Phoneno" placeholder="Alternate Phone no "   onblur="checknegative(this) ">
 			              </div>
 			            
-			              <div class=" col-md-2 ">
+			              <div class="col-md-2">
 			                <label>Extension number<span class="mandatory">*</span></label>
 			                <input type="text" name="internalNo" value="" maxlength="4" class=" form-control input-sm "
 			                    placeholder="Extension Number " onblur=" checknegative(this) "   id="InternalNum"
 			                    onkeypress=" return isNumber(event) " required="required">
 			             </div>
 			            
-						<div class=" col-md-2 ">
+						<div class="col-md-2">
 			                <label>Internal Email<span class=" mandatory ">*</span></label>
 			                <input type="email" value="" name="email" class=" form-control input-sm " maxlength="100"
 			                    placeholder="Internal Email " required="required" onclick=" return trim(this)"
@@ -256,13 +269,13 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			    <div class="form-group">
 			        <div class="row">
-			        
-			        	 <div class=" col-md-2 ">
+			       
+			        	 <div class="col-md-2">
 			                <label>UAN No</label>
 			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
 			                    class=" form-control input-sm " placeholder="UAN No "    onblur="checknegative(this) ">
 			            </div>
-			           <div class=" col-md-2 ">
+			           <div class="col-md-2">
 			                <label>SBI Account<span class=" mandatory ">*</span></label>
 			                <input type="text" id="SBITextBox" value="" name="SBI" class=" form-control input-sm " required
 			                    maxlength=" 11 " placeholder="Account Number " onblur=" checknegative(this) ">
@@ -278,13 +291,13 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>
 			            
-			            <div class=" col-md-2 ">
+			            <div class="col-md-2">
 			                <label>Basic Pay<span class=" mandatory ">*</span></label>
 			                <input type="text" id="basicpaybox" value="" name="basicpay" class=" form-control input-sm " maxlength="12"
 			                    placeholder="Basic Pay" required="required">
 			            </div>
 			            
-			             <div class=" col-md-2 ">
+			             <div class="col-md-2">
 			                <label>GPF/PRAN</label>
 			                <input type="text" name="gpf" value="" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
@@ -308,10 +321,10 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			        </div>
 			    </div>
 			    
-				    <div class=" form-group ">
+				    <div class="form-group">
 				        <div class="row">
     
-    					 <div class=" col-md-2 ">
+    					 <div class="col-md-2">
 			                <label>Religion</label>
 			                <select name="religion" class="form-control input-sm select2" data-live-search="true">
 			                    <option value="Christian">Christian</option>
@@ -325,7 +338,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                </select>
 			            </div>			
 			            
-    					<div class=" col-md-2 ">
+    					<div class="col-md-2">
 			                <label>Category</label>
 			                <select name="category" class=" form-control input-sm select2 "  data-live-search="true">
 								<%for( PisCategory category: piscategorylist){ %>
@@ -335,7 +348,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 	            
 			              <div class="col-md-2">
-			                <label class="text-nowrap  ">Cadre Name</label>
+			                <label class="text-nowrap">Cadre Name</label>
 			                <select name="caderid" id="CadreId" class="form-control select2">
 								<%for( PisCadre cadre: piscaderlist){ %>
 									<option value="<%=cadre.getCadreId()%>"><%=cadre.getCadre()%></option>
@@ -353,16 +366,8 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			                </select>
 			            </div>		
-    						
-						<!-- <div class="col-md-2">
-			                <label>Availed Govt Quarters</label>          
-			                <select name="gq" class=" form-control input-sm select2 " >
-			                	<option value="N">No</option>
-								<option value="Y">YES</option>								
-			                </select>	
-			            </div> -->
-			            
-			             <div class=" col-md-2 ">
+ 
+			             <div class="col-md-2">
 			                <label>Physically Handicap</label>
 			                
 			                 <select name="ph" class=" form-control input-sm select2 " >
@@ -372,7 +377,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 
 			            </div>      
 			                
-			             <div class=" col-md-2 ">
+			             <div class="col-md-2">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
@@ -381,57 +386,51 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 				</div>
 			            
 			            
-			    <!-- <div class=" form-group ">
-			        <div class=" row "> -->
-			
-			
-			           
-			
-			           <%--  <div class=" col-md-2 ">
-			                <label>Emp Status<span class=" mandatory ">*</span></label>
+			     <div class="form-group">
+			        <div class="row"> 
+			        
+			            <div class="col-md-2">
+			                <label>Emp Status<span class="mandatory">*</span></label>
 			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
                    				<%for( EmpStatus status: empstatuslist){ %>
-								<option value="<%=status.getEmp_status_id()%>"><%=status.getEmp_status_name()%></option>
-								<%} %>
-								
-								<option value="1">PRESENT</option>
-			
+								<option value="<%=status.getEmp_status()%>"><%=status.getEmp_status_name()%></option>
+								<%}%>
 			                </select>
-			            </div> --%>
-			
-			          <%--   <div class=" col-md-2 " id=" EmpHide ">
-			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
-			                <input type="date" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="EmpStatus Date ">
-			            </div>
-			             --%>
-			             <!-- <div class=" col-md-2 ">
-			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-			                
-			                 <select name="ExMan" class=" form-control input-sm select2 " >
+			            </div> 
+			            <div class="col-md-2">
+			                <label>Availed Govt Quarters</label>          
+			                <select name="gq" class=" form-control input-sm select2" >
 			                	<option value="N">No</option>
-								<option value="Y">Yes</option>	
-								
+								<option value="Y">YES</option>								
 			                </select>	
-			                
+			            </div> 
+			
+			            <div class="col-md-2" id="EmpHide">
+			                <label>Emp Status Date<span class=" mandatory ">*</span></label>
+			                <input type="text" readonly="readonly" required="required" id="EmpStatusDate" name="EmpStatusDate" value="<%=LocalDate.now() %>" class=" form-control input-sm " placeholder="EmpStatus Date ">
+			            </div>
+			            
+			            <div class="col-md-2" >
+			            	<label> Height(In Centimeters) <span class=" mandatory ">*</span></label>
+			            	<input id="height" name="Height" maxlength="3" class=" form-control input-sm " placeholder="Enter In Centimeters">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>Ex ServiceMan   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			                 <select name="ExMan" class=" form-control input-sm select2 " >
+			                	<option value="N"> No </option>
+								<option value="Y"> Yes </option>	
+			                 </select>	
 			            </div>
 			
-			            <div class=" col-md-2 ">
+			            <div class="col-md-2">
 			                <label>Per Pass No</label>
-			                <input type="text" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"
-			                    placeholder="Permanent Pass No">
-			            </div> -->
-			     <!--    </div>
-			    </div> -->
-			      <div class=" form-group ">
-			        <div class="row">
-			         			            
-			     
-			
-			        </div>
-    			</div>
-			    
-			    
-			    <div class="row" >
+			                <input type="text" id="permpassno" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"  placeholder="Permanent Pass No">
+			            </div> 
+			         </div>
+			    </div> 
+
+			    <div class="row">
 			    	<div class="col-12" align="center">
 			    	<button type="submit" class="btn btn-sm submit-btn" Onclick="return validateform();" name="action" value="submit" >SUBMIT</button>
 			    	</div>
@@ -526,7 +525,17 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			});
 	  });
  
- 
+ $('#EmpStatusDate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,  
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
  
 	 $('empstatus').select2("enable", false)
 	
@@ -554,6 +563,8 @@ setPatternFilter($("#UIDTextBox"), /^-?\d*$/);
 setPatternFilter($("#SBITextBox"), /^-?\d*$/);
 setPatternFilter($("#InternalNum"), /^-?\d*$/);
 setPatternFilter($("#basicpaybox"), /^-?\d*$/);
+setPatternFilter($("#height"), /^[0-9]*(\.[0-9]{0,2})?$/);
+setPatternFilter($("#permpassno"), /^-?\d*$/);
 
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });

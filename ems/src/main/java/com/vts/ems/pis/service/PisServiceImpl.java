@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,18 +34,27 @@ import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.Appointments;
+import com.vts.ems.pis.model.Awards;
+import com.vts.ems.pis.model.DisciplineCode;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmpFamilyDetails;
 import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.Passport;
+import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
 import com.vts.ems.pis.model.PisCatClass;
 import com.vts.ems.pis.model.PisCategory;
 import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
+import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.Publication;
+import com.vts.ems.pis.model.Qualification;
+import com.vts.ems.pis.model.QualificationCode;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -226,6 +236,8 @@ public class PisServiceImpl implements PisService
 		employee.setSubCategary(emp.getSubCategary());
 		employee.setEmpStatusDate(emp.getEmpStatusDate());	
 		employee.setModifiedDate(sdtf.format(new Date()));
+		employee.setExServiceMan(emp.getExServiceMan());
+		employee.setPerPassNo(emp.getPerPassNo());
 		employee.setPhoneNo(emp.getPhoneNo());
 		employee.setAltPhoneNo(emp.getAltPhoneNo());
 		return dao.EmployeeDetailsEditSubmit(employee);
@@ -741,23 +753,27 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception
 		{
-			logger.info(new Date() +"Inside SERVICE UpdateSeniorityNumber");
+			logger.info(new Date() +"Inside Service UpdateSeniorityNumber");
 			try {
 			
 			Long empId=Long.parseLong(empid);
 			Long SeniorityNumber=Long.parseLong(newSeniorityNumber);
 			int result= 0;
 			Long newSeniorityNumberL=SeniorityNumber;
-			List<Object[]> EmpSenHaveUpdate=dao.UpdateAndGetList(empId,newSeniorityNumber);
+			List<Object[]> EmpSenHaveUpdate=dao.UpdateAndGetList(empId,newSeniorityNumber); 
+			result=dao.UpdateAllSeniority(empId,newSeniorityNumberL);
 			List<Object[]> result1=EmpSenHaveUpdate.stream().filter(srno-> Long.parseLong(srno[0].toString())>=SeniorityNumber && Long.parseLong(srno[1].toString())!=empId  ).collect(Collectors.toList());
 			
-			for(Object[] data:result1) { 
-			  Long empIdL=Long.parseLong(data[1].toString()); 
+		
+			for(Object[] data:result1){
+				
+			  Long empIdL=Long.parseLong(data[1].toString());
 			  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
 			}
 			
+			
 			return result;
-			}catch (Exception e) {
+			}catch (Exception e){
 				e.printStackTrace();
 				return 0;
 			}
@@ -1011,5 +1027,681 @@ public class PisServiceImpl implements PisService
 			return dao.GetExcFormMembersList(formid);
 		}
 		
+		@Override
+		public List<Object[]> getEducationList(String empid)throws Exception
+		{
+			return dao.getEducationList(empid);
+		}
+		
+		@Override
+		public List<Object[]> getQualificationList()throws Exception{
+			return dao.getQualificationList();
+		}
+		
+		@Override
+		public List<Object[]> getDiscipline()throws Exception{
+			return dao.getDiscipline();
+		}
+		
+		@Override
+		public Qualification getQualificationDetails(int qualificationid)throws Exception{
+			return dao.getQualificationDetails(qualificationid);
+		}
+		
+		@Override
+		public int DeleteQualification(String qualificationid,String Username)throws Exception{
+			return dao.DeleteQualification(qualificationid,Username);
+			
+		}
+		
+		@Override
+		public int AddQualification(Qualification Details)throws Exception{
+			return dao.AddQualification( Details);
+		}
+		
+		@Override
+		public int EditQualification(Qualification Details)throws Exception{
+			
+			Qualification quali = dao.getQualificationDetails(Details.getQualification_id());
+			
+			  quali.setQuali_id(Details.getQuali_id());			
+	    	  quali.setSponsored(Details.getSponsored());
+	    	  quali.setDisci_id(Details.getDisci_id());
+	    	  quali.setHindi_prof(Details.getHindi_prof());
+	    	  quali.setUniversity(Details.getUniversity());
+	    	  quali.setDivision(Details.getDivision());
+	    	  quali.setSpecialization(Details.getSpecialization());
+	    	  quali.setHonours(Details.getHonours());
+	    	  quali.setAcq_bef_aft(Details.getAcq_bef_aft());
+	    	  quali.setYearofpassing(Details.getYearofpassing());
+	    	  quali.setCgpa(Details.getCgpa());
+	    	  quali.setModifiedby(Details.getModifiedby());
+	    	  quali.setModifieddate(Details.getModifieddate());
+	    	  
+			return dao.EditQualification( quali);
+		}
+		
+		@Override
+		public List<Object[]> getAppointmentList(String empid)throws Exception
+		{
+			return dao.getAppointmentList(empid);
+		}
+		
+		@Override
+		public List<Object[]> getDesignationList()throws Exception{
+			return dao.getDesignationList();
+		}
+		@Override
+		public List<Object[]> getRecruitment()throws Exception{
+			return dao.getRecruitment();
+		}
+		
+		@Override
+		public int DeleteAppointment(String appointmentid,String Username)throws Exception{
+			return dao.DeleteAppointment(appointmentid,Username);
+			
+		}
+		
+		@Override
+		public int AddAppointment(Appointments app)throws Exception{
+			return dao.AddAppointment( app);
+		}
+		
+		@Override
+		public Appointments getAppointmentsDetails(int appointmentsid)throws Exception
+		{
+			return dao.getAppointmentsDetails(appointmentsid);
+		}
+		
+		@Override
+		public int EditAppointment(Appointments app)throws Exception{
+			
+			Appointments appintment = dao.getAppointmentsDetails(app.getAppointment_id());
+			
+			appintment.setMode_recruitment(app.getMode_recruitment());
+			appintment.setDrdo_others(app.getDrdo_others());
+			appintment.setDesig_id(app.getDesig_id());
+			appintment.setOrg_lab(app.getOrg_lab());
+			appintment.setFrom_date(app.getFrom_date());
+			appintment.setTo_date(app.getTo_date());
+			appintment.setCeptam_cycle(app.getCeptam_cycle());
+			appintment.setVacancy_year(app.getVacancy_year());
+			appintment.setRecruitment_year(app.getRecruitment_year());	    	  
+			appintment.setAppointment_id(app.getAppointment_id());
+	    	appintment.setModifiedby(app.getModifiedby());
+	    	appintment.setModifieddate(app.getModifieddate());
+	    	  
+			return dao.EditAppointment( appintment);
+		}
+		
+		@Override
+		public List<Object[]> getAwardsList(String empid)throws Exception
+		{
+			return dao.getAwardsList(empid);
+		}
+		@Override
+		public List<Object[]> getPisAwardsList()throws Exception{
+			return dao.getPisAwardsList();
+		}
+		
+		@Override
+		public int DeleteAwards(String awardsid,String Username)throws Exception
+		{
+			return dao.DeleteAwards(awardsid,Username);
+		}
+		@Override
+		public Awards getAwardsDetails(int awardsid)throws Exception
+		{
+			return dao.getAwardsDetails(awardsid);
+		}
+		
+		@Override
+		public int AddAwards(Awards app)throws Exception
+		{
+			return dao.AddAwards(app);
+		}
+		@Override
+		public int EditAwards(Awards app)throws Exception{
+			
+			Awards appintment = dao.getAwardsDetails(app.getAwards_id());
+			
+			  appintment.setAwardListId(app.getAwardListId());
+			  appintment.setCertificate(app.getCertificate());
+	    	  appintment.setAward_by(app.getAward_by());
+	    	  appintment.setCitation(app.getCitation());
+	    	  appintment.setAward_date(app.getAward_date());
+	    	  appintment.setDetails(app.getDetails());
+	    	  appintment.setAward_cat(app.getAward_cat());
+	    	  appintment.setCash(app.getCash());
+	    	  appintment.setCash_amt(app.getCash_amt());
+	    	  appintment.setAward_year(app.getAward_year());
+	    	  appintment.setMedallion(app.getMedallion());
+	    	  appintment.setModifiedby(app.getModifiedby());
+		      appintment.setModifieddate(app.getModifieddate());
+	    	  
+			return dao.EditAwards( appintment);
+		}
+		
+		@Override
+		public List<Object[]> getPropertyList(String empid)throws Exception
+		{
+			return dao.getPropertyList(empid);
+		}
+		@Override
+		public Property getPropertyDetails(int awardsid)throws Exception
+		{
+			return dao.getPropertyDetails(awardsid);
+		}
+		@Override
+		public int DeleteProperty(String propertyid,String Username)throws Exception
+		{
+			return dao.DeleteProperty(propertyid,Username);
+		}
+		
+		@Override
+		public int AddProperty(Property app)throws Exception
+		{
+			return dao.AddProperty(app);
+		}
+		
+		@Override
+		public int EditProperty(Property app)throws Exception
+		{
+			Property pro = dao.getPropertyDetails(app.getProperty_id()); 
+				pro.setMovable(app.getMovable());
+				pro.setAcquired_type(app.getAcquired_type());
+				pro.setDetails(app.getDetails());
+				pro.setDop(app.getDop());
+				pro.setNoting_on(app.getNoting_on());
+				pro.setRemarks(app.getRemarks());
+				pro.setValue(app.getValue());
+				pro.setProperty_id(app.getProperty_id());
+				
+				return dao.EditProperty(pro);
+		}
+		
+		@Override
+		public List<Object[]> getPublicationList(String empid)throws Exception
+		{
+			return dao.getPublicationList(empid);
+		}
+		@Override
+		public List<Object[]> getPisStateList()throws Exception{
+			return dao.getPisStateList();
+		}
+		
+		@Override
+		public Publication getPublicationDetails(int publicationid)throws Exception
+		{
+			return dao.getPublicationDetails(publicationid);
+		}
+		@Override
+		public int AddPublication(Publication app)throws Exception
+		{
+			return dao.AddPublication(app);
+		}
+		@Override
+		public int EditPublication(Publication app)throws Exception
+		{
+			Publication pro = dao.getPublicationDetails(app.getPublication_id()); 
+			
+				pro.setPublication_id(app.getPublication_id());
+				pro.setPub_type(app.getPub_type());
+				pro.setAuthors(app.getAuthors());
+				pro.setDiscipline(app.getDiscipline());
+				pro.setTitle(app.getTitle());
+				pro.setPub_name_vno_pno(app.getPub_name_vno_pno());
+				pro.setPub_date(app.getPub_date());
+				pro.setPatent_no(app.getPatent_no());
+				pro.setCountry(app.getCountry());
+				pro.setModifiedby(app.getModifiedby());
+				pro.setModifieddate(app.getModifieddate());
+				
+			return dao.EditPublication(pro);
+		}
+		
+		@Override
+		public List<Object[]> getPassportVisitList(String empid)throws Exception
+		{
+			return dao.getPassportVisitList(empid);
+		}
+		@Override
+		public Object[] getPassportList(String empid) throws Exception
+		{
+			return dao.getPassportList(empid);
+		}
+		
+		@Override
+		public Passport getPassportData(String empid)throws Exception
+		{
+			return dao.getPassportData(empid);
+		}
+		@Override
+		public int AddPassport(Passport passport)throws Exception
+		{
+			return dao.AddPassport(passport);
+		}
+		@Override
+		public int EditPassport(Passport passport)throws Exception
+		{
+			return dao.EditPassport(passport);
+		}
+		@Override
+		public PassportForeignVisit getForeignVisitData(int foreignvisitid)throws Exception{
+			return dao.getForeignVisitData(foreignvisitid);
+		}
+		@Override
+		public int deleteForeignVisit(String addresid,String Username)throws Exception{
+			return dao.deleteForeignVisit(addresid,Username);
+			
+		}
+		
+		@Override
+		public int AddForeignVisit(PassportForeignVisit pfv)throws Exception{
+			return dao.AddForeignVisit(pfv);
+		}
+		
+		@Override
+		public int EditForeignVisit(PassportForeignVisit app)throws Exception
+		{
+			PassportForeignVisit pfv = dao.getForeignVisitData(app.getPassportVisitId()); 
+			
+			pfv.setEmpId(app.getEmpId());
+			pfv.setCountryName(app.getCountryName());
+			pfv.setVisitFromDate(app.getVisitFromDate());
+			pfv.setVisitToDate(app.getVisitToDate());
+			pfv.setNocLetterNo(app.getNocLetterNo());
+			pfv.setNocLetterDate(app.getNocLetterDate());
+			pfv.setPurpose(app.getPurpose());
+			pfv.setNocIssuedFrom(app.getNocIssuedFrom());
+			pfv.setRemarks(app.getRemarks());
+		    pfv.setModifiedBy(app.getModifiedBy());
+			pfv.setModifiedDate(app.getModifiedDate());
+				
+			return dao.EditForeignVisit(pfv);
+		}
+		
+		@Override
+		public int DeleteEducationQualification(String id,String Username)throws Exception
+		{
+			return dao.DeleteEducationQualification(id,Username);
+		}
+		@Override
+		public int EditEducationQualification(String id,String qualification,String Username)throws Exception
+		{
+			return dao.EditEducationQualification(id,qualification,Username);
+		}
+		
+		@Override
+		public int AddEducationQualification(QualificationCode qc)throws Exception 
+		{
+		
+			return dao.AddEducationQualification(qc);
+		}
+		@Override
+		public int DeleteDiscipline(String id,String Username)throws Exception
+		{
+			return dao.DeleteDiscipline(id,Username);
+		}
+		@Override
+		public int EditDiscipline(String id,String discipline,String Username)throws Exception
+		{
+			return dao.EditDiscipline(id,discipline,Username);
+		}
+		
+		@Override
+		public int AddDiscipline(DisciplineCode dc)throws Exception 
+		{
+		
+			return dao.AddDiscipline(dc);
+		}
+		
+
+		@Override
+		public Object[] getEmpData(String EmpNo) throws Exception {
+		
+			return dao.getEmpData(EmpNo);
+		}
+		
+		@Override
+		public List<Object[]> GetEmpStatusList() throws Exception
+		{
+			return dao.GetEmpStatusList();
+		}
+		@Override
+		public List<Object[]> getGroupName() throws Exception
+		{
+			return dao.getGroupName();
+		}
+		
+		@Override
+		public List<Object[]> getDesignation() throws Exception
+		{
+			return dao.getDesignation();
+		}
+		
+		@Override
+		public List<Object[]> fetchAllEmployeeDetail() throws Exception
+		{
+			return dao.fetchAllEmployeeDetail();
+		}
+
+		@Override
+		public List<Object[]> getEmployeeStatusWise(String empstatus) throws Exception {
+			return dao.getEmployeeStatusWise(empstatus);
+		}
+
+		@Override
+		public List<Object[]> getEmployeeDivOrGroupWise(int id) throws Exception {
+			return dao.getEmployeeDivOrGroupWise(id);
+		}
+
+		@Override
+		public List<Object[]> getEmployeeDesignationWise(int id) throws Exception {
+			return dao.getEmployeeDesignationWise(id);
+		}
+
+		@Override
+		public List<Object[]> getEmployeeGenderWise(String id) throws Exception {
+			return dao.getEmployeeGenderWise(id);
+		}
+		
+		@Override
+		public List<Object[]> fetchAllPersonalDetail() throws Exception{
+			return dao.fetchAllPersonalDetail();
+		}
+		
+		@Override
+		public List<Object[]> fetchPersonalDetailsNGOorCGO(String cattype) throws Exception
+		{
+			 if("A".equalsIgnoreCase(cattype)) {
+				 return dao.fetchAllPersonalDetail();
+			 }else {
+				 return dao.fetchPersonalDetailsNGOorCGO(cattype);
+			 }
+			
+		}
+		@Override
+		public List<Object[]> getAllEmployeeList()throws Exception
+		{
+			return dao.getAllEmployeeList();
+		}
+		
+		@Override
+		public Object[] GetAllEmployeeDetails(String empid) throws Exception
+		{
+			return dao.GetAllEmployeeDetails(empid);
+		}
+		
+		@Override
+		public List<Object[]> getConfigurableReportList(String name,String DesigId,String DivisionId,String CatId,String Gender,String CadreId,String ServiceStatus,String CategoryId,String BG,String modeOfRecruitId,String AwardId)throws Exception
+		{
+			  String DesigWise="";
+			  String DivisionWise="";
+			  String CatWise="";
+			  String GenderWise="";
+			  String CadreWise="";
+			  String ServiceStatusWise="";
+			  String CategoryWise="";
+			  String BGWise="";
+			 
+			  String modeOfRecruitWise="";
+			  String modeOfRecruitComparison="";
+			  String modeOfRecruitTableName="";
+			  
+			  String AwardsWise="";
+			  String AwardsWiseComparison="";
+			  String AwardsWiseTableName="";
+			  
+			  if("Select".equalsIgnoreCase(DesigId)){DesigWise="";}else{DesigWise="AND  a.DesigId='"+DesigId+"'";}
+			  if("Select".equalsIgnoreCase(DivisionId)){DivisionWise="";}else{DivisionWise="AND  a.divisionId='"+DivisionId+"'";}
+			  if("Select".equalsIgnoreCase(CatId)){CatWise="";}else{CatWise="AND  j.CatId='"+CatId+"'";}
+			  if("Select".equalsIgnoreCase(Gender)){GenderWise="";}else{GenderWise="AND  j.Gender='"+Gender+"'";}
+			  if("Select".equalsIgnoreCase(CadreId)){CadreWise="";}else{CadreWise="AND  j.CadreId='"+CadreId+"'";}
+			  if("Select".equalsIgnoreCase(ServiceStatus)){ServiceStatusWise="";}else{ServiceStatusWise="AND  j.ServiceStatus='"+ServiceStatus+"'";}
+			  if("Select".equalsIgnoreCase(CategoryId)){CategoryWise="";}else{CategoryWise="AND  j.CategoryId='"+CategoryId+"'";}
+			  if("Select".equalsIgnoreCase(BG)){BGWise="";}else{BGWise="AND  j.BloodGroup='"+BG+"'";}
+			  
+			  
+			  if("Select".equalsIgnoreCase(modeOfRecruitId))
+			  { modeOfRecruitWise="";
+			    modeOfRecruitComparison="";
+			    modeOfRecruitTableName="";
+			    
+			  }else{
+			    modeOfRecruitWise="AND  g.mode_recruitment='"+modeOfRecruitId+"'";
+			    modeOfRecruitComparison="AND a.EmpId=g.empid AND g.mode_recruitment=h.recruitment_id";
+			    modeOfRecruitTableName=",pis_appointments g ,pis_mode_recruitment_code h";
+			   }
+			  
+			  if("Select".equalsIgnoreCase(AwardId))
+			  {   AwardsWise="";
+			      AwardsWiseComparison="";
+			      AwardsWiseTableName="";
+			    
+			  }else{
+				  AwardsWise="AND  i.AwardListId="+AwardId+"";
+				  AwardsWiseComparison="AND a.EmpId=i.empid";
+				  AwardsWiseTableName=",pis_awards i ";
+			   }
+
+			    String ConfigurableReportQuery=" SELECT a.EmpId,a.empName,b.Designation,a.SrNo,j.Gender,j.ServiceStatus,"+
+	                                       " j.BloodGroup,c.divisionNAME,d.cat_name,e.Cadre,f.category_type "+
+	                                       " FROM employee a ,employee_desig b ,division_master c ,pis_cat_class d ,pis_cadre e,pis_category f,employee_details j "+modeOfRecruitTableName+" "+AwardsWiseTableName+" "+
+	                                       " WHERE  j.EmpStatus='P' and j.CatId<>'Z' and  a.empName LIKE '%"+name+"%' "+DivisionWise+" "+DesigWise+" "+CatWise+"  "+GenderWise+"  "+CadreWise+"  "+ServiceStatusWise+" "+
+	                                       " "+CategoryWise+" "+BGWise+"   "+modeOfRecruitWise+" "+AwardsWise+" "+
+	                                       " AND j.empno=a.empno AND a.DesigId=b.DesigId  AND a.divisionId=c.divisionId AND "+
+	                                       " j.CatId=d.cat_id AND j.CadreId=e.CadreId AND j.CategoryId=f.category_id " +
+	                                       " "+modeOfRecruitComparison+" "+AwardsWiseComparison+" GROUP BY a.EmpId ";
+	                                       
+			 
+			return dao.getConfigurableReportList(ConfigurableReportQuery);
+		}
+		
+		
+		public List<Object[]> getconfigurablereportselectionwise(String name, String designation, String groupDivision,
+				String catClass, String gender, String cadre, String serviceStatus, String pay_Level, String qualification,
+				String propertyType, String pubType, String category, String bG, String quarter, String physicalHandicap,
+				String religion, String appointment, String awards)throws Exception {
+				
+			List<Object[]> list = null;
+				try {
+				//Conditions to get records
+				String cname="",cdesignation="",cgroupDivision="",ccatClass="",cgender="",ccadre="",
+						cserviceStatus="",cpay_Level="",cqualification="",cpropertyType="",cpubType="",
+						ccategory="",cbG="",cquarter="",cphysicalHandicap="",creligion="",cappointment="",cawards="";
+				
+				// For Dynamic columns to get the records from DB
+				String desigcolumn="",gendercol="",groupcol="",catcol="",cadrecol="",
+						bgcolumn="",servicestatuscol="",religioncol="",quartercol="",
+						physicalHandicapcol="",pay_levelcol="",categorycol="",qualificationcol="",
+						pub_typecol="",propertyTypecol="",appointmentcol="",awardscol="";
+				
+				// For DB Tables
+				String desigtab="",grouptab="",cattab="",cadretab="",pay_leveltab="",categorytab="",
+						qualificationtabs="",pub_typetab="",propertyTypetab="",appointmenttab="",awardstab="";
+				
+				
+				if(!"".equals(name)) {
+					cname=name;
+				}
+				if(null !=serviceStatus && !("".equals(serviceStatus))) {servicestatuscol=",ed.ServiceStatus";cserviceStatus="AND ed.ServiceStatus="+"'"+serviceStatus+"'";}
+				
+				if(null !=propertyType && !("".equals(propertyType))) {propertyTypecol=",o.acquired_type";propertyTypetab=",pis_property o";cpropertyType="AND a.EmpId=o.empid AND o.acquired_type="+"'"+propertyType+"'";}
+				
+				if(null !=pubType && !("".equals(pubType))) {pub_typecol=",n.pub_type";pub_typetab=",pis_publication n";cpubType="AND a.EmpId=n.empid  AND n.pub_type="+"'"+pubType+"'";}
+				
+				if(null !=bG && !("".equals(bG))) {bgcolumn=",ed.BloodGroup";cbG="AND ed.BloodGroup="+"'"+bG+"'";}
+				
+				if(null !=quarter && !("".equals(quarter))) {quartercol=",ed.Quarters";cquarter="AND ed.Quarters="+"'"+quarter.split("#")[0]+"'";}
+				
+				if(null !=physicalHandicap && !("".equals(physicalHandicap))) {physicalHandicapcol=",ed.PH";cphysicalHandicap="AND ed.PH="+"'"+physicalHandicap.split("#")[0]+"'";}
+				
+				if(null !=religion && !("".equals(religion))) {religioncol=",ed.Religion";creligion="AND ed.Religion="+"'"+religion+"'";}
+				
+				if(null != awards && !("".equals(awards))) {
+					String[] AwardArray = awards.split("#");
+					String AwardId = AwardArray[0];
+					//String AwardName = AwardArray[1];
+					awardscol=",r.awardname";
+					awardstab=",pis_awards t,pis_award_list r";
+					cawards="AND a.EmpId = t.empid AND t.AwardListId = r.AwardListId AND t.AwardListId ="+AwardId;
+				}
+				
+				if (null != designation && !("".equals(designation))) {
+					String[] DesigIdAndDesignationArray = designation.split("#");
+					String DesigId = DesigIdAndDesignationArray[0];
+					//String DesigName = DesigIdAndDesignationArray[1];
+					desigtab=",employee_desig b";
+					desigcolumn=",b.Designation";
+					cdesignation="AND  a.DesigId=b.DesigId AND b.DesigId='"+DesigId+"'";
+				}
+				
+				if(null !=groupDivision && !("".equals(groupDivision))) {
+					String[] DivisionIdAndDivisionNameArray = groupDivision.split("#");
+					String divisionid = DivisionIdAndDivisionNameArray[0];
+					//String DivisionName1 = DivisionIdAndDivisionNameArray[1];
+					grouptab=",division_master c";
+					groupcol=",c.divisionname";
+					cgroupDivision="AND a.divisionId=c.divisionId AND  c.divisionId='"+divisionid+"'";
+				}
+				
+				if(null !=catClass && !("".equals(catClass))) {
+					String[] CatIdAndCatClassArray = catClass.split("#");
+					String CatId = CatIdAndCatClassArray[0];
+					//String CatClass1 = CatIdAndCatClassArray[1];
+					cattab=",pis_cat_class d";
+					catcol=",d.cat_name";
+					ccatClass="AND ed.CatId=d.cat_id AND  d.cat_id='"+CatId+"'";
+				}
+				
+				if(null !=gender && !("".equals(gender))){
+					String[] GenderIdAndGenderNameArray = gender.split("#");
+					//String Gender = GenderIdAndGenderNameArray[0];
+					String GenderName = GenderIdAndGenderNameArray[1];
+					gendercol=",ed.Gender";
+					cgender="AND  ed.gender='"+GenderName+"'";;
+				}
+				
+				if(null !=cadre && !("".equals(cadre))) {
+					String[] CadreIdAndCadreNameArray = cadre.split("#");
+					String CadreId = CadreIdAndCadreNameArray[0];
+					//String CadreName = CadreIdAndCadreNameArray[1];
+					cadretab=",pis_cadre e";
+					cadrecol=",e.Cadre";
+					ccadre="AND ed.CadreId=e.CadreId AND  e.CadreId='"+CadreId+"'";
+				}
+				
+				if(null !=pay_Level && !("".equals(pay_Level))) {
+					String[] pay_LevelNameArray = pay_Level.split("#");
+					String pay_LevelId = pay_LevelNameArray[0];
+					//String pay_LevelName = pay_LevelNameArray[1];
+					pay_levelcol=",g.PayLevel";
+					pay_leveltab=",pis_pay_level g";
+					cpay_Level="AND ed.PayLevelId=g.PayLevelId AND g.PayLevelId="+"'"+pay_LevelId+"'";
+				}
+				
+				if(null !=category && !("".equals(category))) {
+					String[] CategoryIdAndCategoryNameArray = category.split("#");
+					String CategoryId = CategoryIdAndCategoryNameArray[0];
+					//String CategoryName = CategoryIdAndCategoryNameArray[1];
+					categorycol=",f.category_type";
+					categorytab=",pis_category f";
+					ccategory=" AND ed.CategoryId=f.CATEGORY_ID AND f.CATEGORY_ID="+"'"+CategoryId+"'";
+				}
+				
+				if(null !=qualification && !("".equals(qualification))) {
+					String[] qualificationNameArray = qualification.split("#");
+					String qualificationd = qualificationNameArray[0];
+					//String qualificationName = qualificationNameArray[1];
+					qualificationcol=",l.quali_title ";
+					qualificationtabs=",pis_qualification m,pis_quali_code  l";
+					cqualification="AND a.EmpId=m.empid AND m.quali_id=l.quali_id AND l.quali_id="+"'"+qualificationd+"'";
+				}
+				
+				if(null !=appointment && !("".equals(appointment))) {
+					String[] appointmentNameArray = appointment.split("#");
+					String appointmentid = appointmentNameArray[0];
+					//String appointmentName = appointmentNameArray[1];
+					appointmentcol=",p.mode_recruitment_title";
+					appointmenttab=",pis_appointments q,pis_mode_recruitment_code p";
+					cappointment="AND a.EmpId=q.empid AND q.mode_recruitment=p.recruitment_id AND p.recruitment_id='"+appointmentid+"'";
+				}
+				
+				String ConfigurableReportQuery="SELECT a.EmpId,a.empName" + desigcolumn+ groupcol+ catcol+gendercol+cadrecol+
+												servicestatuscol+categorycol+bgcolumn+religioncol+quartercol+physicalHandicapcol+pay_levelcol+
+												qualificationcol+pub_typecol+propertyTypecol+appointmentcol+awardscol+
+												" FROM Employee a , employee_details ed"+desigtab+ grouptab+cattab+cadretab+pay_leveltab+categorytab+
+												qualificationtabs+pub_typetab+propertyTypetab+appointmenttab+awardstab+
+												" WHERE  ed.EmpStatus='P' and a.empno=ed.empno and ed.CatId<>'Z' and  a.empName LIKE '%"+cname+"%'" +
+												cdesignation + cgender + cgroupDivision+ ccatClass + ccadre+ cserviceStatus +cbG
+												+creligion+cquarter+cphysicalHandicap+cpay_Level+ccategory+cqualification+cpubType+
+												cpropertyType+cappointment+cawards+"";
+				 
+								
+				  list=dao.getConfigurableReportList(ConfigurableReportQuery);
+				 
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				return list;
+		}
+		
+		@Override
+		public List<Object[]> getDefaultReport()throws Exception {
+			Calendar now = Calendar.getInstance();
+			int year=now.get(Calendar.YEAR);
+			
+			List<Object[]> defaultreports=dao.getDefaultReport(year);
+			
+			return defaultreports;
+		}
+		
+		@Override
+		public List<Object[]> getDobReport(int year, int month)throws Exception {
+			
+			List<Object[]> dobreports=dao.getDobReport(year,month);
+			
+			return dobreports;
+		}
+		
+		@Override
+		public List<Object[]> getDoaReport(int year, int month)throws Exception
+		{	
+			List<Object[]> doareports=dao.getDoaReport(year,month);
+				return doareports;
+			
+		}
+		
+		@Override
+		public List<Object[]> getDorReport(int year, int month)throws Exception
+		{	
+			List<Object[]> doareports=dao.getDorReport(year,month);
+				return doareports;
+			
+		}
+		
+		@Override
+		public List<Object[]> getDojReport(int year, int month)throws Exception
+		{	
+			List<Object[]> doareports=dao.getDojReport(year,month);
+				return doareports;
+			
+		}
+		@Override
+		public List<Object[]> fetchCadreNameCode()throws Exception
+		{
+			return dao.fetchCadreNameCode();
+		}
+		@Override
+		public List<Object[]> EmployeeList(String cadreid)throws Exception
+		{
+			return dao.EmployeeList(cadreid);
+		}
+		@Override
+		public int GetMaxSeniorityNo()throws Exception
+		{
+			return dao.GetMaxSeniorityNo();
+		}
 		
 }

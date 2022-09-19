@@ -272,7 +272,7 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 						<div class="row">
 							<div class="col-12" align="center">
 							 <div class="form-group">
-							 <input type="hidden" name="empid" value="<%=empdata[2]%>"> 
+							 <input type="hidden" name="empid" <%if(empdata!=null){%> value="<%= empdata[2]%>" <%}%>>
 							  <input type="hidden" name="familyid" value="<%=memberdata.getFamily_details_id()%>"> 
 								<button type="submit" class="btn btn-sm submit-btn AddItem"
 									

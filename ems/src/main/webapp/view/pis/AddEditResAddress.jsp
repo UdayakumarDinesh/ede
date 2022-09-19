@@ -33,14 +33,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 
 <div class="card-header page-top">
 					<div class="row">
-						<div class="col-md-5">
+						<div class="col-md-6">
 						<%if(addres!=null){ %>
 							<h5> Residential Address Edit<small><b>&nbsp;&nbsp; <%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%> 
 									</b></small></h5><%}else{ %>
 									<h5>Residential Address Add<small><b>&nbsp;&nbsp; <%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%> 
 									</b></small></h5><%}%>
 						</div>
-						   <div class="col-md-7">
+						   <div class="col-md-6">
 								<ol class="breadcrumb ">
 									<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 									<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
@@ -75,7 +75,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                      <div class="col-md-6">
 		                <div class="form-group">
 		                	<label>Residential  Address</label>
-		                    <input type="text"  value="<%if(addres!=null&&addres.getRes_addr()!=null){%><%=addres.getRes_addr()%><%}%>" class="form-control input-sm" maxlength="4000" name="resAdd" required="required" placeholder="Enter Residential  Address" onclick="return trim(this)" onchange="return trim(this)">
+		                    <input type="text"  value="<%if(addres!=null&&addres.getRes_addr()!=null){%><%=addres.getRes_addr()%><%}%>" class="form-control input-sm" maxlength="4000" id="resAdd" name="resAdd" required="required" placeholder="Enter Residential  Address" onclick="return trim(this)" onchange="return trim(this)">
 		                </div>
 		                </div>
          
@@ -98,7 +98,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 		            <div class="col-md-3">
                         <div class="form-group">
                             <label>City:</label>
-                            <input type="text"  name="city" class="form-control input-sm" maxlength="49"  value="<%if(addres!=null&&addres.getCity()!=null){%> <%=addres.getCity()%> <%}%>"    required="required" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text"  id="city" name="city" class="form-control input-sm" maxlength="49"  value="<%if(addres!=null&&addres.getCity()!=null){%> <%=addres.getCity()%> <%}%>"    required="required" onclick="return trim(this)" onchange="return trim(this)">
                         </div>
                       </div>
                       
@@ -160,7 +160,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-6">
                            <div class="form-group">
                             <label>Quarter Details</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrDetails()!=null){%> <%=addres.getQtrDetails()%> <%}%>" class="form-control input-sm " name="qtrDetail"   maxlength="90"  placeholder="Enter Quarter Details" onclick="return trim(this)" onchange="return trim(this)" required="required" >
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrDetails()!=null){%> <%=addres.getQtrDetails()%> <%}%>" class="form-control input-sm " id="qtrDetail" name="qtrDetail"   maxlength="90"  placeholder="Enter Quarter Details" onclick="return trim(this)" onchange="return trim(this)" required="required" >
                            </div>
                         </div>
                        
@@ -169,14 +169,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-3">
                            <div class="form-group">
                             <label>Quarter No</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrNo()!=null){%> <%=addres.getQtrNo()%> <%}%>" class="form-control input-sm " name="qtrNo"   maxlength="90"  placeholder="Enter Quarter No" onclick="return trim(this)" onchange="return trim(this)" required="required">
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrNo()!=null){%> <%=addres.getQtrNo()%> <%}%>" class="form-control input-sm " id="qtrNo" name="qtrNo"   maxlength="90"  placeholder="Enter Quarter No" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
                        <div class="col-md-3">
                            <div class="form-group">
                             <label>Quarter Type</label>
-                            <input type="text" value="<%if(addres!=null&&addres.getQtrType()!=null){%> <%=addres.getQtrType()%> <%}%>" class="form-control input-sm " name="qtrType"   maxlength="90"  placeholder="Enter Quarter Type" onclick="return trim(this)" onchange="return trim(this)" required="required">
+                            <input type="text" value="<%if(addres!=null&&addres.getQtrType()!=null){%> <%=addres.getQtrType()%> <%}%>" class="form-control input-sm " id="qtrType" name="qtrType"   maxlength="90"  placeholder="Enter Quarter Type" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
         
@@ -186,7 +186,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="col-md-3">
                         <div class="form-group">
                          <label>Email Drona</label>
-                           <input type="email" value="<%if(addres!=null&&addres.getEmailDrona()!=null){%> <%=addres.getEmailDrona()%> <%}%>"  class="form-control input-sm " name="eDrona" maxlength="90"    placeholder=" Enter Email Drona" onclick="return trim(this)" onchange="return trim(this)" required="required">  
+                           <input type="email" value="<%if(addres!=null&&addres.getEmailDrona()!=null){%> <%=addres.getEmailDrona()%> <%}%>"  class="form-control input-sm " id="eDrona" name="eDrona" maxlength="90"    placeholder=" Enter Email Drona" onclick="return trim(this)" onchange="return trim(this)" required="required">  
                         </div>
                          </div>
                          
@@ -194,14 +194,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                            <div class="col-md-3">
                            <div class="form-group">
                             <label>Email Official</label>
-                            <input type="email" value="<%if(addres!=null&&addres.getEmailOfficial()!=null){%> <%=addres.getEmailOfficial()%> <%}%>" class="form-control input-sm " name="eOfficial"  maxlength="90"   placeholder="Enter Email Official" onclick="return trim(this)" onchange="return trim(this)" required="required">
+                            <input type="email" value="<%if(addres!=null&&addres.getEmailOfficial()!=null){%> <%=addres.getEmailOfficial()%> <%}%>" class="form-control input-sm " id="eOfficial" name="eOfficial"  maxlength="90"   placeholder="Enter Email Official" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
                           <div class="col-md-3">
                         <div class="form-group">
                          <label>Email Personal</label>
-                           <input type="email" value="<%if(addres!=null&&addres.getEmailPersonal()!=null){%> <%=addres.getEmailPersonal()%> <%}%>" class="form-control input-sm " name="ePersonal" maxlength="90"   placeholder="Enter Email Personal"  onclick="return trim(this)" onchange="return trim(this)" required="required">  
+                           <input type="email" value="<%if(addres!=null&&addres.getEmailPersonal()!=null){%> <%=addres.getEmailPersonal()%> <%}%>" class="form-control input-sm " id="ePersonal" name="ePersonal" maxlength="90"   placeholder="Enter Email Personal"  onclick="return trim(this)" onchange="return trim(this)" required="required">  
                         </div>
                          </div>
                          
@@ -209,7 +209,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                            <div class="col-md-3">
                            <div class="form-group">
                             <label>Email Outlook</label>
-                            <input type="email" value="<%if(addres!=null&&addres.getEmailOutlook()!=null){%> <%=addres.getEmailOutlook()%> <%}%>" class="form-control input-sm " name="eOutlook"   maxlength="90"   placeholder="Enter Email Outlook" onclick="return trim(this)" onchange="return trim(this)" required="required">
+                            <input type="email" value="<%if(addres!=null&&addres.getEmailOutlook()!=null){%> <%=addres.getEmailOutlook()%> <%}%>" class="form-control input-sm " id="eOutlook" name="eOutlook"   maxlength="90"   placeholder="Enter Email Outlook" onclick="return trim(this)" onchange="return trim(this)" required="required">
                            </div>
                         </div>
                    
@@ -283,11 +283,64 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm('Are you sure to submit')){
-		 $('#myModal').modal('show');
-	}else{
-		return false;
-	}
+	
+	  var ResAdd =$("#resAdd").val();
+	  var City =$("#city").val();
+	  var CityPin= $("#CityPinTextBox").val();
+	  var Mobile = $("#MobileTextBox").val();
+	  var AltMobile = $("#AltMobileTextBox").val();
+	  var LandLine = $("#LandLineTextBox").val();
+	  var QtrDetail =$("#qtrDetail").val();
+	  var QtrNo= $("#qtrNo").val();
+	  var QtrType = $("#qtrType").val();
+	  var EDrona = $("#eDrona").val();
+	  var EOfficial = $("#eOfficial").val();
+	  var EPersonal = $("#ePersonal").val();
+	  var EOutlook = $("#eOutlook").val();
+	  
+	  if(ResAdd==null || ResAdd=='' || ResAdd=="null" ){
+			alert('Enter the Permanent Address!');
+			return false;
+		}else if(City==null || City=='' || City=="null" ){
+			alert('Enter the City Name!');
+			return false;
+		}else if(CityPin==null || CityPin=='' || CityPin=="null" ){
+			alert('Enter the City Pin!');
+			return false;
+		}else if(Mobile==null || Mobile=='' || Mobile=="null" ){
+			alert('Enter the Mobile Number!');
+			return false;
+		}else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
+			alert('Enter the Alt Mobile Number!');
+			return false;
+		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
+			alert('Enter the LandLine Number!');
+			return false;
+		}else if(QtrDetail==null || QtrDetail=='' || QtrDetail=="null" ){
+			alert('Enter the Quarter Details!');
+			return false;
+		}else if(QtrNo==null || QtrNo=='' || QtrNo=="null" ){
+			alert('Enter the Quarter No!');
+			return false;
+		}else if(QtrType==null || QtrType=='' || QtrType=="null" ){
+			alert('Enter the Quarter Type!');
+			return false;
+		}else if(EDrona==null || EDrona=='' || EDrona=="null" ){
+			alert('Enter the Alt Email Drona!');
+			return false;
+		}else if(EOfficial==null || EOfficial=='' || EOfficial=="null" ){
+			alert('Enter the Email Official!');
+			return false;
+		}else if(EPersonal==null || EPersonal=='' || EPersonal=="null" ){
+			alert('Enter the Alt Email Personal!');
+			return false;
+		}else if(EOutlook==null || EOutlook=='' || EOutlook=="null" ){
+			alert('Enter the Email Outlook!');
+			return false;
+		}else{
+			$('#myModal').modal('show');
+		}
+
 }
 </script>
 <script type="text/javascript">

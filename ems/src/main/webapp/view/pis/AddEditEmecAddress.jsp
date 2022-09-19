@@ -22,14 +22,14 @@
 
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-6">
 			<%if(EmecAddress!=null){ %>
 			         	<h5>Emergency  Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}else{ %>
 						<h5>Emergency  Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%>
 						</b></small></h5><%}%>
 			</div>
-			   <div class="col-md-7">
+			   <div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
@@ -47,7 +47,7 @@
 	<div class="card-body">
 		
 		<div class="row">
-		<div class="col-2"></div>
+		<div class="col-1"></div>
 		
 		<%if(EmecAddress!=null){ %>
 		<form action="EmecEditAddressDetails.htm" method="POST" id="MyTable" autocomplete="off" enctype="multipart/form-data">
@@ -72,7 +72,7 @@
 				        <div class="col-md-8">
 				        <div class="form-group">
 		                     <label>Emergency Address:<span class="mandatory">*</span></label>
-		                     <input type="text" id="emergencyadd" value="<%if(EmecAddress!=null&&EmecAddress.getEmer_addr()!=null){%><%=EmecAddress.getEmer_addr()%><%}%>" class="form-control input-sm" maxlength="4000" name="EmecAdd" required="required" placeholder="Enter Emergency Address" onclick="return trim(this)" onchange="return trim(this)"> 
+		                     <input type="text" id="emergencyadd" value="<%if(EmecAddress!=null&&EmecAddress.getEmer_addr()!=null){%><%=EmecAddress.getEmer_addr()%><%}%>" class="form-control input-sm" maxlength="255" name="EmecAdd" required="required" placeholder="Enter Emergency Address" onclick="return trim(this)" onchange="return trim(this)"> 
 		                </div>
 		                </div>
 		                
@@ -151,7 +151,6 @@
                        </div>
                          
 				</div>
-				
 		</div>
 						<div class="row">
 							<div class="col-12" align="center">
@@ -220,11 +219,37 @@
 <script type="text/javascript">
 function CommentsModel()
 {
-	if(confirm('Are you sure to submit')){
-		 $('#myModal').modal('show');
-	}else{
-		return false;
-	}
+
+	  var Emergencyadd =$("#emergencyadd").val();
+	  var City =$("#cityname").val();
+	  var CityPin= $("#CityPinTextBox").val();
+	  var Mobile = $("#MobileTextBox").val();
+	  var AltMobile = $("#AltMobileTextBox").val();
+	  var LandLine = $("#LandLineTextBox").val();
+	 
+	  
+	  if(Emergencyadd==null || Emergencyadd=='' || Emergencyadd=="null" ){
+			alert('Enter the Emergency Address!');
+			return false;
+		}else if(City==null || City=='' || City=="null" ){
+			alert('Enter the City Name!');
+			return false;
+		}else if(CityPin==null || CityPin=='' || CityPin=="null" ){
+			alert('Enter the City Pin!');
+			return false;
+		}else if(Mobile==null || Mobile=='' || Mobile=="null" ){
+			alert('Enter the Mobile Number!');
+			return false;
+		}else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
+			alert('Enter the Alt Mobile Number!');
+			return false;
+		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
+			alert('Enter the LandLine Number!');
+			return false;
+		}else{
+			$('#myModal').modal('show');
+		}
+
 }
 </script>
 

@@ -20,10 +20,10 @@ int slno=0;
 
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-6">
 				<h5>CHSS Item Amount List</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li>	 -->
