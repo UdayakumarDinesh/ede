@@ -88,7 +88,7 @@ List<Object[]> TelephoneClaimApprovedList=(List<Object[]>)request.getAttribute("
 	   	<div  style="margin-left:240px; margin-top:0px;">
 	   
 	        <button type="submit" class="btn btn-primary" formaction="TelephoneApproval.htm" name="TelephoneApproval" value="TelephoneApproval" formnovalidate="formnovalidate" >Approval <span class="badge" style="color:white; background-color:#FF4500;"><%=request.getAttribute("TeleCount")%></span></button>
-   			<button type="submit" class="btn btn-danger" formaction="TelephoneSendback.htm"  formnovalidate="formnovalidate">SendBack <span class="badge" style="color:white; background-color:blue;"><%=request.getAttribute("TeleCount")%></span></button>
+   			<%-- <button type="submit" class="btn btn-danger" formaction="TelephoneSendback.htm"  formnovalidate="formnovalidate">SendBack <span class="badge" style="color:white; background-color:blue;"><%=request.getAttribute("TeleCount")%></span></button> --%>
       
 	       <%if(TelephoneClaimApprovedList!=null&&TelephoneClaimApprovedList.size()!=0){%>
 		        <button type="submit" name="TelephoneApprovalPeriodEdit" class="btn btn-warning" formaction="TelephonePeriodEdit.htm" >Edit Approval Period</button>
