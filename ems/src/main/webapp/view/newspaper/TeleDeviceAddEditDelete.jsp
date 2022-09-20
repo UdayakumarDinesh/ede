@@ -110,40 +110,35 @@ Object[] TeleDeviceEditDetails=(Object[])request.getAttribute("TeleDeviceEditDet
  <!-- List Form -->
 
 <!-- Add Form -->
-				<div class="col-md-4">
-					<div class="card" id="newpost" style="display: none">
+				<div class="col-md-4" id="newpost" style="display: none">
+					<div class="card">
 						<div class="card-body">
 
 							<form action="TelephoneDeviceSave.htm" method="post">
-								<div class="panel-heading">
+								<div class="card-header">
 									<span class="" style="font-size: 20px;">Add Device</span>
 								</div>
-								<div class="panel-body">
+								<div class="card-body">
 									<div class="form-group">
-										<label>Select Device</label> <select name="DeviceId"
-											class="form-control input-sm" required="required">
-											<%
-											if (DeviceList != null && DeviceList.size() > 0) {
-												for (Object ls[] : DeviceList) {
-											%>
-											<option value="<%=ls[0]%>"><%=ls[1]%></option>
-											<%
-											}
-											}
-											%>
+										<label>Select Device</label> <select name="DeviceId" class="form-control input-sm" required="required">
+											<% if (DeviceList != null && DeviceList.size() > 0) {
+												for (Object ls[] : DeviceList) 
+												{%>
+											
+												<option value="<%=ls[0]%>"><%=ls[1]%></option>
+											<% }
+											} %>
 										</select>
 									</div>
 									<div class="form-group">
-										<label>Enter Number</label> <input type="text"
-											class="form-control input-sm" name="DeviceNo"
-											required="required" maxlength="10">
+										<label>Enter Number</label> <input type="text" class="form-control input-sm" name="DeviceNo" required="required" maxlength="10">
 									</div>
 
 								</div>
-								<div class="panel-footer">
-									<button class="btn btn-success btn-sm btn-block" >Submit</button>
+								<div class="card-footer">
+									<button class="btn btn-success btn-sm btn-block">Submit</button>
 								</div>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							</form>
 						</div>
 					</div>
@@ -153,39 +148,33 @@ Object[] TeleDeviceEditDetails=(Object[])request.getAttribute("TeleDeviceEditDet
 
 <!-- Edit Form -->
 <%if(TeleDeviceEditDetails!=null){ %>
-		<div  id="editTime" class="col-md-4">
-				<div class="card">
-		
-		<div class="card-body">
-		
-		<form action="TelephoneDeviceEdit.htm" method="post">
-		    
-		    <div class="panel-heading">
-				<span class="" style="font-size: 20px;">Edit Device</span>
-			</div>
-			<div class="panel-body">
-			
-				<div class="form-group">
-					<label>Device</label>
-					<input type="text" value="<%=TeleDeviceEditDetails[1]%>" class="form-control input-sm" readonly="readonly">
+				<div class="col-md-4 card" id="editTime">
+					<form action="TelephoneDeviceEdit.htm" method="post">
+						<div class="">
+							<div class="card-body">
+								<div class="card-header">
+									<span class="" style="font-size: 20px;">Edit Device</span>
+								</div>
+								<div class="card-body">
+
+									<div class="form-group">
+										<label>Device</label> <input type="text" value="<%=TeleDeviceEditDetails[1]%>" class="form-control input-sm" readonly="readonly">
+									</div>
+									<div class="form-group">
+										<label>Enter Number</label> <input type="text" value="<%=TeleDeviceEditDetails[2]%>" class="form-control input-sm" name="DeviceNo" required="required" maxlength="10">
+									</div>
+								</div>
+								<div class="card-footer">
+									<input type="hidden" name="TeleUsersId" value="<%=TeleDeviceEditDetails[0]%>">
+									<button type="submit" class="btn btn-success btn-sm btn-block">Update</button>
+								</div>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+							</div>
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<label>Enter Number</label>	
-					<input type="text"   value="<%=TeleDeviceEditDetails[2]%>"  class="form-control input-sm" name="DeviceNo" required="required" maxlength="10">
-				</div>
-				
-			
-			</div>
-			<div class="panel-footer">
-				<input type="hidden" name="TeleUsersId" value="<%=TeleDeviceEditDetails[0]%>" >
-				<button type="submit" class="btn btn-success btn-sm btn-block" >Update</button>
-			</div>
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			</form>
-		</div>	
-	</div>
-	</div>
-	<%}%>
+				<%}%>
 	<!-- //Edit Form -->
 
  </div>

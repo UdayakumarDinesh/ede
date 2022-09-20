@@ -48,7 +48,7 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
 				<div class="alert alert-success" role="alert" style="margin-top: 5px;">
 					<%=ses %>
 				</div>
-			<%} %>
+			<% } %>
 		</div>
 	
 	 	<div class="page card dashboard-card">
@@ -75,7 +75,15 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                                 <%if(TeleClaimList!=null && TeleClaimList.size()>0){ 
 		                        for(Object ls[]:TeleClaimList){%>
                                <tr>
-                                <td style="text-align: center;" ><input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required"></td>
+                                <td style="text-align: center;" >
+	                                 <% if(Integer.parseInt(ls[9].toString())==0 && ls[10]!=null && ls[10].toString().equalsIgnoreCase("S") ){ %>
+		                                	 <input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required">
+		                                <%}else if( Integer.parseInt(ls[9].toString())!=0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null ){ %>
+		                                 <input type="radio" name="TeleId_TeleForwardId" disabled="disabled" value="<%=ls[0]%>_<%=ls[9]%>" required="required">
+		                                <% }else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%>
+		                                 <input type="radio" name="TeleId_TeleForwardId" value="<%=ls[0]%>_<%=ls[9]%>" required="required">
+		                            <%}%>
+                                </td>
                      
                                 <td><%=DateTimeFormatUtil.SqlToRegularDate(ls[1].toString())%></td>
                                 <td><%=ls[2]%></td>
@@ -83,28 +91,36 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                                 <td><%=ls[4]%></td>
                                 <td><%=ls[5]%></td>
                                 <td><%=ls[6]%></td>
-                                <td><%if( Integer.parseInt(ls[9].toString())!=0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null ){ %><span class="label label-warning">Forwarded</span><% }else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%><span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span><%}%></td>
+                                <td>
+	                                <% if(Integer.parseInt(ls[9].toString())==0 && ls[10]!=null && ls[10].toString().equalsIgnoreCase("S") ){ %>
+	                                	 <span class="label label-warning">Sent Back</span>
+	                                <%}else if( Integer.parseInt(ls[9].toString())!=0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null ){ %>
+	                                <span class="label label-warning">Forwarded</span>
+	                                <% }else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%>
+	                                <span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span>
+	                                <%}%>
+                                </td>
                               </tr>
                               <%}} %>
                            </tbody> 
                           </table>
                         </div>
                      
-	   <div  align="center"> 
-	   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
-       <%if(TeleClaimList!=null && TeleClaimList.size()!=0){%>
-        <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
-        <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
-        <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
-        <button type="button" class="btn btn-sm " style="background-color: #8758FF;color: white;"  data-toggle="modal" data-target="#ForwardToAdmin"">Forward To Admin</button>
-       <%}%>
-       </div> 
-       
-       	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
-		<div  class="text-center" style="color:black;text-align: center; font-size:15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
-       
-      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
+					   <div  align="center"> 
+					   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
+				       <%if(TeleClaimList!=null && TeleClaimList.size()!=0){ %>
+				        <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
+				        <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
+				        <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
+				        <button type="button" class="btn btn-sm " style="background-color: #8758FF;color: white;"  data-toggle="modal" data-target="#ForwardToAdmin"">Forward To Admin</button>
+				       <% }%>
+				       </div> 
+				       
+				       	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
+						<div  class="text-center" style="color:black;text-align: center; font-size:15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
+				       
+				      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				</form>
 
 
 <!-- add button -->
