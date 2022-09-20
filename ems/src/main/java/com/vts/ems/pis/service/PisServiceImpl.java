@@ -760,18 +760,35 @@ public class PisServiceImpl implements PisService
 			Long SeniorityNumber=Long.parseLong(newSeniorityNumber);
 			int result= 0;
 			Long newSeniorityNumberL=SeniorityNumber;
+			Object[] emp =dao.Getemp(empId);
 			List<Object[]> EmpSenHaveUpdate=dao.UpdateAndGetList(empId,newSeniorityNumber); 
 			result=dao.UpdateAllSeniority(empId,newSeniorityNumberL);
 			List<Object[]> result1=EmpSenHaveUpdate.stream().filter(srno-> Long.parseLong(srno[0].toString())>=SeniorityNumber && Long.parseLong(srno[1].toString())!=empId  ).collect(Collectors.toList());
+
+			Long srno=0l;
+			if(emp!=null&&emp[0]!=null) {
+				srno=Long.parseLong(emp[0].toString());
+			}
 			
-		
-			for(Object[] data:result1){
+			if(SeniorityNumber > srno) {
+				Long srno3=srno;
+				List<Object[]> result2=EmpSenHaveUpdate.stream().filter(srno1-> Long.parseLong(srno1[0].toString())>srno3 && Long.parseLong(srno1[0].toString())<=SeniorityNumber  ).collect(Collectors.toList());
 				
+				for(Object[] obj:result2) {
+					Long empIdL=Long.parseLong(obj[1].toString());
+					Long serialno=Long.parseLong(obj[0].toString());
+					System.out.println(obj[0] +"  -----   "+obj[1]);
+					result= dao.UpdateAllSeniority(empIdL, --serialno);
+				}
+				
+			}else {
+			
+			for(Object[] data:result1){	
 			  Long empIdL=Long.parseLong(data[1].toString());
 			  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
 			}
 			
-			
+			}
 			return result;
 			}catch (Exception e){
 				e.printStackTrace();

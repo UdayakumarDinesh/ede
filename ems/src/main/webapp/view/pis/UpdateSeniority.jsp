@@ -104,7 +104,7 @@ function ChechSeniority() {
 		url : "CheckSenirity.htm",
 		datatype : 'json',
 		success : function(result) {
-			console.log(result)
+			
 			var ajaxresult = JSON.parse(result);
 			var val= ajaxresult+1;
 			console.log(val);
@@ -118,7 +118,7 @@ function ChechSeniority() {
 				}
 				
 			}else{
-				alert('Seniority Number Should Not Be greter than Max Seniority Number');
+				alert('Seniority Number Should Be Max+1 Seniority Number');
 				return false;
 			}
 		}
