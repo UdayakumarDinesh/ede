@@ -107,13 +107,13 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
                         </div>
                      
 					   <div  align="center"> 
-					   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
-				       <%if(TeleClaimList!=null && TeleClaimList.size()!=0){ %>
-				        <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
-				        <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
-				        <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
-				        <button type="button" class="btn btn-sm " style="background-color: #8758FF;color: white;"  data-toggle="modal" data-target="#ForwardToAdmin"">Forward To Admin</button>
-				       <% }%>
+						   	<button type="button" class="btn btn-sm add-btn"  data-toggle="modal" onclick="check()">Add</button>
+					       <%if(TeleClaimList!=null && TeleClaimList.size()!=0){ %>
+					        <button type="submit" formaction="TelephoneEdit.htm" class="btn btn-sm edit-btn" >Edit</button> 
+					        <button type="submit"  class="btn btn-sm delete-btn" formaction="TeleClaimDelete.htm" onclick="return  FunctionToCheckDelete()">Delete</button> 
+					        <button type="submit" class="btn btn-sm print-btn" formaction="TeleClaimPrint.htm" formtarget="_blank" >Print</button>
+					        <button type="button" class="btn btn-sm " style="background-color: #8758FF;color: white;"  data-toggle="modal" data-target="#ForwardToAdmin"">Forward To Admin</button>
+					       <% }%>
 				       </div> 
 				       
 				       	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
