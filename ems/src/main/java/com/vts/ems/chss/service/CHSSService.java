@@ -135,7 +135,6 @@ public interface CHSSService
 	public long CHSSContingentDelete(String contingentid, String Username) throws Exception;
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
-	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;
 	public int DeleteClaimData(String chssapplyid,String username) throws Exception;
 	public CHSSIPDClaimsInfo IpdClaimInfo(String chssapplyid) throws Exception;
@@ -192,5 +191,6 @@ public interface CHSSService
 	public List<Object[]> ClaimAllPackageItemsList(String billid) throws Exception;
 	public long IPDPkgRemAmountEdit(CHSSBillPkg modal) throws Exception;
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
+	List<Object[]> GetClaimsReportList(String empid, String fromdate, String todate, String claimtype, String status)throws Exception;
 
 }

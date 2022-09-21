@@ -1875,22 +1875,23 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	@Override
-	public List<Object[]> GetClaimsReport(String fromdate , String todate ,  String empid)throws Exception
+	public List<Object[]> GetClaimsReportList( String empid,String fromdate , String todate , String claimtype, String status)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetClaimsReport");
+		logger.info(new Date() +"Inside DAO GetClaimsList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
-			Query query = manager.createNativeQuery("call chss_claims_report(:empid , :fromdate , :todate );");
+			Query query = manager.createNativeQuery("CALL chss_claims_report(:empid , :fromdate , :todate ,:claimtype, :status);");
+			query.setParameter("empid", empid);
 			query.setParameter("fromdate", fromdate);
 			query.setParameter("todate", todate);
-			query.setParameter("empid", empid);
+			query.setParameter("claimtype", claimtype);
+			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-	
 	
 	private static final String CLAIMCONSULTMAINLIST = "SELECT DISTINCT ccm.chssconsultmainid,ccm.docname,ccm.docQualification,cdr.docqualification as 'Qualification' FROM chss_apply ca, chss_bill cb,chss_consult_main ccm,chss_doctor_rates cdr WHERE cb.isactive=1 AND cb.chssconsultmainid = ccm.chssconsultmainid AND ca.chssapplyid=cb.chssapplyid AND ccm.docqualification = cdr.docrateid AND ca.chssapplyid= :CHSSApplyId";
 
