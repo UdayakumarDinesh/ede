@@ -1,7 +1,7 @@
 <%@page import="java.util.concurrent.TimeUnit"%>
 <%@ page language="java" contentType="text/html"
     pageEncoding="UTF-8" import="java.util.*,java.text.SimpleDateFormat"%>
-    <%@page import="com.vts.ems.Admin.model.*" %>
+    <%@page import="com.vts.ems.master.model.*" %>
 <!DOCTYPE html>
 <html>
 <head>

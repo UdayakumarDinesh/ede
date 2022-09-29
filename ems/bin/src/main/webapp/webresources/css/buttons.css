@@ -1,0 +1,111 @@
+.btn{
+		
+	padding: 4px 8px;
+	font-weight:600;
+	
+}
+
+.btn-sm
+{
+	text-transform: capitalize;
+	
+}
+
+.btn-sm:hover
+{
+	box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+    transform: scale(1.01);
+}
+
+.add-btn
+{	
+	color: #ffffff;
+	background: #084594;
+}
+
+.edit-btn
+{	
+	color: #ffffff;
+	background: #F66B0E;
+}
+
+
+.submit-btn
+{
+	color: #ffffff;
+	background: green;
+	/* text-transform: uppercase; */
+}
+
+.apply-btn{
+	background: #0e6fb6;
+    padding: 3px 13px;
+    color: white
+	
+}
+
+.view-btn
+{
+	color: #ffffff;
+	background: #2FA4FF;
+}
+
+.update-btn
+{
+	color: #ffffff;
+	background: #E45826;
+}
+
+.delete-btn
+{
+	color: #ffffff;
+	background: #B20600;
+}
+
+
+.print-btn
+{
+	color: #ffffff;
+	background: #051367;
+}
+
+.reset-btn{
+	color: #ffffff;
+	background: #D82148;
+}
+
+.misc-btn
+{
+	color: #ffffff;
+	background: #051367;
+}
+
+
+.misc1-btn{
+	color: #ffffff;
+	background: #1597BB; 
+}
+
+
+
+.preview-btn{
+	color: #ffffff;
+	background: #1597BB; 
+}
+
+.misc2-btn{
+	color: #ffffff;
+	background: #125C13;
+	box-shadow: 2px 2px 5px grey;
+}
+
+
+.view-icon{
+	color: #67349e;
+}
+
+.details-icon{
+	color: #214252;
+}
+
+

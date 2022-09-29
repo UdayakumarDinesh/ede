@@ -4404,7 +4404,7 @@ public class PisController {
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 			
-				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("formmoduleid", "9"); 
 				ses.setAttribute("SidebarActive", "PIS_htm");
 				req.setAttribute("dashboard", admindashboard);
 				Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 

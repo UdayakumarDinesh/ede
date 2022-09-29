@@ -1,0 +1,200 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+        <%@page import="java.util.List" %>
+ <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
+</head>
+<body>
+
+<%
+List<Object[]> qualificationlist = (List<Object[]>)request.getAttribute("QualificationList");
+
+%>
+<div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-6">
+				<h5>Educational Qualification List </h5>
+			</div>
+				<div class="col-md-6">
+					<ol class="breadcrumb ">
+						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+						<li class="breadcrumb-item" ><a href="PIS.htm">PIS</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Educational Qualification List</li>
+					</ol>
+				</div>
+			</div>
+</div>	
+
+
+ <div class="page card dashboard-card">
+	<div class="card-body" >		
+			<div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
+		
+	<div class="card">
+		<div class="card-body">
+			<form action="QualificationListAddEditDelete.htm" method="post" id="empForm">
+				<div align="right">
+				</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="table-responsive">
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+							 <thead> 
+                                <tr>            
+                                   <th>Qualification Name</th>
+                                   <th>Action (Edit &amp; Delete) </th>
+                                 </tr>
+                              </thead>
+                               <tbody>
+                              <%for(Object[] ls:qualificationlist){%>
+	                        <tr> 
+								 <td ><%=ls[1]%></td>
+                                 <td align="center">
+                                 <input type="hidden" id="<%=ls[0]%>" value="<%=ls[1]%>">
+	                                 <button type="button" class="btn btn-sm" name="EditQualification" value="<%=ls[0]%>" onclick="ShowModel('<%=ls[0]%>')"    data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>
+									 <button type="submit"  class="btn btn-sm" formnovalidate="formnovalidate" formaction="QualificationListAddEditDelete.htm" formmethod="POST" Onclick="return confirm('Are You Sure To Delete?');" name="DeleteQualification" value="<%=ls[0]%>" data-toggle="tooltip" data-placement="top" title="Delete Bill"><i class="fa-solid fa-trash-can" style="color: red;"></i></button>
+								 </td>
+                            </tr>
+                             <%}%>
+                           </tbody> 
+							</table>
+							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+						</div>
+	
+	                <div class="row text-center">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-sm add-btn " name="Action" value="ADD" onclick="ShowAddModel()"   >ADD </button>
+						</div> 
+					</div>
+					<!--------------------------- container ------------------------->
+			<div class="container">
+					
+				<!-- The Modal -->
+				<div class="modal" id="myModal">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">Educational Qualification Edit</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+						        	<div class="form-inline">
+						        	<div class="form-group "  >
+						               <label>Qualification Name : &nbsp;&nbsp;&nbsp;</label> 
+						               <input type="text" class=" form-control w-100" required="required"  id="editqualification" name="qualification" > 
+						      		</div>
+						      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        <input type="hidden" name="EditQuali" id="editquali"/>
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="button"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="checkData();" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					</div>
+					<!-----------------------------Edit container Close ---------------------------->
+				</form>	
+				
+						<!---------------------------Add container ------------------------->
+			<div class="container">
+					<form action="AddQualification.htm" method="post">
+				<!-- The Modal -->
+				<div class="modal" id="myModal1">
+					 <div class="modal-dialog">
+					    <div class="modal-content">
+					     
+					        <!-- Modal Header -->
+					        <div class="modal-header">
+					          <h4 class="modal-title">Educational Qualification Add</h4>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        </div>
+					        <!-- Modal body -->
+					        <div class="modal-body">
+						        	<div class="form-inline">
+						        	<div class="form-group "  >
+						               <label>Qualification Name : &nbsp;&nbsp;&nbsp;</label> 
+						               <input type="text" class=" form-control w-100" required="required"  id="qualification" name="Addqualification" > 
+						      		</div>
+						      		</div>
+					        </div>
+					      
+					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					        
+					        <!-- Modal footer -->
+					        <div class="modal-footer" >
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="ADDITEM" onclick="return confirm('Are You Sure To Submit!');" >SUBMIT</button>
+					        </div>
+					       
+					      </div>
+					    </div>
+					  </div>
+					  </form>
+					</div>
+					<!----------------------------- Add container Close ---------------------------->
+			</div>
+		</div>		
+	</div>
+ </div>
+</body>
+<script type="text/javascript">
+function ShowModel(val)
+{
+	var id=val;
+	var qualification = $('#'+id).val();
+	$('#editqualification').val(qualification);
+	$('#editquali').val(id);
+	$('#myModal').modal('show');
+}
+
+function ShowAddModel() {
+	$('#myModal1').modal('show');
+}
+
+function checkData()
+{
+ var quali = $("#editqualification").val();
+
+	if(quali!=null && quali!="" && quali!="null"){
+		
+		if(confirm("Are you sure to submit!")){
+			$('form#empForm').submit();
+			return true;
+		}else{
+			return false;
+		}
+		
+	}else{
+		alert('Enter the Qualification!');
+		return false;
+	}
+	
+}
+</script>
+</html>

@@ -1,0 +1,164 @@
+@import "MyFonts.css";
+  
+*{
+	font-family: 'Lato', sans-serif;
+	font-size: 15px;
+}
+
+.breadcrumb
+{
+	padding: 5px 5px;
+	width: 100%;
+	background-color: transparent;
+	float: right;
+	
+}
+
+
+body,html {
+    height: 100%;
+}
+
+ .page-header{
+	
+	width: 100%;
+	border: 1px solid grey;
+}
+.card .card-body{
+	
+	width: 100% !important ;
+}
+
+/* .page
+{
+	padding: 0px;
+	
+} */
+
+
+.card-header h5{
+	font-weight: 800;
+	font-size: 1.5rem;	
+	font-family: Poppins;
+    color: #005C97;
+}
+
+.card-header h6{
+	font-weight: 800;
+	font-size: 1rem;	
+	font-family: Poppins;
+    color: #005C97;
+    line-height: 2rem;
+}
+
+#myTable thead tr
+{
+	text-align: center;
+}
+
+.c-body{
+	padding: 0px;
+}
+.mandatory {
+    color: red;
+}
+
+.fa-house-chimney{
+	color:#0e6fb6;
+	margin: 0px 3px;
+}
+
+.breadcrumb .breadcrumb-item, .breadcrumb .breadcrumb-item a
+{
+	
+	font-size: 14px !important;
+	font-weight: 800;
+}
+
+.alert {
+	
+	padding: 4px; 
+	margin:-10px 10px 5px 10px ;
+	width: 80% !important;	
+}
+
+.table thead tr td , .table tbody tr td {
+
+padding-top: 7px !important;
+padding-bottom: 7px !important;
+
+}
+
+hr{
+
+	border-top: 1px solid rgba(0,0,0,.2);
+	width: 100%;
+}
+
+
+.dashboard-margin{
+	margin: 0px 2px !important;
+}
+
+#myTable , #myTable1
+{
+	max-width: 100% !important;	
+}
+
+
+
+.table thead tr{
+	background-color: #0e6fb6;
+	color: white;
+}
+
+.table td, .table th {
+    padding: 0.5rem !important;
+}
+
+.main-card
+{
+	padding-top: 0px;
+	margin-top: 5px;
+}
+
+.dashboard-container{
+	margin-top: 1rem;
+}
+
+/* old */
+
+
+/* .page-top
+{
+	margin: 0px 0px -5px 0px;
+} */
+
+/* .dashboard-card{
+	border: none;
+    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
+    margin: 20px;
+} */
+
+/*new  */
+
+.page-top {
+   margin: 7px 6px 6px 1px !important;
+    border-radius: 5px;
+    height : 3rem;
+	border-bottom: none;
+    background-color: #e9ecef;
+}
+
+.dashboard-card{
+	    margin: 7px 6px 6px 1px !important;
+	    border: none;
+    box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
+    overflow-y: auto;
+}
+
+thead tr th 
+{
+	
+	text-align: center;
+}
