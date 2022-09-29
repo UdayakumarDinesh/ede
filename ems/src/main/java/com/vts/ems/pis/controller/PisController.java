@@ -2004,11 +2004,12 @@ public class PisController {
 				String newSeniorityNumber=req.getParameter("UpdatedSrNo");
 				
 		        int result= service.UpdateSeniorityNumber(empid,newSeniorityNumber);
+		        
+		        Object[] emp = service.Getemp(Long.parseLong(empid));
 				   if(result>0) {
-						redir.addAttribute("result", "Emlpoyee Seniority Number Updated Successfully ");
-					}
-					else {
-						redir.addAttribute("resultfail", "Emlpoyee Seniority Number Updated Unsuccessful");
+						redir.addAttribute("result", emp[2]+" Seniority Number Updated Successfully ");
+					}else {
+						redir.addAttribute("resultfail", emp[2]+" Seniority Number Updated Unsuccessful");
 					}					
 				   return "redirect:/PisAdminEmpList.htm";
 			}
@@ -2017,9 +2018,7 @@ public class PisController {
 			e.printStackTrace();
 			 return "static/Error";
 		}
-		
 	}
-
 	
 		@RequestMapping(value = "FamilyMemDataAjax.htm", method = RequestMethod.GET)
 		public @ResponseBody EmpFamilyDetails FamilyMemDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
@@ -5262,7 +5261,7 @@ public class PisController {
 					       req.setAttribute("PassportList", service.getPassportList(empid));
 					
 						 req.setAttribute("labdetails", masterservice.getLabDetails());
-						String filename="QuarterlyStrengthReport";
+						String filename="IndividualDetails";
 						String path=req.getServletContext().getRealPath("/view/temp");
 						req.setAttribute("path",path);
 				        

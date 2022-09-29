@@ -1,7 +1,7 @@
 <%@page import="java.util.concurrent.TimeUnit"%>
 <%@ page language="java" contentType="text/html"
     pageEncoding="UTF-8" import="java.util.*,java.text.SimpleDateFormat"%>
-    <%@page import="com.vts.ems.Admin.model.*" %>
+    <%@page import="com.vts.ems.master.model.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,7 +97,7 @@ for(Object[] obj:printdata){
 तथा समय/End Date and Time:&nbsp;<b><%=sdf.format(  format.parse (obj[25].toString()))%>, <%=obj[6] %></b></span>
 </div>
 </div> 
-  
+               
   
   <div class="row" style="margin-bottom: 10px;">
 <div class="col-md-12">
