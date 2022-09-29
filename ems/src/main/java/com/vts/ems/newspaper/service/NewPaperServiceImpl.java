@@ -516,7 +516,9 @@ public class NewPaperServiceImpl implements NewsPaperService {
 
 			ApprovalResult = dao.TelephoneSendback(Empid, FinalAmount, FromDate, ToDate, map1);
 
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			logger.info("EXCEPTION OCCUR while sending back TELEPHONE");
 			ApprovalResult = 0;
 			e.printStackTrace();

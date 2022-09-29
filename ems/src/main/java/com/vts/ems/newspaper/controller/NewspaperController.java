@@ -334,7 +334,6 @@ public class NewspaperController {
 			try {
 
 				  String NewspaperBillId=request.getParameter("NewspaperBillId");
-				  System.out.println(NewspaperBillId);
 				  Object[]  NewspaperApprovalPeriodEditDetails=service.getNewspaperApprovalPeriodEditDetails(NewspaperBillId);
 				  
 				  mv.addObject("NewspaperApprovalPeriodEditDetails",NewspaperApprovalPeriodEditDetails);
@@ -669,7 +668,6 @@ public class NewspaperController {
 				String TeleUsersId  = request.getParameter("TeleUsersId");
 				String deviceNo  = request.getParameter("DeviceNo");
 				int EditDeviceResult=service.UpdateTeleUser(sesEmpNo,TeleUsersId,deviceNo);
-				System.out.println(EditDeviceResult);
 				if(EditDeviceResult>0) 
 				{
 					mv.addObject("result", "Device Update Unsuccessful");

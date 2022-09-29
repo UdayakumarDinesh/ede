@@ -2930,44 +2930,101 @@ public class CHSSController {
 	}
 	
 	
-	@RequestMapping(value ="ClaimsReport.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
-	public String ClaimsReport(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+//	@RequestMapping(value ="ClaimsReport.htm" , method = {RequestMethod.GET, RequestMethod.POST} )
+//	public String ClaimsReport(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+//	{
+//		String Username = (String) ses.getAttribute("Username");
+//		logger.info(new Date() +"Inside ClaimsReport.htm "+Username);
+//		try {
+//			String fromdate = (String)req.getParameter("fromdate");
+//			String todate = (String) req.getParameter("todate");
+//			String empid = (String)req.getParameter("empid");
+//			LocalDate today = LocalDate.now();
+//			if(fromdate==null) 
+//			{
+//				if(today.getMonthValue()<4) 
+//				{
+//					fromdate = String.valueOf(today.getYear()-1);
+//					todate=String.valueOf(today.getYear());
+//				}
+//				else
+//				{
+//					fromdate = String.valueOf(today.getYear());
+//					todate=String.valueOf(today.getYear()+1);
+//				}
+//				fromdate +="-04-01"; 
+//				todate +="-03-31";
+//				empid="0";
+//			}else
+//			{
+//				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+//				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+//			}
+//			
+//			
+//			req.setAttribute("empid", empid);
+//			req.setAttribute("fromdate", fromdate);
+//			req.setAttribute("todate", todate);
+//			req.setAttribute("emplist", service.EmployeesList());
+//			req.setAttribute("claimslist", service.GetClaimsReport(fromdate , todate , empid));
+//			return "chss/CHSSClaimsReport";
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error(new Date() +" Inside ClaimsReport.htm "+Username, e);
+//			return "static/Error";
+//		}
+//		
+//	}
+	
+	@RequestMapping(value = "ClaimsReport.htm", method = {RequestMethod.POST , RequestMethod.GET } )
+	public String ClaimsReport(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
+		ses.setAttribute("SidebarActive", "ClaimsReportList_htm");
 		logger.info(new Date() +"Inside ClaimsReport.htm "+Username);
+	
 		try {
-			String fromdate = (String)req.getParameter("fromdate");
-			String todate = (String) req.getParameter("todate");
-			String empid = (String)req.getParameter("empid");
-			LocalDate today = LocalDate.now();
+			
+		
+			String empid = (String)req.getParameter("EmpId");			
+            String fromdate = (String)req.getParameter("FromDate");
+			String todate =  (String)req.getParameter("ToDate");
+			String claimtype = (String)req.getParameter("ClaimType");
+			String status = "A";
+			
+			
+			LocalDate today= LocalDate.now();
 			if(fromdate==null) 
 			{
 				if(today.getMonthValue()<4) 
 				{
 					fromdate = String.valueOf(today.getYear()-1);
-					todate=String.valueOf(today.getYear());
-				}
-				else
-				{
+					
+				}else{
 					fromdate = String.valueOf(today.getYear());
-					todate=String.valueOf(today.getYear()+1);
 				}
+				
+				empid = "0";
+				claimtype="All";
+				
 				fromdate +="-04-01"; 
-				todate +="-03-31";
-				empid="0";
+				todate=today.toString();
 			}else
 			{
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
 				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
-			
-			
-			req.setAttribute("empid", empid);
-			req.setAttribute("fromdate", fromdate);
-			req.setAttribute("todate", todate);
+		
+          
+            req.setAttribute("empid", empid);
+			req.setAttribute("frmDt", fromdate);
+			req.setAttribute("toDt",   todate);
+			req.setAttribute("claimtype",claimtype);
+			req.setAttribute("status",status);
 			req.setAttribute("emplist", service.EmployeesList());
-			req.setAttribute("claimslist", service.GetClaimsReport(fromdate , todate , empid));
-			return "chss/CHSSClaimsReport";
+			req.setAttribute("claimsReportList", service.GetClaimsReportList(empid,fromdate,todate,claimtype,status));
+			
+			return "chss/ClaimsReport";
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ClaimsReport.htm "+Username, e);
@@ -2975,6 +3032,343 @@ public class CHSSController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "ClaimsReportDownload.htm")
+	public void ClaimsReportDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside ClaimsReportDownload.htm "+UserId);
+		
+		try {
+
+			String[] passedValues = (String[])req.getParameterValues("selectedParameters");
+			String empid = null;
+			String fromdate = null;
+			String todate = null;
+			String claimtype = null;
+			String status = null;
+			for(int i=0;i<passedValues.length;i++) {
+				empid=passedValues[i].split("#")[0];
+				fromdate=passedValues[i].split("#")[1];
+				todate=passedValues[i].split("#")[2];
+				claimtype=passedValues[i].split("#")[3];
+				status=passedValues[i].split("#")[4];
+			}
+			LocalDate today= LocalDate.now();
+			String currentDate = rdf.format(sdf.parse(today+""));
+			
+			List <Object[]> claimsReportData = service.GetClaimsReportList(empid,fromdate,todate,claimtype,status);
+			req.setAttribute("claimsReportData",claimsReportData );
+			req.setAttribute("labdata", service.getLabCode());
+			req.setAttribute("currentDate", currentDate);
+			
+			req.setAttribute("pagePart","3" );
+			
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			String filename="ClaimsReport";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/chss/ClaimsReportPrint.jsp").forward(req, customResponse);
+			String html = customResponse.getOutput();                
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	       
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+	       	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ClaimsReportDownload.htm "+UserId, e); 
+		}
+
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "ClaimsExcelDownload.htm")
+	public void ClaimsExcelDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ClaimsExcelDownload.htm "+UserId);
+		try {	
+			
+
+			String[] passedValues = (String[])req.getParameterValues("selectedParameters");
+			String empid = null;
+			String fromdate = null;
+			String todate = null;
+			String claimtype = null;
+			String status = null;
+			for(int i=0;i<passedValues.length;i++) {
+				empid=passedValues[i].split("#")[0];
+				fromdate=passedValues[i].split("#")[1];
+				todate=passedValues[i].split("#")[2];
+				claimtype=passedValues[i].split("#")[3];
+				status=passedValues[i].split("#")[4];
+			}
+		
+			SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+			SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+			IndianRupeeFormat nfc=new IndianRupeeFormat();
+
+			List <Object[]> ClaimReportList= service.GetClaimsReportList(empid,fromdate,todate,claimtype,status);
+
+
+			AmountWordConveration awc = new AmountWordConveration();
+			int rowNo=0;
+			// Creating a worksheet
+			Workbook workbook = new XSSFWorkbook();
+
+			Sheet sheet = workbook.createSheet("Contingent Report");
+			sheet.setColumnWidth(0, 1000);
+			sheet.setColumnWidth(1, 4000);
+			sheet.setColumnWidth(2, 1500);
+			sheet.setColumnWidth(3, 4000);
+			sheet.setColumnWidth(4, 6500);
+			sheet.setColumnWidth(5, 3500);
+			//sheet.setColumnWidth(6, 2500);
+			sheet.setColumnWidth(6, 4500);
+			sheet.setColumnWidth(7, 4500);
+			
+			XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+			font.setFontName("Times New Roman");
+			font.setFontHeightInPoints((short) 10);
+			font.setBold(true);
+			// style for file header
+			CellStyle file_header_Style = workbook.createCellStyle();
+			file_header_Style.setLocked(true);
+			file_header_Style.setFont(font);
+			file_header_Style.setWrapText(true);
+			file_header_Style.setAlignment(HorizontalAlignment.CENTER);
+			file_header_Style.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+			// style for table header
+			CellStyle t_header_style = workbook.createCellStyle();
+			t_header_style.setLocked(true);
+			t_header_style.setFont(font);
+			t_header_style.setWrapText(true);
+			// style for table cells
+			CellStyle t_body_style = workbook.createCellStyle();
+			t_body_style.setWrapText(true);
+
+			
+			// File header Row
+			Row file_header_row = sheet.createRow(rowNo++);
+			sheet.addMergedRegion(new CellRangeAddress(0, 0,0, 8));   // Merging Header Cells 
+			Cell cell= file_header_row.createCell(0);
+			cell.setCellValue("CHSS Claims Report :");
+			file_header_row.setHeightInPoints((3*sheet.getDefaultRowHeightInPoints()));
+			cell.setCellStyle(file_header_Style);
+			
+			CellStyle file_header_Style2 = workbook.createCellStyle();
+			file_header_Style2.setLocked(true);
+			file_header_Style2.setFont(font);
+			file_header_Style2.setWrapText(true);
+			file_header_Style2.setAlignment(HorizontalAlignment.RIGHT);
+			file_header_Style2.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+//			Row file_header_row2 = sheet.createRow(rowNo++);
+//			sheet.addMergedRegion(new CellRangeAddress(1, 1,0, 8));   // Merging Header Cells 
+//			cell= file_header_row2.createCell(0);
+//			cell.setCellValue("Approved On : ");
+//			cell.setCellStyle(file_header_Style2);
+
+			// Table in file header Row
+			Row t_header_row = sheet.createRow(rowNo++);
+			cell= t_header_row.createCell(0); 
+			cell.setCellValue("SN"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(1); 
+			cell.setCellValue("Claim No"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(2); 
+			cell.setCellValue("Type"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(3); 
+			cell.setCellValue("Applicant"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(4); 
+			cell.setCellValue("Patient"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(5); 
+			cell.setCellValue("Applied Date"); 
+			cell.setCellStyle(t_header_style);
+			
+//			cell= t_header_row.createCell(6); 
+//			cell.setCellValue("No of Bills"); 
+//			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(6); 
+			cell.setCellValue("Claimed Amt"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(7); 
+			cell.setCellValue("Settled Amt"); 
+			cell.setCellStyle(t_header_style);
+			
+			
+			
+			long slno =0;
+		     for(Object[] obj: ClaimReportList)
+		     {slno++;
+		     
+		     Row t_body_row = sheet.createRow(rowNo++);
+				cell= t_body_row.createCell(0); 
+				cell.setCellValue(slno); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(1); 
+				cell.setCellValue(obj[20].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(2); 
+				cell.setCellValue(obj[10].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(3); 
+				cell.setCellValue(obj[23].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(4); 
+				cell.setCellValue(obj[16].toString()+"("+obj[18].toString() +")"); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(5); 
+				cell.setCellValue(rdf.format(sdf.parse(obj[19].toString()))); 
+				cell.setCellStyle(t_body_style);
+				
+				
+//				cell= t_body_row.createCell(6); 
+//				cell.setCellValue(""); 
+//				cell.setCellStyle(t_body_style);
+				
+				
+				cell= t_body_row.createCell(6); 
+				cell.setCellValue(nfc.rupeeFormat(obj[1].toString())); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(7); 
+				cell.setCellValue(nfc.rupeeFormat(obj[2].toString())); 
+				cell.setCellStyle(t_body_style);
+				
+		
+		     
+		     }
+
+			    long totalClaimedAmt = 0;
+			    long totalSettledAmt = 0;
+		     
+			     for(Object[] obj: ClaimReportList)
+				{
+			    	totalClaimedAmt += Math.round( Double.parseDouble(obj[1].toString()));
+			    	totalSettledAmt += Math.round( Double.parseDouble(obj[2].toString()));
+				}
+
+			// table footer style
+			CellStyle t_footer_style = workbook.createCellStyle();
+			t_footer_style.setLocked(true);
+			t_footer_style.setFont(font);
+			t_footer_style.setWrapText(true);
+			t_footer_style.setFont(font);
+			
+			// table footer total
+			Row f_foot_row = sheet.createRow(rowNo++);
+			cell= f_foot_row.createCell(5); 
+			cell.setCellValue("Total :"); 
+			cell.setCellStyle(t_footer_style);
+					
+		    cell= f_foot_row.createCell(6); 
+			cell.setCellValue(nfc.rupeeFormat(String.valueOf( totalClaimedAmt))); 
+			cell.setCellStyle(t_footer_style);  
+			
+			cell= f_foot_row.createCell(7); 
+			cell.setCellValue(nfc.rupeeFormat(String.valueOf( totalSettledAmt))); 
+			cell.setCellStyle(t_footer_style);  
+			
+			
+			//footer style
+			CellStyle file_footer_Style = workbook.createCellStyle();
+			font.setBold(true);
+			file_footer_Style.setLocked(true);
+			file_footer_Style.setWrapText(true);
+			file_footer_Style.setFont(font);
+			// footer text amount
+			
+//			Row f_foot_row2 = sheet.createRow(rowNo);
+//			sheet.addMergedRegion(new CellRangeAddress(rowNo, rowNo,0, 8));   
+//			cell= f_foot_row2.createCell(0);
+//			cell.setCellValue("In words Rupees"+" Only");
+//			cell.setCellStyle(file_footer_Style);
+//			rowNo++;
+
+		
+			String path = req.getServletContext().getRealPath("/view/temp");
+			String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
+
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+			
+			
+			String filename="CHSSClaims-Excel";
+			
+     
+	        res.setContentType("Application/octet-stream");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".xlsx");
+	        File f=new File(fileLocation);
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	              	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside CHSSClaimsExcelDownload.htm "+UserId, e); 
+		}
+
+	}
+	
+	
 	
 	
 	@RequestMapping(value ="ClaimDeleteEmp.htm" , method = { RequestMethod.POST} )

@@ -2070,12 +2070,12 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.EmployeesList();
 	}
 	
-	@Override
-	public List<Object[]> GetClaimsReport(String fromdate , String todate ,  String empid)throws Exception
+	 @Override
+	public List<Object[]> GetClaimsReportList( String empid, String fromdate, String todate, String claimtype, String status)throws Exception
 	{
-		return dao.GetClaimsReport(fromdate, todate, empid);
+		return dao.GetClaimsReportList( empid, fromdate , todate ,claimtype,status);
 	}
-	
+		
 	@Override
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception
 	{

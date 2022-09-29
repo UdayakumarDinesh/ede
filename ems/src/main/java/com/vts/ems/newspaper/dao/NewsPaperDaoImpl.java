@@ -1295,15 +1295,17 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 
 		private static final String TELEPHONESENDBACK = "update pis_tele_forward  set sendback='B', adminremark=:remark ,modifiedby=:ModifiedBy,modifieddate=:ModifiedDate  where   teleforwardid=:TeleForwardId ";
-		
+		private static final String TELEPHONECLAIMSSENDBACK = "UPDATE pis_tele SET teleforwardid = 0 , STATUS='S' WHERE teleforwardid = :teleforwardid AND isactive=1 ;";
 		@Override
 		public int TelephoneSendback(String Empid, double FinalAmount, String FromDate, String ToDate,	Map<String, String> map) 
 		{
 			logger.info(new Date() + "Inside DAO TelephoneSendback");
 			int result = 0;
 			try {
-
-				for (Map.Entry<String, String> entry : map.entrySet()) {
+				
+				for (Map.Entry<String, String> entry : map.entrySet()) 
+				{
+					long count=0;
 					String TeleForwardId = entry.getKey();
 					String comments = entry.getValue();
 
@@ -1315,10 +1317,17 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 					query1.setParameter("ModifiedBy", Empid);
 					query1.setParameter("remark", Comment);
 					query1.setParameter("ModifiedDate", sdtf.format(new Date()));
-					query1.executeUpdate();
+					count = query1.executeUpdate();
+					
+					if(count > 0) 
+					{
+						Query query = manager.createNativeQuery(TELEPHONECLAIMSSENDBACK);
+						query.setParameter("teleforwardid", Integer.parseInt(TeleForwardId));
+						query.executeUpdate();
+					}
 
 				} // for loop closed
-
+				
 				result = 2;
 			} catch (Exception e) {
 				logger.error(e);
@@ -1364,7 +1373,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			logger.info(new Date() + "Inside DAO getCheckTeleApproveForwardOrNot");
 			Object[] CheckTeleApproveForwardOrNot = null;
 			try {
-
 				Query q = manager.createNativeQuery(GETCHECKTELEAPPROVEFORWARDORNOT);
 				q.setParameter("TeleId", Integer.parseInt(TeleId));
 				CheckTeleApproveForwardOrNot = (Object[]) q.getSingleResult();
@@ -1373,7 +1381,8 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			{
 				System.err.println("No Result found Exception");
 			}	
-			catch (Exception e) {
+			catch (Exception e) 
+			{
 				logger.error(e);
 				e.printStackTrace();
 			}

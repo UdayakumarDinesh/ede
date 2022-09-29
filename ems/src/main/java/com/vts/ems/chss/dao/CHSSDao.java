@@ -129,7 +129,6 @@ public interface CHSSDao {
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception;
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception;
 	public List<Object[]> EmployeesList() throws Exception;
-	public List<Object[]> GetClaimsReport(String fromdate, String todate, String empid) throws Exception;
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception;
 	public int claimBillDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception;
 	public int billMiscDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception;
@@ -194,5 +193,6 @@ public interface CHSSDao {
 	public CHSSIPDClaimsInfo getCHSSIPDClaimsInfo(String chssapplyid) throws Exception;
 	public int billPackageItemsDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
 	public int billPackageDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
+	List<Object[]> GetClaimsReportList(String empid, String fromdate, String todate, String claimtype, String status)throws Exception;
 	
 }
