@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="java.util.concurrent.TimeUnit"%>
 <%@ page language="java" contentType="text/html"
     pageEncoding="UTF-8" import="java.util.*,java.text.SimpleDateFormat"%>
@@ -97,7 +98,7 @@ for(Object[] obj:printdata){
 तथा समय/End Date and Time:&nbsp;<b><%=sdf.format(  format.parse (obj[25].toString()))%>, <%=obj[6] %></b></span>
 </div>
 </div> 
-  
+               
   
   <div class="row" style="margin-bottom: 10px;">
 <div class="col-md-12">
@@ -111,7 +112,7 @@ for(Object[] obj:printdata){
 <span style="margin-left: 10px;">गंतव्य/Destination:&nbsp; &nbsp; &nbsp; <b><%=obj[8] %></b></span>
 </div>
 
-</div> 
+</div>                             
   
  <div class="row" style="margin-bottom: 10px;">
 <div class="col-md-8">

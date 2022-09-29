@@ -750,6 +750,13 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.GetEmpDetails(empid);
 		}
+		
+		@Override
+		public Object[] Getemp(Long empId)throws Exception
+		{
+			return dao.Getemp(empId);
+		}
+		
 		@Override
 		public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception
 		{
