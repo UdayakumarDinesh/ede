@@ -99,6 +99,7 @@ public interface PisService {
 	public List<Object[]> getFamilydetails(String empid) throws Exception;
 	public int ResetPassword(String loginid,String username)throws Exception;
 	public List<Object[]> GetEmployeeList()throws Exception;
+	public Object[] Getemp(Long empId)throws Exception;
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;

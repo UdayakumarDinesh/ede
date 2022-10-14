@@ -1380,7 +1380,7 @@ public class PisDaoImpl implements PisDao {
 	        return updatequery.executeUpdate();
 	}
 	
-	private static final String VALIDATESRNO="select SrNo, EmpId FROM employee where empId=:empId";
+	private static final String VALIDATESRNO="select SrNo, EmpId,empname FROM employee where empId=:empId";
 	@Override
 	public Object[] Getemp(Long empId)throws Exception
 	{
