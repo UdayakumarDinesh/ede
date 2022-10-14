@@ -1520,6 +1520,21 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
+	private static final String FAMMEMAPPROVEDLIST="SELECT fd.familyformid,  e.empid,empname,fd.formstatus,DATE(fd.ForwardedDateTime) AS ForwardedDate, e.empno ,fd.formtype, DATE(fd.ApprovedDateTime) AS 'Approved Date' FROM  pis_emp_family_form fd,  employee e WHERE e.empid = fd.empid  AND fd.formstatus IN ('A') ORDER BY fd.ApprovedDateTime DESC;";
+	@Override
+	public List<Object[]> FamMemApprovedList() throws Exception 
+	{
+		logger.info(new Date() + "Inside DAO FamMemApprovedList()");
+		try {
+			Query query = manager.createNativeQuery(FAMMEMAPPROVEDLIST);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
 	
 	private static final String FAMILYRELATIONLIST="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE isactive=1 AND relation_name NOT LIKE 'self' ORDER BY SerialNo ASC";
 	@Override

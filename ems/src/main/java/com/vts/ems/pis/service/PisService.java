@@ -197,6 +197,7 @@ public interface PisService {
 	public List<Object[]> fetchCadreNameCode()throws Exception;
 	public List<Object[]> EmployeeList(String cadreid)throws Exception;
 	public int GetMaxSeniorityNo()throws Exception;
+	public List<Object[]> FamMemApprovedList() throws Exception;
 	
 	
 }
