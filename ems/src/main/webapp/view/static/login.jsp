@@ -76,9 +76,9 @@ String path=(String)request.getAttribute("path");
 					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Policy</a>				   
 					  </li>
 					  
-					  <li class="nav-item" onclick="$('#footer').hide();">		   
+				<!-- 	  <li class="nav-item" onclick="$('#footer').hide();">		   
 					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Circulars</a>
-					  </li>
+					  </li> --> 
 					  
 					  <li class="nav-item" onclick="$('#footer').hide();">					   
 					   <a class="nav-link" data-toggle="tab" href="#tab-3"  role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>

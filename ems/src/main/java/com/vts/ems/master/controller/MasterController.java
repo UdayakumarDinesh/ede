@@ -1561,6 +1561,7 @@ public class MasterController {
 			{				
 				String UserId=(String)ses.getAttribute("Username");
 				String EmpNo=(String)ses.getAttribute("EmpNo");
+				String EmpName = (String)ses.getAttribute("EmpName");
 				logger.info(new Date() +"Inside download-CircularFile-attachment "+UserId);
 				try {
 					
@@ -1571,7 +1572,7 @@ public class MasterController {
 					res.setContentType("Application/octet-stream");	
 
 					String temppath=req.getServletContext().getRealPath("/view/temp/"+f.getName());
-					File my_file = new EmsFileUtils().addRepeatedWatermarktoPdf(path,temppath,"ID :"+EmpNo);
+					File my_file = new EmsFileUtils().addRepeatedWatermarktoPdf(path,temppath,EmpNo+" : "+EmpName);
 					 res.setHeader("Content-disposition","attachment; filename="+f.getName());
 
 

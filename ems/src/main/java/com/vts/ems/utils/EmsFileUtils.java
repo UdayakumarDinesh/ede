@@ -150,13 +150,10 @@ public class EmsFileUtils
      	   WMText = WMText+WaterMarkText+" ";
      	  
         }
-        WMText +="\n";
-        WMText +="\n";
-        String WMTextLine="";
-        for(int i=1;i<=5;i++)
-        {
-        	WMTextLine +=WMText;
-        }
+        String WMTextLine=WMText;
+        WMTextLine +="\n";
+        WMTextLine +="\n";
+        WMTextLine += WMText;
         
 		try (PdfDocument doc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile))) {
 		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
@@ -170,22 +167,20 @@ public class EmsFileUtils
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
 		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
-		           double rotationDeg = 90d;
-		           double rotationRad = Math.toRadians(rotationDeg);
-		           
-		           Paragraph watermark = new Paragraph(WMTextLine)
-		                   .setFont(helvetica)
-		                   .setFontSize(10);
-//		                   .setPaddings(200, 200,200, 200);
-//		                   .setRotationAngle(rotationRad)
-//		                   .setFixedPosition(90, 90, page.getPageSize().getWidth());
+		        	Rectangle recta=new Rectangle(10,page.getPageSize().getHeight()-10,20,20);
+			        Paragraph watermark = new Paragraph(WMTextLine)
+			                   .setFont(helvetica)
+			                   .setFontSize(10)
+			                   .setPaddings(10, 10,10, 10);
 		            
-		           Rectangle pageSize = page.getPageSize();
-		           float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
-		           float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-		           System.out.println("X = "+x);
-		           System.out.println("Y = "+y);
-		           canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , 0);
+		      
+			        Rectangle pageSize = page.getPageSize();
+			        float x=420;
+			        float y=297.5f;
+			        float rotationRad = (float) Math.toRadians(35);
+			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+			        rotationRad = (float) Math.toRadians(-35);
+			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
 		        }
 		     
 		        canvas.restoreState();
