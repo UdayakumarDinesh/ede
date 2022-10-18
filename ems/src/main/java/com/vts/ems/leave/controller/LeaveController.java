@@ -797,11 +797,10 @@ public class LeaveController {
 	@RequestMapping(value = {"downloadMcFc.htm"})
 	public void downloadMcFc(HttpServletRequest req, HttpSession ses, HttpServletResponse res)throws Exception 
 	{
-
 		logger.info(new Date() +"Inside downloadMcFc "+ req.getUserPrincipal().getName());
 		try
 		{
-			String path= emsfilespath+"\\MC_FC\\";
+			String path= emsfilespath+"EMS\\MC_FC\\";
 		    String mcFc="MC";
 			String applid=req.getParameter("MC");
 			if(applid==null) {

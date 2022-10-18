@@ -2299,7 +2299,7 @@ public class CHSSServiceImpl implements CHSSService {
 		   if(masterdto.getFilePath()!=null && !masterdto.getFilePath().isEmpty()) {
 				String name =masterdto.getFilePath().getOriginalFilename();
 				String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
-				String filepath=emsfilespath+"MastersEditFilePath";
+				String filepath=emsfilespath+"EMS/MastersEditFilePath";
 						
 				masteredit.setFilePath(filepath+File.separator+filename);
 				masteredit.setOriginalName(name);

@@ -609,7 +609,7 @@ public class PisController {
 			if(empdata!=null && empdata[3]!=null) {
 				imagename = service.PhotoPath(empdata[3]+"");
 			}
-				String path = 	uploadpath + "\\empimages";
+				String path = 	uploadpath + "EMS\\empimages";
 					
 			File f = new File(path + "\\" + imagename);
 			if (f.exists()) {
@@ -650,7 +650,7 @@ public class PisController {
 			if(empdata!=null && empdata[3]!=null) {
 				imagename = service.PhotoPath(empdata[3]+"");
 			}
-				String path = 	uploadpath + "\\empimages";
+				String path = 	uploadpath + "EMS\\empimages";
 					
 			File f = new File(path + "\\" + imagename);
 			if (f.exists()) {
@@ -2367,7 +2367,7 @@ public class PisController {
 		    	String filepath=null;
 		    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
 		    	{
-		    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+		    		filepath = saveFile(uploadpath+"EMS\\EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
 		    	}
 		    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()==0)
 		    	{
@@ -2504,8 +2504,7 @@ public class PisController {
 		  
 		    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
 		    	{
-	//	    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
-		    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+		    		filepath = saveFile(uploadpath+"EMS\\EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
 		    	}
 		    	else if(IncAttachment.getOriginalFilename()!=null && IncAttachment.getSize()==0)
 		    	{
@@ -2621,8 +2620,7 @@ public class PisController {
 		    	
 		    		if(!IncAttachment.isEmpty()) 
 			    	{
-//			    		details.setIncFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
-			    		filepath = saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+			    		filepath = saveFile(uploadpath+"EMS\\EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
 			    		if(famMemberdata[10]!=null) {
 			    			new File(famMemberdata[10].toString()).delete();
 			    		}
@@ -2866,7 +2864,7 @@ public class PisController {
 		        String filepath=null;
 		    	if(IncAttachment.getOriginalFilename()!=null  && IncAttachment.getSize()>0) 
 		    	{
-		    		filepath=saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
+		    		filepath=saveFile(uploadpath+"EMS\\EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment);
 		    	}
 		    	
 		    	PisFamFormMembers formmember = new PisFamFormMembers();
@@ -2925,7 +2923,7 @@ public class PisController {
 		    			new File(famMemberdata[10].toString()).delete();
 		    		}
 		    		
-		    		formmember.setAttachFilePath(saveFile(uploadpath+"EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
+		    		formmember.setAttachFilePath(saveFile(uploadpath+"EMS\\EmpFmailyDocs\\",IncAttachment.getOriginalFilename(),IncAttachment));
 		    	}
 		    	else if(famMemberdata[10]!=null && IncAttachment.isEmpty() )
 		    	{

@@ -61,6 +61,7 @@ public class EmsController {
 	  
 	@Value("${ProjectFiles}")
 	private String projectfilespath;
+	
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -443,7 +444,7 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside UserManualDoc.htm "+UserId);		
 		try {
-			String path=projectfilespath+"/ProjectManuals/User-Manual-chss.pdf";
+			String path=projectfilespath+"EMS/ProjectManuals/User-Manual-chss.pdf";
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
@@ -473,7 +474,7 @@ public class EmsController {
 		logger.info(new Date() +"Inside WorkFlow.htm "+UserId);		
 		try {
 
-		String path =projectfilespath +"/ProjectManuals/Work-Flow-chss.pdf";
+		String path =projectfilespath +"EMS/ProjectManuals/Work-Flow-chss.pdf";
 	
 		res.setContentType("application/pdf");
 		res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));

@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -40,8 +39,6 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	MasterDao dao;
-	
-
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
@@ -388,7 +385,7 @@ public class MasterServiceImpl implements MasterService {
 		String name =filecirculardto.getPath().getOriginalFilename();
 		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
 		
-		String path = emsfilespath+"CircularFiles";
+		String path = emsfilespath+"EMS//CircularFiles";
 				
 		circular.setPath(path+"//"+filename);
 		circular.setOriginalName(name);
@@ -425,7 +422,7 @@ public class MasterServiceImpl implements MasterService {
 								
 			CircularList circularlist = dao.GetCircularToEdit(circular.getCircularId());
 			if(circular.getPath()!=null) {
-				String path =emsfilespath+"//CircularFiles";
+				String path =emsfilespath+"EMS//CircularFiles";
 			  Path uploadPath = Paths.get(path);
 			  Path filePath = uploadPath.resolve(circular.getPath());
               File f = filePath.toFile();
@@ -437,7 +434,7 @@ public class MasterServiceImpl implements MasterService {
     	    if(!filecirculardto.getPath().isEmpty()) {
     		String name =filecirculardto.getPath().getOriginalFilename();
     		String filename= "Circular-"+circularlist.getCircularId()+"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-    		String path =emsfilespath+"CircularFiles";
+    		String path =emsfilespath+"EMS//CircularFiles";
     		circularlist.setPath(path+"//"+filename);
     		circularlist.setOriginalName(name);
     			saveFile(path, filename, filecirculardto.getPath());
@@ -492,7 +489,7 @@ public class MasterServiceImpl implements MasterService {
 			   if(!masterdto.getFilePath().isEmpty()) {
 					String name =masterdto.getFilePath().getOriginalFilename();
 					String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
-					String filepath=emsfilespath+"MastersEditFilePath";
+					String filepath=emsfilespath+"EMS//MastersEditFilePath";
 							
 					masteredit.setFilePath(filepath+File.separator+filename);
 					masteredit.setOriginalName(name);
