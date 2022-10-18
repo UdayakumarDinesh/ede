@@ -35,9 +35,9 @@ import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
-import com.vts.ems.utils.MailReciever;
 
 @Controller
+@RequestMapping("/Blocked")
 public class LeaveController {
 	private static final Logger logger = LogManager.getLogger(LeaveController.class);
 	DateTimeFormatUtil sdf=new DateTimeFormatUtil();

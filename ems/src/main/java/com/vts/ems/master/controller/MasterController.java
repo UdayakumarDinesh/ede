@@ -1571,7 +1571,7 @@ public class MasterController {
 					res.setContentType("Application/octet-stream");	
 
 					String temppath=req.getServletContext().getRealPath("/view/temp/"+f.getName());
-					File my_file = new EmsFileUtils().addWatermarktoPdf1(path,temppath,EmpNo);
+					File my_file = new EmsFileUtils().addRepeatedWatermarktoPdf(path,temppath,"ID :"+EmpNo);
 					 res.setHeader("Content-disposition","attachment; filename="+f.getName());
 
 

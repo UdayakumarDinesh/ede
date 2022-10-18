@@ -202,4 +202,5 @@ public interface PisDao {
 	public List<Object[]> EmployeeList(String cadreid)throws Exception;
 	public int GetMaxSeniorityNo()throws Exception;
 	public Object[] Getemp(Long empId)throws Exception;
+	public List<Object[]> FamMemApprovedList() throws Exception;
 }

@@ -19,6 +19,7 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.dopart.service.DoPartService;
 
 @Controller
+@RequestMapping("/Blocked")
 public class DoController {
 
 	@Autowired

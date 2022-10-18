@@ -940,6 +940,12 @@ public class PisServiceImpl implements PisService
 		}
 		
 		@Override
+		public List<Object[]> FamMemApprovedList() throws Exception 
+		{
+			return dao.FamMemApprovedList();
+		}
+		
+		@Override
 		public List<Object[]> familyRelationList()throws Exception
 		{
 			return dao.familyRelationList();

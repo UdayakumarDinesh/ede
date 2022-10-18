@@ -31,17 +31,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -2164,14 +2155,25 @@ public class PisController {
 		}
 		
 	 	@RequestMapping(value="FamFormsApproveList.htm" )
-		public String FamFormsApproveList(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
+		public String FamFormsApproveList(Model model,HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");	
 			logger.info(new Date() +"Inside FamFormsApproveList.htm "+Username);		
 			try {
+				
+				String tab= req.getParameter("tab");;
+				
+				if(tab==null)  {
+					Map md=model.asMap();
+					tab=(String)md.get("tab");
+				}
+				
+				tab = tab==null ? "P" : tab;
+				
 				ses.setAttribute("SidebarActive", "FamFormsApproveList_htm");
 				req.setAttribute("FamFwdFormsList", service.FamMemFwdEmpList());
-				
+				req.setAttribute("FamMemApprovedList", service.FamMemApprovedList());
+				req.setAttribute("tab", tab);
 				return "pis/FamIncExcFormsApproveList";
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside FamFormsApproveList.htm "+Username, e);
@@ -2281,6 +2283,7 @@ public class PisController {
 					return "redirect:/FamIncExcFwdList.htm";
 				}else
 				{
+					redir.addAttribute("tab", "A");
 					return "redirect:/FamFormsApproveList.htm";
 				}
 			} catch (Exception e) {
@@ -4403,7 +4406,7 @@ public class PisController {
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 			
-				ses.setAttribute("formmoduleid", "9");   
+				ses.setAttribute("formmoduleid", "7"); 
 				ses.setAttribute("SidebarActive", "PIS_htm");
 				req.setAttribute("dashboard", admindashboard);
 				Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
