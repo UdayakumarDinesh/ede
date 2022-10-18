@@ -1561,7 +1561,7 @@ public class MasterController {
 			{				
 				String UserId=(String)ses.getAttribute("Username");
 				String EmpNo=(String)ses.getAttribute("EmpNo");
-				logger.info(new Date() +"Inside download-CircularFile-attachment "+UserId);
+				logger.info(new Date() +"Inside download-CircularFile "+UserId);
 				try {
 					
 					String path = (String)req.getParameter("path1");
@@ -1571,7 +1571,7 @@ public class MasterController {
 					res.setContentType("Application/octet-stream");	
 
 					String temppath=req.getServletContext().getRealPath("/view/temp/"+f.getName());
-					File my_file = new EmsFileUtils().addWatermarktoPdf1(path,temppath,EmpNo);
+					File my_file = new EmsFileUtils().addRepeatedWatermarktoPdf(path,temppath,"ID :"+EmpNo);
 					 res.setHeader("Content-disposition","attachment; filename="+f.getName());
 
 
@@ -1586,7 +1586,7 @@ public class MasterController {
 				        in.close();
 				        out.flush();
 				}catch(Exception e) {
-					logger.error(new Date() +"Inside download-CircularFile-attachment "+UserId,e);
+					logger.error(new Date() +"Inside download-CircularFile "+UserId,e);
 					e.printStackTrace();
 				}
 		    }
