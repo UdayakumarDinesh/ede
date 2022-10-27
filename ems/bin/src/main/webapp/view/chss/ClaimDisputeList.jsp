@@ -112,11 +112,15 @@
 													<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[4].toString()) %></td>
 													<td ><span style="color: red;">Response Pending</span></td>
 													<td >
-															
-														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<%if(obj[12].toString().equalsIgnoreCase("OPD")){ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
-																
+														<%}else{ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>
+														<%} %>
 														<input type="hidden" name="view_mode" value="A">
 														<input type="hidden" name="dispReplyEnable" value="Y">	
 													</td>
@@ -196,9 +200,15 @@
 													<td ><span style="color: green;">Response Submitted</span></td>
 													<td style="text-align: center;" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[6].toString()) %></td> 
 													<td >
-														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+														<%if(obj[13].toString().equalsIgnoreCase("OPD")){ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
+														<%}else{ %>
+														<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[1] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>
+														<%} %>
 														<input type="hidden" name="view_mode" value="A">
 														<input type="hidden" name="dispReplyEnable" value="Y">	
 													</td>

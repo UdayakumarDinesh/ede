@@ -444,11 +444,11 @@
 												<%} %>
 											<% } %>
 												
-											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>
 											</button>
 											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button>
 											<%} %>
@@ -457,7 +457,7 @@
 												<i class="fa-solid fa-backward" style="color: #333C83"></i>
 											</button>
 											<%} %>
-										<%}else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
+										<% }else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
 											<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
 												
 													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDApply.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">

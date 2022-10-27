@@ -408,8 +408,7 @@ public class CHSSController {
 				consultmainid=(String)md.get("consultmainid");
 			}	
 			
-//			CHSSConsultMain consultmain = service.getCHSSConsultMain(consultmainid);
-			String chssapplyid = req.getParameter("chssapplyid"); /* consultmain.getCHSSApplyId().toString(); */
+			String chssapplyid = req.getParameter("chssapplyid"); 
 			if (chssapplyid == null) 
 			{
 				Map md=model.asMap();
@@ -879,7 +878,7 @@ public class CHSSController {
 			consult.setConsultationId(Long.parseLong(consultationid));
 			consult.setConsultType(consulttype);
 			consult.setDocName(docname);
-//			consult.setDocQualification(Integer.parseInt(docqualification));
+			consult.setDocQualification(Integer.parseInt(docqualification));
 			consult.setConsultDate(sdf.format(rdf.parse(consdate)));
 			consult.setConsultCharge(Double.parseDouble(conscharge));
 			consult.setModifiedBy(Username);
@@ -2416,6 +2415,10 @@ public class CHSSController {
 		logger.info(new Date() +"Inside ContingetBill.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
+			String claim_view_mode=req.getParameter("claim_view_mode");
+			if(claim_view_mode==null) {
+				claim_view_mode="A";
+			}
 			
 			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
@@ -2425,6 +2428,7 @@ public class CHSSController {
 			req.setAttribute("contingentremarks", service.ContingentBillRemarkHistory(contingentid));
 			req.setAttribute("onlyview","Y");
 			req.setAttribute("logintype",LoginType);
+			req.setAttribute("view_mode",claim_view_mode);
 
 			return "chss/ContingentBillView";
 			

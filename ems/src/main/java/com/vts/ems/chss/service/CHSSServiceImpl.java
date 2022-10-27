@@ -448,7 +448,7 @@ public class CHSSServiceImpl implements CHSSService {
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultType(modal.getConsultType());
 		fetch.setDocName(WordUtils.capitalize(modal.getDocName()).trim());
-//		fetch.setDocQualification(modal.getDocQualification());
+		fetch.setDocQualification(modal.getDocQualification());
 		fetch.setConsultDate(modal.getConsultDate());
 		fetch.setConsultCharge(modal.getConsultCharge());
 		fetch.setModifiedBy(modal.getModifiedBy());

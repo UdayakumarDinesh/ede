@@ -127,7 +127,7 @@
 												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
-												
+												<input type="hidden" name="claim_view_mode" value="E">
 											</td>
 										</tr>
 									<%} %>

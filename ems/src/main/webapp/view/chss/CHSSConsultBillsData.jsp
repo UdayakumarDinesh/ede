@@ -419,13 +419,12 @@ p {
 											<tr class="tr_clone_cons" >
 												<td><input type="text" class="form-control items" name="doc-name" id="doc-name" value="" style="width:100%; "  maxlength="255" required="required"></td>
 												<td>
-													<select class="form-control w-100" name="doc-qualification-view" id="doc-qualification" disabled="disabled" >
+													<select class="form-control w-100" name="doc-qualification" id="doc-qualification">
 														<%int docqual=0;
 														for(CHSSDoctorRates rate:doctorrates ){ %>
 															<option value="<%=rate.getDocRateId() %>"><%=rate.getDocQualification() %></option>
 														<%} %>
 													</select>
-													<input type="hidden" name="doc-qualification" value=""  id="doc-qualification-val" >
 												</td>
 												<td><input type="text" class="form-control cons-date" name="cons-date" id="cons-date" value="" style="width:100%;"  maxlength="10" readonly required="required"></td>
 												<td><input type="number" class="form-control items cost-only co-cost"  step=".01"  name="cons-charge" id="cons-charge" value="0" style="width:100%;text-align: right; " min="1" max="9999999" required="required" ></td>
@@ -1134,7 +1133,7 @@ function getConsultdata()
 			consultHTMLStr +=	'	<td>';
 			
 			
-			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required" disabled > ';
+			consultHTMLStr +=	'		<select class="form-control w-100" name="doc-qualification-'+consult.ConsultationId+'" required="required"  > ';
 			for(var u=0;u<$docrateslist.length;u++)
 			{				
 				if(Number(consult.DocQualification) === $docrateslist[u].DocRateId)
@@ -1207,7 +1206,6 @@ function getConsultdata()
 							$('#doc-name').val(result.DocName);
 							$('#doc-name').prop('readonly','readonly');
 							
-							$('#doc-qualification-val').val(result.DocQualification);
 							$('#doc-qualification').val(result.DocQualification);
 							
 							

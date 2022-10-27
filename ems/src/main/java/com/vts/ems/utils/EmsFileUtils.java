@@ -177,9 +177,9 @@ public class EmsFileUtils
 			        Rectangle pageSize = page.getPageSize();
 			        float x=420;
 			        float y=297.5f;
-			        float rotationRad = (float) Math.toRadians(35);
+			        float rotationRad = (float) Math.toRadians(53);
 			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
-			        rotationRad = (float) Math.toRadians(-35);
+			        rotationRad = (float) Math.toRadians(-51);
 			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
 		        }
 		     

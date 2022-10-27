@@ -142,7 +142,7 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												<%}else if(obj[10].toString().equalsIgnoreCase("IPD")){ %>
-												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>
 												

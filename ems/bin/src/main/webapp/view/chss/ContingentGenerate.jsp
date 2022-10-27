@@ -149,7 +149,7 @@
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
 												<%if(obj[6].toString().equals("OPD")){ %>
-													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 														<i class="fa-solid fa-eye"></i>
 													</button>	
 															
@@ -157,7 +157,7 @@
 														<i style="color: #019267" class="fa-solid fa-download"></i>
 													</button>
 												<%}else if(obj[6].toString().equals("IPD")){ %>
-													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 														<i class="fa-solid fa-eye"></i>
 													</button>	
 															
