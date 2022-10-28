@@ -164,13 +164,16 @@ th,td
 
 	String view_mode=(String)request.getAttribute("view_mode");
 	
-	boolean showRemAmt =  ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A") ;
-	boolean allowEdit =   view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==6 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13  );
+	boolean showRemAmt =  ((view_mode.equalsIgnoreCase("U") || view_mode.equalsIgnoreCase("UF") )&& chssstatusid==15) || view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("A") || ( view_mode.equalsIgnoreCase("E") && (chssstatusid==15 || chssstatusid==10 || chssstatusid==12)) ;
+	boolean allowEdit =   view_mode.equalsIgnoreCase("E") && (chssstatusid==2 || chssstatusid==4 || chssstatusid==5 || chssstatusid==6 ||chssstatusid==8 || chssstatusid==9 || chssstatusid==11 || chssstatusid==13  );
 	boolean historyBtn =  view_mode.equalsIgnoreCase("V") ||  view_mode.equalsIgnoreCase("E")||  view_mode.equalsIgnoreCase("A")  ;
 	
 	historyBtn = historyBtn || allowEdit;
 	
-	
+	System.out.println(showRemAmt);
+	System.out.println(allowEdit);
+	System.out.println(historyBtn);
+	System.out.println(view_mode);
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 
