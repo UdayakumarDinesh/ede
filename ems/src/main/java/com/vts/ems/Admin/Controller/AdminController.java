@@ -661,4 +661,27 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 				return "redirect:/Role.htm";
 			}
+			
+			@RequestMapping(value = "CircularDashBoard.htm", method = RequestMethod.GET)
+			public String CircularDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				String Username = (String) ses.getAttribute("Username");
+				logger.info(new Date() +"Inside CircularDashBoard.htm "+Username);		
+				try {
+					String logintype = (String)ses.getAttribute("LoginType");
+				
+					List<Object[]> admindashboard = service.HeaderSchedulesList("9" ,logintype); 
+				
+					ses.setAttribute("formmoduleid", "9"); 
+					ses.setAttribute("SidebarActive", "CircularDashBoard_htm");
+					req.setAttribute("dashboard", admindashboard);
+
+					return "circular/CircularDashboard";
+				}catch (Exception e) {
+					logger.error(new Date() +" Inside CircularDashBoard.htm "+Username, e);
+					e.printStackTrace();	
+					return "static/Error";
+				}
+				
+			}
+			
 }		

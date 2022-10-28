@@ -66,7 +66,7 @@ public class MasterController {
 	private PisService pisservice;
 		
 	@Value("${EMSFilesPath}")
-	private String emsfilespath;
+	private String emsfilespath1;
 	
 	   @RequestMapping(value = "OtherItems.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 	    public  String Otheritem(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
