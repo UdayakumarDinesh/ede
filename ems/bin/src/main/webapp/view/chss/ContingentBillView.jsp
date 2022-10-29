@@ -89,7 +89,7 @@ th,td
 	Object[]  contingentdata = (Object[])request.getAttribute("contingentdata");
 	Object[] labdata = (Object[])request.getAttribute("labdata");
 	List<Object[]> contingentremarks = (List<Object[]>)request.getAttribute("contingentremarks");
-	
+	String view_mode = (String) request.getAttribute("view_mode");
 	String logintype = (String)request.getAttribute("logintype");
 	int billstatus = Integer.parseInt(contingentdata[5].toString());
 	if(contingentdata[2]==null){
@@ -231,7 +231,7 @@ th,td
 									<%if( true){  %>
 									<td >
 									<%if(obj[9].toString().equals("OPD")){ %>
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>	
 												
@@ -239,7 +239,7 @@ th,td
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
 									<%}else if(obj[9].toString().equals("IPD")){ %>
-										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formtarget="blank"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm"  formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 											<i class="fa-solid fa-eye"></i>
 										</button>	
 												
@@ -247,8 +247,7 @@ th,td
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
 									<%}%>
-									
-									<input type="hidden" name="view_mode" value="A">
+									<input type="hidden" name="view_mode" value="<%=view_mode%>">
 									</td>
 									<%} %>							
 								</tr>
