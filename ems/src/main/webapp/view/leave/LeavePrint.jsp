@@ -5,7 +5,7 @@
 <html>
 <head>
 <link rel="shortcut icon" type="image/png" href="view/images/lablogoui.png">
-<jsp:include page="/view/static/dependancy.jsp"></jsp:include>
+<jsp:include page="../../view/static/dependancy.jsp"></jsp:include>
         
 <spring:url value="/webresources/css/Header.css" var="Header" />
 <title>Leave Print</title>
