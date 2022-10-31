@@ -33,7 +33,7 @@ public class CircularServiceImpl implements CircularService {
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	
-	@Value("${File_Path}")
+	@Value("${EMSFilesPath}")
     private String FilePath;
 
 
