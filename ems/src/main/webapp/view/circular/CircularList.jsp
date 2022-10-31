@@ -29,7 +29,7 @@
 						<li class="breadcrumb-item "><a href="CircularDashBoard.htm">Circular Dashboard</a></li>
 					</ol>
 				</div>
-			</div>
+	
 	</div>	
 <%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");
@@ -48,10 +48,30 @@
         </div>
     </div>
 	<%} %>
+		
 
 <div class="page card dashboard-card">
    <div class="card-body" align="center" >
    
+   <form action="##" method="POST" id="circularForm" >
+   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+   
+   
+   
+   
+   
+   			<div class="row text-center">
+			  <div class="col-md-12">					
+					<button type="submit" class="btn btn-sm add-btn" formaction="CircularAdd.htm"  >ADD</button>
+			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
+					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>																	 
+				</div>						 
+			</div>	
+			
+			</form>	
+			
+
+			</div>
 
    </div>
 </div>
@@ -60,7 +80,35 @@
 
 <script>
 
+function Edit(circularForm)
+{
+	var fields = $("input[name='circulatId']").serializeArray();
 
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Circular ");
+
+		event.preventDefault();
+		return false;
+	}
+	return true;
+	
+}
+	   
+function Delete(circularForm)
+{
+	var fields = $("input[name='circulatId']").serializeArray();
+
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Circular ");
+
+		event.preventDefault();
+		return false;
+	}
+	return true;
+	
+}
+	   	   
+	   
 	   
 
 </script>
