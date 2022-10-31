@@ -1,7 +1,8 @@
-<%@page import="com.vts.ems.pis.model.Employee"%>
-<%@page import="com.vts.ems.leave.model.LeaveRegister"%>
-<%@page import="com.ibm.icu.text.SimpleDateFormat"%>
+
 <%@page import="java.util.List"%>
+<%@ page import="java.util.*" %> 
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -11,6 +12,13 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
+.row {
+   
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -32px;
+    margin-left: -15px;
+}
 
 
 </style>
@@ -26,7 +34,7 @@
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="CircularDashBoard.htm">Circular Dashboard</a></li>
+						<li class="breadcrumb-item "><a href="CircularDashBoard.htm">Circular List</a></li>
 					</ol>
 				</div>
 			</div>
@@ -48,20 +56,115 @@
         </div>
     </div>
 	<%} %>
+	
+	 <form action="" style="margin:auto;max-width:300px;margin-left:81.5%">
+           <input type="text" placeholder="Search Circular" name="search2">
+           <button type="submit"><i class="fa fa-search"></i></button>
+     </form>
 
-<div class="page card dashboard-card">
-   <div class="card-body" align="center" >
+	
+	<%String fromdate = (String)request.getAttribute("fromdate");
+	String todate = (String)request.getAttribute("todate"); %>
+		 
+	    	<div class="card" >
+	        <div class="card-header" style="height: 4rem">
+	              <form action="CircularList.htm" method="POST"> 
+	                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					      <div class="row justify-content-right">
+					      <div class="col-7"></div>
+						        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
+					            <div class="col-1" style="margin-left: -9%"> 
+						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
+							         <label class="input-group-addon btn" for="testdate"></label>              
+						        </div>
+							 
+						
+						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
+							    <div class="col-1" style="margin-left: -10%">						
+							         <input type="text" style="width: 165%; background-color:white;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
+							         <label class="input-group-addon btn" for="testdate"></label>    
+							    </div>
+				          </div>       	
+                  </form>	      
+	       </div>    	             
+	       </div>
+    
+
+<div class="card-body main-card  " >
+       
+        <form action="#" method="POST">
+             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+             <div class="table-responsive">
+             <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
+				<thead>
+					<tr>
+					    <th style="width:4%">SN</th>
+						<th style="width:10%">Circular No</th>
+                        <th style="width:11%">Date</th>
+                        <th style="width:45%">Subject</th>
+                        <th style="width:8%">Download</th>
+                  	</tr>
+				</thead>
+				<tbody>
+				        <%
+				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
+				        System.out.println(allList);
+				        if(allList!=null){ int slno=0;  
+                         for(Object[] ls:allList ){ 
+                        %> 
+                     <tr>
+                         <th style="text-align: center;"><%=++slno %>.</th>
+                         <th><%=ls[0]%></th>
+                         <th style="text-align: center;"><%=ls[1]%></th>
+                         <th><%=ls[2]%></th>
+                         <th>
+                         <button type="submit" class="btn btn-sm" value="<%=ls[3]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+						 <i class="fa-solid fa-download " style="color: green;"></i>
+						 </button></th>
+                         
+                      </tr>
+                           <%} }%>
+                          
+			    </tbody>
+		     </table>
+		       </div>
+	    </form>
    
-
-   </div>
 </div>
 
- 
-
-<script>
 
 
-	   
+<script type="text/javascript">
+
+$('#fromdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	/* "minDate" :datearray,   */
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+	
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :$("#fromdate").val(),  
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	$(document).ready(function(){
+		   $('#fromdate, #todate').change(function(){
+		       $('#myform').submit();
+		    });
+		});
 
 </script>
 

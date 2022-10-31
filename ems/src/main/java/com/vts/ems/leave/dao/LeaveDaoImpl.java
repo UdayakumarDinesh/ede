@@ -25,6 +25,7 @@ import com.vts.ems.pis.model.Employee;
 
 
 @Repository
+@Transactional
 public class LeaveDaoImpl implements LeaveDao{
 	
 	private static final Logger logger = LogManager.getLogger(LeaveDaoImpl.class);

@@ -180,9 +180,16 @@ public class DateTimeFormatUtil
 		return firstday;
 	}
 	
+	public static  String getFinancialYearStartDateRegularFormatCircular() throws Exception
+	{
+		String firstday="01-04-"+LocalDate.now().getYear();
+		return firstday;
+	}
+	
 	public static  String getFinancialYearEndDateRegularFormat() throws Exception
 	{
 		String lastday="31-03-"+LocalDate.now().getYear();
+		
 		return lastday;
 	}
 	
