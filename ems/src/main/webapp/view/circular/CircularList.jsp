@@ -107,7 +107,7 @@
                   	</tr>
 				</thead>
 				<tbody>
-<<<<<<< HEAD
+
 				     <%
 				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
 				        System.out.println(allList);

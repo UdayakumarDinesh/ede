@@ -100,6 +100,8 @@
 			<%}else{ %>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="file"  >
 			<%} %>			 
+			
+			
 			<%if(CirEditDetails!=null && CirEditDetails.getCircularPath()!=null){%>	
 			<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="height: 10%; width: 4%;  margin-top: 2.5%;" 
 			name="path" value="<%=CirEditDetails.getCircularPath()%>//<%=CirEditDetails.getCirFileName()%>" 
@@ -121,7 +123,7 @@
 	      <div class="row" >
 		   <div class="col-12" align="center">
 		   
-		    <%if(CirEditDetails==null ){%>
+		    <%if(CirEditDetails!=null ){%>
 		    <button type="submit" class="btn btn-sm submit-btn " id="editCircular"  onclick="return confirm('Are You Sure To Submit?');" >UPDATE</button>
 		    <%}else{ %>
 		     <button type="submit"   class="btn btn-sm submit-btn"  id="addCircular" onclick="return confirm('Are You Sure To Submit?');"  >SUBMIT</button>
