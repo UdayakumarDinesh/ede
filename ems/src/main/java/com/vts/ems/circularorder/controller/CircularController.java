@@ -109,9 +109,7 @@ public class CircularController {
 		try {
 
 			System.out.println("CircularAddSubmit.htm");			
-
-
-			String CircularNo   =(String)req.getParameter("circularno");
+            String CircularNo   =(String)req.getParameter("circularno");
 			String CircularDate   =(String)req.getParameter("circularDate");
 			String CirSubject  =(String)req.getParameter("cirSubject");
 			String AutoId = UUID.randomUUID().toString();
@@ -175,6 +173,13 @@ public class CircularController {
 		logger.info(new Date() +"Inside CircularEditSubmit.htm "+UserId);
 		
 		try {
+			
+			System.out.println("CircularEditSubmit.htm");	
+			String CircularId =(String)req.getParameter("circularIdSel");
+            String CircularNo   =(String)req.getParameter("circularno");
+			String CircularDate   =(String)req.getParameter("circularDate");
+			String CirSubject  =(String)req.getParameter("cirSubject");
+			String AutoId = UUID.randomUUID().toString();
 			
 		
 			

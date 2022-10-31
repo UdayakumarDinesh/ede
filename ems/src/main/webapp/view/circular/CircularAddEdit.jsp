@@ -96,18 +96,16 @@
 			  <div class="form-group">
 					<label><b>Upload File</b> <span class="mandatory"	style="color: red;">*</span></label>
 			<%if(CirEditDetails!=null ){%>
+			<%System.out.println("filepath"+CirEditDetails.getCircularPath());%>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="<%=CirEditDetails.getCircularPath()%>" required="required"  id="file"  >
 			<%}else{ %>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="file"  >
 			<%} %>			 
-			
-			
 			<%if(CirEditDetails!=null && CirEditDetails.getCircularPath()!=null){%>	
 			<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="height: 10%; width: 4%;  margin-top: 2.5%;" 
 			name="path" value="<%=CirEditDetails.getCircularPath()%>//<%=CirEditDetails.getCirFileName()%>" 
 			formaction="download-CirFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download"
-			> <i style="color: #019267" class="fa-solid fa-download fa-2x"></i>
-			</button>
+			> <i style="color: #019267" class="fa-solid fa-download fa-2x"></i></button>
 			<%} %>		
 							
 			</div>
@@ -124,6 +122,7 @@
 		   <div class="col-12" align="center">
 		   
 		    <%if(CirEditDetails!=null ){%>
+		    <input type="hidden" name="circularIdSel" value="<%if(CirEditDetails!=null){%><%=CirEditDetails.getCircularId()%><%}%>">
 		    <button type="submit" class="btn btn-sm submit-btn " id="editCircular"  onclick="return confirm('Are You Sure To Submit?');" >UPDATE</button>
 		    <%}else{ %>
 		     <button type="submit"   class="btn btn-sm submit-btn"  id="addCircular" onclick="return confirm('Are You Sure To Submit?');"  >SUBMIT</button>
