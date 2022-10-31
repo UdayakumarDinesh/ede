@@ -22,12 +22,17 @@ public class Zipper
     public void pack(String filePath,InputStream IS,String FullPath,String FileName,String Pass) throws ZipException
     {
         ZipParameters zipParameters = new ZipParameters();
-        zipParameters.setFileNameInZip(filePath);
+//        zipParameters.setFileNameInZip(filePath); /*OriginalName*/
+        System.out.println("FilePath :"+filePath);
+        zipParameters.setFileNameInZip(FileName);
         zipParameters.setCompressionMethod(CompressionMethod.STORE);
         zipParameters.setEncryptFiles(true);
         zipParameters.setEncryptionMethod(EncryptionMethod.AES);
         // Below line is optional. AES 256 is used by default. You can override it to use AES 128. AES 192 is supported only for extracting.
         zipParameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256); 
+        System.out.println("FullPath :" +FullPath);
+        System.out.println("FileName :" +FileName);
+        
         new ZipFile(FullPath+FileName+".zip",Pass.toCharArray()).addStream(IS, zipParameters);
     }
 
