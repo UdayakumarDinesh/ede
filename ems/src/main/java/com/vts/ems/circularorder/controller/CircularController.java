@@ -74,38 +74,32 @@ public class CircularController {
 	
 	}
 	
-	@RequestMapping(value = "CircularEdit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
-	public String circularEdit(HttpServletRequest req, HttpSession ses) throws Exception
-	{
-         //			String circularId = (String)req.getParameter("circulatId");
-         //		CircularList circularDetails = service.GetCircularToEdit(Long.parseLong(circularid));
-         //		req.setAttribute("circularDetails", circularDetails);
-		 return "circular/CircularAddEdit";
-	
-	}
-	
 	@RequestMapping(value = "CircularDelete.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
 	{
-         //			String circularId = (String)req.getParameter("circulatId");
-         //		CircularList circularDetails = service.GetCircularToEdit(Long.parseLong(circularid));
-         //		req.setAttribute("circularDetails", circularDetails);
-		 return "redirect:/CircularList.htm";
+		
+       		
+       		String UserName=(String)ses.getAttribute("Username");
+         	String CircularId = (String)req.getParameter("circulatId");
+            System.out.println("CircularIdSelected"+CircularId);
+       		int count = service.CircularDelete(Long.parseLong(CircularId),UserName);
+       		if (count > 0) {
+				redir.addAttribute("result", "Circular deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Circulae delete Unsuccessfull");
+			}
+       	return  "redirect:/CircularList.htm";
 	
 	}
 	
 	
 	@RequestMapping(value = "CircularAddSubmit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularAdd(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("FileAttach") MultipartFile FileAttach) throws Exception{
-		String UserId=(String)ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CircularAdd.htm "+UserId);
+		String Username=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularAddSubmit.htm "+Username);
 		
 		try {
-			System.out.println("CircularAdd.htm");
-//			String action = (String)req.getParameter("action");
-//			if("CircularAdd".equalsIgnoreCase(action)) {
-		
-			
+			System.out.println("CircularAddSubmit.htm");			
 			String CircularNo   =(String)req.getParameter("circularno");
 			String CircularDate   =(String)req.getParameter("circularDate");
 			String CirSubject  =(String)req.getParameter("cirSubject");
@@ -120,7 +114,7 @@ public class CircularController {
 			uploadcirdto.setOriginalName(FileAttach.getOriginalFilename());
 			uploadcirdto.setAutoId(AutoId);
             uploadcirdto.setIS(FileAttach.getInputStream());
-            uploadcirdto.setCreatedBy(UserId);
+            uploadcirdto.setCreatedBy(Username);
             uploadcirdto.setCreatedDate(sdtf.format(new Date()));
 
             EMSCircular circular = new EMSCircular();
@@ -128,15 +122,15 @@ public class CircularController {
 	        if (count > 0) {
 				 redir.addAttribute("result", "Circular Added Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "Circular Added Unsuccessfull");
+				 redir.addAttribute("resultfail", "Circular Add Unsuccessfull");
 			}
 			
-	        System.out.println("CircularAdd.htm");
+
 			
 		return  "redirect:/CircularList.htm";
 		
 	 } catch (Exception e) {
-		  logger.error(new Date() +"Inside CircularAdd.htm "+UserId ,e);
+		  logger.error(new Date() +"Inside CircularAddSubmit.htm "+Username ,e);
 		  e.printStackTrace();
 		  return "static/Error";
 	   }
@@ -146,25 +140,44 @@ public class CircularController {
 	}
 	
 	
-//	@RequestMapping(value ="CircularEDIT.htm" , method = RequestMethod.POST)
-//	public String CirculatEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
-//	{
-//		String UserId=(String)ses.getAttribute("Username");
-//		logger.info(new Date() +"Inside CircularEDIT.htm "+UserId);
-//		
-//		try {
-//			
-//			
-//			
-//			return "redirect:/CircularList.htm";
-//		} catch (Exception e) {
-//			logger.error(new Date() +"Inside CircularEDIT.htm "+UserId,e);
-//			e.printStackTrace();
-//			return "static/Error";
-//		}		
-//		
-//		
-//	}
+	
+	
+	@RequestMapping(value = "CircularEdit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	public String circularEdit(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+         String CircularId = (String)req.getParameter("circulatId");
+         System.out.println("CircularIdSelected"+CircularId);
+         EMSCircular list = service.GetCircularDetailsToEdit(Long.parseLong(CircularId));
+         req.setAttribute("circularDetails", list);
+		 return "circular/CircularAddEdit";
+	
+	}
+	
+
+	
+	@RequestMapping(value ="CircularEditSubmit.htm" , method = RequestMethod.POST)
+	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("FileAttach") MultipartFile FileAttach) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularEditSubmit.htm "+UserId);
+		
+		try {
+			
+		
+			
+			return "redirect:/CircularList.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside CircularEditSubmit.htm "+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}		
+		
+		
+	}
+	
+	
+	
+	
 	
 	
 	

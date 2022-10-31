@@ -10,6 +10,11 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 
@@ -19,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.circularorder.model.EMSCircular;
+import com.vts.ems.master.model.CircularList;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
@@ -38,6 +44,8 @@ public class CircularDaoImpl implements CircularDao {
     EntityManager manager;
 	
 	private static final String SELECTALLLIST="SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular";
+	private static final String CIRCULARLIST = "SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject,CircularId FROM ems_circular WHERE IsActive=1 AND  ( CircularDate>=:fromdate AND CircularDate <=:todate )  ORDER BY CircularDate DESC";
+	private static final String DELETECIRCULAR="UPDATE ems_circular SET IsActive=:isactive , ModifiedBy=:modifiedby , ModifiedDate=:modifieddate WHERE CircularId=:circularid";
 
 	@Override
 	public List<Object[]> selectAllList() throws Exception {
@@ -48,7 +56,7 @@ public class CircularDaoImpl implements CircularDao {
 		return CircularList;
 	}
 
-	private static final String CIRCULARLIST = "SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject,CircularId FROM ems_circular WHERE ( CircularDate>=:fromdate AND CircularDate <=:todate )  ORDER BY CircularDate DESC";
+	
 	
 	@Override
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception {
@@ -95,10 +103,45 @@ public class CircularDaoImpl implements CircularDao {
 	}
 
 	
+	@Override
+	public int CircularDelete(Long CircularId, String Username)throws Exception{
+		logger.info(new Date() + "Inside DAO UserManagerDelete()");
+		
+		try {
+			Query query = manager.createNativeQuery(DELETECIRCULAR);
+			query.setParameter("circularid", CircularId);
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			query.setParameter("isactive", 0);
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 	
-	
-	
+	@Override
+	public EMSCircular GetCircularDetailsToEdit(Long  CircularId)throws Exception
+	{
+		logger.info(new Date() + "Inside GetCircularDetailsToEdit()");
+		EMSCircular list = null;
+		try {
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<EMSCircular> cq = cb.createQuery(EMSCircular.class);
+			Root<EMSCircular> root = cq.from(EMSCircular.class);
+			Predicate p1 = cb.equal(root.get("CircularId"), CircularId);
+			cq = cq.select(root).where(p1);
+			TypedQuery<EMSCircular> allquery = manager.createQuery(cq);
+			list = allquery.getResultList().get(0);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 	

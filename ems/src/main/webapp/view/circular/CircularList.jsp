@@ -93,56 +93,50 @@
 
 <div class="card-body main-card  " >
        
-        <form action="#" method="POST">
+        <form action="#" method="POST" id="circularForm">
              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
              <div class="table-responsive">
              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
 				<thead>
 					<tr>
-					    <th style="width:4%">SN</th>
-						<th style="width:10%">Circular No</th>
-                        <th style="width:11%">Date</th>
-                        <th style="width:45%">Subject</th>
-                        <th style="width:8%">Download</th>
+					   <th style="width:4%">Select</th>
+					   <th style="width:10%">Circular No</th>
+                       <th style="width:11%">Date</th>
+                       <th style="width:45%">Subject</th>
+                       <th style="width:8%">Download</th>
                   	</tr>
 				</thead>
 				<tbody>
-				        <%
-				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
-				        System.out.println(allList);
-				        if(allList!=null){ int slno=0;  
-                         for(Object[] ls:allList ){ 
-                        %> 
-                     <tr>
-                         <th style="text-align: center;"><%=++slno %>.</th>
-                         <th><%=ls[0]%></th>
-                         <th style="text-align: center;"><%=ls[1]%></th>
-                         <th><%=ls[2]%></th>
-                         <th>
-                         <button type="submit" class="btn btn-sm" value="<%=ls[3]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-						 <i class="fa-solid fa-download " style="color: green;"></i>
-						 </button></th>
-                         
+				     <%
+				     List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
+				     System.out.println(allList);
+				     if(allList!=null){ int slno=0;  
+                     for(Object[] ls:allList ){ 
+                     %> 
+                    <tr>
+                     <td style="text-align: center;"><input type="radio" name="circulatId" value="<%=ls[3]%>"></td>
+                     <td><%=ls[0]%></td>
+                     <td style="text-align: center;"><%=ls[1]%></td>
+                     <td><%=ls[2]%></td>
+                     <td>
+                     <button type="submit" class="btn btn-sm" value="<%=ls[3]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+					 <i class="fa-solid fa-download " style="color: green;"></i>
+					 </button></td>
                       </tr>
                            <%} }%>
                           
 			    </tbody>
 		     </table>
+		     
+		      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		       </div>
-	    </form>
-   
-   <form action="##" method="POST" id="circularForm" >
-   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-   
-   
-   
-   
-   
+
+ 
    			<div class="row text-center">
 			  <div class="col-md-12">					
 					<button type="submit" class="btn btn-sm add-btn" formaction="CircularAdd.htm"  >ADD</button>
-			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
-					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>																	 
+			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm"  Onclick="Edit(circularForm)" >EDIT </button>	
+					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm"   Onclick="Delete(circularForm)" >DELETE </button>																	 
 				</div>						 
 			</div>	
 			
@@ -185,29 +179,16 @@ $('#fromdate').daterangepicker({
 		       $('#myform').submit();
 		    });
 		});
-	function Edit(circularForm)
-	{
-		var fields = $("input[name='circulatId']").serializeArray();
-
-
-		if (fields.length === 0) {
-			alert("Please Select Atleast One Circular ");
 	
-			event.preventDefault();
-			return false;
-		}
-		return true;
-		
-	}
-	   
-function Delete(circularForm)
+	
+	
+function Edit(circularForm)
 {
 	var fields = $("input[name='circulatId']").serializeArray();
 
 	if (fields.length === 0) {
 		alert("Please Select Atleast One Circular ");
-
-		event.preventDefault();
+        event.preventDefault();
 		return false;
 	}
 	return true;
@@ -215,7 +196,29 @@ function Delete(circularForm)
 }
 	   	   
 	   
-	   
+
+function Delete(circularForm){ 
+	
+	var fields = $("input[name='circulatId']").serializeArray();
+
+	if (fields.length === 0){
+		alert("Please Select Atleast One Circular");
+		event.preventDefault();
+		return false;
+	}
+	
+	var cnf = confirm("Are You Sure To Delete!");
+    if(cnf){
+		
+		document.getElementById("circularForm").submit();
+		return true;
+
+	}else{
+		
+		event.preventDefault();
+		return false;
+	}
+}
 
 </script>
 

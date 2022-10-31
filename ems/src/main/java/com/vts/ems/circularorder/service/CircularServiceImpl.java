@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.circularorder.dao.CircularDao;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.model.EMSCircular;
+import com.vts.ems.master.model.CircularList;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
@@ -115,5 +116,20 @@ public class CircularServiceImpl implements CircularService {
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
 		return dao.GetCircularList(Fromdate , ToDate);
 	}
+	
+	@Override
+	public int CircularDelete(Long CircularId, String Username)throws Exception{
+		return dao.CircularDelete(CircularId,Username);
+	}
+	
+	
+	@Override
+	   public EMSCircular GetCircularDetailsToEdit(Long CircularId)throws Exception
+	   {
+		   return dao.GetCircularDetailsToEdit(CircularId);
+	   }
+	
+	
+	
 
 }
