@@ -5,10 +5,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -37,12 +33,10 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.circularorder.dao.CircularDao;
+import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.pis.model.EmployeeDetails;
-import com.vts.ems.circularorder.dao.CircularDao;
-import com.vts.ems.circularorder.dto.CircularUploadDto;
-import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
@@ -143,12 +137,7 @@ public class CircularServiceImpl implements CircularService {
 		return dao.GetCircularList(Fromdate , ToDate);
 	}
 
-@Service
-public class CircularServiceImpl implements CircularService 
-{
-	@Autowired
-	private CircularDao dao;
-	
+
 	@Override
 	public EMSCircular getCircularData(String CircularId) throws Exception
 	{
