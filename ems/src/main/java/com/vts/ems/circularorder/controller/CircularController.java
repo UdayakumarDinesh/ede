@@ -3,6 +3,7 @@ package com.vts.ems.circularorder.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.EMSCircular;
+import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.service.CircularService;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -58,18 +60,14 @@ public class CircularController {
 		logger.info(new Date() +"Inside CircularList.htm "+UserId);
 		
 		 String fromdate = (String)req.getParameter("FromDate");
-		 System.out.println("fromm date"+fromdate);
 			 String todate = (String)req.getParameter("ToDate");
 			 
 			 if(fromdate==null && todate == null) {
 				 fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatCircular();
 				 todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-				 System.out.println(fromdate);
-				 System.out.println(todate);
 			 }
 				
 			 circulatlist = service.GetCircularList(fromdate , todate );
-			 System.out.println(circulatlist);
    		 req.setAttribute("circulatlist", circulatlist);
    		 req.setAttribute("fromdate", fromdate);	
 		 req.setAttribute("todate",todate);
@@ -111,11 +109,6 @@ public class CircularController {
 		logger.info(new Date() +"Inside CircularAdd.htm "+UserId);
 		
 		try {
-			System.out.println("CircularAdd.htm");
-//			String action = (String)req.getParameter("action");
-//			if("CircularAdd".equalsIgnoreCase(action)) {
-		
-			
 			String CircularNo   =(String)req.getParameter("circularno");
 			String CircularDate   =(String)req.getParameter("circularDate");
 			String CirSubject  =(String)req.getParameter("cirSubject");
@@ -133,15 +126,13 @@ public class CircularController {
             uploadcirdto.setCreatedBy(UserId);
             uploadcirdto.setCreatedDate(sdtf.format(new Date()));
 
-            EMSCircular circular = new EMSCircular();
-			long count=service.CircularUpload(uploadcirdto,circular);
+            
+			long count=service.CircularUpload(uploadcirdto);
 	        if (count > 0) {
 				 redir.addAttribute("result", "Circular Added Successfully");
 			} else {
 				 redir.addAttribute("resultfail", "Circular Added Unsuccessfull");
 			}
-			
-	        System.out.println("CircularAdd.htm");
 			
 		return  "redirect:/CircularList.htm";
 		
@@ -190,6 +181,7 @@ public class CircularController {
 	@RequestMapping(value = "CircularDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public void CircularDownload(HttpServletResponse res ,HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		String UserId = (String) ses.getAttribute("Username");
 		String EmpNo=(String)ses.getAttribute("EmpNo");
 		String EmpName = (String)ses.getAttribute("EmpName");
@@ -201,7 +193,6 @@ public class CircularController {
 			
 			if(empDetails!=null && empDetails.getPAN()!=null && !empDetails.getPAN().equalsIgnoreCase("") && empDetails.getDOB()!=null) {
 				password = empDetails.getPAN().toUpperCase()+new SimpleDateFormat("dd-MM-yyyy").format(empDetails.getDOB()).replace("-","");
-				
 			}
 			System.out.println(password);
 			
@@ -224,9 +215,8 @@ public class CircularController {
 													.EmpName(EmpName)
 													.build();
 					
-			// adding watermark,Metadata to the pdf file and encrypting the file
+			// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
 			File my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
-			
 			
 			res.setHeader("Content-disposition","attachment; filename="+circular.getCirFileName());
 		    OutputStream out = res.getOutputStream();
@@ -239,6 +229,15 @@ public class CircularController {
 		    }
 		    in.close();
 		    out.flush();
+		    
+		    EMSCircularTrans  circularTrans = new EMSCircularTrans().builder()
+		    									.CircularId(Long.parseLong(CircularId))
+		    									.DownloadBy(Long.parseLong(EmpId))
+		    									.EmpNo(EmpNo)
+		    									.DownloadDate(new Timestamp(new Date().getTime()).toString())
+		    									.IPAddress(req.getRemoteAddr())
+		    									.build();
+		    service.CircularTransactionAdd(circularTrans);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

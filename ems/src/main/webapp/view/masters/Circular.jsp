@@ -57,7 +57,7 @@
 											<td style="text-align:justify; width: 50%;"><%if(obj[1]!=null){%><%=obj[1]%><%}%></td>
 											<td align="center"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3].toString())%> <%} %></td>
 											<td style="text-align:center;  width: 10%;"> <%if(obj[2]!=null){ %> 
-											<button type="submit" class="btn btn-sm" name="CircularId" value="1" formaction="CircularDownload.htm"  formmethod="post" title="Download">
+											<button type="submit" class="btn btn-sm" name="path1" value="<%=obj[2]%>" formaction="download-CircularFile"  formmethod="post" title="Download">
 											  <i style="color: #019267" class="fa-solid fa-download"></i>
 										    </button>
 											<%}else{%>--<%}%></td>

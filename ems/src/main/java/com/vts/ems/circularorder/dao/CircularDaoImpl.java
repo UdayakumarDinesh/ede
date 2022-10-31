@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.circularorder.model.EMSCircular;
+import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -76,7 +77,6 @@ public class CircularDaoImpl implements CircularDao
 
 		Query query = manager.createNativeQuery(SELECTALLLIST);
 		List<Object[]> CircularList= query.getResultList();
-		System.out.println(CircularList);
 		return CircularList;
 	}
 
@@ -85,13 +85,10 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception {
 	 
-		System.out.println(fromdate);
-		System.out.println(toDate);
 		Query query =  manager.createNativeQuery(CIRCULARLIST);
 		 query.setParameter("fromdate", fromdate);
 		 query.setParameter("todate", toDate);
 		 List<Object[]> CircularList=query.getResultList();
-		 System.out.println(CircularList);
 		 return CircularList;
 		
 	}
@@ -101,7 +98,7 @@ public class CircularDaoImpl implements CircularDao
 	public long GetCircularMaxId() throws Exception {
 		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
 		try {
-			Query query = manager.createNativeQuery("SELECT MAX(CircularId)  FROM ems_circular");	
+			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(CircularId),0) AS 'count'  FROM ems_circular");	
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 			
@@ -126,6 +123,13 @@ public class CircularDaoImpl implements CircularDao
 		}
 	}
 
+	@Override
+	public long CircularTransactionAdd(EMSCircularTrans cirTrans) throws Exception 
+	{
+		manager.persist(cirTrans);
+		manager.flush();
+		return (long)cirTrans.getCircularTransId();
+	}
 	
 	
 	
