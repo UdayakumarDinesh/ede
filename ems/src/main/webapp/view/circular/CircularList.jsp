@@ -107,21 +107,22 @@
                   	</tr>
 				</thead>
 				<tbody>
+<<<<<<< HEAD
 				     <%
-				     List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
-				     System.out.println(allList);
-				     if(allList!=null){ int slno=0;  
-                     for(Object[] ls:allList ){ 
-                     %> 
+				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
+				        System.out.println(allList);
+				        if(allList!=null){ int slno=0;  
+                         for(Object[] ls:allList ){ 
+                        %> 
                     <tr>
                      <td style="text-align: center;"><input type="radio" name="circulatId" value="<%=ls[3]%>"></td>
                      <td><%=ls[0]%></td>
                      <td style="text-align: center;"><%=ls[1]%></td>
                      <td><%=ls[2]%></td>
                      <td>
-                     <button type="submit" class="btn btn-sm" value="<%=ls[3]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-					 <i class="fa-solid fa-download " style="color: green;"></i>
-					 </button></td>
+                      <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[3] %>" formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+					  <i class="fa-solid fa-download " style="color: green;"></i>
+					  </button></td>
                       </tr>
                            <%} }%>
                           
