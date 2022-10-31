@@ -167,7 +167,6 @@ public class EmsFileUtils
 		        canvas.saveState();
 		        canvas.setExtGState(gstate);
 		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
-		        	Rectangle recta=new Rectangle(10,page.getPageSize().getHeight()-10,20,20);
 			        Paragraph watermark = new Paragraph(WMTextLine)
 			                   .setFont(helvetica)
 			                   .setFontSize(10)
