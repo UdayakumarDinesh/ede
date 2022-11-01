@@ -8,7 +8,6 @@
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
-		<title>CHSS</title>
 		<jsp:include page="../static/header.jsp"></jsp:include>
 	<style>
 	

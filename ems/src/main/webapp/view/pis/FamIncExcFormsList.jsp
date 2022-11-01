@@ -10,7 +10,6 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
-<title>CHSS Claims List</title>
 </head>
 <body>
 <body>

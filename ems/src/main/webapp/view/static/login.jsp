@@ -7,7 +7,6 @@
 <c:set var="contPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<title>CHSS Login</title>
 
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
 <spring:url value="/webresources/css/LoginPage.css" var="loginPageCss" />
@@ -58,7 +57,7 @@ String path=(String)request.getAttribute("path");
         			</div>
       			</div>
      			<div class="logo">
-     				<a href="#" title="PMS"><span class="c"  style="margin-top: 2% !important;font-size: 113% !important;">CONTRIBUTORY HEALTH SERVICE SCHEME</span></a>
+     				<a href="#" title="PMS"><span class="c"  style="margin-top: 2% !important;font-size: 113% !important;">STARC EMPLOYEE INFORMATION PORTAL</span></a>
      			</div>
      		
      			
@@ -109,10 +108,10 @@ String path=(String)request.getAttribute("path");
 							<div >
 								
 								<div>
-									<p class="quote">Simplifying Medical Claims</p>
+									<p class="quote"><!-- Simplifying Medical Claims --></p>
 									
 	
-								 <h4 class="quote2" style="font-family: 'Lato', sans-serif;font-weight: 400" >Claims  &nbsp;|&nbsp; Coverages  &nbsp;|&nbsp;  Empowerment</h4>
+								 <h4 class="quote2" style="font-family: 'Lato', sans-serif;font-weight: 400" ><!-- Claims  &nbsp;|&nbsp; Coverages  &nbsp;|&nbsp;  Empowerment --></h4>
 									
 									
 								</div>

@@ -55,23 +55,31 @@ public class CircularController {
 	@RequestMapping(value = "CircularList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularList(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String LoginType = (String) ses.getAttribute("LoginType");
 		List<Object[]> circulatlist = new ArrayList<Object[]>();
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CircularList.htm "+UserId);
-		
-		 String fromdate = (String)req.getParameter("FromDate");
-			 String todate = (String)req.getParameter("ToDate");
-			 
-			 if(fromdate==null && todate == null) {
-				 fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatCircular();
-				 todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-			 }
-				
-			 circulatlist = service.GetCircularList(fromdate , todate );
-   		 req.setAttribute("circulatlist", circulatlist);
-   		 req.setAttribute("fromdate", fromdate);	
-		 req.setAttribute("todate",todate);
-		return "circular/CircularList";
+		try {
+			ses.setAttribute("SidebarActive", "CircularList_htm");
+			String fromdate = (String)req.getParameter("FromDate");
+			String todate = (String)req.getParameter("ToDate");
+				 
+			if(fromdate==null && todate == null) {
+				fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatCircular();
+				todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
+			}
+					
+			circulatlist = service.GetCircularList(fromdate , todate );
+	   		req.setAttribute("circulatlist", circulatlist);
+	   		req.setAttribute("fromdate", fromdate);	
+			req.setAttribute("todate",todate);
+			req.setAttribute("LoginType",LoginType);
+			return "circular/CircularList";
+		} catch (Exception e) {
+			  logger.error(new Date() +"Inside CircularAdd.htm "+UserId ,e);
+			  e.printStackTrace();
+			  return "static/Error";
+		   }
 	}
 
 
@@ -245,5 +253,24 @@ public class CircularController {
 		}
 		
 	}
+	
+	
+	
+	@RequestMapping(value = "RunBatchFile.htm")
+	public String runBatchFile(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		
+		
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		processBuilder.command("cmd.exe", "/C",  "C:\\Users\\Admin\\Desktop\\DBBackup.bat");
+//		File dir = new File("C:\\Users\\Admin\\Desktop\\");
+//		processBuilder.directory(dir);
+		
+		Process process = processBuilder.start();
+		
+		return "redirect:/CircularList.htm";
+	}
+	
+	
 	
 }

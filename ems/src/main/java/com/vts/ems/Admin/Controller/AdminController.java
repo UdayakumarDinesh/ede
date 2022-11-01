@@ -672,10 +672,11 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					List<Object[]> admindashboard = service.HeaderSchedulesList("9" ,logintype); 
 				
 					ses.setAttribute("formmoduleid", "9"); 
-					ses.setAttribute("SidebarActive", "CircularDashBoard_htm");
+//					ses.setAttribute("SidebarActive", "CircularDashBoard_htm");
 					req.setAttribute("dashboard", admindashboard);
 
-					return "circular/CircularDashboard";
+					return "redirect:/CircularList.htm";
+//					return "circular/CircularDashboard";
 				}catch (Exception e) {
 					logger.error(new Date() +" Inside CircularDashBoard.htm "+Username, e);
 					e.printStackTrace();	

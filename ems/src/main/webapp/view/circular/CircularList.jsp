@@ -10,7 +10,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<jsp:include page="../static/sidebar.jsp"></jsp:include>
+<%-- <jsp:include page="../static/sidebar.jsp"></jsp:include> --%>
 <style type="text/css">
 .row {
    
@@ -25,6 +25,7 @@
 </head>
 <body>
 
+<%String LoginType = (String)request.getAttribute("LoginType"); %>
 
 <div class="card-header page-top ">
 		<div class="row">
@@ -114,14 +115,14 @@
                          for(Object[] ls:allList ){ 
                         %> 
                      <tr>
-                         <th style="text-align: center;"><%=++slno %>.</th>
-                         <th><%=ls[0]%></th>
-                         <th style="text-align: center;"><%=ls[1]%></th>
-                         <th><%=ls[2]%></th>
-                         <th>
+                         <td style="text-align: center;"><%=++slno %>.</td>
+                         <td><%=ls[0]%></tdS>
+                         <td style="text-align: center;"><%=ls[1]%></td>
+                         <td><%=ls[2]%></td>
+                         <td>
                          <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[3] %>" formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
-						 </button></th>
+						 </button></td>
                          
                       </tr>
                            <%} }%>
@@ -139,10 +140,12 @@
    
    
    			<div class="row text-center">
-			  <div class="col-md-12">					
+			  <div class="col-md-12">	
+			  		<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>				
 					<button type="submit" class="btn btn-sm add-btn" formaction="CircularAdd.htm"  >ADD</button>
 			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
-					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>																	 
+					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>
+					<%} %>																	 
 				</div>						 
 			</div>	
 			
