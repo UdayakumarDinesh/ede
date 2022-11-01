@@ -107,7 +107,8 @@
                          for(Object[] ls:allList ){ 
                         %> 
                      <tr>
-                         <td style="text-align: center;"><%=++slno %>.</td>
+                      
+                         <td style="text-align: center;"> <input type="radio" name="circulatId" value="<%=ls[3]%>"></td>
                          <td><%=ls[0]%></td>
                          <td style="text-align: center;"><%=ls[1]%></td>
                          <td><%=ls[2]%></td>
