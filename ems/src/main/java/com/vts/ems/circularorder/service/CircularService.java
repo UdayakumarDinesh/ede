@@ -15,7 +15,9 @@ import com.vts.ems.pis.model.EmployeeDetails;
 public interface CircularService {
 	
 
-	public long CircularUpload(CircularUploadDto uploadcirdto)throws Exception;
+	public long CircularAdd(CircularUploadDto uploadcirdto)throws Exception;
+	public long CircularUpdate(CircularUploadDto uploadcirdto)throws Exception;
+	public long GetMaxCircularId()throws Exception;
 	public List<Object[]> selectAllList() throws Exception;
 	public List<Object[]> GetCircularList(String fromdate, String todate) throws Exception;
 	public int CircularDelete(Long CircularId, String Username)throws Exception;

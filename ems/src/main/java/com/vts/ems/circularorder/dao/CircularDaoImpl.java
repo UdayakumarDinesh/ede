@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
+import com.vts.ems.master.model.CircularList;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -114,9 +115,9 @@ public class CircularDaoImpl implements CircularDao
 	}
 	
 	@Override
-	public long CircularAdd(EMSCircular circular) throws Exception {
+	public long AddCircular(EMSCircular circular) throws Exception {
 		
-		logger.info(new Date() + "Inside CircularAdd()");
+		logger.info(new Date() + "Inside DAO CircularAdd()");
 		try {
 			manager.persist(circular);
 			manager.flush();
@@ -131,7 +132,7 @@ public class CircularDaoImpl implements CircularDao
 	private static final String DELETECIRCULAR="UPDATE ems_circular SET IsActive=:isactive , ModifiedBy=:modifiedby , ModifiedDate=:modifieddate WHERE CircularId=:circularid";
 	@Override
 	public int CircularDelete(Long CircularId, String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO UserManagerDelete()");
+		logger.info(new Date() + "Inside DAO CircularDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETECIRCULAR);
@@ -167,6 +168,20 @@ public class CircularDaoImpl implements CircularDao
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public long EditCircular(EMSCircular circular) throws Exception
+	{
+		logger.info(new Date() +"Inside DAO EditCircular()");
+		try {
+			manager.merge(circular);
+			manager.flush();		
+			return circular.getCircularId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}		
 	}
 	
 	

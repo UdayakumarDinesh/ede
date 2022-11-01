@@ -127,7 +127,7 @@ public class CircularController {
             uploadcirdto.setCreatedDate(sdtf.format(new Date()));
 
             
-			long count=service.CircularUpload(uploadcirdto);
+			long count=service.CircularAdd(uploadcirdto);
 	        if (count > 0) {
 				 redir.addAttribute("result", "Circular Added Successfully");
 			} else {
@@ -154,47 +154,73 @@ public class CircularController {
 	
 	
 	@RequestMapping(value = "CircularEdit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
-	public String circularEdit(HttpServletRequest req, HttpSession ses) throws Exception
+	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception
 	{
          String CircularId = (String)req.getParameter("circulatId");
-         System.out.println("CircularIdSelected"+CircularId);
-         EMSCircular list = service.GetCircularDetailsToEdit(Long.parseLong(CircularId));
-         req.setAttribute("circularDetails", list);
-		 return "circular/CircularAddEdit";
+         long cirId = Long.parseLong(CircularId);
+         long getMaxCircularId = service.GetMaxCircularId();
+        
+         
+         if(cirId == getMaxCircularId) {
+        	 System.out.println("CircularIdSelected"+cirId);
+        	 EMSCircular list = service.GetCircularDetailsToEdit(cirId);
+             req.setAttribute("circularDetails", list);
+    		 return "circular/CircularAddEdit";
+        	 
+         }else {
+        	 redir.addAttribute("resultfail", "Only Recent Circular is allowed to edit ");
+        	 return "redirect:/CircularList.htm";
+         }
+         
 	
 	}
 	
 
 	
 	@RequestMapping(value ="CircularEditSubmit.htm" , method = RequestMethod.POST)
-	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("FileAttach") MultipartFile FileAttach) throws Exception
+	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("EditFileAttach") MultipartFile FileAttach) throws Exception
 	{
-		String UserId=(String)ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CircularEditSubmit.htm "+UserId);
+		String Username=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularEditSubmit.htm "+Username);
 		
 		try {
 			
-			System.out.println("CircularEditSubmit.htm");	
 			String CircularId =(String)req.getParameter("circularIdSel");
             String CircularNo   =(String)req.getParameter("circularno");
 			String CircularDate   =(String)req.getParameter("circularDate");
 			String CirSubject  =(String)req.getParameter("cirSubject");
 			String AutoId = UUID.randomUUID().toString();
+
 			
+			CircularUploadDto uploadcirdto =new CircularUploadDto();
+			uploadcirdto.setCircularId(Long.parseLong(CircularId));
+			uploadcirdto.setCircularNo(CircularNo.trim()); 
+			uploadcirdto.setCircularDate(CircularDate);
+			uploadcirdto.setCirSubject(CirSubject.trim());
+			uploadcirdto.setOriginalName(FileAttach.getOriginalFilename());
+			uploadcirdto.setAutoId(AutoId);
+            uploadcirdto.setIS(FileAttach.getInputStream());
+            uploadcirdto.setCircularPath(FileAttach);
+            uploadcirdto.setModifiedBy(Username);
+            uploadcirdto.setModifiedDate(sdtf.format(new Date()));
+			
+			long count=service.CircularUpdate(uploadcirdto);
+	        if (count > 0) {
+				 redir.addAttribute("result", "Circular Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "Circular Update Unsuccessfull");
+			}
 		
 			
 			return "redirect:/CircularList.htm";
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside CircularEditSubmit.htm "+UserId,e);
+			logger.error(new Date() +"Inside CircularEditSubmit.htm "+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}		
 		
 		
 	}
-	
-	
-	
 	
 	
 	
@@ -235,6 +261,7 @@ public class CircularController {
 			//Unzip the pdf file from zip file and copy to tempPath
 			Zipper zip=new Zipper();
 			zip.unpack(emsfilespath+"//"+circular.getCircularPath(),tempPath,circular.getCircularKey());
+			System.out.println("unpack"+zip);
 			
 			PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()
 													.sourcePath(tempPath+"//"+circular.getCirFileName())

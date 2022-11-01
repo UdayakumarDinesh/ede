@@ -2,7 +2,13 @@ package com.vts.ems.circularorder.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -15,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -59,7 +66,7 @@ public class CircularServiceImpl implements CircularService
     private String FilePath;
 
 	@Override
-	public long CircularUpload(CircularUploadDto cirdto) throws Exception 
+	public long CircularAdd(CircularUploadDto cirdto) throws Exception 
 	{
 		logger.info(new Date() +"Inside CircularUpload");
 		
@@ -73,10 +80,9 @@ public class CircularServiceImpl implements CircularService
 			maxCircularId = dao.GetCircularMaxId()+1;
 			String[] cirSplit = cirDate.split("-");
 			CirFileName ="C"+maxCircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
-			cirdto.setCirFileName(CirFileName);
+	
 			
 			year = cirSplit[2];
-			
 			String CircularPath = "EMS\\Circulars\\"+year+"\\";
 			
 			String FullDir = FilePath+CircularPath;
@@ -101,7 +107,7 @@ public class CircularServiceImpl implements CircularService
 			Zipper zip=new Zipper();
 			zip.pack(cirdto.getOriginalName(),cirdto.getIS(),FullDir,CirFileName,cirdto.getAutoId());
 				
-		    count =  dao.CircularAdd(circular);
+		    count =  dao.AddCircular(circular);
 		
 		}catch (Exception e) {
 			 e.printStackTrace();
@@ -113,6 +119,115 @@ public class CircularServiceImpl implements CircularService
 		
 			
 	}
+	
+	@Override
+	public long GetMaxCircularId() throws Exception
+	{
+		return dao.GetCircularMaxId();
+	}
+	
+	@Override
+	public long CircularUpdate(CircularUploadDto cirdto) throws Exception 
+	{
+		logger.info(new Date() +"Inside CircularUpdate");
+
+		
+		
+		
+		String year=null;
+		long count=0;	
+		try {	
+			
+			long CircularId = cirdto.getCircularId();
+			EMSCircular circular = dao.GetCircularDetailsToEdit(CircularId);
+			String cirDate = cirdto.getCircularDate();
+	        String[] cirSplit = cirDate.split("-");
+	        year = cirSplit[2];
+	        
+	        System.out.println("pathcir"+cirdto.getCircularPath());
+	        if(!cirdto.getCircularPath().isEmpty()) {
+	        	
+	        	new File(FilePath+circular.getCircularPath()).delete();
+	        	
+	        	
+	        	System.out.println("File Uploaded");
+	        	String OrigFilelName = cirdto.getCircularPath().getOriginalFilename();
+	        	String CirFileName = "C"+CircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
+	        	String CircularPath = "EMS\\Circulars\\"+year+"\\";
+	        	String FullDir = FilePath+CircularPath;
+	        	
+	        	File theDir = new File(FullDir);
+				if (!theDir.exists()){
+					theDir.mkdirs();
+				}
+	        	
+	        	Zipper zip=new Zipper();
+				zip.pack(cirdto.getOriginalName(),cirdto.getIS(),FullDir,CirFileName,cirdto.getAutoId());
+	        	
+	        	circular.setCirFileName(OrigFilelName);
+				circular.setCircularPath(CircularPath+CirFileName+".zip");
+
+	        
+	        }
+	        
+
+			
+			//query to update details to to ems_circular table
+			circular.setCircularId(cirdto.getCircularId());
+			circular.setCircularNo(cirdto.getCircularNo());
+			circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
+			circular.setCirSubject(cirdto.getCirSubject());
+			circular.setCircularKey(cirdto.getAutoId());
+			circular.setModifiedBy(cirdto.getModifiedBy());
+			circular.setModifiedDate(cirdto.getModifiedDate());
+			circular.setIsActive(1);
+			
+			
+				
+			count = dao.EditCircular(circular); 
+		
+		}catch (Exception e) {
+			 e.printStackTrace();
+		   count=0;
+		}
+	
+		
+		   return count;
+		
+			
+	}
+	public static void replaceFile(String FullDir, String fileName, MultipartFile multipartFile) throws IOException 
+	{
+		
+//	    Path myFilePath = Paths.get("c:/dump2/mytextfile.txt");
+//        Path zipFilePath = Paths.get("c:/dump2/myarchive.zip");
+//	    try( FileSystem fs = FileSystems.newFileSystem(zipFilePath, null) ){
+//	        Path fileInsideZipPath = fs.getPath("/mytextfile.txt");
+//	        Files.copy(myFilePath, fileInsideZipPath);
+//	    } catch (IOException e) {
+//	        // TODO Auto-generated catch block
+//	        e.printStackTrace();
+//        Path uploadPath = Paths.get(FullDir);        
+//if (!Files.exists(uploadPath)) {
+//            Files.createDirectories(uploadPath);
+//        }
+//        
+//        try (InputStream inputStream = multipartFile.getInputStream()) {
+//            Path filePath = uploadPath.resolve(fileName);
+//            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException ioe) {       
+//            throw new IOException("Could not save  file: " + fileName, ioe);
+//        }    	
+		
+//	    }
+	}
+	
+
+	 
+	 
+	 
+	 
+	 
 	
 	@Override
 	public List<Object[]> selectAllList() throws Exception 
@@ -142,8 +257,6 @@ public class CircularServiceImpl implements CircularService
 	   }
 	
 	
-	
-
 
 	@Override
 	public EMSCircular getCircularData(String CircularId) throws Exception

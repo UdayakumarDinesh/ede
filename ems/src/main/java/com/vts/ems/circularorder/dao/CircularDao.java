@@ -12,7 +12,8 @@ public interface CircularDao {
 
 	public EMSCircular getCircularData(String CircularId) throws Exception;
 	public EmployeeDetails getEmpdataData(String empNo) throws Exception;
-	public long CircularAdd(EMSCircular circular)throws Exception;
+	public long AddCircular(EMSCircular circular)throws Exception;
+	public long EditCircular(EMSCircular circular)throws Exception;
 	public long GetCircularMaxId()throws Exception;
 	public List<Object[]> selectAllList() throws Exception;
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception;
