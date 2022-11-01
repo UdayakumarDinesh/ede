@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,26 +12,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Entity(name = "ems_circular")
-public class EMSCircular {
-	
+@Entity
+@Table(name = "ems_circular_trans")
+public class EMSCircularTrans {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long CircularTransId;
 	private long CircularId;
-	private String CircularNo;
-	private String CircularDate;
-	private String CirSubject;
-	private String CirFileName;
-	private String CircularPath;
-	private String CircularKey;
-	private String CreatedBy;
-	private String CreatedDate;
-	private String ModifiedBy;
-	private String ModifiedDate;
-	private int IsActive;
-	
-
+	private String EmpNo;
+	private long DownloadBy;
+	private String DownloadDate;
+	private String IPAddress;
+	private String MacAddress;
 }
