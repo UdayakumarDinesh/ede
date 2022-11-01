@@ -128,6 +128,27 @@ public class CircularServiceImpl implements CircularService
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
 		return dao.GetCircularList(Fromdate , ToDate);
 	}
+	
+	@Override
+	public int CircularDelete(Long CircularId, String Username)throws Exception{
+		return dao.CircularDelete(CircularId,Username);
+	}
+	
+	
+	@Override
+	   public EMSCircular GetCircularDetailsToEdit(Long CircularId)throws Exception
+	   {
+		   return dao.GetCircularDetailsToEdit(CircularId);
+	   }
+	
+	
+	
+
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception {
+		
+		return dao.GetSearchList(search);
+	}
 
 
 	@Override

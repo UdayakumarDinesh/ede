@@ -57,14 +57,7 @@
         </div>
     </div>
 	<%} %>
-	
-	 <form action="" style="margin:auto;max-width:300px;margin-left:81.5%">
-           <input type="text" placeholder="Search Circular" name="search2">
-           <button type="submit"><i class="fa fa-search"></i></button>
-     </form>
 		
-
-	
 	<%String fromdate = (String)request.getAttribute("fromdate");
 	String todate = (String)request.getAttribute("todate"); %>
 		 
@@ -83,7 +76,7 @@
 						
 						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
 							    <div class="col-1" style="margin-left: -10%">						
-							         <input type="text" style="width: 165%; background-color:white;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
+							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
 							         <label class="input-group-addon btn" for="testdate"></label>    
 							    </div>
 				          </div>       	
@@ -92,31 +85,30 @@
 	       </div>
     
 
-<div class="card-body main-card  " >
+<div class="card-body main-card">
        
-        <form action="#" method="POST">
+        <form action="#" method="POST" id="circularForm">
              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
              <div class="table-responsive">
              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
 				<thead>
 					<tr>
-					    <th style="width:4%">SN</th>
-						<th style="width:10%">Circular No</th>
-                        <th style="width:11%">Date</th>
-                        <th style="width:45%">Subject</th>
-                        <th style="width:8%">Download</th>
+					   <th style="width:4%">Select</th>
+					   <th style="width:10%">Circular No</th>
+                       <th style="width:11%">Date</th>
+                       <th style="width:45%">Subject</th>
+                       <th style="width:8%">Download</th>
                   	</tr>
 				</thead>
 				<tbody>
-				        <%
+				     <%
 				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
-				        System.out.println(allList);
 				        if(allList!=null){ int slno=0;  
                          for(Object[] ls:allList ){ 
                         %> 
                      <tr>
                          <td style="text-align: center;"><%=++slno %>.</td>
-                         <td><%=ls[0]%></tdS>
+                         <td><%=ls[0]%></td>
                          <td style="text-align: center;"><%=ls[1]%></td>
                          <td><%=ls[2]%></td>
                          <td>
@@ -124,21 +116,15 @@
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>
                          
-                      </tr>
+                       </tr>
                            <%} }%>
                           
 			    </tbody>
 		     </table>
-		       </div>
-	    </form>
-   
-   <form action="##" method="POST" id="circularForm" >
-   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-   
-   
-   
-   
-   
+		     
+		      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		      </div>
+ 
    			<div class="row text-center">
 			  <div class="col-md-12">	
 			  		<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>				
@@ -146,6 +132,7 @@
 			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
 					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>
 					<%} %>																	 
+					<button type="submit" class="btn btn-sm search-btn" formaction="CircularSearch.htm" name="action" style="background-color:green;color:white">SEARCH </button>																 
 				</div>						 
 			</div>	
 			
@@ -188,29 +175,16 @@ $('#fromdate').daterangepicker({
 		       $('#myform').submit();
 		    });
 		});
-	function Edit(circularForm)
-	{
-		var fields = $("input[name='circulatId']").serializeArray();
-
-
-		if (fields.length === 0) {
-			alert("Please Select Atleast One Circular ");
 	
-			event.preventDefault();
-			return false;
-		}
-		return true;
-		
-	}
-	   
-function Delete(circularForm)
+	
+	
+function Edit(circularForm)
 {
 	var fields = $("input[name='circulatId']").serializeArray();
 
 	if (fields.length === 0) {
 		alert("Please Select Atleast One Circular ");
-
-		event.preventDefault();
+        event.preventDefault();
 		return false;
 	}
 	return true;
@@ -218,7 +192,29 @@ function Delete(circularForm)
 }
 	   	   
 	   
-	   
+
+function Delete(circularForm){ 
+	
+	var fields = $("input[name='circulatId']").serializeArray();
+
+	if (fields.length === 0){
+		alert("Please Select Atleast One Circular");
+		event.preventDefault();
+		return false;
+	}
+	
+	var cnf = confirm("Are You Sure To Delete!");
+    if(cnf){
+		
+		document.getElementById("circularForm").submit();
+		return true;
+
+	}else{
+		
+		event.preventDefault();
+		return false;
+	}
+}
 
 </script>
 
