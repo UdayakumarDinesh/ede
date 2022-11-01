@@ -6,7 +6,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<jsp:include page="../static/sidebar.jsp"></jsp:include>
+
 <title>Circular Add</title>
 
 <style>
@@ -97,15 +97,16 @@
 					<label><b>Upload File</b> <span class="mandatory"	style="color: red;">*</span></label>
 			<%if(CirEditDetails!=null ){%>
 			<%System.out.println("filepath"+CirEditDetails.getCircularPath());%>
-			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="<%=CirEditDetails.getCircularPath()%>" required="required"  id="file"  >
+			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="editFile"  >
 			<%}else{ %>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="file"  >
-			<%} %>			 
+			<%} %>	
+			
+			<!-- Download Button Incase of Edit -->		 
 			<%if(CirEditDetails!=null && CirEditDetails.getCircularPath()!=null){%>	
-			<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="height: 10%; width: 4%;  margin-top: 2.5%;" 
-			name="path" value="<%=CirEditDetails.getCircularPath()%>//<%=CirEditDetails.getCirFileName()%>" 
-			formaction="download-CirFile-attachment" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download"
-			> <i style="color: #019267" class="fa-solid fa-download fa-2x"></i></button>
+			<button type="submit" class="btn btn-sm" formnovalidate="formnovalidate"  name="CircularId" value="<%=CirEditDetails.getCircularId()%>" 
+			formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" 
+			style="height: 10%; width: 4%;  margin-top: 2.5%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
 			<%} %>		
 							
 			</div>

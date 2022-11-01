@@ -11,15 +11,14 @@ import lombok.Setter;
 @Getter
 public class CircularUploadDto {
 	
+	private Long CircularId;
 	private String CircularNo;
 	private String CircularDate;
 	private String CirSubject;
 	private String OriginalName;
-	private String PathName;
+	private MultipartFile CircularPath;
     private String AutoId;
-	private String CirFileName;
 	private InputStream IS;
-	private String FileNamePath;
     private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;
