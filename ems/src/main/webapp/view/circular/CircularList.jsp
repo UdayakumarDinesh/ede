@@ -56,14 +56,7 @@
         </div>
     </div>
 	<%} %>
-	
-	 <form action="" style="margin:auto;max-width:300px;margin-left:81.5%">
-           <input type="text" placeholder="Search Circular" name="search2">
-           <button type="submit"><i class="fa fa-search"></i></button>
-     </form>
 		
-
-	
 	<%String fromdate = (String)request.getAttribute("fromdate");
 	String todate = (String)request.getAttribute("todate"); %>
 		 
@@ -82,7 +75,7 @@
 						
 						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
 							    <div class="col-1" style="margin-left: -10%">						
-							         <input type="text" style="width: 165%; background-color:white;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
+							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
 							         <label class="input-group-addon btn" for="testdate"></label>    
 							    </div>
 				          </div>       	
@@ -91,7 +84,7 @@
 	       </div>
     
 
-<div class="card-body main-card  " >
+<div class="card-body main-card">
        
         <form action="#" method="POST">
              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -108,20 +101,19 @@
 				</thead>
 				<tbody>
 				        <%
-				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");
-				        System.out.println(allList);
+				        List<Object[]> allList=(List<Object[]>)request.getAttribute("circulatlist");				   
 				        if(allList!=null){ int slno=0;  
                          for(Object[] ls:allList ){ 
                         %> 
                      <tr>
-                         <th style="text-align: center;"><%=++slno %>.</th>
-                         <th><%=ls[0]%></th>
-                         <th style="text-align: center;"><%=ls[1]%></th>
-                         <th><%=ls[2]%></th>
-                         <th>
+                         <td style="text-align: center;"><%=++slno %>.</td>
+                         <td><%=ls[0]%></td>
+                         <td style="text-align: center;"><%=ls[1]%></td>
+                         <td><%=ls[2]%></td>
+                         <td >
                          <button type="submit" class="btn btn-sm" value="<%=ls[3]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
-						 </button></th>
+						 </button></td>
                          
                       </tr>
                            <%} }%>
@@ -142,7 +134,8 @@
 			  <div class="col-md-12">					
 					<button type="submit" class="btn btn-sm add-btn" formaction="CircularAdd.htm"  >ADD</button>
 			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
-					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>																	 
+					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>	
+					<button type="submit" class="btn btn-sm search-btn" formaction="CircularSearch.htm" name="action" style="background-color:green;color:white">SEARCH </button>																 
 				</div>						 
 			</div>	
 			

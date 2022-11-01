@@ -44,7 +44,6 @@ public class CircularDaoImpl implements CircularDao {
 
 		Query query = manager.createNativeQuery(SELECTALLLIST);
 		List<Object[]> CircularList= query.getResultList();
-		System.out.println(CircularList);
 		return CircularList;
 	}
 
@@ -53,13 +52,11 @@ public class CircularDaoImpl implements CircularDao {
 	@Override
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception {
 	 
-		System.out.println(fromdate);
-		System.out.println(toDate);
-		Query query =  manager.createNativeQuery(CIRCULARLIST);
+	
+		 Query query =  manager.createNativeQuery(CIRCULARLIST);
 		 query.setParameter("fromdate", fromdate);
 		 query.setParameter("todate", toDate);
 		 List<Object[]> CircularList=query.getResultList();
-		 System.out.println(CircularList);
 		 return CircularList;
 		
 	}
@@ -92,6 +89,17 @@ public class CircularDaoImpl implements CircularDao {
 			e.printStackTrace();
 			return 0l;
 		}
+	}
+
+	private static final String SEARCHLIST="SELECT CircularId,CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular "
+			+ "WHERE CircularNo LIKE :Search  OR Cirsubject LIKE :Search";
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception 
+	{
+		Query query = manager.createNativeQuery(SEARCHLIST);
+		query.setParameter("Search", "%"+search+"%");
+		List<Object[]> SearchList= query.getResultList();
+		return SearchList;
 	}
 
 	

@@ -116,4 +116,10 @@ public class CircularServiceImpl implements CircularService {
 		return dao.GetCircularList(Fromdate , ToDate);
 	}
 
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception {
+		
+		return dao.GetSearchList(search);
+	}
+
 }

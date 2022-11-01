@@ -48,18 +48,14 @@ public class CircularController {
 		logger.info(new Date() +"Inside CircularList.htm "+UserId);
 		
 		 String fromdate = (String)req.getParameter("FromDate");
-		 System.out.println("fromm date"+fromdate);
 			 String todate = (String)req.getParameter("ToDate");
 			 
 			 if(fromdate==null && todate == null) {
 				 fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatCircular();
 				 todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-				 System.out.println(fromdate);
-				 System.out.println(todate);
 			 }
 				
 			 circulatlist = service.GetCircularList(fromdate , todate );
-			 System.out.println(circulatlist);
    		 req.setAttribute("circulatlist", circulatlist);
    		 req.setAttribute("fromdate", fromdate);	
 		 req.setAttribute("todate",todate);
@@ -93,6 +89,34 @@ public class CircularController {
 		 return "redirect:/CircularList.htm";
 	
 	}
+	@RequestMapping(value = "CircularSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	public String circularSearch(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		List<Object[]> SearchList=new ArrayList<Object[]>();
+        String search=req.getParameter("search");
+        if(search!=null && !search.trim().equalsIgnoreCase("")) {
+        	SearchList=service.GetSearchList(search);
+        }
+        req.setAttribute("SearchList",SearchList);
+        //System.out.println(SearchList.size());
+		return "circular/CircularSearch";
+	
+	}
+	
+	
+	/*
+	 * @RequestMapping(value = "SearchCircular.htm", method = { RequestMethod.POST
+	 * ,RequestMethod.GET }) public String SearchCircular(HttpServletRequest req,
+	 * HttpSession ses, RedirectAttributes redir) throws Exception { List<Object[]>
+	 * SearchList=new ArrayList<Object[]>(); String
+	 * search=(String)req.getParameter("search");
+	 * SearchList=service.GetSearchList(search);
+	 * req.setAttribute("SearchList",SearchList); System.out.println(SearchList);
+	 * return "redirect:/CircularSearch";
+	 * 
+	 * }
+	 */
+	
 	
 	
 	@RequestMapping(value = "CircularAddSubmit.htm", method = { RequestMethod.POST ,RequestMethod.GET })

@@ -11,4 +11,5 @@ public interface CircularDao {
 	public long GetCircularMaxId()throws Exception;
 	public List<Object[]> selectAllList() throws Exception;
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception;
+	public List<Object[]> GetSearchList(String search) throws Exception;
 }
