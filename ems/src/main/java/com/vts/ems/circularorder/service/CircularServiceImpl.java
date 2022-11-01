@@ -131,9 +131,6 @@ public class CircularServiceImpl implements CircularService
 	{
 		logger.info(new Date() +"Inside CircularUpdate");
 
-		
-		
-		
 		String year=null;
 		long count=0;	
 		try {	
@@ -148,9 +145,6 @@ public class CircularServiceImpl implements CircularService
 	        if(!cirdto.getCircularPath().isEmpty()) {
 	        	
 	        	new File(FilePath+circular.getCircularPath()).delete();
-	        	
-	        	
-	        	System.out.println("File Uploaded");
 	        	String OrigFilelName = cirdto.getCircularPath().getOriginalFilename();
 	        	String CirFileName = "C"+CircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
 	        	String CircularPath = "EMS\\Circulars\\"+year+"\\";
@@ -169,9 +163,7 @@ public class CircularServiceImpl implements CircularService
 
 	        
 	        }
-	        
-
-			
+		
 			//query to update details to to ems_circular table
 			circular.setCircularId(cirdto.getCircularId());
 			circular.setCircularNo(cirdto.getCircularNo());
@@ -196,38 +188,8 @@ public class CircularServiceImpl implements CircularService
 		
 			
 	}
-	public static void replaceFile(String FullDir, String fileName, MultipartFile multipartFile) throws IOException 
-	{
-		
-//	    Path myFilePath = Paths.get("c:/dump2/mytextfile.txt");
-//        Path zipFilePath = Paths.get("c:/dump2/myarchive.zip");
-//	    try( FileSystem fs = FileSystems.newFileSystem(zipFilePath, null) ){
-//	        Path fileInsideZipPath = fs.getPath("/mytextfile.txt");
-//	        Files.copy(myFilePath, fileInsideZipPath);
-//	    } catch (IOException e) {
-//	        // TODO Auto-generated catch block
-//	        e.printStackTrace();
-//        Path uploadPath = Paths.get(FullDir);        
-//if (!Files.exists(uploadPath)) {
-//            Files.createDirectories(uploadPath);
-//        }
-//        
-//        try (InputStream inputStream = multipartFile.getInputStream()) {
-//            Path filePath = uploadPath.resolve(fileName);
-//            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-//        } catch (IOException ioe) {       
-//            throw new IOException("Could not save  file: " + fileName, ioe);
-//        }    	
-		
-//	    }
-	}
 	
 
-	 
-	 
-	 
-	 
-	 
 	
 	@Override
 	public List<Object[]> selectAllList() throws Exception 
@@ -257,6 +219,15 @@ public class CircularServiceImpl implements CircularService
 	   }
 	
 	
+
+
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception {
+		
+		return dao.GetSearchList(search);
+	}
+
+
 
 	@Override
 	public EMSCircular getCircularData(String CircularId) throws Exception

@@ -20,6 +20,7 @@ public interface CircularService {
 	public long GetMaxCircularId()throws Exception;
 	public List<Object[]> selectAllList() throws Exception;
 	public List<Object[]> GetCircularList(String fromdate, String todate) throws Exception;
+	public List<Object[]> GetSearchList(String search) throws Exception;
 	public int CircularDelete(Long CircularId, String Username)throws Exception;
 	public EMSCircular GetCircularDetailsToEdit(Long CircularId)throws Exception;
 	public EMSCircular getCircularData(String CircularId) throws Exception;

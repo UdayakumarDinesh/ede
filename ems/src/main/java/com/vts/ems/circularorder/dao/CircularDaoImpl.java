@@ -89,7 +89,7 @@ public class CircularDaoImpl implements CircularDao
 	private static final String CIRCULARLIST = "SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject,CircularId FROM ems_circular WHERE IsActive=1 AND  ( CircularDate>=:fromdate AND CircularDate <=:todate )  ORDER BY CircularDate DESC";
 	@Override
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception {
-	 
+	
 		Query query =  manager.createNativeQuery(CIRCULARLIST);
 		 query.setParameter("fromdate", fromdate);
 		 query.setParameter("todate", toDate);
@@ -126,6 +126,17 @@ public class CircularDaoImpl implements CircularDao
 			e.printStackTrace();
 			return 0l;
 		}
+	}
+
+	private static final String SEARCHLIST="SELECT CircularId,CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular "
+			+ "WHERE CircularNo LIKE :Search  OR Cirsubject LIKE :Search";
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception 
+	{
+		Query query = manager.createNativeQuery(SEARCHLIST);
+		query.setParameter("Search", "%"+search+"%");
+		List<Object[]> SearchList= query.getResultList();
+		return SearchList;
 	}
 
 

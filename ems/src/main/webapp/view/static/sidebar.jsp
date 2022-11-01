@@ -7,7 +7,6 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>CHSS</title>
 
 <spring:url value="/webresources/css/master.css" var="MasterCss" />     
 <link href="${MasterCss}" rel="stylesheet" />
