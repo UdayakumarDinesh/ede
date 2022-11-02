@@ -6,7 +6,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-
 <title>Circular Add</title>
 
 <style>
