@@ -1560,41 +1560,7 @@ public class MasterController {
 				}
 			}
 			
-			@RequestMapping(value = "download-CircularFile",method = {RequestMethod.GET,RequestMethod.POST})
-		    public void downloadCircular(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
-			{				
-				String UserId=(String)ses.getAttribute("Username");
-				String EmpNo=(String)ses.getAttribute("EmpNo");
-				String EmpName = (String)ses.getAttribute("EmpName");
-				logger.info(new Date() +"Inside download-CircularFile-attachment "+UserId);
-				try {
-					
-					String path = (String)req.getParameter("path1");
-
-					File f = new File(path);
-
-					res.setContentType("Application/octet-stream");	
-
-					String temppath=req.getServletContext().getRealPath("/view/temp/"+f.getName());
-					File my_file = new EmsFileUtils().addRepeatedWatermarktoPdf(path,temppath,EmpNo+" : "+EmpName);
-					 res.setHeader("Content-disposition","attachment; filename="+f.getName());
-
-
-				      OutputStream out = res.getOutputStream();
-				     
-				        FileInputStream in = new FileInputStream(my_file);
-				        byte[] buffer = new byte[4096];
-				        int length;
-				        while ((length = in.read(buffer)) > 0){
-				           out.write(buffer, 0, length);
-				        }
-				        in.close();
-				        out.flush();
-				}catch(Exception e) {
-					logger.error(new Date() +"Inside download-CircularFile-attachment "+UserId,e);
-					e.printStackTrace();
-				}
-		    }
+			
 			
 			
 			

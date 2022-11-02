@@ -181,12 +181,12 @@ $(function(){
         
     	
     	var file = $("#cirFile").val();
-    	  console.log(file);
+    	console.log(file);
        var upld = file.split('.').pop();  
-       if(upld=='pdf'){
-    	    alert("File uploaded is pdf")
-    	  }else{
-    	    alert("Only PDF are allowed")
+       if(upld!='pdf'){
+    	    alert("Only PDF are allowed to Upload")
+    	    document.getElementById("cirFile").value = "";
+    	    return;
     	  }
         
 
@@ -197,12 +197,35 @@ $(function(){
 
 
 </script>
+<!-- <script type="text/javascript">
 
+function ValidatePdf(myfrm1){ 
+	
+	var
+	var file = $("#cirFile").val();
+	console.log(file);
+	  var upld = file.split('.').pop();  
 
+	  if(upld!='pdf'){
+		  alert("Only PDF are allowed to Upload");
+		event.preventDefault();
+		return false;
+	}
+	 
+	var cnf = confirm("Are You Sure To Submit!");
+    if(cnf){
+		
+		document.getElementById("myfrm1").submit();
+		return true;
 
+	}else{
+		
+		event.preventDefault();
+		return false;
+	}
+}
 
-
-
+</script> -->
 
 
 
