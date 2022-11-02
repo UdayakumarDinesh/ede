@@ -98,16 +98,16 @@
 					<label><b>Upload File</b> <span class="mandatory"	style="color: red;">*</span></label>
 			<%if(CirEditDetails!=null ){%>
 			<%System.out.println("filepath"+CirEditDetails.getCircularPath());%>
-			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="editFile"  >
+			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="cirFile"  >
 			<%}else{ %>
-			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="file"  >
+			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="cirFile"  >
 			<%} %>	
 			
 			<!-- Download Button Incase of Edit -->		 
 			<%if(CirEditDetails!=null && CirEditDetails.getCircularPath()!=null){%>	
 			<button type="submit" class="btn btn-sm" formnovalidate="formnovalidate"  name="CircularId" value="<%=CirEditDetails.getCircularId()%>" 
 			formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" 
-			style="height: 10%; width: 4%;  margin-top: 2.5%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
+			style="height: 10%; width: 15%;  margin-top: 2.5%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
 			<%} %>		
 							
 			</div>
@@ -173,11 +173,30 @@ $('#circulardate').daterangepicker({
 
 
 
+<script type="text/javascript">
+
+
+$(function(){
+    $("#cirFile").on('change', function(event) {
+        
+    	
+    	var file = $("#cirFile").val();
+    	  console.log(file);
+       var upld = file.split('.').pop();  
+       if(upld=='pdf'){
+    	    alert("File uploaded is pdf")
+    	  }else{
+    	    alert("Only PDF are allowed")
+    	  }
+        
+
+        
+    });
+});
 
 
 
-
-
+</script>
 
 
 
