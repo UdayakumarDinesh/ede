@@ -75,7 +75,6 @@ public class CircularDaoImpl implements CircularDao
 		}
 	}
 	
-
 	private static final String SELECTALLLIST="SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular";
 	@Override
 	public List<Object[]> selectAllList() throws Exception {
