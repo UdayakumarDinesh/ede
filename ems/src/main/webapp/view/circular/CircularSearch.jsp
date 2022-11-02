@@ -99,7 +99,7 @@
                          <td style="text-align: center;"><%=ls[2]%></td>
                          <td><%=ls[3]%></td>
                          <td>
-                         <button type="submit" class="btn btn-sm" value="<%=ls[0]%>" name="formid" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+                        <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[0] %>" formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>
                          
