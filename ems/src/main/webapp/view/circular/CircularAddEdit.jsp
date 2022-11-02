@@ -10,10 +10,12 @@
 <title>Circular Add</title>
 
 <style>
-.card{
+/* .card .card-body {
+     
+    width: 80% !important;
+    margin: auto;
+} */
 
-
-}
 </style>
 </head>
 <body>
