@@ -1534,6 +1534,7 @@ public class PisDaoImpl implements PisDao {
 			return new ArrayList<Object[]>();
 		}
 	}
+
 	
 	private static final String FAMILYRELATIONLIST="SELECT relation_id, relation_name,Gender FROM pis_emp_family_relation WHERE isactive=1 AND relation_name NOT LIKE 'self' ORDER BY SerialNo ASC";
 	@Override

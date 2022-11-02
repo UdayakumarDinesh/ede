@@ -86,7 +86,7 @@ public class CircularDaoImpl implements CircularDao
 	}
 
 	
-	private static final String CIRCULARLIST = "SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject,CircularId FROM ems_circular WHERE IsActive=1 AND  ( CircularDate>=:fromdate AND CircularDate <=:todate )  ORDER BY CircularId DESC";
+	private static final String CIRCULARLIST = "SELECT CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject,CircularId FROM ems_circular WHERE IsActive=1 AND  ( CircularDate>=:fromdate AND CircularDate <=:todate )  ORDER BY CreatedDate DESC";
 	@Override
 	public List<Object[]> GetCircularList(LocalDate fromdate, LocalDate toDate) throws Exception {
 	

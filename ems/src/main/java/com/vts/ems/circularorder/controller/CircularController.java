@@ -93,19 +93,26 @@ public class CircularController {
 	@RequestMapping(value = "CircularDelete.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
 	{
-		
-       		
-       		String UserName=(String)ses.getAttribute("Username");
-         	String CircularId = (String)req.getParameter("circulatId");
-            System.out.println("CircularIdSelected"+CircularId);
-       		int count = service.CircularDelete(Long.parseLong(CircularId),UserName);
+   		String UserName=(String)ses.getAttribute("Username");
+       	String CircularId = (String)req.getParameter("circulatId");
+       	
+       	long cirId = Long.parseLong(CircularId);
+        long getMaxCircularId = service.GetMaxCircularId();
+       
+        
+        if(cirId == getMaxCircularId) {
+        	int count = service.CircularDelete(Long.parseLong(CircularId),UserName);
        		if (count > 0) {
-				redir.addAttribute("result", "Circular deleted Successfully");
-			} else {
-				redir.addAttribute("resultfail", "Circulae delete Unsuccessfull");
-			}
-       	return  "redirect:/CircularList.htm";
-	
+       			redir.addAttribute("result", "Circular deleted Successfully");
+    		} else {
+    			redir.addAttribute("resultfail", "Circulae delete Unsuccessfull");
+    		}
+       		
+        }else {
+       	 redir.addAttribute("resultfail", "Only Recent Circular is allowed to Delete ");
+       	
+        }
+        return "redirect:/CircularList.htm";
 	}
 	@RequestMapping(value = "CircularSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularSearch(HttpServletRequest req, HttpSession ses) throws Exception
@@ -198,7 +205,6 @@ public class CircularController {
         
          
          if(cirId == getMaxCircularId) {
-        	 System.out.println("CircularIdSelected"+cirId);
         	 EMSCircular list = service.GetCircularDetailsToEdit(cirId);
              req.setAttribute("circularDetails", list);
     		 return "circular/CircularAddEdit";

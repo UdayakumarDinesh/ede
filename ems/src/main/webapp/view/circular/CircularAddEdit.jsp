@@ -9,11 +9,12 @@
 <title>Circular Add</title>
 
 <style>
-/* .card .card-body {
+.card .card-body {
      
     width: 80% !important;
-    margin: auto;
-} */
+    margin:0 auto;
+    padding-top: 25px;
+} 
 
 </style>
 </head>
@@ -63,7 +64,8 @@
 	  
 	   <div class="row" align="center"> 
 	   
-	        <div class="col-md-3" style="margin-left: 20px;" >
+	       <!--  <div class="col-md-3" style="margin-left: 20px;" > -->
+	        <div class="col-md-3" style="margin-left: 10px;" >
 			   <div class="form-group">
 				  <label><b>Circular No</b><span class="mandatory"	style="color: red;">*</span></label>
 				  <input type="text" style="width: 70%; " class="form-control input-sm "  name="circularno"  id="circularNo" <%if(CirEditDetails!=null && CirEditDetails.getCircularNo()!=null){%>value="<%=CirEditDetails.getCircularNo()%>" <%}%>   maxlength="20"  required="required" >
@@ -84,7 +86,8 @@
 	 <div class="row" align="center">  
 	     
 	     
-	      <div class="col-md-3" style="margin-left: 20px;">
+	      <!-- <div class="col-md-3" style="margin-left: 20px;"> -->
+	       <div class="col-md-3" style="margin-left: 10px;" >
 			   <div class="form-group">
 				  <label><b>Circular Date</b><span class="mandatory"	style="color: red;">*</span></label>
 				  <input type="text" style="width: 70%; " class="form-control input-sm " value="" name="circularDate"  id="circulardate"   required="required"  >
@@ -101,18 +104,16 @@
 			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="cirFile"  >
 			<%}else{ %>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="cirFile"  >
-			<%} %>	
-			
+			<%} %>				
+			</div>
+		  </div>
+		  
 			<!-- Download Button Incase of Edit -->		 
 			<%if(CirEditDetails!=null && CirEditDetails.getCircularPath()!=null){%>	
 			<button type="submit" class="btn btn-sm" formnovalidate="formnovalidate"  name="CircularId" value="<%=CirEditDetails.getCircularId()%>" 
 			formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" 
-			style="height: 10%; width: 15%;  margin-top: 2.5%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
+			style="height: 10%; width: 6%;  margin-top: 4%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
 			<%} %>		
-							
-			</div>
-		  </div>
-		  
 		  
 		
 	 </div> 

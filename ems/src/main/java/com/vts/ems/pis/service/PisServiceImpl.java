@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -776,24 +778,43 @@ public class PisServiceImpl implements PisService
 			if(emp!=null&&emp[0]!=null) {
 				srno=Long.parseLong(emp[0].toString());
 			}
-			
+			System.out.println(SeniorityNumber+"     SeniorityNumber");
+			System.out.println(srno+"          srno");
 			if(SeniorityNumber > srno) {
 				Long srno3=srno;
+				if(srno!=0) {
 				List<Object[]> result2=EmpSenHaveUpdate.stream().filter(srno1-> Long.parseLong(srno1[0].toString())>srno3 && Long.parseLong(srno1[0].toString())<=SeniorityNumber  ).collect(Collectors.toList());
 				
 				for(Object[] obj:result2) {
 					Long empIdL=Long.parseLong(obj[1].toString());
 					Long serialno=Long.parseLong(obj[0].toString());
-					System.out.println(obj[0] +"  -----   "+obj[1]);
+					System.out.println(obj[0] +"  ---QQQQQQQ-   "+obj[1]);
 					result= dao.UpdateAllSeniority(empIdL, --serialno);
 				}
-				
+				}else {
+					List<Object[]> result2=EmpSenHaveUpdate.stream().filter(srno1-> SeniorityNumber >= Long.parseLong(srno1[0].toString())).collect(Collectors.toList());
+					
+					for(Object[] obj:result2) {
+						Long empIdL=Long.parseLong(obj[1].toString());
+						Long serialno=Long.parseLong(obj[0].toString());
+						System.out.println(obj[0] +"  --dddddddd---   "+obj[1]);
+						result= dao.UpdateAllSeniority(empIdL, --serialno);
+					}
+					
+					int srNumber = Integer.parseInt(EmpSenHaveUpdate.stream().map(e-> e[0]).sorted(Collections.reverseOrder()).findFirst().get().toString());
+							
+					Object[] obj = EmpSenHaveUpdate.stream().filter(e-> e[0].toString().equalsIgnoreCase(String.valueOf(srNumber))).collect(Collectors.toList()).get(0);
+					
+					Long id=Long.parseLong(obj[1].toString());
+					Long snum=Long.valueOf(srNumber) ;
+					result=dao.UpdateAllSeniority(id,++snum);
+				}
 			}else {
 			
-			for(Object[] data:result1){	
-			  Long empIdL=Long.parseLong(data[1].toString());
-			  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
-			}
+				for(Object[] data:result1){	
+				  Long empIdL=Long.parseLong(data[1].toString());
+				  result= dao.UpdateAllSeniority(empIdL, ++newSeniorityNumberL);
+				}
 			
 			}
 			return result;
