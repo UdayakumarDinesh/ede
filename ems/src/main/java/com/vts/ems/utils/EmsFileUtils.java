@@ -150,6 +150,7 @@ public class EmsFileUtils
      	   WMText = WMText+WaterMarkText+" ";
      	  
         }
+
         String WMTextLine=WMText;
         WMTextLine +="\n";
         WMTextLine +="\n";
@@ -180,6 +181,7 @@ public class EmsFileUtils
 			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
 			        rotationRad = (float) Math.toRadians(-51);
 			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
+
 		        }
 		     
 		        canvas.restoreState();

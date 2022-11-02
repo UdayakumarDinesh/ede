@@ -126,9 +126,16 @@
         	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 1rem !important;">              
             	<div class="container-fluid">
 
+<<<<<<< HEAD
 					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:6% ">
 						<img class="" style="width: 28%;" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; SEIP &nbsp;&nbsp;</b>
 						
+=======
+					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:30% ">
+						<img class="headerlogo" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; CHSS &nbsp;&nbsp;</b>
+						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
+						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
+>>>>>>> branch 'feature' of https://susant-vedts@bitbucket.org/susant-vedts/ems.git
 					</a>
 					<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
 						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;color: white;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
