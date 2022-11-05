@@ -683,4 +683,29 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				
 			}
 			
+			
+			
+			@RequestMapping(value = "OfficeOrderDashBoard.htm", method = RequestMethod.GET)
+			public String OfficeOrderDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				String Username = (String) ses.getAttribute("Username");
+				logger.info(new Date() +"Inside OfficeOrderDashBoard.htm "+Username);		
+				try {
+					String logintype = (String)ses.getAttribute("LoginType");
+				
+					List<Object[]> admindashboard = service.HeaderSchedulesList("10" ,logintype); 
+				
+					ses.setAttribute("formmoduleid", "10"); 
+//					ses.setAttribute("SidebarActive", "CircularDashBoard_htm");
+					req.setAttribute("dashboard", admindashboard);
+
+					return "redirect:/OfficeOrder.htm";
+//					return "circular/CircularDashboard";
+				}catch (Exception e) {
+					logger.error(new Date() +" Inside OfficeOrderDashBoard.htm "+Username, e);
+					e.printStackTrace();	
+					return "static/Error";
+				}
+				
+			}
+			
 }		
