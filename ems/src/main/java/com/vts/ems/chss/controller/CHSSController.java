@@ -104,20 +104,97 @@ public class CHSSController {
 	
 	private static final String formmoduleid="4";
 	
-	@RequestMapping(value = "CHSSDashboard.htm" )
-	public String CHSSDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	@RequestMapping(value = "CHSSDashboard.htm", method = RequestMethod.GET)
+	public String CHSSDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+	{
+		logger.info(new Date() + "Inside CHSSDashboard.htm ");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+    	String LoginType=(String)ses.getAttribute("LoginType");
+    	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
+    	String UserId = (String) ses.getAttribute("Username");
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSDashBoard.htm "+Username);		
+		try {
+			String logintype = (String)ses.getAttribute("LoginType");
+			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
+			ses.setAttribute("formmoduleid", formmoduleid);
+			req.setAttribute("dashboard", chssdashboard);
+			
+
+	    	String IsSelf = req.getParameter("isselfvalue");
+			String FromDate = req.getParameter("FromDate");
+			String ToDate = req.getParameter("ToDate");
+			LocalDate today= LocalDate.now();
+			int currentmonth= today.getMonthValue();
+			String DbFromDate="";
+			String DbToDate="";
+			
+			if(FromDate== null) {
+				String start ="";
+				if(currentmonth<4) 
+				{
+					start = String.valueOf(today.getYear()-1);
+				}else{
+					start=String.valueOf(today.getYear());
+				}
+				
+				FromDate=start;
+				DbFromDate = start+"-04-01";
+				
+			}
+			
+			if(ToDate== null) {
+				String end="";
+				if(currentmonth<4) 
+				{
+					end =String.valueOf(today.getYear());
+				}else{
+					end =String.valueOf(today.getYear()+1);
+				}
+				
+				ToDate=end;
+				DbToDate=end+"-03-31";
+			}
+			
+			DbFromDate = FromDate+"-04-01";
+			DbToDate= ToDate+"-03-31";
+				
+			if(IsSelf==null) {
+				IsSelf="Y";
+			}
+			
+			
+			req.setAttribute("countdata", service.CHSSDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
+			req.setAttribute("Fromdate", FromDate);
+			req.setAttribute("Todate", ToDate);
+			req.setAttribute("graphdata",  service.CHSSDashboardGraphData(EmpId, DbFromDate, DbToDate) );
+			req.setAttribute("amountdata", service.CHSSDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
+			req.setAttribute("amountdataindividual", service.CHSSDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
+			req.setAttribute("logintype", LoginType);
+			req.setAttribute("isself", IsSelf);
+			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
+//			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			ses.setAttribute("SidebarActive","Home");
+			
+			
+			return "chss/CHSSDashboard";
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside CHSSDashboard.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "CHSSApplyDashboard.htm" )
+	public String CHSSApplyDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		logger.info(new Date() +"Inside CHSSDashboard.htm "+Username);
+		logger.info(new Date() +"Inside CHSSApplyDashboard.htm "+Username);
 		
 		try {
-			
-			ses.setAttribute("formmoduleid", formmoduleid);
-			ses.setAttribute("SidebarActive","CHSSDashboard_htm");
-			
-			String logintype = (String)ses.getAttribute("LoginType");
-
+			ses.setAttribute("SidebarActive","CHSSApplyDashboard_htm");
 			SimpleDateFormat sf= new SimpleDateFormat("yyyy");
 			SimpleDateFormat sf1= new SimpleDateFormat("dd-MM-yyyy");
 	
@@ -142,9 +219,6 @@ public class CHSSController {
 				PatientName=req.getParameter("patientname");
 			}
 			
-					
-			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("4" ,logintype); 
-			req.setAttribute("dashboard", chssdashboard);
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));
@@ -156,10 +230,10 @@ public class CHSSController {
 			req.setAttribute("IsSelf", IsSelf);
 			
 			
-			return "chss/CHSSDashboard";
+			return "chss/CHSSApplyDashboard";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSDashboard.htm "+Username, e);
+			logger.error(new Date() +" Inside CHSSApplyDashboard.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -266,7 +340,7 @@ public class CHSSController {
 				
 			} else {
 				redir.addAttribute("resultfail", "Internal Error !");	
-				return "redirect:/CHSSDashboard.htm";
+				return "redirect:/CHSSApplyDashboard.htm";
 			}	
 			redir.addFlashAttribute("chssapplyid",String.valueOf(count));
 			return "redirect:/CHSSConsultMainData.htm";
@@ -430,7 +504,7 @@ public class CHSSController {
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSDashboard.htm";
+				return "redirect:/CHSSApplyDashboard.htm";
 			}
 						
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
@@ -1815,7 +1889,7 @@ public class CHSSController {
 					return "redirect:/CHSSApprovalsList.htm";
 				}
 			}
-			return "redirect:/CHSSDashboard.htm";
+			return "redirect:/CHSSApplyDashboard.htm";
 			
 		} catch (Exception e) {
 			
@@ -2743,7 +2817,7 @@ public class CHSSController {
 				redir.addAttribute("resultfail", "Claim Revoke Unsuccessful");	
 			}	
 			
-			return "redirect:/CHSSDashboard.htm";
+			return "redirect:/CHSSApplyDashboard.htm";
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSEmpClaimRevoke.htm "+Username, e);
@@ -2986,17 +3060,13 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		ses.setAttribute("SidebarActive", "ClaimsReportList_htm");
 		logger.info(new Date() +"Inside ClaimsReport.htm "+Username);
-	
 		try {
-			
-		
+			ses.setAttribute("SidebarActive","ClaimsReport_htm");		
 			String empid = (String)req.getParameter("EmpId");			
             String fromdate = (String)req.getParameter("FromDate");
 			String todate =  (String)req.getParameter("ToDate");
 			String claimtype = (String)req.getParameter("ClaimType");
 			String status = "A";
-			
-			
 			LocalDate today= LocalDate.now();
 			if(fromdate==null) 
 			{
@@ -3018,8 +3088,6 @@ public class CHSSController {
 				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
 				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
-		
-          
             req.setAttribute("empid", empid);
 			req.setAttribute("frmDt", fromdate);
 			req.setAttribute("toDt",   todate);
@@ -3389,7 +3457,7 @@ public class CHSSController {
 			} else {
 				redir.addAttribute("resultfail", "Claim Delete Unsuccessful");	
 			}	
-			return "redirect:/CHSSDashboard.htm";
+			return "redirect:/CHSSApplyDashboard.htm";
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside ClaimDeleteEmp.htm "+Username, e);
@@ -3416,7 +3484,7 @@ public class CHSSController {
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSDashboard.htm";
+				return "redirect:/CHSSApplyDashboard.htm";
 			}
 						
 			Object[] apply= service.CHSSAppliedData(chssapplyid);
@@ -3464,7 +3532,7 @@ public class CHSSController {
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSDashboard.htm";
+				return "redirect:/CHSSApplyDashboard.htm";
 			}
 			
 			String tab = req.getParameter("tab");
@@ -4934,7 +5002,7 @@ public class CHSSController {
 			
 			if(chssapplyid==null) {
 				redir.addAttribute("result", "Refresh Not Allowed");
-				return "redirect:/CHSSDashboard.htm";
+				return "redirect:/CHSSApplyDashboard.htm";
 			}
 			
 //			String tab = req.getParameter("tab");
@@ -5069,7 +5137,7 @@ public class CHSSController {
 					return "redirect:/CHSSIPDApprovalsList.htm";
 				}
 			}
-			return "redirect:/CHSSDashboard.htm";
+			return "redirect:/CHSSApplyDashboard.htm";
 			
 		} catch (Exception e) {
 			

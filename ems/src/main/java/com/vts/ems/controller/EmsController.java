@@ -154,59 +154,9 @@ public class EmsController {
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
     	String UserId = (String) ses.getAttribute("Username");
     	try {
-	    	String IsSelf = req.getParameter("isselfvalue");
-			String FromDate = req.getParameter("FromDate");
-			String ToDate = req.getParameter("ToDate");
-			LocalDate today= LocalDate.now();
-			int currentmonth= today.getMonthValue();
-			String DbFromDate="";
-			String DbToDate="";
-			
-			if(FromDate== null) {
-				String start ="";
-				if(currentmonth<4) 
-				{
-					start = String.valueOf(today.getYear()-1);
-				}else{
-					start=String.valueOf(today.getYear());
-				}
-				
-				FromDate=start;
-				DbFromDate = start+"-04-01";
-				
-			}
-			
-			if(ToDate== null) {
-				String end="";
-				if(currentmonth<4) 
-				{
-					end =String.valueOf(today.getYear());
-				}else{
-					end =String.valueOf(today.getYear()+1);
-				}
-				
-				ToDate=end;
-				DbToDate=end+"-03-31";
-			}
-			
-			DbFromDate = FromDate+"-04-01";
-			DbToDate= ToDate+"-03-31";
-				
-			if(IsSelf==null) {
-				IsSelf="Y";
-			}
-			
-			
-			req.setAttribute("countdata", service.MainDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
-			req.setAttribute("Fromdate", FromDate);
-			req.setAttribute("Todate", ToDate);
-			req.setAttribute("graphdata",  service.MainDashboardGraphData(EmpId, DbFromDate, DbToDate) );
-			req.setAttribute("amountdata", service.MainDashboardAmountData(EmpId, DbFromDate, DbToDate,IsSelf));
-			req.setAttribute("amountdataindividual", service.MainDashboardIndividualAmountData(EmpId, DbFromDate, DbToDate));
-			req.setAttribute("logintype", LoginType);
-			req.setAttribute("isself", IsSelf);
-			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
+
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			req.setAttribute("logintype", LoginType);
 			ses.setAttribute("SidebarActive","Home");
 			return "static/maindashboard";
     	}catch (Exception e) {

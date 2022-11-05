@@ -1,7 +1,6 @@
 package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -218,44 +217,6 @@ public class EMSMainServiceImpl implements EMSMainService
 	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception
 	{
 		return dao.AllowedLoginTypesList(loginid);
-	}
-	
-	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
-		
-		return dao.MainDashboardCountData(EmpId, FromDate, ToDate,IsSelf);
-	}
-	
-	@Override
-	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception{
-		
-		return dao.MainDashboardGraphData(EmpId, FromDate, ToDate);
-	}
-
-	@Override
-	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception{
-		
-		return dao.MainDashboardAmountData(EmpId,FromDate,ToDate,IsSelf);
-	}
-	
-	@Override
-	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception{
-		
-		return dao.MainDashboardIndividualAmountData(EmpId, FromDate, ToDate);
-	}
-	
-	@Override
-	public List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception{
-		
-		ArrayList<Object[]> Newlist = new ArrayList<Object[]>();
-		
-		for(int i=1; i<=12; i++ ) {
-			
-			Object[] EachMonth = dao.MonthlyWiseDashboardData(FromDate, ToDate, i );
-			Newlist.add(EachMonth);
-	
-		}
-
-		return Newlist;
 	}
 	
 	@Override

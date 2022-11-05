@@ -15,7 +15,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +43,13 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.circularorder.dao.CircularDao;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
+import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
+import com.vts.ems.circularorder.model.EMSDepCircular;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.utils.CustomEncryptDecrypt;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
@@ -99,7 +104,7 @@ public class CircularServiceImpl implements CircularService
 			circular.setCirSubject(cirdto.getCirSubject());
 			circular.setCirFileName(cirdto.getOriginalName());
 			circular.setCircularPath(CircularPath+CirFileName+".zip");
-			circular.setCircularKey(cirdto.getAutoId());
+			circular.setCircularKey(CustomEncryptDecrypt.encryption(cirdto.getAutoId().toCharArray()));
 			circular.setCreatedBy(cirdto.getCreatedBy());
 			circular.setCreatedDate(cirdto.getCreatedDate());
 			circular.setIsActive(1);
@@ -107,6 +112,7 @@ public class CircularServiceImpl implements CircularService
 			Zipper zip=new Zipper();
 			zip.pack(cirdto.getOriginalName(),cirdto.getIS(),FullDir,CirFileName,cirdto.getAutoId());
 				
+			
 		    count =  dao.AddCircular(circular);
 		
 		}catch (Exception e) {
@@ -127,6 +133,11 @@ public class CircularServiceImpl implements CircularService
 	}
 	
 	@Override
+	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
+	{
+		return dao.GetDepCircularMaxIdEdit(DepTypeId);
+	}
+	@Override
 	public long CircularUpdate(CircularUploadDto cirdto) throws Exception 
 	{
 		logger.info(new Date() +"Inside CircularUpdate");
@@ -141,7 +152,6 @@ public class CircularServiceImpl implements CircularService
 	        String[] cirSplit = cirDate.split("-");
 	        year = cirSplit[2];
 	        
-	        System.out.println("pathcir"+cirdto.getCircularPath());
 	        if(!cirdto.getCircularPath().isEmpty()) {
 	        	
 	        	new File(FilePath+circular.getCircularPath()).delete();
@@ -169,7 +179,7 @@ public class CircularServiceImpl implements CircularService
 			circular.setCircularNo(cirdto.getCircularNo());
 			circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
 			circular.setCirSubject(cirdto.getCirSubject());
-			circular.setCircularKey(cirdto.getAutoId());
+			circular.setCircularKey(CustomEncryptDecrypt.encryption(cirdto.getAutoId().toCharArray()));
 			circular.setModifiedBy(cirdto.getModifiedBy());
 			circular.setModifiedDate(cirdto.getModifiedDate());
 			circular.setIsActive(1);
@@ -227,6 +237,16 @@ public class CircularServiceImpl implements CircularService
 		return dao.GetSearchList(search);
 	}
 
+	@Override
+	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception {
+		
+		if(Integer.parseInt(id)==0) {
+			return dao.DepCircularSearchList(search);
+		}
+		
+		return dao.DepCircularSearchList(search,id);
+	}
+
 
 
 	@Override
@@ -251,7 +271,6 @@ public class CircularServiceImpl implements CircularService
         for(int i=1;i<=25;i++)
         {
      	   WMText = WMText+dto.getWatermarkText()+" ";
-     	  
         }
         String WMTextLine=WMText;
         WMTextLine +="\n";
@@ -268,7 +287,6 @@ public class CircularServiceImpl implements CircularService
 	        pdfDoc.getDocumentInfo().setMoreInfo("EMP NO", dto.getEmpNo());
 	        pdfDoc.getDocumentInfo().setMoreInfo("EMP Name",dto.getEmpName());
 	        pdfDoc.getDocumentInfo().setMoreInfo("Downloaded On",timestamp );
-			
 			
 			// Adding Watermark to the PDF
 		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
@@ -321,6 +339,140 @@ public class CircularServiceImpl implements CircularService
 	public long CircularTransactionAdd(EMSCircularTrans cirTrans) throws Exception 
 	{
 		return dao.CircularTransactionAdd(cirTrans);
+	}
+	
+	@Override
+	public List<Object[]> GetDepCircularList(String fromdate, String toDate,String DepTypeId) throws Exception 
+	{
+		return dao.GetDepCircularList(fromdate, toDate, DepTypeId);
+	}
+	
+	@Override
+	public Object[] GetEmsDepType(String DepTypeId) throws Exception 
+	{
+		return dao.GetEmsDepType(DepTypeId);
+	}
+	
+	@Override
+	public long DepCircularAdd(DepCircularDto dto) throws Exception 
+	{
+		EMSDepCircular cir=dto.getCircular();
+		String CircularPath = "EMS\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
+		String FullDir = FilePath+CircularPath;
+		File theDir = new File(FullDir);
+		if (!theDir.exists()){
+			theDir.mkdirs();
+		}
+		
+		String cirDate = cir.getDepCircularDate();
+		long maxCircularId = dao.GetDepCircularMaxId()+1;
+		String[] cirSplit = cirDate.split("-");
+		String CirFileName ="C"+maxCircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
+
+	    
+		String filename=dto.getCirFile().getOriginalFilename();
+//		int count=0;
+//		String tempName = filename;
+//		while(new File(FullDir+tempName).exists())
+//		{
+//			count++;
+//			tempName = FilenameUtils.getName(filename)+"("+count+")."+FilenameUtils.getExtension(filename);
+//		}
+		
+		
+//		CustomEncryptDecrypt
+		String key  = UUID.randomUUID().toString();
+		cir.setDepCircularKey(CustomEncryptDecrypt.encryption(key.toCharArray()));
+		cir.setIsActive(1);
+		Zipper zip=new Zipper();
+		zip.pack(filename,dto.getCirFile().getInputStream(),FullDir,CirFileName,key);
+		
+		
+		cir.setCreatedDate(sdtf.format(new Date()));
+		cir.setDepCircularPath(CircularPath+CirFileName+".zip");
+		cir.setDepCirFileName(filename);
+		return dao.EmsDepCircularAdd(cir);
+	}
+	
+	
+	
+	public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
+	{
+        Path uploadPath = Paths.get(CircularFilePath);
+	         
+	    if (!Files.exists(uploadPath)) {
+	        Files.createDirectories(uploadPath);
+	    }
+	        
+	    try (InputStream inputStream = multipartFile.getInputStream()) {
+	        Path filePath = uploadPath.resolve(fileName);
+	        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	    } catch (IOException ioe) {       
+	        throw new IOException("Could not save image file: " + fileName, ioe);
+	    }     
+	}
+	
+	@Override
+	public EMSDepCircular getEmsDepCircular(String circularId) throws Exception
+	{
+		return dao.getEmsDepCircular(circularId);
+	}
+	
+	@Override
+	public long DepCircularEdit(DepCircularDto dto) throws Exception 
+	{
+		EMSDepCircular cir = dto.getCircular();
+		EMSDepCircular fetch = dao.getEmsDepCircular(String.valueOf(cir.getDepCircularId()));
+		fetch.setDepCircularDate(cir.getDepCircularDate());
+		fetch.setDepCircularNo(cir.getDepCircularNo());
+		fetch.setDepCirSubject(cir.getDepCirSubject());
+		fetch.setModifiedBy(cir.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(!dto.getCirFile().isEmpty()) 
+		{
+			String CircularPath = "EMS\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
+			String FullDir = FilePath+CircularPath;
+			File theDir = new File(FullDir);
+			if (!theDir.exists()){
+				theDir.mkdirs();
+			}
+			
+			String cirDate = cir.getDepCircularDate();
+			long maxCircularId = dao.GetDepCircularMaxId()+1;
+			String[] cirSplit = cirDate.split("-");
+			String CirFileName ="C"+maxCircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
+		    
+			String filename=dto.getCirFile().getOriginalFilename();
+	
+			String key =  UUID.randomUUID().toString();
+			
+			Zipper zip=new Zipper();
+			zip.pack(filename,dto.getCirFile().getInputStream(),FullDir,CirFileName,key);
+			
+			new File(FilePath+fetch.getDepCircularPath()).delete();
+			fetch.setDepCircularKey(CustomEncryptDecrypt.encryption(key.toCharArray()));
+			fetch.setDepCircularPath(CircularPath+CirFileName+".zip");
+			fetch.setDepCirFileName(filename);
+		}
+		
+		return dao.EmsDepCircularEdit(fetch);
+	}
+	
+	@Override
+	public long DepCircularDelete(String circularId,String Username) throws Exception 
+	{
+		EMSDepCircular fetch = dao.getEmsDepCircular(circularId);
+		fetch.setModifiedBy(Username);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		fetch.setIsActive(0);
+		return dao.EmsDepCircularEdit(fetch);
+	}
+	
+	@Override
+	public List<Object[]> GetEmsDepType() throws Exception
+	{
+		return dao.GetEmsDepType();
 	}
 	
 }

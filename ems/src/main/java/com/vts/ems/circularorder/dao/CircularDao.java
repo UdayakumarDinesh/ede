@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
+import com.vts.ems.circularorder.model.EMSDepCircular;
 import com.vts.ems.pis.model.EmployeeDetails;
 
 public interface CircularDao {
@@ -21,4 +22,14 @@ public interface CircularDao {
 	public int CircularDelete(Long CircularId, String Username)throws Exception;
 	public EMSCircular GetCircularDetailsToEdit(Long  CircularId)throws Exception;
 	public long CircularTransactionAdd(EMSCircularTrans cirTrans) throws Exception;
+	public List<Object[]> GetDepCircularList(String fromdate, String toDate, String DepTypeId) throws Exception;
+	public Object[] GetEmsDepType(String DepTypeId) throws Exception;
+	public long EmsDepCircularAdd(EMSDepCircular circular) throws Exception;
+	public EMSDepCircular getEmsDepCircular(String circularId) throws Exception;
+	public long GetDepCircularMaxId() throws Exception;
+	public long EmsDepCircularEdit(EMSDepCircular circular) throws Exception;
+	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception;
+	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception;
+	public List<Object[]> DepCircularSearchList(String search) throws Exception;
+	public List<Object[]> GetEmsDepType() throws Exception;
 }

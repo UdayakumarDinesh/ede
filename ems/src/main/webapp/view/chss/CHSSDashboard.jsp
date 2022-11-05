@@ -1,627 +1,933 @@
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
-<%@page import="java.io.File"%>
-<%@page import="com.vts.ems.pis.model.Employee"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
-<%@page import=" java.math.RoundingMode, java.text.DecimalFormat" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"   import="java.util.*"%>
+<%@page import="org.bouncycastle.util.Arrays"%>
+<%@page import="org.apache.commons.lang3.ArrayUtils"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<jsp:include page="../static/header.jsp"></jsp:include>
+	<head>
+		<meta charset="ISO-8859-1">
+		<jsp:include page="../static/header.jsp"></jsp:include>
+		<jsp:include page="../static/sidebar.jsp"></jsp:include>
+	<style>
+	
+	.highcharts-figure,	.highcharts-data-table table {
+	    min-width: 310px;
+	    max-width: 800px;
+	}
 
-<jsp:include page="../static/sidebar.jsp"></jsp:include> 
+	.highcharts-data-table table {
+	    font-family: Verdana, sans-serif;
+	    border-collapse: collapse;
+	    border: 1px solid #ebebeb;
+	    margin: 10px auto;
+	    text-align: center;
+	    width: 100%;
+	    max-width: 500px;
+	}
+	
+	.highcharts-data-table caption {
+	    padding: 1em 0;
+	    font-size: 1.2em;
+	    color: #555;
+	}
+	
+	.highcharts-data-table th {
+	    font-weight: 600;
+	    padding: 0.5em;
+	}
+	
+	.highcharts-data-table td,
+	.highcharts-data-table th,
+	.highcharts-data-table caption {
+	    padding: 0.5em;
+	}
+	
+	.highcharts-data-table thead tr,
+	.highcharts-data-table tr:nth-child(even) {
+	    background: #f8f8f8;
+	}
+	
+	.highcharts-data-table tr:hover {
+	    background: #f1f7ff;
+	}
+	
+	/* counter css */
+	
+	.counter{
+    color: #628900;
+    background: linear-gradient(to bottom, #628900 49%, transparent 50%);
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    /* width: 200px; */
+   /*  height: 200px; */
+    padding: 19px 20px 18px;
+    margin: 0 auto;
+    border: 18px solid #628900;
+    border-radius: 100% 100%;
+    box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.3);
+	}
+	.counter .counter-value{
+	    color: #fff;
+	    font-size: 23px; 
+	    font-weight: 600;
+	    display: block;
+	    margin: 0 0 16px;
+	}
+	.counter h3{
+	    font-size: 14px;
+	    font-weight: 600;
+	    text-transform: uppercase;
+	    margin: 0;
+	}
+	.counter.blue{
+	    color: #187498;
+	    background: linear-gradient(to bottom, #187498 49%, transparent 50%);
+	    border-color: #187498;
+	}
+	.counter.purple{
+	    color: #6E3274;
+	    background: linear-gradient(to bottom, #6E3274 49%, transparent 50%);
+	    border-color: #6E3274;
+	}
+	.counter.green{
+	    color: #36AE7C;
+	    background: linear-gradient(to bottom, #36AE7C 49%, transparent 50%);
+	    border-color: #36AE7C;
+	}
+	@media screen and (max-width:990px) {
+	    .counter{ margin-bottom: 40px; }
+	}
 
-<style>
+	@media screen and (min-width: 1151px) and (max-width : 1500px){
+		.counter {
+			width : 150px;
+			height: 150px;
+		}
+	}
+	
+	@media screen and (min-width: 1501px) {
+		.counter {
+			width : 180px;
+			height: 180px;
+			padding: 49px 19px 19px;
+		}
+		
+		.counter h3{
+			font-size: 20px
+		}
+		
+		.counter .counter-value {
+		    font-size: 30px;
+		    margin: -27px 0 21px;
+		}
+	}
 
+	@media screen and (max-width : 1150px){
+		.counter h3{
+			font-size: 11px
+		}
+		.counter {
+			width : 135px;
+			height: 135px;
+		}
+		
+		.counter .counter-value{
+			font-size: 17px;
+			 margin: 0 0 18px;
+		}
+	}
 
-.a-box {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-}
+	
+	/* second card counter */
+	
+	.card-counter{
+    box-shadow: 2px 2px 10px #DADADA;
+    margin: 5px;
+    padding: 20px 10px;
+    background-color: #fff;
+    height: 100px;
+    border-radius: 5px;
+    transition: .3s linear all;
+  }
 
-.img-container {
-    height: 11rem;
-   /*  width: 200px; */
-    overflow: hidden;
-    border-radius: 0px 0px 20px 20px;
-    display: inline-block;
-}
+  .card-counter:hover{
+    box-shadow: 4px 4px 20px #DADADA;
+    transition: .3s linear all;
+  }
 
-.img-container img {
-    transform: skew(0deg, -13deg);
-    height: 6.5rem;
-    margin: 25px 0px 0px 0px;
-        border-radius: 53%;
-}
+  .card-counter.primary{
+    background-color: #187498;
+    color: #FFF;
+  }
 
-.inner-skew {
-    display: inline-block;
-    border-radius: 20px;
-    overflow: hidden;
-    padding: 0px;
-    transform: skew(0deg, 13deg);
-    font-size: 0px;
-    margin: 30px 0px 0px 0px;
-    background: #c8c2c2;
-    height: 11rem;
-    width: 8rem;
-}
+  .card-counter.danger{
+    background-color: #ef5350;
+    color: #FFF;
+  }  
 
-.text-container {
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
-  padding: 67px 20px 8px 20px;
-  border-radius: 20px;
-  background: #fff;
-  margin:-83px 0px 0px 0px;
-  line-height: 19px;
-  font-size: 14px;
-}
+  .card-counter.success{
+    background-color: #36AE7C;
+    color: #FFF;
+  }  
 
-.text-container h3 {
-  margin: 16px 0px 3px 0px;
-  font-size: 100%;
-  white-space:pre-line;
-      font-family: 'Lato';
+  .card-counter.info{
+    background-color: #26c6da;
+    color: #FFF;
+  }  
+
+  .card-counter i{
+    font-size: 5em;
+    opacity: 0.2;
+  }
+
+  .card-counter .count-numbers{
+    position: absolute;
+    right: 35px;
+    top: 20px;
+    font-size: 1.5vw;
+    display: block;
+  }
+
+  .card-counter .count-name{
+    position: absolute;
+    right: 35px;
+    top: 65px;
+    font-style: italic;
     text-transform: capitalize;
-    font-weight: 700;
-    color: #005C97;
-}
+    opacity: 0.5;
+    display: block;
+    font-size: 16px;
+  }
+  
+  .toggle{
+  	margin: 0px 35px !important;
+  }
+  
 
-.main{
-	padding :0px 0px 1.5rem 0px ;
-	cursor: pointer;
-	 transition: transform .2s;
-	 
-}
-
-.profile-card-container{
-	border-radius: 12px;
-    background-color: white;
-    /* max-height: 20rem !important; */
-    padding: 0px 20px;
-    margin: 6px 8px 14px 2px;
-    max-width:50rem;
-}
-
-.fa-angle-left, .fa-angle-right{
-	font-size: 3rem;
-	color:black;
+	@media (max-width: 600px) {
+	    .highcharts-figure,
+	    .highcharts-data-table table {
+	        width: 100%;
+	    }
 	
-}
-
-.table-card , .profile-card-container{
-	  border: none;
-	  box-shadow: 4px 7px 5px rgb(0 0 0 / 10%);
-}
-
-.table-card{
-	border-radius: 0px !important;
-}
-
-.profile-card-container > .row {
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
-  overflow-y : hidden;
-}
-.profile-card-container > .row > .col-md-2 {
-  display: inline-block;
-}
-
-.table thead tr{
-	background-color: #0e6fb6;
-	color: white;
-}
-
-.main:hover{
-	transform : scale(1.1);
-}
-
-
-
-
-.outer-wrapper {
-  max-width: 100vw;
-  overflow-x: scroll;
-  position: relative;
-  scrollbar-color: #d5ac68 #f1db9d;
-  scrollbar-width: thin;
-  -ms-overflow-style: none;
-}
-
-
-.pseduo-track {
-  background-color: #f1db9d;
-  height: 2px;
-  width: 100%;
-  position: relative;
-  top: -3px;
-  z-index: -10;
-}
-
-
-.outer-wrapper::-webkit-scrollbar {
-  height: 5px;
-}
-
-.outer-wrapper::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
-}
-
-.outer-wrapper::-webkit-scrollbar-thumb {
-  height: 5px;
-  background-color: #d5ac68;
-}
-
-.outer-wrapper::-webkit-scrollbar-thumb:hover {
-  background-color: #f1db9d;
-}
-
-.outer-wrapper::-webkit-scrollbar:vertical {
-  display: none;
-}
-
-.inner-wrapper {
-  display: flex;
-  padding-bottom: 10px;
-}
-
-.pseudo-item {
-  height: 300px;
-  width: 369px;
-  margin-right: 59px;
-  flex-shrink: 0;
-  background-color: gray;
-}
-
-.pseudo-item:nth-of-type(2n) {
-  background-color: lightgray;
-}
-
-.select2-container{
-	width:282px !important;
-}
-
-.custom-navbar{
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-	background-color: #e9ecef !important;
-}
-
-.employee-details{
-	margin-bottom: 0px !important;
-	font-size: 12px;
-    color: #005C97;
-    font-weight: 600;
-    text-align: left;
-    padding: 0px 0px 0px 0rem;
-}
-
- .heading-breadcrumb{
-	   /*  margin-top: 10px !important; */
-	    font-family: 'Montserrat',sans-serif;
-	    font-weight: 700 !important;
-	    color: #005C97;
-} 
-
-.page-button{
-	margin: 0.4rem 19px;
-    background-color: #e9ecef !important;
-    border-bottom: 0;
-    border-radius: 7px;
-    padding: 0rem 1.25rem;
-} 
- 
-
-.apply-bn
-{
-	padding: 2px;
-	margin-top: 5px;
-
-}
-
-
-</style>
-</head>
-<body >
-
-<% String logintype = (String) session.getAttribute("LoginType"); 
-	List<Object[]> dashboard = (List<Object[]>)request.getAttribute("dashboard");
-	List<Object[]> empfamilylist = (List<Object[]>)request.getAttribute("empfamilylist");
-	Object[] employee = (Object[])request.getAttribute("employee") ;
-	List<Object[]> empchsslist = (List<Object[]>)request.getAttribute("empchsslist");
-	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
-	IndianRupeeFormat nfc=new IndianRupeeFormat();
-	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	String Fromdate=(String)request.getAttribute("Fromdate");
-	String Todate=(String)request.getAttribute("Todate");
-	
-	String patientname = "All";
-	if(request.getAttribute("patientname")!=null){
-		patientname=(String)request.getAttribute("patientname") ;
 	}
 	
-	String patientidvalue = "0";
-	if(request.getAttribute("patientidvalue")!=null){
-		patientidvalue=(String)request.getAttribute("patientidvalue");
-	}
+	#container, #container3, #container4, #container-speed {
+    height: 300px;
+    min-width: 310px;
+    max-width: 800px;
+}
+  
+  .violet{
+  	background-color: #533E85;
+  	color:white;
+  }
+  
+  
+	</style>
+
+	</head>
+
+	<body  >
+	<%	
 	
-	String IsSelf = "Y";
-	if(request.getAttribute("IsSelf")!=null){
-		IsSelf=(String)request.getAttribute("IsSelf");
-	}
+		/* List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist"); */
+		String logintype   = (String)session.getAttribute("LoginType");
+		String Fromdate=(String)request.getAttribute("Fromdate");
+		String Todate=(String)request.getAttribute("Todate"); 
+		Object[] TotalCountData = (Object[])request.getAttribute("countdata"); 
+		List<Object[]> graphdata  = (List<Object[]> )request.getAttribute("graphdata");
+		Object[] amountdata = (Object[])request.getAttribute("amountdata"); 
+		List<Object[]> amountdataindividual  = (List<Object[]> )request.getAttribute("amountdataindividual");
+		String isself   = (String)request.getAttribute("isself");
+		List<Object[]> monthlywisedata = (List<Object[]>)request.getAttribute("monthlywisedata");
 	
-	DecimalFormat df = new DecimalFormat("0.00");
-%>
-
-
-
-
-
-	<div class="card-header page-top ">
+		IndianRupeeFormat nfc=new IndianRupeeFormat();
+	%>
+	
+	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
 		<div class="row">
-			<div class="col-md-3 ">
-				<h5>CHSS DASHBOARD</h5>
+			<div class="col-md-3">
+				<h5 style="padding-top: 0.5rem">CHSS DASHBOARD </h5>
 			</div>
-			<div class="col-md-9 " >
-				<nav aria-label="breadcrumb">
-				  <ol class="breadcrumb ">
-				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
-				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
-				  </ol>
-				</nav>
-			</div>			
+			<div class="col-md-9">
+					<%-- <form action="EmpLogitypeChange.htm" method="post" style="float: right;">
+							
+								<b>Login As : &nbsp;</b> 
+								<select class="form-control select2" name="logintype" onchange="this.form.submit();" style="margin-top: -5px;width: 200px;">
+									<%for(Object[] login:emplogintypelist){ %>
+										<option value="<%=login[0]%>" <%if(logintype.equalsIgnoreCase(login[0].toString())){ %>selected <%} %>><%=login[1]%></option>
+									<%} %>
+								</select>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+							
+					</form>  --%>
+				
+			</div>
 		</div>
 	</div>	
 
- 
- <div align="center">
-		<%String ses=(String)request.getParameter("result"); 
-		String ses1=(String)request.getParameter("resultfail");
-		if(ses1!=null){ %>
-			<div class="alert alert-danger" role="alert">
-				<%=ses1 %>
-			</div>
-			
-		<%}if(ses!=null){ %>
-			
-			<div class="alert alert-success" role="alert">
-				<%=ses %>
-			</div>
-		<%} %>
-	</div>
-	
-<div class=" card profile-card-container " >
- 
-	<div class="row" >
-		<div class="col-md-2">
-		<%if(!IsSelf.equalsIgnoreCase("Y")){ %>
-			<div class="main" onclick="submitform('Y','<%=employee[0]%>','<%=employee[2] %>')" > 
-			<%}else{ %>
-			<div class="main" > 
-			<%} %>
-			 
-				<div class="a-box">
-					<div class="img-container">
-						<div class="img-inner">
-							<div class="inner-skew">
-								<% if(employee[5].toString().equalsIgnoreCase("F")) { %>
-									<img src="view/images/femaleuser.png" alt="Photo Not Found">
-								<% }else{ %>
-									<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<% } %>
+
+	<div class="card dashboard-card" >
+		<div class="card-body " >
+		<div align="center">
+						<%String ses=(String)request.getParameter("result"); 
+						String ses1=(String)request.getParameter("resultfail");
+						if(ses1!=null){ %>
+							<div class="alert alert-danger" role="alert">
+								<%=ses1 %>
 							</div>
-						</div>
-					</div>
-					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(employee[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
-						<h3><%=employee[2] %> <span style="font-weight: 700;font-size: 13px;" > (Self)</span></h3>
-						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(employee[10].toString()))%></p>
-						<%-- <p class="employee-details">&#9679; Blood Group : <%if(employee.getBloodGroup()!=null){ %> <%=employee.getBloodGroup()%> <%}else{ %> - <%} %></p> --%>
-						
-						<%if(IsSelf.equalsIgnoreCase("Y")){ %>
-						<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
 							
-							&nbsp;&nbsp;Apply&nbsp;
-						</button>
-						<%} %>
-					</div>
-				</div>	
-			</div>
-		</div>
-		
-		<%for(Object[] obj : empfamilylist){ %>
-		<div class="col-md-2">
-			<%if(!(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString()))){ %>
-			<div class="main" onclick="submitform('N','<%=obj[0]%>','<%=obj[1] %>')" > 
-			<%}else{ %>
-			<div class="main" > 
-			<%} %>
-				<div class="a-box">
-					<div class="img-container">
-						<div class="img-inner">
-							<div class="inner-skew">
-								<%if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("F")){ %>
-								<img src="view/images/femaleuser.png" alt="Photo Not Found">
-								<%}else if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("M")){ %>
-								<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<%}else {%>
-								<img src="view/images/maleuser.png" alt="Photo Not Found">
-								<%} %>
+						<%}if(ses!=null){ %>
+							
+							<div class="alert alert-success" role="alert">
+								<%=ses %>
 							</div>
-						</div>
-					</div>
-					<div class="text-container" <%if(patientidvalue.equalsIgnoreCase(obj[0].toString())) {%>style="box-shadow: 0px 0px 10px 0px rgb(230 100 10 / 90%)" <%} %>>
-						<h3><%=obj[1] %> <span style="font-weight: 700;font-size: 13px;" >(<%=obj[7] %>)</span></h3>
-						<p class="employee-details">&#9679; DOB : <%=rdf.format(sdf.parse(obj[3].toString()))%></p>
-						<p class="employee-details">&#9679;Dep from : <%=rdf.format(sdf.parse(obj[9].toString()))%></p>						
-						<%if(IsSelf.equalsIgnoreCase("N") && patientidvalue.equalsIgnoreCase(obj[0].toString())){ %>
-							<button type="button" class="btn btn-sm misc2-btn apply-bn"	<% if(patientname.equalsIgnoreCase("All")){ %> style="display: none" <%} %> name="Action" value="APPLY" onclick="applyform()" data-toggle="tooltip" data-placement="bottom" title="Apply New Claim">
-								&nbsp;&nbsp;Apply&nbsp;
-							</button>
 						<%} %>
-						 
 					</div>
-				</div>	
-			</div>
-		</div>
-		<%} %>
-	</div>
-</div>
+			<div class="container-fluid">
+			  <div class="row">
+			  
+			    <div class="col-md-6">
+			   		
+					<div class="container">
+					    <div class="row">
+					        <div class="col-md-4">
+					            <div class="counter purple">
+					                <span class="counter-value"><%=TotalCountData[2] %></span>
+					                <h3>TOTAL</h3>
+					            </div>
+					        </div>
+					        <div class="col-md-4 ">
+					            <div class="counter blue">
+					                <span class="counter-value"><%=TotalCountData[0] %></span>
+					                <h3>PENDING</h3>
+					            </div>
+					        </div>
+					        <div class="col-md-4 ">
+					            <div class="counter green">
+					                <span class="counter-value"><%=TotalCountData[1] %></span>
+					                <h3>APPROVED</h3>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+			    </div>
+			    	
+			   	<div class="col-md-6">
+			   	
+			   		<div class="container" style="margin-bottom: -9px !important">
+					    <div class="row justify-content-end" >
+					    	
+					    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
 
-	<div class="nav navbar bg-light dashboard-margin custom-navbar">
-		<div class="col-md-3"></div>
-		<div class="col-md-4 d-flex justify-content-center">
-			<h4 style="color: #005C97;font-weight: 700;text-transform: capitalize;"><%=patientname %> Applied List 	</h4>
-		</div>
-		<label style=" font-weight: 800">From Date : &nbsp; </label>
-		<input  class="form-control form-control date"  data-date-format="dd-mm-yyyy" id="datepicker1" name="Fromdate"  required="required"  style="width: 120px;"
-		<%if(Fromdate!=null){%> value="<%=(Fromdate) %>" <%} %> onchange="changeform('<%=patientname %>')" >
+						    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
+								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">
+								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
 	
-		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
-		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="datepicker3" name="Todate"  style="width: 120px;"
-		<%if(Todate!=null){%> value="<%=(Todate) %>" <%} %>  onchange="changeform('<%=patientname %>')" >  
+								<%
+								String[] arr = new String[]{ "Z", "K", "V" , "W" , "F" };
+								if( ArrayUtils.contains(arr,  logintype) ){ %>
+				    				<input type="checkbox" <%if(isself.equalsIgnoreCase("Y")) {%> checked <%} %> data-toggle="toggle" data-width="100" id="isself" data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+			    				<%} %>
+			    				
+			    				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
+			    				<input type="hidden" name="isselfvalue" id="isselfvalue" />
+			    			</form>	
+			    				
+			    		</div>
+			    		<br>
+			    	</div>
+			    	
+			    	<div class="container">
+					    <div class="row">
+					    
+					     <div class="col-md-4">
+					      <div class="card-counter violet">
+					        <i class="fa-solid fa-list-check"></i>
+					        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
+					        <span class="count-name"> Amount InProcess </span>
+					      </div>
+					    </div>
+					    
+					    <div class="col-md-4">
+					      <div class="card-counter primary">
+					        <i class="fa fa-code-fork"></i>
+					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[0].toString() ))))%> <%}else {%>0 <%} %></span>
+					        <span class="count-name"> Amount Claimed</span>
+					      </div>
+					    </div>
 		
-	</div>
+					    <div class="col-md-4">
+					      <div class="card-counter success">
+					        <i class="fa fa-database"></i>
+					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[1].toString() ))))%> <%}else {%>0 <%} %></span>
+					        <span class="count-name"> Amount Settled </span>
+					      </div>
+					    </div>
+					    
+					    
+					    
+					  </div>
+					  
+					</div>
+			   	
+			   	</div> 	
 
-<div class="card table-card dashboard-margin" >
-	<div class="card-body "  style="padding: 1rem !important;">				
-		<form action="#" method="post" id="ClaimForm">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<div class="table-responsive" style="max-height: 200px !important" >
-					<table class="table table-bordered table-hover table-striped table-condensed" id="myTable"  > 
-						<thead>
-							<tr>
-								<td style="padding-top:5px; padding-bottom: 5px;">SN</td>
-								<td style="padding-top:5px; padding-bottom: 5px;" >Claim No</td>
-								<td style="padding-top:5px; padding-bottom: 5px;" >Patient Name</td>
-								<td style="padding-top:5px; padding-bottom: 5px;" >Type</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Applied Date</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Claim Amt (&#8377;)</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Admitted Amt (&#8377;)</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Status</td>
-								<td style="padding-top:5px; padding-bottom: 5px;">Action</td>
-							</tr>
-						</thead>
-						<tbody>
-							<%long slno=0;
-							for(Object[] obj : empchsslist){ 
-								slno++; %>
-								<tr>
-									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%>.</td>
-									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[12] %></td>
-									<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[6] %></td>
-									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right"> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[27].toString()))))%></td>
-									<td style="padding-top:5px; padding-bottom: 5px;text-align: right">
-										<%if(Integer.parseInt(obj[9].toString())>14){ %>
-											<%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[28].toString()))))%>
-										<%}else{ %>
-											-
-										<%} %>
-									</td>
-									<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
-									 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
-									 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[25]%>; font-weight: 600;">  &nbsp;<%=obj[18] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
-									
-									</td>
-									<td style="padding-top:5px; padding-bottom: 5px;">
-										<%if(obj[6].toString().equalsIgnoreCase("OPD")){ %>
-											<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
-												
-													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-														Edit
-													</button>
-												
-												<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
-												<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
-													<i class="fa-solid fa-trash-can " style="color: red"></i>
-												</button>
-												<%} %>
-											<% } %>
-												
-											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-												<i class="fa-solid fa-eye"></i>
-											</button>
-											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-												<i style="color: #019267" class="fa-solid fa-download"></i>
-											</button>
-											<%} %>
-											<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
-												<i class="fa-solid fa-backward" style="color: #333C83"></i>
-											</button>
-											<%} %>
-										<%}else if(obj[6].toString().equalsIgnoreCase("IPD")){ %>
-											<%if(Integer.parseInt(obj[9].toString())==1 || Integer.parseInt(obj[9].toString())==3 || Integer.parseInt(obj[9].toString())==7){ %>
-												
-													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDApply.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
-														Edit
-													</button>
-												
-												<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
-												<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
-													<i class="fa-solid fa-trash-can " style="color: red"></i>
-												</button>
-												<%} %>
-											<% } %>
-												
-											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-												<i class="fa-solid fa-eye"></i>
-											</button>
-											<%if(Integer.parseInt(obj[9].toString())>1 && Integer.parseInt(obj[9].toString())!=3 ){ %>	
-											<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-												<i style="color: #019267" class="fa-solid fa-download"></i>
-											</button>
-											<%} %>
-											<%if(Integer.parseInt(obj[9].toString())==2 && obj[24].toString().equalsIgnoreCase("0")){ %>
-												<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSEmpClaimRevoke.htm" onclick="return confirm('Are you sure to revoke this claim?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
-													<i class="fa-solid fa-backward" style="color: #333C83"></i>
-												</button>
-											<%} %>
-										
-										
-										
-										<%} %>
-										<input type="hidden" name="ActivateDisp" value="Y">
-										
-										<input type="hidden" name="view_mode" value="U">
-									</td>
-								</tr>
-							<%} %>
-						</tbody>
-					</table>
 				</div>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			</form>
-		</div>
-	</div>
- </div> 
-</div>
-<form action="CHSSApplyDetails.htm" method="post" id="myform" >
-	<input type="hidden" name="isself" id="isself" >
-	<input type="hidden" name="patientid" id="patientid" >
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
-
-
-<form action="CHSSDashboard.htm" method="post" id="changeform" >
-	<input type="hidden" name="isselfvalue" id="isselfvalue" >
-	<input type="hidden" name="patientidvalue" id="patientidvalue" >
-	<input type="hidden" name="fromdate" id="fromdate" >
-	<input type="hidden" name="todate" id="todate" >
-	<input type="hidden" name="patientname" id="patientname" >
+				
+			   <hr>
+			   
+			   <div class="row">
+			   		<div class="col-md-6">
+			   			<div id="container" style="display:block;" ></div>
+					    <div id="container3" style="display:block;" ></div>
+			   		</div>
+			   		<div class="col-md-6">
+			   			<div id="container4"  style="display: block"></div>
+					    <div id="container-speed" style="display: block" ></div>
+			   		</div>
+			   </div>
+			   
+			  </div>
+			</div>
 	
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
+		</div>
+	 
+	 
+	
+
+	
+	 
 <script>
 
 
-function applyform(){
-
-	
-	$('#isself').val('<%=IsSelf%>')		
-	$('#patientid').val(<%=patientidvalue%>)
-	$('#myform').submit(); 
-	
-}
-
-function changeform(val){
-
-	$('#fromdate').val($('#datepicker1').val());
-	$('#todate').val($('#datepicker3').val());
-	$('#patientidvalue').val(<%=patientidvalue%>);
-	$('#patientname').val(val)
-
-	if(<%=employee[1]%>==<%=patientidvalue%>){
-		$('#isselfvalue').val('Y')		
-	}else{
-		$('#isselfvalue').val('N')		
-	}
-
-	
-	$('#changeform').submit();
-}
-
-function submitform(value,patientid,patientname){
-	/* $('#isself').val(value)
-	$('#patientid').val(patientid)
-	$('#myform').submit(); */
-	
-	$('#fromdate').val($('#datepicker1').val());
-	$('#todate').val($('#datepicker3').val());
-	$('#patientidvalue').val(patientid);
-	$('#isselfvalue').val(value);
-	$('#patientname').val(patientname)
-	
-	$('#changeform').submit();
-	
-	
-}
 
 $(document).ready(function(){
 	
 	
+	var selfvalue = '<%=isself%>';
+	if(selfvalue == 'Y'){
+		$('#container').css("display" , "block");
+		$('#container4').css("display" , "block");
+		$('#container3').css("display" , "none");
+		$('#container-speed').css("display" , "none");
+		
+	}else if(selfvalue== 'N'){
+		$('#container').css("display", "none");
+		$('#container4').css("display", "none");
+		$('#container3').css("display" , "block");
+		$('#container-speed').css("display" , "block");
+	}
 	
 	
-    $("#datepicker1").daterangepicker({
-        minDate: 0,
-        maxDate: 0,
-        numberOfMonths: 1,
-        autoclose: true,
-        "singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-        onSelect: function(selected) {
-        $("#datepicker3").datepicker("option","minDate", selected)
-        },
-        locale : {
-			format : 'DD-MM-YYYY'
-		}
-    });
+})
 
-    $("#datepicker3").daterangepicker({
-        minDate: 0,
-        maxDate: 0, 
-        numberOfMonths: 1,
-        autoclose: true,
-        "singleDatePicker" : true,
-		"linkedCalendars" : false,
-		"showCustomRangeLabel" : true,
-		"minDate":$("#datepicker1").val(),
-	    onSelect: function(selected) {
-	    	console.log(selected);
-	    $("#datepicker1").datepicker("option","maxDate", selected)
-        },
-        locale : {
-			format : 'DD-MM-YYYY'
-		}
-    }); 
-    
-	var windowwidth= $(window).width(); 
-	$('.profile-card-container').css('max-width',(windowwidth - 230) +'px'  );
-    
-    
-
-});
-
-$("#myTable1").DataTable({
-    "lengthMenu": [ 50, 75, 100],
-    "pagingType": "simple",
-    "language": {
-	      "emptyTable": "No Record Found"
-	    }
-
-});
-
-
-
+$('#isself').change(function(){
+	
+	if($(this).prop("checked")==true){
+		//is self
+		$('#isselfvalue').val('Y');
+		$('#dateform').submit();
+		
+	}else if($(this).prop("checked")==false){
+		$('#isselfvalue').val('N')
+		$('#dateform').submit();
+	}
+	
+})
 
 </script>
-</body>
+	
+<script type="text/javascript">
+
+/* Counts Graph */	
+
+	Highcharts.chart('container', {
+		
+		   chart: {
+		        type: 'column',
+		    },
+	    title: {
+	        text: 'Claim Summary'
+	    },
+	    
+	    
+	    
+	    xAxis: {
+	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[1]%>' ,   <%}%>   ] 
+	   
+	    },
+	    yAxis: {
+	        min: 0,
+	        title: {
+	            text: 'Count'
+	        }
+	    },
+	    labels: {
+	       /*  items: [{
+	            html: 'Amount Settled',
+	            style: {
+	                left:'465px',
+	                top: '0px',
+	                color: ( // theme
+	                    Highcharts.defaultOptions.title.style &&
+	                    Highcharts.defaultOptions.title.style.color
+	                ) || 'black' ,
+	                fontSize:'10px'
+	                
+	            }
+	        }] */
+	    },
+	    colors: [
+	        '#187498',
+	        '#36AE7C',
+	    ],
+	    series: [{
+	        type: 'column',
+	        name: 'Pending',
+	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[6]%> ,   <%}%>   ] 
+	    }, {
+	        type: 'column',
+	        name: 'Approved',
+	        data: [ <% for (Object[]  obj : graphdata ) { %>   <%=obj[7]%> ,   <%}%>   ]
+	    }
+	    ],
+	    
+	    credits: {
+            enabled: false
+        },
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                // Make the labels less space demanding on mobile
+                chartOptions: {
+                    xAxis: {
+                        labels: {
+                            formatter: function () {
+                                return this.value.charAt(0);
+                            }
+                        }
+                    },
+                    yAxis: {
+                        labels: {
+                            align: 'left',
+                            x: 0,
+                            y: -2
+                        },
+                        title: {
+                            text: ''
+                        }
+                    }
+                }
+            }]
+        }
+	}); 
+
+
+
+	/********************** Amount Gauge Unit ***********************************/	
+
+	var gaugeOptions = {
+    chart: {
+        type: 'solidgauge',
+        marginTop : 30,
+    },
+
+    title: null,
+
+    pane: {
+        size: '100%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: true
+    },
+
+    // the value axis
+    yAxis: {
+        stops: [
+            [0.1, '#DF5353'], // green
+            [0.5, '#DDDF0D'], // yellow
+            [0.9, '#55BF3B'] // red 
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: 70
+        },
+        labels: {
+            y: 16,
+          
+        }
+    },
+
+	    plotOptions: {
+	        solidgauge: {
+	            dataLabels: {
+	                y: 5,
+	                borderWidth: 0,
+	                useHTML: true,
+	                
+	            }
+	        }
+	    }
+	};
+	
+	// The amount gauge
+
+	var maxamount = Math.round(<%=amountdata[0]%>);
+	
+	var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: maxamount  ,
+        tickWidth: 0,
+        tickPositions: [0 , maxamount ],
+        title: {
+            text: 'Amount Settled',
+        },
+        labels : {
+        	style :{
+        		'font-size': 20	
+        	}
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Amount Settled',
+        data: [<%=Math.round(Double.parseDouble(amountdata[1].toString() ))%> ],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">&#8377; {y}</span><br/>' +
+                '<span style="font-size:12px;opacity:0.4"></span>' +
+                '</div>'
+        },
+        tooltip: {
+            valuePrefix: ' &#8377;'
+        }
+    }],
+    
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                xAxis: {
+                    labels: {
+                        formatter: function () {
+                            return this.value.charAt(0);
+                        }
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -2
+                    },
+                    title: {
+                        text: ''
+                    }
+                }
+            }
+        }]
+    }
+
+}));
+
+
+	/* ****************************************** Pie Chart Amount Graph *************************************************** */
+	
+	// Radialize the colors
+	Highcharts.setOptions({
+	    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+	        return {
+	            radialGradient: {
+	                cx: 0.5,
+	                cy: 0.3,
+	                r: 0.7
+	            },
+	            stops: [
+	                [0, color],
+	                [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
+	            ]
+	        };
+	    })
+	});
+
+	// Build the chart
+	Highcharts.chart('container4', {
+	    chart: {
+	        plotBackgroundColor: null,
+	        plotBorderWidth: null,
+	        plotShadow: false,
+	        type: 'pie',
+
+	    },
+	    title: {
+	        text: 'Total Amount Settled'
+	    },
+	    tooltip: {
+	        pointFormat: '{series.name}: <b>&#8377; {point.y:,.2f}</b>'
+	    },
+	    
+	    plotOptions: {
+	        pie: {
+	            allowPointSelect: true,
+	            cursor: 'pointer',
+	            dataLabels: {
+	                enabled: true,
+	                format: '<b>{point.name}</b>:&#8377; {point.y:,.2f}',
+	                connectorColor: 'silver'
+	                
+	            },
+	            colors: [
+	                '#187498', 
+	                '#36AE7C', 
+	                '#DDDF00', 
+	                '#24CBE5', 
+	                '#64E572', 
+	                '#FF9655', 
+	                '#FFF263', 
+	                '#6AF9C4'
+	              ],
+	        }
+	    },
+
+	    series: [{
+	        name: 'Share',
+	        data: [
+		        
+		        <% if(!amountdata[1].toString().equalsIgnoreCase("0.00")){  int j=0; 
+		        for(Object[] obj : amountdataindividual) { %>	
+		        {
+		            name: '<%=obj[1]%>',
+		            y:<%=obj[7]%>,
+		            color: Highcharts.getOptions().colors[<%=j%>] 
+		        }
+		        ,
+		        <% j++; 
+		        }
+		        }
+		        %>
+		        
+		        
+		        ],
+	    }],
+	    credits: {
+            enabled: false
+        },
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                // Make the labels less space demanding on mobile
+                chartOptions: {
+                    xAxis: {
+                        labels: {
+                            formatter: function () {
+                                return this.value.charAt(0);
+                            }
+                        }
+                    },
+                    yAxis: {
+                        labels: {
+                            align: 'left',
+                            x: 0,
+                            y: -2
+                        },
+                        title: {
+                            text: ''
+                        }
+                    }
+                }
+            }]
+        }
+	});
+	
+	
+
+
+	/********************************************* Unit Graph Month Wise ************************************** */
+	
+	Highcharts.chart('container3', {
+
+    chart: {
+        type: 'column',
+    },
+
+    colors: [
+        '#36AE7C', 
+        '#187498',
+        '#116530',
+        '#4D96FF'
+      ],
+    
+    title: {
+        text: 'Complete Analysis'
+    },
+
+    xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+
+    yAxis: {
+        allowDecimals: false,
+        min: 0,
+        title: {
+            text: 'Count'
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.x + '</b><br/>' +
+                this.series.name + ': ' + this.y + '<br/>' +
+                'Total: ' + this.point.stackTotal;
+        }
+    },
+
+    plotOptions: {
+        column: {
+            stacking: 'normal'
+        },
+        
+    },
+
+    series: [{
+        name: 'Self Approved',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[1]%> ,   <%}%>   ] ,
+        stack: 'male'
+    }, {
+        name: 'Self Pending',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[0]%> ,   <%}%>   ] ,
+        stack: 'male'
+    }, {
+        name: 'Family Approved',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[3]%> ,   <%}%>   ] ,
+        stack: 'female'
+    }, {
+        name: 'Family Pending',
+        data: [ <% for (Object[]  obj : monthlywisedata ) { %>   <%=obj[2]%> ,   <%}%>   ] ,
+        stack: 'female'
+    }],
+    credits: {
+        enabled: false
+    },
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            // Make the labels less space demanding on mobile
+            chartOptions: {
+                xAxis: {
+                    labels: {
+                        formatter: function () {
+                            return this.value.charAt(0);
+                        }
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -2
+                    },
+                    title: {
+                        text: ''
+                    }
+                }
+            }
+        }]
+    }
+    
+});
+
+	
+	
+	
+	
+
+	$(document).ready(function(){
+		 
+		
+	    $('.counter-value').each(function(){
+	        $(this).prop('Counter',0).animate({
+	            Counter: $(this).text()
+	        },{
+	            duration: 1000,
+	            easing: 'swing',
+	            step: function (now){
+	                $(this).text(Math.ceil(now));
+	            }
+	        });
+	    });
+
+	    
+	    $("#datepicker1").datepicker({
+	    	
+	    	autoclose: true,
+	    	 format: 'yyyy',
+	    		 viewMode: "years", 
+	    		    minViewMode: "years"
+	    });
+
+	   
+
+	    <%if(Fromdate!=null){%>
+	    document.getElementById("datepicker1").value =<%=Fromdate%>
+	     <%} %>
+	     <%if(Todate!=null){%>
+	     document.getElementById("datepicker2").value =<%=Todate%>
+	      <%} %>
+	    
+	    
+	    $('#datepicker1').change(function () {
+	    	
+	        var startDate = document.getElementById("datepicker1").value;
+	        var year1=Number(startDate);
+	     
+	        document.getElementById("datepicker2").value = year1+1;
+	        $('#isselfvalue').val('<%=isself%>');
+	        
+	        $('#dateform').submit();
+	        
+	    }); 
+	    
+	
+	    
+
+	});
+
+</script>
+
+
 </html>

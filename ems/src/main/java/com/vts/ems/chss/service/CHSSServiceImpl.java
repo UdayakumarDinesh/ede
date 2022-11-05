@@ -121,6 +121,30 @@ public class CHSSServiceImpl implements CHSSService {
 		return returnVal.doubleValue();
 	}
 	
+	@Override 
+	public Object[] CHSSDashboardCountData(String Empid, String FromDate, String ToDate,String IsSelf) throws Exception
+	{
+		return dao.CHSSDashboardCountData(Empid, FromDate, ToDate, IsSelf);
+	}
+	
+	
+	
+	@Override
+	public List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception
+	{
+		ArrayList<Object[]> Newlist = new ArrayList<Object[]>();
+		
+		for(int i=1; i<=12; i++ ) {
+			
+			Object[] EachMonth = dao.MonthlyWiseDashboardData(FromDate, ToDate, i );
+			Newlist.add(EachMonth);
+	
+		}
+
+		return Newlist;
+	}
+	
+	
 	
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
@@ -3387,6 +3411,24 @@ public class CHSSServiceImpl implements CHSSService {
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid,long  basicpay) throws Exception
 	{
 		return dao.getCHSSOtherPermitAmt(otheritemid, basicpay);
+	}
+
+	@Override
+	public List<Object[]> CHSSDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception 
+	{
+		return dao.CHSSDashboardGraphData(EmpId, FromDate, ToDate);
+	}
+
+	@Override
+	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate, String IsSelf) throws Exception 
+	{
+		return dao.CHSSDashboardAmountData(EmpId, FromDate, ToDate, IsSelf);
+	}
+
+	@Override
+	public List<Object[]> CHSSDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception 
+	{
+		return dao.CHSSDashboardIndividualAmountData(EmpId, FromDate, ToDate);
 	}
 	
 }

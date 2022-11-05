@@ -24,12 +24,7 @@ public interface EMSMainService {
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception;
 	public List<Object[]> CirculatList() throws Exception;
-	public Object[] MainDashboardCountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
-	public List<Object[]> MainDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
-	public Object[] MainDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
-	public List<Object[]> MainDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public List<Object[]> GetDoctorList()throws Exception;
-	public List<Object[]> MonthlyWiseDashboardData(String FromDate , String ToDate) throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
 	public List<Object[]> GetCircularList()throws Exception;

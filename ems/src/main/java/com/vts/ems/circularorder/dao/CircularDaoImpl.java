@@ -3,12 +3,12 @@ package com.vts.ems.circularorder.dao;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
-import com.vts.ems.master.model.CircularList;
+import com.vts.ems.circularorder.model.EMSDepCircular;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -114,6 +114,39 @@ public class CircularDaoImpl implements CircularDao
 		
 	}
 	
+
+	@Override
+	public long GetDepCircularMaxId() throws Exception {
+		logger.info(new Date() +"Inside DAO GetDepCircularMaxId()");
+		try {
+			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular");	
+			BigInteger result = (BigInteger) query.getSingleResult();
+			return result.longValue();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
+	{
+		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
+		try {
+			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular WHERE deptypeid=:DepTypeId");
+			query.setParameter("DepTypeId", DepTypeId);
+			BigInteger result = (BigInteger) query.getSingleResult();
+			return result.longValue();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
+	
 	@Override
 	public long AddCircular(EMSCircular circular) throws Exception {
 		
@@ -128,8 +161,7 @@ public class CircularDaoImpl implements CircularDao
 		}
 	}
 
-	private static final String SEARCHLIST="SELECT CircularId,CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular "
-			+ "WHERE CircularNo LIKE :Search  OR Cirsubject LIKE :Search";
+	private static final String SEARCHLIST="SELECT CircularId,CircularNo,DATE_FORMAT(CircularDate,'%d-%m-%Y'),CirSubject FROM ems_circular  WHERE IsActive=1 AND  (CircularNo LIKE :Search  OR Cirsubject LIKE :Search)";
 	@Override
 	public List<Object[]> GetSearchList(String search) throws Exception 
 	{
@@ -207,7 +239,94 @@ public class CircularDaoImpl implements CircularDao
 		return (long)cirTrans.getCircularTransId();
 	}
 
+	private static final String DEPCIRCULARLIST = "SELECT DepCircularId,DepTypeId,DepCircularNo,DepCirSubject,DepCircularDate FROM ems_dep_circular WHERE IsActive=1 AND  DepTypeId=:DepTypeId AND ( DepCircularDate>=:fromdate AND DepCircularDate <=:todate )  ORDER BY CreatedDate DESC";
+	@Override
+	public List<Object[]> GetDepCircularList(String fromdate, String toDate,String DepTypeId) throws Exception 
+	{
+		Query query =  manager.createNativeQuery(DEPCIRCULARLIST);
+		query.setParameter("DepTypeId", DepTypeId);
+		query.setParameter("fromdate", fromdate);
+		query.setParameter("todate", toDate);
+		List<Object[]> CircularList=query.getResultList();
+		return CircularList;
+		
+	}
+	
+	private static final String GETEMSDEPTYPE = "SELECT DepTypeId,DepName,DepShorrtName FROM ems_dep_type WHERE DepTypeId=:DepTypeId";
+	@Override
+	public Object[] GetEmsDepType(String DepTypeId) throws Exception 
+	{
+		try {
+			Query query =  manager.createNativeQuery(GETEMSDEPTYPE);
+			query.setParameter("DepTypeId", DepTypeId);
+			Object[] GetEmsDepType=(Object[] )query.getSingleResult();
+			return GetEmsDepType;
+		}catch ( NoResultException e ) {
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public long EmsDepCircularAdd(EMSDepCircular circular) throws Exception 
+	{
+		manager.persist(circular);
+		manager.flush();
+		return circular.getDepCircularId();
+		
+	}
+	
+	@Override
+	public long EmsDepCircularEdit(EMSDepCircular circular) throws Exception 
+	{
+		manager.merge(circular);
+		manager.flush();
+		return circular.getDepCircularId();
+		
+	}
 	
 	
+	@Override
+	public EMSDepCircular getEmsDepCircular(String circularId) throws Exception 
+	{
+		EMSDepCircular circular= manager.find(EMSDepCircular.class,Long.parseLong(circularId));
+		return circular;
+		
+	}
 	
+	private static final String DEPCIRCULARSEARCHLIST="SELECT DepCircularId,DepCircularNo,DATE_FORMAT(DepCircularDate,'%d-%m-%Y'),DepCirSubject,DepTypeId FROM ems_dep_circular  WHERE IsActive=1 AND  (DepCircularNo LIKE :Search  OR DepCirsubject LIKE :Search  ) AND DepTypeId=:DepTypeId ";
+	@Override
+	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception 
+	{
+		Query query = manager.createNativeQuery(DEPCIRCULARSEARCHLIST);
+		query.setParameter("Search", "%"+search+"%");
+		query.setParameter("DepTypeId", id);
+		List<Object[]> SearchList= query.getResultList();
+		return SearchList;
+	}
+	
+	private static final String DEPCIRCULARSEARCHLISTALL="SELECT DepCircularId,DepCircularNo,DATE_FORMAT(DepCircularDate,'%d-%m-%Y'),DepCirSubject,DepTypeId FROM ems_dep_circular  WHERE IsActive=1 AND  (DepCircularNo LIKE :Search  OR DepCirsubject LIKE :Search  )";
+	@Override
+	public List<Object[]> DepCircularSearchList(String search) throws Exception 
+	{
+		Query query = manager.createNativeQuery(DEPCIRCULARSEARCHLISTALL);
+		query.setParameter("Search", "%"+search+"%");
+		List<Object[]> SearchList= query.getResultList();
+		return SearchList;
+	}
+	
+	
+	private static final String GETEMSDEPTYPELIST = "SELECT DepTypeId,DepName,DepShorrtName FROM ems_dep_type WHERE IsActive=1";
+	@Override
+	public List<Object[]> GetEmsDepType() throws Exception 
+	{
+		try {
+			Query query =  manager.createNativeQuery(GETEMSDEPTYPELIST);
+			List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
+			return GetEmsDepType;
+		}catch ( NoResultException e ) {
+			return new ArrayList<Object[]>();
+		}
+		
+	}
 }

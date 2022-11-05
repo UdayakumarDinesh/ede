@@ -25,18 +25,24 @@
 </head>
 <body>
 
-<%String LoginType = (String)request.getAttribute("LoginType"); %>
+<%	
+	String LoginType = (String)request.getAttribute("LoginType");
+	String fromdate = (String)request.getAttribute("fromdate");
+	String todate = (String)request.getAttribute("todate");
+	Object[] DepType = (Object[])request.getAttribute("DepType");
+	
+%>
 
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>P & A Circular List</h5>
+			<div class="col-md-4">
+				<h5><%=DepType[2] %>&nbsp;Circular List</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-8 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CircularDashBoard.htm"> Circular </a></li>
-						<li class="breadcrumb-item active">P & A Circular List</li>
+						<li class="breadcrumb-item active" aria-current="page"><%=DepType[2] %>&nbsp;Circular List</li>
 					</ol>
 				</div>
 	
@@ -59,28 +65,27 @@
     </div>
 	<%} %>
 		
-	<%String fromdate = (String)request.getAttribute("fromdate");
-	String todate = (String)request.getAttribute("todate"); %>
 		 
 	    	<div class="card" >
 	        <div class="card-header" style="height: 4rem">
-	              <form action="CircularList.htm" method="POST"> 
-	                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	              <form action="DepCircularList.htm" method="POST"> 
 					      <div class="row justify-content-right">
 					      <div class="col-7"></div>
 						        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
 					            <div class="col-1" style="margin-left: -9%"> 
-						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
+						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
 							         <label class="input-group-addon btn" for="testdate"></label>              
 						        </div>
 							 
 						
 						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
 							    <div class="col-1" style="margin-left: -10%">						
-							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
+							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=DateTimeFormatUtil.SqlToRegularDate(todate)%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
 							         <label class="input-group-addon btn" for="testdate"></label>    
 							    </div>
-				          </div>       	
+				          </div>      
+				       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	                   <input type="hidden" name="id" value="<%=DepType[0]%>"> 	
                   </form>	      
 	       </div>    	             
 	       </div>
@@ -109,12 +114,12 @@
                         %> 
                      <tr>
                       
-                         <td style="text-align: center;"> <input type="radio" name="circulatId" value="<%=ls[3]%>"></td>
-                         <td><%=ls[0]%></td>
-                         <td style="text-align: center;"><%=ls[1]%></td>
+                         <td style="text-align: center;"> <input type="radio" name="circularId" value="<%=ls[0]%>"></td>
                          <td><%=ls[2]%></td>
+                         <td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(ls[4].toString())%></td>
+                         <td><%=ls[3]%></td>
                          <td>
-                         <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[3] %>" formaction="CircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+                         <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[0] %>" formaction="DepCircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" formtarget="_blank">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>
                          
@@ -130,11 +135,12 @@
    			<div class="row text-center">
 			  <div class="col-md-12">	
 			  		<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>				
-					<button type="submit" class="btn btn-sm add-btn" formaction="CircularAdd.htm"  >ADD</button>
-			        <button type="submit" class="btn btn-sm edit-btn" formaction="CircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
-					<button type="submit" class="btn btn-sm delete-btn" formaction="CircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="DepCircularAdd.htm"  >ADD</button>
+				        <button type="submit" class="btn btn-sm edit-btn" formaction="DepCircularEdit.htm" name="action" value="EDITCIR"  Onclick="Edit(circularForm)" >EDIT </button>	
+						<button type="submit" class="btn btn-sm delete-btn" formaction="DepCircularDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(circularForm)" >DELETE </button>
 					<%} %>																	 
-					<button type="submit" class="btn btn-sm search-btn" formaction="CircularSearch.htm" name="action" style="background-color:green;color:white">SEARCH </button>																 
+					<button type="submit" class="btn btn-sm search-btn" formaction="DepCircularSearch.htm" name="action" style="background-color:green;color:white">SEARCH </button>
+					<input type="hidden" name="id" value="<%=DepType[0]%>">																 
 				</div>						 
 			</div>	
 			
@@ -172,6 +178,8 @@ $('#fromdate').daterangepicker({
 			format : 'DD-MM-YYYY'
 		}
 	});
+	
+	
 	$(document).ready(function(){
 		   $('#fromdate, #todate').change(function(){
 		       $('#myform').submit();
@@ -182,7 +190,7 @@ $('#fromdate').daterangepicker({
 	
 function Edit(circularForm)
 {
-	var fields = $("input[name='circulatId']").serializeArray();
+	var fields = $("input[name='circularId']").serializeArray();
 
 	if (fields.length === 0) {
 		alert("Please Select Atleast One Circular ");
@@ -197,7 +205,7 @@ function Edit(circularForm)
 
 function Delete(circularForm){ 
 	
-	var fields = $("input[name='circulatId']").serializeArray();
+	var fields = $("input[name='circularId']").serializeArray();
 
 	if (fields.length === 0){
 		alert("Please Select Atleast One Circular");

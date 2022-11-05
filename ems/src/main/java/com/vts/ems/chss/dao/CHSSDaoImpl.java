@@ -60,6 +60,127 @@ public class CHSSDaoImpl implements CHSSDao {
 	@PersistenceContext
 	EntityManager manager;
 	
+	
+	
+	private static final String CHSSDASHBOARDCOUNTDATA = "CALL Chss_MainDashboard_Count (:empid, :fromdate,  :todate, :isself) ";
+	
+	@Override 
+	public Object[] CHSSDashboardCountData(String Empid, String FromDate, String ToDate,String IsSelf) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO CHSSDashboardCountData");
+		try {
+			Query query = manager.createNativeQuery(CHSSDASHBOARDCOUNTDATA);
+			query.setParameter("empid", Empid);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			query.setParameter("isself", IsSelf);
+			
+			return (Object[])query.getSingleResult();
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSDashboardCountData " + e);
+			return null;
+		}
+		
+	}
+	
+	private static final String CHSSDASHBOARDGRAPHDATA = "CALL Chss_MainDashboard_GraphData (:empid, :fromdate,  :todate) ";
+	
+	@Override 
+	public List<Object[]> CHSSDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO CHSSDashboardGraphData");
+		try {
+			Query query = manager.createNativeQuery(CHSSDASHBOARDGRAPHDATA);
+			query.setParameter("empid", Empid);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			
+			return (List<Object[]> )query.getResultList();
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside DAO CHSSDashboardGraphData " + e);
+			return null;
+		}
+		
+	}
+	
+	private static final String CHSSDASHBOARDAMOUNTDATA = "CALL Chss_MainDashboard_Total_Amnt (:empid, :fromdate,  :todate, :isself) ;";
+	 
+	@Override
+	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception
+	{
+		logger.info(new Date() + "Inside DAO CHSSDashboardAmountData");
+		try {
+				
+			Query query = manager.createNativeQuery(CHSSDASHBOARDAMOUNTDATA);
+			query.setParameter("empid", EmpId);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			query.setParameter("isself", IsSelf);
+			
+			return (Object[])query.getSingleResult();
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSDashboardAmountData " + e);
+			return null;
+		}
+	 }
+	
+	 private static final String CHSSDASHBOARDINDIVIDUALAMOUNTDATA = "CALL Chss_MainDashboard_Individual_Amnt (:empid, :fromdate,  :todate) ";
+
+	@Override 
+	public List<Object[]> CHSSDashboardIndividualAmountData(String Empid, String FromDate, String ToDate) throws Exception
+	{
+		
+		logger.info(new Date() + "Inside DAO CHSSDashboardIndividualAmountData");
+		try {
+			
+			Query query = manager.createNativeQuery(CHSSDASHBOARDINDIVIDUALAMOUNTDATA);
+			query.setParameter("empid", Empid);
+			query.setParameter("fromdate", FromDate);
+			query.setParameter("todate", ToDate);
+			
+			return (List<Object[]> )query.getResultList();
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside DAO CHSSDashboardIndividualAmountData " + e);
+			return null;
+		}
+	}
+		
+	
+	
+		private static final String MONTHLYWISEDASHBOARDDATA="CALL Chss_MainDashboard_Monthly_Data (:fromdate, :todate, :month)";
+		
+		@Override
+		public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate,int Month) throws Exception
+		{
+			 		 
+			 logger.info(new Date() + "Inside DAO MonthlyWiseDashboardData");
+				try {
+					
+					Query query = manager.createNativeQuery(MONTHLYWISEDASHBOARDDATA);
+					query.setParameter("fromdate", FromDate);
+					query.setParameter("todate", ToDate);
+					query.setParameter("month", Month);
+					
+					return (Object[])query.getSingleResult();
+				}
+				catch(Exception e) {
+					logger.error(new Date()  + "Inside Dao MonthlyWiseDashboardData " + e);
+					return null;
+				}
+		 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender,fd.med_dep_from FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.med_dep ='Y' AND empid = :empid ORDER BY fr.SerialNo ASC ";
 	
 	@Override
@@ -2959,4 +3080,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		return list;
 	}
 
+	
+	
 }

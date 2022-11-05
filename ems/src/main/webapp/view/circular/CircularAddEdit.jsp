@@ -7,7 +7,7 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <title>Circular Add</title>
-
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style>
 .card .card-body {
      
@@ -37,7 +37,7 @@
      	<div class="col-md-9">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-
+				<li class="breadcrumb-item "><a href="CircularDashBoard.htm"> Circular </a></li>
 				<li class="breadcrumb-item "><a href="CircularList.htm"> Circular List </a></li>
 						<%if(CirEditDetails==null){  %>
                         <li class="breadcrumb-item active " aria-current="page">Circular Add</li>
@@ -183,12 +183,13 @@ $(function(){
     	
     	var file = $("#cirFile").val();
     	console.log(file);
-       var upld = file.split('.').pop();  
-       if(upld!='pdf'){
+       	var upld = file.split('.').pop();  
+       	if(!(upld.toLowerCase().trim()==='pdf' ))
+       	{
     	    alert("Only PDF are allowed to Upload")
     	    document.getElementById("cirFile").value = "";
     	    return;
-    	  }
+    	}
         
 
         

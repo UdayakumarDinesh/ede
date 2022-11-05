@@ -11,7 +11,8 @@
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
 <spring:url value="/webresources/css/LoginPage.css" var="loginPageCss" />
 <link href="${loginPageCss}" rel="stylesheet" />
-
+<link rel="shortcut icon" type="image/png" href="view/images/lablogoui.png">
+<title>SEIP</title>
 <style>
 
 .fa-file-text{

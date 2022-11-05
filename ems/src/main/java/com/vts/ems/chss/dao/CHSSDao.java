@@ -193,6 +193,11 @@ public interface CHSSDao {
 	public CHSSIPDClaimsInfo getCHSSIPDClaimsInfo(String chssapplyid) throws Exception;
 	public int billPackageItemsDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
 	public int billPackageDeleteAll(String billid, String modifiedby, String modifieddate) throws Exception;
-	List<Object[]> GetClaimsReportList(String empid, String fromdate, String todate, String claimtype, String status)throws Exception;
+	public List<Object[]> GetClaimsReportList(String empid, String fromdate, String todate, String claimtype, String status)throws Exception;
+	public Object[] CHSSDashboardCountData(String Empid, String FromDate, String ToDate, String IsSelf) throws Exception;
+	public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate, int Month) throws Exception;
+	public List<Object[]> CHSSDashboardIndividualAmountData(String Empid, String FromDate, String ToDate) throws Exception;
+	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate, String IsSelf) throws Exception;
+	public List<Object[]> CHSSDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception;
 	
 }
