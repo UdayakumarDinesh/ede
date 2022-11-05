@@ -70,7 +70,7 @@
 											
 										</select> --%>
 
-						<input type="hidden" name="id" value="<%=DepType[0]%>">
+										<input type="hidden" name="id" value="<%=DepType[0]%>">
 
 					</div>
 								
