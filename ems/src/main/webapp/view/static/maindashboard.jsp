@@ -18,6 +18,7 @@
 	<%	
 		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
+		String EmpName     = (String)session.getAttribute("EmpName");
 	%>
 	
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
@@ -64,7 +65,7 @@
 				
 				<div class="row">
 					<div class="col-md-12" align="center">
-						<h1>WELCOME</h1>
+						<h1>WELCOME <%=EmpName.toUpperCase() %></h1>
 					</div>
 				</div>
 				

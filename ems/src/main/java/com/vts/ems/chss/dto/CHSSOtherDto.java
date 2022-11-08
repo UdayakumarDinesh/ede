@@ -1,16 +1,16 @@
-package com.vts.ems.chss.Dto;
+package com.vts.ems.chss.dto;
 
 import lombok.Data;
 
 @Data
-public class CHSSTestsDto{
+public class CHSSOtherDto {
 
-	
-	private String CHSSTestId;
+	private String CHSSOtherId;
 	private String BillId;
-	private String TestMainId[];
-	private String TestSubId[];
-	private String TestCost[];
+	private String OtherItemId[];
+	private String OtherItemCost[];
+	
+	private String empid;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

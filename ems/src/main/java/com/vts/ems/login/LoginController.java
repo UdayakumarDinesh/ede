@@ -1,7 +1,6 @@
 package com.vts.ems.login;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.vts.ems.model.AuditStamping;
 import com.vts.ems.service.EMSMainService;
 
 @Controller
@@ -66,21 +64,21 @@ public class LoginController
 	    
 	     
 		   	 try {
-		   		List<Object[]> Empanelled  = service.GetEmpanelledHostpitalList();
-	        	req.setAttribute("Empanelled",Empanelled);
-	        	
-		   		 List<Object[]> doctorlist  = service.GetDoctorList();
-	        	 req.setAttribute("doctorlist",doctorlist);
-	        	 
-	   			List<Object[]> 	 circulatlist = service.CirculatList();
-	   			req.setAttribute("circularlist", circulatlist);
-	   			List<Object[]> 	circular = service.GetCircularList();
-	   			req.setAttribute("circular", circular);
-	   			String path = projectfilespath+ "/ProjectManuals/chss-policy.pdf";
-				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
-				req.setAttribute("Messege", "hello");
-				req.setAttribute("path", path);
-				req.setAttribute("chss_policy_pdf", chss_policy_pdf);
+//		   		List<Object[]> Empanelled  = service.GetEmpanelledHostpitalList();
+//	        	req.setAttribute("Empanelled",Empanelled);
+//	        	
+//		   		 List<Object[]> doctorlist  = service.GetDoctorList();
+//	        	 req.setAttribute("doctorlist",doctorlist);
+//	        	 
+//	   			List<Object[]> 	 circulatlist = service.CirculatList();
+//	   			req.setAttribute("circularlist", circulatlist);
+//	   			List<Object[]> 	circular = service.GetCircularList();
+//	   			req.setAttribute("circular", circular);
+//	   			String path = projectfilespath+ "/ProjectManuals/chss-policy.pdf";
+//				String chss_policy_pdf = Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+//				req.setAttribute("Messege", "hello");
+//				req.setAttribute("path", path);
+//				req.setAttribute("chss_policy_pdf", chss_policy_pdf);
 	   			
 			} catch (Exception e) {
 				e.printStackTrace();

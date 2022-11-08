@@ -1,16 +1,16 @@
-package com.vts.ems.chss.Dto;
+package com.vts.ems.chss.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CHSSImplantDto {
+public class CHSSEquipDto {
 
 	private String ChssMiscId;
 	private String BillId;
-	private String[] ImplantName;
-	private String[] ImplantCost;
+	private String[] EquipName;
+	private String[] EquipCost;
 	private String Comments;
 	private Integer IsActive;
 	private String CreatedBy;

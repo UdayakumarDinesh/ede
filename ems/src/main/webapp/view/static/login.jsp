@@ -34,12 +34,13 @@
 </head>
 
 <body class="home" >
-<%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
+<%
+/* List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
 List<Object[]> circular =  (List<Object[]>)request.getAttribute("circular");
 List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
 List<Object[]> Empanelled = (List<Object[]> )request.getAttribute("Empanelled") ;
 String chss_policy_pdf=(String)request.getAttribute("chss_policy_pdf");
-String path=(String)request.getAttribute("path"); 
+String path=(String)request.getAttribute("path"); */ 
 %>
 
 <!--  Login Page  -->  
@@ -67,18 +68,18 @@ String path=(String)request.getAttribute("path");
   		</div>
   		
   		
-  				<ul class="nav nav-tabs justify-content-end ">
+  				<ul class="nav nav-tabs justify-content-center ">
 					  <li class="nav-item"  onclick="$('#footer').show();">
 						 <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" ><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 					  </li> 
 					  
-					   <li class="nav-item" onclick="$('#footer').hide();">
+					 <!--  <li class="nav-item" onclick="$('#footer').hide();">
 					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Policy</a>				   
 					  </li>
 					  
-				<!-- 	  <li class="nav-item" onclick="$('#footer').hide();">		   
+					  <li class="nav-item" onclick="$('#footer').hide();">		   
 					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Circulars</a>
-					  </li> --> 
+					  </li>
 					  
 					  <li class="nav-item" onclick="$('#footer').hide();">					   
 					   <a class="nav-link" data-toggle="tab" href="#tab-3"  role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
@@ -86,7 +87,7 @@ String path=(String)request.getAttribute("path");
 
 					    <li class="nav-item" onclick="$('#footer').hide();">					    
 					    <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
-					  </li> 
+					  </li>  -->
 				</ul>
 				
   		
@@ -213,7 +214,7 @@ String path=(String)request.getAttribute("path");
 	</div>	
 	</div>
 	
-	<!-- -----------------------------------Circular--------------------------------------------- -->
+<%-- 	<!-- -----------------------------------Circular--------------------------------------------- -->
 	<div class="tab-pane scrollpolicy" id="tab-2" role="tabpanel" >
 		<div align="center"  >
 		
@@ -227,7 +228,7 @@ String path=(String)request.getAttribute("path");
 					<div class="row ">
 						<div class="col-md-6 "><span style=" color: #3498DB; text-shadow: 0px 0px 1px #3a3b3c; font-size: 30px;">Circulars</span></div>
 					    <div class="col-md-6">
-						 <%--    <table>
+						    <table>
 						    	<tr>
 						    		<td><h6>From Date :&nbsp;&nbsp;</h6></td>
 									<td>							    	
@@ -238,7 +239,7 @@ String path=(String)request.getAttribute("path");
 										<input type="text" style="width: 100%;"  class="form-control input-sm mydate" onchange="this.form.submit()" readonly="readonly" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%>   id="todate" name="todate"  required="required"  > 							
 									</td>
 								</tr>    
-							</table> --%>
+							</table>
 						</div>
 
 					</div>
@@ -369,7 +370,7 @@ String path=(String)request.getAttribute("path");
 	</div>
 
 	<!-- -----------------------------------Empanelled Hospital--------------------------------------------- -->
-<div class="tab-pane scrollpolicy" id="tab-4" role="tabpanel">
+	<div class="tab-pane scrollpolicy" id="tab-4" role="tabpanel">
 	
 	<div align="center">
 		
@@ -456,18 +457,18 @@ String path=(String)request.getAttribute("path");
         </div>
 </div>	
 </div>	
-
+ --%>
    <div id="footer">
 	<footer class="footer"  >
 	    <section id="fontSize" class="clearfix" style="font-size: 100%;margin-bottom: -1%;">
 		  <section id="page" class="body-wrapper clearfix" style="">
 		    	<!-- Blue Border for Login Page -->  
 		    <div class="support-row clearfix" id="swapper-border" style="">
-		      	<div class="widget-guide clearfix">
+		      	<%-- <div class="widget-guide clearfix">
 		        	<%if(circularlist!=null  && circularlist.size()>0) {%>
 						<marquee direction="left" scrollamount="3" style="background: rgba(6,127,208,1);"> <p style="font-size: 1rem;margin-bottom: 0px !important"><%int i =0; for(Object[] obj:circularlist){ ++i;%><%=obj[1]%>  &emsp; <%if(circularlist.size()!=i){ %> || <%}%> &emsp; <% }%></p></marquee>
 					<%}%> 
-		        </div>
+		        </div> --%>
 		    </div> 
 		    	
 		  </section>  

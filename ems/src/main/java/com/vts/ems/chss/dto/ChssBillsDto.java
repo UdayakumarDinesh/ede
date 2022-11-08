@@ -1,4 +1,4 @@
-package com.vts.ems.chss.Dto;
+package com.vts.ems.chss.dto;
 
 import java.io.Serializable;
 
