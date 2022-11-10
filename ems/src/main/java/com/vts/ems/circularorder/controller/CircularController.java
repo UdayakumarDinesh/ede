@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
+import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
@@ -144,8 +145,6 @@ public class CircularController {
 			String CirSubject  =(String)req.getParameter("cirSubject");
 			String AutoId = UUID.randomUUID().toString();
 			
-				
-			
 			CircularUploadDto uploadcirdto =new CircularUploadDto();
 			uploadcirdto.setCircularNo(CircularNo.trim()); 
 			uploadcirdto.setCircularDate(CircularDate);
@@ -163,10 +162,6 @@ public class CircularController {
 			} else {
 				 redir.addAttribute("resultfail", "Circular Add Unsuccessfull");
 			}
-			
-
-
-			
 
 		return  "redirect:/CircularList.htm";
 		
@@ -207,7 +202,7 @@ public class CircularController {
 
 	
 	@RequestMapping(value ="CircularEditSubmit.htm" , method = RequestMethod.POST)
-	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("EditFileAttach") MultipartFile FileAttach) throws Exception
+	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("FileAttach") MultipartFile FileAttach) throws Exception
 	{
 		String Username=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CircularEditSubmit.htm "+Username);
@@ -476,14 +471,14 @@ public class CircularController {
 		    in.close();
 		    out.flush();
 		    
-//		    EMSCircularTrans  circularTrans = new EMSCircularTrans().builder()
-//		    									.CircularId(Long.parseLong(CircularId))
-//		    									.DownloadBy(Long.parseLong(EmpId))
-//		    									.EmpNo(EmpNo)
-//		    									.DownloadDate(new Timestamp(new Date().getTime()).toString())
-//		    									.IPAddress(req.getRemoteAddr())
-//		    									.build();
-//		    service.CircularTransactionAdd(circularTrans);
+		    DepEMSCircularTrans  circularTrans = new DepEMSCircularTrans().builder()
+					.DepCircularId(Long.parseLong(CircularId))
+					.DownloadBy(Long.parseLong(EmpId))
+					.EmpNo(EmpNo)
+					.DownloadDate(new Timestamp(new Date().getTime()).toString())
+					.IPAddress(req.getRemoteAddr())
+					.build();
+		    	service.DepCircularTransactionAdd(circularTrans);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -45,6 +45,7 @@ import com.vts.ems.circularorder.dao.CircularDao;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
+import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
@@ -73,7 +74,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long CircularAdd(CircularUploadDto cirdto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CircularUpload");
+		logger.info(new Date() +"Inside CircularAdd");
 		
 		long maxCircularId=0;
 		String CirFileName=null;	
@@ -339,6 +340,12 @@ public class CircularServiceImpl implements CircularService
 	public long CircularTransactionAdd(EMSCircularTrans cirTrans) throws Exception 
 	{
 		return dao.CircularTransactionAdd(cirTrans);
+	}
+	
+	@Override
+	public long DepCircularTransactionAdd(DepEMSCircularTrans cirTrans) throws Exception 
+	{
+		return dao.DepCircularTransactionAdd(cirTrans);
 	}
 	
 	@Override

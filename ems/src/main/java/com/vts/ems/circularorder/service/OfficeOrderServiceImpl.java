@@ -49,6 +49,7 @@ import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.utils.CustomEncryptDecrypt;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
@@ -103,7 +104,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 			order.setOrderSubject(uploadorderdto.getOrderSubject());
 			order.setOrderFileName(uploadorderdto.getOrderFileName());
 			order.setOrderPath(orderPath+OrderFileName+".zip");
-			order.setOrderKey(uploadorderdto.getAutoId());
+			order.setOrderKey(CustomEncryptDecrypt.encryption(uploadorderdto.getAutoId().toCharArray()));
 			order.setCreatedBy(uploadorderdto.getCreatedBy());
 			order.setCreatedDate(uploadorderdto.getCreatedDate());
 			order.setIsActive(1);
@@ -174,7 +175,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 	        Order.setOrderNo(uploadorderdto.getOrderNo());
 	        Order.setOrderDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
 	        Order.setOrderSubject(uploadorderdto.getOrderSubject());
-	        Order.setOrderKey(uploadorderdto.getAutoId());
+	        Order.setOrderKey(CustomEncryptDecrypt.encryption(uploadorderdto.getAutoId().toCharArray()));
 	        Order.setModifiedBy(uploadorderdto.getModifiedBy());
 	        Order.setModifiedDate(uploadorderdto.getModifiedDate());
 	        Order.setIsActive(1);

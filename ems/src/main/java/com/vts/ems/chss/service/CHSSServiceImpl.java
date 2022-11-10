@@ -1169,7 +1169,7 @@ public class CHSSServiceImpl implements CHSSService {
 				notify.setEmpId(claim.getEmpId());
 				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
-				notify.setNotificationUrl("CHSSDashboard.htm");
+				notify.setNotificationUrl("CHSSApplyDashboard.htm");
 				claim.setPOId(0L);
 				claim.setVOId(0L);
 				
@@ -2164,7 +2164,7 @@ public class CHSSServiceImpl implements CHSSService {
 		{
 			EMSNotification notify = new EMSNotification();
 			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
-			notify.setNotificationUrl("CHSSDashboard.htm");
+			notify.setNotificationUrl("CHSSApplyDashboard.htm");
 			notify.setNotificationDate(LocalDate.now().toString());
 			notify.setNotificationBy(EmpId);
 			notify.setIsActive(1);
@@ -3005,7 +3005,7 @@ public class CHSSServiceImpl implements CHSSService {
 				notify.setEmpId(claim.getEmpId());
 				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
-				notify.setNotificationUrl("CHSSDashboard.htm");
+				notify.setNotificationUrl("CHSSApplyDashboard.htm");
 				claim.setPOId(0L);
 				claim.setVOId(0L);
 				

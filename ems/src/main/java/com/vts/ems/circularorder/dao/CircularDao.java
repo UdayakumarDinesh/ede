@@ -3,6 +3,7 @@ package com.vts.ems.circularorder.dao;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
@@ -32,4 +33,5 @@ public interface CircularDao {
 	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception;
 	public List<Object[]> DepCircularSearchList(String search) throws Exception;
 	public List<Object[]> GetEmsDepType() throws Exception;
+	public long DepCircularTransactionAdd(DepEMSCircularTrans cirTrans) throws Exception ;
 }

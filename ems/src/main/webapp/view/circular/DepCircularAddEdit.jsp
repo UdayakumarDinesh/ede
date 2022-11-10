@@ -66,7 +66,7 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 					<div class="col-md-6">
 						<div class="form-group">						
 							<label><b>Circular No.</b><span class="mandatory"	style="color: red;">*</span></label>
-							<input type="text"  class="form-control input-sm " <%if(circular!=null && circular.getDepCircularNo()!=null){%>value="<%=circular.getDepCircularNo()%>" <%}%>  name="CircularNo"  required="required" > 
+							<input type="text"  class="form-control input-sm " <%if(circular!=null && circular.getDepCircularNo()!=null){%>value="<%=circular.getDepCircularNo()%>" <%}%>  name="CircularNo"  required="required" maxlength="100" > 
 						</div>
 					</div>
 					
@@ -120,11 +120,6 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 	</div>
 
 </div>
-		 
-		 
-		 
-		 
-		 
 		 
 </body>
 <script type="text/javascript">

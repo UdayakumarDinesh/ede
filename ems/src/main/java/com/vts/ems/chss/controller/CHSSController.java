@@ -107,11 +107,8 @@ public class CHSSController {
 	@RequestMapping(value = "CHSSDashboard.htm", method = RequestMethod.GET)
 	public String CHSSDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
-		logger.info(new Date() + "Inside CHSSDashboard.htm ");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
-    	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
-    	String UserId = (String) ses.getAttribute("Username");
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CHSSDashBoard.htm "+Username);		
 		try {

@@ -6,6 +6,7 @@ import java.util.List;
 import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
+import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
@@ -37,6 +38,6 @@ public interface CircularService {
 	public long DepCircularDelete(String circularId, String Username) throws Exception;
 	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception;
 	public List<Object[]> GetEmsDepType() throws Exception;
-
+	public long DepCircularTransactionAdd(DepEMSCircularTrans cirTrans) throws Exception ;
 
 }

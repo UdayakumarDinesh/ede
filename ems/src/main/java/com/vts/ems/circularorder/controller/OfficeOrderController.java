@@ -32,6 +32,7 @@ import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.circularorder.service.OfficeOrderService;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.utils.CustomEncryptDecrypt;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
@@ -290,8 +291,8 @@ public class OfficeOrderController {
 			
 			String password="123";
 			
-			if(empDetails!=null && empDetails.getPAN()!=null && !empDetails.getPAN().equalsIgnoreCase("") && empDetails.getDOB()!=null) {
-				password = empDetails.getPAN().toUpperCase()+new SimpleDateFormat("dd-MM-yyyy").format(empDetails.getDOB()).replace("-","");
+			if(empDetails!=null && empDetails.getDOB()!=null) {
+				password = new SimpleDateFormat("dd-MM-yy").format(empDetails.getDOB()).replace("-","");
 			}
 			System.out.println(password);
 			
@@ -303,7 +304,7 @@ public class OfficeOrderController {
 			
 			//Unzip the pdf file from zip file and copy to tempPath
 			Zipper zip=new Zipper();
-			zip.unpack(emsfilespath+"//"+Order.getOrderPath(),tempPath,Order.getOrderKey());
+			zip.unpack(emsfilespath+"//"+Order.getOrderPath(),tempPath,CustomEncryptDecrypt.decryption(Order.getOrderKey().toCharArray()));
 			System.out.println("unpack"+zip);
 			
 			PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()

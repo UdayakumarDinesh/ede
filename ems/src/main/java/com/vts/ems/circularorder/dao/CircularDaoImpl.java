@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSCircular;
 import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
@@ -236,6 +237,14 @@ public class CircularDaoImpl implements CircularDao
 		manager.persist(cirTrans);
 		manager.flush();
 		return (long)cirTrans.getCircularTransId();
+	}
+	
+	@Override
+	public long DepCircularTransactionAdd(DepEMSCircularTrans cirTrans) throws Exception 
+	{
+		manager.persist(cirTrans);
+		manager.flush();
+		return (long)cirTrans.getDepCircularTransId();
 	}
 
 	private static final String DEPCIRCULARLIST = "SELECT DepCircularId,DepTypeId,DepCircularNo,DepCirSubject,DepCircularDate FROM ems_dep_circular WHERE IsActive=1 AND  DepTypeId=:DepTypeId AND ( DepCircularDate>=:fromdate AND DepCircularDate <=:todate )  ORDER BY CreatedDate DESC";

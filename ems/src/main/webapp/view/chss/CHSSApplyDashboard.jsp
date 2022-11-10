@@ -510,7 +510,7 @@
 </form>
 
 
-<form action="CHSSDashboard.htm" method="post" id="changeform" >
+<form action="CHSSApplyDashboard.htm" method="post" id="changeform" >
 	<input type="hidden" name="isselfvalue" id="isselfvalue" >
 	<input type="hidden" name="patientidvalue" id="patientidvalue" >
 	<input type="hidden" name="fromdate" id="fromdate" >

@@ -38,7 +38,7 @@
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 
-				<li class="breadcrumb-item "><a href="OfficeOrder.htms"> OfficeOrder List </a></li>
+				<li class="breadcrumb-item "><a href="OfficeOrder.htm"> OfficeOrder List </a></li>
 						<%if(OrderEditDetails==null){  %>
                         <li class="breadcrumb-item active " aria-current="page">OfficeOrder Add</li>
                          <%}else{%>
@@ -183,12 +183,13 @@ $(function(){
     	
     	var file = $("#OrderFile").val();
     	console.log(file);
-       var upld = file.split('.').pop();  
-       if(upld!='pdf'){
+       	var upld = file.split('.').pop();  
+       	if(!(upld.toLowerCase().trim()==='pdf' ))
+       	{
     	    alert("Only PDF are allowed to Upload")
     	    document.getElementById("OrderFile").value = "";
     	    return;
-    	  }
+    	}
         
 
         
@@ -198,37 +199,6 @@ $(function(){
 
 
 </script>
-<!-- <script type="text/javascript">
-
-function ValidatePdf(myfrm1){ 
-	
-	var
-	var file = $("#cirFile").val();
-	console.log(file);
-	  var upld = file.split('.').pop();  
-
-	  if(upld!='pdf'){
-		  alert("Only PDF are allowed to Upload");
-		event.preventDefault();
-		return false;
-	}
-	 
-	var cnf = confirm("Are You Sure To Submit!");
-    if(cnf){
-		
-		document.getElementById("myfrm1").submit();
-		return true;
-
-	}else{
-		
-		event.preventDefault();
-		return false;
-	}
-}
-
-</script> -->
-
-
 
 
 </body>
