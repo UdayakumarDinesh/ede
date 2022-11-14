@@ -81,14 +81,12 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> EmployeeDetailsList(String LoginType, String Empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeDetailsList()");
 		Query query = manager.createNativeQuery(EMPLOYEEDETAILSLIST);
 		return (List<Object[]>) query.getResultList();
 	}
 
 	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEDETAILS);
 			query.setParameter("empid", empid);
@@ -99,6 +97,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return result;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -106,7 +105,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String GETALLDETAILS="SELECT e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,     ee.SBIAccNo,  c.Category_type,   ed.designation,  dm.divisionname,  dm.DivisionCode, ee.gpfno, dg.GroupCode,ee.hometown,  ee.quarters ,  ee.photo,   ee.phoneno ,   pp.paylevel,  ee.pranno ,  pp.paygrade,  ee.basicpay,  cat.cat_name,  cad.cadre  ,  ee.perpassno,  ee.exserviceman, ee.servicestatus,  ee.empstatus ,  ee.ph FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp ,pis_category c, pis_cat_class cat ,pis_cadre cad WHERE cat.cat_id=ee.catid AND ee.categoryid=c.category_id AND ee.cadreid=cad.cadreid AND  e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND  dm.groupid = dg.groupid AND e.empno=ee.empno AND ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
 	@Override
 	public Object[] GetAllEmployeeDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO GetAllEmployeeDetails()");
 		try {
 			Query query = manager.createNativeQuery(GETALLDETAILS);
 			query.setParameter("empid", empid);
@@ -118,6 +116,7 @@ public class PisDaoImpl implements PisDao {
 			return result;
 					
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetAllEmployeeDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -125,7 +124,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<DivisionMaster> DivisionList() throws Exception {
-		logger.info(new Date() + "Inside DAO DivisionList()");
 		List<DivisionMaster> divlist = new ArrayList<DivisionMaster>();
 		try {
 
@@ -141,6 +139,7 @@ public class PisDaoImpl implements PisDao {
 			divlist = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DivisionList"+e);
 			e.printStackTrace();
 		}
 		return divlist;
@@ -148,7 +147,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<EmployeeDesig> DesigList() throws Exception {
-		logger.info(new Date() + "Inside DAO DesigList()");
 		List<EmployeeDesig> desiglist = new ArrayList<EmployeeDesig>();
 		try {
 
@@ -163,6 +161,7 @@ public class PisDaoImpl implements PisDao {
 			desiglist = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DesigList"+e);
 			e.printStackTrace();
 		}
 		return desiglist;
@@ -170,7 +169,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisPayLevel> PayLevelList() throws Exception {
-		logger.info(new Date() + "Inside DAO PayLevelList");
 		List<PisPayLevel> pispaylevel = new ArrayList<PisPayLevel>();
 		try {
 
@@ -182,6 +180,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PayLevelList"+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -189,7 +188,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCadre> PisCaderList() throws Exception {
-		logger.info(new Date() + "Inside DAO PisCaderList()");
 		List<PisCadre> pispaylevel = new ArrayList<PisCadre>();
 		try {
 
@@ -201,6 +199,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PisCaderList"+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -208,7 +207,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCatClass> PisCatClassList() throws Exception {
-		logger.info(new Date() + "Inside DAO PisCatClassList()");
 		List<PisCatClass> pispaylevel = new ArrayList<PisCatClass>();
 		try {
 
@@ -221,6 +219,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PisCatClassList"+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -228,7 +227,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<PisCategory> PisCategoryList() throws Exception {
-		logger.info(new Date() + "Inside DAO PisCategoryList()");
 		List<PisCategory> pispaylevel = new ArrayList<PisCategory>();
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -238,6 +236,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PisCategoryList"+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -245,7 +244,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<EmpStatus> EmpStatusList() throws Exception {
-		logger.info(new Date() + "Inside DAO EmpStatusList()");
 		List<EmpStatus> pispaylevel = new ArrayList<EmpStatus>();
 		try {
 
@@ -257,6 +255,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpStatusList"+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -265,13 +264,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long EmployeeAddSubmit(Employee emp) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmployeeAddSubmit()");
 
 		try {
 			manager.persist(emp);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeAddSubmit"+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpId();
@@ -279,12 +278,12 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long EmployeeEditSubmit(Employee emp) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeEditSubmit()");
 		try {
 			manager.merge(emp);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeEditSubmit"+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpId();
@@ -293,13 +292,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long EmployeeDetailsAddSubmit(EmployeeDetails emp) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmployeeDetailsDetailsAddSubmit()");
 
 		try {
 			manager.persist(emp);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeDetailsAddSubmit"+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpDetailsId();
@@ -307,12 +306,12 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeDetailsEditSubmit()");
 		try {
 			manager.merge(emp);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeDetailsEditSubmit"+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpDetailsId();
@@ -320,7 +319,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public long getempno() throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeEditSubmit()");
 		long result = 0;
 		try {
 			Query query = manager.createNativeQuery("SELECT max(empno) FROM employee");
@@ -328,6 +326,7 @@ public class PisDaoImpl implements PisDao {
 			Object o = query.getSingleResult();
 			result = Long.parseLong(o.toString());
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getempno"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -336,7 +335,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Employee getEmp(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO PisCaderList()");
 		Employee employee = null;
 		try {
 			Query query = manager.createQuery("FROM Employee WHERE EmpId=:empid AND IsActive='1'");
@@ -344,6 +342,7 @@ public class PisDaoImpl implements PisDao {
 			employee =(Employee)query.getSingleResult();
 			
 	       } catch (Exception e) {
+	    	   logger.error(new Date() + "Inside DAO getEmp"+e);
 		   e.printStackTrace();
 	     }
 	return employee;
@@ -351,7 +350,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public EmployeeDetails getEmployee(String empdetailsid) throws Exception {
-		logger.info(new Date() + "Inside DAO getEmployee()");
 		EmployeeDetails employee = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -363,6 +361,7 @@ public class PisDaoImpl implements PisDao {
 			employee = allquery.getResultList().get(0);		
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployee"+e);
 			e.printStackTrace();
 		}
 		return employee;
@@ -372,7 +371,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public EmployeeDetails getEmployeeDetailsData(String empno) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getEmployeeDetailsData()");
 		EmployeeDetails employee = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -384,6 +382,7 @@ public class PisDaoImpl implements PisDao {
 			employee = allquery.getResultList().get(0);		
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeDetailsData"+e);
 			e.printStackTrace();
 		}
 		return employee;
@@ -391,9 +390,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int PunchcardList(String empno) throws Exception {
-		
-		logger.info(new Date() + "Inside DAO PunchcardList()");
-		
 		
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEENO);
@@ -405,6 +401,7 @@ public class PisDaoImpl implements PisDao {
 
 			return result;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PunchcardList"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -413,13 +410,13 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public String PhotoPath(String empno) throws Exception {
-		logger.info(new Date() + "Inside DAO PhotoPath()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOPATH);
 			query.setParameter("empno", empno);
 			String EmpName = (String) query.getSingleResult();
 			return EmpName;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PhotoPath"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -428,7 +425,6 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public int PhotoPathUpdate(String Path, String empno) throws Exception {
-		logger.info(new Date() + "Inside DAO PhotoPathUpdate()");
 		try {
 			Query query = manager.createNativeQuery(PHOTOUPDATE);
 			query.setParameter("Path", Path);
@@ -437,6 +433,7 @@ public class PisDaoImpl implements PisDao {
 
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PhotoPathUpdate"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -445,11 +442,11 @@ public class PisDaoImpl implements PisDao {
 
 	@Override
 	public List<Object[]> LoginMasterList() throws Exception {
-		logger.info(new Date() + "Inside DAO LoginMasterList()");
 		try {
 			Query query = manager.createNativeQuery(LOGINMASTER);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO LoginMasterList"+e);
 			e.printStackTrace();
 			return null;
 				
@@ -460,11 +457,11 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getEmpList() throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeList()");
 		try {
 			Query query = manager.createNativeQuery(EMPLIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmpList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -474,11 +471,11 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getLoginTypeList()throws Exception{
-		logger.info(new Date() + "Inside DAO getLoginTypeList()");
 		try {
 			Query query = manager.createNativeQuery(LOGINLIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getLoginTypeList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -489,7 +486,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int UserManagerDelete(String username , String loginid)throws Exception{
-		logger.info(new Date() + "Inside DAO UserManagerDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEUSERMANAGER);
@@ -500,6 +496,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserManagerDelete"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -511,13 +508,13 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int UserNamePresentCount(String UserName)throws Exception{
-		logger.info(new Date() + "Inside DAO UserNamePresentCount()");
 		try {
 			Query query = manager.createNativeQuery(USERNAMEPRESENTCOUNT);
 			query.setParameter("username", UserName);
 			BigInteger UserNamePresentCount = (BigInteger) query.getSingleResult();
 			return   UserNamePresentCount.intValue();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserNamePresentCount"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -528,12 +525,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long UserManagerAdd(Login login) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO UserManagerAdd()");
 		try {
 			manager.persist(login);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserManagerAdd"+e);
 			e.printStackTrace();
 		}
 		return login.getLoginId();
@@ -542,13 +539,13 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Login getLoginEditData(Long LoginId)throws Exception{
-		logger.info(new Date() + "Inside DAO UserManagerAdd()");
 		Login UserManagerEditData =null;
 		try {
 			Query query = manager.createQuery(LOGINEDITDATA);
 			query.setParameter("LoginId", LoginId);
 			 UserManagerEditData = (Login) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getLoginEditData"+e);
 			e.printStackTrace();
 		}
 		
@@ -558,7 +555,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int UserManagerEdit(Login login)throws Exception{
 		
-		logger.info(new Date() + "Inside DAO UserManagerEdit()"); 
 		try {
 			Query query = manager.createNativeQuery(EDITUSERMANAGER);
 			query.setParameter("modifiedby", login.getModifiedBy());
@@ -568,6 +564,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserManagerEdit"+e);
 				e.printStackTrace();
 				return 0;
 		}
@@ -577,13 +574,13 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyMembersList(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getFamilyMembersList()");
 		
 		try {
 			Query query = manager.createNativeQuery(FAMILYLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getFamilyMembersList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -592,12 +589,12 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Object[] GetEmpData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO GetEmpData()");
 		try {
 			Query query = manager.createNativeQuery(EMPDATA);
 			query.setParameter("empid", empid);
 			return (Object[]) query.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmpData"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -607,12 +604,12 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyRelation()throws Exception{
-		logger.info(new Date() + "Inside DAO getFamilyRelation()");
 		
 		try {
 			Query query = manager.createNativeQuery(FAMILYRELATION);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getFamilyRelation"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -623,11 +620,11 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public List<Object[]> getFamilyStatus()throws Exception{
-		logger.info(new Date() + "Inside DAO getFamilyStatus()");
 		try {
 			Query query = manager.createNativeQuery(FAMILYSTATUS);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getFamilyStatus"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -638,12 +635,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long AddFamilyDetails(EmpFamilyDetails Details) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
 		try {
 			manager.persist(Details);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddFamilyDetails"+e);
 			e.printStackTrace();
 		}
 		return Details.getFamily_details_id();
@@ -653,12 +650,12 @@ public class PisDaoImpl implements PisDao {
 	public long PisFamFormMembersAdd(PisFamFormMembers Details) throws Exception 
 	{
 	
-		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
 		try {
 			manager.persist(Details);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PisFamFormMembersAdd"+e);
 			e.printStackTrace();
 		}
 		return Details.getFormMemberId();
@@ -667,7 +664,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public int DeleteMeber(String familyid , String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO UserManagerDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEMEMBER);
@@ -679,6 +675,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteMeber"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -688,7 +685,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public EmpFamilyDetails	getMemberDetails(String familyid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getMemberDetails()");
 		EmpFamilyDetails memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -699,6 +695,7 @@ public class PisDaoImpl implements PisDao {
 			TypedQuery<EmpFamilyDetails> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getMemberDetails"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -707,7 +704,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public EmpFamilyDetails getMember(String familyid) throws Exception {
-		logger.info(new Date() + "Inside DAO PisCaderList()");
 		EmpFamilyDetails memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -719,6 +715,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getMember"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -727,7 +724,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public PisFamFormMembers getPisFamFormMembers(String formmemberid) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO getPisFamFormMembers()");
 		PisFamFormMembers formmemeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -739,6 +735,7 @@ public class PisDaoImpl implements PisDao {
 			formmemeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPisFamFormMembers"+e);
 			e.printStackTrace();
 		}
 		return formmemeber;
@@ -747,12 +744,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long PisFamFormMemberEdit(PisFamFormMembers formmember) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO getPisFamFormMembers()");
 		try {
 			manager.merge(formmember);
 			manager.flush();
 			return formmember.getFamilyFormId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PisFamFormMemberEdit"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -762,12 +759,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditFamilyDetails(EmpFamilyDetails Details) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditFamilyDetails()");
 		try {
 			manager.merge(Details);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditFamilyDetails"+e);
 			e.printStackTrace();
 		}
 		return Details.getFamily_details_id();
@@ -775,7 +772,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERMNENTADDRESS="SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid";
 	@Override
 	public Object[] getPerAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside DAO GetPerAddress()");
 		try {
 			Query query = manager.createNativeQuery(PERMNENTADDRESS);
 			query.setParameter("empid", Empid);
@@ -786,6 +782,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPerAddress"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -795,23 +792,23 @@ public class PisDaoImpl implements PisDao {
 	private static final String STATE="SELECT StateId,StateName FROM pis_states";
 	@Override
 	public List<Object[]> getStates()throws Exception{
-		logger.info(new Date() + "Inside DAO GetStates()");
 		try {
 			Query query = manager.createNativeQuery(STATE);		
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getStates"+e);
 			e.printStackTrace();
 			return null;
 		}
 	}
 	@Override
 	public Long AddPerAddress(AddressPer peraddress)throws Exception{
-		logger.info(new Date() + "Inside DAO AddPerAddress()");
 		try {
 			manager.persist(peraddress);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddPerAddress"+e);
 			e.printStackTrace();
 		}
 		return peraddress.getAddress_per_id();
@@ -819,13 +816,13 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERADDRESS="FROM AddressPer WHERE empid=:empid";
 	@Override
 	public AddressPer getPerAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getPerAddressData()");
 		AddressPer addres=null;
 		try {
 			Query query = manager.createQuery(PERADDRESS);
 			query.setParameter("empid", empid);
 			addres = (AddressPer) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPerAddressData"+e);
 			e.printStackTrace();
 		}		
 		return addres;
@@ -833,7 +830,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressPer getPeraddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside DAO getPeraddress()");
 		AddressPer memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -845,6 +841,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPeraddress"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -853,12 +850,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditPerAddress(AddressPer address) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditPerAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditPerAddress"+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_per_id();
@@ -867,12 +864,12 @@ public class PisDaoImpl implements PisDao {
 	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive='1'";
 	@Override
 	public List<Object[]> getResAddress(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getResAddress()");
 		try {
 			Query query = manager.createNativeQuery(RESADDRESS);	
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getResAddress"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -882,7 +879,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String KINADDRESS="SELECT empid,address_kin_id,nextkin_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_kin  WHERE empid=:empid";
 	@Override
 	public Object[] getKinAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside DAO GetKinAddress()");
 		try {
 			Query query = manager.createNativeQuery(KINADDRESS);
 			query.setParameter("empid", Empid);
@@ -893,6 +889,7 @@ public class PisDaoImpl implements PisDao {
 					}
 					return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getKinAddress"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -901,7 +898,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMEADDRESS="SELECT empid,address_emer_id,emer_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_emer  WHERE empid=:empid";
 	@Override
 	public Object[] getEmeAddress(String Empid)throws Exception{
-		logger.info(new Date() + "Inside DAO GetEmeAddress()");
 		try {
 			Query query = manager.createNativeQuery(EMEADDRESS);
 			query.setParameter("empid", Empid);
@@ -912,6 +908,7 @@ public class PisDaoImpl implements PisDao {
 					}
 					return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmeAddress"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -919,12 +916,12 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Long AddResAddress(AddressRes resaddress)throws Exception{
-		logger.info(new Date() + "Inside DAO AddResAddress()");
 		try {
 			manager.persist(resaddress);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddResAddress"+e);
 			e.printStackTrace();
 		}
 		return resaddress.getAddress_res_id();
@@ -932,7 +929,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressRes getResAddressData(String addressid) throws Exception {
-		logger.info(new Date() + "Inside DAO getResAddressData()");
 		AddressRes memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -944,6 +940,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getResAddressData"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -952,12 +949,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditResAddress(AddressRes address) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditResAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditResAddress"+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_res_id();
@@ -965,7 +962,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String DELETERES="UPDATE pis_address_res  SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE address_res_id=:addressid";
 	@Override
 	public int deleteResAdd(String addressid , String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO deleteResAdd()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETERES);
@@ -977,6 +973,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO deleteResAdd"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -986,19 +983,18 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public Long AddNextAddress(AddressNextKin nextkinaddress)throws Exception{
-		logger.info(new Date() + "Inside DAO AddNextAddress()");
 		try {
 			manager.persist(nextkinaddress);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddNextAddress"+e);
 			e.printStackTrace();
 		}
 		return nextkinaddress.getAddress_kin_id();
 	}
 	@Override
 	public AddressNextKin getNextKinaddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside DAO getNextKinaddress()");
 		AddressNextKin memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -1010,6 +1006,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getNextKinaddress"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1018,12 +1015,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditNextKinAddress(AddressNextKin address) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditNextKinAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditNextKinAddress"+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_kin_id();
@@ -1031,25 +1028,25 @@ public class PisDaoImpl implements PisDao {
 	private static final String NEXTKINADDRESS="FROM AddressNextKin WHERE empid=:empid";
 	@Override
 	public AddressNextKin getNextKinAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getNextKinAddressData()");
 		AddressNextKin addres=null;
 		try {
 			Query query = manager.createQuery(NEXTKINADDRESS);
 			query.setParameter("empid", empid);
 			addres = (AddressNextKin) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getNextKinAddressData"+e);
 			e.printStackTrace();
 		}		
 		return addres;
 	}
 	@Override
 	public Long AddEmecAddress(AddressEmec Emecaddress)throws Exception{
-		logger.info(new Date() + "Inside DAO AddEmecAddress()");
 		try {
 			manager.persist(Emecaddress);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddEmecAddress"+e);
 			e.printStackTrace();
 		}
 		return Emecaddress.getAddress_emer_id();
@@ -1057,7 +1054,6 @@ public class PisDaoImpl implements PisDao {
 	
 	@Override
 	public AddressEmec getEmecaddress(long addressid) throws Exception {
-		logger.info(new Date() + "Inside DAO getEmecaddress()");
 		AddressEmec memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -1069,6 +1065,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmecaddress"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1077,12 +1074,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Long EditEmecAddress(AddressEmec address) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditEmecAddress()");
 		try {
 			manager.merge(address);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditEmecAddress"+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_emer_id();
@@ -1100,13 +1097,13 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMECADDRESS="FROM AddressEmec WHERE empid=:empid";
 	@Override
 	public AddressEmec getEmecAddressData(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getEmecAddressData()");
 		AddressEmec addres=null;
 		try {
 			Query query = manager.createQuery(EMECADDRESS);
 			query.setParameter("empid", empid);
 			addres = (AddressEmec) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmecAddressData"+e);
 			e.printStackTrace();
 		}		
 		return addres;
@@ -1129,7 +1126,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String OLDPASSWORD="select password from login where loginid=:loginid";
 	@Override
 	public String OldPassword(String UserId) throws Exception {
-		logger.info(new Date() +"Inside DAO OldPassword()");
 		Query query = manager.createNativeQuery(OLDPASSWORD);
 		query.setParameter("loginid", UserId);
 		
@@ -1140,7 +1136,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int PasswordChange(String OldPassword, String NewPassword ,String loginid, String ModifiedDate,String UserName)throws Exception {
 		
-		logger.info(new Date() +"Inside DAO PasswordChange()");
 		Query query = manager.createNativeQuery(PASSWORDUPDATECHANGE);
 		
 		query.setParameter("newpassword", NewPassword);
@@ -1154,7 +1149,6 @@ public class PisDaoImpl implements PisDao {
     private static final String NEXTKINADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , nextkin_addr , pin ,state FROM pis_address_kin WHERE empid =:empid";
 	@Override
 	public Object[] EmployeeNextAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeNextAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(NEXTKINADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1164,6 +1158,7 @@ public class PisDaoImpl implements PisDao {
 				}
 				return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeNextAddressDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1172,7 +1167,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String PERADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , per_addr , pin ,state FROM pis_address_per WHERE empid =:empid";
 	@Override
 	public Object[] EmployeePerAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeePerAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(PERADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1182,6 +1176,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeePerAddressDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1190,13 +1185,13 @@ public class PisDaoImpl implements PisDao {
 	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state,ext,qtrno,qtrtype,emailofficial FROM pis_address_res WHERE empid =:empid";
 	@Override
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeResAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(RESADDRESSDETAILS);
 			query.setParameter("empid", empid);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeResAddressDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1205,7 +1200,6 @@ public class PisDaoImpl implements PisDao {
 	private static final String EMECADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , emer_addr , pin ,state FROM pis_address_emer WHERE empid =:empid";
 	@Override
 	public Object[] EmployeeEmeAddressDetails(String empid) throws Exception {
-		logger.info(new Date() + "Inside DAO EmployeeEmeAddressDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMECADDRESSDETAILS);
 			query.setParameter("empid", empid);
@@ -1217,6 +1211,7 @@ public class PisDaoImpl implements PisDao {
 			
 			return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeEmeAddressDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1226,13 +1221,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> getFamilydetails(String empid) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO getFamilydetails()");
 		try {
 			Query query = manager.createNativeQuery(FAMILYDETAILS);
 			query.setParameter("empid", empid);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getFamilydetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1244,7 +1239,6 @@ public class PisDaoImpl implements PisDao {
 	public int ResetPassword(String loginid, String password,String UserName )throws Exception
 	{
 		
-		logger.info(new Date() +"Inside DAO ResetPassword()");
 		Query query = manager.createNativeQuery(RESETPASSWORD);
 		
 		query.setParameter("resetpwd", password);
@@ -1260,12 +1254,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetAllEmployee()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetAllEmployee()");
 		try {
 			Query query = manager.createNativeQuery(ALLEMPLIST);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetAllEmployee"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1274,7 +1268,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] GetEmpPhoneNo(String loginid) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetEmpPhoneNo()");
 		try {
 			Query query = manager.createNativeQuery(GETPHONENO);
 			query.setParameter("loginid", loginid);
@@ -1284,6 +1277,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmpPhoneNo"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1293,12 +1287,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetEmployeeList()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetEmployeeList()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLIST);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmployeeList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1309,13 +1303,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetEmployeeLoginData(String loginid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetEmployeeLoginData()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPLOYEELOGINDATA);
 			query.setParameter("loginid", loginid);
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmployeeLoginData"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1325,12 +1319,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO loginHisAddSubmit()");
 		try {
 			manager.persist(model);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO loginHisAddSubmit"+e);
 			e.printStackTrace();
 		}
 		return model.getPasswordHistoryId(); 
@@ -1339,7 +1333,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] GetEmpDetails(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetEmpDetails()");
 		try {
 			Query query = manager.createNativeQuery(EMPDETAILS);
 			query.setParameter("empid", empid);
@@ -1349,6 +1342,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmpDetails"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1399,10 +1393,10 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getFamilyMemberModal");
 		try {
 			return manager.find(EmpFamilyDetails.class, Long.parseLong(familydetailsid));			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getFamilyMemberModal"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1414,7 +1408,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> GetFormMembersList(String formid) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO GetFormMembersList()");
 		try {
 			Query query = manager.createNativeQuery(GETFAMILYDETAILSFWD);
 			query.setParameter("formid",formid);
@@ -1422,6 +1415,7 @@ public class PisDaoImpl implements PisDao {
 			return List;
 			
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetFormMembersList"+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1433,7 +1427,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] getEmployeeInfo(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmployeeInfo()");
 		Query query =manager.createNativeQuery(GETEMPLOYEEINFO);
 		Object[] result = null;
 		query.setParameter("empid", empid);
@@ -1441,6 +1434,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeInfo"+e);
 			e.printStackTrace();
 		}
 		
@@ -1452,14 +1446,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] employeeResAddr(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO employeeResAddr()");
 		Query query =manager.createNativeQuery(EMPLOYEERESADDR);
 		Object[] result = null;
 		query.setParameter("empid", empid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			
+			logger.error(new Date() + "Inside DAO employeeResAddr"+e);
 		}
 		return result;
 	}
@@ -1468,13 +1461,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long UpdateMemberStatus(PisEmpFamilyForm famform)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateMemberStatus()");
 		try {
 			manager.persist(famform);	
 			manager.flush();
 			
 			return famform.getFamilyFormId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UpdateMemberStatus"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1486,7 +1479,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public PisEmpFamilyForm getPisEmpFamilyForm(String familyformid1) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPisEmpFamilyForm()");
 		PisEmpFamilyForm famform = null;
 		try {
 			
@@ -1499,6 +1491,7 @@ public class PisDaoImpl implements PisDao {
 			famform= allquery.getResultList().get(0);
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPisEmpFamilyForm"+e);
 			e.printStackTrace();
 		}
 		return famform;
@@ -1509,12 +1502,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> FamMemFwdEmpList() throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO FamMemFwdEmpList()");
 		try {
 			Query query = manager.createNativeQuery(FAMMEMFWDEMPLIST);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO FamMemFwdEmpList"+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1524,12 +1517,12 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> FamMemApprovedList() throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO FamMemApprovedList()");
 		try {
 			Query query = manager.createNativeQuery(FAMMEMAPPROVEDLIST);
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO FamMemApprovedList"+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1540,7 +1533,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> familyRelationList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO familyRelationList()");
 		Query query = manager.createNativeQuery(FAMILYRELATIONLIST);
 		List<Object[]> List=(List<Object[]>) query.getResultList();
 		return  List;
@@ -1552,13 +1544,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] RelationshipData(String relationid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO RelationshipData()");
 		Query query =manager.createNativeQuery(RELATIONSHIPDATA);
 		Object[] result = null;
 		query.setParameter("relationid", relationid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO RelationshipData"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1569,13 +1561,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public  Object[] getMemberdata(String formmemberid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getMemberdata()");
 		Query query =manager.createNativeQuery(GETMEMBERDATA);
 		Object[] result = null;
 		query.setParameter("formmemberid", formmemberid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getMemberdata"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1587,13 +1579,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public List<Object[]> EmpFamFormsList(String empid,String status) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmpFamFormsList()");
 		Query query =manager.createNativeQuery(EMPFAMFORMSLIST);
 		query.setParameter("empid", empid);
 		List<Object[]> result = new ArrayList<>();
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpFamFormsList"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1603,7 +1595,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public int FamilyMemIncConfirm(String formid, String empid,String username,String medDepStatus)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FamilyMemIncConfirm()");
 		try {
 		    Query query=manager.createNativeQuery(FAMTABLEUPDATE);
 		    query.setParameter("formid", formid);
@@ -1612,6 +1603,7 @@ public class PisDaoImpl implements PisDao {
 		    query.setParameter("ModifiedDate", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
 	        return query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO FamilyMemIncConfirm"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1621,13 +1613,13 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmpFamilyFormAdd()");
 
 		try {
 			manager.persist(form);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpFamilyFormAdd"+e);
 			e.printStackTrace();
 		}
 		return form.getFamilyFormId();
@@ -1638,14 +1630,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public  Object[] GetFamFormData(String familyformid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetFamFormData()");
 		Query query =manager.createNativeQuery(GETFAMFORMDATA);
 		Object[] result = null;
 		query.setParameter("familyformid", familyformid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			
+			logger.error(new Date() + "Inside DAO GetFamFormData"+e);
 		}
 		return result;
 	}
@@ -1654,12 +1645,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int FormFamilyMemberDelete(String formmemberid)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FormFamilyMemberDelete()");
 		try {
 		    Query query=manager.createNativeQuery(FAMILYMEMBERDELETE);
 		    query.setParameter("formmemberid", formmemberid);
 	        return query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO FormFamilyMemberDelete"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1670,12 +1661,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int FormFamilyMemberHardDelete(String familydetailsid)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO FormFamilyMemberHardDelete()");
 		try {
 		    Query query=manager.createNativeQuery(FORMFAMILYMEMBERHARDDELETE);
 		    query.setParameter("familydetailsid", familydetailsid);
 	        return query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO FormFamilyMemberHardDelete"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1688,7 +1679,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	
 	@Override
 	public int EmpBloodGropuEdit(String empno , String bloodgroup)throws Exception {
-		logger.info(new Date() + "Inside DAO EmpBloodGropuEdit");
 		try {
 			Query query = manager.createNativeQuery(EMPBLOODGROPUEDIT);
 			query.setParameter("empno", empno);
@@ -1696,6 +1686,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpBloodGropuEdit"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1705,13 +1696,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public long NotificationAdd(EMSNotification notification ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO NotificationAdd");
 		try {
 			manager.persist(notification);
 			manager.flush();
 			
 			return notification.getNotificationId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO NotificationAdd"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1723,13 +1714,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> loginTypeEmpData(String logintype) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO loginTypeEmpData");
 		Query query =manager.createNativeQuery(LOGINTYPEEMPDATA);
 		query.setParameter("logintype", logintype);
 		List<Object[]> result = new ArrayList<>();
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO loginTypeEmpData"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1742,7 +1733,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> EmpFamMembersListMedDep(String empid,String formid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmpFamMembersListMedDep");
 		Query query =manager.createNativeQuery(EMPFAMMEMBERSLISTMEDDEP);
 		query.setParameter("empid", empid);
 		query.setParameter("formid", formid);
@@ -1750,6 +1740,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpFamMembersListMedDep"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1760,7 +1751,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> EmpFamMembersNotMedDep(String empid,String formid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmpFamMembersNotMedDep");
 		Query query =manager.createNativeQuery(EMPFAMMEMBERSNOTMEDDEP);
 		query.setParameter("empid", empid);
 		query.setParameter("formid", formid);
@@ -1768,6 +1758,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpFamMembersNotMedDep"+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1778,7 +1769,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO GetExcFormMembersList");
 		try {
 			Query query = manager.createNativeQuery(GETEXCFORMMEMBERSLIST);
 			query.setParameter("formid",formid);
@@ -1786,6 +1776,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			return List;
 			
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetExcFormMembersList"+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1794,13 +1785,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String EDUCATIONLIST="SELECT A.qualification_id, A.empid, B.quali_title,C.disci_title,A.university,A.yearofpassing,A.cgpa,A.division,A.specialization,A.sponsored,A.acq_bef_aft FROM pis_qualification A, pis_quali_code B,pis_disci_code C WHERE A.quali_id = B.quali_id AND A.disci_id=C.disci_id AND A.empid=:empid AND A.is_active='1' order by A.qualification_id desc";
 	@Override
 	public List<Object[]> getEducationList(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getEducationList()");
 		
 		try {
 			Query query = manager.createNativeQuery(EDUCATIONLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEducationList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1810,12 +1801,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM pis_quali_code WHERE is_active='1'";
 	@Override
 	public List<Object[]> getQualificationList()throws Exception{
-		logger.info(new Date() + "Inside DAO getQualificationList()");
 		
 		try {
 			Query query = manager.createNativeQuery(QUALIFICATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getQualificationList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1823,11 +1814,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String DISCILIST="SELECT disci_id,disci_title FROM pis_disci_code WHERE is_active='1'";
 	@Override
 	public List<Object[]> getDiscipline()throws Exception{
-		logger.info(new Date() + "Inside DAO getDiscipline()");
 		try {
 			Query query = manager.createNativeQuery(DISCILIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDiscipline"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1836,7 +1827,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Qualification getQualificationDetails(int qualificationid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getQualificationDetails()");
 		Qualification memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -1847,6 +1837,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Qualification> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getQualificationDetails"+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1855,7 +1846,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteQualification(String qualificationid,String Username)throws Exception
 	{
-			logger.info(new Date() + "Inside DAO DeleteQualification()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEQUALIFICATION);
@@ -1867,6 +1857,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteQualification"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1876,12 +1867,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddQualification(Qualification Details) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO AddFamilyDetails()");
 		try {
 			manager.persist(Details);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddQualification"+e);
 			e.printStackTrace();
 		}
 		return Details.getQualification_id();
@@ -1890,12 +1881,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditQualification(Qualification Details) throws Exception {
 	
-		logger.info(new Date() + "Inside DAO EditQualification()");
 		try {
 			manager.merge(Details);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditQualification"+e);
 			e.printStackTrace();
 		}
 		return Details.getQualification_id();
@@ -1904,13 +1895,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String APPOINTMENTLIST="SELECT A.appointment_id,A.empid,A.org_lab,A.drdo_others,A.mode_recruitment,B.mode_recruitment_title,A.desig_id,C.Designation,A.from_date,A.to_date FROM pis_appointments A, pis_mode_recruitment_code B, employee_desig C WHERE A.mode_recruitment=B.recruitment_id AND A.desig_id=C.DesigId AND A.empid=:empid AND A.is_active='1' ORDER BY A.appointment_id desc";
 	@Override
 	public List<Object[]> getAppointmentList(String empid)throws Exception{
-		logger.info(new Date() + "Inside DAO getAppointmentList()");
 		
 		try {
 			Query query = manager.createNativeQuery(APPOINTMENTLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getAppointmentList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1920,12 +1911,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String RECRUITMENTLIST="SELECT recruitment_id,mode_recruitment_title FROM pis_mode_recruitment_code";
 	@Override
 	public List<Object[]> getRecruitment()throws Exception{
-		logger.info(new Date() + "Inside DAO getRecruitment()");
 		
 		try {
 			Query query = manager.createNativeQuery(RECRUITMENTLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getRecruitment"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1933,12 +1924,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String PisAwardsList="SELECT  DesigId,Designation  FROM employee_desig";
 	@Override
 	public List<Object[]> getDesignationList()throws Exception{
-		logger.info(new Date() + "Inside DAO getDesignationList()");
 		
 		try {
 			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDesignationList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1948,7 +1939,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteAppointment(String appointmentid,String Username)throws Exception
 	{
-			logger.info(new Date() + "Inside DAO DeleteAppointment()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEAPPOINTMENT);
@@ -1960,6 +1950,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteAppointment"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1968,7 +1959,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Appointments getAppointmentsDetails(int appointmentsid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getAppointmentsDetails()");
 		Appointments list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -1979,6 +1969,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Appointments> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getAppointmentsDetails"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1987,12 +1978,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddAppointment(Appointments app)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO AddAppointment()");
 		try {
 			manager.persist(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddAppointment"+e);
 			e.printStackTrace();
 		}
 		return app.getAppointment_id();
@@ -2001,12 +1992,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditAppointment(Appointments app)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO EditAppointment()");
 		try {
 			manager.merge(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditAppointment"+e);
 			e.printStackTrace();
 		}
 		return app.getAppointment_id();
@@ -2016,13 +2007,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getAwardsList(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getAwardsList()");
 		
 		try {
 			Query query = manager.createNativeQuery(AWARDSLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getAwardsList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2032,12 +2023,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String DESIGNATIONLIST="SELECT AwardListId,AwardName FROM pis_award_list";
 	@Override
 	public List<Object[]> getPisAwardsList()throws Exception{
-		logger.info(new Date() + "Inside DAO getPisAwardsList()");
 		
 		try {
 			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPisAwardsList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2047,7 +2038,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteAwards(String awardsid,String Username)throws Exception
 	{
-			logger.info(new Date() + "Inside DAO DeleteAwards()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEAWARDS);
@@ -2059,6 +2049,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteAwards"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2067,7 +2058,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Awards getAwardsDetails(int awardsid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getAwardsDetails()");
 		Awards list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -2078,6 +2068,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Awards> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getAwardsDetails"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2085,12 +2076,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddAwards(Awards app)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO AddAwards()");
 		try {
 			manager.persist(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddAwards"+e);
 			e.printStackTrace();
 		}
 		return app.getAwards_id();
@@ -2099,12 +2090,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditAwards(Awards app)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO EditAwards()");
 		try {
 			manager.merge(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditAwards"+e);
 			e.printStackTrace();
 		}
 		return app.getAwards_id();
@@ -2114,13 +2105,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getPropertyList(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPropertyList()");
 		
 		try {
 			Query query = manager.createNativeQuery(PROPERTYLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPropertyList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2130,7 +2121,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Property getPropertyDetails(int propertyid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPropertyDetails()");
 		Property list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -2141,6 +2131,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Property> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPropertyDetails"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2149,7 +2140,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteProperty(String propertyid,String Username)throws Exception
 	{
-			logger.info(new Date() + "Inside DAO DeleteProperty()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEPROPERTY);
@@ -2161,6 +2151,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteProperty"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2170,12 +2161,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int AddProperty(Property app)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO AddProperty()");
 		try {
 			manager.persist(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddProperty"+e);
 			e.printStackTrace();
 		}
 		return app.getProperty_id();
@@ -2185,12 +2176,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int EditProperty(Property app)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO EditProperty()");
 		try {
 			manager.merge(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditProperty"+e);
 			e.printStackTrace();
 		}
 		return app.getProperty_id();
@@ -2200,13 +2191,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getPublicationList(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPublicationList()");
 		
 		try {
 			Query query = manager.createNativeQuery(PUBLICATIONLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPublicationList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2216,12 +2207,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getPisStateList()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPisStateList()");
 		
 		try {
 			Query query = manager.createNativeQuery(PISSTATELIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPisStateList"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2231,7 +2222,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Publication getPublicationDetails(int publicationid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPublicationDetails()");
 		Publication list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -2242,6 +2232,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Publication> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPublicationDetails"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2250,12 +2241,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddPublication(Publication app)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO AddPublication()");
 		try {
 			manager.persist(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddPublication"+e);
 			e.printStackTrace();
 		}
 		return app.getPublication_id();
@@ -2264,12 +2255,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int EditPublication(Publication app)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO EditPublication()");
 		try {
 			manager.merge(app);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditPublication"+e);
 			e.printStackTrace();
 		}
 		return app.getPublication_id();
@@ -2279,13 +2270,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getPassportVisitList(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPassportVisitList()");
 		
 		try {
 			Query query = manager.createNativeQuery(PASSPORTVISITLIST);
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditPublication"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -2296,7 +2287,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Object[] getPassportList(String empid) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPassportList()");
 		
 		try {
 			Query query = manager.createNativeQuery(PASSPORTLIST);
@@ -2308,6 +2298,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			}
 			return result;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPassportList"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -2319,13 +2310,13 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Passport getPassportData(String empid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getPassportData()");
 		Passport passport=null;
 		try {
 			Query query = manager.createQuery(PASSPORT);
 			query.setParameter("empid", empid);
 			passport = (Passport) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getPassportData"+e);
 			e.printStackTrace();
 		}		
 		return passport;
@@ -2334,12 +2325,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddPassport(Passport passport)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO AddResAddress()");
 		try {
 			manager.persist(passport);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddPassport"+e);
 			e.printStackTrace();
 		}
 		return passport.getPassportId();
@@ -2349,7 +2340,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditPassport(Passport passport)throws Exception
 	{
-			logger.info(new Date() + "Inside DAO EditPassport()");
 		
 		try {
 			Query query = manager.createNativeQuery(EDITPASSPORT);
@@ -2365,6 +2355,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditPassport"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2373,7 +2364,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public PassportForeignVisit getForeignVisitData(int foreignvisitid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getForeignVisitData()");
 		PassportForeignVisit list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -2384,6 +2374,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<PassportForeignVisit> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getForeignVisitData"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2392,7 +2383,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String DELETEFOREIGNVISIT="UPDATE pis_passport_visit  SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE passportvisitid=:passportvisitid";
 	@Override
 	public int deleteForeignVisit(String foreignvisitid , String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO deleteForeignVisit()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEFOREIGNVISIT);
@@ -2404,6 +2394,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO deleteForeignVisit"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2412,12 +2403,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int AddForeignVisit(PassportForeignVisit pfv)throws Exception{
 	
-		logger.info(new Date() + "Inside DAO AddForeignVisit()");
 		try {
 			manager.persist(pfv);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddForeignVisit"+e);
 			e.printStackTrace();
 		}
 		return pfv.getPassportVisitId();
@@ -2427,12 +2418,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int EditForeignVisit(PassportForeignVisit pfv)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO EditForeignVisit()");
 		try {
 			manager.merge(pfv);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditForeignVisit"+e);
 			e.printStackTrace();
 		}
 		return pfv.getPassportVisitId();
@@ -2442,7 +2433,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteEducationQualification(String id,String Username)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO DeleteEducationQualification()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEEDUCATIONQUALIFICATION);
@@ -2454,6 +2444,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteEducationQualification"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2464,7 +2455,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditEducationQualification(String id,String qualification,String Username)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO EditEducationQualification()");
 		
 		try {
 			Query query = manager.createNativeQuery(EDITEDUCATIONQUALIFICATION);
@@ -2476,6 +2466,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditEducationQualification"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2485,12 +2476,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int AddEducationQualification(QualificationCode qc)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO AddEducationQualification()");
 		try {
 			manager.persist(qc);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddEducationQualification"+e);
 			e.printStackTrace();
 		}
 		return qc.getQuali_id();
@@ -2501,7 +2492,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int DeleteDiscipline(String id,String Username)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO DeleteDiscipline()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEEDISCIPLINE);
@@ -2513,6 +2503,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteDiscipline"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2523,7 +2514,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int EditDiscipline(String id,String discipline,String Username)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO EditDiscipline()");
 		
 		try {
 			Query query = manager.createNativeQuery(EDITDISCIPLINE);
@@ -2535,6 +2525,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditDiscipline"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2544,12 +2535,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	public int AddDiscipline(DisciplineCode dc)throws Exception
 	{
 	
-		logger.info(new Date() + "Inside DAO AddDiscipline()");
 		try {
 			manager.persist(dc);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddDiscipline"+e);
 			e.printStackTrace();
 		}
 		return dc.getDisci_id();
@@ -2558,7 +2549,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public Object[] getEmpData(String EmpNo) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmpData()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		Object[] empdata=null;
 		try {
@@ -2570,6 +2560,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 				empdata=list.get(0);
 			}
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getEmpData"+e);
 			e.printStackTrace();
 		}
 		return empdata;
@@ -2578,11 +2569,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static  final String GETEMPSTATUS="select emp_status ,emp_status_name  from emp_status";
 	@Override
 	public List<Object[]> GetEmpStatusList() throws Exception {
-		logger.info(new Date() + "Inside DAO GetEmpStatusList()");
 		try {
 			Query query = manager.createNativeQuery(GETEMPSTATUS);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEmpStatusList"+e);
 			e.printStackTrace();
 			return null;
 				
@@ -2594,11 +2585,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getGroupName() throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getGroupName()");
 		try {
 			Query query = manager.createNativeQuery(GETGROUPNAME);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getGroupName"+e);
 			e.printStackTrace();
 			return null;	
 		}
@@ -2608,11 +2599,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDesignation() throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDesignation()");
 		try {
 			Query query = manager.createNativeQuery(GETDESIGNATION);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDesignation"+e);
 			e.printStackTrace();
 			return null;	
 		}
@@ -2621,11 +2612,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	private static final String ALLEMPLOYEEDETAIL="SELECT a.SrNo, a.empName,b.Designation FROM employee a,employee_desig b,employee_details c WHERE a.empno=c.empno AND  a.DesigId=b.DesigId AND c.EmpStatus='P' AND c.CatId<>'Z' ORDER BY SrNo";
 	@Override
 	public List<Object[]> fetchAllEmployeeDetail() throws Exception {
-		logger.info(new Date() + "Inside DAO fetchAllEmployeeDetail()");
 		try {
 			Query query = manager.createNativeQuery(ALLEMPLOYEEDETAIL);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO fetchAllEmployeeDetail"+e);
 			e.printStackTrace();
 			return null;
 				
@@ -2637,12 +2628,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getEmployeeStatusWise(String empstatus) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getEmployeeStatusWise()");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEESTATUSWISE);
 			query.setParameter("empStatus", empstatus);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeStatusWise"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2652,12 +2643,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getEmployeeDivOrGroupWise(int id) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getEmployeeDivOrGroupWise()");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEGROUPORDIVISIONWISE);
 			query.setParameter("divisionid", id);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeDivOrGroupWise"+e);
 			e.printStackTrace();
 			return null;	
 		}	
@@ -2673,6 +2664,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("desigid", id);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeDesignationWise"+e);
 			e.printStackTrace();
 			return null;	
 		}	
@@ -2682,12 +2674,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getEmployeeGenderWise(String gender) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getEmployeeGenderWise()");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEGENDERWISE);
 			query.setParameter("gender", gender);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmployeeGenderWise"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2697,11 +2689,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> fetchAllPersonalDetail() throws Exception
 	{
-		logger.info(new Date() + "Inside DAO fetchAllPersonalDetail()");
 		try {
 			Query query = manager.createNativeQuery(FETCHALLPERSONALDETAIL);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO fetchAllPersonalDetail"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2709,7 +2701,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> fetchPersonalDetailsNGOorCGO(String cattype) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO fetchAllPersonalDetail()");
          List<Object[]> PersonalDetailsNGOorCGO=new ArrayList<>();
       try
       {
@@ -2722,6 +2713,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	        }
 	        return PersonalDetailsNGOorCGO;
         }catch(Exception e){
+        	logger.error(new Date() + "Inside DAO fetchPersonalDetailsNGOorCGO"+e);
     	  e.printStackTrace();
 			return null;	                   
 		}
@@ -2732,11 +2724,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getConfigurableReportList(String ConfigurableReportQuery)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getConfigurableReportList()");
 		try {
 			Query query = manager.createNativeQuery(ConfigurableReportQuery);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getConfigurableReportList"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2746,11 +2738,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getAllEmployeeList()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getAllEmployeeList()");
 		try {
 			Query query = manager.createNativeQuery(ALLEMPLOYEELIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getAllEmployeeList"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2760,12 +2752,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDefaultReport(int year)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDefaultReport()");
 		try {
 			Query query = manager.createNativeQuery(DATEREPORT);
 			query.setParameter("years", year);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDefaultReport"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2774,7 +2766,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDobReport(int year, int month)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDobReport()");
 		List<Object[]> dobreports = new ArrayList<>();
 		try {
 			
@@ -2791,6 +2782,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dobreports;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDobReport"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2799,7 +2791,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDoaReport(int year, int month)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDoaReport()");
 		List<Object[]> doareports = new ArrayList<>();
 		try {
 			
@@ -2816,6 +2807,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return doareports;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDoaReport"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2824,7 +2816,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDorReport(int year, int month)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDorReport()");
 		List<Object[]> dorreports = new ArrayList<>();
 		try {
 			
@@ -2841,6 +2832,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dorreports;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDorReport"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2849,7 +2841,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> getDojReport(int year, int month)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getDojReport()");
 		List<Object[]> dojreports = new ArrayList<>();
 		try {
 			
@@ -2866,6 +2857,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dojreports;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getDojReport"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2874,11 +2866,11 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> fetchCadreNameCode()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO fetchCadreNameCode()");
 		try {
 			Query query = manager.createNativeQuery("SELECT CadreId,Cadre FROM pis_cadre WHERE IsActive='1'");
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO fetchCadreNameCode"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2887,12 +2879,12 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public List<Object[]> EmployeeList(String cadreid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO EmployeeList()");
 		try {
 			Query query = manager.createNativeQuery("CALL employee_rptStrength(:cadreId);");
 			query.setParameter("cadreId",cadreid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeList"+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2902,7 +2894,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public int GetMaxSeniorityNo()throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetMaxSeniorityNo()");
 				try {
 					Query query = manager.createNativeQuery(MAXSENIORNO);
 					Object o = query.getSingleResult();
@@ -2914,6 +2905,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		
 					return result;
 				} catch (Exception e) {
+					logger.error(new Date() + "Inside DAO GetMaxSeniorityNo"+e);
 					e.printStackTrace();
 					return 0;
 				}

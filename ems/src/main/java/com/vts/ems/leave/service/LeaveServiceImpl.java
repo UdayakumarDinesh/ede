@@ -66,7 +66,6 @@ public class LeaveServiceImpl implements LeaveService{
 	
 	@Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
-		logger.info(new Date() +"Inside  PisHolidayList");
 		return dao.PisHolidayList(year);
 	}
 
@@ -96,6 +95,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public long LeaveCredited(String month, String year, String emmNo) throws Exception {
+		logger.info(new Date() +"Inside  LeaveCredited");
 		long result=0;
 		try {
 			for(Object[] obj:dao.LeaveCreditPreview(month, year, emmNo)) {
@@ -155,6 +155,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public long LeaveCreditedAddUpdate(LeaveRegister register, String type) throws Exception {
+		logger.info(new Date() +"Inside  LeaveCreditedAddUpdate");
 		long result=0;
 		if("U".equalsIgnoreCase(type)) {
 			
@@ -197,6 +198,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public String[] LeaveCheck(LeaveApplyDto dto) throws Exception {
+		logger.info(new Date() +"Inside  LeaveCheck");
 		String[] Result=new String[5]; 
 		LabMaster lab=dao.getLabDetails().get(0);
 		LeaveRegister register=getRegister(dto.getEmpNo(),sdf.getCurrentYear());
@@ -1612,7 +1614,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public LeaveRegister getRegister(String EmpNo,String yr) throws Exception {
-		
+		logger.info(new Date() +"Inside  getRegister");
 		List<String> regiyrs=dao.getRegisterYrs(EmpNo,yr);
 		double CL=0.0;
 		int EL=0;
@@ -1666,6 +1668,7 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	public LeaveRegister yrlyRegister(String EmpNo,String year) throws Exception {
+		logger.info(new Date() +"Inside  yrlyRegister");
 		List<Object[]> regiList=dao.getRegisterByYear(EmpNo,year);
 		double CL=0.0;
 		int EL=0;
@@ -1742,6 +1745,7 @@ public class LeaveServiceImpl implements LeaveService{
 	
 	
 	private LeaveAppl getLeaveModified(LeaveApplyDto dto,String [] leaveChecked) throws Exception{
+		logger.info(new Date() +"Inside  getLeaveModified");
 		LeaveAppl appl=applrepo.findByApplId(dto.getApplId());
 		LeaveAppl modifiedAppl=new LeaveAppl();
 		if(dto.getApplId()!=null) {
@@ -1818,6 +1822,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public String[] applyLeaveAdd(LeaveApplyDto dto) throws Exception {
+		logger.info(new Date() +"Inside  applyLeaveAdd");
 		String [] leaveChecked=LeaveCheck(dto);
 		if(leaveChecked[1].equalsIgnoreCase("Pass")) {
 			LeaveAppl appl=getLeaveModified(dto,leaveChecked);
@@ -1992,6 +1997,7 @@ public class LeaveServiceImpl implements LeaveService{
 					}
 					}
 					catch (Exception e) {
+						logger.error(new Date() +"Inside  LeaveRegisterList"+e);
 						 e.printStackTrace();
 				         leaveChecked[1]="Fail";
 				         leaveChecked[0]="Leave Apply unsuccessful, if added delete that leave please.";
@@ -2010,6 +2016,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public List<LeaveRegister> LeaveRegisterList(String EmpNo, String yr) throws Exception {
+		logger.info(new Date() +"Inside  LeaveRegisterList");
 		List<Object[]> regiList=dao.getRegisterByYear(EmpNo,yr);
 		List<LeaveRegister>  regiall=new ArrayList<LeaveRegister>();
  		if(regiList!=null&&regiList.size()>0) {
@@ -2042,6 +2049,7 @@ public class LeaveServiceImpl implements LeaveService{
 	
 	@Override
 	public LeaveRegister RegisterOpening(String EmpNo, String yr) throws Exception {
+		logger.info(new Date() +"Inside  RegisterOpening");
 		LeaveRegister last=getRegister(EmpNo,String.valueOf(Integer.parseInt(yr)-1));
 		LeaveRegister opening=new LeaveRegister();
 		try {
@@ -2095,6 +2103,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public int getApproved(ApprovalDto dto,HttpServletRequest req) throws Exception {
+		logger.info(new Date() +"Inside  getApproved");
 		int count=0;
 		if(dto.getApprove()!=null) {
 			for(int i=0;i<dto.getApprove().length;i++) {
@@ -2149,6 +2158,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public int deleteLeave(ApprovalDto dto) throws Exception {
+		logger.info(new Date() +"Inside  deleteLeave");
 		dao.deleteLeaveRegiHo(dto.getApplId());
 		return dao.deleteLeave(dto);
 	}
@@ -2179,6 +2189,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public int getCancelLeave(ApprovalDto dto) throws Exception {
+		logger.info(new Date() +"Inside  getCancelLeave");
 		int count=1;
 		try {
 		dto.setStatus("LCU");
@@ -2192,6 +2203,7 @@ public class LeaveServiceImpl implements LeaveService{
 	        transaction.setLeaveRemarks("NA");
 	        long trns=dao.LeaveTransInsert(transaction);
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside  getCancelLeave"+e);
 			count=0;
 		}     
 		return count;
@@ -2247,10 +2259,12 @@ public class LeaveServiceImpl implements LeaveService{
 
 	@Override
 	public LeaveRaSa getReccSancById(String Id) throws Exception {
+		logger.info(new Date() +"Inside  getReccSancById");
 		LeaveRaSa raSa=new LeaveRaSa();
 		try {
 		raSa=saRaRepo.findByEMPID(Id);
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside  getReccSancById"+e);
 		}
 		return raSa;
 	}
@@ -2275,6 +2289,7 @@ public class LeaveServiceImpl implements LeaveService{
 
 	 public static void saveFile(String FilePath, String fileName, MultipartFile multipartFile) throws IOException 
 	   {
+		 logger.info(new Date() +"Inside  saveFile");
 	        Path uploadPath = Paths.get(FilePath);
 	          
 	        if (!Files.exists(uploadPath)) {
@@ -2287,12 +2302,14 @@ public class LeaveServiceImpl implements LeaveService{
 	        } catch (IOException ioe) {       
 	            throw new IOException("Could not save image file: " + fileName, ioe);
 	        }   catch (Exception e) {
+	        	logger.error(new Date() +"Inside  saveFile"+e);
 	        	e.printStackTrace();
 	        }
 	    }
 
 	@Override
 	public long McFcAttachmentFile(LeaveAttachmentDto dto) throws Exception {
+		logger.info(new Date() +"Inside  McFcAttachmentFile");
 		long result=0;
 		String Path= emsfilespath+"\\MC_FC\\";
 		
@@ -2305,6 +2322,7 @@ public class LeaveServiceImpl implements LeaveService{
         try {
         	model=mcFcRepo.findByApplId(dto.getApplId());
         }catch (Exception e) {
+        	logger.error(new Date() +"Inside  McFcAttachmentFile"+e);
 
 		}
         if(model==null) {

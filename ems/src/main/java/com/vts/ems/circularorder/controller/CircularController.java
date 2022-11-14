@@ -102,6 +102,8 @@ public class CircularController {
 	@RequestMapping(value = "DepCircularAdd.htm")
 	public String DepCircularAdd(HttpServletRequest req, HttpSession ses,@RequestParam(name = "id") String id) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DepCircularAdd.htm "+UserId);
 		req.setAttribute("DepType",service.GetEmsDepType(id));
 		return "circular/DepCircularAddEdit";
 	}

@@ -33,7 +33,6 @@ public class CircularDaoImpl implements CircularDao
 	
 	@Autowired
 	EntityManager manager;
-	
 
 	private static final String GETEMPDATADATA ="from EmployeeDetails where EmpNo =:empNo ";
 	@Override
@@ -47,20 +46,22 @@ public class CircularDaoImpl implements CircularDao
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(new Date() +"Inside getEmpdataData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
+
 	@Override
 	public long GetDepCircularMaxId() throws Exception {
-		logger.info(new Date() +"Inside DAO GetDepCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular");	
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetDepCircularMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -70,7 +71,6 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular WHERE deptypeid=:DepTypeId");
 			query.setParameter("DepTypeId", DepTypeId);
@@ -78,6 +78,7 @@ public class CircularDaoImpl implements CircularDao
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetDepCircularMaxIdEdit "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -115,6 +116,7 @@ public class CircularDaoImpl implements CircularDao
 			Object[] GetEmsDepType=(Object[] )query.getSingleResult();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside GetEmsDepType "+ e);
 			return null;
 		}
 		
@@ -178,6 +180,7 @@ public class CircularDaoImpl implements CircularDao
 			List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside GetEmsDepType "+ e);
 			return new ArrayList<Object[]>();
 		}
 		

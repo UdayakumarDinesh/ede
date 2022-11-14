@@ -408,6 +408,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount, String[] TotalAmount,
 			String PayLevelId, String ClaimMonth, String ClaimYear, String IsBroadBand) {
 
+		logger.info(new Date() + "Inside AddTelephoneClaim ");
 		int AddTelephoneClaim = 0;
 		try {
 
@@ -427,7 +428,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 					TotalAmount);
 
 		} catch (Exception e) {
-			logger.info("EXCEPTION OCCUR while CALCULATING PAYABLE AMOUNT OF TELE data");
+			logger.error("EXCEPTION OCCUR while CALCULATING PAYABLE AMOUNT OF TELE data");
 			AddTelephoneClaim = 0;
 			e.printStackTrace();
 
@@ -443,6 +444,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount, String[] TotalAmount,
 			String IsBroadBand, String UserRemark, String id) {
 		int EditTelephoneResult = 0;
+		logger.info(new Date() + "Inside EditTelephoneResult ");
 
 		try {
 
@@ -462,7 +464,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 					BasicAmount, TaxAmount, TotalAmount, UserRemark, fid);
 
 		} catch (Exception e) {
-			logger.info("EXCEPTION OCCUR while CALCULATING PAYABLE AMOUNT OF TELE data");
+			logger.error("EXCEPTION OCCUR while CALCULATING PAYABLE AMOUNT OF TELE data");
 			EditTelephoneResult = 0;
 			e.printStackTrace();
 
@@ -474,6 +476,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public int TeleApproval(Map<String, String> map, String FromDate, String ToDate, String Empid) {
 		int ApprovalResult = 0;
+		logger.info(new Date() + "Inside TeleApproval ");
 		Map<String, String> map1 = new LinkedHashMap<>();
 		try {
 
@@ -490,7 +493,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			ApprovalResult = dao.TelephoneApprove_AddTelephoneBill(Empid, FinalAmount, FromDate, ToDate, map1);
 
 		} catch (Exception e) {
-			logger.info("EXCEPTION OCCUR while Approving TELEPHONE");
+			logger.error("EXCEPTION OCCUR while Approving TELEPHONE");
 			ApprovalResult = 0;
 			e.printStackTrace();
 
@@ -502,6 +505,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public int TeleSendback(Map<String, String> map, String FromDate, String ToDate, String Empid)
 	{
+		logger.info(new Date() + "Inside TeleSendback ");
 		int ApprovalResult = 0;
 		Map<String, String> map1 = new LinkedHashMap<>();
 		try {
@@ -519,7 +523,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		} 
 		catch (Exception e) 
 		{
-			logger.info("EXCEPTION OCCUR while sending back TELEPHONE");
+			logger.error("EXCEPTION OCCUR while sending back TELEPHONE");
 			ApprovalResult = 0;
 			e.printStackTrace();
 

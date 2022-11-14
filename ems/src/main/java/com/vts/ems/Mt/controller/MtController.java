@@ -41,7 +41,7 @@ public class MtController {
 	private int year = Calendar.getInstance().get(Calendar.YEAR);
 	private int month = Calendar.getInstance().get(Calendar.MONTH)+1;
 	private int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-	private static final Logger logger = LogManager.getLogger(LeaveController.class);
+	private static final Logger logger = LogManager.getLogger(MtController.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	
@@ -150,7 +150,7 @@ public class MtController {
 	public String GetProjectList(HttpServletRequest req, HttpSession ses , RedirectAttributes redir)throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside ProjectList.htm "+Username);
+		logger.info(new Date() +"Inside MtUserApplyAddEdit.htm "+Username);
 		
 		try {	
 			String mtapplid = req.getParameter("mtapplId");			
@@ -290,7 +290,7 @@ public class MtController {
 		}
 			
 		} catch (Exception e) {
-			logger.error(new Date() +" Inside ProjectList.htm "+Username, e);
+			logger.error(new Date() +" Inside MtUserApplyAddEdit.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
@@ -529,7 +529,7 @@ public class MtController {
 	public String MTTripInsertEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside MTTripInsert.htm "+Username);
+		logger.info(new Date() +"Inside MTTrip.htm "+Username);
 		try {
 			String tripid = req.getParameter("TripId");
 			if(tripid!=null) {
@@ -616,7 +616,7 @@ public class MtController {
 		}
 
 		} catch (Exception e) {
-			logger.error(new Date() +" Inside MTTripInsert.htm "+Username, e);
+			logger.error(new Date() +" Inside MTTrip.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
@@ -1061,7 +1061,7 @@ public class MtController {
 	public String VechicleAddSubmit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside MtVehicleC.htm "+Username);	
+		logger.info(new Date() +"Inside MtVehicleAddEdit.htm "+Username);	
 		try {
 			String vehicleid= req.getParameter("vehicleid");
 			if(vehicleid!=null && vehicleid!="") {
@@ -1100,7 +1100,7 @@ public class MtController {
 			}
 			return "redirect:/MtVehicle.htm";
 		} catch (Exception e) {
-			logger.error(new Date() +" Inside MtVehicleC.htm "+Username, e);
+			logger.error(new Date() +" Inside MtVehicleAddEdit.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}	

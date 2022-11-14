@@ -45,7 +45,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public List<Object[]> getNewspaperClaimList(String empno)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperClaimList");
 		List<Object[]> NewspaperClaimList = new ArrayList<Object[]>();
 		try 
 		{
@@ -55,7 +54,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperClaimList"+e);
 			e.printStackTrace();
 		}
 		return NewspaperClaimList;
@@ -67,7 +66,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getPayLevelAndNewsRectrictAmt(String empno) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getPayLevelAndNewsRectrictAmt");
 		Object[] PayLevelAndNewsRectrictAmt = null;
 		try {
 			Query q = manager.createNativeQuery(GETPAYLEVELANDNEWSRECTRICTAMT);
@@ -79,8 +77,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			System.err.println("No Result found Exception");
 		}	
 		catch (Exception e) {
-
-			logger.error(e);			
+			logger.error(new Date() +"Inside DAO getPayLevelAndNewsRectrictAmt"+e);
 			e.printStackTrace();
 			PayLevelAndNewsRectrictAmt = null;
 		}
@@ -92,7 +89,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public long AddNewspaperClaim(String empno, String ClaimMonth, String ClaimYear, double ClaimAmount,double RestrictedAmount, double PayableAmount, String PayLevelId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO AddNewspaperClaim");
 		long result = 0;
 
 		try {
@@ -125,7 +121,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO AddNewspaperClaim"+e);
 			e.printStackTrace();
 		}
 
@@ -138,7 +134,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getCheckPeriodOfNewsAlreadyPresentOrNot(String empno, String ClaimMonth, String ClaimYear) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCheckPeriodOfNewsAlreadyPresentOrNot");
 		Object[] getCheckPeriodAlreadyPresentOrNot = null;
 
 		try {
@@ -156,7 +151,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		 catch (Exception e) {
 
-			logger.error(e);
+			 logger.error(new Date() +"Inside DAO getCheckPeriodOfNewsAlreadyPresentOrNot"+e);
 			e.printStackTrace();
 			getCheckPeriodAlreadyPresentOrNot = null;
 		}
@@ -170,7 +165,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getCheckNewspaperApproveOrNot(String NewspaperId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCheckNewspaperApproveOrNot");
 		Object[] CheckNewspaperApproveOrNot = null;
 		try {
 			Query q = manager.createNativeQuery(GETCHECKNEWSPAPERAPPROVEORNOT);
@@ -182,7 +176,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			System.err.println("No Result found Exception");
 		}	
 		catch (Exception e) {
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getCheckNewspaperApproveOrNot"+e);
 			e.printStackTrace();
 			CheckNewspaperApproveOrNot = null;
 		}
@@ -195,7 +189,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getNewspaperEditDetails(String NewspaperId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperEditDetails");
 		Object[] NewspaperEditDetails = null;
 
 		try {
@@ -211,7 +204,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperEditDetails"+e);
 			e.printStackTrace();
 		}
 
@@ -224,7 +217,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int EditNewspaperClaim(String empno, double ClaimAmount, String NewspaperId, double PayableAmount)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditNewspaperClaim");
 		int EditNewspaperClaim = 0;
 
 		try {
@@ -245,7 +237,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO EditNewspaperClaim"+e);
 			e.printStackTrace();
 		}
 
@@ -258,7 +250,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int DeleteNewspaperClaim(String NewspaperId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO DeleteNewspaperClaim");
 		int DeleteNewspaperClaim = 0;
 
 		try {
@@ -269,7 +260,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO DeleteNewspaperClaim"+e);
 			e.printStackTrace();
 		}
 
@@ -282,7 +273,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getNewspaperUserPrintData(String NewspaperId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperUserPrintData");
 		Object[] NewspaperUserPrintData = null;
 
 		try {
@@ -298,7 +288,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		 catch (Exception e) {
 
-			logger.error(e);
+			 logger.error(new Date() +"Inside DAO getNewspaperUserPrintData"+e);
 			e.printStackTrace();
 		}
 
@@ -311,7 +301,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public List<Object[]> getNewspaperClaimApprovedList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperClaimApprovedList");
 		List<Object[]> NewspaperClaimApprovedList = new ArrayList<>();
 		try {
 
@@ -321,7 +310,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperClaimApprovedList"+e);
 			e.printStackTrace();
 
 		}
@@ -334,7 +323,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public List<Object[]> getNewspaperApprovalList() throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperApprovalList");
 		List<Object[]> NewspaperApprovalList = new ArrayList<>();
 		try {
 
@@ -344,7 +332,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperApprovalList"+e);
 			e.printStackTrace();
 		}
 
@@ -358,7 +346,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int NewspaperApprove_AddNewspaperBill(String empno, double totalAmount, String FromDate, String ToDate,Map<String, String> map) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO NewspaperApprove_AddNewspaperBill");
 		int result = 0;
 
 		try {
@@ -398,7 +385,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			result = result + 1;
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO NewspaperApprove_AddNewspaperBill"+e);
 			e.printStackTrace();
 		}
 
@@ -412,14 +399,13 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int getMaxNewspaperBillId() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getMaxNewspaperBillId");
 		int MaxNewspaperBillId = 0;
 		try {
 			Query q = manager.createNativeQuery(GETMAXNEWSPAPERBILLID);
 			MaxNewspaperBillId = (int) q.getSingleResult();
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getMaxNewspaperBillId"+e);
 			e.printStackTrace();
 		} 
 		return (MaxNewspaperBillId);
@@ -431,7 +417,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int NewspaperApprove_UpdateNewspaper(Map<String, String> map, String empno, int MaxNewspaperBillId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO NewspaperApprove_UpdateNewspaper");
 		int NewspaperApprove_UpdateNewspaper = 0;
 		try {
 
@@ -465,7 +450,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} // try closed
 		catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO NewspaperApprove_UpdateNewspaper"+e);
 			e.printStackTrace();
 			NewspaperApprove_UpdateNewspaper = 0;
 
@@ -479,7 +464,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getNewspaperApprovalPeriodEditDetails(String NewspaperBillId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperApprovalPeriodEditDetails");
 		Object[] NewspaperApprovalPeriodEditDetails = null;
 
 		try {
@@ -495,7 +479,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		 catch (Exception e) {
 
-			logger.error(e);
+			 logger.error(new Date() +"Inside DAO getNewspaperApprovalPeriodEditDetails"+e);
 			e.printStackTrace();
 		}
 
@@ -508,7 +492,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public int UpdateNewsPeriod(String empno, String NewspaperBillId, String FromDate, String ToDate)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateNewsPeriod");
 		int UpdateNewsPeriod = 0;
 
 		try {
@@ -531,7 +514,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO UpdateNewsPeriod"+e);
 			e.printStackTrace();
 			UpdateNewsPeriod = 0;
 		}
@@ -546,7 +529,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public List<Object[]> getNewspaperReportPrintData(String NewspaperBillId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperReportPrintData");
 		List<Object[]> NewspaperReportPrintData = new ArrayList<>();
 		try {
 			
@@ -556,7 +538,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperReportPrintData"+e);
 			e.printStackTrace();
 		}
 		return (NewspaperReportPrintData);
@@ -570,7 +552,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public Object[] getNewspaperContingentBillPrintData(String NewspaperBillId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperContingentBillPrintData");
 		Object[] NewspaperContingentBillPrintData = null;
 
 		try {
@@ -587,7 +568,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getNewspaperContingentBillPrintData"+e);
 			e.printStackTrace();
 		}
 
@@ -601,7 +582,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	@Override
 	public LabMaster getLabDetails() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getNewspaperContingentBillPrintData");
 		LabMaster LabDetails = null;
 		try {
 
@@ -611,7 +591,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error(new Date() +"Inside DAO getLabDetails"+e);
 			e.printStackTrace();
 		}
 
@@ -630,7 +610,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getDeviceList(String empid) throws Exception
 		{
-			logger.info(new Date() +"Inside DAO getDeviceList");
 			List<Object[]> DeviceList = new ArrayList<>();
 			try {
 		
@@ -639,7 +618,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeviceList = (List<Object[]>) query.getResultList();
 		
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getDeviceList"+e);
 				e.printStackTrace();
 				
 			} 
@@ -653,7 +632,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTeleDeviceList(String empid) throws Exception
 		{
-			logger.info(new Date() +"Inside DAO getTeleDeviceList");
 			List<Object[]> TeleDeviceList=new ArrayList<>();
 			try
 			{
@@ -663,7 +641,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}
 			catch(Exception e)
 			{
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTeleDeviceList"+e);
 				e.printStackTrace();
 			}
 			return TeleDeviceList;
@@ -674,7 +652,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int AddTeleUsers(String Empid,String deviceId,String deviceNo) throws Exception
 		{
-			logger.info(new Date() +"Inside DAO AddTeleUsers");
 			try
 			{
 				TelephoneUsers tu=new  TelephoneUsers();
@@ -692,7 +669,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}
 			catch(Exception e)
 			{
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO AddTeleUsers"+e);
 				e.printStackTrace();
 				return 0;
 			}
@@ -705,7 +682,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getTeleDeviceEditDetails(String empid, String TeleUsersId) 
 		{
-			logger.info(new Date() +"Inside DAO getTeleDeviceEditDetails");
 			Object[] TeleDeviceEditDetails = null;
 			try 
 			{
@@ -721,7 +697,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}	
 			catch (Exception e) 
 			{
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTeleDeviceEditDetails"+e);
 				e.printStackTrace();
 			}
 
@@ -735,7 +711,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int UpdateTeleUser(String Empid,String TeleUsersId,String deviceNo)
 		{
-			logger.info(new Date() +"Inside DAO UpdateTeleUser");
 			int UpdateTeleUser = 0;
 
 			try {
@@ -750,7 +725,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				UpdateTeleUser = query.executeUpdate();
 				
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO UpdateTeleUser"+e);
 				e.printStackTrace();
 			}
 
@@ -763,7 +738,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int DeleteTeleUser(String Empid,String TeleUsersId)
 		{
-			logger.info(new Date() +"Inside DAO DeleteTeleUser");
 			int DeleteTeleUser = 0;
 			try {
 
@@ -773,7 +747,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeleteTeleUser = query.executeUpdate();
 				
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO DeleteTeleUser"+e);
 				e.printStackTrace();
 			} 
 		
@@ -788,7 +762,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTeleClaimList(String Empid) 
 		{
-			logger.info(new Date() +"Inside DAO getTeleClaimList");
 			List<Object[]> TeleClaimList = new ArrayList<>();
 			try {
 
@@ -797,7 +770,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TeleClaimList = (List<Object[]>) query.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTeleClaimList"+e);
 				e.printStackTrace();
 			} 
 			return (TeleClaimList);
@@ -809,7 +782,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getPayLevelAndTeleRectrictAmt(String Empid)
 		{
-			logger.info(new Date() +"Inside DAO getPayLevelAndTeleRectrictAmt");
 			Object[] PayLevelAndTeleRectrictAmt = null;
 			try {
 	
@@ -823,7 +795,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getPayLevelAndTeleRectrictAmt"+e);
 				e.printStackTrace();
 			} 
 			return (PayLevelAndTeleRectrictAmt);
@@ -834,7 +806,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getTeleSpecialpermission(String Empid) 
 		{
-			logger.info(new Date() +"Inside DAO getTeleSpecialpermission");
 			Object[] TeleSpecialpermission = null;
 			try {
 
@@ -847,7 +818,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}			
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTeleSpecialpermission"+e);
 				e.printStackTrace();
 			} 
 			return (TeleSpecialpermission);
@@ -862,7 +833,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount,
 				String[] TotalAmount) 
 		{
-			logger.info(new Date() +"Inside DAO addTeleClaim");
 			int result = 0;
 			try {
 
@@ -906,7 +876,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = 1;
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO addTeleClaim"+e);
 				e.printStackTrace();
 			} 
 
@@ -919,7 +889,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int getMaxTeleId()
 		{
-			logger.info(new Date() +"Inside DAO getMaxTeleId");
 			int MaxTeleId = 0;
 			try {
 		
@@ -927,7 +896,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				MaxTeleId = (int) q.getSingleResult();
 		
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getMaxTeleId"+e);
 				e.printStackTrace();
 			} 
 			return (MaxTeleId);
@@ -941,7 +910,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getCheckPeriodOfTeleAlreadyPresentOrNot(String Empid,String  ClaimMonth,String ClaimYear)
 		{
-			logger.info(new Date() +"Inside DAO getCheckPeriodOfTeleAlreadyPresentOrNot");
 			Object[] getCheckPeriodAlreadyPresentOrNot = null;
 			try {
 		
@@ -957,7 +925,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getCheckPeriodOfTeleAlreadyPresentOrNot"+e);
 				e.printStackTrace();
 			} 
 			return (getCheckPeriodAlreadyPresentOrNot);
@@ -969,7 +937,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTeleClaimEditDetails(String TeleId) 
 		{
-			logger.info(new Date() +"Inside DAO getTeleClaimEditDetails");
 			List<Object[]> TeleClaimEditDetails = new ArrayList<Object[]>();
 			try {
 
@@ -978,7 +945,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TeleClaimEditDetails = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTeleClaimEditDetails"+e);
 				e.printStackTrace();
 			}
 			return (TeleClaimEditDetails);
@@ -990,7 +957,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int  updateTele(String Empid,String TeleId,String TotalBasic,String TotalTax,double GrossTotal,double PayableAmount,String IsBroadBand,String[] TeleDId,String[] TeleFromDate,String[] TeleToDate,String[] TeleBillNo,String[] TeleBillDate,String[] BasicAmount,String[] TaxAmount,String[] TotalAmount,String UserRemark,int fid)
 		{
-			logger.info(new Date() +"Inside DAO updateTele");
 			int updateTele = 0;
 			int updateTeleD = 0;
 			int updateTeleF = 0;
@@ -1040,7 +1006,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = updateTele + updateTeleD;
 		
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO updateTele"+e);
 				e.printStackTrace();
 			}
 		
@@ -1055,7 +1021,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int DeleteTelephone(String TeleId, String sessionEmpid) 
 		{
-			logger.info(new Date() + "Inside DAO DeleteTelephone");
 			int DeleteTelephone = 0;
 
 			try {
@@ -1067,7 +1032,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeleteTelephone = q.executeUpdate();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO DeleteTelephone"+e);
 				e.printStackTrace();
 			}
 
@@ -1078,7 +1043,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int InsertTeleUserFlagAndGenerateTeleForwardId(String Empid) 
 		{
-			logger.info(new Date() + "Inside DAO InsertTeleUserFlagAndGenerateTeleForwardId");
 			int result = 0;
 			try {
 
@@ -1092,7 +1056,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = 1;
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO InsertTeleUserFlagAndGenerateTeleForwardId"+e);
 				e.printStackTrace();
 			}
 
@@ -1104,14 +1068,13 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int getMaxTeleForwardId() 
 		{
-			logger.info(new Date() + "Inside DAO getMaxTeleForwardId");
 			int MaxTeleForwardId = 0;
 			try {
 				Query q = manager.createNativeQuery(GETMAXTELEFORWARDID);
 				MaxTeleForwardId = (int) q.getSingleResult();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getMaxTeleForwardId"+e);
 				e.printStackTrace();
 			}
 			return (MaxTeleForwardId);
@@ -1123,7 +1086,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int UpdateTeleByTeleForwardId(String Empid, String[] TeleIdArray) 
 		{
-			logger.info(new Date() + "Inside DAO UpdateTeleByTeleForwardId");
 			int result = 0;
 			try {
 
@@ -1146,7 +1108,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 				result = result + 1;
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO UpdateTeleByTeleForwardId"+e);
 				e.printStackTrace();
 			}
 			return (result);
@@ -1156,7 +1118,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneUserPrintSingleData");
 			List<Object[]> TelephoneUserPrintSingleData = new ArrayList<>();
 			try {
 
@@ -1165,7 +1126,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneUserPrintSingleData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneUserPrintSingleData"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneUserPrintSingleData);
@@ -1177,7 +1138,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneUserPrintMultiData");
 			List<Object[]> TelephoneUserPrintMultiData = new ArrayList<>();
 			try {
 
@@ -1186,7 +1146,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneUserPrintMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneUserPrintMultiData"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneUserPrintMultiData);
@@ -1200,7 +1160,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephoneClaimApprovedList() 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneClaimApprovedList");
 			List<Object[]> TelephoneClaimApprovedList = new ArrayList<>();
 			try {
 
@@ -1208,7 +1167,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneClaimApprovedList = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneClaimApprovedList"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneClaimApprovedList);
@@ -1220,7 +1179,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephoneApprovalList() 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneApprovalList");
 			List<Object[]> TelephoneApprovalList = new ArrayList<>();
 			try {
 
@@ -1228,7 +1186,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneApprovalList = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneApprovalList"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneApprovalList);
@@ -1241,7 +1199,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int TelephoneApprove_AddTelephoneBill( String Empid, double FinalAmount, String FromDate, String ToDate, Map<String, String> map ) 
 		{
-			logger.info(new Date() + "Inside DAO TelephoneApprove_AddTelephoneBill");
 			int result = 0;
 
 			try {
@@ -1286,7 +1243,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 				result = 2;
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO TelephoneApprove_AddTelephoneBill"+e);
 				e.printStackTrace();
 			}
 
@@ -1299,7 +1256,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int TelephoneSendback(String Empid, double FinalAmount, String FromDate, String ToDate,	Map<String, String> map) 
 		{
-			logger.info(new Date() + "Inside DAO TelephoneSendback");
 			int result = 0;
 			try {
 				
@@ -1330,7 +1286,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				
 				result = 2;
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO TelephoneSendback"+e);
 				e.printStackTrace();
 			}
 
@@ -1343,7 +1299,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getCheckTeleApproveOrNot(String TeleId) 
 		{
-			logger.info(new Date() + "Inside DAO getCheckTeleApproveOrNot");
 			Object[] CheckTeleApproveOrNot = null;
 
 			try {
@@ -1358,7 +1313,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getCheckTeleApproveOrNot"+e);
 				e.printStackTrace();
 			}
 			return (CheckTeleApproveOrNot);
@@ -1370,7 +1325,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getCheckTeleApproveForwardOrNot(String TeleId) 
 		{
-			logger.info(new Date() + "Inside DAO getCheckTeleApproveForwardOrNot");
 			Object[] CheckTeleApproveForwardOrNot = null;
 			try {
 				Query q = manager.createNativeQuery(GETCHECKTELEAPPROVEFORWARDORNOT);
@@ -1383,7 +1337,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}	
 			catch (Exception e) 
 			{
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getCheckTeleApproveForwardOrNot"+e);
 				e.printStackTrace();
 			}
 			return (CheckTeleApproveForwardOrNot);
@@ -1395,7 +1349,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getTelephoneApprovalPeriodEditDetails(String TeleBillId) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneApprovalPeriodEditDetails");
 			Object[] TelephoneApprovalPeriodEditDetails = null;
 
 			try {
@@ -1410,7 +1363,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneApprovalPeriodEditDetails"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneApprovalPeriodEditDetails);
@@ -1422,7 +1375,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public int UpdateTelePeriod(String Empid, String TeleBillId, String FromDate, String ToDate) 
 		{
-			logger.info(new Date() + "Inside DAO UpdateTelePeriod");
 			int UpdateTelePeriod = 0;
 
 			try {
@@ -1444,7 +1396,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				UpdateTelePeriod = q.executeUpdate();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO UpdateTelePeriod"+e);
 				e.printStackTrace();
 			}
 
@@ -1458,7 +1410,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public Object[] getTelephoneContingentBillPrintData(String TeleBillId) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneContingentBillPrintData");
 			Object[] TelephoneContingentBillPrintData = null;
 
 			try {
@@ -1473,7 +1424,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneContingentBillPrintData"+e);
 				e.printStackTrace();
 			}
 			return (TelephoneContingentBillPrintData);
@@ -1485,7 +1436,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephonePrintReportSingleData(String TeleBillId) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephonePrintReportSingleData");
 			List<Object[]> TelephonePrintReportSingleData = new ArrayList<>();
 			try {
 
@@ -1494,7 +1444,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportSingleData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephonePrintReportSingleData"+e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportSingleData);
@@ -1506,7 +1456,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephonePrintReportMultiData(String TeleBillId)
 		{
-			logger.info(new Date() + "Inside DAO getTelephonePrintReportMultiData");
 			List<Object[]> TelephonePrintReportMultiData = new ArrayList<>();
 			try {
 
@@ -1515,7 +1464,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephonePrintReportMultiData"+e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportMultiData);
@@ -1526,7 +1475,6 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		@Override
 		public List<Object[]> getTelephoneSendbackData(String Empid) 
 		{
-			logger.info(new Date() + "Inside DAO getTelephoneSendbackData");
 			List<Object[]> TelephonePrintReportMultiData = new ArrayList<>();
 			try {
 
@@ -1535,7 +1483,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(new Date() +"Inside DAO getTelephoneSendbackData"+e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportMultiData);

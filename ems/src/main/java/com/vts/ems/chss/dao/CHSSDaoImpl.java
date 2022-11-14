@@ -67,7 +67,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override 
 	public Object[] CHSSDashboardCountData(String Empid, String FromDate, String ToDate,String IsSelf) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO CHSSDashboardCountData");
 		try {
 			Query query = manager.createNativeQuery(CHSSDASHBOARDCOUNTDATA);
 			query.setParameter("empid", Empid);
@@ -89,7 +88,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override 
 	public List<Object[]> CHSSDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO CHSSDashboardGraphData");
 		try {
 			Query query = manager.createNativeQuery(CHSSDASHBOARDGRAPHDATA);
 			query.setParameter("empid", Empid);
@@ -110,7 +108,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO CHSSDashboardAmountData");
 		try {
 				
 			Query query = manager.createNativeQuery(CHSSDASHBOARDAMOUNTDATA);
@@ -133,7 +130,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> CHSSDashboardIndividualAmountData(String Empid, String FromDate, String ToDate) throws Exception
 	{
 		
-		logger.info(new Date() + "Inside DAO CHSSDashboardIndividualAmountData");
 		try {
 			
 			Query query = manager.createNativeQuery(CHSSDASHBOARDINDIVIDUALAMOUNTDATA);
@@ -144,7 +140,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]> )query.getResultList();
 		}
 		catch(Exception e) {
-			logger.error(new Date()  + "Inside DAO CHSSDashboardIndividualAmountData " + e);
+			logger.error(new Date()  + "Inside DAO CHSSDashboardIndividualAmountData " +e);
 			return null;
 		}
 	}
@@ -157,7 +153,6 @@ public class CHSSDaoImpl implements CHSSDao {
 		public Object[] MonthlyWiseDashboardData(String FromDate, String ToDate,int Month) throws Exception
 		{
 			 		 
-			 logger.info(new Date() + "Inside DAO MonthlyWiseDashboardData");
 				try {
 					
 					Query query = manager.createNativeQuery(MONTHLYWISEDASHBOARDDATA);
@@ -186,7 +181,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> familyDetailsList(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO familyDetailsList");
 		Query query =manager.createNativeQuery(FAMILYDETAILSLIST);
 		List<Object[]> resultList = new ArrayList<Object[]>();		
 		query.setParameter("empid", empid);
@@ -199,7 +193,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] familyMemberData(String familydetailsid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO familyMemberData");
 		Query query =manager.createNativeQuery(FAMILYMEMBERDATA);
 		Object[] result = null;
 		query.setParameter("familydetailsid", familydetailsid);
@@ -208,6 +201,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date()  + "Inside Dao familyMemberData " + e);
 		}
 		
 		return result;
@@ -218,13 +212,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public  Object[] getEmployee(String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmployee");
 		Query query =manager.createNativeQuery(EMPLOYEE);
 		Object[] result = null;
 		query.setParameter("empid", empid);
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getEmployee " + e);
 			e.printStackTrace();
 		}
 		
@@ -237,7 +231,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSOtherItems getCHSSOtherItems(String otheritemid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSPaybandRemlist");
 		CHSSOtherItems remamountlist= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -249,6 +242,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			remamountlist= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSOtherItems " + e);
 			e.printStackTrace();
 		}
 		return remamountlist;
@@ -258,7 +252,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid,long  basicpay) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSOtherPermitAmt");
 		CHSSOtherPermitAmt list= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -277,7 +270,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
-		
+			logger.error(new Date()  + "Inside Dao getCHSSOtherPermitAmt " + e);
 		}
 		return list;
 	}
@@ -291,7 +284,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSTreatType> CHSSTreatTypeList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTreatTypeList");
 		List<CHSSTreatType> list= new ArrayList<CHSSTreatType>(); 
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -302,6 +294,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date()  + "Inside Dao CHSSTreatTypeList " + e);
 		}
 		return list;
 	}
@@ -310,7 +303,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSApplyAdd(CHSSApply apply ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApplyAdd");
 		manager.persist(apply);
 		manager.flush();
 		
@@ -320,7 +312,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSBillAdd(CHSSBill bill) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBillAdd");
 		manager.persist(bill);
 		manager.flush();
 		
@@ -331,7 +322,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSConsultMainAdd(CHSSConsultMain consultmain) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultMainAdd");
 		manager.persist(consultmain);
 		manager.flush();		
 		return consultmain.getCHSSConsultMainId();
@@ -340,7 +330,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSApply CHSSApplied(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApplied");
 		CHSSApply apply= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -353,6 +342,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date()  + "Inside Dao CHSSApplied " + e);
 		}
 		return apply;
 	}
@@ -361,12 +351,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] CHSSAppliedData(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSAppliedData");
 		try {
 			Query query = manager.createNativeQuery("CALL chss_claim_data(:CHSSApplyId);");
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSAppliedData " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -377,11 +367,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSDoctorRates getDocterRate(String rateid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getDocterRate");
 		try {
 			return manager.find(CHSSDoctorRates.class, Integer.parseInt(rateid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getDocterRate " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -392,13 +382,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSBillsList(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBillsList");
 		try {
 			Query query = manager.createNativeQuery("CALL chss_claim_bills (:CHSSApplyId);");
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date()  + "Inside Dao CHSSBillsList " + e);
 			return new ArrayList<Object[]>();
 		}
 		
@@ -407,7 +397,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSConsultMainBillsList(String consultmainid, String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultMainBillsList");
 		try {
 			Query query = manager.createNativeQuery("CALL chss_consult_bills (:chssapplyid ,:consultmainid );");
 			query.setParameter("chssapplyid", chssapplyid);
@@ -415,6 +404,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(new Date()  + "Inside Dao CHSSConsultMainBillsList " + e);
 			return new ArrayList<Object[]>();
 		}
 		
@@ -425,12 +415,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] claimConsultationsCount(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO claimConsultationsCount");
 		try {
 			Query query = manager.createNativeQuery(CLAIMCONSULTATIONSCOUNT);
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getResultList().get(0);
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimConsultationsCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -443,12 +433,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] claimMedicinesCount(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO claimMedicinesCount");
 		try {
 			Query query = manager.createNativeQuery(CLAIMMEDICINESCOUNT);
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getResultList().get(0);
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimMedicinesCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -459,7 +449,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> empCHSSList(String empid,String PatientId, LocalDate FromDate, LocalDate Todate, String IsSelf) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO empCHSSList");
 		try {
 			Query query = manager.createNativeQuery(EMPCHSSLIST);
 			query.setParameter("empid", empid);
@@ -471,6 +460,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao empCHSSList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -480,10 +470,10 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSConsultMain getCHSSConsultMain(String ConsultMainId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSConsultMainEdit");
 		try {
 			return manager.find(CHSSConsultMain.class, Long.parseLong(ConsultMainId));
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSConsultMain " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -492,11 +482,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBill getCHSSBill(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSBill");
 		try {
 			return manager.find(CHSSBill.class, Long.parseLong(billid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSBill " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -506,13 +496,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] CHSSBill(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBill");
 		try {
 			Query query = manager.createNativeQuery("CALL chss_bill_data(:billid)");
 			query.setParameter("billid", billid);
 			return (Object[])query.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSBill " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -521,13 +511,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSBillEdit(CHSSBill bill) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBillEdit");
 		try {
 			manager.merge(bill);
 			manager.flush();
 			
 			return bill.getBillId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -538,7 +528,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int CHSSConsultMainDelete(String  consultmainid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
 		try {
 			CriteriaBuilder criteriaBuilder  = manager.getCriteriaBuilder();
 			CriteriaDelete<CHSSConsultMain> query = criteriaBuilder.createCriteriaDelete(CHSSConsultMain.class);
@@ -548,6 +537,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			int result = manager.createQuery(query).executeUpdate();
 			return result;
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSConsultMainDelete " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -556,13 +546,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
 		try {
 			manager.merge(consultmain);
 			manager.flush();
 			
 			return consultmain.getCHSSConsultMainId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSConsultMainEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -573,11 +563,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSApply getCHSSApply(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSApply");
 		try {
 			return manager.find(CHSSApply.class, Long.parseLong(chssapplyid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSApply " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -588,7 +578,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSApplyDispute getCHSSApplyDispute(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSApplyDispute");
 		CHSSApplyDispute Dispute= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -604,6 +593,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Dispute= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSApplyDispute " + e);
 			e.printStackTrace();
 		}
 		return Dispute;
@@ -614,11 +604,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillConsultation getCHSSConsultation(String consultationid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSConsultation");
 		try {
 			return manager.find(CHSSBillConsultation.class, Long.parseLong(consultationid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSConsultation " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -628,13 +618,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSApplyEdit(CHSSApply apply) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApplyEdit");
 		try {
 			manager.merge(apply);
 			manager.flush();
 			
 			return apply.getCHSSApplyId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApplyEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -644,7 +634,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSTestMain> CHSSTestMainList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTestMainList");
 		List<CHSSTestMain> testmainlist= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -654,6 +643,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testmainlist= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSTestMainList " + e);
 			e.printStackTrace();
 		}
 		return testmainlist;
@@ -662,7 +652,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSTestSub> CHSSTestSubList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTestSubList");
 		List<CHSSTestSub> testsublist= new ArrayList<CHSSTestSub>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -679,6 +668,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsublist= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSTestSubList " + e);
 			e.printStackTrace();
 		}
 		return testsublist;
@@ -687,7 +677,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSTestSub> CHSSTestSubListWithAyur() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTestSubList");
 		List<CHSSTestSub> testsublist= new ArrayList<CHSSTestSub>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -704,6 +693,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsublist= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSTestSubListWithAyur " + e);
 			e.printStackTrace();
 		}
 		return testsublist;
@@ -713,7 +703,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSTestSub getCHSSTestSub(String testsubid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTestSubList");
 		CHSSTestSub testsub= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -729,6 +718,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsub= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSTestSub " + e);
 			e.printStackTrace();
 		}
 		return testsub;
@@ -737,7 +727,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long ConsultationBillAdd(CHSSBillConsultation consult) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultationBillAdd");
 		manager.persist(consult);
 		manager.flush();
 		
@@ -747,7 +736,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillConsultation> CHSSConsultationList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultationList");
 		List<CHSSBillConsultation> list= new ArrayList<CHSSBillConsultation>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -764,6 +752,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ConsultationBillAdd " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -772,13 +761,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long ConsultationBillEdit(CHSSBillConsultation consult) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultationBillEdit");
 		try {
 			manager.merge(consult);
 			manager.flush();
 			
 			return consult.getConsultationId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ConsultationBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -788,7 +777,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long MedicinesBillAdd(CHSSBillMedicine medicine) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedicinesBillAdd");
 		manager.persist(medicine);
 		manager.flush();
 		
@@ -798,7 +786,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillMedicine> CHSSMedicineList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMedicineList");
 		List<CHSSBillMedicine> list= new ArrayList<CHSSBillMedicine>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -815,6 +802,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao MedicinesBillAdd " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -823,11 +811,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillMedicine getCHSSMedicine(String CHSSMedicineId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSMedicine");
 		try {
 			return manager.find(CHSSBillMedicine.class, Long.parseLong(CHSSMedicineId));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSMedicine " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -838,11 +826,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillTests getCHSSTest(String chsstestid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSTest");
 		try {
 			return manager.find(CHSSBillTests.class, Long.parseLong(chsstestid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSTest " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -852,13 +840,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long MedicineBillEdit(CHSSBillMedicine medicine) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedicineBillEdit");
 		try {
 			manager.merge(medicine);
 			manager.flush();
 			
 			return medicine.getCHSSMedicineId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao MedicineBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -871,7 +859,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long TestsBillAdd(CHSSBillTests test) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO TestsBillAdd");
 		manager.persist(test);
 		manager.flush();
 		
@@ -881,7 +868,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillTests> CHSSTestsList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMedicineList");
 		List<CHSSBillTests> list= new ArrayList<CHSSBillTests>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -898,6 +884,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSTestsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -907,13 +894,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long TestBillEdit(CHSSBillTests test) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO TestBillEdit");
 		try {
 			manager.merge(test);
 			manager.flush();
 			
 			return test.getCHSSTestId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao TestBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -929,7 +916,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long MiscBillAdd(CHSSBillMisc misc) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MiscBillAdd");
 		manager.persist(misc);
 		manager.flush();
 		
@@ -938,11 +924,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillMisc getCHSSMisc(String miscid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSMisc");
 		try {
 			return manager.find(CHSSBillMisc.class, Long.parseLong(miscid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSMisc " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -951,7 +937,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillMisc> CHSSMiscList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMiscList");
 		List<CHSSBillMisc> list= new ArrayList<CHSSBillMisc>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -967,6 +952,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSMiscList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -975,13 +961,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long MiscBillEdit(CHSSBillMisc misc) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MiscBillEdit");
 		try {
 			manager.merge(misc);
 			manager.flush();
 			
 			return misc.getChssMiscId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao MiscBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -992,7 +978,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSDoctorRates> getCHSSDoctorRates(String treattypeid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSDoctorRates");
 		List<CHSSDoctorRates> list= new ArrayList<CHSSDoctorRates>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1009,6 +994,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSDoctorRates " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1017,7 +1003,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSOtherItems> OtherItemsList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OtherItemsList");
 		List<CHSSOtherItems> list= new ArrayList<CHSSOtherItems>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1033,6 +1018,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao OtherItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1041,7 +1027,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillOther> CHSSOtherList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSOtherList");
 		List<CHSSBillOther> list= new ArrayList<CHSSBillOther>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1057,7 +1042,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			
+			logger.error(new Date()  + "Inside Dao CHSSOtherList " + e);
 		}
 		return list;
 	}
@@ -1065,7 +1050,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSBillPkg> CHSSBillPkgList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSOtherList");
 		List<CHSSBillPkg> list= new ArrayList<CHSSBillPkg>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1081,7 +1065,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			
+			logger.error(new Date()  + "Inside Dao CHSSBillPkgList " + e);
 		}
 		return list;
 	}
@@ -1089,7 +1073,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long OtherBillAdd(CHSSBillOther other) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OtherBillAdd");
 		manager.persist(other);
 		manager.flush();
 		
@@ -1099,13 +1082,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long OtherBillEdit(CHSSBillOther other) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OtherBillEdit");
 		try {
 			manager.merge(other);
 			manager.flush();
 			
 			return other.getCHSSOtherId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao OtherBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1115,11 +1098,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillOther getCHSSOther(String otherid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSOther");
 		try {
 			return manager.find(CHSSBillOther.class, Long.parseLong(otherid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSOther " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1132,12 +1115,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSConsultDataList(String CHSSApplyId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSCONSULTDATALIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSConsultDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1150,12 +1133,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSTestsDataList(String CHSSApplyId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSTestsDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSTESTSDATALIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSTestsDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1167,12 +1150,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMedicineDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSMEDICINEDATALIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSMedicineDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1184,12 +1167,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSOtherDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSOTHERDATALIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSOtherDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1202,12 +1185,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSMiscDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSMISCDATALIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSMiscDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1219,13 +1202,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public String CHSSApplyNoCount(String finYear) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSMiscDataList");
 		try {
 			Query query= manager.createNativeQuery(CHSSAPPLYNOCOUNT);
 			query.setParameter("finYear", finYear+"%");
 			Object[] result= (Object[])query.getSingleResult();
 			return result[0].toString();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApplyNoCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1236,7 +1219,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSApproveClaimList(String logintype,String empid,String claimtype) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSApproveClaimList");
 		try {
 			Query query= manager.createNativeQuery("CALL chss_claims_pending (:logintype, :empid, :claimtype);");
 			query.setParameter("logintype", logintype);
@@ -1244,6 +1226,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("claimtype", claimtype);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApproveClaimList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1253,7 +1236,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSClaimListRep");
 		try {
 			Query query= manager.createNativeQuery("CALL chss_claims_rep (:fromdate,:todate,:type);");
 			query.setParameter("type", type);
@@ -1261,6 +1243,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("todate", todate);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSClaimListRep " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1270,7 +1253,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid,String ClaimType)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBatchApproval");
 		try {
 			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype, :todate,:contingentid, :ClaimType);");
 			query.setParameter("logintype", logintype);
@@ -1279,6 +1261,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("ClaimType", ClaimType);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSBatchApproval " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1290,13 +1273,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public String CHSSContingentNoCount(String finYear) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO CHSSContingentNoCount");
 		try {
 			Query query= manager.createNativeQuery(CHSSCONTINGENTNOCOUNT);
 			query.setParameter("finYear", "CHSS"+finYear+"%");
 			Object[] result= (Object[])query.getSingleResult();
 			return result[0].toString();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSContingentNoCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1306,7 +1289,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long ContingentAdd(CHSSContingent contingent) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ContingentAdd");
 		manager.persist(contingent);
 		manager.flush();
 		
@@ -1316,7 +1298,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSContingentEdit(CHSSContingent contingent) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSContingentEdit");
 		try {
 			
 			manager.merge(contingent);
@@ -1324,6 +1305,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return contingent.getContingentId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSContingentEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1335,11 +1317,11 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSContingent");
 		try {
 			return manager.find(CHSSContingent.class, Long.parseLong(contingentid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSContingent " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1350,13 +1332,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSApplyTransactionAdd(CHSSApplyTransaction transaction ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApplyEdit");
 		try {
 			manager.persist(transaction);
 			manager.flush();
 			
 			return transaction.getCHSSTransactionId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApplyTransactionAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1368,13 +1350,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSContingentTransactionAdd(CHSSContingentTransaction transaction ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApplyEdit");
 		try {
 			manager.persist(transaction);
 			manager.flush();
 			
 			return transaction.getContinTransactionId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSContingentTransactionAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1386,7 +1368,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSContingentList");
 		
 		try {
 			
@@ -1397,6 +1378,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSContingentList " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1406,7 +1388,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object> ContingentApplyIds(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ContingentApplyIds");
 		
 		try {
 			Query query= manager.createNativeQuery(CONTINGENTAPPLYIDS);
@@ -1414,6 +1395,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ContingentApplyIds " + e);
 			return new ArrayList<Object>();
 		}
 	}
@@ -1422,7 +1404,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] CHSSContingentData(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSContingentData");
 		
 		try {
 			Query query= manager.createNativeQuery(CHSSCONTINGENTDATA);
@@ -1430,6 +1411,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (Object[])query.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSContingentData " + e);
 			return null;
 		}
 	}
@@ -1437,7 +1419,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSContingentClaimList");
 		
 		try {
 			Query query= manager.createNativeQuery("CALL chss_contingent_claims (:contingentid);");
@@ -1445,6 +1426,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSContingentClaimList " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1455,7 +1437,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSStatusDetails(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSStatusDetails");
 		
 		try {
 			Query query= manager.createNativeQuery(CHSSSTAUSDETAILS);
@@ -1463,6 +1444,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSStatusDetails " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1471,7 +1453,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSApplyTransaction> claimTransactionObjects(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMedicineList");
 		List<CHSSApplyTransaction> list= new ArrayList<CHSSApplyTransaction>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1487,6 +1468,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimTransactionObjects " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1497,7 +1479,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSStatusDetails");
 		try {
 			Query query= manager.createNativeQuery(CONTINGENTTRANSACTIONS);
 			query.setParameter("contingentid", contingentid);
@@ -1505,6 +1486,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		catch (Exception e) 
 		{
+			logger.error(new Date()  + "Inside Dao ContingentTransactions " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1524,6 +1506,7 @@ public class CHSSDaoImpl implements CHSSDao {
 
 			return result;
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getdata " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1535,7 +1518,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<CHSSMedicinesList> getCHSSMedicinesList(String treattypeid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSMedicineList");
 		List<CHSSMedicinesList> list= new ArrayList<CHSSMedicinesList>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -1552,6 +1534,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSMedicinesList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1561,7 +1544,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> getCHSSConsultMainList(String applyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSConsultMainList");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1570,6 +1552,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list =  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSConsultMainList " + e);
 			e.printStackTrace();
 		}
 		return  list;		
@@ -1580,7 +1563,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSApprovalAuthList(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApprovalAuthList");
 		try {
 			
 			Query query= manager.createNativeQuery("call chss_contingent_approve_stamp(:contingentid); ");
@@ -1588,6 +1570,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApprovalAuthList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1598,7 +1581,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApprovalAuth");
 		try {
 			
 			Query query= manager.createNativeQuery(CHSSAPPROVALAUTH);
@@ -1611,6 +1593,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			}
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSApprovalAuth " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1620,13 +1603,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long NotificationAdd(EMSNotification notification ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO NotificationAdd");
 		try {
 			manager.persist(notification);
 			manager.flush();
 			
 			return notification.getNotificationId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao NotificationAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1637,7 +1620,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ConsultationHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultationHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(CONSULTATIONHISTORY);
@@ -1645,6 +1627,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ConsultationHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1655,7 +1638,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> TestsHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO TestsHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1664,6 +1646,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao TestsHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1674,7 +1657,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> MedicinesHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedicinesHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1683,6 +1665,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao MedicinesHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1693,7 +1676,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> OthersHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OthersHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1702,6 +1684,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao OthersHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1712,7 +1695,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> MiscItemsHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MiscItemsHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1721,6 +1703,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao MiscItemsHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1731,7 +1714,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] ConsultBillsConsultCount(String consultmainid, String chssapplyid,String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultBillsConsultCount");
 		Object[] list = null;
 		try {
 			
@@ -1742,6 +1724,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (Object[])query.getSingleResult();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ConsultBillsConsultCount " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1752,12 +1735,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int ConsultBillsDelete(String consultmainid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ConsultBillsDelete");
 		try {
 			Query query= manager.createNativeQuery(CONSULTBILLSDELETE);
 			query.setParameter("consultmainid", consultmainid);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ConsultBillsDelete " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -1768,7 +1751,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> PatientConsultHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO PatientConsultHistory");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			
@@ -1777,6 +1759,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao PatientConsultHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1787,7 +1770,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> OldConsultMedsList(String CHSSConsultMainId, String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO OldConsultMedsList");
 		List<Object[]> list = new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(OLDCONSULTMEDSLIST);
@@ -1795,6 +1777,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("chssapplyid", chssapplyid);
 			list=  (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao OldConsultMedsList " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1804,7 +1787,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> MedAdmissibleCheck(String medicinename) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedAdmissibleCheck");
 		 List<Object[]> list = null;
 		try {
 			String MEDADMISSIBLECHECK  ="SELECT   MedicineId, MedNo, TreatTypeId, CategoryId, MedicineName FROM chss_medicines_list WHERE IsAdmissible='N' AND IsActive=1 AND MedicineName LIKE '%"+medicinename.trim()+"%' ;";
@@ -1814,6 +1796,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
+			logger.error(new Date()  + "Inside Dao MedAdmissibleCheck " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1823,7 +1806,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> MedAdmissibleList(String medicinename, String treattype)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MedAdmissibleList");
 		List<Object[]> list = null;
 		try {
 			
@@ -1838,6 +1820,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
+			logger.error(new Date()  + "Inside Dao MedAdmissibleList " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1847,7 +1830,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int POAcknowldgedUpdate(String chssapplyid,String poacknowledge)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO POAcknowldgedUpdate");
 		try {
 			
 			Query query= manager.createNativeQuery(POACKNOWLDGEDUPDATE);
@@ -1858,6 +1840,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}		
 		catch (Exception e)
 		{
+			logger.error(new Date()  + "Inside Dao POAcknowldgedUpdate " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1868,7 +1851,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ClaimApprovedPOVOData(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimApprovedPOVOData");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(" CALL chss_claim_approve_stamp(:chssapplyid);");
@@ -1876,6 +1858,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimApprovedPOVOData " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1885,7 +1868,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ClaimRemarksHistory(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimRemarksHistory");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(CLAIMREMARKSHISTORY);
@@ -1893,6 +1875,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimRemarksHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1903,7 +1886,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	public Object[] getLabCode() throws Exception
 	{
 
-		logger.info(new Date() +"Inside DAO getLabCode");
 		try {
 			
 			Query query= manager.createNativeQuery(GETLABCODE);
@@ -1915,6 +1897,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			}
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getLabCode " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1927,7 +1910,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ContingentBillHistory(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ContingentHistory");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(CONTINGENTHISTORY);
@@ -1935,6 +1917,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ContingentBillHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1944,7 +1927,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ContingentBillRemarkHistory(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ContingentBillRemarkHistory");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query= manager.createNativeQuery(CONTINGENTBILLREMARKHISTORY);
@@ -1952,6 +1934,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ContingentBillRemarkHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1961,7 +1944,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> GetClaimsList(String fromdate , String todate ,  String empid,String status)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetClaimsList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery("call chss_all_claims(:empid , :fromdate , :todate , :status);");
@@ -1971,6 +1953,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao GetClaimsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1983,12 +1966,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> EmployeesList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmployeesList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEESLIST);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao EmployeesList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1998,7 +1981,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> GetClaimsReportList( String empid,String fromdate , String todate , String claimtype, String status)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetClaimsList");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery("CALL chss_claims_report(:empid , :fromdate , :todate ,:claimtype, :status);");
@@ -2009,6 +1991,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao GetClaimsReportList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2019,12 +2002,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ClaimConsultMainList(String CHSSApplyId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimConsultMainList");
 		try {
 			Query query= manager.createNativeQuery(CLAIMCONSULTMAINLIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimConsultMainList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2034,13 +2017,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long ClaimDisputeAdd(CHSSApplyDispute dispute) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSIPDBasicInfoAdd");
 		try {
 			manager.persist(dispute);
 			manager.flush();
 			
 			return dispute.getCHSSDisputeId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimDisputeAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2050,13 +2033,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long ClaimDisputeEdit(CHSSApplyDispute dispute) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimDisputeEdit");
 		try {
 			manager.merge(dispute);
 			manager.flush();
 			
 			return dispute.getCHSSDisputeId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimDisputeEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2067,7 +2050,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int claimConsultMainDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO claimConsultMainDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(CLAIMCONSULTMAINDELETEALL);
 			query.setParameter("chssapplyid", chssapplyid);
@@ -2075,6 +2057,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimConsultMainDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2086,7 +2069,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billConsultDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billConsultDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLCONSULTDELETEALL);
 			query.setParameter("billid", billid);
@@ -2094,6 +2076,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billConsultDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2105,7 +2088,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billTestsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billTestsDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLTESTSDELETEALL);
 			query.setParameter("billid", billid);
@@ -2113,6 +2095,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billTestsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2123,7 +2106,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billMedsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billMedsDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLMEDSDELETEALL);
 			query.setParameter("billid", billid);
@@ -2131,6 +2113,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billMedsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2141,7 +2124,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billOthersDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billOthersDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLOTHERSDELETEALL);
 			query.setParameter("billid", billid);
@@ -2149,6 +2131,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billOthersDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2159,7 +2142,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billMiscDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billMiscDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLMISCDELETEALL);
 			query.setParameter("billid", billid);
@@ -2167,6 +2149,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billMiscDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2177,7 +2160,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billEquipmentDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billEquipmentDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLEQUIPMENTDELETEALL);
 			query.setParameter("billid", billid);
@@ -2185,6 +2167,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billEquipmentDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2195,7 +2178,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billImplantDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billImplantDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLIMPLANTDELETEALL);
 			query.setParameter("billid", billid);
@@ -2203,6 +2185,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billImplantDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2213,7 +2196,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billPackageDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billPackageDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLPACKAGEDELETEALL);
 			query.setParameter("billid", billid);
@@ -2221,6 +2203,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billPackageDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2231,7 +2214,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int billPackageItemsDeleteAll(String billid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO billPackageItemsDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(BILLPACKAGEITEMSDELETEALL);
 			query.setParameter("billid", billid);
@@ -2239,6 +2221,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao billPackageItemsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2250,7 +2233,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int claimBillDeleteAll(String chssapplyid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO claimBillDeleteAll");
 		try {
 			Query query= manager.createNativeQuery(CLAIMBILLDELETEALL);
 			query.setParameter("chssapplyid", chssapplyid);
@@ -2258,6 +2240,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimBillDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2269,7 +2252,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int claimDelete(String chssapplyid,String modifiedby,String modifieddate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO claimDelete");
 		try {
 			Query query= manager.createNativeQuery(CLAIMDELETE);
 			query.setParameter("chssapplyid", chssapplyid);
@@ -2277,6 +2259,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao claimDelete " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2286,7 +2269,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int UpdateBillAdmissibleTotal(String billid,String admissibleAmt) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UpdateBillAdmissibleAmt");
 		try {
 			Query query= manager.createNativeQuery(UPDATEBILLADMISSIBLEAMT);
 			query.setParameter("billid", billid);
@@ -2294,6 +2276,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao UpdateBillAdmissibleTotal " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2303,7 +2286,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSIPDClaimsInfo IpdClaimInfo(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO IpdClaimInfo");
 		CHSSIPDClaimsInfo returnlist= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2316,6 +2298,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			returnlist = claiminfo.getResultList().get(0);
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao IpdClaimInfo " + e);
 			return null;
 		}
 		return returnlist;
@@ -2324,13 +2307,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSIPDBasicInfoAdd(CHSSIPDClaimsInfo model ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSIPDBasicInfoAdd");
 		try {
 			manager.persist(model);
 			manager.flush();
 			
 			return model.getIPDClaimInfoId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSIPDBasicInfoAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2340,10 +2323,10 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSIPDClaimsInfo getIpcClaimInfo(String ipdclaiminfoid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getIpcClaimInfo");
 		try {
 			return manager.find(CHSSIPDClaimsInfo.class, Long.parseLong(ipdclaiminfoid));
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getIpcClaimInfo " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2354,13 +2337,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo claimsinfo) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultMainEdit");
 		try {
 			manager.merge(claimsinfo);
 			manager.flush();
 			
 			return claimsinfo.getIPDClaimInfoId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSIPDBasicInfoEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2371,13 +2354,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public int GetMaxMedNo(String treatmenttype)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO GetMaxMedNo()");
 		try {
 			Query query = manager.createNativeQuery(MAXMEDNO);
 			query.setParameter("treattype", treatmenttype);
 			Integer result = (Integer) query.getSingleResult();
 			return result;
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao GetMaxMedNo " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2387,12 +2370,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO AddMedicine()");
 		try {
 			manager.persist(medicine);
 			manager.flush();
 			return medicine.getMedicineId();
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao AddMedicine " + e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -2403,12 +2386,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO AddMasterEditComments()");
 		try {
 			manager.persist(masteredit);
 			manager.flush();
 			return (long)masteredit.getMasterEditId();
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao AddMasterEditComments " + e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -2421,13 +2404,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> IPDBillOtherItems(String billid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO IPDBillNonPackageItems");
 		try {
 			Query query = manager.createNativeQuery(IPDBILLOTHERITEMS);
 			query.setParameter("billid", billid);
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao IPDBillOtherItems " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2436,7 +2419,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public CHSSBillOther getCHSSIPDOther(long CHSSOtherId,long billid,int OtherItemId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSBillIPDheads");
 		CHSSBillOther Bhead= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2460,6 +2442,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		} catch (NoResultException e) {
 			return null;
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSIPDOther " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2474,13 +2457,13 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> consultMainBillIds(String consultmainid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO IPDBillNonPackageItems");
 		try {
 			Query query = manager.createNativeQuery(CONSULTMAINBILLIDS);
 			query.setParameter("consultmainid", consultmainid);
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao consultMainBillIds " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2491,7 +2474,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CheckPrevConsultInfo(String consultationid,long consultmainid,String fromdate,String todate)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO CheckPrevConsultInfo");
 		try {
 		
 			Query query = manager.createNativeQuery(CHECKPREVCONSULTINFO);
@@ -2502,6 +2484,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CheckPrevConsultInfo " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2513,12 +2496,12 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public Object[] getClaimDisputeData(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getClaimDisputeData");
 		try {
 			Query query = manager.createNativeQuery(GETCLAIMDISPUTEDATA);
 			query.setParameter("chssapplyid",chssapplyid);
 			return (Object[]) query.getResultList().get(0);
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getClaimDisputeData " + e);
 			return null;
 		}
 	}
@@ -2528,7 +2511,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> ClaimDisputeList(String fromdate,String todate)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO ClaimDisputeList");
 		try {
 			
 			Query query = manager.createNativeQuery(CLAIMDISPUTELIST);
@@ -2536,6 +2518,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimDisputeList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2546,7 +2529,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> ClaimDisputeClosedList(String fromdate,String todate)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO ClaimDisputeClosedList");
 		try {
 			
 			Query query = manager.createNativeQuery(CLAIMDISPUTECLOSEDLIST);
@@ -2555,6 +2537,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimDisputeClosedList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2564,7 +2547,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long EquipmentBillAdd(CHSSBillEquipment equipment) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EquipmentBillAdd");
 		manager.persist(equipment);
 		manager.flush();
 		
@@ -2574,11 +2556,11 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSBillEquipment getCHSSEquipment(String equipid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSEquipment");
 		try {
 			return manager.find(CHSSBillEquipment.class, Long.parseLong(equipid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSEquipment " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2588,7 +2570,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSConsultationList");
 		List<CHSSBillEquipment> list= new ArrayList<CHSSBillEquipment>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2605,6 +2586,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSEquipmentList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2613,13 +2595,13 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long EquipmentBillEdit(CHSSBillEquipment equipment) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EquipmentBillEdit");
 		try {
 			manager.merge(equipment);
 			manager.flush();
 			
 			return equipment.getCHSSEquipmentId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao EquipmentBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2630,7 +2612,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long ImplantBillAdd(CHSSBillImplants equipment) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ImplantBillAdd");
 		manager.persist(equipment);
 		manager.flush();
 		
@@ -2640,11 +2621,11 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSBillImplants getCHSSImplant(String implantid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSImplant");
 		try {
 			return manager.find(CHSSBillImplants.class, Long.parseLong(implantid));
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSImplant " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2654,7 +2635,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSBillImplants> CHSSImplantList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSImplantList");
 		List<CHSSBillImplants> list= new ArrayList<CHSSBillImplants>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2671,6 +2651,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSImplantList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2679,13 +2660,13 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long ImplantBillEdit(CHSSBillImplants implant) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ImplantBillEdit");
 		try {
 			manager.merge(implant);
 			manager.flush();
 			
 			return implant.getCHSSImplantId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ImplantBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2697,7 +2678,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> IPDClaimAttachments(String chssapplyid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO IPDClaimAttachments");
 		try {
 			
 			Query query = manager.createNativeQuery(IPDCLAIMATTACHMENTS);
@@ -2705,6 +2685,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao IPDClaimAttachments " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2716,7 +2697,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSIPDAttachments getIPDClaimAttach(String chssapplyid,String attachtypeid)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO getIPDClaimAttach");
 		try {
 			Query query = manager.createQuery(GETIPDCLAIMATTACH);
 			query.setParameter("chssapplyid", chssapplyid);
@@ -2726,6 +2706,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		} catch (NoResultException e) {
 			return null;
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getIPDClaimAttach " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2735,13 +2716,13 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long IPDClaimAttachAdd(CHSSIPDAttachments Attach) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO IPDClaimAttachAdd");
 		try {
 			manager.persist(Attach);
 			manager.flush();
 			
 			return Attach.getIPDAttachId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao IPDClaimAttachAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2751,13 +2732,13 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long IPDClaimAttachEdit(CHSSIPDAttachments Attach) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO IPDClaimAttachEdit");
 		try {
 			manager.merge(Attach);
 			manager.flush();
 			
 			return Attach.getIPDAttachId();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao IPDClaimAttachEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2769,12 +2750,12 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> ClaimPackagesList(String billid) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO ClaimPackagesList");
 		try {
 			Query query= manager.createNativeQuery(CLAIMPACKAGESLIST);
 			query.setParameter("billid", billid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimPackagesList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2785,12 +2766,12 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> ClaimAllPackageItemsList(String billid) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO ClaimAllPackageItemsList");
 		try {
 			Query query= manager.createNativeQuery(CLAIMALLPACKAGEITEMSLIST);
 			query.setParameter("billid", billid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimAllPackageItemsList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2801,12 +2782,12 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> ClaimEquipmentList(String CHSSApplyId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO ClaimEquipmentList");
 		try {
 			Query query= manager.createNativeQuery(CLAIMEQUIPMENTLIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimEquipmentList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2817,12 +2798,12 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<Object[]> ClaimImplantList(String CHSSApplyId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO ClaimImplantList");
 		try {
 			Query query= manager.createNativeQuery(CLAIMIMPLANTLIST);
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimImplantList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2832,7 +2813,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSEquipmentList");
 		List<CHSSBillEquipment> list= new ArrayList<CHSSBillEquipment>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2848,6 +2828,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao BillEquipmentList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2856,7 +2837,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSImplantsList");
 		List<CHSSBillImplants> list= new ArrayList<CHSSBillImplants>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2872,6 +2852,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao BillImplantsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2880,7 +2861,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSIPDPkgItems> getCHSSIPDPkgItemsList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSIPDPkgItemsList");
 		List<CHSSIPDPkgItems> list= new ArrayList<CHSSIPDPkgItems>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2896,6 +2876,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2904,7 +2885,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long CHSSIPDBillPackageAdd(CHSSBillPkg billpkg ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSIPDBillPackageAdd");
 		manager.persist(billpkg);
 		manager.flush();
 		
@@ -2914,7 +2894,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long CHSSIPDBillPackageItemAdd(CHSSBillPkgItems billpkgItem ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSIPDBillPackageAdd");
 		manager.persist(billpkgItem);
 		manager.flush();
 		
@@ -2924,13 +2903,13 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSBillPkg getCHSSBillPkg(String billpkgId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSBillPkg");
 		CHSSBillPkg pkg=null;
 		try {
 			
 			pkg=manager.find(CHSSBillPkg.class, Long.parseLong(billpkgId));
 		
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSBillPkg " + e);
 			return null;
 		}
 		return pkg;
@@ -2939,7 +2918,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSBillPkgItems getCHSSIPDPkgItem(String chssbillpkgid,String ipdpkgitemid ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSIPDPkgItemsList");
 		CHSSBillPkgItems list= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2959,6 +2937,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		}catch (NoResultException e) {
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItem " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2967,7 +2946,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSBillPkgItems> getCHSSIPDPkgItemsList(String chssbillpkgid ) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSIPDPkgItemsList");
 		List<CHSSBillPkgItems> list= new ArrayList<CHSSBillPkgItems>();
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -2984,6 +2962,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2992,11 +2971,11 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long CHSSBillPkgEdit(CHSSBillPkg billpkg) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBillPkgEdit");
 		try {
 			manager.merge(billpkg);
 			manager.flush();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSBillPkgEdit " + e);
 			return 0;
 		}
 		return billpkg.getCHSSBillPkgId();
@@ -3005,11 +2984,11 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public long CHSSBillPkgItemEdit(CHSSBillPkgItems  billpkgItem) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSBillPkgItemEdit");
 		try {
 			manager.merge(billpkgItem);
 			manager.flush();
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao CHSSBillPkgItemEdit " + e);
 			return 0;
 		}
 		return billpkgItem.getBillPkgItemId();
@@ -3019,7 +2998,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public List<CHSSIPDPkgItems> ClaimPkgItemsAddedAjax(String billid, String billpkgid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimPkgItemsAddedAjax");
 		List<CHSSIPDPkgItems> list= new ArrayList<CHSSIPDPkgItems>();
 		try {
 			Query query= manager.createQuery(CLAIMPKGITEMSADDEDAJAX);
@@ -3028,6 +3006,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<CHSSIPDPkgItems>)query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimPkgItemsAddedAjax " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -3037,7 +3016,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public int ClaimPkgItemsDelete(String chssbillpkgid,String modifiedby,String modifiedDate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO ClaimPkgItemsDelete");
 		try {
 			Query query= manager.createNativeQuery(CLAIMPKGITEMSDELETE);
 			query.setParameter("chssbillpkgid", chssbillpkgid);
@@ -3046,6 +3024,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return query.executeUpdate();
 			
 		}catch (Exception e) {
+			logger.error(new Date()  + "Inside Dao ClaimPkgItemsDelete " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -3056,7 +3035,6 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 	@Override
 	public CHSSIPDClaimsInfo getCHSSIPDClaimsInfo(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getCHSSOtherPermitAmt");
 		CHSSIPDClaimsInfo list= null;
 		try {
 			CriteriaBuilder cb= manager.getCriteriaBuilder();
@@ -3075,6 +3053,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
+			logger.error(new Date()  + "Inside Dao getCHSSIPDClaimsInfo " + e);
 			e.printStackTrace();
 		}
 		return list;

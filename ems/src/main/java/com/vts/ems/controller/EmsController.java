@@ -139,7 +139,8 @@ public class EmsController {
 	
 	@RequestMapping(value = "ForcePasswordChange.htm", method = RequestMethod.GET)
 	public String ForcePasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
-		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside ForcePasswordChange.htm "+UserId);
 		req.setAttribute("ForcePwd", "Y");
 		return "pis/PasswordChange";
 	}
@@ -148,11 +149,12 @@ public class EmsController {
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
 	{
-		logger.info(new Date() + "Inside MainDashBoard.htm ");
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
-    	String UserId = (String) ses.getAttribute("Username");
+    	
     	try {
 
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
@@ -239,7 +241,8 @@ public class EmsController {
 	 @RequestMapping(value = "fpwd/ForgotPassword.htm", method = {RequestMethod.POST,RequestMethod.GET}) 
 	 public String forgotPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
-		logger.info(new Date() +"Inside fpwd/ForgotPassword.htm ");
+		 String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside fpwd/ForgotPassword.htm "+UserId);
 		try 
 		{
 			String username=req.getParameter("username");
@@ -288,7 +291,8 @@ public class EmsController {
 	 @RequestMapping(value = "fpwd/ResetPassword.htm", method = RequestMethod.POST) 
 	 public String resetPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
-		logger.info(new Date() +"Inside fpwd/ResetPassword.htm ");
+		 String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside fpwd/ResetPassword.htm "+UserId);
 		try 
 		{
 			String loginid=req.getParameter("loginid");
@@ -318,7 +322,8 @@ public class EmsController {
 	 @RequestMapping(value = "fpwd/ResendOTP.htm", method = RequestMethod.POST) 
 	 public String ResendOTP(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
-		logger.info(new Date() +"Inside fpwd/ResendOTP.htm ");
+		 String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside fpwd/ResendOTP.htm "+UserId);
 		try 
 		{
 			String loginid=req.getParameter("loginid");

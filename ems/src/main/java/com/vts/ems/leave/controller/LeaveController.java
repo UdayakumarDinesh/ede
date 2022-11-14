@@ -413,14 +413,14 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveApproval.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveApproval(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside GhApprovalList.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveApproval.htm"+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveApproval_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside GhApprovalList.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveApproval.htm"+UserId, e);
 	       }
 	   return "leave/LeaveApprovalGh";
 
@@ -574,7 +574,7 @@ public class LeaveController {
 	@RequestMapping(value = "/edited-leave.htm", method = RequestMethod.POST)
 	public String leaveEdited(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside edit-leave.htm"+UserId);
+		logger.info(new Date() +"Inside edited-leave.htm"+UserId);
 		try {
 	    LeaveApplyDto dto=new LeaveApplyDto();
 	    dto.setType(req.getParameter("type"));
@@ -607,7 +607,7 @@ public class LeaveController {
 		}
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside edit-leave.htm"+UserId, e);
+			 logger.error(new Date() +" Inside edited-leave.htm"+UserId, e);
 	       }
 		return "redirect:/applyLeaveRedirect.htm";
 	}
@@ -694,8 +694,10 @@ public class LeaveController {
 	}
 	
 	@RequestMapping(value = "assign-recc-sanc.htm", method = RequestMethod.POST)
+	
 	public String assignReccSancAddEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside assign-recc-sanc.htm"+UserId);
 		String EmpNo = (String) ses.getAttribute("EmpNo");
 		String returnPage="leave/AssignReccSancAddEdit";
 		String empid = req.getParameter("selecRadioForEmpid");
@@ -780,6 +782,7 @@ public class LeaveController {
 			count=service.McFcAttachmentFile(dto);
 
 		}catch(Exception e) {
+			logger.error(new Date() +" Inside UploadMcFc.htm"+UserId, e);
 			e.printStackTrace();
 		}
 		

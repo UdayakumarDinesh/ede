@@ -67,7 +67,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String LEAVEADM="CALL leav_adm(:empNo)";
     @Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
-		logger.info(new Date() +"Inside PisHolidayList");	
 		Query query = manager.createNativeQuery(HOLIDAYLIST);
 		query.setParameter("holiyear", year);
 		List<Object[]> FormModuleList= query.getResultList();
@@ -78,7 +77,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveCreditList(String month, String year) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditList");	
 		Query query = manager.createNativeQuery(CREDITLIST);
 		query.setParameter("yr", year);
 		query.setParameter("mnth", month);
@@ -90,7 +88,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Employee> EmpList() throws Exception {
-		logger.info(new Date() +"Inside EmpList");	
 		Query query = manager.createQuery(EMPLIST);
 		List<Employee> EmpList= query.getResultList();
 		return EmpList;
@@ -100,7 +97,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> CreditList(String month) throws Exception {
-		logger.info(new Date() +"Inside CreditList");	
 		Query query = manager.createNativeQuery(CREDIT);
 		query.setParameter("mnth", month);
 		List<Object[]> CreditList= query.getResultList();
@@ -111,7 +107,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveCreditPreview(String month, String year,String emmNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditPreview");	
 		Query query = manager.createNativeQuery(CREDITPREVIEW);
 		query.setParameter("yr", year);
 		query.setParameter("mnth", month);
@@ -125,7 +120,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public long LeaveCreditInsert(LeaveRegister register) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditInsert");	
 		manager.persist(register);
 		manager.flush();
 		return register.getRegisterId();
@@ -133,7 +127,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> LeaveCreditInd(String month, String year,String emmNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditInd");	
 		Query query = manager.createNativeQuery(CREDITIND);
 		query.setParameter("yr", year);
 		query.setParameter("mnth", month);
@@ -146,7 +139,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveCreditById(String registerId) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditInd");	
 		Query query = manager.createNativeQuery(CREDITBYID);
 		query.setParameter("id", registerId);
 		List<Object[]> LeaveCreditInd= query.getResultList();
@@ -158,7 +150,6 @@ public class LeaveDaoImpl implements LeaveDao{
     @Transactional
     @Override
     public long LeaveCreditAddById(LeaveRegister register) throws Exception {
-	 logger.info(new Date() +"Inside LeaveCreditInsertById");	
 	 manager.persist(register);
 	 manager.flush();
 	 return register.getRegisterId();
@@ -167,7 +158,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public long LeaveCreditUpdateById(LeaveRegister register) throws Exception {
-		logger.info(new Date() +"Inside LeaveCreditUpdateById");
 		regirepo.save(register);
 		return register.getRegisterId();
 	}
@@ -175,7 +165,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> GetHolidays(String Type) throws Exception {
-		logger.info(new Date() +"Inside GetHolidays");	
 		Query query = manager.createNativeQuery(HOLIDAYS);
 		query.setParameter("type", Type);
 		List<Object[]> GetHolidays= query.getResultList();
@@ -185,7 +174,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> EmpDetails(String EmpNo) throws Exception {
-		logger.info(new Date() +"Inside EmpDetails");	
 		Query query = manager.createNativeQuery(EMPDETAILS);
 		query.setParameter("empNo", EmpNo);
 		List<Object[]> EmpDetails= query.getResultList();
@@ -195,7 +183,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> EmployeeList() throws Exception {
-		logger.info(new Date() +"Inside EmployeeList");	
 		Query query = manager.createNativeQuery(EMPLOYEELIST);
 		List<Object[]> EmpDetails= query.getResultList();
 		return EmpDetails;
@@ -203,7 +190,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> LeaveCode(String EmpNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveCode");	
 		Query query = manager.createNativeQuery(LEAVECODE);
 		query.setParameter("empno", EmpNo);
 		List<Object[]> EmpDetails= query.getResultList();
@@ -213,7 +199,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> purposeList() throws Exception {
-		logger.info(new Date() +"Inside purposeList");	
 		Query query = manager.createNativeQuery(PUROPSELIST);
 		List<Object[]> purposeList= query.getResultList();
 		return purposeList;
@@ -222,7 +207,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> OfficerDetails(String EmpNo) throws Exception {
-		logger.info(new Date() +"Inside EmpDetails");	
 		Query query = manager.createNativeQuery(OFFICERDETAILS);
 		query.setParameter("empNo", EmpNo);
 		List<Object[]> EmpDetails= query.getResultList();
@@ -231,7 +215,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<LabMaster> getLabDetails() throws Exception {
-		logger.info(new Date() +"Inside getLabDetails");	
 		Query query = manager.createQuery(LABMASTER);
 		List<LabMaster> EmpList= query.getResultList();
 		return EmpList;
@@ -241,7 +224,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> getRegister(String EmpNo, String yr) throws Exception {
-		logger.info(new Date() +"Inside getRegister");	
 		Query query = manager.createNativeQuery(REGISTER);
 		query.setParameter("empNo", EmpNo);
 		query.setParameter("yr", yr);
@@ -252,7 +234,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<String> getRegisterYrs(String EmpNo, String yr) throws Exception {
-		logger.info(new Date() +"Inside getRegisterYrs");	
 		Query query = manager.createNativeQuery(LEAVEYRS);
 		query.setParameter("empNo", EmpNo);
 		query.setParameter("yr", yr);
@@ -262,7 +243,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> getRegisterByYear(String EmpNo, String yr) throws Exception {
-		logger.info(new Date() +"Inside getRegisterByYear");	
 		Query query = manager.createNativeQuery(REGISTERBYYEAR);
 		query.setParameter("empNo", EmpNo);
 		query.setParameter("yr", yr);
@@ -272,7 +252,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public long checkHoliday(String inDate,String inType) throws Exception {
-		logger.info(new Date() +"Inside checkHoliday");	
 		Query query = manager.createNativeQuery(CHECKDAY);
 		query.setParameter("inType", inType);
 		query.setParameter("inDate", inDate);
@@ -283,7 +262,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public Object[] checkLeave(String EmpNo,String fromDate,String inDate) throws Exception {
-		logger.info(new Date() +"Inside checkLeave");	
 		Query query = manager.createNativeQuery(CHECKLEAVE);
 		query.setParameter("empno", EmpNo);
 		query.setParameter("fromDate", fromDate);
@@ -301,7 +279,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public long getCountHandingOver(String EmpNo, String fromDate, String ToDate) throws Exception {
-		logger.info(new Date() +"Inside checkHoliday");	
 		Query query = manager.createNativeQuery(CHECKHANDOVER);
 		query.setParameter("empno", EmpNo);
 		query.setParameter("fromDate", fromDate);
@@ -313,7 +290,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public long LeaveApplInsert(LeaveAppl appl) throws Exception {
-		logger.info(new Date() +"Inside LeaveApplInsert");	
 		manager.persist(appl);
 		manager.flush();
 		return appl.getLeaveApplId();
@@ -322,7 +298,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public long LeaveTransInsert(LeaveTransaction leaveTransaction) throws Exception {
-		logger.info(new Date() +"Inside LeaveTransInsert");	
 		manager.persist(leaveTransaction);
 		manager.flush();
 		return leaveTransaction.getLeaveTransactionId();
@@ -331,7 +306,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public long getLeaveApplId(int Year) throws Exception {
-		logger.info(new Date() +"Inside getLeaveApplId");	
 		Query query = manager.createNativeQuery(GETAPPLID);
 		query.setParameter("year", Year);
 		long id=0;
@@ -339,6 +313,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			BigInteger checkHoliday=(BigInteger)query.getSingleResult();
 		id=checkHoliday.longValue();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside getLeaveApplId"+e);
 		e.printStackTrace();
 		}
 		return id;
@@ -347,7 +322,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> getAppliedLeave(String EmpNo) throws Exception {
-		logger.info(new Date() +"Inside getAppliedLeave");	
 		Query query = manager.createNativeQuery(LEAVEAPPLIED);
 		query.setParameter("empNo", EmpNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -356,7 +330,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public LeaveRegister getOpeningBalance(String EmpNo,String yr) throws Exception {
-		logger.info(new Date() +"Inside getOpeningBalance");	
 		Query query = manager.createQuery(OPENINGBALANCE);
 		query.setParameter("EmpNo", EmpNo);
 		query.setParameter("yr", yr);
@@ -369,7 +342,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Override
 	public  Object[] getEmployee(String empno) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmployee");
 		Query query =manager.createNativeQuery(EMPLOYEE);
 		Object[] result = null;
 		query.setParameter("empno", empno);
@@ -377,6 +349,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside getEmployee"+e);
 			e.printStackTrace();
 		}
 		
@@ -385,7 +358,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception {
-		logger.info(new Date() +"Inside checkLeaveEl");	
 		Query query = manager.createNativeQuery(CHECKLEAVEEL);
 		query.setParameter("empno", EmpNo);
 		query.setParameter("fromDate", fromDate);
@@ -398,7 +370,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> LeaveApprovalGh(String empNo) throws Exception {
-		logger.info(new Date() +"Inside checkLeaveEl");	
 		Query query = manager.createNativeQuery(LEAVEAPPGH);
 		query.setParameter("empNo", empNo);
 		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
@@ -409,7 +380,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public Object[] LeavePrint(String applid) throws Exception {
-		logger.info(new Date() +"Inside LeavePrint");	
 		Query query =manager.createNativeQuery(LEAVEPRINT);
 		Object[] result = null;
 		query.setParameter("applid", applid);
@@ -417,6 +387,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside LeavePrint"+e);
 			e.printStackTrace();
 		}
 		
@@ -426,7 +397,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String LEAVETRANSCTION="SELECT a.description,b.empname,c.designation,d.actiondate,d.leaveremarks,a.shortname,a.status FROM leave_status_desc a,employee b,employee_desig c,leave_transaction d WHERE a.status=d.leavestatus AND d.actionby=b.empno AND c.desigid=b.desigid AND  d.leaveapplid=:applid order by d.actiondate";
 	@Override
 	public List<Object[]> LeaveTransaction(String applid) throws Exception {
-		logger.info(new Date() +"Inside LeaveTransaction");	
 		Query query = manager.createNativeQuery(LEAVETRANSCTION);
 		query.setParameter("applid", applid);
 		List<Object[]> checkLeave=(List<Object[]>)query.getResultList();
@@ -438,7 +408,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	public Object[] getLabCode() throws Exception
 	{
 
-		logger.info(new Date() +"Inside DAO getLabCode");
 		try {
 			
 			Query query= manager.createNativeQuery(GETLABCODE);
@@ -450,6 +419,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			}
 			
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside getLabCode"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -460,7 +430,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int getUpdateAppl(ApprovalDto dto) throws Exception {
-       logger.info(new Date() + "Inside getUpdateAppl()");
 		
 		try {
 			Query query = manager.createNativeQuery(UPDATEAPPL);
@@ -469,6 +438,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside getUpdateAppl"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -479,7 +449,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int getUpdateRegister(ApprovalDto dto) throws Exception {
-		 logger.info(new Date() + "Inside getUpdateRegister()");
 			
 			try {
 				Query query = manager.createNativeQuery(UPDATEREGISTER);
@@ -488,6 +457,7 @@ public class LeaveDaoImpl implements LeaveDao{
 				int count = (int) query.executeUpdate();
 				return count;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside getUpdateRegister"+e);
 				e.printStackTrace();
 				return 0;
 			}
@@ -496,7 +466,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> getSanctionedLeave(String EmpNo) throws Exception {
-		logger.info(new Date() +"Inside getSanctionedLeave");	
 		Query query = manager.createNativeQuery(LEAVESANC);
 		query.setParameter("empNo", EmpNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -510,7 +479,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int deleteLeave(ApprovalDto dto) throws Exception {
-		logger.info(new Date() + "Inside deleteLeave()");
 		int count =0;
 		try {
 			
@@ -523,6 +491,7 @@ public class LeaveDaoImpl implements LeaveDao{
 
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside deleteLeave"+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -530,7 +499,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int deleteLeaveRegiHo(String applid) throws Exception {
-		logger.info(new Date() + "Inside deleteLeaveRegiHo()");
 		int count =0;
 		try {
 			Query query1 = manager.createNativeQuery(REMOVEAPPLIDREGI);
@@ -541,6 +509,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			query3.executeUpdate();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside deleteLeaveRegiHo"+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -550,7 +519,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public Object[] getLeaveData(String applid) throws Exception {
-		logger.info(new Date() +"Inside LeaveData");	
 		Query query =manager.createNativeQuery(LEAVEDATA);
 		Object[] result = null;
 		query.setParameter("applid", applid);
@@ -558,6 +526,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside getLeaveData"+e);
 			e.printStackTrace();
 		}
 		
@@ -567,12 +536,12 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Override
 	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception
 	{
-		logger.info(new Date() + "Inside AddHandingOver()");
 		try {
 			manager.persist(handinfover);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside AddHandingOver"+e);
 			e.printStackTrace();
 		}
 		return handinfover.getHandingoverId();
@@ -585,7 +554,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int laeveNotModified(String empno) throws Exception {
-		logger.info(new Date() + "Inside deleteLeave()");
 		int count =0;
 		try {
 			
@@ -602,6 +570,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			query3.setParameter("empno",empno);
 			count = (int) query3.executeUpdate();
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside laeveNotModified"+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -612,7 +581,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Transactional
 	@Override
 	public int updateTransaction(String applid,String modifiedAppId) throws Exception {
-		logger.info(new Date() + "Inside updateTransaction()");
 		int count =0;
 		try {
 			Query query1 = manager.createNativeQuery(UPDATETRANS);
@@ -621,6 +589,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			count = (int) query1.executeUpdate();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside updateTransaction"+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -630,7 +599,6 @@ public class LeaveDaoImpl implements LeaveDao{
     
 	@Override
 	public List<Object[]> LeaveStatusList(String empNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveStatusList");	
 		Query query = manager.createNativeQuery(LEAVESTATUS);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -640,7 +608,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveApprovalDirRecc(String empNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveApprovalDirRecc");	
 		Query query = manager.createNativeQuery(LEAVEDIRRECC);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -650,7 +617,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveApprovalDirNR(String empNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveApprovalDirNR");	
 		Query query = manager.createNativeQuery(LEAVEDIRNR);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -660,7 +626,6 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	@Override
 	public List<Object[]> LeaveApprovalAdm(String empNo) throws Exception {
-		logger.info(new Date() +"Inside LeaveApprovalAdm");	
 		Query query = manager.createNativeQuery(LEAVEADM);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getAppliedLeave= query.getResultList();
@@ -669,7 +634,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String RECCSANC="SELECT  l.empid AS empid,a.empname,b.empname AS rname,c.empname AS sname,l.leave_status,d.empname AS tdra,e.empname AS tdsa,l.td_status,a.srno FROM employee a,employee b,employee c,employee d,employee e, leave_sa_ra l WHERE a.empno=l.empid AND b.empno=l.ra AND c.empno=l.sa AND d.empno=l.td_ra AND e.empno=l.td_sa   AND a.isactive='1' ORDER BY srno ";
 	@Override
 	public List<Object[]> AssignReccSanc() throws Exception {
-		logger.info(new Date() +"Inside AssignReccSanc");	
 		Query query = manager.createNativeQuery(RECCSANC);
 		List<Object[]> AssignReccSanc= query.getResultList();
 		return AssignReccSanc;
@@ -678,7 +642,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String RECCSANCLIST="call leave_sa_ra(:empNo)";
 	@Override
 	public List<Object[]> getReccSanc(String empNo) throws Exception {
-		logger.info(new Date() +"Inside getReccSanc");	
 		Query query = manager.createNativeQuery(RECCSANCLIST);
 		query.setParameter("empNo", empNo);
 		List<Object[]> getReccSanc= query.getResultList();
@@ -688,7 +651,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String RASASTATUS="select * from leave_sa_ra_status";
 	@Override
 	public List<Object[]> getRaSaStatus() throws Exception {
-		logger.info(new Date() +"Inside getRaSaStatus");	
 		Query query = manager.createNativeQuery(RASASTATUS);
 		List<Object[]> getRaSaStatus= query.getResultList();
 		return getRaSaStatus;
@@ -697,7 +659,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	private static final String UPLAODMCFC="SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,IF(c.mc_file IS NULL , '0', c.mc_file )  AS mcfile,IF(c.fc_file IS NULL , '0', c.fc_file ) AS fcfile  FROM leave_appl  a, leave_code b, leave_mc_fc c WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid=c.applid AND a.empid=:empno  AND a.leaveyear=:yr UNION SELECT a.applid,a.fromdate,a.todate,a.status,b.leave_name,'0' AS mcfile,'0' AS fcfile  FROM leave_appl  a, leave_code b WHERE  a.leavecode='0003' AND a.leavecode=b.leave_code AND a.applid NOT IN (SELECT applid FROM leave_mc_fc WHERE  empid=:empno  AND leaveyear=:yr) AND a.empid=:empno  AND a.leaveyear=:yr";
 	@Override
 	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception {
-		logger.info(new Date() +"Inside getRaSaStatus");	
 		Query query = manager.createNativeQuery(UPLAODMCFC);
 		query.setParameter("empno", EmpId);
 		query.setParameter("yr", Year);

@@ -1,9 +1,9 @@
 package com.vts.ems.Mt.service;
 
 import java.math.BigInteger;
-import java.sql.Date;
-import java.util.List;
 
+import java.util.List;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,8 @@ public class MtServiceImpl implements MtService {
 
 	private static final Logger logger = LogManager.getLogger(MtServiceImpl.class);
 	DateTimeFormatUtil sdf=new DateTimeFormatUtil();
+	
+	
 	
 	@Autowired
 	private MtDao dao;
@@ -55,8 +57,9 @@ public class MtServiceImpl implements MtService {
 	}
 	
 	@Override
-	public int UserApplyEdit(MtUserApply user) throws Exception {
-		
+	public int UserApplyEdit(MtUserApply user) throws Exception 
+	{
+		logger.info(new Date() +"Inside UserApplyEdit");
 		MtUserApply userapply = dao.GetMtUserApply(user.getMtApplId());
 		userapply.setUserRemarks(user.getUserRemarks());
 		userapply.setDestination(user.getDestination());
@@ -206,7 +209,7 @@ public class MtServiceImpl implements MtService {
 	
 	@Override
 	public int EditTrip(MtTrip trip) throws Exception {
-		
+		logger.info(new Date() +"Inside EditTrip");
 		MtTrip edittrip= dao.GetTrip(trip.getTripId());
 		edittrip.setDriverId(trip.getDriverId());
 		edittrip.setEndTime(trip.getEndTime());
@@ -286,7 +289,7 @@ public class MtServiceImpl implements MtService {
 		return dao.GetLabDetails();
 	}
 	@Override
-	public List<Object[]> DateWiseProjectReport(Date FromDate, Date ToDate, int DriverId, int VehicleId)
+	public List<Object[]> DateWiseProjectReport(java.sql.Date FromDate, java.sql.Date ToDate, int DriverId, int VehicleId)
 			throws Exception {
 		
 		return dao.DateWiseProjectReport(FromDate, ToDate, DriverId, VehicleId);
@@ -311,13 +314,13 @@ public class MtServiceImpl implements MtService {
 	}
 	
 	@Override
-	public List<Object[]> TripList(Date FromDate, Date ToDate) throws Exception {
+	public List<Object[]> TripList(java.sql.Date FromDate, java.sql.Date ToDate) throws Exception {
 	
 		return dao.TripList(FromDate, ToDate);
 	}
 	
 	@Override
-	public List<Object[]> DirectorTripList(Date FromDate,Date ToDate) throws Exception {
+	public List<Object[]> DirectorTripList(java.sql.Date FromDate,java.sql.Date ToDate) throws Exception {
 		
 		return dao.DirectorTripList(FromDate,ToDate);
 	}
