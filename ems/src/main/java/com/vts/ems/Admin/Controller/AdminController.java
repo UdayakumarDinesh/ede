@@ -62,7 +62,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			public String RoleFormAccess(Model model, HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
 					throws Exception {
 				String UserId = (String) ses.getAttribute("Username");
-				logger.info(new Date() +"Inside RoleFormAccess.htm "+UserId);		
+				logger.info(new Date() +"Inside Role.htm "+UserId);		
 				try {
 					
 				
@@ -92,7 +92,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 					ses.setAttribute("SidebarActive","Role_htm");
 				}
 				catch (Exception e) {
-						e.printStackTrace(); logger.error(new Date() +" Inside RoleFormAccess.htm "+UserId, e);
+						e.printStackTrace(); logger.error(new Date() +" Inside Role.htm "+UserId, e);
 				}	
 				 return "Admin/RoleFormAccess";
 			}
@@ -245,6 +245,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				
 				
 			}catch(Exception e) {
+				logger.error(new Date() +" Inside SidebarModuleList.htm "+UserId, e);
 				e.printStackTrace();
 			}
 		
@@ -423,7 +424,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 			long EmpId = (long)ses.getAttribute("EmpId");
 			String UserId = (String)ses.getAttribute("Username");
 			String logintype = (String)ses.getAttribute("LoginType");
-			logger.info(new Date() +"Inside HadlingOver.htm "+UserId);
+			logger.info(new Date() +"Inside HandingOver.htm "+UserId);
 			ses.setAttribute("SidebarActive", "HandingOver_htm");
 			try {
 				LocalDate today= LocalDate.now();
@@ -530,7 +531,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 						}
 			      }
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside HadlingOver.htm "+UserId , e);
+				logger.error(new Date() +"Inside HandingOver.htm "+UserId , e);
 				e.printStackTrace();
 				return "static/Error";
 			}

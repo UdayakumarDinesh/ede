@@ -96,6 +96,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public String getimage(String empid)throws Exception
 	{
+		logger.info(new Date() +"Inside getimage");
 		String result=null;
 		try {
 			String photoname=dao.PhotoPath(empid);
@@ -105,6 +106,7 @@ public class PisServiceImpl implements PisService
 				result=encodeFileToBase64Binary(f);
 			}                                     
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside getimage"+e);
 			e.printStackTrace();		
 		}
 		
@@ -112,6 +114,7 @@ public class PisServiceImpl implements PisService
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
+		logger.info(new Date() +"Inside encodeFileToBase64Binary");
 		String encodedfile = null;
 		try {
 			FileInputStream fileInputStreamReader = new FileInputStream(file);
@@ -171,6 +174,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public long EmployeeAddSubmit(Employee emp,EmployeeDetails empd) throws Exception
 	{
+		logger.info(new Date() +"Inside EmployeeAddSubmit");
 		emp.setCreatedDate(sdtf.format(new Date()));
 		long result=dao.EmployeeAddSubmit(emp);
 		if(result>0) {		
@@ -185,6 +189,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public long EmployeeEditSubmit(Employee emp) throws Exception
 	{
+		logger.info(new Date() +"Inside EmployeeEditSubmit");
 		Employee employee = dao.getEmp(String.valueOf(emp.getEmpId()));
 		employee.setEmpName(emp.getEmpName());
 		employee.setEmail(emp.getEmail());
@@ -201,7 +206,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public long EmployeeDetailsEditSubmit(EmployeeDetails emp) throws Exception
 	{
-		
+		logger.info(new Date() +"Inside EmployeeDetailsEditSubmit");
 		EmployeeDetails employee = dao.getEmployee(String.valueOf(emp.getEmpDetailsId()));
 		employee.setUANNo(emp.getUANNo());
 		employee.setTitle(emp.getTitle());
@@ -275,6 +280,7 @@ public class PisServiceImpl implements PisService
 	}
 	 public static void saveFile(String uploadpath, String fileName, MultipartFile multipartFile) throws IOException 
 	    {
+		 logger.info(new Date() +"Inside saveFile");
 	        Path uploadPath = Paths.get(uploadpath);
 	          
 	        if (!Files.exists(uploadPath)) {
@@ -291,6 +297,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public int saveEmpImage(MultipartFile file ,String empno ,String uploadpath)throws Exception{
 		int result =0;
+		logger.info(new Date() +"Inside saveEmpImage");
 		try {
 			
 			 String OriginalFilename[]=(file.getOriginalFilename()).split("\\.");		 
@@ -329,7 +336,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public Long UserManagerAdd(UserManageAdd useradd)throws Exception
 	{
-		
+		logger.info(new Date() +"Inside UserManagerAdd");
 		Login login = new Login();
 		
 		login.setUsername(useradd.getUserName());
@@ -347,6 +354,7 @@ public class PisServiceImpl implements PisService
 	@Override
 	public int UserMangerEdit(String logintype, String username,String loginid )throws Exception
 	{
+		logger.info(new Date() +"Inside UserMangerEdit");
 		Login login = new Login();
 		login.setModifiedBy(username);
 		//login.setEmpId(Long.parseLong(empid));
@@ -411,7 +419,7 @@ public class PisServiceImpl implements PisService
 	
 	@Override
 	public Long EditFamilyDetails(EmpFamilyDetails Details)throws Exception{
-		
+		logger.info(new Date() +"Inside EditFamilyDetails");
 		EmpFamilyDetails member = dao.getMember(String.valueOf(Details.getFamily_details_id()));
 
 		member.setMember_name(Details.getMember_name());
@@ -477,7 +485,7 @@ public class PisServiceImpl implements PisService
 	
 	@Override
 	public Long EditPerAddress(AddressPer address)throws Exception{
-		
+		logger.info(new Date() +"Inside EditPerAddress");
 		AddressPer peraddress=dao.getPeraddress(address.getAddress_per_id());
 		   peraddress.setLandline(address.getLandline());
 	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
@@ -518,7 +526,7 @@ public class PisServiceImpl implements PisService
 	
 	@Override
 	public Long EditResAddress(AddressRes add)throws Exception{
-		
+		logger.info(new Date() +"Inside EditResAddress");
 		AddressRes address = dao.getResAddressData(Long.toString(add.getAddress_res_id()));
 		
 		address.setEmpid(add.getEmpid());
@@ -558,7 +566,7 @@ public class PisServiceImpl implements PisService
 	}
 	@Override
 	public Long EditNextKinAddress(AddressNextKin address)throws Exception{
-		
+		logger.info(new Date() +"Inside EditNextKinAddress");
 		AddressNextKin peraddress=dao.getNextKinaddress(address.getAddress_kin_id());
 		   peraddress.setLandline(address.getLandline());
 	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
@@ -591,7 +599,7 @@ public class PisServiceImpl implements PisService
 	
 	@Override
 	public Long EditEmecAddress(AddressEmec address)throws Exception{
-		
+		logger.info(new Date() +"Inside EditEmecAddress");
 		AddressEmec peraddress=dao.getEmecaddress(address.getAddress_emer_id());
 		   peraddress.setLandline(address.getLandline());
 	 	   peraddress.setFrom_per_addr(address.getFrom_per_addr());
@@ -716,6 +724,7 @@ public class PisServiceImpl implements PisService
 				
 				return count;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside SERVICE ResetPassword()");
 				e.printStackTrace();
 				return 0;
 			}
@@ -735,6 +744,7 @@ public class PisServiceImpl implements PisService
 			try {
 				return dao.GetEmployeeList();
 			}catch (Exception e) {
+				logger.error(new Date() +"Inside SERVICE GetEmployeeList()");
 				e.printStackTrace();
 				return null;
 			}
@@ -819,6 +829,7 @@ public class PisServiceImpl implements PisService
 			}
 			return result;
 			}catch (Exception e){
+				logger.error(new Date() +"Inside Service UpdateSeniorityNumber");
 				e.printStackTrace();
 				return 0;
 			}
@@ -854,7 +865,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks) throws Exception
 		{
-			
+			logger.info(new Date() +"Inside FamilyMemDetailsForward");
 			long count=0;
 			
 			Object[] formdata =  dao.GetFamFormData(formid);
@@ -989,6 +1000,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public Long DepMemEditSubmit(EmpFamilyDetails Details)throws Exception
 		{
+			logger.info(new Date() +"Inside DepMemEditSubmit");
 			EmpFamilyDetails member = dao.getMember(String.valueOf(Details.getFamily_details_id()));
 
 			member.setMember_name(Details.getMember_name());
@@ -1045,6 +1057,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int FormFamilyMemberDelete(String formmemberid)throws Exception
 		{
+			logger.info(new Date() +"Inside FormFamilyMemberDelete");
 			Object[] member =dao.getMemberdata(formmemberid);
 			if(member[14].toString().equals("0")) {
 				dao.FormFamilyMemberHardDelete(member[0].toString());
@@ -1112,7 +1125,7 @@ public class PisServiceImpl implements PisService
 		
 		@Override
 		public int EditQualification(Qualification Details)throws Exception{
-			
+			logger.info(new Date() +"Inside EditQualification");
 			Qualification quali = dao.getQualificationDetails(Details.getQualification_id());
 			
 			  quali.setQuali_id(Details.getQuali_id());			
@@ -1166,7 +1179,7 @@ public class PisServiceImpl implements PisService
 		
 		@Override
 		public int EditAppointment(Appointments app)throws Exception{
-			
+			logger.info(new Date() +"Inside EditAppointment");
 			Appointments appintment = dao.getAppointmentsDetails(app.getAppointment_id());
 			
 			appintment.setMode_recruitment(app.getMode_recruitment());
@@ -1213,7 +1226,7 @@ public class PisServiceImpl implements PisService
 		}
 		@Override
 		public int EditAwards(Awards app)throws Exception{
-			
+			logger.info(new Date() +"Inside EditAwards");
 			Awards appintment = dao.getAwardsDetails(app.getAwards_id());
 			
 			  appintment.setAwardListId(app.getAwardListId());
@@ -1258,6 +1271,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int EditProperty(Property app)throws Exception
 		{
+			logger.info(new Date() +"Inside EditProperty");
 			Property pro = dao.getPropertyDetails(app.getProperty_id()); 
 				pro.setMovable(app.getMovable());
 				pro.setAcquired_type(app.getAcquired_type());
@@ -1294,6 +1308,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int EditPublication(Publication app)throws Exception
 		{
+			logger.info(new Date() +"Inside EditPublication");
 			Publication pro = dao.getPublicationDetails(app.getPublication_id()); 
 			
 				pro.setPublication_id(app.getPublication_id());
@@ -1355,6 +1370,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public int EditForeignVisit(PassportForeignVisit app)throws Exception
 		{
+			logger.info(new Date() +"Inside EditForeignVisit");
 			PassportForeignVisit pfv = dao.getForeignVisitData(app.getPassportVisitId()); 
 			
 			pfv.setEmpId(app.getEmpId());
@@ -1465,6 +1481,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public List<Object[]> fetchPersonalDetailsNGOorCGO(String cattype) throws Exception
 		{
+			logger.info(new Date() +"Inside fetchPersonalDetailsNGOorCGO");
 			 if("A".equalsIgnoreCase(cattype)) {
 				 return dao.fetchAllPersonalDetail();
 			 }else {
@@ -1487,6 +1504,7 @@ public class PisServiceImpl implements PisService
 		@Override
 		public List<Object[]> getConfigurableReportList(String name,String DesigId,String DivisionId,String CatId,String Gender,String CadreId,String ServiceStatus,String CategoryId,String BG,String modeOfRecruitId,String AwardId)throws Exception
 		{
+			logger.info(new Date() +"Inside getConfigurableReportList");
 			  String DesigWise="";
 			  String DivisionWise="";
 			  String CatWise="";
@@ -1554,7 +1572,8 @@ public class PisServiceImpl implements PisService
 				String catClass, String gender, String cadre, String serviceStatus, String pay_Level, String qualification,
 				String propertyType, String pubType, String category, String bG, String quarter, String physicalHandicap,
 				String religion, String appointment, String awards)throws Exception {
-				
+
+			logger.info(new Date() +"Inside getconfigurablereportselectionwise");
 			List<Object[]> list = null;
 				try {
 				//Conditions to get records
@@ -1693,6 +1712,7 @@ public class PisServiceImpl implements PisService
 				  list=dao.getConfigurableReportList(ConfigurableReportQuery);
 				 
 				}catch (Exception e) {
+					logger.error(new Date() +"Inside getconfigurablereportselectionwise");
 					e.printStackTrace();
 				}
 				return list;
@@ -1700,6 +1720,7 @@ public class PisServiceImpl implements PisService
 		
 		@Override
 		public List<Object[]> getDefaultReport()throws Exception {
+			logger.info(new Date() +"Inside getDefaultReport");
 			Calendar now = Calendar.getInstance();
 			int year=now.get(Calendar.YEAR);
 			

@@ -78,7 +78,7 @@ public class OfficeOrderController {
 			req.setAttribute("LoginType",LoginType);
 			return "officeOrder/OfficeOrderList";
 		} catch (Exception e) {
-			  logger.error(new Date() +"Inside OfficeOrderAdd.htm "+UserId ,e);
+			  logger.error(new Date() +"Inside OfficeOrder.htm "+UserId ,e);
 			  e.printStackTrace();
 			  return "static/Error";
 		   }
@@ -88,6 +88,8 @@ public class OfficeOrderController {
 	@RequestMapping(value = "OfficeOrderAdd.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String OfficeOrderAdd(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OfficeOrderAdd.htm "+UserId);
 		 return "officeOrder/OfficeOrderAddEdit";
 	
 	}
@@ -95,6 +97,8 @@ public class OfficeOrderController {
 	@RequestMapping(value = "OfficeOrderDelete.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String OfficeOrderDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OfficeOrderDelete.htm "+UserId);
    		String UserName=(String)ses.getAttribute("Username");
        	String OrderId = (String)req.getParameter("OrderId");
        	
@@ -119,6 +123,8 @@ public class OfficeOrderController {
 	@RequestMapping(value = "OfficeOrderSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String OfficeOrderSearch(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OfficeOrderSearch.htm "+UserId);
 		List<Object[]> SearchList=new ArrayList<Object[]>();
         String search=req.getParameter("search");
         if(search!=null && !search.trim().equalsIgnoreCase("")) {
@@ -200,6 +206,8 @@ public class OfficeOrderController {
 	@RequestMapping(value = "OfficeOrderEdit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String OfficeOrderEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception
 	{
+		String Username=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OfficeOrderEdit.htm "+Username);
          String OrderId = (String)req.getParameter("OrderId");
          long OrdersId = Long.parseLong(OrderId);
          long GetMaxOrderId = service.GetMaxOrderId();
@@ -280,6 +288,8 @@ public class OfficeOrderController {
 	@RequestMapping(value = "OfficeOrderDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public void OfficeOrderDownload(HttpServletResponse res ,HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String Username=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside OfficeOrderDownload.htm "+Username);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		String UserId = (String) ses.getAttribute("Username");
 		String EmpNo=(String)ses.getAttribute("EmpNo");

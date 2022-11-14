@@ -55,6 +55,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(new Date() +"Inside getOrderData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -72,6 +73,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(new Date() +"Inside getEmpdataData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -103,13 +105,13 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 
 	@Override
 	public long GetOrderMaxId() throws Exception {
-		logger.info(new Date() +"Inside DAO GetMaxOrderId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(OrderId),0) AS 'count'  FROM ems_office_order");	
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetOrderMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -119,12 +121,12 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 	@Override
 	public long AddOfficeOrder(EMSOfficeOrder order) throws Exception {
 		
-		logger.info(new Date() + "Inside DAO OfficeOrderAdd()");
 		try {
 			manager.persist(order);
 			manager.flush();
 			return (long)order.getOrderId();
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside AddOfficeOrder "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -145,7 +147,6 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 	private static final String DELETECIRCULAR="UPDATE ems_office_order SET IsActive=:isactive , ModifiedBy=:modifiedby , ModifiedDate=:modifieddate WHERE Orderid=:Orderid";
 	@Override
 	public int OfficeOrderDelete(Long OrdersId, String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO CircularDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETECIRCULAR);
@@ -156,6 +157,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside OfficeOrderDelete "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -166,7 +168,6 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 	@Override
 	public EMSOfficeOrder GetOrderDetailsToEdit(Long  OrdersId)throws Exception
 	{
-		logger.info(new Date() + "Inside GetOrderDetailsToEdit()");
 		EMSOfficeOrder list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -178,6 +179,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetOrderDetailsToEdit "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -186,12 +188,12 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 	@Override
 	public long EditOrder(EMSOfficeOrder Order) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditCircular()");
 		try {
 			manager.merge(Order);
 			manager.flush();		
 			return Order.getOrderId();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside EditOrder "+ e);
 			e.printStackTrace();
 			return 0;
 		}		

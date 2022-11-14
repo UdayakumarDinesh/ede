@@ -26,7 +26,7 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 @Repository
 public class AdminDaoImpl implements AdminDao{
 
-	private static final Logger logger = LogManager.getLogger(CHSSDaoImpl.class);
+	private static final Logger logger = LogManager.getLogger(AdminDaoImpl.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	@PersistenceContext
@@ -68,7 +68,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public List<Object[]> HeaderSchedulesList(String FormModuleId,String Logintype) throws Exception {
 
-		logger.info(new Date() +"Inside HeaderSchedulesList");
 		Query query=manager.createNativeQuery(HEADERSCHEDULELIST);
 		query.setParameter("logintype",Logintype);
 		query.setParameter("formmoduleid", FormModuleId);
@@ -80,7 +79,6 @@ public class AdminDaoImpl implements AdminDao{
 	private static final String FROMMODULELIST = "SELECT DISTINCT a.formmoduleid , a.formmodulename  , a.moduleurl,a.isactive ,a.moduleicon FROM form_module a, form_detail b, form_role_access c WHERE a.isactive='1' AND a.formmoduleid=b.formmoduleid AND b.formdetailid=c.formdetailid AND c.logintype=:LOGINTYPE AND c.isactive=1 ORDER BY a.formmoduleid";
 	@Override
 	public List<Object[]> FormModuleList(String LoginType) throws Exception {
-		logger.info(new Date() +"Inside FormModuleList");	
 		Query query = manager.createNativeQuery(FROMMODULELIST);
 		query.setParameter("LOGINTYPE", LoginType);
 		List<Object[]> FormModuleList= query.getResultList();
@@ -104,7 +102,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public Long FormRoleActive(String formroleaccessid, Long Value) throws Exception {
 
-		logger.info(new java.util.Date() +"Inside FormRoleActive");
 		int count=0;
 		
 		System.out.println("Inside UPDATE " + formroleaccessid + Value);
@@ -135,7 +132,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public Object[]   getChssAprovalList() throws Exception
 	{
-		 logger.info(new Date() +"Inside getChssAprovalList()");	
 		 try {
 			 Query query = manager.createNativeQuery(CHSSAPPROVAL);
 			 
@@ -155,7 +151,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public int UpdateApprovalAuth(String processing,String verification,String approving,String id ,String userid)throws Exception
 	{
-         logger.info(new Date() + "Inside UpdateApprovalAuth()");
 		
 		try {
 			Query query = manager.createNativeQuery(APPROVALAUTH);
@@ -177,7 +172,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public long AddApprovalAuthority(CHSSApproveAuthority approva)throws Exception
 	{
-		logger.info(new Date() + "Inside AddApprovalAuthority()");
 		try {
 			manager.persist(approva);
 			manager.flush();
@@ -192,7 +186,6 @@ public class AdminDaoImpl implements AdminDao{
 	private static final String REQUESTMSGLIST = "SELECT emprequestid, requestmessage ,responsemessage , DATE_FORMAT(requestdate,'%Y-%m-%d'  ) AS 'requestdate' ,DATE_FORMAT(requestdate, '%H:%i') AS 'requesttime',DATE_FORMAT(responsedate,'%Y-%m-%d'  ) AS 'responsedate' ,DATE_FORMAT(responsedate, '%H:%i') AS 'responsetime' FROM ems_emp_request WHERE empid=:empid and isactive='1'";
 	@Override
 	public List<Object[]> GetRequestMessageList(String empid) throws Exception {
-		logger.info(new Date() +"Inside GetRequestMessageList()");	
 		try {
 			Query query = manager.createNativeQuery(REQUESTMSGLIST);
 			query.setParameter("empid", empid);
@@ -208,7 +201,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public int DeleteRequestMsg(String requestid ,String modifiedby)throws Exception
 	{
-         logger.info(new Date() + "Inside DeleteRequestMsg()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETEREQUESTMSG);			
@@ -227,7 +219,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public long AddRequestMsg(EmployeeRequest reqmsg)throws Exception
 	{
-		logger.info(new Date() + "Inside AddRequestMsg()");
 		try {
 			manager.persist(reqmsg);
 			manager.flush();
@@ -241,7 +232,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public long AddRequestMsgNotification(EMSNotification notification)throws Exception
 	{
-		logger.info(new Date() + "Inside AdDRequestMsgNotification()");
 		try {
 			manager.persist(notification);
 			manager.flush();
@@ -257,7 +247,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public List<Object[]> CHSSApprovalAuth2(String Logintype) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO CHSSApprovalAuth2()");
 		try {
 			
 			Query query= manager.createNativeQuery(CHSSAPPROVALAUTH2);
@@ -276,7 +265,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public List<Object[]> GethandlingOverList(LocalDate FromDate, LocalDate Todate)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GethandlingOverList()");
 		try {
 			
 			Query query= manager.createNativeQuery(HANDLINGOVERLIST);
@@ -296,7 +284,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public Object[] checkAlreadyPresentForSameEmpidAndSameDates(String FromEmpid, String ToEmpid, String FromDate,String ToDate)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO checkAlreadyPresentForSameEmpidAndSameDates()");
 		try {
 			
 			Query query= manager.createNativeQuery(CHECKHANDINGDATA);				
@@ -320,7 +307,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public long AddHandingOver(LeaveHandingOver handinfover)throws Exception
 	{
-		logger.info(new Date() + "Inside AddHandingOver()");
 		try {
 			manager.persist(handinfover);
 			manager.flush();
@@ -335,7 +321,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public int updateRevokeInHandingOver(long empid ,String UserId, String HandingOverId)throws Exception
 	{
-		logger.info(new Date() + "Inside updateRevokeInHandingOver()");
 		int count=0;
 		try {
 			Date d = new Date();
@@ -367,7 +352,6 @@ public class AdminDaoImpl implements AdminDao{
 	public List<Object[]> GetReqListFromUser()throws Exception
 	{
 
-		logger.info(new Date() + "Inside GetReqListFromUser()");
 		
 		try {
 			Query query= manager.createNativeQuery(GETREQLIST);			
@@ -384,7 +368,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception
 	{
-		logger.info(new Date() + "Inside UpdateAdminResponse()");
 		int count=0;
 		try {
 			
@@ -406,7 +389,6 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception
 	{
-		logger.info(new Date() + "Inside GetReqResMessagelist()");
 		
 		try {
 			Query query= manager.createNativeQuery(GETREQRESMESSAGELIST);			
@@ -424,7 +406,6 @@ public class AdminDaoImpl implements AdminDao{
 	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE empid=:empid AND isactive=1";
 	public List<Object[]> AllNotificationLists(long empid)throws Exception
 	{
-		logger.info(new Date() + "Inside AllNotificationLists()");
 		try {
 			Query query= manager.createNativeQuery(ALLNOTIFICATION);			
 			query.setParameter("empid", empid);
@@ -482,7 +463,6 @@ public class AdminDaoImpl implements AdminDao{
 	
 	@Override
 	public Long insertformroleaccess(FormRoleAccess main) throws Exception {
-		logger.info(new Date() + "Inside insertformroleaccess()");
 		try {
 			manager.persist(main);
 			manager.flush();

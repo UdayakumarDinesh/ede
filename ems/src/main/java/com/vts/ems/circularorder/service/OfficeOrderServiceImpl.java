@@ -73,7 +73,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 	@Override
 	public long OfficeOrderAdd(OfficeOrderUploadDto uploadorderdto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CircularUpload");
+		logger.info(new Date() +"Inside OfficeOrderAdd");
 		
 		long maxOrderId=0;
 		String OrderFileName=null;	
@@ -116,6 +116,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 		    count =  dao.AddOfficeOrder(order);
 		
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside OfficeOrderAdd");
 			 e.printStackTrace();
 		   count=0;
 		}
@@ -135,7 +136,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 	@Override
 	public long OrderUpdate(OfficeOrderUploadDto uploadorderdto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CircularUpdate");
+		logger.info(new Date() +"Inside OrderUpdate");
 
 		String year=null;
 		long count=0;	
@@ -185,6 +186,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 			count = dao.EditOrder(Order); 
 		
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside OrderUpdate");
 			 e.printStackTrace();
 		   count=0;
 		}
@@ -205,7 +207,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 
 	@Override
 	public List<Object[]> GetOfficeOrderList(String fromdate, String todate) throws Exception {
-		
+		logger.info(new Date() +"Inside GetOfficeOrderList");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate Todate= LocalDate.parse(todate, formatter);
@@ -250,6 +252,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 	@Override
 	public File EncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
 	{
+		logger.info(new Date() +"Inside EncryptAddWaterMarkAndMetadatatoPDF");
 		File pdffile = new File(dto.getSourcePath());
 		OutputStream tofile = new FileOutputStream(new File(dto.getTargetPath()));
 		
@@ -308,6 +311,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 		    pdfDoc.close();
 		 }catch (Exception e)
 		{
+			 logger.error(new Date() +"Inside EncryptAddWaterMarkAndMetadatatoPDF");
 			 e.printStackTrace();
 		}
 		return new File(dto.getTargetPath());

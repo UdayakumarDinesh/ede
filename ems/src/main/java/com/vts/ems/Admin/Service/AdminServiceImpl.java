@@ -7,10 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
+import com.vts.ems.Admin.dao.AdminDaoImpl;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.dao.CHSSDao;
@@ -24,7 +27,7 @@ public class AdminServiceImpl implements AdminService{
 	AdminDao dao;
 	@Autowired
 	CHSSDao chssdao;
-	
+	private static final Logger logger = LogManager.getLogger(AdminServiceImpl.class);
 	
 	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
@@ -63,7 +66,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Long FormRoleActive(String formroleaccessid) throws Exception 
 	{
-		
+		logger.info(new Date() +"Inside FormRoleActive");
 
 		List<BigInteger> FormRoleActiveList=dao.FormRoleActiveList(formroleaccessid);
 		
@@ -119,7 +122,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public long EmpRequestNotification(EMSNotification notification)throws Exception
 	{
-		
+		logger.info(new Date() +"Inside EmpRequestNotification");
 		List<Object[]> adminlist =dao.CHSSApprovalAuth2("P");
 	
 		if(adminlist.size()>0) {
@@ -155,6 +158,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
 	{	
+		logger.info(new Date() +"Inside GethandlingOverList");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -200,6 +204,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception
 	{
+		logger.info(new Date() +"Inside GetReqResMessagelist");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -227,7 +232,7 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception{
-		
+		logger.info(new Date() +"Inside updateformroleaccess");
 			if(isactive!=null && isactive.equals("0")){
 				isactive="1";
 			}else {

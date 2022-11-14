@@ -54,6 +54,7 @@ public class CircularDaoImpl implements CircularDao
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(new Date() +"Inside getCircularData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -71,6 +72,7 @@ public class CircularDaoImpl implements CircularDao
 			return null;
 		}
 		catch (Exception e) {
+			logger.error(new Date() +"Inside getEmpdataData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -101,13 +103,13 @@ public class CircularDaoImpl implements CircularDao
 
 	@Override
 	public long GetCircularMaxId() throws Exception {
-		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(CircularId),0) AS 'count'  FROM ems_circular");	
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetCircularMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -117,13 +119,13 @@ public class CircularDaoImpl implements CircularDao
 
 	@Override
 	public long GetDepCircularMaxId() throws Exception {
-		logger.info(new Date() +"Inside DAO GetDepCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular");	
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetDepCircularMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -133,7 +135,6 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT IFNULL(MAX(DepCircularId),0) AS 'count'  FROM ems_dep_circular WHERE deptypeid=:DepTypeId");
 			query.setParameter("DepTypeId", DepTypeId);
@@ -141,6 +142,7 @@ public class CircularDaoImpl implements CircularDao
 			return result.longValue();
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetDepCircularMaxIdEdit "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -150,12 +152,12 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public long AddCircular(EMSCircular circular) throws Exception {
 		
-		logger.info(new Date() + "Inside DAO CircularAdd()");
 		try {
 			manager.persist(circular);
 			manager.flush();
 			return (long)circular.getCircularId();
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside AddCircular "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -175,7 +177,6 @@ public class CircularDaoImpl implements CircularDao
 	private static final String DELETECIRCULAR="UPDATE ems_circular SET IsActive=:isactive , ModifiedBy=:modifiedby , ModifiedDate=:modifieddate WHERE CircularId=:circularid";
 	@Override
 	public int CircularDelete(Long CircularId, String Username)throws Exception{
-		logger.info(new Date() + "Inside DAO CircularDelete()");
 		
 		try {
 			Query query = manager.createNativeQuery(DELETECIRCULAR);
@@ -186,6 +187,7 @@ public class CircularDaoImpl implements CircularDao
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside CircularDelete "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -196,7 +198,6 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public EMSCircular GetCircularDetailsToEdit(Long  CircularId)throws Exception
 	{
-		logger.info(new Date() + "Inside GetCircularDetailsToEdit()");
 		EMSCircular list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -208,6 +209,7 @@ public class CircularDaoImpl implements CircularDao
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside GetCircularDetailsToEdit "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -216,12 +218,12 @@ public class CircularDaoImpl implements CircularDao
 	@Override
 	public long EditCircular(EMSCircular circular) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditCircular()");
 		try {
 			manager.merge(circular);
 			manager.flush();		
 			return circular.getCircularId();
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside EditCircular "+ e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -270,6 +272,7 @@ public class CircularDaoImpl implements CircularDao
 			Object[] GetEmsDepType=(Object[] )query.getSingleResult();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside GetEmsDepType "+ e);
 			return null;
 		}
 		
@@ -333,6 +336,7 @@ public class CircularDaoImpl implements CircularDao
 			List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside GetEmsDepType "+ e);
 			return new ArrayList<Object[]>();
 		}
 		

@@ -72,13 +72,13 @@ public class MasterController {
 	    public  String Otheritem(HttpSession ses, HttpServletRequest req, RedirectAttributes redir)throws Exception
 	    {
 	    	String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside Otheritem.htm "+UserId);
+			logger.info(new Date() +"Inside Otheritems.htm "+UserId);
 			try {				
 				List<Object[]> otheritem = service.OtherItems(); 
 				req.setAttribute("itemlist", otheritem);
 				ses.setAttribute("SidebarActive","OtherItems_htm");
 	       }catch(Exception e){
-	    	   logger.error(new Date() +" Inside Otheritem.htm "+UserId, e);
+	    	   logger.error(new Date() +" Inside Otheritems.htm "+UserId, e);
 	    	   e.printStackTrace();
 	    	  return "static/Error";
 	       }
@@ -624,7 +624,7 @@ public class MasterController {
 		{
 			
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside ChssMedicineEdit.htm "+UserId);
+			logger.info(new Date() +"Inside DoctorsMasterEdit.htm "+UserId);
 
 			try {
 				String action = (String)req.getParameter("Action");
@@ -968,7 +968,7 @@ public class MasterController {
 		public String DesgnationEdit (HttpServletRequest req, HttpSession ses , @RequestPart("selectedFile") MultipartFile selectedFile , RedirectAttributes redir)throws Exception
 		{ 
 			String UserId = (String)ses.getAttribute("Username");			
-			logger.info(new Date() +" Inside DesignationAddEdit.htm "+UserId);
+			logger.info(new Date() +" Inside DesignationEdit.htm "+UserId);
 			
 			try {			
 				String designationid = (String)req.getParameter("deisignationid");
@@ -1023,7 +1023,7 @@ public class MasterController {
 					return "redirect:/Designation.htm";
 				}				
 				}catch (Exception e){
-					logger.error(new Date() +" Inside DesignationAddEdit.htm "+UserId ,e);
+					logger.error(new Date() +" Inside DesignationEdit.htm "+UserId ,e);
 					e.printStackTrace();
 					return "static/Error";
 				}

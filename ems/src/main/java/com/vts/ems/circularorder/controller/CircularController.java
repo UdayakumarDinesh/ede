@@ -81,7 +81,7 @@ public class CircularController {
 			req.setAttribute("LoginType",LoginType);
 			return "circular/CircularList";
 		} catch (Exception e) {
-			  logger.error(new Date() +"Inside CircularAdd.htm "+UserId ,e);
+			  logger.error(new Date() +"Inside CircularList.htm "+UserId ,e);
 			  e.printStackTrace();
 			  return "static/Error";
 		   }
@@ -91,6 +91,8 @@ public class CircularController {
 	@RequestMapping(value = "CircularAdd.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularAdd(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularAdd.htm "+UserId);
 		 return "circular/CircularAddEdit";
 	
 	}
@@ -98,7 +100,9 @@ public class CircularController {
 	@RequestMapping(value = "CircularDelete.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
 	{
+		
    		String UserName=(String)ses.getAttribute("Username");
+   		logger.info(new Date() +"Inside CircularDelete.htm "+UserName);
        	String CircularId = (String)req.getParameter("circulatId");
        	
        	long cirId = Long.parseLong(CircularId);
@@ -123,6 +127,8 @@ public class CircularController {
 	@RequestMapping(value = "CircularSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularSearch(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularSearch.htm "+UserId);
 		List<Object[]> SearchList=new ArrayList<Object[]>();
         String search=req.getParameter("search");
         if(search!=null && !search.trim().equalsIgnoreCase("")) {
@@ -181,6 +187,8 @@ public class CircularController {
 	@RequestMapping(value = "CircularEdit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String circularEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CircularEdit.htm "+UserId);
          String CircularId = (String)req.getParameter("circulatId");
          long cirId = Long.parseLong(CircularId);
          long getMaxCircularId = service.GetMaxCircularId();
@@ -321,6 +329,8 @@ public class CircularController {
 	@RequestMapping(value = "RunBatchFile.htm")
 	public String runBatchFile(HttpServletRequest req, HttpSession ses) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside RunBatchFile.htm "+UserId);
 		ProcessBuilder processBuilder = new ProcessBuilder();
 		processBuilder.command("cmd.exe", "/C",  "C:\\Users\\Admin\\Desktop\\DBBackup.bat");
 //		File dir = new File("C:\\Users\\Admin\\Desktop\\");
@@ -378,6 +388,8 @@ public class CircularController {
 	@RequestMapping(value = "DepCircularAdd.htm")
 	public String DepCircularAdd(HttpServletRequest req, HttpSession ses,@RequestParam(name = "id") String id) throws Exception
 	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DepCircularAdd.htm "+UserId);
 		req.setAttribute("DepType",service.GetEmsDepType(id));
 		return "circular/DepCircularAddEdit";
 	}

@@ -45,7 +45,6 @@ public class MtDaoImpl implements MtDao {
 	private static final String LASTREQNO=" SELECT mtreqno from mt_appl WHERE mtapplid=(select max(mtapplid)from mt_appl)  ";
 	@Override
 	public List<Object[]> GetDutyType() throws Exception{
-		logger.info(new Date() +"Inside DAO getDutyType");	
 		Query query = manager.createNativeQuery(DUTYTYPE);
 		List<Object[]> list= query.getResultList();
 		return list;
@@ -54,7 +53,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> GetProjectList()throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO GetProjectList");	
 		Query query = manager.createNativeQuery(PROJECTLIST);
 		List<Object[]> list= query.getResultList();
 		return list;
@@ -63,7 +61,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public String GetLastReqNo() throws Exception {
 
-		logger.info(new Date() +"Inside DAO GetLastReqNo()");		
 		Query query= manager.createNativeQuery(LASTREQNO);
 		String result= (String)query.getSingleResult();		
 		return result;
@@ -74,12 +71,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int UserApply(MtUserApply user) throws Exception {
 
-		logger.info(new Date() + "Inside DAO UserApply()");
 		try {
 			manager.persist(user);
 			manager.flush();
 			return (int)user.getMtApplId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserApply()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -88,12 +85,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int MtApplyTranscation(MtApplyTransaction mttra)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO MtApplyTranscation()");
 		try {
 			manager.persist(mttra);
 			manager.flush();
 			return (int)mttra.getMtApplTransactionId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO MtApplyTranscation()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -102,7 +99,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public MtUserApply GetMtUserApply(int  mtapplid)throws Exception
 	{
-		logger.info(new Date() + "Inside GetUserApply()");
 		MtUserApply list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -114,6 +110,7 @@ public class MtDaoImpl implements MtDao {
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetMtUserApply()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -122,12 +119,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int UserApplyEdit(MtUserApply mtuserapply)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO UserApplyEdit()");
 		try {
 			manager.merge(mtuserapply);
 			manager.flush();
 			return (int)mtuserapply.getMtApplId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserApplyEdit()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -138,7 +135,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> GetApplyDataOFApplyStatus(String Empno)throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO GetApplyDataOFApplyStatus()");	
 		Query query = manager.createNativeQuery(USERAPYLISTAPPLYSTATUS);
 		query.setParameter("empid", Empno);
 		query.setParameter("isActive", "1");
@@ -150,13 +146,13 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> GetApplyDataOfSancApplyStatus(String EmpNo )throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetApplyDataOfSancApplyStatus()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery("call mt_trip_sanc_list(:empid);");		
 			query.setParameter("empid", EmpNo );
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetApplyDataOfSancApplyStatus()"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -167,12 +163,12 @@ public class MtDaoImpl implements MtDao {
 	public List<Object[]> VehiclePendingListDashBoard()throws Exception 
 	{
 
-		logger.info(new Date() +"Inside DAO VehiclePendingListDashBoard()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery("CALL mt_vehicle_pending();");				
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO VehiclePendingListDashBoard()"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -184,12 +180,12 @@ public class MtDaoImpl implements MtDao {
 	public List<Object[]> VehicleAssignedListDashBoard()throws Exception 
 	{
 
-		logger.info(new Date() +"Inside DAO VehicleAssignedListDashBoard()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		try {
 			Query query = manager.createNativeQuery("CALL mt_vehicle_assigned();");				
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO VehicleAssignedListDashBoard()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -200,13 +196,13 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public MtUserApply getApplySingleData(int MtApplId)throws Exception 
 	{
-		logger.info(new Date() + "Inside DAO getApplySingleData()");
 		MtUserApply mtuserapply =null;
 		try {
 			Query query = manager.createQuery(USERAPYLDATA);
 			query.setParameter("mtapplid", MtApplId);
 			mtuserapply = (MtUserApply) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getApplySingleData()"+e);
 			e.printStackTrace();
 		}
 		return mtuserapply;
@@ -215,7 +211,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public Object[] getEmpData(String EmpNo) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmpData()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		Object[] empdata=null;
 		try {
@@ -227,6 +222,7 @@ public class MtDaoImpl implements MtDao {
 				empdata=list.get(0);
 			}
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getEmpData()"+e);
 			e.printStackTrace();
 		}
 		return empdata;
@@ -237,7 +233,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int UserApplyCancel(MtUserApply apply) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO UserApplyCancel()");
 		try {
 			Query query= manager.createNativeQuery(USERAPPLYDELETE);
 			query.setParameter("isActive", "0");
@@ -246,6 +241,7 @@ public class MtDaoImpl implements MtDao {
 			query.setParameter("modifieddate", apply.getModifiedDate());
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO UserApplyCancel()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -256,7 +252,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> getApplyList(String EmpId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getApplyList()");
 		List<Object[]> list =new ArrayList<Object[]>();
 		
 		try {
@@ -265,6 +260,7 @@ public class MtDaoImpl implements MtDao {
 			list = (List<Object[]>)query.getResultList();
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getApplyList()"+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -272,7 +268,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> getDriverList() throws Exception {
-		logger.info(new Date() +"Inside DAO getDriverList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -281,6 +276,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getDriverList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -291,13 +287,13 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<MtVehicle> GetVechileList() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetVechileList()");
 		try {			
 				Query query= manager.createQuery(VEHICLELIST);
 				query.setParameter("isActive", "1");
 				return  query.getResultList();
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetVechileList()"+e);
 			e.printStackTrace();
 			return null;
 		}				
@@ -305,7 +301,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> getListOfTrip() throws Exception {
-		logger.info(new Date() +"Inside DAO getDriverList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -314,6 +309,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getListOfTrip()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -322,7 +318,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> GetLinkRequest() throws Exception {
-		logger.info(new Date() +"Inside DAO getDriverList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -331,6 +326,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO GetLinkRequest()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -339,7 +335,6 @@ public class MtDaoImpl implements MtDao {
 	private static final String LASTTRIPNO=" SELECT TripNo FROM mt_trip WHERE TripId=(SELECT MAX(TripId) FROM mt_trip)  ";
 	public String getLastTripNo() throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getLastTripNo()");		
 		Query query= manager.createNativeQuery(LASTTRIPNO);
 		String result= (String)query.getSingleResult();		
 		return result;
@@ -350,12 +345,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int Inserttrip(MtTrip trip) throws Exception {
 
-		logger.info(new Date() + "Inside DAO Inserttrip()");
 		try {
 			manager.persist(trip);
 			manager.flush();
 			return (int)trip.getTripId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO Inserttrip()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -365,7 +360,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public String GetRecOfficer(String empid) throws Exception {
 
-		logger.info(new Date() +"Inside DAO GetRecOfficer()");		
 		Query query= manager.createNativeQuery(GETRECOFFICER);
 		query.setParameter("empid", empid);
 		BigInteger result= (BigInteger)query.getSingleResult();
@@ -377,12 +371,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public Long MtEmsNotification(EMSNotification notification)throws Exception
 	{
-		logger.info(new Date() + "Inside DAO MtEmsNotification()");
 		try {
 			manager.persist(notification);
 			manager.flush();
 			return notification.getNotificationId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO MtEmsNotification()"+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -390,7 +384,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> GhApproveList(String EmpId) throws Exception {
-		logger.info(new Date() +"Inside DAO GhApproveList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -400,6 +393,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO GhApproveList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -408,7 +402,6 @@ public class MtDaoImpl implements MtDao {
 	private static final String EMPIDMTAPPL="select empid from mt_appl where mtapplid=:mtapplid";
 	public String EmpIdOfMtRequest(int MtApplId) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO EmpIdOfMtRequest()");		
 		Query query= manager.createNativeQuery(EMPIDMTAPPL);
 		query.setParameter("mtapplid", MtApplId);
 		return (String)query.getSingleResult(); 
@@ -418,7 +411,6 @@ public class MtDaoImpl implements MtDao {
 
 	public int StatusUpdate(MtUserApply apply) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO StatusUpdate()");
 		try {
 			Query query= manager.createNativeQuery(USERAPPLYGHAPPROVE);
 			query.setParameter("mtstatus","V");
@@ -431,6 +423,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO StatusUpdate()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -445,13 +438,13 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public MtTrip GetTrip(int TripId) throws Exception {
 		
-		logger.info(new Date() +"Inside DAO GetTrip()");
 		try {			
 				Query query= manager.createQuery(TRIPDATA);
 				query.setParameter("tripid", TripId);
 				MtTrip trip=(MtTrip)query.getSingleResult();
 			return trip;
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetTrip()"+e);
 			e.printStackTrace();
 			return null;
 		}		
@@ -462,7 +455,6 @@ public class MtDaoImpl implements MtDao {
 	
 	public int DeleteTrip(int tripid) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO DeleteTrip()");
 		try {
 			Query query= manager.createNativeQuery(DELETETRIP);
 			query.setParameter("isactive", 0);
@@ -470,6 +462,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteTrip()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -477,12 +470,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int EditTrip(MtTrip trip) throws Exception 
 	{
-		logger.info(new Date() + "Inside EditTrip()");
 		try {
 			manager.merge(trip);
 			manager.flush();
 			return trip.getTripId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditTrip()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -491,7 +484,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int insertTriplink(MtLinkDuty linkduty) throws Exception {
 		
-		logger.info(new Date() +"Inside DAO insertTriplink()");
 		int count;
 		if(linkduty.getTripId()==0) {
 			
@@ -530,7 +522,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> PrintList(String fromDate, String toDate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GhApproveList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -541,6 +532,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO PrintList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -549,7 +541,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> getPrintData(String EmpId, int TripId) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GhApproveList()");
 		List<Object[]> list=null;
 		
 		try {
@@ -560,6 +551,7 @@ public class MtDaoImpl implements MtDao {
 			return list;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getPrintData()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -567,7 +559,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> getEmployeeList() throws Exception {
-		logger.info(new Date() +"Inside DAO getEmployeeList()");
 		List<Object[]> driverlist=null;
 		
 		try {
@@ -576,6 +567,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO getEmployeeList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -585,12 +577,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int AddDriver(MtDriver driver) throws Exception {
 
-		logger.info(new Date() + "Inside DAO AddDriver()");
 		try {
 			manager.persist(driver);
 			manager.flush();
 			return (int)driver.getDriverId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddDriver()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -601,7 +593,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int InActiveDriver(MtDriver driver) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO InActiveDriver()");
 		try {
 			Query query= manager.createNativeQuery(INACTIVEDRIVER);
 			query.setParameter("modifiedby", driver.getModifiedby());
@@ -611,6 +602,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO InActiveDriver()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -619,11 +611,11 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public MtVehicle GetVehicleData(int vehicleid) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO GetVechileList()");
 		try {			
 			return manager.find(MtVehicle.class, vehicleid);	
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetVehicleData()"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -634,7 +626,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int DeleteVehicle(MtVehicle vehicle) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO DeleteVehicle()");
 		try {
 			Query query= manager.createNativeQuery(DELETE_VEHICLE);
 			query.setParameter("isActive", 0);
@@ -644,6 +635,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DeleteVehicle()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -653,12 +645,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int AddVehicle(MtVehicle vehicle)throws Exception{
 
-		logger.info(new Date() + "Inside DAO AddVehicle()");
 		try {
 			manager.persist(vehicle);
 			manager.flush();
 			return (int)vehicle.getVehicleId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddVehicle()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -668,7 +660,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int EditVehicle(MtVehicle vehicle) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditVehicle()");
 		try {
 			Query query= manager.createNativeQuery(EDITVEHICLE);
 			query.setParameter("noofseat", vehicle.getNoOfSeat());
@@ -681,6 +672,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditVehicle()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -689,12 +681,12 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<LabMaster> GetLabDetails()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetLabDetails()");
 		try {			
 				Query query= manager.createQuery("FROM LabMaster");
 				List<LabMaster> labdetails=(List<LabMaster>)query.getResultList();
 			return labdetails;
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetLabDetails()"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -702,7 +694,6 @@ public class MtDaoImpl implements MtDao {
 
 	@Override
 	public List<Object[]> DateWiseProjectReport(Date FromDate, Date ToDate, int DriverId, int VehicleId) throws Exception {
-		logger.info(new Date() +"Inside DAO DateWiseProjectReport()");
 		List<Object[]> reportlist=null;
 		
 		try {
@@ -716,6 +707,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO DateWiseProjectReport()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -725,7 +717,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public Object[] getEmpDesig(Long Empid)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getEmpDesig()");		
 		Query query= manager.createNativeQuery(EMPDESIG);
 		query.setParameter("Empid", Empid);
 		
@@ -741,7 +732,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<BigInteger> GetMtoEmployeeList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetMtoEmployeeList()");		
 		Query query= manager.createNativeQuery(MTOEMP);
 		List<BigInteger> list  =(List<BigInteger> )query.getResultList();
 		return list;
@@ -773,7 +763,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> TripList(Date FromDate, Date ToDate) throws Exception {
-		logger.info(new Date() +"Inside DAO TripList()");
 		List<Object[]> reportlist=null;
 		
 		try {
@@ -784,6 +773,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO TripList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -793,7 +783,6 @@ public class MtDaoImpl implements MtDao {
 	
 	@Override
 	public List<Object[]> DirectorTripList(Date FromDate, Date ToDate) throws Exception {
-		logger.info(new Date() +"Inside DAO DirectorTripList()");
 		List<Object[]> reportlist=null;
 		
 		try {
@@ -804,6 +793,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO DirectorTripList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -812,7 +802,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int DirectorTripAssign(MtDirectorDuty Dduty) throws Exception
 	{
-		logger.info(new Date() + "Inside DAO DirectorTripAssign()");
 		try {
 			
 			manager.persist(Dduty);
@@ -820,6 +809,7 @@ public class MtDaoImpl implements MtDao {
 			return Dduty.getTripId();
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO DirectorTripAssign()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -830,7 +820,6 @@ public class MtDaoImpl implements MtDao {
 	public int MtAdminReqDelete(String tripid)throws Exception
 	{
 		
-		logger.info(new Date() +"Inside DAO MtAdminReqDelete()");
 		try {
 			Query query= manager.createNativeQuery(DELETEMTREQ);
 			query.setParameter("ISACTIVE", 0);
@@ -838,6 +827,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO MtAdminReqDelete()"+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -849,7 +839,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public Object[] MtAdminReqEdit(String tripid) throws Exception 
 	{
-		logger.info(new Date() +"Inside DAO MtAdminReqEdit()");
 		Object[] list=null;
 		
 		try {
@@ -862,6 +851,7 @@ public class MtDaoImpl implements MtDao {
 	
 			return list;
 		}catch (Exception e){
+			logger.error(new Date() + "Inside DAO MtAdminReqEdit()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -873,7 +863,6 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public int MtAdminReqEdit(MtUserApply apply) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO MtAdminReqEdit()");
 		try {
 			Query query=manager.createNativeQuery(MTADMINEDIT);
 			query.setParameter("starttime", apply.getStartTime());
@@ -888,6 +877,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO MtAdminReqEdit()"+e);
 			e.printStackTrace();
 			return  0;
 		}

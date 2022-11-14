@@ -70,7 +70,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Employee EmployeeInfo(long EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmployeeInfo");
 		try {
 			Employee emloyee = null;
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -82,6 +81,7 @@ public class EmsDaoImpl implements EmsDao
 			emloyee = allQuery.getSingleResult();
 			return emloyee;
 		}catch (Exception e) {
+			logger.error(new Date() +" Inside EmployeeInfo "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -90,7 +90,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public EmployeeDesig DesignationInfo(long DesigId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO DesignationInfo");
 		try {
 			EmployeeDesig emloyee = null;
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -102,6 +101,7 @@ public class EmsDaoImpl implements EmsDao
 			emloyee = allQuery.getSingleResult();
 			return emloyee;
 		}catch (Exception e) {
+			logger.error(new Date() +" Inside DesignationInfo "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -113,13 +113,13 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Object[] EmployeeData(String EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EmployeeData");
 		try {
 			Query query = manager.createNativeQuery(EMPLOYEEDATA);
 			query.setParameter("empid", EmpId);				
 			return (Object[])query.getResultList().get(0);			
 		}
 		catch (Exception e) {
+			logger.error(new Date() +" Inside EmployeeData "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -129,7 +129,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public long PasswordChangeHystoryCount(String loginid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO PasswordChangeHystoryCount");
 		try {
 			Query query = manager.createNativeQuery(PASSWORDCHANGEHYSTORYCOUNT);
 			query.setParameter("loginid", loginid);		
@@ -138,6 +137,7 @@ public class EmsDaoImpl implements EmsDao
 			return Long.parseLong(result[0].toString());
 					
 		}catch (Exception e) {
+			logger.error(new Date() +" Inside PasswordChangeHystoryCount"+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -147,7 +147,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public List<EMSNotification> NotificationList(long EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO NotificationList");
 		try {
 			List<EMSNotification> notylist = null;
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -160,6 +159,7 @@ public class EmsDaoImpl implements EmsDao
 			notylist = allQuery.getResultList();
 			return notylist;
 		}catch (Exception e) {
+			logger.error(new Date() +" NotificationList "+ e);
 			e.printStackTrace();
 			return new ArrayList<EMSNotification>();
 		}
@@ -170,7 +170,6 @@ public class EmsDaoImpl implements EmsDao
 	public int NotificationUpdate(String NotificationId) throws Exception
 	{
 		
-		logger.info(new Date() +"Inside DAO NotificationUpdate");	
 		Query query = manager.createNativeQuery(NOTIFICATIONUPDATE);
 		
 		query.setParameter("notificationid", NotificationId);
@@ -184,7 +183,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Object[] LoginExistCheck(String username) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO LoginExistCheck");	
 		try {
 			Query query = manager.createNativeQuery(LOGINEXISTCHECK);
 			
@@ -202,7 +200,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public int UpdateResetOtp(String loginid,String otp) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO UpdateResetOtp");	
 		try {
 			Query query = manager.createNativeQuery(UPDATERESETOTP);
 			
@@ -223,7 +220,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Object[] getResetOtp(String loginid) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO getResetOtp");	
 		try {
 			Query query = manager.createNativeQuery(GETRESETOTP);
 			
@@ -243,7 +239,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public int userResetPassword(String loginid,String password) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO userResetPassword");	
 		try {
 			Query query = manager.createNativeQuery(USERRESETPASSWORD);
 			
@@ -268,7 +263,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public Object[] LoginEmpInfo(String loginid) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO LoginEmpInfo");	
 		try {
 			Query query = manager.createNativeQuery(LOGINEMPINFO);
 			
@@ -286,7 +280,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO EmpHandOverLoginTypeList");	
 		try {
 			Query query = manager.createNativeQuery(EMPHANDOVERLOGINTYPELIST);
 			
@@ -304,7 +297,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public List<Object[]> LoginLoginType(String loginid) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO LoginLoginType");	
 		try {
 			Query query = manager.createNativeQuery(LOGINLOGINTYPE);
 			
@@ -322,7 +314,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception
 	{		
-		logger.info(new Date() +"Inside DAO EmpHandOverLoginTypeList");	
 		try {
 			Query query = manager.createNativeQuery(ALLOWEDlOGINTYPESlIST);
 			
@@ -340,7 +331,6 @@ public class EmsDaoImpl implements EmsDao
 	@Override
 	 public List<Object[]> CirculatList() throws Exception
 	 {
-		 logger.info(new Date() +"Inside DAO CirculatList()");	
 		 try {
 				Query query =  manager.createNativeQuery(CIRCULARLIST);
 				
@@ -357,7 +347,6 @@ public class EmsDaoImpl implements EmsDao
 		@Override
 		public List<Object[]> GetDoctorList()throws Exception
 		{
-			 logger.info(new Date() +"Inside DAO GetDoctorList()");	
 			 try {
 					Query query =  manager.createNativeQuery(DOCTORSLIST);
 					
@@ -372,13 +361,13 @@ public class EmsDaoImpl implements EmsDao
 		@Override
 		public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
 		{
-			logger.info(new Date() +"Inside DAO loginHisAddSubmit");
 
 			try {
 				manager.persist(model);
 				manager.flush();
 
 			} catch (Exception e) {
+				logger.error(new Date() +" Inside loginHisAddSubmit "+ e);
 				e.printStackTrace();
 			}
 			return model.getPasswordHistoryId(); 
@@ -387,7 +376,6 @@ public class EmsDaoImpl implements EmsDao
 		@Override
 		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
 		{
-			 logger.info(new Date() +"Inside DAO GetEmpanelledHostpitalList()");	
 			 try {
 					Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
 					
@@ -402,7 +390,6 @@ public class EmsDaoImpl implements EmsDao
 		@Override
 		public List<Object[]> GetCircularList()throws Exception
 		{
-			 logger.info(new Date() +"Inside DAO GetCircularList()");	
 			 try {
 					Query query =  manager.createNativeQuery(GETCIRCULAR);
 					
@@ -417,7 +404,6 @@ public class EmsDaoImpl implements EmsDao
 		@Override
 		public LabMaster getLabDetails()throws Exception
 		{
-			logger.info(new Date() + "Inside getCHSSDocRate()");
 			LabMaster memeber = null;
 			try {
 				CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -428,6 +414,7 @@ public class EmsDaoImpl implements EmsDao
 				memeber = allquery.getResultList().get(0);
 				return memeber;
 			} catch (Exception e) {
+				logger.error(new Date() +" Inside getLabDetails "+ e);
 				e.printStackTrace();
 				return null;
 			}

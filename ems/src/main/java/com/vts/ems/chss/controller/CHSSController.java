@@ -1900,7 +1900,8 @@ public class CHSSController {
 	@RequestMapping(value = "CHSSIPDApprovalsList.htm" )
 	public String CHSSIPDApprovalsList(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
-		
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CHSSIPDApprovalsList.htm "+Username);
 		redir.addAttribute("tab","IPD");
 		redir.addAttribute("resultfail",req.getParameter("resultfail"));
 		redir.addAttribute("result",req.getParameter("result"));
@@ -2348,7 +2349,7 @@ public class CHSSController {
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		
-		logger.info(new Date() +"Inside CHSSClaimsApprove.htm "+Username);
+		logger.info(new Date() +"Inside CHSSContingentApprove.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
 			String action = req.getParameter("action");
@@ -2421,7 +2422,7 @@ public class CHSSController {
 		} catch (Exception e) {
 			
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSClaimsApprove.htm "+Username, e);
+			logger.error(new Date() +" Inside CHSSContingentApprove.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -2532,7 +2533,7 @@ public class CHSSController {
 	public String ContingentTransactions(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside ContingentTransactions.htm "+Username);
+		logger.info(new Date() +"Inside ContingentTransaction.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
 			req.setAttribute("Transactions", service.ContingentTransactions(contingentid));
@@ -2540,7 +2541,7 @@ public class CHSSController {
 			return "chss/ContingentTransaction";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside ContingentTransactions.htm "+Username, e);
+			logger.error(new Date() +" Inside ContingentTransaction.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -2939,7 +2940,7 @@ public class CHSSController {
 			return "redirect:/ContingentApprovals.htm";
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside CHSSMedicinesListAjax.htm "+Username, e);
+			logger.error(new Date() +" Inside CHSSContingentDelete.htm "+Username, e);
 			return "static/Error";
 		}
 		
@@ -3980,7 +3981,7 @@ public class CHSSController {
 	public String IPDMiscBillAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside MiscBillAdd.htm "+Username);
+		logger.info(new Date() +"Inside IPDMiscBillAdd.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
 			String billid = req.getParameter("billid");
@@ -5196,7 +5197,7 @@ public class CHSSController {
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
 		Long EmpId = ((Long) ses.getAttribute("EmpId"));
-		logger.info(new Date() +"Inside IPDConsultRemAmountEdit.htm "+Username);
+		logger.info(new Date() +"Inside IPDBillheadRemAmountEdit.htm "+Username);
 		try {
 			
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -5227,7 +5228,7 @@ public class CHSSController {
 			return "redirect:/CHSSIPDFormEdit.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside IPDConsultRemAmountEdit.htm "+Username, e);
+			logger.error(new Date() +" Inside IPDBillheadRemAmountEdit.htm "+Username, e);
 			return "static/Error";
 		}
 	}

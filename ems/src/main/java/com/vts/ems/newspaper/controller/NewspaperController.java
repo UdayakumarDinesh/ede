@@ -224,7 +224,7 @@ public class NewspaperController {
 			String Username = (String) ses.getAttribute("Username");
 			String name = (String) ses.getAttribute("EmpName");
 			String designation = (String) ses.getAttribute("EmpDesig");
-			logger.info(new Date() + "Inside NewspaperEditSubmit.htm " + Username);
+			logger.info(new Date() + "Inside NewspaperEditView.htm " + Username);
 			
 			ModelAndView mv = new ModelAndView();
 			
@@ -291,7 +291,7 @@ public class NewspaperController {
 		public ModelAndView NewspaperDelete(HttpServletRequest request,HttpSession ses) throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() + "Inside NewspaperPrint.htm " + Username);
+			logger.info(new Date() + "Inside NewspaperDelete.htm " + Username);
 			
 			ModelAndView mv = new ModelAndView();
 			try {
@@ -550,6 +550,8 @@ public class NewspaperController {
 		  		@RequestMapping(value="TelephoneList.htm")
 		  		public ModelAndView telephoneList(HttpServletRequest request,HttpSession ses) throws Exception
 		  		{
+		  			String Username = (String) ses.getAttribute("Username");
+		  			logger.info(new Date() + "Inside telephoneList.htm " + Username);
 		  		    ModelAndView mv=new ModelAndView("newspaper/TelephoneList");
 	  				String sesEmpNo = (String) ses.getAttribute("EmpNo");
 		  				
@@ -1146,7 +1148,7 @@ public class NewspaperController {
 		{
 			String Username = (String) ses.getAttribute("Username");
 			ModelAndView mv = new ModelAndView();
-			logger.info(new Date() + "Inside TelephoneEdit.htm " + Username);
+			logger.info(new Date() + "Inside TeleClaimPrint.htm " + Username);
 			try {
 				// split TeleId and TeleForwardId ..
 				String TeleId_TeleForwardId = request.getParameter("TeleId_TeleForwardId");
@@ -1249,7 +1251,7 @@ public class NewspaperController {
 		{
 			String Username = (String) ses.getAttribute("Username");
 			ModelAndView mv = new ModelAndView();
-			logger.info(new Date() + "Inside TelephoneContingentBill.htm " + Username);
+			logger.info(new Date() + "Inside TelephoneSendback.htm " + Username);
 			try {
 				List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
 				request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
@@ -1313,6 +1315,8 @@ public class NewspaperController {
 		@RequestMapping(value={"/telephonedeviceadd","/telephonedeviceedit","/telephonedevicedelete","/telephone-claim-forward","/telephone-sendback",},method=RequestMethod.POST)
 		public ModelAndView telephoneAddEditDeletePrintApproval(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
 		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside telephonedeviceadd.htm " + Username);
 			ModelAndView mv = new ModelAndView();
 			if (request.getParameter("TeleApprovedReportYearWise") != null) 
 			{
@@ -1351,6 +1355,8 @@ public class NewspaperController {
 		@RequestMapping(value="TelephoneApprovedList.htm")
   		public ModelAndView telephoneApprovedList(HttpServletRequest request,HttpSession ses)
   		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside TelephoneApprovedList.htm " + Username);
   			ModelAndView mv=new ModelAndView("newspaper/TelephoneApprovedList");
   			List<Object[]> TelephoneClaimApprovedList=service.getTelephoneClaimApprovedList();
   			request.setAttribute("TelephoneClaimApprovedList", TelephoneClaimApprovedList);
@@ -1366,6 +1372,8 @@ public class NewspaperController {
 		  		@RequestMapping(value="/telephone-approval-individualclaim-details")
 		  		public ModelAndView telephoneIndividualClaimDetailsPrint(HttpServletRequest request,HttpSession ses) throws Exception
 		  		{
+		  			String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() + "Inside telephone-approval-individualclaim-details " + Username);
 		  			  ModelAndView mv=new ModelAndView();
 		  		
 		  			if(request.getParameter("TeleForwardId")!=null)

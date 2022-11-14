@@ -49,7 +49,6 @@ public class MasterDaoImpl implements MasterDao{
 	private static final String OTHERITEM = "SELECT  otheritemid , otheritemname FROM chss_other_items ORDER BY otheritemid DESC";
 	@Override
 	public List<Object[]> OtherItems() throws Exception {
-		logger.info(new Date() +"Inside OtherItems");	
 		Query query = manager.createNativeQuery(OTHERITEM);
 		
 		List<Object[]> FormModuleList= query.getResultList();
@@ -60,7 +59,6 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public List<Object[]> ChssTestSub() throws Exception
 	{
-		 logger.info(new Date() +"Inside ChssTestMain");	
 		 Query query = manager.createNativeQuery(TESTMAIN);
 		 List<Object[]> FormModuleList= query.getResultList();
 	return FormModuleList;
@@ -69,7 +67,6 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public List<Object[]>ChssTestMain () throws Exception
 	{
-		 logger.info(new Date() +"Inside ChssTestSub");	
 		 Query query = manager.createNativeQuery(TESTSUB);
 		 List<Object[]> FormModuleList= query.getResultList();
 	return FormModuleList;
@@ -78,12 +75,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public Long AddTestSub(CHSSTestSub TestSub)throws Exception
 	{
-		logger.info(new Date() + "Inside AddTestSub()");
 		try {
 			manager.persist(TestSub);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside testSub()"+e);
 			e.printStackTrace();
 		}
 		return TestSub.getTestSubId();
@@ -94,11 +91,11 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public CHSSTestSub testSub(String TestSubId)throws Exception
 	{
-		logger.info(new Date() + "Inside testSub()");
 		
 		try {
 			return manager.find(CHSSTestSub.class, Long.parseLong(TestSubId));		
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside testSub()"+e);
 			e.printStackTrace();
 			return null;
 		}		
@@ -108,11 +105,11 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public CHSSTestSub getTestSub(long subid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getTestSub()");
 		try {
 			return manager.find(CHSSTestSub.class, subid);
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside getTestSub()"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -121,13 +118,13 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public long EditTestSub(CHSSTestSub test) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditTestSub()");
 		try {
 			manager.merge(test);
 			manager.flush();
 			
 			return test.getTestSubId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditTestSub()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -135,10 +132,10 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public CHSSOtherItems getOtherItem(int itemid) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getOtherItem()");
 		try {
 			return manager.find(CHSSOtherItems.class, itemid);			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside getOtherItem()"+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -146,12 +143,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public int AddOtherItem(CHSSOtherItems item)throws Exception
 	{
-		logger.info(new Date() + "Inside AddOtherItem()");
 		try {
 			manager.persist(item);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside AddOtherItem()"+e);
 			e.printStackTrace();
 		}
 		return item.getOtherItemId();
@@ -159,12 +156,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public int EditItem(CHSSOtherItems item) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditItem()");
 		try {
 			manager.merge(item);
 			manager.flush();		
 			return item.getOtherItemId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditItem()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -175,12 +172,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public List<Object[]>  getMedicineList()throws Exception
 	{
-		 logger.info(new Date() +"Inside GetMedicineList()");	
 		 try {
 			 Query query = manager.createNativeQuery(MEDICINELIST);
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside getMedicineList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -190,13 +187,13 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public List<Object[]>  getMedicineListByTreatment(String treatmentname)throws Exception
 	{
-		 logger.info(new Date() +"Inside GetMedicineList()");	
 		 try {
 			 Query query = manager.createNativeQuery(MEDICINELISTBYTREATMENT);
 			 query.setParameter("treatmentid", treatmentname);
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside getMedicineListByTreatment()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -207,12 +204,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public List<Object[]> GetTreatmentType()throws Exception
 	{
-		 logger.info(new Date() +"Inside GetTrateMentType()");	
 		 try {
 			 Query query = manager.createNativeQuery(TREATMENTTYPE);
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetTreatmentType()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -221,7 +218,6 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public int Checkduplicate(String medicinename ,String treatid)throws Exception
 	{
-		 logger.info(new Date() +"Inside Checkduplicate()");	
 		 try {
 			Query query = manager.createNativeQuery(CHECKMEDICINE);
 			query.setParameter("medicinename", medicinename);
@@ -232,6 +228,7 @@ public class MasterDaoImpl implements MasterDao{
 
 				return result;
 		  }catch (Exception e){
+			  logger.error(new Date() + "Inside Checkduplicate()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -239,7 +236,6 @@ public class MasterDaoImpl implements MasterDao{
 	
 	@Override
 	public CHSSMedicinesList getCHSSMedicine(long medicineid) throws Exception {
-		logger.info(new Date() + "Inside getCHSSMedicine()");
 		CHSSMedicinesList memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -251,6 +247,7 @@ public class MasterDaoImpl implements MasterDao{
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside getCHSSMedicine()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -260,7 +257,6 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public CHSSDoctorRates getCHSSDoctorRates(int DocRateId) throws Exception
 	{
-		logger.info(new Date() + "Inside getCHSSDoctorRates()");
 		CHSSDoctorRates memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -272,6 +268,7 @@ public class MasterDaoImpl implements MasterDao{
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside getCHSSDoctorRates()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -281,12 +278,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public Long AddMedicine(CHSSMedicinesList medicine)throws Exception
 	{
-		logger.info(new Date() + "Inside AddMedicine()");
 		try {
 			manager.persist(medicine);
 			manager.flush();
 			return medicine.getMedicineId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside AddMedicine()"+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -296,12 +293,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public int AddDocQualification(CHSSDoctorRates  DocRate)throws Exception
 	{
-		logger.info(new Date() + "Inside AddDocQualification()");
 		try {
 			manager.persist(DocRate);
 			manager.flush();
 			return DocRate.getDocRateId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside AddDocQualification()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -310,12 +307,12 @@ public class MasterDaoImpl implements MasterDao{
 	@Override
 	public Long EditMedicine(CHSSMedicinesList item) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditMedicine()");
 		try {
 			manager.merge(item);
 			manager.flush();		
 			return item.getMedicineId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditMedicine()"+e);
 			e.printStackTrace();
 			return 0l;
 		}		
@@ -325,7 +322,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public List<Object[]> GetDoctorList()throws Exception
 	{                                           
-		logger.info(new Date() +"Inside DAO GetDoctorList()");
 		try {
 			
 			Query query= manager.createNativeQuery(DOCTORLIST);			
@@ -333,6 +329,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			return list;
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside GetDoctorList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -341,7 +338,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public CHSSDoctorRates getCHSSDocRate(long docrateid) throws Exception 
 	{
-		logger.info(new Date() + "Inside getCHSSDocRate()");
 		CHSSDoctorRates memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -353,6 +349,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside getCHSSDocRate()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -362,12 +359,12 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public int EditDoctorMaster(CHSSDoctorRates Docrate) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditDoctorMaster()");
 		try {
 			manager.merge(Docrate);
 			manager.flush();		
 			return Docrate.getDocRateId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditDoctorMaster()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -376,7 +373,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public Object[] getLabDetails()throws Exception
 	{
-		 logger.info(new Date() +"Inside getLabDetails()");	
 		 try {
 			 Query query = manager.createNativeQuery(LABDETAILS);
 			 
@@ -387,6 +383,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			 }
 				return null;
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside getLabDetails()"+e);
 				e.printStackTrace();
 				return null;
 			}	
@@ -394,7 +391,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public LabMaster GetLabDetailsToEdit(long labid)throws Exception
 	{
-		logger.info(new Date() + "Inside getCHSSDocRate()");
 		LabMaster memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -406,6 +402,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetLabDetailsToEdit()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -415,7 +412,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public List<Object[]> getLabsList()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO getLabsList()");
 		try {
 			
 			Query query= manager.createNativeQuery(LABSLIST);			
@@ -423,6 +419,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			return list;
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside getLabsList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -430,12 +427,12 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public long EditLabMaster(LabMaster labmatster) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditLabMaster()");
 		try {
 			manager.merge(labmatster);
 			manager.flush();		
 			return labmatster.getLabMasterId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditLabMaster()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -445,7 +442,6 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 	@Override
 	public long updateOtherItemAmt(String chssOtheramtid, String admAmt, String UserId ,String basicto)throws Exception
 	{
-		logger.info(new Date() + "Inside updateOtherAmt()");
 		int count=0;
 		try {
 			Date d = new Date();
@@ -459,6 +455,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside updateOtherItemAmt()"+e);
 				e.printStackTrace();
 				return count;
 			}
@@ -469,7 +466,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public int CheckduplicateItem(String treatmentname)throws Exception
 	{
-		 logger.info(new Date() +"Inside CheckduplicateItem()");	
 		 try {
 			Query query = manager.createNativeQuery(CHECKITEM);
 			query.setParameter("treatmentname", treatmentname);		
@@ -479,6 +475,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 				return result;
 		  }catch (Exception e){
+			  logger.error(new Date() + "Inside CheckduplicateItem()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -489,7 +486,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public int CheckduplicateTest(String testname)throws Exception
 	{
-		 logger.info(new Date() +"Inside CheckduplicateTest()");	
 		 try {
 			Query query = manager.createNativeQuery(CHECKTEST);
 			query.setParameter("testname", testname);		
@@ -499,6 +495,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 			return result;
 		  }catch (Exception e){
+			  logger.error(new Date() + "Inside CheckduplicateTest()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -510,7 +507,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public long DeleteOtherAmt(String chssOtheramtid, String userid)throws Exception
 	{
-		logger.info(new Date() + "Inside DeleteOtherAmt()");
 		long count=0;
 		try {
 			
@@ -524,6 +520,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			return count;
 			
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DeleteOtherAmt()"+e);
 			e.printStackTrace();
 			return count;
 		}
@@ -534,12 +531,12 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public List<Object[]> GetDesignation()throws Exception
 	{
-		logger.info(new Date() + "Inside GetDesignation()");
 		try {
 				Query query= manager.createNativeQuery(DESIGNATION);			
 				List<Object[]> list =  (List<Object[]>)query.getResultList();
 				return list;
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside GetDesignation()"+e);
 				e.printStackTrace();
 				return null;
 		   }
@@ -549,12 +546,12 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public long AddDesignation(EmployeeDesig desig)throws Exception
 	{
-		logger.info(new Date() + "Inside AddDesignation()");
 		try {
 			manager.persist(desig);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside AddDesignation()"+e);
 			e.printStackTrace();
 		}
 		return desig.getDesigId();
@@ -563,7 +560,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public EmployeeDesig GetDesignationToEdit(long desigid)throws Exception
 	{
-		logger.info(new Date() + "Inside GetDesignationToEdit()");
 		EmployeeDesig memeber = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -575,6 +571,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetDesignationToEdit()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -583,12 +580,12 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public long EditDesignation(EmployeeDesig desig) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditDesignation()");
 		try {
 			manager.merge(desig);
 			manager.flush();		
 			return desig.getDesigId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditDesignation()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -636,7 +633,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public DoctorList GetDoctor(Long  doctorid)throws Exception
 	{
-		logger.info(new Date() + "Inside GetDoctor()");
 		DoctorList list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -648,6 +644,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetDoctor()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -656,12 +653,12 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public long DoctorsAdd(DoctorList doctor)throws Exception
 	{
-		logger.info(new Date() + "Inside DoctorsAdd()");
 		try {
 			manager.persist(doctor);
 			manager.flush();
 			return (long)doctor.getDoctorId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DoctorsAdd()"+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -670,12 +667,12 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public long DoctorsEdit(DoctorList doctor)throws Exception
 	{
-		logger.info(new Date() + "Inside DoctorsEdit()");
 		try {
 			manager.merge(doctor);
 			manager.flush();
 			return (long)doctor.getDoctorId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside DoctorsEdit()"+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -697,7 +694,6 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 	@Override
 	public int CheckduplicateTestCode(String testcode)throws Exception
 	{
-		 logger.info(new Date() +"Inside CheckduplicateTestCode()");	
 		 try {
 			Query query = manager.createNativeQuery(CHECKTESTCODE);
 			query.setParameter("testcode", testcode);		
@@ -707,6 +703,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 			return result;
 		  }catch (Exception e){
+			  logger.error(new Date() + "Inside CheckduplicateTestCode()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -718,7 +715,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public int DuplicateDocQualification(String treatment,String qualification)throws Exception
 	{
-		 logger.info(new Date() +"Inside CheckduplicateTestCode()");	
 		 try {
 			Query query = manager.createNativeQuery(DUPLICATEDOCQUALIFICATION);
 			query.setParameter("treatment", treatment);	
@@ -729,6 +725,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 
 			return result;
 		  }catch (Exception e){
+			  logger.error(new Date() + "Inside DuplicateDocQualification()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -739,7 +736,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public List<Object[]> GetOtherItemAmlountList(String id)throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetOtherItemAmlountList()");
 		try {
 			
 			Query query= manager.createNativeQuery(GETOTHEREMSLIST);			
@@ -748,6 +744,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			return list;
 			
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside GetOtherItemAmlountList()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -757,12 +754,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public long AddOtherItemAmt(CHSSOtherPermitAmt otheramt)throws Exception
 	{
-		logger.info(new Date() + "Inside AddOtherItemAmt()");
 		try {
 			manager.persist(otheramt);
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside AddOtherItemAmt()"+e);
 			e.printStackTrace();
 		}
 		return otheramt.getCHSSOtherAmtId();
@@ -771,7 +768,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public long updateOtherAmt(String chssOtheramtid, String admAmt, String UserId)throws Exception
 	{
-		logger.info(new Date() + "Inside updateOtherAmt()");
 		int count=0;
 		try {
 			Date d = new Date();
@@ -784,6 +780,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside updateOtherAmt()"+e);
 				e.printStackTrace();
 				return count;
 			}
@@ -792,12 +789,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public long CircularListAdd(CircularList circular)throws Exception
 	{
-		logger.info(new Date() + "Inside CircularListAdd()");
 		try {
 			manager.persist(circular);
 			manager.flush();
 			return (long)circular.getCircularId();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside CircularListAdd()"+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -807,7 +804,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public CircularList GetCircularToEdit(Long  circularid)throws Exception
 	{
-		logger.info(new Date() + "Inside GetCircularToEdit()");
 		CircularList list = null;
 		try {
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -819,6 +815,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetCircularToEdit()"+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -827,12 +824,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public long EditCircular(CircularList circular) throws Exception
 	{
-		logger.info(new Date() +"Inside DAO EditCircular()");
 		try {
 			manager.merge(circular);
 			manager.flush();		
 			return circular.getCircularId();
 		}catch (Exception e) {
+			logger.error(new Date() + "Inside EditCircular()"+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -841,13 +838,13 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	public long GetCircularMaxId()throws Exception
 	{
-		logger.info(new Date() +"Inside DAO GetCircularMaxId()");
 		try {
 			Query query = manager.createNativeQuery("SELECT MAX(circularid)  FROM chss_circular_list");	
 			
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 		} catch (Exception e) {
+			logger.error(new Date() + "Inside GetCircularMaxId()"+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -859,14 +856,13 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	@Override
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception
 	 {
-		 logger.info(new Date() +"Inside DAO CirculatList()");	
 		 try {
 				Query query =  manager.createNativeQuery(CIRCULARLIST);
 				 query.setParameter("fromdate", fromdate);
 				 query.setParameter("todate", todate);
 				return (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() +" Inside DAO CirculatList "+ e);
+			logger.error(new Date() +" Inside DAO GetCircularList "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -876,12 +872,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		@Override
 		public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception
 		{
-			logger.info(new Date() + "Inside EmpanelledHospitalAdd()");
 			try {
 				manager.persist(hospital);
 				manager.flush();
 				return (long)hospital.getEmpanelledHospitalId();
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside EmpanelledHospitalAdd()"+e);
 				e.printStackTrace();
 				return 0l;
 			}
@@ -889,7 +885,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		@Override
 		public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception
 		{
-			logger.info(new Date() + "Inside GetEmpanelled()");
 			CHSSEmpanelledHospital list = null;
 			try {
 				CriteriaBuilder cb = manager.getCriteriaBuilder();
@@ -901,6 +896,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				list = allquery.getResultList().get(0);
 				return list;
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside GetEmpanelled()"+e);
 				e.printStackTrace();
 				return null;
 			}
@@ -908,12 +904,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		
 		public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception
 		{
-			logger.info(new Date() +"Inside DAO EmpanelledHospitalEdit()");
 			try {
 				manager.merge(hospital);
 				manager.flush();		
 				return hospital.getEmpanelledHospitalId();
 			}catch (Exception e) {
+				logger.error(new Date() + "Inside EmpanelledHospitalEdit()"+e);
 				e.printStackTrace();
 				return 0;
 			}	
@@ -922,12 +918,12 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		@Override
 		public Long AddMasterEditComments(MasterEdit masteredit)throws Exception
 		{
-			logger.info(new Date() + "Inside AddMasterEditComments()");
 			try {
 				manager.persist(masteredit);
 				manager.flush();
 				return (long)masteredit.getMasterEditId();
 			} catch (Exception e) {
+				logger.error(new Date() + "Inside AddMasterEditComments()"+e);
 				e.printStackTrace();
 				return 0l;
 			}
