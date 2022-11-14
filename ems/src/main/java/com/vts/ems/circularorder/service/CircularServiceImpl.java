@@ -12,12 +12,10 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +40,9 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.vts.ems.circularorder.dao.CircularDao;
-import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.DepEMSCircularTrans;
-import com.vts.ems.circularorder.model.EMSCircular;
-import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.CustomEncryptDecrypt;
@@ -70,197 +65,6 @@ public class CircularServiceImpl implements CircularService
 	
 	@Value("${EMSFilesPath}")
     private String FilePath;
-
-	@Override
-	public long CircularAdd(CircularUploadDto cirdto) throws Exception 
-	{
-		logger.info(new Date() +"Inside CircularAdd");
-		
-		long maxCircularId=0;
-		String CirFileName=null;	
-		String year=null;
-		long count=0;	
-		try {	
-			
-			String cirDate = cirdto.getCircularDate();
-			maxCircularId = dao.GetCircularMaxId()+1;
-			String[] cirSplit = cirDate.split("-");
-			CirFileName ="C"+maxCircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
-	
-			
-			year = cirSplit[2];
-			String CircularPath = "EMS\\Circulars\\"+year+"\\";
-			
-			String FullDir = FilePath+CircularPath;
-			File theDir = new File(FullDir);
-			if (!theDir.exists()){
-				theDir.mkdirs();
-			}
-		     
-			
-			EMSCircular circular = new EMSCircular();
-			//query to add details to to ems_circular table
-			circular.setCircularNo(cirdto.getCircularNo());
-			circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
-			circular.setCirSubject(cirdto.getCirSubject());
-			circular.setCirFileName(cirdto.getOriginalName());
-			circular.setCircularPath(CircularPath+CirFileName+".zip");
-			circular.setCircularKey(CustomEncryptDecrypt.encryption(cirdto.getAutoId().toCharArray()));
-			circular.setCreatedBy(cirdto.getCreatedBy());
-			circular.setCreatedDate(cirdto.getCreatedDate());
-			circular.setIsActive(1);
-			
-			Zipper zip=new Zipper();
-			zip.pack(cirdto.getOriginalName(),cirdto.getIS(),FullDir,CirFileName,cirdto.getAutoId());
-				
-			
-		    count =  dao.AddCircular(circular);
-		
-		}catch (Exception e) {
-			 e.printStackTrace();
-		   count=0;
-		}
-	
-		
-		   return count;
-		
-			
-	}
-	
-	@Override
-	public long GetMaxCircularId() throws Exception
-	{
-		return dao.GetCircularMaxId();
-	}
-	
-	@Override
-	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
-	{
-		return dao.GetDepCircularMaxIdEdit(DepTypeId);
-	}
-	@Override
-	public long CircularUpdate(CircularUploadDto cirdto) throws Exception 
-	{
-		logger.info(new Date() +"Inside CircularUpdate");
-
-		String year=null;
-		long count=0;	
-		try {	
-			
-			long CircularId = cirdto.getCircularId();
-			EMSCircular circular = dao.GetCircularDetailsToEdit(CircularId);
-			String cirDate = cirdto.getCircularDate();
-	        String[] cirSplit = cirDate.split("-");
-	        year = cirSplit[2];
-	        
-	        if(!cirdto.getCircularPath().isEmpty()) {
-	        	
-	        	new File(FilePath+circular.getCircularPath()).delete();
-	        	String OrigFilelName = cirdto.getCircularPath().getOriginalFilename();
-	        	String CirFileName = "C"+CircularId+cirSplit[0]+cirSplit[1]+cirSplit[2];
-	        	String CircularPath = "EMS\\Circulars\\"+year+"\\";
-	        	String FullDir = FilePath+CircularPath;
-	        	
-	        	File theDir = new File(FullDir);
-				if (!theDir.exists()){
-					theDir.mkdirs();
-				}
-	        	
-	        	Zipper zip=new Zipper();
-				zip.pack(cirdto.getOriginalName(),cirdto.getIS(),FullDir,CirFileName,cirdto.getAutoId());
-	        	
-	        	circular.setCirFileName(OrigFilelName);
-				circular.setCircularPath(CircularPath+CirFileName+".zip");
-
-	        
-	        }
-		
-			//query to update details to to ems_circular table
-			circular.setCircularId(cirdto.getCircularId());
-			circular.setCircularNo(cirdto.getCircularNo());
-			circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
-			circular.setCirSubject(cirdto.getCirSubject());
-			circular.setCircularKey(CustomEncryptDecrypt.encryption(cirdto.getAutoId().toCharArray()));
-			circular.setModifiedBy(cirdto.getModifiedBy());
-			circular.setModifiedDate(cirdto.getModifiedDate());
-			circular.setIsActive(1);
-			
-			
-				
-			count = dao.EditCircular(circular); 
-		
-		}catch (Exception e) {
-			 e.printStackTrace();
-		   count=0;
-		}
-	
-		
-		   return count;
-		
-			
-	}
-	
-
-	
-	@Override
-	public List<Object[]> selectAllList() throws Exception 
-	{
-		return dao.selectAllList();
-	}
-
-	@Override
-	public List<Object[]> GetCircularList(String fromdate, String todate) throws Exception {
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
-		LocalDate ToDate= LocalDate.parse(todate, formatter);
-		return dao.GetCircularList(Fromdate , ToDate);
-	}
-	
-	@Override
-	public int CircularDelete(Long CircularId, String Username)throws Exception{
-		return dao.CircularDelete(CircularId,Username);
-	}
-	
-	
-	@Override
-	   public EMSCircular GetCircularDetailsToEdit(Long CircularId)throws Exception
-	   {
-		   return dao.GetCircularDetailsToEdit(CircularId);
-	   }
-	
-	
-
-
-	@Override
-	public List<Object[]> GetSearchList(String search) throws Exception {
-		
-		return dao.GetSearchList(search);
-	}
-
-	@Override
-	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception {
-		
-		if(Integer.parseInt(id)==0) {
-			return dao.DepCircularSearchList(search);
-		}
-		
-		return dao.DepCircularSearchList(search,id);
-	}
-
-
-
-	@Override
-	public EMSCircular getCircularData(String CircularId) throws Exception
-	{
-		return dao.getCircularData(CircularId);
-	}
-	
-	@Override
-	public EmployeeDetails getEmpdataData(String empNo) throws Exception
-	{
-		return dao.getEmpdataData(empNo);
-	}
 
 	@Override
 	public File EncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
@@ -325,23 +129,34 @@ public class CircularServiceImpl implements CircularService
 		}
 		return new File(dto.getTargetPath());
 	}
-	
-//	public void encrypt(String source, String target, byte[] password) throws IOException 
-//	{
-//		
-//	    PdfReader reader = new PdfReader(new FileInputStream(source));
-//	    PdfWriter writer = new PdfWriter( new FileOutputStream(target), new WriterProperties().setStandardEncryption(password, "123456789".getBytes(),
-//	            /*EncryptionConstants.ALLOW_PRINTING*/ 0, EncryptionConstants.ENCRYPTION_AES_128 | EncryptionConstants.DO_NOT_ENCRYPT_METADATA));
-//	    
-//	    new PdfDocument(reader, writer).close();
-//	}
 
+	
+	
+	
 	@Override
-	public long CircularTransactionAdd(EMSCircularTrans cirTrans) throws Exception 
+	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
 	{
-		return dao.CircularTransactionAdd(cirTrans);
+		return dao.GetDepCircularMaxIdEdit(DepTypeId);
 	}
 	
+	@Override
+	public List<Object[]> DepCircularSearchList(String search,String id) throws Exception {
+		
+		if(Integer.parseInt(id)==0) {
+			return dao.DepCircularSearchList(search);
+		}
+		
+		return dao.DepCircularSearchList(search,id);
+	}
+
+
+
+	@Override
+	public EmployeeDetails getEmpdataData(String empNo) throws Exception
+	{
+		return dao.getEmpdataData(empNo);
+	}
+
 	@Override
 	public long DepCircularTransactionAdd(DepEMSCircularTrans cirTrans) throws Exception 
 	{
@@ -481,5 +296,5 @@ public class CircularServiceImpl implements CircularService
 	{
 		return dao.GetEmsDepType();
 	}
-	
+
 }

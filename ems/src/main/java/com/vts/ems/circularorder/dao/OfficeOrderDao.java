@@ -3,8 +3,6 @@ package com.vts.ems.circularorder.dao;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.vts.ems.circularorder.model.EMSCircular;
-import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
