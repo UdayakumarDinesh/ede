@@ -294,7 +294,7 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 //			        rotationRad = (float) Math.toRadians(-51);
 //			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
 			        
-			        if(pageSize.getRight()>pageSize.getTop())
+			        if(pageSize.getRight() < pageSize.getTop())
 				       {
 					        float rotationRad = (float) Math.toRadians(55);
 					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
