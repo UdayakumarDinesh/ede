@@ -3512,4 +3512,20 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.CHSSDashboardIndividualAmountData(EmpId, FromDate, ToDate);
 	}
 	
+	@Override
+	public long ContingentClaimDrop(String[] chssapplyids,String Username) throws Exception 
+	{
+		long count=0;
+		for(String applyid :  chssapplyids)
+		{
+			CHSSApply apply=dao.getCHSSApply(applyid);
+			apply.setContingentId(0L);
+			apply.setModifiedBy(Username);
+			apply.setModifiedDate(sdtf.format(new Date()));
+			
+			count +=dao.CHSSApplyEdit(apply);
+		}
+		return count;
+	}
+	
 }

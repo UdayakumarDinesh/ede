@@ -159,7 +159,7 @@ th,td
 							<%} %>
 						</div>
 						<%} %>
-					<form action="#" method="post">
+					<form action="#" method="post" id="view-form">
 						<input type="hidden" name="isapproval" value="Y">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div align="center">
@@ -188,6 +188,9 @@ th,td
 						
 						<table>
 							<tr>
+								<%if((  billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K") && view_mode.equalsIgnoreCase("E")){ %>
+								<th style="text-align: center;" >Select</th>
+								<%} %>
 								<th style="text-align: center;" >SN</th>
 								<th style="text-align: center;">Emp. No.</th>
 								<th style="text-align: center;">Name</th>
@@ -209,7 +212,9 @@ th,td
 					          	{
 									i++; %>
 								<tr>
-									
+									<%if((  billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K") && view_mode.equalsIgnoreCase("E")){ %>
+									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><input type="checkbox" name="chssapplyid" value="<%=obj[0] %>" > </td>
+									<%} %>
 									<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%=i %></td>
 									<%if(k==0){ %>
 										<td rowspan="<%=arrlist.size() %>" style="padding-top:5px; padding-bottom: 5px;"><%=obj[24] %></td>
@@ -228,7 +233,6 @@ th,td
 									<td class="center" style="padding-top:5px; padding-bottom: 5px;"><%=obj[25] %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[1].toString())) )) %></td>
 									<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[2].toString())) )) %></td>
-									<%if( true){  %>
 									<td >
 									<%if(obj[9].toString().equals("OPD")){ %>
 										<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
@@ -247,9 +251,8 @@ th,td
 											<i style="color: #019267" class="fa-solid fa-download"></i>
 										</button>
 									<%}%>
-									<input type="hidden" name="view_mode" value="<%=view_mode%>">
+									
 									</td>
-									<%} %>							
 								</tr>
 							<%	k++;
 								claimamt += Math.round(Double.parseDouble(obj[1].toString()));
@@ -258,7 +261,11 @@ th,td
 								} 
 							}%>
 								<tr>
+								<%if((  billstatus==1 || billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K") && view_mode.equalsIgnoreCase("E")){ %>
+									<td colspan="6" class="right">Total</td>
+								<%}else{ %>
 									<td colspan="5" class="right">Total</td>
+								<%} %>
 									<td class="center"><%=billscount %></td>
 									<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt)) %></td>
 									<td class="right">
@@ -277,6 +284,8 @@ th,td
 							</div>
 						<%} %>
 					</div>
+					<input type="hidden" name="view_mode" value="<%=view_mode%>">
+					<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
 					</form>	
 					<%if(billscount>0 && (logintype==null || !logintype.equals("Y"))){ %>
 					<form action="CHSSContingentApprove.htm" method="post">
@@ -317,24 +326,33 @@ th,td
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea><br>
 								</div>
 							<%} %>
-							<div class="col-12" align="center">
-								<%if(billstatus==1  && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
-								<%}else if(( billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R')" >Forward</button>
-								<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
-								<%}else if((billstatus==10) && logintype.equalsIgnoreCase("W")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Recommend?');"  >Recommend</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
-								<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
-									<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
-								<%}else if(billstatus==14  && new ArrayList<String>( Arrays.asList("B", "K", "V", "W","Z")).contains(logintype)){ %>
-									<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R');" >Bank Transfer Successful</button>								
-								<%} %>
-							</div>	
+							
+								<div class="col-12" align="center">
+									<%if(view_mode.equalsIgnoreCase("E")){ %>
+										<%if(billstatus==1  && logintype.equalsIgnoreCase("K") ){ %>
+											<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F"  onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
+											<button type="submit" class="btn btn-sm submit-btn" style="background-color: #D2001A" formaction="ContingentClaimDrop.htm" form="view-form" onclick="return checklength();"  >Drop From Bill</button>
+										<%}else if(( billstatus==9 || billstatus==11 || billstatus==13) && logintype.equalsIgnoreCase("K") ){ %>
+											<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R')" >Forward</button>
+											<button type="submit" class="btn btn-sm submit-btn" style="background-color: #D2001A" formaction="ContingentClaimDrop.htm" form="view-form" onclick="return checklength();"  >Drop From Bill</button>
+										<%}else if((billstatus==8 ) && logintype.equalsIgnoreCase("V")){ %>
+											<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Forward?');"  >Forward</button>
+											<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
+										<%}else if((billstatus==10) && logintype.equalsIgnoreCase("W")){ %>
+											<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Recommend?');"  >Recommend</button>
+											<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
+										<%}else if(billstatus==12  && logintype.equalsIgnoreCase("Z")){ %>
+											<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return confirm('Are You Sure To Approve?');" >Approve</button>
+											<button type="submit" class="btn btn-sm delete-btn" name="action" value="R" onclick="return remarkRequired('R')" >Return</button>
+										<%}%>
+									<%} %>
+									<%if(billstatus==14  && new ArrayList<String>( Arrays.asList("B", "K", "V", "W","Z")).contains(logintype)){ %>
+										<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="F" onclick="return remarkRequired('R');" >Bank Transfer Successful</button>								
+									<%} %>
+								</div>	
+							
+							
+							
 						</div>
 						<input type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
 						<input type="hidden" name="isapproval" value="Y">
@@ -361,6 +379,20 @@ th,td
  </div>
 
 <script type="text/javascript">
+
+
+function checklength()
+{
+	if($('input:checked').length > 0){
+	
+		return confirm('Are You Sure to Drop the Claims from the Bill(s) ? ');
+	}else
+	{
+		alert('Please Select Atleast One Claim!');
+		return false;
+	}
+}
+
 
 $('#fwd-btn').click(function(){
 	$('#remarks').attr('required', false);

@@ -970,7 +970,7 @@ th,td
 							<%}else { %>
 								<div class="col-md-5" ></div>
 							<%} %>
-							<%if(Arrays.asList("UF","E","A").contains(view_mode) && chssstatusid < 14){ %>	
+							<%if(Arrays.asList("UF","E").contains(view_mode) && chssstatusid < 14){ %>	
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
 							
 							<%if(chssstatusid!=8  ){ %>
