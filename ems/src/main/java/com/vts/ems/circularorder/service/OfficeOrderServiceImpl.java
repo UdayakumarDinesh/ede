@@ -287,12 +287,28 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 		            
 		      
 			        Rectangle pageSize = page.getPageSize();
-			        float x=420;
-			        float y=297.5f;
-			        float rotationRad = (float) Math.toRadians(53);
-			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
-			        rotationRad = (float) Math.toRadians(-51);
-			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
+//			        float x=420;
+//			        float y=297.5f;
+//			        float rotationRad = (float) Math.toRadians(53);
+//			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+//			        rotationRad = (float) Math.toRadians(-51);
+//			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
+			        
+			        if(pageSize.getRight()>pageSize.getTop())
+				       {
+					        float rotationRad = (float) Math.toRadians(55);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+					        rotationRad = (float) Math.toRadians(-55);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       }
+				       else
+				       {
+				    	   float rotationRad = (float) Math.toRadians(-145);
+					        canvas2.showTextAligned(watermark, pageSize.getRight(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+					        rotationRad = (float) Math.toRadians(-35);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       }
+			        
 		        }
 		     
 		        canvas.restoreState();
