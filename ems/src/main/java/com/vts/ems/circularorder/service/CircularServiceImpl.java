@@ -113,12 +113,6 @@ public class CircularServiceImpl implements CircularService
 		            
 		      
 			        Rectangle pageSize = page.getPageSize();
-//			        float x=420;
-//			        float y=297.5f;
-//			        float rotationRad = (float) Math.toRadians(53);
-//			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
-//			        rotationRad = (float) Math.toRadians(-51);
-//			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
 			        
 			       if(pageSize.getRight() < pageSize.getTop())
 			       {
