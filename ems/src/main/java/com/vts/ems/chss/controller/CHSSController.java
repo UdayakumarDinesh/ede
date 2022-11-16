@@ -1772,7 +1772,6 @@ public class CHSSController {
 					break;
 				}
 				
-				System.out.println(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) +" = "+ Math.round(Double.parseDouble(bill[9].toString())));
 				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					allow[2]="1";
@@ -1875,7 +1874,7 @@ public class CHSSController {
 				
 				if((chssstatusid==6 || chssstatusid == 9 || chssstatusid == 11 || chssstatusid == 13) && contingentid>0 ) {
 					redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
-					return "redirect:/ContingentBillData.htm";
+					return "redirect:/ContingetBill.htm";
 				}
 				
 				if(chssstatusid>=6 ) 
@@ -2298,7 +2297,7 @@ public class CHSSController {
 					redir.addAttribute("resultfail", "Contingent Bill Generation Unsuccessful");	
 				}	
 			redir.addFlashAttribute("contingentid",String.valueOf(count));
-			return "redirect:/ContingentBillData.htm";
+			return "redirect:/ContingetBill.htm";
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -2308,40 +2307,6 @@ public class CHSSController {
 		
 	}
 		
-	
-	@RequestMapping(value = "ContingentBillData.htm", method = {RequestMethod.POST,RequestMethod.GET})
-	public String ContingentBillData(Model model,HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
-	{
-		String Username = (String) ses.getAttribute("Username");
-		String LoginType = (String) ses.getAttribute("LoginType");
-		logger.info(new Date() +"Inside ContingentBillData.htm "+Username);
-		try {
-			String contingentid = req.getParameter("contingentid");
-			if (contingentid == null) 
-			{
-				Map md=model.asMap();
-				contingentid=(String)md.get("contingentid");
-			}
-			req.setAttribute("ContingentList", service.CHSSContingentClaimList(contingentid));
-			req.setAttribute("contingentdata", service.CHSSContingentData(contingentid));
-			req.setAttribute("contingentremarks", service.ContingentBillRemarkHistory(contingentid));
-			
-			req.setAttribute("logintype", LoginType);
-			req.setAttribute("labdata", service.getLabCode());
-			
-			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			
-			return "chss/ContingentBillView";
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			logger.error(new Date() +" Inside ContingentBillData.htm "+Username, e);
-			return "static/Error";
-		}
-		
-	}
-	
-	
 	@RequestMapping(value = "CHSSContingentApprove.htm", method = RequestMethod.POST)
 	public String CHSSClaimsApprove(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
@@ -2488,6 +2453,13 @@ public class CHSSController {
 		try {
 			String contingentid = req.getParameter("contingentid");
 			String claim_view_mode=req.getParameter("claim_view_mode");
+			
+			if(contingentid==null) {
+				Map md=model.asMap();
+				contingentid=(String)md.get("contingentid");
+				claim_view_mode=(String)md.get("claim_view_mode");
+			}
+			
 			if(claim_view_mode==null) {
 				claim_view_mode="A";
 			}
@@ -3663,7 +3635,6 @@ public class CHSSController {
 			claiminfo.setIPDClaimInfoId(Long.parseLong(ipdclaiminfoid));
 			claiminfo.setHospitalName(hospitalname);
 			claiminfo.setRoomType(roomtype);
-			System.out.println(admitteddate);
 			claiminfo.setAdmissionDate(admitteddate);
 			claiminfo.setAdmissionTime(admittedtime);
 			claiminfo.setDischargeDate(dischargeddate);
@@ -4954,7 +4925,6 @@ public class CHSSController {
 					return Msg;
 				}
 				
-				System.out.println(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) +" = "+ Math.round(Double.parseDouble(bill[9].toString())));
 				if(Math.round(Double.parseDouble(bill[6].toString())+Double.parseDouble(bill[7].toString())) != Math.round(Double.parseDouble(bill[9].toString())))
 				{
 					Msg = "Sum of Items Cost in Bill No '"+bill[2]+"' does not Tally with Amount Paid. \nBill Amount ="
@@ -5123,7 +5093,7 @@ public class CHSSController {
 				
 				if((chssstatusid==6 || chssstatusid == 9 || chssstatusid == 11 || chssstatusid == 13) && contingentid>0 ) {
 					redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
-					return "redirect:/ContingentBillData.htm";
+					return "redirect:/ContingetBill.htm";
 				}
 				
 				if(chssstatusid>=6 ) 
@@ -5546,7 +5516,34 @@ public class CHSSController {
 //			return "static/Error";
 		}
 	}
-	
+		
+	@RequestMapping(value = "ContingentClaimDrop.htm", method = RequestMethod.POST)
+	public String ContingentFormDrop(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ContingentClaimDrop.htm "+Username);
+		try {
+			String[] chssapplyids = req.getParameterValues("chssapplyid");
+			String contingentid = req.getParameter("contingentid");
+			
+			long count = service.ContingentClaimDrop(chssapplyids, Username);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Contingent Bill Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Contingent Bill Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
+			return "redirect:/ContingetBill.htm";		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ContingentClaimDrop.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
 	
 	
 }

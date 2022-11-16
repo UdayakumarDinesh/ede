@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,11 +21,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.vts.ems.circularorder.model.EMSCircular;
-import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
 

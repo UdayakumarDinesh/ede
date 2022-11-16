@@ -197,6 +197,7 @@ public interface CHSSService
 	public List<Object[]> CHSSDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> CHSSDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
+	public long ContingentClaimDrop(String[] chssapplyids, String Username) throws Exception;
 
 
 }

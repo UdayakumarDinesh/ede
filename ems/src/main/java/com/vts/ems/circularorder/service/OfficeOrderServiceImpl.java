@@ -2,13 +2,7 @@ package com.vts.ems.circularorder.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -39,13 +32,9 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.vts.ems.circularorder.dao.CircularDao;
 import com.vts.ems.circularorder.dao.OfficeOrderDao;
-import com.vts.ems.circularorder.dto.CircularUploadDto;
 import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
-import com.vts.ems.circularorder.model.EMSCircular;
-import com.vts.ems.circularorder.model.EMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
@@ -298,12 +287,28 @@ public class OfficeOrderServiceImpl implements OfficeOrderService
 		            
 		      
 			        Rectangle pageSize = page.getPageSize();
-			        float x=420;
-			        float y=297.5f;
-			        float rotationRad = (float) Math.toRadians(53);
-			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
-			        rotationRad = (float) Math.toRadians(-51);
-			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
+//			        float x=420;
+//			        float y=297.5f;
+//			        float rotationRad = (float) Math.toRadians(53);
+//			        canvas2.showTextAligned(watermark, pageSize.getLeft()+20,20, pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+//			        rotationRad = (float) Math.toRadians(-51);
+//			        canvas2.showTextAligned(watermark, x, y, pageNum, TextAlignment.CENTER, VerticalAlignment.MIDDLE , rotationRad);
+			        
+			        if(pageSize.getRight() < pageSize.getTop())
+				       {
+					        float rotationRad = (float) Math.toRadians(55);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+					        rotationRad = (float) Math.toRadians(-55);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       }
+				       else
+				       {
+				    	   float rotationRad = (float) Math.toRadians(-145);
+					        canvas2.showTextAligned(watermark, pageSize.getRight(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+					        rotationRad = (float) Math.toRadians(-35);
+					        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       }
+			        
 		        }
 		     
 		        canvas.restoreState();
