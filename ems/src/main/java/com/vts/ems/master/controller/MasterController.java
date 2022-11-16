@@ -50,7 +50,7 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
 @Controller
 public class MasterController {
-	private static final Logger logger = LogManager.getLogger(CHSSController.class);
+	private static final Logger logger = LogManager.getLogger(MasterController.class);
 
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
@@ -489,7 +489,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
-				logger.error(new Date() +"Inside DuplicateMedicine.htm"+UserId ,e);
+				logger.error(new Date() +"Inside DuplicateMedicine.htm "+UserId ,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -501,7 +501,7 @@ public class MasterController {
 			int count =0;
 			Gson json = new Gson();
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DuplicateOtherItem.htm"+UserId);
+			logger.info(new Date() +"Inside DuplicateOtherItem.htm "+UserId);
 			try {
 				String treatmentName = (String)req.getParameter("treatmentName");
 				
@@ -509,7 +509,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
-				logger.error(new Date() +"Inside DuplicateOtherItem.htm"+UserId,e);
+				logger.error(new Date() +"Inside DuplicateOtherItem.htm "+UserId,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -921,7 +921,7 @@ public class MasterController {
 			int count =0;
 			Gson json = new Gson();
 			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside DuplicateTest.htm"+UserId);
+			logger.info(new Date() +"Inside DuplicateTest.htm "+UserId);
 			try {
 				String testname = (String)req.getParameter("testName");
 				
@@ -929,7 +929,7 @@ public class MasterController {
 				
 				 return json.toJson(count);
 			}catch (Exception e){
-				logger.error(new Date() +"Inside DuplicateTest.htm"+UserId ,e);
+				logger.error(new Date() +"Inside DuplicateTest.htm "+UserId ,e);
 				e.printStackTrace();
 				 return json.toJson(count);
 			}
@@ -1119,7 +1119,7 @@ public class MasterController {
 					
 					 return json.toJson(count);
 				}catch (Exception e){
-					logger.error(new Date() +"Inside DuplicateTestCode.htm"+UserId ,e);
+					logger.error(new Date() +"Inside DuplicateTestCode.htm "+UserId ,e);
 					e.printStackTrace();
 					 return json.toJson(count);
 				}

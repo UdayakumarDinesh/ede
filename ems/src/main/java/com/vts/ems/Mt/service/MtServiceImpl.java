@@ -59,7 +59,7 @@ public class MtServiceImpl implements MtService {
 	@Override
 	public int UserApplyEdit(MtUserApply user) throws Exception 
 	{
-		logger.info(new Date() +"Inside UserApplyEdit");
+		logger.info(new Date() +"Inside SERVICE UserApplyEdit ");
 		MtUserApply userapply = dao.GetMtUserApply(user.getMtApplId());
 		userapply.setUserRemarks(user.getUserRemarks());
 		userapply.setDestination(user.getDestination());
@@ -209,7 +209,7 @@ public class MtServiceImpl implements MtService {
 	
 	@Override
 	public int EditTrip(MtTrip trip) throws Exception {
-		logger.info(new Date() +"Inside EditTrip");
+		logger.info(new Date() +"Inside SERVICE EditTrip ");
 		MtTrip edittrip= dao.GetTrip(trip.getTripId());
 		edittrip.setDriverId(trip.getDriverId());
 		edittrip.setEndTime(trip.getEndTime());

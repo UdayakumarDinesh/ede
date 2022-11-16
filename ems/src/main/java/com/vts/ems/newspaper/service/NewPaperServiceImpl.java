@@ -31,7 +31,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public long AddNewspaperClaim(String EmpNo, String ClaimMonth, String ClaimYear, String ClaimAmount,	String RestrictedAmount, String PayLevelId) throws Exception 
 	{
-		logger.info(new Date() +"Inside SERVICE AddNewspaperClaim");
+		logger.info(new Date() +"Inside SERVICE AddNewspaperClaim ");
 		long AddNewspaperClaimResult = 0;
 		try {
 			double PayableAmount;
@@ -61,7 +61,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	public int EditNewspaperClaim(String EmpNo, String ClaimAmount, String NewspaperId, String RestrictedAmount)throws Exception 
 	{
 		int EditNewspaperClaimResult = 0;
-		logger.info(new Date() +"Inside SERVICE AddNewspaperClaim");
+		logger.info(new Date() +"Inside SERVICE AddNewspaperClaim ");
 		try {
 
 			double PayableAmount;
@@ -90,7 +90,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public int NewsApproval(Map<String, String> map, String FromDate, String ToDate, String EmpNo) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE NewsApproval");
+		logger.info(new Date() +"Inside SERVICE NewsApproval ");
 		int ApprovalResult = 0;
 		Map<String, String> map1 = new LinkedHashMap<>();
 		try {
@@ -408,7 +408,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount, String[] TotalAmount,
 			String PayLevelId, String ClaimMonth, String ClaimYear, String IsBroadBand) {
 
-		logger.info(new Date() + "Inside AddTelephoneClaim ");
+		logger.info(new Date() + "Inside SERVICE AddTelephoneClaim ");
 		int AddTelephoneClaim = 0;
 		try {
 
@@ -444,7 +444,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount, String[] TotalAmount,
 			String IsBroadBand, String UserRemark, String id) {
 		int EditTelephoneResult = 0;
-		logger.info(new Date() + "Inside EditTelephoneResult ");
+		logger.info(new Date() + "Inside SERVICE EditTelephoneResult ");
 
 		try {
 
@@ -476,7 +476,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public int TeleApproval(Map<String, String> map, String FromDate, String ToDate, String Empid) {
 		int ApprovalResult = 0;
-		logger.info(new Date() + "Inside TeleApproval ");
+		logger.info(new Date() + "Inside SERVICE TeleApproval ");
 		Map<String, String> map1 = new LinkedHashMap<>();
 		try {
 
@@ -505,7 +505,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	@Override
 	public int TeleSendback(Map<String, String> map, String FromDate, String ToDate, String Empid)
 	{
-		logger.info(new Date() + "Inside TeleSendback ");
+		logger.info(new Date() + "Inside SERVICE TeleSendback ");
 		int ApprovalResult = 0;
 		Map<String, String> map1 = new LinkedHashMap<>();
 		try {

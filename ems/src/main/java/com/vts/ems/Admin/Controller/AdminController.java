@@ -38,7 +38,7 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 @Controller
 public class AdminController {
 	
-private static final Logger logger = LogManager.getLogger(CHSSController.class);
+private static final Logger logger = LogManager.getLogger(AdminController.class);
 	
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
@@ -359,7 +359,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			long EmpId = (long)ses.getAttribute("EmpId");
-			logger.info(new Date() +"Inside EmpRequestMsg.htm"+UserId);
+			logger.info(new Date() +"Inside EmpRequestMsg.htm "+UserId);
 			try {
 				
 				String action = (String)req.getParameter("Action");
@@ -410,7 +410,7 @@ private static final Logger logger = LogManager.getLogger(CHSSController.class);
 				}
 			
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside EmpRequestMsg.htm"+UserId,e);
+				logger.error(new Date() +"Inside EmpRequestMsg.htm "+UserId,e);
 				e.printStackTrace();
 				return "static/Error";
 				

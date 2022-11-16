@@ -74,7 +74,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long CircularAdd(CircularUploadDto cirdto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CircularAdd");
+		logger.info(new Date() +"Inside SERVICE CircularAdd ");
 		
 		long maxCircularId=0;
 		String CirFileName=null;	
@@ -141,7 +141,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long CircularUpdate(CircularUploadDto cirdto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CircularUpdate");
+		logger.info(new Date() +"Inside SERVICE CircularUpdate ");
 
 		String year=null;
 		long count=0;	
@@ -210,7 +210,7 @@ public class CircularServiceImpl implements CircularService
 
 	@Override
 	public List<Object[]> GetCircularList(String fromdate, String todate) throws Exception {
-		logger.info(new Date() +"Inside GetCircularList");
+		logger.info(new Date() +"Inside SERVICE GetCircularList ");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -265,7 +265,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public File EncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside EncryptAddWaterMarkAndMetadatatoPDF");
+		logger.info(new Date() +"Inside SERVICE EncryptAddWaterMarkAndMetadatatoPDF ");
 		File pdffile = new File(dto.getSourcePath());
 		OutputStream tofile = new FileOutputStream(new File(dto.getTargetPath()));
 		
@@ -364,7 +364,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long DepCircularAdd(DepCircularDto dto) throws Exception 
 	{
-		logger.info(new Date() +"Inside DepCircularAdd");
+		logger.info(new Date() +"Inside SERVICE DepCircularAdd ");
 		EMSDepCircular cir=dto.getCircular();
 		String CircularPath = "EMS\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
 		String FullDir = FilePath+CircularPath;
@@ -407,7 +407,7 @@ public class CircularServiceImpl implements CircularService
 	
 	public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
 	{
-		logger.info(new Date() +"Inside saveFile");
+		logger.info(new Date() +"Inside SERVICE saveFile ");
         Path uploadPath = Paths.get(CircularFilePath);
 	         
 	    if (!Files.exists(uploadPath)) {
@@ -431,7 +431,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long DepCircularEdit(DepCircularDto dto) throws Exception 
 	{
-		logger.info(new Date() +"Inside DepCircularEdit");
+		logger.info(new Date() +"Inside SERVICE DepCircularEdit ");
 		EMSDepCircular cir = dto.getCircular();
 		EMSDepCircular fetch = dao.getEmsDepCircular(String.valueOf(cir.getDepCircularId()));
 		fetch.setDepCircularDate(cir.getDepCircularDate());
@@ -473,7 +473,7 @@ public class CircularServiceImpl implements CircularService
 	@Override
 	public long DepCircularDelete(String circularId,String Username) throws Exception 
 	{
-		logger.info(new Date() +"Inside DepCircularDelete");
+		logger.info(new Date() +"Inside SERVICE DepCircularDelete ");
 		EMSDepCircular fetch = dao.getEmsDepCircular(circularId);
 		fetch.setModifiedBy(Username);
 		fetch.setModifiedDate(sdtf.format(new Date()));

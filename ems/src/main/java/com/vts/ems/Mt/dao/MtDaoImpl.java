@@ -76,7 +76,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)user.getMtApplId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserApply()"+e);
+			logger.error(new Date() + "Inside DAO UserApply() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -90,7 +90,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)mttra.getMtApplTransactionId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO MtApplyTranscation()"+e);
+			logger.error(new Date() + "Inside DAO MtApplyTranscation() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -110,7 +110,7 @@ public class MtDaoImpl implements MtDao {
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetMtUserApply()"+e);
+			logger.error(new Date() + "Inside DAO GetMtUserApply() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -124,7 +124,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)mtuserapply.getMtApplId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserApplyEdit()"+e);
+			logger.error(new Date() + "Inside DAO UserApplyEdit() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -152,7 +152,7 @@ public class MtDaoImpl implements MtDao {
 			query.setParameter("empid", EmpNo );
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetApplyDataOfSancApplyStatus()"+e);
+			logger.error(new Date() + "Inside DAO GetApplyDataOfSancApplyStatus() "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -168,7 +168,7 @@ public class MtDaoImpl implements MtDao {
 			Query query = manager.createNativeQuery("CALL mt_vehicle_pending();");				
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO VehiclePendingListDashBoard()"+e);
+			logger.error(new Date() + "Inside DAO VehiclePendingListDashBoard() "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -185,7 +185,7 @@ public class MtDaoImpl implements MtDao {
 			Query query = manager.createNativeQuery("CALL mt_vehicle_assigned();");				
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO VehicleAssignedListDashBoard()"+e);
+			logger.error(new Date() + "Inside DAO VehicleAssignedListDashBoard() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -202,7 +202,7 @@ public class MtDaoImpl implements MtDao {
 			query.setParameter("mtapplid", MtApplId);
 			mtuserapply = (MtUserApply) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getApplySingleData()"+e);
+			logger.error(new Date() + "Inside DAO getApplySingleData() "+e);
 			e.printStackTrace();
 		}
 		return mtuserapply;
@@ -222,7 +222,7 @@ public class MtDaoImpl implements MtDao {
 				empdata=list.get(0);
 			}
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getEmpData()"+e);
+			logger.error(new Date() + "Inside DAO getEmpData() "+e);
 			e.printStackTrace();
 		}
 		return empdata;
@@ -241,7 +241,7 @@ public class MtDaoImpl implements MtDao {
 			query.setParameter("modifieddate", apply.getModifiedDate());
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserApplyCancel()"+e);
+			logger.error(new Date() + "Inside DAO UserApplyCancel() "+e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -260,7 +260,7 @@ public class MtDaoImpl implements MtDao {
 			list = (List<Object[]>)query.getResultList();
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getApplyList()"+e);
+			logger.error(new Date() + "Inside DAO getApplyList() "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -276,7 +276,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getDriverList()"+e);
+			logger.error(new Date() + "Inside DAO getDriverList() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -293,7 +293,7 @@ public class MtDaoImpl implements MtDao {
 				return  query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetVechileList()"+e);
+			logger.error(new Date() + "Inside DAO GetVechileList() "+e);
 			e.printStackTrace();
 			return null;
 		}				
@@ -309,7 +309,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getListOfTrip()"+e);
+			logger.error(new Date() + "Inside DAO getListOfTrip() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -326,7 +326,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO GetLinkRequest()"+e);
+			logger.error(new Date() + "Inside DAO GetLinkRequest() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -350,7 +350,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)trip.getTripId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO Inserttrip()"+e);
+			logger.error(new Date() + "Inside DAO Inserttrip() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -376,7 +376,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return notification.getNotificationId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO MtEmsNotification()"+e);
+			logger.error(new Date() + "Inside DAO MtEmsNotification() "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -393,7 +393,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO GhApproveList()"+e);
+			logger.error(new Date() + "Inside DAO GhApproveList() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -423,7 +423,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO StatusUpdate()"+e);
+			logger.error(new Date() + "Inside DAO StatusUpdate() "+ e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -444,7 +444,7 @@ public class MtDaoImpl implements MtDao {
 				MtTrip trip=(MtTrip)query.getSingleResult();
 			return trip;
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetTrip()"+e);
+			logger.error(new Date() + "Inside DAO GetTrip() "+ e);
 			e.printStackTrace();
 			return null;
 		}		
@@ -475,7 +475,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return trip.getTripId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditTrip()"+e);
+			logger.error(new Date() + "Inside DAO EditTrip() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -532,7 +532,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO PrintList()"+e);
+			logger.error(new Date() + "Inside DAO PrintList() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -551,7 +551,7 @@ public class MtDaoImpl implements MtDao {
 			return list;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getPrintData()"+e);
+			logger.error(new Date() + "Inside DAO getPrintData() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -567,7 +567,7 @@ public class MtDaoImpl implements MtDao {
 			return driverlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getEmployeeList()"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeList() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -582,7 +582,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)driver.getDriverId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddDriver()"+e);
+			logger.error(new Date() + "Inside DAO AddDriver() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -602,7 +602,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO InActiveDriver()"+e);
+			logger.error(new Date() + "Inside DAO InActiveDriver() "+ e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -615,7 +615,7 @@ public class MtDaoImpl implements MtDao {
 			return manager.find(MtVehicle.class, vehicleid);	
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetVehicleData()"+e);
+			logger.error(new Date() + "Inside DAO GetVehicleData() "+ e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -635,7 +635,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteVehicle()"+e);
+			logger.error(new Date() + "Inside DAO DeleteVehicle() "+ e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -650,7 +650,7 @@ public class MtDaoImpl implements MtDao {
 			manager.flush();
 			return (int)vehicle.getVehicleId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddVehicle()"+e);
+			logger.error(new Date() + "Inside DAO AddVehicle() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -672,7 +672,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditVehicle()"+e);
+			logger.error(new Date() + "Inside DAO EditVehicle() "+ e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -686,7 +686,7 @@ public class MtDaoImpl implements MtDao {
 				List<LabMaster> labdetails=(List<LabMaster>)query.getResultList();
 			return labdetails;
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetLabDetails()"+e);
+			logger.error(new Date() + "Inside DAO GetLabDetails() "+ e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -707,7 +707,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO DateWiseProjectReport()"+e);
+			logger.error(new Date() + "Inside DAO DateWiseProjectReport() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -773,7 +773,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO TripList()"+e);
+			logger.error(new Date() + "Inside DAO TripList() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -793,7 +793,7 @@ public class MtDaoImpl implements MtDao {
 			return reportlist;
 	
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO DirectorTripList()"+e);
+			logger.error(new Date() + "Inside DAO DirectorTripList() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -809,7 +809,7 @@ public class MtDaoImpl implements MtDao {
 			return Dduty.getTripId();
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DirectorTripAssign()"+e);
+			logger.error(new Date() + "Inside DAO DirectorTripAssign() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -827,7 +827,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO MtAdminReqDelete()"+e);
+			logger.error(new Date() + "Inside DAO MtAdminReqDelete() "+ e);
 			e.printStackTrace();
 			return  0;
 		}
@@ -851,7 +851,7 @@ public class MtDaoImpl implements MtDao {
 	
 			return list;
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO MtAdminReqEdit()"+e);
+			logger.error(new Date() + "Inside DAO MtAdminReqEdit() "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -877,7 +877,7 @@ public class MtDaoImpl implements MtDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO MtAdminReqEdit()"+e);
+			logger.error(new Date() + "Inside DAO MtAdminReqEdit() "+ e);
 			e.printStackTrace();
 			return  0;
 		}

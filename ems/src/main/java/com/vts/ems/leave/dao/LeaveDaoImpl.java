@@ -271,7 +271,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		checkLeave=(Object[])query.getSingleResult();
 		}
 		catch (Exception e) {
-			
+			logger.error(new Date() +"Inside DAO checkLeave "+ e);
 		}
 		return checkLeave;
 	}
@@ -313,7 +313,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			BigInteger checkHoliday=(BigInteger)query.getSingleResult();
 		id=checkHoliday.longValue();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside getLeaveApplId"+e);
+			logger.error(new Date() +"Inside DAO getLeaveApplId "+e);
 		e.printStackTrace();
 		}
 		return id;
@@ -349,7 +349,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside getEmployee"+e);
+			logger.error(new Date() +"Inside DAO getEmployee "+e);
 			e.printStackTrace();
 		}
 		
@@ -387,7 +387,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside LeavePrint"+e);
+			logger.error(new Date() +"Inside DAO LeavePrint "+e);
 			e.printStackTrace();
 		}
 		
@@ -419,7 +419,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			}
 			
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside getLabCode"+e);
+			logger.error(new Date() +"Inside DAO getLabCode "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -438,7 +438,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside getUpdateAppl"+e);
+			logger.error(new Date() +"Inside DAO getUpdateAppl "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -457,7 +457,7 @@ public class LeaveDaoImpl implements LeaveDao{
 				int count = (int) query.executeUpdate();
 				return count;
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside getUpdateRegister"+e);
+				logger.error(new Date() +"Inside DAO getUpdateRegister "+e);
 				e.printStackTrace();
 				return 0;
 			}
@@ -491,7 +491,7 @@ public class LeaveDaoImpl implements LeaveDao{
 
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside deleteLeave"+e);
+			logger.error(new Date() +"Inside DAO deleteLeave "+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -509,7 +509,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			query3.executeUpdate();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside deleteLeaveRegiHo"+e);
+			logger.error(new Date() +"Inside DAO deleteLeaveRegiHo "+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -526,7 +526,7 @@ public class LeaveDaoImpl implements LeaveDao{
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside getLeaveData"+e);
+			logger.error(new Date() +"Inside DAO getLeaveData "+e);
 			e.printStackTrace();
 		}
 		
@@ -541,7 +541,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside AddHandingOver"+e);
+			logger.error(new Date() +"Inside DAO AddHandingOver "+e);
 			e.printStackTrace();
 		}
 		return handinfover.getHandingoverId();
@@ -570,7 +570,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			query3.setParameter("empno",empno);
 			count = (int) query3.executeUpdate();
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside laeveNotModified"+e);
+			logger.error(new Date() +"Inside DAO laeveNotModified "+e);
 			e.printStackTrace();
 		}
 		return count;
@@ -589,7 +589,7 @@ public class LeaveDaoImpl implements LeaveDao{
 			count = (int) query1.executeUpdate();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside updateTransaction"+e);
+			logger.error(new Date() +"Inside DAO updateTransaction "+e);
 			e.printStackTrace();
 		}
 		return count;

@@ -97,7 +97,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return result;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeDetails"+e);
+			logger.error(new Date() + "Inside DAO EmployeeDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -116,7 +116,7 @@ public class PisDaoImpl implements PisDao {
 			return result;
 					
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetAllEmployeeDetails"+e);
+			logger.error(new Date() + "Inside DAO GetAllEmployeeDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -139,7 +139,7 @@ public class PisDaoImpl implements PisDao {
 			divlist = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DivisionList"+e);
+			logger.error(new Date() + "Inside DAO DivisionList "+e);
 			e.printStackTrace();
 		}
 		return divlist;
@@ -161,7 +161,7 @@ public class PisDaoImpl implements PisDao {
 			desiglist = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DesigList"+e);
+			logger.error(new Date() + "Inside DAO DesigList "+e);
 			e.printStackTrace();
 		}
 		return desiglist;
@@ -180,7 +180,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PayLevelList"+e);
+			logger.error(new Date() + "Inside DAO PayLevelList "+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -199,7 +199,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PisCaderList"+e);
+			logger.error(new Date() + "Inside DAO PisCaderList "+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -219,7 +219,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PisCatClassList"+e);
+			logger.error(new Date() + "Inside DAO PisCatClassList "+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -236,7 +236,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PisCategoryList"+e);
+			logger.error(new Date() + "Inside DAO PisCategoryList "+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -255,7 +255,7 @@ public class PisDaoImpl implements PisDao {
 			pispaylevel = allquery.getResultList();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpStatusList"+e);
+			logger.error(new Date() + "Inside DAO EmpStatusList "+e);
 			e.printStackTrace();
 		}
 		return pispaylevel;
@@ -270,7 +270,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeAddSubmit"+e);
+			logger.error(new Date() + "Inside DAO EmployeeAddSubmit "+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpId();
@@ -283,7 +283,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeEditSubmit"+e);
+			logger.error(new Date() + "Inside DAO EmployeeEditSubmit "+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpId();
@@ -298,7 +298,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeDetailsAddSubmit"+e);
+			logger.error(new Date() + "Inside DAO EmployeeDetailsAddSubmit "+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpDetailsId();
@@ -311,7 +311,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeDetailsEditSubmit"+e);
+			logger.error(new Date() + "Inside DAO EmployeeDetailsEditSubmit "+e);
 			e.printStackTrace();
 		}
 		return emp.getEmpDetailsId();
@@ -326,7 +326,7 @@ public class PisDaoImpl implements PisDao {
 			Object o = query.getSingleResult();
 			result = Long.parseLong(o.toString());
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getempno"+e);
+			logger.error(new Date() + "Inside DAO getempno "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -342,7 +342,7 @@ public class PisDaoImpl implements PisDao {
 			employee =(Employee)query.getSingleResult();
 			
 	       } catch (Exception e) {
-	    	   logger.error(new Date() + "Inside DAO getEmp"+e);
+	    	   logger.error(new Date() + "Inside DAO getEmp "+e);
 		   e.printStackTrace();
 	     }
 	return employee;
@@ -361,7 +361,7 @@ public class PisDaoImpl implements PisDao {
 			employee = allquery.getResultList().get(0);		
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployee"+e);
+			logger.error(new Date() + "Inside DAO getEmployee "+e);
 			e.printStackTrace();
 		}
 		return employee;
@@ -382,7 +382,7 @@ public class PisDaoImpl implements PisDao {
 			employee = allquery.getResultList().get(0);		
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeDetailsData"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeDetailsData "+e);
 			e.printStackTrace();
 		}
 		return employee;
@@ -401,7 +401,7 @@ public class PisDaoImpl implements PisDao {
 
 			return result;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PunchcardList"+e);
+			logger.error(new Date() + "Inside DAO PunchcardList "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -416,7 +416,7 @@ public class PisDaoImpl implements PisDao {
 			String EmpName = (String) query.getSingleResult();
 			return EmpName;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PhotoPath"+e);
+			logger.error(new Date() + "Inside DAO PhotoPath "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -433,7 +433,7 @@ public class PisDaoImpl implements PisDao {
 
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PhotoPathUpdate"+e);
+			logger.error(new Date() + "Inside DAO PhotoPathUpdate "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -446,7 +446,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(LOGINMASTER);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO LoginMasterList"+e);
+			logger.error(new Date() + "Inside DAO LoginMasterList "+e);
 			e.printStackTrace();
 			return null;
 				
@@ -461,7 +461,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(EMPLIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmpList"+e);
+			logger.error(new Date() + "Inside DAO getEmpList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -475,7 +475,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(LOGINLIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getLoginTypeList"+e);
+			logger.error(new Date() + "Inside DAO getLoginTypeList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -496,7 +496,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserManagerDelete"+e);
+			logger.error(new Date() + "Inside DAO UserManagerDelete "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -514,7 +514,7 @@ public class PisDaoImpl implements PisDao {
 			BigInteger UserNamePresentCount = (BigInteger) query.getSingleResult();
 			return   UserNamePresentCount.intValue();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserNamePresentCount"+e);
+			logger.error(new Date() + "Inside DAO UserNamePresentCount "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -530,7 +530,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserManagerAdd"+e);
+			logger.error(new Date() + "Inside DAO UserManagerAdd "+e);
 			e.printStackTrace();
 		}
 		return login.getLoginId();
@@ -545,7 +545,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("LoginId", LoginId);
 			 UserManagerEditData = (Login) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getLoginEditData"+e);
+			logger.error(new Date() + "Inside DAO getLoginEditData "+e);
 			e.printStackTrace();
 		}
 		
@@ -564,7 +564,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UserManagerEdit"+e);
+			logger.error(new Date() + "Inside DAO UserManagerEdit "+e);
 				e.printStackTrace();
 				return 0;
 		}
@@ -580,7 +580,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getFamilyMembersList"+e);
+			logger.error(new Date() + "Inside DAO getFamilyMembersList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -594,7 +594,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			return (Object[]) query.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmpData"+e);
+			logger.error(new Date() + "Inside DAO GetEmpData "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -609,7 +609,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(FAMILYRELATION);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getFamilyRelation"+e);
+			logger.error(new Date() + "Inside DAO getFamilyRelation "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -624,7 +624,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(FAMILYSTATUS);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getFamilyStatus"+e);
+			logger.error(new Date() + "Inside DAO getFamilyStatus "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -640,7 +640,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddFamilyDetails"+e);
+			logger.error(new Date() + "Inside DAO AddFamilyDetails "+e);
 			e.printStackTrace();
 		}
 		return Details.getFamily_details_id();
@@ -655,7 +655,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PisFamFormMembersAdd"+e);
+			logger.error(new Date() + "Inside DAO PisFamFormMembersAdd "+e);
 			e.printStackTrace();
 		}
 		return Details.getFormMemberId();
@@ -675,7 +675,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteMeber"+e);
+			logger.error(new Date() + "Inside DAO DeleteMeber "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -695,7 +695,7 @@ public class PisDaoImpl implements PisDao {
 			TypedQuery<EmpFamilyDetails> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getMemberDetails"+e);
+			logger.error(new Date() + "Inside DAO getMemberDetails "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -715,7 +715,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getMember"+e);
+			logger.error(new Date() + "Inside DAO getMember "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -735,7 +735,7 @@ public class PisDaoImpl implements PisDao {
 			formmemeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPisFamFormMembers"+e);
+			logger.error(new Date() + "Inside DAO getPisFamFormMembers "+e);
 			e.printStackTrace();
 		}
 		return formmemeber;
@@ -749,7 +749,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 			return formmember.getFamilyFormId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO PisFamFormMemberEdit"+e);
+			logger.error(new Date() + "Inside DAO PisFamFormMemberEdit "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -764,7 +764,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditFamilyDetails"+e);
+			logger.error(new Date() + "Inside DAO EditFamilyDetails "+e);
 			e.printStackTrace();
 		}
 		return Details.getFamily_details_id();
@@ -782,7 +782,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPerAddress"+e);
+			logger.error(new Date() + "Inside DAO getPerAddress "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -796,7 +796,7 @@ public class PisDaoImpl implements PisDao {
 			Query query = manager.createNativeQuery(STATE);		
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getStates"+e);
+			logger.error(new Date() + "Inside DAO getStates "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -808,7 +808,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddPerAddress"+e);
+			logger.error(new Date() + "Inside DAO AddPerAddress "+e);
 			e.printStackTrace();
 		}
 		return peraddress.getAddress_per_id();
@@ -822,7 +822,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			addres = (AddressPer) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPerAddressData"+e);
+			logger.error(new Date() + "Inside DAO getPerAddressData "+e);
 			e.printStackTrace();
 		}		
 		return addres;
@@ -841,7 +841,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPeraddress"+e);
+			logger.error(new Date() + "Inside DAO getPeraddress "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -855,7 +855,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditPerAddress"+e);
+			logger.error(new Date() + "Inside DAO EditPerAddress "+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_per_id();
@@ -869,7 +869,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getResAddress"+e);
+			logger.error(new Date() + "Inside DAO getResAddress "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -889,7 +889,7 @@ public class PisDaoImpl implements PisDao {
 					}
 					return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getKinAddress"+e);
+			logger.error(new Date() + "Inside DAO getKinAddress "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -908,7 +908,7 @@ public class PisDaoImpl implements PisDao {
 					}
 					return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmeAddress"+e);
+			logger.error(new Date() + "Inside DAO getEmeAddress "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -921,7 +921,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddResAddress"+e);
+			logger.error(new Date() + "Inside DAO AddResAddress "+e);
 			e.printStackTrace();
 		}
 		return resaddress.getAddress_res_id();
@@ -940,7 +940,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getResAddressData"+e);
+			logger.error(new Date() + "Inside DAO getResAddressData "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -954,7 +954,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditResAddress"+e);
+			logger.error(new Date() + "Inside DAO EditResAddress "+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_res_id();
@@ -973,7 +973,7 @@ public class PisDaoImpl implements PisDao {
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO deleteResAdd"+e);
+			logger.error(new Date() + "Inside DAO deleteResAdd "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -988,7 +988,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddNextAddress"+e);
+			logger.error(new Date() + "Inside DAO AddNextAddress "+e);
 			e.printStackTrace();
 		}
 		return nextkinaddress.getAddress_kin_id();
@@ -1006,7 +1006,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getNextKinaddress"+e);
+			logger.error(new Date() + "Inside DAO getNextKinaddress "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1020,7 +1020,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditNextKinAddress"+e);
+			logger.error(new Date() + "Inside DAO EditNextKinAddress "+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_kin_id();
@@ -1034,7 +1034,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			addres = (AddressNextKin) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getNextKinAddressData"+e);
+			logger.error(new Date() + "Inside DAO getNextKinAddressData "+e);
 			e.printStackTrace();
 		}		
 		return addres;
@@ -1046,7 +1046,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddEmecAddress"+e);
+			logger.error(new Date() + "Inside DAO AddEmecAddress "+e);
 			e.printStackTrace();
 		}
 		return Emecaddress.getAddress_emer_id();
@@ -1065,7 +1065,7 @@ public class PisDaoImpl implements PisDao {
 			memeber = allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmecaddress"+e);
+			logger.error(new Date() + "Inside DAO getEmecaddress "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1079,7 +1079,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditEmecAddress"+e);
+			logger.error(new Date() + "Inside DAO EditEmecAddress "+e);
 			e.printStackTrace();
 		}
 		return address.getAddress_emer_id();
@@ -1103,7 +1103,7 @@ public class PisDaoImpl implements PisDao {
 			query.setParameter("empid", empid);
 			addres = (AddressEmec) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmecAddressData"+e);
+			logger.error(new Date() + "Inside DAO getEmecAddressData "+e);
 			e.printStackTrace();
 		}		
 		return addres;
@@ -1158,7 +1158,7 @@ public class PisDaoImpl implements PisDao {
 				}
 				return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeNextAddressDetails"+e);
+			logger.error(new Date() + "Inside DAO EmployeeNextAddressDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1176,7 +1176,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeePerAddressDetails"+e);
+			logger.error(new Date() + "Inside DAO EmployeePerAddressDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1191,7 +1191,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeResAddressDetails"+e);
+			logger.error(new Date() + "Inside DAO EmployeeResAddressDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1211,7 +1211,7 @@ public class PisDaoImpl implements PisDao {
 			
 			return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeEmeAddressDetails"+e);
+			logger.error(new Date() + "Inside DAO EmployeeEmeAddressDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1227,7 +1227,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getFamilydetails"+e);
+			logger.error(new Date() + "Inside DAO getFamilydetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1259,7 +1259,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetAllEmployee"+e);
+			logger.error(new Date() + "Inside DAO GetAllEmployee "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1277,7 +1277,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmpPhoneNo"+e);
+			logger.error(new Date() + "Inside DAO GetEmpPhoneNo "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1292,7 +1292,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmployeeList"+e);
+			logger.error(new Date() + "Inside DAO GetEmployeeList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1309,7 +1309,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> list=(List<Object[]>) query.getResultList();
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmployeeLoginData"+e);
+			logger.error(new Date() + "Inside DAO GetEmployeeLoginData "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1324,7 +1324,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO loginHisAddSubmit"+e);
+			logger.error(new Date() + "Inside DAO loginHisAddSubmit "+e);
 			e.printStackTrace();
 		}
 		return model.getPasswordHistoryId(); 
@@ -1342,7 +1342,7 @@ public class PisDaoImpl implements PisDao {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmpDetails"+e);
+			logger.error(new Date() + "Inside DAO GetEmpDetails "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1396,7 +1396,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			return manager.find(EmpFamilyDetails.class, Long.parseLong(familydetailsid));			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getFamilyMemberModal"+e);
+			logger.error(new Date() + "Inside DAO getFamilyMemberModal "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1415,7 +1415,7 @@ public class PisDaoImpl implements PisDao {
 			return List;
 			
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetFormMembersList"+e);
+			logger.error(new Date() + "Inside DAO GetFormMembersList "+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1434,7 +1434,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeInfo"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeInfo "+e);
 			e.printStackTrace();
 		}
 		
@@ -1452,7 +1452,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO employeeResAddr"+e);
+			logger.error(new Date() + "Inside DAO employeeResAddr "+e);
 		}
 		return result;
 	}
@@ -1467,7 +1467,7 @@ public class PisDaoImpl implements PisDao {
 			
 			return famform.getFamilyFormId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UpdateMemberStatus"+e);
+			logger.error(new Date() + "Inside DAO UpdateMemberStatus "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1491,7 +1491,7 @@ public class PisDaoImpl implements PisDao {
 			famform= allquery.getResultList().get(0);
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPisEmpFamilyForm"+e);
+			logger.error(new Date() + "Inside DAO getPisEmpFamilyForm "+e);
 			e.printStackTrace();
 		}
 		return famform;
@@ -1507,7 +1507,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO FamMemFwdEmpList"+e);
+			logger.error(new Date() + "Inside DAO FamMemFwdEmpList "+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1522,7 +1522,7 @@ public class PisDaoImpl implements PisDao {
 			List<Object[]> List=(List<Object[]>) query.getResultList();
 			return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO FamMemApprovedList"+e);
+			logger.error(new Date() + "Inside DAO FamMemApprovedList "+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1550,7 +1550,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO RelationshipData"+e);
+			logger.error(new Date() + "Inside DAO RelationshipData "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1567,7 +1567,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getMemberdata"+e);
+			logger.error(new Date() + "Inside DAO getMemberdata "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1585,7 +1585,7 @@ public class PisDaoImpl implements PisDao {
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpFamFormsList"+e);
+			logger.error(new Date() + "Inside DAO EmpFamFormsList "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1603,7 +1603,7 @@ public class PisDaoImpl implements PisDao {
 		    query.setParameter("ModifiedDate", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
 	        return query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO FamilyMemIncConfirm"+e);
+			logger.error(new Date() + "Inside DAO FamilyMemIncConfirm "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1619,7 +1619,7 @@ public class PisDaoImpl implements PisDao {
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpFamilyFormAdd"+e);
+			logger.error(new Date() + "Inside DAO EmpFamilyFormAdd "+e);
 			e.printStackTrace();
 		}
 		return form.getFamilyFormId();
@@ -1636,7 +1636,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetFamFormData"+e);
+			logger.error(new Date() + "Inside DAO GetFamFormData "+e);
 		}
 		return result;
 	}
@@ -1650,7 +1650,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		    query.setParameter("formmemberid", formmemberid);
 	        return query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO FormFamilyMemberDelete"+e);
+			logger.error(new Date() + "Inside DAO FormFamilyMemberDelete "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1666,7 +1666,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		    query.setParameter("familydetailsid", familydetailsid);
 	        return query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO FormFamilyMemberHardDelete"+e);
+			logger.error(new Date() + "Inside DAO FormFamilyMemberHardDelete "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1686,7 +1686,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpBloodGropuEdit"+e);
+			logger.error(new Date() + "Inside DAO EmpBloodGropuEdit "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1702,7 +1702,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return notification.getNotificationId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO NotificationAdd"+e);
+			logger.error(new Date() + "Inside DAO NotificationAdd "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1720,7 +1720,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO loginTypeEmpData"+e);
+			logger.error(new Date() + "Inside DAO loginTypeEmpData "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1740,7 +1740,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpFamMembersListMedDep"+e);
+			logger.error(new Date() + "Inside DAO EmpFamMembersListMedDep "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1758,7 +1758,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		try {
 			result = (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmpFamMembersNotMedDep"+e);
+			logger.error(new Date() + "Inside DAO EmpFamMembersNotMedDep "+e);
 			e.printStackTrace();
 		}
 		return result;
@@ -1776,7 +1776,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			return List;
 			
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetExcFormMembersList"+e);
+			logger.error(new Date() + "Inside DAO GetExcFormMembersList "+e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1791,7 +1791,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEducationList"+e);
+			logger.error(new Date() + "Inside DAO getEducationList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1806,7 +1806,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(QUALIFICATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getQualificationList"+e);
+			logger.error(new Date() + "Inside DAO getQualificationList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1818,7 +1818,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(DISCILIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDiscipline"+e);
+			logger.error(new Date() + "Inside DAO getDiscipline "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1837,7 +1837,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Qualification> allquery = manager.createQuery(cq);
 			memeber = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getQualificationDetails"+e);
+			logger.error(new Date() + "Inside DAO getQualificationDetails "+e);
 			e.printStackTrace();
 		}
 		return memeber;
@@ -1857,7 +1857,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteQualification"+e);
+			logger.error(new Date() + "Inside DAO DeleteQualification "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1872,7 +1872,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddQualification"+e);
+			logger.error(new Date() + "Inside DAO AddQualification "+e);
 			e.printStackTrace();
 		}
 		return Details.getQualification_id();
@@ -1886,7 +1886,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditQualification"+e);
+			logger.error(new Date() + "Inside DAO EditQualification "+e);
 			e.printStackTrace();
 		}
 		return Details.getQualification_id();
@@ -1901,7 +1901,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getAppointmentList"+e);
+			logger.error(new Date() + "Inside DAO getAppointmentList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1916,7 +1916,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(RECRUITMENTLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getRecruitment"+e);
+			logger.error(new Date() + "Inside DAO getRecruitment "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1929,7 +1929,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDesignationList"+e);
+			logger.error(new Date() + "Inside DAO getDesignationList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1950,7 +1950,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteAppointment"+e);
+			logger.error(new Date() + "Inside DAO DeleteAppointment "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1969,7 +1969,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Appointments> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getAppointmentsDetails"+e);
+			logger.error(new Date() + "Inside DAO getAppointmentsDetails "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1983,7 +1983,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddAppointment"+e);
+			logger.error(new Date() + "Inside DAO AddAppointment "+e);
 			e.printStackTrace();
 		}
 		return app.getAppointment_id();
@@ -1997,7 +1997,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditAppointment"+e);
+			logger.error(new Date() + "Inside DAO EditAppointment "+e);
 			e.printStackTrace();
 		}
 		return app.getAppointment_id();
@@ -2013,7 +2013,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getAwardsList"+e);
+			logger.error(new Date() + "Inside DAO getAwardsList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2028,7 +2028,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(DESIGNATIONLIST);	
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPisAwardsList"+e);
+			logger.error(new Date() + "Inside DAO getPisAwardsList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2049,7 +2049,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteAwards"+e);
+			logger.error(new Date() + "Inside DAO DeleteAwards "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2068,7 +2068,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Awards> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getAwardsDetails"+e);
+			logger.error(new Date() + "Inside DAO getAwardsDetails "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2081,7 +2081,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddAwards"+e);
+			logger.error(new Date() + "Inside DAO AddAwards "+e);
 			e.printStackTrace();
 		}
 		return app.getAwards_id();
@@ -2095,7 +2095,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditAwards"+e);
+			logger.error(new Date() + "Inside DAO EditAwards "+e);
 			e.printStackTrace();
 		}
 		return app.getAwards_id();
@@ -2111,7 +2111,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPropertyList"+e);
+			logger.error(new Date() + "Inside DAO getPropertyList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2131,7 +2131,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Property> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPropertyDetails"+e);
+			logger.error(new Date() + "Inside DAO getPropertyDetails "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2151,7 +2151,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteProperty"+e);
+			logger.error(new Date() + "Inside DAO DeleteProperty "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2166,7 +2166,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddProperty"+e);
+			logger.error(new Date() + "Inside DAO AddProperty "+e);
 			e.printStackTrace();
 		}
 		return app.getProperty_id();
@@ -2181,7 +2181,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditProperty"+e);
+			logger.error(new Date() + "Inside DAO EditProperty "+e);
 			e.printStackTrace();
 		}
 		return app.getProperty_id();
@@ -2197,7 +2197,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPublicationList"+e);
+			logger.error(new Date() + "Inside DAO getPublicationList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2212,7 +2212,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(PISSTATELIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPisStateList"+e);
+			logger.error(new Date() + "Inside DAO getPisStateList "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2232,7 +2232,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<Publication> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPublicationDetails"+e);
+			logger.error(new Date() + "Inside DAO getPublicationDetails "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2246,7 +2246,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddPublication"+e);
+			logger.error(new Date() + "Inside DAO AddPublication "+e);
 			e.printStackTrace();
 		}
 		return app.getPublication_id();
@@ -2260,7 +2260,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditPublication"+e);
+			logger.error(new Date() + "Inside DAO EditPublication "+e);
 			e.printStackTrace();
 		}
 		return app.getPublication_id();
@@ -2276,7 +2276,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditPublication"+e);
+			logger.error(new Date() + "Inside DAO EditPublication "+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -2298,7 +2298,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			}
 			return result;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPassportList"+e);
+			logger.error(new Date() + "Inside DAO getPassportList "+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -2316,7 +2316,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empid", empid);
 			passport = (Passport) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getPassportData"+e);
+			logger.error(new Date() + "Inside DAO getPassportData "+e);
 			e.printStackTrace();
 		}		
 		return passport;
@@ -2330,7 +2330,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddPassport"+e);
+			logger.error(new Date() + "Inside DAO AddPassport "+e);
 			e.printStackTrace();
 		}
 		return passport.getPassportId();
@@ -2355,7 +2355,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditPassport"+e);
+			logger.error(new Date() + "Inside DAO EditPassport "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2374,7 +2374,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			TypedQuery<PassportForeignVisit> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getForeignVisitData"+e);
+			logger.error(new Date() + "Inside DAO getForeignVisitData "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2394,7 +2394,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO deleteForeignVisit"+e);
+			logger.error(new Date() + "Inside DAO deleteForeignVisit "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2408,7 +2408,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddForeignVisit"+e);
+			logger.error(new Date() + "Inside DAO AddForeignVisit "+e);
 			e.printStackTrace();
 		}
 		return pfv.getPassportVisitId();
@@ -2423,7 +2423,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditForeignVisit"+e);
+			logger.error(new Date() + "Inside DAO EditForeignVisit "+e);
 			e.printStackTrace();
 		}
 		return pfv.getPassportVisitId();
@@ -2444,7 +2444,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteEducationQualification"+e);
+			logger.error(new Date() + "Inside DAO DeleteEducationQualification "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2466,7 +2466,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditEducationQualification"+e);
+			logger.error(new Date() + "Inside DAO EditEducationQualification "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2481,7 +2481,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddEducationQualification"+e);
+			logger.error(new Date() + "Inside DAO AddEducationQualification "+e);
 			e.printStackTrace();
 		}
 		return qc.getQuali_id();
@@ -2503,7 +2503,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO DeleteDiscipline"+e);
+			logger.error(new Date() + "Inside DAO DeleteDiscipline "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2525,7 +2525,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditDiscipline"+e);
+			logger.error(new Date() + "Inside DAO EditDiscipline "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2540,7 +2540,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO AddDiscipline"+e);
+			logger.error(new Date() + "Inside DAO AddDiscipline "+e);
 			e.printStackTrace();
 		}
 		return dc.getDisci_id();
@@ -2560,7 +2560,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 				empdata=list.get(0);
 			}
 		}catch (Exception e){
-			logger.error(new Date() + "Inside DAO getEmpData"+e);
+			logger.error(new Date() + "Inside DAO getEmpData "+e);
 			e.printStackTrace();
 		}
 		return empdata;
@@ -2573,7 +2573,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(GETEMPSTATUS);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetEmpStatusList"+e);
+			logger.error(new Date() + "Inside DAO GetEmpStatusList "+e);
 			e.printStackTrace();
 			return null;
 				
@@ -2589,7 +2589,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(GETGROUPNAME);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getGroupName"+e);
+			logger.error(new Date() + "Inside DAO getGroupName "+e);
 			e.printStackTrace();
 			return null;	
 		}
@@ -2603,7 +2603,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(GETDESIGNATION);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDesignation"+e);
+			logger.error(new Date() + "Inside DAO getDesignation "+e);
 			e.printStackTrace();
 			return null;	
 		}
@@ -2616,7 +2616,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(ALLEMPLOYEEDETAIL);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO fetchAllEmployeeDetail"+e);
+			logger.error(new Date() + "Inside DAO fetchAllEmployeeDetail "+e);
 			e.printStackTrace();
 			return null;
 				
@@ -2633,7 +2633,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("empStatus", empstatus);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeStatusWise"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeStatusWise "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2648,7 +2648,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("divisionid", id);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeDivOrGroupWise"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeDivOrGroupWise "+e);
 			e.printStackTrace();
 			return null;	
 		}	
@@ -2664,7 +2664,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("desigid", id);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeDesignationWise"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeDesignationWise "+e);
 			e.printStackTrace();
 			return null;	
 		}	
@@ -2679,7 +2679,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("gender", gender);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getEmployeeGenderWise"+e);
+			logger.error(new Date() + "Inside DAO getEmployeeGenderWise "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2693,7 +2693,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(FETCHALLPERSONALDETAIL);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO fetchAllPersonalDetail"+e);
+			logger.error(new Date() + "Inside DAO fetchAllPersonalDetail "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2713,7 +2713,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	        }
 	        return PersonalDetailsNGOorCGO;
         }catch(Exception e){
-        	logger.error(new Date() + "Inside DAO fetchPersonalDetailsNGOorCGO"+e);
+        	logger.error(new Date() + "Inside DAO fetchPersonalDetailsNGOorCGO " +e);
     	  e.printStackTrace();
 			return null;	                   
 		}
@@ -2728,7 +2728,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(ConfigurableReportQuery);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getConfigurableReportList"+e);
+			logger.error(new Date() + "Inside DAO getConfigurableReportList "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2742,7 +2742,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(ALLEMPLOYEELIST);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getAllEmployeeList"+e);
+			logger.error(new Date() + "Inside DAO getAllEmployeeList "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2757,7 +2757,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("years", year);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDefaultReport"+e);
+			logger.error(new Date() + "Inside DAO getDefaultReport "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2782,7 +2782,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dobreports;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDobReport"+e);
+			logger.error(new Date() + "Inside DAO getDobReport "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2807,7 +2807,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return doareports;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDoaReport"+e);
+			logger.error(new Date() + "Inside DAO getDoaReport "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2832,7 +2832,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dorreports;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDorReport"+e);
+			logger.error(new Date() + "Inside DAO getDorReport "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2857,7 +2857,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			
 			return dojreports;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO getDojReport"+e);
+			logger.error(new Date() + "Inside DAO getDojReport "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2870,7 +2870,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery("SELECT CadreId,Cadre FROM pis_cadre WHERE IsActive='1'");
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO fetchCadreNameCode"+e);
+			logger.error(new Date() + "Inside DAO fetchCadreNameCode "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2884,7 +2884,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			query.setParameter("cadreId",cadreid);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeList"+e);
+			logger.error(new Date() + "Inside DAO EmployeeList "+e);
 			e.printStackTrace();
 			return null;		
 		}
@@ -2905,7 +2905,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		
 					return result;
 				} catch (Exception e) {
-					logger.error(new Date() + "Inside DAO GetMaxSeniorityNo"+e);
+					logger.error(new Date() + "Inside DAO GetMaxSeniorityNo "+e);
 					e.printStackTrace();
 					return 0;
 				}

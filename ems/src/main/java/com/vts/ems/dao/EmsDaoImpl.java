@@ -81,7 +81,7 @@ public class EmsDaoImpl implements EmsDao
 			emloyee = allQuery.getSingleResult();
 			return emloyee;
 		}catch (Exception e) {
-			logger.error(new Date() +" Inside EmployeeInfo "+ e);
+			logger.error(new Date() +" Inside DAO EmployeeInfo "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -101,7 +101,7 @@ public class EmsDaoImpl implements EmsDao
 			emloyee = allQuery.getSingleResult();
 			return emloyee;
 		}catch (Exception e) {
-			logger.error(new Date() +" Inside DesignationInfo "+ e);
+			logger.error(new Date() +" Inside DAO DesignationInfo "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -119,7 +119,7 @@ public class EmsDaoImpl implements EmsDao
 			return (Object[])query.getResultList().get(0);			
 		}
 		catch (Exception e) {
-			logger.error(new Date() +" Inside EmployeeData "+ e);
+			logger.error(new Date() +" Inside DAO EmployeeData "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -137,7 +137,7 @@ public class EmsDaoImpl implements EmsDao
 			return Long.parseLong(result[0].toString());
 					
 		}catch (Exception e) {
-			logger.error(new Date() +" Inside PasswordChangeHystoryCount"+ e);
+			logger.error(new Date() +" Inside DAO PasswordChangeHystoryCount"+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -159,7 +159,7 @@ public class EmsDaoImpl implements EmsDao
 			notylist = allQuery.getResultList();
 			return notylist;
 		}catch (Exception e) {
-			logger.error(new Date() +" NotificationList "+ e);
+			logger.error(new Date() +"Inside DAO NotificationList "+ e);
 			e.printStackTrace();
 			return new ArrayList<EMSNotification>();
 		}
@@ -367,7 +367,7 @@ public class EmsDaoImpl implements EmsDao
 				manager.flush();
 
 			} catch (Exception e) {
-				logger.error(new Date() +" Inside loginHisAddSubmit "+ e);
+				logger.error(new Date() +" Inside DAO loginHisAddSubmit "+ e);
 				e.printStackTrace();
 			}
 			return model.getPasswordHistoryId(); 
@@ -414,7 +414,7 @@ public class EmsDaoImpl implements EmsDao
 				memeber = allquery.getResultList().get(0);
 				return memeber;
 			} catch (Exception e) {
-				logger.error(new Date() +" Inside getLabDetails "+ e);
+				logger.error(new Date() +" Inside DAO getLabDetails "+ e);
 				e.printStackTrace();
 				return null;
 			}

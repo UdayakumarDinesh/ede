@@ -55,7 +55,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			return null;
 		}
 		catch (Exception e) {
-			logger.error(new Date() +"Inside getOrderData "+ e);
+			logger.error(new Date() +"Inside DAO getOrderData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -73,7 +73,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			return null;
 		}
 		catch (Exception e) {
-			logger.error(new Date() +"Inside getEmpdataData "+ e);
+			logger.error(new Date() +"Inside DAO getEmpdataData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -111,7 +111,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			return result.longValue();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetOrderMaxId "+ e);
+			logger.error(new Date() +"Inside DAO GetOrderMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -126,7 +126,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			manager.flush();
 			return (long)order.getOrderId();
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside AddOfficeOrder "+ e);
+			logger.error(new Date() +"Inside DAO AddOfficeOrder "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -157,7 +157,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside OfficeOrderDelete "+ e);
+			logger.error(new Date() +"Inside DAO OfficeOrderDelete "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -179,7 +179,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetOrderDetailsToEdit "+ e);
+			logger.error(new Date() +"Inside DAO GetOrderDetailsToEdit "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -193,7 +193,7 @@ public class OfficeOrderDaoImpl implements OfficeOrderDao
 			manager.flush();		
 			return Order.getOrderId();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside EditOrder "+ e);
+			logger.error(new Date() +"Inside DAO EditOrder "+ e);
 			e.printStackTrace();
 			return 0;
 		}		

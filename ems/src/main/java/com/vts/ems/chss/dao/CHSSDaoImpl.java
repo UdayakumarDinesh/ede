@@ -77,7 +77,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (Object[])query.getSingleResult();
 		}
 		catch(Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSDashboardCountData " + e);
+			logger.error(new Date()  + "Inside DAO CHSSDashboardCountData " + e);
 			return null;
 		}
 		
@@ -119,7 +119,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (Object[])query.getSingleResult();
 		}
 		catch(Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSDashboardAmountData " + e);
+			logger.error(new Date()  + "Inside DAO CHSSDashboardAmountData " + e);
 			return null;
 		}
 	 }
@@ -163,7 +163,7 @@ public class CHSSDaoImpl implements CHSSDao {
 					return (Object[])query.getSingleResult();
 				}
 				catch(Exception e) {
-					logger.error(new Date()  + "Inside Dao MonthlyWiseDashboardData " + e);
+					logger.error(new Date()  + "Inside DAO MonthlyWiseDashboardData " + e);
 					return null;
 				}
 		 }
@@ -201,7 +201,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date()  + "Inside Dao familyMemberData " + e);
+			logger.error(new Date()  + "Inside DAO familyMemberData " + e);
 		}
 		
 		return result;
@@ -218,7 +218,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		try {
 			result = (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getEmployee " + e);
+			logger.error(new Date()  + "Inside DAO getEmployee " + e);
 			e.printStackTrace();
 		}
 		
@@ -242,7 +242,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			remamountlist= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSOtherItems " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSOtherItems " + e);
 			e.printStackTrace();
 		}
 		return remamountlist;
@@ -270,7 +270,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSOtherPermitAmt " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSOtherPermitAmt " + e);
 		}
 		return list;
 	}
@@ -294,7 +294,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date()  + "Inside Dao CHSSTreatTypeList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTreatTypeList " + e);
 		}
 		return list;
 	}
@@ -342,7 +342,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date()  + "Inside Dao CHSSApplied " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApplied " + e);
 		}
 		return apply;
 	}
@@ -356,7 +356,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getSingleResult();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSAppliedData " + e);
+			logger.error(new Date()  + "Inside DAO CHSSAppliedData " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -371,7 +371,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSDoctorRates.class, Integer.parseInt(rateid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getDocterRate " + e);
+			logger.error(new Date()  + "Inside DAO getDocterRate " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -388,7 +388,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date()  + "Inside Dao CHSSBillsList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBillsList " + e);
 			return new ArrayList<Object[]>();
 		}
 		
@@ -404,7 +404,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date()  + "Inside Dao CHSSConsultMainBillsList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSConsultMainBillsList " + e);
 			return new ArrayList<Object[]>();
 		}
 		
@@ -420,7 +420,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getResultList().get(0);
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimConsultationsCount " + e);
+			logger.error(new Date()  + "Inside DAO claimConsultationsCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -438,7 +438,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", chssapplyid);
 			return (Object[])query.getResultList().get(0);
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimMedicinesCount " + e);
+			logger.error(new Date()  + "Inside DAO claimMedicinesCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -460,7 +460,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao empCHSSList " + e);
+			logger.error(new Date()  + "Inside DAO empCHSSList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -473,7 +473,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		try {
 			return manager.find(CHSSConsultMain.class, Long.parseLong(ConsultMainId));
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSConsultMain " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSConsultMain " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -486,7 +486,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBill.class, Long.parseLong(billid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSBill " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSBill " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -502,7 +502,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (Object[])query.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBill " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBill " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -517,7 +517,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return bill.getBillId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -537,7 +537,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			int result = manager.createQuery(query).executeUpdate();
 			return result;
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSConsultMainDelete " + e);
+			logger.error(new Date()  + "Inside DAO CHSSConsultMainDelete " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -552,7 +552,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return consultmain.getCHSSConsultMainId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSConsultMainEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSConsultMainEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -567,7 +567,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSApply.class, Long.parseLong(chssapplyid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSApply " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSApply " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -593,7 +593,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Dispute= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSApplyDispute " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSApplyDispute " + e);
 			e.printStackTrace();
 		}
 		return Dispute;
@@ -608,7 +608,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBillConsultation.class, Long.parseLong(consultationid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSConsultation " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSConsultation " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -624,7 +624,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return apply.getCHSSApplyId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApplyEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApplyEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -643,7 +643,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testmainlist= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSTestMainList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTestMainList " + e);
 			e.printStackTrace();
 		}
 		return testmainlist;
@@ -668,7 +668,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsublist= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSTestSubList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTestSubList " + e);
 			e.printStackTrace();
 		}
 		return testsublist;
@@ -693,7 +693,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsublist= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSTestSubListWithAyur " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTestSubListWithAyur " + e);
 			e.printStackTrace();
 		}
 		return testsublist;
@@ -718,7 +718,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			testsub= allquery.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSTestSub " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSTestSub " + e);
 			e.printStackTrace();
 		}
 		return testsub;
@@ -752,7 +752,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ConsultationBillAdd " + e);
+			logger.error(new Date()  + "Inside DAO ConsultationBillAdd " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -767,7 +767,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return consult.getConsultationId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ConsultationBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO ConsultationBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -802,7 +802,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao MedicinesBillAdd " + e);
+			logger.error(new Date()  + "Inside DAO MedicinesBillAdd " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -815,7 +815,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBillMedicine.class, Long.parseLong(CHSSMedicineId));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSMedicine " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSMedicine " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -830,7 +830,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBillTests.class, Long.parseLong(chsstestid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSTest " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSTest " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -846,7 +846,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return medicine.getCHSSMedicineId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao MedicineBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO MedicineBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -884,7 +884,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSTestsList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTestsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -900,7 +900,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return test.getCHSSTestId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao TestBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO TestBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -928,7 +928,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBillMisc.class, Long.parseLong(miscid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSMisc " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSMisc " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -952,7 +952,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSMiscList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSMiscList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -967,7 +967,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return misc.getChssMiscId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao MiscBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO MiscBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -994,7 +994,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSDoctorRates " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSDoctorRates " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1018,7 +1018,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao OtherItemsList " + e);
+			logger.error(new Date()  + "Inside DAO OtherItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1042,7 +1042,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSOtherList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSOtherList " + e);
 		}
 		return list;
 	}
@@ -1065,7 +1065,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBillPkgList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBillPkgList " + e);
 		}
 		return list;
 	}
@@ -1088,7 +1088,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return other.getCHSSOtherId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao OtherBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO OtherBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1102,7 +1102,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSBillOther.class, Long.parseLong(otherid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSOther " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSOther " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1120,7 +1120,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSConsultDataList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSConsultDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1138,7 +1138,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSTestsDataList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSTestsDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1155,7 +1155,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSMedicineDataList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSMedicineDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1172,7 +1172,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSOtherDataList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSOtherDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1190,7 +1190,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSMiscDataList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSMiscDataList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1208,7 +1208,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Object[] result= (Object[])query.getSingleResult();
 			return result[0].toString();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApplyNoCount " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApplyNoCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1226,7 +1226,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("claimtype", claimtype);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApproveClaimList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApproveClaimList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1243,7 +1243,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("todate", todate);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSClaimListRep " + e);
+			logger.error(new Date()  + "Inside DAO CHSSClaimListRep " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1261,7 +1261,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("ClaimType", ClaimType);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBatchApproval " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBatchApproval " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1279,7 +1279,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Object[] result= (Object[])query.getSingleResult();
 			return result[0].toString();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSContingentNoCount " + e);
+			logger.error(new Date()  + "Inside DAO CHSSContingentNoCount " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1305,7 +1305,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return contingent.getContingentId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSContingentEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSContingentEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1321,7 +1321,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return manager.find(CHSSContingent.class, Long.parseLong(contingentid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSContingent " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSContingent " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1338,7 +1338,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return transaction.getCHSSTransactionId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApplyTransactionAdd " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApplyTransactionAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1356,7 +1356,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return transaction.getContinTransactionId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSContingentTransactionAdd " + e);
+			logger.error(new Date()  + "Inside DAO CHSSContingentTransactionAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1378,7 +1378,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSContingentList " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSContingentList " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1395,7 +1395,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ContingentApplyIds " + e);
+			logger.error(new Date()  + "Inside DAO ContingentApplyIds " + e);
 			return new ArrayList<Object>();
 		}
 	}
@@ -1411,7 +1411,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (Object[])query.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSContingentData " + e);
+			logger.error(new Date()  + "Inside DAO CHSSContingentData " + e);
 			return null;
 		}
 	}
@@ -1426,7 +1426,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSContingentClaimList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSContingentClaimList " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1444,7 +1444,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSStatusDetails " + e);
+			logger.error(new Date()  + "Inside DAO CHSSStatusDetails " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1468,7 +1468,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimTransactionObjects " + e);
+			logger.error(new Date()  + "Inside DAO claimTransactionObjects " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1486,7 +1486,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}
 		catch (Exception e) 
 		{
-			logger.error(new Date()  + "Inside Dao ContingentTransactions " + e);
+			logger.error(new Date()  + "Inside DAO ContingentTransactions " + e);
 			return new ArrayList<Object[]>();
 		}
 	}
@@ -1506,7 +1506,7 @@ public class CHSSDaoImpl implements CHSSDao {
 
 			return result;
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getdata " + e);
+			logger.error(new Date()  + "Inside DAO getdata " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1534,7 +1534,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSMedicinesList " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSMedicinesList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1552,7 +1552,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list =  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSConsultMainList " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSConsultMainList " + e);
 			e.printStackTrace();
 		}
 		return  list;		
@@ -1570,7 +1570,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApprovalAuthList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApprovalAuthList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1593,7 +1593,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			}
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSApprovalAuth " + e);
+			logger.error(new Date()  + "Inside DAO CHSSApprovalAuth " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1609,7 +1609,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return notification.getNotificationId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao NotificationAdd " + e);
+			logger.error(new Date()  + "Inside DAO NotificationAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1627,7 +1627,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ConsultationHistory " + e);
+			logger.error(new Date()  + "Inside DAO ConsultationHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1646,7 +1646,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao TestsHistory " + e);
+			logger.error(new Date()  + "Inside DAO TestsHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1665,7 +1665,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao MedicinesHistory " + e);
+			logger.error(new Date()  + "Inside DAO MedicinesHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1684,7 +1684,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao OthersHistory " + e);
+			logger.error(new Date()  + "Inside DAO OthersHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1703,7 +1703,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao MiscItemsHistory " + e);
+			logger.error(new Date()  + "Inside DAO MiscItemsHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1724,7 +1724,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (Object[])query.getSingleResult();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ConsultBillsConsultCount " + e);
+			logger.error(new Date()  + "Inside DAO ConsultBillsConsultCount " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1740,7 +1740,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("consultmainid", consultmainid);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ConsultBillsDelete " + e);
+			logger.error(new Date()  + "Inside DAO ConsultBillsDelete " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -1759,7 +1759,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list=  (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao PatientConsultHistory " + e);
+			logger.error(new Date()  + "Inside DAO PatientConsultHistory " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1777,7 +1777,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("chssapplyid", chssapplyid);
 			list=  (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao OldConsultMedsList " + e);
+			logger.error(new Date()  + "Inside DAO OldConsultMedsList " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1796,7 +1796,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
-			logger.error(new Date()  + "Inside Dao MedAdmissibleCheck " + e);
+			logger.error(new Date()  + "Inside DAO MedAdmissibleCheck " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1820,7 +1820,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
-			logger.error(new Date()  + "Inside Dao MedAdmissibleList " + e);
+			logger.error(new Date()  + "Inside DAO MedAdmissibleList " + e);
 			e.printStackTrace();
 		}
 		return  list;
@@ -1840,7 +1840,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		}		
 		catch (Exception e)
 		{
-			logger.error(new Date()  + "Inside Dao POAcknowldgedUpdate " + e);
+			logger.error(new Date()  + "Inside DAO POAcknowldgedUpdate " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -1858,7 +1858,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimApprovedPOVOData " + e);
+			logger.error(new Date()  + "Inside DAO ClaimApprovedPOVOData " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1875,7 +1875,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimRemarksHistory " + e);
+			logger.error(new Date()  + "Inside DAO ClaimRemarksHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1897,7 +1897,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			}
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getLabCode " + e);
+			logger.error(new Date()  + "Inside DAO getLabCode " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -1917,7 +1917,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ContingentBillHistory " + e);
+			logger.error(new Date()  + "Inside DAO ContingentBillHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1934,7 +1934,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			list= (List<Object[]>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ContingentBillRemarkHistory " + e);
+			logger.error(new Date()  + "Inside DAO ContingentBillRemarkHistory " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1953,7 +1953,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao GetClaimsList " + e);
+			logger.error(new Date()  + "Inside DAO GetClaimsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1971,7 +1971,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Query query = manager.createNativeQuery(EMPLOYEESLIST);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao EmployeesList " + e);
+			logger.error(new Date()  + "Inside DAO EmployeesList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -1991,7 +1991,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("status", status);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao GetClaimsReportList " + e);
+			logger.error(new Date()  + "Inside DAO GetClaimsReportList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2007,7 +2007,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimConsultMainList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimConsultMainList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2023,7 +2023,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return dispute.getCHSSDisputeId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimDisputeAdd " + e);
+			logger.error(new Date()  + "Inside DAO ClaimDisputeAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2039,7 +2039,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return dispute.getCHSSDisputeId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimDisputeEdit " + e);
+			logger.error(new Date()  + "Inside DAO ClaimDisputeEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2057,7 +2057,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimConsultMainDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO claimConsultMainDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2076,7 +2076,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billConsultDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billConsultDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2095,7 +2095,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billTestsDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billTestsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2113,7 +2113,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billMedsDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billMedsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2131,7 +2131,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billOthersDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billOthersDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2149,7 +2149,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billMiscDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billMiscDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2167,7 +2167,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billEquipmentDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billEquipmentDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2185,7 +2185,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billImplantDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billImplantDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2203,7 +2203,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billPackageDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billPackageDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2221,7 +2221,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao billPackageItemsDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO billPackageItemsDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2240,7 +2240,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimBillDeleteAll " + e);
+			logger.error(new Date()  + "Inside DAO claimBillDeleteAll " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2259,7 +2259,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("modifieddate", modifieddate);
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao claimDelete " + e);
+			logger.error(new Date()  + "Inside DAO claimDelete " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2276,7 +2276,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return  query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao UpdateBillAdmissibleTotal " + e);
+			logger.error(new Date()  + "Inside DAO UpdateBillAdmissibleTotal " + e);
 			e.printStackTrace();
 		}
 		return  0;
@@ -2298,7 +2298,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			returnlist = claiminfo.getResultList().get(0);
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao IpdClaimInfo " + e);
+			logger.error(new Date()  + "Inside DAO IpdClaimInfo " + e);
 			return null;
 		}
 		return returnlist;
@@ -2313,7 +2313,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return model.getIPDClaimInfoId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSIPDBasicInfoAdd " + e);
+			logger.error(new Date()  + "Inside DAO CHSSIPDBasicInfoAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2326,7 +2326,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		try {
 			return manager.find(CHSSIPDClaimsInfo.class, Long.parseLong(ipdclaiminfoid));
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getIpcClaimInfo " + e);
+			logger.error(new Date()  + "Inside DAO getIpcClaimInfo " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2343,7 +2343,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			
 			return claimsinfo.getIPDClaimInfoId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSIPDBasicInfoEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSIPDBasicInfoEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2360,7 +2360,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			Integer result = (Integer) query.getSingleResult();
 			return result;
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao GetMaxMedNo " + e);
+			logger.error(new Date()  + "Inside DAO GetMaxMedNo " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2375,7 +2375,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			manager.flush();
 			return medicine.getMedicineId();
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao AddMedicine " + e);
+			logger.error(new Date()  + "Inside DAO AddMedicine " + e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -2391,7 +2391,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			manager.flush();
 			return (long)masteredit.getMasterEditId();
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao AddMasterEditComments " + e);
+			logger.error(new Date()  + "Inside DAO AddMasterEditComments " + e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -2410,7 +2410,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao IPDBillOtherItems " + e);
+			logger.error(new Date()  + "Inside DAO IPDBillOtherItems " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2442,7 +2442,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		} catch (NoResultException e) {
 			return null;
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSIPDOther " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSIPDOther " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2463,7 +2463,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao consultMainBillIds " + e);
+			logger.error(new Date()  + "Inside DAO consultMainBillIds " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2484,7 +2484,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CheckPrevConsultInfo " + e);
+			logger.error(new Date()  + "Inside DAO CheckPrevConsultInfo " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2501,7 +2501,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			query.setParameter("chssapplyid",chssapplyid);
 			return (Object[]) query.getResultList().get(0);
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getClaimDisputeData " + e);
+			logger.error(new Date()  + "Inside DAO getClaimDisputeData " + e);
 			return null;
 		}
 	}
@@ -2518,7 +2518,7 @@ public class CHSSDaoImpl implements CHSSDao {
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimDisputeList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimDisputeList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2537,7 +2537,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimDisputeClosedList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimDisputeClosedList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2560,7 +2560,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return manager.find(CHSSBillEquipment.class, Long.parseLong(equipid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSEquipment " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSEquipment " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2586,7 +2586,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSEquipmentList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSEquipmentList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2601,7 +2601,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			
 			return equipment.getCHSSEquipmentId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao EquipmentBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO EquipmentBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2625,7 +2625,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return manager.find(CHSSBillImplants.class, Long.parseLong(implantid));
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSImplant " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSImplant " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2651,7 +2651,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSImplantList " + e);
+			logger.error(new Date()  + "Inside DAO CHSSImplantList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2666,7 +2666,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			
 			return implant.getCHSSImplantId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ImplantBillEdit " + e);
+			logger.error(new Date()  + "Inside DAO ImplantBillEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2685,7 +2685,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao IPDClaimAttachments " + e);
+			logger.error(new Date()  + "Inside DAO IPDClaimAttachments " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -2706,7 +2706,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		} catch (NoResultException e) {
 			return null;
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getIPDClaimAttach " + e);
+			logger.error(new Date()  + "Inside DAO getIPDClaimAttach " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2722,7 +2722,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			
 			return Attach.getIPDAttachId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao IPDClaimAttachAdd " + e);
+			logger.error(new Date()  + "Inside DAO IPDClaimAttachAdd " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2738,7 +2738,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			
 			return Attach.getIPDAttachId();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao IPDClaimAttachEdit " + e);
+			logger.error(new Date()  + "Inside DAO IPDClaimAttachEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -2755,7 +2755,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			query.setParameter("billid", billid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimPackagesList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimPackagesList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2771,7 +2771,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			query.setParameter("billid", billid);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimAllPackageItemsList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimAllPackageItemsList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2787,7 +2787,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimEquipmentList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimEquipmentList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2803,7 +2803,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			query.setParameter("CHSSApplyId", CHSSApplyId);
 			return (List<Object[]>)query.getResultList();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimImplantList " + e);
+			logger.error(new Date()  + "Inside DAO ClaimImplantList " + e);
 			e.printStackTrace();
 			return null;
 		}
@@ -2828,7 +2828,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao BillEquipmentList " + e);
+			logger.error(new Date()  + "Inside DAO BillEquipmentList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2852,7 +2852,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao BillImplantsList " + e);
+			logger.error(new Date()  + "Inside DAO BillImplantsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2876,7 +2876,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItemsList " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSIPDPkgItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2909,7 +2909,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			pkg=manager.find(CHSSBillPkg.class, Long.parseLong(billpkgId));
 		
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSBillPkg " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSBillPkg " + e);
 			return null;
 		}
 		return pkg;
@@ -2937,7 +2937,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		}catch (NoResultException e) {
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItem " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSIPDPkgItem " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2962,7 +2962,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			list= allquery.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao getCHSSIPDPkgItemsList " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSIPDPkgItemsList " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -2975,7 +2975,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			manager.merge(billpkg);
 			manager.flush();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBillPkgEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBillPkgEdit " + e);
 			return 0;
 		}
 		return billpkg.getCHSSBillPkgId();
@@ -2988,7 +2988,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			manager.merge(billpkgItem);
 			manager.flush();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao CHSSBillPkgItemEdit " + e);
+			logger.error(new Date()  + "Inside DAO CHSSBillPkgItemEdit " + e);
 			return 0;
 		}
 		return billpkgItem.getBillPkgItemId();
@@ -3006,7 +3006,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return (List<CHSSIPDPkgItems>)query.getResultList();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimPkgItemsAddedAjax " + e);
+			logger.error(new Date()  + "Inside DAO ClaimPkgItemsAddedAjax " + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -3024,7 +3024,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return query.executeUpdate();
 			
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside Dao ClaimPkgItemsDelete " + e);
+			logger.error(new Date()  + "Inside DAO ClaimPkgItemsDelete " + e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -3053,7 +3053,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			System.err.println ("No Result Exception");
 		}catch (Exception e)
 		{
-			logger.error(new Date()  + "Inside Dao getCHSSIPDClaimsInfo " + e);
+			logger.error(new Date()  + "Inside DAO getCHSSIPDClaimsInfo " + e);
 			e.printStackTrace();
 		}
 		return list;

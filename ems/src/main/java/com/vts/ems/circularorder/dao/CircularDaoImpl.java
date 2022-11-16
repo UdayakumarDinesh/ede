@@ -54,7 +54,7 @@ public class CircularDaoImpl implements CircularDao
 			return null;
 		}
 		catch (Exception e) {
-			logger.error(new Date() +"Inside getCircularData "+ e);
+			logger.error(new Date() +"Inside DAO getCircularData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -72,7 +72,7 @@ public class CircularDaoImpl implements CircularDao
 			return null;
 		}
 		catch (Exception e) {
-			logger.error(new Date() +"Inside getEmpdataData "+ e);
+			logger.error(new Date() +"Inside DAO getEmpdataData "+ e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -109,7 +109,7 @@ public class CircularDaoImpl implements CircularDao
 			return result.longValue();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetCircularMaxId "+ e);
+			logger.error(new Date() +"Inside DAO GetCircularMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -125,7 +125,7 @@ public class CircularDaoImpl implements CircularDao
 			return result.longValue();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetDepCircularMaxId "+ e);
+			logger.error(new Date() +"Inside DAO GetDepCircularMaxId "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -142,7 +142,7 @@ public class CircularDaoImpl implements CircularDao
 			return result.longValue();
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetDepCircularMaxIdEdit "+ e);
+			logger.error(new Date() +"Inside DAO GetDepCircularMaxIdEdit "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -157,7 +157,7 @@ public class CircularDaoImpl implements CircularDao
 			manager.flush();
 			return (long)circular.getCircularId();
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside AddCircular "+ e);
+			logger.error(new Date() +"Inside DAO AddCircular "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -187,7 +187,7 @@ public class CircularDaoImpl implements CircularDao
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside CircularDelete "+ e);
+			logger.error(new Date() +"Inside DAO CircularDelete "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -209,7 +209,7 @@ public class CircularDaoImpl implements CircularDao
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GetCircularDetailsToEdit "+ e);
+			logger.error(new Date() +"Inside DAO GetCircularDetailsToEdit "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -223,7 +223,7 @@ public class CircularDaoImpl implements CircularDao
 			manager.flush();		
 			return circular.getCircularId();
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside EditCircular "+ e);
+			logger.error(new Date() +"Inside DAO EditCircular "+ e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -272,7 +272,7 @@ public class CircularDaoImpl implements CircularDao
 			Object[] GetEmsDepType=(Object[] )query.getSingleResult();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
-			logger.error(new Date() +"Inside GetEmsDepType "+ e);
+			logger.error(new Date() +"Inside DAO GetEmsDepType "+ e);
 			return null;
 		}
 		
@@ -336,7 +336,7 @@ public class CircularDaoImpl implements CircularDao
 			List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
 			return GetEmsDepType;
 		}catch ( NoResultException e ) {
-			logger.error(new Date() +"Inside GetEmsDepType "+ e);
+			logger.error(new Date() +"Inside DAO GetEmsDepType "+ e);
 			return new ArrayList<Object[]>();
 		}
 		

@@ -46,7 +46,7 @@ public class EMSMainServiceImpl implements EMSMainService
 
 	@Override
 	public int LoginStampingUpdate(String Logid, String LogoutType) throws Exception {
-		logger.info(new Date() +"Inside LoginStampingUpdate");
+		logger.info(new Date() +"Inside SERVICE LoginStampingUpdate ");
 		AuditStamping stamping=new AuditStamping();
         stamping.setAuditStampingId(dao.LastLoginStampingId(Logid));
         stamping.setLogOutType(LogoutType);
@@ -99,7 +99,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	
 	public static String getAlphaNumericString(int n)
     {
-		logger.info(new Date() +"Inside getAlphaNumericString");
+		logger.info(new Date() +"Inside SERVICE getAlphaNumericString ");
         // chose a Character random from this String
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                     + "0123456789"
@@ -128,7 +128,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public String getPasswordResetOTP(String loginid) throws Exception
 	{
-		logger.info(new Date() +"Inside getPasswordResetOTP");
+		logger.info(new Date() +"Inside SERVICE getPasswordResetOTP ");
 		String otp="";
 		Object[] otpdata = dao.getResetOtp(loginid);
 		if(otpdata!=null && otpdata[0]!=null && !otpdata[0].toString().trim().equals("") )
@@ -148,7 +148,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public int userResetPassword(String loginid,String password) throws Exception
 	{
-		logger.info(new Date() +"Inside userResetPassword");
+		logger.info(new Date() +"Inside SERVICE userResetPassword ");
 			LoginPasswordHistory passHis= new LoginPasswordHistory();
 			passHis.setLoginId(Long.parseLong(loginid));
 			passHis.setPassword(encoder.encode(password));
@@ -170,7 +170,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public int SendOtpMail(String loginid) throws Exception
 	{
-		logger.info(new Date() +"Inside SendOtpMail");
+		logger.info(new Date() +"Inside SERVICE SendOtpMail ");
 		Object[] userinfo = dao.LoginEmpInfo(loginid);
 		
 		String email= "";
@@ -207,7 +207,7 @@ public class EMSMainServiceImpl implements EMSMainService
 	@Override
 	public String reSendResetOTP(String loginid) throws Exception
 	{
-		logger.info(new Date() +"Inside reSendResetOTP");
+		logger.info(new Date() +"Inside SERVICE reSendResetOTP ");
 		String otp="";		
 		
 		otp = getAlphaNumericString(4);

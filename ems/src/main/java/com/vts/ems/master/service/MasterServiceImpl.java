@@ -82,7 +82,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public Long EditTestSub(CHSSTestSub TestSub)throws Exception
 	{
-		logger.info(new Date() +"Inside EditTestSub");
+		logger.info(new Date() +"Inside SERVICE EditTestSub ");
 		CHSSTestSub test=dao.getTestSub(TestSub.getTestSubId());
 			test.setTestMainId(TestSub.getTestMainId());
 			test.setTestName(TestSub.getTestName());
@@ -107,7 +107,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public int EditItem(CHSSOtherItems item)throws Exception
 	{
-		logger.info(new Date() +"Inside EditItem");
+		logger.info(new Date() +"Inside SERVICE EditItem ");
 		CHSSOtherItems test=dao.getOtherItem(item.getOtherItemId());
 			test.setOtherItemName(item.getOtherItemName());
 			test.setModifiedBy(item.getModifiedBy());
@@ -123,7 +123,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public List<Object[]> getMedicineListByTreatment(String treatmentname)throws Exception
 	{
-		logger.info(new Date() +"Inside getMedicineListByTreatment");
+		logger.info(new Date() +"Inside SERVICE getMedicineListByTreatment ");
 		if("A".equalsIgnoreCase(treatmentname)) {
 			return dao.getMedicineList();
 		}else {
@@ -164,7 +164,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public Long EditMedicine(CHSSMedicinesList medicine)throws Exception
 	{
-		logger.info(new Date() +"Inside EditMedicine");
+		logger.info(new Date() +"Inside SERVICE EditMedicine ");
 		CHSSMedicinesList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
 		
 		mlist.setMedicineName(medicine.getMedicineName());
@@ -177,7 +177,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public Long EditDelete(CHSSMedicinesList medicine)throws Exception
 	{
-		logger.info(new Date() +"Inside EditDelete");
+		logger.info(new Date() +"Inside SERVICE EditDelete ");
 		CHSSMedicinesList mlist  = dao.getCHSSMedicine(medicine.getMedicineId());
 		
 		mlist.setIsActive(0);
@@ -202,7 +202,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public int EditDoctorMaster(CHSSDoctorRates docrate) throws Exception
 	{	
-		logger.info(new Date() +"Inside EditDoctorMaster");
+		logger.info(new Date() +"Inside SERVICE EditDoctorMaster ");
 		CHSSDoctorRates doctor = dao.getCHSSDocRate(docrate.getDocRateId());
 		
 //		doctor.setTreatTypeId(docrate.getTreatTypeId());
@@ -237,7 +237,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public long EditLabMaster(LabMaster labmater)throws Exception
 	{
-		logger.info(new Date() +"Inside EditLabMaster");
+		logger.info(new Date() +"Inside SERVICE EditLabMaster ");
 		LabMaster lab = dao.GetLabDetailsToEdit(labmater.getLabMasterId());
 		
 		lab.setLabCode(labmater.getLabCode());
@@ -312,7 +312,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public long EditDesignation(EmployeeDesig desig)throws Exception
 	{
-		logger.info(new Date() +"Inside EditDesignation");
+		logger.info(new Date() +"Inside SERVICE EditDesignation ");
 		EmployeeDesig designation = dao.GetDesignationToEdit(desig.getDesigId());
 		designation.setDesigId(desig.getDesigId());
 		designation.setDesigCode(desig.getDesigCode());
@@ -325,7 +325,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public Object[] DesignationAddCheck(String desigcode,String designation) throws Exception
 	{
-		logger.info(new Date() +"Inside DesignationAddCheck");
+		logger.info(new Date() +"Inside SERVICE DesignationAddCheck ");
 		Object[] returnobj=new Object[2];
 		returnobj[0]=dao.DesignationCodeCheck(desigcode)[0].toString();
 		returnobj[1]=dao.DesignationCheck(designation)[0].toString();
@@ -335,7 +335,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public Object[] DesignationEditCheck(String desigcode,String designation,String desigid) throws Exception
 	{
-		logger.info(new Date() +"Inside DesignationEditCheck");
+		logger.info(new Date() +"Inside SERVICE DesignationEditCheck ");
 		Object[] returnobj=new Object[2];
 		returnobj[0]=dao.DesignationCodeEditCheck(desigcode,desigid)[0].toString();
 		returnobj[1]=dao.DesignationEditCheck(designation,desigid)[0].toString();
@@ -358,7 +358,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public long DoctorsEdit(DoctorList doc)throws Exception
 	{
-		logger.info(new Date() +"Inside DoctorsEdit");
+		logger.info(new Date() +"Inside SERVICE DoctorsEdit ");
 		DoctorList doctor = dao.GetDoctor(doc.getDoctorId());
 		doctor.setDoctorName(doc.getDoctorName());
 		doctor.setQualification(doc.getQualification());
@@ -394,7 +394,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public long CircularListAdd(CircularList circular ,CircularListDto filecirculardto)throws Exception
 	{
-		logger.info(new Date() +"Inside CircularListAdd");
+		logger.info(new Date() +"Inside SERVICE CircularListAdd ");
 		long value = dao.GetCircularMaxId();
 	    if(!filecirculardto.getPath().isEmpty()) {
 		String name =filecirculardto.getPath().getOriginalFilename();
@@ -411,7 +411,7 @@ public class MasterServiceImpl implements MasterService {
 	
 	   public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
 	   {
-		   logger.info(new Date() +"Inside saveFile");
+		   logger.info(new Date() +"Inside SERVICE saveFile ");
 	        Path uploadPath = Paths.get(CircularFilePath);
 	          
 	        if (!Files.exists(uploadPath)) {
@@ -435,7 +435,7 @@ public class MasterServiceImpl implements MasterService {
 		@Override
 		public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception
 		{
-			logger.info(new Date() +"Inside CircularListEdit");				
+			logger.info(new Date() +"Inside SERVICE CircularListEdit ");				
 			CircularList circularlist = dao.GetCircularToEdit(circular.getCircularId());
 			if(circular.getPath()!=null) {
 				String path =emsfilespath+"EMS//CircularFiles";
@@ -468,7 +468,7 @@ public class MasterServiceImpl implements MasterService {
 		@Override
 		public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception
 		{
-			logger.info(new Date() +"Inside GetCircularList");
+			logger.info(new Date() +"Inside SERVICE GetCircularList ");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 			LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 			LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -483,8 +483,8 @@ public class MasterServiceImpl implements MasterService {
 		
 		@Override
 		public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception
-		{
-			logger.info(new Date() +"Inside EmpanelledHospitalEdit");
+		{ 
+			logger.info(new Date() +"Inside SERVICE EmpanelledHospitalEdit ");
 			CHSSEmpanelledHospital empanelled = dao.GetEmpanelled(hospital.getEmpanelledHospitalId());
 			empanelled.setHospitalName(hospital.getHospitalName());
 			empanelled.setHospitalAddress(hospital.getHospitalAddress());
@@ -501,7 +501,7 @@ public class MasterServiceImpl implements MasterService {
 		@Override
 		public Long AddMasterEditComments(MasterEdit masteredit , MasterEditDto masterdto )throws Exception
 		{
-			logger.info(new Date() +"Inside AddMasterEditComments");
+			logger.info(new Date() +"Inside SERVICE AddMasterEditComments ");
 			Timestamp instant= Timestamp.from(Instant.now());
 			String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
 			

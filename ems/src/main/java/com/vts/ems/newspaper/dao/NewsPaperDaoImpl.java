@@ -54,7 +54,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(new Date() +"Inside DAO getNewspaperClaimList"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperClaimList "+e);
 			e.printStackTrace();
 		}
 		return NewspaperClaimList;
@@ -77,7 +77,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			System.err.println("No Result found Exception");
 		}	
 		catch (Exception e) {
-			logger.error(new Date() +"Inside DAO getPayLevelAndNewsRectrictAmt"+e);
+			logger.error(new Date() +"Inside DAO getPayLevelAndNewsRectrictAmt " +e);
 			e.printStackTrace();
 			PayLevelAndNewsRectrictAmt = null;
 		}
@@ -121,7 +121,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO AddNewspaperClaim"+e);
+			logger.error(new Date() +"Inside DAO AddNewspaperClaim "+e);
 			e.printStackTrace();
 		}
 
@@ -147,11 +147,11 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}
 		catch (NoResultException e)
 		{
-			System.err.println("No Result found Exception");
+			System.err.println("No Result found Exception ");
 		}	
 		 catch (Exception e) {
 
-			 logger.error(new Date() +"Inside DAO getCheckPeriodOfNewsAlreadyPresentOrNot"+e);
+			 logger.error(new Date() +"Inside DAO getCheckPeriodOfNewsAlreadyPresentOrNot "+e);
 			e.printStackTrace();
 			getCheckPeriodAlreadyPresentOrNot = null;
 		}
@@ -176,7 +176,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			System.err.println("No Result found Exception");
 		}	
 		catch (Exception e) {
-			logger.error(new Date() +"Inside DAO getCheckNewspaperApproveOrNot"+e);
+			logger.error(new Date() +"Inside DAO getCheckNewspaperApproveOrNot "+e);
 			e.printStackTrace();
 			CheckNewspaperApproveOrNot = null;
 		}
@@ -204,7 +204,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		catch (Exception e) 
 		{
-			logger.error(new Date() +"Inside DAO getNewspaperEditDetails"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperEditDetails "+e);
 			e.printStackTrace();
 		}
 
@@ -237,7 +237,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO EditNewspaperClaim"+e);
+			logger.error(new Date() +"Inside DAO EditNewspaperClaim "+e);
 			e.printStackTrace();
 		}
 
@@ -260,7 +260,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO DeleteNewspaperClaim"+e);
+			logger.error(new Date() +"Inside DAO DeleteNewspaperClaim "+e);
 			e.printStackTrace();
 		}
 
@@ -288,7 +288,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		 catch (Exception e) {
 
-			 logger.error(new Date() +"Inside DAO getNewspaperUserPrintData"+e);
+			 logger.error(new Date() +"Inside DAO getNewspaperUserPrintData "+e);
 			e.printStackTrace();
 		}
 
@@ -310,7 +310,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO getNewspaperClaimApprovedList"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperClaimApprovedList "+e);
 			e.printStackTrace();
 
 		}
@@ -332,7 +332,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(new Date() +"Inside DAO getNewspaperApprovalList"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperApprovalList "+e);
 			e.printStackTrace();
 		}
 
@@ -385,7 +385,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			result = result + 1;
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO NewspaperApprove_AddNewspaperBill"+e);
+			logger.error(new Date() +"Inside DAO NewspaperApprove_AddNewspaperBill "+e);
 			e.printStackTrace();
 		}
 
@@ -405,7 +405,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			MaxNewspaperBillId = (int) q.getSingleResult();
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO getMaxNewspaperBillId"+e);
+			logger.error(new Date() +"Inside DAO getMaxNewspaperBillId "+ e);
 			e.printStackTrace();
 		} 
 		return (MaxNewspaperBillId);
@@ -450,7 +450,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} // try closed
 		catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO NewspaperApprove_UpdateNewspaper"+e);
+			logger.error(new Date() +"Inside DAO NewspaperApprove_UpdateNewspaper "+e);
 			e.printStackTrace();
 			NewspaperApprove_UpdateNewspaper = 0;
 
@@ -479,7 +479,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		}	
 		 catch (Exception e) {
 
-			 logger.error(new Date() +"Inside DAO getNewspaperApprovalPeriodEditDetails"+e);
+			 logger.error(new Date() +"Inside DAO getNewspaperApprovalPeriodEditDetails "+e);
 			e.printStackTrace();
 		}
 
@@ -514,7 +514,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO UpdateNewsPeriod"+e);
+			logger.error(new Date() +"Inside DAO UpdateNewsPeriod "+ e);
 			e.printStackTrace();
 			UpdateNewsPeriod = 0;
 		}
@@ -538,7 +538,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		} catch (Exception e) {
 
-			logger.error(new Date() +"Inside DAO getNewspaperReportPrintData"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperReportPrintData "+ e);
 			e.printStackTrace();
 		}
 		return (NewspaperReportPrintData);
@@ -568,7 +568,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		
 		catch (Exception e) 
 		{
-			logger.error(new Date() +"Inside DAO getNewspaperContingentBillPrintData"+e);
+			logger.error(new Date() +"Inside DAO getNewspaperContingentBillPrintData "+ e);
 			e.printStackTrace();
 		}
 
@@ -591,7 +591,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(new Date() +"Inside DAO getLabDetails"+e);
+			logger.error(new Date() +"Inside DAO getLabDetails "+e);
 			e.printStackTrace();
 		}
 
@@ -618,7 +618,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeviceList = (List<Object[]>) query.getResultList();
 		
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getDeviceList"+e);
+				logger.error(new Date() +"Inside DAO getDeviceList "+e);
 				e.printStackTrace();
 				
 			} 
@@ -641,7 +641,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}
 			catch(Exception e)
 			{
-				logger.error(new Date() +"Inside DAO getTeleDeviceList"+e);
+				logger.error(new Date() +"Inside DAO getTeleDeviceList "+e);
 				e.printStackTrace();
 			}
 			return TeleDeviceList;
@@ -669,7 +669,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}
 			catch(Exception e)
 			{
-				logger.error(new Date() +"Inside DAO AddTeleUsers"+e);
+				logger.error(new Date() +"Inside DAO AddTeleUsers "+e);
 				e.printStackTrace();
 				return 0;
 			}
@@ -697,7 +697,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}	
 			catch (Exception e) 
 			{
-				logger.error(new Date() +"Inside DAO getTeleDeviceEditDetails"+e);
+				logger.error(new Date() +"Inside DAO getTeleDeviceEditDetails "+e);
 				e.printStackTrace();
 			}
 
@@ -725,7 +725,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				UpdateTeleUser = query.executeUpdate();
 				
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO UpdateTeleUser"+e);
+				logger.error(new Date() +"Inside DAO UpdateTeleUser "+e);
 				e.printStackTrace();
 			}
 
@@ -747,7 +747,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeleteTeleUser = query.executeUpdate();
 				
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO DeleteTeleUser"+e);
+				logger.error(new Date() +"Inside DAO DeleteTeleUser "+ e);
 				e.printStackTrace();
 			} 
 		
@@ -770,7 +770,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TeleClaimList = (List<Object[]>) query.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTeleClaimList"+e);
+				logger.error(new Date() +"Inside DAO getTeleClaimList "+ e);
 				e.printStackTrace();
 			} 
 			return (TeleClaimList);
@@ -795,7 +795,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getPayLevelAndTeleRectrictAmt"+e);
+				logger.error(new Date() +"Inside DAO getPayLevelAndTeleRectrictAmt "+ e);
 				e.printStackTrace();
 			} 
 			return (PayLevelAndTeleRectrictAmt);
@@ -818,7 +818,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}			
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTeleSpecialpermission"+e);
+				logger.error(new Date() +"Inside DAO getTeleSpecialpermission "+ e);
 				e.printStackTrace();
 			} 
 			return (TeleSpecialpermission);
@@ -876,7 +876,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = 1;
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO addTeleClaim"+e);
+				logger.error(new Date() +"Inside DAO addTeleClaim "+ e);
 				e.printStackTrace();
 			} 
 
@@ -896,7 +896,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				MaxTeleId = (int) q.getSingleResult();
 		
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getMaxTeleId"+e);
+				logger.error(new Date() +"Inside DAO getMaxTeleId "+ e);
 				e.printStackTrace();
 			} 
 			return (MaxTeleId);
@@ -925,7 +925,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getCheckPeriodOfTeleAlreadyPresentOrNot"+e);
+				logger.error(new Date() +"Inside DAO getCheckPeriodOfTeleAlreadyPresentOrNot "+ e);
 				e.printStackTrace();
 			} 
 			return (getCheckPeriodAlreadyPresentOrNot);
@@ -945,7 +945,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TeleClaimEditDetails = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTeleClaimEditDetails"+e);
+				logger.error(new Date() +"Inside DAO getTeleClaimEditDetails "+ e);
 				e.printStackTrace();
 			}
 			return (TeleClaimEditDetails);
@@ -1006,7 +1006,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = updateTele + updateTeleD;
 		
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO updateTele"+e);
+				logger.error(new Date() +"Inside DAO updateTele "+ e);
 				e.printStackTrace();
 			}
 		
@@ -1032,7 +1032,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				DeleteTelephone = q.executeUpdate();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO DeleteTelephone"+e);
+				logger.error(new Date() +"Inside DAO DeleteTelephone "+ e);
 				e.printStackTrace();
 			}
 
@@ -1056,7 +1056,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				result = 1;
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO InsertTeleUserFlagAndGenerateTeleForwardId"+e);
+				logger.error(new Date() +"Inside DAO InsertTeleUserFlagAndGenerateTeleForwardId "+ e);
 				e.printStackTrace();
 			}
 
@@ -1108,7 +1108,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 				result = result + 1;
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO UpdateTeleByTeleForwardId"+e);
+				logger.error(new Date() +"Inside DAO UpdateTeleByTeleForwardId "+ e);
 				e.printStackTrace();
 			}
 			return (result);
@@ -1126,7 +1126,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneUserPrintSingleData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneUserPrintSingleData"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneUserPrintSingleData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneUserPrintSingleData);
@@ -1146,7 +1146,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneUserPrintMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneUserPrintMultiData"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneUserPrintMultiData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneUserPrintMultiData);
@@ -1167,7 +1167,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneClaimApprovedList = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneClaimApprovedList"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneClaimApprovedList "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneClaimApprovedList);
@@ -1186,7 +1186,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephoneApprovalList = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneApprovalList"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneApprovalList "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneApprovalList);
@@ -1243,7 +1243,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 				result = 2;
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO TelephoneApprove_AddTelephoneBill"+e);
+				logger.error(new Date() +"Inside DAO TelephoneApprove_AddTelephoneBill "+ e);
 				e.printStackTrace();
 			}
 
@@ -1286,7 +1286,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				
 				result = 2;
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO TelephoneSendback"+e);
+				logger.error(new Date() +"Inside DAO TelephoneSendback "+ e);
 				e.printStackTrace();
 			}
 
@@ -1313,7 +1313,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getCheckTeleApproveOrNot"+e);
+				logger.error(new Date() +"Inside DAO getCheckTeleApproveOrNot "+ e);
 				e.printStackTrace();
 			}
 			return (CheckTeleApproveOrNot);
@@ -1337,7 +1337,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			}	
 			catch (Exception e) 
 			{
-				logger.error(new Date() +"Inside DAO getCheckTeleApproveForwardOrNot"+e);
+				logger.error(new Date() +"Inside DAO getCheckTeleApproveForwardOrNot "+ e);
 				e.printStackTrace();
 			}
 			return (CheckTeleApproveForwardOrNot);
@@ -1363,7 +1363,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneApprovalPeriodEditDetails"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneApprovalPeriodEditDetails "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneApprovalPeriodEditDetails);
@@ -1396,7 +1396,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				UpdateTelePeriod = q.executeUpdate();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO UpdateTelePeriod"+e);
+				logger.error(new Date() +"Inside DAO UpdateTelePeriod "+ e);
 				e.printStackTrace();
 			}
 
@@ -1424,7 +1424,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				System.err.println("No Result found Exception");
 			}	
 			catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneContingentBillPrintData"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneContingentBillPrintData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephoneContingentBillPrintData);
@@ -1444,7 +1444,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportSingleData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephonePrintReportSingleData"+e);
+				logger.error(new Date() +"Inside DAO getTelephonePrintReportSingleData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportSingleData);
@@ -1464,7 +1464,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephonePrintReportMultiData"+e);
+				logger.error(new Date() +"Inside DAO getTelephonePrintReportMultiData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportMultiData);
@@ -1483,7 +1483,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 				TelephonePrintReportMultiData = (List<Object[]>) q.getResultList();
 
 			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO getTelephoneSendbackData"+e);
+				logger.error(new Date() +"Inside DAO getTelephoneSendbackData "+ e);
 				e.printStackTrace();
 			}
 			return (TelephonePrintReportMultiData);

@@ -37,7 +37,7 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
 @Repository
 public class MasterDaoImpl implements MasterDao{
-	private static final Logger logger = LogManager.getLogger(CHSSDaoImpl.class);
+	private static final Logger logger = LogManager.getLogger(MasterDaoImpl.class);
 	
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
@@ -80,7 +80,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside testSub()"+e);
+			logger.error(new Date() + "Inside DAO testSub() "+e);
 			e.printStackTrace();
 		}
 		return TestSub.getTestSubId();
@@ -95,7 +95,7 @@ public class MasterDaoImpl implements MasterDao{
 		try {
 			return manager.find(CHSSTestSub.class, Long.parseLong(TestSubId));		
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside testSub()"+e);
+			logger.error(new Date() + "Inside DAO testSub() "+e);
 			e.printStackTrace();
 			return null;
 		}		
@@ -109,7 +109,7 @@ public class MasterDaoImpl implements MasterDao{
 			return manager.find(CHSSTestSub.class, subid);
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside getTestSub()"+e);
+			logger.error(new Date() + "Inside DAO getTestSub() "+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -124,7 +124,7 @@ public class MasterDaoImpl implements MasterDao{
 			
 			return test.getTestSubId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditTestSub()"+e);
+			logger.error(new Date() + "Inside DAO EditTestSub() "+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -135,7 +135,7 @@ public class MasterDaoImpl implements MasterDao{
 		try {
 			return manager.find(CHSSOtherItems.class, itemid);			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside getOtherItem()"+e);
+			logger.error(new Date() + "Inside DAO getOtherItem() "+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -148,7 +148,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside AddOtherItem()"+e);
+			logger.error(new Date() + "Inside DAO AddOtherItem() "+e);
 			e.printStackTrace();
 		}
 		return item.getOtherItemId();
@@ -161,7 +161,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();		
 			return item.getOtherItemId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditItem()"+e);
+			logger.error(new Date() + "Inside DAO EditItem() "+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -177,7 +177,7 @@ public class MasterDaoImpl implements MasterDao{
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside getMedicineList()"+e);
+			logger.error(new Date() + "Inside DAO getMedicineList() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -193,7 +193,7 @@ public class MasterDaoImpl implements MasterDao{
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside getMedicineListByTreatment()"+e);
+			logger.error(new Date() + "Inside DAO getMedicineListByTreatment() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -209,7 +209,7 @@ public class MasterDaoImpl implements MasterDao{
 			 List<Object[]> List= query.getResultList();
 			 return List;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetTreatmentType()"+e);
+			logger.error(new Date() + "Inside DAO GetTreatmentType() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -228,7 +228,7 @@ public class MasterDaoImpl implements MasterDao{
 
 				return result;
 		  }catch (Exception e){
-			  logger.error(new Date() + "Inside Checkduplicate()"+e);
+			  logger.error(new Date() + "Inside DAO Checkduplicate() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -247,7 +247,7 @@ public class MasterDaoImpl implements MasterDao{
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside getCHSSMedicine()"+e);
+			logger.error(new Date() + "Inside DAO getCHSSMedicine() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -268,8 +268,8 @@ public class MasterDaoImpl implements MasterDao{
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside getCHSSDoctorRates()"+e);
-			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO getCHSSDoctorRates() "+e);
+			e.printStackTrace(); 
 			return null;
 		}
 	
@@ -283,7 +283,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();
 			return medicine.getMedicineId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside AddMedicine()"+e);
+			logger.error(new Date() + "Inside DAO AddMedicine() "+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -298,7 +298,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();
 			return DocRate.getDocRateId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside AddDocQualification()"+e);
+			logger.error(new Date() + "Inside DAO AddDocQualification() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -312,7 +312,7 @@ public class MasterDaoImpl implements MasterDao{
 			manager.flush();		
 			return item.getMedicineId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditMedicine()"+e);
+			logger.error(new Date() + "Inside DAO EditMedicine() "+e);
 			e.printStackTrace();
 			return 0l;
 		}		
@@ -329,7 +329,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			return list;
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside GetDoctorList()"+e);
+			logger.error(new Date() + "Inside DAO GetDoctorList() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -349,7 +349,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside getCHSSDocRate()"+e);
+			logger.error(new Date() + "Inside DAO getCHSSDocRate() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -364,7 +364,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			manager.flush();		
 			return Docrate.getDocRateId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditDoctorMaster()"+e);
+			logger.error(new Date() + "Inside DAO EditDoctorMaster() "+ e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -383,7 +383,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			 }
 				return null;
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside getLabDetails()"+e);
+				logger.error(new Date() + "Inside DAO getLabDetails() "+e);
 				e.printStackTrace();
 				return null;
 			}	
@@ -402,7 +402,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetLabDetailsToEdit()"+e);
+			logger.error(new Date() + "Inside DAO GetLabDetailsToEdit() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -419,7 +419,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			return list;
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside getLabsList()"+e);
+			logger.error(new Date() + "Inside DAO getLabsList() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -432,7 +432,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			manager.flush();		
 			return labmatster.getLabMasterId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditLabMaster()"+e);
+			logger.error(new Date() + "Inside DAO EditLabMaster() "+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -455,7 +455,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside updateOtherItemAmt()"+e);
+				logger.error(new Date() + "Inside DAO updateOtherItemAmt() "+e);
 				e.printStackTrace();
 				return count;
 			}
@@ -475,7 +475,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 				return result;
 		  }catch (Exception e){
-			  logger.error(new Date() + "Inside CheckduplicateItem()"+e);
+			  logger.error(new Date() + "Inside DAO CheckduplicateItem() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -495,7 +495,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 			return result;
 		  }catch (Exception e){
-			  logger.error(new Date() + "Inside CheckduplicateTest()"+e);
+			  logger.error(new Date() + "Inside DAO CheckduplicateTest() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -520,7 +520,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			return count;
 			
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DeleteOtherAmt()"+e);
+			logger.error(new Date() + "Inside DAO DeleteOtherAmt() "+e);
 			e.printStackTrace();
 			return count;
 		}
@@ -536,7 +536,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 				List<Object[]> list =  (List<Object[]>)query.getResultList();
 				return list;
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside GetDesignation()"+e);
+				logger.error(new Date() + "Inside DAO GetDesignation() "+e);
 				e.printStackTrace();
 				return null;
 		   }
@@ -551,7 +551,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside AddDesignation()"+e);
+			logger.error(new Date() + "Inside DAO AddDesignation() "+e);
 			e.printStackTrace();
 		}
 		return desig.getDesigId();
@@ -571,7 +571,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			memeber = allquery.getResultList().get(0);
 			return memeber;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetDesignationToEdit()"+e);
+			logger.error(new Date() + "Inside DAO GetDesignationToEdit() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -585,7 +585,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			manager.flush();		
 			return desig.getDesigId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditDesignation()"+e);
+			logger.error(new Date() + "Inside DAO EditDesignation() "+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -644,7 +644,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetDoctor()"+e);
+			logger.error(new Date() + "Inside DAO GetDoctor() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -658,7 +658,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			manager.flush();
 			return (long)doctor.getDoctorId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DoctorsAdd()"+e);
+			logger.error(new Date() + "Inside DAO DoctorsAdd() "+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -672,7 +672,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 			manager.flush();
 			return (long)doctor.getDoctorId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DoctorsEdit()"+e);
+			logger.error(new Date() + "Inside DAO DoctorsEdit() "+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -703,7 +703,7 @@ private static final String CHECKITEM="SELECT COUNT(otheritemid) FROM chss_other
 
 			return result;
 		  }catch (Exception e){
-			  logger.error(new Date() + "Inside CheckduplicateTestCode()"+e);
+			  logger.error(new Date() + "Inside DAO CheckduplicateTestCode() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -725,7 +725,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 
 			return result;
 		  }catch (Exception e){
-			  logger.error(new Date() + "Inside DuplicateDocQualification()"+e);
+			  logger.error(new Date() + "Inside DAO DuplicateDocQualification() "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -744,7 +744,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			return list;
 			
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside GetOtherItemAmlountList()"+e);
+			logger.error(new Date() + "Inside DAO GetOtherItemAmlountList() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -759,7 +759,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			manager.flush();
 
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside AddOtherItemAmt()"+e);
+			logger.error(new Date() + "Inside DAO AddOtherItemAmt() "+ e);
 			e.printStackTrace();
 		}
 		return otheramt.getCHSSOtherAmtId();
@@ -780,7 +780,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside updateOtherAmt()"+e);
+				logger.error(new Date() + "Inside DAO updateOtherAmt() "+e);
 				e.printStackTrace();
 				return count;
 			}
@@ -794,7 +794,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			manager.flush();
 			return (long)circular.getCircularId();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside CircularListAdd()"+e);
+			logger.error(new Date() + "Inside DAO CircularListAdd() "+e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -815,7 +815,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			list = allquery.getResultList().get(0);
 			return list;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetCircularToEdit()"+e);
+			logger.error(new Date() + "Inside DAO GetCircularToEdit() "+e);
 			e.printStackTrace();
 			return null;
 		}
@@ -829,7 +829,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			manager.flush();		
 			return circular.getCircularId();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside EditCircular()"+e);
+			logger.error(new Date() + "Inside DAO EditCircular() "+e);
 			e.printStackTrace();
 			return 0;
 		}		
@@ -844,7 +844,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			BigInteger result = (BigInteger) query.getSingleResult();
 			return result.longValue();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside GetCircularMaxId()"+e);
+			logger.error(new Date() + "Inside DAO GetCircularMaxId() "+e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -877,7 +877,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				manager.flush();
 				return (long)hospital.getEmpanelledHospitalId();
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside EmpanelledHospitalAdd()"+e);
+				logger.error(new Date() + "Inside DAO EmpanelledHospitalAdd() "+e);
 				e.printStackTrace();
 				return 0l;
 			}
@@ -896,7 +896,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				list = allquery.getResultList().get(0);
 				return list;
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside GetEmpanelled()"+e);
+				logger.error(new Date() + "Inside DAO GetEmpanelled() "+e);
 				e.printStackTrace();
 				return null;
 			}
@@ -909,7 +909,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				manager.flush();		
 				return hospital.getEmpanelledHospitalId();
 			}catch (Exception e) {
-				logger.error(new Date() + "Inside EmpanelledHospitalEdit()"+e);
+				logger.error(new Date() + "Inside DAO EmpanelledHospitalEdit() "+e);
 				e.printStackTrace();
 				return 0;
 			}	
@@ -923,7 +923,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				manager.flush();
 				return (long)masteredit.getMasterEditId();
 			} catch (Exception e) {
-				logger.error(new Date() + "Inside AddMasterEditComments()"+e);
+				logger.error(new Date() + "Inside DAO AddMasterEditComments() "+e);
 				e.printStackTrace();
 				return 0l;
 			}

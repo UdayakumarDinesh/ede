@@ -104,14 +104,14 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public double CropTo2Decimal(String Amount)throws Exception
 	{
-		logger.info(new Date() +"Inside CropTo2Decimal");
+		logger.info(new Date() +"Inside SERVICE CropTo2Decimal ");
 		double Invalue = Double.parseDouble(Amount) ;
 		return RoundTo2Decimal(Invalue);
 	}
 	
 	public double CropTo6Decimal(String Amount)throws Exception
 	{
-		logger.info(new Date() +"Inside CropTo6Decimal");
+		logger.info(new Date() +"Inside SERVICE CropTo6Decimal ");
 		double Invalue = Double.parseDouble(Amount) ;
 		BigDecimal returnVal= new BigDecimal(Invalue).setScale(6, BigDecimal.ROUND_HALF_UP);
 		return returnVal.doubleValue();
@@ -119,7 +119,7 @@ public class CHSSServiceImpl implements CHSSService {
 
 	public double RoundTo2Decimal(double Invalue)throws Exception
 	{
-		logger.info(new Date() +"Inside RoundTo2Decimal");
+		logger.info(new Date() +"Inside SERVICE RoundTo2Decimal ");
 		BigDecimal returnVal= new BigDecimal(Invalue).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return returnVal.doubleValue();
 	}
@@ -135,7 +135,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception
 	{
-		logger.info(new Date() +"Inside MonthlyWiseDashboardData");
+		logger.info(new Date() +"Inside SERVICE MonthlyWiseDashboardData ");
 		ArrayList<Object[]> Newlist = new ArrayList<Object[]>();
 		
 		for(int i=1; i<=12; i++ ) {
@@ -192,7 +192,7 @@ public class CHSSServiceImpl implements CHSSService {
 	public long CHSSApplySubmit(CHSSApplyDto dto) throws Exception
 	{
 		
-		logger.info(new Date() +"Inside SERVICE CHSSApplySubmit");		
+		logger.info(new Date() +"Inside SERVICE CHSSApplySubmit ");		
 		try {
 			long applyid=0;
 			if(dto.getCHSSApplyId()==null) {
@@ -263,7 +263,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE CHSSApplySubmit");
+			logger.error(new Date() +" Inside SERVICE CHSSApplySubmit ");
 			return 0;
 		}
 		
@@ -272,7 +272,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public String GenerateCHSSClaimNo() throws Exception
 	{
-		logger.info(new Date() +"Inside GenerateCHSSClaimNo");
+		logger.info(new Date() +"Inside SERVICE GenerateCHSSClaimNo ");
 		LocalDate today= LocalDate.now();
 		String start ="";
 		String end="";
@@ -322,7 +322,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<Object[]> empCHSSList(String empid,String PatientId, String FromDate, String Todate, String IsSelf) throws Exception
 	{
-		logger.info(new Date() +"Inside empCHSSList");
+		logger.info(new Date() +"Inside SERVICE empCHSSList ");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(FromDate,formatter);
 		LocalDate ToDate= LocalDate.parse(Todate, formatter);
@@ -351,7 +351,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultMainEdit(CHSSConsultMain consultmain) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSConsultMainEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSConsultMainEdit ");
 		CHSSConsultMain fetch = dao.getCHSSConsultMain(String.valueOf(consultmain.getCHSSConsultMainId()));
 		
 		fetch.setDocName(WordUtils.capitalize(consultmain.getDocName()).trim());
@@ -372,7 +372,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultMainDelete(String consultmainid, String modifiedby) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSConsultMainDelete");
+		logger.info(new Date() +"Inside SERVICE CHSSConsultMainDelete ");
 		List<Object[]> billids = dao.consultMainBillIds(consultmainid);
 		
 		for(Object[] obj : billids)
@@ -388,7 +388,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSApplyEdit(CHSSApplyDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSApplyEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSApplyEdit ");
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
 		if(dto.getTreatTypeId()!=null) {
 			fetch.setTreatTypeId(Integer.parseInt(dto.getTreatTypeId()));
@@ -404,7 +404,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSApplyEncCountEdit(CHSSApplyDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSApplyEncCountEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSApplyEncCountEdit ");
 		CHSSApply fetch = dao.getCHSSApply(dto.getCHSSApplyId());
 		fetch.setNoEnclosures(Integer.parseInt(dto.getNoEnclosures()));
 		return dao.CHSSApplyEdit(fetch);
@@ -413,7 +413,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public List<CHSSTestSub> CHSSTestSubList(String treattypeid) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSTestSubList");
+		logger.info(new Date() +"Inside SERVICE CHSSTestSubList ");
 		List<CHSSTestSub> list= dao.CHSSTestSubList();
 		if(Integer.parseInt(treattypeid)==2) {
 			list.addAll (0,dao.CHSSTestSubListWithAyur());
@@ -439,7 +439,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ConsultationBillAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE ConsultationBillAdd");		
+		logger.info(new Date() +"Inside SERVICE ConsultationBillAdd ");		
 		try {
 			
 			long count=0;
@@ -467,7 +467,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE ConsultationBillAdd");
+			logger.error(new Date() +" Inside SERVICE ConsultationBillAdd ");
 			return 0;
 		}
 		
@@ -479,7 +479,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ConsultationBillEdit(CHSSBillConsultation modal,String chssapplyid, String consultmainidold) throws Exception
 	{
-		logger.info(new Date() +"Inside ConsultationBillEdit");
+		logger.info(new Date() +"Inside SERVICE ConsultationBillEdit ");
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultType(modal.getConsultType());
 		fetch.setDocName(WordUtils.capitalize(modal.getDocName()).trim());
@@ -500,7 +500,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ConsultationBillDelete(String consultationid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside ConsultationBillDelete");
+		logger.info(new Date() +"Inside SERVICE ConsultationBillDelete ");
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(consultationid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -518,7 +518,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MedicinesBillAdd(CHSSMedicineDto dto, String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE MedicinesBillAdd");		
+		logger.info(new Date() +"Inside SERVICE MedicinesBillAdd ");		
 		try {
 			
 			long count=0;
@@ -549,7 +549,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE MedicinesBillAdd");
+			logger.error(new Date() +" Inside SERVICE MedicinesBillAdd ");
 			return 0;
 		}
 	}
@@ -570,7 +570,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MedicineBillEdit(CHSSBillMedicine modal, String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside MedicineBillEdit");
+		logger.info(new Date() +"Inside SERVICE MedicineBillEdit ");
 		Object[] chssapplydata = dao.CHSSAppliedData(chssapplyid);
 		String treattypeid= chssapplydata[7].toString();
 		CHSSBillMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getCHSSMedicineId()));
@@ -609,7 +609,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MedicineBillDelete(String medicineid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside MedicineBillDelete");
+		logger.info(new Date() +"Inside SERVICE MedicineBillDelete ");
 		CHSSBillMedicine fetch = dao.getCHSSMedicine(medicineid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -624,7 +624,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long TestsBillAdd(CHSSTestsDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE TestsBillAdd");		
+		logger.info(new Date() +"Inside SERVICE TestsBillAdd ");		
 		try {
 			
 			long count=0;
@@ -654,7 +654,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE TestsBillAdd");
+			logger.error(new Date() +" Inside SERVICE TestsBillAdd ");
 			return 0;
 		}
 		
@@ -674,7 +674,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long TestBillEdit(CHSSBillTests modal) throws Exception
 	{
-		logger.info(new Date() +"Inside TestBillEdit");
+		logger.info(new Date() +"Inside SERVICE TestBillEdit ");
 		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
 		fetch.setTestMainId(modal.getTestMainId());
 		fetch.setTestSubId(modal.getTestSubId());
@@ -693,7 +693,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long TestBillDelete(String chsstestid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside TestBillDelete");
+		logger.info(new Date() +"Inside v TestBillDelete ");
 		CHSSBillTests fetch = dao.getCHSSTest(chsstestid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -709,7 +709,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MiscBillAdd(CHSSMiscDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE MiscBillAdd");		
+		logger.info(new Date() +"Inside SERVICE MiscBillAdd ");		
 		try {
 			long count=0;
 			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
@@ -735,7 +735,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd ");
 			return 0;
 		}
 		
@@ -750,7 +750,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MiscBillEdit(CHSSBillMisc modal) throws Exception
 	{
-		logger.info(new Date() +"Inside MiscBillEdit");
+		logger.info(new Date() +"Inside SERVICE MiscBillEdit ");
 		CHSSBillMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
 		fetch.setMiscItemName(WordUtils.capitalize(modal.getMiscItemName()).trim());
@@ -768,7 +768,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MiscBillDelete(String chssMiscid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside MiscBillDelete");
+		logger.info(new Date() +"Inside SERVICE MiscBillDelete ");
 		CHSSBillMisc fetch = dao.getCHSSMisc(chssMiscid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -802,7 +802,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long OtherBillAdd(CHSSOtherDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE OtherBillAdd");		
+		logger.info(new Date() +"Inside SERVICE OtherBillAdd ");		
 		try {
 			
 			long count=0;
@@ -828,7 +828,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE OtherBillAdd");
+			logger.error(new Date() +" Inside SERVICE OtherBillAdd ");
 			return 0;
 		}
 		
@@ -841,7 +841,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long OtherBillEdit(CHSSBillOther modal,String empid) throws Exception
 	{
-		logger.info(new Date() +"Inside OtherBillEdit");
+		logger.info(new Date() +"Inside SERVICE OtherBillEdit ");
 		CHSSBillOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherItemId(modal.getOtherItemId());
 		fetch.setOtherItemCost(modal.getOtherItemCost());
@@ -859,7 +859,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long OtherBillDelete(String chssotherid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside OtherBillDelete");
+		logger.info(new Date() +"Inside SERVICE OtherBillDelete ");
 		CHSSBillOther fetch = dao.getCHSSOther(chssotherid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -872,7 +872,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void CalculateConsultEligibleAmt(CHSSBillConsultation consult,String chssapplyid,String billid) throws Exception 
 	{		
-		logger.info(new Date() +"Inside CalculateConsultEligibleAmt");
+		logger.info(new Date() +"Inside SERVICE CalculateConsultEligibleAmt ");
 		CHSSBill bill = dao.getCHSSBill(billid);
 		
 		Double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
@@ -941,7 +941,7 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	public void getTestEligibleAmount(CHSSBillTests testsub) throws Exception 
 	{
-		logger.info(new Date() +"Inside getTestEligibleAmount");
+		logger.info(new Date() +"Inside SERVICE getTestEligibleAmount ");
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(testsub.getBillId()));
 		double applyamount = testsub.getTestCost()-(testsub.getTestCost() * (bill.getDiscountPercent()/100));
 		testsub.setAmountPaid(RoundTo2Decimal(applyamount));
@@ -960,7 +960,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void calculateMedAmount(CHSSBillMedicine  meds, String billid,String treattypeid  ) throws Exception
 	{
-		logger.info(new Date() +"Inside calculateMedAmount");
+		logger.info(new Date() +"Inside SERVICE calculateMedAmount ");
 		CHSSBill bill = dao.getCHSSBill(billid);
 		int purs = meds.getMedQuantity();
 		int pres = meds.getPresQuantity();
@@ -986,7 +986,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void getOtherItemRemAmount(String empid,CHSSBillOther other) throws Exception
 	{
-		logger.info(new Date() +"Inside getOtherItemRemAmount");
+		logger.info(new Date() +"Inside SERVICE getOtherItemRemAmount ");
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(other.getBillId()));
 		double itemcost = other.getOtherItemCost()-(other.getOtherItemCost() * (bill.getDiscountPercent()/100));
 		other.setAmountPaid(RoundTo2Decimal(itemcost));
@@ -1017,7 +1017,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public int UpdateBillAdmissibleTotal(String billid) throws Exception
 	{
-		logger.info(new Date() +"Inside UpdateBillAdmissibleTotal");
+		logger.info(new Date() +"Inside SERVICE UpdateBillAdmissibleTotal ");
 		Object[] bill = dao.CHSSBill(billid);
 		return dao.UpdateBillAdmissibleTotal(bill[0].toString(), bill[11].toString());
 	}
@@ -1025,7 +1025,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void UpdateOPDClaimItemsRemAmount(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside UpdateOPDClaimItemsRemAmount");
+		logger.info(new Date() +"Inside SERVICE UpdateOPDClaimItemsRemAmount ");
 		CHSSApply chssapply =dao.getCHSSApply(chssapplyid);
 		String treattypeid= chssapply.getTreatTypeId().toString();
 		long empid =  chssapply.getEmpId();
@@ -1123,7 +1123,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
 	{
-		logger.info(new Date() +"Inside CHSSUserForward");
+		logger.info(new Date() +"Inside SERVICE CHSSUserForward ");
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
 		EMSNotification notify = new EMSNotification();
@@ -1275,7 +1275,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception
 	{
-		logger.info(new Date() +"Inside ConsultRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE ConsultRemAmountEdit ");
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultRemAmount(RoundTo2Decimal(modal.getConsultRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -1299,7 +1299,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long TestRemAmountEdit(CHSSBillTests modal) throws Exception
 	{
-		logger.info(new Date() +"Inside TestRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE TestRemAmountEdit ");
 		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
 		fetch.setTestRemAmount(RoundTo2Decimal(modal.getTestRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -1321,7 +1321,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long OtherRemAmountEdit(CHSSBillOther modal) throws Exception
 	{
-		logger.info(new Date() +"Inside OtherRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE OtherRemAmountEdit ");
 		CHSSBillOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherRemAmount(RoundTo2Decimal(modal.getOtherRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -1343,7 +1343,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MedRemAmountEdit(CHSSBillMedicine modal) throws Exception
 	{
-		logger.info(new Date() +"Inside MedRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE MedRemAmountEdit ");
 		CHSSBillMedicine fetch = dao.getCHSSMedicine(String.valueOf(modal.getCHSSMedicineId()));
 		fetch.setMedsRemAmount(RoundTo2Decimal(modal.getMedsRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -1365,7 +1365,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long MiscRemAmountEdit(CHSSBillMisc modal) throws Exception
 	{
-		logger.info(new Date() +"Inside MiscRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE MiscRemAmountEdit ");
 		CHSSBillMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
 		fetch.setMiscRemAmount(RoundTo2Decimal(modal.getMiscRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -1410,7 +1410,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ContingentGenerate(String CHSSApplyId[],String Username, String action,String billcontent,String logintype,String EmpId,String genTilldate,String claims_type) throws Exception 
 	{	
-		logger.info(new Date() +"Inside ContingentGenerate");
+		logger.info(new Date() +"Inside SERVICE ContingentGenerate ");
 		CHSSContingent continnew =new CHSSContingent();
 		long contingentid=0;
 		if(claims_type.equalsIgnoreCase("OPD")) 
@@ -1464,7 +1464,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public String GenerateOPDContingentNo() throws Exception
 	{
-		logger.info(new Date() +"Inside GenerateOPDContingentNo");
+		logger.info(new Date() +"Inside SERVICE GenerateOPDContingentNo ");
 		try {
 			String value="STARC/F&A/Med-Regular/";
 						
@@ -1495,7 +1495,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GenerateOPDContingentNo"+e);
+			logger.error(new Date() +"Inside SERVICE GenerateOPDContingentNo " +e);
 			e.printStackTrace();
 			return "";
 		}
@@ -1503,7 +1503,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public String GenerateIPDContingentNo() throws Exception
 	{
-		logger.info(new Date() +"Inside GenerateIPDContingentNo");
+		logger.info(new Date() +"Inside SERVICE GenerateIPDContingentNo ");
 		try {
 			String value="STARC/F&A/Med-IPD/";
 						
@@ -1535,7 +1535,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside GenerateIPDContingentNo"+e);
+			logger.error(new Date() +"Inside SERVICE GenerateIPDContingentNo "+e);
 			e.printStackTrace();
 			return "";
 		}
@@ -1544,7 +1544,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSClaimsApprove(CHSSContingentDto dto) throws Exception 
 	{
-		logger.info(new Date() +"Inside CHSSClaimsApprove");
+		logger.info(new Date() +"Inside SERVICE CHSSClaimsApprove ");
 		long continid=0;		
 		CHSSContingent contingent = dao.getCHSSContingent(dto.getContingentid());
 		int continstatus = contingent.getContingentStatusId();
@@ -1787,7 +1787,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public LinkedHashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSContingentClaimList");
+		logger.info(new Date() +"Inside SERVICE CHSSContingentClaimList ");
 		List<Object[]> claims = dao.CHSSContingentClaimList(contingentid);
 		
 		LinkedHashMap<Long, ArrayList<Object[]>> sortedclaims  = new LinkedHashMap<Long, ArrayList<Object[]>>();
@@ -1886,7 +1886,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSConsultBillsAdd(ChssBillsDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSConsultBillsAdd");
+		logger.info(new Date() +"Inside SERVICE CHSSConsultBillsAdd ");
 		long billid =0;
 		for(int i=0 ; i<dto.getBillNo().length ; i++)
 		{
@@ -1913,7 +1913,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSIPDBillsAdd(ChssBillsDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSIPDBillsAdd");
+		logger.info(new Date() +"Inside SERVICE CHSSIPDBillsAdd ");
 		long billid =0;
 		for(int i=0 ; i<dto.getBillNo().length ; i++)
 		{
@@ -1941,7 +1941,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSBillEdit(CHSSBill bill) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSBillEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSBillEdit ");
 		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
 		
 		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
@@ -1960,7 +1960,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSIPDBillEdit(CHSSBill bill) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSIPDBillEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSIPDBillEdit ");
 		CHSSBill fetch = dao.getCHSSBill(String.valueOf(bill.getBillId()));
 		
 		fetch.setCenterName(WordUtils.capitalize(bill.getCenterName()).trim());
@@ -1980,7 +1980,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSBillDelete(String billid, String modifiedby) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSBillDelete");
+		logger.info(new Date() +"Inside SERVICE CHSSBillDelete ");
 		CHSSBill fetch = dao.getCHSSBill(billid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -1992,7 +1992,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public int deleteBillItems(String billid,String username) throws Exception 
 	{
-		logger.info(new Date() +"Inside deleteBillItems");
+		logger.info(new Date() +"Inside SERVICE deleteBillItems ");
 		int count=0;
 		try {
 			
@@ -2052,7 +2052,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSUserRevoke(String CHSSApplyId,String Username,String EmpId)throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSUserRevoke");
+		logger.info(new Date() +"Inside SERVICE CHSSUserRevoke ");
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		
 		if(claim.getPOAcknowledge()==0) 
@@ -2122,7 +2122,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSContingentDelete(String contingentid,String Username) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSContingentDelete");
+		logger.info(new Date() +"Inside SERVICE CHSSContingentDelete ");
 		CHSSContingent contingent = dao.getCHSSContingent(contingentid);
 		contingent.setIsActive(0);
 		contingent.setModifiedBy(contingentid);
@@ -2157,7 +2157,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception
 	{
-		logger.info(new Date() +"Inside ClaimDisputeSubmit");
+		logger.info(new Date() +"Inside SERVICE ClaimDisputeSubmit ");
 		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		String Username = (String) ses.getAttribute("Username");
 		dispute.setRaisedTime(sdtf.format(new Date()));
@@ -2197,7 +2197,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal,HttpSession ses) throws Exception
 	{
-		logger.info(new Date() +"Inside ClaimDisputeResponseSubmit");
+		logger.info(new Date() +"Inside SERVICE ClaimDisputeResponseSubmit ");
 		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		String Username = (String) ses.getAttribute("Username");
 		
@@ -2286,7 +2286,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public int DeleteClaimData(String chssapplyid,String username) throws Exception 
 	{
-		logger.info(new Date() +"Inside DeleteClaimData");
+		logger.info(new Date() +"Inside SERVICE DeleteClaimData ");
 		List<Object[]> billslist = dao.CHSSBillsList(chssapplyid);
 				
 		for(Object[] obj : billslist)
@@ -2319,7 +2319,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSIPDBasicInfoEdit(CHSSIPDClaimsInfo model) throws Exception
 	{
-		logger.info(new Date() +"Inside CHSSIPDBasicInfoEdit");
+		logger.info(new Date() +"Inside SERVICE CHSSIPDBasicInfoEdit ");
 		CHSSIPDClaimsInfo fetch = dao.getIpcClaimInfo(String.valueOf(model.getIPDClaimInfoId()));
 		
 		fetch.setHospitalName(model.getHospitalName());
@@ -2352,7 +2352,7 @@ public class CHSSServiceImpl implements CHSSService {
 
 	 public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
 	   {
-		 logger.info(new Date() +"Inside saveFile");
+		 logger.info(new Date() +"Inside SERVICE saveFile ");
 	        Path uploadPath = Paths.get(CircularFilePath);
 	          
 	        if (!Files.exists(uploadPath)) {
@@ -2370,7 +2370,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public Long AddMasterEditComments(MasterEdit masteredit , MasterEditDto masterdto )throws Exception
 	{
-		logger.info(new Date() +"Inside AddMasterEditComments");
+		logger.info(new Date() +"Inside SERVICE AddMasterEditComments ");
 		Timestamp instant= Timestamp.from(Instant.now());
 		String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
 		
@@ -2399,7 +2399,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDBillHeadDataAddEdit(CHSSBillOther other)throws Exception
 	{
-		logger.info(new Date() +"Inside IPDBillHeadDataAddEdit");
+		logger.info(new Date() +"Inside SERVICE IPDBillHeadDataAddEdit ");
 		CHSSBillOther fetch = dao.getCHSSIPDOther(0l,other.getBillId(),other.getOtherItemId());
 		long count=0;
 		if(fetch==null && other.getOtherItemCost()>0) 
@@ -2425,7 +2425,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDConsultAdd(CHSSConsultationDto dto,String chssapplyid, String consultmainidold) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE IPDConsultAdd");		
+		logger.info(new Date() +"Inside SERVICE IPDConsultAdd ");		
 		try {
 			
 			long count=0;
@@ -2453,7 +2453,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE IPDConsultAdd");
+			logger.error(new Date() +" Inside SERVICE IPDConsultAdd ");
 			return 0;
 		}
 		
@@ -2462,7 +2462,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDConsultEdit(CHSSBillConsultation modal,String chssapplyid, String consultmainidold) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDConsultEdit");
+		logger.info(new Date() +"Inside SERVICE IPDConsultEdit ");
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultType(modal.getConsultType());
 		fetch.setDocName(WordUtils.capitalize(modal.getDocName()).trim());
@@ -2486,7 +2486,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDTestsBillAdd(CHSSTestsDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE IPDTestsBillAdd");		
+		logger.info(new Date() +"Inside SERVICE IPDTestsBillAdd ");		
 		try {
 			
 			long count=0;
@@ -2515,7 +2515,7 @@ public class CHSSServiceImpl implements CHSSService {
 			return count;
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE IPDTestsBillAdd");
+			logger.error(new Date() +" Inside SERVICE IPDTestsBillAdd ");
 			return 0;
 		}
 		
@@ -2524,7 +2524,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDTestBillEdit(CHSSBillTests modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDTestBillEdit");
+		logger.info(new Date() +"Inside SERVICE IPDTestBillEdit ");
 		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
 		fetch.setTestMainId(modal.getTestMainId());
 		fetch.setTestSubId(modal.getTestSubId());
@@ -2540,7 +2540,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDTestBillDelete(String chsstestid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDTestBillDelete");
+		logger.info(new Date() +"Inside SERVICE IPDTestBillDelete ");
 		CHSSBillTests fetch = dao.getCHSSTest(chsstestid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -2554,7 +2554,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDMiscBillAdd(CHSSMiscDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE IPDMiscBillAdd");		
+		logger.info(new Date() +"Inside SERVICE IPDMiscBillAdd ");		
 		try {
 			long count=0;
 			for(int i=0 ; i<dto.getMiscItemName().length ; i++)
@@ -2580,7 +2580,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE MiscBillAdd");
+			logger.error(new Date() +" Inside SERVICE MiscBillAdd ");
 			return 0;
 		}
 		
@@ -2589,7 +2589,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDMiscBillEdit(CHSSBillMisc modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDMiscBillEdit");
+		logger.info(new Date() +"Inside SERVICE IPDMiscBillEdit ");
 		CHSSBillMisc fetch = dao.getCHSSMisc(String.valueOf(modal.getChssMiscId()));
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
 		fetch.setMiscItemName(WordUtils.capitalize(modal.getMiscItemName()).trim());
@@ -2607,7 +2607,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDMiscBillDelete(String chssMiscid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDMiscBillDelete");
+		logger.info(new Date() +"Inside SERVICE IPDMiscBillDelete ");
 		CHSSBillMisc fetch = dao.getCHSSMisc(chssMiscid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -2634,7 +2634,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long EquipmentItemAdd(CHSSEquipDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE EquipmentItemAdd");		
+		logger.info(new Date() +"Inside SERVICE EquipmentItemAdd ");		
 		try {
 			long count=0;
 			for(int i=0 ; i<dto.getEquipName().length ; i++)
@@ -2657,7 +2657,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside EquipmentItemAdd"+e);
+			logger.error(new Date() +" Inside SERVICE EquipmentItemAdd "+e);
 			return 0;
 		}
 		
@@ -2666,7 +2666,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long EquipmentItemEdit(CHSSBillEquipment modal) throws Exception
 	{
-		logger.info(new Date() +"Inside EquipmentItemEdit");
+		logger.info(new Date() +"Inside SERVICE EquipmentItemEdit ");
 		CHSSBillEquipment fetch = dao.getCHSSEquipment(String.valueOf(modal.getCHSSEquipmentId()));
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
 		fetch.setEquipmentName(WordUtils.capitalize(modal.getEquipmentName()).trim());
@@ -2684,7 +2684,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long EquipmentBillDelete(String chssequipid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside EquipmentBillDelete");
+		logger.info(new Date() +"Inside SERVICE EquipmentBillDelete ");
 		CHSSBillEquipment fetch = dao.getCHSSEquipment(chssequipid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -2701,7 +2701,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ImplantItemAdd(CHSSImplantDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE ImplantItemAdd");		
+		logger.info(new Date() +"Inside SERVICE ImplantItemAdd ");		
 		try {
 			long count=0;
 			for(int i=0 ; i<dto.getImplantName().length ; i++)
@@ -2724,7 +2724,7 @@ public class CHSSServiceImpl implements CHSSService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(new Date() +" Inside SERVICE ImplantItemAdd");
+			logger.error(new Date() +" Inside SERVICE ImplantItemAdd ");
 			return 0;
 		}
 		
@@ -2738,7 +2738,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ImplantItemEdit(CHSSBillImplants modal) throws Exception
 	{
-		logger.info(new Date() +"Inside ImplantItemEdit");
+		logger.info(new Date() +"Inside SERVICE ImplantItemEdit ");
 		CHSSBillImplants fetch = dao.getCHSSImplant(String.valueOf(modal.getCHSSImplantId()));
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(fetch.getBillId()));
 		fetch.setImplantName(WordUtils.capitalize(modal.getImplantName()).trim());
@@ -2756,7 +2756,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long ImplantBillDelete(String chssImplantid, String modifiedby ) throws Exception
 	{
-		logger.info(new Date() +"Inside ImplantBillDelete");
+		logger.info(new Date() +"Inside SERVICE ImplantBillDelete ");
 		CHSSBillImplants fetch = dao.getCHSSImplant(chssImplantid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -2771,7 +2771,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDPackageAddService(CHSSIPDPackageDto pkgDto)throws Exception
 	{
-		logger.info(new Date() +"Inside IPDPackageAddService");
+		logger.info(new Date() +"Inside SERVICE IPDPackageAddService ");
 		CHSSBillPkg billPkg = new CHSSBillPkg();
 		billPkg.setBillId(Long.parseLong(pkgDto.getBillid()));
 		billPkg.setTestSubId(Long.parseLong(pkgDto.getPkg_id()));
@@ -2814,7 +2814,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDPackageEditService(CHSSIPDPackageDto pkgDto)throws Exception
 	{
-		logger.info(new Date() +"Inside IPDPackageEditService");
+		logger.info(new Date() +"Inside SERVICE IPDPackageEditService ");
 		CHSSBillPkg billPkg = dao.getCHSSBillPkg(pkgDto.getCHSSBillPkgId());
 		billPkg.setTestSubId(Long.parseLong(pkgDto.getPkg_id()));
 		billPkg.setPackageCost(CropTo2Decimal(pkgDto.getPkg_total_cost()));
@@ -2870,7 +2870,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDPackageDeleteService(CHSSBillPkg pkg)throws Exception
 	{
-		logger.info(new Date() +"Inside IPDPackageDeleteService");
+		logger.info(new Date() +"Inside SERVICE IPDPackageDeleteService ");
 		int count = dao.ClaimPkgItemsDelete(String.valueOf(pkg.getCHSSBillPkgId()),pkg.getModifiedBy(),LocalDateTime.now().toString());
 		
 		if(count>0) {
@@ -2898,7 +2898,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDAttachmentsUpdate(String chssapplyid,String attachtypeid, String value)throws Exception
 	{
-		logger.info(new Date() +"Inside IPDAttachmentsUpdate");
+		logger.info(new Date() +"Inside SERVICE IPDAttachmentsUpdate ");
 		CHSSIPDAttachments attachment = dao.getIPDClaimAttach(chssapplyid, attachtypeid);
 		
 		if(attachment==null)
@@ -2922,7 +2922,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDClaimBillDelete(String billid, String modifiedby) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDClaimBillDelete");
+		logger.info(new Date() +"Inside SERVICE IPDClaimBillDelete ");
 		CHSSBill fetch = dao.getCHSSBill(billid);
 		fetch.setIsActive(0);
 		fetch.setModifiedBy(modifiedby);
@@ -2933,7 +2933,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public int IPDBillItemsDelete(String billid,String username) throws Exception 
 	{
-		logger.info(new Date() +"Inside IPDBillItemsDelete");
+		logger.info(new Date() +"Inside SERVICE IPDBillItemsDelete ");
 		int count=0;
 		try {
 			
@@ -2943,7 +2943,7 @@ public class CHSSServiceImpl implements CHSSService {
 			count += dao.billOthersDeleteAll(billid,username,sdtf.format(new Date()));
 			count += dao.billMiscDeleteAll(billid,username,sdtf.format(new Date()));
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside FormRoleActive"+e);
+			logger.error(new Date() +"Inside SERVICE FormRoleActive "+ e);
 			e.printStackTrace();
 		}
 		
@@ -2976,7 +2976,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public String GenerateCHSSIPDClaimNo() throws Exception
 	{
-		logger.info(new Date() +"Inside GenerateCHSSIPDClaimNo");
+		logger.info(new Date() +"Inside SERVICE GenerateCHSSIPDClaimNo ");
 		LocalDate today= LocalDate.now();
 		String start ="";
 		String end="";
@@ -3002,7 +3002,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long CHSSUserIPDForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
 	{
-		logger.info(new Date() +"Inside CHSSUserIPDForward");
+		logger.info(new Date() +"Inside SERVICE CHSSUserIPDForward ");
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
 		EMSNotification notify = new EMSNotification();
@@ -3148,7 +3148,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void CalculateConsultEligibleAmtIPD(CHSSBillConsultation consult,String billid) throws Exception 
 	{		
-		logger.info(new Date() +"Inside CalculateConsultEligibleAmtIPD");
+		logger.info(new Date() +"Inside SERVICE CalculateConsultEligibleAmtIPD ");
 		CHSSBill bill = dao.getCHSSBill(billid);
 		
 		Double applyamount= consult.getConsultCharge()-(consult.getConsultCharge()*(bill.getDiscountPercent()/100));
@@ -3168,7 +3168,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public double getNonPkgItemRemAmount(String empid,CHSSBillOther other) throws Exception
 	{
-		logger.info(new Date() +"Inside getNonPkgItemRemAmount");
+		logger.info(new Date() +"Inside SERVICE getNonPkgItemRemAmount ");
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(other.getBillId()));
 		
 		Object[] emp =dao.getEmployee(empid);
@@ -3224,7 +3224,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public double getPackageEligibleAmount(CHSSBillPkg pkg) throws Exception 
 	{
-		logger.info(new Date() +"Inside getPackageEligibleAmount");
+		logger.info(new Date() +"Inside SERVICE getPackageEligibleAmount ");
 		CHSSBill bill = dao.getCHSSBill(String.valueOf(pkg.getBillId()));
 		double applyamount = pkg.getPackageCost()-(pkg.getPackageCost() * (bill.getDiscountPercent()/100));
 		int testsubamount = dao.getCHSSTestSub(String.valueOf(pkg.getTestSubId())).getTestRate();
@@ -3242,7 +3242,7 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	public void UpdateIPDClaimItemsRemAmount(String chssapplyid) throws Exception
 	{
-		logger.info(new Date() +"Inside UpdateIPDClaimItemsRemAmount");
+		logger.info(new Date() +"Inside SERVICE UpdateIPDClaimItemsRemAmount ");
 		CHSSApply chssapply =dao.getCHSSApply(chssapplyid);
 		
 		long empid =  chssapply.getEmpId();
@@ -3348,7 +3348,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDConsultRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE IPDConsultRemAmountEdit SERVICE");
 		CHSSBillConsultation fetch = dao.getCHSSConsultation(String.valueOf(modal.getConsultationId()));
 		fetch.setConsultRemAmount(modal.getConsultRemAmount());
 		fetch.setComments(modal.getComments());
@@ -3374,7 +3374,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDTestRemAmountEdit(CHSSBillTests modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDTestRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE IPDTestRemAmountEdit ");
 		CHSSBillTests fetch = dao.getCHSSTest(String.valueOf(modal.getCHSSTestId()));
 		fetch.setTestRemAmount(modal.getTestRemAmount());
 		fetch.setComments(modal.getComments());
@@ -3396,7 +3396,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDEquipmentRemEdit(CHSSBillEquipment modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDEquipmentRemEdit");
+		logger.info(new Date() +"Inside SERVICE IPDEquipmentRemEdit ");
 		CHSSBillEquipment fetch = dao.getCHSSEquipment(String.valueOf(modal.getCHSSEquipmentId()));
 		fetch.setEquipmentRemAmt(RoundTo2Decimal(modal.getEquipmentRemAmt()));
 		fetch.setComments(modal.getComments());
@@ -3418,7 +3418,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDImplantRemEdit(CHSSBillImplants modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDImplantRemEdit");
+		logger.info(new Date() +"Inside SERVICE IPDImplantRemEdit ");
 		CHSSBillImplants fetch = dao.getCHSSImplant(String.valueOf(modal.getCHSSImplantId()));
 		fetch.setImplantRemAmt(RoundTo2Decimal(modal.getImplantRemAmt()));
 		fetch.setComments(modal.getComments());
@@ -3440,7 +3440,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDOtherRemAmountEdit(CHSSBillOther modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDOtherRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE IPDOtherRemAmountEdit ");
 		CHSSBillOther fetch = dao.getCHSSOther(String.valueOf(modal.getCHSSOtherId()));
 		fetch.setOtherRemAmount(RoundTo2Decimal(modal.getOtherRemAmount()));
 		fetch.setComments(modal.getComments());
@@ -3463,7 +3463,7 @@ public class CHSSServiceImpl implements CHSSService {
 	@Override
 	public long IPDPkgRemAmountEdit(CHSSBillPkg modal) throws Exception
 	{
-		logger.info(new Date() +"Inside IPDPkgRemAmountEdit");
+		logger.info(new Date() +"Inside SERVICE IPDPkgRemAmountEdit ");
 		CHSSBillPkg fetch = dao.getCHSSBillPkg(String.valueOf(modal.getCHSSBillPkgId() ));
 		fetch.setPkgRemAmt(RoundTo2Decimal(modal.getPkgRemAmt()));
 		fetch.setComments(modal.getComments());

@@ -32,7 +32,7 @@ public class DoPartDaoImpl implements DoPartDao {
 			Query query = manager.createNativeQuery("call dop_edit();");		
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside DAO GetDOList()"+e);
+			logger.error(new Date() +"Inside DAO GetDOList() "+e);
 			e.printStackTrace();
 		}
 		return list;
@@ -50,7 +50,7 @@ public class DoPartDaoImpl implements DoPartDao {
 			query.setParameter("DoPartYear", year);
 			list = (List<Object[]>)query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() +"Inside DAO GetApplyDataOfSancApplyStatus()"+e);
+			logger.error(new Date() +"Inside DAO GetApplyDataOfSancApplyStatus() "+e);
 			e.printStackTrace();
 		}
 		return list;

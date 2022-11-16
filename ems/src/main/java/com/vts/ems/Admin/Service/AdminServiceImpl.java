@@ -66,7 +66,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Long FormRoleActive(String formroleaccessid) throws Exception 
 	{
-		logger.info(new Date() +"Inside FormRoleActive");
+		logger.info(new Date() +"Inside SERVICE FormRoleActive ");
 
 		List<BigInteger> FormRoleActiveList=dao.FormRoleActiveList(formroleaccessid);
 		
@@ -122,7 +122,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public long EmpRequestNotification(EMSNotification notification)throws Exception
 	{
-		logger.info(new Date() +"Inside EmpRequestNotification");
+		logger.info(new Date() +"Inside SERVICE EmpRequestNotification ");
 		List<Object[]> adminlist =dao.CHSSApprovalAuth2("P");
 	
 		if(adminlist.size()>0) {
@@ -158,7 +158,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Object[]> GethandlingOverList(String fromdate , String todate)throws Exception
 	{	
-		logger.info(new Date() +"Inside GethandlingOverList");
+		logger.info(new Date() +"Inside SERVICE GethandlingOverList ");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -204,7 +204,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception
 	{
-		logger.info(new Date() +"Inside GetReqResMessagelist");
+		logger.info(new Date() +"Inside SERVICE GetReqResMessagelist ");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
 		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
 		LocalDate ToDate= LocalDate.parse(todate, formatter);
@@ -232,7 +232,7 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception{
-		logger.info(new Date() +"Inside updateformroleaccess");
+		logger.info(new Date() +"Inside SERVICE updateformroleaccess ");
 			if(isactive!=null && isactive.equals("0")){
 				isactive="1";
 			}else {

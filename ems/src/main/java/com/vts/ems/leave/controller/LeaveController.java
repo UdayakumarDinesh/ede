@@ -73,7 +73,7 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveCredit.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveCredit(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside LeaveCredit.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveCredit.htm "+UserId);		
 		try {
 			String month=req.getParameter("month");
 			String yr=req.getParameter("Year");
@@ -89,7 +89,7 @@ public class LeaveController {
 	
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveCredit.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveCredit.htm "+UserId, e);
 	       }
 	   return "leave/LeaveCreditList";
 
@@ -98,7 +98,7 @@ public class LeaveController {
 	@RequestMapping(value = "CreditPreview.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String CreditPreview(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CreditPreview.htm"+UserId);		
+		logger.info(new Date() +"Inside CreditPreview.htm "+UserId);		
 		try {
 			String month=req.getParameter("month");
 			String yr=req.getParameter("Year");
@@ -109,7 +109,7 @@ public class LeaveController {
 	
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside CreditPreview.htm"+UserId, e);
+			 logger.error(new Date() +" Inside CreditPreview.htm "+UserId, e);
 	       }
 	   return "leave/LeaveCreditPreview";
 
@@ -118,7 +118,7 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveCredited.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveCredited(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveCredited.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveCredited.htm "+UserId);		
 		try {
 			String month=req.getParameter("month");
 			String yr=req.getParameter("Year");
@@ -133,7 +133,7 @@ public class LeaveController {
 	
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveCredited.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveCredited.htm "+UserId, e);
 	       }
 	   return "redirect:/LeaveCredit.htm";
 
@@ -206,7 +206,7 @@ public class LeaveController {
 	@RequestMapping(value = "AddUpdateCredit.htm", method = {RequestMethod.POST})
 	public String AddUpdateCredit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside AddUpdateCredit.htm"+UserId);		
+		logger.info(new Date() +"Inside AddUpdateCredit.htm "+UserId);		
 		try {
 			String month=req.getParameter("mnth");
 			String year=req.getParameter("yr");
@@ -262,7 +262,7 @@ public class LeaveController {
 	
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside AddUpdateCredit.htm"+UserId, e);
+			 logger.error(new Date() +" Inside AddUpdateCredit.htm "+UserId, e);
 	       }
 	   return "redirect:/LeaveCredit.htm";
 
@@ -384,7 +384,7 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveRegister.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveRegister(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveRegister.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveRegister.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveRegister_htm");
 			String empNo=req.getParameter("empNo");
@@ -404,7 +404,7 @@ public class LeaveController {
 		    
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveRegister.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveRegister.htm "+UserId, e);
 	       }
 	   return "leave/LeaveRegister";
 
@@ -413,14 +413,14 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveApproval.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveApproval(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveApproval.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveApproval.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveApproval_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApproval.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveApproval.htm "+UserId, e);
 	       }
 	   return "leave/LeaveApprovalGh";
 
@@ -437,7 +437,7 @@ public class LeaveController {
 		req.setAttribute("Lab", service.getLabCode());
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside leavePrint.htm"+UserId, e);
+			 logger.error(new Date() +" Inside leavePrint.htm "+UserId, e);
 	       }
 	return "leave/LeavePrint";	
 	}
@@ -445,7 +445,7 @@ public class LeaveController {
 	@RequestMapping(value = "/leaveApprovals.htm")
 	public String leaveApprovals(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside leaveApprovals.htm"+UserId);
+		logger.info(new Date() +"Inside leaveApprovals.htm "+UserId);
 		 ApprovalDto dto=new ApprovalDto();
 		 String returnType=null;
 		try {
@@ -462,7 +462,7 @@ public class LeaveController {
 		}
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside leaveApprovals.htm"+UserId, e);
+			 logger.error(new Date() +" Inside leaveApprovals.htm "+UserId, e);
 	       }
 		if(dto.getType().equals("GH")) {
 			returnType="redirect:/LeaveApproval.htm";
@@ -477,7 +477,7 @@ public class LeaveController {
 	@RequestMapping(value = "/delete-leave.htm", method = RequestMethod.POST)
 	public String leaveDelete(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside delete-leave.htm"+UserId);
+		logger.info(new Date() +"Inside delete-leave.htm "+UserId);
 		try {
 		ApprovalDto dto=new ApprovalDto();
         dto.setApplId(req.getParameter("appl_id"));
@@ -501,7 +501,7 @@ public class LeaveController {
 	@RequestMapping(value = "/edit-leave.htm", method = RequestMethod.POST)
 	public String leaveEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside edit-leave.htm"+UserId);
+		logger.info(new Date() +"Inside edit-leave.htm "+UserId);
 		try {
 			String EmpNo=req.getParameter("EmpNo");
 			String applid = req.getParameter("appl_id");
@@ -565,7 +565,7 @@ public class LeaveController {
 
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside edit-leave.htm"+UserId, e);
+			 logger.error(new Date() +" Inside edit-leave.htm "+UserId, e);
 	       }
 		return "leave/LeaveEdit";
 	}
@@ -574,7 +574,7 @@ public class LeaveController {
 	@RequestMapping(value = "/edited-leave.htm", method = RequestMethod.POST)
 	public String leaveEdited(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside edited-leave.htm"+UserId);
+		logger.info(new Date() +"Inside edited-leave.htm "+UserId);
 		try {
 	    LeaveApplyDto dto=new LeaveApplyDto();
 	    dto.setType(req.getParameter("type"));
@@ -607,7 +607,7 @@ public class LeaveController {
 		}
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside edited-leave.htm"+UserId, e);
+			 logger.error(new Date() +" Inside edited-leave.htm "+UserId, e);
 	       }
 		return "redirect:/applyLeaveRedirect.htm";
 	}
@@ -615,14 +615,14 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveStatusList.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveStatusList(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveStatusList.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveStatusList.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveStatusList_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("StatusList", service.LeaveStatusList(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveStatusList.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveStatusList.htm "+UserId, e);
 	       }
 	   return "leave/LeaveStatusList";
 
@@ -631,14 +631,14 @@ public class LeaveController {
 	@RequestMapping(value = "/leavestatus.htm")
 	public String leaveStatus(HttpServletRequest req) {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside leavestatus.htm"+UserId);
+		logger.info(new Date() +"Inside leavestatus.htm "+UserId);
 		String LeaveApplId = req.getParameter("applId");
 		try {
 		req.setAttribute("print", service.LeavePrint(LeaveApplId));
 		req.setAttribute("trans", service.LeaveTransaction(LeaveApplId));
 		}
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside leavestatus.htm"+UserId, e);
+			 logger.error(new Date() +" Inside leavestatus.htm "+UserId, e);
 	       }
 	return "leave/LeaveStatus";	
 	}
@@ -646,14 +646,14 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveApprovalAdm.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveApprovalAdm(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveApprovalAdm.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveApprovalAdm.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveApprovalAdm_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApprovalAdm.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveApprovalAdm.htm "+UserId, e);
 	       }
 	   return "leave/LeaveApprovalAdm";
 
@@ -662,7 +662,7 @@ public class LeaveController {
 	@RequestMapping(value = "LeaveApprovalDir.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String LeaveApprovalDir(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveApprovalDir.htm"+UserId);		
+		logger.info(new Date() +"Inside LeaveApprovalDir.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveApprovalDir_htm");
 			String empNo=empNo=(String)ses.getAttribute("EmpNo");
@@ -671,7 +671,7 @@ public class LeaveController {
 		    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApprovalDir.htm"+UserId, e);
+			 logger.error(new Date() +" Inside LeaveApprovalDir.htm "+UserId, e);
 	       }
 	   return "leave/LeaveApprovalDir";
 
@@ -680,14 +680,14 @@ public class LeaveController {
 	@RequestMapping(value = "AssignReccSanc.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String AssignReccSanc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside AssignReccSanc.htm"+UserId);		
+		logger.info(new Date() +"Inside AssignReccSanc.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "AssignReccSanc_htm");
 			req.setAttribute("AllRaSaAssignEmployee", service.AssignReccSanc());
 
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside AssignReccSanc.htm"+UserId, e);
+			 logger.error(new Date() +" Inside AssignReccSanc.htm "+UserId, e);
 	       }
 	   return "leave/AssignReccSanc";
 
@@ -697,7 +697,7 @@ public class LeaveController {
 	
 	public String assignReccSancAddEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside assign-recc-sanc.htm"+UserId);
+		logger.info(new Date() +"Inside assign-recc-sanc.htm "+UserId);
 		String EmpNo = (String) ses.getAttribute("EmpNo");
 		String returnPage="leave/AssignReccSancAddEdit";
 		String empid = req.getParameter("selecRadioForEmpid");
@@ -745,7 +745,7 @@ public class LeaveController {
 	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.GET})
 	public String UploadMcFc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside UploadMcFc.htm"+UserId);		
+		logger.info(new Date() +"Inside UploadMcFc.htm "+UserId);		
 		try {
 
 			String yr=req.getParameter("yr");
@@ -758,7 +758,7 @@ public class LeaveController {
 
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside UploadMcFc.htm"+UserId, e);
+			 logger.error(new Date() +" Inside UploadMcFc.htm "+UserId, e);
 	       }
 	   return "leave/UploadMcFc";
 
@@ -767,7 +767,7 @@ public class LeaveController {
 	@RequestMapping(value = "UploadMcFc.htm", method = {RequestMethod.POST})
 	public String UploadMcFcSubmit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestParam(name = "document" ,required = false) MultipartFile document) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside UploadMcFc.htm"+UserId);		
+		logger.info(new Date() +"Inside UploadMcFc.htm "+UserId);		
         long count =0;	
 		try {
 						
@@ -782,7 +782,7 @@ public class LeaveController {
 			count=service.McFcAttachmentFile(dto);
 
 		}catch(Exception e) {
-			logger.error(new Date() +" Inside UploadMcFc.htm"+UserId, e);
+			logger.error(new Date() +" Inside UploadMcFc.htm "+UserId, e);
 			e.printStackTrace();
 		}
 		

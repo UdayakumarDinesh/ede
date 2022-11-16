@@ -142,6 +142,7 @@ public class AdminDaoImpl implements AdminDao{
 			 }
 				return null;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO getChssAprovalList "+ e);
 				e.printStackTrace();
 				return null;
 			}	
@@ -164,6 +165,7 @@ public class AdminDaoImpl implements AdminDao{
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO UpdateApprovalAuth "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -177,6 +179,7 @@ public class AdminDaoImpl implements AdminDao{
 			manager.flush();
 			return approva.getApproveAuthListId();
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO AddApprovalAuthority "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
@@ -192,6 +195,7 @@ public class AdminDaoImpl implements AdminDao{
 			List<Object[]> MsgList= query.getResultList();
 			return MsgList;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO GetRequestMessageList "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -211,6 +215,7 @@ public class AdminDaoImpl implements AdminDao{
 			int count = (int) query.executeUpdate();
 			return count;
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO DeleteRequestMsg "+ e);
 			e.printStackTrace();
 			return 0;
 		}
@@ -224,6 +229,7 @@ public class AdminDaoImpl implements AdminDao{
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO AddRequestMsg "+ e);
 			e.printStackTrace();
 		}
 		return reqmsg.getEmpRequestId();
@@ -237,6 +243,7 @@ public class AdminDaoImpl implements AdminDao{
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO AddRequestMsgNotification "+ e);
 			e.printStackTrace();
 		}
 		return notification.getNotificationId();
@@ -255,6 +262,7 @@ public class AdminDaoImpl implements AdminDao{
 			return list;
 			
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside DAO CHSSApprovalAuth2 "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -274,6 +282,7 @@ public class AdminDaoImpl implements AdminDao{
 			return list;
 			
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside DAO GethandlingOverList "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -298,6 +307,7 @@ public class AdminDaoImpl implements AdminDao{
 				return null;
 			
 		}catch (Exception e) {
+			logger.error(new Date() +"Inside DAO checkAlreadyPresentForSameEmpidAndSameDates "+ e);
 			e.printStackTrace();
 			return null;
 		}
@@ -312,6 +322,7 @@ public class AdminDaoImpl implements AdminDao{
 			manager.flush();
 
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO AddHandingOver "+ e);
 			e.printStackTrace();
 		}
 		return handinfover.getHandingoverId();
@@ -337,6 +348,7 @@ public class AdminDaoImpl implements AdminDao{
 			return count;
 			
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO updateRevokeInHandingOver "+ e);
 			e.printStackTrace();
 			return count;
 		}
@@ -359,6 +371,7 @@ public class AdminDaoImpl implements AdminDao{
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO GetReqListFromUser "+ e);
 				e.printStackTrace();
 				return null;
 			}
@@ -380,6 +393,7 @@ public class AdminDaoImpl implements AdminDao{
 			count = query.executeUpdate();
 			return count;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO UpdateAdminResponse "+ e);
 				e.printStackTrace();
 				return count;
 			}
@@ -398,6 +412,7 @@ public class AdminDaoImpl implements AdminDao{
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO GetReqResMessagelist "+ e);
 				e.printStackTrace();
 				return null;
 		   }
@@ -413,6 +428,7 @@ public class AdminDaoImpl implements AdminDao{
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
 			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO AllNotificationLists "+ e);
 				e.printStackTrace();
 				return null;
 		   }
@@ -468,6 +484,7 @@ public class AdminDaoImpl implements AdminDao{
 			manager.flush();
 			return (long)main.getFormRoleAccessId();
 		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO insertformroleaccess "+ e);
 			e.printStackTrace();
 			return 0l;
 		}
