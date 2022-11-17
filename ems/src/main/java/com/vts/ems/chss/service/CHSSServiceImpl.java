@@ -3520,6 +3520,7 @@ public class CHSSServiceImpl implements CHSSService {
 		{
 			CHSSApply apply=dao.getCHSSApply(applyid);
 			apply.setContingentId(0L);
+			apply.setCHSSStatusId(6);
 			apply.setModifiedBy(Username);
 			apply.setModifiedDate(sdtf.format(new Date()));
 			
