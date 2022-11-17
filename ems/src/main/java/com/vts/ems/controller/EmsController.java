@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -39,7 +38,6 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
 import com.vts.ems.master.model.LabMaster;
-import com.vts.ems.master.service.MasterService;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
@@ -56,9 +54,7 @@ public class EmsController {
 	@Autowired
 	EMSMainService service;
 
-	@Autowired
-	MasterService masterservice;
-	  
+
 	@Value("${ProjectFiles}")
 	private String projectfilespath;
 	

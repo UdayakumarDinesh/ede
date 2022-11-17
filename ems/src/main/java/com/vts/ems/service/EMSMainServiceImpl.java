@@ -224,31 +224,6 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
-	public List<Object[]> CirculatList() throws Exception
-	{
-
-		return dao.CirculatList();
-	}
-	
-	@Override
-	public List<Object[]> GetDoctorList()throws Exception
-	{
-		return dao.GetDoctorList();
-	}
-	
-	@Override
-	public List<Object[]> GetEmpanelledHostpitalList()throws Exception
-	{
-		return dao.GetEmpanelledHostpitalList();
-	}
-	
-	@Override
-	public List<Object[]> GetCircularList()throws Exception
-	{
-		return dao.GetCircularList();
-	}
-	
-	@Override
 	public LabMaster getLabDetails()throws Exception
 	{
 		return dao.getLabDetails();

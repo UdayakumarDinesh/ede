@@ -517,4 +517,18 @@ public class MasterServiceImpl implements MasterService {
 				}	
 			return dao.AddMasterEditComments(masteredit);
 		}
+		
+		
+		public List<Object[]> GetDoctorEmpanelledList() throws Exception
+		{
+			return dao.GetDoctorEmpanelledList();
+		}
+		public List<Object[]> GetEmpanelledHostpitalList() throws Exception
+		{
+			return dao.GetEmpanelledHostpitalList();
+		}
+		public List<Object[]> CirculatList() throws Exception
+		{
+			return dao.CirculatList();
+		}
 }

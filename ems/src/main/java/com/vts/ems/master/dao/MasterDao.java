@@ -74,6 +74,9 @@ public interface MasterDao {
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
 	public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception;
 	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception;
+	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
+	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> CirculatList() throws Exception;
 	
 	
 	

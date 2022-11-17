@@ -1,16 +1,12 @@
 package com.vts.ems.login;
 
-import java.io.File;
-import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,12 +97,6 @@ public class LoginController
     @RequestMapping(value = {"/sessionExpired","/invalidSession"}, method = RequestMethod.GET)
     public String sessionExpired(Model model,HttpServletRequest req,HttpSession ses) {
     	logger.info(new Date() +"Inside sessionExpired ");
-    	try {
-      	}
-      	catch (Exception e) {
-				e.printStackTrace();
-			}
-    	
         return "SessionExp";
     }
     

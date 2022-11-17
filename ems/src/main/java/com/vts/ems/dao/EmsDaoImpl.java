@@ -327,37 +327,6 @@ public class EmsDaoImpl implements EmsDao
 	}
 	
 
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,referenceno , OriginalName  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
-	@Override
-	 public List<Object[]> CirculatList() throws Exception
-	 {
-		 try {
-				Query query =  manager.createNativeQuery(CIRCULARLIST);
-				
-				return (List<Object[]>)query.getResultList();
-		} catch (Exception e) {
-			logger.error(new Date() +" Inside DAO CirculatList "+ e);
-			e.printStackTrace();
-			return null;
-		}
-	
-	 }
-
-		private static final String DOCTORSLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
-		@Override
-		public List<Object[]> GetDoctorList()throws Exception
-		{
-			 try {
-					Query query =  manager.createNativeQuery(DOCTORSLIST);
-					
-					return (List<Object[]>)query.getResultList();
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO GetDoctorList "+ e);
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
 		@Override
 		public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception
 		{
@@ -372,35 +341,7 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return model.getPasswordHistoryId(); 
 		}
-		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName, hospitaladdress FROM chss_empanelledhospital WHERE isactive='1' order by EmpanelledHospitalId desc";
-		@Override
-		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
-		{
-			 try {
-					Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
-					
-					return (List<Object[]>)query.getResultList();
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
-				e.printStackTrace();
-				return null;
-			}
-		}
-		private static final String GETCIRCULAR="SELECT circularid , description , path , CircularDate  ,OriginalName,todate,referenceno FROM chss_circular_list ORDER BY CircularDate DESC";
-		@Override
-		public List<Object[]> GetCircularList()throws Exception
-		{
-			 try {
-					Query query =  manager.createNativeQuery(GETCIRCULAR);
-					
-					return (List<Object[]>)query.getResultList();
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO GetCircularList "+ e);
-				e.printStackTrace();
-				return null;
-			}
-		}
-	
+
 		@Override
 		public LabMaster getLabDetails()throws Exception
 		{

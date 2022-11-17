@@ -74,7 +74,9 @@ public interface MasterService {
 	public Long AddMasterEditComments(MasterEdit masteredit ,MasterEditDto masterdto)throws Exception;
 	public Long EditDelete(CHSSMedicinesList medicine) throws Exception;
 
-
+	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
+	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> CirculatList() throws Exception;
 
 
 

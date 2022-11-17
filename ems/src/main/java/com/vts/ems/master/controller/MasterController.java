@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
@@ -45,9 +44,7 @@ import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
-import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.DateTimeFormatUtil;
-import com.vts.ems.utils.EmsFileUtils;
 @Controller
 public class MasterController {
 	private static final Logger logger = LogManager.getLogger(MasterController.class);
@@ -59,9 +56,7 @@ public class MasterController {
 	@Autowired
 	MasterService service;
 	                      
-	@Autowired
-	EMSMainService emsservice;
-	
+
 	@Autowired
 	private PisService pisservice;
 		
@@ -1146,7 +1141,7 @@ public class MasterController {
 						req.setAttribute("doctor", list);
 						return "masters/DoctorAddEdit";
 					}else {
-						doctorlist=emsservice.GetDoctorList();
+						doctorlist=service.GetDoctorEmpanelledList();
 						req.setAttribute("doctorlist", doctorlist);
 						return "masters/DoctorList";
 					}		   		 
@@ -1454,7 +1449,7 @@ public class MasterController {
 						return "masters/EmpanelledHospitalAddEdit";
 					
 					}else{
-						empanelledhospital=emsservice.GetEmpanelledHostpitalList();
+						empanelledhospital=service.GetEmpanelledHostpitalList();
 						req.setAttribute("empanelledhospital", empanelledhospital);
 						return "masters/EmpanelledHospitalList";
 					}	
@@ -1549,7 +1544,7 @@ public class MasterController {
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside Circular.htm "+UserId);
 				try {
-					List<Object[]> 	 circulatlist = emsservice.CirculatList();
+					List<Object[]> 	 circulatlist = service.CirculatList();
 		   			req.setAttribute("circularlist", circulatlist);
 					
 					return "masters/Circular";

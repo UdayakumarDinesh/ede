@@ -23,11 +23,7 @@ public interface EMSMainService {
 	public String reSendResetOTP(String loginid) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid,String loginid) throws Exception;
-	public List<Object[]> CirculatList() throws Exception;
-	public List<Object[]> GetDoctorList()throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
-	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
-	public List<Object[]> GetCircularList()throws Exception;
 	public LabMaster getLabDetails() throws Exception;
 	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
 }

@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
@@ -851,13 +850,13 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 	}
 	
 	
-	private static final String CIRCULARLIST = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate ,referenceno FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY CircularDate DESC";
+	private static final String GETCIRCULARLISTFROMTODATE = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate ,referenceno FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY CircularDate DESC";
 	
 	@Override
 	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception
 	 {
 		 try {
-				Query query =  manager.createNativeQuery(CIRCULARLIST);
+				Query query =  manager.createNativeQuery(GETCIRCULARLISTFROMTODATE);
 				 query.setParameter("fromdate", fromdate);
 				 query.setParameter("todate", todate);
 				return (List<Object[]>)query.getResultList();
@@ -928,4 +927,51 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return 0l;
 			}
 		}
+		
+		
+		private static final String GETDOCTOREMPANELLEDLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
+		@Override
+		public List<Object[]> GetDoctorEmpanelledList()throws Exception
+		{
+			try {
+					Query query =  manager.createNativeQuery(GETDOCTOREMPANELLEDLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetDoctorEmpanelledList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		private static final String EMPANELLEDHOSPITALLIST="SELECT  EmpanelledHospitalId ,HospitalName, hospitaladdress FROM chss_empanelledhospital WHERE isactive='1' order by EmpanelledHospitalId desc";
+		@Override
+		public List<Object[]> GetEmpanelledHostpitalList()throws Exception
+		{
+			 try {
+					Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,referenceno , OriginalName  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
+		@Override
+		 public List<Object[]> CirculatList() throws Exception
+		 {
+			 try {
+					Query query =  manager.createNativeQuery(CIRCULARLIST);
+					
+					return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO CirculatList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		
+		 }
 }

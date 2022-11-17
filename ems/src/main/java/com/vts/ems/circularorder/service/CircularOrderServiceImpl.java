@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,11 +40,14 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.vts.ems.circularorder.dao.CircularDao;
+import com.vts.ems.circularorder.dao.CircularOrderDao;
 import com.vts.ems.circularorder.dto.DepCircularDto;
+import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
+import com.vts.ems.circularorder.model.EMSOfficeOrder;
+import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.CustomEncryptDecrypt;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -52,12 +56,12 @@ import com.vts.ems.utils.Zipper;
 
 
 @Service
-public class CircularServiceImpl implements CircularService 
+public class CircularOrderServiceImpl implements CircularOrderService 
 {
-	private static final Logger logger=LogManager.getLogger(CircularServiceImpl.class);
+	private static final Logger logger=LogManager.getLogger(CircularOrderServiceImpl.class);
 	
 	@Autowired
-	CircularDao dao;
+	CircularOrderDao dao;
 	
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
@@ -204,16 +208,7 @@ public class CircularServiceImpl implements CircularService
 
 	    
 		String filename=dto.getCirFile().getOriginalFilename();
-//		int count=0;
-//		String tempName = filename;
-//		while(new File(FullDir+tempName).exists())
-//		{
-//			count++;
-//			tempName = FilenameUtils.getName(filename)+"("+count+")."+FilenameUtils.getExtension(filename);
-//		}
-		
-		
-//		CustomEncryptDecrypt
+
 		String key  = UUID.randomUUID().toString();
 		cir.setDepCircularKey(CustomEncryptDecrypt.encryption(key.toCharArray()));
 		cir.setIsActive(1);
@@ -309,6 +304,187 @@ public class CircularServiceImpl implements CircularService
 	public List<Object[]> GetEmsDepType() throws Exception
 	{
 		return dao.GetEmsDepType();
+	}
+	
+	
+	@Override
+	public long OfficeOrderAdd(OfficeOrderUploadDto uploadorderdto) throws Exception 
+	{
+		logger.info(new Date() +"Inside SERVICE OfficeOrderAdd ");
+		
+		long maxOrderId=0;
+		String OrderFileName=null;	
+		String year=null;
+		long count=0;	
+		try {	
+			
+			String OrderDate = uploadorderdto.getOrderDate();
+			maxOrderId = dao.GetOrderMaxId()+1;
+			String[] OrderSplit = OrderDate.split("-");
+			OrderFileName ="C"+maxOrderId+OrderSplit[0]+OrderSplit[1]+OrderSplit[2];
+	
+			
+			year = OrderSplit[2];
+			String orderPath = "EMS\\orders\\"+year+"\\";
+			
+			String FullDir = FilePath+orderPath;
+			File theDir = new File(FullDir);
+			if (!theDir.exists()){
+				theDir.mkdirs();
+			}
+		     
+			
+			EMSOfficeOrder order = new EMSOfficeOrder();
+			//query to add details to to ems_circular table
+			order.setOrderNo(uploadorderdto.getOrderNo());
+			order.setOrderDate(DateTimeFormatUtil.dateConversionSql(OrderDate).toString());
+			order.setOrderSubject(uploadorderdto.getOrderSubject());
+			order.setOrderFileName(uploadorderdto.getOrderFileName());
+			order.setOrderPath(orderPath+OrderFileName+".zip");
+			order.setOrderKey(CustomEncryptDecrypt.encryption(uploadorderdto.getAutoId().toCharArray()));
+			order.setCreatedBy(uploadorderdto.getCreatedBy());
+			order.setCreatedDate(uploadorderdto.getCreatedDate());
+			order.setIsActive(1);
+			
+			
+			Zipper zip=new Zipper();
+			zip.pack(uploadorderdto.getOrderFileName(),uploadorderdto.getIS(),FullDir,OrderFileName,uploadorderdto.getAutoId());
+				
+		    count =  dao.AddOfficeOrder(order);
+		
+		}catch (Exception e) {
+			logger.error(new Date() +"Inside SERVICE OfficeOrderAdd ");
+			 e.printStackTrace();
+		   count=0;
+		}
+	
+		
+		   return count;
+		
+			
+	}
+	
+	@Override
+	public long GetMaxOrderId() throws Exception
+	{
+		return dao.GetOrderMaxId();
+	}
+	
+	@Override
+	public long OrderUpdate(OfficeOrderUploadDto uploadorderdto) throws Exception 
+	{
+		logger.info(new Date() +"Inside SERVICE OrderUpdate ");
+
+		String year=null;
+		long count=0;	
+		try {	
+			
+			long OrderId = uploadorderdto.getOrderId();
+			EMSOfficeOrder Order = dao.GetOrderDetailsToEdit(OrderId);
+			String cirDate = uploadorderdto.getOrderDate();
+	        String[] cirSplit = cirDate.split("-");
+	        year = cirSplit[2];
+	        
+	        System.out.println("pathcir"+uploadorderdto.getOrderPath());
+	        if(!uploadorderdto.getOrderPath().isEmpty()) {
+	        	
+	        	new File(FilePath+Order.getOrderPath()).delete();
+	        	String OrigFilelName = uploadorderdto.getOrderPath().getOriginalFilename();
+	        	String CirFileName = "C"+OrderId+cirSplit[0]+cirSplit[1]+cirSplit[2];
+	        	String CircularPath = "EMS\\Circulars\\"+year+"\\";
+	        	String FullDir = FilePath+CircularPath;
+	        	
+	        	File theDir = new File(FullDir);
+				if (!theDir.exists()){
+					theDir.mkdirs();
+				}
+	        	
+	        	Zipper zip=new Zipper();
+				zip.pack(uploadorderdto.getOrderFileName(),uploadorderdto.getIS(),FullDir,CirFileName,uploadorderdto.getAutoId());
+	        	
+				Order.setOrderFileName(OrigFilelName);
+				Order.setOrderPath(CircularPath+CirFileName+".zip");
+
+	        
+	        }
+		
+			//query to update details to to ems_circular table
+	        Order.setOrderId(uploadorderdto.getOrderId());
+	        Order.setOrderNo(uploadorderdto.getOrderNo());
+	        Order.setOrderDate(DateTimeFormatUtil.dateConversionSql(cirDate).toString());
+	        Order.setOrderSubject(uploadorderdto.getOrderSubject());
+	        Order.setOrderKey(CustomEncryptDecrypt.encryption(uploadorderdto.getAutoId().toCharArray()));
+	        Order.setModifiedBy(uploadorderdto.getModifiedBy());
+	        Order.setModifiedDate(uploadorderdto.getModifiedDate());
+	        Order.setIsActive(1);
+			
+			
+				
+			count = dao.EditOrder(Order); 
+		
+		}catch (Exception e) {
+			logger.error(new Date() +"Inside SERVICE OrderUpdate ");
+			 e.printStackTrace();
+		   count=0;
+		}
+	
+		
+		   return count;
+		
+			
+	}
+	
+
+	
+	@Override
+	public List<Object[]> selectAllList() throws Exception 
+	{
+		return dao.selectAllList();
+	}
+
+	@Override
+	public List<Object[]> GetOfficeOrderList(String fromdate, String todate) throws Exception {
+		logger.info(new Date() +"Inside SERVICE GetOfficeOrderList ");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
+		LocalDate Todate= LocalDate.parse(todate, formatter);
+		return dao.GetOfficeOrderList(Fromdate , Todate);
+	}
+	
+	@Override
+	public int OfficeOrderDelete(Long OrdersId, String Username)throws Exception{
+		return dao.OfficeOrderDelete(OrdersId,Username);
+	}
+	
+	
+	@Override
+	   public EMSOfficeOrder GetOrderDetailsToEdit(Long OrdersId)throws Exception
+	   {
+		   return dao.GetOrderDetailsToEdit(OrdersId);
+	   }
+	
+	
+
+
+	@Override
+	public List<Object[]> GetSearchList(String search) throws Exception {
+		
+		return dao.GetSearchList(search);
+	}
+
+
+
+	@Override
+	public EMSOfficeOrder getOrderData(String OrderId) throws Exception
+	{
+		return dao.getOrderData(OrderId);
+	}
+	
+
+	@Override
+	public long OfficeOrderTransactionAdd(EMSOfficeOrderTrans  OrderTrans) throws Exception 
+	{
+		return dao.OfficeOrderTransactionAdd(OrderTrans);
 	}
 
 }

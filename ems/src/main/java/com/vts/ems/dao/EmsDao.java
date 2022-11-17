@@ -24,12 +24,8 @@ public interface EmsDao
 	public int userResetPassword(String loginid, String password) throws Exception;
 	public Object[] LoginEmpInfo(String loginid) throws Exception;
 	public List<Object[]> EmpHandOverLoginTypeList(String empid) throws Exception;
-	public List<Object[]> CirculatList() throws Exception;
-	public List<Object[]> GetDoctorList()throws Exception;
 	public long PasswordChangeHystoryCount(String loginid) throws Exception;
 	public long loginHisAddSubmit(LoginPasswordHistory model) throws Exception;
-	public List<Object[]> GetEmpanelledHostpitalList()throws Exception;
-	public List<Object[]> GetCircularList()throws Exception;
 	public List<Object[]> AllowedLoginTypesList(String loginid) throws Exception;
 	public List<Object[]> LoginLoginType(String loginid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
