@@ -3,30 +3,35 @@
 <%@page import="java.util.List"%>
 <%@ page import="java.util.*" %> 
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
+
+<% String LoginType = (String)request.getAttribute("LoginType"); %>
+ 
+
+<%if(LoginType!=null){ %>
 <jsp:include page="../static/header.jsp"></jsp:include>
-<style type="text/css">
-.row {
-   
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -32px;
-    margin-left: -15px;
-}
 
+<%}else{ %>
 
-</style>
+<jsp:include page="../static/dependancy.jsp"></jsp:include>
+<spring:url value="../../webresources/css/LoginPage.css" var="loginPageCss" />
+<link href="${loginPageCss}" rel="stylesheet" />
+
+<%} %>
+
 </head>
 <body>
 
 <%
-String LoginType = (String)request.getAttribute("LoginType"); 
+ 
 List<Object[]> DepTypeList=(List<Object[]>)request.getAttribute("DepTypeList");
 List<Object[]> FormsList=(List<Object[]>)request.getAttribute("FormsList");
 String DepTypeId = (String)request.getAttribute("DepTypeId"); 
@@ -44,7 +49,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 					</ol>
 				</div>
 	
-	</div>	
+		</div>	
 <%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");
 	if(ses1!=null)
@@ -95,7 +100,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
 				<thead>
 					<tr>
-						<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>
+						<%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>
 					  		<th style="width:4%">Select</th>
 					 	<%}else{ %>
 					 		<th style="width:4%">SN</th>
@@ -112,7 +117,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
                      %> 
                      <tr>
                       
-                      <%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>
+                      <%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>
 					  		<td style="text-align: center;"> <input type="radio" name="EMSFormId" value="<%=form[0] %>" required="required" > </td>
 					 	<%}else{ %>
 					 		<td style="text-align: center;"> <%=FormsList.indexOf(form)+1 %> </td>
@@ -125,7 +130,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 						 	<i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>
                          
-                       </tr>
+                    </tr>
                    <%} %>
                           
 			    </tbody>
@@ -136,7 +141,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
  
    			<div class="row text-center">
 			  <div class="col-md-12">	
-			  		<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>	
+			  		<%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>	
 			  					
 						<button type="submit" class="btn btn-sm add-btn" formaction="EMSFormAdd.htm" formnovalidate="formnovalidate"  >ADD</button>
 						<button type="submit" class="btn btn-sm delete-btn" formaction="Delete.htm"    >DELETE </button>

@@ -119,7 +119,7 @@ public class FormNoticeController {
 		}
 	}
 	
-	@RequestMapping(value = "EMSFormDownload.htm",method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "EMSFormDownload.htm")
     public void EMSFormDownload(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
 	{				
 		String UserId=(String)ses.getAttribute("Username");

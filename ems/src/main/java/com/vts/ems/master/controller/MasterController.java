@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,11 +32,9 @@ import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.master.dto.CircularListDto;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -1238,134 +1235,7 @@ public class MasterController {
 				}
 				
 			}
-			@RequestMapping(value="CircularLists.htm", method = { RequestMethod.POST ,RequestMethod.GET })
-			public String circularList(HttpSession ses, HttpServletRequest req )throws Exception
-			{
-				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside CircularLists.htm "+UserId);
-				List<Object[]> circulatlist = new ArrayList<Object[]>();
-				
-			   	 try {
-			   		 ses.setAttribute("SidebarActive", "CircularLists_htm");
-			   		 String action = (String)req.getParameter("action");
-			   		 if("ADD".equalsIgnoreCase(action)){
-			   			 
-			   			 return "masters/CircularAddEdit";
-			   			 
-			   		 }else if ("EDIT".equalsIgnoreCase(action)){
-			   			 
-			   			String circularid = (String)req.getParameter("circulatId");
-						CircularList circular = service.GetCircularToEdit(Long.parseLong(circularid));
-						req.setAttribute("circular", circular);
-			   			return "masters/CircularAddEdit";
-			   			
-			   		 }else{
-			   			 
-			   			 String fromdate = (String)req.getParameter("fromdate");
-			   			 String todate = (String)req.getParameter("todate");
-			   			 
-			   			 if(fromdate==null && todate == null) {
-			   				 fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormat();
-			   				 todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-			   			 }
-			   				
-			   			 circulatlist = service.GetCircularList(fromdate , todate );
-				   		 req.setAttribute("circulatlist", circulatlist);
-				   		 req.setAttribute("fromdate", fromdate);	
-						 req.setAttribute("todate",todate);
-				   		return "masters/CircularList";
-			   		 }
-			   		                                                      
-				} catch (Exception e) {
-					logger.error(new Date() +"Inside CircularLists.htm "+UserId ,e);
-					e.printStackTrace();
-					return "static/Error";
-				}
-				
-			}
-			
-			@RequestMapping(value ="CircularADD.htm" , method = RequestMethod.POST)
-			public String CirculatAdd(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
-			{
-				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside CircularADD.htm "+UserId);
-				try {
-					String action = (String)req.getParameter("action");
-					
-					if("CircularAdd".equalsIgnoreCase(action)) {
-						
-						String circulardate   =(String)req.getParameter("circulardate");
-						String description = (String)req.getParameter("description");
-						String todate = (String)req.getParameter("todate");
-						String referenceNo = (String)req.getParameter("referenceno");
-						CircularList circular = new CircularList();
-						                    
-						circular.setReferenceNo(referenceNo);
-						circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
-						circular.setDescription(description.trim());
-						circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
-						circular.setCreatedBy(UserId);
-						circular.setCreatedDate(sdtf.format(new Date()));
-						CircularListDto filecircular = new CircularListDto();
-					
-						filecircular.setPath(selectedFile);
-						
-						long result = service.CircularListAdd(circular , filecircular);
-						if (result != 0) {
-							 redir.addAttribute("result", "Circular Added Successfully");
-						} else {
-							 redir.addAttribute("resultfail", "Circular Added Unsuccessfull");
-						}
-					}
-					return "redirect:/CircularLists.htm";
-				}catch (Exception e){
-					logger.error(new Date() +"Inside CircularADD.htm "+UserId ,e);
-					e.printStackTrace();				
-					return "static/Error";
-				}
-				
-			}
-			
-			@RequestMapping(value ="CircularEDIT.htm" , method = RequestMethod.POST)
-			public String CirculatEdit(HttpServletRequest req,HttpSession ses, @RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir) throws Exception
-			{
-				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside CircularEDIT.htm "+UserId);
-				try {
-					
-					String circulardate   = (String)req.getParameter("circulardate");
-					String todate   = (String)req.getParameter("todate");
-					String description = (String)req.getParameter("description");
-					String circularid = (String)req.getParameter("circular");
-					String referenceNo = (String)req.getParameter("referenceno");
-					CircularList circular = new CircularList();
-				
-					circular.setReferenceNo(referenceNo);
-					circular.setCircularDate(DateTimeFormatUtil.dateConversionSql(circulardate).toString());
-					circular.setToDate(DateTimeFormatUtil.dateConversionSql(todate).toString());
-					circular.setDescription(description.trim());
-					circular.setCircularId(Long.parseLong(circularid));
-					circular.setModifiedBy(UserId);
-					circular.setModifiedDate(sdtf.format(new Date()));
-					CircularListDto filecircular = new CircularListDto();
-				
-					filecircular.setPath(selectedFile);
-					long result = service.CircularListEdit(circular , filecircular);
-											
-					if (result != 0) {
-						 redir.addAttribute("result", "Circular Updated Successfully");
-					} else {
-						 redir.addAttribute("resultfail", "Circular Updated Unsuccessfull");
-					}
-					return "redirect:/CircularLists.htm";
-				} catch (Exception e) {
-					logger.error(new Date() +"Inside CircularEDIT.htm "+UserId,e);
-					e.printStackTrace();
-					return "static/Error";
-				}			
-			}
-			
-			
+
 			@RequestMapping(value = "download-CircularFile-attachment",method = {RequestMethod.GET,RequestMethod.POST})
 		    public void downloadCircularAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
 			{				
@@ -1537,27 +1407,6 @@ public class MasterController {
 					 return "static/Error";
 				}
 			}
-			
-			@RequestMapping(value = "Circular.htm" , method = RequestMethod.GET)
-			public String Circular(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
-			{
-				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside Circular.htm "+UserId);
-				try {
-					List<Object[]> 	 circulatlist = service.CirculatList();
-		   			req.setAttribute("circularlist", circulatlist);
-					
-					return "masters/Circular";
-				} catch (Exception e) {
-					logger.error(new Date() +"Inside Circular.htm "+UserId,e);
-					e.printStackTrace();
-					 return "static/Error";
-				}
-			}
-			
-
-			
-			
 			
 			
 }

@@ -34,14 +34,6 @@
 </head>
 
 <body class="home" >
-<%
-/* List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circularlist");
-List<Object[]> circular =  (List<Object[]>)request.getAttribute("circular");
-List<Object[]> doctorlist = (List<Object[]> )request.getAttribute("doctorlist") ;
-List<Object[]> Empanelled = (List<Object[]> )request.getAttribute("Empanelled") ;
-String chss_policy_pdf=(String)request.getAttribute("chss_policy_pdf");
-String path=(String)request.getAttribute("path"); */ 
-%>
 
 <!--  Login Page  -->  
   
@@ -73,11 +65,11 @@ String path=(String)request.getAttribute("path"); */
 						 <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" ><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a>
 					  </li> 
 					  
-					 <!--  <li class="nav-item" onclick="$('#footer').hide();">
-					    <a class="nav-link" data-toggle="tab" href="#tab-5" role="tab"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Policy</a>				   
+					  <li class="nav-item">
+					    <a class="nav-link" href="EMSForms.htm" target="blank"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; Forms</a>				   
 					  </li>
 					  
-					  <li class="nav-item" onclick="$('#footer').hide();">		   
+					  <!-- <li class="nav-item" onclick="$('#footer').hide();">		   
 					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Circulars</a>
 					  </li>
 					  
@@ -157,10 +149,7 @@ String path=(String)request.getAttribute("path"); */
 														<i class="fa fa-lock fa-lg position-absolute"></i>	
 													</div>
 														
-													<%-- <span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="error-alert">${error}</span>
-													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:green;margin-bottom: 10px;" id="success-alert">${success}</span> --%>
-													
-															<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
+													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
 																		
 												</div>
 												

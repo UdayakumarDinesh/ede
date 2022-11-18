@@ -6,11 +6,9 @@ import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
-import com.vts.ems.master.dto.CircularListDto;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -64,10 +62,6 @@ public interface MasterService {
 	public int GetMaxMedNo(String treatmenttype)throws Exception;
 	public int CheckduplicateTestCode(String testcode)throws Exception;
 	public int DuplicateDocQualification(String treatment,String qualification)throws Exception;
-	public long CircularListAdd(CircularList circular , CircularListDto filecircular)throws Exception;
-	public CircularList GetCircularToEdit(Long circularid)throws Exception;
-	public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception;
-	public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception;
 	public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception;
 	public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception;
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
@@ -76,7 +70,6 @@ public interface MasterService {
 
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
-	public List<Object[]> CirculatList() throws Exception;
 
 
 

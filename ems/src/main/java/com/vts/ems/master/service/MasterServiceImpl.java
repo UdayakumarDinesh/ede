@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -22,17 +20,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.vts.ems.chss.controller.CHSSController;
 import com.vts.ems.chss.model.CHSSMedicinesList;
 import com.vts.ems.chss.model.CHSSOtherItems;
 import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dao.MasterDao;
-import com.vts.ems.master.dto.CircularListDto;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -389,92 +384,7 @@ public class MasterServiceImpl implements MasterService {
 	{
 		return dao.updateOtherItemAmt(chssOtheramtid, admAmt, UserId,basicto);
 	}
-	
 
-	@Override
-	public long CircularListAdd(CircularList circular ,CircularListDto filecirculardto)throws Exception
-	{
-		logger.info(new Date() +"Inside SERVICE CircularListAdd ");
-		long value = dao.GetCircularMaxId();
-	    if(!filecirculardto.getPath().isEmpty()) {
-		String name =filecirculardto.getPath().getOriginalFilename();
-		String filename= "Circular-"+(++value) +"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-		
-		String path = emsfilespath+"EMS//CircularFiles";
-				
-		circular.setPath(path+"//"+filename);
-		circular.setOriginalName(name);
-		saveFile(path, filename, filecirculardto.getPath());
-		}		
-		return dao.CircularListAdd(circular);
-	}
-	
-	   public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile) throws IOException 
-	   {
-		   logger.info(new Date() +"Inside SERVICE saveFile ");
-	        Path uploadPath = Paths.get(CircularFilePath);
-	          
-	        if (!Files.exists(uploadPath)) {
-	            Files.createDirectories(uploadPath);
-	        }
-	        
-	        try (InputStream inputStream = multipartFile.getInputStream()) {
-	            Path filePath = uploadPath.resolve(fileName);
-	            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-	        } catch (IOException ioe) {       
-	            throw new IOException("Could not save image file: " + fileName, ioe);
-	        }     
-	    }
-	   @Override
-	   public CircularList GetCircularToEdit(Long circularid)throws Exception
-	   {
-		   return dao.GetCircularToEdit(circularid);
-	   }
-	   
-	   
-		@Override
-		public long CircularListEdit(CircularList circular ,CircularListDto filecirculardto)throws Exception
-		{
-			logger.info(new Date() +"Inside SERVICE CircularListEdit ");				
-			CircularList circularlist = dao.GetCircularToEdit(circular.getCircularId());
-			if(circular.getPath()!=null) {
-				String path =emsfilespath+"EMS//CircularFiles";
-			  Path uploadPath = Paths.get(path);
-			  Path filePath = uploadPath.resolve(circular.getPath());
-              File f = filePath.toFile();
-              if(f.exists()) {
-            	  f.delete();
-              }
-			}
-          	
-    	    if(!filecirculardto.getPath().isEmpty()) {
-    		String name =filecirculardto.getPath().getOriginalFilename();
-    		String filename= "Circular-"+circularlist.getCircularId()+"."+FilenameUtils.getExtension(filecirculardto.getPath().getOriginalFilename());
-    		String path =emsfilespath+"EMS//CircularFiles";
-    		circularlist.setPath(path+"//"+filename);
-    		circularlist.setOriginalName(name);
-    			saveFile(path, filename, filecirculardto.getPath());
-    		}	
-    	    circularlist.setCircularDate(circular.getCircularDate());
-    	    circularlist.setToDate(circular.getToDate());
-    	    circularlist.setDescription(circular.getDescription());
-    	    circularlist.setReferenceNo(circular.getReferenceNo());
-    	    circularlist.setModifiedBy(circular.getModifiedBy());
-    	    circularlist.setModifiedDate(circular.getModifiedDate());
-            return dao.EditCircular(circularlist);
-		}
-	   
-		
-		@Override
-		public List<Object[]> GetCircularList(String fromdate , String todate)throws Exception
-		{
-			logger.info(new Date() +"Inside SERVICE GetCircularList ");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-			LocalDate Fromdate= LocalDate.parse(fromdate,formatter);
-			LocalDate ToDate= LocalDate.parse(todate, formatter);
-			return dao.GetCircularList(Fromdate , ToDate);
-		}
-		
 		@Override
 		public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception
 		{
@@ -518,17 +428,33 @@ public class MasterServiceImpl implements MasterService {
 			return dao.AddMasterEditComments(masteredit);
 		}
 		
-		
+		@Override
 		public List<Object[]> GetDoctorEmpanelledList() throws Exception
 		{
 			return dao.GetDoctorEmpanelledList();
 		}
+		@Override
 		public List<Object[]> GetEmpanelledHostpitalList() throws Exception
 		{
 			return dao.GetEmpanelledHostpitalList();
 		}
-		public List<Object[]> CirculatList() throws Exception
+
+		public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile)throws IOException 
 		{
-			return dao.CirculatList();
+			logger.info(new Date() + "Inside SERVICE saveFile ");
+			Path uploadPath = Paths.get(CircularFilePath);
+
+			if (!Files.exists(uploadPath)) {
+				Files.createDirectories(uploadPath);
+			}
+
+			try (InputStream inputStream = multipartFile.getInputStream()) {
+				Path filePath = uploadPath.resolve(fileName);
+				Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException ioe) {
+				throw new IOException("Could not save image file: " + fileName, ioe);
+			}
 		}
+		
+		
 }

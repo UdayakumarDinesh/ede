@@ -64,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/view/**").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/login").permitAll()
-				.antMatchers("/CircularAttachmentView.htm").permitAll()
+				.antMatchers("/EMSForms.htm","/EMSFormDownload.htm").permitAll()
 				.anyRequest().authenticated().accessDecisionManager(adm())
 
 				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error")

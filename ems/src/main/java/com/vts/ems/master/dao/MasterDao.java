@@ -1,6 +1,5 @@
 package com.vts.ems.master.dao;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -9,7 +8,6 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -65,18 +63,12 @@ public interface MasterDao {
     public DoctorList GetDoctor(Long  doctorid)throws Exception;
 	public long DoctorsAdd(DoctorList doctor)throws Exception;
 	public long DoctorsEdit(DoctorList doctor)throws Exception;
-	public long CircularListAdd(CircularList circular)throws Exception;
-	public CircularList GetCircularToEdit(Long  circularid)throws Exception;
-	public long EditCircular(CircularList circular) throws Exception;
-	public long GetCircularMaxId()throws Exception;
-	public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception;
 	public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception;
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
 	public long EmpanelledHospitalEdit(CHSSEmpanelledHospital hospital)throws Exception;
 	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception;
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
-	public List<Object[]> CirculatList() throws Exception;
 	
 	
 	

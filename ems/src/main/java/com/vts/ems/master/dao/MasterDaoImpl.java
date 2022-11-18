@@ -1,8 +1,6 @@
 package com.vts.ems.master.dao;
 
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +24,6 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.CircularList;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -785,89 +782,6 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 	}
 	
-	@Override
-	public long CircularListAdd(CircularList circular)throws Exception
-	{
-		try {
-			manager.persist(circular);
-			manager.flush();
-			return (long)circular.getCircularId();
-		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO CircularListAdd() "+e);
-			e.printStackTrace();
-			return 0l;
-		}
-		
-	}
-	
-	@Override
-	public CircularList GetCircularToEdit(Long  circularid)throws Exception
-	{
-		CircularList list = null;
-		try {
-			CriteriaBuilder cb = manager.getCriteriaBuilder();
-			CriteriaQuery<CircularList> cq = cb.createQuery(CircularList.class);
-			Root<CircularList> root = cq.from(CircularList.class);
-			Predicate p1 = cb.equal(root.get("CircularId"), circularid);
-			cq = cq.select(root).where(p1);
-			TypedQuery<CircularList> allquery = manager.createQuery(cq);
-			list = allquery.getResultList().get(0);
-			return list;
-		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetCircularToEdit() "+e);
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	@Override
-	public long EditCircular(CircularList circular) throws Exception
-	{
-		try {
-			manager.merge(circular);
-			manager.flush();		
-			return circular.getCircularId();
-		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EditCircular() "+e);
-			e.printStackTrace();
-			return 0;
-		}		
-	}
-	
-	@Override
-	public long GetCircularMaxId()throws Exception
-	{
-		try {
-			Query query = manager.createNativeQuery("SELECT MAX(circularid)  FROM chss_circular_list");	
-			
-			BigInteger result = (BigInteger) query.getSingleResult();
-			return result.longValue();
-		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetCircularMaxId() "+e);
-			e.printStackTrace();
-			return 0;
-		}
-	}
-	
-	
-	private static final String GETCIRCULARLISTFROMTODATE = "SELECT circularid , description , path , CircularDate  ,OriginalName,todate ,referenceno FROM chss_circular_list WHERE ( CircularDate BETWEEN  :fromdate AND :todate )  ORDER BY CircularDate DESC";
-	
-	@Override
-	 public List<Object[]> GetCircularList(LocalDate fromdate , LocalDate todate) throws Exception
-	 {
-		 try {
-				Query query =  manager.createNativeQuery(GETCIRCULARLISTFROMTODATE);
-				 query.setParameter("fromdate", fromdate);
-				 query.setParameter("todate", todate);
-				return (List<Object[]>)query.getResultList();
-		} catch (Exception e) {
-			logger.error(new Date() +" Inside DAO GetCircularList "+ e);
-			e.printStackTrace();
-			return null;
-		}
-	
-	 }
-	
 		@Override
 		public long EmpanelledHospitalAdd(CHSSEmpanelledHospital hospital)throws Exception
 		{
@@ -959,19 +873,5 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 		}
 		
-		private static final String CIRCULARLIST = "SELECT circularid , description , path , circulardate ,referenceno , OriginalName  FROM chss_circular_list  WHERE CURDATE() BETWEEN circulardate AND todate ORDER BY circulardate DESC";
-		@Override
-		 public List<Object[]> CirculatList() throws Exception
-		 {
-			 try {
-					Query query =  manager.createNativeQuery(CIRCULARLIST);
-					
-					return (List<Object[]>)query.getResultList();
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO CirculatList "+ e);
-				e.printStackTrace();
-				return null;
-			}
-		
-		 }
+
 }
