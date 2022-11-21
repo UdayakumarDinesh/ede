@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vts.ems.circularorder.model.EMSForms;
+import com.vts.ems.circularorder.model.EMSNotice;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Repository
@@ -41,24 +42,6 @@ public class FormNoticeDaoImpl implements FormNoticeDao
 		query.setParameter("DepTypeId", DepTypeId);
 		List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
 		return GetEmsDepType;
-		
-		
-//		CriteriaBuilder cb= manager.getCriteriaBuilder();
-//		CriteriaQuery<EMSForms> cq= cb.createQuery(EMSForms.class);
-//		Root<EMSForms> root= cq.from(EMSForms.class);				
-//		if(!DepTypeId.equalsIgnoreCase("A")) {
-//			Predicate p1=cb.equal(root.get("DepTypeId") , Integer.parseInt(DepTypeId));
-//			Predicate p2=cb.equal(root.get("IsActive") ,1);
-//			cq=cq.select(root).where(p1,p2);
-//			cq=cq.select(root).where(p1);
-//		}else
-//		{
-//			Predicate p1=cb.equal(root.get("IsActive") ,1);
-//			cq=cq.select(root).where(p1);
-//		}
-//		
-//		TypedQuery<EMSForms> allquery = manager.createQuery(cq);
-//		return allquery.getResultList();
 	}
 	
 	
@@ -98,6 +81,14 @@ public class FormNoticeDaoImpl implements FormNoticeDao
 	}
 	
 	@Override
+	public long EMSFormEdit(EMSForms form)throws Exception
+	{
+		manager.merge(form);
+		manager.flush();
+		return form.getEMSFormId();
+	}
+	
+	@Override
 	public EMSForms GetEMSForm(String formId)throws Exception
 	{
 		try {
@@ -127,5 +118,74 @@ public class FormNoticeDaoImpl implements FormNoticeDao
 		
 	}
 	
+	private static final String  GETEMSNOTICELIST="SELECT NoticeId,ReferenceNo,Description,NoticeDate,ToDate FROM ems_notice WHERE IsActive=1 AND (NoticeDate BETWEEN :FromDate AND :ToDate ) ORDER BY NoticeDate DESC";
+	
+	@Override
+	public List<Object[]> getEmsNoticeList(String FromDate, String ToDate) throws Exception
+	{
+		Query query =  manager.createNativeQuery(GETEMSNOTICELIST);
+		query.setParameter("FromDate", FromDate);
+		query.setParameter("ToDate", ToDate);
+		List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
+		return GetEmsDepType;
+	}
+	
+	@Override
+	public long EMSNoticeAdd(EMSNotice Notice)throws Exception
+	{
+		manager.persist(Notice);
+		manager.flush();
+		return Notice.getNoticeId();
+	}
+	
+	private static final String MAXOFEMSNOTICEID = "SELECT IFNULL(MAX(NoticeId),0) as 'MAX' FROM ems_notice ";
+	@Override
+	public long MaxOfEmsNoticeId() throws Exception 
+	{
+		try {
+			Query query =  manager.createNativeQuery(MAXOFEMSNOTICEID);
+			BigInteger GetEmsDepType=(BigInteger)query.getSingleResult();
+			return GetEmsDepType.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO MaxOfEmsNoticeId "+ e);
+			return 0;
+		}
+		
+	}
+	
+	@Override
+	public EMSNotice GetEMSNotice(String NoticeId)throws Exception
+	{
+		try {
+			EMSNotice Notice = manager.find(EMSNotice.class, Long.parseLong(NoticeId));
+			return Notice;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetEMSNotice() "+e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	@Override
+	public long EMSNoticeEdit(EMSNotice Notice)throws Exception
+	{
+		manager.merge(Notice);
+		manager.flush();
+		return Notice.getNoticeId();
+	}
+	
+	
+	
+	private static final String  GETEMSTODAYNOTICES="SELECT noticeid, referenceno,description,noticedate,todate FROM ems_notice WHERE (CURDATE() BETWEEN noticedate AND todate) AND isactive=1";
+	
+	@Override
+	public List<Object[]> getEmsTodayNotices() throws Exception
+	{
+		Query query =  manager.createNativeQuery(GETEMSTODAYNOTICES);
+		List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
+		return GetEmsDepType;
+	}
 	
 }

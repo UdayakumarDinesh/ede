@@ -30,4 +30,5 @@ public interface EmsDao
 	public List<Object[]> LoginLoginType(String loginid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
 	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
+	public long AllNoticeCount() throws Exception;
 }

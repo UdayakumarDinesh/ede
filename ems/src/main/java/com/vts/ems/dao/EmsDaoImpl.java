@@ -165,6 +165,21 @@ public class EmsDaoImpl implements EmsDao
 		}
 	}
 	
+	private static final String ALLNOTICECOUNT="SELECT COUNT(*) FROM ems_notice WHERE (CURDATE() BETWEEN noticedate AND todate) AND isactive=1";
+	@Override
+	public long AllNoticeCount()throws Exception
+	{
+		try {
+			Query query= manager.createNativeQuery(ALLNOTICECOUNT);			
+			BigInteger count= (BigInteger)query.getSingleResult();
+			return count.longValue();
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO AllNoticeCount "+ e);
+				e.printStackTrace();
+				return 0;
+		   }
+	}
+	
 	private static final String NOTIFICATIONUPDATE="update ems_notification set isactive='0' where notificationid=:notificationid ";
 	@Override
 	public int NotificationUpdate(String NotificationId) throws Exception
@@ -360,4 +375,6 @@ public class EmsDaoImpl implements EmsDao
 				return null;
 			}
 		}
+		
+
 }

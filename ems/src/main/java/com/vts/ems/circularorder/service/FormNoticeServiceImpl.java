@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.circularorder.dao.FormNoticeDao;
 import com.vts.ems.circularorder.dto.FormUploadDto;
+import com.vts.ems.circularorder.dto.NoticeUploadDto;
 import com.vts.ems.circularorder.model.EMSForms;
+import com.vts.ems.circularorder.model.EMSNotice;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
@@ -69,13 +71,14 @@ public class FormNoticeServiceImpl implements FormNoticeService
 			}
 			
 			saveFile(FilePath+"EMS//forms//","Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
-			storagePath=FilePath+"EMS//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
+			storagePath="EMS//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
 			
 			
 			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			return 0;
 		}
 		
 		EMSForms form = new EMSForms().builder()
@@ -122,4 +125,117 @@ public class FormNoticeServiceImpl implements FormNoticeService
 	{
 		return dao.getFormNoCount(formNo);
 	}
+	@Override
+	public long EMSFormDelete(String EMSFormId, String userId)throws Exception
+	{
+		EMSForms form = dao.GetEMSForm(EMSFormId);
+		form.setModifiedBy(userId);
+		form.setModifiedDate(sdtf.format(new Date()));
+		form.setIsActive(0);
+		return dao.EMSFormEdit(form);
+	}
+	
+	
+	@Override
+	public List<Object[]> getEmsNoticeList(String FromDate, String ToDate) throws Exception
+	{
+		return dao.getEmsNoticeList(FromDate, ToDate);
+	}
+	
+	
+	@Override
+	public long EmsNoticeAdd(NoticeUploadDto noticeDto) throws Exception 
+	{
+		MultipartFile FormFile = noticeDto.getNoticeFile();
+		long maxFormId = dao.MaxOfEmsNoticeId()+1;
+		String storagePath="";
+		
+		try
+		{
+			while(new File(FilePath+"EMS//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
+			{
+				maxFormId++;
+			}
+			saveFile(FilePath+"EMS//Notice//","Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
+			storagePath="EMS//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		EMSNotice Notice = new EMSNotice().builder()
+				.ReferenceNo(noticeDto.getReferenceNo())
+				.Description(noticeDto.getDescription())
+				.FileOriginalName(FormFile.getOriginalFilename())
+				.NoticePath(storagePath)
+				.NoticeDate(noticeDto.getNoticeDate())
+				.ToDate(noticeDto.getToDate())
+				.CreatedBy(noticeDto.getCreatedBy())
+				.CreatedDate(sdtf.format(new Date()))
+				.IsActive(1)
+				.build();
+		
+		return dao.EMSNoticeAdd(Notice);
+	}
+	
+	@Override
+	public EMSNotice GetEMSNotice(String NoticeId)throws Exception
+	{
+		return dao.GetEMSNotice(NoticeId);
+	}
+	
+	@Override
+	public long EMSNoticeEdit(NoticeUploadDto noticeDto) throws Exception 
+	{
+		MultipartFile FormFile = noticeDto.getNoticeFile();
+		
+		EMSNotice Notice = dao.GetEMSNotice(noticeDto.getNoticeId());
+		String storagePath=Notice.getNoticePath();
+		if(!FormFile.isEmpty()) {
+			try
+			{
+				saveFile(
+						FilePath+FilenameUtils.getPath(storagePath), 
+						FilenameUtils.getBaseName(storagePath)+ "." + FilenameUtils.getExtension(storagePath),
+						FormFile
+						);
+				Notice.setFileOriginalName(FormFile.getOriginalFilename());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
+				
+		Notice.setReferenceNo(noticeDto.getReferenceNo());
+		Notice.setDescription(noticeDto.getDescription());
+		
+//		Notice.setNoticePath(storagePath);
+		Notice.setNoticeDate(noticeDto.getNoticeDate());
+		Notice.setToDate(noticeDto.getToDate());
+		Notice.setModifiedBy(noticeDto.getModifiedBy());
+		Notice.setModifiedDate(sdtf.format(new Date()));
+		
+		return dao.EMSNoticeEdit(Notice);
+	}
+	
+	
+	@Override
+	public long EMSNoticeDelete(String NoticeId, String userId)throws Exception
+	{
+		EMSNotice Notice = dao.GetEMSNotice(NoticeId);
+		Notice.setModifiedBy(userId);
+		Notice.setModifiedDate(sdtf.format(new Date()));
+		Notice.setIsActive(0);
+		return dao.EMSNoticeEdit(Notice);
+	}
+	
+	@Override
+	public List<Object[]> getEmsTodayNotices() throws Exception
+	{
+		return dao.getEmsTodayNotices();
+	}
+	
 }

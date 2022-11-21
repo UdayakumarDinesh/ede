@@ -222,7 +222,7 @@ public class CircularOrderController {
 	public String DepCircularEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,@RequestParam(name = "id") String id) throws Exception
 	{
 		String UserId=(String)ses.getAttribute("Username");
-		logger.info(new Date() +"Inside DepCircularList.htm "+UserId);
+		logger.info(new Date() +"Inside DepCircularEdit.htm "+UserId);
 		try {
 			String circularId = req.getParameter("circularId");
 			long getMaxCircularId = service.GetDepCircularMaxIdEdit(id);
@@ -238,7 +238,7 @@ public class CircularOrderController {
 	        	return "redirect:/DepCircularList.htm";
 	        }
 		} catch (Exception e) {
-			  logger.error(new Date() +"Inside DepCircularAddSubmit.htm "+UserId ,e);
+			  logger.error(new Date() +"Inside DepCircularEdit.htm "+UserId ,e);
 			  e.printStackTrace();
 			  return "static/Error";
 		}
@@ -358,7 +358,7 @@ public class CircularOrderController {
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OfficeOrder.htm "+UserId);
 		try {
-			ses.setAttribute("SidebarActive", "CircularList_htm");
+			ses.setAttribute("SidebarActive", "OfficeOrder_htm");
 			
 			String fromdate = (String)req.getParameter("FromDate");
 			String todate = (String)req.getParameter("ToDate");

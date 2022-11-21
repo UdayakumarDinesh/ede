@@ -211,6 +211,27 @@ public class EmsController {
 		
 	}
 	
+	@RequestMapping(value = "AllNoticeCount.htm" ,method=RequestMethod.GET)
+	public  @ResponseBody String AllNoticeCount(HttpSession ses , HttpServletRequest req)throws Exception
+	{
+		String UserId = (String)ses.getAttribute("Username");			
+		logger.info(new Date() +"Inside AllNoticeCount.htm "+UserId);
+		long count=0;
+		try 
+		{			
+			count= service.AllNoticeCount();
+		} 
+		catch (Exception e) {
+			logger.error(new Date() +"Inside AllNoticeCount.htm "+UserId ,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+
+		Gson json = new Gson();  
+		return json.toJson(count);
+	}
+
+	
 	
 	@RequestMapping(value = "NotificationUpdate.htm" , method = RequestMethod.GET)
 	public @ResponseBody String NotificationUpdate(HttpServletRequest request ,HttpSession ses) throws Exception {

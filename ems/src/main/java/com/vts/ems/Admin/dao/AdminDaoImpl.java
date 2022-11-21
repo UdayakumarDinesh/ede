@@ -435,6 +435,8 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	
+	
+	
 	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
 	
 	@Override

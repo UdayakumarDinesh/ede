@@ -29,7 +29,6 @@ String todate = (String)request.getAttribute("todate");
 				</div>
 		</div>
 </div>
-		  <%List<Object[]> circularlist = (List<Object[]>)request.getAttribute("circulatlist"); %> 
 		 	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">

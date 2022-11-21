@@ -49,7 +49,7 @@
 }
 
 .onclickbell{
-	    margin: 0px 0px 0px 35px;
+	    margin: 0px 0px 0px 10px;
 }
 
 .logoutdivider{
@@ -158,26 +158,25 @@
 							</ul>
 							
 							
+							
+						
+					        
+					        <div class="btn-group ">
+				
+								<a class="nav-link  onclickbell" style="padding: 0.25rem 0.5rem;" href="EMSTodaysNotices.htm" id="NoticeButton" target="blank" data-toggle="tooltip" data-placement="top" title="Notices">
+						            <img alt="logo" src="view/images/notice.png" >
+							            <span class="badge badge-danger badge-counter" id="NoticeCount"></span>
+<!-- 							            <i class="fa fa-caret-down " aria-hidden="true" style="color: #ffffff"></i> -->
+						        </a>
+					    
+						  	</div>
+							
 						<div class="btn-group ">
-						<%-- <%if(request.getRequestURI().equalsIgnoreCase("/ems/view/static/maindashboard.jsp")){ %>
-							<form action="EmpLogitypeChange.htm" class="form-inline my-2 my-lg-0" method="post">
-								<div class=" search rounded rounded-pill shadow-sm ">
-									<div class="input-group">
-										<select class="form-control select2" name="logintype" onchange="this.form.submit();">
-											<%for(Object[] login:emplogintypelist){ %>
-												<option value="<%=login[0]%>" <%if(logintype.equalsIgnoreCase(login[0].toString())){ %>selected <%} %>><%=login[1]%></option>
-											<%} %>
-										</select>
-										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-									</div>
-								</div>
-							</form> 
-						<%} %> --%>
 	
-							<a class="nav-link  onclickbell" href="" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a class="nav-link  onclickbell" style="padding: 0.25rem 0.5rem;"  href="" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 					            <img alt="logo" src="view/images/alarm.png" >
 						            <span class="badge badge-danger badge-counter" id="NotificationCount"></span>
-						            <i class="fa fa-caret-down " aria-hidden="true" style="padding-left:5px;color: #ffffff"></i>
+						            <i class="fa fa-caret-down " aria-hidden="true" style="color: #ffffff"></i>
 					        </a>
 					        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in custombell" aria-labelledby="alertsDropdown" style="width:400px;padding: 0px;margin-top: 6px; ">
 								<span class="dropdown-header" style="background-color: #faa51e;font-size: 16px;color: #145374; margin-top: -1px;border-top-left-radius: 3px;border-top-right-radius: 3px;font-weight: 700"><i class="fa-solid fa-bell"></i>&nbsp;&nbsp;&nbsp;&nbsp;Notifications</span>
@@ -187,8 +186,10 @@
 						        </div>
 						        
 						            <a class="dropdown-item text-center small text-gray-500 showall" href="AllNotificationList.htm" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
-						        </div>
+						       </div>
 						    </div>
+						    
+						    
 						    
 
 							<div class="btn-group">
@@ -209,19 +210,19 @@
 								 	<a class="dropdown-item" href="PasswordChange.htm" >&nbsp;<i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
-								   <a class="dropdown-item" href="EMSForms.htm" >&nbsp;&nbsp;<i class="fa-solid fa-file"></i> &nbsp;&nbsp;&nbsp;&nbsp;Forms </a>
+								   <a class="dropdown-item" href="EMSForms.htm" ><img src="view/images/forms.png"/> &nbsp;&nbsp;&nbsp;&nbsp;Forms </a>
 								    <div class="dropdown-divider logoutdivider"></div>
-								   
+								    
+								    <a class="dropdown-item" href="EMSNotices.htm" ><img src="view/images/notice.png"/> &nbsp;&nbsp;&nbsp;&nbsp;Notice </a>
+								    <div class="dropdown-divider logoutdivider"></div>
+								    
 								   <a class="dropdown-item" href="UserManualDoc.htm" target="blank"><img src="view/images/handbook.png"/> &nbsp;&nbsp;Manual </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
 								    <a class="dropdown-item" href="WorkFlow.htm" target="blank" ><img src="view/images/work.png"/>&nbsp;&nbsp; Work Flow</a>
 								    <div class="dropdown-divider logoutdivider"></div>
 						
-								   	<!-- <a class="dropdown-item" href="#" target="blank"> &nbsp;<i class="fa fa-cog" aria-hidden="true" style="color: green"></i> &nbsp;&nbsp;HELP </a>
-								  	<div class="dropdown-divider logoutdivider"></div> -->
-									
-									<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
+								  	<input type="hidden" value="<%=logintype %>" name="logintype" id="logintype">
 								            
 								    	<form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
 									        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -380,6 +381,25 @@ $(document).ready(function() {
 		
 	});
 
+	
+	$(document).ready(function(){
+		
+		$.ajax({
+			type : "GET",
+			url : "AllNoticeCount.htm",
+			
+			datatype : 'json',
+			success : function(result) {
+				
+				var result = JSON.parse(result);
+		
+				$('#NoticeCount').html(result); 
+			}
+		});
+		
+	});
+	
+	
 	function RemNotification(notifyid){
 		
 		var notificationid=notifyid;

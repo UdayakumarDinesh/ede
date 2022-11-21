@@ -144,7 +144,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 			  		<%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>	
 			  					
 						<button type="submit" class="btn btn-sm add-btn" formaction="EMSFormAdd.htm" formnovalidate="formnovalidate"  >ADD</button>
-						<button type="submit" class="btn btn-sm delete-btn" formaction="Delete.htm"    >DELETE </button>
+						<button type="submit" class="btn btn-sm delete-btn" formaction="EMSFormDelete.htm"    >DELETE </button>
 						
 						<!-- <button type="submit" class="btn btn-sm edit-btn" formaction="Edit.htm" name="action" value="EDITCIR"  Onclick="Edit(Form)" >EDIT </button> -->
 						

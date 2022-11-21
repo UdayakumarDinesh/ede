@@ -217,7 +217,6 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	
-	
 	@Override
 	public List<Object[]> GetFromemployee()throws Exception
 	{

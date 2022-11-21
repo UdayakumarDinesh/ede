@@ -85,6 +85,11 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
+	public long AllNoticeCount()throws Exception
+	{
+		return dao.AllNoticeCount();
+	}
+	@Override
 	public int NotificationUpdate(String NotificationId) throws Exception
 	{
 		return dao.NotificationUpdate(NotificationId);

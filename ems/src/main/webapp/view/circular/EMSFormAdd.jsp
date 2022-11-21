@@ -1,7 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.circularorder.model.EMSDepCircular"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-  <%@ page import="com.vts.ems.master.model.CircularList" %>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>

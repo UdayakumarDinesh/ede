@@ -99,7 +99,11 @@
              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
 				<thead>
 					<tr>
+					<%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>
 					   <th style="width:4%">Select</th>
+					  <%}else{ %>
+					  <th style="width:4%">SN</th>
+					  <%} %>
 					   <th style="width:10%">Circular No</th>
                        <th style="width:11%">Date</th>
                        <th style="width:45%">Subject</th>
@@ -114,7 +118,12 @@
                         %> 
                      <tr>
                       
-                         <td style="text-align: center;"> <input type="radio" name="circularId" value="<%=ls[0]%>"></td>
+	                     <%if(LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P")){ %>
+						 	<td style="text-align: center;"> <input type="radio" name="circularId" value="<%=ls[0]%>"></td>
+						 <%}else{ %>
+						 <td style="text-align: center;"> <%=allList.indexOf(ls)+1%></td>
+						 <%} %>
+                         
                          <td><%=ls[2]%></td>
                          <td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(ls[4].toString())%></td>
                          <td><%=ls[3]%></td>
