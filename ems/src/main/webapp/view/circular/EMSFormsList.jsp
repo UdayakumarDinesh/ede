@@ -42,13 +42,14 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 			<div class="col-md-3">
 				<h5>Forms</h5>
 			</div>
+			<%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>	
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item active">Forms</li>
 					</ol>
 				</div>
-	
+			<%} %>
 		</div>	
 <%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");

@@ -69,17 +69,6 @@
 					    <a class="nav-link" href="EMSForms.htm" target="blank"><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; Forms</a>				   
 					  </li>
 					  
-					  <!-- <li class="nav-item" onclick="$('#footer').hide();">		   
-					  	<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" ><i class="fa fa-file-text" aria-hidden="true" ></i>&nbsp; CHSS Circulars</a>
-					  </li>
-					  
-					  <li class="nav-item" onclick="$('#footer').hide();">					   
-					   <a class="nav-link" data-toggle="tab" href="#tab-3"  role="tab"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Doctors List</a>
-					  </li>
-
-					    <li class="nav-item" onclick="$('#footer').hide();">					    
-					    <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" ><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Empanelled  Hospitals</a>
-					  </li>  -->
 				</ul>
 				
   		
