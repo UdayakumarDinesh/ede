@@ -1,7 +1,10 @@
 package com.vts.ems.circularorder.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -27,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
@@ -120,7 +127,23 @@ public class CircularOrderController {
 		try {
 			
 			String DepTypeId= req.getParameter("DepTypeId");
-			
+			try(PDDocument doc = PDDocument.load(CircularFile.getInputStream());)
+			{
+			    if(doc.isEncrypted())
+			    {
+			    	doc.close();
+			    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+					redir.addAttribute("DepTypeId",DepTypeId);
+					return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			    }
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+		    	redir.addAttribute("resultfail", " PDF File is Corrupted");
+				redir.addAttribute("DepTypeId",DepTypeId);
+				return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			}
 			
 			EMSDepCircular cir = new EMSDepCircular().builder()
 									.DepTypeId(Integer.parseInt(DepTypeId))
@@ -254,7 +277,23 @@ public class CircularOrderController {
 			String circularId = req.getParameter("circularId");
 			String DepTypeId= req.getParameter("DepTypeId");
 			
-			
+			try(PDDocument doc = PDDocument.load(CircularFile.getInputStream());)
+			{
+			    if(doc.isEncrypted())
+			    {
+			    	doc.close();
+			    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+					redir.addAttribute("DepTypeId",DepTypeId);
+					return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			    }
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+		    	redir.addAttribute("resultfail", " PDF File is Corrupted");
+				redir.addAttribute("DepTypeId",DepTypeId);
+				return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			}
 			EMSDepCircular cir = new EMSDepCircular().builder()
 									.DepCircularId(Long.parseLong(circularId))
 									.DepTypeId(Integer.parseInt(DepTypeId))
@@ -454,13 +493,28 @@ public class CircularOrderController {
 		logger.info(new Date() +"Inside OfficeOrderAddSubmit.htm "+Username);
 		
 		try {
-
-			System.out.println("OfficeOrderAddSubmit.htm");			
             String OrderNo   =(String)req.getParameter("OrderNo");
 			String OrderDate   =(String)req.getParameter("OrderDate");
 			String OrderSubject  =(String)req.getParameter("OrderSubject");
 			String AutoId = UUID.randomUUID().toString();
 			
+			
+			try(PDDocument doc = PDDocument.load(FileAttach.getInputStream());)
+			{
+				
+			    if(doc.isEncrypted())
+			    {
+			    	doc.close();
+			    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+					return  "redirect:/OfficeOrder.htm";
+			    }
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+		    	redir.addAttribute("resultfail", " PDF File is Corrupted");
+				return  "redirect:/OfficeOrder.htm";
+			}
 			
 			OfficeOrderUploadDto uploadorderdto =new OfficeOrderUploadDto();
 			uploadorderdto.setOrderNo(OrderNo.trim()); 
