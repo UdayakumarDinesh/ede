@@ -127,10 +127,10 @@ public class CircularOrderServiceImpl implements CircularOrderService
 			       }
 			       else
 			       {
-			    	   float rotationRad = (float) Math.toRadians(-145);
-				        canvas2.showTextAligned(watermark, pageSize.getRight(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
-				        rotationRad = (float) Math.toRadians(-35);
-				        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+			    	   float rotationRad = (float) Math.toRadians(35);
+				       canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       rotationRad = (float) Math.toRadians(-35);
+				       canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
 			       }
 		        }
 		     

@@ -19,22 +19,45 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-			<%if(circular!=null){ %>
-				<h5> <%=DepType[2] %>&nbsp;Circular Edit</h5>
-				<%}else{%>
-				<h5> <%=DepType[2] %>&nbsp;Circular Add</h5>
-				<%} %>
-			</div>
+			
+			<%if(Integer.parseInt(DepType[0].toString())==9){ %>
+				<%if(circular!=null){ %>
+					<h5> Government Order Edit</h5>
+					<%}else{%>
+					<h5> Government Order Add</h5>
+					<%} %>
+				</div>
+			<%}else{ %>
+				<%if(circular!=null){ %>
+					<h5> <%=DepType[2] %>&nbsp;Circular Edit</h5>
+					<%}else{%>
+					<h5> <%=DepType[2] %>&nbsp;Circular Add</h5>
+					<%} %>
+				</div>
+			
+			<%} %>
 				<div class="col-md-9">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="CircularDashBoard.htm"> Circular </a></li>
-						<li class="breadcrumb-item "><a href="DepCircularList.htm?id=<%=DepType[0]%>"> <%=DepType[2] %>&nbsp;Circular List </a></li>
-						<%if(circular!=null){ %>
-                        <li class="breadcrumb-item active " aria-current="page"><%=DepType[2] %>&nbsp;Circular Edit</li>
-                        <%}else{ %>
-                         <li class="breadcrumb-item active " aria-current="page"><%=DepType[2] %>&nbsp;Circular Add</li>
-                         <%} %>
+						
+						<%if(Integer.parseInt(DepType[0].toString())==9){ %>
+							<li class="breadcrumb-item "><a href="DepCircularList.htm?id=<%=DepType[0]%>"> <%=DepType[2] %>&nbsp; List </a></li>
+							<%if(circular!=null){ %>
+	                        <li class="breadcrumb-item active " aria-current="page"> Government Order Edit</li>
+	                        <%}else{ %>
+	                         <li class="breadcrumb-item active " aria-current="page"> Government Order Add</li>
+	                         <%} %>
+	                    <%}else{ %>
+	                    	<li class="breadcrumb-item "><a href="DepCircularList.htm?id=<%=DepType[0]%>"> <%=DepType[2] %>&nbsp;Circular List </a></li>
+	                    	<%if(circular!=null){ %>
+	                    	
+	                        <li class="breadcrumb-item active " aria-current="page"><%=DepType[2] %>&nbsp;Circular Edit</li>
+	                        <%}else{ %>
+	                         <li class="breadcrumb-item active " aria-current="page"><%=DepType[2] %>&nbsp;Circular Add</li>
+	                         <%} %>
+	                    
+	                    <%} %>
 					</ol>
 			   </div>
 		</div>
@@ -55,7 +78,11 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 				<div class="row" >
 					<div class="col-md-6" >
 						<div class="form-group">
+						<%if(Integer.parseInt(DepType[0].toString())==9){ %>
+							<label><b>Order Date</b><span class="mandatory"	style="color: red;">*</span></label>
+						<%}else{ %>
 							<label><b>Circular Date</b><span class="mandatory"	style="color: red;">*</span></label>
+						<%} %>
 							 <input type="text" class="form-control input-sm " value=""  id="circulardate" name="CircularDate"  required="required" readonly="readonly" >
 						</div>
 					</div>
@@ -63,8 +90,12 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 				</div>
 				<div class="row" >
 					<div class="col-md-6">
-						<div class="form-group">						
+						<div class="form-group">	
+						<%if(Integer.parseInt(DepType[0].toString())==9){ %>					
+							<label><b>Order No.</b><span class="mandatory"	style="color: red;">*</span></label>
+							<%}else{ %>
 							<label><b>Circular No.</b><span class="mandatory"	style="color: red;">*</span></label>
+						<%} %>
 							<input type="text"  class="form-control input-sm " <%if(circular!=null && circular.getDepCircularNo()!=null){%>value="<%=circular.getDepCircularNo()%>" <%}%>  name="CircularNo"  required="required" maxlength="100" > 
 						</div>
 					</div>

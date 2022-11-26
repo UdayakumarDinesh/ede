@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,7 +131,7 @@ public class FormNoticeController {
 			EMSForms form=service.GetEMSForm(EMSFormId);
 			
 			res.setContentType("Application/octet-stream");	
-			File my_file=new File(form.getFormPath());
+			File my_file=new File(emsfilespath+form.getFormPath());
 			res.setHeader("Content-disposition","attachment;filename="+form.getFormName());
 			OutputStream out=res.getOutputStream();
 			
@@ -282,7 +281,7 @@ public class FormNoticeController {
 			EMSNotice form=service.GetEMSNotice(NoticeId);
 			
 			res.setContentType("Application/octet-stream");	
-			File my_file=new File(form.getNoticePath());
+			File my_file=new File(emsfilespath+form.getNoticePath());
 			res.setHeader("Content-disposition","attachment;filename="+form.getFileOriginalName());
 			OutputStream out=res.getOutputStream();
 			

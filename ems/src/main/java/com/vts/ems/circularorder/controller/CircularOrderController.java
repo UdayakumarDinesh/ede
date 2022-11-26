@@ -1,10 +1,7 @@
 package com.vts.ems.circularorder.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -31,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
 import com.vts.ems.circularorder.dto.DepCircularDto;
 import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
@@ -199,19 +193,21 @@ public class CircularOrderController {
 			Zipper zip=new Zipper();
 			zip.unpack(emsfilespath+"//"+circular.getDepCircularPath(),tempPath,CustomEncryptDecrypt.decryption(circular.getDepCircularKey().toCharArray()));
 			
-			
-			PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()
-													.sourcePath(tempPath+"//"+circular.getDepCirFileName())
-													.targetPath(tempPath1+"//"+circular.getDepCirFileName())
-													.watermarkText( EmpNo+" : "+EmpName)
-													.password(password)
-													.EmpNo(EmpNo)
-													.EmpName(EmpName)
-													.build();
-					
-			// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
-			File my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
-			
+			File my_file = new File(tempPath+"//"+circular.getDepCirFileName());
+			if(circular.getDepTypeId()!=9) 
+			{
+				PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()
+														.sourcePath(tempPath+"//"+circular.getDepCirFileName())
+														.targetPath(tempPath1+"//"+circular.getDepCirFileName())
+														.watermarkText( EmpNo+" : "+EmpName)
+														.password(password)
+														.EmpNo(EmpNo)
+														.EmpName(EmpName)
+														.build();
+						
+				// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
+				my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
+			}
 			res.setHeader("Content-disposition","attachment; filename="+circular.getDepCirFileName());
 		    OutputStream out = res.getOutputStream();
 		    FileInputStream in = new FileInputStream(my_file);

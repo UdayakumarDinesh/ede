@@ -65,7 +65,10 @@
 					<div class="col-md-6" >
 						<div class="form-group">
 							<label><b>File</b> <span class="mandatory"	style="color: red;">*</span></label>
-							<input type="file"  accept="application/pdf" style="width: 100%" class="form-control input-sm "  value="" id="formFile" name="FormFile" >
+							<input type="file"  style="width: 100%" class="form-control input-sm "  value="" id="formFile" name="FormFile" 
+							
+							accept=".xlsx,.xls,.pdf,.doc,.docx "
+							>
 						</div>
 					</div>
 				</div>
@@ -104,10 +107,11 @@ $(function(){
     	
     	var file = $("#formFile").val();
     	console.log(file);
-       	var upld = file.split('.').pop();  
-       	if(!(upld.toLowerCase().trim()==='pdf' ))
+       	var upld = file.split('.').pop(); 
+       	if(!(upld.toLowerCase().trim()==='pdf' || upld.toLowerCase().trim()==='xlsx' 
+       				|| upld.toLowerCase().trim()==='xls' || upld.toLowerCase().trim()==='doc' || upld.toLowerCase().trim()==='docx')  )
        	{
-    	    alert("Only PDF are allowed to Upload")
+    	    alert("Only PDF,Word and Excel documents are allowed to Upload")
     	    document.getElementById("formFile").value = "";
     	    return;
     	}

@@ -36,6 +36,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,6 +103,9 @@ public class CHSSController {
 	@Autowired
 	EmsFileUtils emsfileutils ;
 	
+	@Autowired
+	Environment env;
+	
 	private static final String formmoduleid="4";
 	
 	@RequestMapping(value = "CHSSDashboard.htm", method = RequestMethod.GET)
@@ -160,7 +164,7 @@ public class CHSSController {
 				IsSelf="Y";
 			}
 			
-			
+			req.setAttribute("chss_policy_pdf", Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(env.getProperty("ProjectFiles")+ "/ProjectManuals/chss-policy.pdf"))) );
 			req.setAttribute("countdata", service.CHSSDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
 			req.setAttribute("Fromdate", FromDate);
 			req.setAttribute("Todate", ToDate);

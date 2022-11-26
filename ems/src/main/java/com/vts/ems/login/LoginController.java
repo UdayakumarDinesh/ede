@@ -29,9 +29,6 @@ public class LoginController
 	@Autowired
 	EMSMainService service;
 	
-	@Value("${ProjectFiles}")
-	private String projectfilespath;
-
 
 	 @RequestMapping(value = "/login", method = RequestMethod.GET)
 	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
