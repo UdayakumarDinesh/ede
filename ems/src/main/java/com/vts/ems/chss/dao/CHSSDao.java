@@ -199,5 +199,7 @@ public interface CHSSDao {
 	public List<Object[]> CHSSDashboardIndividualAmountData(String Empid, String FromDate, String ToDate) throws Exception;
 	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate, String IsSelf) throws Exception;
 	public List<Object[]> CHSSDashboardGraphData(String Empid, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	
 }

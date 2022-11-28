@@ -3529,4 +3529,16 @@ public class CHSSServiceImpl implements CHSSService {
 		return count;
 	}
 	
+	@Override
+	public List<Object[]> GetDoctorEmpanelledList() throws Exception
+	{
+		return dao.GetDoctorEmpanelledList();
+	}
+	@Override
+	public List<Object[]> GetEmpanelledHostpitalList() throws Exception
+	{
+		return dao.GetEmpanelledHostpitalList();
+	}
+
+	
 }

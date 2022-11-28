@@ -265,13 +265,14 @@
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3 ">
-				<h5>CHSS DASHBOARD</h5>
+				<h5>CHSS APPLY</h5>
 			</div>
 			<div class="col-md-9 " >
 				<nav aria-label="breadcrumb">
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
-				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
+				    <li class="breadcrumb-item"><a href="CHSSDashboard.htm">CHSS</a></li>
+				    <li class="breadcrumb-item active " aria-current="page">CHSS Apply</li>
 				  </ol>
 				</nav>
 			</div>			
@@ -283,13 +284,13 @@
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
 		if(ses1!=null){ %>
-			<div class="alert alert-danger" role="alert">
+			<div class="alert alert-danger" role="alert" style="margin:5px;">
 				<%=ses1 %>
 			</div>
 			
 		<%}if(ses!=null){ %>
 			
-			<div class="alert alert-success" role="alert">
+			<div class="alert alert-success" role="alert" style="margin:5px;">
 				<%=ses %>
 			</div>
 		<%} %>

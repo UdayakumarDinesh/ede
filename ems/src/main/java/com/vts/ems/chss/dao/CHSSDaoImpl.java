@@ -3059,6 +3059,33 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		return list;
 	}
 
+	private static final String EMPANELLEDHOSPITALLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
+	@Override
+	public List<Object[]> GetEmpanelledHostpitalList()throws Exception
+	{
+		 try {
+				Query query =  manager.createNativeQuery(EMPANELLEDHOSPITALLIST);
+				
+				return (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO GetEmpanelledHostpitalList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
-	
+	private static final String GETDOCTOREMPANELLEDLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
+	@Override
+	public List<Object[]> GetDoctorEmpanelledList()throws Exception
+	{
+		try {
+				Query query =  manager.createNativeQuery(GETDOCTOREMPANELLEDLIST);
+				
+				return (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO GetDoctorEmpanelledList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

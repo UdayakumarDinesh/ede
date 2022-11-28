@@ -7,7 +7,16 @@ $(document).ready(function() {
 		    }
 
     });
+    
+    $(".myDataTable").DataTable({
+        "lengthMenu": [ 50, 75, 100],
+        "pagingType": "simple",
+        "language": {
+		      "emptyTable": "No Record Found"
+		    }
 
+    });
+    
    $('[data-toggle="tooltip"]').tooltip({
 		 trigger : 'hover',
 	});

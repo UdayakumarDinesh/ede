@@ -224,13 +224,16 @@
   	background-color: #533E85;
   	color:white;
   }
+  .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #750550;
+}
   
-  
-	</style>
+</style>
 
-	</head>
+</head>
 
-	<body  >
+<body  >
 	<%	
 	
 		/* List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist"); */
@@ -243,187 +246,247 @@
 		List<Object[]> amountdataindividual  = (List<Object[]> )request.getAttribute("amountdataindividual");
 		String isself   = (String)request.getAttribute("isself");
 		List<Object[]> monthlywisedata = (List<Object[]>)request.getAttribute("monthlywisedata");
-	
+		
+		List<Object[]> EmpanelledHospitals = (List<Object[]>)request.getAttribute("EmpanelledHospitals");
+		List<Object[]> EmpanelledDoctors = (List<Object[]>)request.getAttribute("EmpanelledDoctors");
 		String chsspolicypdf = (String)request.getAttribute("chss_policy_pdf");
 		IndianRupeeFormat nfc=new IndianRupeeFormat();
 	%>
 	
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
-		<div class="row">
-			<div class="col-md-3">
-				<h5 style="padding-top: 0.5rem">CHSS DASHBOARD </h5>
-			</div>
-			<div class="col-md-9">
-				
-				<div>
-					
+			
+			<div class="row">
+				<div class="col-md-5">
+					<h5 style="padding-top: 0.5rem">CHSS DASHBOARD </h5>
 				</div>
-								
+			  	<div class="col-md-7" >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				    <li class="breadcrumb-item active " aria-current="page">CHSS</li>
+				  </ol>
+				</nav>
+			</div>		
 			</div>
-		</div>
+			
+			
 	</div>	
 
 
 	<div class="card dashboard-card" >
-		<div class="card-body " >
-		<div align="center">
-						<%String ses=(String)request.getParameter("result"); 
-						String ses1=(String)request.getParameter("resultfail");
-						if(ses1!=null){ %>
-							<div class="alert alert-danger" role="alert">
-								<%=ses1 %>
-							</div>
-							
-						<%}if(ses!=null){ %>
-							
-							<div class="alert alert-success" role="alert">
-								<%=ses %>
-							</div>
-						<%} %>
-					</div>
-			<div class="container-fluid">
-			  
-			  <!-- <div class="row">
-			  		<div class="col-md-12	">
-				  		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background: white;">
-						  <li class="nav-item">
-						    <a class="nav-link active" id="pills-dashboard-tab" data-toggle="pill" href="#pills-dashboard" role="tab" aria-controls="pills-dashboard" aria-selected="true">Dashboard</a>
+	<div align="center">
+			<%String ses=(String)request.getParameter("result"); 
+			String ses1=(String)request.getParameter("resultfail");
+			if(ses1!=null){ %>
+				<div class="alert alert-danger" role="alert">
+					<%=ses1 %>
+				</div>
+					
+			<%}if(ses!=null){ %>
+				
+				<div class="alert alert-success" role="alert">
+					<%=ses %>
+				</div>
+			<%} %>
+		</div>
+		<div class="row">
+				<div class="col-md-12" style="padding-top:0px;">
+				  		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background: #ECD4B9;padding: 0px;border-radius: 0px;">
+						  <li class="nav-item" style="width: 25%;text-align: center;">
+						    <a class="nav-link active" style="border-radius: 0px;" id="pills-dashboard-tab" data-toggle="pill" href="#pills-dashboard" role="tab" aria-controls="pills-dashboard" aria-selected="true">Dashboard</a>
 						  </li>
-						  <li class="nav-item">
-						    <a class="nav-link" id="pills-policy-tab" data-toggle="pill" href="#pills-policy" role="tab" aria-controls="pills-policy" aria-selected="false">CHSS - Policy</a>
+						  <li class="nav-item" style="width: 25%;text-align: center;">
+						    <a class="nav-link" style="border-radius: 0px;" id="pills-policy-tab" data-toggle="pill" href="#pills-policy" role="tab" aria-controls="pills-policy" aria-selected="false">CHSS - Policy</a>
 						  </li>
-						  <li class="nav-item">
-						    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+						  <li class="nav-item" style="width: 25%;text-align: center;">
+						    <a class="nav-link" style="border-radius: 0px;" id="pills-hospital-tab" data-toggle="pill" href="#pills-hospital" role="tab" aria-controls="pills-hospital" aria-selected="false">Empanelled Hospitals</a>
+						  </li>
+						  <li class="nav-item" style="width: 25%;text-align: center;">
+						    <a class="nav-link" style="border-radius: 0px;" id="pills-doctor-tab" data-toggle="pill" href="#pills-doctor" role="tab" aria-controls="pills-doctor" aria-selected="false">Empanelled Doctors</a>
 						  </li>
 						</ul>
-					</div>
-			  	</div> -->
-			  
-	<div class="tab-content" id="pills-tabContent">
-  		<div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel" aria-labelledby="pills-dashboard-tab">
-			  <div class="row">
-			  
-			    <div class="col-md-6">
-			   		
-					<div class="container">
-					    <div class="row">
-					        <div class="col-md-4">
-					            <div class="counter purple">
-					                <span class="counter-value"><%=TotalCountData[2] %></span>
-					                <h3>TOTAL</h3>
-					            </div>
-					        </div>
-					        <div class="col-md-4 ">
-					            <div class="counter blue">
-					                <span class="counter-value"><%=TotalCountData[0] %></span>
-					                <h3>PENDING</h3>
-					            </div>
-					        </div>
-					        <div class="col-md-4 ">
-					            <div class="counter green">
-					                <span class="counter-value"><%=TotalCountData[1] %></span>
-					                <h3>APPROVED</h3>
-					            </div>
-					        </div>
-					    </div>
-					</div>
-			    </div>
-			    	
-			   	<div class="col-md-6">
-			   	
-			   		<div class="container" style="margin-bottom: -9px !important">
-					    <div class="row justify-content-end" >
-					    	
-					    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
-
-						    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
-								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">
-								<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
-	
-								<%
-								String[] arr = new String[]{ "Z", "K", "V" , "W" , "F" };
-								if( ArrayUtils.contains(arr,  logintype) ){ %>
-				    				<input type="checkbox" <%if(isself.equalsIgnoreCase("Y")) {%> checked <%} %> data-toggle="toggle" data-width="100" id="isself" data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
-			    				<%} %>
-			    				
-			    				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
-			    				<input type="hidden" name="isselfvalue" id="isselfvalue" />
-			    			</form>	
-			    				
-			    		</div>
-			    		<br>
-			    	</div>
-			    	
-			    	<div class="container">
-					    <div class="row">
-					    
-					     <div class="col-md-4">
-					      <div class="card-counter violet">
-					        <i class="fa-solid fa-list-check"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name"> Amount InProcess </span>
-					      </div>
-					    </div>
-					    
-					    <div class="col-md-4">
-					      <div class="card-counter primary">
-					        <i class="fa fa-code-fork"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[0].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name"> Amount Claimed</span>
-					      </div>
-					    </div>
-		
-					    <div class="col-md-4">
-					      <div class="card-counter success">
-					        <i class="fa fa-database"></i>
-					        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[1].toString() ))))%> <%}else {%>0 <%} %></span>
-					        <span class="count-name"> Amount Settled </span>
-					      </div>
-					    </div>
-					    
-					    
-					    
-					  </div>
-					  
-					</div>
-			   	
-			   	</div> 	
-
 				</div>
+			</div>
+		<div class="card-body " style="padding-top: 0px;">
+		
+		
+			<div class="container-fluid" >
+				  
+			<div class="tab-content" id="pills-tabContent">
+		  	
+		  		<div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel" aria-labelledby="pills-dashboard-tab">
+					  <div class="row">
+					  
+					    <div class="col-md-6">
+					   		
+							<div class="container">
+							    <div class="row">
+							        <div class="col-md-4">
+							            <div class="counter purple">
+							                <span class="counter-value"><%=TotalCountData[2] %></span>
+							                <h3>TOTAL</h3>
+							            </div>
+							        </div>
+							        <div class="col-md-4 ">
+							            <div class="counter blue">
+							                <span class="counter-value"><%=TotalCountData[0] %></span>
+							                <h3>PENDING</h3>
+							            </div>
+							        </div>
+							        <div class="col-md-4 ">
+							            <div class="counter green">
+							                <span class="counter-value"><%=TotalCountData[1] %></span>
+							                <h3>APPROVED</h3>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+					    </div>
+					    	
+					   	<div class="col-md-6">
+					   	
+					   		<div class="container" style="margin-bottom: -9px !important">
+							    <div class="row justify-content-end" >
+							    	
+							    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
+		
+								    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
+										<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">
+										<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker2" name="ToDate"  readonly	 required="required"  style="width: 120px;">
+			
+										<%
+										String[] arr = new String[]{ "Z", "K", "V" , "W" , "F" };
+										if( ArrayUtils.contains(arr,  logintype) ){ %>
+						    				<input type="checkbox" <%if(isself.equalsIgnoreCase("Y")) {%> checked <%} %> data-toggle="toggle" data-width="100" id="isself" data-onstyle="success" data-offstyle="primary"  data-on=" <i class='fa-solid fa-user'></i>&nbsp;&nbsp; Self" data-off="<i class='fa-solid fa-industry'></i>&nbsp;&nbsp; Unit" >
+					    				<%} %>
+					    				
+					    				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
+					    				<input type="hidden" name="isselfvalue" id="isselfvalue" />
+					    			</form>	
+					    				
+					    		</div>
+					    		<br>
+					    	</div>
+					    	
+					    	<div class="container">
+							    <div class="row">
+							    
+							     <div class="col-md-4">
+							      <div class="card-counter violet">
+							        <i class="fa-solid fa-list-check"></i>
+							        <span class="count-numbers">&#8377; <%if(amountdata[2]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[2].toString() ))))%> <%}else {%>0 <%} %></span>
+							        <span class="count-name"> Amount InProcess </span>
+							      </div>
+							    </div>
+							    
+							    <div class="col-md-4">
+							      <div class="card-counter primary">
+							        <i class="fa fa-code-fork"></i>
+							        <span class="count-numbers">&#8377; <%if(amountdata[0]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[0].toString() ))))%> <%}else {%>0 <%} %></span>
+							        <span class="count-name"> Amount Claimed</span>
+							      </div>
+							    </div>
 				
-			   <hr>
+							    <div class="col-md-4">
+							      <div class="card-counter success">
+							        <i class="fa fa-database"></i>
+							        <span class="count-numbers">&#8377; <%if(amountdata[1]!=null) {%> <%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(amountdata[1].toString() ))))%> <%}else {%>0 <%} %></span>
+							        <span class="count-name"> Amount Settled </span>
+							      </div>
+							    </div>
+							    
+							    
+							    
+							  </div>
+							  
+							</div>
+					   	
+					   	</div> 	
+		
+						</div>
+						
+					   <hr>
+					   
+					   <div class="row">
+					   		<div class="col-md-6">
+					   			<div id="container" style="display:block;" ></div>
+							    <div id="container3" style="display:block;" ></div>
+					   		</div>
+					   		<div class="col-md-6">
+					   			<div id="container4"  style="display: block"></div>
+							    <div id="container-speed" style="display: block" ></div>
+					   		</div>
+					   </div>
+					   
+				</div>
 			   
-			   <div class="row">
-			   		<div class="col-md-6">
-			   			<div id="container" style="display:block;" ></div>
-					    <div id="container3" style="display:block;" ></div>
-			   		</div>
-			   		<div class="col-md-6">
-			   			<div id="container4"  style="display: block"></div>
-					    <div id="container-speed" style="display: block" ></div>
-			   		</div>
-			   </div>
+				<div class="tab-pane fade" id="pills-policy" role="tabpanel" aria-labelledby="pills-policy-tab">
+					<div>
+					    <iframe src="data:application/pdf;base64,<%=chsspolicypdf %>" width="100%" style="height: 33rem !important;" > PDF- File Missing</iframe>
+					</div>
+			 	</div>
+			 	
+			 	<div class="tab-pane fade" id="pills-hospital" role="tabpanel" aria-labelledby="pills-hospital-tab">
+					<div>
+			 			<table class="table table-bordered table-hover table-striped table-condensed myDataTable" > 
+							<thead>
+								<tr>
+									<th>Select</th>
+									<th>Hospital Name </th>
+									<th>Hospital Address</th>								
+								</tr>
+							</thead>
+							<tbody>
+								<% if(EmpanelledHospitals!=null && EmpanelledHospitals.size()>0){ 
+									for(Object[] obj : EmpanelledHospitals){
+								%>
+									<tr>
+										<td style="text-align:center;  width: 10%;"><%=EmpanelledHospitals.indexOf(obj)+1 %> </td>
+										<td style=" width: 35%;"><%=obj[1]%></td>
+										<td style=" width: 45%;"><%=obj[2]%></td>
+									</tr>
+								<%} }%>
+							</tbody>
+						</table>
+			 		</div>
+			 	</div>
+			 	
+			 	<div class="tab-pane fade" id="pills-doctor" role="tabpanel" aria-labelledby="pills-doctor-tab">
+					<div>
+			 			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable" > 
+								<thead>
+									<tr>
+										<th>Select</th>
+										<th>Name </th>
+										<th>Address </th>
+										<th>Contact Details</th>																		
+									</tr>
+								</thead>
+								<tbody>
+									<%if(EmpanelledDoctors!=null && EmpanelledDoctors.size()>0){ 
+										for(Object[] obj : EmpanelledDoctors){
+									%>
+										<tr>
+											<td style="text-align:center;  width: 5%;"> <input type="radio" name="doctorId" value="<%=obj[0]%>"> </td>
+											<td ><%=obj[1]%></td>
+										    <td ><%=obj[3]%></td>
+											<td ><%=obj[4]%></td>
+										</tr>
+								<%} }%>
+								</tbody>
+							</table>
+			 			
+			 		</div>
+			 	</div>
+			 
+			 
+			 </div>	
+					   
 			   
+			</div>
 		</div>
-	   
-		<%-- <div class="tab-pane fade" id="pills-policy" role="tabpanel" aria-labelledby="pills-policy-tab">
-			<div>
-			    <object data="data:application/pdf;base64,<%=chsspolicypdf %>" type="application/pdf" width="100%" height="33cm;" >
-			        PDF- File Missing
-			    </object>
-			    
-			</div>
-	 	</div> --%>
-	 
-	 
-	 
-	 </div>	
-			   
-			   
-			  </div>
-			</div>
 	
-		</div>
+	</div>
 	 
 	 
 	
@@ -432,10 +495,7 @@
 	 
 <script>
 
-
-
 $(document).ready(function(){
-	
 	
 	var selfvalue = '<%=isself%>';
 	if(selfvalue == 'Y'){

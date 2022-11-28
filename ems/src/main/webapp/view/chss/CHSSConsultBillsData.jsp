@@ -352,7 +352,7 @@ p {
 		
 			   <div class="row" >
 			   		<div class="col-2" style="padding: 0px 5px 0px 5px;">
-				    	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.25);min-height: 28rem;border-radius: 5px;" >
+				    	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.25);min-height: 28rem;border-radius: 5px;color: white;" >
 				    		<a class="nav-link nav-link-btn btn co"  data-toggle="tab" id="nav-consultation-tab" href="#nav-consultation" role="tab" aria-controls="nav-consultation"  Onclick="getConsultdata();"  >Consultation</a>
 				    		<a class="nav-link nav-link-btn btn te"  data-toggle="tab" id="nav-tests-tab" href="#nav-tests" role="tab" aria-controls="nav-tests"   Onclick="getTestsData();"  >Tests / Procedures</a>
 				    		<a class="nav-link nav-link-btn btn me"  data-toggle="tab" id="nav-medicines-tab" href="#nav-medicines" role="tab" aria-controls="nav-medicines" Onclick="getMedicinesData();"  >Medicines</a>

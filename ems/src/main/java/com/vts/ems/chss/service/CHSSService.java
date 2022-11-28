@@ -193,11 +193,12 @@ public interface CHSSService
 	public CHSSOtherPermitAmt getCHSSOtherPermitAmt(String otheritemid, long basicpay) throws Exception;
 	public List<Object[]> GetClaimsReportList(String empid, String fromdate, String todate, String claimtype, String status)throws Exception;
 	public Object[] CHSSDashboardCountData(String Empid, String FromDate, String ToDate, String IsSelf) throws Exception;
-	List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception;
+	public List<Object[]> MonthlyWiseDashboardData(String FromDate, String ToDate) throws Exception;
 	public List<Object[]> CHSSDashboardGraphData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public Object[] CHSSDashboardAmountData(String EmpId, String FromDate, String ToDate,String IsSelf) throws Exception;
 	public List<Object[]> CHSSDashboardIndividualAmountData(String EmpId, String FromDate, String ToDate) throws Exception;
 	public long ContingentClaimDrop(String[] chssapplyids, String Username) throws Exception;
-
+	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 
 }

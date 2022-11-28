@@ -88,7 +88,8 @@ import com.vts.ems.utils.EmsFileUtils;
 import com.vts.ems.utils.IndianRupeeFormat;
 
 @Controller
-public class CHSSController {
+public class CHSSController 
+{
 
 	private static final Logger logger = LogManager.getLogger(CHSSController.class);
 	
@@ -163,8 +164,9 @@ public class CHSSController {
 			if(IsSelf==null) {
 				IsSelf="Y";
 			}
-			
+			if(new File(env.getProperty("ProjectFiles")+ "/ProjectManuals/chss-policy.pdf").exists()) {
 			req.setAttribute("chss_policy_pdf", Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(env.getProperty("ProjectFiles")+ "/ProjectManuals/chss-policy.pdf"))) );
+			}
 			req.setAttribute("countdata", service.CHSSDashboardCountData(EmpId, DbFromDate, DbToDate,IsSelf) );
 			req.setAttribute("Fromdate", FromDate);
 			req.setAttribute("Todate", ToDate);
@@ -175,9 +177,11 @@ public class CHSSController {
 			req.setAttribute("isself", IsSelf);
 			req.setAttribute("monthlywisedata", service.MonthlyWiseDashboardData(DbFromDate, DbToDate));
 //			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			
+			req.setAttribute("EmpanelledHospitals", service.GetEmpanelledHostpitalList());
+			req.setAttribute("EmpanelledDoctors", service.GetDoctorEmpanelledList());
+			
 			ses.setAttribute("SidebarActive","Home");
-			
-			
 			return "chss/CHSSDashboard";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside CHSSDashboard.htm "+Username, e);
