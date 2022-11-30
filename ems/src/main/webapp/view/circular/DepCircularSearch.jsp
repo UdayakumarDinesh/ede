@@ -40,22 +40,13 @@
 <div class="card-header page-top">
   <div class="row">  
   <div class="col-md-8" style="width:30px">
-  	<%if(Integer.parseInt(DepType[0].toString())==9){ %>
-      <h5>Government Orders Search</h5>
-    <%}else{ %>
     	<h5>Circular Search - &nbsp;<%if(DepType!=null){ %><%=DepType[2] %><%}else {%>All <%} %></h5>
-    <%} %>
   </div>   
      	<div class="col-md-4">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 				<li class="breadcrumb-item "><a href="CircularDashBoard.htm"> Circular </a></li>
-				
-                <%if(Integer.parseInt(DepType[0].toString())==9){ %>
-				<li class="breadcrumb-item active " aria-current="page">Order Search</li>
-				<%}else{%>
 				<li class="breadcrumb-item active " aria-current="page">Circular Search</li>
-				<%}%>
                 </ol>                
 		</div>  
  </div>
@@ -106,11 +97,7 @@
 				<thead>
 					<tr>
 					    <th style="width:4%">SN</th>
-						 <%if(Integer.parseInt(DepType[0].toString())==9){ %>
-					   <th style="width:10%">Order No</th>
-					  <%}else{ %>
 					  <th style="width:10%">Circular No</th>
-					  <%} %>
                         <th style="width:11%">Date</th>
                         <th style="width:45%">Subject</th>
                         <th style="width:8%">Download</th>
@@ -140,7 +127,7 @@
 	    </form>
 	    </div>
 	    
-	    <script type="text/javascript">
+<script type="text/javascript">
 
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,

@@ -6,7 +6,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<title>Circular Add</title>
 
 <style>
 .card .card-body {
@@ -28,9 +27,9 @@
   
      	<div class="col-md-3">
      	<%if(OrderEditDetails==null){  %>
-     	<h5>OfficeOrder Add</h5>
+     	<h5>Office Order Add</h5>
      	<%}else{%>
-		<h5>OfficeOrder Edit</h5>
+		<h5>Office Order Edit</h5>
 		<%	}  %> 
      	</div>
      	
@@ -38,11 +37,11 @@
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 
-				<li class="breadcrumb-item "><a href="OfficeOrder.htm"> OfficeOrder List </a></li>
+				<li class="breadcrumb-item "><a href="OfficeOrder.htm"> Office Order List </a></li>
 						<%if(OrderEditDetails==null){  %>
-                        <li class="breadcrumb-item active " aria-current="page">OfficeOrder Add</li>
+                        <li class="breadcrumb-item active " aria-current="page">Office Order Add</li>
                          <%}else{%>
-                          <li class="breadcrumb-item active " aria-current="page">OfficeOrder Edit</li>
+                          <li class="breadcrumb-item active " aria-current="page">Office Order Edit</li>
                         <%}%> 
 			</ol>
 		</div>  

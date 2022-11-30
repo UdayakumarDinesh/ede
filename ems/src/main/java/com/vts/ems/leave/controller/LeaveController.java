@@ -825,7 +825,7 @@ public class LeaveController {
 	        }
 	        in.close();
 	        out.flush();
-			
+	        out.close();	
 		}catch (Exception e) {
 				e.printStackTrace(); 
 				logger.error(new Date() +"Inside downloadMcFc "+ req.getUserPrincipal().getName(),e);

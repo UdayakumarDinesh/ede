@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,7 @@ import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
+import com.vts.ems.circularorder.model.EMSGovtOrders;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.circularorder.service.CircularOrderService;
@@ -59,7 +62,7 @@ public class CircularOrderController {
 	private String emsfilespath;
 
 
-	@RequestMapping(value = "DepCircularList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	@RequestMapping(value = "DepCircularList.htm")
 	public String DepCircularList( HttpServletRequest req, HttpSession ses,@RequestParam String id ) throws Exception
 	{
 		String LoginType = (String) ses.getAttribute("LoginType");
@@ -68,8 +71,8 @@ public class CircularOrderController {
 		try {
 			Object[] DepType=service.GetEmsDepType(id);
 			ses.setAttribute("SidebarActive", "DepCircularList_htm?id="+id);
-			String fromdate = (String)req.getParameter("FromDate");
-			String todate = (String)req.getParameter("ToDate");
+			String fromdate = req.getParameter("FromDate");
+			String todate = req.getParameter("ToDate");
 				 
 			if(fromdate==null || todate == null) 
 			{
@@ -84,7 +87,8 @@ public class CircularOrderController {
 				}
 				
 				todate  = LocalDate.now().toString();
-			}else
+			}
+			else
 			{
 				fromdate=sdf.format(rdf.parse(fromdate));
 				todate=sdf.format(rdf.parse(todate));
@@ -139,7 +143,7 @@ public class CircularOrderController {
 				return "redirect:/DepCircularList.htm?id="+DepTypeId;
 			}
 			
-			EMSDepCircular cir = new EMSDepCircular().builder()
+			EMSDepCircular cir =  EMSDepCircular.builder()
 									.DepTypeId(Integer.parseInt(DepTypeId))
 									.DepCircularNo(req.getParameter("CircularNo"))
 									.DepCircularDate(sdf.format(rdf.parse(req.getParameter("CircularDate"))))
@@ -164,7 +168,7 @@ public class CircularOrderController {
 		
 	}
 	
-	@RequestMapping(value = "DepCircularDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "DepCircularDownload.htm")
 	public void DepCircularDownload(HttpServletResponse res ,HttpServletRequest req, HttpSession ses) throws Exception
 	{
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -196,7 +200,7 @@ public class CircularOrderController {
 			File my_file = new File(tempPath+"//"+circular.getDepCirFileName());
 			if(circular.getDepTypeId()!=9) 
 			{
-				PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()
+				PdfFileEncryptionDataDto dto=PdfFileEncryptionDataDto.builder()
 														.sourcePath(tempPath+"//"+circular.getDepCirFileName())
 														.targetPath(tempPath1+"//"+circular.getDepCirFileName())
 														.watermarkText( EmpNo+" : "+EmpName)
@@ -219,8 +223,8 @@ public class CircularOrderController {
 		    }
 		    in.close();
 		    out.flush();
-		    
-		    DepEMSCircularTrans  circularTrans = new DepEMSCircularTrans().builder()
+		    out.close();	
+		    DepEMSCircularTrans  circularTrans =  DepEMSCircularTrans.builder()
 					.DepCircularId(Long.parseLong(CircularId))
 					.DownloadBy(Long.parseLong(EmpId))
 					.EmpNo(EmpNo)
@@ -272,25 +276,26 @@ public class CircularOrderController {
 			
 			String circularId = req.getParameter("circularId");
 			String DepTypeId= req.getParameter("DepTypeId");
-			
-			try(PDDocument doc = PDDocument.load(CircularFile.getInputStream());)
-			{
-			    if(doc.isEncrypted())
-			    {
-			    	doc.close();
-			    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+			if(!CircularFile.isEmpty()) {
+				try(PDDocument doc = PDDocument.load(CircularFile.getInputStream());)
+				{
+				    if(doc.isEncrypted())
+				    {
+				    	doc.close();
+				    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+						redir.addAttribute("DepTypeId",DepTypeId);
+						return "redirect:/DepCircularList.htm?id="+DepTypeId;
+				    }
+				}
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+			    	redir.addAttribute("resultfail", " PDF File is Corrupted");
 					redir.addAttribute("DepTypeId",DepTypeId);
 					return "redirect:/DepCircularList.htm?id="+DepTypeId;
-			    }
+				}
 			}
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-		    	redir.addAttribute("resultfail", " PDF File is Corrupted");
-				redir.addAttribute("DepTypeId",DepTypeId);
-				return "redirect:/DepCircularList.htm?id="+DepTypeId;
-			}
-			EMSDepCircular cir = new EMSDepCircular().builder()
+			EMSDepCircular cir =  EMSDepCircular.builder()
 									.DepCircularId(Long.parseLong(circularId))
 									.DepTypeId(Integer.parseInt(DepTypeId))
 									.DepCircularNo(req.getParameter("CircularNo"))
@@ -360,15 +365,12 @@ public class CircularOrderController {
 			List<Object[]> SearchList=new ArrayList<Object[]>();
 	        String search=req.getParameter("search");
 	        
-	        System.out.println(search);
-	        System.out.println(id);
-	        
 	        if(search!=null && !search.trim().equalsIgnoreCase("") && !id.trim().equalsIgnoreCase("")) {
 	        	SearchList=service.DepCircularSearchList(search,id);
 	        }
 	        
 	        req.setAttribute("Search",search);
-	        req.setAttribute("DepTypeList",service.GetEmsDepType());
+	        req.setAttribute("DepTypeList",service.GetEmsDepTypeList());
 	        req.setAttribute("DepType",service.GetEmsDepType(id));
 	        req.setAttribute("SearchList",SearchList);
 	        return "circular/DepCircularSearch";
@@ -395,8 +397,8 @@ public class CircularOrderController {
 		try {
 			ses.setAttribute("SidebarActive", "OfficeOrder_htm");
 			
-			String fromdate = (String)req.getParameter("FromDate");
-			String todate = (String)req.getParameter("ToDate");
+			String fromdate = req.getParameter("FromDate");
+			String todate = req.getParameter("ToDate");
 			if(fromdate==null && todate == null) {
 				fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatOffice();
 				todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
@@ -431,7 +433,7 @@ public class CircularOrderController {
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OfficeOrderDelete.htm "+UserId);
    		String UserName=(String)ses.getAttribute("Username");
-       	String OrderId = (String)req.getParameter("OrderId");
+       	String OrderId = req.getParameter("OrderId");
        	
        	long OrdersId = Long.parseLong(OrderId);
         long getMaxOrderId = service.GetMaxOrderId();
@@ -440,17 +442,18 @@ public class CircularOrderController {
         if(OrdersId == getMaxOrderId) {
         	int count = service.OfficeOrderDelete(Long.parseLong(OrderId),UserName);
        		if (count > 0) {
-       			redir.addAttribute("result", "OfficeOrder deleted Successfully");
+       			redir.addAttribute("result", "Office Order deleted Successfully");
     		} else {
-    			redir.addAttribute("resultfail", "OfficeOrder delete Unsuccessfull");
+    			redir.addAttribute("resultfail", "Office Order delete Unsuccessfull");
     		}
        		
         }else {
-       	 redir.addAttribute("resultfail", "Only Recent OfficeOrder is allowed to Delete ");
+       	 redir.addAttribute("resultfail", "Only Recent Office Order is allowed to Delete ");
        	
         }
         return "redirect:/OfficeOrder.htm";
 	}
+	
 	@RequestMapping(value = "OfficeOrderSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String OfficeOrderSearch(HttpServletRequest req, HttpSession ses) throws Exception
 	{
@@ -462,36 +465,20 @@ public class CircularOrderController {
         	SearchList=service.GetSearchList(search);
         }
         req.setAttribute("SearchList",SearchList);
-        //System.out.println(SearchList.size());
 		return "circular/OfficeOrderSearch";
 	
 	}
 	
-	
-	/*
-	 * @RequestMapping(value = "SearchCircular.htm", method = { RequestMethod.POST
-	 * ,RequestMethod.GET }) public String SearchCircular(HttpServletRequest req,
-	 * HttpSession ses, RedirectAttributes redir) throws Exception { List<Object[]>
-	 * SearchList=new ArrayList<Object[]>(); String
-	 * search=(String)req.getParameter("search");
-	 * SearchList=service.GetSearchList(search);
-	 * req.setAttribute("SearchList",SearchList); System.out.println(SearchList);
-	 * return "redirect:/CircularSearch";
-	 * 
-	 * }
-	 */
-	
-	
-	
+
 	@RequestMapping(value = "OfficeOrderAddSubmit.htm", method = { RequestMethod.POST ,RequestMethod.GET })
 	public String officeOrderAdd(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("FileAttach") MultipartFile FileAttach) throws Exception{
 		String Username=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OfficeOrderAddSubmit.htm "+Username);
 		
 		try {
-            String OrderNo   =(String)req.getParameter("OrderNo");
-			String OrderDate   =(String)req.getParameter("OrderDate");
-			String OrderSubject  =(String)req.getParameter("OrderSubject");
+            String OrderNo   =req.getParameter("OrderNo");
+			String OrderDate   =req.getParameter("OrderDate");
+			String OrderSubject  =req.getParameter("OrderSubject");
 			String AutoId = UUID.randomUUID().toString();
 			
 			
@@ -525,14 +512,10 @@ public class CircularOrderController {
             
 			long count=service.OfficeOrderAdd(uploadorderdto);
 	        if (count > 0) {
-				 redir.addAttribute("result", "OfficeOrder Added Successfully");
+				 redir.addAttribute("result", "Office Order Added Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "OfficeOrder Add Unsuccessfull");
+				 redir.addAttribute("resultfail", "Office Order Add Unsuccessfull");
 			}
-			
-
-
-			
 
 		return  "redirect:/OfficeOrder.htm";
 		
@@ -554,10 +537,9 @@ public class CircularOrderController {
 	{
 		String Username=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OfficeOrderEdit.htm "+Username);
-         String OrderId = (String)req.getParameter("OrderId");
+         String OrderId = req.getParameter("OrderId");
          long OrdersId = Long.parseLong(OrderId);
          long GetMaxOrderId = service.GetMaxOrderId();
-        System.out.println(GetMaxOrderId);
          
          if(OrdersId == GetMaxOrderId) {
         	 EMSOfficeOrder list = service.GetOrderDetailsToEdit(OrdersId);
@@ -565,7 +547,7 @@ public class CircularOrderController {
     		 return "circular/OfficeOrderAddEdit";
         	 
          }else {
-        	 redir.addAttribute("resultfail", "Only Recent OfficeOrder is allowed to edit ");
+        	 redir.addAttribute("resultfail", "Only Recent Office Order is allowed to edit ");
         	 return "redirect:/OfficeOrder.htm";
          }
 	
@@ -581,10 +563,10 @@ public class CircularOrderController {
 		
 		try {
 			
-			String OrderId =(String)req.getParameter("OrderIdSel");
-            String OrderNo   =(String)req.getParameter("OrderNo");
-			String OrderDate   =(String)req.getParameter("OrderDate");
-			String OrderSubject  =(String)req.getParameter("OrderSubject");
+			String OrderId =req.getParameter("OrderIdSel");
+            String OrderNo   =req.getParameter("OrderNo");
+			String OrderDate   =req.getParameter("OrderDate");
+			String OrderSubject  =req.getParameter("OrderSubject");
 			String AutoId = UUID.randomUUID().toString();
 
 			
@@ -602,9 +584,9 @@ public class CircularOrderController {
 			
 			long count=service.OrderUpdate(uploadorderdto);
 	        if (count > 0) {
-				 redir.addAttribute("result", "OfficeOrder Updated Successfully");
+				 redir.addAttribute("result", "Office Order Updated Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "OfficeOrder Update Unsuccessfull");
+				 redir.addAttribute("resultfail", "Office Order Update Unsuccessfull");
 			}
 		
 			
@@ -618,17 +600,7 @@ public class CircularOrderController {
 		
 	}
 	
-	
-	
-	
-	/*
-	 * @RequestMapping(value = "OfficeOrders.htm", method = RequestMethod.GET)
-	 * public String OfficeOrders(HttpServletRequest req, HttpSession ses) throws
-	 * Exception { return "circular/OfficeOrders"; }
-	 */
-	
 
-	
 
 	@RequestMapping(value = "OfficeOrderDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public void OfficeOrderDownload(HttpServletResponse res ,HttpServletRequest req, HttpSession ses) throws Exception
@@ -660,9 +632,8 @@ public class CircularOrderController {
 			//Unzip the pdf file from zip file and copy to tempPath
 			Zipper zip=new Zipper();
 			zip.unpack(emsfilespath+"//"+Order.getOrderPath(),tempPath,CustomEncryptDecrypt.decryption(Order.getOrderKey().toCharArray()));
-			System.out.println("unpack"+zip);
 			
-			PdfFileEncryptionDataDto dto=new PdfFileEncryptionDataDto().builder()
+			PdfFileEncryptionDataDto dto = PdfFileEncryptionDataDto.builder()
 													.sourcePath(tempPath+"//"+Order.getOrderFileName())
 													.targetPath(tempPath1+"//"+Order.getOrderFileName())
 													.watermarkText( EmpNo+" : "+EmpName)
@@ -685,8 +656,8 @@ public class CircularOrderController {
 		    }
 		    in.close();
 		    out.flush();
-		    
-		    EMSOfficeOrderTrans  OrderTrans = new EMSOfficeOrderTrans().builder()
+		    out.close();	
+		    EMSOfficeOrderTrans  OrderTrans =  EMSOfficeOrderTrans.builder()
 		    									.OrderId(Long.parseLong(OrderId))
 		    									.DownloadBy(Long.parseLong(EmpId))
 		    									.EmpNo(EmpNo)
@@ -702,5 +673,284 @@ public class CircularOrderController {
 		
 	}
 	
+	
+	@RequestMapping(value = "GovtOrdersList.htm")
+	public String GovtOrdersList(Model model, HttpServletRequest req, HttpSession ses ) throws Exception
+	{
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrdersList.htm "+UserId);
+		try {
+			String DepTypeId = req.getParameter("DepTypeId");
+			String fromdate = req.getParameter("FromDate");
+			String todate = req.getParameter("ToDate");
+			
+			if (DepTypeId==null) 
+			{
+				Map md=model.asMap();
+				DepTypeId=(String)md.get("DepTypeId");
+			}	
+			
+			if(DepTypeId==null)
+			{
+				DepTypeId="A";
+			}
+			
+		
+			if(fromdate==null || todate == null) 
+			{
+				LocalDate today= LocalDate.now();
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1)+"-04-01";
+				}
+				else
+				{
+					fromdate=String.valueOf(today.getYear())+"-04-01";
+				}
+				
+				todate  = LocalDate.now().toString();
+			}
+			else
+			{
+				fromdate=sdf.format(rdf.parse(fromdate));
+				todate=sdf.format(rdf.parse(todate));
+			}
+					
+			req.setAttribute("DepTypeList",service.GetEmsDepTypeList());
+	   		req.setAttribute("GovtOrdersList", service.GetGovtOrdersList(fromdate , todate,DepTypeId ));
+	   		req.setAttribute("fromdate", fromdate);	
+			req.setAttribute("todate",todate);
+			req.setAttribute("LoginType",LoginType);
+			req.setAttribute("DepTypeId",DepTypeId);
+			return "circular/GovtOrderList";
+		} catch (Exception e) {
+			  logger.error(new Date() +"Inside GovtOrdersList.htm "+UserId ,e);
+			  e.printStackTrace();
+			  return "static/Error";
+		}
+	}
+	
+	
+	@RequestMapping(value = "GovtOrderAdd.htm")
+	public String GovtOrderAdd(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderAdd.htm "+UserId);
+		
+		String DepTypeId= req.getParameter("DepTypeId");
+		req.setAttribute("DepTypeList",service.GetEmsDepTypeList());
+		req.setAttribute("DepTypeId",DepTypeId);
+		return "circular/GovtOrderAddEdit";
+	}
+	
+	
+
+	
+	@RequestMapping(value = "GovtOrderAddSubmit.htm")
+	public String GovtOrderAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,@RequestPart("OrderFile") MultipartFile OrderFile) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderAddSubmit.htm "+UserId);
+		try {
+			
+			String DepTypeId= req.getParameter("DepTypeId");
+			try(PDDocument doc = PDDocument.load(OrderFile.getInputStream());)
+			{
+			    if(doc.isEncrypted())
+			    {
+			    	doc.close();
+			    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+					redir.addAttribute("DepTypeId",DepTypeId);
+					return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			    }
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+		    	redir.addAttribute("resultfail", " PDF File is Corrupted");
+				redir.addAttribute("DepTypeId",DepTypeId);
+				return "redirect:/DepCircularList.htm?id="+DepTypeId;
+			}
+			
+			EMSGovtOrders order =  EMSGovtOrders.builder()
+									.DepTypeId(Integer.parseInt(DepTypeId))
+									.OrderNo(req.getParameter("OrderNo"))
+									.OrderDate(sdf.format(rdf.parse(req.getParameter("OrderDate"))))
+									.Description(req.getParameter("description"))
+									.CreatedBy(UserId)
+									.build();
+			
+			long count=service.GovtOrderAdd(order, OrderFile);
+			
+	        if (count > 0) {
+				 redir.addAttribute("result", "Govternment Order Added Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "Govternment Order Adding Unsuccessfull");
+			}
+			
+			redir.addAttribute("DepTypeId",DepTypeId);
+			return "redirect:/GovtOrdersList.htm";
+		} catch (Exception e) {
+			  logger.error(new Date() +"Inside GovtOrderAddSubmit.htm "+UserId ,e);
+			  e.printStackTrace();
+			  return "static/Error";
+		}
+		
+	}
+	
+	
+
+	@RequestMapping(value = "GovtOrderDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public void GovtOrderDownload(HttpServletResponse res ,HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderDownload.htm "+UserId);
+		try {
+			String OrderId=req.getParameter("OrderId");
+			EMSGovtOrders order = service.getEMSGovtOrder(OrderId);
+			
+			File my_file = new File(emsfilespath+"//"+order.getOrderFilePath());
+			
+			res.setHeader("Content-disposition","attachment; filename="+order.getOrderFileName());
+		    OutputStream out = res.getOutputStream();
+		    FileInputStream in = new FileInputStream(my_file);
+		    byte[] buffer = new byte[4096];
+		    int length;
+		    while ((length = in.read(buffer)) > 0)
+		    {
+		    	out.write(buffer, 0, length);
+		    }
+		    in.close();
+		    out.flush();
+		    out.close();		    
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" GovtOrderDownload.htm "+UserId, e);
+		}
+		
+	}
+	
+	@RequestMapping(value = "GovtOrderEdit.htm")
+	public String GovtOrderEdit(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderEdit.htm "+UserId);
+		String OrderId =req.getParameter("OrderId");
+		String DepTypeId= req.getParameter("DepTypeId");
+		
+		req.setAttribute("Order",service.getEMSGovtOrder(OrderId));
+		req.setAttribute("DepTypeList",service.GetEmsDepTypeList());
+		req.setAttribute("DepTypeId",DepTypeId);
+		return "circular/GovtOrderAddEdit";
+	}
+	
+	@RequestMapping(value ="GovtOrderEditSubmit.htm" , method = RequestMethod.POST)
+	public String GovtOrderEditSubmit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir,@RequestPart("OrderFile") MultipartFile OrderFile) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderEditSubmit.htm "+UserId);
+		try {
+			
+			String DepTypeId= req.getParameter("DepTypeId");
+			if(!OrderFile.isEmpty()) {
+				try(PDDocument doc = PDDocument.load(OrderFile.getInputStream());)
+				{
+				    if(doc.isEncrypted())
+				    {
+				    	doc.close();
+				    	redir.addAttribute("resultfail", "Cannot Upload Encrypted PDF File");
+						redir.addAttribute("DepTypeId",DepTypeId);
+						return "redirect:/DepCircularList.htm?id="+DepTypeId;
+				    }
+				}
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+			    	redir.addAttribute("resultfail", " PDF File is Corrupted");
+					redir.addAttribute("DepTypeId",DepTypeId);
+					return "redirect:/DepCircularList.htm?id="+DepTypeId;
+				}
+			}
+			EMSGovtOrders order =  EMSGovtOrders.builder()
+									.DepTypeId(Integer.parseInt(DepTypeId))
+									.GovtOrderId(Long.parseLong(req.getParameter("OrderId")))
+									.OrderNo(req.getParameter("OrderNo"))
+									.OrderDate(sdf.format(rdf.parse(req.getParameter("OrderDate"))))
+									.Description(req.getParameter("description"))
+									.CreatedBy(UserId)
+									.build();
+			
+			long count=service.GovtOrderEdit(order, OrderFile);
+			
+	        if (count > 0) {
+				 redir.addAttribute("result", "Govternment Order Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "Govternment Order Update Unsuccessfull");
+			}
+			
+			redir.addFlashAttribute("DepTypeId",DepTypeId);
+			return "redirect:/GovtOrdersList.htm";
+		} catch (Exception e) {
+			  logger.error(new Date() +"Inside GovtOrderEditSubmit.htm "+UserId ,e);
+			  e.printStackTrace();
+			  return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "GovtOrderDelete.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	public String GovtOrderDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderDelete.htm "+UserId);
+		
+		try {
+	       	String OrderId = req.getParameter("OrderId");
+	       	
+	        long count = service.GovtOrderDelete(OrderId,UserId);
+	       	if (count > 0) {
+	       		redir.addAttribute("result", "Government Order deleted Successfully");
+	    	} else {
+	    		redir.addAttribute("resultfail", "Government Order delete Unsuccessfull");
+	    	}
+	       		
+	        return "redirect:/GovtOrdersList.htm";
+		} catch (Exception e) {
+			  logger.error(new Date() +"Inside GovtOrderDelete.htm "+UserId ,e);
+			  e.printStackTrace();
+			  return "static/Error";
+		}
+	}
+
+	@RequestMapping(value = "GovtOrderSearch.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	public String GovtOrderSearch(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside GovtOrderSearch.htm "+UserId);
+		try
+		{
+			List<Object[]> SearchList=new ArrayList<Object[]>();
+	        String search=req.getParameter("search");
+	        String DepTypeId= req.getParameter("DepTypeId");
+	        if(search!=null && !search.trim().equalsIgnoreCase("") && !DepTypeId.trim().equalsIgnoreCase("")) {
+	        	SearchList=service.GovtOrderSearchList(search,DepTypeId);
+	        }
+	        
+	        req.setAttribute("Search",search);
+	        req.setAttribute("DepTypeList",service.GetEmsDepTypeList());
+	        req.setAttribute("DepTypeId",DepTypeId);
+	        req.setAttribute("SearchList",SearchList);
+	        return "circular/GovtOrderSearch";
+		}
+		catch (Exception e) {
+		  logger.error(new Date() +"Inside GovtOrderSearch.htm "+UserId ,e);
+		  e.printStackTrace();
+		  return "static/Error";
+		
+		}
+	
+	}
 	
 }

@@ -210,11 +210,11 @@
 								 	<a class="dropdown-item" href="PasswordChange.htm" >&nbsp;<i class="fa fa-key" aria-hidden="true" style="color: cornflowerblue"></i> &nbsp;&nbsp;Change Password </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
-								   <a class="dropdown-item" href="EMSForms.htm" ><img src="view/images/forms.png"/> &nbsp;&nbsp;&nbsp;&nbsp;Forms </a>
+								<!--    <a class="dropdown-item" href="EMSForms.htm" ><img src="view/images/forms.png"/> &nbsp;&nbsp;&nbsp;&nbsp;Forms </a>
 								    <div class="dropdown-divider logoutdivider"></div>
 								    
 								    <a class="dropdown-item" href="EMSNotices.htm" ><img src="view/images/notice.png"/> &nbsp;&nbsp;&nbsp;&nbsp;Notice </a>
-								    <div class="dropdown-divider logoutdivider"></div>
+								    <div class="dropdown-divider logoutdivider"></div> -->
 								    
 								   <a class="dropdown-item" href="UserManualDoc.htm" target="blank"><img src="view/images/handbook.png"/> &nbsp;&nbsp;Manual </a>
 								    <div class="dropdown-divider logoutdivider"></div>

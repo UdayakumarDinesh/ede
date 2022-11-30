@@ -1259,6 +1259,7 @@ public class MasterController {
 				        }
 				        in.close();
 				        out.flush();
+				        out.close();	
 				}catch(Exception e) {
 					logger.error(new Date() +"Inside download-CircularFile-attachment "+UserId,e);
 					e.printStackTrace();
@@ -1292,7 +1293,7 @@ public class MasterController {
 						}
 						in.close();
 						out.flush();
-		        
+						out.close();	
 				}catch(Exception e) {
 					logger.error(new Date() +"Inside CircularAttachmentView.htm "+UserId,e);
 					e.printStackTrace();

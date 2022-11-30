@@ -67,6 +67,8 @@ public class FormNoticeController {
 			req.setAttribute("DepTypeId",DepTypeId);
 			req.setAttribute("LoginType",LoginType);
 			
+			
+			ses.setAttribute("SidebarActive", "EMSForms_htm");
 			return "circular/EMSFormsList";
 			
 		} catch (Exception e) {
@@ -97,7 +99,7 @@ public class FormNoticeController {
 			String description=req.getParameter("description");
 			
 			
-			FormUploadDto dto=new FormUploadDto().builder()
+			FormUploadDto dto= FormUploadDto.builder()
 					.DepTypeId(DepTypeId)
 					.FormFile(FormFile)
 					.FormNo(FormNo)
@@ -217,6 +219,7 @@ public class FormNoticeController {
 			req.setAttribute("NoticeList", service.getEmsNoticeList(FromDate, ToDate));
 			req.setAttribute("LoginType",LoginType);
 			
+			ses.setAttribute("SidebarActive", "EMSNotices_htm");
 			return "circular/EMSNoticeList";
 			
 		} catch (Exception e) {
@@ -245,7 +248,7 @@ public class FormNoticeController {
 			String description=req.getParameter("description");
 			String NoticeNo =req.getParameter("ReferenceNo");
 			
-			NoticeUploadDto dto =  new NoticeUploadDto().builder()
+			NoticeUploadDto dto =   NoticeUploadDto.builder()
 									.NoticeDate(sdf.format(rdf.parse(NoticeDate)))
 									.ToDate(sdf.format(rdf.parse(NoticeToDate)))
 									.NoticeFile(NoticeFile)
@@ -339,7 +342,7 @@ public class FormNoticeController {
 			String description=req.getParameter("description");
 			String NoticeNo =req.getParameter("ReferenceNo");
 			
-			NoticeUploadDto dto =  new NoticeUploadDto().builder()
+			NoticeUploadDto dto =   NoticeUploadDto.builder()
 									.NoticeDate(sdf.format(rdf.parse(NoticeDate)))
 									.ToDate(sdf.format(rdf.parse(NoticeToDate)))
 									.NoticeFile(NoticeFile)
@@ -357,7 +360,7 @@ public class FormNoticeController {
 			}
 	        
 	        redir.addAttribute("FromDate", rdf.format(sdf.parse(req.getParameter("FromDate"))));	
-	        redir.addAttribute("ToDate",rdf.format(sdf.parse(req.getParameter("ToDate"))));
+	        redir.addAttribute("ToDate", rdf.format(sdf.parse(req.getParameter("ToDate"))));
 			
 	        return "redirect:/EMSNotices.htm";
 	        
@@ -400,7 +403,6 @@ public class FormNoticeController {
 	@RequestMapping(value = "EMSTodaysNotices.htm")
 	public String EMSTodaysNotices(Model model, HttpServletRequest req, HttpSession ses) throws Exception
 	{
-		String LoginType=(String)ses.getAttribute("LoginType");
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EMSTodaysNotices.htm "+UserId);
 		try 

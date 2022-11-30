@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ import com.vts.ems.circularorder.dto.OfficeOrderUploadDto;
 import com.vts.ems.circularorder.dto.PdfFileEncryptionDataDto;
 import com.vts.ems.circularorder.model.DepEMSCircularTrans;
 import com.vts.ems.circularorder.model.EMSDepCircular;
+import com.vts.ems.circularorder.model.EMSGovtOrders;
 import com.vts.ems.circularorder.model.EMSOfficeOrder;
 import com.vts.ems.circularorder.model.EMSOfficeOrderTrans;
 import com.vts.ems.pis.model.EmployeeDetails;
@@ -237,7 +239,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	        Path filePath = uploadPath.resolve(fileName);
 	        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException ioe) {       
-	        throw new IOException("Could not save image file: " + fileName, ioe);
+	        throw new IOException("Could not save file: " + fileName, ioe);
 	    }     
 	}
 	
@@ -276,11 +278,11 @@ public class CircularOrderServiceImpl implements CircularOrderService
 			String filename=dto.getCirFile().getOriginalFilename();
 	
 			String key =  UUID.randomUUID().toString();
-			
+			new File(FilePath+fetch.getDepCircularPath()).delete();
 			Zipper zip=new Zipper();
 			zip.pack(filename,dto.getCirFile().getInputStream(),FullDir,CirFileName,key);
 			
-			new File(FilePath+fetch.getDepCircularPath()).delete();
+			
 			fetch.setDepCircularKey(CustomEncryptDecrypt.encryption(key.toCharArray()));
 			fetch.setDepCircularPath(CircularPath+CirFileName+".zip");
 			fetch.setDepCirFileName(filename);
@@ -301,9 +303,9 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	}
 	
 	@Override
-	public List<Object[]> GetEmsDepType() throws Exception
+	public List<Object[]> GetEmsDepTypeList() throws Exception
 	{
-		return dao.GetEmsDepType();
+		return dao.GetEmsDepTypeList();
 	}
 	
 	
@@ -385,7 +387,6 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	        String[] cirSplit = cirDate.split("-");
 	        year = cirSplit[2];
 	        
-	        System.out.println("pathcir"+uploadorderdto.getOrderPath());
 	        if(!uploadorderdto.getOrderPath().isEmpty()) {
 	        	
 	        	new File(FilePath+Order.getOrderPath()).delete();
@@ -487,4 +488,98 @@ public class CircularOrderServiceImpl implements CircularOrderService
 		return dao.OfficeOrderTransactionAdd(OrderTrans);
 	}
 
+	@Override
+	public List<Object[]> GetGovtOrdersList(String fromdate, String toDate,String DepTypeId) throws Exception 
+	{
+		return dao.GetGovtOrdersList(fromdate, toDate, DepTypeId);
+	}
+	
+	@Override
+	public long GovtOrderAdd(EMSGovtOrders order,MultipartFile OrderFile) throws Exception 
+	{
+		logger.info(new Date() +"Inside SERVICE GovtOrderAdd ");
+		String OrderPath = "\\GovtOrders\\"+LocalDate.parse(order.getOrderDate()).getYear()+"\\";
+		String FullDir = FilePath+OrderPath;
+		File theDir = new File(FullDir);
+		if (!theDir.exists()){
+			theDir.mkdirs();
+		}
+		
+		String OrderDate = order.getOrderDate();
+		long maxOrderId = dao.GetGovtOrderMaxId()+1;
+		String[] OrderSplit = OrderDate.split("-");
+		String OrderFileName ="GO"+maxOrderId+OrderSplit[0]+OrderSplit[1]+OrderSplit[2];
+	    
+		String filename=OrderFile.getOriginalFilename();
+		
+		
+		saveFile(FilePath+OrderPath, OrderFileName+"."+FilenameUtils.getExtension(OrderFile.getOriginalFilename()),OrderFile);
+		
+		order.setCreatedDate(sdtf.format(new Date()));
+		order.setOrderFilePath(OrderPath+OrderFileName+"."+FilenameUtils.getExtension(OrderFile.getOriginalFilename()));
+		order.setOrderFileName(filename);
+		order.setIsActive(1);
+		return dao.EmsGovtOrderAdd(order);
+	}
+	
+	@Override
+	public EMSGovtOrders getEMSGovtOrder(String OrderId) throws Exception 
+	{
+		return dao.getEMSGovtOrder(OrderId);
+		
+	}
+	@Override
+	public long GovtOrderEdit(EMSGovtOrders order,MultipartFile OrderFile) throws Exception 
+	{
+		logger.info(new Date() +"Inside SERVICE DepCircularEdit ");
+		EMSGovtOrders fetch = dao.getEMSGovtOrder(String.valueOf(order.getGovtOrderId()));
+		fetch.setOrderDate(order.getOrderDate());
+		fetch.setOrderNo(order.getOrderNo());
+		fetch.setDescription(order.getDescription());
+		fetch.setModifiedBy(order.getModifiedBy());
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		
+		if(!OrderFile.isEmpty()) 
+		{
+			String OrderPath = "\\GovtOrders\\"+LocalDate.parse(order.getOrderDate()).getYear()+"\\";
+			String FullDir = FilePath+OrderPath;
+			File theDir = new File(FullDir);
+			if (!theDir.exists()){
+				theDir.mkdirs();
+			}
+			
+			String OrderDate = order.getOrderDate();
+			String[] OrderSplit = OrderDate.split("-");
+			String OrderFileName ="GO"+order.getGovtOrderId()+OrderSplit[0]+OrderSplit[1]+OrderSplit[2];
+		    
+			String filename=OrderFile.getOriginalFilename();
+			
+			new File(FilePath+fetch.getOrderFilePath()).delete();
+			saveFile(FilePath+OrderPath, OrderFileName+"."+FilenameUtils.getExtension(OrderFile.getOriginalFilename()),OrderFile);
+			
+			fetch.setCreatedDate(sdtf.format(new Date()));
+			fetch.setOrderFilePath(OrderPath+OrderFileName+"."+FilenameUtils.getExtension(OrderFile.getOriginalFilename()));
+			fetch.setOrderFileName(filename);
+		}
+		
+		return dao.EmsGovtOrderEdit(fetch);
+	}
+	
+	
+	@Override
+	public long GovtOrderDelete(String OrderId,String Username) throws Exception 
+	{
+		logger.info(new Date() +"Inside SERVICE DepCircularDelete ");
+		EMSGovtOrders fetch = dao.getEMSGovtOrder(OrderId);
+		fetch.setModifiedBy(Username);
+		fetch.setModifiedDate(sdtf.format(new Date()));
+		fetch.setIsActive(0);
+		return dao.EmsGovtOrderEdit(fetch);
+	}
+	
+	@Override
+	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception
+	{
+		return dao.GovtOrderSearchList(search, id);
+	}
 }

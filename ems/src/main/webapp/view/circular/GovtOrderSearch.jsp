@@ -8,6 +8,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+
 <style>
 #button {
    float: left;
@@ -24,47 +25,60 @@
 </style>
 </head>
 <body>
+<%	
+	String fromdate = (String)request.getAttribute("fromdate");
+	String todate = (String)request.getAttribute("todate");
+	List<Object[]> SearchList=(List<Object[]>)request.getAttribute("SearchList");
+	List<Object[]> DepTypeList=(List<Object[]>)request.getAttribute("DepTypeList");
+	String DepTypeId = (String)request.getAttribute("DepTypeId");
+	String Search = (String)request.getAttribute("Search");
+%>
+
+
 <div class="card-header page-top">
   <div class="row">  
   <div class="col-md-8" style="width:30px">
-      
+    	<h5>Government Order Search</h5>
   </div>   
      	<div class="col-md-4">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-				<li class="breadcrumb-item "><a href="OfficeOrder.htm"> Office Order List </a></li>			
-                <li class="breadcrumb-item active " aria-current="page">Office Order Search</li>  
+				<li class="breadcrumb-item "><a href="GovtOrdersList.htm"> Government Orders </a></li>
+				<li class="breadcrumb-item active " aria-current="page">Government Order Search</li>
                 </ol>                
 		</div>  
  </div>
 </div>
 
-<%String fromdate = (String)request.getAttribute("fromdate");
-	String todate = (String)request.getAttribute("todate"); %>
 		 
 	    	<div class="card" >
 	        <div class="card-header" style="height: 4rem">
-	              <form action="OfficeOrderSearch.htm" method="POST"> 
+	              <form action="GovtOrderSearch.htm" method="POST"> 
 	                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					      <div class="row justify-content-center">
-						        <%-- <div class="col-2" style="margin-left: 1%;"><h6>From Date :  &nbsp;</h6></div>
-					            <div class="col-2" style="margin-left:-9%"> 
-						             <input type="text" style="width: 100%; background-color:white;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
-							         <label class="input-group-addon btn" for="testdate"></label>              
-						        </div>
-							 
-						
-						        <div class="col-2"  style="margin-left: 1%"><h6>To Date : &nbsp;</h6></div>
-							    <div class="col-2" style="margin-left: -10.5%">						
-							         <input type="text" style="width: 100%; background-color:white;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
-							         <label class="input-group-addon btn" for="testdate"></label>    
-							    </div> --%>
-							    
-							    <div class="col-2" style="margin-left:4%">
-                                     <input type="text" placeholder="Search Office Order" name="search" autocomplete="off" style=" width: 205%;padding: 5px;border-left: none;border-top: none;border-right: none;border-down: black;"></div>
-                                <div class="col-1" style="margin-left:13%"><button type="submit" id="button" formaction="OfficeOrderSearch.htm"><i class="fa fa-search"></i></button></div>
+					      <div class="row" >
+					      		
+								<div class="col-md-4" >
+									
+										<b>Department : &nbsp;</b>
+										<select class="form-control select2" name="DepTypeId" style="width: 70%" onchange="this.form.submit()" >
+											<option value="A" <%if(DepTypeId.equalsIgnoreCase("A") ){ %> selected <%} %> >All</option>
+											
+											<%for(Object[] dep :DepTypeList){ %>
+											<option value="<%=dep[0]%>" <%if(DepTypeId.equalsIgnoreCase(dep[0].toString())){ %> selected <%} %>><%=dep[2]%></option>
+											<%} %>
+											
+										</select>
+
+	
+								</div>
+								
+							    <div class="col-md-4">
+                                     <input type="text" placeholder="Search Government Order" name="search" value="<%if(Search!=null) {%><%=Search %><%} %>" autocomplete="off" style=" width: 100%;padding: 5px;border-left: none;border-top: none;border-right: none;border-down: black;">
+                                </div>
+                                <div class="col-md-1" >
+                                	<button type="submit" id="button" ><i class="fa fa-search"></i></button>
+                                </div>
                                 
-                                   
 				          </div>       	
                   </form>	      
 	       </div>    	             
@@ -80,7 +94,7 @@
 				<thead>
 					<tr>
 					    <th style="width:4%">SN</th>
-						<th style="width:10%">Order No</th>
+					  <th style="width:10%">Order No</th>
                         <th style="width:11%">Date</th>
                         <th style="width:45%">Subject</th>
                         <th style="width:8%">Download</th>
@@ -88,7 +102,6 @@
 				</thead>
 				<tbody>
 				        <%
-				        List<Object[]> SearchList=(List<Object[]>)request.getAttribute("SearchList");
 				        if(SearchList!=null){ int slno=0;  
                          for(Object[] ls:SearchList ){ 
                         %> 
@@ -98,7 +111,7 @@
                          <td style="text-align: center;"><%=ls[2]%></td>
                          <td><%=ls[3]%></td>
                          <td>
-                        <button type="submit" class="btn btn-sm" name="OrderId" value="<%=ls[0] %>" formaction="OfficeOrderDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+                        <button type="submit" class="btn btn-sm" name="OrderId" value="<%=ls[0] %>" formaction="GovtOrderDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" formtarget="_blank">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>
                          

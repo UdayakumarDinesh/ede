@@ -11,6 +11,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>SEIP - FORMS</title>
 <meta charset="ISO-8859-1">
 
 <% String LoginType = (String)request.getAttribute("LoginType"); %>
@@ -18,10 +19,12 @@
 
 <%if(LoginType!=null){ %>
 <jsp:include page="../static/header.jsp"></jsp:include>
+<jsp:include page="../static/sidebar.jsp"></jsp:include>
 
 <%}else{ %>
 
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
+
 <spring:url value="../../webresources/css/LoginPage.css" var="loginPageCss" />
 <link href="${loginPageCss}" rel="stylesheet" />
 
@@ -49,6 +52,12 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 						<li class="breadcrumb-item active">Forms</li>
 					</ol>
 				</div>
+			<%}else{ %>
+				<div class="col-md-8 ">
+					<ol class="breadcrumb ">
+						<li class="breadcrumb-item ml-auto"><a	href="login"><i class=" fa-solid fa-house-chimney fa-sm"></i> Login</a></li>
+					</ol>
+				</div>
 			<%} %>
 		</div>	
 <%	String ses=(String)request.getParameter("result"); 
@@ -68,7 +77,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
         </div>
     </div>
 	<%} %>
-
+<br>
 		<div class="card">
 			<div class="card-header" style="height: 4rem">
 				<div class="row " >

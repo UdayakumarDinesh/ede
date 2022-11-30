@@ -432,6 +432,7 @@ public class EmsController {
 			}
 			in.close();
 			out.flush();
+			out.close();	
 		}
 		catch (Exception e) {
 				e.printStackTrace();
@@ -462,6 +463,7 @@ public class EmsController {
 		}
 		in.close();
 		out.flush();
+		out.close();	
 		}
 		catch (Exception e) {
 				e.printStackTrace();

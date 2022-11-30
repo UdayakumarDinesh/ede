@@ -36,21 +36,13 @@
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
-				<%if(Integer.parseInt(DepType[0].toString())==9){ %>
-				<h5>Government Orders List</h5>
-				<%}else{ %>
 				<h5><%=DepType[2] %>&nbsp;Circular List</h5>
-				<%} %>
 			</div>
 				<div class="col-md-8 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="CircularDashBoard.htm"> Circular </a></li>
-						<%if(Integer.parseInt(DepType[0].toString())==9){ %>
-						<li class="breadcrumb-item active" aria-current="page">Government Orders List</li>
-						<%}else{ %>
 						<li class="breadcrumb-item active" aria-current="page"><%=DepType[2] %>&nbsp;Circular List</li>
-						<%} %>
 					</ol>
 				</div>
 	
@@ -112,11 +104,7 @@
 					  <%}else{ %>
 					  <th style="width:4%">SN</th>
 					  <%} %>
-					  <%if(Integer.parseInt(DepType[0].toString())==9){ %>
-					   <th style="width:10%">Order No</th>
-					  <%}else{ %>
 					  <th style="width:10%">Circular No</th>
-					  <%} %>
                        <th style="width:11%">Date</th>
                        <th style="width:45%">Subject</th>
                        <th style="width:8%">Download</th>
@@ -215,11 +203,7 @@ function Edit(circularForm)
 
 	if (fields.length === 0) {
 		
-		<%if(Integer.parseInt(DepType[0].toString())==9){ %>
-		alert("Please Select Atleast One Order ");
-		<%}else{%>
 		alert("Please Select Atleast One Circular ");
-		<%}%>
         event.preventDefault();
 		return false;
 	}
@@ -234,11 +218,7 @@ function Delete(circularForm){
 	var fields = $("input[name='circularId']").serializeArray();
 
 	if (fields.length === 0){
-		<%if(Integer.parseInt(DepType[0].toString())==9){ %>
-		alert("Please Select Atleast One Order");
-		<%}else{%>
 		alert("Please Select Atleast One Circular");
-		<%}%>
 		event.preventDefault();
 		return false;
 	}

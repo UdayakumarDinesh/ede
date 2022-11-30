@@ -10,7 +10,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<%-- <jsp:include page="../static/sidebar.jsp"></jsp:include> --%>
 <style type="text/css">
 .row {
    
@@ -30,12 +29,12 @@
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>OfficeOrder List</h5>
+				<h5>Office Order List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="OfficeOrder.htm">OfficeOrder List</a></li>
+						<li class="breadcrumb-item "><a href="OfficeOrder.htm">Office Order List</a></li>
 					</ol>
 				</div>
 	
@@ -184,7 +183,7 @@ function Edit(OfficeOrderForm)
 	var fields = $("input[name='OrderId']").serializeArray();
 
 	if (fields.length === 0) {
-		alert("Please Select Atleast One OfficeOrder ");
+		alert("Please Select Atleast One Office Order ");
         event.preventDefault();
 		return false;
 	}
@@ -199,7 +198,7 @@ function Delete(OfficeOrderForm){
 	var fields = $("input[name='OrderId']").serializeArray();
 
 	if (fields.length === 0){
-		alert("Please Select Atleast One OfficeOrder");
+		alert("Please Select Atleast One Office Order");
 		event.preventDefault();
 		return false;
 	}
