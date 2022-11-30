@@ -85,7 +85,7 @@
 								<td><%=ls[1]%></td>
 								<td><%=ls[2]%></td>
 								<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(ls[3].toString())%></td>
-								<td>
+								<td style="text-align: center;">
 									<button type="submit" class="btn btn-sm" name="NoticeId" value="<%=ls[0]%>" formaction="EMSNoticeDownload.htm" formmethod="post" data-toggle="tooltip" data-placement="top"
 										title="Download" formtarget="_blank">
 										<i class="fa-solid fa-download " style="color: green;"></i>

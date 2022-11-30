@@ -127,7 +127,7 @@
                          <td><%=ls[2]%></td>
                          <td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(ls[4].toString())%></td>
                          <td><%=ls[3]%></td>
-                         <td>
+                         <td style="text-align: center;">
                          <button type="submit" class="btn btn-sm" name="CircularId" value="<%=ls[0] %>" formaction="DepCircularDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" formtarget="_blank">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>

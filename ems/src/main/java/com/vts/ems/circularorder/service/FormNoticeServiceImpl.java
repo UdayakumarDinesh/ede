@@ -65,15 +65,13 @@ public class FormNoticeServiceImpl implements FormNoticeService
 		
 		try
 		{
-			while(new File(FilePath+"EMS//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
+			while(new File(FilePath+"//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
 			{
 				maxFormId++;
 			}
 			
-			saveFile(FilePath+"EMS//forms//","Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
-			storagePath="EMS//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
-			
-			
+			saveFile(FilePath+"//forms//","Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
+			storagePath="//forms//Form-"+maxFormId+"-"+formDto.getFormNo()+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
 			
 		}
 		catch (Exception e) {
@@ -81,7 +79,7 @@ public class FormNoticeServiceImpl implements FormNoticeService
 			return 0;
 		}
 		
-		EMSForms form = new EMSForms().builder()
+		EMSForms form = EMSForms.builder()
 				.FormNo(formDto.getFormNo().trim())
 				.Description(formDto.getDescription())
 				.DepTypeId(Integer.parseInt(formDto.getDepTypeId()))
@@ -152,12 +150,12 @@ public class FormNoticeServiceImpl implements FormNoticeService
 		
 		try
 		{
-			while(new File(FilePath+"EMS//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
+			while(new File(FilePath+"//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
 			{
 				maxFormId++;
 			}
-			saveFile(FilePath+"EMS//Notice//","Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
-			storagePath="EMS//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
+			saveFile(FilePath+"//Notice//","Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
+			storagePath="//Notice//Notice-"+maxFormId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
 			
 		}
 		catch (Exception e) {
@@ -165,7 +163,7 @@ public class FormNoticeServiceImpl implements FormNoticeService
 			return 0;
 		}
 		
-		EMSNotice Notice = new EMSNotice().builder()
+		EMSNotice Notice = EMSNotice.builder()
 				.ReferenceNo(noticeDto.getReferenceNo())
 				.Description(noticeDto.getDescription())
 				.FileOriginalName(FormFile.getOriginalFilename())

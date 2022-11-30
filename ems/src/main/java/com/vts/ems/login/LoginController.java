@@ -1,5 +1,6 @@
 package com.vts.ems.login;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -54,6 +55,12 @@ public class LoginController
 	    	 model.addAttribute("success", success);
 	    }
 	    
+	    try {
+	    	req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
+	    }
+	    catch (Exception e) {
+	    	req.setAttribute("alerts-marquee", new ArrayList<Object[]>());
+	    }
  	    return "static/login";
 	 }
 	 

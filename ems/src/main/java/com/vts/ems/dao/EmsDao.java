@@ -31,4 +31,5 @@ public interface EmsDao
 	public LabMaster getLabDetails() throws Exception;
 	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
 	public long AllNoticeCount() throws Exception;
+	public List<Object[]> getCircularOrdersNotice() throws Exception;
 }

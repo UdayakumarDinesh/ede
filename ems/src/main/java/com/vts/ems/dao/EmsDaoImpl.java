@@ -376,5 +376,28 @@ public class EmsDaoImpl implements EmsDao
 			}
 		}
 		
+		private static final String GETCIRCULARORDERSNOTICE ="SELECT 'C' AS 'type', DepCircularId AS 'ID',DepCircularNo AS 'RefNo',DepCircularDate AS 'Date',DepCirSubject  AS 'Description'\r\n"
+				+ "FROM ems_dep_circular WHERE CURDATE() BETWEEN depcirculardate AND DATE_ADD(depcirculardate,INTERVAL 7 DAY) AND isactive=1\r\n"
+				+ "UNION\r\n"
+				+ "SELECT 'N' AS 'type',NoticeId AS 'ID',ReferenceNo AS 'RefNo',NoticeDate AS 'Date',Description\r\n"
+				+ "FROM ems_notice WHERE CURDATE() BETWEEN NoticeDate AND DATE_ADD(NoticeDate,INTERVAL 7 DAY) AND isactive=1\r\n"
+				+ "UNION\r\n"
+				+ "SELECT 'O' AS 'type',OrderId AS 'ID',OrderNo AS 'RefNo',OrderDate AS 'Date',OrderSubject\r\n"
+				+ "FROM ems_office_order WHERE CURDATE() BETWEEN OrderDate AND DATE_ADD(OrderDate,INTERVAL 7 DAY) AND isactive=1\r\n"
+				+ "UNION\r\n"
+				+ "SELECT 'G' AS 'type',GovtOrderId AS 'ID',OrderNo AS 'RefNo',OrderDate AS 'Date',Description\r\n"
+				+ "FROM ems_govt_orders WHERE CURDATE() BETWEEN OrderDate AND DATE_ADD(OrderDate,INTERVAL 7 DAY) AND isactive=1;";
+		@Override
+		public List<Object[]> getCircularOrdersNotice()throws Exception
+		{
+			try {
+				Query query = manager.createNativeQuery(GETCIRCULARORDERSNOTICE);
+				return (List<Object[]>)query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getCircularOrdersNotice "+ e);
+				e.printStackTrace();
+				return new ArrayList<Object[]>();
+			}
+		}
 
 }

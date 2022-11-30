@@ -55,8 +55,6 @@ import com.vts.ems.utils.CustomEncryptDecrypt;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.Zipper;
 
-
-
 @Service
 public class CircularOrderServiceImpl implements CircularOrderService 
 {
@@ -196,7 +194,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	{
 		logger.info(new Date() +"Inside SERVICE DepCircularAdd ");
 		EMSDepCircular cir=dto.getCircular();
-		String CircularPath = "EMS\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
+		String CircularPath = "\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
 		String FullDir = FilePath+CircularPath;
 		File theDir = new File(FullDir);
 		if (!theDir.exists()){
@@ -263,7 +261,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 		
 		if(!dto.getCirFile().isEmpty()) 
 		{
-			String CircularPath = "EMS\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
+			String CircularPath = "\\DepartmentCirculars\\"+LocalDate.parse(cir.getDepCircularDate()).getYear()+"\\";
 			String FullDir = FilePath+CircularPath;
 			File theDir = new File(FullDir);
 			if (!theDir.exists()){
@@ -327,7 +325,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	
 			
 			year = OrderSplit[2];
-			String orderPath = "EMS\\orders\\"+year+"\\";
+			String orderPath = "\\orders\\"+year+"\\";
 			
 			String FullDir = FilePath+orderPath;
 			File theDir = new File(FullDir);
@@ -392,7 +390,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	        	new File(FilePath+Order.getOrderPath()).delete();
 	        	String OrigFilelName = uploadorderdto.getOrderPath().getOriginalFilename();
 	        	String CirFileName = "C"+OrderId+cirSplit[0]+cirSplit[1]+cirSplit[2];
-	        	String CircularPath = "EMS\\Circulars\\"+year+"\\";
+	        	String CircularPath = "\\Circulars\\"+year+"\\";
 	        	String FullDir = FilePath+CircularPath;
 	        	
 	        	File theDir = new File(FullDir);

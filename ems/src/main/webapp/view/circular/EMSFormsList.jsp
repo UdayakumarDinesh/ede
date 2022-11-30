@@ -135,7 +135,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
                          
                          <td style="text-align: center;" ><%=form[2]%></td>
                          <td><%=form[3]%></td>
-                         <td> 
+                         <td style="text-align: center;"> 
                          <button type="submit" class="btn btn-sm" name="EMSFormId" value="<%=form[0] %>" formaction="EMSFormDownload.htm"  formnovalidate="formnovalidate" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 						 	<i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>

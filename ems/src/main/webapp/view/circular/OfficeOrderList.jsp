@@ -111,7 +111,7 @@
                          <td><%=ls[1]%></td>
                          <td style="text-align: center;"><%=ls[2]%></td>
                          <td><%=ls[3]%></td>
-                         <td>
+                         <td style="text-align: center;" >
                          <button type="submit" class="btn btn-sm" name="OrderId" value="<%=ls[0] %>" formaction="OfficeOrderDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 						 <i class="fa-solid fa-download " style="color: green;"></i>
 						 </button></td>

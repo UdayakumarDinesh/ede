@@ -233,4 +233,10 @@ public class EMSMainServiceImpl implements EMSMainService
 	{
 		return dao.getLabDetails();
 	}
+	
+	@Override
+	public List<Object[]> getCircularOrdersNotice()throws Exception
+	{
+		return dao.getCircularOrdersNotice();
+	}
 }
