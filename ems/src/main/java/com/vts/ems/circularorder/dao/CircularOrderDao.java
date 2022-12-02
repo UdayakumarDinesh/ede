@@ -41,5 +41,6 @@ public interface CircularOrderDao {
 	public long EmsGovtOrderEdit(EMSGovtOrders order) throws Exception ;
 	public EMSGovtOrders getEMSGovtOrder(String OrderId) throws Exception;
 	public long GetGovtOrderMaxId() throws Exception;
-	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception; 
+	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception;
+	public List<Object[]> GetGOTopicList() throws Exception; 
 }

@@ -48,8 +48,8 @@
 	String todate = (String)request.getAttribute("todate");
 	
 	List<Object[]> allList=(List<Object[]>)request.getAttribute("GovtOrdersList");
-	List<Object[]> DepTypeList=(List<Object[]>)request.getAttribute("DepTypeList");
-	String DepTypeId = (String)request.getAttribute("DepTypeId");
+	List<Object[]> TopicList=(List<Object[]>)request.getAttribute("TopicList");
+	String TopicId = (String)request.getAttribute("TopicId");
 %>
 
 <div class="card-header page-top ">
@@ -97,13 +97,13 @@
 	              <form action="GovtOrdersList.htm" method="POST"> 
 					      	<div class="row justify-content-right">
 					      	<div class="col-4"></div>
-					     	<div class="col-1.5" style="font-color:black;"><h6>Department :  &nbsp;</h6></div>
+					     	<div class="col-1.5" style="font-color:black;"><h6>Topic :  &nbsp;</h6></div>
 							<div class="col-2" >
-								<select class="form-control select2" name="DepTypeId" onchange="this.form.submit();">
-									<option value="A" <%if(DepTypeId.equalsIgnoreCase("A")){ %>selected <%} %>>All</option>
+								<select class="form-control select2" name="TopicId" onchange="this.form.submit();">
+									<option value="A" <%if(TopicId.equalsIgnoreCase("A")){ %>selected <%} %>>All</option>
 									
-									<%for(Object[] deptype : DepTypeList){ %>
-										<option value="<%=deptype[0]%>"  <%if(DepTypeId.equalsIgnoreCase(deptype[0].toString())){ %>selected <%} %> ><%=deptype[2]%></option>
+									<%for(Object[] topic : TopicList){ %>
+										<option value="<%=topic[0]%>"  <%if(TopicId.equalsIgnoreCase(topic[0].toString())){ %>selected <%} %> ><%=topic[2]%></option>
 									<%} %>
 									
 								</select>
@@ -123,7 +123,7 @@
 							    </div>
 				          </div>      
 				       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	                   <input type="hidden" name="DepTypeId" value="<%=DepTypeId%>"> 	
+	                   <input type="hidden" name="TopicId" value="<%=TopicId%>"> 	
                   </form>	      
 				</div>    	             
 	       </div>
@@ -187,7 +187,7 @@
 								<button type="submit" class="btn btn-sm delete-btn" formaction="GovtOrderDelete.htm" name="action" value="DELETECIR"  Onclick="Delete(OrderForm)" >DELETE </button>
 							<%} %>																	 
 							<button type="submit" class="btn btn-sm search-btn" formaction="GovtOrderSearch.htm" name="action" style="background-color:green;color:white">SEARCH </button>
-							<input type="hidden" name="DepTypeId" value="<%=DepTypeId%>">																 
+							<input type="hidden" name="TopicId" value="<%=TopicId%>">																 
 						</div>						 
 					</div>	
 				<%} %>

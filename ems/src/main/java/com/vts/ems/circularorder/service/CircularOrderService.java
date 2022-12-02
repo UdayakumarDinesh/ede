@@ -49,5 +49,6 @@ public interface CircularOrderService {
 	public EMSGovtOrders getEMSGovtOrder(String OrderId) throws Exception;
 	public long GovtOrderEdit(EMSGovtOrders order, MultipartFile OrderFile) throws Exception;
 	public long GovtOrderDelete(String OrderId, String Username) throws Exception;
-	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception; 
+	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception;
+	public List<Object[]> GetGOTopicList() throws Exception; 
 }

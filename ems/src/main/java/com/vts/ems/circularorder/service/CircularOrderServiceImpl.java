@@ -531,6 +531,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	{
 		logger.info(new Date() +"Inside SERVICE DepCircularEdit ");
 		EMSGovtOrders fetch = dao.getEMSGovtOrder(String.valueOf(order.getGovtOrderId()));
+		fetch.setTopicId(order.getTopicId());
 		fetch.setOrderDate(order.getOrderDate());
 		fetch.setOrderNo(order.getOrderNo());
 		fetch.setDescription(order.getDescription());
@@ -579,5 +580,11 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception
 	{
 		return dao.GovtOrderSearchList(search, id);
+	}
+	
+	@Override
+	public List<Object[]> GetGOTopicList() throws Exception 
+	{
+		return dao.GetGOTopicList();
 	}
 }

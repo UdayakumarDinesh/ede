@@ -11,11 +11,11 @@
 <body>
 <%	
 	EMSGovtOrders Order = (EMSGovtOrders)request.getAttribute("Order");
-	List<Object[]> DepTypeList=(List<Object[]>)request.getAttribute("DepTypeList");
-	String DepTypeId = (String)request.getAttribute("DepTypeId");
+	List<Object[]> TopicList=(List<Object[]>)request.getAttribute("TopicList");
+	String TopicId = (String)request.getAttribute("TopicId");
 	if(Order!=null)
 	{
-		DepTypeId=String.valueOf(Order.getDepTypeId());
+		TopicId=String.valueOf(Order.getTopicId());
 	}
 %>
 
@@ -67,10 +67,10 @@
 					</div>
 					<div class="col-md-6" >
 						<div class="form-group">
-							<label><b>Department</b><span class="mandatory"	style="color: red;">*</span></label>
-							<select class="form-control select2" name="DepTypeId" >
-								<%for(Object[] deptype : DepTypeList){ %>
-									<option value="<%=deptype[0]%>"  <%if(DepTypeId.equalsIgnoreCase(deptype[0].toString())){ %>selected <%} %> ><%=deptype[2]%></option>
+							<label><b>Topic</b><span class="mandatory"	style="color: red;">*</span></label>
+							<select class="form-control select2" name="TopicId" >
+								<%for(Object[] topic : TopicList){ %>
+									<option value="<%=topic[0]%>"  <%if(TopicId.equalsIgnoreCase(topic[0].toString())){ %>selected <%} %> ><%=topic[2]%></option>
 								<%} %>
 							</select>
 						</div>

@@ -30,7 +30,7 @@
 	String todate = (String)request.getAttribute("todate");
 	List<Object[]> SearchList=(List<Object[]>)request.getAttribute("SearchList");
 	List<Object[]> DepTypeList=(List<Object[]>)request.getAttribute("DepTypeList");
-	String DepTypeId = (String)request.getAttribute("DepTypeId");
+	String TopicId = (String)request.getAttribute("TopicId");
 	String Search = (String)request.getAttribute("Search");
 %>
 
@@ -59,12 +59,12 @@
 					      		
 								<div class="col-md-4" >
 									
-										<b>Department : &nbsp;</b>
-										<select class="form-control select2" name="DepTypeId" style="width: 70%" onchange="this.form.submit()" >
-											<option value="A" <%if(DepTypeId.equalsIgnoreCase("A") ){ %> selected <%} %> >All</option>
+										<b>Topic : &nbsp;</b>
+										<select class="form-control select2" name="TopicId" style="width: 70%" onchange="this.form.submit()" >
+											<option value="A" <%if(TopicId.equalsIgnoreCase("A") ){ %> selected <%} %> >All</option>
 											
 											<%for(Object[] dep :DepTypeList){ %>
-											<option value="<%=dep[0]%>" <%if(DepTypeId.equalsIgnoreCase(dep[0].toString())){ %> selected <%} %>><%=dep[2]%></option>
+											<option value="<%=dep[0]%>" <%if(TopicId.equalsIgnoreCase(dep[0].toString())){ %> selected <%} %>><%=dep[2]%></option>
 											<%} %>
 											
 										</select>

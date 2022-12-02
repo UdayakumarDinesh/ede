@@ -22,7 +22,7 @@ public class EMSGovtOrders {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long GovtOrderId;
-	private int DepTypeId;
+	private int TopicId;
 	private String OrderNo;
 	private String OrderDate;
 	private String Description;

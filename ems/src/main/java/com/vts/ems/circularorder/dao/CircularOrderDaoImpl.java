@@ -194,6 +194,22 @@ public class CircularOrderDaoImpl implements CircularOrderDao
 		
 	}
 	
+	
+	private static final String GETGOTOPICLIST = "SELECT EMSTopicId,Topic,TopicCode  FROM ems_go_topic WHERE isactive=1";
+	@Override
+	public List<Object[]> GetGOTopicList() throws Exception 
+	{
+		try {
+			Query query =  manager.createNativeQuery(GETGOTOPICLIST);
+			List<Object[]> GetEmsDepType=(List<Object[]>)query.getResultList();
+			return GetEmsDepType;
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO GetGOTopicList "+ e);
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
 	private static final String GETCIRCULARDATA ="from ems_office_order where OrderId =:OrderId";
 	@Override
 	public EMSOfficeOrder getOrderData(String OrderId) throws Exception
@@ -345,13 +361,13 @@ public class CircularOrderDaoImpl implements CircularOrderDao
 	}
 
 
-	private static final String GETGOVTORDERSLIST = "SELECT GovtOrderId,DepTypeId,OrderNo,Description,OrderDate FROM ems_govt_orders WHERE IsActive=1 AND CASE WHEN :DepTypeId ='A' THEN 1=1 ELSE DepTypeId=:DepTypeId END AND ( OrderDate>=:fromdate AND OrderDate <=:todate )  ORDER BY CreatedDate DESC";
+	private static final String GETGOVTORDERSLIST = "SELECT GovtOrderId,TopicId,OrderNo,Description,OrderDate FROM ems_govt_orders WHERE IsActive=1 AND CASE WHEN :TopicId ='A' THEN 1=1 ELSE TopicId=:TopicId END AND ( OrderDate>=:fromdate AND OrderDate <=:todate )  ORDER BY CreatedDate DESC";
 	@Override
-	public List<Object[]> GetGovtOrdersList(String fromdate, String toDate,String DepTypeId) throws Exception 
+	public List<Object[]> GetGovtOrdersList(String fromdate, String toDate,String TopicId) throws Exception 
 	{
 		Query query =  manager.createNativeQuery(GETGOVTORDERSLIST);
 		
-		query.setParameter("DepTypeId", DepTypeId);
+		query.setParameter("TopicId", TopicId);
 		query.setParameter("fromdate", fromdate);
 		query.setParameter("todate", toDate);
 		List<Object[]> OrdersList=query.getResultList();
@@ -401,13 +417,13 @@ public class CircularOrderDaoImpl implements CircularOrderDao
 		
 	}
 	
-	private static final String GOVTORDERSEARCHLIST="SELECT GovtOrderId,OrderNo,DATE_FORMAT(OrderDate,'%d-%m-%Y'),Description,DepTypeId FROM ems_govt_orders  WHERE    (OrderNo LIKE :Search  OR Description LIKE :Search  ) AND CASE WHEN :DepTypeId = 'A' THEN 1=1 ELSE DepTypeId=:DepTypeId END AND IsActive=1 ";
+	private static final String GOVTORDERSEARCHLIST="SELECT GovtOrderId,OrderNo,DATE_FORMAT(OrderDate,'%d-%m-%Y'),Description,TopicId FROM ems_govt_orders  WHERE    (OrderNo LIKE :Search  OR Description LIKE :Search  ) AND CASE WHEN :TopicId = 'A' THEN 1=1 ELSE TopicId=:TopicId END AND IsActive=1 ";
 	@Override
 	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception 
 	{
 		Query query = manager.createNativeQuery(GOVTORDERSEARCHLIST);
 		query.setParameter("Search", "%"+search+"%");
-		query.setParameter("DepTypeId", id);
+		query.setParameter("TopicId", id);
 		List<Object[]> SearchList= query.getResultList();
 		return SearchList;
 	}

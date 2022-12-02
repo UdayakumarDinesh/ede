@@ -1019,7 +1019,7 @@ function setTooltip()
 
 
 $(document).ready( function() 
-		{
+{
 	onlyNumbers();
 	getdoctorrates(<%=chssapplydata[7]%>);
 	MedsAllowedList();
