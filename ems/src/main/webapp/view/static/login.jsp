@@ -197,7 +197,7 @@
 													</div>
 														
 													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:red;margin-bottom: 10px;" id="success-alert">${error}</span>
-																		
+													<span style="font-family: 'Lato', sans-serif;font-size: 15px;color:green;margin-bottom: 10px;" id="success-alert">${message}</span>
 												</div>
 												
 											

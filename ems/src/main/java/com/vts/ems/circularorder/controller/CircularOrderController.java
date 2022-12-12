@@ -197,9 +197,6 @@ public class CircularOrderController {
 			Zipper zip=new Zipper();
 			zip.unpack(emsfilespath+"//"+circular.getDepCircularPath(),tempPath,CustomEncryptDecrypt.decryption(circular.getDepCircularKey().toCharArray()));
 			
-			File my_file = new File(tempPath+"//"+circular.getDepCirFileName());
-			if(circular.getDepTypeId()!=9) 
-			{
 				PdfFileEncryptionDataDto dto=PdfFileEncryptionDataDto.builder()
 														.sourcePath(tempPath+"//"+circular.getDepCirFileName())
 														.targetPath(tempPath1+"//"+circular.getDepCirFileName())
@@ -209,9 +206,9 @@ public class CircularOrderController {
 														.EmpName(EmpName)
 														.build();
 						
-				// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
-				my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
-			}
+			// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
+			File my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
+			
 			res.setHeader("Content-disposition","attachment; filename="+circular.getDepCirFileName());
 		    OutputStream out = res.getOutputStream();
 		    FileInputStream in = new FileInputStream(my_file);

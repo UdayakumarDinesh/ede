@@ -1,6 +1,5 @@
 package com.vts.ems.utils;
 
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -124,15 +123,6 @@ public class DateTimeFormatUtil
 		return  String.valueOf(LocalDate.now().getYear());
 	}
 	
-	public static  String getCurrentMonthShortName()
-	{
-		return new DateFormatSymbols().getShortMonths()[LocalDate.now().getMonthValue()];
-	}
-	
-	public static  String getCurrentMonthFullName()
-	{
-		return new DateFormatSymbols().getMonths()[LocalDate.now().getMonthValue()];
-	}
 	
 	/*---------------------------------------------*/
 	

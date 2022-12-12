@@ -3059,7 +3059,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 		return list;
 	}
 
-	private static final String EMPANELLEDHOSPITALLIST="SELECT doctorid ,doctorname , qualification, address, phoneno FROM chss_doctor_list ORDER BY doctorid DESC";
+	private static final String EMPANELLEDHOSPITALLIST="SELECT EmpanelledHospitalId,HospitalName,HospitalAddress  FROM chss_empanelledhospital ORDER BY EmpanelledHospitalId DESC";
 	@Override
 	public List<Object[]> GetEmpanelledHostpitalList()throws Exception
 	{

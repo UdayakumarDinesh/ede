@@ -256,7 +256,7 @@ public class EmsController {
 	
   
 	 @RequestMapping(value = "fpwd/ForgotPassword.htm", method = {RequestMethod.POST,RequestMethod.GET}) 
-	 public String forgotPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 public String forgotPassword(Model model, HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
 		 String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside fpwd/ForgotPassword.htm "+UserId);
@@ -306,7 +306,7 @@ public class EmsController {
 
 	
 	 @RequestMapping(value = "fpwd/ResetPassword.htm", method = RequestMethod.POST) 
-	 public String resetPassword(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 public String resetPassword(Model model,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
 		 String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside fpwd/ResetPassword.htm "+UserId);
@@ -337,7 +337,7 @@ public class EmsController {
 	 }
 	 
 	 @RequestMapping(value = "fpwd/ResendOTP.htm", method = RequestMethod.POST) 
-	 public String ResendOTP(Model model, String error, String logout,HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
+	 public String ResendOTP(Model model, HttpServletRequest req,HttpSession ses,HttpServletResponse response, RedirectAttributes redir ) throws Exception 
 	 {	 
 		 String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside fpwd/ResendOTP.htm "+UserId);
@@ -416,7 +416,7 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside UserManualDoc.htm "+UserId);		
 		try {
-			String path=projectfilespath+"EMS/ProjectManuals/User-Manual-chss.pdf";
+			String path=projectfilespath+"/ProjectManuals/User-Manual-chss.pdf";
 
 			res.setContentType("application/pdf");
 			res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));
@@ -447,7 +447,7 @@ public class EmsController {
 		logger.info(new Date() +"Inside WorkFlow.htm "+UserId);		
 		try {
 
-		String path =projectfilespath +"EMS/ProjectManuals/Work-Flow-chss.pdf";
+		String path =projectfilespath +"/ProjectManuals/Work-Flow-chss.pdf";
 	
 		res.setContentType("application/pdf");
 		res.setHeader("Content-Disposition", String.format("inline; filename=\"" + req.getParameter("path") + "\""));

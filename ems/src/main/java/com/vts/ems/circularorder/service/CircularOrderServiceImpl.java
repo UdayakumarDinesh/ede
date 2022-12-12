@@ -20,11 +20,14 @@ import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.forms.PdfAcroForm;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -136,17 +139,22 @@ public class CircularOrderServiceImpl implements CircularOrderService
 		     
 		        canvas.restoreState();
 		    }
+		    PdfAcroForm.getAcroForm(pdfDoc, true).flattenFields();
 		    pdfDoc.close();
+		    
+//		    PDDocument pDDocument = PDDocument.load(new File(dto.getTargetPath()),dto.getPassword());    
+//		    PDAcroForm pDAcroForm = pDDocument.getDocumentCatalog().getAcroForm();
+//		    pDAcroForm.flatten();
+//		    pDDocument.close();
+//		    
 		 }catch (Exception e)
 		{
 			 e.printStackTrace();
 		}
-		return new File(dto.getTargetPath());
+		return new File(dto.getSourcePath());
 	}
 
-	
-	
-	
+
 	@Override
 	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
 	{

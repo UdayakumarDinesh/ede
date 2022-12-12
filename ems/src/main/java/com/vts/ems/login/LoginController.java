@@ -11,11 +11,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vts.ems.service.EMSMainService;
 
@@ -32,17 +32,25 @@ public class LoginController
 	
 
 	 @RequestMapping(value = "/login", method = RequestMethod.GET)
-	 public String login(Model model, String error, String logout, HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
+	 public String login(Model model, @RequestParam(value = "error", required=false) String error,
+			 						@RequestParam(value = "logout", required=false) String logout, 
+			 						@RequestParam(value = "session", required=false) String session,
+			 						HttpServletRequest req,HttpSession ses,HttpServletResponse response) 
 	 {	 
 		logger.info(new Date() +"Inside login ");
-		
-		
-		if (error != null) {
+	
+		if (error != null && error.equalsIgnoreCase("1")) 
+		{
 	        model.addAttribute("error", "Your username or password is invalid.");
-	        
-	        return "static/login";
 	    }
-	    if (logout != null) {
+		
+	    if (logout != null && logout.equalsIgnoreCase("1")) 
+	    {
+	        model.addAttribute("message", "You have been logged out successfully.");
+	    }
+	    
+	    if (logout != null && logout.equalsIgnoreCase("1")) 
+	    {
 	        model.addAttribute("message", "You have been logged out successfully.");
 	    }
 	    

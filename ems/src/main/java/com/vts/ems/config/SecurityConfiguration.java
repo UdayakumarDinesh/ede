@@ -67,16 +67,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/EMSForms.htm","/EMSFormDownload.htm","/GovtOrdersList.htm","/GovtOrderDownload.htm").permitAll()
 				.anyRequest().authenticated().accessDecisionManager(adm())
 
-				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error")
+				.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome", true).failureUrl("/login?error=1")
 				.permitAll().usernameParameter("username").passwordParameter("password").and().logout()
-				.logoutSuccessUrl("/login?logout").addLogoutHandler(logoutSuccessHandler())
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
+				.logoutSuccessUrl("/login?logout=1")
+				.addLogoutHandler(logoutSuccessHandler())
 
 				.and().exceptionHandling().accessDeniedPage("/accessdenied")
 
 				.and()
 
 				.csrf().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				.invalidSessionUrl("/login")
+				.invalidSessionUrl("/login?session=1")
 
 		;
 
