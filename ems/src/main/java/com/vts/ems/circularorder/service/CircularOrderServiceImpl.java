@@ -92,7 +92,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
         
         //create and Encrypt the File
 		try (PdfDocument pdfDoc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile, new WriterProperties().setStandardEncryption(dto.getPassword().getBytes(), "0123456789".getBytes(),
-	            /*EncryptionConstants.ALLOW_PRINTING*/ 0, EncryptionConstants.ENCRYPTION_AES_128 | EncryptionConstants.DO_NOT_ENCRYPT_METADATA)))) {
+	            EncryptionConstants.ALLOW_PRINTING, EncryptionConstants.ENCRYPTION_AES_128 | EncryptionConstants.DO_NOT_ENCRYPT_METADATA)))) {
 			
 			//Adding Metadata to the pdf file
 			String timestamp =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(new Date().getTime()) );
@@ -151,7 +151,7 @@ public class CircularOrderServiceImpl implements CircularOrderService
 		{
 			 e.printStackTrace();
 		}
-		return new File(dto.getSourcePath());
+		return new File(dto.getTargetPath());
 	}
 
 
