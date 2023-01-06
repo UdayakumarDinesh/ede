@@ -209,14 +209,14 @@
 													<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 														<i class="fa-solid fa-eye"></i>
 													</button>	
-													<button type="submit" class="btn btn-sm " name="formid" value="5" formaction="DependentIncForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
+													<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentIncForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
 														<i class="fa-solid fa-download " style="color: green;"></i>
 													</button>
 													<%}else if(form[6].toString().equals("E") ){  %>
 														<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepExclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
 														</button>	
-														<button type="submit" class="btn btn-sm " name="formid" value="5" formaction="DependentExcForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
+														<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentExcForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
 													<%} %>	

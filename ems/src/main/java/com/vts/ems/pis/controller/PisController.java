@@ -2301,7 +2301,7 @@ public class PisController {
 			logger.info(new Date() +"Inside DepInclusionFormView.htm "+Username);
 			try {
 				
-				String empid =""; //req.getParameter("empid");
+				
 				String formid = req.getParameter("formid");
 				String isapproval = req.getParameter("isApprooval");
 				if(formid==null)  {
@@ -2316,6 +2316,7 @@ public class PisController {
 					return "static/Error";
 				}
 				
+				String empid ="0"; 
 				Object[] formdata = service.GetFamFormData(formid);
 				if(formdata!=null) {
 					empid = formdata[1].toString();
@@ -2731,10 +2732,14 @@ public class PisController {
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside DependentIncForm.htm "+Username);
 			try {
-				String empid = req.getParameter("empid");
+				
 				String formid = req.getParameter("formid");
 				
+				String empid = "0";
 				Object[] formdata = service.GetFamFormData(formid);
+				if(formdata!=null) {
+					empid = formdata[1].toString();
+				}
 				req.setAttribute("formdetails" , formdata);
 				req.setAttribute("FwdMemberDetails",service.GetFormMembersList(formid));
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );

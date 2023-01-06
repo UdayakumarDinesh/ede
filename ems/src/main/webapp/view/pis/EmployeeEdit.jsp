@@ -267,7 +267,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    	   </div>
 			            				
 			            <div class="col-md-2">
-			                <label>AAdhar No<span class="mandatory">*</span></label>
+			                <label>Aadhar No<span class="mandatory">*</span></label>
 			                <input id="UIDTextBox" type="text" name="uid" value="<%if(employee!=null){%><%=employee.getUID()%><%}%>" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
 			            

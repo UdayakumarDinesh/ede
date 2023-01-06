@@ -193,6 +193,7 @@ public class PisServiceImpl implements PisService
 		Employee employee = dao.getEmp(String.valueOf(emp.getEmpId()));
 		employee.setEmpName(emp.getEmpName());
 		employee.setEmail(emp.getEmail());
+		employee.setExtNo(emp.getExtNo());
 		employee.setDivisionId(emp.getDivisionId());
 		employee.setDesigId(emp.getDesigId());
 		employee.setEmpNo(emp.getEmpNo());

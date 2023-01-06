@@ -207,7 +207,7 @@ public class CircularOrderController {
 														.build();
 						
 			// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
-			File my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
+			File my_file = service.CircularEncryptAddWaterMarkAndMetadatatoPDF(dto);
 			
 			res.setHeader("Content-disposition","attachment; filename="+circular.getDepCirFileName());
 		    OutputStream out = res.getOutputStream();
@@ -394,12 +394,31 @@ public class CircularOrderController {
 		try {
 			ses.setAttribute("SidebarActive", "OfficeOrder_htm");
 			
-			String fromdate = req.getParameter("FromDate");
-			String todate = req.getParameter("ToDate");
-			if(fromdate==null && todate == null) {
-				fromdate = DateTimeFormatUtil.getFinancialYearStartDateRegularFormatOffice();
-				todate  = DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now());
-			}
+			String fromdate= req.getParameter("fromdate");
+			String todate= req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate ="01-04-"+fromdate;
+				todate ="31-03-"+todate;
+			} 
+//			else 
+//			{
+//				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+//				todate=DateTimeFormatUtil.RegularToSqlDate(todate); 
+//			}
+				
 					
 			officelist = service.GetOfficeOrderList(fromdate , todate );
 	   		req.setAttribute("officelist", officelist);
@@ -640,7 +659,7 @@ public class CircularOrderController {
 													.build();
 					
 			// adding watermark,Metadata to the pdf file and encrypting the file and place it in temppath1
-			File my_file = service.EncryptAddWaterMarkAndMetadatatoPDF(dto);
+			File my_file = service.OfficeOrderEncryptAddWaterMarkAndMetadatatoPDF(dto);
 			
 			res.setHeader("Content-disposition","attachment; filename="+Order.getOrderFileName());
 		    OutputStream out = res.getOutputStream();

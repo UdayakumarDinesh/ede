@@ -211,19 +211,37 @@ public class CHSSController
 			if(req.getParameter("isselfvalue")!=null) {
 				IsSelf= req.getParameter("isselfvalue");
 			}
-			String FromDate="01-04-"+sf.format(new Date()) ;
-			if(req.getParameter("fromdate")!=null) {
-				FromDate= req.getParameter("fromdate");
-			}
-			String ToDate=sf1.format(new Date());
-			if(req.getParameter("todate")!=null) {
-				ToDate= req.getParameter("todate");
-			}
 			String PatientName="All";
 			if(req.getParameter("patientname")!=null) {
 				PatientName=req.getParameter("patientname");
 			}
 			
+			
+			String FromDate= req.getParameter("fromdate");
+			String ToDate= req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(FromDate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					FromDate = String.valueOf(today.getYear()-1);
+					ToDate=String.valueOf(today.getYear());
+					
+				}else{
+					FromDate = String.valueOf(today.getYear());
+					ToDate=String.valueOf(today.getYear()+1);
+				}
+				FromDate ="01-04-"+FromDate;
+				ToDate ="31-03-"+ToDate;
+			} /*
+				 * else { FromDate=DateTimeFormatUtil.RegularToSqlDate(FromDate);
+				 * ToDate=DateTimeFormatUtil.RegularToSqlDate(ToDate); }
+				 */
+			
+			
+		
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
 			req.setAttribute("empchsslist", service.empCHSSList(EmpId,PatientId,FromDate,ToDate,IsSelf));

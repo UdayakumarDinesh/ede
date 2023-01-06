@@ -74,9 +74,92 @@ public class CircularOrderServiceImpl implements CircularOrderService
     private String FilePath;
 
 	@Override
-	public File EncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
+	public File CircularEncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE EncryptAddWaterMarkAndMetadatatoPDF ");
+		logger.info(new Date() +"Inside SERVICE CircularEncryptAddWaterMarkAndMetadatatoPDF ");
+		File pdffile = new File(dto.getSourcePath());
+		OutputStream tofile = new FileOutputStream(new File(dto.getTargetPath()));
+		
+		String WMText = "";
+        for(int i=1;i<=25;i++)
+        {
+     	   WMText = WMText+dto.getWatermarkText()+" ";
+        }
+        String WMTextLine=WMText;
+        WMTextLine +="\n";
+        WMTextLine +="\n";
+        WMTextLine += WMText;
+        
+        //create and Encrypt the File
+		try (PdfDocument pdfDoc = new PdfDocument(new PdfReader(pdffile), new PdfWriter(tofile, new WriterProperties().setStandardEncryption(dto.getPassword().getBytes(), "0123456789".getBytes(),
+				/* EncryptionConstants.ALLOW_PRINTING */ 0, EncryptionConstants.ENCRYPTION_AES_128 | EncryptionConstants.DO_NOT_ENCRYPT_METADATA)))) {
+			
+			//Adding Metadata to the pdf file
+			String timestamp =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(new Date().getTime()) );
+			pdfDoc.getDocumentInfo().setTitle(dto.getWatermarkText()+" : "+timestamp);
+	        pdfDoc.getDocumentInfo().setMoreInfo("EMP NO", dto.getEmpNo());
+	        pdfDoc.getDocumentInfo().setMoreInfo("EMP Name",dto.getEmpName());
+	        pdfDoc.getDocumentInfo().setMoreInfo("Downloaded On",timestamp );
+			
+			// Adding Watermark to the PDF
+		    PdfFont helvetica = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
+		    for (int pageNum = 1; pageNum <= pdfDoc.getNumberOfPages(); pageNum++) {
+		        PdfPage page = pdfDoc.getPage(pageNum);
+		        PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
+	
+		        PdfExtGState gstate = new PdfExtGState();
+		        gstate.setFillOpacity(.25f);
+		        canvas = new PdfCanvas(page);
+		        canvas.saveState();
+		        canvas.setExtGState(gstate);
+		        try (Canvas canvas2 = new Canvas(canvas,  page.getPageSize())) {
+			        Paragraph watermark = new Paragraph(WMTextLine)
+			                   .setFont(helvetica)
+			                   .setFontSize(10)
+			                   .setPaddings(10, 10,10, 10);
+		            
+		      
+			        Rectangle pageSize = page.getPageSize();
+			        
+			       if(pageSize.getRight() < pageSize.getTop())
+			       {
+				        float rotationRad = (float) Math.toRadians(55);
+				        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				        rotationRad = (float) Math.toRadians(-55);
+				        canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+			       }
+			       else
+			       {
+			    	   float rotationRad = (float) Math.toRadians(35);
+				       canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getBottom(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+				       rotationRad = (float) Math.toRadians(-35);
+				       canvas2.showTextAligned(watermark, pageSize.getLeft(),pageSize.getTop(), pageNum, TextAlignment.LEFT, VerticalAlignment.MIDDLE , rotationRad);
+			       }
+		        }
+		     
+		        canvas.restoreState();
+		    }
+		    PdfAcroForm.getAcroForm(pdfDoc, true).flattenFields();
+		    pdfDoc.close();
+		    
+//		    PDDocument pDDocument = PDDocument.load(new File(dto.getTargetPath()),dto.getPassword());    
+//		    PDAcroForm pDAcroForm = pDDocument.getDocumentCatalog().getAcroForm();
+//		    pDAcroForm.flatten();
+//		    pDDocument.close();
+//		    
+		 }catch (Exception e)
+		{
+			 e.printStackTrace();
+		}
+		return new File(dto.getTargetPath());
+	}
+	
+	
+	
+	@Override
+	public File OfficeOrderEncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE OfficeOrderEncryptAddWaterMarkAndMetadatatoPDF ");
 		File pdffile = new File(dto.getSourcePath());
 		OutputStream tofile = new FileOutputStream(new File(dto.getTargetPath()));
 		
@@ -155,6 +238,10 @@ public class CircularOrderServiceImpl implements CircularOrderService
 	}
 
 
+	
+	
+	
+	
 	@Override
 	public long GetDepCircularMaxIdEdit(String DepTypeId) throws Exception 
 	{

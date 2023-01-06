@@ -20,7 +20,7 @@ import com.vts.ems.pis.model.EmployeeDetails;
 public interface CircularOrderService {
 	
 
-	public File EncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception;
+	public File CircularEncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception;
 	public EmployeeDetails getEmpdataData(String empNo) throws Exception;
 	public List<Object[]> GetDepCircularList(String fromdate, String toDate, String DepTypeId) throws Exception;
 	public Object[] GetEmsDepType(String DepTypeId) throws Exception;
@@ -50,5 +50,6 @@ public interface CircularOrderService {
 	public long GovtOrderEdit(EMSGovtOrders order, MultipartFile OrderFile) throws Exception;
 	public long GovtOrderDelete(String OrderId, String Username) throws Exception;
 	public List<Object[]> GovtOrderSearchList(String search,String id) throws Exception;
-	public List<Object[]> GetGOTopicList() throws Exception; 
+	public List<Object[]> GetGOTopicList() throws Exception;
+	public File OfficeOrderEncryptAddWaterMarkAndMetadatatoPDF(PdfFileEncryptionDataDto dto) throws Exception; 
 }
