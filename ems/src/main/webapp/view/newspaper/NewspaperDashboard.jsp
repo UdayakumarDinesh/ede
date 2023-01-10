@@ -20,13 +20,13 @@
 
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>NewsPaper Dashboard</h5>
+			<div class="col-md-6">
+				<h5>NewsPaper/Telephone Dashboard</h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item active " aria-current="page">Newspaper</li>
+						<li class="breadcrumb-item active " aria-current="page">NewsPaper/Telephone</li>
 					</ol>
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 
 <div class="page card dashboard-card">
    <div class="card-body" align="center" >
-  		<h3>NewsPaper Dashboard</h3>
+  		<h3>NewsPaper/Telephone Dashboard</h3>
    
 
    </div>
