@@ -56,7 +56,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 
 <%
 	String empid = (String) request.getAttribute("empid");
-Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
+	Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 	Object[] empdata = (Object[]) request.getAttribute("empdata");
 	Object[] Emecdetails = (Object[]) request.getAttribute("emeaddressdetails");
 	Object[] Nextdetails = (Object[]) request.getAttribute("nextaddressdetails");
@@ -69,9 +69,9 @@ Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 	String LoginType = (String) session.getAttribute("LoginType");
 %>
  
- <%if(LoginType.equalsIgnoreCase("A")){ %>
+ <%-- <%if(LoginType.equalsIgnoreCase("A")){ %> --%>
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
- <%} %>
+ <%-- <%} %> --%>
  
   <div class="card-header page-top">
 		<div class="row">

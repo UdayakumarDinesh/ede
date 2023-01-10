@@ -27,8 +27,6 @@ List<Object[]> pisawardslist = (List<Object[]>)request.getAttribute("PisAwardsLi
 				<div class="col-md-7">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
 						<li class="breadcrumb-item  " aria-current="page"><a href="PropertyList.htm?empid=<%=empdata[2]%>">Property List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Property Add</li>
 					</ol>

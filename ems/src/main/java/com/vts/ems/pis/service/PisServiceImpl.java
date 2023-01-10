@@ -54,6 +54,7 @@ import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.PropertyDetails;
 import com.vts.ems.pis.model.Publication;
 import com.vts.ems.pis.model.Qualification;
 import com.vts.ems.pis.model.QualificationCode;
@@ -789,8 +790,6 @@ public class PisServiceImpl implements PisService
 			if(emp!=null&&emp[0]!=null) {
 				srno=Long.parseLong(emp[0].toString());
 			}
-			System.out.println(SeniorityNumber+"     SeniorityNumber");
-			System.out.println(srno+"          srno");
 			if(SeniorityNumber > srno) {
 				Long srno3=srno;
 				if(srno!=0) {
@@ -799,7 +798,6 @@ public class PisServiceImpl implements PisService
 				for(Object[] obj:result2) {
 					Long empIdL=Long.parseLong(obj[1].toString());
 					Long serialno=Long.parseLong(obj[0].toString());
-					System.out.println(obj[0] +"  ---QQQQQQQ-   "+obj[1]);
 					result= dao.UpdateAllSeniority(empIdL, --serialno);
 				}
 				}else {
@@ -808,7 +806,6 @@ public class PisServiceImpl implements PisService
 					for(Object[] obj:result2) {
 						Long empIdL=Long.parseLong(obj[1].toString());
 						Long serialno=Long.parseLong(obj[0].toString());
-						System.out.println(obj[0] +"  --dddddddd---   "+obj[1]);
 						result= dao.UpdateAllSeniority(empIdL, --serialno);
 					}
 					
@@ -1777,4 +1774,44 @@ public class PisServiceImpl implements PisService
 			return dao.GetMaxSeniorityNo();
 		}
 		
+		@Override
+		public Long AddPropertyDetails(PropertyDetails details) throws Exception {
+
+			return dao.AddPropertyDetails(details);
+		}
+
+		@Override
+		public List<Object[]> editPropertyDetails(String PropertyId) throws Exception {
+
+			return dao.editPropertyDetails(PropertyId);
+		}
+
+		@Override
+		public Long updatePropertyDetails(PropertyDetails details, String propertyId) throws Exception {
+
+			return dao.updatePropertyDetails(details, propertyId);
+		}
+
+		@Override
+		public List<Object[]> getLabDetails() throws Exception {
+			return dao.getLabDetails();
+		}
+
+		@Override
+		public List<Object[]> getEmpDetails(String empId) throws Exception {
+
+			return dao.GetEmpdetails(empId);
+		}
+
+		@Override
+		public List<Object[]> getPropertiesYearwise(int year, String empId) throws Exception {
+
+			return dao.getPropertiesYearWise(year, empId);
+		}
+
+		@Override
+		public int deletePropertyDetails(String propertyId, String Username) throws Exception {
+
+			return dao.deletePropertyDetails(propertyId, Username);
+		}
 }

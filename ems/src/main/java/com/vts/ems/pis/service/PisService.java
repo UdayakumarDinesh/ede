@@ -28,6 +28,7 @@ import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.PropertyDetails;
 import com.vts.ems.pis.model.Publication;
 import com.vts.ems.pis.model.Qualification;
 import com.vts.ems.pis.model.QualificationCode;
@@ -199,6 +200,13 @@ public interface PisService {
 	public List<Object[]> EmployeeList(String cadreid)throws Exception;
 	public int GetMaxSeniorityNo()throws Exception;
 	public List<Object[]> FamMemApprovedList() throws Exception;
+	public Long AddPropertyDetails(PropertyDetails details) throws Exception;
+	public List<Object[]> editPropertyDetails(String propertyId)  throws Exception;
+	public Long updatePropertyDetails(PropertyDetails details, String propertyId)throws Exception;
+	public List<Object[]> getLabDetails( )throws Exception;
+	public List<Object[]> getEmpDetails(String empId)throws Exception;
+	public List<Object[]> getPropertiesYearwise(int year, String empId)throws Exception;
+	public int deletePropertyDetails(String propertyId,String Username)throws Exception;
 	
 	
 }

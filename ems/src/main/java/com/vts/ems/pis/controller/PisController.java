@@ -77,6 +77,7 @@ import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.PropertyDetails;
 import com.vts.ems.pis.model.Publication;
 import com.vts.ems.pis.model.Qualification;
 import com.vts.ems.pis.model.QualificationCode;
@@ -113,7 +114,10 @@ public class PisController {
 	@Value("${EMSFilesPath}")
 	private String uploadpath;
 	                                                   
-
+	private static final String profileformmoduleid="3";
+	private static final String adminformmoduleid="4";
+	
+	
 	@RequestMapping(value = "PisUserDashboard.htm", method = RequestMethod.GET)
 	public String PisUserDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
@@ -155,8 +159,13 @@ public class PisController {
 	public String EmployeeDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
 		String Username = (String) ses.getAttribute("Username");
+		String logintype = (String)ses.getAttribute("LoginType");
 		logger.info(new Date() +"Inside EmployeeDetails.htm "+Username);		
 		try {
+			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("3" ,logintype);
+			ses.setAttribute("formmoduleid", profileformmoduleid);
+			req.setAttribute("dashboard", chssdashboard);
+			ses.setAttribute("SidebarActive","EmployeeDetails_htm");
 			
 			String empid=req.getParameter("empid");
 			if(empid==null)  {
@@ -4608,9 +4617,6 @@ public class PisController {
 				List<Object[]> ConfigurableReportList = service.getConfigurableReportList(name, DesigId, GroupId, CatId,
 						Gender, CadreId, ServiceStatus, CategoryId, BG, modeOfRecruitId, AwardId);
 
-				// System.out.println(name+" "+DesigName+" "+DesigId+" "+GroupId+" "+CatId+"
-				// "+Gender+" "+CadreId+" "+ServiceStatus+" "+CategoryId+" "+BG+"
-				// "+modeOfRecruitId+" "+Awards);
 				request.setAttribute("ConfigurableReportList", ConfigurableReportList);
 
 				Map<String, String> map = new HashMap<String, String>();
@@ -6099,4 +6105,191 @@ public class PisController {
 			return json.toJson(result);
 		   
 	   }
+	   
+	   
+	   @RequestMapping(value = "PropertyReport.htm", method = { RequestMethod.POST, RequestMethod.GET })
+		public String propertyReport(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir) throws Exception 
+		{
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			logger.info(new Date() + "Inside PropertyReport.htm " + Username);
+			try {
+				ses.setAttribute("SidebarActive", "PropertyReport_htm");
+				String action = req.getParameter("action");
+				if ("ADD".equalsIgnoreCase(action)) {
+					return "pis/PropertyDetailsAdd";
+				} else if ("EDIT".equalsIgnoreCase(action)) {
+
+					String PropertyId = req.getParameter("PropertyId");
+					List<Object[]> list = service.editPropertyDetails(PropertyId);
+					req.setAttribute("list", list);
+
+					return "pis/PropertyDetailsEdit";
+				} else if ("DELETE".equalsIgnoreCase(action)) {
+					String PropertyId = req.getParameter("PropertyId");
+					int result = service.deletePropertyDetails(PropertyId, Username);
+					if (result != 0) {
+						redir.addAttribute("result", "Property Details Deleted Successfully");
+					} else
+						redir.addAttribute("resultFail", "property Details Not Deleted");
+					return "redirect:/PropertyReport.htm";
+				} else {
+
+					String year = req.getParameter("PropertyYear");
+					if (year == null) {
+						year = String.valueOf(LocalDate.now().minusYears(1).getYear());
+					}
+					List<Object[]> list = service.getPropertiesYearwise(Integer.parseInt(year), EmpId);
+					req.setAttribute("list", list);
+					req.setAttribute("year", year);
+					String result = req.getParameter("result");
+					String resultFail = req.getParameter("resultFail");
+
+					req.setAttribute("result", result);
+					req.setAttribute("resultFail", resultFail);
+					return "pis/PropertyDetailsReportList";
+				}
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside PropertyReport.htm " + Username, e);
+				e.printStackTrace();
+			}
+
+			return "pis/PropertyDetailsReportList";
+		}
+
+		@RequestMapping(value = "PrintPropertyReport.htm", method = { RequestMethod.POST, RequestMethod.GET })
+		public void PrintReport(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir) throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			logger.info(new Date() + "Inside PrintPropertyReport.htm " + UserId);
+
+			try {
+				int year = Integer.parseInt(req.getParameter("year"));
+				List<Object[]> lablist = service.getLabDetails();
+				req.setAttribute("lablist", lablist);
+				List<Object[]> emplist = service.getEmpDetails(EmpId);
+				req.setAttribute("emplist", emplist);
+				List<Object[]> list = service.getPropertiesYearwise(year, EmpId);
+				req.setAttribute("list", list);
+				req.setAttribute("year", year);
+				String filename = "PropertiesDetailsPrint";
+				String path = req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path", path);
+
+				CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/pis/PropertiesDetailsPrint.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();
+
+				HtmlConverter.convertToPdf(html, new FileOutputStream(path + File.separator + filename + ".pdf"));
+
+				res.setContentType("application/pdf");
+				res.setHeader("Content-disposition", "inline;filename=" + filename + ".pdf");
+				File f = new File(path + File.separator + filename + ".pdf");
+				FileInputStream fis = new FileInputStream(f);
+				DataOutputStream os = new DataOutputStream(res.getOutputStream());
+				res.setHeader("Content-Length", String.valueOf(f.length()));
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while ((len = fis.read(buffer)) >= 0) {
+					os.write(buffer, 0, len);
+				}
+				os.close();
+				fis.close();
+
+				Path pathOfFile = Paths.get(path + File.separator + filename + ".pdf");
+				Files.delete(pathOfFile);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() + " Inside PrintPropertyReport.htm " + UserId, e);
+			}
+
+		}
+
+		@RequestMapping(value = "AddPropertyReoprt.htm", method = { RequestMethod.POST, RequestMethod.GET })
+		public String AddPropertyDetailsReport(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+			Long EmpId = ((Long) ses.getAttribute("EmpId"));
+			logger.info(new Date() + "Inside AddPropertyReoprt.htm " + UserId);
+			try {
+
+				String description = req.getParameter("description");
+				String address = req.getParameter("Address");
+				Double propertyValue = Double.parseDouble(req.getParameter("propertyvalue"));
+				String PartnerInfo = req.getParameter("PartnernameAndRelationship");
+				String modeOfproperty = req.getParameter("propertymode");
+				Double annualIncome = Double.parseDouble(req.getParameter("AnnualIncome"));
+				String remarks = req.getParameter("remarks");
+
+				PropertyDetails details = new PropertyDetails();
+				details.setEmpId(EmpId);
+				details.setDescription(description);
+				details.setAddress(address);
+				details.setPropertyValue(propertyValue);
+				details.setPartnerInfo(PartnerInfo);
+				details.setModeOfProperty(modeOfproperty);
+				details.setAnnualIncome(annualIncome);
+				details.setRemarks(remarks);
+				details.setPropertyYear(LocalDate.now().minusYears(1).getYear());
+				details.setCreatedBy(UserId);
+				details.setCreatedDate(sdtf.format(new Date()));
+				details.setIsActive(1);
+				Long result = service.AddPropertyDetails(details);
+				if (result != 0) {
+					redir.addAttribute("result", "Property Details Added Successfully");
+				} else
+					redir.addAttribute("resultFail", "property Details Not Added");
+
+			} catch (Exception e) {
+				logger.error(new Date() + " Inside AddPropertyReoprt.htm " + UserId, e);
+				e.printStackTrace();
+			}
+			return "redirect:/PropertyReport.htm";
+		}
+
+		@RequestMapping(value = "UpdatePropertyDetails.htm", method = { RequestMethod.GET, RequestMethod.POST })
+		public String updatePropertyDetails(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+		{
+
+			String UserId = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside UpdatePropertyDetails.htm " + UserId);
+			try {
+				String PropertyId = req.getParameter("PropertyId");
+				String description = req.getParameter("description");
+				String address = req.getParameter("Address");
+				String PropertyValue = req.getParameter("propertyvalue");
+				Double propertyValue = Double.parseDouble(PropertyValue);
+				String PartnerInfo = req.getParameter("PartnernameAndRelationship");
+				String modeOfproperty = req.getParameter("propertymode");
+				String AnnualIncome = req.getParameter("AnnualIncome");
+				Double annualIncome = Double.parseDouble(AnnualIncome);
+				String remarks = req.getParameter("remarks");
+
+				PropertyDetails details = new PropertyDetails();
+
+				details.setDescription(description);
+				details.setAddress(address);
+				details.setPropertyValue(propertyValue);
+				details.setPartnerInfo(PartnerInfo);
+				details.setModeOfProperty(modeOfproperty);
+				details.setAnnualIncome(annualIncome);
+				details.setRemarks(remarks);
+				details.setModifiedBy(UserId);
+				details.setModifiedDate(sdtf.format(new Date()));
+				Long result = service.updatePropertyDetails(details, PropertyId);
+				if (result != 0) {
+					redir.addAttribute("result", "Property Details Updated Successfully");
+				} else {
+					redir.addAttribute("resultFail", "property Details Not Updated");
+				}
+
+			} catch (Exception e) {
+				logger.error(new Date() + " Inside UpdatePropertyDetails.htm " + UserId, e);
+				e.printStackTrace();
+			}
+			return "redirect:/PropertyReport.htm";
+
+		}
 }

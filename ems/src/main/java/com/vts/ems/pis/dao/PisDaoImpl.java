@@ -45,6 +45,7 @@ import com.vts.ems.pis.model.PisEmpFamilyForm;
 import com.vts.ems.pis.model.PisFamFormMembers;
 import com.vts.ems.pis.model.PisPayLevel;
 import com.vts.ems.pis.model.Property;
+import com.vts.ems.pis.model.PropertyDetails;
 import com.vts.ems.pis.model.Publication;
 import com.vts.ems.pis.model.Qualification;
 import com.vts.ems.pis.model.QualificationCode;
@@ -2910,5 +2911,133 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 					return 0;
 				}
 	}
+	
+	
+	
+	@Override
+	public Long AddPropertyDetails(PropertyDetails details) throws Exception 
+	{
+		manager.persist(details);
+		manager.flush();
+		return details.getPropertyId();
+	}
+
+	private static final String PropertyDetails = "select PropertyId, Description,Address, PropertyValue,PartnerInfo,ModeOfProperty, AnnualIncome,Remarks from pis_property_details where PropertyId=:PropertyId";
+
+	@Override
+	public List<Object[]> editPropertyDetails(String propertyId) throws Exception 
+	{
+		List<Object[]> list = null;
+
+		Query query = manager.createNativeQuery(PropertyDetails);
+		query.setParameter("PropertyId", propertyId);
+		list = (List<Object[]>) query.getResultList();
+		manager.flush();
+		return list;
+	}
+
+	private static final String UpdatePropertyDetails = "update pis_property_details set Description=:Description,Address=:Address,PropertyValue=:PropertyValue,PartnerInfo=:PartnerInfo,ModeOfProperty=:ModeOfProperty,AnnualIncome=:AnnualIncome,Remarks=:Remarks where PropertyId=:propertyId";
+
+	@Override
+	public Long updatePropertyDetails(PropertyDetails details, String propertyId) throws Exception 
+	{
+		Long result = null;
+		try {
+			Query query = manager.createNativeQuery(UpdatePropertyDetails);
+			query.setParameter("Description", details.getDescription());
+			query.setParameter("Address", details.getAddress());
+			query.setParameter("PropertyValue", details.getPropertyValue());
+			query.setParameter("PartnerInfo", details.getPartnerInfo());
+			query.setParameter("ModeOfProperty", details.getModeOfProperty());
+			query.setParameter("AnnualIncome", details.getAnnualIncome());
+			query.setParameter("Remarks", details.getRemarks());
+			query.setParameter("propertyId", propertyId);
+			result = (long) query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	private static final String LabDetails = "select LabName ,LabAddress,LabCity,LabPin from lab_master";
+
+	@Override
+	public List<Object[]> getLabDetails() throws Exception 
+	{
+		List<Object[]> list = null;
+		try {
+			Query query = manager.createNativeQuery(LabDetails);
+			list = (List<Object[]>) query.getResultList();
+			manager.flush();
+		} catch (Exception e) {
+
+		}
+
+		return list;
+	}
+
+	private static final String EmpDetails = "SELECT emp.empname,emp.empno,emp.ExtNo,ppl.paygrade,ppl.paylevel,dm.divisionname,dm.divisioncode,DATE_FORMAT(det.dojl,'%d-%m-%Y') AS dojl,ed.designation,det.basicpay\n"
+			+ "\n" + "\n"
+			+ "FROM employee emp, employee_desig ed, division_master dm, employee_details det, pis_pay_level ppl\n"
+			+ "WHERE emp.desigid=ed.desigid AND emp.divisionid=dm.divisionid AND emp.empno = det.empno AND det.PayLevelId=ppl.PayLevelId\n"
+			+ "AND emp.empid=:EmpId";
+
+	@Override
+	public List<Object[]> GetEmpdetails(String empId) throws Exception 
+	{
+		List<Object[]> list = null;
+		try {
+			Query query = manager.createNativeQuery(EmpDetails);
+			query.setParameter("EmpId", empId);
+			list = (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return list;
+	}
+
+	private static final String propertiesYearwise = "select PropertyId,PropertyYear, Description,Address,FORMAT(PropertyValue,2,'en_IN') as PropertyValue,PartnerInfo,ModeOfProperty,FORMAT(AnnualIncome,2,'en_IN') as AnnualIncome,Remarks from pis_property_details where EmpId=:EmpId and PropertyYear=:PropertyYear and isactive=1";
+
+	@Override
+	public List<Object[]> getPropertiesYearWise(int year, String empId) throws Exception 
+	{
+		List<Object[]> list = null;
+		try {
+			Query query = manager.createNativeQuery(propertiesYearwise);
+			query.setParameter("PropertyYear", year);
+			query.setParameter("EmpId", empId);
+
+			list = (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private static final String DeletePropertyDetails = "update  pis_property_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE PropertyId=:propertyId ";
+
+	@Override
+	public int deletePropertyDetails(String propertyId, String Username) throws Exception 
+	{
+		int result = 0;
+		logger.info(new Date() + "Inside DAO deletePropertyDetails()");
+		try {
+			Query query = manager.createNativeQuery(DeletePropertyDetails);
+			query.setParameter("modifiedby", Username);
+			query.setParameter("modifieddate", sdf.format(new Date()));
+			query.setParameter("IsActive", 0);
+			query.setParameter("propertyId", propertyId);
+
+			result = query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
 }
 	
