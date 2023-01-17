@@ -2361,7 +2361,7 @@ public class PisController {
 	
 	
 	 	@RequestMapping(value ="ExistingMemAddSubmit.htm" , method =  RequestMethod.POST )
-		public String ExistingMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestPart("mem-attach") MultipartFile IncAttachment)throws Exception
+		public String ExistingMemAddSubmit(HttpServletRequest req, HttpServletResponse res, HttpSession ses,RedirectAttributes redir, @RequestParam(required = false, name = "mem-attach") MultipartFile IncAttachment)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");
 			String empid = ((Long) ses.getAttribute("EmpId")).toString();	

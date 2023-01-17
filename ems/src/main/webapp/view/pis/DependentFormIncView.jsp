@@ -331,9 +331,11 @@ th
 							</td>
 							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
+									<%if(FwdMemberDetails.get(i)[19].toString().equals("0")){ %>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
+									<%} %>
 									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" formmethod="post" formenctype="application/x-www-form-urlencoded" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>" formaction="FormFamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Remove">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>

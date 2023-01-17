@@ -212,11 +212,13 @@ th
 					}%>
 					</table>
 				
-				
+				</div>
 				
 <!-- -------------------------------- Exclude --------------------------------------  -->
+			
 			<%if(ExcMemberDetails.stream().anyMatch(obj -> obj[19].toString().equalsIgnoreCase("E")))
 			{ %>
+			<div align="left">
 				<br>
 				<b style="text-decoration: underline; ">Exclude below Family Members from Medical Dependents List</b><br>
 				<form method="post">
@@ -248,7 +250,7 @@ th
 							<td style="text-align: center;" ><%=++count%></td>
 							<td><%=ExcMemberDetails.get(i)[1] %></td>
 							<td><%=ExcMemberDetails.get(i)[2] %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[17].toString()) %></td>							
+							<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(ExcMemberDetails.get(i)[17].toString()) %></td>							
 							<td>
 								<%if(ExcMemberDetails.get(i)[16]!=null){ %>
 									<%=ExcMemberDetails.get(i)[16] %>
@@ -282,7 +284,9 @@ th
 					<input type="hidden" name="Decformid" value="<%=formid%>"/>
 					<input type="hidden" name="formid" value="<%=formid%>"/>
 				</form>
+				</div>
 			<% } %>
+			
 <!-- --------------------------------exclude----------------------------------- -->							
 				
 				<br>
@@ -370,11 +374,11 @@ th
 								<%=i+1%>
 							</td>
 							<td>
-								<form action="ExistingMemAddSubmit.htm" method="post" id="edit-form-<%=FwdMemberDetails.get(i)[0] %>" enctype="multipart/form-data" autocomplete="off" > </form>
+								<form action="DepMemEditSubmit.htm" method="post" id="edit-form-<%=FwdMemberDetails.get(i)[0] %>" enctype="multipart/form-data" autocomplete="off" > </form>
 								<select class="form-control selectpicker dropdown" form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" id="familydetailsid-<%=FwdMemberDetails.get(i)[0] %>" name="familydetailsid" onchange="changeReletion('<%=FwdMemberDetails.get(i)[0] %>')" data-dropup-auto="false" data-live-search="true" data-container="body" data-show-subtext="false" required="required" >
 									<option disabled="disabled" selected="selected" value="0">Choose..</option>
-									<%for(Object[] member : FamilymemDropdown){
-										if(!excludeedlist.contains(member[0].toString())){%>
+									<%for(Object[] member : FamilymemDropdown)
+									{%>
 										<option value="<%=member[0]%>" 
 										data-subtext="(<%=member[4]%>)" 
 										data-relation="<%=member[4]%>" 
@@ -382,30 +386,33 @@ th
 										data-dob="<%=DateTimeFormatUtil.SqlToRegularDate(member[5].toString())%>" 
 										data-occupation="<%if(member[6]!=null){ %><%=member[6]%> <%} %>"
 										data-income=<%if(member[7]!=null){ %><%=member[7]%> <%}%>
+										
+										<%if(member[0].toString().equalsIgnoreCase(FwdMemberDetails.get(i)[0].toString())){ %>selected<%} %>
+										
 										><%=member[2]%></option>
-									<%} } %>
+									<%}  %>
 								</select>
 							</td>
 							<td>
-								<span id="mem-rel-0"></span>	
+								<span id="mem-rel-0"><%=FwdMemberDetails.get(i)[2] %></span>	
 							</td>
-							<td>
-								<span id="mem-dob-0" ></span>
+							<td style="text-align: center;">
+								<span id="mem-dob-0" ><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></span>
 							</td>
 							<td>
 								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control mem-IncDate-edit"  name="mem-IncDate" value="" style="width:100%;"  maxlength="10" readonly required="required">
 							</td>
 							<td>
-								<span id="mem-occu-0"></span>
+								<span id="mem-occu-0"><%if(FwdMemberDetails.get(i)[7]!=null){ %><%=FwdMemberDetails.get(i)[7]%> <%} %></span>
 							</td>
 							<td>
-								<span  id="mem-inc-0"></span>
+								<span  id="mem-inc-0"><%if(FwdMemberDetails.get(i)[8]!=null){ %><%=FwdMemberDetails.get(i)[8]%> <%} %></span>
 							</td>
 							<td>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" value="" maxlength="255" required >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="text" class="form-control" name="mem-comment" value="<%if(FwdMemberDetails.get(i)[16]!=null){ %><%=FwdMemberDetails.get(i)[16]%> <%} %>" maxlength="255" required >
 							</td>
 							<td>
-								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit" required="required" >
+								<input form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="file" class="form-control" name="mem-attach-edit" >
 							</td>
 							
 							<td>	
@@ -430,8 +437,8 @@ th
 							<td style="text-align: center;" ><%=count1%></td>
 							<td><%=FwdMemberDetails.get(i)[1] %></td>
 							<td><%=FwdMemberDetails.get(i)[2] %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
-							<td><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[11].toString()) %></td>
+							<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[3].toString()) %></td>
+							<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(FwdMemberDetails.get(i)[11].toString()) %></td>
 							<td>
 								<%if(FwdMemberDetails.get(i)[7]!=null){ %>
 									<%=FwdMemberDetails.get(i)[7] %>
@@ -463,9 +470,11 @@ th
 							</td>
 							<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 								<td>
+									<%if(FwdMemberDetails.get(i)[19].toString().equals("0")){ %>
 									<button type="button" class="btn btn-sm "  onclick="showEdit('<%=FwdMemberDetails.get(i)[0] %>')" title="Edit"> 
 										<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i>
 									</button> 
+									<%} %>
 									<button form="edit-form-<%=FwdMemberDetails.get(i)[0] %>" type="submit" class="btn btn-sm" formnovalidate="formnovalidate" formmethod="post" formenctype="application/x-www-form-urlencoded" name="formmemberid" value="<%=FwdMemberDetails.get(i)[15]%>" formaction="FormFamilyMemberDelete.htm"  onclick="return confirm('Are You Sure to Remove ?');" title="Remove">
 										<i class="fa-solid fa-trash-can" style="color: red;"></i>
 									</button>
@@ -476,15 +485,6 @@ th
 					<%} %>	
 					<%} %>
 					
-					<%-- <%if(count==0){ %>
-						<tr>
-						<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
-							<td colspan="10" style="text-align: center;">Member(s) Not Added</td>
-						<%}else{ %>
-							<td colspan="9" style="text-align: center;">Member(s) Not Added</td>
-						<%} %>
-						</tr>
-					<%} %> --%>
 					
 					</table>
 				
@@ -756,8 +756,7 @@ th
 				<br><br><br><br><br>
 			</div>
 		</div>
-	</div>
-
+</div>
 
 <script type="text/javascript">
 	function IncomeRequired(detailid)
