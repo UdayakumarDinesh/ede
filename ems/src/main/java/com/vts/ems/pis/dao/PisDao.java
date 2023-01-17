@@ -18,6 +18,7 @@ import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.PISEmpFamilyDeclaration;
 import com.vts.ems.pis.model.Passport;
 import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
@@ -119,7 +120,7 @@ public interface PisDao {
 	public Object[] RelationshipData(String relationid) throws Exception;
 	public Object[] getMemberdata(String formmemberid) throws Exception;
 	public List<Object[]> EmpFamFormsList(String empid, String status) throws Exception;
-	public int FamilyMemIncConfirm(String formid, String empid, String username,String medDepStatus) throws Exception;
+	public int FamilyMemIncConfirm(String formid, String empid, String username,String medDepStatus,String incexc) throws Exception;
 	public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception;
 	public Object[] GetFamFormData(String familyformid) throws Exception;
 	public int FormFamilyMemberDelete(String formmemberid) throws Exception;
@@ -211,4 +212,7 @@ public interface PisDao {
 	public List<Object[]> GetEmpdetails(String empId) throws Exception;
 	public List<Object[]> getPropertiesYearWise(int year, String empId) throws Exception;
 	public int deletePropertyDetails(String propertyId,String Username) throws Exception ;
+	public List<Object[]> familyDetailsList(String empid) throws Exception;
+	public long EmpFamilyDeclarationAdd(PISEmpFamilyDeclaration declare) throws Exception;
+	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
 }

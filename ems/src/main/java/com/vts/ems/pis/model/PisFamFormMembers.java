@@ -26,6 +26,7 @@ public class PisFamFormMembers implements Serializable {
 	private	String Comments;
 	private	String IncExcDate;
 	private	String AttachFilePath;
+	private String IncExc;
 	private	int IsActive;
 	private	String CreatedBy;
 	private	String CreatedDate;

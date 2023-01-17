@@ -126,6 +126,8 @@
 											Inclusion
 										<%}else if(form[6].toString().equals("E") ){  %>
 											Exclusion
+										<%}else if(form[6].toString().equals("D") ){  %>
+											Declaration
 										<%} %>					
 									</td>
 									
@@ -137,6 +139,10 @@
 										</button>	
 										<%}else if(form[6].toString().equals("E") ){  %>
 											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepExclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa-solid fa-eye"></i>
+											</button>	
+										<%}else if(form[6].toString().equals("D") ){  %>
+											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepDeclareFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>
 											</button>	
 										<%} %>	
@@ -206,12 +212,12 @@
 												<td style="text-align: center;"><%=DateTimeFormatUtil.SqlToRegularDate(form[7].toString()) %></td>
 												<td>
 													<%if(form[6].toString().equals("I") ){ %>
-													<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
-														<i class="fa-solid fa-eye"></i>
-													</button>	
-													<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentIncForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
-														<i class="fa-solid fa-download " style="color: green;"></i>
-													</button>
+														<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+														<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentIncForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: green;"></i>
+														</button>
 													<%}else if(form[6].toString().equals("E") ){  %>
 														<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepExclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 															<i class="fa-solid fa-eye"></i>
@@ -219,7 +225,14 @@
 														<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentExcForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-													<%} %>	
+													<%}else if(form[6].toString().equals("D") ){  %>
+														<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepDeclareFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+															<i class="fa-solid fa-eye"></i>
+														</button>	
+														<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DepDeclareFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: green;"></i>
+														</button>
+													<%} %>
 													
 															
 													<input type="hidden" name="empid" value="<%=form[1]%>">

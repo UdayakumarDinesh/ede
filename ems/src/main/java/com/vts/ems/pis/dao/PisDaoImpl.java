@@ -36,6 +36,7 @@ import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.PISEmpFamilyDeclaration;
 import com.vts.ems.pis.model.Passport;
 import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
@@ -1405,7 +1406,7 @@ public class PisDaoImpl implements PisDao {
 	}
 	
 	
-	private static final  String GETFAMILYDETAILSFWD="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath,fd.isactive FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr  WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  "; 
+	private static final  String GETFAMILYDETAILSFWD="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath,fd.isactive,ffm.incexc FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr  WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  "; 
 	@Override
 	public List<Object[]> GetFormMembersList(String formid) throws Exception 
 	{
@@ -1592,9 +1593,9 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String FAMTABLEUPDATE = "UPDATE pis_emp_family_details fd, pis_fam_form_members  ff SET fd.isactive=1 , fd.med_dep=:medDepStatus, fd.modifiedby =:username ,fd.modifieddate=:ModifiedDate   WHERE ff.FamilyDetailsId = fd.family_details_id AND ff.isactive=1 AND ff.FamilyFormId=:formid ;";
+	private static final String FAMTABLEUPDATE = "UPDATE pis_emp_family_details fd, pis_fam_form_members  ff SET fd.isactive=1 , fd.med_dep=:medDepStatus, fd.modifiedby =:username ,fd.modifieddate=:ModifiedDate   WHERE ff.FamilyDetailsId = fd.family_details_id AND ff.isactive=1 AND ff.incexc=:IncExc AND ff.FamilyFormId=:formid ;";
 	@Override
-	public int FamilyMemIncConfirm(String formid, String empid,String username,String medDepStatus)throws Exception
+	public int FamilyMemIncConfirm(String formid, String empid,String username,String medDepStatus,String incexc)throws Exception
 	{
 		try {
 		    Query query=manager.createNativeQuery(FAMTABLEUPDATE);
@@ -1602,6 +1603,7 @@ public class PisDaoImpl implements PisDao {
 		    query.setParameter("medDepStatus", medDepStatus);
 		    query.setParameter("username", username);
 		    query.setParameter("ModifiedDate", DateTimeFormatUtil.getSqlDateAndTimeFormat().format(new Date()));
+		    query.setParameter("IncExc", incexc);
 	        return query.executeUpdate();
 		}catch (Exception e) {
 			logger.error(new Date() + "Inside DAO FamilyMemIncConfirm "+e);
@@ -1765,7 +1767,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return result;
 	}
 	
-	private static final  String GETEXCFORMMEMBERSLIST="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr   WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND fd.isactive=1 AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  ";
+	private static final  String GETEXCFORMMEMBERSLIST="SELECT fd.family_details_id, fd.member_name, fr.relation_name, fd.dob, fd.med_dep, fd.blood_group, fd.emp_unemp, fd.MemberOccupation,  fd.MemberIncome ,   fd.relation_id,fd.empid, fd.med_dep_from ,ff.FormStatus,ff.familyformid,ff.formtype,   ffm.formmemberid , ffm.Comments , ffm.IncExcDate,ffm.AttachFilePath,ffm.incexc FROM pis_emp_family_form ff ,pis_fam_form_members ffm ,  pis_emp_family_details fd,pis_emp_family_relation fr   WHERE  ffm.isactive=1 AND ff.FamilyFormId = ffm.FamilyFormId AND ffm.FamilyDetailsId=fd.family_details_id AND fd.relation_id=fr.relation_id AND fd.isactive=1 AND ff.FamilyFormId = :formid ORDER BY ffm.formmemberid ASC;  ";
 	
 	@Override
 	public List<Object[]> GetExcFormMembersList(String formid) throws Exception 
@@ -3039,5 +3041,35 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return result;
 	}
 	
+	
+	private static final String FAMILYDETAILSLIST = "SELECT fd.family_details_id, fd.member_name, fd.relation_id, fd.dob, fd.family_status_id, fd.status_from, fd.blood_group, fr.relation_name,fd.gender,fd.med_dep_from, fd.MemberOccupation,fd.MemberIncome FROM pis_emp_family_details fd,  pis_emp_family_relation fr, pis_emp_family_status fs WHERE fd.IsActive = 1 AND fd.relation_id = fr.relation_id   AND fd.family_status_id = fs.family_status_id AND fs.family_status_id IN (1, 2) AND fd.med_dep ='Y' AND empid = :empid ORDER BY fr.SerialNo ASC ";
+	
+	@Override
+	public List<Object[]> familyDetailsList(String empid) throws Exception
+	{
+		Query query =manager.createNativeQuery(FAMILYDETAILSLIST);
+		List<Object[]> resultList = new ArrayList<Object[]>();		
+		query.setParameter("empid", empid);
+		resultList = (List<Object[]>)query.getResultList();				
+		return resultList;
+	}
+	
+	@Override
+	public long EmpFamilyDeclarationAdd(PISEmpFamilyDeclaration declare)throws Exception
+	{
+		manager.persist(declare);
+		manager.flush();
+		return declare.getFamilyDeclarationId();
+	}
+	
+	private static final String GETEMPFAMILYDECLARATION = "from PISEmpFamilyDeclaration where FamilyFormId =:formid";
+	@Override
+	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid)throws Exception
+	{
+		Query query =manager.createQuery(GETEMPFAMILYDECLARATION);
+		query.setParameter("formid", Long.parseLong(formid));
+		PISEmpFamilyDeclaration declare = (PISEmpFamilyDeclaration)query.getSingleResult();				
+		return declare;
+	}
 }
 	

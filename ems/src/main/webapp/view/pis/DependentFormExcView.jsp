@@ -292,6 +292,9 @@ th,td
 					<% } %>
 					
 				</table>
+			
+			
+			
 				<div class="row" align="left"> 
 					<div class="col-md-12">
 					<br><br><br><br>

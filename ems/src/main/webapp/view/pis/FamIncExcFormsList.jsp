@@ -82,9 +82,11 @@
 									<td>
 										<%if(form[2].toString().equals("I") ){ %>
 											Inclusion
-										<%}else{ %>
+										<%}else if(form[2].toString().equals("E") ){ %>
 											Exclusion
-										<%} %>					
+										<%}else if(form[2].toString().equals("D") ){ %>
+											Declaration
+										<%} %>				
 									</td>
 									<td>
 										<%if(form[3].toString().equals("C") ){ %>
@@ -112,6 +114,14 @@
 												<i class="fa-solid fa-download " style="color: green;"></i>
 											</button>
 										
+										<%}else if(form[2].toString().equals("D") ){ %>
+											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepDeclareFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa-solid fa-eye"></i>
+											</button>	
+											<button type="button" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentExcForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+												<i class="fa-solid fa-download " style="color: green;"></i>
+											</button>
+										
 										<%} %>
 									</td>
 								</tr>
@@ -127,7 +137,10 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div align="center">
 						<button type="submit" class="btn btn-sm " style=" background: #231955; color: #ffffff " name="formid" value="0" formaction="DepInclusionFormView.htm"  name="action" value="add" >Inclusion Form</button>
-						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button> 
+						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button>
+						<%if(LocalDate.now().getMonthValue()==1){ %>
+						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff " name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Declaration Form</button>
+						<%} %> 
 					</div>
 					
 				</form>
@@ -155,9 +168,11 @@
 									<td>
 										<%if(form[2].toString().equals("I") ){ %>
 											Inclusion
-										<%}else{ %>
+										<%}else if(form[2].toString().equals("E") ){ %>
 											Exclusion
-										<%} %>	
+										<%}else if(form[2].toString().equals("D") ){ %>
+											Declaration
+										<%} %>		
 									</td>
 									<td>
 										Confirmed
@@ -180,6 +195,13 @@
 												<i class="fa-solid fa-download " style="color: green;"></i>
 											</button>
 										
+										<%}else if(form[2].toString().equals("D") ){ %>
+											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepDeclareFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<i class="fa-solid fa-eye"></i>
+											</button>	
+											<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DepDeclareFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download">
+												<i class="fa-solid fa-download " style="color: green;"></i>
+											</button>
 										<%} %>
 									</td>
 								</tr>

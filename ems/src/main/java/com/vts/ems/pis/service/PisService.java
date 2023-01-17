@@ -2,6 +2,9 @@ package com.vts.ems.pis.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
@@ -19,6 +22,7 @@ import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.PISEmpFamilyDeclaration;
 import com.vts.ems.pis.model.Passport;
 import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
@@ -104,7 +108,7 @@ public interface PisService {
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
-	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String Remarks) throws Exception;
+	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
 	public List<Object[]> GetFormMembersList(String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
@@ -207,6 +211,8 @@ public interface PisService {
 	public List<Object[]> getEmpDetails(String empId)throws Exception;
 	public List<Object[]> getPropertiesYearwise(int year, String empId)throws Exception;
 	public int deletePropertyDetails(String propertyId,String Username)throws Exception;
+	public List<Object[]> familyDetailsList(String empid) throws Exception;
+	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
 	
 	
 }

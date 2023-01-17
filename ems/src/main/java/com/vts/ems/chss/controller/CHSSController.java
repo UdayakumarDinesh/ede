@@ -200,8 +200,6 @@ public class CHSSController
 		
 		try {
 			ses.setAttribute("SidebarActive","CHSSApplyDashboard_htm");
-			SimpleDateFormat sf= new SimpleDateFormat("yyyy");
-			SimpleDateFormat sf1= new SimpleDateFormat("dd-MM-yyyy");
 	
 			String PatientId="0";
 			if(req.getParameter("patientidvalue")!=null) {

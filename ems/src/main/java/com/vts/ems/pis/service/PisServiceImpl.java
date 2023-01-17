@@ -1,7 +1,9 @@
 package com.vts.ems.pis.service;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,6 +19,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -25,8 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
 import com.vts.ems.model.EMSNotification;
@@ -45,6 +55,7 @@ import com.vts.ems.pis.model.EmpStatus;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.model.EmployeeDetails;
+import com.vts.ems.pis.model.PISEmpFamilyDeclaration;
 import com.vts.ems.pis.model.Passport;
 import com.vts.ems.pis.model.PassportForeignVisit;
 import com.vts.ems.pis.model.PisCadre;
@@ -58,6 +69,7 @@ import com.vts.ems.pis.model.PropertyDetails;
 import com.vts.ems.pis.model.Publication;
 import com.vts.ems.pis.model.Qualification;
 import com.vts.ems.pis.model.QualificationCode;
+import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -861,7 +873,7 @@ public class PisServiceImpl implements PisService
 		
 		
 		@Override
-		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks) throws Exception
+		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception
 		{
 			logger.info(new Date() +"Inside SERVICE FamilyMemDetailsForward ");
 			long count=0;
@@ -889,12 +901,18 @@ public class PisServiceImpl implements PisService
 					notify.setEmpId(Long.parseLong(loginTypeEmpData.get(0)[1].toString()));
 					notify.setNotificationBy(Long.parseLong(formdata[1].toString()));
 					
-					if(formtype.equalsIgnoreCase("I")) {
+					if(formtype.equalsIgnoreCase("I")) 
+					{
 						notify.setNotificationMessage("Family Member(s) Inclusion Form Recieved");
-					}else if(formtype.equalsIgnoreCase("E")) {
+					}
+					else if(formtype.equalsIgnoreCase("E")) 
+					{
 						notify.setNotificationMessage("Family Member(s) Exclusion Form Recieved");
 					}
-					
+					else if(formtype.equalsIgnoreCase("D")) 
+					{
+						notify.setNotificationMessage("Family Member(s) Declaration Form Recieved");
+					}
 				}
 				
 			}else if(action.equalsIgnoreCase("R") ) 
@@ -907,6 +925,10 @@ public class PisServiceImpl implements PisService
 				else if(formtype.equalsIgnoreCase("E")) 
 				{
 					notify.setNotificationMessage("Family Member(s) Exclusion Form Returned");
+				}
+				else if(formtype.equalsIgnoreCase("D")) 
+				{
+					notify.setNotificationMessage("Family Member(s) Declaration Form Returned");
 				}
 				
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
@@ -931,6 +953,13 @@ public class PisServiceImpl implements PisService
 					ExcFormApprove(formid, empid,usernmae);
 					notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
 				}
+				else if(formtype.equalsIgnoreCase("D")) 
+				{
+					FamilyMemIncConfirm(formid, empid, usernmae);
+					ExcFormApprove(formid, empid,usernmae);
+					notify.setNotificationMessage("Family Member(s) Declaration Form Approved");
+					DepDeclareFormFreeze(req, res, formid);
+				}
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
 				notify.setEmpId(Long.parseLong(formdata[1].toString()));
@@ -950,17 +979,98 @@ public class PisServiceImpl implements PisService
 			return count;
 		}
 		
+		public void DepDeclareFormFreeze(HttpServletRequest req, HttpServletResponse res,String formid)throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE DepDeclareFormFreeze ");
+			try {
+				
+				String empid; 
+				Object[] formdata = GetFamFormData(formid);
+				empid = formdata[1].toString();
+					
+				req.setAttribute("formdetails" , formdata);
+				
+				req.setAttribute("empdetails",getEmployeeInfo(empid) );
+				req.setAttribute("employeeResAddr",employeeResAddr(empid) );
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("CHSSEligibleFamList", familyDetailsList(empid));
+				
+				String filename="DependantDeclaration";
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+				CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/pis/DependentFormDec.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();        
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        File file=new File(path +File.separator+ filename+".pdf");
+		        
+		        
+		        String fname="DependantDeclaration-"+formdata[1].toString()+"-"+LocalDate.now().getYear();
+				String filepath = "\\DependantDeclaration";
+				int count=0;
+				while(new File(uploadpath+filepath+"\\"+fname+".pdf").exists())
+				{
+					fname = "DependantDeclaration-"+formdata[1].toString()+"-"+LocalDate.now().getYear();
+					fname = fname+" ("+ ++count+")";
+				}
+		        
+		        saveFile(uploadpath+filepath, fname+".pdf", file);
+		        
+		        PISEmpFamilyDeclaration declare = PISEmpFamilyDeclaration.builder()
+		        									.EmpId(Long.parseLong(formdata[1].toString()))
+		        									.FamilyFormId(Long.parseLong(formid))
+		        									.FilePath(filepath+"\\"+fname+".pdf")
+		        									.build();
+		        		
+		        dao.EmpFamilyDeclarationAdd(declare);
+		        									
+		        		
+		        
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		@Override
+		public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid)throws Exception
+		{
+			return dao.getEmpFamilyDeclaration(formid);
+		}
+		
+
+		public void saveFile(String uploadpath, String fileName, File fileToSave) throws IOException 
+		{
+		   logger.info(new Date() +"Inside SERVICE saveFile ");
+		   Path uploadPath = Paths.get(uploadpath);
+		          
+		   if (!Files.exists(uploadPath)) {
+			   Files.createDirectories(uploadPath);
+		   }
+		        
+		   try (InputStream inputStream = new FileInputStream(fileToSave)) {
+			   Path filePath = uploadPath.resolve(fileName);
+		       Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		   } catch (IOException ioe) {       
+			   throw new IOException("Could not save file: " + fileName, ioe);
+		   }     
+		}
 		
 		@Override
 		public int FamilyMemIncConfirm(String formid,String empid,String username ) throws Exception
 		{
-			return dao.FamilyMemIncConfirm(formid, empid, username,"Y");
+			return dao.FamilyMemIncConfirm(formid, empid, username,"Y","I");
 		}
 		
 		@Override
 		public int ExcFormApprove(String formid,String empid,String username) throws Exception 
 		{
-			return dao.FamilyMemIncConfirm(formid, empid, username,"N");
+			return dao.FamilyMemIncConfirm(formid, empid, username,"N","E");
 		}
 		
 		@Override
@@ -1813,5 +1923,10 @@ public class PisServiceImpl implements PisService
 		public int deletePropertyDetails(String propertyId, String Username) throws Exception {
 
 			return dao.deletePropertyDetails(propertyId, Username);
+		}
+		@Override
+		public List<Object[]> familyDetailsList(String empid) throws Exception
+		{
+			return dao.familyDetailsList(empid);
 		}
 }
