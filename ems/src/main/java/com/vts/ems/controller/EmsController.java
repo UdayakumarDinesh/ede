@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -157,6 +158,29 @@ public class EmsController {
 			req.setAttribute("logintype", LoginType);
 			ses.setAttribute("SidebarActive","Home");
 			return "static/maindashboard";
+    	}catch (Exception e) {
+    		e.printStackTrace();
+			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "Calandar.htm")
+	public String Calandar(HttpServletRequest req, HttpSession ses) throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
+    	
+    	try {
+    		String Year = req.getParameter("year");
+    		
+    		if(Year==null) {
+    			Year=LocalDate.now().getYear()+"";
+    		}
+    		
+    		req.setAttribute("CalandarEventType", service.CalandarEventTypes());
+    		req.setAttribute("CalandarEvents", service.CalandarEvents(Year));
+			return "static/EventsCalandar";
     	}catch (Exception e) {
     		e.printStackTrace();
 			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);

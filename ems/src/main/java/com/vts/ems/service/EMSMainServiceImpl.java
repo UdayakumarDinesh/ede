@@ -239,4 +239,23 @@ public class EMSMainServiceImpl implements EMSMainService
 	{
 		return dao.getCircularOrdersNotice();
 	}
+	@Override
+	public List<Object[]> CalandarEvents(String eventyear) throws Exception
+	{	
+		List<Object[]> eventList=  dao.CalandarEvents(eventyear);
+
+		
+		
+		return eventList;
+	}
+	
+		
+
+		
+		
+	@Override
+	public List<Object[]> CalandarEventTypes() throws Exception
+	{
+		return dao.CalandarEventTypes();
+	}
 }

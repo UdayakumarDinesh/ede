@@ -32,4 +32,6 @@ public interface EmsDao
 	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
 	public long AllNoticeCount() throws Exception;
 	public List<Object[]> getCircularOrdersNotice() throws Exception;
+	public List<Object[]> CalandarEvents(String eventyear) throws Exception;
+	public List<Object[]> CalandarEventTypes() throws Exception;
 }

@@ -400,4 +400,37 @@ public class EmsDaoImpl implements EmsDao
 			}
 		}
 
+		
+		private static final String CALANDAREVENTS="SELECT ce.EMSEventId,ce.EventTypeCode,ce.EventDate,ce.EventName,ce.EventDescription,et.EventType,et.EventColor FROM ems_calandar_events ce, ems_calandar_eventtypes et WHERE ce.EventTypeCode= et.EventTypeCode AND ce.isactive=1 AND YEAR(ce.EventDate) = :eventyear ORDER BY eventdate ASC";
+		
+		@Override
+		public List<Object[]> CalandarEvents(String eventyear) throws Exception
+		{		
+			try {
+				Query query = manager.createNativeQuery(CALANDAREVENTS);
+				
+				query.setParameter("eventyear", eventyear);
+				return (List<Object[]>)query.getResultList();
+			}
+			catch (Exception e) {
+				logger.error(new Date() +" Inside DAO EmpHandOverLoginTypeList "+ e);
+				return null;
+			}
+		}
+		
+		private static final String CALANDAREVENTTYPES="SELECT et.EMSEventTypeId,et.EventTypeCode,et.EventType,et.EventColor FROM  ems_calandar_eventtypes et WHERE et.isactive=1";
+		
+		@Override
+		public List<Object[]> CalandarEventTypes() throws Exception
+		{		
+			try {
+				Query query = manager.createNativeQuery(CALANDAREVENTTYPES);
+				
+				return (List<Object[]>)query.getResultList();
+			} 
+			catch (Exception e) {
+				logger.error(new Date() +" Inside DAO EmpHandOverLoginTypeList "+ e);
+				return null;
+			}
+		}
 }

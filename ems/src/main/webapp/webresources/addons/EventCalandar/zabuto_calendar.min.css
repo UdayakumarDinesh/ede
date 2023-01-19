@@ -1,0 +1,281 @@
+/*! Zabuto Calendar - v2.1.0 - 2022-12-29
+* https://github.com/zabuto/calendar
+* Copyright (c) 2022 Anke Heijnen; Licensed MIT */
+.zabuto-calendar {
+	width: 100%;
+	margin: 0;
+	padding: 0
+}
+
+.zabuto-calendar__navigation__item--next,
+	.zabuto-calendar__navigation__item--prev {
+	text-align: center;
+	cursor: pointer;
+}
+
+.zabuto-calendar__navigation__item--header {
+	text-align: center;
+}
+
+.zabuto-calendar__navigation__item--header__title {
+	cursor: pointer;
+	font-weight: bolder;
+}
+
+.zabuto-calendar__days-of-week__item {
+	text-align: center;
+}
+
+.zabuto-calendar__day {
+	text-align: center;
+	cursor: pointer;
+}
+
+.zabuto-calendar__day--today {
+	text-align: center
+}
+
+.zabuto-calendar.table td, .zabuto-calendar.table th {
+	vertical-align: middle
+}
+
+.zabuto-calendar.table thead td {
+	padding-top: 14px;
+	padding-bottom: 14px;
+	background-color: #fafafa
+}
+
+.zabuto-calendar.table-bordered thead td {
+	border: 0
+}
+
+.zabuto-calendar.table thead th {
+	background-color: #f0f0f0
+}
+
+.zabuto-calendar.table>thead:first-child>tr:first-child>td {
+	border-top: 1px solid #ddd
+}
+
+.zabuto-calendar.table>thead>tr>th {
+	border-bottom: 2px solid #ddd
+}
+
+.zabuto-calendar.table>tbody td {
+	width: calc(100%/ 7)
+}
+
+.zabuto-calendar.table>tbody>tr:last-child>td {
+	border-bottom: 1px solid #ddd
+}
+
+.zabuto-calendar.table>tbody td .badge {
+	font-size: 100%
+}
+
+.zabuto-calendar.clickable>tbody td {
+	cursor: pointer
+}
+
+.zabuto-calendar.table.clickable>tbody td:hover {
+	background-color: #f0f0f0
+}
+
+/* sections */
+section h2, section p.lead {
+	padding-top: 4.5rem;
+	color: #99792f;
+}
+
+section h3 {
+	padding-top: 1rem;
+}
+
+/* footer */
+footer {
+	margin-top: 4.5rem;
+	padding: 30px 0 20px 0;
+	color: #564e49;
+}
+
+/* scrollup */
+a.scrollup {
+	height: 32px;
+	width: 32px;
+	color: #ffffff;
+	background-color: #564e49;
+	font-size: 18px;
+	line-height: 32px;
+	text-align: center;
+	text-decoration: none;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 9999;
+	opacity: 0.5;
+}
+
+a.scrollup:hover {
+	opacity: 1;
+	color: #fff;
+}
+
+/* settings */
+dd {
+	color: #777;
+}
+
+dl.language {
+	font-size: 0.9em;
+}
+
+dd.type, dl.language dd {
+	color: #000;
+}
+
+dl.language dd {
+	margin-bottom: 0;
+}
+
+/* code */
+pre.prettyprint, pre.prettyprint.prettyprinted {
+	padding: 10px;
+}
+
+/* responsive */
+@media ( max-width : 767px) {
+	a.scrollup {
+		height: 28px;
+		width: 28px;
+		bottom: 12px;
+		right: 12px;
+	}
+	section {
+		padding: 1rem 0 1rem 0;
+	}
+}
+
+/* calendar demo */
+.demo-calendar {
+	min-height: 340px;
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #888;
+	border-radius: 4px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+}
+
+.demo-calendar.basic {
+	min-height: 190px;
+}
+
+table.lightgrey-weekends tbody td:nth-child(n+7) {
+	background-color: #f3f3f3;
+	color: red;
+}
+
+
+.diamond {
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	transform: rotate(45deg);
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background: #fff;
+}
+
+.diamond-day {
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	transform: rotate(-45deg);
+	padding-top: 0.33em;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	color: red;
+}
+
+.grade-1 {
+	background-color: #fa2601 !important;
+}
+
+.grade-2 {
+	background-color: #fa8a00 !important;
+}
+
+.grade-3 {
+	background-color: #ffeB00 !important;
+}
+
+.grade-4 {
+	background-color: #27ab00 !important;
+}
+
+.console-log {
+	width: 100%;
+	height: 300px;
+	overflow-y: scroll;
+	margin-top: 5px;
+	padding: 5px;
+	border: 1px solid #000;
+	border-radius: 4px;
+	color: #00ff00;
+	background-color: #000;
+}
+
+.console-log p {
+	margin-top: 0;
+	margin-bottom: 0;
+	line-height: 1.1rem;
+	font-family: 'Courier New', Courier, sans-serif;
+	font-size: 0.75rem;
+}
+
+.today-badge {
+	margin:-5px;
+    display: inline-block;
+    padding: 0.75em 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    border: 2px solid white;
+}
+
+
+.event-black {
+	background-color: #000 !important;
+}
+
+.event-holiday {
+	background-color: #E3ACF9 !important;
+}
+
+.event-event {
+	background-color: #FFEA20 !important;
+}
+
+.event-colourful {
+	background: linear-gradient(180deg, #fdcd3b 50%, #ffed4b 50%),
+		linear-gradient(45deg, #b5ffd0 50%, #00ff00 50%);
+	background-position: top left, bottom right;
+	background-repeat: no-repeat, no-repeat;
+	background-size: 100% 50%;
+}
+
+.event-div
+{
+	border: 1px solid grey;
+	border-radius: 5px;
+	margin-bottom: 3px;
+	padding: 5px;
+	
+}
