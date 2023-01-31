@@ -71,8 +71,7 @@
 							</div>
 						<%} %>
 					</div>
-					
-	<form action="MainDashBoard.htm" method="POST" id="myform"> 
+					<form action="MainDashBoard.htm" method="POST" id="myform"> 
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
 					      <div class="row justify-content-right">
 					     
