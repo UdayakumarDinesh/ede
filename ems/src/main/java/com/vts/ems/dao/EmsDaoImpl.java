@@ -1,6 +1,8 @@
 package com.vts.ems.dao;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +27,7 @@ import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 
 @Transactional
@@ -35,7 +38,10 @@ public class EmsDaoImpl implements EmsDao
 	
 	private static final String LOGINSTAMPINGUPDATE="update audit_stamping set logouttype=:logouttype,logoutdatetime=:logoutdatetime where auditstampingid=:auditstampingid";
 	private static final String LASTLOGINEMPID = "select a.auditstampingid from  audit_stamping a where a.auditstampingid=(select max(b.auditstampingid) from audit_stamping b WHERE b.loginid=:loginid)";
-	
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	SimpleDateFormat sf=new SimpleDateFormat();
 	@PersistenceContext
 	EntityManager manager;
 	
@@ -432,5 +438,37 @@ public class EmsDaoImpl implements EmsDao
 				logger.error(new Date() +" Inside DAO EmpHandOverLoginTypeList "+ e);
 				return null;
 			}
+		}
+   private static final String EMPLIST="select EmpNo,EmpName from employee where isactive=1"; 
+		@Override
+		public List<Object[]> EmployeeList() throws Exception {
+			List<Object[]> list=null;
+			try {
+				Query query = manager.createNativeQuery(EMPLIST);
+				 list =(List<Object[]>) query.getResultList();
+				    manager.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return list;
+		}
+    private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from ems_attend_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo";  
+		@Override
+		public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
+			List<Object[]> list=null;
+			System.out.println("empNo"+empNo);
+			try {
+				
+				Query query = manager.createNativeQuery(ATTENDANCEREPORT);				
+				query.setParameter("FromDate",fromDate);
+				query.setParameter("ToDate", toDate);
+				query.setParameter("EmpNo", empNo);
+				
+			 list = query.getResultList();
+				System.out.println("emplist="+list);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return list;
 		}
 }

@@ -47,41 +47,35 @@ margin-left: 42%;
 				</div>
 			</div>
 		 </div>
-		   <%String result=(String)request.getAttribute("result");
+		<%String result=(String)request.getAttribute("result");
           String resultFail=(String)request.getAttribute("resultFail");
-          if(result!=null){
+          if(resultFail!=null){
           %>
-             <center id="alrt">
-            <div class="alert alert-success" style="width:50%; role:alert ;margin-top: 20px;">
-             <%=result %>
-          </div></center>
-           <%} %>
-             <%if(resultFail!=null) {%> 
-           <center id="alrt">
-        <div class="alert alert-danger"role="alert" style="width:50%;margin-top:20px;">
-       <%=resultFail%>
-         </div></center>
-            <%} %>
-		 <div style="margin-top:20px;">
-              <form action="PropertyReport.htm" method="GET" id="frm"  style="margin-left: 32%;"> 
-              <select class="form-control select2" name="PropertyYear" id="PropertyYear" required="required"  style="width:280px; margin-left:180px;"  data-container="body" data-live-search="true" onchange="this.form.submit()">
-                         <!-- <option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option> -->
-                         <option value="2022"<%if((year).equalsIgnoreCase("2022")){ %>selected="selected"<%} %>>2022</option>
-                         <option value="2021"<%if((year).equalsIgnoreCase("2021")){ %>selected="selected"<%} %>>2021</option>
-                         <option value="2020"<%if((year).equalsIgnoreCase("2020")){ %>selected="selected"<%} %>>2020</option>
-                         <option value="2019"<%if((year).equalsIgnoreCase("2019")){ %>selected="selected"<%} %>>2019</option>
-                         <option value="2018"<%if((year).equalsIgnoreCase("2018")){ %>selected="selected"<%} %>>2018</option>
-                         <option value="2017"<%if((year).equalsIgnoreCase("2017")){ %>selected="selected"<%} %>>2017</option>
-                        <option value="2016"<%if((year).equalsIgnoreCase("2016")){ %>selected="selected"<%} %>>2016</option>
-                        <option value="2015"<%if((year).equalsIgnoreCase("2015")){ %>selected="selected"<%} %>>2015</option>
-                           	        	
-            </select>
-            </form>
-          </div>
+        <div align="center">
+		<div class="alert alert-danger" role="alert">
+        	<%=resultFail %>
+        </div>
+   	</div>
+	<%}if(result!=null){ %>
+	<div align="center">
+		<div class="alert alert-success" role="alert" >
+        	<%=result %>
+        </div>
+    </div>
+            <%} %>		 
 		  <div class="page card dashboard-card" style="min-height: 650px;max-height: 660px;">	
 	    	<div class="card-body" >
 	    	<div class="card">
-	    	
+	    	<form action="PropertyReport.htm" method="GET" id="frm"  style="margin-top: 1%; margin-left: 62%;">
+               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
+	    	 <table>
+                   <tr>
+                       <th ><label for="PropertyYear">Property Details For the Year &nbsp;&nbsp;</label></th>
+                       <td><input type="text" id="PropertyYear" name="PropertyYear" class="form-control input-sm date" onchange="this.form.submit()" value="<%=year%>"style="width:195px;"></td>
+                   </tr>
+            
+            </table>
+            </form>
 	           <div class="card-body">
 	             <form action="PropertyReport.htm" method="POST" id="myform"> 
 	               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -120,15 +114,22 @@ margin-left: 42%;
 	                <button type="submit" id="add" class="btn btn-sm add-btn" value="ADD" name="action" <%if(Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="margin-left: 43%;display:none;" <%} %> formnovalidate="formnovalidate">ADD</button>    
 	             <button type="submit" id="edit" class="btn btn-sm edit-btn" value="EDIT" name="action" <%if(list==null||list.isEmpty()||Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="display:none;" <%} %>>EDIT</button>
 	              <button type="submit" id="delete"class="btn btn-sm delete-btn" name="action" value="DELETE" <%if(list==null||list.isEmpty()||Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="display:none;"<%} %>>delete</button>
-	               <button type="submit" id="print" class="btn btn-sm print-btn" formaction="PrintPropertyReport.htm" formtarget="_target"  formmethod="post" name="year" value="<%=year%>" <%if(list==null||list.isEmpty()){ %> style="display:none;" <%} else%>style="margin-left: 57%;margin-top:-57px;"
+	               <button type="submit" id="print" class="btn btn-sm print-btn" formaction="PrintPropertyReport.htm" formtarget="_target"  formmethod="post" name="year" value="<%=year%>" <%if(list==null||list.isEmpty()){ %> style="display:none;" <%} else%>style="margin-left: 56%;margin-top:-57px;"
 	                      formnovalidate="formnovalidate">PRINT</button> 
 	                       
-	</div>
-	</form>            
+	       </div>
+	     </form>            
+       </div>
 	 </div>
-	 </div>
-	 </div>
-	 </div>
-	 
+  </div>
+</div>
+<script>
+$('.date').datepicker({
+    format: "yyyy",
+    orientation: "bottom",
+    minViewMode: "years",   
+    autoclose:"true"
+});
+</script>
 </body>
 </html>

@@ -34,4 +34,6 @@ public interface EmsDao
 	public List<Object[]> getCircularOrdersNotice() throws Exception;
 	public List<Object[]> CalandarEvents(String eventyear) throws Exception;
 	public List<Object[]> CalandarEventTypes() throws Exception;
+	public List<Object[]> EmployeeList() throws Exception;
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate)  throws Exception;
 }

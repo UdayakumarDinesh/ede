@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.dao.AdminDaoImpl;
+import com.vts.ems.Admin.model.CalendarEvents;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.dao.CHSSDao;
@@ -253,6 +254,42 @@ public class AdminServiceImpl implements AdminService{
 			return dao.updateformroleaccess(formroleaccessid,isactive,UserId);
 		}
 		
+	}
+	@Override
+	public List<Object[]> getEventTypeList() throws Exception {
+		
+		return dao.getEventTypeList();
+	}
+
+	@Override
+	public Long addCalendarEvents(CalendarEvents events) throws Exception {
+	
+		return dao.addCalendarEvents(events);
+	}
+
+	@Override
+	public List<Object[]> getEventsList(String year) throws Exception {
+		
+		return dao.getEventsList(year);
+	}
+
+	@Override
+	public Object[] editCalendarEvent(String eMSEventId) throws Exception {
+		
+		return dao.editCalendarEvent(eMSEventId);
+	}
+
+	@Override
+	public long deleteCalendarEvent(String eMSEventId) throws Exception {
+		
+		return dao.deleteCalendarEvent(eMSEventId);
+	}
+
+	@Override
+	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName,
+			String eventDescription) throws Exception {
+	
+		return dao.updateCalendarEvent(eMSEventId,eventDate,eventType,eventName,eventDescription);
 	}
 
 	

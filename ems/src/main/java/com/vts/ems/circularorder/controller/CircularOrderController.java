@@ -697,6 +697,7 @@ public class CircularOrderController {
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside GovtOrdersList.htm "+UserId);
 		try {
+			ses.setAttribute("SidebarActive", "GovtOrdersList_htm");
 			String TopicId = req.getParameter("TopicId");
 			String fromdate = req.getParameter("FromDate");
 			String todate = req.getParameter("ToDate");

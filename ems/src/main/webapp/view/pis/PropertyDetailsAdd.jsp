@@ -27,7 +27,7 @@
 		 <div class="page card dashboard-card" style="min-height: 650px;max-height: 660px;overflow: hidden">
      <div class="card-body" >  
      <div style="margin-left: 15%;margin-top: 0px; font-weight: bold;">FORM FOR STATEMENT OF IMMOVABLE PROPERTY FOR THE YEAR ENDING 31<sup style="font-size: 8px;">ST</sup> DECEMBER &nbsp;<%=LocalDate.now().minusYears(1).getYear() %> </div>  
- <form >	 
+ <form autocomplete="off">	 
 		<div class="form-group">
 			<div class="table-responsive">
 				<table class="table table-bordered table-hover table-striped table-condensed " style="width: 63%; margin-left: 15%; margin-top:5px;">					

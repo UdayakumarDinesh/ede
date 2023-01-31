@@ -84,7 +84,7 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 					<div class="col-9"></div>
 					<div class="col-1.5" style="font-color:black;"><h6>Department :  &nbsp;</h6></div>
 					<div class="col-2" >
-						<form action="EMSForms.htm" method="post">
+						<form action="EMSForms.htm" method="post" style="margin-top:-20%;">
 							<select class="form-control select2" name="DepTypeId" onchange="this.form.submit();">
 								<option value="A" <%if(DepTypeId.equalsIgnoreCase("A")){ %>selected <%} %>>All</option>
 								
