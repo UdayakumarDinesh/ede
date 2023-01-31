@@ -67,27 +67,27 @@
 		
 		 
 	    	<div class="card" >
-	        <div class="card-header" style="height: 4rem">
-	              <form action="DepCircularList.htm" method="POST"> 
-					      <div class="row justify-content-right">
-					      <div class="col-7"></div>
-						        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
-					            <div class="col-1" style="margin-left: -9%"> 
-						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
-							         <label class="input-group-addon btn" for="testdate"></label>              
-						        </div>
-							 
-						
-						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
-							    <div class="col-1" style="margin-left: -10%">						
-							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=DateTimeFormatUtil.SqlToRegularDate(todate)%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
-							         <label class="input-group-addon btn" for="testdate"></label>    
-							    </div>
-				          </div>      
-				       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-	                   <input type="hidden" name="id" value="<%=DepType[0]%>"> 	
-                  </form>	      
-	       </div>    	             
+		        <div class="card-header" style="height: 4rem">
+		              <form action="DepCircularList.htm" method="POST"> 
+						      <div class="row justify-content-right">
+						      <div class="col-7"></div>
+							        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
+						            <div class="col-1" style="margin-left: -9%"> 
+							             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
+								         <label class="input-group-addon btn" for="testdate"></label>              
+							        </div>
+								 
+							
+							        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
+								    <div class="col-1" style="margin-left: -10%">						
+								         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=DateTimeFormatUtil.SqlToRegularDate(todate)%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
+								         <label class="input-group-addon btn" for="testdate"></label>    
+								    </div>
+					          </div>      
+					       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		                   <input type="hidden" name="id" value="<%=DepType[0]%>"> 	
+	                  </form>	      
+		       </div>    	             
 	       </div>
     
 

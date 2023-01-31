@@ -2,6 +2,7 @@ package com.vts.ems.Admin.Controller;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -661,7 +662,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				return "redirect:/Role.htm";
 			}
 			
-			@RequestMapping(value = "CircularDashBoard.htm", method = RequestMethod.GET)
+			@RequestMapping(value = "CircularDashBoard.htm", method = {RequestMethod.GET,RequestMethod.POST})
 			public String CircularDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 			{
 				String Username = (String) ses.getAttribute("Username");
@@ -669,12 +670,25 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				try {
 					String logintype = (String)ses.getAttribute("LoginType");
 					List<Object[]> admindashboard = service.HeaderSchedulesList("9" ,logintype); 
-				
+				    
 					ses.setAttribute("formmoduleid", "9"); 
 					ses.setAttribute("SidebarActive", "");
-					
 					req.setAttribute("dashboard", admindashboard);
-
+					List<Object[]> SearchList=new ArrayList<Object[]>();
+					String search = req.getParameter("search");
+					
+					if (search != null && !search.trim().equalsIgnoreCase("")) 
+					{
+			        	SearchList=service.AllDepCircularSearchList(search);
+					} 
+					else if(search == null) 
+					{
+						SearchList=service.getCircularOrdersNotice();
+					}
+					
+					req.setAttribute("SearchList", SearchList);
+		        	req.setAttribute("Search", search);
+		        	
 					return "circular/CircularDashboard";
 				}catch (Exception e) {
 					logger.error(new Date() +" Inside CircularDashBoard.htm "+Username, e);

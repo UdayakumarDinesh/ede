@@ -682,10 +682,12 @@ th
 					residing with me.
 				</p>
 				<br><br>
+				<div align="left" >
 				<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 				 &nbsp; &nbsp; &nbsp;<input type="checkbox"  class="TCBox" > &nbsp; I have read the instructions, terms and condition mentioned above and I agree to them.
 				 <%} %>
 				<%} %>
+				</div>
 				<div class="row" align="left"> 
 					<div class="col-md-12">
 					<br><br><br><br>
@@ -724,7 +726,7 @@ th
 				</div>
 				<br><br>
 				<form action="FamilyFormForwardRet.htm" method="Post">	
-					<div class="row">
+					<div class="row" align="left">
 						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
 							<%if(formdetails!=null && formdetails[10]!=null && !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
 							<br>

@@ -70,18 +70,6 @@
 					<form action="CHSSBatchList.htm" method="post" >
 					
 					<div class="row justify-content-end">
-		
-						
-							<%-- <div class="col-sm-1half">	
-								<h6 class="control-label" style="color: #145374;"> From : </h6>
-							</div>		
-								
-							<div class="col-md-2">			
-								<input type="text" class="form-control fromdate"  name="fromdate" id="fromdate" value="" required="required" readonly="readonly"   > 
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-								
-							</div> --%>
-							
 							<div class="col-sm-1half">	
 								<h6 class="control-label"  style="color: #145374; margin-bottom: 10px;"> Till Date : </h6> 						
 							</div>
@@ -133,22 +121,22 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" >
 												<input type="checkbox" class="checkbox" name="chssapplyidcb" value="<%=obj[0] %>" checked>
 											</td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[16] %></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[19] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[20] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[23] %></td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<%if(obj[14]!=null && !obj[14].toString().equalsIgnoreCase("Self")){ %>
-													<%=obj[12] %> (<%=obj[14] %>)
+												<%if(obj[18]!=null && !obj[18].toString().equalsIgnoreCase("Self")){ %>
+													<%=obj[16] %> (<%=obj[18] %>)
 												<%}else{ %>
-													<%=obj[14] %>
+													<%=obj[18] %>
 												<%} %>
 											</td>
-											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[15].toString()))%></td>
-											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[26].toString())) %></td>
-											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[27].toString())) %></td>
+											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[19].toString()))%></td>
+											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[1].toString())) %></td>
+											<td style="padding-top:5px; padding-bottom: 5px; text-align: right;"><%=Math.round(Double.parseDouble(obj[2].toString())) %></td>
 											
 											<td style="padding-top:5px; padding-bottom: 5px;">
 												
-												<%if(obj[6].toString().equals("OPD")){ %>
+												<%if(obj[10].toString().equals("OPD")){ %>
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 														<i class="fa-solid fa-eye"></i>
 													</button>	
@@ -156,7 +144,7 @@
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEmpDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 														<i style="color: #019267" class="fa-solid fa-download"></i>
 													</button>
-												<%}else if(obj[6].toString().equals("IPD")){ %>
+												<%}else if(obj[10].toString().equals("IPD")){ %>
 													<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSIPDFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 														<i class="fa-solid fa-eye"></i>
 													</button>	
@@ -170,8 +158,8 @@
 											</td>
 										</tr>
 									<%
-									itemstotal += Math.round(Double.parseDouble(obj[26].toString()));
-									totalremamount += Math.round(Double.parseDouble(obj[27].toString()));
+									itemstotal += Math.round(Double.parseDouble(obj[1].toString()));
+									totalremamount += Math.round(Double.parseDouble(obj[2].toString()));
 									} %>
 									
 									<%if(chssclaimlist.size()>0){ %>

@@ -1,6 +1,7 @@
 package com.vts.ems.chss.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,8 +39,8 @@ public class CHSSApply implements Serializable {
 	private Integer POAcknowledge;
 	private Long POId;
 	private Long VOId;
-	private Double AmountClaimed;
-	private Double AmountSettled;
+	private BigDecimal AmountClaimed;
+	private BigDecimal AmountSettled;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

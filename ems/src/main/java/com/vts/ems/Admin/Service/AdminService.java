@@ -36,7 +36,8 @@ public interface AdminService {
 	public List<Object[]> GetFromemployee()throws Exception;
 	public List<Object[]> GetToemployee()throws Exception;
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception;
- 
+	public List<Object[]> AllDepCircularSearchList(String search) throws Exception;
+	public List<Object[]> getCircularOrdersNotice() throws Exception;
 	
 	
 	
