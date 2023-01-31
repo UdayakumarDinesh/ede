@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.Admin.model.CalendarEvents;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -512,8 +513,92 @@ public class AdminDaoImpl implements AdminDao{
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
+	}
+	private static final String EventTypeList="select EMSEventTypeId,EventTypeCode,EventType from ems_calandar_eventtypes where IsActive=1";
+	@Override
+	public List<Object[]> getEventTypeList() throws Exception {
+		 List<Object[]> list=null;
+	  try {
+		Query query = manager.createNativeQuery(EventTypeList);
+		 list = (List<Object[]>)query.getResultList();
+	} catch (Exception e) {
 		
 	}
+		return list;
+	}
 
+	@Override
+	public Long addCalendarEvents(CalendarEvents events) throws Exception {
+	 try {
+		manager.persist(events);
+		manager.flush();
+	} catch (Exception e) {
+	 e.printStackTrace();
+	}
+		return (Long)events.getEMSEventId();
+	}
+private static final String Eventslist="select a.EMSEventId,a.EventDate,b.EventType,a.EventName,a.EventDescription from ems_calandar_events as a,ems_calandar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1 and extract(year from a.EventDate)=:year order by a.EventDate";
+	@Override
+	public List<Object[]> getEventsList(String year) throws Exception {
+		List<Object[]> list=null;
+	try {
+			Query query = manager.createNativeQuery(Eventslist);
+			query.setParameter("year", year);
+			  list= (List<Object[]>)query.getResultList();			 
+			  manager.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	 
+		return list;
+	}
+ private static final String EditEvent="select a.EMSEventId,DATE_FORMAT(a.EventDate,'%d-%m-%Y') as EventDate,b.EventTypeCode,b.EventType,a.EventName,a.EventDescription from ems_calandar_events as a,ems_calandar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1  and a.EMSEventId=:EMSEventId";
+	@Override
+	public Object[] editCalendarEvent(String eMSEventId) throws Exception {
+		Object[] events=null;
+		try {
+			Query query = manager.createNativeQuery(EditEvent);
+			query.setParameter("EMSEventId", eMSEventId);
+			List<Object[]> list= (List<Object[]>)query.getResultList();
+			if(list!=null && list.size()>0) {
+				events=list.get(0);
+			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return events;
+	}
+private static final String  DeletecalendarEvent=" update ems_calandar_events  set IsActive=0 where EMSEventId=:EMSEventId";
+	@Override
+	public long deleteCalendarEvent(String eMSEventId) throws Exception {
+		long result =0;
+		try {
+			Query query = manager.createNativeQuery(DeletecalendarEvent);
+		    query.setParameter("EMSEventId", eMSEventId);
+		     result = query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return result ;
+	}
+private static final String UpdateCalendarEvent="update ems_calandar_events set EventDate=:EventDate,EventTypeCode=:EventTypeCode,EventName=:EventName,EventDescription=:description where EMSEventId=:EMSEventId";
+	@Override
+	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName,
+			String eventDescription) throws Exception {
+		Long result=(long) 0;
+	try {
+		Query query = manager.createNativeQuery(UpdateCalendarEvent);
+		query.setParameter("EventDate", eventDate);
+		query.setParameter("EventTypeCode", eventType);
+		query.setParameter("EventName", eventName);
+		query.setParameter("description", eventDescription);
+		query.setParameter("EMSEventId", eMSEventId);
+		 result = (long) query.executeUpdate();
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+		return result;
+	}	
 	 
 }

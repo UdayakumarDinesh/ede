@@ -2,6 +2,7 @@ package com.vts.ems.Admin.Service;
 
 import java.util.List;
 
+import com.vts.ems.Admin.model.CalendarEvents;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
@@ -38,6 +39,12 @@ public interface AdminService {
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception;
 	public List<Object[]> AllDepCircularSearchList(String search) throws Exception;
 	public List<Object[]> getCircularOrdersNotice() throws Exception;
+	public List<Object[]> getEventTypeList()throws Exception;
+	public Long addCalendarEvents(CalendarEvents events)throws Exception;
+	public List<Object[]> getEventsList(String year)throws Exception;
+	public Object[] editCalendarEvent(String eMSEventId) throws Exception;
+	public long deleteCalendarEvent(String eMSEventId) throws Exception;
+	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName, String eventDescription)throws Exception;
 	
 	
 	

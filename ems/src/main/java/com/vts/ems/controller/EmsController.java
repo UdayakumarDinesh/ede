@@ -44,6 +44,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.service.EMSMainService;
 import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class EmsController {
@@ -60,7 +61,9 @@ public class EmsController {
 	private String projectfilespath;
 	
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcome(Model model, HttpServletRequest req, HttpSession ses) throws Exception {
@@ -151,11 +154,25 @@ public class EmsController {
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
+    	List <Object[]> attendlist=null;
     	try {
     		req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
 			req.setAttribute("logintype", LoginType);
 			ses.setAttribute("SidebarActive","Home");
+		    List<Object[]>  emplist=service.EmployeeList();
+			req.setAttribute("Emplist", emplist);
+			String empNo=req.getParameter("empNo");
+			String fromDate=req.getParameter("FromDate");
+			String toDate=req.getParameter("ToDate");
+			if(empNo!=null && fromDate!=null && fromDate!=null) {
+			 attendlist=service.getAttendanceDetails(empNo,fromDate,toDate);
+			}
+			req.setAttribute("ToDate", toDate);
+			req.setAttribute("FromDate", fromDate);
+			req.setAttribute("EmpNo", empNo);
+			req.setAttribute("attendlist", attendlist);
+			//req.setAttribute("EmpId",EmpId);
 			return "static/maindashboard";
     	}catch (Exception e) {
     		e.printStackTrace();
@@ -497,5 +514,5 @@ public class EmsController {
 				logger.error(new Date() +" Inside WorkFlow.htm "+UserId, e);
 		}
 	}
-
+	
 }

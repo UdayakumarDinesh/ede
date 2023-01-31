@@ -27,7 +27,9 @@ public class EMSMainServiceImpl implements EMSMainService
 {
 	private static final Logger logger=LogManager.getLogger(EMSMainServiceImpl.class);
 	
-	private SimpleDateFormat sdtf=DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 
 	@Autowired
 	EmsDao dao;
@@ -257,5 +259,20 @@ public class EMSMainServiceImpl implements EMSMainService
 	public List<Object[]> CalandarEventTypes() throws Exception
 	{
 		return dao.CalandarEventTypes();
+	}
+
+	@Override
+	public List<Object[]> EmployeeList() throws Exception {
+		
+		return dao.EmployeeList();
+	}
+
+	@Override
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
+		
+		System.out.println(fromDate);
+		System.out.println(toDate);
+
+		return dao.getAttendanceDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
 }

@@ -863,7 +863,7 @@ public class PisDaoImpl implements PisDao {
 		return address.getAddress_per_id();
 	}
 	
-	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive='1'";
+	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive=1";
 	@Override
 	public List<Object[]> getResAddress(String empid)throws Exception{
 		try {
@@ -2190,15 +2190,17 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 		return app.getProperty_id();
 	}
 	
-	private static final String PUBLICATIONLIST="SELECT a.empid,a.publication_id,a.pub_type,a.authors,a.discipline,a.title,b.statename,a.pub_date ,a.pub_name_vno_pno,a.patent_no FROM pis_publication  a ,pis_states b WHERE a.country =b.stateid AND a.empid=:empid AND a.is_active='1' ORDER BY a.publication_id DESC";
+	private static final String PUBLICATIONLIST="SELECT a.empid,a.publication_id,a.pub_type,a.authors,a.discipline,a.title,a.country,a.pub_date ,a.pub_name_vno_pno,a.patent_no FROM pis_publication  a  WHERE a.empid=:empid AND a.is_active='1' ORDER BY a.publication_id DESC";
 	@Override
 	public List<Object[]> getPublicationList(String empid)throws Exception
 	{
-		
+		List<Object[]>list=null;
 		try {
 			Query query = manager.createNativeQuery(PUBLICATIONLIST);
 			query.setParameter("empid", empid);
-			return (List<Object[]>) query.getResultList();
+		      list=(List<Object[]>) query.getResultList();
+		      System.out.println("insidedao"+list);
+			return list;
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO getPublicationList "+e);
 			e.printStackTrace();
@@ -2376,6 +2378,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			cq = cq.select(root).where(p1);
 			TypedQuery<PassportForeignVisit> allquery = manager.createQuery(cq);
 			list = allquery.getResultList().get(0);
+			
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO getForeignVisitData "+e);
 			e.printStackTrace();

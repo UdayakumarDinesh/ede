@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
+import com.vts.ems.Admin.model.CalendarEvents;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
@@ -635,9 +636,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			}
 	
 		}
-		
-
-			
+				
 			@RequestMapping(value="UpdateRoleAcess.htm" ,method = RequestMethod.GET)
 			public @ResponseBody String RoleAccess(HttpSession ses, HttpServletRequest req , RedirectAttributes redir )throws Exception
 			{
@@ -718,5 +717,121 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				}
 				
 			}
-			
+			@RequestMapping(value = "CalendarEvents.htm", method = {RequestMethod.POST,RequestMethod.GET})
+			public String CalendarEvents(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+						String Username = (String) ses.getAttribute("Username");
+						logger.info(new Date() +"Inside CalendarEvents.htm "+Username);
+							try {
+								ses.setAttribute("SidebarActive", "CalendarEvents_htm");
+								List<Object[]> eventTypeList=service.getEventTypeList();
+								req.setAttribute("EventTypeList", eventTypeList);
+								String year = req.getParameter("eventYear");
+								if(year==null) {
+									year = String.valueOf(LocalDate.now().getYear());
+								}
+								List<Object[]> eventsList=service.getEventsList(year);
+								req.setAttribute("year", year);
+								req.setAttribute("EventsList", eventsList);
+								req.setAttribute("result", req.getParameter("result"));
+							} catch (Exception e) {
+							e.printStackTrace();
+							}	
+						
+						return "Admin/CalendarEvents";
+						}
+			@RequestMapping(value="CalendarEventAdd.htm",method= {RequestMethod.GET,RequestMethod.POST})
+			public  String CalendarEventsAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				String Username = (String) ses.getAttribute("Username");
+				logger.info(new Date() +"Inside CalendarEventAdd.htm "+Username);
+				try {
+					String eventDate = req.getParameter("Eventdate");
+					String eventType = req.getParameter("EventType");
+					
+					String eventName = req.getParameter("EventName");
+					String eventDescription = req.getParameter("description");
+					CalendarEvents events=new CalendarEvents();
+					events.setEventDate(sdf.format(rdf.parse(eventDate)));
+					events.setEventTypeCode(eventType);
+					events.setEventName(eventName.trim());
+					events.setEventDescription(eventDescription.trim());
+					events.setCreatedBy(Username);
+					events.setCreatedDate(sdtf.format(new Date()));
+					events.setIsActive(1);					
+					int Year=DateTimeFormatUtil.getYearFromRegularDate(eventDate);					
+					redir.addAttribute("eventYear", Year);
+					Long result=service .addCalendarEvents(events);
+					if (result != 0) {
+						 redir.addAttribute("result", "Event Successfully Added");
+					} else {
+						 redir.addAttribute("resultfail", " Event not Added Successfully");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return "redirect:/CalendarEvents.htm";
+			}	
+			 @RequestMapping(value="calendarEventEdit.htm",method= {RequestMethod.GET,RequestMethod.POST})
+			public String calendarEventEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				String Username = (String) ses.getAttribute("Username");
+				try {
+					String EMSEventId = req.getParameter("EMSEventId");			
+					List<Object[]> eventTypeList=service.getEventTypeList();
+					req.setAttribute("EventTypeList", eventTypeList);
+					Object[] event=service.editCalendarEvent(EMSEventId);
+					req.setAttribute("EventsList",event);
+					req.setAttribute("year", req.getParameter("eventYear"));
+					
+				} catch (Exception e) {
+				e.printStackTrace();
+				}
+				
+				return "Admin/CalendarEventEdit";
+			}
+			 @RequestMapping(value="UpdateCalendarEvent.htm",method= {RequestMethod.GET,RequestMethod.POST})
+			 public String updateCalendarEvent(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				 String Username = (String) ses.getAttribute("Username");
+				 try {
+					    String EMSEventId = req.getParameter("EMSEventId");
+					    String eventDate = req.getParameter("Eventdate");
+						String eventType = req.getParameter("EventType");
+						String eventName = req.getParameter("EventName");
+						String eventDescription = req.getParameter("description");
+						
+						Long result=service.updateCalendarEvent(EMSEventId,sdf.format(rdf.parse(eventDate)),eventType,eventName,eventDescription);
+					   redir.addAttribute("eventYear",req.getParameter("EventYear"));
+					   
+					   if (result != 0) {
+							 redir.addAttribute("result", "Event Successfully Updated");
+						} else {
+							 redir.addAttribute("resultfail", " Event not Updated Successfully");
+						}
+				 } catch (Exception e) {
+						e.printStackTrace();
+					}
+				    
+				 
+				return "redirect:/CalendarEvents.htm"; 
+			 }
+			 @RequestMapping(value="CalendarEventDelete.htm",method= {RequestMethod.GET,RequestMethod.POST})
+			 public String CalendarEventDelete(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+					try {
+						String Username = (String) ses.getAttribute("Username");
+						String EMSEventId = req.getParameter("EMSEventId");
+						String eventYear=req.getParameter("eventYear");
+						
+						 long result=service.deleteCalendarEvent(EMSEventId);
+						 redir.addAttribute("eventYear",eventYear);
+						 
+						 if (result != 0) {
+							 redir.addAttribute("result", "Event Successfully Deleted");
+						} else {
+							 redir.addAttribute("resultfail", " Event not Deleted Successfully");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				    
+					return "redirect:/CalendarEvents.htm";
+			 }		
 }		
