@@ -216,7 +216,7 @@ public class LeaveDaoImpl implements LeaveDao{
 	@Override
 	public List<LabMaster> getLabDetails() throws Exception {
 		Query query = manager.createQuery(LABMASTER);
-		List<LabMaster> EmpList= query.getResultList();
+		List<LabMaster> EmpList= (List<LabMaster>)query.getResultList();
 		return EmpList;
 	
 	}

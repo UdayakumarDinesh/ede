@@ -1598,7 +1598,7 @@ public class LeaveServiceImpl implements LeaveService{
 		   
 			
 		}else {
-			Result[0]="Sitara Please Try Again";
+			Result[0]="Please Try Again";
 			Result[1]="Fail";
 			return Result;
 

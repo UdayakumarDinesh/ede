@@ -70,7 +70,7 @@ margin-left: 42%;
                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 	    	 <table>
                    <tr>
-                       <th ><label for="PropertyYear">Property Details For the Year &nbsp;&nbsp;</label></th>
+                       <th ><label for="PropertyYear">Property Details for the Year &nbsp;&nbsp;</label></th>
                        <td><input type="text" id="PropertyYear" name="PropertyYear" class="form-control input-sm date" onchange="this.form.submit()" value="<%=year%>"style="width:195px;"></td>
                    </tr>
             

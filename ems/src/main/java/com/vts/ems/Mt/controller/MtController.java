@@ -35,7 +35,6 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
-@RequestMapping("/Blocked")
 public class MtController {
 
 	private int year = Calendar.getInstance().get(Calendar.YEAR);

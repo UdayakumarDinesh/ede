@@ -275,7 +275,11 @@ public class PisController {
 			String height = req.getParameter("Height");
 			String exman = req.getParameter("ExMan");
 			String permpassno =  req.getParameter("PermPassNo");
-			
+			String dop=req.getParameter("DOP");
+			String chssno=req.getParameter("CHSSNo");
+			String dcmafno=req.getParameter("DCMAFNo");
+			String benovelentfundno=req.getParameter("BenovelentNo");
+			String iticreditsocno=req.getParameter("ITICreditSocNo");
 			Employee employee = new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
@@ -290,7 +294,11 @@ public class PisController {
 			EmployeeDetails emp= new EmployeeDetails();
 			
 			emp.setEmpStatus(empstatus);
-
+            emp.setDOP(DateTimeFormatUtil.dateConversionSql(dop));
+            emp.setCHSSNo(chssno);
+            emp.setDCMAFNo(dcmafno);
+            emp.setBenovelentFundNo(benovelentfundno);
+            emp.setITICreditSocNo(iticreditsocno);
 			emp.setEmpStatusDate(DateTimeFormatUtil.dateConversionSql(empstatusdate));
 			emp.setHeight(height);
 			emp.setExServiceMan(exman);
@@ -458,7 +466,12 @@ public class PisController {
 			String height = req.getParameter("Height");
 			String exman = req.getParameter("ExMan");
 			String permpassno =  req.getParameter("PermPassNo");
+			String dop=req.getParameter("DOP");
 			
+			String chssno=req.getParameter("CHSSNo");
+			String dcmafno=req.getParameter("DCMAFNo");
+			String benovelentfundno=req.getParameter("BenovelentNo");
+			String iticreditsocno=req.getParameter("ITICreditSocNo");
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
 				employee.setEmpName(WordUtils.capitalize(empname.trim()));
@@ -474,6 +487,11 @@ public class PisController {
 			EmployeeDetails emp = new EmployeeDetails();
 			
 			emp.setEmpStatus(empstatus);
+			emp.setDOP(DateTimeFormatUtil.dateConversionSql(dop));
+	        emp.setCHSSNo(chssno);
+	        emp.setDCMAFNo(dcmafno);
+	        emp.setBenovelentFundNo(benovelentfundno);
+	        emp.setITICreditSocNo(iticreditsocno);
 			emp.setEmpStatusDate(DateTimeFormatUtil.dateConversionSql(empstatusdate));
 			emp.setHeight(height);
 			emp.setExServiceMan(exman);

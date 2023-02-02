@@ -439,7 +439,7 @@ public class EmsDaoImpl implements EmsDao
 				return null;
 			}
 		}
-   private static final String EMPLIST="select EmpNo,EmpName from employee where isactive=1"; 
+   private static final String EMPLIST="select EmpNo,EmpName,EmpId from employee where isactive=1"; 
 		@Override
 		public List<Object[]> EmployeeList() throws Exception {
 			List<Object[]> list=null;
@@ -455,17 +455,14 @@ public class EmsDaoImpl implements EmsDao
     private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from ems_attend_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo";  
 		@Override
 		public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
-			List<Object[]> list=null;
-			System.out.println("empNo"+empNo);
+			List<Object[]> list=null;			
 			try {
 				
 				Query query = manager.createNativeQuery(ATTENDANCEREPORT);				
 				query.setParameter("FromDate",fromDate);
 				query.setParameter("ToDate", toDate);
-				query.setParameter("EmpNo", empNo);
-				
-			 list = query.getResultList();
-				System.out.println("emplist="+list);
+				query.setParameter("EmpNo", empNo);				
+			 list = query.getResultList();				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

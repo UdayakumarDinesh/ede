@@ -260,7 +260,12 @@ public class PisServiceImpl implements PisService
 		employee.setExServiceMan(emp.getExServiceMan());
 		employee.setPerPassNo(emp.getPerPassNo());
 		employee.setPhoneNo(emp.getPhoneNo());
-		employee.setAltPhoneNo(emp.getAltPhoneNo());
+		employee.setAltPhoneNo(emp.getAltPhoneNo());		
+		employee.setDOP(emp.getDOP());
+		employee.setCHSSNo(emp.getCHSSNo());
+		employee.setBenovelentFundNo(emp.getBenovelentFundNo());
+		employee.setDCMAFNo(emp.getDCMAFNo());
+		employee.setITICreditSocNo(emp.getITICreditSocNo());
 		return dao.EmployeeDetailsEditSubmit(employee);
 	}
 	

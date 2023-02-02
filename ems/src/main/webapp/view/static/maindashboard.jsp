@@ -21,8 +21,7 @@
 		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
 		String EmpName     = (String)session.getAttribute("EmpName");
-		String fromdate = (String)request.getAttribute("FromDate");
-		//System.out.println(fromdate);
+		String fromdate = (String)request.getAttribute("FromDate");		
 		String todate = (String)request.getAttribute("ToDate");
 		List<Object[]> emplist=(List<Object[]>)request.getAttribute("Emplist");
 		String EmpId=(String)request.getAttribute("EmpId");
@@ -77,17 +76,27 @@
 					     
 					      <div class="col-4" > <label for="EmpName" style="margin-left: 306px; font-weight: bold" >Employee Name</label></div>
 					      <div class="col-3" >	
-                              		          
-					           <Select class="form-control select2" onchange="this.form.submit();" name="empNo" style="width:280px;" id="EmpName">
-					           
-					           <%if(emplist!=null){
-					        	   for(Object[] obj:emplist){
-					        	   %>					           
-					           <option value="<%=obj[0]%>"<%if(obj[0].equals(empNo)) {%>selected="selected"<%} %>><%=obj[1]%></option>
-					           <%}} %>
-					           </Select>
 					        
-					           
+                              	<%                             		 
+                              	if(logintype.equals("A")||logintype.equals("P")||logintype.equals("Z")) {
+                              	%>
+                              	<Select class="form-control select2" onchange="this.form.submit();" name="empNo" style="width:280px;" id="EmpName">
+                              		<%  if(emplist!=null){
+					        	   for(Object[] obj:emplist){
+					        	   %>	      
+					           <option value="<%=obj[0]%>"<%if(obj[0].equals(empNo)) {%>selected="selected"<%} %>><%=obj[1]%></option>
+					          <%}}%>
+					          </Select>	
+					         <% }else{ %>
+                              		 <Select class="form-control select" onchange="this.form.submit();" name="empNo" style="width:280px;" id="EmpName" readonly="readonly">
+					              <% if(emplist!=null){
+					        	   for(Object[] obj:emplist){
+					        	  if(obj[0].equals(empNo)){ %>	      
+					           <option value="<%=obj[0]%>"<%if(obj[0].equals(empNo)) {%>selected="selected" <%} %>><%=obj[1]%></option>
+					          <%}}}%>
+					       
+					        	 </Select>
+					            <%}%>
 					      </div>
 					 
 						        <div class="col-2" style="margin-left: 5%;margin-top:8px; font-color:black!important;font-weight: bold!important;"><h6 style="font-weight: bold" >From Date :  &nbsp;</h6></div>
@@ -111,14 +120,14 @@
 			                  
 			                  <tr>
 			                       <th>SN</th>
-			                       <th>EmpNo</th>
-			                       <th>Status</th>
+			                       <th>Emp No</th>
+			                       <!-- <th>Status</th> -->
 			                       <th>Attendance Date</th>
-			                       <th>InDate</th>
-			                       <th>InTime</th>
-			                       <th>OutDate</th>		                       
-			                       <th>OutTime</th>
-			                       <th>WorkTime </th>
+			                       <th>In Date</th>
+			                       <th>In Time</th>
+			                       <th>Out Date</th>		                       
+			                       <th>Out Time</th>
+			                       <th>Work Time </th>
 			                  </tr>	
 			                  	           			           
 			           </thead>
@@ -131,7 +140,7 @@
 			                   <tr> 
 			                         <td style="text-align: center;"><%=++sn%></td>
 			                         <td><%=obj[0] %></td>	
-			                          <td <% if((obj[1].toString()).equalsIgnoreCase("present")){%>style="color:green;font-weight: bold;text-align: center;"<%}else {%>style="color:red;font-weight: bold;text-align: center;"<% }%>><%=obj[1] %></td>		                         
+			                        <%--   <td <% if((obj[1].toString()).equalsIgnoreCase("present")){%>style="color:green;font-weight: bold;text-align: center;"<%}else {%>style="color:red;font-weight: bold;text-align: center;"<% }%>><%=obj[1] %></td>		                          --%>
 			                         <td style="text-align: center;"><%=sdf.format(obj[2])%></td>			                        
 			                         <td style="text-align: center;"><%if(obj[3]!=null){%><%=sdf.format(obj[3])%><%}else {%>-<%} %></td>
 			                         <td style="text-align: center;"><%if(obj[3]!=null){%><%=stf.format(obj[3])%><%}else {%>-<%} %></td>
@@ -139,11 +148,7 @@
 			                         <td style="text-align: center;"><%if(obj[4]!=null){%><%=stf.format(obj[4])%><%}else {%>-<%} %></td>
 			                         <td style="text-align: center;font-weight: bold;"><%if(obj[5]!=null){%><%=obj[5]%><%}else {%>00:00<%} %></td>
 			                   </tr>
-			                   <%}} else{%>	
-			                   			 <tr>
-			                   			      <td colspan="12"style="text-align: center;">No Data Found</td>
-			                   			 </tr>
-			                   			 <%} %>          			           
+			                   <%}} %>          			           
 			           </tbody>									
 			     </table>
 			  </div> 

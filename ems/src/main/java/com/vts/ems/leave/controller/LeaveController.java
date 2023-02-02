@@ -37,7 +37,6 @@ import com.vts.ems.leave.service.LeaveService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
-@RequestMapping("/Blocked")
 public class LeaveController {
 	private static final Logger logger = LogManager.getLogger(LeaveController.class);
 	DateTimeFormatUtil sdf=new DateTimeFormatUtil();
@@ -358,6 +357,7 @@ public class LeaveController {
 		try { 
 			 Map md=model.asMap();
 			 String EmpNo=(String)md.get("EmpNo");
+			 System.out.println("Empno="+EmpNo);
 			 if(EmpNo==null) {
 				 redir.addAttribute("result", "Refresh Not Allowed");
 					return "redirect:/LeaveApply.htm";
