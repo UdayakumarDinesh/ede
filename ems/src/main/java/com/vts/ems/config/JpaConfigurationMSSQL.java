@@ -37,7 +37,7 @@ public class JpaConfigurationMSSQL
 		dataSource.setJdbcUrl(env.getProperty("datasource2.datasource.url"));
 		dataSource.setUsername(env.getProperty("datasource2.datasource.username"));
 		dataSource.setPassword(env.getProperty("datasource2.datasource.password"));
-		dataSource.setConnectionTimeout(30000);
+		dataSource.setConnectionTimeout(10000);
 		return dataSource;
 	}
 

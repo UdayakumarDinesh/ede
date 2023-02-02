@@ -23,7 +23,6 @@ import com.vts.ems.newspaper.service.NewPaperServiceImpl;
 // newspaper and Telephone claim controller
 
 @Controller
-@RequestMapping("/Blocked")
 public class NewspaperController {
 
 	@Value("${NewspaperAuthority}")
