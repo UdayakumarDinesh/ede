@@ -118,6 +118,7 @@ DecimalFormat df = new DecimalFormat( "#####################");
 										<th>Action</th>
 									</tr>
 								</thead>
+								
 								<tbody>
 									<%long i=0;
 										for(Object[] obj : claimslist)
