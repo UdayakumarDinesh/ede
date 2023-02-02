@@ -28,14 +28,17 @@ function validateform(){
 		  var internalnum = $("#InternalNum").val();
 		  var height = $("#height").val();
 		  var permpassno = $("#permpassno").val();
-
+          var dcmafno= $("#dcmafno").val();
+          var chssno= $("#chssno").val();
+          var iticreditsocno=$("#iticreditsocno").val();
+          var benovelentno=$("#benovelentno").val();
 		if(pan.length<10){
 			 alert("Check PAN Number!");
 		       event.preventDefault();
 		       return false;
 		}
 		if(uid.length<12){
-			 alert("Check UID Number!");
+			 alert("Check Aadhaar Number!");
 		       event.preventDefault();
 		       return false;
 		}
@@ -56,6 +59,26 @@ function validateform(){
 		}
 		if(permpassno==null || permpassno=="" || permpassno=="null"){
 			 alert("Check Permanent Pass Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(dcmafno==null || dcmafno=="" || dcmafno=="null"){
+			 alert("Check DCMAF Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(chssno==null || chssno=="" || chssno=="null"){
+			 alert("Check CHSS Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(iticreditsocno==null || iticreditsocno=="" || iticreditsocno=="null"){
+			 alert("Check ITI Credit Society Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(benovelentno==null || benovelentno=="" || benovelentno=="null"){
+			 alert("Check Benovelent Fund Number!");
 		       event.preventDefault();
 		       return false;
 		}
@@ -428,8 +451,37 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input type="text" id="permpassno" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"  placeholder="Permanent Pass No">
 			            </div> 
 			         </div>
-			    </div> 
-
+			    </div> 			    
+                <div class="form-group">
+			        <div class="row">
+			        
+			            <div class="col-md-2">
+			                <label>Date of Promotion</label>
+			                <input type="text" id="dop" name="DOP" readonly="readonly" value="<%=LocalDate.now() %>" class=" form-control input-sm " >
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>DCMAF No</label>
+			                <input type="text" id="dcmafno" name="DCMAFNo" value="" class=" form-control input-sm " maxlength="20"  placeholder="DCMAF No">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>CHSS No</label>
+			                <input type="text" id="chssno" name="CHSSNo" value="" class=" form-control input-sm " maxlength="20"  placeholder="CHSS No">
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>ITI Credit Society No</label>
+			                <input type="text" id="iticreditsocno" name="ITICreditSocNo" value="" class=" form-control input-sm " maxlength="20"  placeholder="ITI Credit Society No">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>Benovelent Fund No</label>
+			                <input type="text" id="benovelentno" name="BenovelentNo" value="" class=" form-control input-sm " maxlength="20"  placeholder="Benovelent Fund No">
+			            </div>
+			            
+			        </div>
+			     </div>    
 			    <div class="row">
 			    	<div class="col-12" align="center">
 			    	<button type="submit" class="btn btn-sm submit-btn" Onclick="return validateform();" name="action" value="submit" >SUBMIT</button>
@@ -531,6 +583,19 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 		"showCustomRangeLabel" : true,  
 		"startDate" : new Date(),
 		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+             
+ $('#dop').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,  
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		drops:'up',
 		showDropdowns : true,
 		locale : {
 			format : 'DD-MM-YYYY'

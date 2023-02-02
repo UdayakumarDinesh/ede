@@ -35,7 +35,10 @@ function validateform(){
 		  var sbiAccount = $("#SBITextBox").val();
 		  var internalnum = $("#internalNo").val();
 		  var empname = $("#empname").val();
-		  
+		  var dcmafno= $("#dcmafno").val();
+          var chssno= $("#chssno").val();
+          var iticreditsocno=$("#iticreditsocno").val();
+          var benovelentno=$("#benovelentno").val();
 		if(pan.length<10){
 			
 			 alert("Check PAN Number!");
@@ -66,7 +69,26 @@ function validateform(){
 			 $('#myModal').modal('show');
 			 return false;
 		}
-	      
+		if(dcmafno==null || dcmafno=="" || dcmafno=="null"){
+			 alert("Check DCMAF Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(chssno==null || chssno=="" || chssno=="null"){
+			 alert("Check CHSS Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(iticreditsocno==null || iticreditsocno=="" || iticreditsocno=="null"){
+			 alert("Check ITI Credit Society Number!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(benovelentno==null || benovelentno=="" || benovelentno=="null"){
+			 alert("Check Benovelent Fund Number!");
+		       event.preventDefault();
+		       return false;
+		}
 	  
 	  }else{
 	 return false;}
@@ -451,7 +473,36 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div> 
 			         </div>
 			    </div> 
-
+                 <div class="form-group">
+			        <div class="row">
+			        
+			            <div class="col-md-2">
+			                <label>Date of Promotion</label>
+			                <input type="text" id="dop" name="DOP" readonly="readonly" value="<%if(employee!=null&&employee.getDOP()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employee.getDOP().toString()) %><%}%>" class=" form-control input-sm " >
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>DCMAF No</label>
+			                <input type="text" id="dcmafno" name="DCMAFNo" <%if(employee!=null && employee.getDCMAFNo()!=null){%> value="<%=employee.getDCMAFNo()%>" <%}%> class=" form-control input-sm " maxlength="20"  placeholder="DCMAF No">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>CHSS No</label>
+			                <input type="text" id="chssno" name="CHSSNo" <%if(employee!=null && employee.getCHSSNo()!=null){%> value="<%=employee.getCHSSNo()%>" <%}%> class=" form-control input-sm " maxlength="20"  placeholder="CHSS No">
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>ITI Credit Society No</label>
+			                <input type="text" id="iticreditsocno" name="ITICreditSocNo" <%if(employee!=null && employee.getITICreditSocNo()!=null){%> value="<%=employee.getITICreditSocNo()%>" <%}%> class=" form-control input-sm " maxlength="20"  placeholder="ITI Credit Society No">
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label>Benovelent Fund No</label>
+			                <input type="text" id="benovelentno" name="BenovelentNo" <%if(employee!=null && employee.getBenovelentFundNo()!=null){%> value="<%=employee.getBenovelentFundNo()%>" <%}%> class=" form-control input-sm " maxlength="20"  placeholder="Benovelent Fund No">
+			            </div>
+			            
+			        </div>
+			     </div>    
 			    <div class="row" >
 			    	<div class="col-12" align="center">
 						<input type="hidden" <%if(emp.getEmpId()!=null){%> value="<%=emp.getEmpId()%>" <%}%> name="EmpId">
@@ -574,7 +625,17 @@ $('#EmpStatusDate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-
+$('#dop').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,  	
+	"cancelClass" : "btn-default",
+	drops:'up',
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
 $(document).ready(function () {
 	
 	
@@ -650,6 +711,7 @@ $('#dob').on('change', function() {
 				format : 'DD-MM-YYYY'
 			}
 		});
+	 
   });
  
 

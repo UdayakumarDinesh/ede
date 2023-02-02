@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.List"%>
 <%@page import="java.time.LocalDate"%>
@@ -29,6 +30,7 @@ String status =(String)request.getAttribute("status");
 SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 IndianRupeeFormat nfc=new IndianRupeeFormat();
+DecimalFormat df = new DecimalFormat( "#####################");
 %>
 
 
@@ -138,7 +140,8 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 								     {    slno++;
 										  totalClaimedAmt += Math.round( Double.parseDouble(obj[1].toString()));
 										  totalSettledAmt += Math.round( Double.parseDouble(obj[2].toString()));
-
+                                        System.out.println("Claimed Amount :"+obj[1].toString());
+                                        System.out.println("Settled Amount :"+obj[2].toString());
 								     %>
 								<tr>
 								   <td><%=slno %></td>
@@ -149,7 +152,7 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 									<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
 									<!-- <td></td> -->
 									<td style="text-align: right;"><%= nfc.rupeeFormat(obj[1].toString())%></td>
-								    <td style="text-align: right;"><%= nfc.rupeeFormat(obj[2].toString())%></td>
+								    <td style="text-align: right;"><%= nfc.rupeeFormat(df.format(obj[2]))%></td>
 								</tr>
 								
 								

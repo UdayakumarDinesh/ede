@@ -268,11 +268,8 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 
 	@Override
-	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {		
 		
-		System.out.println(fromDate);
-		System.out.println(toDate);
-
 		return dao.getAttendanceDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
 }

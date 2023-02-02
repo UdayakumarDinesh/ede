@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
@@ -25,6 +26,7 @@ SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 
 IndianRupeeFormat nfc=new IndianRupeeFormat();
+DecimalFormat df = new DecimalFormat( "#####################");
 %>
 
 
@@ -116,6 +118,7 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 										<th>Action</th>
 									</tr>
 								</thead>
+								
 								<tbody>
 									<%long i=0;
 										for(Object[] obj : claimslist)
@@ -127,7 +130,7 @@ IndianRupeeFormat nfc=new IndianRupeeFormat();
 											<td><%=obj[23] %></td>
 											<td><%=obj[16] %>&nbsp;(<%=obj[18] %>)</td>
 											<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[19].toString())) %></td>
-											<td style="text-align: right;"><%= nfc.rupeeFormat(obj[1].toString())%></td>
+											<td style="text-align: right;"><%= nfc.rupeeFormat(df.format(obj[1]))%></td>
 											<td>
 												 <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[0]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=obj[27] %>; font-weight: 600;" >
