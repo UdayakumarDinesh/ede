@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -17,18 +19,35 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.zaxxer.hikari.HikariDataSource;
+
+@Primary
 @Configuration
 @EnableJpaRepositories(basePackages = "com.vts.*", entityManagerFactoryRef = "entityManagerFactory", transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 public class JpaConfigurationMySQL {
 
 	@Autowired
-	DataSource datasource;
+	private Environment env;
 
+	@Primary
+	@Bean
+	public DataSource mysqlDataSource() {
+
+		HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setDriverClassName(env.getProperty("datasource1.datasource.driver-class-name"));
+		dataSource.setJdbcUrl(env.getProperty("datasource1.datasource.url"));
+		dataSource.setUsername(env.getProperty("datasource1.datasource.username"));
+		dataSource.setPassword(env.getProperty("datasource1.datasource.password"));
+		return dataSource;
+	}
+	
+	
+	@Primary
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-		factoryBean.setDataSource(datasource);
+		factoryBean.setDataSource(mysqlDataSource());
 		factoryBean.setPackagesToScan(new String[] { "com.vts.*" });
 		factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
 		factoryBean.setJpaProperties(jpaProperties());
@@ -38,6 +57,7 @@ public class JpaConfigurationMySQL {
 	/*
 	 * Provider specific adapter.
 	 */
+	@Primary
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
@@ -55,6 +75,7 @@ public class JpaConfigurationMySQL {
 		return properties;
 	}
 
+	@Primary
 	@Bean
 	@Autowired
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {

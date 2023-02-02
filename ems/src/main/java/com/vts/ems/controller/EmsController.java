@@ -158,7 +158,7 @@ public class EmsController {
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
     	List <Object[]> attendlist=null;
     	try {
-
+    		req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
 			req.setAttribute("logintype", LoginType);
 			ses.setAttribute("SidebarActive","Home");
@@ -196,14 +196,18 @@ public class EmsController {
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
     	
     	try {
-    		String Year = req.getParameter("year");
-    		
-    		if(Year==null) {
-    			Year=LocalDate.now().getYear()+"";
+    		String year = req.getParameter("year");
+    		String month = req.getParameter("month");
+    		if(year==null) {
+    			LocalDate today = LocalDate.now();
+    			year=today.getYear()+"";
+    			month = today.getMonthValue()+"";
     		}
     		
     		req.setAttribute("CalandarEventType", service.CalandarEventTypes());
-    		req.setAttribute("CalandarEvents", service.CalandarEvents(Year));
+    		req.setAttribute("CalandarEvents", service.CalandarEvents(year));
+    		req.setAttribute("year",year);
+    		req.setAttribute("month",month);
 			return "static/EventsCalandar";
     	}catch (Exception e) {
     		e.printStackTrace();

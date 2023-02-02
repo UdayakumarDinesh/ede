@@ -223,8 +223,7 @@ public class CHSSServiceImpl implements CHSSService {
 				apply.setPOId(0L);
 				apply.setVOId(0L);
 				apply.setContingentId(0L);
-				apply.setAmountClaimed(0.0);
-				apply.setAmountClaimed(0.00);
+				apply.setAmountClaimed(new BigDecimal(0.00));
 				applyid=dao.CHSSApplyAdd(apply);
 				
 				CHSSApplyTransaction transac =new CHSSApplyTransaction();
@@ -1716,8 +1715,8 @@ public class CHSSServiceImpl implements CHSSService {
 			// update claimed and settled amount in each claim of this bill
 			if(continstatus==14) 
 			{
-				claim.setAmountClaimed(Double.parseDouble(claimslist.get(i)[1].toString()) );
-				claim.setAmountSettled(Double.parseDouble(claimslist.get(i)[2].toString()) );
+				claim.setAmountClaimed(new BigDecimal( claimslist.get(i)[1].toString()) );
+				claim.setAmountSettled(new BigDecimal( claimslist.get(i)[2].toString()) );
 			}
 			
 			claim.setCHSSStatusId(continstatus);

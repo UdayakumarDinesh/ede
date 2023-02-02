@@ -3071,7 +3071,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	{
 		Query query =manager.createQuery(GETEMPFAMILYDECLARATION);
 		query.setParameter("formid", Long.parseLong(formid));
-		PISEmpFamilyDeclaration declare = (PISEmpFamilyDeclaration)query.getSingleResult();				
+		PISEmpFamilyDeclaration declare = (PISEmpFamilyDeclaration)query.getResultList().get(0);				
 		return declare;
 	}
 }

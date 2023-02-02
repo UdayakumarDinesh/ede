@@ -292,5 +292,17 @@ public class AdminServiceImpl implements AdminService{
 		return dao.updateCalendarEvent(eMSEventId,eventDate,eventType,eventName,eventDescription);
 	}
 
+	@Override
+	public List<Object[]> AllDepCircularSearchList(String search) throws Exception {
+		
+		return dao. AllDepCircularSearchList(search);
+	}
+
+	@Override
+	public List<Object[]> getCircularOrdersNotice() throws Exception {
+	
+		return dao.getCircularOrdersNotice();
+	}
+
 	
 }

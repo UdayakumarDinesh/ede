@@ -17,12 +17,12 @@
 <spring:url value="/webresources/addons/EventCalandar/zabuto_calendar.min.css" var="EventCalanderCss" />
 <link href="${EventCalanderCss}" rel="stylesheet" />
 	 
-<spring:url value="/webresources/addons/EventCalandar/zabuto_calendar.min.js" var="EventCalanderjs" />
+<spring:url value="/webresources/addons/EventCalandar/zabuto_calendar.js" var="EventCalanderjs" />
 <script src="${EventCalanderjs}"></script>
  <%List<Object[]> EventTypes = (List<Object[]>)request.getAttribute("CalandarEventType"); %>
 
 
-<style type="text/css">
+<%-- <style type="text/css">
 
 <%for(Object[] etype : EventTypes){%>
 
@@ -32,7 +32,7 @@
 }
 <%}%>
 
-</style>
+</style> --%>
 
 <style>
 
@@ -58,7 +58,8 @@ table.event-calander thead th,
 <body>
 <%
 	List<Object[]> CalandarEventList = (List<Object[]>)request.getAttribute("CalandarEvents");
-	
+	String year = (String)request.getAttribute("year");
+	String month = (String)request.getAttribute("month");
 	HashMap<LocalDate, ArrayList<Object[]>> eventMap=new LinkedHashMap<LocalDate, ArrayList<Object[]>>(); 
 	
 	CalandarEventList.stream()
@@ -107,7 +108,8 @@ table.event-calander thead th,
 			<div class="container-fluid" style="padding: 0px;">
 
 				<div class="row">
-					<div class="col-md-3 event-list-table"   style="height:78vh;overflow: auto;">
+					<div class="col-md-3 event-list-table" align="center"  style="height:78vh;overflow: auto;">
+						<span style="font-weight: bold;">Calandar Event For the Year  <span style="color: red"><%=year %></span></span>
 						<table class="table table-bordered table-hover table-striped table-condensed" >
 							<thead>
 								<tr>
@@ -117,15 +119,12 @@ table.event-calander thead th,
 							</thead>
 							<tbody >
 								<%	int count=0;
-									for(Map.Entry<LocalDate, ArrayList<Object[]>> DateEvent : eventMap.entrySet()){
-										int flag=0;
-										for(Object[] event : DateEvent.getValue()){ 
+										for(Object[] event :CalandarEventList){ 
 										 %>
 											<tr class="event-row" id="event-row-<%=event[0]%>" >
 												<td  style="border: 1px solid black;text-align: center;center;width: 100px;vertical-align: middle;"><%=DateTimeFormatUtil.SqlToRegularDate(event[2].toString()) %></td>
 												<td style="border: 1px solid black;"><%=event[3] %></td>
 											</tr>
-									<%} %>
 								<%} %>
 							</tbody>
 						</table>
@@ -145,37 +144,50 @@ table.event-calander thead th,
 		</div>
 
 	</div>
-
+<form action="Calandar.htm" method="post" id="calandar-form"> 
+<input type="hidden" name="year" value="<%=year %>" id="cal-year">
+<input type="hidden" name="month" value="<%=month %>" id="cal-month">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
 
 <script>
 $(document).ready(function () {
   $("#demo-calendar").zabuto_calendar({
 	
     classname: 'table table-bordered lightgrey-weekends event-calander table clickable',
-    
+    year : <%=year%>,
+    month : <%=month%>,
     events: [
       	
     	<% boolean today =true;
-				for(Object[] event : CalandarEventList){ %>
+	    	for(Map.Entry<LocalDate, ArrayList<Object[]>> DateEvent : eventMap.entrySet()){
+				int flag=0;
+				for(Object[] event : DateEvent.getValue()){ %>
 				{
-	    			"eventid":"<%=event[0]%>",
+	    			"eventid":<%=event[0]%>,
 		            "description" : "<%=event[4]%>",
 		            "color":  "<%=event[6]%>",
 		            "FormatedDate" : "<%=DateTimeFormatUtil.SqlToRegularDate(event[2].toString()) %>",
 		            "eventName": "<%=event[3]%>",
 		            
 		            "date": "<%=event[2]%>",
-			        "classname": "event-color-<%=event[1]%>",
+			        <%-- "classname": "event-color-<%=event[1]%>", --%>
+						
+			        "datebgcolor" : "<%=event[6]%>",
+			        
 		            <%if(LocalDate.now().equals(LocalDate.parse(event[2].toString()))){
 		            	today =false;
 		            %>
-		            "markup": "<div class=\"today-badge rounded-pill bg-success\" style=\"color:#FFFFFF !important;\">[day]</div>"
+		            "markup": "<div class=\"today-badge rounded-pill bg-success\" style=\"color:#FFFFFF !important;\">[day]</div>",
 		            <%}%>
+			        
 	         	},
     		
+    			<%}%>
     		<%}%>
     	<%if(today){%>
 	    	{
+	    		"eventid" : 0 ,
 	            "date": "<%=LocalDate.now() %>",
 	            "markup": "<div class=\"today-badge rounded-pill bg-success\" style=\"color:#FFFFFF !important;\">[day]</div>"
 	     	}
@@ -188,11 +200,9 @@ $(document).ready(function () {
   });
 });
 
-
 $('#demo-calendar').on('zabuto:calendar:day', function (event) {
-	if(event.hasEvent){
+	if(event.hasEvent && event.eventdata.events[0].eventid>0 ){
 		var edata = event.eventdata.events;
-    	
     	
     	$('.event-row').css("background-color", "");
     	
@@ -207,13 +217,26 @@ $('#demo-calendar').on('zabuto:calendar:day', function (event) {
     	
     	$('#event-description').html(descriptionHtml);
     	
-    	$.scrollTo($('#event-row-'+edata[0].eventid), 1000);
+        $('.event-list-table').animate({
+            scrollTop: $('#event-row-'+edata[0].eventid).offset().top - 200},100
+        );
     	
-    	/* $('.event-list-table').animate({
-             scrollTop: $('#event-row-'+edata[0].eventid).offset().top
-         }, 1000); */
+    }else{
+    	$('#event-description').html('');
     	
     }
+});
+
+
+
+$('#demo-calendar').on('zabuto:calendar:goto', function (e) {
+	
+	var  cyear = <%=year%>;
+	if(cyear != e.year){
+		$('#cal-year').val(e.year);
+		$('#cal-month').val(e.month);
+		$('#calandar-form').submit();
+	}
 });
 
 

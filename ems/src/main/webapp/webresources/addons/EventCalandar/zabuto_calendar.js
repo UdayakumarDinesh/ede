@@ -79,7 +79,7 @@
 		},
 		today_markup: null,
 		events: null,
-		ajax: null
+		ajax: null,
 	};
 
 	/**
@@ -424,7 +424,6 @@
 			} else {
 				row.addClass('zabuto-calendar__week');
 			}
-
 			return row;
 		},
 
@@ -462,9 +461,35 @@
 			if (null !== eventdata) {
 				cell.data('hasEvent', 1);
 				cell.addClass('zabuto-calendar__event');
+				
 				$.each(eventdata.classnames, function (i, val) {
 					cell.addClass(val);
 				});
+				
+				if(eventdata.datebgcolors.length == 1)
+				{
+					$.each(eventdata.datebgcolors, function (i, style) {
+						cell.css('background' , style);
+					});
+				}
+				else if(eventdata.datebgcolors.length > 1)
+				{
+					var gradientclr= eventdata.datebgcolors[0];
+					var flag=0;
+					$.each(eventdata.datebgcolors, function (i, style) {
+						if (gradientclr === style ) {flag++;};	
+					});
+					
+					if(flag == eventdata.datebgcolors.length)
+					{
+						cell.css('background' , eventdata.datebgcolors[0]);
+					}
+					else 
+					{
+						cell.css('background' , 'linear-gradient(to bottom , #E3ACF9 , #FF6D28 )');
+					}
+				}
+				
 				if (null !== eventdata.markup) {
 					var eventMarkup = eventdata.markup;
 					eventMarkup = eventMarkup.replace('[day]', day);
@@ -661,7 +686,7 @@
 			$.each(events, function (idx, event) {
 				if (typeof event === 'object' && 'date' in event) {
 					var date = event.date;
-					var day = {count: 0, classnames: [], markup: null, events: []};
+					var day = {count: 0, classnames: [], datebgcolors: [], markup: null, events: []};
 					if (date in data) {
 						day = data[date];
 					}
@@ -674,7 +699,11 @@
 					if ('markup' in event && event.markup !== null) {
 						day.markup = event.markup;
 					}
-
+					
+					if ('datebgcolor' in event && event.datebgcolor !== null) {
+						day.datebgcolors.push(event.datebgcolor);
+					}
+					
 					data[date] = day;
 				}
 			});

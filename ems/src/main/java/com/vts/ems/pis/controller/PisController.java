@@ -2406,6 +2406,10 @@ public class PisController {
 		    		redir.addAttribute("resultfail", "Invalid File, Please Check the file");
 		    		redir.addFlashAttribute("formid",IncFormId);
 			    	
+		    		if(Decformid!=null) {
+			    		return "redirect:/DepDeclareFormView.htm";
+			    	}
+		    		
 					return "redirect:/DepInclusionFormView.htm";
 		    	}
 		    	
@@ -2558,6 +2562,11 @@ public class PisController {
 		    	{
 		    		redir.addAttribute("resultfail", "Invalid File, Please Check the file");
 		    		redir.addFlashAttribute("formid",IncFormId);
+			    	
+			    	
+			    	if(Decformid!=null) {
+			    		return "redirect:/DepDeclareFormView.htm";
+			    	}
 			    	
 					return "redirect:/DepInclusionFormView.htm";
 		    	}
@@ -6452,6 +6461,7 @@ public class PisController {
 			}
 			
 		}
+		
 		
 		
 }

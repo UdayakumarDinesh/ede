@@ -42,6 +42,8 @@ public interface AdminDao {
 	public int checkavaibility(String logintype,String detailsid)throws Exception;
 	public int updateformroleaccess(String formroleid,String active,String auth)throws Exception;
 	public Long insertformroleaccess(FormRoleAccess main) throws Exception;
+	public List<Object[]> AllDepCircularSearchList(String search) throws Exception;
+	public List<Object[]> getCircularOrdersNotice() throws Exception;
 	public List<Object[]> getEventTypeList() throws Exception;
 	public Long addCalendarEvents(CalendarEvents events) throws Exception;
 	public List<Object[]> getEventsList(String year) throws Exception;

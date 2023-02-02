@@ -611,7 +611,7 @@ th
 					
 					<%if(status.equalsIgnoreCase("F") && isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyFormForwardRet.htm" name="action" value="A" formnovalidate="formnovalidate" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyFormForwardRet.htm" name="action" value="A" formnovalidate="formnovalidate" onclick="return confirm('Are you Sure to Confirm ?');" >Approve</button>
 							<button type="submit" class="btn btn-sm delete-btn" formaction="FamilyFormForwardRet.htm" name="action" value="R" onclick="return confirm('Are you Sure to Return ?');" >Return</button>
 						</div>
 					

@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -123,7 +124,7 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 		<div align="center">
 			<br>
 			<h3>Contributory Health Service Scheme of SITAR Society</h3>
-			<span style="text-decoration: underline; font-size: 15px;"><b>APPLICATION FOR INITIAL ADMISSION TO CHSS</b></span>
+			<span style="text-decoration: underline; font-size: 15px;"><b>APPLICATION FOR INITIAL ADMISSION / ANNUAL DECLARATION <br> TO CHSS FOR THE YEAR <span style="color: #3030ED;"><%=LocalDate.now().getYear() %></span></b></span>
 		</div>
 		<div align="left">
 			<br>

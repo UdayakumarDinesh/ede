@@ -21,11 +21,6 @@
 	String formmoduleid =(String) session.getAttribute("formmoduleid");
 %>
 
-<%-- <%if(!formmoduleid.equalsIgnoreCase("3")){ %>
-
-
-
-<%} %> --%>
 
 	<div class="card-header page-top">
 		<div class="row">
@@ -138,8 +133,8 @@
 					<div align="center">
 						<button type="submit" class="btn btn-sm " style=" background: #231955; color: #ffffff " name="formid" value="0" formaction="DepInclusionFormView.htm"  name="action" value="add" >Inclusion Form</button>
 						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button>
-						<%if(LocalDate.now().getMonthValue()==1){ %>
-						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff " name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Declaration Form</button>
+						<%if(LocalDate.now().getMonthValue()==1 || LocalDate.now().getMonthValue()==2){ %>
+						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff " name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Initial Admission / Annual Declaration </button>
 						<%} %> 
 					</div>
 					
@@ -184,14 +179,14 @@
 											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepInclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>
 											</button>	
-											<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentIncForm.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DepDeclareFormDownload.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i class="fa-solid fa-download " style="color: green;"></i>
 											</button>
 										<%}else if(form[2].toString().equals("E") ){ %>
 											<button type="submit" class="btn btn-sm view-icon" name="formid" value="<%=form[0] %>" formaction="DepExclusionFormView.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>
 											</button>	
-											<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DependentExcForm.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+											<button type="submit" class="btn btn-sm " name="formid" value="<%=form[0] %>" formaction="DepDeclareFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 												<i class="fa-solid fa-download " style="color: green;"></i>
 											</button>
 										

@@ -450,6 +450,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> empCHSSList(String empid,String PatientId, LocalDate FromDate, LocalDate Todate, String IsSelf) throws Exception
 	{
 		try {
+			System.out.println(empid+"  "+ PatientId+"  "+ FromDate+"  "+ Todate+"  "+ IsSelf);
 			Query query = manager.createNativeQuery(EMPCHSSLIST);
 			query.setParameter("empid", empid);
 			query.setParameter("patientid", PatientId);
@@ -1254,6 +1255,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid,String ClaimType)throws Exception
 	{
 		try {
+			System.out.println( logintype+" "+  todate+" "+ contingentid+" "+ ClaimType);
 			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype, :todate,:contingentid, :ClaimType);");
 			query.setParameter("logintype", logintype);
 			query.setParameter("todate", todate);
@@ -1419,7 +1421,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	@Override
 	public List<Object[]> CHSSContingentClaimList(String contingentid) throws Exception
 	{
-		
 		try {
 			Query query= manager.createNativeQuery("CALL chss_contingent_claims (:contingentid);");
 			query.setParameter("contingentid", contingentid);

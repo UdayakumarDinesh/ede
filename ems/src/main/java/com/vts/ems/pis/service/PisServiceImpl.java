@@ -952,11 +952,13 @@ public class PisServiceImpl implements PisService
 				{
 					approvalcount = FamilyMemIncConfirm(formid, empid, usernmae);
 					notify.setNotificationMessage("Family Member(s) Inclusion Form Approved");
+					DepIncFormFreeze(req, res, formid);
 				}
 				else if(formtype.equalsIgnoreCase("E")) 
 				{
 					ExcFormApprove(formid, empid,usernmae);
 					notify.setNotificationMessage("Family Member(s) Exclusion Form Approved");
+					DepExcFormFreeze(req, res, formid);
 				}
 				else if(formtype.equalsIgnoreCase("D")) 
 				{
@@ -982,6 +984,129 @@ public class PisServiceImpl implements PisService
 			}
 		
 			return count;
+		}
+		
+		public void DepIncFormFreeze(HttpServletRequest req, HttpServletResponse res,String formid)throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE DepIncFormFreeze ");
+			try {
+				
+				
+				String empid = "0";
+				Object[] formdata = GetFamFormData(formid);
+				if(formdata!=null) {
+					empid = formdata[1].toString();
+				}
+				req.setAttribute("formdetails" , formdata);
+				req.setAttribute("FwdMemberDetails",GetFormMembersList(formid));
+				req.setAttribute("empdetails",getEmployeeInfo(empid) );
+				req.setAttribute("employeeResAddr",employeeResAddr(empid) );
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+				String filename="Dependent Addition Form";
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path); //DependentIncFormView.js
+					        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/pis/DependentFormInc.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();                  
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        File file=new File(path +File.separator+ filename+".pdf");
+		        
+		        
+		        String fname="DependantInclusion-"+formid;
+				String filepath = "\\DependantDeclaration";
+				int count=0;
+				while(new File(uploadpath+filepath+"\\"+fname+".pdf").exists())
+				{
+					fname = "DependantInclusion-"+formid;
+					fname = fname+" ("+ ++count+")";
+				}
+		        
+		        saveFile(uploadpath+filepath, fname+".pdf", file);
+		        
+		        PISEmpFamilyDeclaration declare = PISEmpFamilyDeclaration.builder()
+		        									.EmpId(Long.parseLong(formdata[1].toString()))
+		        									.FamilyFormId(Long.parseLong(formid))
+		        									.FilePath(filepath+"\\"+fname+".pdf")
+		        									.build();
+		        		
+		        dao.EmpFamilyDeclarationAdd(declare);
+		        									
+		        		
+		        
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		public void DepExcFormFreeze(HttpServletRequest req, HttpServletResponse res,String formid)throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE DepExcFormFreeze ");
+			try {
+				
+				
+				Object[] formdata = GetFamFormData(formid);
+				
+				String empid = formdata[1].toString();
+				
+				req.setAttribute("formdetails" , formdata);
+				req.setAttribute("empdetails",getEmployeeInfo(empid) );				
+				req.setAttribute("employeeResAddr",employeeResAddr(empid) );
+//				req.setAttribute("FamilymemDropdown",service.EmpFamMembersListMedDep(empid,formid));
+				req.setAttribute("ExcMemberDetails",GetExcFormMembersList(formid));
+				
+				req.setAttribute("relationtypes" , familyRelationList() );				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+//				return "pis/DependentFormExc";
+				
+				String filename="Dependent Exclusion Form";
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+					        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/pis/DependentFormExc.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();             
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        File file=new File(path +File.separator+ filename+".pdf");
+		        
+		        
+		        String fname="DependantExclusion-"+formid;
+				String filepath = "\\DependantDeclaration";
+				int count=0;
+				while(new File(uploadpath+filepath+"\\"+fname+".pdf").exists())
+				{
+					fname = "DependantExclusion-"+formid;
+					fname = fname+" ("+ ++count+")";
+				}
+		        
+		        saveFile(uploadpath+filepath, fname+".pdf", file);
+		        
+		        PISEmpFamilyDeclaration declare = PISEmpFamilyDeclaration.builder()
+		        									.EmpId(Long.parseLong(formdata[1].toString()))
+		        									.FamilyFormId(Long.parseLong(formid))
+		        									.FilePath(filepath+"\\"+fname+".pdf")
+		        									.build();
+		        		
+		        dao.EmpFamilyDeclarationAdd(declare);
+		        									
+		        		
+		        
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 		public void DepDeclareFormFreeze(HttpServletRequest req, HttpServletResponse res,String formid)throws Exception
@@ -1012,12 +1137,12 @@ public class PisServiceImpl implements PisService
 		        File file=new File(path +File.separator+ filename+".pdf");
 		        
 		        
-		        String fname="DependantDeclaration-"+formdata[1].toString()+"-"+LocalDate.now().getYear();
+		        String fname="DependantDeclaration-"+formid;
 				String filepath = "\\DependantDeclaration";
 				int count=0;
 				while(new File(uploadpath+filepath+"\\"+fname+".pdf").exists())
 				{
-					fname = "DependantDeclaration-"+formdata[1].toString()+"-"+LocalDate.now().getYear();
+					fname = "DependantDeclaration-"+formid;
 					fname = fname+" ("+ ++count+")";
 				}
 		        

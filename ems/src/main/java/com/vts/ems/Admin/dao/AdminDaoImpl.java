@@ -3,6 +3,7 @@ package com.vts.ems.Admin.dao;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vts.ems.Admin.model.CalendarEvents;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
-import com.vts.ems.chss.dao.CHSSDaoImpl;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.model.EMSNotification;
@@ -30,10 +30,10 @@ public class AdminDaoImpl implements AdminDao{
 	private static final Logger logger = LogManager.getLogger(AdminDaoImpl.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	
+	
 	@PersistenceContext
 	EntityManager manager;
-	
-	
 	
 	private static final String LOGINTYPEROLES="SELECT LoginTypeId,LoginType,LoginDesc FROM login_type";
 	@Override
@@ -494,6 +494,26 @@ public class AdminDaoImpl implements AdminDao{
 	
 	}
 	
+	private static final String ALLDEPSEARCHCIRCULARLIST="SELECT a.DepCircularId,a.DepCircularNo,DATE_FORMAT(a.DepCircularDate,'%d-%m-%Y') as DepCircularDate ,a.DepCirSubject,a.DepTypeId,b.DepShorrtName FROM ems_dep_circular a, ems_dep_type b  WHERE a.DepTypeId=b.DepTypeId AND a.IsActive=1 AND  (DepCircularNo LIKE :Search  OR DepCirsubject LIKE :Search  ) order by a.DepCircularDate desc"; 
+	@Override
+	public List<Object[]> AllDepCircularSearchList(String search) throws Exception {
+		Query query = manager.createNativeQuery(ALLDEPSEARCHCIRCULARLIST);
+		query.setParameter("Search", "%"+search+"%");
+		List<Object[]> SearchList= (List<Object[]>)query.getResultList();
+		return SearchList;
+	}
+	
+	private static final String RECENTCIRCULARSLIST="SELECT a.DepCircularId,a.DepCircularNo,DATE_FORMAT(a.DepCircularDate,'%d-%m-%Y') as DepCircularDate ,a.DepCirSubject,a.DepTypeId,b.DepShorrtName FROM ems_dep_circular  AS a ,ems_dep_type AS b WHERE a.DepTypeId=b.DepTypeId AND CURDATE() BETWEEN depcirculardate AND DATE_ADD(depcirculardate,INTERVAL 7 DAY) AND a.isactive=1 order by a.DepCircularDate desc ";
+	@Override
+	public List<Object[]> getCircularOrdersNotice() throws Exception {
+	try {
+		Query query = manager.createNativeQuery(RECENTCIRCULARSLIST);
+		return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
 	private static final String EventTypeList="select EMSEventTypeId,EventTypeCode,EventType from ems_calandar_eventtypes where IsActive=1";
 	@Override
 	public List<Object[]> getEventTypeList() throws Exception {

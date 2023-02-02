@@ -127,14 +127,16 @@ th
 			<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;float:left;" ><img style="width: 80px; height: 90px; margin: 5px;"   src="data:image/png;base64,<%=LabLogo%>"></div>
 			<h3 style="text-decoration: underline; float: right;margin: 15px 15px 0px 0px;">CHSS FORM - 1</h3>
 		</div>	
-		<div id="pageborder" align="center" style="max-width:95%;margin-top: 5px;margin-left: 10px;" >
+		<div id="pageborder" align="center" style="margin-top: 5px;margin-left: 10px;" >
 		
 		<!-- 	<div align="right">
 				<h3 style="text-decoration: underline;">CHSS FORM - 2</h3>
 			</div> -->
 			<div align="center">
 				<h3>Contributory Health Service Scheme of SITAR Society</h3>
-				<span style="text-decoration: underline; font-size: 15px;"><b>APPLICATION FOR INITIAL ADMISSION TO CHSS</b></span>
+				<span style="text-decoration: underline; font-size: 15px;">
+					<b>APPLICATION FOR INITIAL ADMISSION / ANNUAL DECLARATION <br> TO CHSS FOR THE YEAR <span style="text-decoration: underline;color: #3030ED;"><%=LocalDate.now().getYear() %></span></b>
+				</span>
 			</div>
 			
 			<div align="left">
@@ -166,7 +168,7 @@ th
 			</div>
 			<div align="left">
 			
-				<b style="text-decoration: underline; ">Particulars of Medically Dependent Family Members</b><br>
+				<b style="text-decoration: underline;color: #3030ED;">Particulars of Medically Dependent Family Members</b><br>
 				<table>
 					<tr>
 						<th style="width:3%;text-align: center; " >SN</th>
@@ -220,10 +222,10 @@ th
 			{ %>
 			<div align="left">
 				<br>
-				<b style="text-decoration: underline; ">Exclude below Family Members from Medical Dependents List</b><br>
+				<b style="text-decoration: underline;color:red; ">Exclude below Family Members from Medical Dependents List</b><br>
 				<form method="post">
 				<table>
-					<tr>
+					<tr style="color:red;">
 						<th style="width:5%;text-align: center; " >SN</th>
 						<th style="width:25% " >Name</th>
 						<th style="width:10% " >Relationship With the Employee</th>
@@ -294,9 +296,10 @@ th
 				ArrayList<String> excludeedlist = new ArrayList<String>();
 				if(FwdMemberDetails.stream().anyMatch(obj -> obj[20].toString().equalsIgnoreCase("I")))
 				{ %>
-				<b style="text-decoration: underline; ">Include below Family Members into Medical Dependents List</b><br>
+				<div align="left">
+				<b style="text-decoration: underline;color: #0F720F; ">Include below Family Members into Medical Dependant List</b><br>
 				<table>
-					<tr>
+					<tr style="color: #0F720F;">
 						<th style="width:3%;text-align: center; " >SN</th>
 						<th style="width:15% " >Name</th>
 						<th style="width:10% " >Relationship With the Employee</th>
@@ -490,10 +493,13 @@ th
 				
 				<%} %>
 				<br>
-					
+				</div>
 					
 					<%if(status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R")){ %>
 					<table>
+					<tr>
+						<td colspan="9" style="text-align: left;color: #3030ED;"> <b>Add Existing Family Member to Dependants List</b></td>
+					</tr>
 					<tr>
 						
 						<th style="width:15% " >Name</th>
@@ -561,7 +567,7 @@ th
 							
 						</tr>
 						<tr>
-							<td colspan="9" style="text-align: center;"> <b>Add New Family Member to Profile </b></td>
+							<td colspan="9" style="text-align: left;color: #3030ED;"> <b>Add New Family Member to Profile </b></td>
 						</tr>
 						<tr>
 							<td>
@@ -682,10 +688,10 @@ th
 					residing with me.
 				</p>
 				<br><br>
-				<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
+				<div align="left" >
 				 &nbsp; &nbsp; &nbsp;<input type="checkbox"  class="TCBox" > &nbsp; I have read the instructions, terms and condition mentioned above and I agree to them.
-				 <%} %>
-				<%} %>
+				<% } %>
+				</div>
 				<div class="row" align="left"> 
 					<div class="col-md-12">
 					<br><br><br><br>
@@ -724,7 +730,7 @@ th
 				</div>
 				<br><br>
 				<form action="FamilyFormForwardRet.htm" method="Post">	
-					<div class="row">
+					<div class="row" align="left">
 						<div class="col-md-12" style="text-align: justify !important;   	text-justify: inter-word;">
 							<%if(formdetails!=null && formdetails[10]!=null && !formdetails[10].toString().equalsIgnoreCase("")){ %> <b style="color: red;">Remark : </b> <%=formdetails[10] %> <%} %>
 							<br>
@@ -734,7 +740,7 @@ th
 							<textarea rows="5" style="width: 100%;" name="remarks" maxlength="400" required="required"></textarea>
 						</div>
 					</div>
-					<%if(FwdMemberDetails.size()>0 && (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
+					<%if( (status.equalsIgnoreCase("C") || status.equalsIgnoreCase("R"))){ %>
 						<div align="center">
 							<button type="submit" class="btn btn-sm submit-btn" id="fwd-btn" name="action" formnovalidate="formnovalidate" value="F" onclick="return confirm('Are you Sure to Submit ?');" disabled="disabled">Forward</button>
 						</div>
@@ -743,7 +749,7 @@ th
 					
 					<%if(status.equalsIgnoreCase("F") && isapproval!=null && isapproval.equalsIgnoreCase("Y")){ %>
 						<div align="center">
-							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyFormForwardRet.htm" name="action" value="A" formnovalidate="formnovalidate" onclick="return confirm('Are you Sure to Confirm ?');" >Confirm</button>
+							<button type="submit" class="btn btn-sm submit-btn" formaction="FamilyFormForwardRet.htm" name="action" value="A" formnovalidate="formnovalidate" onclick="return confirm('Are you Sure to Confirm ?');" >Approve</button>
 							<button type="submit" class="btn btn-sm delete-btn" formaction="FamilyFormForwardRet.htm" name="action" value="R" onclick="return confirm('Are you Sure to Return ?');" >Return</button>
 						</div>
 					
