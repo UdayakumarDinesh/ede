@@ -14,12 +14,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
-<spring:url value="/webresources/addons/EventCalandar/zabuto_calendar.min.css" var="EventCalanderCss" />
+<spring:url value="/webresources/addons/EventCalendar/zabuto_calendar.min.css" var="EventCalanderCss" />
 <link href="${EventCalanderCss}" rel="stylesheet" />
 	 
-<spring:url value="/webresources/addons/EventCalandar/zabuto_calendar.js" var="EventCalanderjs" />
+<spring:url value="/webresources/addons/EventCalendar/zabuto_calendar.js" var="EventCalanderjs" />
 <script src="${EventCalanderjs}"></script>
- <%List<Object[]> EventTypes = (List<Object[]>)request.getAttribute("CalandarEventType"); %>
+ <%List<Object[]> EventTypes = (List<Object[]>)request.getAttribute("calendarEventType"); %>
 
 
 <%-- <style type="text/css">
@@ -57,12 +57,12 @@ table.event-calander thead th,
 
 <body>
 <%
-	List<Object[]> CalandarEventList = (List<Object[]>)request.getAttribute("calendarEvents");
+	List<Object[]> calendarEventList = (List<Object[]>)request.getAttribute("calendarEvents");
 	String year = (String)request.getAttribute("year");
 	String month = (String)request.getAttribute("month");
 	HashMap<LocalDate, ArrayList<Object[]>> eventMap=new LinkedHashMap<LocalDate, ArrayList<Object[]>>(); 
 	
-	CalandarEventList.stream()
+	calendarEventList.stream()
 	.forEach(event -> {if(eventMap.get(LocalDate.parse(event[2].toString()))==null) 
 						{ 	ArrayList<Object[]> EventValueList = new ArrayList<>();
 							EventValueList.add(event);
@@ -81,7 +81,7 @@ table.event-calander thead th,
 	<div class="card-header page-top" style="padding: 0.25rem 1.25rem;">
 		<div class="row">
 			<div class="col-md-3">
-				<h5 style="padding-top: 0.5rem">Calandar</h5>
+				<h5 style="padding-top: 0.5rem">Calendar</h5>
 			</div>
 			<div class="col-md-9"></div>
 		</div>
@@ -109,7 +109,7 @@ table.event-calander thead th,
 
 				<div class="row">
 					<div class="col-md-3 event-list-table" align="center"  style="height:78vh;overflow: auto;">
-						<span style="font-weight: bold;">Calandar Event For the Year  <span style="color: red"><%=year %></span></span>
+						<span style="font-weight: bold;">Calendar Event For the Year  <span style="color: red"><%=year %></span></span>
 						<table class="table table-bordered table-hover table-striped table-condensed" >
 							<thead>
 								<tr>
@@ -119,7 +119,7 @@ table.event-calander thead th,
 							</thead>
 							<tbody >
 								<%	int count=0;
-										for(Object[] event :CalandarEventList){ 
+										for(Object[] event :calendarEventList){ 
 										 %>
 											<tr class="event-row" id="event-row-<%=event[0]%>" >
 												<td  style="border: 1px solid black;text-align: center;center;width: 100px;vertical-align: middle;"><%=DateTimeFormatUtil.SqlToRegularDate(event[2].toString()) %></td>
@@ -144,7 +144,7 @@ table.event-calander thead th,
 		</div>
 
 	</div>
-<form action="Calandar.htm" method="post" id="calandar-form"> 
+<form action="calendar.htm" method="post" id="calendar-form"> 
 <input type="hidden" name="year" value="<%=year %>" id="cal-year">
 <input type="hidden" name="month" value="<%=month %>" id="cal-month">
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -235,7 +235,7 @@ $('#demo-calendar').on('zabuto:calendar:goto', function (e) {
 	if(cyear != e.year){
 		$('#cal-year').val(e.year);
 		$('#cal-month').val(e.month);
-		$('#calandar-form').submit();
+		$('#calendar-form').submit();
 	}
 });
 
