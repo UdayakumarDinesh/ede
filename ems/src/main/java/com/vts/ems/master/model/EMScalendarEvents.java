@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "ems_calandar_events")
-public class EMSCalandarEvents implements Serializable {
+@Entity(name = "ems_calendar_events")
+public class EMScalendarEvents implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id

@@ -28,8 +28,8 @@ public interface EMSMainService {
 	public EmployeeDesig DesignationInfo(long DesigId) throws Exception;
 	public long AllNoticeCount() throws Exception;
 	public List<Object[]> getCircularOrdersNotice() throws Exception;
-	public List<Object[]> CalandarEvents(String eventyear) throws Exception;
-	public List<Object[]> CalandarEventTypes() throws Exception;
+	public List<Object[]> calendarEvents(String eventyear) throws Exception;
+	public List<Object[]> calendarEventTypes() throws Exception;
 	public List<Object[]> EmployeeList() throws Exception;
 	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception;
 }

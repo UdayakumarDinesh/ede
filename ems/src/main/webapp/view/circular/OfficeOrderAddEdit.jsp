@@ -99,7 +99,6 @@
 			  <div class="form-group">
 					<label><b>Upload File</b> <span class="mandatory"	style="color: red;">*</span></label>
 			<%if(OrderEditDetails!=null ){%>
-			<%System.out.println("filepath"+OrderEditDetails.getOrderPath());%>
 			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="OrderFile"  >
 			<%}else{ %>
 			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="OrderFile"  >

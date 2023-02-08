@@ -21,15 +21,6 @@
 
 
 
-      <%
-
-      System.out.println("::::::::::SHUBH ERROR OCCUR IN LEAVES PAGES SHUBH...................."+exception);
-      //exception.printStackTrace();
-
-      %>
-
-
-
 
 </body>
 </html>

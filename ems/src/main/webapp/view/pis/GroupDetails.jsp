@@ -25,7 +25,6 @@ String choice=(String)request.getAttribute("choice");
 List<Object[]> ResultedList=(List<Object[]>)request.getAttribute("ResultedList");
 String DropDownOption1 =(String)request.getAttribute("DropDownOption1");
 String empname = (String)request.getAttribute("empname");
-System.out.println("jsp"+choice);
 %>
 <div class="card-header page-top ">
 		<div class="row">

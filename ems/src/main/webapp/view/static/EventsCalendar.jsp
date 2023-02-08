@@ -57,7 +57,7 @@ table.event-calander thead th,
 
 <body>
 <%
-	List<Object[]> CalandarEventList = (List<Object[]>)request.getAttribute("CalandarEvents");
+	List<Object[]> CalandarEventList = (List<Object[]>)request.getAttribute("calendarEvents");
 	String year = (String)request.getAttribute("year");
 	String month = (String)request.getAttribute("month");
 	HashMap<LocalDate, ArrayList<Object[]>> eventMap=new LinkedHashMap<LocalDate, ArrayList<Object[]>>(); 

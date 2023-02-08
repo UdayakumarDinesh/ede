@@ -2,6 +2,7 @@ package com.vts.ems.attendance.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,9 +46,20 @@ public class AttendanceServiceImpl implements AttendanceService{
 	{
 		long count=0;
 		LocalDate yesterday = LocalDate.now().minusDays(1);
-		List<PunchInfoSQLDto> PunchDataFromSQLServer = dao.getPunchInfo(yesterday.toString());
+		
+		List<PunchInfoSQLDto> PunchDataFromSQLServer = null;
+		if(dao.PunchListSize()==0) {
+			PunchDataFromSQLServer = dao.getPunchInfoAll();
+		}else {
+			PunchDataFromSQLServer = dao.getPunchInfo(yesterday.toString());
+			if(dao.AttendPunchInfo(yesterday.toString()).size()>0) {
+				dao.DeletePunchInfo(yesterday.toString());
+			}
+		}
+		
+		List<AttendancePunchData> punchlist = new ArrayList<AttendancePunchData>();
 		for(PunchInfoSQLDto PunchData :PunchDataFromSQLServer) {
-			if(true || yesterday.equals(LocalDate.parse(PunchData.getPunchDate()))) {
+//			if(yesterday.equals(LocalDate.parse(PunchData.getPunchDate()))) {
 			AttendancePunchData punch =  AttendancePunchData.builder()
 											.AttendanceDate(PunchData.getPunchDate())
 											.PunchInTime(PunchData.getPunchInTime())
@@ -58,9 +70,11 @@ public class AttendanceServiceImpl implements AttendanceService{
 											.WorkTime(PunchData.getWorkTime())
 											.CreatedDate(sdtf.format(new Date()))
 											.build();
-			count = dao.insertPunchInfo(punch);
-			}
+			punchlist.add(punch);
+//			count = dao.insertPunchInfo(punch);
+//			}
 		}
+			count = dao.insertPunchInfo(punchlist);
 		return count;
 	}
 	

@@ -170,10 +170,6 @@ th,td
 	
 	historyBtn = historyBtn || allowEdit;
 	
-	System.out.println(showRemAmt);
-	System.out.println(allowEdit);
-	System.out.println(historyBtn);
-	System.out.println(view_mode);
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 

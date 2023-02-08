@@ -15,7 +15,6 @@
 
 <%
 List<Object[]> publicationlist = (List<Object[]>)request.getAttribute("Publicationlist");
-System.out.println("list"+publicationlist);
 Object[] empdata = (Object[])request.getAttribute("Empdata");
 %>
 <div class="card-header page-top">

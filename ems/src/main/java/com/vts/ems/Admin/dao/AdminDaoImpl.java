@@ -105,11 +105,8 @@ public class AdminDaoImpl implements AdminDao{
 
 		int count=0;
 		
-		System.out.println("Inside UPDATE " + formroleaccessid + Value);
 		
 		if(Value.equals(1L)) {
-			
-			System.out.println("Inside if " + formroleaccessid + Value);
 			
 			Query query=manager.createNativeQuery(FORMROLEACTIVE0);
 			query.setParameter("formroleaccessid", formroleaccessid);
@@ -514,7 +511,7 @@ public class AdminDaoImpl implements AdminDao{
 			return new ArrayList<Object[]>();
 		}
 	}
-	private static final String EventTypeList="select EMSEventTypeId,EventTypeCode,EventType from ems_calandar_eventtypes where IsActive=1";
+	private static final String EventTypeList="select EMSEventTypeId,EventTypeCode,EventType from ems_calendar_eventtypes where IsActive=1";
 	@Override
 	public List<Object[]> getEventTypeList() throws Exception {
 		 List<Object[]> list=null;
@@ -537,7 +534,7 @@ public class AdminDaoImpl implements AdminDao{
 	}
 		return (Long)events.getEMSEventId();
 	}
-private static final String Eventslist="select a.EMSEventId,a.EventDate,b.EventType,a.EventName,a.EventDescription from ems_calandar_events as a,ems_calandar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1 and extract(year from a.EventDate)=:year order by a.EventDate";
+private static final String Eventslist="select a.EMSEventId,a.EventDate,b.EventType,a.EventName,a.EventDescription from ems_calendar_events as a,ems_calendar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1 and extract(year from a.EventDate)=:year order by a.EventDate";
 	@Override
 	public List<Object[]> getEventsList(String year) throws Exception {
 		List<Object[]> list=null;
@@ -552,7 +549,7 @@ private static final String Eventslist="select a.EMSEventId,a.EventDate,b.EventT
 	 
 		return list;
 	}
- private static final String EditEvent="select a.EMSEventId,DATE_FORMAT(a.EventDate,'%d-%m-%Y') as EventDate,b.EventTypeCode,b.EventType,a.EventName,a.EventDescription from ems_calandar_events as a,ems_calandar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1  and a.EMSEventId=:EMSEventId";
+ private static final String EditEvent="select a.EMSEventId,DATE_FORMAT(a.EventDate,'%d-%m-%Y') as EventDate,b.EventTypeCode,b.EventType,a.EventName,a.EventDescription from ems_calendar_events as a,ems_calendar_eventtypes as b where a.EventTypeCode=b.EventTypeCode and a.IsActive=1  and a.EMSEventId=:EMSEventId";
 	@Override
 	public Object[] editCalendarEvent(String eMSEventId) throws Exception {
 		Object[] events=null;
@@ -568,7 +565,7 @@ private static final String Eventslist="select a.EMSEventId,a.EventDate,b.EventT
 		}
 		return events;
 	}
-private static final String  DeletecalendarEvent=" update ems_calandar_events  set IsActive=0 where EMSEventId=:EMSEventId";
+private static final String  DeletecalendarEvent=" update ems_calendar_events  set IsActive=0 where EMSEventId=:EMSEventId";
 	@Override
 	public long deleteCalendarEvent(String eMSEventId) throws Exception {
 		long result =0;
@@ -581,7 +578,7 @@ private static final String  DeletecalendarEvent=" update ems_calandar_events  s
 		}		
 		return result ;
 	}
-private static final String UpdateCalendarEvent="update ems_calandar_events set EventDate=:EventDate,EventTypeCode=:EventTypeCode,EventName=:EventName,EventDescription=:description where EMSEventId=:EMSEventId";
+private static final String UpdateCalendarEvent="update ems_calendar_events set EventDate=:EventDate,EventTypeCode=:EventTypeCode,EventName=:EventName,EventDescription=:description where EMSEventId=:EMSEventId";
 	@Override
 	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName,
 			String eventDescription) throws Exception {

@@ -195,7 +195,7 @@ $(document).ready(function () {
 			}
 			$('#sidebarmodule').html(sidebarmodule); 
 			/* $('#'+ window.location.href.split('/')[4].replace('.','_')).addClass('active') */
-			$('#'+ activeid).addClass('active')
+			$('#'+ activeid).addClass('active');
 		}
 	});
     

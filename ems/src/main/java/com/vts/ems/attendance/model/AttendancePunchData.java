@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ems_attend_punch_data")
+@Table(name = "attand_punch_data")
 public class AttendancePunchData implements Serializable
 {
 

@@ -1,5 +1,6 @@
 package com.vts.ems.attendance.controller;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,12 +43,12 @@ public class AttendanceController {
 			long result = service.syncAttendancePunchData();
 			
 			if(result != 0){
-    			redir.addAttribute("result", "Attendance Sync Successfull");
+    			redir.addAttribute("result", "Attendance Sync Successfull for the date -"+DateTimeFormatUtil.SqlToRegularDate(LocalDate.now().minusDays(1).toString()));
 			}else{
 				redir.addAttribute("resultfail", "Attendance Sync Unsuccessfull");
 			}
 			
-			return "redirect:/MainDashBoard.htm";
+			return "redirect:/PisAdminDashboard.htm";
 		}
 		catch (Exception e) {
 			e.printStackTrace(); 

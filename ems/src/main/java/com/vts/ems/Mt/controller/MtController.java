@@ -653,7 +653,6 @@ public class MtController {
 			String[] MtApplyId=req.getParameterValues("Approve");
 	
 			if(MtApplyId!=null) {
-			System.out.println(Arrays.toString(MtApplyId));
 			for(String str:MtApplyId) {
 				apply.setMtApplId(Integer.parseInt(str.split("-")[0]));
 				apply.setForwardRemarks(req.getParameter(str.split("-")[0]));
@@ -1021,7 +1020,6 @@ public class MtController {
 		logger.info(new Date() +"Inside MtVehicleC.htm "+Username);	
 		try {
 			String action=req.getParameter("action");
-			System.out.println(action);
 				if(action.equalsIgnoreCase("Edit")) {
 					req.setAttribute("vehicledata",service.GetVehicleData(Integer.parseInt(req.getParameter("vehicleid"))));
 					ses.setAttribute("SidebarActive", "MtVehicle_htm");

@@ -2199,7 +2199,6 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			Query query = manager.createNativeQuery(PUBLICATIONLIST);
 			query.setParameter("empid", empid);
 		      list=(List<Object[]>) query.getResultList();
-		      System.out.println("insidedao"+list);
 			return list;
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO getPublicationList "+e);

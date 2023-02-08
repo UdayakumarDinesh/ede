@@ -8,7 +8,7 @@
    <head>
       <meta charset="utf-8">
 
-      <title>EMS</title>
+      <title>SEIP - ERROR</title>
 
       <link rel="stylesheet" href="style.css">
       
