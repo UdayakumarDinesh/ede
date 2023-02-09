@@ -17,7 +17,8 @@
 	</head>
 
 	<body  >
-	<%	 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");	
+	<%	
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");	
 		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
 		String EmpName     = (String)session.getAttribute("EmpName");
@@ -27,16 +28,13 @@
 		String EmpId=(String)request.getAttribute("EmpId");
 		String empNo=(String)request.getAttribute("EmpNo");
 		List<Object[]> attendlist=(List<Object[]>)request.getAttribute("attendlist");
-		 SimpleDateFormat stf = new SimpleDateFormat("hh:mm aa");
-		
-		
-		
+		SimpleDateFormat stf = new SimpleDateFormat("hh:mm aa");
 	%>
 	
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
 		<div class="row">
 			<div class="col-md-3">
-				<h5 style="padding-top: 0.5rem">DASHBOARD </h5>
+				<h5 style="padding-top: 0.5rem;color: #009851;" >Attendance </h5>
 			</div>
 			<div class="col-md-9">
 					<form action="EmpLogitypeChange.htm" method="post" style="float: right;">
@@ -130,7 +128,7 @@
 			                       <th>In Time</th>
 			                       <th>Out Date</th>		                       
 			                       <th>Out Time</th>
-			                       <th>Work Time </th>
+			                       <th>Duration </th>
 			                  </tr>	
 			                  	           			           
 			           </thead>
@@ -152,7 +150,7 @@
 			                         <td style="text-align: center;color:blue;"><%if(obj[3]!=null){%><%=stf.format(obj[3])%><%}else {%>-<%} %></td>
 			                         <td style="text-align: center;"><%if(obj[4]!=null){%><%=sdf.format(obj[4])%><%}else {%>-<%} %></td>
 			                         <td style="text-align: center;color:blue;"><%if(obj[4]!=null){%><%=stf.format(obj[4])%><%}else {%>-<%} %></td>
-			                         <td <%if(obj[5]!=null){if(some.before(time)){%> style="color:red;font-weight: bold;text-align: center;"<%}else{%> style="font-weight:bold;text-align:center;"<%}%>><%=obj[5]%><%}else {%>00:00<%} %></td>
+			                         <td <%if(obj[5]!=null){if(some.before(time)){%> style="color:red;font-weight: bold;text-align: center;"<%}else{%> style="color:green;font-weight:bold;text-align:center;"<%}%>><%=obj[5]%><%}else {%>00:00<%} %></td>
 			                   </tr>
 			                   <%}} %>          			           
 			           </tbody>									

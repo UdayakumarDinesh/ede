@@ -6440,6 +6440,26 @@ public class PisController {
 				String formid = req.getParameter("formid");
 				PISEmpFamilyDeclaration declare = service.getEmpFamilyDeclaration(formid);
 				
+				Object[] formdata = service.GetFamFormData(formid);
+				if(declare==null) 
+				{
+					if( formdata[2].toString().equalsIgnoreCase("I"))
+					{
+						service.DepIncFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+					else if( formdata[2].toString().equalsIgnoreCase("E"))
+					{
+						service.DepExcFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+					else if(formdata[2].toString().equalsIgnoreCase("D"))
+					{
+						service.DepDeclareFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+				}
+				
 				res.setContentType("application/pdf");
 				res.setHeader("Content-disposition", "inline;filename= DependantsDeclaration.pdf");
 				File f = new File(uploadpath + File.separator + declare.getFilePath());

@@ -3068,10 +3068,15 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 	@Override
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid)throws Exception
 	{
-		Query query =manager.createQuery(GETEMPFAMILYDECLARATION);
-		query.setParameter("formid", Long.parseLong(formid));
-		PISEmpFamilyDeclaration declare = (PISEmpFamilyDeclaration)query.getResultList().get(0);				
-		return declare;
+		try {
+			Query query =manager.createQuery(GETEMPFAMILYDECLARATION);
+			query.setParameter("formid", Long.parseLong(formid));
+			PISEmpFamilyDeclaration declare = (PISEmpFamilyDeclaration)query.getResultList().get(0);				
+			return declare;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
 	

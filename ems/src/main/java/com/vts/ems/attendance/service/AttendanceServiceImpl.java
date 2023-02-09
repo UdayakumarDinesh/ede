@@ -46,15 +46,18 @@ public class AttendanceServiceImpl implements AttendanceService{
 	{
 		long count=0;
 		LocalDate yesterday = LocalDate.now().minusDays(1);
+		LocalDate today = LocalDate.now();
 		
 		List<PunchInfoSQLDto> PunchDataFromSQLServer = null;
 		if(dao.PunchListSize()==0) {
-			PunchDataFromSQLServer = dao.getPunchInfoAll();
+			PunchDataFromSQLServer = dao.getPunchInfoAllAfter(LocalDate.now().getYear()+"-01-01");
 		}else {
+			dao.DeletePunchInfo(yesterday.toString());
+			dao.DeletePunchInfo(today.toString());
+			
 			PunchDataFromSQLServer = dao.getPunchInfo(yesterday.toString());
-			if(dao.AttendPunchInfo(yesterday.toString()).size()>0) {
-				dao.DeletePunchInfo(yesterday.toString());
-			}
+			PunchDataFromSQLServer .addAll(dao.getPunchInfo(today.toString()));
+			
 		}
 		
 		List<AttendancePunchData> punchlist = new ArrayList<AttendancePunchData>();
@@ -64,12 +67,18 @@ public class AttendanceServiceImpl implements AttendanceService{
 											.AttendanceDate(PunchData.getPunchDate())
 											.PunchInTime(PunchData.getPunchInTime())
 											.PunchOutTime(PunchData.getPunchOutTime())
-											.EmpNo(String.valueOf(Long.parseLong(PunchData.getUserId())))
+//											.EmpNo(String.valueOf(Long.parseLong(PunchData.getUserId())))
 											.Status(PunchData.getStatus())
 											.Half(PunchData.getHalf())
 											.WorkTime(PunchData.getWorkTime())
 											.CreatedDate(sdtf.format(new Date()))
 											.build();
+			if(PunchData.getUserId().matches("[0-9]+")) {
+				punch.setEmpNo(String.valueOf(Long.parseLong(PunchData.getUserId())));
+			}else
+			{
+				punch.setEmpNo(String.valueOf(PunchData.getUserId()));
+			}
 			punchlist.add(punch);
 //			count = dao.insertPunchInfo(punch);
 //			}

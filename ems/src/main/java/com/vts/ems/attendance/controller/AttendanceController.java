@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -58,4 +59,17 @@ public class AttendanceController {
 	}
 	
 	
+	
+	@Scheduled(cron = "0 0 10 * * ?")
+	public void attendancePunchDataSyncCronScheduler()throws Exception 
+	{
+		logger.info(new Date() +"Inside CONTROLLER attendancePunchDataSyncCronScheduler ");		
+		try {
+			service.syncAttendancePunchData();
+		}
+		catch (Exception e) {
+			e.printStackTrace(); 
+			logger.error(new Date() +"Inside CONTROLLER attendancePunchDataSyncCronScheduler "+ e);
+		}	
+	}
 }

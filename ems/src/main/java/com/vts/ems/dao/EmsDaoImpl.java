@@ -452,7 +452,7 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return list;
 		}
-    private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from attand_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo";  
+		private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from attand_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo ORDER BY AttendanceDate DESC";  
 		@Override
 		public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
 			List<Object[]> list=null;			

@@ -1413,12 +1413,12 @@ public class MasterController {
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside Departments.htm"+UserId);
 				List<Object[]> Deparmentslist=new ArrayList<Object[]>();
-				List<Object[]> EmpList=service.getEmpList();
+//				List<Object[]> EmpList=service.getEmpList();
 				try {
 					ses.setAttribute("SidebarActive", "DepartmentsList_htm");
 					String action=req.getParameter("action");
 					if("Add".equalsIgnoreCase(action)) {
-						req.setAttribute("Emplist",EmpList );
+//						req.setAttribute("Emplist",EmpList );
 						return "masters/DepartmentsAddEdit";
 					}
 					else if("Edit".equalsIgnoreCase(action)) {
