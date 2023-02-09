@@ -140,8 +140,6 @@ DecimalFormat df = new DecimalFormat( "#####################");
 								     {    slno++;
 										  totalClaimedAmt += Math.round( Double.parseDouble(obj[1].toString()));
 										  totalSettledAmt += Math.round( Double.parseDouble(obj[2].toString()));
-                                        System.out.println("Claimed Amount :"+obj[1].toString());
-                                        System.out.println("Settled Amount :"+obj[2].toString());
 								     %>
 								<tr>
 								   <td><%=slno %></td>

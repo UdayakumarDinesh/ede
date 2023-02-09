@@ -1255,7 +1255,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> CHSSBatchApproval(String logintype, String todate,String contingentid,String ClaimType)throws Exception
 	{
 		try {
-			System.out.println( logintype+" "+  todate+" "+ contingentid+" "+ ClaimType);
 			Query query = manager.createNativeQuery("CALL chss_claims_approve(:logintype, :todate,:contingentid, :ClaimType);");
 			query.setParameter("logintype", logintype);
 			query.setParameter("todate", todate);

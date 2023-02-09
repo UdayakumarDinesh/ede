@@ -273,7 +273,7 @@ public class DateTimeFormatUtil
             actualdate = sdf.format(d);
 	       
 		  }
-		catch(Exception e){System.out.println(e);}
+		catch(Exception e){e.printStackTrace();}
 		return(actualdate);
 	
 	}
@@ -289,7 +289,7 @@ public class DateTimeFormatUtil
             actualdate = sdf.format(d);
 	       
 		  }
-		catch(Exception e){System.out.println(e);}
+		catch(Exception e){e.printStackTrace();}
 		return(actualdate);
 	
 	}
@@ -304,7 +304,7 @@ public class DateTimeFormatUtil
             actualdate = sdf.format(d);
 	       
 		  }
-		catch(Exception e){System.out.println(e);}
+		catch(Exception e){e.printStackTrace();}
 		return(actualdate);
 	
 	}

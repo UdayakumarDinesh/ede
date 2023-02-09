@@ -18,7 +18,7 @@ public class CHSSTestSub implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long TestSubId;
+	private long TestSubId;
 	private Long TestMainId;
 	private String TestCode;
 	private String TestName;

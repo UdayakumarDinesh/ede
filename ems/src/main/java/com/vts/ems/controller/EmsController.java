@@ -152,7 +152,7 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		String Empno = ( ses.getAttribute("EmpNo")).toString();	
+		String Empno = ( ses.getAttribute("EmpNo")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
     	List <Object[]> attendlist=null;
@@ -198,8 +198,8 @@ public class EmsController {
 		}
 	}
 	
-	@RequestMapping(value = "Calandar.htm")
-	public String Calandar(HttpServletRequest req, HttpSession ses) throws Exception 
+	@RequestMapping(value = "Calendar.htm")
+	public String calendar(HttpServletRequest req, HttpSession ses) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
@@ -213,11 +213,11 @@ public class EmsController {
     			month = today.getMonthValue()+"";
     		}
     		
-    		req.setAttribute("CalandarEventType", service.CalandarEventTypes());
-    		req.setAttribute("CalandarEvents", service.CalandarEvents(year));
+    		req.setAttribute("calendarEventType", service.calendarEventTypes());
+    		req.setAttribute("calendarEvents", service.calendarEvents(year));
     		req.setAttribute("year",year);
     		req.setAttribute("month",month);
-			return "static/EventsCalandar";
+			return "static/EventsCalendar";
     	}catch (Exception e) {
     		e.printStackTrace();
 			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);

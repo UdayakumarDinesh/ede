@@ -242,9 +242,9 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.getCircularOrdersNotice();
 	}
 	@Override
-	public List<Object[]> CalandarEvents(String eventyear) throws Exception
+	public List<Object[]> calendarEvents(String eventyear) throws Exception
 	{	
-		List<Object[]> eventList=  dao.CalandarEvents(eventyear);
+		List<Object[]> eventList=  dao.calendarEvents(eventyear);
 
 		
 		
@@ -256,9 +256,9 @@ public class EMSMainServiceImpl implements EMSMainService
 		
 		
 	@Override
-	public List<Object[]> CalandarEventTypes() throws Exception
+	public List<Object[]> calendarEventTypes() throws Exception
 	{
-		return dao.CalandarEventTypes();
+		return dao.calendarEventTypes();
 	}
 
 	@Override

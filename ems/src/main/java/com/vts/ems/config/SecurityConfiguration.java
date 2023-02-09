@@ -119,11 +119,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		@Override
 		public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
 
-			// System.out.println(authentication.getName());
-			/*
-			 * if(url.equalsIgnoreCase("DemandInitiationList.htm")) { return ACCESS_GRANTED;
-			 * } }
-			 */
 
 			return ACCESS_GRANTED;
 		}

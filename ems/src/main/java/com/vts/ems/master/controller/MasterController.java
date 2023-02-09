@@ -537,7 +537,6 @@ public class MasterController {
 			try {
 				
 				String action = (String)req.getParameter("Action");
-			System.out.println(action);
 				if("ADD".equalsIgnoreCase(action)){
 					
 					List<Object[]> treatment = service.GetTreatmentType();
@@ -547,7 +546,6 @@ public class MasterController {
 				} else if ("EDIT".equalsIgnoreCase(action)) {
 					
 					String DocRateId = (String)req.getParameter("DocRateId");
-					System.out.println(DocRateId);
 					CHSSDoctorRates  DoctorRates=service.getCHSSDoctorRates(Integer.parseInt(DocRateId));
 					List<Object[]> treatment = service.GetTreatmentType();
 					req.setAttribute("treatment", treatment);

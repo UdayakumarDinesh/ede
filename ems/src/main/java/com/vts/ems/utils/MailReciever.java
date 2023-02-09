@@ -25,12 +25,10 @@ import com.sun.mail.imap.SortTerm;
 public class MailReciever {
 	
 	public  void mail(String  mail_protocol,String  mail_host,String  mail_port,String  mail_username,String  mail_password) throws MessagingException, IOException {
-		 System.out.println("insid5");
 		    IMAPFolder folder = null;
 		    Store store = null;
 		    String subject = null;
 		    Flag flag = null;
-		    System.out.println("insidi");
 		    try 
 		    {
 		      Properties props = System.getProperties();
@@ -40,14 +38,12 @@ public class MailReciever {
 		      props.setProperty("mail."+mail_protocol+".ssl.trust",mail_host);
 		      props.setProperty("mail."+mail_protocol+".timeout", "10000");
 		      Session session = Session.getDefaultInstance(props, null);
-              System.out.println("insidi2");
 		      ExecutorService es = Executors.newCachedThreadPool();
 		      final IdleManager idleManager = new IdleManager(session, es);
 		      try 
 			    {
 		      store = session.getStore(mail_protocol);
 		      store.connect(mail_host ,mail_username,mail_password);
-		      System.out.println("insid3");
 			    }catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -72,8 +68,6 @@ public class MailReciever {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		              System.out.println("Folder: " + folder +
-		                  " got " + msgs.length + " new messages");
 		              try {
 		                  // process new messages
 		                  idleManager.watch(folder); // keep watching for new messages
@@ -86,28 +80,15 @@ public class MailReciever {
 
 
 		      Message[] messages = folder.getMessages();
-		      System.out.println("No of Messages : " + folder.getMessageCount());
-		      System.out.println("No of Unread Messages : " + folder.getUnreadMessageCount());
-		      System.out.println(messages.length);
 
 
 		      for (int i=messages.length-1; i >0;i--) 
 		      {
 
-		        System.out.println("*****************************************************************************");
-		        System.out.println("MESSAGE " + (i + 1) + ":");
 		        Message msg =  messages[i];
 
 		        subject = msg.getSubject();
  
-		        System.out.println("Subject: " + subject);
-		        System.out.println("At: " + msg.ATTACHMENT);
-		        //javax.mail.internet.MimeMultipart msger=(javax.mail.internet.MimeMultipart)msg.getContent();
-		        System.out.println(msg.getContent());
-		        System.out.println(msg.getReceivedDate());
-		        System.out.println("From: " + msg.getFrom()[0]);
-		        System.out.println("To: "+msg.getAllRecipients()[0]);
-		        System.out.println("CC: " + msg.getAllRecipients());
 		        msg.setFlag(Flag.SEEN, true);
 		        break;
 

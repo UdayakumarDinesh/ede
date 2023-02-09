@@ -358,7 +358,6 @@ public class LeaveController {
 		try { 
 			 Map md=model.asMap();
 			 String EmpNo=(String)md.get("EmpNo");
-			 System.out.println("Empno="+EmpNo);
 			 if(EmpNo==null) {
 				 redir.addAttribute("result", "Refresh Not Allowed");
 					return "redirect:/LeaveApply.htm";

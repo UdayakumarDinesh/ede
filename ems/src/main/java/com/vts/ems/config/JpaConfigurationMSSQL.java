@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -37,7 +36,7 @@ public class JpaConfigurationMSSQL
 		dataSource.setJdbcUrl(env.getProperty("datasource2.datasource.url"));
 		dataSource.setUsername(env.getProperty("datasource2.datasource.username"));
 		dataSource.setPassword(env.getProperty("datasource2.datasource.password"));
-		dataSource.setConnectionTimeout(30000);
+		dataSource.setConnectionTimeout(10000);
 		return dataSource;
 	}
 

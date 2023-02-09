@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name="ems_calandar_events")
+@Table(name="ems_calendar_events")
 public class CalendarEvents  implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

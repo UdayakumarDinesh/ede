@@ -61,26 +61,26 @@
 	String todate = (String)request.getAttribute("todate"); %>
 		 
 	    	<div class="card" >
-	        <div class="card-header" style="height: 4rem">
-	              <form action="OfficeOrder.htm" method="POST"> 
-	                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					      <div class="row justify-content-right">
-					      <div class="col-7"></div>
-						        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
-					            <div class="col-1" style="margin-left: -9%"> 
-						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="FromDate"  required="required"   > 
-							         <label class="input-group-addon btn" for="testdate"></label>              
-						        </div>
-							 
-						
-						        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
-							    <div class="col-1" style="margin-left: -10%">						
-							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="ToDate"  required="required"  > 							
-							         <label class="input-group-addon btn" for="testdate"></label>    
-							    </div>
-				          </div>       	
-                  </form>	      
-	       </div>    	             
+		        <div class="card-header" style="height: 4rem">
+		        	<form action="OfficeOrder.htm" method="POST"> 
+		            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="row justify-content-right">
+						      <div class="col-7"></div>
+							        <div class="col-2" style="margin-left: 1%; font-color:black;"><h6>From Date :  &nbsp;</h6></div>
+						            <div class="col-1" style="margin-left: -9%"> 
+							             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm mydate" onchange="this.form.submit()" <%if(fromdate!=null){%> value="<%=fromdate%>" <%}%>  readonly="readonly"  value=""  id="fromdate" name="fromdate"  required="required"   > 
+								         <label class="input-group-addon btn" for="testdate"></label>              
+							        </div>
+								 
+							
+							        <div class="col-2"  style="margin-left: 4%"><h6>To Date : &nbsp;</h6></div>
+								    <div class="col-1" style="margin-left: -10%">						
+								         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" onchange="this.form.submit()" <%if(todate!=null){%>value="<%=todate%>" <%}%> readonly="readonly"   value=""  id="todate" name="todate"  required="required"  > 							
+								         <label class="input-group-addon btn" for="testdate"></label>    
+								    </div>
+					  	</div>       	
+	                  </form>	      
+		       </div>    	             
 	       </div>
     
 

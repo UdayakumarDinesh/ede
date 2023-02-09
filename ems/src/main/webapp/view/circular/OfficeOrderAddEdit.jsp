@@ -87,7 +87,6 @@
 	<div class="row">
 		<div class="col-md-10">
 			<%if(OrderEditDetails!=null ){%>
-			<%System.out.println("filepath"+OrderEditDetails.getOrderPath());%>
 			<input type="file" name="EditFileAttach" style="width:100%"  accept="application/pdf"  class="form-control input-sm "  value=""   id="OrderFile"  >
 			<%}else{ %>
 			<input type="file" name="FileAttach"  style="width:100%" accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="OrderFile"  >

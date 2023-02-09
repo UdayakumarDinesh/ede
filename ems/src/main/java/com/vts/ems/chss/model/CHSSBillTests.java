@@ -17,7 +17,7 @@ public class CHSSBillTests implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long CHSSTestId;
+	private long CHSSTestId;
 	private Long BillId;
 	private Long TestMainId;
 	private Long TestSubId;

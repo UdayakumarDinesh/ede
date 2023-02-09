@@ -407,13 +407,13 @@ public class EmsDaoImpl implements EmsDao
 		}
 
 		
-		private static final String CALANDAREVENTS="SELECT ce.EMSEventId,ce.EventTypeCode,ce.EventDate,ce.EventName,ce.EventDescription,et.EventType,et.EventColor FROM ems_calandar_events ce, ems_calandar_eventtypes et WHERE ce.EventTypeCode= et.EventTypeCode AND ce.isactive=1 AND YEAR(ce.EventDate) = :eventyear ORDER BY eventdate ASC";
+		private static final String calendarEVENTS="SELECT ce.EMSEventId,ce.EventTypeCode,ce.EventDate,ce.EventName,ce.EventDescription,et.EventType,et.EventColor FROM ems_calendar_events ce, ems_calendar_eventtypes et WHERE ce.EventTypeCode= et.EventTypeCode AND ce.isactive=1 AND YEAR(ce.EventDate) = :eventyear ORDER BY eventdate ASC";
 		
 		@Override
-		public List<Object[]> CalandarEvents(String eventyear) throws Exception
+		public List<Object[]> calendarEvents(String eventyear) throws Exception
 		{		
 			try {
-				Query query = manager.createNativeQuery(CALANDAREVENTS);
+				Query query = manager.createNativeQuery(calendarEVENTS);
 				
 				query.setParameter("eventyear", eventyear);
 				return (List<Object[]>)query.getResultList();
@@ -424,13 +424,13 @@ public class EmsDaoImpl implements EmsDao
 			}
 		}
 		
-		private static final String CALANDAREVENTTYPES="SELECT et.EMSEventTypeId,et.EventTypeCode,et.EventType,et.EventColor FROM  ems_calandar_eventtypes et WHERE et.isactive=1";
+		private static final String calendarEVENTTYPES="SELECT et.EMSEventTypeId,et.EventTypeCode,et.EventType,et.EventColor FROM  ems_calendar_eventtypes et WHERE et.isactive=1";
 		
 		@Override
-		public List<Object[]> CalandarEventTypes() throws Exception
+		public List<Object[]> calendarEventTypes() throws Exception
 		{		
 			try {
-				Query query = manager.createNativeQuery(CALANDAREVENTTYPES);
+				Query query = manager.createNativeQuery(calendarEVENTTYPES);
 				
 				return (List<Object[]>)query.getResultList();
 			} 
@@ -452,7 +452,7 @@ public class EmsDaoImpl implements EmsDao
 			}
 			return list;
 		}
-    private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from ems_attend_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo";  
+    private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from attand_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo";  
 		@Override
 		public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
 			List<Object[]> list=null;			
