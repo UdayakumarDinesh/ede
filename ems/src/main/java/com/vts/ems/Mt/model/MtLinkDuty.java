@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 
-//@Entity
-//@Table(name="mt_link_duty")
+@Entity
+@Table(name="mt_link_duty")
 public class MtLinkDuty implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

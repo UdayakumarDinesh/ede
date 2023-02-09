@@ -207,8 +207,10 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                                <select class="form-control selectpicker" name="EmpNo" data-live-search="true">
                                  
                                  <%if(emplist!=null&&emplist.size()>0){
-                                  for(Object[] emp:emplist){ %> 
-                                   <option value="<%=emp[0]%>" <%if(emp[0].toString().equalsIgnoreCase(empNo)){ %> selected="selected" <%} %>><%=emp[1]%>, <%=emp[2]%>  (<%=emp[3]%>)</option> 
+                                  for(Object[] emp:emplist){                                 	 
+                                  %> 
+                                 
+                                   <option value="<%=emp[0]%>" <%if(emp[0].toString().equalsIgnoreCase(empNo)){ %> selected="selected" <%} %>><%=emp[1]%>, <%=emp[2]%>  <%-- (<%=emp[3]%>) --%></option> 
                                  <%}} %> 
                                 </select>
                                 
@@ -807,7 +809,7 @@ function Edit(myfrm){
 	 var fields = $("input[name='Aid']").serializeArray();
 
 	  if (fields.length === 0){
-	alert("PLESE SELECT ONE RECORD");
+	alert("PLEASE SELECT ONE RECORD");
 	 event.preventDefault();
 	return false;
 	}

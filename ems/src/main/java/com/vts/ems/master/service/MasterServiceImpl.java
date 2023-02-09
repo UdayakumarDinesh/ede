@@ -455,6 +455,18 @@ public class MasterServiceImpl implements MasterService {
 				throw new IOException("Could not save image file: " + fileName, ioe);
 			}
 		}
+
+		@Override
+		public List<Object[]> getDepartmentslist() throws Exception {
+		
+			return dao.getDepartmentsList();
+		}
+
+	//	@Override
+	//	public List<Object[]> getEmpList() throws Exception {
+			
+		//	return dao.getEmpList();
+		//}
 		
 		
 }

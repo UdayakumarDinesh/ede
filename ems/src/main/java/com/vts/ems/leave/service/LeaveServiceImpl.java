@@ -230,7 +230,7 @@ public class LeaveServiceImpl implements LeaveService{
 			
 			}
 		
-		if(!lab.getLabCode().equalsIgnoreCase("STARC")) {
+		if(lab.getLabCode().equalsIgnoreCase("STARC")) {
 			//Leave Check for CL
 		   if(dto.getLeaveType().equalsIgnoreCase("0001")) {
 				

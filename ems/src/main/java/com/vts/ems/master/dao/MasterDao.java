@@ -69,6 +69,9 @@ public interface MasterDao {
 	public Long AddMasterEditComments(MasterEdit masteredit)throws Exception;
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> getDepartmentsList() throws Exception;
+	//public List<Object[]> getEmpList() throws Exception;
+	
 	
 	
 	

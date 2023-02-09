@@ -70,6 +70,8 @@ public interface MasterService {
 
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
+	public List<Object[]> getDepartmentslist() throws Exception;
+//	public List<Object[]> getEmpList() throws Exception;
 
 
 

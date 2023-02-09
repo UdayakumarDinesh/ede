@@ -356,16 +356,19 @@ public class MtDaoImpl implements MtDao {
 		}
 	}
 	
-	private static final String GETRECOFFICER="SELECT  empid FROM employee WHERE empno = (SELECT ra FROM leave_sa_ra WHERE empid=:empid)";
+	private static final String GETRECOFFICER="SELECT  empid , empname FROM employee WHERE empno = (SELECT ra FROM leave_sa_ra WHERE empid=:empid)";
 	@Override
 	public String GetRecOfficer(String empid) throws Exception {
 
 		Query query= manager.createNativeQuery(GETRECOFFICER);
 		query.setParameter("empid", empid);
-		BigInteger result= (BigInteger)query.getSingleResult();
+		List<Object[]>	list = (List<Object[]>)query.getResultList();	
 		
-		return String.valueOf(result) ;
-		
+		if(list!=null && list.size()>0) {
+			return list.get(0)[0].toString() ;
+		}else {
+			return null;
+		}
 	}
 	
 	@Override

@@ -8,8 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-//@Entity
-//@Table(name="mt_director_duty")
+@Entity
+@Table(name="mt_director_duty")
 public class MtDirectorDuty implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

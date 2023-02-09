@@ -6,16 +6,16 @@
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
+<!-- <style>
 
-<style>
 .card .card-body {
      
     width: 80% !important;
     margin:0 auto;
     padding-top: 25px;
-} 
+}  
 
-</style>
+</style> -->
 </head>
 <body>
 <% EMSOfficeOrder OrderEditDetails = (EMSOfficeOrder)request.getAttribute("OfficeOrderDetails");   %>
@@ -50,9 +50,10 @@
 
 
 <div class="page card dashboard-card">
- <div class="card-body" >
-	<div class="card" >
-	  <div class="card-body main-card  " align="center" >
+ <div class="card-body" align="center">
+ 
+	<div class="card" style="width:50%">
+	  <div class="card-body main-card  " align="left" >
 	<%if(OrderEditDetails!=null){ %> 
 		<form name="myfrm" action="OfficeOrderEditSubmit.htm" method="POST" id="myfrm1" autocomplete="off" enctype="multipart/form-data" >
 	<%}else{ %>	
@@ -61,65 +62,59 @@
 	  <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 	  
 	  
-	   <div class="row" align="center"> 
-	   
-	       <!--  <div class="col-md-3" style="margin-left: 20px;" > -->
-	        <div class="col-md-3" style="margin-left: 10px;" >
+	   <div class="row" > 
+	   	     
+	        <div class="col-md-6" >
 			   <div class="form-group">
 				  <label><b>Order No</b><span class="mandatory"	style="color: red;">*</span></label>
-				  <input type="text" style="width: 70%; " class="form-control input-sm "  name="OrderNo"  id="OrderNo" <%if(OrderEditDetails!=null && OrderEditDetails.getOrderNo()!=null){%>value="<%=OrderEditDetails.getOrderNo()%>" <%}%>   maxlength="20"  required="required" >
+				  <input type="text" style="width: 100%; " class="form-control input-sm "  name="OrderNo"  id="OrderNo" <%if(OrderEditDetails!=null && OrderEditDetails.getOrderNo()!=null){%>value="<%=OrderEditDetails.getOrderNo()%>" <%}%>   maxlength="20"  required="required" >
 				</div>
 			</div>
-			
-	     <div class="col-md-2" style="margin-left: 200px;" >
-			   <div class="form-group">
-				  <label><b>Subject</b><span class="mandatory"	style="color: red;">*</span></label>
-				   <textarea id="OrderSubject" name="OrderSubject" rows="2" cols="50" style="border-bottom-color: gray;" required="required" ><%if(OrderEditDetails!=null && OrderEditDetails.getOrderSubject()!=null){%><%=OrderEditDetails.getOrderSubject()%><%}%></textarea> 
-				</div>
-			</div>
-     
-	      
-			
-	  </div>
+		</div>	
+		
 	  
-	 <div class="row" align="center">  
-	     
-	     
-	      <!-- <div class="col-md-3" style="margin-left: 20px;"> -->
-	       <div class="col-md-3" style="margin-left: 10px;" >
+	 <div class="row" >  	     	     	     
+	       <div class="col-md-6"  >
 			   <div class="form-group">
 				  <label><b>Order Date</b><span class="mandatory"	style="color: red;">*</span></label>
-				  <input type="text" style="width: 70%; " class="form-control input-sm " value="" name="OrderDate"  id="OrderDate"   required="required"  >
+				  <input type="text" style="width: 100%; " class="form-control input-sm " value="" name="OrderDate"  id="OrderDate"   required="required"  >
 				</div>
 			</div>
-				
-	       
-			
-			  <div class="col-md-3" style="margin-left: 200px;">
+					       			
+			  <div class="col-md-6">
 			  <div class="form-group">
 					<label><b>Upload File</b> <span class="mandatory"	style="color: red;">*</span></label>
+	<div class="row">
+		<div class="col-md-10">
 			<%if(OrderEditDetails!=null ){%>
 			<%System.out.println("filepath"+OrderEditDetails.getOrderPath());%>
-			<input type="file" name="EditFileAttach"   accept="application/pdf"  class="form-control input-sm "  value=""   id="OrderFile"  >
+			<input type="file" name="EditFileAttach" style="width:100%"  accept="application/pdf"  class="form-control input-sm "  value=""   id="OrderFile"  >
 			<%}else{ %>
-			<input type="file" name="FileAttach"   accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="OrderFile"  >
-			<%} %>				
+			<input type="file" name="FileAttach"  style="width:100%" accept="application/pdf"  class="form-control input-sm "  value="" required="required"  id="OrderFile"  >
+			<%} %>	
 			</div>
-		  </div>
-		  
+			<div class="col-md-2">		
 			<!-- Download Button Incase of Edit -->		 
 			<%if(OrderEditDetails!=null && OrderEditDetails.getOrderPath()!=null){%>	
 			<button type="submit" class="btn btn-sm" formnovalidate="formnovalidate"  name="OrderId" value="<%=OrderEditDetails.getOrderId()%>" 
 			formaction="OfficeOrderDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download" 
-			style="height: 10%; width: 6%;  margin-top: 4%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
-			<%} %>		
-		  
-		
-	 </div> 
-	 	<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-	  
-	
-	 <br>
+			style=" margin-left:-50%;" > <i class="fa-solid fa-download fa-2x" style="color: green;"></i></button>
+			<%} %>	
+						
+			  </div>			
+			</div>
+		  </div>
+	  </div> 
+	</div> 
+	     <div class="row">
+	       <div class="col-md-12">
+			   <div class="form-group">
+				  <label><b>Subject</b><span class="mandatory"	style="color: red;">*</span></label>		  
+				   <textarea id="OrderSubject" name="OrderSubject" rows="2"  style="border-bottom-color: gray;width:100%" required="required" ><%if(OrderEditDetails!=null && OrderEditDetails.getOrderSubject()!=null){%><%=OrderEditDetails.getOrderSubject()%><%}%></textarea> 
+				</div>
+			</div>
+	  </div>					     	 	 		  	
+	<!--  <br> -->
 	      <div class="row" >
 		   <div class="col-12" align="center">
 		   
@@ -132,7 +127,7 @@
 		    	</div>
 		    </div> 
 				
-			
+			<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						
 		<%if(OrderEditDetails!=null){%> 
 		</form>

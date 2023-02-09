@@ -83,11 +83,11 @@ String ses=(String)request.getParameter("result");
   
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-            <button type="submit" name="Add" value="Add" class="btn btn-primary " formnovalidate="formnovalidate">Add</button>
+           <button type="submit" name="Add" value="Add" class="btn btn-primary " style="margin-left: 42%;" formnovalidate="formnovalidate">Add</button>
            <%if(AllRaSaAssignEmployee!=null&&AllRaSaAssignEmployee.size()>0){%>
            <button type="submit" name="ViewDetails" value="ViewDetails" class="btn btn-info">View Details</button>
            <%}%>
-
+     
 
      </form>
 

@@ -52,7 +52,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 											.AttendanceDate(PunchData.getPunchDate())
 											.PunchInTime(PunchData.getPunchInTime())
 											.PunchOutTime(PunchData.getPunchOutTime())
-											.EmpNo(PunchData.getUserId())
+											.EmpNo(String.valueOf(Long.parseLong(PunchData.getUserId())))
 											.Status(PunchData.getStatus())
 											.Half(PunchData.getHalf())
 											.WorkTime(PunchData.getWorkTime())

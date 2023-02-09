@@ -1409,5 +1409,34 @@ public class MasterController {
 				}
 			}
 			
-			
+			@RequestMapping(value="DepartmentsList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+			public String Departments(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+			{
+				String UserId=(String)ses.getAttribute("Username");
+				logger.info(new Date() +"Inside Departments.htm"+UserId);
+				List<Object[]> Deparmentslist=new ArrayList<Object[]>();
+				List<Object[]> EmpList=service.getEmpList();
+				try {
+					ses.setAttribute("SidebarActive", "DepartmentsList_htm");
+					String action=req.getParameter("action");
+					if("Add".equalsIgnoreCase(action)) {
+						req.setAttribute("Emplist",EmpList );
+						return "masters/DepartmentsAddEdit";
+					}
+					else if("Edit".equalsIgnoreCase(action)) {
+						
+						return "masters/DepartmentsAddEdit";
+					}else {
+						 Deparmentslist=service.getDepartmentslist();
+						 req.setAttribute("Deparmentslist", Deparmentslist);
+					}
+					
+				return "masters/DepartmentsList";
+				} catch (Exception e) {
+				logger.error(new Date() +"Inside EmpanneledHospitalList.htm "+UserId,e);
+					e.printStackTrace();
+					return "static/Error";
+				}
+				
+			}
 }

@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 @Setter
 @Getter
-//@Entity
-//@Table(name="mt_duty_type")
+@Entity
+@Table(name="mt_duty_type")
 public class MtDutyType implements Serializable {
 	
 private static final long serialVersionUID = 1L;

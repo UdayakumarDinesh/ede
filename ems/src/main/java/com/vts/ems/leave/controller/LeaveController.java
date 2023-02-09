@@ -319,6 +319,7 @@ public class LeaveController {
 		String UserId=req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside applyLeaveAdd.htm "+UserId);		
 		try {
+			System.out.println("handover="+req.getParameter("HandingOverEmpid"));
 			LeaveApplyDto dto=new LeaveApplyDto();
 			dto.setEmpNo(req.getParameter("empNo"));
 			dto.setLTC(req.getParameter("elcash"));

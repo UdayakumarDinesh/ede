@@ -150,8 +150,15 @@ public class MtController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside MtUserApplyAddEdit.htm "+Username);
-		
+		String logintype = (String)ses.getAttribute("LoginType");
 		try {	
+			
+			String RecOfficer = service.GetRecOfficer((String)ses.getAttribute("EmpNo")); 
+			if(logintype.equalsIgnoreCase("U")&& RecOfficer==null) {
+				redir.addAttribute("resultfail","Recommanding Officer Not Assigned!");
+				return "redirect:/MtList.htm";
+			}
+			
 			String mtapplid = req.getParameter("mtapplId");			
 				MtUserApply user=new MtUserApply();		
 					user.setEmpId((String)ses.getAttribute("EmpNo"));
@@ -229,7 +236,8 @@ public class MtController {
 			
 			user.setMtStatus("A");
 			user.setIsActive(1);
-			user.setApplDate(new java.sql.Date(new Date().getTime()));			
+			user.setApplDate(new java.sql.Date(new Date().getTime()));		
+			
 			if(user.getDateOfTravel().equals(user.getEndDateOfTravel())||user.getEndDateOfTravel().after(user.getDateOfTravel())){			   
 				count=service.UserApply( user);
 			}
@@ -266,8 +274,8 @@ public class MtController {
 					}
 				}else {
 					EMSNotification notification = new EMSNotification();
-					String empid = service.GetRecOfficer((String)ses.getAttribute("EmpNo")); 
-					notification.setEmpId(Long.parseLong(empid));
+					//String empid = service.GetRecOfficer((String)ses.getAttribute("EmpNo")); 
+					notification.setEmpId(Long.parseLong(RecOfficer));
 					notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
 					notification.setIsActive(1);
 					notification.setNotificationDate(sdtf.format(new Date()));

@@ -15,8 +15,8 @@ import lombok.Setter;
 @Getter
 @Setter
 
-//@Entity
-//@Table(name="mt_appl")
+@Entity
+@Table(name="mt_appl")
 public class MtUserApply implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

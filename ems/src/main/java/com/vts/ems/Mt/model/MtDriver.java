@@ -13,8 +13,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@Entity
-//@Table(name="mt_driver")
+@Entity
+@Table(name="mt_driver")
 public class MtDriver implements Serializable {
 
 

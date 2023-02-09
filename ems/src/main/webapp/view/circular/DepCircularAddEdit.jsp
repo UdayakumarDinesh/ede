@@ -53,9 +53,7 @@ EMSDepCircular circular = (EMSDepCircular)request.getAttribute("circular");
 				<form  action="DepCircularEditSubmit.htm" method="POST" autocomplete="off" enctype="multipart/form-data">
 			<%}else{%>
 				<form  action="DepCircularAddSubmit.htm" method="POST" autocomplete="off" enctype="multipart/form-data">
-			<%}%>
-			
-					
+			<%}%>								
 				<div class="row" >
 					<div class="col-md-6" >
 						<div class="form-group">

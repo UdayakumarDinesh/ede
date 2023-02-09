@@ -872,6 +872,34 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return null;
 			}
 		}
-		
+         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,b.EmpName AS DivisionHEAD FROM division_master AS a,employee AS  b WHERE b.EmpId=a.DivisionHeadId AND a.IsActive=1;";
+		@Override
+		public List<Object[]> getDepartmentsList() throws Exception {
+			List <Object[]>list=null;
+			try {
+				Query query = manager.createNativeQuery(DEPARTMENTLIST);
+				list =(List <Object[]>)query.getResultList();
+				return list;
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getDepartmentsList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		/*
+		 * private static final String
+		 * EMPLIST="select EmpId,EmpName from employee where isactive=1";
+		 * 
+		 * @Override public List<Object[]> getEmpList() throws Exception {
+		 * List<Object[]> emplist=null; try { Query query =
+		 * manager.createNamedQuery(EMPLIST);
+		 * emplist=(List<Object[]>)query.getResultList();
+		 * 
+		 * return emplist; } catch (Exception e) { logger.error(new Date()
+		 * +" Inside DAO getEmpListList "+ e); e.printStackTrace(); return null; }
+		 * 
+		 * }
+		 */
 
 }
