@@ -34,7 +34,7 @@
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
 		<div class="row">
 			<div class="col-md-3">
-				<h5 style="padding-top: 0.5rem;color: #009851;" >Attendance </h5>
+				<h5 style="padding-top: 0.5rem;color: #009851;" >Dashboard : Punch Data </h5>
 			</div>
 			<div class="col-md-9">
 					<form action="EmpLogitypeChange.htm" method="post" style="float: right;">
