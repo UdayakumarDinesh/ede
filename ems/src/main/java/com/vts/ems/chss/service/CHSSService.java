@@ -200,5 +200,7 @@ public interface CHSSService
 	public long ContingentClaimDrop(String[] chssapplyids, String Username) throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
+	public List<Object[]> getEmpList() throws Exception;
+	public List<Object[]> getDependantsList(String empNo) throws Exception;
 
 }

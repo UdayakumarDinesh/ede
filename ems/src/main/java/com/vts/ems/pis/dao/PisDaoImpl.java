@@ -3078,5 +3078,19 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			return null;
 		}
 	}
+private static final String FORMDECYEAR="SELECT COUNT(FamilyFormId) FROM pis_emp_family_form WHERE YEAR(ForwardedDateTime)=:year and FormType='D' AND empid=:EmpId and IsActive=1";
+	@Override
+	public BigInteger getFormYear(int year,Long empId) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(FORMDECYEAR);
+			query.setParameter("year", year);
+			query.setParameter("EmpId", empId);
+			BigInteger count=(BigInteger) query.getSingleResult();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
 }
 	

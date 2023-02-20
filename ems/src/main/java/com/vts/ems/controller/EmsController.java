@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +69,7 @@ public class EmsController {
 
 	@Value("${ProjectFiles}")
 	private String projectfilespath;
-	
+	SimpleDateFormat rf = new SimpleDateFormat("dd-MM-yyyy");
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
@@ -237,7 +239,7 @@ public class EmsController {
 			req.setAttribute("FromDate",fromDate);						
 			req.setAttribute("attendlist", attendlist);
 			req.setAttribute("EmpId",EmpId);
-			
+			req.setAttribute("LastSyncDateTime", service.getlastSyncDateTime());
 			
 			return "static/maindashboard";
     	}catch (Exception e) {
@@ -580,5 +582,42 @@ public class EmsController {
 				logger.error(new Date() +" Inside WorkFlow.htm "+UserId, e);
 		}
 	}
+	@RequestMapping(value = "AttendancePieChart.htm",method= {RequestMethod.GET,RequestMethod.POST} )
+	public String AttendanceReportPieChart(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside AttendancePieChart.htm "+Username);	
+		try {
+			String date=req.getParameter("date");
+			String date1=null;
+			if(date==null) {
+				 date = LocalDate.now().toString();
+				 req.setAttribute("date",rdf.format(sf.parse(date)));
+				 date1=date;
+			}else {
+				date1=sdf.format(rf.parse(date));
+			 	req.setAttribute("date", date);	
+			}	
+		Object[] count1=service.getEmpCountFirstSes(date1);
+		Object[] count2=service.getEmpCountSecondSes(date1);
+		Object[] count3=service.getEmpCountThirdSes(date1);
+		Object[] count4=service.getEmpCountFourthSes(date1);	
+		Object[] count5=service.getEmpCountFifthSes(date1);
+			
+		List<Object[]> list=new ArrayList<Object[]>();
+		list.add(count1);
+		list.add(count2);
+		list.add(count3);
+		list.add(count4);
+		list.add(count5);				
+		req.setAttribute("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" AttendancePieChart.htm "+Username, e);
+		}
+			
+			return "Admin/AttendanceReportInPiechart";
 	
+	}
 }

@@ -1,8 +1,10 @@
+<%@page import="org.hibernate.internal.build.AllowSysOut"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
      <%@page import="java.time.LocalDate"%>
      <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
+  <%@page import="java.math.BigInteger"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +21,7 @@
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String formmoduleid =(String) session.getAttribute("formmoduleid");
+	int count=(int)request.getAttribute("formdecyear");
 %>
 
 
@@ -133,9 +136,10 @@
 					<div align="center">
 						<button type="submit" class="btn btn-sm " style=" background: #231955; color: #ffffff " name="formid" value="0" formaction="DepInclusionFormView.htm"  name="action" value="add" >Inclusion Form</button>
 						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button>
-						<%if(LocalDate.now().getMonthValue()==1 || LocalDate.now().getMonthValue()==2){ %>
-						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff " name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Initial Admission / Annual Declaration </button>
-						<%} %> 
+						
+							<%if(count==0){ %>
+						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff "name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Initial Admission / Annual Declaration </button>
+						<%}%> 
 					</div>
 					
 				</form>

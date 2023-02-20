@@ -348,7 +348,7 @@
 					   		<div class="container" style="margin-bottom: -9px !important">
 							    <div class="row justify-content-end" >
 							    	
-							    	<form class="form-inline" action="MainDashBoard.htm" method="post" id="dateform" >
+							    	<form class="form-inline" action="CHSSDashboard.htm" method="post" id="dateform" >
 		
 								    	<label style=" font-weight: 800;margin-top: 5px;margin-left: 5px"> Financial Year : &nbsp; </label>
 										<input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="FromDate"  required="required"  style="width: 120px;">

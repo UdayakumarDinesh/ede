@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -2162,6 +2163,7 @@ public class PisController {
 		public String FamIncExcFwdList(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");	
+		Long EmpId=(Long)ses.getAttribute("EmpId");
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
 				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
@@ -2173,6 +2175,9 @@ public class PisController {
 				ses.setAttribute("SidebarActive", "FamIncExcFwdList_htm");
 				req.setAttribute("formslist",service.EmpFamFormsList(empid, ""));
 				req.setAttribute("empid", empid);
+				BigInteger countYear=	service.getFormYear(LocalDate.now().getYear(),EmpId);
+				int count=countYear.intValue();
+				req.setAttribute("formdecyear",count);
 				return "pis/FamIncExcFormsList";
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside FamIncExcFwdList.htm "+Username, e);

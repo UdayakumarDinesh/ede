@@ -109,7 +109,7 @@ public class CHSSController
 	
 	private static final String formmoduleid="4";
 	
-	@RequestMapping(value = "CHSSDashboard.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "CHSSDashboard.htm")
 	public String CHSSDashBoard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -214,10 +214,9 @@ public class CHSSController
 				PatientName=req.getParameter("patientname");
 			}
 			
-			
+			System.out.println("IsSelf"+IsSelf);
 			String FromDate= req.getParameter("fromdate");
-			String ToDate= req.getParameter("todate");
-			
+			String ToDate= req.getParameter("todate");						
 			LocalDate today=LocalDate.now();
 			
 			if(FromDate==null) 
@@ -237,8 +236,6 @@ public class CHSSController
 				 * else { FromDate=DateTimeFormatUtil.RegularToSqlDate(FromDate);
 				 * ToDate=DateTimeFormatUtil.RegularToSqlDate(ToDate); }
 				 */
-			
-			
 		
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("empfamilylist", service.familyDetailsList(EmpId));
@@ -5568,6 +5565,40 @@ public class CHSSController
 		}
 		
 	}
-	
-	
+	@RequestMapping(value = "DependantsList.htm", method = {RequestMethod.POST , RequestMethod.GET } )
+	public String DependantsList(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		ses.setAttribute("SidebarActive", "DependantsList_htm");
+		logger.info(new Date() +"Inside DependantsList.htm "+Username);
+		String EmpNo=null;
+		List<Object[]> dependantList=null;
+			
+	try {
+		ses.setAttribute("SidebarActive","DependantsList_htm");
+		EmpNo= req.getParameter("EmpNo");
+		
+		List<Object[]> Emplist=service.getEmpList();
+		if(EmpNo!=null) {				
+			dependantList=service.getDependantsList(EmpNo);
+			req.setAttribute("dependantList", dependantList);
+			req.setAttribute("EmpNo", EmpNo);
+		}
+		else {
+		Long  EmpId=(Long)ses.getAttribute("EmpId");
+		EmpNo=EmpId.toString();
+		dependantList=service.getDependantsList(EmpNo);
+		req.setAttribute("dependantList", dependantList);
+		req.setAttribute("EmpNo", EmpNo);
+		}
+		req.setAttribute("Emplist", Emplist);
+		return"chss/DependantsList";
+	} catch (Exception e) {		
+		e.printStackTrace();
+		logger.error(new Date() +" Inside DependantsList.htm "+Username, e);
+		return "static/Error";
+		
+	}
+		
+	}
 }

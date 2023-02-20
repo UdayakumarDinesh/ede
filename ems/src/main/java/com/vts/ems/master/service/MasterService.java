@@ -1,5 +1,6 @@
 package com.vts.ems.master.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -9,6 +10,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
+import com.vts.ems.master.model.Department;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -67,11 +69,17 @@ public interface MasterService {
 	public CHSSEmpanelledHospital GetEmpanelled(Long  empanelledid)throws Exception;
 	public Long AddMasterEditComments(MasterEdit masteredit ,MasterEditDto masterdto)throws Exception;
 	public Long EditDelete(CHSSMedicinesList medicine) throws Exception;
-
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
 	public List<Object[]> getDepartmentslist() throws Exception;
-//	public List<Object[]> getEmpList() throws Exception;
+	public List<Object[]> getEmpList() throws Exception;
+	public int DepartmentAdd(Department dep)throws Exception;
+	public Object[] departmentEdit(String deptId) throws Exception;
+	public int UpdateDepartment(Department dep)throws Exception;
+	public BigInteger DepartmentAddcheck(String depCode)throws Exception;
+	public Long AddDeptEditComments(MasterEdit masteredit, MasterEditDto masterdto)throws Exception;
+	public BigInteger DepartmentEditcheck(String depCode, String deptId)throws Exception;
+	
 
 
 

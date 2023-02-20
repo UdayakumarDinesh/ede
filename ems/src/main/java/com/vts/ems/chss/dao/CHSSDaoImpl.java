@@ -3088,4 +3088,51 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 			return null;
 		}
 	}
+
+
+
+private static final String EMPLIST="select EmpId,EmpName from employee where isactive=1";
+	@Override
+	public List<Object[]> getEmpList() throws Exception {
+		try {
+			Query query = manager.createNativeQuery(EMPLIST);
+			List<Object[]> list =(List<Object[]>) query.getResultList();
+			manager.flush();
+			return list;
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getEmpList "+ e);
+			e.printStackTrace();
+			;
+		}	
+		return null;
+	}
+
+
+private static final String AllDEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_name,b.dob,b.med_dep_from ,c.relation_name FROM employee a,pis_emp_family_details b,pis_emp_family_relation c \r\n"
+		+ "WHERE a.EmpId=b.empid AND b.relation_id=c.relation_id AND b.med_dep ='y' AND b.isactive=1 ORDER BY b.empid ASC";
+private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_name,b.dob,b.med_dep_from ,c.relation_name FROM employee a,pis_emp_family_details b,pis_emp_family_relation c \r\n"
+		+ "WHERE a.EmpId=b.empid AND b.relation_id=c.relation_id AND b.med_dep ='y' AND b.isactive=1 AND b.empid=:empid";
+	@Override
+	public List<Object[]> getDependantsList(String empNo) throws Exception {
+		List<Object[]> list=null;
+	try {
+		if(empNo.equals("A")) {
+		Query query = manager.createNativeQuery(AllDEPENDANTLIST);
+		
+		 list =(List<Object[]>) query.getResultList();
+		}else {
+			Query qury = manager.createNativeQuery(DEPENDANTLIST);	
+			qury.setParameter("empid", empNo);
+			 list =(List<Object[]>) qury.getResultList();
+		manager.flush();
+		}
+		return list;
+		
+	} catch (Exception e) {
+		logger.error(new Date() +" Inside DAO getDependantsList "+ e);
+		e.printStackTrace();
+		return null;
+	}
+		
+	}
 }

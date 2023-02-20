@@ -3539,5 +3539,17 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.GetEmpanelledHostpitalList();
 	}
 
+	@Override
+	public List<Object[]> getEmpList() throws Exception {
+		
+		return dao.getEmpList();
+	}
+
+	@Override
+	public List<Object[]> getDependantsList(String empNo) throws Exception {
+		
+		return dao.getDependantsList(empNo);
+	}
+
 	
 }
