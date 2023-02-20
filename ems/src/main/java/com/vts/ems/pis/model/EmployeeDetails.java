@@ -64,7 +64,6 @@ public class EmployeeDetails {
 	private String PhoneNo;
 	private String AltPhoneNo;
 	private String PerPassNo;
-	private String ExServiceMan; 
 	private Date DOP;
 	private String CHSSNo;
 	private String DCMAFNo;
