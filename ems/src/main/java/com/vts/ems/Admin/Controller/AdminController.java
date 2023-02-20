@@ -93,7 +93,8 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					ses.setAttribute("SidebarActive","Role_htm");
 				}
 				catch (Exception e) {
-						e.printStackTrace(); logger.error(new Date() +" Inside Role.htm "+UserId, e);
+						e.printStackTrace(); 
+						logger.error(new Date() +" Inside Role.htm "+UserId, e);
 				}	
 				 return "Admin/RoleFormAccess";
 			}
