@@ -23,7 +23,6 @@ import com.vts.ems.attendance.model.AttendancePunchData;
 @Transactional
 public class AttendanceDaoImpl implements AttendanceDao{
 	
-	private static final Logger logger = LogManager.getLogger(AttendanceDaoImpl.class);
 
 	@PersistenceContext
     EntityManager manager;

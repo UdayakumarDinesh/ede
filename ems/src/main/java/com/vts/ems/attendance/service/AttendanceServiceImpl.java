@@ -77,7 +77,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 				punch.setEmpNo(String.valueOf(Long.parseLong(PunchData.getUserId())));
 			}else
 			{
-				punch.setEmpNo(String.valueOf(PunchData.getUserId()));
+				continue;
 			}
 			punchlist.add(punch);
 //			count = dao.insertPunchInfo(punch);
