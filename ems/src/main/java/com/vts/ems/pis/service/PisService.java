@@ -215,6 +215,9 @@ public interface PisService {
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
 	public BigInteger getFormYear(int year, Long empId)throws Exception;
+	public void DepIncFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
+	public void DepExcFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
+	public void DepDeclareFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
 	
 	
 }

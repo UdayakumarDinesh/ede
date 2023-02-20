@@ -764,6 +764,19 @@ p {
 
 var threeMonthsAgo = new Date('<%=minbilldate%>');
 
+$('.billdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"maxDate" :new Date(), 
+	"minDate":threeMonthsAgo,
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
 
 function calculateDiscountPer($id)
 {
@@ -994,18 +1007,6 @@ function  onlyNumbers() {
 }
 
 
-$('.billdate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"maxDate" :new Date(), 
-	"minDate":threeMonthsAgo,
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
 
 function setTooltip()
 {

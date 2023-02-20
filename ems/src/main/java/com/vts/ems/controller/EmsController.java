@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,6 +30,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +41,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.login.EmpContractRepo;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
+import com.vts.ems.master.model.EmployeeContract;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
@@ -53,10 +58,13 @@ public class EmsController {
 	private static final Logger logger = LogManager.getLogger(EmsController.class);
 
 	@Autowired
-	LoginRepository Repository;
+	private LoginRepository Repository;
 
 	@Autowired
-	EMSMainService service;
+	private EmpContractRepo contractemprepo;
+	
+	@Autowired
+	private EMSMainService service;
 
 
 	@Value("${ProjectFiles}")
@@ -67,70 +75,111 @@ public class EmsController {
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcome(Model model, HttpServletRequest req, HttpSession ses) throws Exception {
 		logger.info(new Date() + " Login By " + req.getUserPrincipal().getName());
 		try {
-			Login login = Repository.findByUsername(req.getUserPrincipal().getName());
-			
-			ses.setAttribute("LoginId", login.getLoginId());
-			ses.setAttribute("Username", req.getUserPrincipal().getName());
-			ses.setAttribute("LoginType", login.getLoginType());
-			ses.setAttribute("EmpId", login.getEmpId());
-			ses.setAttribute("FormRole", login.getFormRoleId());
+			boolean isContractEmp=false;
+			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+			for(SimpleGrantedAuthority auth : authorities)
+			{
+				String role = auth.getAuthority();
+				System.out.println("role "+auth.getAuthority());
+				if(role.equalsIgnoreCase("ROLE_CE"))
+				{
+					isContractEmp=true;
+				}
+			}
 			
 			LabMaster labinfo =service.getLabDetails();
 			if(labinfo!=null && labinfo.getLabCode()!=null) {
 				ses.setAttribute("LabCode", labinfo.getLabCode());
-			}else
+			}
+			else
 			{
 				ses.setAttribute("LabCode", "");
 			}
-			Employee employee = service.EmployeeInfo(login.getEmpId());
-			ses.setAttribute("EmpNo", employee.getEmpNo());
-			ses.setAttribute("EmpName", employee.getEmpName());
-			ses.setAttribute("EmpDesigId", String.valueOf(employee.getDesigId()) );
-			ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
 			
-			long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
-			if(pwdCount==0) 
+			
+        	String IpAddress="Not Available";
+     		try{
+     		
+	     		 IpAddress = req.getRemoteAddr();
+	     		 
+	     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
+	     		{     			
+	     			InetAddress ip = InetAddress.getLocalHost();
+	     			IpAddress= ip.getHostAddress();
+	     		}
+     		
+     		}
+     		catch(Exception e)
+     		{
+	     		IpAddress="Not Available";	
+	     		e.printStackTrace();	
+     		}
+
+			
+			
+			if(!isContractEmp) 
 			{
-				return "redirect:/ForcePasswordChange.htm";
+			
+					Login login = Repository.findByUsername(req.getUserPrincipal().getName());
+					ses.setAttribute("LoginId", login.getLoginId());
+					ses.setAttribute("Username", req.getUserPrincipal().getName());
+					ses.setAttribute("LoginType", login.getLoginType());
+					ses.setAttribute("EmpId", login.getEmpId());
+					ses.setAttribute("FormRole", login.getFormRoleId());
+					
+					Employee employee = service.EmployeeInfo(login.getEmpId());
+					ses.setAttribute("EmpNo", employee.getEmpNo());
+					ses.setAttribute("EmpName", employee.getEmpName());
+					ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
+					
+					long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
+					if(pwdCount==0) 
+					{
+						return "redirect:/ForcePasswordChange.htm";
+					}
+		     		
+		     		AuditStamping stamping=new AuditStamping();
+			        stamping.setLoginId(login.getLoginId());
+			        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+			        stamping.setUsername(login.getUsername());
+			        stamping.setIpAddress(IpAddress);
+			        stamping.setLoginDateTime(LocalDateTime.now().toString());
+			        service.LoginStampingInsert(stamping);
+			        
 			}
-			// code for audit stamping
-		        	String IpAddress="Not Available";
-		     		try{
-		     		
-		     		 IpAddress = req.getRemoteAddr();
-		     		 
-		     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
-		     		{     			
-		     			InetAddress ip = InetAddress.getLocalHost();
-		     			IpAddress= ip.getHostAddress();
-		     		}
-		     		
-		     		}
-		     		catch(Exception e)
-		     		{
-		     		IpAddress="Not Available";	
-		     		e.printStackTrace();	
-		     		}
-		     	try{
-				        AuditStamping stamping=new AuditStamping();
-				        stamping.setLoginId(login.getLoginId());
-				        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-				        stamping.setUsername(login.getUsername());
-				        stamping.setIpAddress(IpAddress);
-				        stamping.setLoginDateTime(LocalDateTime.now().toString());
-				        service.LoginStampingInsert(stamping);
-		     	}
-				catch (Exception e) {
-					e.printStackTrace();
-				}	       
+			else
+			{
+				EmployeeContract login = contractemprepo.findByUserName(req.getUserPrincipal().getName());
+				ses.setAttribute("LoginId", login.getContractEmpId() );
+				ses.setAttribute("Username", req.getUserPrincipal().getName());
+				ses.setAttribute("LoginType", "CE");
+				ses.setAttribute("EmpId", login.getContractEmpId() );
+				ses.setAttribute("FormRole", 0);
+				
+				ses.setAttribute("EmpNo", login.getContractEmpNo());
+				ses.setAttribute("EmpName", login.getEmpName());
+				ses.setAttribute("EmpDesig","Contract Employee" );
+					
+				AuditStamping stamping=new AuditStamping();
+		        stamping.setLoginId(login.getContractEmpId());
+		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+		        stamping.setUsername(login.getUserName());
+		        stamping.setIpAddress(IpAddress);
+		        stamping.setLoginDateTime(LocalDateTime.now().toString());
+		        service.LoginStampingInsert(stamping);
+		        
 		       
+			}
+		     	
 			
 		} catch (Exception e) {
 			logger.error(new Date() + " Login Issue Occured When Login By " + req.getUserPrincipal().getName(), e);
+			e.printStackTrace();
 		}
 
 		return "redirect:/MainDashBoard.htm";

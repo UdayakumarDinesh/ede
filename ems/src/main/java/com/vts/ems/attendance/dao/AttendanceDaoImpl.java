@@ -23,7 +23,6 @@ import com.vts.ems.attendance.model.AttendancePunchData;
 @Transactional
 public class AttendanceDaoImpl implements AttendanceDao{
 	
-	private static final Logger logger = LogManager.getLogger(AttendanceDaoImpl.class);
 
 	@PersistenceContext
     EntityManager manager;
@@ -62,11 +61,12 @@ public class AttendanceDaoImpl implements AttendanceDao{
 	}
 	
 	
-	private static final String  GETPUNCHINFOALL= "SELECT  UserID,Status ,Row, Half, PDate ,UserName ,ProcessDate ,Punch1 ,Punch1_Date ,Punch1_Time  ,WorkTime ,WorkTime_HHMM ,FirstHalf ,SecondHalf ,OutPunch ,OutPunch_Date ,OutPunch_Time FROM EMSPunchView ORDER BY ProcessDate ASC";
+	private static final String  GETPUNCHINFOALL= "SELECT  UserID,Status ,Row, Half, PDate ,UserName ,ProcessDate ,Punch1 ,Punch1_Date ,Punch1_Time  ,WorkTime ,WorkTime_HHMM ,FirstHalf ,SecondHalf ,OutPunch ,OutPunch_Date ,OutPunch_Time FROM EMSPunchView  WHERE ProcessDate>:ProcessDate ORDER BY ProcessDate ASC";
 	@Override
-	public List<PunchInfoSQLDto> getPunchInfoAll() throws Exception
+	public List<PunchInfoSQLDto> getPunchInfoAllAfter(String date) throws Exception
 	{
 		Query  query = SQLMnager.createNativeQuery(GETPUNCHINFOALL);
+		query.setParameter("ProcessDate", date);
 		List<Object[]> punchinfolist= (List<Object[]>)query.getResultList();
 		List<PunchInfoSQLDto> PunchDTOList = new ArrayList<>();
 		punchinfolist.stream().forEach(punchinfo -> 

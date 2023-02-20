@@ -1416,7 +1416,7 @@ public class MasterController {
 				String UserId=(String)ses.getAttribute("Username");
 				logger.info(new Date() +"Inside Departments.htm"+UserId);
 				List<Object[]> Deparmentslist=new ArrayList<Object[]>();
-				
+
 				try {
 					
 					ses.setAttribute("SidebarActive", "DepartmentsList_htm");

@@ -1,12 +1,7 @@
 package com.vts.ems.login;
 
-import java.net.InetAddress;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,71 +12,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vts.ems.model.AuditStamping;
-import com.vts.ems.service.EMSMainService;
-import com.vts.ems.utils.DateTimeFormatUtil;
-
+import com.vts.ems.master.model.EmployeeContract;
 
 @Service
 public class LoginDetailsServiceImpl implements UserDetailsService 
 {
-	private SimpleDateFormat sdf1 = DateTimeFormatUtil.getSqlDateAndTimeFormat();
-	@Autowired
-	private HttpServletRequest request;
-	
 	@Autowired
     private LoginRepository loginRepository;
 	
 	@Autowired
-	private EMSMainService emsService;
+	private EmpContractRepo contractemprepo;
 	
 	@Override
 	@Transactional(readOnly = false)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
 		Login login = loginRepository.findByUsername(username);
-        if(login != null && login.getIsActive()==1) {
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : login.getRoles()){
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+		EmployeeContract contractemp = contractemprepo.findByUserName(username);
+        if(login != null && login.getIsActive()==1) 
+        {
+	        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+	        for (Role role : login.getRoles()){
+	            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+	        }
+	        return new org.springframework.security.core.userdetails.User(login.getUsername(), login.getPassword(), grantedAuthorities);
         }
-        
-//        if(login!=null && login.getIsActive()==1) {
-//        
-//        	String IpAddress="Not Available";
-//     		try{
-//     		
-//     		 IpAddress = request.getRemoteAddr();
-//     		 
-//     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
-//     		{     			
-//     			InetAddress ip = InetAddress.getLocalHost();
-//     			IpAddress= ip.getHostAddress();
-//     		}
-//     		
-//     		}
-//     		catch(Exception e)
-//     		{
-//     		IpAddress="Not Available";	
-//     		e.printStackTrace();	
-//     		}
-//		  try{
-//		        AuditStamping stamping=new AuditStamping();
-//		        stamping.setLoginId(login.getLoginId());
-//		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-//		        stamping.setUsername(login.getUsername());
-//		        stamping.setIpAddress(IpAddress);
-//		        stamping.setLoginDateTime(sdf1.format(new Date()));
-//		        emsService.LoginStampingInsert(stamping);
-//     		}catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//       
-//        }
-        return new org.springframework.security.core.userdetails.User(login.getUsername(), login.getPassword(), grantedAuthorities);
-    }
-        else {
-        	   throw new UsernameNotFoundException("username not found");
+        else if(contractemp != null && contractemp.getIsActive()==1)
+        {
+        	Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+	        
+	        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_CE"));
+	       
+	        return new org.springframework.security.core.userdetails.User(contractemp.getUserName(), contractemp.getPassword(), grantedAuthorities);
+        }
+        else
+        {
+        	 throw new UsernameNotFoundException("username not found");
         }
     }
 	

@@ -2290,6 +2290,35 @@ public class PisController {
 				String action = req.getParameter("action");
 				String remarks = req.getParameter("remarks");
 				
+				
+				
+				String Decformid = req.getParameter("Decformid");
+				if(action.equalsIgnoreCase("F") && Decformid!=null && Long.parseLong(Decformid)==0 ) {
+					
+			        	PisEmpFamilyForm form = new PisEmpFamilyForm();
+			        	form.setEmpid(Long.parseLong(EmpId));
+			        	form.setFormStatus("C");
+			        	form.setFormType("D");
+			        	form.setIsActive(1);
+		//	        	details.setIncFormId(service.EmpFamilyFormAdd(form));
+			        	formid = String.valueOf(service.EmpFamilyFormAdd(form));
+			        	
+			        
+				}
+				
+//				List<Object[]> CHSSEligibleFamList = service.familyDetailsList(EmpId);
+//				for(Object[] obj :CHSSEligibleFamList ) {
+//		    	PisFamFormMembers formmember = new PisFamFormMembers();
+//			    	formmember.setFamilyFormId(Long.parseLong(formid));
+//			    	formmember.setFamilyDetailsId(Long.parseLong(familydetailsid));
+//			    	formmember.setIncExcDate(DateTimeFormatUtil.RegularToSqlDate(IncDate));
+//	//		    	formmember.setComments(comment);
+//	//		    	formmember.setAttachFilePath(filepath);
+//			    	formmember.setIncExc("D");
+//			    	formmember.setIsActive(1);
+//			    	formmember.setCreatedBy(Username);
+//			    	long count=service.PisFamFormMembersAdd(formmember);
+//				}
 				long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,remarks,req,res);
 				if(result>0) 
 				{
@@ -6444,6 +6473,26 @@ public class PisController {
 			try {
 				String formid = req.getParameter("formid");
 				PISEmpFamilyDeclaration declare = service.getEmpFamilyDeclaration(formid);
+				
+				Object[] formdata = service.GetFamFormData(formid);
+				if(declare==null) 
+				{
+					if( formdata[2].toString().equalsIgnoreCase("I"))
+					{
+						service.DepIncFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+					else if( formdata[2].toString().equalsIgnoreCase("E"))
+					{
+						service.DepExcFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+					else if(formdata[2].toString().equalsIgnoreCase("D"))
+					{
+						service.DepDeclareFormFreeze(req, res, formid);
+						declare = service.getEmpFamilyDeclaration(formid);
+					}
+				}
 				
 				res.setContentType("application/pdf");
 				res.setHeader("Content-disposition", "inline;filename= DependantsDeclaration.pdf");

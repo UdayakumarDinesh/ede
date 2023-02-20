@@ -11,7 +11,7 @@ public interface AttendanceDao {
 	List<AttendancePunchData> AttendPunchInfo(String AttendanceDate) throws Exception;
 	long DeletePunchInfo(String AttendanceDate) throws Exception;
 	long PunchListSize() throws Exception;
-	List<PunchInfoSQLDto> getPunchInfoAll() throws Exception;
+	List<PunchInfoSQLDto> getPunchInfoAllAfter(String after) throws Exception;
 	long insertPunchInfo(List<AttendancePunchData> punchlist) throws Exception;
 	
 }

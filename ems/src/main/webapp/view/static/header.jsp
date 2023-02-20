@@ -75,63 +75,16 @@
       
 	<div class="wrapper">
 
-                  <%--  <div id="sidebar-container" class="sidebar-expanded  ">
-						<div class="navbar-brand ml-3 w-100" style="margin: 2.5px 0px;">
-							<div style="">
-								<span  style="font-size: 1.7rem; color: #ffff">
-									<img src="view/images/works.png" width="30" height="30" alt="">
-									<span class="menu-collapsed" style="font-size: 22px;" >CHSS</span>
-								</span>
-							</div>
-						</div>
-						<ul class="list-group" id="module">
-					 <%if("A".equalsIgnoreCase(logintype)){%>
-							   <li>
-									<a href="PisAdminDashboard.htm"
-										class="bg-dark list-group-item list-group-item-action">
-										<span class="d-flex w-100 justify-content-start align-items-center">
-											<i class="fa-solid  fa-address-card mr-3"></i>
-											<span class="menu-collapsed" >Admin</span>
-										</span>
-									</a>
-								</li>
-								<%}else{%>
-								<li>
-								
-									<a href="EmployeeDetails.htm"
-										class="bg-dark list-group-item list-group-item-action">
-										<span class="d-flex w-100 justify-content-start align-items-center">
-											<i class="fa-solid  fa-address-card mr-3"></i>
-											<span class="menu-collapsed" >Profile</span>
-										</span>
-									</a>
-								</li>
-								<%}%>
-								<li>
-									<a href="CHSSDashboard.htm"
-										class="bg-dark list-group-item list-group-item-action">
-										<span class="d-flex w-100 justify-content-start align-items-center">
-											<i class="fa-solid fa-hospital-user  mr-3"></i>
-											<span class="menu-collapsed" >CHSS</span>
-										</span>
-									</a>
-								</li> 
-								
-								
-							</ul>
-						</div>  --%>
-							
 
 		<div id="content" >
         	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 1rem !important;">              
             	<div class="container-fluid">
 
-
 					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:6% ">
 						<img class="" style="width: 28%;" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; SEIP &nbsp;&nbsp;</b>
 					</a>
-					<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
-						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;color: white;"><%=LocalDate.now().getMonth() %> &nbsp; <%=LocalDate.now().getYear() %> </span>
+						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
+						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;color: white;"><%=LocalDate.now().getMonth().toString().substring(0,3) %> &nbsp; <%=LocalDate.now().getYear() %> </span>
 
 					
 
@@ -160,15 +113,12 @@
 							
 							
 						
-					        
+					        <%if(!logintype.equalsIgnoreCase("CE")){ %>
 					        <div class="btn-group ">
-				
 								<a class="nav-link  onclickbell" style="padding: 0.25rem 0.5rem;" href="EMSTodaysNotices.htm" id="NoticeButton" target="blank" data-toggle="tooltip" data-placement="top" title="Notices">
 						            <img alt="logo" src="view/images/notice.png" >
 							            <span class="badge badge-danger badge-counter" id="NoticeCount"></span>
-<!-- 							            <i class="fa fa-caret-down " aria-hidden="true" style="color: #ffffff"></i> -->
 						        </a>
-					    
 						  	</div>
 							
 						<div class="btn-group ">
@@ -188,7 +138,7 @@
 						            <a class="dropdown-item text-center small text-gray-500 showall" href="AllNotificationList.htm" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
 						       </div>
 						    </div>
-						    
+						    <%} %>
 						    
 						    
 
@@ -318,9 +268,6 @@ $(document).ready(function() {
 					if(name.trim()==='CHSS'){
 						chsscount=1;
 					}
-				}
-				if(chsscount==0){
-				module+='<li class="nav-item dropdown " >  <a href="CHSSDashboard.htm" class=" btn bg-transparent custom-button" >CHSS</a></li>';
 				}
 				$('#module').html(module); 
 				
