@@ -1,5 +1,6 @@
 package com.vts.ems.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
@@ -36,4 +37,11 @@ public interface EmsDao
 	public List<Object[]> calendarEventTypes() throws Exception;
 	public List<Object[]> EmployeeList() throws Exception;
 	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate)  throws Exception;
+	public Object[] getEmpCountThirdSes(String date)throws Exception;
+	public Object[]getEmpCountSecondSes(String date)throws Exception;
+	public Object[] getEmpCountFourthSes(String date)throws Exception;
+	public Object[] getEmpCountFifthSes(String date)throws Exception;
+	public int getTotalNoOfEmployees()throws Exception;
+	public Object[] getEmpCountFirstSes(String date)throws Exception;
+	public Object getlastSyncDateTime()throws Exception;
 }

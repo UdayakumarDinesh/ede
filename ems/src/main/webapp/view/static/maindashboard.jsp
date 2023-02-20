@@ -16,7 +16,7 @@
 	
 	</head>
 
-	<body  >
+	<body>
 	<%	 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");	
 		List<Object[]> emplogintypelist     = (List<Object[]>)request.getAttribute("logintypeslist");
 		String logintype   = (String)session.getAttribute("LoginType");
@@ -27,6 +27,7 @@
 		String EmpId=(String)request.getAttribute("EmpId");
 		String empNo=(String)request.getAttribute("EmpNo");
 		List<Object[]> attendlist=(List<Object[]>)request.getAttribute("attendlist");
+		Object LastSyncDateTime=(Object)request.getAttribute("LastSyncDateTime");
 		 SimpleDateFormat stf = new SimpleDateFormat("hh:mm aa");
 		
 		
@@ -75,11 +76,18 @@
 					</div>
 					<form action="MainDashBoard.htm" method="POST" id="myform"> 
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
-					      <div class="row justify-content-right">
-					     
-					      <div class="col-4" > <label for="EmpName" style="margin-left: 306px; font-weight: bold" >Employee Name</label></div>
-					      <div class="col-3" >	
-					        
+					     <!--  <div class="row justify-content-right"> -->
+					   
+					    
+					       <div class="table-responsive" > 
+					       <div align="right">
+					        <table > 
+					        <tr>
+					         <td><div align="left"> <button type="submit"  class="btn btn-sm submit-btn"  formaction="AttendancePieChart.htm" formmethod="POST">Pie Chart</button></div></td>
+					         <th style="margin-left:10px;font-weight: bold; ">Last Sync Date And Time :&nbsp;</th>
+					         <td style="font-weight: bold;">  <%if(LastSyncDateTime!=null){ %><%=sdf.format(LastSyncDateTime)%>&nbsp;&nbsp;<%=stf.format(LastSyncDateTime)%><% }%></td>
+					        <th ><h6 style="font-weight: bold;" class="text-nowrap">&nbsp;Employee Name :&nbsp;</h6></th>
+					        <td>
                               	<%                             		 
                               	if(logintype.equals("A")||logintype.equals("P")||logintype.equals("Z")) {
                               	%>
@@ -100,9 +108,20 @@
 					       
 					        	 </Select>
 					            <%}%>
-					      </div>
-					 
-						        <div class="col-2" style="margin-left: 5%;margin-top:8px; font-color:black!important;font-weight: bold!important;"><h6 style="font-weight: bold" >From Date :  &nbsp;</h6></div>
+					            </td>
+					            <td>&nbsp;&nbsp;&nbsp;&nbsp;<td>
+					      <th ><h6 style="font-weight: bold;" class="text-nowrap">From Date : &nbsp;</h6> </th>
+				         <td><input type="text" style="width:7rem;; background-color:white; text-align: left;"  class="form-control input-sm" <%if(fromdate!=null){%>value="<%=fromdate%>" <%}%>   readonly="readonly" id="fromdate" name="FromDate"  required="required">  </td>
+				        <th><h6 style="font-weight: bold;" class="text-nowrap"> &nbsp; &nbsp; &nbsp;To Date : &nbsp;</h6></th>
+				        <td> <input type="text" style="background-color:white;width: 7rem;" class="form-control input-sm mydate" readonly="readonly" <%if(todate!=null){ %>  value="<%=todate%>"<%} %>  id="todate" name="ToDate"  required="required"></td>
+				        
+				         </tr>
+				         </table> 
+				         </div>
+				           </div> 
+				             <!-- <div class="col-4" > <label for="EmpName" style="margin-left: 306px; font-weight: bold" >Employee Name</label></div> -->
+					
+						       <%--  <div class="col-2" style="margin-left: 5%;margin-top:8px; font-color:black!important;font-weight: bold!important;"><h6 style="font-weight: bold" >From Date :  &nbsp;</h6></div>
 					            <div class="col-1" style="margin-left: -10%"> 
 						             <input type="text" style="width: 165%; background-color:white; text-align: left;"  class="form-control input-sm s" <%if(fromdate!=null){%>value="<%=fromdate%>" <%}%>   readonly="readonly" id="fromdate" name="FromDate"  required="required"> 
 							         <label class="input-group-addon btn" for="testdate"  ></label>              
@@ -111,10 +130,11 @@
 							    <div class="col-1" style="margin-left: -12%">						
 							         <input type="text" style="width: 165%; background-color:white;" class="form-control input-sm mydate" readonly="readonly" <%if(todate!=null){ %>  value="<%=todate%>"<%} %>  id="todate" name="ToDate"  required="required"> 							
 							         <label class="input-group-addon btn" for="testdate"></label>    
-							    </div>
-				          </div>      
-				                           	
-                  </form>	      
+							    </div> --%>
+				         <!--  </div> --> 
+				                          	
+                  </form>	
+                  <br>      
     <form action="MainDashBoard.htm" method="POST">
 	     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	               
 	          <div class="table-responsive" >
@@ -160,8 +180,21 @@
 			  </div> 
 			</form>
 		</div>
-	
 	</div>
+	<!-- Pie Chart Modal-->
+	<div class="modal" id="piechartmodal">
+	<div class="modal-body">
+	
+	<div class="col-md-12">
+		<div id="container4"  style="display: block"></div>
+		<div id="container-speed" style="display: block" ></div>
+	</div>
+	         
+	</div>
+	</div>
+	 
+	
+	
 <script>
 
 $('#fromdate').daterangepicker({

@@ -1,5 +1,6 @@
 package com.vts.ems.pis.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
@@ -215,4 +216,5 @@ public interface PisDao {
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public long EmpFamilyDeclarationAdd(PISEmpFamilyDeclaration declare) throws Exception;
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
+	public BigInteger getFormYear(int year,Long empId)throws Exception;
 }

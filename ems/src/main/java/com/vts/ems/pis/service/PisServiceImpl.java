@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -2058,5 +2059,11 @@ public class PisServiceImpl implements PisService
 		public List<Object[]> familyDetailsList(String empid) throws Exception
 		{
 			return dao.familyDetailsList(empid);
+		}
+
+		@Override
+		public BigInteger getFormYear(int year,Long empId) throws Exception {
+			
+			return dao.getFormYear(year,empId);
 		}
 }

@@ -448,6 +448,7 @@ public class EmsDaoImpl implements EmsDao
 				 list =(List<Object[]>) query.getResultList();
 				    manager.flush();
 			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO EmployeeList "+ e);
 				e.printStackTrace();
 			}
 			return list;
@@ -464,8 +465,112 @@ public class EmsDaoImpl implements EmsDao
 				query.setParameter("EmpNo", empNo);				
 			 list = query.getResultList();				
 			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getAttendanceDetails "+ e);
 				e.printStackTrace();
 			}
 			return list;
 		}
+		
+		private final static String LASTSYNCDATETIME="select max(CreatedDate) from attand_punch_data";
+		@Override
+		public Object getlastSyncDateTime() throws Exception {
+			Query query = manager.createNativeQuery(LASTSYNCDATETIME);
+						
+			return query.getSingleResult();
+		}
+private static final String GETSECONDDATA="SELECT COUNT(a.AttendPunchId),'9:00-9:30' FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and TIME(a.PunchInTime) BETWEEN'09:00:00' AND '09:30:00'AND a.AttendanceDate=:Date";
+
+		@Override
+		public Object[] getEmpCountSecondSes(String date) throws Exception {
+			try {
+				Query query = manager.createNativeQuery(GETSECONDDATA);
+				
+				query.setParameter("Date",date);
+				Object[]  count1=(Object[]) query.getResultList().get(0);				
+				return count1;
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getEmpCountSecondSes "+ e);
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		private static final String GETTHIRDDATA="SELECT COUNT(a.AttendPunchId),'9:30-10:00' FROM attand_punch_data a, employee b WHERE a.EmpNo=b.EmpNo and TIME(a.PunchInTime) between '09:30:00' and '10:00:00' AND a.AttendanceDate=:Date";
+
+		@Override
+		public Object[] getEmpCountThirdSes(String date) throws Exception {
+			
+			try {
+			Query query = manager.createNativeQuery(GETTHIRDDATA);
+			query.setParameter("Date",date);
+			Object[]  count1=(Object[]) query.getResultList().get(0);				
+			return count1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getEmpCountThirdSes "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+		private static final String GETFOURTHDATA="SELECT COUNT(a.AttendPunchId),'10:00-10:30' FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and  TIME(a.PunchInTime) BETWEEN '10:00:00' AND '10:30:00' AND a.AttendanceDate=:Date";
+
+		@Override
+		public Object[] getEmpCountFourthSes(String date) throws Exception {
+			try {
+				Query query = manager.createNativeQuery(GETFOURTHDATA);
+				query.setParameter("Date",date);
+				Object[]  count1=(Object[]) query.getResultList().get(0);				
+				return count1;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getEmpCountFourthSes "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		private static final String GETFIFTHDATA="SELECT COUNT(a.AttendPunchId),'After 11:00'  FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and  TIME(a.PunchInTime) BETWEEN '11:00:00' AND '24:00:00' AND a.AttendanceDate=:Date";
+		@Override
+		public Object[] getEmpCountFifthSes(String date) throws Exception {
+			try {
+				Query query = manager.createNativeQuery(GETFIFTHDATA);
+				query.setParameter("Date",date);
+				Object[] count1=(Object[])query.getResultList().get(0);				
+				return count1;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getEmpCountFifthSes "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+private static final String EMPLOYEECOUNT="SELECT COUNT(a.EmpId) FROM employee a,employee_details b WHERE a.EmpNo=b.EmpNo AND a.isactive='1' AND b.EmpStatus='P'";
+
+		@Override
+		public int getTotalNoOfEmployees() throws Exception {
+			
+			try {
+				Query query = manager.createNativeQuery(EMPLOYEECOUNT);
+				BigInteger count=(BigInteger)query.getSingleResult();
+				int EmpCount=count.intValue();
+				return EmpCount;
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getTotalNoOfEmployees "+ e);
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		private static final String GETFIRSTDATA="SELECT COUNT(a.AttendPunchId),'Before 9:00' FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and  TIME(a.PunchInTime) BETWEEN '00:00:00' AND '09:00:00' AND a.AttendanceDate=:Date";
+		@Override
+		public Object[] getEmpCountFirstSes(String date) throws Exception {
+			try {
+				Query query = manager.createNativeQuery(GETFIRSTDATA);
+				query.setParameter("Date",date);
+				Object[] count1=(Object[])query.getResultList().get(0);				
+				return count1;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getEmpCountFirstSes "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		
+		
 }

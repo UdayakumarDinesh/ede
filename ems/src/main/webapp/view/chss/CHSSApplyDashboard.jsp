@@ -17,39 +17,39 @@
 <style>
 
 
-.a-box {
+ .a-box {
   display: inline-block;
   width: 100%;
-  text-align: center;
-}
+   text-align: center; 
+} 
 
-.img-container {
+ .img-container {
     height: 11rem;
    /*  width: 200px; */
-    overflow: hidden;
-    border-radius: 0px 0px 20px 20px;
-    display: inline-block;
-}
+     overflow: hidden; 
+     border-radius: 0px 0px 20px 20px; 
+     display: inline-block; 
+} 
 
-.img-container img {
+ .img-container img {
     transform: skew(0deg, -13deg);
     height: 6.5rem;
     margin: 25px 0px 0px 0px;
         border-radius: 53%;
-}
+} 
 
-.inner-skew {
-    display: inline-block;
-    border-radius: 20px;
-    overflow: hidden;
+ .inner-skew {
+     display: inline-block; 
+     border-radius: 20px; 
+    overflow: hidden; 
     padding: 0px;
-    transform: skew(0deg, 13deg);
+    transform: skew(0deg, 13deg); 
     font-size: 0px;
-    margin: 30px 0px 0px 0px;
+    margin: 30px 0px 0px 0px; 
     background: #c8c2c2;
     height: 11rem;
     width: 8rem;
-}
+} 
 
 .text-container {
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
@@ -61,16 +61,16 @@
   font-size: 14px;
 }
 
-.text-container h3 {
-  margin: 16px 0px 3px 0px;
-  font-size: 100%;
-  white-space:pre-line;
-      font-family: 'Lato';
+ .text-container h3 {
+   margin: 16px 0px 3px 0px; 
+   font-size: 100%;
+   white-space:pre-line; 
+   font-family: 'Lato'; 
     text-transform: capitalize;
     font-weight: 700;
     color: #005C97;
 }
-
+ 
 .main{
 	padding :0px 0px 1.5rem 0px ;
 	cursor: pointer;
@@ -296,7 +296,7 @@
 		<%} %>
 	</div>
 	
-<div class=" card profile-card-container " >
+<div class=" card profile-card-container ">
  
 	<div class="row" >
 		<div class="col-md-2">

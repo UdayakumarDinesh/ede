@@ -26,6 +26,21 @@
 		 </div>
 		 <div class="page card dashboard-card">
 		 <div class="card" >
+		 <div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
 				<div class="card-body ">			
 					<form action="DepartmentsList.htm" method="POST" >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
@@ -36,7 +51,7 @@
 										<th> Select            </th>
 										<th>Department Code    </th>
 										<th> Department        </th>
-										<th> DepartmentHead    </th>
+										<th> Department Head    </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -44,7 +59,7 @@
 								    	  for(Object[] obj:Deplist){ 
 								    	   %>
 								     <tr>
-								        <td style="text-align: center;"><input type="radio" value="<%=obj[0] %>" name="Depid"> </td>
+								        <td style="text-align: center;"><input type="radio" value="<%=obj[0] %>" name="Depid" required="required"> </td>
 								        <td style="text-align: center;width:14%;"><%=obj[1]%></td>
 								        <td><%=obj[2]%></td>
 								         <td><%=obj[3]%></td>
@@ -55,7 +70,7 @@
 					</div>
 					<div class="row text-center">
 					<div class="col-md-12">
-					<button type="submit" class="btn btn-sm add-btn" name="action" value="Add">ADD</button>
+					<button type="submit" class="btn btn-sm add-btn" name="action" value="Add" formnovalidate="formnovalidate">ADD</button>
 					<button type="submit" class="btn btn-sm edit-btn"  name="action"value="Edit">EDIT</button>
 					</div>
 					</div>

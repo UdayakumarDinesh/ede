@@ -3,6 +3,7 @@ package com.vts.ems.master.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ import com.vts.ems.master.dao.MasterDao;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
+import com.vts.ems.master.model.Department;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -462,11 +464,64 @@ public class MasterServiceImpl implements MasterService {
 			return dao.getDepartmentsList();
 		}
 
-	//	@Override
-	//	public List<Object[]> getEmpList() throws Exception {
+		@Override
+		public List<Object[]> getEmpList() throws Exception {
 			
-		//	return dao.getEmpList();
-		//}
+			return dao.getEmpList();
+		}
+		@Override
+		public int DepartmentAdd(Department dep) throws Exception {
+			
+			return dao.DepartmentAdd(dep);
+		}
+
+		@Override
+		public Object[] departmentEdit(String deptId) throws Exception {
+			
+			return dao.departmentEdit(deptId);
+		}
+
+		@Override
+		public int UpdateDepartment(Department dep) throws Exception {
+			logger.info(new Date() +"Inside SERVICE UpdateDepartment ");
+			Department department=dao.departmentEdit(dep.getDivisionId());
+			department.setDivisionId(dep.getDivisionId());
+			department.setDivisionCode(dep.getDivisionCode());
+			department.setDivisionName(dep.getDivisionName());
+			department.setDivisionHeadId(dep.getDivisionHeadId());
+			department.setModifiedBy(dep.getModifiedBy());
+			department.setModifiedDate(dep.getModifiedDate());
+			return dao.updateDepartment(department);
+		}
+
+		@Override
+		public BigInteger DepartmentAddcheck(String depCode) throws Exception {
+			return dao.DepartmentCodeCheck(depCode);			
+		}
 		
-		
+		@Override
+		public Long AddDeptEditComments(MasterEdit masteredit , MasterEditDto masterdto )throws Exception
+		{
+			logger.info(new Date() +"Inside SERVICE AddDeptEditComments ");
+			Timestamp instant= Timestamp.from(Instant.now());
+			
+			String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
+			
+			   if(!masterdto.getFilePath().isEmpty()) {
+					String name =masterdto.getFilePath().getOriginalFilename();
+					String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
+					String filepath=emsfilespath+"EMS//MastersEditFilePath";							
+					masteredit.setFilePath(filepath+File.separator+filename);
+					masteredit.setOriginalName(name);
+				    saveFile(filepath , filename, masterdto.getFilePath());
+					
+				}	
+			return dao.AddDeptEditComments(masteredit);
+		}
+
+		@Override
+		public BigInteger DepartmentEditcheck(String depCode, String deptId) throws Exception {
+			
+			return dao.DepartmentEditcheck(depCode,deptId);
+		}
 }

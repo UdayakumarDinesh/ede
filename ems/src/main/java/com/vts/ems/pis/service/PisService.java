@@ -1,5 +1,6 @@
 package com.vts.ems.pis.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -213,6 +214,7 @@ public interface PisService {
 	public int deletePropertyDetails(String propertyId,String Username)throws Exception;
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
+	public BigInteger getFormYear(int year, Long empId)throws Exception;
 	
 	
 }

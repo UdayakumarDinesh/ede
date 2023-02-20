@@ -1,5 +1,6 @@
 package com.vts.ems.master.dao;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
+import com.vts.ems.master.model.Department;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -879,6 +881,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			try {
 				Query query = manager.createNativeQuery(DEPARTMENTLIST);
 				list =(List <Object[]>)query.getResultList();
+				manager.flush();
 				return list;
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside DAO getDepartmentsList "+ e);
@@ -887,19 +890,120 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 			
 		}
-		/*
-		 * private static final String
-		 * EMPLIST="select EmpId,EmpName from employee where isactive=1";
-		 * 
-		 * @Override public List<Object[]> getEmpList() throws Exception {
-		 * List<Object[]> emplist=null; try { Query query =
-		 * manager.createNamedQuery(EMPLIST);
-		 * emplist=(List<Object[]>)query.getResultList();
-		 * 
-		 * return emplist; } catch (Exception e) { logger.error(new Date()
-		 * +" Inside DAO getEmpListList "+ e); e.printStackTrace(); return null; }
-		 * 
-		 * }
-		 */
+		
+		 private static final String EMPLIST="select EmpId,EmpName from employee where isactive=1";
+		 
+		 @Override public List<Object[]> getEmpList() throws Exception {
+		 List<Object[]> emplist=null;
+		 try { 
+			 Query query =manager.createNativeQuery(EMPLIST);
+		  emplist=(List<Object[]>)query.getResultList();
+		  manager.flush();
+		  return emplist; 
+		  } catch (Exception e) {
+			  logger.error(new Date()+" Inside DAO getEmpListList "+ e); 
+			  e.printStackTrace(); 
+			  return null; 
+	    }
+		 
+		 }
 
+		@Override
+		public int DepartmentAdd(Department dep) throws Exception {
+			try {
+				manager.persist(dep);
+				manager.flush();
+				return (int) dep.getDivisionId();
+			} catch (Exception e) {
+				 logger.error(new Date()+" Inside DAO DepartmentAdd "+ e);
+				e.printStackTrace();
+				return 0; 
+			}
+			
+		}
+      private static final String DEPTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId from division_master where DivisionId=:deptId";
+
+		@Override
+		public Object[] departmentEdit(String deptId) throws Exception {			
+			try {
+				Query query = manager.createNativeQuery(DEPTEDIT);
+				query.setParameter("deptId", deptId);
+				Object[] dept=(Object[]) query.getSingleResult();
+				return dept;
+			} catch (Exception e) {
+				 logger.error(new Date()+" Inside DAO departmentEdit "+ e);
+					e.printStackTrace();
+					return null;
+			}
+			
+		}
+		 private static final String DEPARTMENTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId from division_master where DivisionId=:deptId";
+		@Override
+		public Department departmentEdit(long divisionId) throws Exception {
+			try {
+				
+				return manager.find(Department.class, divisionId);	
+				
+			} catch (Exception e) {
+				 logger.error(new Date()+" Inside DAO departmentEdit "+ e);
+					e.printStackTrace();
+					return null;
+			}
+		}
+
+		@Override
+		public int updateDepartment(Department department) throws Exception {
+			try {
+				 manager.merge(department);
+				 manager.flush();
+				return (int) department.getDivisionId();
+			} catch (Exception e) {
+				 logger.error(new Date()+" Inside DAO departmentEdit "+ e);
+					e.printStackTrace();
+					return 0;
+			}
+			
+		}
+		private static final String DEPTCODE="select count(DivisionCode) from division_master where DivisionCode=:DeptCode";
+		@Override
+		public BigInteger DepartmentCodeCheck(String depCode) throws Exception {
+		try {		
+		Query query = manager.createNativeQuery(DEPTCODE);
+		query.setParameter("DeptCode", depCode.trim());
+	     return (BigInteger) query.getSingleResult();	
+		} catch (Exception e) {
+			logger.error(new Date()+" Inside DAO DepartmentCodeCheck "+ e);
+			e.printStackTrace();
+			return null;
+		}	
+	}
+		@Override
+		public Long AddDeptEditComments(MasterEdit masteredit)throws Exception
+		{
+			try {
+				manager.persist(masteredit);
+				manager.flush();
+				return (long)masteredit.getMasterEditId();
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside DAO AddDeptEditComments "+e);
+				e.printStackTrace();
+				return 0l;
+			}
+		}
+private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from division_master where DivisionCode=:DeptCode and DivisionId=:DeptId";
+		@Override
+		public BigInteger DepartmentEditcheck(String depCode, String deptId) throws Exception {
+			try {
+				Query query = manager.createNativeQuery(DEPTCODEEDITCHECK);
+				query.setParameter("DeptCode", depCode);
+				query.setParameter("DeptId", deptId);
+				return (BigInteger) query.getSingleResult();
+				
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside DAO AddDeptEditComments "+e);
+				e.printStackTrace();
+				
+			}
+			return null;
+		}
 }

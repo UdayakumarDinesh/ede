@@ -1,6 +1,7 @@
 package com.vts.ems.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -271,5 +272,47 @@ public class EMSMainServiceImpl implements EMSMainService
 	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {		
 		
 		return dao.getAttendanceDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
+	}
+
+	@Override
+	public Object[]getEmpCountThirdSes(String date) throws Exception {
+	
+		return dao.getEmpCountThirdSes( date);
+	}
+
+	@Override
+	public Object[] getEmpCountSecondSes(String date) throws Exception {
+		
+		return dao.getEmpCountSecondSes(date);
+	}
+
+	@Override
+	public Object[] getEmpCountFourthSes(String date) throws Exception {
+		
+		return dao.getEmpCountFourthSes(date);
+	}
+
+	@Override
+	public Object[] getEmpCountFifthSes(String date) throws Exception {
+		
+		return dao.getEmpCountFifthSes(date);
+	}
+
+	@Override
+	public int getTotalNoOfEmployees() throws Exception {
+		
+		return dao.getTotalNoOfEmployees();
+	}
+
+	@Override
+	public Object[] getEmpCountFirstSes(String date) throws Exception {
+	
+		return dao.getEmpCountFirstSes(date);
+	}
+
+	@Override
+	public Object getlastSyncDateTime() throws Exception {
+	
+		return dao.getlastSyncDateTime();
 	}
 }

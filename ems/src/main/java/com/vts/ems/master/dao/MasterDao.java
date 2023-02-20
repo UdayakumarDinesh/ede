@@ -1,5 +1,6 @@
 package com.vts.ems.master.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.chss.model.CHSSMedicinesList;
@@ -8,6 +9,7 @@ import com.vts.ems.chss.model.CHSSOtherPermitAmt;
 import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
+import com.vts.ems.master.model.Department;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -70,7 +72,14 @@ public interface MasterDao {
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
 	public List<Object[]> getDepartmentsList() throws Exception;
-	//public List<Object[]> getEmpList() throws Exception;
+	public List<Object[]> getEmpList() throws Exception;
+	public int DepartmentAdd(Department dep) throws Exception;
+	public Object[] departmentEdit(String deptId) throws Exception;
+	public Department departmentEdit(long divisionId)throws Exception;
+	public int updateDepartment(Department department)throws Exception;
+	public BigInteger DepartmentCodeCheck(String depCode) throws Exception;
+	public Long AddDeptEditComments(MasterEdit masteredit)throws Exception;
+	public BigInteger DepartmentEditcheck(String depCode, String deptId)throws Exception;
 	
 	
 	
