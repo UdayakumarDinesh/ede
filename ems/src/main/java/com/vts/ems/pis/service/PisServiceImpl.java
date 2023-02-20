@@ -270,7 +270,6 @@ public class PisServiceImpl implements PisService
 		return dao.EmployeeDetailsEditSubmit(employee);
 	}
 	
-	
 	@Override
 	public EmployeeDetails getEmployee(String empid) throws Exception
 	{
