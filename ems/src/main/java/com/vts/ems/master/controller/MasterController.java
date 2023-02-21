@@ -1625,7 +1625,7 @@ public class MasterController {
 				 redir.addAttribute("resultfail", "Group Added Unsuccessfull");
 			}
 			
-			 return "redirect:/DivisionGroup.htm";
+			return "redirect:/DivisionGroup.htm";
 		} catch (Exception e) {
 			logger.error(new Date() +"Inside DivisionGroupAdd.htm "+UserId,e);
 			e.printStackTrace();
