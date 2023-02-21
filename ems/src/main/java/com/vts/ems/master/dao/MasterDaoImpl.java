@@ -26,6 +26,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -1005,5 +1006,85 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 				
 			}
 			return null;
+		}
+		
+		@Override
+		public int divisionGroupAdd(DivisionGroup divisiongroup) throws Exception {
+			try {
+				manager.persist(divisiongroup);
+				manager.flush();
+				return divisiongroup.getGroupId();
+			}  catch (Exception e) {
+				logger.error(new Date() + "Inside DAO divsionGroupAdd() "+e);
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		
+//		public static final String DIVISIONGROUPUPDATE = "UPDATE division_group SET GroupCode=:groupCode, GroupName=:groupName, GroupHeadId=:groupHeadId WHERE GroupId=:groupId";
+		@Override
+		public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception {
+			
+			try {
+				manager.merge(divisionGroup);
+				manager.flush();		
+				return divisionGroup.getGroupId();
+			}	catch (Exception e) {
+				logger.error(new Date() + "Inside DAO divsionGroupEdit() "+e);
+				e.printStackTrace();
+				return 0;
+			}
+		}
+
+		public static final String DIVISIONGROUPFINDBYID = "FROM DivisionGroup WHERE GroupId=:groupId";
+		@Override
+		public DivisionGroup getDivisionGroupById(int groupId) throws Exception {
+			
+			try {
+				return manager.find(DivisionGroup.class, groupId);	
+			}catch (Exception e) {
+				logger.error(new Date() + "Inside DAO divsionGroupAdd() "+e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		private static final String DIVISIONGROUPLIST = "SELECT a.GroupId,UPPER (a.GroupCode),a.GroupName, b.EmpName AS DivisionHead, c.Designation FROM division_group a,employee b,employee_desig c\r\n"
+				+ "WHERE b.EmpId =a.GroupHeadId AND c.DesigId = b.DesigId;"; 
+		@Override
+		public List<Object[]> getDivisionGroupsList() throws Exception {
+			List <Object[]>list=null;
+			try {
+				Query query = manager.createNativeQuery(DIVISIONGROUPLIST);
+				list =(List <Object[]>)query.getResultList();
+				return list;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getDivisionGroupList "+ e);
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		public static final String EMPLOYEELIST = "SELECT EmpId, EmpName FROM employee";
+		@Override
+		public List<Object[]> getEmployeeList() throws Exception {
+			List <Object[]>list=null;
+			try {
+			Query query = manager.createNativeQuery(EMPLOYEELIST);
+			list = (List <Object[]>)query.getResultList();
+			return list;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getDivisionGroupAddEdit "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		public static final String DUPLICATE = "SELECT COUNT(GroupCode),'GroupCode' FROM division_group WHERE  GroupCode=:groupCode";
+		@Override
+		public Object[] getDuplicateCount(String groupCode) throws Exception {
+				Query query =manager.createNativeQuery(DUPLICATE);
+				query.setParameter("groupCode", groupCode);
+				return (Object[])query.getSingleResult();
 		}
 }

@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.text.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -38,6 +37,7 @@ import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -973,7 +973,7 @@ public class MasterController {
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigId(Long.parseLong(designationid));
 					desig.setDesigCode(code.toUpperCase());
-					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
+					desig.setDesignation(name.trim());
 					desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					String comments = (String)req.getParameter("comments");
@@ -1004,7 +1004,7 @@ public class MasterController {
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
-					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
+					desig.setDesignation(name.trim());
 					desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
@@ -1035,7 +1035,7 @@ public class MasterController {
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
-					desig.setDesignation(WordUtils.capitalizeFully(name.trim()));
+					desig.setDesignation(name.trim());
 					desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
@@ -1559,5 +1559,137 @@ public class MasterController {
 		}
 		Gson json = new Gson();
 		  return json.toJson(Depart);
-	}	
+	}
+	
+	
+	@RequestMapping(value="DivisionGroup.htm" , method={ RequestMethod.POST ,RequestMethod.GET })
+	public String groupDivision(HttpServletRequest req ,HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DivisionGroup.htm"+UserId);
+		try {
+			ses.setAttribute("SidebarActive", "DivisionGroup_htm");
+			String action=req.getParameter("action");
+			
+			List<Object[]> emp = service.getEmployeeList();
+			req.setAttribute("grpheadlist", emp);
+			if("ADD".equalsIgnoreCase(action)) {
+				
+				return "masters/DivisionGroupAddEdit";
+			}
+			else if("EDIT".equalsIgnoreCase(action)) {
+				String groupId = req.getParameter("groupId");
+				DivisionGroup divisionGroup = service.getDivisionGroupById(Integer.parseInt(groupId));
+				req.setAttribute("divgrp", divisionGroup);
+				
+				return "masters/DivisionGroupAddEdit";
+			}
+			else {
+				List<Object[]> list = service.getDivisionGroupList();
+				req.setAttribute("divisiongroup", list);
+				
+				return "masters/DivisionGroup";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DivisionGroup.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value="DivisionGroupAdd.htm", method={RequestMethod.POST} )
+	public String DivisionGroupAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DivisionGroupAdd.htm "+UserId);
+		try {
+			
+			String groupCode = (String)req.getParameter("groupCode");
+			String groupName = (String)req.getParameter("groupName");
+			String groupHeadId = (String)req.getParameter("groupHeadId");
+			
+			DivisionGroup grp = new DivisionGroup();
+			grp.setGroupCode(groupCode.toUpperCase());
+			grp.setGroupName(groupName);
+			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
+			grp.setCreatedBy(UserId);
+			grp.setCreatedDate(sdtf.format(new Date()));
+			grp.setIsActive("1");
+			int result = service.addDivisionGroup(grp);
+			if (result != 0) {
+				 redir.addAttribute("result", "Group Added Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "Group Added Unsuccessfull");
+			}
+			
+			 return "redirect:/DivisionGroup.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DivisionGroupAdd.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	@RequestMapping(value="DivisionGroupEdit.htm", method={RequestMethod.POST} )
+	public String DivisionGroupEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DivisionGroupEdit.htm "+UserId);
+		try {
+			
+			String groupId = (String)req.getParameter("divgrpid");	
+			String groupCode = (String)req.getParameter("groupCode");
+			String groupName = (String)req.getParameter("groupName");
+			String groupHeadId = (String)req.getParameter("groupHeadId");
+			
+			
+			DivisionGroup grp = new DivisionGroup();
+			grp.setGroupId(Integer.parseInt(groupId));
+			grp.setGroupCode(groupCode.toUpperCase());
+			grp.setGroupName(groupName);
+			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
+			grp.setIsActive("1");
+			grp.setModifiedBy(UserId);
+			grp.setModifiedDate(sdtf.format(new Date()));
+			int result = service.editDivisionGroup(grp);
+			if (result != 0) {
+				 redir.addAttribute("result", "Group Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "Group Update Unsuccessfull");
+			}
+			
+			 return "redirect:/DivisionGroup.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DivisionGroupEdit.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	
+	@RequestMapping(value="DivisionAddcheck.htm", method=RequestMethod.GET)
+	public @ResponseBody String yourControllerMethod(HttpSession ses, HttpServletRequest req) throws Exception {
+		String UserId=(String)ses.getAttribute("Username");
+		Object[] Duplicate = null;
+		logger.info(new Date() +"Inside DivisionAddcheck.htm "+UserId);
+		try
+		{	  
+			String groupCode = req.getParameter("groupCode");
+			Duplicate = service.checkDuplicate(groupCode);
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DivisionAddcheck.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  Gson json = new Gson();
+		  return json.toJson(Duplicate);           
+		  
+	}
+	
+	
 }

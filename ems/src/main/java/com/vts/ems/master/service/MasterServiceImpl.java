@@ -30,6 +30,7 @@ import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -524,4 +525,42 @@ public class MasterServiceImpl implements MasterService {
 			
 			return dao.DepartmentEditcheck(depCode,deptId);
 		}
+		
+		@Override
+		public int addDivisionGroup(DivisionGroup divisionGroup) throws Exception {
+			
+			return dao.divisionGroupAdd(divisionGroup);
+		}
+
+		@Override
+		public int editDivisionGroup(DivisionGroup divisionGroup) throws Exception {
+			
+			return dao.divisionGroupEdit(divisionGroup);
+		}
+
+		@Override
+		public DivisionGroup getDivisionGroupById(int id) throws Exception {
+			
+			return dao.getDivisionGroupById(id);
+		}
+
+		@Override
+		public List<Object[]> getDivisionGroupList() throws Exception {
+			
+			return dao.getDivisionGroupsList();
+		}
+		@Override
+		public List<Object[]> getEmployeeList() throws Exception {
+			return dao.getEmployeeList();
+		}
+
+		@Override
+		public Object[] checkDuplicate(String groupCode) throws Exception {
+			
+			logger.info(new Date() +"Inside SERVICE DesignationAddCheck ");
+			Object[] returnobj=new Object[1];
+			returnobj[0]=dao.getDuplicateCount(groupCode)[0].toString();
+			return returnobj;
+		}
+
 }
