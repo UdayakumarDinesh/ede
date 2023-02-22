@@ -17,10 +17,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.CalendarEvents;
+import com.vts.ems.Admin.model.ContractEmployeeData;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
@@ -596,6 +598,146 @@ private static final String UpdateCalendarEvent="update ems_calendar_events set 
 		e.printStackTrace();
 	}
 		return result;
-	}	
+	}
+
+	@Override
+	public Long AddContractEmployeeData(ContractEmployeeData cemp) throws Exception {
+		try {
+			manager.persist(cemp);
+			manager.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +"Inside DAO AddContractEmployeeData "+ e);
+		}
+		return(long)cemp.getContractEmpId();
+	}
+private static final String CONTRACTEMPLIST="SELECT ContractEmpId,EmpName,ContractEmpNo,UserName,DateOfBirth,MobileNo FROM employee_contract WHERE IsActive=1";
+	@Override
+	public List<Object[]> getContractEmployeeList() throws Exception {
+		List<Object[]> list=null;
+		try {
+			Query query = manager.createNativeQuery(CONTRACTEMPLIST);
+			list=(List<Object[]>)query.getResultList();
+			return list;
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO getContractEmployeeList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+		
+	}
+private static final String CONTRACTEMPDATA="SELECT ContractEmpId,SUBSTRING(UserName,4),EmpName,DateOfBirth,EmailId,MobileNo FROM employee_contract WHERE ContractEmpId=:EmpId"; 
+
+	@Override
+	public Object[] getContractEmployeeData(String contractEmpId) throws Exception {
+		Object[] cemp=null;
+		try {
+			Query query = manager.createNativeQuery(CONTRACTEMPDATA);
+			query.setParameter("EmpId", contractEmpId);
+		List<Object[]>list=(List<Object[]>)query.getResultList();
+		if(list!=null && list.size()>0) {
+			cemp=list.get(0);
+		}	
+			return cemp;
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO getContractEmployeeData "+ e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+private static final String CONTRACTEMPEDIT="SELECT ContractEmpId,UserName,EmpName,DateOfBirth,EmailId,MobileNo FROM employee_contract WHERE ContractEmpId=:EmpId";
+	@Override
+	public ContractEmployeeData getContractEmpDetails(Long contractEmpId) throws Exception {
+		try {
+		return manager.find(ContractEmployeeData.class,contractEmpId);
+		} catch (Exception e) {
+			 logger.error(new Date()+" Inside DAO getContractEmpDetails "+ e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	@Override
+	public Long UpdateContractEmployeeData(ContractEmployeeData emp) throws Exception {
+	try {
+		manager.merge(emp);
+		manager.flush();
+		return emp.getContractEmpId();
+	} catch (Exception e) {
+		 logger.error(new Date()+" Inside DAO UpdateContractEmployeeData "+ e);
+		e.printStackTrace();
+		return null;
+	}
+		
+	}
+private static final String GETMAXEMPNO="SELECT MAX(SUBSTRING(ContractEmpNo,3)) FROM employee_contract WHERE Isactive=1";
+	@Override
+	public String getMaxContractEmpNo() throws Exception {
+		try {
+			Query query = manager.createNativeQuery(GETMAXEMPNO);
+		String EmpNo=(String)query.getSingleResult();
+		return EmpNo;
+		} catch (Exception e) {
+			e.printStackTrace();
+			 logger.error(new Date()+" Inside DAO getMaxContractEmpNo "+ e);
+			 return null;
+		}
+		
+	}
+private static final String USERNAMECOUNT="SELECT COUNT(ContractEmpId) FROM employee_contract WHERE UserName=:userName";
+	@Override
+	public BigInteger contractEmpAddcheck(String cuserName) throws Exception {
+		try {
+			
+			Query query = manager.createNativeQuery(USERNAMECOUNT);
+			query.setParameter("userName", cuserName);
+			BigInteger count=(BigInteger)query.getSingleResult();
+			
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			 logger.error(new Date()+" Inside DAO contractEmpAddcheck "+ e);
+			 return null;
+		}
+		
+	}
+private static final String USERNAMECOUNTINEDIT="SELECT COUNT(ContractEmpId) FROM employee_contract WHERE UserName=:UserName AND ContractEmpId!=:ContractEmpId";
+	@Override
+	public BigInteger contractEmpEditcheck(String username, String contractEmpId) throws Exception {
+		try {
+			System.out.println("username"+username);
+			System.out.println("contractEmpId"+contractEmpId);
+			Query query = manager.createNativeQuery(USERNAMECOUNTINEDIT);
+			query.setParameter("UserName", username);
+			query.setParameter("ContractEmpId", contractEmpId);
+			BigInteger count=(BigInteger)query.getSingleResult();
+			return count;
+		} catch (Exception e) {
+			logger.error(new Date()+" Inside DAO contractEmpEditcheck "+ e);
+			e.printStackTrace();
+			return null;
+			 
+		}
+		
+	}
+
+	@Override
+	public Long ContractEmpEditComments(MasterEdit masteredit) throws Exception {
+		try {
+			manager.persist(masteredit);
+			manager.flush();
+			return (long)masteredit.getMasterEditId();
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ContractEmpEditComments "+e);
+			e.printStackTrace();
+			return 0l;
+		}
+	}
 	 
 }

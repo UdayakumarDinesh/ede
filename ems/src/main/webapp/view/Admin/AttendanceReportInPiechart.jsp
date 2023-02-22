@@ -286,9 +286,9 @@ Highcharts.chart('container4', {
     }
 });
 </script>
-<%-- <script>
+ <script>
         //******************** Today's Trend (Area Chart ) ********************
-    Highcharts.chart('container', {
+    Highcharts.chart('container1', {
 		
 		   chart: {
 		        type: 'area',
@@ -365,9 +365,9 @@ Highcharts.chart('container4', {
             }]
         }
 	}); 
-</script> --%>
-<script>
-Highcharts.chart('container1', {
+</script> 
+<%-- <script>
+Highcharts.chart('container', {
 	  chart: {
 	    type: 'area'
 	  },
@@ -431,7 +431,7 @@ Highcharts.chart('container1', {
 	    ]
 	  },]
 	});
-</script>
+</script> --%>
 <script>
 
 $('#mydate').daterangepicker({

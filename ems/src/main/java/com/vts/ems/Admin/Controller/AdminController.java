@@ -1,5 +1,6 @@
 package com.vts.ems.Admin.Controller;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.CalendarEvents;
+import com.vts.ems.Admin.model.ContractEmployeeData;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
@@ -834,5 +836,153 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					}
 				    
 					return "redirect:/CalendarEvents.htm";
-			 }		
+			 }	
+
+			 @RequestMapping(value = "ContractEmployeeList.htm", method = {RequestMethod.POST,RequestMethod.GET})
+				public String ContractEmployeeList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+							String Username = (String) ses.getAttribute("Username");
+							logger.info(new Date() +"Inside ContractEmployeeList.htm "+Username);
+								try {
+									ses.setAttribute("SidebarActive", "ContractEmployeeList_htm");
+									String action = req.getParameter("action");
+									if("Add".equalsIgnoreCase(action)) {
+										return"masters/ContractEmpAddEdit";
+									}
+									else if("Edit".equalsIgnoreCase(action)) {
+										String ContractEmpId = req.getParameter("ContractEmpId");
+										Object[] cemp=service.getContractEmployeeData(ContractEmpId);
+										req.setAttribute("ContractEmpData", cemp);
+										return"masters/ContractEmpAddEdit";
+									}
+									List<Object[]> list=service.getContractEmployeeList();
+									req.setAttribute("ContractEmpList", list);
+									req.setAttribute("result", req.getParameter("result"));
+									
+								} catch (Exception e) {
+									e.printStackTrace();
+										
+								}
+								return "masters/ContractEmpList";					
+									
+   }
+			 @RequestMapping(value="ContractEmployeeAdd.htm",method= {RequestMethod.POST,RequestMethod.GET})
+			 public String ContractEmployeeAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+				 String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() +"Inside ContractEmployeeAdd.htm "+Username);
+			 try {
+				//String userName = req.getParameter("userName");
+				String EmpName=req.getParameter("EmpName");
+				String DOB = req.getParameter("DOB");
+				String EmailId=req.getParameter("EmailId");
+				String MobileNo=req.getParameter("MobileNo");
+				String empNo=service.getMaxContractEmpNo();
+				int EmpNo=Integer.parseInt(empNo);
+				System.out.println("EmpNo"+EmpNo);
+				ContractEmployeeData cemp=new ContractEmployeeData();
+				//cemp.setUserName("CE-"+userName);
+				cemp.setEmpName(EmpName);
+				
+				cemp.setContractEmpNo("CE"+(++EmpNo));
+				cemp.setDateOfBirth(sdf.format(rdf.parse(DOB)));
+				cemp.setEmailId(EmailId);
+				cemp.setMobileNo(Long.parseLong(MobileNo));
+				cemp.setPassword("$2y$12$QTTMcjGKiCVKNvNa242tVu8SPi0SytTAMpT3XRscxNXHHu1nY4Kui");
+				cemp.setCreatedBy(Username);
+				cemp.setCreatedDate(sdtf.format(new Date()));
+				cemp.setIsActive(1);
+		     Long result=service.AddContractEmployeeData(cemp);
+		     if(result>0) {
+		    	 redir.addAttribute("result", "Contract Employee Data Added succesfully!");
+		     }else {
+		    	 redir.addAttribute("resultfail", "Contract Employee Data Added Unsuccesful!");
+		     }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+				 return "redirect:/ContractEmployeeList.htm"; 
+			 }
+			 @RequestMapping(value="ContractEmployeeEdit.htm",method= {RequestMethod.POST,RequestMethod.GET})
+			 public String ContractEmployeeUpdate(HttpServletRequest req, HttpSession ses,@RequestPart("selectedFile") MultipartFile selectedFile,  RedirectAttributes redir)  throws Exception {
+				 String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() +"Inside ContractEmployeeAdd.htm "+Username);
+			 try {
+				 String ContractEmpId = req.getParameter("ContractEmpId");
+			//	String userName = req.getParameter("userName");
+				String EmpName=req.getParameter("EmpName");
+				String DOB = req.getParameter("DOB");
+				String EmailId=req.getParameter("EmailId");
+				String MobileNo=req.getParameter("MobileNo");
+				ContractEmployeeData cemp=new ContractEmployeeData();
+				cemp.setContractEmpId(Long.parseLong(ContractEmpId));
+				//cemp.setUserName("CE-"+userName);
+				cemp.setEmpName(EmpName);
+				cemp.setDateOfBirth(sdf.format(rdf.parse(DOB)));
+				cemp.setEmailId(EmailId);
+				cemp.setMobileNo(Long.parseLong(MobileNo));
+				cemp.setModifiedBy(Username);
+				cemp.setModifiedDate(sdtf.format(new Date()));
+				cemp.setIsActive(1);
+				String comments = (String)req.getParameter("comments");
+		    	   MasterEdit masteredit  = new MasterEdit();
+		    	   masteredit.setCreatedBy(Username);
+		    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+		    	   masteredit.setTableRowId(Long.parseLong(ContractEmpId));
+		    	   masteredit.setComments(comments);
+		    	   masteredit.setTableName("employee_contract");
+		    	     
+		    	   MasterEditDto masterdto = new MasterEditDto();
+		    	   masterdto.setFilePath(selectedFile);
+		    	   
+		    	   service.ContractEmpEditComments(masteredit , masterdto);
+		     Long result=service.UpdateContractEmployeeData(cemp);
+		     if(result>0) {
+		    	 redir.addAttribute("result", "Contract Employee Data Updated succesfully!");
+		     }else {
+		    	 redir.addAttribute("resultfail", "Contract Employee Data Updated Unsuccesful!");
+		     }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+				 return "redirect:/ContractEmployeeList.htm"; 
+	}
+			 @RequestMapping(value="ContractEmpAddcheck.htm",method=RequestMethod.GET)
+				public @ResponseBody String ContractEmpAddcheck(HttpSession ses,HttpServletRequest req) throws Exception{
+							String UserId=(String)ses.getAttribute("Username");
+							int username = 0;
+							BigInteger userNameCount = null;
+							logger.info(new Date() +"Inside ContractEmpAddcheck.htm"+UserId);
+					try {
+						
+						String CuserName=req.getParameter("CUserName");
+						userNameCount =service.contractEmpAddcheck("CE-"+CuserName);
+						username=userNameCount.intValue();
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside ContractEmpAddcheck.htm"+UserId,e);
+						e.printStackTrace();
+						return "static/Error";
+					}
+					Gson json = new Gson();
+					  return json.toJson(username);
+				}
+			 @RequestMapping(value="ContractEmpEditcheck.htm",method=RequestMethod.GET)
+				public @ResponseBody String ContractEmpEditcheck(HttpSession ses,HttpServletRequest req) throws Exception{
+							String UserId=(String)ses.getAttribute("Username");
+							int username = 0;
+							BigInteger userNameCount = null;
+							logger.info(new Date() +"Inside ContractEmpEditcheck.htm"+UserId);
+					try {
+						String ContractEmpId=req.getParameter("ContractEmpId");
+						String CuserName=req.getParameter("CUserName");
+						userNameCount =service.contractEmpEditcheck("CE-"+CuserName,ContractEmpId);
+						username=userNameCount.intValue();
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside ContractEmpEditcheck.htm"+UserId,e);
+						e.printStackTrace();
+						return "static/Error";
+					}
+					Gson json = new Gson();
+					  return json.toJson(username);
+				}		 
 }		

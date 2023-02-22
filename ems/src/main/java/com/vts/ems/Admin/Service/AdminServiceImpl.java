@@ -1,25 +1,40 @@
 package com.vts.ems.Admin.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.dao.AdminDaoImpl;
 import com.vts.ems.Admin.model.CalendarEvents;
+import com.vts.ems.Admin.model.ContractEmployeeData;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.master.dto.MasterEditDto;
+import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.model.EMSNotification;
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -29,7 +44,8 @@ public class AdminServiceImpl implements AdminService{
 	@Autowired
 	CHSSDao chssdao;
 	private static final Logger logger = LogManager.getLogger(AdminServiceImpl.class);
-	
+	@Value("${EMSFilesPath}")
+	private String emsfilespath;
 	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	
@@ -302,6 +318,91 @@ public class AdminServiceImpl implements AdminService{
 	public List<Object[]> getCircularOrdersNotice() throws Exception {
 	
 		return dao.getCircularOrdersNotice();
+	}
+
+	@Override
+	public Long AddContractEmployeeData(ContractEmployeeData cemp) throws Exception {
+		
+		return dao.AddContractEmployeeData(cemp);
+	}
+
+	@Override
+	public List<Object[]> getContractEmployeeList() throws Exception {
+		
+		return dao.getContractEmployeeList();
+	}
+
+	@Override
+	public Object[] getContractEmployeeData(String contractEmpId) throws Exception {
+		
+		return dao.getContractEmployeeData(contractEmpId);
+	}
+
+	@Override
+	public Long UpdateContractEmployeeData(ContractEmployeeData cemp) throws Exception {
+		ContractEmployeeData emp=dao.getContractEmpDetails(cemp.getContractEmpId());
+		emp.setContractEmpId(cemp.getContractEmpId());
+		emp.setUserName(cemp.getUserName());
+		emp.setEmpName(cemp.getEmpName());
+		emp.setDateOfBirth(cemp.getDateOfBirth());
+		emp.setEmailId(cemp.getEmailId());
+		emp.setMobileNo(cemp.getMobileNo());
+		emp.setModifiedBy(cemp.getModifiedBy());
+		emp.setModifiedDate(cemp.getModifiedDate());		
+		return dao.UpdateContractEmployeeData(emp);
+	}
+
+	@Override
+	public String getMaxContractEmpNo() throws Exception {
+		
+		return dao.getMaxContractEmpNo();
+	}
+
+	@Override
+	public BigInteger contractEmpAddcheck(String cuserName) throws Exception {
+		
+		return dao.contractEmpAddcheck(cuserName);
+	}
+
+	@Override
+	public BigInteger contractEmpEditcheck(String username, String contractEmpId)throws Exception {
+		
+		return dao.contractEmpEditcheck(username,contractEmpId);
+	}
+	public static void saveFile(String CircularFilePath, String fileName, MultipartFile multipartFile)throws IOException 
+	{
+		logger.info(new Date() + "Inside SERVICE saveFile ");
+		Path uploadPath = Paths.get(CircularFilePath);
+
+		if (!Files.exists(uploadPath)) {
+			Files.createDirectories(uploadPath);
+		}
+
+		try (InputStream inputStream = multipartFile.getInputStream()) {
+			Path filePath = uploadPath.resolve(fileName);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ioe) {
+			throw new IOException("Could not save image file: " + fileName, ioe);
+		}
+	}
+
+	@Override
+	public Long ContractEmpEditComments(MasterEdit masteredit, MasterEditDto masterdto) throws Exception {
+		logger.info(new Date() +"Inside SERVICE AddDeptEditComments ");
+		Timestamp instant= Timestamp.from(Instant.now());
+		
+		String timestampstr = instant.toString().replace(" ","").replace(":", "").replace("-", "").replace(".","");
+		
+		   if(!masterdto.getFilePath().isEmpty()) {
+				String name =masterdto.getFilePath().getOriginalFilename();
+				String filename= "MasterEditFile-"+timestampstr +"."+FilenameUtils.getExtension(masterdto.getFilePath().getOriginalFilename());
+				String filepath=emsfilespath+"EMS//MastersEditFilePath";							
+				masteredit.setFilePath(filepath+File.separator+filename);
+				masteredit.setOriginalName(name);
+			    saveFile(filepath , filename, masterdto.getFilePath());
+				
+			}	
+		return dao.ContractEmpEditComments(masteredit);
 	}
 
 	

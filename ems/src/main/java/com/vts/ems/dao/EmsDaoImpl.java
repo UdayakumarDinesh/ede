@@ -439,7 +439,7 @@ public class EmsDaoImpl implements EmsDao
 				return null;
 			}
 		}
-   private static final String EMPLIST="select EmpNo,EmpName,EmpId from employee where isactive=1"; 
+   private static final String EMPLIST="select e.EmpNo,e.EmpName,e.EmpId from employee e ,employee_details ed where e.EmpNo=ed.EmpNo and ed.EmpStatus='P'and  e.isactive=1"; 
 		@Override
 		public List<Object[]> EmployeeList() throws Exception {
 			List<Object[]> list=null;

@@ -1962,7 +1962,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	
 	
 	
-	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed WHERE e.DesigId = ed.DesigId ORDER BY e.srno DESC";
+	private static final String EMPLOYEESLIST = "SELECT e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed,employee_details edt WHERE e.DesigId = ed.DesigId AND e.EmpNo=edt.EmpNo AND edt.EmpStatus='P' ORDER BY e.srno DESC;";
 	@Override
 	public List<Object[]> EmployeesList()throws Exception
 	{
@@ -3091,7 +3091,7 @@ private static final String  CLAIMDISPUTECLOSEDLIST = "SELECT cad.CHSSDisputeId,
 
 
 
-private static final String EMPLIST="select EmpId,EmpName from employee where isactive=1";
+private static final String EMPLIST="select e.EmpId,e.EmpName from employee e,employee_details ed where e.EmpNo=ed.EmpNo and ed.EmpStatus='P' and e.isactive=1";
 	@Override
 	public List<Object[]> getEmpList() throws Exception {
 		try {

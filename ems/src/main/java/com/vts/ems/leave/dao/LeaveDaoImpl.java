@@ -39,7 +39,7 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	private static final String HOLIDAYLIST="SELECT * FROM leave_holiday_workingday WHERE DATE_FORMAT(holidate,'%Y')=:holiyear and isactive='1'";
     private static final String CREDITLIST="SELECT a.registerid, b.empname,c.designation ,a.cl,a.el,a.hpl,a.cml,a.rh,a.month,a.year FROM Leave_Register a, employee b, employee_desig c  WHERE a.empid=b.empno and b.desigid=c.desigid and CASE WHEN 'A'=:yr THEN Year=year(sysdate()) ELSE Year=:yr and Month=:mnth END AND Status='LKU'  ";
-    private static final String EMPLIST="FROM Employee WHERE IsActive='1'";
+    private static final String EMPLIST="FROM Employee  WHERE IsActive='1'";
     private static final String CREDIT="select * from leave_credit where month=:mnth";
     private static final String CREDITPREVIEW="select b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.phcl,d.ph FROM Leave_credit a, employee b, employee_desig c,employee_details d   WHERE a.month=:mnth AND d.empno=b.empno and  b.desigid=c.desigid and b.empno not in(select empid from leave_register where month=:mnth and year=:yr and status='LKU') and case when 'A'=:empNo then 1=1 else  b.empno=:empNo end ";
     private static final String CREDITIND="CALL leave_credit_individual(:mnth,:yr,:empNo)";
@@ -47,7 +47,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String HOLIDAYS="select holidate,holiname from leave_holiday_workingday where isactive='1' and case when 'U'=:type then holidate>=DATE(SYSDATE()) else holitype=:type end and year(holidate)=YEAR(CURDATE()) ORDER BY holidate";
     private static final String OFFICERDETAILS="SELECT d.empno,d.empname,e.designation,a.empname AS name1,b.empname AS name2 FROM employee a, employee b, leave_sa_ra c,employee d,employee_desig e WHERE a.empno=c.ra AND b.empno=c.sa AND c.empid=:empNo AND c.empid=d.empno AND e.desigid=d.desigid";
     private static final String EMPDETAILS="SELECT d.empno,d.empname,e.designation,d.divisionid,l.logintype FROM employee d,employee_desig e,login l WHERE l.empid=d.empid  and :empNo=d.empno AND e.desigid=d.desigid";
-    private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation,ed.punchcard from  employee d,employee_desig e,employee_details ed WHERE d.empno=ed.empno and  e.desigid=d.desigid and d.isactive='1'";
+    private static final String EMPLOYEELIST="SELECT d.empno,d.empname,e.designation,ed.punchcard from  employee d,employee_desig e,employee_details ed WHERE d.empno=ed.empno  and  e.desigid=d.desigid and d.isactive='1'and ed.EmpStatus='P'";
     private static final String LEAVECODE="SELECT a.leave_code,a.type_of_leave FROM Leave_Code a, employee b, employee_details c   WHERE  b.empno=:empno AND c.empno=b.empno and CASE WHEN c.gender='M' THEN  a.leave_code NOT IN ('0006','0007') ELSE  a.leave_code NOT IN ('0010') END  ";
     private static final String PUROPSELIST="select id,reasons from Leave_Purpose";
     private static final String LABMASTER="FROM LabMaster";

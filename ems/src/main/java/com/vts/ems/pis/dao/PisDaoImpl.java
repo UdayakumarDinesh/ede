@@ -68,7 +68,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
 	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
 	private static final String LOGINMASTER = "SELECT a.loginid, a.username, b.divisionname, 'Y' , e.empname, d.designation ,lt.logindesc FROM login a , division_master b , employee e, employee_desig d  ,  login_type lt WHERE e.divisionid=b.divisionid AND a.isactive=1 AND a.empid=e.empid  AND e.desigid=d.desigid AND a.logintype=lt.logintype order by a.username asc";
-	private static final String EMPLIST = " SELECT empid,empname FROM employee e WHERE e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
+	private static final String EMPLIST = " SELECT e.empid,e.empname FROM employee e,employee_details ed WHERE e.EmpNo=ed.EmpNo and ed.EmpStatus='P'and  e.isactive='1' AND empid NOT IN (SELECT empid FROM login WHERE isactive=1) ORDER BY srno ";
 	private static final String USERNAMEPRESENTCOUNT="SELECT COUNT(*) FROM login WHERE username=:username AND isactive='1'";
 	private static final String LOGINEDITDATA="FROM Login WHERE LOGINID=:LoginId";
 	private static final String EDITUSERMANAGER="UPDATE login SET logintype=:logintype , modifiedby=:modifiedby , modifieddate=:modifieddate  WHERE loginid=:loginid";
@@ -1252,7 +1252,7 @@ public class PisDaoImpl implements PisDao {
 		return  resetpwd;
 	}
 	
-	private static final String ALLEMPLIST="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId";
+	private static final String ALLEMPLIST="SELECT a.empid,a.empname,b.designation FROM employee a,employee_desig b,employee_details c WHERE a.EmpNo=c.EmpNo and  a.isactive='1' AND a.DesigId=b.DesigId and c.EmpStatus='P'";
 	@Override
 	public List<Object[]> GetAllEmployee()throws Exception
 	{
