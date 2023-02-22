@@ -10,6 +10,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
@@ -80,6 +81,12 @@ public interface MasterDao {
 	public BigInteger DepartmentCodeCheck(String depCode) throws Exception;
 	public Long AddDeptEditComments(MasterEdit masteredit)throws Exception;
 	public BigInteger DepartmentEditcheck(String depCode, String deptId)throws Exception;
+	public DivisionGroup getDivisionGroupById(int groupId) throws Exception;
+	public List<Object[]> getDivisionGroupsList() throws Exception;
+	public List<Object[]> getEmployeeList() throws Exception;
+	public Object[] getDuplicateCount(String groupCode) throws Exception;
+	public int divisionGroupAdd(DivisionGroup divisiongroup) throws Exception;
+	public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception;
 	
 	
 	

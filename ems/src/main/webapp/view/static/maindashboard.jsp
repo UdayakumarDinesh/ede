@@ -8,7 +8,6 @@
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
@@ -76,6 +75,8 @@
 						<%} %>
 					</div>
 
+
+				<%if(!logintype.equalsIgnoreCase("CE")){ %>
 					<form action="MainDashBoard.htm" method="POST" id="myform"> 
 	             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
 					     				    
@@ -116,54 +117,56 @@
 				   </tr>
 		    </table> 				         			             				                          	
       </form>	
-                  <br>      
-    <form action="MainDashBoard.htm" method="POST">
-	     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	               
-	          <div class="table-responsive" >
-	                <table  class="table table-bordered table-hover table-striped table-condensed" id="myTable"  >
-			           <thead>
-			                  
-			                  <tr>
-			                       <th>SN</th>
-			                       <th>Emp No</th>
-			                       <!-- <th>Status</th> -->
-			                       <th>Attendance Date</th>
-			                       <th>In Date</th>
-			                       <th>In Time</th>
-			                       <th>Out Date</th>		                       
-			                       <th>Out Time</th>
-			                       <th>Work Time </th>
-			                  </tr>	
-			                  	           			           
-			           </thead>
-			           <tbody>
-			                    <%if(attendlist!=null){ int sn=0;
-			                  for(Object[] obj:attendlist){ 
-			                  
-			                 SimpleDateFormat st=new SimpleDateFormat("HH:mm");
-			                 Date time=st.parse("7:50");
-			                 Date some=st.parse(obj[5].toString());
-			                
-			                  %>
-			                   <tr> 
-			                         <td style="text-align: center;"><%=++sn%></td>
-			                         <td  style="text-align: center;"><%=obj[0] %></td>	
-			                        <%--   <td <% if((obj[1].toString()).equalsIgnoreCase("present")){%>style="color:green;font-weight: bold;text-align: center;"<%}else {%>style="color:red;font-weight: bold;text-align: center;"<% }%>><%=obj[1] %></td>		                          --%>
-			                         <td style="text-align: center;"><%=sdf.format(obj[2])%></td>			                        
-			                         <td style="text-align: center;"><%if(obj[3]!=null){%><%=sdf.format(obj[3])%><%}else {%>-<%} %></td>
-			                         <td style="text-align: center;color:blue;"><%if(obj[3]!=null){%><%=stf.format(obj[3])%><%}else {%>-<%} %></td>
-			                         <td style="text-align: center;"><%if(obj[4]!=null){%><%=sdf.format(obj[4])%><%}else {%>-<%} %></td>
-			                         <td style="text-align: center;color:blue;"><%if(obj[4]!=null){%><%=stf.format(obj[4])%><%}else {%>-<%} %></td>
-			                         <td <%if(obj[5]!=null){if(some.before(time)){%> style="color:red;font-weight: bold;text-align: center;"<%}else{%> style="font-weight:bold;text-align:center;"<%}%>><%=obj[5]%><%}else {%>00:00<%} %></td>
-			                   </tr>
-			                   <%}} %>          			           
-			           </tbody>									
-			     </table>
-			  </div> 
-			</form>
-		</div>
+                  	<br>      
+				    <form action="MainDashBoard.htm" method="POST">
+					     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	               
+					          <div class="table-responsive" >
+					                <table  class="table table-bordered table-hover table-striped table-condensed" id="myTable"  >
+							           <thead>
+							                  
+							                  <tr>
+							                       <th>SN</th>
+							                       <th>Emp No</th>
+							                       <!-- <th>Status</th> -->
+							                       <th>Attendance Date</th>
+							                       <th>In Date</th>
+							                       <th>In Time</th>
+							                       <th>Out Date</th>		                       
+							                       <th>Out Time</th>
+							                       <th>Work Time </th>
+							                  </tr>	
+							                  	           			           
+							           </thead>
+							           <tbody>
+							                    <%if(attendlist!=null){ int sn=0;
+							                  for(Object[] obj:attendlist){ 
+							                  
+							                 SimpleDateFormat st=new SimpleDateFormat("HH:mm");
+							                 Date time=st.parse("7:50");
+							                 Date some=st.parse(obj[5].toString());
+							                
+							                  %>
+							                   <tr> 
+							                         <td style="text-align: center;"><%=++sn%></td>
+							                         <td  style="text-align: center;"><%=obj[0] %></td>	
+							                        <%--   <td <% if((obj[1].toString()).equalsIgnoreCase("present")){%>style="color:green;font-weight: bold;text-align: center;"<%}else {%>style="color:red;font-weight: bold;text-align: center;"<% }%>><%=obj[1] %></td>		                          --%>
+							                         <td style="text-align: center;"><%=sdf.format(obj[2])%></td>			                        
+							                         <td style="text-align: center;"><%if(obj[3]!=null){%><%=sdf.format(obj[3])%><%}else {%>-<%} %></td>
+							                         <td style="text-align: center;color:blue;"><%if(obj[3]!=null){%><%=stf.format(obj[3])%><%}else {%>-<%} %></td>
+							                         <td style="text-align: center;"><%if(obj[4]!=null){%><%=sdf.format(obj[4])%><%}else {%>-<%} %></td>
+							                         <td style="text-align: center;color:blue;"><%if(obj[4]!=null){%><%=stf.format(obj[4])%><%}else {%>-<%} %></td>
+							                         <td <%if(obj[5]!=null){if(some.before(time)){%> style="color:red;font-weight: bold;text-align: center;"<%}else{%> style="font-weight:bold;text-align:center;"<%}%>><%=obj[5]%><%}else {%>00:00<%} %></td>
+							                   </tr>
+							                   <%}} %>          			           
+							           </tbody>									
+							     </table>
+							  </div> 
+							</form>
+				<%} %>
+				</div>
+				
+			</div>				
 
-	</div>				
 <script>
 
 $('#fromdate').daterangepicker({
