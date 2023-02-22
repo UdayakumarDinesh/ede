@@ -87,6 +87,7 @@ public interface MasterDao {
 	public Object[] getDuplicateCount(String groupCode) throws Exception;
 	public int divisionGroupAdd(DivisionGroup divisiongroup) throws Exception;
 	public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception;
+	public List<Object[]> getGroupList() throws Exception;
 	
 	
 	

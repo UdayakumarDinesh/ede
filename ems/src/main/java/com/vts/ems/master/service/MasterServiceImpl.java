@@ -562,5 +562,9 @@ public class MasterServiceImpl implements MasterService {
 			returnobj[0]=dao.getDuplicateCount(groupCode)[0].toString();
 			return returnobj;
 		}
-
+		@Override
+		public List<Object[]> getGroupList() throws Exception {
+			
+			return dao.getGroupList();
+		}
 }

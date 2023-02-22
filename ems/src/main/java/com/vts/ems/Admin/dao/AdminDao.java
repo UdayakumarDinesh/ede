@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vts.ems.Admin.model.CalendarEvents;
-import com.vts.ems.Admin.model.ContractEmployeeData;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -52,11 +52,11 @@ public interface AdminDao {
 	public Object[] editCalendarEvent(String eMSEventId) throws Exception;
 	public long deleteCalendarEvent(String eMSEventId) throws Exception;
 	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName,String eventDescription)throws Exception;
-	public Long AddContractEmployeeData(ContractEmployeeData cemp)throws Exception;
+	public Long AddContractEmployeeData(EmployeeContract cemp)throws Exception;
 	public List<Object[]> getContractEmployeeList()throws Exception;
 	public Object[] getContractEmployeeData(String contractEmpId)throws Exception;
-	public Long UpdateContractEmployeeData(ContractEmployeeData emp)throws Exception;
-	public ContractEmployeeData getContractEmpDetails(Long contractEmpId)throws Exception;
+	public Long UpdateContractEmployeeData(EmployeeContract emp)throws Exception;
+	public EmployeeContract getContractEmpDetails(Long contractEmpId)throws Exception;
 	public String getMaxContractEmpNo()throws Exception;
 	public BigInteger contractEmpAddcheck(String cuserName)throws Exception;
 	public BigInteger contractEmpEditcheck(String username, String contractEmpId)throws Exception;

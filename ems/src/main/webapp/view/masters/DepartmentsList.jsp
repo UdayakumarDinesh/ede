@@ -24,8 +24,9 @@
 				</div>
 			</div>
 		 </div>
+		 
 		 <div class="page card dashboard-card">
-		 <div class="card" >
+		 <div class="card-body" >
 		 <div align="center">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
@@ -41,6 +42,7 @@
 			</div>
 		<%} %>
 	</div>
+	          <div class="card" >
 				<div class="card-body ">			
 					<form action="DepartmentsList.htm" method="POST" >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
@@ -49,7 +51,7 @@
 								<thead>
 									<tr>
 										<th> Select            </th>
-										<th>Department Code    </th>
+										<th> Department Code    </th>
 										<th> Department        </th>
 										<th> Department Head    </th>
 									</tr>
@@ -59,7 +61,7 @@
 								    	  for(Object[] obj:Deplist){ 
 								    	   %>
 								     <tr>
-								        <td style="text-align: center;"><input type="radio" value="<%=obj[0] %>" name="Depid" required="required"> </td>
+								        <td style="text-align: center;"><input type="radio" value="<%=obj[0] %>" name="Depid" > </td>
 								        <td style="text-align: center;width:14%;"><%=obj[1]%></td>
 								        <td><%=obj[2]%></td>
 								         <td><%=obj[3]%></td>
@@ -71,12 +73,27 @@
 					<div class="row text-center">
 					<div class="col-md-12">
 					<button type="submit" class="btn btn-sm add-btn" name="action" value="Add" formnovalidate="formnovalidate">ADD</button>
-					<button type="submit" class="btn btn-sm edit-btn"  name="action"value="Edit">EDIT</button>
+					<button type="submit" class="btn btn-sm edit-btn"  name="action"value="Edit"  Onclick="Edit(myTable)">EDIT</button>
 					</div>
 					</div>
 			  </form>
 		 </div>
     </div>
-</div>				
+    </div>
+</div>	
+<script type="text/javascript">
+function Edit(myfrm) {
+
+	var fields = $("input[name='Depid']").serializeArray();
+
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Group Code ");
+
+		event.preventDefault();
+		return false;
+	}
+	return true;
+}
+</script>
 </body>
 </html>

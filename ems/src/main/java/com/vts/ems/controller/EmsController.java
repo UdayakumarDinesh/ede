@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +39,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.login.EmpContractRepo;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
-import com.vts.ems.master.model.EmployeeContract;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.AuditStamping;
 import com.vts.ems.model.EMSNotification;
@@ -154,7 +152,7 @@ public class EmsController {
 			}
 			else
 			{
-				EmployeeContract login = contractemprepo.findByUserName(req.getUserPrincipal().getName());
+				EmployeeContract login = contractemprepo.findByContractEmpNo(req.getUserPrincipal().getName());
 				ses.setAttribute("LoginId", login.getContractEmpId() );
 				ses.setAttribute("Username", req.getUserPrincipal().getName());
 				ses.setAttribute("LoginType", "CE");
@@ -168,7 +166,7 @@ public class EmsController {
 				AuditStamping stamping=new AuditStamping();
 		        stamping.setLoginId(login.getContractEmpId());
 		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-		        stamping.setUsername(login.getUserName());
+		        stamping.setUsername(login.getContractEmpNo());
 		        stamping.setIpAddress(IpAddress);
 		        stamping.setLoginDateTime(LocalDateTime.now().toString());
 		        service.LoginStampingInsert(stamping);

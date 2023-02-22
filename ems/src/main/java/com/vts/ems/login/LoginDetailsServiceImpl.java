@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vts.ems.master.model.EmployeeContract;
+import com.vts.ems.Admin.model.EmployeeContract;
 
 @Service
 public class LoginDetailsServiceImpl implements UserDetailsService 
@@ -28,7 +28,7 @@ public class LoginDetailsServiceImpl implements UserDetailsService
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
 		Login login = loginRepository.findByUsername(username);
-		EmployeeContract contractemp = contractemprepo.findByUserName(username);
+		EmployeeContract contractemp = contractemprepo.findByContractEmpNo(username);
         if(login != null && login.getIsActive()==1) 
         {
 	        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
@@ -43,7 +43,7 @@ public class LoginDetailsServiceImpl implements UserDetailsService
 	        
 	        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_CE"));
 	       
-	        return new org.springframework.security.core.userdetails.User(contractemp.getUserName(), contractemp.getPassword(), grantedAuthorities);
+	        return new org.springframework.security.core.userdetails.User(contractemp.getContractEmpNo(), contractemp.getPassword(), grantedAuthorities);
         }
         else
         {
