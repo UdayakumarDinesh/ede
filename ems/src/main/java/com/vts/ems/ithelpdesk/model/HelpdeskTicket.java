@@ -18,8 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-
-
 @Entity(name="helpdesk_tickets")
 public class HelpdeskTicket implements Serializable {
 	
