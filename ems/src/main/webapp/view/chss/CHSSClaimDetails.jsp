@@ -226,6 +226,8 @@ var count=1;
 	  $('[data-toggle="tooltip"]').tooltip('dispose');
 	  $('[data-toggle="tooltip"]').tooltip({
 			 trigger : 'hover',
+			 html : true,
+			 boundary: 'window'
 		});
 	  
 	});
@@ -242,6 +244,8 @@ var count=1;
 	  
 	   $('[data-toggle="tooltip"]').tooltip({
 			 trigger : 'hover',
+			 html : true,
+			 boundary: 'window'
 		});
 	}
 	   

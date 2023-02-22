@@ -19,6 +19,8 @@ $(document).ready(function() {
     
    $('[data-toggle="tooltip"]').tooltip({
 		 trigger : 'hover',
+		 html : true,
+		 boundary: 'window'
 	});
 	$('[data-toggle="tooltip"]').on('click', function () {
 		$(this).tooltip('hide');

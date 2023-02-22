@@ -188,6 +188,8 @@ int slno=0;
 		 
 	  $('[data-toggle="tooltip"]').tooltip({
 			 trigger : 'hover',
+			 html : true,
+			 boundary: 'window'
 		});
 	  
 	});

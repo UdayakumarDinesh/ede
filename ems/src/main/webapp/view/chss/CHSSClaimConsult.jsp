@@ -491,6 +491,8 @@ function setTooltip()
 {
 	$('[data-toggle="tooltip"]').tooltip({
 		 trigger : 'hover',
+		 html : true,
+		 boundary: 'window'
 	});
 	$('[data-toggle="tooltip"]').on('click', function () {
 		$(this).tooltip('hide');
