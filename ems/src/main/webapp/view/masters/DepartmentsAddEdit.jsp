@@ -55,7 +55,7 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 											<th><label>Department Code<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Department Code" type="text" id="depcode" name="Departmentcode" value="<%if(dept!=null){%><%=dept[1]%><%} %>"
-												style="text-transform:capitalize" required="required" maxlength="5" style="font-size: 15px;" ></td>
+												style="text-transform:capitalize" required="required" maxlength="5" style="font-size: 15px;"  ></td>
 										</tr>
 										<tr>
 											<th><label>Department Name <span class="mandatory" style="color: red;">*</span></label></th>
@@ -81,7 +81,7 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 									
 								</table>
 								<%if(dept!=null){%>
-								 <input type="hidden" name="Deptid" value="<%=dept[0]%>">
+								 <input type="hidden" name="Deptid" id="Deptid" value="<%=dept[0]%>">
 								<button class="btn btn-sm submit-btn" onclick="return DepartmentEditcheck(addfrm)">Submit</button>
 								<%}else {%>
 								<button class="btn btn-sm submit-btn" onclick="return DepartmentAddcheck()">Submit</button>
@@ -140,7 +140,25 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 				</div>
 			</div>
 		</div>
-  </div>	
+  </div>
+  <script type="text/javascript">
+
+$('#depcode').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z0-9 \s]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter AlphaNumeric Characters Only');
+    return false;
+    }
+});
+
+</script>
+	
 	<script type="text/javascript">
 	function DepartmentAddcheck()
 	{
@@ -204,6 +222,7 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 	{
 		var depcode=$('#depcode').val();
 		var department=$('#department').val();
+		var Deptid=$('#Deptid').val();
 		var count =true;
 		$.ajax({
 
@@ -212,7 +231,7 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 			data : {
 				
 				Departmentcode:depcode.trim(),			
-				
+				Deptid:Deptid.trim(),
 			},
 			datatype : 'json',
 			success : function(result)

@@ -896,6 +896,7 @@ public class NewspaperController {
 			ModelAndView mv = new ModelAndView();
 			logger.info(new Date() + "Inside TelephoneApproval.htm" + Username);
 			try {
+				ses.setAttribute("SidebarActive", "TelephoneApproval_htm");
 				List<Object[]> TelephoneApprovalList = service.getTelephoneApprovalList();
 				request.setAttribute("TelephoneApprovalList", TelephoneApprovalList);
 				mv.setViewName("newspaper/TelephoneApproval");

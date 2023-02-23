@@ -31,7 +31,7 @@ List<Object[]> ContractEmpList=(List<Object[]>)request.getAttribute("ContractEmp
 		 </div>
 		 <div class="page card dashboard-card">
 		 <div class="card">	
-		 <div align="center" >
+		 <div align="center">
 		 <%String res=(String)request.getParameter("result"); 
 		String res1=(String)request.getParameter("resultfail");
 		if(res1!=null){ %>
@@ -54,7 +54,7 @@ List<Object[]> ContractEmpList=(List<Object[]>)request.getAttribute("ContractEmp
 									<tr>
 										<th> Select </th>
 										<th>Employee Name</th>
-										<th> Emp No / UserName </th>
+										<th style="width: 20%;"> Emp No / UserName </th>
 										<!-- <th>User Name</th> -->
 										<th>DOB</th>
 										<th>Mobile No</th>
@@ -72,7 +72,7 @@ List<Object[]> ContractEmpList=(List<Object[]>)request.getAttribute("ContractEmp
 								             <td><%=obj[2] %></td>
 								            <%--  <td><%=obj[3] %></td> --%>
 								             <td style="text-align: center;"><%=sdf.format(obj[4])%></td>
-								             <td style="text-align: center;"><%=obj[5] %></td>
+								             <td style="text-align: center;"><%if(obj[5]!=null){%><%=obj[5] %><%}else{ %>-<%} %></td>
 								         </tr>
 								         <%}} %>
 								</tbody>

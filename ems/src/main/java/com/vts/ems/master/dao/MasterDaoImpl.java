@@ -991,7 +991,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return 0l;
 			}
 		}
-private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from division_master where DivisionCode=:DeptCode and DivisionId=:DeptId";
+private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from division_master where DivisionCode=:DeptCode and DivisionId!=:DeptId";
 		@Override
 		public BigInteger DepartmentEditcheck(String depCode, String deptId) throws Exception {
 			try {

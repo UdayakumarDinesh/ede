@@ -72,7 +72,7 @@ Object[] cemp=(Object[])request.getAttribute("ContractEmpData"); %>
 										
 										<tr>
 										     <th><label>Mobile No</label></th>
-										     <td> <input type="text" class="form-control form-control" pattern="[6-9]{1}[0-9]{9}"placeholder="Enter Mobile No" id="mobileNo" name="MobileNo" value="<%if(cemp!=null){%><%=cemp[5]%><%}%>" maxlength="10" ></td>
+										     <td> <input type="text" class="form-control form-control" placeholder="Enter Mobile No" id="mobileNo" name="MobileNo" value="<%if(cemp!=null){%><%=cemp[5]%><%}%>" maxlength="10" ></td>
 										</tr>
 									</table>
 									<%if(cemp!=null){ %>
@@ -149,6 +149,54 @@ $('#dob').daterangepicker({
 	}
 });			
 	</script> 
+	<script type="text/javascript">
+
+$('#EmpName').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z \s]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter Alphabate');
+    return false;
+    }
+});
+
+</script>
+<script type="text/javascript">
+
+
+setPatternFilter($("#mobileNo"), /^-?\d*$/);
+
+function setPatternFilter(obj, pattern) {
+	  setInputFilter(obj, function(value) { return pattern.test(value); });
+	}
+
+function setInputFilter(obj, inputFilter) {
+	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+	    if (inputFilter(this.value)) {
+	      this.oldValue = this.value;
+	      this.oldSelectionStart = this.selectionStart;
+	      this.oldSelectionEnd = this.selectionEnd;
+	    } else if (this.hasOwnProperty("oldValue")) {
+	      this.value = this.oldValue;
+	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+	    }
+	  });
+	}
+function checknegative(str) {
+    if (parseFloat(document.getElementById(str.id).value) < 0) {
+        document.getElementById(str.id).value = "";
+        document.getElementById(str.id).focus();
+        alert('Negative Values Not allowed');
+        return false;
+    }
+}
+
+</script>
 	<script type="text/javascript">
 	function ContractEmpAddcheck()
 	{

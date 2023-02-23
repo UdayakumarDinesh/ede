@@ -676,7 +676,7 @@ private static final String CONTRACTEMPEDIT="SELECT ContractEmpId,UserName,EmpNa
 	}
 		
 	}
-private static final String GETMAXEMPNO="SELECT MAX(SUBSTRING(ContractEmpNo,3)) FROM employee_contract WHERE Isactive=1";
+private static final String GETMAXEMPNO="SELECT substring(ContractEmpNo,3) FROM employee_contract  WHERE ContractEmpId=(SELECT MAX(ContractEmpId) FROM employee_contract)";
 	@Override
 	public String getMaxContractEmpNo() throws Exception {
 		try {

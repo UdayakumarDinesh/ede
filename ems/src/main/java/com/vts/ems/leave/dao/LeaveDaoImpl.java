@@ -39,7 +39,7 @@ public class LeaveDaoImpl implements LeaveDao{
 
 	private static final String HOLIDAYLIST="SELECT * FROM leave_holiday_workingday WHERE DATE_FORMAT(holidate,'%Y')=:holiyear and isactive='1'";
     private static final String CREDITLIST="SELECT a.registerid, b.empname,c.designation ,a.cl,a.el,a.hpl,a.cml,a.rh,a.month,a.year FROM Leave_Register a, employee b, employee_desig c  WHERE a.empid=b.empno and b.desigid=c.desigid and CASE WHEN 'A'=:yr THEN Year=year(sysdate()) ELSE Year=:yr and Month=:mnth END AND Status='LKU'  ";
-    private static final String EMPLIST="FROM Employee  WHERE IsActive='1'";
+    private static final String EMPLIST="SELECT e.EmpNo,e.EmpName FROM employee e, employee_details ed  WHERE e.EmpNo=ed.EmpNo AND ed.EmpStatus='P'AND  e.IsActive='1'";
     private static final String CREDIT="select * from leave_credit where month=:mnth";
     private static final String CREDITPREVIEW="select b.empno,b.empname,c.designation,a.cl,a.el,a.hpl,a.cml,a.rh,a.phcl,d.ph FROM Leave_credit a, employee b, employee_desig c,employee_details d   WHERE a.month=:mnth AND d.empno=b.empno and  b.desigid=c.desigid and b.empno not in(select empid from leave_register where month=:mnth and year=:yr and status='LKU') and case when 'A'=:empNo then 1=1 else  b.empno=:empNo end ";
     private static final String CREDITIND="CALL leave_credit_individual(:mnth,:yr,:empNo)";
@@ -87,9 +87,13 @@ public class LeaveDaoImpl implements LeaveDao{
 
 
 	@Override
-	public List<Employee> EmpList() throws Exception {
-		Query query = manager.createQuery(EMPLIST);
-		List<Employee> EmpList= query.getResultList();
+	public List<Object[]> EmpList() throws Exception {
+		Query query = manager.createNativeQuery(EMPLIST);
+		List<Object[]> EmpList= (List<Object[]>)query.getResultList();
+		for(Object[] emp:EmpList) {
+			System.out.println(emp[0]);
+			System.out.println(emp[1]);
+		}
 		return EmpList;
 	
 	}

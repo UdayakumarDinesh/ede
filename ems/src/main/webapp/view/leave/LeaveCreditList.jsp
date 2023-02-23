@@ -1,7 +1,7 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
 <%@page import="com.ibm.icu.text.SimpleDateFormat"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -93,7 +93,7 @@ String ses=(String)request.getParameter("result");
 
  <%
     List<Object[]> clist=(List<Object[]>)request.getAttribute("CreditList");
-    List<Employee> emplist=(List<Employee>)request.getAttribute("EmpList");
+    List<Object[]> emplist=( List<Object[]>)request.getAttribute("EmpList");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	   %>
 
@@ -114,9 +114,10 @@ String ses=(String)request.getParameter("result");
 				    <div class="col-md-4">
 					    <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
 					    <option value="A">All</option>
-					    <%for(Employee emp:emplist){ %>
-					    <option value="<%=emp.getEmpNo() %>"><%=emp.getEmpName() %></option>
-					    <%} %>
+					    <%if(emplist!=null){
+					    for(Object[] emp:emplist){ %>
+					    <option value="<%=emp[0] %>"><%=emp[1] %></option>
+					    <%}} %>
 					    </select>
 				    </div>
 			    

@@ -92,7 +92,7 @@
 								<thead>
 									<tr>
 										<th>Select</th>
-										<th>SrNo.</th>
+										<th>SN</th>
 										<th>EmpNo</th>
 										<th>Name</th>
 										<th>Designation</th>
@@ -106,7 +106,7 @@
 									slno++;%>
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="empid" value="<%=obj[0] %>"> </td>
-											<td><%=obj[3]%></td>
+											<td><%=slno%></td>
 											<td><%=obj[1] %></td>
 											<td><%=obj[2] %></td>
 											<td><%=obj[4] %></td>

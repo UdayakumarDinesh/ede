@@ -35,7 +35,7 @@
 			</div>
 	</div>
 <%
-List<Employee> AllEmployee=(List<Employee>)request.getAttribute("AllEmployee");
+List<Object[]> AllEmployee=(List<Object[]>)request.getAttribute("AllEmployee");
 List<Object[]> ReccSanc=(List<Object[]>)request.getAttribute("ReccSanc");
 String empNo=(String)request.getAttribute("empNo");
 %> 
@@ -53,8 +53,8 @@ String empNo=(String)request.getAttribute("empNo");
 				    </div>
 				    <div class="col-md-4">
 					    <select class="form-control  selectpicker" required="required" name="selecRadioForEmpid" title="Select Employee" data-live-search="ture" id="empNo">
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(empNo.equals(emp.getEmpNo())){ %>selected="selected" <%}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(empNo.equals(emp[0])){ %>selected="selected" <%}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
 				    </div>
@@ -135,8 +135,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    RA1 Name:<br>
   	      		   <select class="form-control  selectpicker" required="required" name="RA1" title="Select Employee" data-live-search="ture" >
   	      		       <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getRA())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getRA())){ %>selected="selected" <%}}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
   	      		    </div>
@@ -144,8 +144,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    RA2 Name:<br>
   	      		    <select class="form-control  selectpicker" required="required" name="RA2" title="Select Employee" data-live-search="ture" >
 					    <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getRA2())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getRA2())){ %>selected="selected" <%}}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
   	      		    </div>
@@ -165,8 +165,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    RA3 Name:<br>
   	      		    <select class="form-control  selectpicker" required="required" name="RA3" title="Select Employee" data-live-search="ture" >
 					   <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getRA3())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0]%>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getRA3())){ %>selected="selected" <%}}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
   	      		    </div>
@@ -174,8 +174,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    SA Name:<br>
   	      		    <select class="form-control  selectpicker" required="required" name="SA" title="Select Employee" data-live-search="ture" >
 					    <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getSA())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getSA())){ %>selected="selected" <%}}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
   	      		    </div>
@@ -195,8 +195,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    TD RA Name:<br>
   	      		    <select class="form-control  selectpicker" required="required" name="TDRA" title="Select Employee" data-live-search="ture" >
 					    <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getTD_RA())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getTD_RA())){ %>selected="selected" <%}}%>><%=emp[1] %></option>
 					    <%} %>
 					    </select>
   	      		    </div>
@@ -204,8 +204,8 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    TD SA Name:<br>
   	      		    <select class="form-control  selectpicker" required="required" name="TDSA" title="Select Employee" data-live-search="ture" >
 					    <option value="0000000" selected="selected">Not Required</option>
-					    <%for(Employee emp:AllEmployee){ %>
-					    <option value="<%=emp.getEmpNo() %>" <%if(ReccSancById!=null){ if(emp.getEmpNo().equals(ReccSancById.getTD_SA())){ %>selected="selected" <%}}%>><%=emp.getEmpName() %></option>
+					    <%for(Object[] emp:AllEmployee){ %>
+					    <option value="<%=emp[0] %>" <%if(ReccSancById!=null){ if(emp[0].equals(ReccSancById.getTD_SA())){ %>selected="selected" <%}}%>><%=emp[1]%></option>
 					    <%} %>
 					    </select>
   	      		    </div>
