@@ -969,12 +969,12 @@ public class MasterController {
 					
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+					//String limit = (String)req.getParameter("Designationlimit");
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigId(Long.parseLong(designationid));
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+				//	desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					String comments = (String)req.getParameter("comments");
 			    	   MasterEdit masteredit  = new MasterEdit();
@@ -1000,12 +1000,12 @@ public class MasterController {
 				}else{
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+					//String limit = (String)req.getParameter("Designationlimit");
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+					//desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
 					if (result != 0) {
@@ -1031,12 +1031,12 @@ public class MasterController {
 			try {						
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+				//	String limit = (String)req.getParameter("Designationlimit");
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+				//	desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
 					if (result != 0) {
@@ -1410,116 +1410,8 @@ public class MasterController {
 				}
 			}
 			
-			@RequestMapping(value="DepartmentsList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
-			public String Departments(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
-			{
-				String UserId=(String)ses.getAttribute("Username");
-				logger.info(new Date() +"Inside Departments.htm"+UserId);
-				List<Object[]> Deparmentslist=new ArrayList<Object[]>();
-
-				try {
-					
-					ses.setAttribute("SidebarActive", "DepartmentsList_htm");
-					String action=req.getParameter("action");
-					List<Object[]> EmpList=service.getEmpList();
-					if("Add".equalsIgnoreCase(action)) {
-						
-						req.setAttribute("Emplist",EmpList );
-						return "masters/DepartmentsAddEdit";
-					}
-					else if("Edit".equalsIgnoreCase(action)) {
-						String DeptId=req.getParameter("Depid");						
-						Object[] deptdetails=(Object[])service.departmentEdit(DeptId);
-					req.setAttribute("Department", deptdetails);
-					req.setAttribute("Emplist",EmpList );
-						return "masters/DepartmentsAddEdit";
-					}else {
-						 Deparmentslist=service.getDepartmentslist();
-						 req.setAttribute("Deparmentslist", Deparmentslist);
-						 req.setAttribute("result", req.getParameter("result"));
-						 req.setAttribute("resultfail", req.getParameter("resultfail"));
-					}
-					
-				return "masters/DepartmentsList";
-				} catch (Exception e) {
-				logger.error(new Date() +"Inside DepartmentsList.htm "+UserId,e);
-					e.printStackTrace();
-					return "static/Error";
-				}
-				
-			}
-			@RequestMapping(value="DepartmentAdd.htm",method=RequestMethod.POST)
-		public String DepartmentAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
-		{    String UserId=(String)ses.getAttribute("Username");
-				try {
-					String depCode = req.getParameter("Departmentcode");
-					String depName = req.getParameter("DepartmentName");
-					String depHead = req.getParameter("DepartmentHead");
-					;
-					Department dep=new Department();
-					 dep.setDivisionCode(depCode.toUpperCase().trim());
-					 dep.setDivisionName(depName.trim());
-					 dep.setDivisionHeadId(Long.parseLong(depHead));
-					 dep.setCreatedBy(UserId);
-					 dep.setCreatedDate(sdtf.format(new Date()));
-					 dep.setGroupId(1);
-					 dep.setIsActive(1);
-					int result=service.DepartmentAdd(dep);
-					if(result>0) {
-					 redir.addAttribute("result", "Department Details Added Successfully");
-					}else {
-						 redir.addAttribute("resultfail", "Department Details  Not Added ");
-					}
-					return "redirect:/DepartmentsList.htm";	
-				} catch (Exception e) {
-				logger.error(new Date() +"Inside DepartmentAdd.htm"+UserId,e);
-					e.printStackTrace();
-					return "static/Error";
-				}
-			
-		}
-			@RequestMapping(value="DepartmentEdit.htm",method=RequestMethod.POST)
-			public String DepartmentUpdate(HttpServletRequest req,HttpSession ses,@RequestPart("selectedFile") MultipartFile selectedFile ,RedirectAttributes redir) throws Exception{
-				 String UserId=(String)ses.getAttribute("Username");
-				try {
-					
-					String deptId=req.getParameter("Deptid");
-					String depCode = req.getParameter("Departmentcode");
-					String depName = req.getParameter("DepartmentName");
-					String depHead = req.getParameter("DepartmentHead");
-					Department dep=new Department();
-					dep.setDivisionId(Long.parseLong(deptId));
-					dep.setDivisionCode(depCode.toUpperCase().trim());
-					dep.setDivisionName(depName.trim());
-					dep.setDivisionHeadId(Long.parseLong(depHead));
-					dep.setModifiedBy(UserId);
-					dep.setModifiedDate(sdtf.format(new Date()));					
-					String comments = (String)req.getParameter("comments");
-			    	   MasterEdit masteredit  = new MasterEdit();
-			    	   masteredit.setCreatedBy(UserId);
-			    	   masteredit.setCreatedDate(sdtf.format(new Date()));
-			    	   masteredit.setTableRowId(Long.parseLong(deptId));
-			    	   masteredit.setComments(comments);
-			    	   masteredit.setTableName("division_master");
-			    	     
-			    	   MasterEditDto masterdto = new MasterEditDto();
-			    	   masterdto.setFilePath(selectedFile);
-			    	   
-			    	   service.AddDeptEditComments(masteredit , masterdto);
-				int result=	service.UpdateDepartment(dep);
-				if(result>0) {
-					 redir.addAttribute("result", "Department Details Updated Successfully");
-					}else {
-						 redir.addAttribute("resultfail", "Department Details  Not Updated");
-					}
-					return "redirect:/DepartmentsList.htm";
-				} catch (Exception e) {
-					logger.error(new Date() +"Inside DepartmentUpdate.htm"+UserId,e);
-					e.printStackTrace();
-					return  "static/Error";
-				}
-	
-			}			
+		
+		
 	@RequestMapping(value="DepartmentAddCheck.htm",method=RequestMethod.GET)
 	public @ResponseBody String DepartmentAddcheck(HttpSession ses,HttpServletRequest req) throws Exception{
 				String UserId=(String)ses.getAttribute("Username");
@@ -1562,6 +1454,128 @@ public class MasterController {
 	}
 	
 	
+	@RequestMapping(value="DepartmentsList.htm", method = { RequestMethod.POST ,RequestMethod.GET })
+	public String Departments(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside Departments.htm"+UserId);
+		List<Object[]> Deparmentslist=new ArrayList<Object[]>();
+
+		try {
+			
+			ses.setAttribute("SidebarActive", "DepartmentsList_htm");
+			String action=req.getParameter("action");
+			List<Object[]> EmpList=service.getEmpList();
+			List<Object[]> groupList = service.getGroupList();
+			if("Add".equalsIgnoreCase(action)) {
+				
+				req.setAttribute("Emplist",EmpList );
+				req.setAttribute("groupList", groupList);
+				return "masters/DepartmentsAddEdit";
+			}
+			else if("Edit".equalsIgnoreCase(action)) {
+				String DeptId=req.getParameter("Depid");						
+				Object[] deptdetails=(Object[])service.departmentEdit(DeptId);
+			    req.setAttribute("Department", deptdetails);
+			    req.setAttribute("Emplist",EmpList );
+			    req.setAttribute("groupList", groupList);
+				return "masters/DepartmentsAddEdit";
+			}else {
+				 Deparmentslist=service.getDepartmentslist();
+				 req.setAttribute("Deparmentslist", Deparmentslist);
+				 req.setAttribute("result", req.getParameter("result"));
+				 req.setAttribute("resultfail", req.getParameter("resultfail"));
+			}
+			
+		return "masters/DepartmentsList";
+		} catch (Exception e) {
+		logger.error(new Date() +"Inside DepartmentsList.htm "+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	
+	@RequestMapping(value="DepartmentAdd.htm",method=RequestMethod.POST)
+	public String DepartmentAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{    String UserId=(String)ses.getAttribute("Username");
+			try {
+				String depCode = req.getParameter("Departmentcode");
+				String depName = req.getParameter("DepartmentName");
+				String depHead = req.getParameter("DepartmentHead");
+				String groupId = req.getParameter("groupCode");
+				
+				Department dep=new Department();
+				 dep.setDivisionCode(depCode.toUpperCase().trim());
+				 dep.setDivisionName(depName.trim());
+				 dep.setDivisionHeadId(Long.parseLong(depHead));
+				 dep.setCreatedBy(UserId);
+				 dep.setCreatedDate(sdtf.format(new Date()));
+				 dep.setGroupId( Long.parseLong(groupId));
+				 dep.setIsActive(1);
+				int result=service.DepartmentAdd(dep);
+				if(result>0) {
+				 redir.addAttribute("result", "Department Details Added Successfully");
+				}else {
+					 redir.addAttribute("resultfail", "Department Details  Not Added ");
+				}
+				return "redirect:/DepartmentsList.htm";	
+			} catch (Exception e) {
+			logger.error(new Date() +"Inside DepartmentAdd.htm"+UserId,e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+		
+	}
+	
+	
+	@RequestMapping(value="DepartmentEdit.htm",method=RequestMethod.POST)
+	public String DepartmentUpdate(HttpServletRequest req,HttpSession ses,@RequestPart("selectedFile") MultipartFile selectedFile ,RedirectAttributes redir) throws Exception{
+		 String UserId=(String)ses.getAttribute("Username");
+		try {
+			
+			String deptId=req.getParameter("Deptid");
+			String depCode = req.getParameter("Departmentcode");
+			String depName = req.getParameter("DepartmentName");
+			String depHead = req.getParameter("DepartmentHead");
+			String groupId = req.getParameter("groupCode");
+			
+			Department dep=new Department();
+			dep.setDivisionId(Long.parseLong(deptId));
+			dep.setDivisionCode(depCode.toUpperCase().trim());
+			dep.setDivisionName(depName.trim());
+			dep.setDivisionHeadId(Long.parseLong(depHead));
+			dep.setGroupId( Long.parseLong(groupId));
+			dep.setModifiedBy(UserId);
+			dep.setModifiedDate(sdtf.format(new Date()));					
+			String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(deptId));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("division_master");
+	    	     
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   service.AddDeptEditComments(masteredit , masterdto);
+		int result=	service.UpdateDepartment(dep);
+		if(result>0) {
+			 redir.addAttribute("result", "Department Details Updated Successfully");
+			}else {
+				 redir.addAttribute("resultfail", "Department Details  Not Updated");
+			}
+			return "redirect:/DepartmentsList.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DepartmentUpdate.htm"+UserId,e);
+			e.printStackTrace();
+			return  "static/Error";
+		}
+
+	}
+	
 	@RequestMapping(value="DivisionGroup.htm" , method={ RequestMethod.POST ,RequestMethod.GET })
 	public String groupDivision(HttpServletRequest req ,HttpSession ses, RedirectAttributes redir) throws Exception
 	{
@@ -1598,6 +1612,7 @@ public class MasterController {
 		}
 		
 	}
+	
 	
 	@RequestMapping(value="DivisionGroupAdd.htm", method={RequestMethod.POST} )
 	public String DivisionGroupAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
@@ -1690,6 +1705,5 @@ public class MasterController {
 		  return json.toJson(Duplicate);           
 		  
 	}
-	
 	
 }

@@ -30,7 +30,7 @@ List<Object[]> ContractEmpList=(List<Object[]>)request.getAttribute("ContractEmp
 			</div>
 		 </div>
 		 <div class="page card dashboard-card">
-		 <div class="card">	
+		 
 		 <div align="center">
 		 <%String res=(String)request.getParameter("result"); 
 		String res1=(String)request.getParameter("resultfail");
@@ -45,6 +45,7 @@ List<Object[]> ContractEmpList=(List<Object[]>)request.getAttribute("ContractEmp
 			</div>
 		<%} %>
 		 </div>	 
+		        <div class="card">	
 				<div class="card-body ">			
 					<form action="ContractEmployeeList.htm" method="POST" >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						

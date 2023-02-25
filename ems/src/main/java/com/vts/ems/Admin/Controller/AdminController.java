@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.model.CalendarEvents;
-import com.vts.ems.Admin.model.ContractEmployeeData;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
@@ -884,7 +884,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				if(!mobileNo.isEmpty()) {
 					MobileNo=Long.parseLong(mobileNo);
 				}
-				ContractEmployeeData cemp=new ContractEmployeeData();
+				EmployeeContract cemp=new EmployeeContract();
 				//cemp.setUserName("CE-"+userName);
 				cemp.setEmpName(EmpName);				
 				cemp.setContractEmpNo("CE"+(++EmpNo));
@@ -917,13 +917,12 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				String DOB = req.getParameter("DOB");
 				String EmailId=req.getParameter("EmailId");
 				String mobileNo=req.getParameter("MobileNo");
-				System.out.println("mobileNo="+mobileNo);
 				Long MobileNo=null;
 				if(!mobileNo.isEmpty()) {
 					MobileNo=Long.parseLong(mobileNo);
 				}
 				
-				ContractEmployeeData cemp=new ContractEmployeeData();
+				EmployeeContract cemp=new EmployeeContract();
 				cemp.setContractEmpId(Long.parseLong(ContractEmpId));
 				//cemp.setUserName("CE-"+userName);
 				cemp.setEmpName(EmpName);
@@ -996,4 +995,24 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					Gson json = new Gson();
 					  return json.toJson(username);
 				}		 
+			 
+			 @RequestMapping(value = "ITDashboard.htm", method = RequestMethod.GET)
+				public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+					String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
+					try {
+						String logintype = (String)ses.getAttribute("LoginType");
+				        
+						List<Object[]> admindashboard = service.HeaderSchedulesList("11" ,logintype); 
+					
+						ses.setAttribute("formmoduleid", "11"); 
+						req.setAttribute("dashboard", admindashboard);
+						ses.setAttribute("SidebarActive", "ITDashboard_htm");
+						return "ithelpdesk/ITDashboard";
+					} catch (Exception e) {
+						logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
+						e.printStackTrace();	
+						return "static/Error";
+					}
+				}
 }		

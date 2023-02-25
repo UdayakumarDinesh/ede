@@ -16,15 +16,14 @@ import lombok.Setter;
 @Entity
 @Table(name="employee_contract")
 
-public class ContractEmployeeData implements Serializable {
+public class EmployeeContract implements Serializable {
 private static final long serialVersionUID = 1L;
 
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long ContractEmpId;
 private String EmpName;
-private String ContractEmpNo;
-private String UserName;
+private String contractEmpNo;
 private String DateOfBirth;
 private String Password;
 private Long MobileNo;

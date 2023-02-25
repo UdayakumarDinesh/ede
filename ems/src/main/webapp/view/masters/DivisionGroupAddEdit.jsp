@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Division Group</title>
+<title>Group Master</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		 </div>
-		  <div class="page card dashboard-card">
+    <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
 				<div class="card-body  " align="center" >
@@ -68,7 +68,7 @@
 										</tr>
 										<tr>
 											<th><label>Group Head Name <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"  name="groupHeadId" id="groupHeadId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;">
+											<td><select class="form-control select2"  name="groupHeadId" id="groupHeadId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
 												<option value="<%=O[0]%>" <%if(divgrp!=null){if(divgrp.getGroupHeadId()==Long.parseLong(O[0].toString())){%> selected   <%}}%> > <%=O[1]%></option>
@@ -89,7 +89,7 @@
 									name="action"  value="EDIT">SUBMIT</button>
 									<%}else{ %>
 									<button type="button" class="btn btn-sm submit-btn"
-									onclick="return checkDuplicate('addfrm1');"
+									onclick="return checkDuplicateAdd('addfrm1');"
 									name="action"  value="ADD">SUBMIT</button>
 									
 									<%} %>
@@ -110,7 +110,22 @@
 </div>
 
 <script type="text/javascript">
-function checkDuplicate(frmid)
+
+$('#groupCode').keypress(function (e) {
+    var regex = new RegExp("^[A-Za-z0-9]*$" );
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter Alphabates And Numbers');
+    return false;
+    }
+});
+
+function checkDuplicateAdd(frmid)
 {
 	 var $groupCode1 = $("#groupCode").val();	
 	
@@ -125,7 +140,7 @@ function checkDuplicate(frmid)
 			success : function(result) {
 				var ajaxresult = JSON.parse(result);
 				
-				if(ajaxresult[0]>0){
+				if(ajaxresult>0){
 					alert('Group Code Already Exists');
 					event.preventDefault();
 					return false;
@@ -134,7 +149,9 @@ function checkDuplicate(frmid)
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
 					var $groupCode1 = $("#groupCode").val();	
-					if($groupCode1==null || $groupCode1==""||$groupCode1=="null"){
+					var $groupName1 = $('#groupName').val();
+					var $groupHeadId1 =$('#groupHeadId').val(); 
+					if($groupCode1==null || $groupCode1==""||$groupCode1=="null" || $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
 						alert('Enter Data Properly');
 						
 						return false;
@@ -171,7 +188,7 @@ function checkDuplicateEdit(frmid)
 				var ajaxresult = JSON.parse(result);
 				
 				
-				if(ajaxresult[0]>1){
+				if(ajaxresult>1){
 					alert('Group Code Already Exists');
 					event.preventDefault();
 					return false;
@@ -180,7 +197,9 @@ function checkDuplicateEdit(frmid)
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
 					var $groupCode1 = $("#groupCode").val();	
-					if($groupCode1==null || $groupCode1==""||$groupCode1=="null"){
+					var $groupName1 = $('#groupName').val();
+					var $groupHeadId1 =$('#groupHeadId').val();
+					if($groupCode1==null || $groupCode1==""||$groupCode1=="null"|| $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
 						alert('Enter Data Properly');
 						
 						return false;

@@ -472,7 +472,11 @@ function leaveCredit(){
 		 			$("#ml").val(consultVals[0][15]);
 		 			$('#div').removeClass().addClass('col-md-3');
 			    }
-	 			$('[data-toggle="tooltip"]').tooltip()
+	 			$('[data-toggle="tooltip"]').tooltip({
+	 				
+	 				html : true,
+	 				 boundary: 'window'
+	 			})
 	 				
 	 				
 	  			}
@@ -537,7 +541,11 @@ function leaveCreditEdit(id){
 	 			$("#ml").val(consultVals[0][15]);
 	 			$('#div').removeClass().addClass('col-md-3');
 		    }
-			$('[data-toggle="tooltip"]').tooltip()
+			$('[data-toggle="tooltip"]').tooltip({
+				html : true,
+				 boundary: 'window'
+				
+			})
 				
 				
 			}

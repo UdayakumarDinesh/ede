@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.Admin.model.CalendarEvents;
-import com.vts.ems.Admin.model.ContractEmployeeData;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
@@ -601,7 +601,7 @@ private static final String UpdateCalendarEvent="update ems_calendar_events set 
 	}
 
 	@Override
-	public Long AddContractEmployeeData(ContractEmployeeData cemp) throws Exception {
+	public Long AddContractEmployeeData(EmployeeContract cemp) throws Exception {
 		try {
 			manager.persist(cemp);
 			manager.flush();
@@ -653,9 +653,9 @@ private static final String CONTRACTEMPDATA="SELECT ContractEmpId,SUBSTRING(User
 
 private static final String CONTRACTEMPEDIT="SELECT ContractEmpId,UserName,EmpName,DateOfBirth,EmailId,MobileNo FROM employee_contract WHERE ContractEmpId=:EmpId";
 	@Override
-	public ContractEmployeeData getContractEmpDetails(Long contractEmpId) throws Exception {
+	public EmployeeContract getContractEmpDetails(Long contractEmpId) throws Exception {
 		try {
-		return manager.find(ContractEmployeeData.class,contractEmpId);
+		return manager.find(EmployeeContract.class,contractEmpId);
 		} catch (Exception e) {
 			 logger.error(new Date()+" Inside DAO getContractEmpDetails "+ e);
 			e.printStackTrace();
@@ -664,7 +664,7 @@ private static final String CONTRACTEMPEDIT="SELECT ContractEmpId,UserName,EmpNa
 		
 	}
 	@Override
-	public Long UpdateContractEmployeeData(ContractEmployeeData emp) throws Exception {
+	public Long UpdateContractEmployeeData(EmployeeContract emp) throws Exception {
 	try {
 		manager.merge(emp);
 		manager.flush();

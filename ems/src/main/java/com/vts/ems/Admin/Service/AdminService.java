@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.Admin.model.CalendarEvents;
-import com.vts.ems.Admin.model.ContractEmployeeData;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.chss.model.CHSSApproveAuthority;
 import com.vts.ems.leave.model.LeaveHandingOver;
@@ -49,10 +49,10 @@ public interface AdminService {
 	public Object[] editCalendarEvent(String eMSEventId) throws Exception;
 	public long deleteCalendarEvent(String eMSEventId) throws Exception;
 	public Long updateCalendarEvent(String eMSEventId, String eventDate, String eventType, String eventName, String eventDescription)throws Exception;
-	public Long AddContractEmployeeData(ContractEmployeeData cemp)throws Exception;
+	public Long AddContractEmployeeData(EmployeeContract cemp)throws Exception;
 	public List<Object[]> getContractEmployeeList()throws Exception;
 	public Object[] getContractEmployeeData(String contractEmpId)throws Exception;
-	public Long UpdateContractEmployeeData(ContractEmployeeData cemp)throws Exception;
+	public Long UpdateContractEmployeeData(EmployeeContract cemp)throws Exception;
 	public String getMaxContractEmpNo()throws Exception;
 	public BigInteger contractEmpAddcheck(String cuserName)throws Exception;
 	public BigInteger contractEmpEditcheck(String username, String contractEmpId)throws Exception;

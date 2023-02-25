@@ -86,6 +86,7 @@ public interface MasterService {
 	public List<Object[]> getDivisionGroupList() throws Exception;
 	public Object[] checkDuplicate(String groupCode) throws Exception;
 	public List<Object[]> getEmployeeList() throws Exception;
+	public List<Object[]> getGroupList() throws Exception;
 	
 
 

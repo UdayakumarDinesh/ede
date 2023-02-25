@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="com.vts.ems.Admin.model.ContractEmployeeData" %>
+    <%@ page import="com.vts.ems.Admin.model.EmployeeContract" %>
     <%@page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
@@ -72,7 +72,7 @@ Object[] cemp=(Object[])request.getAttribute("ContractEmpData"); %>
 										
 										<tr>
 										     <th><label>Mobile No</label></th>
-										     <td> <input type="text" class="form-control form-control" placeholder="Enter Mobile No" id="mobileNo" name="MobileNo" value="<%if(cemp!=null){%><%=cemp[5]%><%}%>" maxlength="10" ></td>
+										     <td> <input type="text" class="form-control form-control" placeholder="Enter Mobile No" id="mobileNo" name="MobileNo" <%if(cemp!=null && cemp[5]!=null){%>value="<%=cemp[5]%>"<%}%> maxlength="10" ></td>
 										</tr>
 									</table>
 									<%if(cemp!=null){ %>

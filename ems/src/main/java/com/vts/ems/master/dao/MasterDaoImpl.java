@@ -1087,4 +1087,20 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 				query.setParameter("groupCode", groupCode);
 				return (Object[])query.getSingleResult();
 		}
+		
+		public static final String GROUPLIST = "SELECT GroupId,GroupCode FROM division_group";
+		@Override
+		public List<Object[]> getGroupList() throws Exception
+		{
+			List <Object[]>list=null;
+			try {
+			Query query = manager.createNativeQuery(GROUPLIST);
+			list = (List <Object[]>)query.getResultList();
+			return list;
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getDepartmentsAddEdit "+ e);
+				e.printStackTrace();
+				return null;
+			}
+		}
 }

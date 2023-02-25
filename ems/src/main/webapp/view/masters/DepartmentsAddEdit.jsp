@@ -13,6 +13,7 @@
 <body>
 <% Object[] dept=(Object[])request.getAttribute("Department");
 List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
+List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
 %>
 <div class="card-header page-top">
 		<div class="row">
@@ -55,7 +56,8 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 											<th><label>Department Code<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control"
 												placeholder=" Enter Department Code" type="text" id="depcode" name="Departmentcode" value="<%if(dept!=null){%><%=dept[1]%><%} %>"
-												style="text-transform:capitalize" required="required" maxlength="5" style="font-size: 15px;"  ></td>
+												style="text-transform:capitalize" required="required" maxlength="3" style="font-size: 15px;"  ></td>
+
 										</tr>
 										<tr>
 											<th><label>Department Name <span class="mandatory" style="color: red;">*</span></label></th>
@@ -78,6 +80,17 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 								     
 										     </td>
 										</tr>
+										<tr>
+										   <th> <label>Group Code <span class="mandatory" style="color: red;">*</span></label> </th>
+										   <td> <select class="form-control select2"  name="groupCode" id="groupCode" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
+										        <%if(groupList!=null){
+										    	 for(Object[] grp:groupList){
+										    	 %>
+										     <option value="<%=grp[0]%>" <%if(dept!=null){if((Long.parseLong(dept[3].toString()))==(Long.parseLong(grp[0].toString()))){%>selected="selected"<%}}%>><%=grp[1] %></option>
+										     <%}} %>
+										 </select> </td> 
+										</tr>
 									
 								</table>
 								<%if(dept!=null){%>
@@ -89,7 +102,7 @@ List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</div>
 						</div>
-								<%if(dept!=null){ %>
+						<%if(dept!=null){ %>
 						<!--------------------------- container ------------------------->
 			<div class="container">
 					
@@ -160,6 +173,22 @@ $('#depcode').keypress(function (e) {
 </script>
 	
 	<script type="text/javascript">
+	
+	$('#depcode').keypress(function (e) {
+	    var regex = new RegExp("^[A-Za-z0-9]*$" );
+	    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+	    if (regex.test(str)) {
+	        return true;
+	    }
+	    else
+	    {
+	    e.preventDefault();
+	    alert('Please Enter Alphabates And Numbers');
+	    return false;
+	    }
+	});
+	
+	
 	function DepartmentAddcheck()
 	{
 		var depcode=$('#depcode').val();

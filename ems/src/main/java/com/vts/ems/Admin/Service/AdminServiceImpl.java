@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Admin.dao.AdminDaoImpl;
 import com.vts.ems.Admin.model.CalendarEvents;
-import com.vts.ems.Admin.model.ContractEmployeeData;
+import com.vts.ems.Admin.model.EmployeeContract;
 import com.vts.ems.Admin.model.EmployeeRequest;
 import com.vts.ems.Admin.model.FormRoleAccess;
 import com.vts.ems.chss.dao.CHSSDao;
@@ -321,7 +321,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Long AddContractEmployeeData(ContractEmployeeData cemp) throws Exception {
+	public Long AddContractEmployeeData(EmployeeContract cemp) throws Exception {
 		
 		return dao.AddContractEmployeeData(cemp);
 	}
@@ -339,10 +339,9 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public Long UpdateContractEmployeeData(ContractEmployeeData cemp) throws Exception {
-		ContractEmployeeData emp=dao.getContractEmpDetails(cemp.getContractEmpId());
+	public Long UpdateContractEmployeeData(EmployeeContract cemp) throws Exception {
+		EmployeeContract emp=dao.getContractEmpDetails(cemp.getContractEmpId());
 		emp.setContractEmpId(cemp.getContractEmpId());
-		emp.setUserName(cemp.getUserName());
 		emp.setEmpName(cemp.getEmpName());
 		emp.setDateOfBirth(cemp.getDateOfBirth());
 		emp.setEmailId(cemp.getEmailId());
