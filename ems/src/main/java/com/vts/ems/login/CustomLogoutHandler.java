@@ -10,12 +10,11 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.vts.ems.service.EMSMainService;
 
-public class CustomLogoutHandler  implements LogoutHandler  {
+public class CustomLogoutHandler implements LogoutHandler  {
 
 	@Autowired
 	EMSMainService EMSService;
-	
-	
+
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		 HttpSession ses=request.getSession();

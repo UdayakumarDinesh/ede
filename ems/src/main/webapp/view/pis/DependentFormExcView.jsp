@@ -150,7 +150,7 @@ th,td
 				</table>
 				Residential Address :
 					<%if(employeeResAddr!=null){ %>
-						<%=employeeResAddr[1] %>
+						<%=employeeResAddr[1] %>, <%if(employeeResAddr[4]!=null){%> <%=employeeResAddr[4] %><%} %><%if(employeeResAddr[5]!=null){%> , <%=employeeResAddr[5] %><%} %> <%if(employeeResAddr[6]!=null){%>, PIN:<%=employeeResAddr[6] %><%} %>.
 					<%} %>
 				<br>
 				<br><br><br>

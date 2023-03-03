@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -1284,8 +1285,13 @@ public class PisServiceImpl implements PisService
 		@Override
 		public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception
 		{
+			if(form.getFormType().equalsIgnoreCase("D")) 
+			{
+				ChangeAnnualDeclarationStatus(form.getEmpid()+"","N");
+			}
 			return dao.EmpFamilyFormAdd(form);
 		}
+		
 		
 		@Override
 		public Object[] GetFamFormData(String familyformid) throws Exception
@@ -2062,8 +2068,30 @@ public class PisServiceImpl implements PisService
 		}
 
 		@Override
-		public BigInteger getFormYear(int year,Long empId) throws Exception {
-			
-			return dao.getFormYear(year,empId);
+		public Object[] getFormYear(Long empId) throws Exception 
+		{
+			return dao.getFormYear(empId);
+		}
+		
+		// change annual declaration form status every year 1st of jan to allow employee to submit declaration
+		@Scheduled(cron = "0 0 0 1 1 ?")
+		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("Y");
+		}
+		
+		
+		
+		// change annual declaration form status every year 1st of march to disallow employee to submit declaration		
+		@Scheduled(cron = "0 0 0 1 3 ?")
+		public void UpdateAnnualDeclarationAllEmpDisAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("N");
+		}
+		
+		@Override
+		public int ChangeAnnualDeclarationStatus(String Empid,String status) throws Exception 
+		{
+			return dao.ChangeAnnualDeclarationStatus(Empid, status);
 		}
 }
