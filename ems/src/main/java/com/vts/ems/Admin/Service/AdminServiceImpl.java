@@ -345,6 +345,7 @@ public class AdminServiceImpl implements AdminService{
 		emp.setEmpName(cemp.getEmpName());
 		emp.setDateOfBirth(cemp.getDateOfBirth());
 		emp.setEmailId(cemp.getEmailId());
+		
 		emp.setMobileNo(cemp.getMobileNo());
 		emp.setModifiedBy(cemp.getModifiedBy());
 		emp.setModifiedDate(cemp.getModifiedDate());		

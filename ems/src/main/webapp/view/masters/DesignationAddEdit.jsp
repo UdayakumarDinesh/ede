@@ -66,13 +66,13 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 												required="required" maxlength="255" style="font-size: 15px;" id="designation"></td>
 												
 										</tr>
-										<tr>
+										<%-- <tr>
 											<th><label>Designation Limit  <i class="fa fa-inr" aria-hidden="true"></i> <span class="mandatory" style="color: red;"> *</span>
 											</label></th>
 											<td><input class="form-control form-control"
 												placeholder="Enter Designation Limit" type="text" id="RateValue" name="Designationlimit" value="<%if(desig!=null){%><%=desig.getDesigLimit()%> <%}%>"
 												required="required" maxlength="10" style="font-size: 15px;" ></td>
-										</tr>
+										</tr> --%>
 									
 								</table>
 							</div>
@@ -149,7 +149,7 @@ EmployeeDesig desig = (EmployeeDesig)request.getAttribute("desig");
 	</div>
 
 </div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 setPatternFilter($("#RateValue"), /^-?\d*$/);
 function setPatternFilter(obj, pattern) {
 	  setInputFilter(obj, function(value) { return pattern.test(value); });
@@ -167,7 +167,7 @@ function setInputFilter(obj, inputFilter) {
 	    }
 	  });
 	}
-</script>
+</script> -->
 
 
 <script type="text/javascript">
@@ -178,7 +178,7 @@ function DesignationAddcheck(frmid){
 	var desigcode=$('#desigcode').val();
 	var designation=$('#designation').val();
 	var desigid     =   $('#deisignationid').val();
-	var RateValue=$('#RateValue').val();
+	//var RateValue=$('#RateValue').val();
 	var count=true;
 
 	$.ajax({
@@ -205,7 +205,7 @@ function DesignationAddcheck(frmid){
 			
 			var ret = confirm('Are you Sure To Submit ?');
 			if(ret){
-				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null" || RateValue=="" || RateValue==null || RateValue=="null"){
+				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null"){
 					alert('Enter Data Properly');
 					return false;
 				}else{
@@ -258,7 +258,7 @@ function DesignationEditcheck(frmid){
 				count = false;
 			}else if(count){
 					
-				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null" || RateValue=="" || RateValue==null || RateValue=="null"){
+				if(desigcode==null || desigcode==""||desigcode=="null" || designation==null || designation=="" || designation=="null"){
 					alert('Enter Data Properly');
 					return false;
 				}else{

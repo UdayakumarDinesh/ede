@@ -314,7 +314,7 @@ public class MasterServiceImpl implements MasterService {
 		EmployeeDesig designation = dao.GetDesignationToEdit(desig.getDesigId());
 		designation.setDesigId(desig.getDesigId());
 		designation.setDesigCode(desig.getDesigCode());
-		designation.setDesigLimit(desig.getDesigLimit());
+		//designation.setDesigLimit(desig.getDesigLimit());
 		designation.setDesignation(desig.getDesignation());
 		return dao.EditDesignation(designation);
 	}

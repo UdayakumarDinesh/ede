@@ -13,7 +13,7 @@ import com.vts.ems.pis.model.Employee;
 public interface LeaveDao {
 	public List<Object[]> PisHolidayList(String year) throws Exception;	
 	public List<Object[]> LeaveCreditList(String month,String year) throws Exception;	
-	public List<Employee> EmpList() throws Exception;	
+	public  List<Object[]> EmpList() throws Exception;	
 	public List<Object[]> CreditList(String month) throws Exception;	
 	public List<Object[]> LeaveCreditPreview(String month,String year,String emmNo) throws Exception;
 	public long LeaveCreditInsert(LeaveRegister register)throws Exception;

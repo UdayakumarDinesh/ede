@@ -57,7 +57,7 @@ List<Object[]> designation  =  (List<Object[]>)request.getAttribute("designation
 										<th> Select            </th>
 										<th> Designation Code  </th>
 										<th> Designation       </th>
-										<th> Designation Limit </th>
+										<!-- <th> Designation Limit </th> -->
 									</tr>
 								</thead>
 								<tbody>
@@ -66,7 +66,7 @@ List<Object[]> designation  =  (List<Object[]>)request.getAttribute("designation
 											<td style="text-align: center;"><input type="radio" name="desigid" value="<%=obj[0] %>"> </td>
 											<td><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
-											<td><%=obj[3]%></td>
+											<%-- <td><%=obj[3]%></td> --%>
 										</tr>
 									 <%} }%>
 								</tbody>

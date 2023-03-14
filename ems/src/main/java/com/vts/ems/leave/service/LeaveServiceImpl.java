@@ -76,7 +76,7 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	@Override
-	public List<Employee> EmpList() throws Exception {
+	public  List<Object[]> EmpList() throws Exception {
 		
 		return dao.EmpList();
 	}

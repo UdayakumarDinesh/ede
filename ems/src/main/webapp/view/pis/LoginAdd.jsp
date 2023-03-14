@@ -124,6 +124,23 @@ List<Object[]> emplist = (List<Object[]>) request.getAttribute("emplist");
 </body>
 <script type="text/javascript">
 
+$('#UserNameCheck').keypress(function (e) {
+    var regex = new RegExp("^[a-zA-Z0-9 \s]+$");
+    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (regex.test(str)) {
+        return true;
+    }
+    else
+    {
+    e.preventDefault();
+    alert('Please Enter AlphaNumeric Characters Only');
+    return false;
+    }
+});
+
+</script>
+<script type="text/javascript">
+
 
 $("#UsernameSubmit").hide();
 $(document).ready(function() {

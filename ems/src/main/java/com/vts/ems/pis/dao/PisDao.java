@@ -216,5 +216,7 @@ public interface PisDao {
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public long EmpFamilyDeclarationAdd(PISEmpFamilyDeclaration declare) throws Exception;
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
-	public BigInteger getFormYear(int year,Long empId)throws Exception;
+	public Object[] getFormYear(Long empId)throws Exception;
+	public void UpdateAnnualDeclarationAllEmp(String status) throws Exception;
+	public int ChangeAnnualDeclarationStatus(String Empid, String status) throws Exception;
 }

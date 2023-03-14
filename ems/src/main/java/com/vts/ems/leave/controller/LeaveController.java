@@ -101,6 +101,7 @@ public class LeaveController {
 		try {
 			String month=req.getParameter("month");
 			String yr=req.getParameter("Year");
+			req.setAttribute("EmpList", service.EmpList());
 			req.setAttribute("year",yr);
 			req.setAttribute("month",month);
 			req.setAttribute("empNo",req.getParameter("empNo"));

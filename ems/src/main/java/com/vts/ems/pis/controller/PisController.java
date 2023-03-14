@@ -2175,9 +2175,7 @@ public class PisController {
 				ses.setAttribute("SidebarActive", "FamIncExcFwdList_htm");
 				req.setAttribute("formslist",service.EmpFamFormsList(empid, ""));
 				req.setAttribute("empid", empid);
-				BigInteger countYear=	service.getFormYear(LocalDate.now().getYear(),EmpId);
-				int count=countYear.intValue();
-				req.setAttribute("formdecyear",count);
+				req.setAttribute("AnnualDecFlag",service.getFormYear(EmpId));
 				return "pis/FamIncExcFormsList";
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside FamIncExcFwdList.htm "+Username, e);
@@ -2289,8 +2287,6 @@ public class PisController {
 				String formid = req.getParameter("formid");
 				String action = req.getParameter("action");
 				String remarks = req.getParameter("remarks");
-				
-				
 				
 				String Decformid = req.getParameter("Decformid");
 				if(action.equalsIgnoreCase("F") && Decformid!=null && Long.parseLong(Decformid)==0 ) {
@@ -6446,14 +6442,10 @@ public class PisController {
 				req.setAttribute("empdetails",service.getEmployeeInfo(empid) );
 				req.setAttribute("employeeResAddr",service.employeeResAddr(empid) );
 				req.setAttribute("relationtypes" , service.familyRelationList() );
-				
 				req.setAttribute("FamilymemDropdown" , service.EmpFamMembersNotMedDep(empid,formid));
-				
 				req.setAttribute("isApprooval" , isapproval );
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-				
 				req.setAttribute("CHSSEligibleFamList", service.familyDetailsList(empid));
-				
 				req.setAttribute("FwdMemberDetails",service.GetFormMembersList(formid));
 				req.setAttribute("ExcMemberDetails",service.GetExcFormMembersList(formid));
 				return "pis/DependentFormDecView";
@@ -6515,6 +6507,29 @@ public class PisController {
 			
 		}
 		
-		
+		@RequestMapping(value = "AllowAnnualDeclaration.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		public String AllowAnnualDeclaration(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{   
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside AllowAnnualDeclaration.htm " + Username);
+			try {
+				String empid =(String)req.getParameter("empid");
+					
+				int count = service.ChangeAnnualDeclarationStatus(empid,"Y");
+				if (count > 0) {
+					redir.addAttribute("result", "Allow Annual Declaration Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Allow Annual Declarationd Unsuccessfull");
+				}
+				return "redirect:/PisAdminEmpList.htm";
+				
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside AllowAnnualDeclaration.htm "+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+			
+		}
 		
 }

@@ -969,12 +969,12 @@ public class MasterController {
 					
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+					//String limit = (String)req.getParameter("Designationlimit");
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigId(Long.parseLong(designationid));
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+				//	desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					String comments = (String)req.getParameter("comments");
 			    	   MasterEdit masteredit  = new MasterEdit();
@@ -1000,12 +1000,12 @@ public class MasterController {
 				}else{
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+					//String limit = (String)req.getParameter("Designationlimit");
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+					//desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
 					if (result != 0) {
@@ -1031,12 +1031,12 @@ public class MasterController {
 			try {						
 					String code  = (String)req.getParameter("Designationcode");
 					String name  = (String)req.getParameter("DesignationName");
-					String limit = (String)req.getParameter("Designationlimit");
+				//	String limit = (String)req.getParameter("Designationlimit");
 					
 					EmployeeDesig desig = new EmployeeDesig();
 					desig.setDesigCode(code.toUpperCase());
 					desig.setDesignation(name.trim());
-					desig.setDesigLimit(Long.parseLong(limit.trim()));
+				//	desig.setDesigLimit(Long.parseLong(limit.trim()));
 					
 					long result = service.AddDesignation(desig);
 					if (result != 0) {

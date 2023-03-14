@@ -86,7 +86,7 @@ text-align: center;
 			</div>
 	</div>	
 <%  Object[] empDetails=(Object[])request.getAttribute("empDetails");  
-List<Employee> emplist=(List<Employee>)request.getAttribute("EmpList");
+List<Object[]> emplist=(List<Object[]>)request.getAttribute("EmpList");
 String empno=(String)request.getAttribute("empNo");
 String year=(String)request.getAttribute("year");
 String ses=(String)request.getParameter("result"); 
@@ -121,8 +121,8 @@ String ses=(String)request.getParameter("result");
     <div class="col-md-3">
     <div class="group-form">
     <select class="form-control  selectpicker" required="required" name="empNo" title="Select Employee" data-live-search="ture" id="empNo">
-    <%for(Employee emp:emplist){ %>
-    <option value="<%=emp.getEmpNo() %>" <%if(emp.getEmpNo().equals(empno)){ %> selected="selected" <%} %>><%=emp.getEmpName() %></option>
+    <%for(Object[] emp:emplist){ %>
+    <option value="<%=emp[0] %>" <%if(emp[0].equals(empno)){ %> selected="selected" <%} %>><%=emp[1]%></option>
     <%} %>
     </select>
     

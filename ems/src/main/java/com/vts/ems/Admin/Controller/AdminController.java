@@ -737,6 +737,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 								req.setAttribute("EventsList", eventsList);
 								req.setAttribute("result", req.getParameter("result"));
 							} catch (Exception e) {
+								logger.error(new Date() +" Inside CalendarEvents.htm "+Username, e);
 							e.printStackTrace();
 							}	
 						
@@ -769,6 +770,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 						 redir.addAttribute("resultfail", " Event not Added Successfully");
 					}
 				} catch (Exception e) {
+					logger.error(new Date() +" Inside CalendarEventAdd.htm "+Username, e);
 					e.printStackTrace();
 				}
 				
@@ -786,6 +788,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					req.setAttribute("year", req.getParameter("eventYear"));
 					
 				} catch (Exception e) {
+					logger.error(new Date() +" Inside calendarEventEdit.htms "+Username, e);
 				e.printStackTrace();
 				}
 				
@@ -874,18 +877,20 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				String EmpName=req.getParameter("EmpName");
 				String DOB = req.getParameter("DOB");
 				String EmailId=req.getParameter("EmailId");
-				String MobileNo=req.getParameter("MobileNo");
+				String mobileNo=req.getParameter("MobileNo");
 				String empNo=service.getMaxContractEmpNo();
 				int EmpNo=Integer.parseInt(empNo);
-				System.out.println("EmpNo"+EmpNo);
+				Long MobileNo=null;
+				if(!mobileNo.isEmpty()) {
+					MobileNo=Long.parseLong(mobileNo);
+				}
 				EmployeeContract cemp=new EmployeeContract();
 				//cemp.setUserName("CE-"+userName);
-				cemp.setEmpName(EmpName);
-				
+				cemp.setEmpName(EmpName);				
 				cemp.setContractEmpNo("CE"+(++EmpNo));
 				cemp.setDateOfBirth(sdf.format(rdf.parse(DOB)));
 				cemp.setEmailId(EmailId);
-				cemp.setMobileNo(Long.parseLong(MobileNo));
+				cemp.setMobileNo(MobileNo);
 				cemp.setPassword("$2y$12$QTTMcjGKiCVKNvNa242tVu8SPi0SytTAMpT3XRscxNXHHu1nY4Kui");
 				cemp.setCreatedBy(Username);
 				cemp.setCreatedDate(sdtf.format(new Date()));
@@ -911,14 +916,19 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				String EmpName=req.getParameter("EmpName");
 				String DOB = req.getParameter("DOB");
 				String EmailId=req.getParameter("EmailId");
-				String MobileNo=req.getParameter("MobileNo");
+				String mobileNo=req.getParameter("MobileNo");
+				Long MobileNo=null;
+				if(!mobileNo.isEmpty()) {
+					MobileNo=Long.parseLong(mobileNo);
+				}
+				
 				EmployeeContract cemp=new EmployeeContract();
 				cemp.setContractEmpId(Long.parseLong(ContractEmpId));
 				//cemp.setUserName("CE-"+userName);
 				cemp.setEmpName(EmpName);
 				cemp.setDateOfBirth(sdf.format(rdf.parse(DOB)));
-				cemp.setEmailId(EmailId);
-				cemp.setMobileNo(Long.parseLong(MobileNo));
+				cemp.setEmailId(EmailId);				
+				cemp.setMobileNo(MobileNo);								
 				cemp.setModifiedBy(Username);
 				cemp.setModifiedDate(sdtf.format(new Date()));
 				cemp.setIsActive(1);

@@ -83,7 +83,6 @@ public class EmsController {
 			for(SimpleGrantedAuthority auth : authorities)
 			{
 				String role = auth.getAuthority();
-				System.out.println("role "+auth.getAuthority());
 				if(role.equalsIgnoreCase("ROLE_CE"))
 				{
 					isContractEmp=true;

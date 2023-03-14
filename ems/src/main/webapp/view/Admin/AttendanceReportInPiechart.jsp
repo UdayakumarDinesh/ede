@@ -291,7 +291,7 @@ Highcharts.chart('container4', {
     Highcharts.chart('container1', {
 		
 		   chart: {
-		        type: 'area',
+		        type: 'areaspline',
 		    },
 	    title: {
 	        text: 'Todays Trend'
@@ -311,7 +311,7 @@ Highcharts.chart('container4', {
 	         }
 	    },
 	    yAxis: {
-	        min: 0,
+	        min: 0,	        
 	        max:100,
 	        title: {
 	            text: 'Employee Count'
@@ -324,7 +324,7 @@ Highcharts.chart('container4', {
 	        '#36AE7C',
 	    ],
 	     series: [{
-	        type: 'area',
+	        type: 'areaspline',
 	        name: 'count',
 	        data: [  <%if(list!=null){
 	        	for(Object[] obj:list){
