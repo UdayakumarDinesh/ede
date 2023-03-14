@@ -3,6 +3,7 @@ package com.vts.ems.ithelpdesk.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,16 +28,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
-import com.vts.ems.ithelpdesk.dto.itheldeskdto;
+import com.vts.ems.ithelpdesk.dto.ItHeldeskDto;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
-import com.vts.ems.ithelpdesk.service.helpdeskService;
+import com.vts.ems.ithelpdesk.service.HelpdeskService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
-public class helpdeskcontroller {
+public class HelpdeskController {
 	
-	private static final Logger logger = LogManager.getLogger(helpdeskcontroller.class);
+	private static final Logger logger = LogManager.getLogger(HelpdeskController.class);
 	
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
@@ -44,7 +46,7 @@ public class helpdeskcontroller {
 	//private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Autowired
-	helpdeskService service;
+	HelpdeskService service;
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
@@ -137,7 +139,7 @@ public class helpdeskcontroller {
     	  logger.info(new Date() +"Inside ITHelpDeskAddSubmit.htm "+UserId);
     	  try {
     		  
-  		       itheldeskdto dto= itheldeskdto.builder()
+  		       ItHeldeskDto dto= ItHeldeskDto.builder()
     				  .EmpNo(EmpNo)
     				  .FormFile(FormFile)
     				  .FileName(EmpNo)
@@ -236,7 +238,7 @@ public class helpdeskcontroller {
     				
     				String TicketId = req.getParameter("TicketId");
     				
-    				itheldeskdto dto =   itheldeskdto.builder()
+    				ItHeldeskDto dto =   ItHeldeskDto.builder()
     										.TicketId(TicketId)
     										.FormFile(FormFile)
     										.TicketDesc(req.getParameter("Description"))
@@ -379,7 +381,7 @@ public class helpdeskcontroller {
     				
     					
     					
-    				itheldeskdto dto= itheldeskdto.builder()
+    				ItHeldeskDto dto= ItHeldeskDto.builder()
     						  .TicketId(TicketId)
     	    				  //.EmpId(EmpId)
     						 
@@ -489,7 +491,7 @@ public class helpdeskcontroller {
   				//ses.setAttribute("SidebarActive","TicketAssigned_htm");	
   				 System.out.println("asignto--------"+req.getParameter("AssignTo"));
   				 
-  				itheldeskdto dto= itheldeskdto.builder()
+  				ItHeldeskDto dto= ItHeldeskDto.builder()
   						  .TicketId(TicketId)
   	    				  //.EmpId(EmpId)
   						 
@@ -570,7 +572,7 @@ public class helpdeskcontroller {
     				
     				String TicketId=req.getParameter("TicketId1");
     				System.out.println("Ticket id--------"+TicketId);
-    				itheldeskdto dto= itheldeskdto.builder()
+    				ItHeldeskDto dto= ItHeldeskDto.builder()
     						  .TicketId(TicketId)
     	    				
     						 .CWRemarks(req.getParameter("Remarks"))
@@ -641,7 +643,7 @@ public class helpdeskcontroller {
   				
   				String TicketId=req.getParameter("TicketId2");
   				System.out.println("Ticket id-++------"+TicketId);
-  				itheldeskdto dto= itheldeskdto.builder()
+  				ItHeldeskDto dto= ItHeldeskDto.builder()
   						  .TicketId(TicketId)
   						  .ARemarks(req.getParameter("Remarks"))
   						  .AssignedBy(EmpNo)
@@ -684,7 +686,7 @@ public class helpdeskcontroller {
  				
   				String TicketId=req.getParameter("TicketId3");
 				System.out.println("Ticket id--------"+TicketId);
-				itheldeskdto dto= itheldeskdto.builder()
+				ItHeldeskDto dto= ItHeldeskDto.builder()
 						  .TicketId(TicketId)
 	    				  .ClosedBy(EmpNo)
 						  .FeedBackRequired(req.getParameter("Feedback"))
@@ -797,7 +799,7 @@ public class helpdeskcontroller {
 				
 				String TicketId=req.getParameter("TicketId2");
 			System.out.println("Ticket id--------"+TicketId);
-			itheldeskdto dto= itheldeskdto.builder()
+			ItHeldeskDto dto= ItHeldeskDto.builder()
 					  .TicketId(TicketId)
     				  .Feedback(req.getParameter("Feedback"))
     				  .build();
@@ -841,8 +843,8 @@ public class helpdeskcontroller {
  			}
  			else if("EDIT".equalsIgnoreCase(action)) {
  				String tcId = req.getParameter("TicketCategoryId");
- 				HelpdeskCategory category = service.getTicketCategoryById(Long.parseLong(UserId));
- 				req.setAttribute("tickcategory", category);
+ 				HelpdeskCategory category = service.getTicketCategoryById(Long.parseLong(tcId));
+ 				req.setAttribute("ticketcategory", category);
  				return "ithelpdesk/TicketCategoryAddEdit";
  			}
  			else {
@@ -863,17 +865,17 @@ public class helpdeskcontroller {
      
      @RequestMapping(value="TicketCategoryAdd.htm", method=RequestMethod.POST)
      public String ticketCategoryAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
-   	  String UserId=(String)ses.getAttribute("Username");
- 		logger.info(new Date() +"Inside DivisionGroupAdd.htm "+UserId);
+   	    String UserId=(String)ses.getAttribute("Username");
+ 		logger.info(new Date() +"Inside TicketCategoryAdd.htm "+UserId);
  		try {
- 			String action = req.getParameter("action");
- 			if("ADD".equalsIgnoreCase(action)) {
+ 			
+ 			
  				String ticketCategory = req.getParameter("ticketCategory");
  				
  				HelpdeskCategory category = new HelpdeskCategory();
- 				category.setTicketCategory(ticketCategory);
+ 				category.setTicketCategory(ticketCategory.trim());
  				category.setCreatedBy(UserId);
- 				category.setCreatedDate(new Date());
+ 				category.setCreatedDate(sdtf.format(new Date()));
  				category.setIsActive(1);
  				Long result = service.TicketCategoryAdd(category);
  				if (result != 0) {
@@ -881,7 +883,7 @@ public class helpdeskcontroller {
  				} else {
  					 redir.addAttribute("resultfail", "Ticket Category Added Unsuccessfull");
  				}
- 			}
+ 			
  			return "redirect:/TicketCategory.htm";
  		}catch (Exception e) {
 			logger.error(new Date() +"Inside TicketCategoryAdd.htm"+UserId,e);
@@ -891,6 +893,214 @@ public class helpdeskcontroller {
  		}
      }
      
+     @RequestMapping(value="TicketCategoryEdit.htm", method=RequestMethod.POST)
+     public String ticketCategoryEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+    	 String UserId=(String)ses.getAttribute("Username");
+  		logger.info(new Date() +"Inside TicketCategoryEdit.htm"+UserId);
+  		try {		
+  				String ticketCategory = req.getParameter("ticketCategory");
+  				String ticketCategoryId = req.getParameter("TicketCategoryId");
+  				
+  				HelpdeskCategory category = new HelpdeskCategory();
+  				category.setTicketCategoryId(Long.parseLong(ticketCategoryId));
+  				category.setTicketCategory(ticketCategory.trim());
+  				category.setModifiedBy(UserId);
+  				category.setModifiedDate(sdtf.format(new Date()));
+  			
+  				Long result = service.TicketCategoryEdit(category);
+  				if (result != 0) {
+  					 redir.addAttribute("result", "Ticket Category Updated Successfully");
+  				} else {
+  					 redir.addAttribute("resultfail", "Ticket Category Update Unsuccessfull");
+  				}
+  			
+  			return "redirect:/TicketCategory.htm";
+  		}catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketCategoryAdd.htm"+UserId,e);
+ 			e.printStackTrace();
+ 			return "static/Error";
+ 		
+  		}
+     }
+     
+     @RequestMapping(value="TicketCategoryAddcheck.htm",method=RequestMethod.GET)
+     public @ResponseBody String ticketCategoryDuplicateAddCheck(HttpSession ses, HttpServletRequest req) throws Exception {
+    	 Gson json = new Gson();
+    	 String UserId=(String)ses.getAttribute("Username");
+ 		BigInteger duplicate=null;
+ 		logger.info(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId);
+ 		try
+ 		{	  
+ 			String ticketCategory = req.getParameter("ticketCategory");
+ 			 duplicate = service.ticketCategoryDuplicateAddCheck(ticketCategory);
+ 			
+ 		}catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId ,e);
+ 				e.printStackTrace(); 
+ 		}
+ 		  return json.toJson(duplicate);
+ 	}
+     
+     @RequestMapping(value="TicketCategoryEditcheck.htm",method=RequestMethod.GET)
+     public @ResponseBody String ticketCategoryDuplicateEditCheck(HttpSession ses, HttpServletRequest req) throws Exception {
+    	 Gson json = new Gson();
+    	 String UserId=(String)ses.getAttribute("Username");
+ 		BigInteger duplicate=null;
+ 		logger.info(new Date() +"Inside TicketCategoryEditcheck.htm"+UserId);
+ 		try
+ 		{	  
+ 			String ticketCategory = req.getParameter("ticketCategory");
+ 			String ticketCategoryId = req.getParameter("ticketCategoryId");
+ 			 duplicate = service.ticketCategoryDuplicateEditCheck(ticketCategoryId,ticketCategory);
+ 			
+ 		}catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketCategoryEditcheck.htm"+UserId ,e);
+ 				e.printStackTrace(); 
+ 		}
+ 		  return json.toJson(duplicate);
+ 	}
+
+     
+     @RequestMapping(value="TicketSubCategory.htm", method= {RequestMethod.POST, RequestMethod.GET})
+     public String ticketSubCategory(HttpServletRequest req, HttpSession ses) throws Exception {
+    	
+    	 String UserId=(String)ses.getAttribute("Username");
+  		logger.info(new Date() +"Inside TicketSubCategory.htm"+UserId);
+  		List<Object[]> list1 = service.getTicketCategoryList();
+			
+  		try {
+  			String action=req.getParameter("action");
+  			
+  			if("ADD".equalsIgnoreCase(action)) {
+  				req.setAttribute("ticketCategoryList", list1);
+  				return "ithelpdesk/TicketSubCategoryAddEdit";
+  			}
+  			else if("EDIT".equalsIgnoreCase(action)) {
+  				String tscId = req.getParameter("TicketSubCategoryId");
+  				HelpdeskSubCategory category = service.getTicketSubCategoryById(Long.parseLong(tscId));
+  				req.setAttribute("ticketsubcategory", category);
+  				req.setAttribute("ticketCategoryList", list1);
+  				return "ithelpdesk/TicketSubCategoryAddEdit";
+  			}
+  			else {
+  				List<Object[]> list = service.getTicketSubCategoryList();
+  				req.setAttribute("tscList", list);
+  				
+  				return "ithelpdesk/TicketSubCategory";
+  			}
+    	  
+  		
+  		} catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketSubCategory.htm"+UserId,e);
+ 			e.printStackTrace();
+ 			return "static/Error";
+ 		
+  		}
+     }
+     
+     @RequestMapping(value="TicketSubCategoryAdd.htm", method=RequestMethod.POST)
+     public String ticketSubCategoryAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+   	    String UserId=(String)ses.getAttribute("Username");
+ 		logger.info(new Date() +"Inside TicketSubCategoryAdd.htm "+UserId);
+ 		try {
+ 			
+ 			
+ 				String ticketSubCategory = req.getParameter("ticketSubCategory");
+ 				String ticketCategoryId = req.getParameter("ticketCategory");
+ 				
+ 				HelpdeskSubCategory category = new HelpdeskSubCategory();
+ 				category.setTicketCategoryId(Long.parseLong(ticketCategoryId));
+ 				category.setTicketSubCategory(ticketSubCategory.trim());
+ 				category.setCreatedBy(UserId);
+ 				category.setCreatedDate(sdtf.format(new Date()));
+ 				category.setIsActive(1);
+ 				Long result = service.TicketSubCategoryAdd(category);
+ 				if (result != 0) {
+ 					 redir.addAttribute("result", "Sub-Category Added Successfully");
+ 				} else {
+ 					 redir.addAttribute("resultfail", "Sub-Category Added Unsuccessfull");
+ 				}
+ 			
+ 			return "redirect:/TicketSubCategory.htm";
+ 		}catch (Exception e) {
+			logger.error(new Date() +"Inside TicketSubCategoryAdd.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		
+ 		}
+     }
+     
+     @RequestMapping(value="TicketSubCategoryEdit.htm", method=RequestMethod.POST)
+     public String ticketSubCategoryEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+   	    
+    	 String UserId=(String)ses.getAttribute("Username");
+ 		logger.info(new Date() +"Inside TicketSubCategoryEdit.htm "+UserId);
+ 		try {
+ 				String ticketSubCategory = req.getParameter("ticketSubCategory");
+ 				String ticketCategoryId = req.getParameter("ticketCategory");
+ 				String ticketSubCategoryId = req.getParameter("TicketSubCategoryId");
+ 				
+ 				HelpdeskSubCategory category = new HelpdeskSubCategory();
+ 				category.setTicketSubCategoryId(Long.parseLong(ticketSubCategoryId));
+ 				category.setTicketCategoryId(Long.parseLong(ticketCategoryId));
+ 				category.setTicketSubCategory(ticketSubCategory.trim());
+ 				category.setModifiedBy(UserId);
+ 				category.setModifiedDate(sdtf.format(new Date()));
+ 				
+ 				Long result = service.TicketSubCategoryEdit(category);
+ 				if (result != 0) {
+ 					 redir.addAttribute("result", "Sub-Category Updated Successfully");
+ 				} else {
+ 					 redir.addAttribute("resultfail", "Sub-Category Update Unsuccessfull");
+ 				}
+ 			
+ 			return "redirect:/TicketSubCategory.htm";
+ 		}catch (Exception e) {
+			logger.error(new Date() +"Inside TicketSubCategoryEdit.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		
+ 		}
+     }
+     
+     @RequestMapping(value="TicketSubCategoryAddcheck.htm",method=RequestMethod.GET)
+     public @ResponseBody String ticketSubCategoryDuplicateAddCheck(HttpSession ses, HttpServletRequest req) throws Exception {
+    	 Gson json = new Gson();
+    	 String UserId=(String)ses.getAttribute("Username");
+ 		BigInteger duplicate=null;
+ 		logger.info(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId);
+ 		try
+ 		{	  
+ 			String ticketSubCategory = req.getParameter("ticketSubCategory");
+ 			String ticketCategoryId = req.getParameter("ticketCategoryId");
+ 			 duplicate = service.ticketSubCategoryDuplicateAddCheck(ticketCategoryId,ticketSubCategory);
+ 		}catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId ,e);
+ 				e.printStackTrace(); 
+ 		}
+ 		  return json.toJson(duplicate);
+ 	}
+     
+     @RequestMapping(value="TicketSubCategoryEditcheck.htm",method=RequestMethod.GET)
+     public @ResponseBody String ticketSubCategoryDuplicateEditCheck(HttpSession ses, HttpServletRequest req) throws Exception {
+    	 Gson json = new Gson();
+    	 String UserId=(String)ses.getAttribute("Username");
+ 		BigInteger duplicate=null;
+ 		logger.info(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId);
+ 		try
+ 		{	  
+ 			String ticketSubCategory = req.getParameter("ticketSubCategory");
+ 			String ticketCategoryId = req.getParameter("ticketCategoryId");
+ 			String ticketSubCategoryId = req.getParameter("ticketSubCategoryId");
+ 			
+ 			 duplicate = service.ticketSubCategoryDuplicateEditCheck(ticketSubCategoryId,ticketCategoryId,ticketSubCategory);
+ 		
+ 		}catch (Exception e) {
+ 			logger.error(new Date() +"Inside TicketCategoryAddcheck.htm"+UserId ,e);
+ 				e.printStackTrace(); 
+ 		}
+ 		  return json.toJson(duplicate);
+ 	}
      
 }
     	  

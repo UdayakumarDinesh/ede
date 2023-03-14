@@ -875,7 +875,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return null;
 			}
 		}
-         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,b.EmpName AS DivisionHEAD FROM division_master AS a,employee AS  b WHERE b.EmpId=a.DivisionHeadId AND a.IsActive=1;";
+         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,c.GroupCode,b.EmpName AS DivisionHEAD FROM division_master AS a,employee AS  b,division_group AS c WHERE b.EmpId=a.DivisionHeadId AND c.GroupId=a.GroupId";
 		@Override
 		public List<Object[]> getDepartmentsList() throws Exception {
 			List <Object[]>list=null;
@@ -922,7 +922,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 			
 		}
-      private static final String DEPTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId from division_master where DivisionId=:deptId";
+      private static final String DEPTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId,GroupId from division_master where DivisionId=:deptId";
 
 		@Override
 		public Object[] departmentEdit(String deptId) throws Exception {			
@@ -1008,6 +1008,8 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 			return null;
 		}
 		
+		
+		
 		@Override
 		public int divisionGroupAdd(DivisionGroup divisiongroup) throws Exception {
 			try {
@@ -1050,7 +1052,7 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 		}
 		
 		private static final String DIVISIONGROUPLIST = "SELECT a.GroupId,UPPER (a.GroupCode),a.GroupName, b.EmpName AS DivisionHead, c.Designation FROM division_group a,employee b,employee_desig c\r\n"
-				+ "WHERE b.EmpId =a.GroupHeadId AND c.DesigId = b.DesigId;"; 
+				+ "WHERE b.EmpId =a.GroupHeadId AND c.DesigId = b.DesigId ORDER BY a.GroupId DESC"; 
 		@Override
 		public List<Object[]> getDivisionGroupsList() throws Exception {
 			List <Object[]>list=null;
@@ -1080,15 +1082,25 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 			}
 		}
 		
-		public static final String DUPLICATE = "SELECT COUNT(GroupCode),'GroupCode' FROM division_group WHERE  GroupCode=:groupCode";
+		public static final String DUPLICATEADD = "SELECT COUNT(GroupCode) FROM division_group WHERE  GroupCode=:groupCode";
 		@Override
-		public Object[] getDuplicateCount(String groupCode) throws Exception {
-				Query query =manager.createNativeQuery(DUPLICATE);
+		public BigInteger getDuplicateCount(String groupCode) throws Exception {
+				Query query =manager.createNativeQuery(DUPLICATEADD);
 				query.setParameter("groupCode", groupCode);
-				return (Object[])query.getSingleResult();
+				return (BigInteger)query.getSingleResult();
 		}
 		
-		public static final String GROUPLIST = "SELECT GroupId,GroupCode FROM division_group";
+		public static final String DUPLICATEEDIT = "SELECT COUNT(GroupCode) FROM division_group WHERE GroupId!=:groupId AND GroupCode=:groupCode";
+		@Override
+		public BigInteger getDuplicateCountEdit(String groupId,String groupCode) throws Exception {
+			Query query =manager.createNativeQuery(DUPLICATEEDIT);
+			query.setParameter("groupId", groupId);
+			query.setParameter("groupCode", groupCode);
+			 return (BigInteger)query.getSingleResult();
+			
+	}
+		
+		public static final String GROUPLIST = "SELECT GroupId,GroupName FROM division_group WHERE IsActive=1;";
 		@Override
 		public List<Object[]> getGroupList() throws Exception
 		{

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 
 
-public class itheldeskdto {
+public class ItHeldeskDto {
 	
 	
 	//private int    TicketId;

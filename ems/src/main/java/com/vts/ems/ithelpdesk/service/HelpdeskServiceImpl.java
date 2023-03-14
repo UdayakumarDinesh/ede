@@ -3,6 +3,7 @@ package com.vts.ems.ithelpdesk.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,23 +21,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.vts.ems.ithelpdesk.dao.helpdeskDao;
-import com.vts.ems.ithelpdesk.dto.itheldeskdto;
+import com.vts.ems.ithelpdesk.dao.HelpdeskDao;
+import com.vts.ems.ithelpdesk.dto.ItHeldeskDto;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
 @Service
-public class helpdeskServiceImpl implements helpdeskService {
+public class HelpdeskServiceImpl implements HelpdeskService {
 	
 	@Autowired
-	helpdeskDao dao;
+	HelpdeskDao dao;
 	
 	@Value("${EMSFilesPath}")
     private String FilePath;
 	
-	private static final Logger logger = LogManager.getLogger(helpdeskServiceImpl.class);
+	private static final Logger logger = LogManager.getLogger(HelpdeskServiceImpl.class);
 	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
@@ -51,7 +53,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 
 
 	@Override
-	public long saveTicket(itheldeskdto dto, String userId) throws Exception {
+	public long saveTicket(ItHeldeskDto dto, String userId) throws Exception {
 		
 		MultipartFile FormFile = dto.getFormFile();
 		System.out.println("path"+FormFile);
@@ -161,7 +163,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long ticketUpdate(itheldeskdto dto) throws Exception {
+	public long ticketUpdate(ItHeldeskDto dto) throws Exception {
 		
 		MultipartFile FormFile = dto.getFormFile();
 		
@@ -233,7 +235,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long assignedTicket(itheldeskdto dto) throws Exception {
+	public long assignedTicket(ItHeldeskDto dto) throws Exception {
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 				
@@ -265,7 +267,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long reAssignedTicket(itheldeskdto dto) throws Exception {
+	public long reAssignedTicket(ItHeldeskDto dto) throws Exception {
 		
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
@@ -292,7 +294,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	
 
 	@Override
-	public long ForwardTicket(itheldeskdto dto) throws Exception {
+	public long ForwardTicket(ItHeldeskDto dto) throws Exception {
 		
        HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		
@@ -311,7 +313,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long ReturnTicket(itheldeskdto dto) throws Exception {
+	public long ReturnTicket(ItHeldeskDto dto) throws Exception {
 		
 		 HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 			
@@ -352,7 +354,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 
 
 	@Override
-	public long closeTicket(itheldeskdto dto) throws Exception {
+	public long closeTicket(ItHeldeskDto dto) throws Exception {
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		
@@ -379,7 +381,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
   @Override
-  public long savefeedback(itheldeskdto dto) throws Exception {
+  public long savefeedback(ItHeldeskDto dto) throws Exception {
 	
 	  HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		
@@ -421,8 +423,13 @@ public class helpdeskServiceImpl implements helpdeskService {
 
      @Override
      public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception {
-     	
-     	return dao.TicketCategoryEdit(helpdeskCategory);
+    	 HelpdeskCategory hc = dao.getTicketCategoryById(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategoryId(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategory(helpdeskCategory.getTicketCategory());
+    	 hc.setModifiedBy(helpdeskCategory.getModifiedBy());
+    	 hc.setModifiedDate(helpdeskCategory.getModifiedDate());
+    	 
+     	return dao.TicketCategoryEdit(hc);
      }
 
 
@@ -433,6 +440,84 @@ public class helpdeskServiceImpl implements helpdeskService {
      	
      	return dao.getTicketCategoryById(tcId);
      }
+
+
+     @Override
+ 	 public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception {
+ 		
+ 		return dao.ticketCategoryDuplicateAddCheck(ticketCategory);
+ 	 }
+     
+     @Override
+ 	public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId, String ticketCategory)throws Exception {
+ 		
+ 		return dao.ticketCategoryDuplicateEditCheck(ticketCategoryId, ticketCategory);
+ 	}
+     
+	@Override
+	public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.TicketSubCategoryAdd(helpdeskSubCategory);
+	}
+
+
+
+
+	@Override
+	public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		HelpdeskSubCategory hsc = dao.getTicketSubCategoryById(helpdeskSubCategory.getTicketSubCategoryId());
+		hsc.setTicketSubCategory(helpdeskSubCategory.getTicketSubCategory());
+		hsc.setTicketCategoryId(helpdeskSubCategory.getTicketCategoryId());
+		hsc.setModifiedBy(helpdeskSubCategory.getModifiedBy());
+		hsc.setModifiedDate(helpdeskSubCategory.getModifiedDate());
+		return dao.TicketSubCategoryEdit(hsc);
+	}
+
+
+
+
+	@Override
+	public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception {
+		
+		return dao.getTicketSubCategoryById(tscId);
+	}
+
+
+
+
+	@Override
+	public List<Object[]> getTicketSubCategoryList() throws Exception {
+		
+		return dao.getTicketSubCategoryList();
+	}
+
+
+
+
+	@Override
+	public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateAddCheck(ticketCategoryId,ticketCategory);
+	}
+
+
+
+
+	@Override
+	public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId, String ticketCategory)throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateEditCheck(ticketSubCategoryId,ticketCategoryId, ticketCategory);
+	}
+
+
+
+
+	
+
+
+
+
+	
 
 
  }

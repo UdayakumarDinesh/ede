@@ -16,15 +16,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
 @Transactional
 @Repository
-public class helpdeskDaoImpl implements helpdeskDao {
+public class HelpdeskDaoImpl implements HelpdeskDao {
 	
-	private static final Logger logger = LogManager.getLogger(helpdeskDaoImpl.class);
+	private static final Logger logger = LogManager.getLogger(HelpdeskDaoImpl.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	
@@ -300,7 +301,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	
 	}
 
-	public static final String TICKETCATEGORYLIST = "SELECT TicketCategoryId,TicketCategory from helpdesk_category";
+	public static final String TICKETCATEGORYLIST = "SELECT TicketCategoryId,TicketCategory FROM helpdesk_category  WHERE isActive=1 ORDER BY TicketCategoryId DESC ";
 	@Override
 	public List<Object[]> getTicketCategoryList() throws Exception {
 		List<Object[]> ticketlist=null;
@@ -309,7 +310,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			 ticketlist=(List<Object[]>)query.getResultList();
 		     return ticketlist; 
 		  } catch (Exception e) {
-			  logger.error(new Date()+" Inside DAO getEmpListList "+ e); 
+			  logger.error(new Date()+" Inside DAO getTicketCategoryList() "+ e); 
 			  e.printStackTrace(); 
 			  return null; 
 	    }
@@ -323,7 +324,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			manager.flush();		
 			return helpdeskCategory.getTicketCategoryId();
 		}	catch (Exception e) {
-			logger.error(new Date() + "Inside DAO divsionGroupEdit() "+e);
+			logger.error(new Date() + "Inside DAO  TicketCategoryAdd() "+e);
 			e.printStackTrace();
 			return 0L;
 		}
@@ -337,7 +338,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			manager.flush();		
 			return helpdeskCategory.getTicketCategoryId();
 		}	catch (Exception e) {
-			logger.error(new Date() + "Inside DAO divsionGroupEdit() "+e);
+			logger.error(new Date() + "Inside DAO TicketCategoryEdit() "+e);
 			e.printStackTrace();
 			return 0L;
 		}
@@ -349,11 +350,132 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		try {
 			return manager.find(HelpdeskCategory.class, tcId);	
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO TicketCategoryAdd() "+e);
+			logger.error(new Date() + "Inside DAO ticketCategoryAdd() "+e);
 			e.printStackTrace();
 			return null;
 		}
 	}
+	
+	public static final String DUPLICATETICKETCATEGORY="SELECT COUNT(TicketCategory) FROM helpdesk_category WHERE TicketCategory=:ticketCategory";
+	@Override
+	public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception {
+		try {
+		Query query =manager.createNativeQuery(DUPLICATETICKETCATEGORY);
+		query.setParameter("ticketCategory", ticketCategory);
+		return (BigInteger)query.getSingleResult();
+	}catch (Exception e) {
+		logger.error(new Date() + "Inside DAO ticketCategoryDuplicateCheck() "+e);
+		e.printStackTrace();
+		return null;
+	}
+	}
+	
+	public static final String DUPLICATETICKETCATEGORYEDIT = "SELECT COUNT(TicketCategory) FROM helpdesk_category WHERE TicketCategoryId!=:ticketCategoryId AND TicketCategory=:ticketCategory";
+	@Override
+	public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId,String ticketCategory) throws Exception {
+		try {
+			Query query =manager.createNativeQuery(DUPLICATETICKETCATEGORYEDIT);
+			query.setParameter("ticketCategoryId", ticketCategoryId);
+			query.setParameter("ticketCategory", ticketCategory);
+			return (BigInteger)query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ticketCategoryDuplicateCheck() "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		try {
+			manager.persist(helpdeskSubCategory);
+			manager.flush();		
+			return helpdeskSubCategory.getTicketSubCategoryId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO TicketSubCategoryAdd() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+
+	@Override
+	public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		try {
+			manager.merge(helpdeskSubCategory);
+			manager.flush();		
+			return helpdeskSubCategory.getTicketSubCategoryId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO TicketSubCategoryEdit() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+
+	@Override
+	public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception {
+		try {
+			return manager.find(HelpdeskSubCategory.class, tscId);	
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getTicketSubCategoryById() "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+    public static final String TICKETSUBCATEGORYLIST = "SELECT a.TicketSubCategoryId,b.TicketCategory,a.TicketSubCategory FROM  helpdesk_sub_category AS a,helpdesk_category AS b WHERE a.TicketCategoryId=b.TicketCategoryId ORDER BY a.TicketCategoryId DESC ";
+	@Override
+	public List<Object[]> getTicketSubCategoryList() throws Exception {
+		
+		List <Object[]>list=null;
+		try {
+		Query query = manager.createNativeQuery(TICKETSUBCATEGORYLIST);
+		list = (List <Object[]>)query.getResultList();
+		return list;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getTicketSubCategoryList() "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+    public static final String DUPLICATESUBCATEGORYADD = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category AS a, helpdesk_category AS b WHERE b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategory=:ticketSubCategory";
+	@Override
+	public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception {
+		try {
+			Query query =manager.createNativeQuery(DUPLICATESUBCATEGORYADD);
+			query.setParameter("ticketCategoryId", ticketCategoryId);
+			query.setParameter("ticketSubCategory", ticketCategory);
+			return (BigInteger)query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ticketCategoryDuplicateCheck() "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static final String DUPLICATESUBCATEGORYEDIT = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category AS a, helpdesk_category AS b WHERE b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategoryId!=:ticketSubCategoryId AND a.TicketSubCategory=:ticketSubCategory";
+	@Override
+	public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId, String ticketCategory) throws Exception {
+		try {
+			Query query =manager.createNativeQuery(DUPLICATESUBCATEGORYEDIT);
+			query.setParameter("ticketCategoryId", ticketCategoryId);
+			query.setParameter("ticketSubCategoryId", ticketSubCategoryId);
+			query.setParameter("ticketSubCategory", ticketCategory);
+			return (BigInteger)query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ticketCategoryDuplicateCheck() "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	
+
+
+	
 
 		
 }

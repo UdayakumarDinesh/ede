@@ -1628,11 +1628,11 @@ public class MasterController {
 			
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName);
+			grp.setGroupName(groupName.trim());
 			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
 			grp.setCreatedBy(UserId);
 			grp.setCreatedDate(sdtf.format(new Date()));
-			grp.setIsActive("1");
+			grp.setIsActive(1);
 			int result = service.addDivisionGroup(grp);
 			if (result != 0) {
 				 redir.addAttribute("result", "Group Added Successfully");
@@ -1665,9 +1665,9 @@ public class MasterController {
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupId(Integer.parseInt(groupId));
 			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName);
+			grp.setGroupName(groupName.trim());
 			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
-			grp.setIsActive("1");
+//			grp.setIsActive(1);
 			grp.setModifiedBy(UserId);
 			grp.setModifiedDate(sdtf.format(new Date()));
 			int result = service.editDivisionGroup(grp);
@@ -1688,22 +1688,46 @@ public class MasterController {
 	
 	
 	@RequestMapping(value="DivisionAddcheck.htm", method=RequestMethod.GET)
-	public @ResponseBody String yourControllerMethod(HttpSession ses, HttpServletRequest req) throws Exception {
+	public @ResponseBody String addDuplicateCheck(HttpSession ses, HttpServletRequest req) throws Exception {
 		String UserId=(String)ses.getAttribute("Username");
-		Object[] Duplicate = null;
+		BigInteger duplicate=null;
 		logger.info(new Date() +"Inside DivisionAddcheck.htm "+UserId);
 		try
 		{	  
 			String groupCode = req.getParameter("groupCode");
-			Duplicate = service.checkDuplicate(groupCode);
+			 duplicate = service.checkAddDuplicate(groupCode);
 		}
 		catch (Exception e) {
 			logger.error(new Date() +"Inside DivisionAddcheck.htm "+UserId ,e);
 				e.printStackTrace(); 
 		}
 		  Gson json = new Gson();
-		  return json.toJson(Duplicate);           
+		  return json.toJson(duplicate);           
 		  
+	}
+	
+	@RequestMapping(value="DivisionEditcheck.htm", method=RequestMethod.GET)
+	public @ResponseBody String editDuplicateCheck(HttpSession ses, HttpServletRequest req) throws Exception {
+		
+		String UserId=(String)ses.getAttribute("Username");
+		
+		BigInteger duplicate=null;
+		logger.info(new Date() +"Inside DivisionAddcheck.htm "+UserId);
+		Gson json = new Gson();
+		
+		try
+		{	  
+			String groupCode = req.getParameter("groupCode");
+			String groupId = req.getParameter("groupId");
+	          duplicate = service.getDuplicateCountEdit(groupId,groupCode);
+	          
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DivisionEditcheck.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  
+		 return json.toJson(duplicate);    
 	}
 	
 }
