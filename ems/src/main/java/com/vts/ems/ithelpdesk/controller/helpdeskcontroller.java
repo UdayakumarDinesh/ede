@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
+import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
 import com.vts.ems.ithelpdesk.service.helpdeskService;
@@ -36,41 +40,34 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 @Controller
 public class helpdeskcontroller {
 	
-	private static final Logger logger = LogManager.getLogger(helpdeskcontroller.class);
 	
+	private static final Logger logger = LogManager.getLogger(helpdeskcontroller.class);
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf = DateTimeFormatUtil.getSqlDateAndTimeFormat();
-	//private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Autowired
 	helpdeskService service;
+	
+	@Autowired
+	AdminService adminservice;
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
 	
 	
-	
-	
-	@RequestMapping(value = "ITTicketList.htm", method = {RequestMethod.GET,RequestMethod.POST})
-	public String TicketList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-	{
-		String UserId=(String)ses.getAttribute("Username");
-		
-		List<Object[]> TicketRaisedlist=null;
-		logger.info(new Date() +"Inside ITTicketList.htm "+UserId);
+	private static final String formmoduleid="11";
+	@RequestMapping(value = "ITDashboard.htm")
+	public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
 		try {
-			
-			ses.setAttribute("SidebarActive","ITTicketList_htm");	
-			String fromDate=req.getParameter("FromDate");
+			String logintype = (String)ses.getAttribute("LoginType");
+		    String EmpNo = (String)ses.getAttribute("EmpNo");
+		    List<Object[]> admindashboard = adminservice.HeaderSchedulesList("11" ,logintype); 
+		    String fromDate=req.getParameter("FromDate");
 			String toDate=req.getParameter("ToDate");	
-			
-			String EmpNo=ses.getAttribute("EmpNo").toString();
-			System.out.println("Employee No"+EmpNo);
-			
-			List<Object[]> CategoryList=service.getCategoryList();
-			List<Object[]> HelpDeskUserList=(List<Object[]>) service.getHelpDeskList(EmpNo);
-			
 			
 			if(fromDate==null  && toDate==null) 
 			{
@@ -80,19 +77,52 @@ public class helpdeskcontroller {
 				toDate=rdf.format(sdf.parse(td.toString()));
 			}
 			
-			if(EmpNo!=null && fromDate!=null && fromDate!=null) {
-				 TicketRaisedlist=service.getTicketRaisedDetails(EmpNo,fromDate,toDate);				
-				req.setAttribute("EmpNo", EmpNo);
+			req.setAttribute("FromDate", fromDate);
+			req.setAttribute("ToDate",  toDate);
+			req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo,logintype,fromDate,toDate));
+			req.setAttribute("graphdata", service.IThelpdeskDashboardGraphData(fromDate,toDate));
+			req.setAttribute("piechartdata", service.IThelpdeskDashboardPieChartData(fromDate,toDate));
+			ses.setAttribute("formmoduleid", "11"); 
+			req.setAttribute("dashboard", admindashboard);
+			ses.setAttribute("SidebarActive", "ITDashboard_htm");
+			req.setAttribute("LoginType", logintype);
+			
+			return "ithelpdesk/ITDashboard";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	}
+	
+
+    @RequestMapping(value = "ITTicketList.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String TicketList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		ses.setAttribute("SidebarActive","ITTicketList_htm");	
+		ses.setAttribute("formmoduleid", formmoduleid);
+		logger.info(new Date() +"Inside ITTicketList.htm "+UserId);
+		try {
+			
+			String fromDate=req.getParameter("FromDate");
+			String toDate=req.getParameter("ToDate");	
+			String EmpNo=ses.getAttribute("EmpNo").toString();
+			List<Object[]> CategoryList=service.getCategoryList();
+			
+			if(fromDate==null  && toDate==null) 
+			{
+				String fd = LocalDate.now().minusMonths(1).toString();
+				String td = LocalDate.now().toString();
+				fromDate=rdf.format(sdf.parse(fd.toString()));
+				toDate=rdf.format(sdf.parse(td.toString()));
 			}
-			
-			
+			List<Object[]> HelpDeskUserList=(List<Object[]>) service.getHelpDeskList(EmpNo,fromDate,toDate);
 			req.setAttribute("frmDt", fromDate);
 			req.setAttribute("toDt",  toDate);
 			req.setAttribute("HelpDeskUserList",HelpDeskUserList );
 			req.setAttribute("CategoryList",CategoryList );
 			
-			
-		 
 		return "ithelpdesk/TicketList";
 		}
 		catch (Exception e) {
@@ -110,22 +140,16 @@ public class helpdeskcontroller {
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside GetSubCategoryListAjax.htm "+Username);
 			List<Object[]> SubCategoryList=null;
-			
-			
 			try {
 				
 				String CategoryId=req.getParameter("selectedValue");
 				SubCategoryList =  service.getSubCategoryList(CategoryId);
-				
-				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(new Date() +" Inside GetSubCategoryListAjax.htm"+Username, e);
 				SubCategoryList=new ArrayList<>();
 			}
-			
-			
 			return json.toJson(SubCategoryList);
 		}
 	
@@ -134,6 +158,7 @@ public class helpdeskcontroller {
 	
     	  String UserId=(String)ses.getAttribute("Username");
     	  String EmpNo =  ses.getAttribute("EmpNo").toString();
+    	  
     	  logger.info(new Date() +"Inside ITHelpDeskAddSubmit.htm "+UserId);
     	  try {
     		  
@@ -147,8 +172,7 @@ public class helpdeskcontroller {
     				  .TicketStatus("I")
     				  .build();
     		  
-    			
-    		  Long save=service.saveTicket(dto,UserId);
+    		  Long save=service.saveTicket(dto,UserId,EmpNo);
     		  
     		  if (save > 0) {
   				
@@ -175,14 +199,11 @@ public class helpdeskcontroller {
     			try {
     				
     				String TicketId=req.getParameter("TicketId");
-    				System.out.println("TicketId"+TicketId);
     				HelpdeskTicket form=service.GetTicketId(TicketId);
-    				
     				res.setContentType("Application/octet-stream");	
     				File my_file=new File(emsfilespath+form.getFilePath());
     				res.setHeader("Content-disposition","attachment;filename="+form.getFileName());
     				OutputStream out=res.getOutputStream();
-    				
     				FileInputStream in=new FileInputStream(my_file);
     				byte[] buffer=new byte[4096];
     				int length;
@@ -207,14 +228,10 @@ public class helpdeskcontroller {
    			try {
    				
    				String TicketId = req.getParameter("TicketId");
-   				System.out.println("Ticket Id...."+TicketId);
    				HelpdeskTicket desk =  service.GetTicket(TicketId);
    				List<Object[]> category=service.getCategoryList();
-   				String CategoryId=req.getParameter("CategoryId1");
-   				System.out.println(CategoryId);
-   				List<Object[]> subcategory=service.getSubCategoryList(CategoryId);
-   				
-   				    req.setAttribute("category", category);
+   				List<Object[]> subcategory=service.getSubCategoryList();
+   				 req.setAttribute("category", category);
    				    req.setAttribute("subcategory", subcategory);
     				req.setAttribute("desk", desk);
     				return "ithelpdesk/TicketEdit";
@@ -235,7 +252,6 @@ public class helpdeskcontroller {
     			try {
     				
     				String TicketId = req.getParameter("TicketId");
-    				
     				itheldeskdto dto =   itheldeskdto.builder()
     										.TicketId(TicketId)
     										.FormFile(FormFile)
@@ -252,8 +268,7 @@ public class helpdeskcontroller {
     					 redir.addAttribute("resultfail", "Ticket Update Unsuccessfull");
     				}
     		        
-    		        
-    		        return "redirect:/ITTicketList.htm";
+    		         return "redirect:/ITTicketList.htm";
     		        
     			} catch (Exception e) {
     				  logger.error(new Date() +"Inside TicketUpdate.htm "+UserId ,e);
@@ -262,48 +277,41 @@ public class helpdeskcontroller {
     			}
     		}
     	  
-   
-    
-    	  
-    	  @RequestMapping(value = "TicketDelete.htm")
+         @RequestMapping(value = "TicketDelete.htm")
     		public String EMSNoticeDelete( HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
     		{
     			String UserId=(String)ses.getAttribute("Username");
     			logger.info(new Date() +"Inside TicketDelete.htm "+UserId);
     			try {
     				String TicketId=req.getParameter("TicketId");
-    				
-    							
     				long count = service.TicketDelete(TicketId);
-    				
     				if (count != 0) {
     					redir.addAttribute("result", "Ticket Deleted Successsfull");
     				} else {
     					redir.addAttribute("resultfail", "Ticket Delete UnSuccesssful");
     				}
     				
-    			   
-    				return "redirect:/ITTicketList.htm";
+    			   return "redirect:/ITTicketList.htm";
     			} catch (Exception e) {
     				  logger.error(new Date() +"Inside TicketDelete.htm "+UserId ,e);
     				  e.printStackTrace();
     				  return "static/Error";
     			}
     	  
-}
+    }
     	  @RequestMapping(value = "TicketPending.htm", method = {RequestMethod.GET,RequestMethod.POST})
     		public String TicketApproval(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
     		{
     			String UserId=(String)ses.getAttribute("Username");
     			logger.info(new Date() +"Inside TicketPending.htm "+UserId);
+    			ses.setAttribute("SidebarActive","TicketPending_htm");	
+    			ses.setAttribute("formmoduleid", formmoduleid);
     			try {
-    				ses.setAttribute("SidebarActive","TicketPending_htm");	
     				
     				List<Object[]> TicketPendList=(List<Object[]>) service.getPendingList();
     			    req.setAttribute("TicketPendList",TicketPendList );
     				
-    				
-				return "ithelpdesk/TicketPending";
+    			return "ithelpdesk/TicketPending";
     			
              }
     			 catch (Exception e) {
@@ -312,7 +320,6 @@ public class helpdeskcontroller {
    				  return "static/Error";
      }
   }
-    	  
     	  @RequestMapping(value = "GetTicketDataAjax.htm", method = RequestMethod.GET)
     		public @ResponseBody String GetTicketDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
     		{
@@ -320,14 +327,10 @@ public class helpdeskcontroller {
     			String Username = (String) ses.getAttribute("Username");
     			logger.info(new Date() +"Inside GetTicketDataAjax.htm "+Username);
     			List<Object[]> TicketList=null;
-    			
     			List<Object[]> CaseworkerList=null;
     			try {
     				String TicketId=req.getParameter("TicketId");
-    				
     				TicketList =  service.getTicketList(TicketId);
-    				
-    				System.out.println("List------"+CaseworkerList);
     				req.setAttribute("CaseworkerList", CaseworkerList);
     			} catch (Exception e) {
     				e.printStackTrace();
@@ -335,12 +338,29 @@ public class helpdeskcontroller {
     				TicketList=new ArrayList<>();
     			}
     			
-    			
     			return json.toJson(TicketList);
     		}
     	  
+    	  @RequestMapping(value = "GetReturnTicketDataAjax.htm", method = RequestMethod.GET)
+  		public @ResponseBody String GetReturnTicketDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
+  		{
+  		    Gson json = new Gson();
+  			String Username = (String) ses.getAttribute("Username");
+  			logger.info(new Date() +"Inside GetReturnTicketDataAjax.htm "+Username);
+  			List<Object[]> TicketList=null;
+  			try {
+  				String TicketId=req.getParameter("TicketId");
+  				TicketList =  service.getTicketReturnedList(TicketId);
+  				
+  			} catch (Exception e) {
+  				e.printStackTrace();
+  				logger.error(new Date() +" Inside GetReturnTicketDataAjax.htm "+Username, e);
+  				TicketList=new ArrayList<>();
+  			}
+  			return json.toJson(TicketList);
+  		}
     	  
-    	  @RequestMapping(value = "GetCaseWorkerListAjax.htm", method = RequestMethod.GET)
+     @RequestMapping(value = "GetCaseWorkerListAjax.htm", method = RequestMethod.GET)
     		public @ResponseBody String GetTestMainListAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
     		{
     		     Gson json = new Gson();
@@ -350,7 +370,6 @@ public class helpdeskcontroller {
     			try {
     				
     				CaseworkerList = service.getCaseWorkerList();
-    				System.out.println("List------"+CaseworkerList);
     				
     			} catch (Exception e) {
     				e.printStackTrace();
@@ -359,55 +378,40 @@ public class helpdeskcontroller {
     			
     			return json.toJson(CaseworkerList);
     		}
-
-    	  
-    	  
-    	  @RequestMapping(value = "TicketAssign.htm",method = {RequestMethod.GET,RequestMethod.POST} )
+        @RequestMapping(value = "TicketAssign.htm",method = {RequestMethod.GET,RequestMethod.POST} )
     		public String TicketAssign( HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
     		{
     			String UserId=(String)ses.getAttribute("Username");
     			String EmpNo =  ses.getAttribute("EmpNo").toString();
-    			
+    			ses.setAttribute("SidebarActive","TicketAssign_htm");
     			logger.info(new Date() +"Inside TicketAssign.htm "+UserId);
     			try {
     				
     				String TicketId=req.getParameter("TicketId1");
-    				System.out.println("Ticket id--------"+TicketId);
-    				ses.setAttribute("SidebarActive","TicketAssign_htm");	
-    				 System.out.println("asignto--------"+req.getParameter("AssignTo"));
-    				 
-    				
-    					
-    					
+    				String split= req.getParameter("AssignTo");
+    				 if(split!=null && !split.equals("null")) {
+    					 String s[]=split.split("/");
+    					  String s1=s[0];
+    					  String s2=s[1];
+    				  
     				itheldeskdto dto= itheldeskdto.builder()
     						  .TicketId(TicketId)
-    	    				  //.EmpId(EmpId)
-    						 
-    	    				  .AssignedTo((req.getParameter("AssignTo")))
+    	    				  .AssignedTo(s1)
     	    				  .Priority(req.getParameter("Priority"))
     	    				  .AssignedBy(EmpNo)
     	    				  .build();
     				
+    				 long save=service.assignedTicket(dto,UserId,EmpNo,s2);
     				
-    				 long save=service.assignedTicket(dto);
-    	    		  
     	    		  if (save > 0) {
-    	  				
-    	                  redir.addAttribute("result", "Ticket Assigned Successfully ");
-
-    	 			} else {
+    	  				redir.addAttribute("result", "Ticket Assigned Successfully ");
+                      }
+    	    		  else {
     	                  redir.addAttribute("resultfail", "Ticket Assigned Unsuccessful");
     	 			}
-    				
-    	    		  redir.addAttribute("EmpNo",EmpNo );
-					/* List<Object[]> TicketPendList=(List<Object[]>) service.getPendingList(); */
-    				
-    				
-    				
-					/* req.setAttribute("TicketPendList",TicketPendList ); */
-    				
-    				
-    			 
+    				 }
+    				 redir.addAttribute("EmpNo",EmpNo );
+    				  
     			return "redirect:/TicketPending.htm";
     			}
     			catch (Exception e) {
@@ -415,29 +419,18 @@ public class helpdeskcontroller {
     				logger.error(new Date() +" Inside TicketAssign.htm "+UserId, e);
     				return "static/Error";
     			}
-    	
-
     		}
     	  
     	  @RequestMapping(value = "TicketAssigned.htm", method = {RequestMethod.GET,RequestMethod.POST})
   		 public String TicketAssigned(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
   		{
   			String UserId=(String)ses.getAttribute("Username");
-  			String EmpId =  ses.getAttribute("EmpId").toString();
-  			
-  			
   			logger.info(new Date() +"Inside TicketAssigned.htm "+UserId);
   			try {
   				ses.setAttribute("SidebarActive","TicketAssigned_htm");
-  				
-               
-				
   				List<Object[]> TicketAssignedList=(List<Object[]>)service.getAssignedList();
-  				
   				req.setAttribute("TicketAssignedList", TicketAssignedList);
-  				req.setAttribute("EmpId",EmpId);
-  			
-				return "ithelpdesk/TicketAssigned";
+  			return "ithelpdesk/TicketAssigned";
   			
            }
   			 catch (Exception e) {
@@ -455,51 +448,40 @@ public class helpdeskcontroller {
   			logger.info(new Date() +"Inside GetTicketAssignedDataAjax.htm "+Username);
   			List<Object[]> TicketAssignedList=null;
   			
-  			
   			try {
   				String TicketId=req.getParameter("TicketId");
-  				
   				TicketAssignedList =  service.getTicketAssignedList(TicketId);
-  				
-  				
-  				
   			} catch (Exception e) {
   				e.printStackTrace();
   				logger.error(new Date() +" Inside GetTicketAssignedDataAjax.htm"+Username, e);
   				TicketAssignedList=new ArrayList<>();
   			}
   			
-  			
   			return json.toJson(TicketAssignedList);
   		}
-    	  
-    	  
     	  
     	  @RequestMapping(value = "TicketReAssigned.htm",method = {RequestMethod.GET,RequestMethod.POST} )
   		public String TicketReAssign( HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
   		{
   			String UserId=(String)ses.getAttribute("Username");
   			String EmpNo =  ses.getAttribute("EmpNo").toString();
-  			
   			logger.info(new Date() +"Inside TicketReAssigned.htm "+UserId);
   			try {
   				
   				String TicketId=req.getParameter("TicketId1");
-  				System.out.println("Ticket id--------"+TicketId);
-  				//ses.setAttribute("SidebarActive","TicketAssigned_htm");	
-  				 System.out.println("asignto--------"+req.getParameter("AssignTo"));
-  				 
+  				String split= req.getParameter("AssignTo");
+				 if(split!=null && !split.equals("null")) {
+					 String s[]=split.split("/");
+					  String s1=s[0];
+					  String s2=s[1];
+				  
   				itheldeskdto dto= itheldeskdto.builder()
   						  .TicketId(TicketId)
-  	    				  //.EmpId(EmpId)
-  						 
-  	    				  .AssignedTo((req.getParameter("AssignTo")))
+  	    				  .AssignedTo(s1)
   	    				  .Priority(req.getParameter("Priority"))
   	    				  .AssignedBy(EmpNo)
   	    				  .build();
-  				
-  				
-  				 long save=service.reAssignedTicket(dto);
+  				 long save=service.reAssignedTicket(dto,UserId,EmpNo,s2);
   	    		  
   	    		  if (save > 0) {
   	  				
@@ -509,77 +491,55 @@ public class helpdeskcontroller {
   	                  redir.addAttribute("resultfail", "Ticket ReAssigned Unsuccessful");
   	 			}
   				
+		}
   	    		  redir.addAttribute("EmpNo",EmpNo );
 					
-  				
-  				
-  			 
-  			return "redirect:/TicketAssigned.htm";
+			return "redirect:/TicketAssigned.htm";
   			}
   			catch (Exception e) {
   				e.printStackTrace();
   				logger.error(new Date() +" Inside TicketReAssigned.htm"+UserId, e);
   				return "static/Error";
   			}
-  	
-  
+  	 }
     	  
-      }
-    	  
-    	  
-    	  @RequestMapping(value = "TicketRecieved.htm", method = {RequestMethod.GET,RequestMethod.POST})
+    	   @RequestMapping(value = "TicketRecieved.htm", method = {RequestMethod.GET,RequestMethod.POST})
    		 public String TicketRecieved(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
    		{
    			String UserId=(String)ses.getAttribute("Username");
-   			
    			String EmpNo=ses.getAttribute("EmpNo").toString();
-			System.out.println("Employee No"+EmpNo);
-   			
+   			ses.setAttribute("SidebarActive","TicketRecieved_htm");
+   			ses.setAttribute("formmoduleid", formmoduleid);
    			logger.info(new Date() +"Inside TicketRecieved.htm "+UserId);
    			try {
-   				ses.setAttribute("SidebarActive","TicketRecieved_htm");
-   				
-                System.out.println("Empid---"+EmpNo);
-   				List<Object[]> TicketRecievedList=service.getRecievedList(EmpNo);
-   	
-   				req.setAttribute("TicketRecievedList", TicketRecievedList);
-   				req.setAttribute("EmpId",EmpNo);
-   		
- 				return "ithelpdesk/TicketRecieved";
-   			
-            }
+   				  
+   				  List<Object[]> TicketRecievedList=service.getRecievedList(EmpNo);
+   	              req.setAttribute("TicketRecievedList", TicketRecievedList);
+   				  return "ithelpdesk/TicketRecieved";
+   			}
    			 catch (Exception e) {
   				  logger.error(new Date() +"Inside TicketRecieved.htm "+UserId ,e);
   				  e.printStackTrace();
   				  return "static/Error";
     }
     	  
-    	  
-   }
-    	  
-    	  
-     
-    	  @RequestMapping(value = "TicketForward.htm",method = {RequestMethod.GET,RequestMethod.POST} )
+  }
+    	 @RequestMapping(value = "TicketForward.htm",method = {RequestMethod.GET,RequestMethod.POST} )
     		public String TicketForward( HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
     		{
     			String UserId=(String)ses.getAttribute("Username");
     			String EmpId =  ses.getAttribute("EmpId").toString();
+    			String EmpNo=ses.getAttribute("EmpNo").toString();
     			
     			logger.info(new Date() +"Inside TicketForward.htm "+UserId);
     			try {
     				
     				String TicketId=req.getParameter("TicketId1");
-    				System.out.println("Ticket id--------"+TicketId);
     				itheldeskdto dto= itheldeskdto.builder()
     						  .TicketId(TicketId)
-    	    				
-    						 .CWRemarks(req.getParameter("Remarks"))
-    	    				  
+    	    				  .CWRemarks(req.getParameter("Remarks"))
     	    				  .build();
-    				
-    				
-    				 long save=service.ForwardTicket(dto);
-    	    		  
+    				 long save=service.ForwardTicket(dto,UserId,EmpNo);
     	    		  if (save > 0) {
     	  				
     	                  redir.addAttribute("result", "Ticket Forwarded Successfully ");
@@ -600,33 +560,26 @@ public class helpdeskcontroller {
     	
            }
     	 
-    
-    	  
     	  @RequestMapping(value = "TicketForwarded.htm", method = {RequestMethod.GET,RequestMethod.POST})
  		 public String TicketForwarded(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
  		{
  			String UserId=(String)ses.getAttribute("Username");
- 			
- 			
+ 			ses.setAttribute("SidebarActive","TicketForwarded_htm");
+ 			ses.setAttribute("formmoduleid", formmoduleid);
  			
  			logger.info(new Date() +"Inside TicketForwarded.htm"+UserId);
  			try {
- 				ses.setAttribute("SidebarActive","TicketForwarded_htm");
  				
-              
  				List<Object[]> TicketForwardedList=service.getForwardedList();
- 	
- 				req.setAttribute("TicketForwardedList", TicketForwardedList);
- 				
- 		
-				return "ithelpdesk/TicketForwarded";
+ 	            req.setAttribute("TicketForwardedList", TicketForwardedList);
+ 				return "ithelpdesk/TicketForwarded";
  			
           }
  			 catch (Exception e) {
 				  logger.error(new Date() +"Inside TicketForwarded.htm "+UserId ,e);
 				  e.printStackTrace();
 				  return "static/Error";
-  }
+       }
  	  
  } 
     	  
@@ -635,72 +588,68 @@ public class helpdeskcontroller {
     		{
     		  String UserId=(String)ses.getAttribute("Username");
   			String EmpNo =  ses.getAttribute("EmpNo").toString();
+  			String EmpId =  ses.getAttribute("EmpId").toString();
   			
   			logger.info(new Date() +"Inside TicketReturn.htm "+UserId);
   			try {
   				
-  				String TicketId=req.getParameter("TicketId2");
-  				System.out.println("Ticket id-++------"+TicketId);
+  				String split=req.getParameter("TicketId2");
+  				if(split!=null && !split.equals("null")) {
+					  String arr[]=split.split("/");
+				      String s1=arr[0]; 
+					  String s2=req.getParameter("ReturnTo");	  
+				 
   				itheldeskdto dto= itheldeskdto.builder()
-  						  .TicketId(TicketId)
+  						  .TicketId(s1)
   						  .ARemarks(req.getParameter("Remarks"))
   						  .AssignedBy(EmpNo)
   	    				  .build();
   				
-  				
-  				 long save=service.ReturnTicket(dto);
-  	    		  
+  				 long save=service.ReturnTicket(dto,UserId,EmpNo,s2);
   	    		  if (save > 0) {
-  	  				
-  	                  redir.addAttribute("result", "Ticket Returned Successfully ");
-
-  	 			} else {
+  	  				 redir.addAttribute("result", "Ticket Returned Successfully ");
+                 } else {
   	                  redir.addAttribute("resultfail", "Ticket Return Unsuccessful");
   	 			}
   				
+  			}
   	    		  redir.addAttribute("EmpNo",EmpNo );
-				
+  				
   			return "redirect:/TicketForwarded.htm";
-    			
-             }
+     }
     			 catch (Exception e) {
    				  logger.error(new Date() +"Inside TicketReturn.htm "+UserId ,e);
    				  e.printStackTrace();
    				  return "static/Error";
-     }
-    	  
-    	  
+         }
    }
     	  
    	  @RequestMapping(value = "TicketClose.htm", method = {RequestMethod.GET,RequestMethod.POST})
-  		 public String TicketReturned(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+  		 public String TicketClose(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
  		{
  			String UserId=(String)ses.getAttribute("Username");
  			String EmpNo =  ses.getAttribute("EmpNo").toString();
- 			
-  			
-  			logger.info(new Date() +"Inside TicketClose.htm "+UserId);
+ 			logger.info(new Date() +"Inside TicketClose.htm "+UserId);
   			try {
  				
-  				String TicketId=req.getParameter("TicketId3");
-				System.out.println("Ticket id--------"+TicketId);
+  				String split=req.getParameter("TicketId3");
+  				 if(split!=null && !split.equals("null")) {
+					  String arr[]=split.split("/");
+					  String s1=arr[0]; 
+					  String s2=req.getParameter("EmpNo");	  
 				itheldeskdto dto= itheldeskdto.builder()
-						  .TicketId(TicketId)
+						  .TicketId(s1)
 	    				  .ClosedBy(EmpNo)
 						  .FeedBackRequired(req.getParameter("Feedback"))
 	    				  .build();
-				
-				
-				 long save=service.closeTicket(dto);
-	    		  
+				 long save=service.closeTicket(dto,UserId,EmpNo,s2);
 	    		  if (save > 0) {
-	  				
-	                  redir.addAttribute("result", "Ticket Closed Successfully ");
+	  				 redir.addAttribute("result", "Ticket Closed Successfully ");
 
 	 			} else {
 	                  redir.addAttribute("resultfail", "Ticket Closed Unsuccessful");
 	 			}
-				
+  		}
 	    		  redir.addAttribute("EmpNo",EmpNo );
 				return "redirect:/TicketClosed.htm";
   			
@@ -709,12 +658,8 @@ public class helpdeskcontroller {
  				  logger.error(new Date() +"Inside TicketClose.htm "+UserId ,e);
 				  e.printStackTrace();
 				  return "static/Error";
-   }
-    	  
-    	  
-    	  
+        }
   }
-   	  
    	  
    	 @RequestMapping(value = "TicketClosed.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		 public String TicketClosed(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -722,12 +667,9 @@ public class helpdeskcontroller {
 			String UserId=(String)ses.getAttribute("Username");
 			String fromDate=req.getParameter("FromDate");
 			String toDate=req.getParameter("ToDate");	
-			
-			
 			logger.info(new Date() +"Inside TicketClosed.htm"+UserId);
 			try {
 				ses.setAttribute("SidebarActive","TicketClosed_htm");
-				
 				if(fromDate==null  && toDate==null) 
 				{
 					String fd = LocalDate.now().minusMonths(1).toString();
@@ -735,28 +677,20 @@ public class helpdeskcontroller {
 					fromDate=rdf.format(sdf.parse(fd.toString()));
 					toDate=rdf.format(sdf.parse(td.toString()));
 				}
-				
-				
 				req.setAttribute("frmDt", fromDate);
 				req.setAttribute("toDt",  toDate);
-          
-				List<Object[]> TicketClosedList=service.getClosedList();
-	
-				req.setAttribute("TicketClosedList", TicketClosedList);
+                List<Object[]> TicketClosedList=service.getClosedList(fromDate,toDate);
+	            req.setAttribute("TicketClosedList", TicketClosedList);
 				
-		
-			return "ithelpdesk/TicketClosed";
+		return "ithelpdesk/TicketClosed";
 			
       }
 			 catch (Exception e) {
 			  logger.error(new Date() +"Inside TicketClosed.htm "+UserId ,e);
 			  e.printStackTrace();
 			  return "static/Error";
-  }
-	  
-    
-   }
-   	 
+          }
+ }
    	 
    	 @RequestMapping(value = "GetTicketClosedDataAjax.htm", method = RequestMethod.GET)
 		public @ResponseBody String GetTicketClosedDataAjax(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception 
@@ -765,12 +699,9 @@ public class helpdeskcontroller {
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside GetTicketClosedDataAjax.htm "+Username);
 			List<Object[]> TicketClosedList=null;
-			
-			
 			try {
 				
 				String TicketId=req.getParameter("TicketId");
-				
 				TicketClosedList =  service.getTicketClosedList(TicketId);
 				
 			} catch (Exception e) {
@@ -778,33 +709,28 @@ public class helpdeskcontroller {
 				logger.error(new Date() +" Inside GetTicketClosedDataAjax.htm  "+Username, e);
 				TicketClosedList=new ArrayList<>();
 			}
-			
-			
 			return json.toJson(TicketClosedList);
 		}
    	 
-   	 
-   	 
-     @RequestMapping(value = "TicketClosedFeedback.htm", method = {RequestMethod.GET,RequestMethod.POST})
+   	  @RequestMapping(value = "TicketClosedFeedback.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		 public String TicketClosedFeedback(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			String UserId=(String)ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			
-			
 			logger.info(new Date() +"Inside TicketClosedFeedback.htm "+UserId);
 			try {
 				
-				String TicketId=req.getParameter("TicketId2");
-			System.out.println("Ticket id--------"+TicketId);
-			itheldeskdto dto= itheldeskdto.builder()
-					  .TicketId(TicketId)
+				String split=req.getParameter("TicketId2");
+				if(split!=null && !split.equals("null")) {
+					  String arr[]=split.split("/");
+					  String s1=arr[0]; 
+					  String s2=req.getParameter("EmpNo"); //assignedby empno
+			    itheldeskdto dto= itheldeskdto.builder()
+					  .TicketId(s1)
     				  .Feedback(req.getParameter("Feedback"))
     				  .build();
 			
-			
-			 long save=service.savefeedback(dto);
-    		  
+			 long save=service.savefeedback(dto,UserId,EmpNo,s2);
     		  if (save > 0) {
   				
                   redir.addAttribute("result", "FeedBack Submitted Successfully ");
@@ -812,7 +738,7 @@ public class helpdeskcontroller {
  			} else {
                   redir.addAttribute("resultfail", "FeedBack Submit Unsuccessful");
  			}
-			
+				}
     		  redir.addAttribute("EmpNo",EmpNo );
 			return "redirect:/ITTicketList.htm";
 			
@@ -823,11 +749,8 @@ public class helpdeskcontroller {
 			  return "static/Error";
         }
 	  
-	  
-	  
 }
-
-     @RequestMapping(value="TicketCategory.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value="TicketCategory.htm",method= {RequestMethod.POST,RequestMethod.GET})
      public String ticketCategory(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
      {
    	  String UserId=(String)ses.getAttribute("Username");
@@ -852,7 +775,6 @@ public class helpdeskcontroller {
  				return "ithelpdesk/TicketCategory";
  			}
    	  
- 		
  		} catch (Exception e) {
 			logger.error(new Date() +"Inside TicketCategory.htm"+UserId,e);
 			e.printStackTrace();
@@ -869,7 +791,6 @@ public class helpdeskcontroller {
  			String action = req.getParameter("action");
  			if("ADD".equalsIgnoreCase(action)) {
  				String ticketCategory = req.getParameter("ticketCategory");
- 				
  				HelpdeskCategory category = new HelpdeskCategory();
  				category.setTicketCategory(ticketCategory);
  				category.setCreatedBy(UserId);
@@ -891,9 +812,161 @@ public class helpdeskcontroller {
  		}
      }
      
+     @RequestMapping(value = "HelpdeskEmployee.htm", method = {RequestMethod.GET,RequestMethod.POST})
+ 	public String HelpdeskEmployee(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+ 	{
+ 		String UserId=(String)ses.getAttribute("Username");
+ 		logger.info(new Date() +"Inside HelpdeskEmployee.htm "+UserId);
+ 		try {
+ 			
+ 			ses.setAttribute("SidebarActive","HelpdeskEmployee_htm");	
+ 			String ValidTill=req.getParameter("ValidTill");	
+ 			String CurrentDate=req.getParameter("CurrentDate");	
+ 			String EmpNo=ses.getAttribute("EmpNo").toString();
+ 		    List<Object[]> EmployeeList=service.getEmployeeList();
+ 			List<Object[]> ContractEmployeeList=(List<Object[]>) service.getContractEmployee();
+ 			List<Object[]> HelpDeskEmployeeList=service.getHelpDeskEmployeeList();
+ 			
+ 			String fd = LocalDate.now().plusMonths(12).toString();
+ 			ValidTill=rdf.format(sdf.parse(fd.toString()));
+ 			String cd=LocalDate.now().toString();
+ 			CurrentDate=rdf.format(sdf.parse(cd.toString()));
+			
+			req.setAttribute("CurrentDate", CurrentDate);
+ 			req.setAttribute("ValidTill", ValidTill);
+ 			req.setAttribute("EmployeeList",EmployeeList );
+ 			req.setAttribute("ContractEmployeeList",ContractEmployeeList );
+ 			req.setAttribute("HelpDeskEmployeeList",HelpDeskEmployeeList );
+ 			
+ 		return "ithelpdesk/HelpDeskEmployee";
+ 		}
+ 		catch (Exception e) {
+ 			e.printStackTrace();
+ 			logger.error(new Date() +" Inside HelpdeskEmployee.htm "+UserId, e);
+ 			return "static/Error";
+ 		}
      
+   }
+     
+     @RequestMapping(value="EmployeeAddSubmit.htm",method= {RequestMethod.GET,RequestMethod.POST})
+     public String EmployeeAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) {
+	
+  	  String UserId=(String)ses.getAttribute("Username");
+  	  logger.info(new Date() +"Inside EmployeeAddSubmit.htm "+UserId);
+  	  try {
+  		  
+		       HelpDeskEmployee Employee=new HelpDeskEmployee();
+		       Employee.setEmpNo(req.getParameter("Employee"));
+		       Employee.setEmpType("P");
+  		       Employee.setValidTill(sdf.format(rdf.parse(req.getParameter("ValidTill"))));
+  		       Employee.setCreatedBy(UserId);
+  		       Employee.setCreatedDate(sdf1.format(new Date()));
+  		       Employee.setIsActive(1);
+  			
+  		  long save=service.EmployeeAddSubmit(Employee);
+  		  
+  		  if(save!=0) {
+  			redir.addAttribute("result", "Employee Added Successfully");
+  		  }
+  		  else {
+  			 redir.addAttribute("resultfail", "Employee Add Unsuccessful");
+  		  }
+		return "redirect:/HelpdeskEmployee.htm"; 
+  		  
+  	  }catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside EmployeeAddSubmit.htm "+UserId, e);
+			return "static/Error";
+		}
+  
+   }
+     
+     @RequestMapping(value="CaseworkerAddSubmit.htm",method= {RequestMethod.GET,RequestMethod.POST})
+     public String CaseworkerAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) {
+	
+  	  String UserId=(String)ses.getAttribute("Username");
+  	  
+  	  logger.info(new Date() +"Inside CaseworkerAddSubmit.htm "+UserId);
+  	  try {
+  		  
+		       HelpDeskEmployee Employee=new HelpDeskEmployee();
+		       Employee.setEmpNo(req.getParameter("Caseworker"));
+		       Employee.setEmpType("C");
+  		       Employee.setValidTill(sdf.format(rdf.parse(req.getParameter("ValidTill"))));
+  		       Employee.setCreatedBy(UserId);
+  		       Employee.setCreatedDate(sdf1.format(new Date()));
+  		       Employee.setIsActive(1);
+  			
+  		  long save=service.EmployeeAddSubmit(Employee);
+  		  
+  		  if(save!=0) {
+  			redir.addAttribute("result", "Caseworker Added Successfully");
+  		  }
+  		  else {
+  			 redir.addAttribute("resultfail", "Caseworker Add Unsuccessful");
+  		  }
+		 return "redirect:/HelpdeskEmployee.htm"; 
+  		  
+  	  }catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CaseworkerAddSubmit.htm "+UserId, e);
+			return "static/Error";
+		}
+  
+   }
+     
+     @RequestMapping(value = "EmployeeUpdate.htm")
+		public String EmployeeUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			 
+			logger.info(new Date() +"Inside EmployeeUpdate.htm "+UserId);
+			try {
+				
+				String HelpDeskEmpId=req.getParameter("HelpDeskEmpId");
+				HelpDeskEmployee Employee=new HelpDeskEmployee();
+			    Employee.setHelpDeskEmpId(Long.parseLong(HelpDeskEmpId));
+				Employee.setValidTill(sdf.format(rdf.parse(req.getParameter("ValidTill"))));
+				Employee.setModifiedBy(UserId);
+				Employee.setModifiedDate(sdf1.format(new Date()));
+			    long count=service.Employeeupdate(Employee);
+				
+		        if (count > 0) {
+					 redir.addAttribute("result", "Employee Updated Successfully");
+				} else {
+					 redir.addAttribute("resultfail", "Employee Update Unsuccessfull");
+				}
+		        return "redirect:/HelpdeskEmployee.htm";
+		        
+			} catch (Exception e) {
+				  logger.error(new Date() +"Inside EmployeeUpdate.htm "+UserId ,e);
+				  e.printStackTrace();
+				  return "static/Error";
+			}
+		}
+     
+      @RequestMapping(value = "EmployeeDelete.htm")
+		public String EmployeeDelete( HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+		{
+			String UserId=(String)ses.getAttribute("Username");
+			logger.info(new Date() +"Inside EmployeeDelete.htm "+UserId);
+			try {
+				String HelpDeskEmpId=req.getParameter("HelpDeskEmpId");
+				long count = service.EmployeeDelete(HelpDeskEmpId);
+				if (count != 0) {
+					redir.addAttribute("result", "Employee Deleted Successsfull");
+				} else {
+					redir.addAttribute("resultfail", "Employee Delete UnSuccesssful");
+				}
+				return "redirect:/HelpdeskEmployee.htm";
+			} catch (Exception e) {
+				  logger.error(new Date() +"Inside EmployeeDelete.htm "+UserId ,e);
+				  e.printStackTrace();
+				  return "static/Error";
+			} 
+     
+     }
 }
-    	  
 
     	  
     	  

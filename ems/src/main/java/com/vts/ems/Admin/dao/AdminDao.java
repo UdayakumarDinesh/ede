@@ -38,7 +38,7 @@ public interface AdminDao {
     public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;
 	public List<Object[]> GetReqResMessagelist(String emp ,LocalDate FromDate, LocalDate Todate)throws Exception;
-	public List<Object[]> AllNotificationLists(long empid)throws Exception;
+	public List<Object[]> AllNotificationLists(String EmpNo)throws Exception;
 	public List<Object[]> GetFromemployee()throws Exception;
 	public List<Object[]> GetToemployee()throws Exception;
 	public int checkavaibility(String logintype,String detailsid)throws Exception;

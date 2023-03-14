@@ -92,7 +92,10 @@ public class CircularOrderController {
 			{
 				fromdate=sdf.format(rdf.parse(fromdate));
 				todate=sdf.format(rdf.parse(todate));
+				
 			}
+			System.out.println("11111111111111------"+fromdate);
+			System.out.println("11111111111111------"+todate);
 					
 			List<Object[]> circulatlist = service.GetDepCircularList(fromdate , todate,id );
 	   		req.setAttribute("circulatlist", circulatlist);
@@ -733,6 +736,9 @@ public class CircularOrderController {
 				fromdate=sdf.format(rdf.parse(fromdate));
 				todate=sdf.format(rdf.parse(todate));
 			}
+			  System.out.println("From Date---"+fromdate);
+			    System.out.println("toDate---"+todate);
+				
 					
 			req.setAttribute("TopicList",service.GetGOTopicList());
 	   		req.setAttribute("GovtOrdersList", service.GetGovtOrdersList(fromdate , todate,TopicId ));

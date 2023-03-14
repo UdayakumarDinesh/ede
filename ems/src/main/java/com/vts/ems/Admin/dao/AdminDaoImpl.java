@@ -418,12 +418,12 @@ public class AdminDaoImpl implements AdminDao{
 		   }
 	}
 	
-	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE empid=:empid AND isactive=1";
-	public List<Object[]> AllNotificationLists(long empid)throws Exception
+	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE EmpNo=:empno AND isactive=1";
+	public List<Object[]> AllNotificationLists(String EmpNo)throws Exception
 	{
 		try {
 			Query query= manager.createNativeQuery(ALLNOTIFICATION);			
-			query.setParameter("empid", empid);
+			query.setParameter("empno", EmpNo);
 		
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
@@ -433,9 +433,6 @@ public class AdminDaoImpl implements AdminDao{
 				return null;
 		   }
 	}
-	
-	
-	
 	
 	private static final String FROMEMPLOYEE="SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT po FROM `chss_approve_auth` WHERE isactive='1') UNION  SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT vo FROM `chss_approve_auth` WHERE isactive='1') UNION SELECT a.empid,a.empname,b.designation,a.empno,a.divisionid FROM employee a,employee_desig b WHERE a.isactive='1' AND a.DesigId=b.DesigId AND a.empid  IN (SELECT ao FROM `chss_approve_auth` WHERE isactive='1')";
 	

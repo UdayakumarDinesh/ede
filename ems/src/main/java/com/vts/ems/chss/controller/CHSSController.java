@@ -1844,6 +1844,7 @@ public class CHSSController
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSUserForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -1853,7 +1854,7 @@ public class CHSSController
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,EmpNo,LoginType);
 			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
@@ -2334,7 +2335,7 @@ public class CHSSController
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSContingentApprove.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
@@ -2353,7 +2354,7 @@ public class CHSSController
 			dto.setBillcontent(billcontent);
 			dto.setPO(billcontent);
 			
-			long count= service.CHSSClaimsApprove( dto);
+			long count= service.CHSSClaimsApprove( dto,EmpNo);
 			
 			if(action.equalsIgnoreCase("F")) 
 			{
@@ -5063,6 +5064,7 @@ public class CHSSController
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSUserIPDForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -5072,7 +5074,7 @@ public class CHSSController
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
-			long count = service.CHSSUserIPDForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
+			long count = service.CHSSUserIPDForward(chssapplyid, Username, action,remarks,EmpId,EmpNo,LoginType);
 			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{

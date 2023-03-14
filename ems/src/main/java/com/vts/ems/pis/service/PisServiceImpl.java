@@ -878,7 +878,7 @@ public class PisServiceImpl implements PisService
 		
 		
 		@Override
-		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception
+		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String EmpNo,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception
 		{
 			logger.info(new Date() +"Inside SERVICE FamilyMemDetailsForward ");
 			long count=0;
@@ -903,8 +903,8 @@ public class PisServiceImpl implements PisService
 				{
 					notify.setNotificationUrl("FamFormsApproveList.htm");
 					notify.setNotificationDate(LocalDate.now().toString());
-					notify.setEmpId(Long.parseLong(loginTypeEmpData.get(0)[1].toString()));
-					notify.setNotificationBy(Long.parseLong(formdata[1].toString()));
+					notify.setEmpNo(loginTypeEmpData.get(0)[1].toString());
+					notify.setNotificationBy(formdata[1].toString());
 					
 					if(formtype.equalsIgnoreCase("I")) 
 					{
@@ -938,8 +938,8 @@ public class PisServiceImpl implements PisService
 				
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
-				notify.setEmpId(Long.parseLong(formdata[1].toString()));
-				notify.setNotificationBy(Long.parseLong(empid));
+				notify.setEmpNo(formdata[1].toString());
+				notify.setNotificationBy(EmpNo);
 				
 			}
 			else if(action.equalsIgnoreCase("A"))
@@ -969,8 +969,8 @@ public class PisServiceImpl implements PisService
 				}
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
-				notify.setEmpId(Long.parseLong(formdata[1].toString()));
-				notify.setNotificationBy(Long.parseLong(empid));
+				notify.setEmpNo((formdata[1].toString()));
+				notify.setNotificationBy(EmpNo);
 			}
 				
 			
@@ -979,7 +979,7 @@ public class PisServiceImpl implements PisService
 			notify.setIsActive(1);
 			notify.setCreatedBy(usernmae);
 			notify.setCreatedDate(sdtf.format(new Date()));
-			if(notify.getEmpId()>0 && count>0) {
+			if(notify.getEmpNo()!=null && count>0) {
 				dao.NotificationAdd(notify);
 			}
 		

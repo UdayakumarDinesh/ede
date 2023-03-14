@@ -37,7 +37,7 @@ public interface AdminService {
 	public List<Object[]> GetReqListFromUser()throws Exception;
 	public int UpdateAdminResponse(String  responsemsg , String requestid, String UserId)throws Exception;
 	public List<Object[]> GetReqResMessagelist(String emp , String fromdate , String todate )throws Exception;
-	public List<Object[]> AllNotificationLists(long  emp  )throws Exception;
+	public List<Object[]> AllNotificationLists(String EmpNo)throws Exception;
 	public List<Object[]> GetFromemployee()throws Exception;
 	public List<Object[]> GetToemployee()throws Exception;
 	public int updateformroleaccess(String formroleaccessid,String detailsid,String isactive,String logintype, String UserId)throws Exception;
@@ -57,6 +57,7 @@ public interface AdminService {
 	public BigInteger contractEmpAddcheck(String cuserName)throws Exception;
 	public BigInteger contractEmpEditcheck(String username, String contractEmpId)throws Exception;
 	public Long ContractEmpEditComments(MasterEdit masteredit, MasterEditDto masterdto)throws Exception;
+	
 	
 	
 }

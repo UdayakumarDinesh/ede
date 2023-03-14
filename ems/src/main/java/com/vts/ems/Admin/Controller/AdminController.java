@@ -363,6 +363,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			long EmpId = (long)ses.getAttribute("EmpId");
+			String EmpNo = (String)ses.getAttribute("EmpNo");
 			logger.info(new Date() +"Inside EmpRequestMsg.htm "+UserId);
 			try {
 				
@@ -383,7 +384,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					EMSNotification notification = new EMSNotification();                
 					notification.setCreatedBy(UserId);
 					notification.setCreatedDate(sdtf.format(new Date()));
-					notification.setNotificationBy(EmpId);
+					notification.setNotificationBy(EmpNo);
 					notification.setNotificationMessage("Request Message from "+empname);
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationUrl("AdminReplyToReqMsg.htm");
@@ -548,6 +549,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 		{
 			String UserId = (String)ses.getAttribute("Username");
 			long EmpId = (long)ses.getAttribute("EmpId");
+			String EmpNo = (String)ses.getAttribute("EmpNo");
 			logger.info(new Date() +"Inside AdminReplyToReqMsg.htm "+UserId);
 			try {
 				String requestid = (String)req.getParameter("action");
@@ -559,8 +561,8 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					EMSNotification notification = new EMSNotification();                
 					notification.setCreatedBy(UserId);
 					notification.setCreatedDate(sdtf.format(new Date()));
-					notification.setEmpId(Long.parseLong(req.getParameter(empid)));
-					notification.setNotificationBy(EmpId);
+					notification.setEmpNo(req.getParameter(empid));
+					notification.setNotificationBy(EmpNo);
 					notification.setNotificationMessage("Response Message from "+empname);
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationUrl("EmpRequestMsg.htm");
@@ -626,10 +628,11 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			
 			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +"Inside AllNotificationList.htm "+UserId);
-			long EmpId = (long)ses.getAttribute("EmpId");
+			String EmpNo = (String)ses.getAttribute("EmpNo");
+			System.out.println("-------------------not-----"+EmpNo);
 			try {			
 				 
-				List<Object[]>  list = service.AllNotificationLists(EmpId);
+				List<Object[]>  list = service.AllNotificationLists(EmpNo);
 				req.setAttribute("notificationlist", list);	
 			    return "Admin/NotificationList";
 			} catch (Exception e) {
@@ -996,23 +999,27 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					  return json.toJson(username);
 				}		 
 			 
-			 @RequestMapping(value = "ITDashboard.htm", method = RequestMethod.GET)
-				public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
-					String Username = (String) ses.getAttribute("Username");
-					logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
-					try {
-						String logintype = (String)ses.getAttribute("LoginType");
-				        
-						List<Object[]> admindashboard = service.HeaderSchedulesList("11" ,logintype); 
-					
-						ses.setAttribute("formmoduleid", "11"); 
-						req.setAttribute("dashboard", admindashboard);
-						ses.setAttribute("SidebarActive", "ITDashboard_htm");
-						return "ithelpdesk/ITDashboard";
-					} catch (Exception e) {
-						logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
-						e.printStackTrace();	
-						return "static/Error";
-					}
-				}
+//			 @RequestMapping(value = "ITDashboard.htm", method = RequestMethod.GET)
+//				public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
+//					String Username = (String) ses.getAttribute("Username");
+//					logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
+//					try {
+//						String logintype = (String)ses.getAttribute("LoginType");
+//						String EmpNo = (String)ses.getAttribute("EmpNo");
+//				        
+//						List<Object[]> admindashboard = service.HeaderSchedulesList("11" ,logintype); 
+//						
+//						req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo));
+//						
+//						
+//						ses.setAttribute("formmoduleid", "11"); 
+//						req.setAttribute("dashboard", admindashboard);
+//						ses.setAttribute("SidebarActive", "ITDashboard_htm");
+//						return "ithelpdesk/ITDashboard";
+//					} catch (Exception e) {
+//						logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
+//						e.printStackTrace();	
+//						return "static/Error";
+//					}
+//				}
 }		

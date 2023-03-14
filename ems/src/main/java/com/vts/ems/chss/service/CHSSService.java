@@ -87,7 +87,7 @@ public interface CHSSService
 	public List<Object[]> CHSSMedicineDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSOtherDataList(String CHSSApplyId) throws Exception;
 	public List<Object[]> CHSSMiscDataList(String CHSSApplyId) throws Exception;
-	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String LoginType) throws Exception;
+	public long CHSSUserForward(String CHSSApplyId, String Username, String action,String remarks, String EmpId,String EmpNo,String LoginType) throws Exception;
 	public List<Object[]> CHSSApproveClaimList(String logintype,String empid,String claimtype) throws Exception;
 	public long ConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception;
 	public long TestRemAmountEdit(CHSSBillTests modal) throws Exception;
@@ -96,7 +96,7 @@ public interface CHSSService
 	public long MiscRemAmountEdit(CHSSBillMisc modal) throws Exception;
 	public List<Object[]> CHSSClaimListRep(String type, String fromdate, String todate) throws Exception;
 	public List<Object[]> CHSSBatchApproval(String logintype,String todate,String contingentid,String ClaimType) throws Exception;
-	public long CHSSClaimsApprove(CHSSContingentDto dto)throws Exception;
+	public long CHSSClaimsApprove(CHSSContingentDto dto,String EmpNo)throws Exception;
 	public CHSSContingent getCHSSContingent(String contingentid) throws Exception;
 	public List<Object[]> getCHSSContingentList(String logintype,String fromdate,String todate) throws Exception;
 	public LinkedHashMap<Long, ArrayList<Object[]>> CHSSContingentClaimList(String contingentid) throws Exception;
@@ -171,7 +171,7 @@ public interface CHSSService
 	public List<Object[]> ContingentTransactions(String contingentid) throws Exception;
 	public List<Object[]> ClaimEquipmentList(String CHSSApplyId) throws Exception;
 	public List<Object[]> ClaimImplantList(String CHSSApplyId) throws Exception;
-	public long CHSSUserIPDForward(String CHSSApplyId, String Username, String action, String remarks, String EmpId, String LoginType) throws Exception;
+	public long CHSSUserIPDForward(String CHSSApplyId, String Username, String action, String remarks, String EmpId,String EmpNo, String LoginType) throws Exception;
 	public List<CHSSBillImplants> BillImplantsList(String billid) throws Exception;
 	public List<CHSSBillEquipment> BillEquipmentList(String billid) throws Exception;
 	public long IPDConsultRemAmountEdit(CHSSBillConsultation modal) throws Exception;

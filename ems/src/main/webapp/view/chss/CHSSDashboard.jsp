@@ -546,7 +546,7 @@ $('#isself').change(function(){
 	    
 	    
 	    xAxis: {
-	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[1]%>' ,   <%}%>   ] 
+	         categories: [  <% for (Object[]  obj : graphdata ) { %>   '<%=obj[1]%>' ,   <%}%>   ] 
 	   
 	    },
 	    yAxis: {
@@ -816,9 +816,9 @@ $('#isself').change(function(){
 		        <% if(!amountdata[1].toString().equalsIgnoreCase("0.00")){  int j=0; 
 		        for(Object[] obj : amountdataindividual) { %>	
 		        {
-		            name: '<%=obj[1]%>',
+		           name: '<%=obj[1]%>',
 		            y:<%=obj[7]%>,
-		            color: Highcharts.getOptions().colors[<%=j%>] 
+		           color: Highcharts.getOptions().colors[<%=j%>]
 		        }
 		        ,
 		        <% j++; 

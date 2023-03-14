@@ -120,7 +120,7 @@
 							            <span class="badge badge-danger badge-counter" id="NoticeCount"></span>
 						        </a>
 						  	</div>
-							
+							    <%} %>
 						<div class="btn-group ">
 	
 							<a class="nav-link  onclickbell" style="padding: 0.25rem 0.5rem;"  href="" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -138,7 +138,7 @@
 						            <a class="dropdown-item text-center small text-gray-500 showall" href="AllNotificationList.htm" style="height: 30px;font-size: 13px;color: black;" >Show All Alerts</a>
 						       </div>
 						    </div>
-						    <%} %>
+						
 						    
 						    
 

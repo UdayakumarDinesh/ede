@@ -154,7 +154,7 @@ public class AdminServiceImpl implements AdminService{
 				notifi.setNotificationMessage(notification.getNotificationMessage());
 				notifi.setNotificationValue(notification.getNotificationValue());
 				notifi.setNotificationUrl(notification.getNotificationUrl());
-				notifi.setEmpId(Long.parseLong(obj[0].toString()));
+				notifi.setEmpNo(obj[0].toString());
 				long result = dao.AddRequestMsgNotification(notifi);
 				if(result>0) {
 					id++;
@@ -228,9 +228,9 @@ public class AdminServiceImpl implements AdminService{
 		return dao.GetReqResMessagelist(emp,Fromdate,ToDate);
 	}
 	@Override
-	public List<Object[]> AllNotificationLists(long emp)throws Exception
+	public List<Object[]> AllNotificationLists(String EmpNo)throws Exception
 	{
-		return dao.AllNotificationLists(emp);
+		return dao.AllNotificationLists(EmpNo);
 	}
 	
 	

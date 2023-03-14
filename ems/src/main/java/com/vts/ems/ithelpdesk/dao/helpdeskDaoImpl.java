@@ -15,8 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
@@ -31,12 +33,15 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String HELPDESKLIST="SELECT b.TicketId,a.EmpNo,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.TicketStatus,c.TicketCategory,d.TicketSubCategory,b.FileName,b.FeedBackRequired,b.Feedback FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND a.EmpNo=:EmpNo ORDER BY RaisedDate DESC";
+	private static final String HELPDESKLIST="SELECT b.TicketId,a.EmpNo,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.TicketStatus,c.TicketCategory,d.TicketSubCategory,b.FileName,b.FeedBackRequired,b.Feedback,b.AssignedBy FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND a.EmpNo=:EmpNo AND DATE(b.RaisedDate) BETWEEN :FromDate AND :ToDate  ORDER BY RaisedDate DESC";
 	@Override
-	public List<Object[]> getHelpDeskList(String empno) throws Exception {
+	public List<Object[]> getHelpDeskList(String empno,String fromDate, String toDate) throws Exception {
 		
 		Query query=manager.createNativeQuery(HELPDESKLIST);
 		query.setParameter("EmpNo", empno);
+		query.setParameter("FromDate",fromDate );
+		query.setParameter("ToDate", toDate);
+		
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		
 		return list;
@@ -79,8 +84,6 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		}
 	}
 		
-	
-	//public final static String TICKETEDIT="SELECT TicketDesc,TicketCategoryId,Priority,FilePath,TicketId FROM helpdesk_tickets   WHERE TicketId=:ticketid";
 	@Override
 	public HelpdeskTicket GetTicket(String ticketId) throws Exception {
 		
@@ -94,7 +97,6 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		}	
 	
 	}
-	
 	
 	public final static String TICKETDELETE="UPDATE helpdesk_tickets SET IsActive=:isactive WHERE TicketId=:ticketid";
 	@Override
@@ -125,6 +127,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
+	
 	public final static String TICKETLISTFORMODAL="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.FileName FROM helpdesk_tickets b,employee a,helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketId=:TicketId";
 	@Override
 	public List<Object[]> getTicketList(String ticketId) throws Exception {
@@ -134,7 +137,8 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
-	public final static String CASEWORKERLIST="SELECT a.EmpNo,a.EmpName  FROM employee a,login b WHERE a.EmpId=b.EmpId AND b.LoginType='C'";
+	
+	public final static String CASEWORKERLIST= "SELECT a.EmpNo,'CE' AS logintype,a.EmpType ,c.EmpName,a.ValidTill ,(SELECT COUNT(*) FROM helpdesk_tickets ht WHERE ht.TicketStatus <> 'C' AND ht.IsActive=1 AND ht.AssignedTo=a.EmpNo) AS 'Tickets Count'FROM helpdesk_employee a ,employee_contract c WHERE a.isActive='1' AND a.EmpNo=c.contractEmpNo  AND a.EmpNo NOT IN (SELECT a.EmpNo FROM helpdesk_employee a  WHERE a.ValidTill < CURDATE()) UNION SELECT a.EmpNo,'U' AS logintype,a.EmpType,b.EmpName,a.ValidTill ,(SELECT COUNT(*) FROM helpdesk_tickets ht WHERE ht.TicketStatus <> 'C' AND ht.IsActive=1 AND ht.AssignedTo=a.EmpNo) AS 'Tickets Count' FROM helpdesk_employee a,employee b WHERE a.isActive='1' AND a.EmpNo=b.EmpNo AND  a.EmpNo NOT IN (SELECT a.EmpNo FROM helpdesk_employee a  WHERE a.ValidTill < CURDATE())";
 	@Override
 	public List<Object[]> getCaseWorkerList() throws Exception {
 		
@@ -142,6 +146,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
+	
 	@Override
 	public long assignedTicket(HelpdeskTicket desk) throws Exception {
 		
@@ -149,14 +154,15 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		manager.flush();
 		return desk.getTicketId();
 	}
-	public final static String ASSIGNEDLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.Priority ,c.TicketCategory,d.TicketSubCategory,b.FileName,b.AssignedDate,b.AssignedTo,b.TicketStatus,a1.EmpName AS caseworkername,a2.Empname AS assignedbyname,b.AssignedBy,a2.EmpNo AS adminid FROM helpdesk_tickets b,employee a ,employee a1,employee a2, helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND b.TicketStatus  IN ('A') AND b.assignedTo=a1.EmpNo AND b.assignedBy=a2.EmpNo  ORDER BY AssignedDate DESC";
+	
+	public final static String ASSIGNEDLIST="CALL ticket_assigned_list()";
 	@Override
 	public List<Object[]> getAssignedList() throws Exception {
 		
 			Query query=manager.createNativeQuery(ASSIGNEDLIST);
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 			return list;
-		}
+	}
 	
 	public final static String TICKETASSIGNEDLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.Priority,b.AssignedTo FROM helpdesk_tickets b,employee a,helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketId=:TicketId ";
 	@Override
@@ -167,6 +173,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		return list;
 		
 	}
+	
 	@Override
 	public long reAssignedTicket(HelpdeskTicket desk) throws Exception {
 		
@@ -174,7 +181,8 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		manager.flush();
 		return desk.getTicketId();
 	}
-	public final static String TICKETRECIEVEDLIST="SELECT b.TicketId,a.EmpNo,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.Priority ,c.TicketCategory,d.TicketSubCategory,b.FileName,b.AssignedDate,b.Returneddate,b.ARemarks,b.AssignedTo,b.TicketStatus,a1.EmpName AS caseworkername,a2.Empname AS assignedbyname,b.AssignedBy FROM helpdesk_tickets b,employee a ,employee a1,employee a2, helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND b.TicketStatus  IN ('A','R') AND b.assignedTo=a1.EmpNo AND b.assignedBy=a2.EmpNo AND a1.EmpNo=:EmpNo ORDER BY AssignedDate DESC";
+	
+	public final static String TICKETRECIEVEDLIST="CALL ticket_recieved_list(:EmpNo)";
 	@Override
 	public List<Object[]> getRecievedList(String empno) throws Exception {
 		
@@ -192,16 +200,17 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		manager.flush();
 		return desk.getTicketId();
 	}
-	public final static String TICKETFORWARDEDLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.Priority ,c.TicketCategory,d.TicketSubCategory,b.FileName,b.AssignedDate,b.AssignedTo,b.TicketStatus,a1.EmpName AS caseworkername,a2.Empname AS assignedbyname,b.AssignedBy,b.CWRemarks,b.ForwardedDate FROM helpdesk_tickets b,employee a ,employee a1,employee a2, helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.ticketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketStatus  IN ('F') AND b.assignedTo=a1.EmpNo AND b.assignedBy=a2.EmpNo ORDER BY AssignedDate DESC";
+	
+	public final static String TICKETFORWARDEDLIST="CALL ticket_forwarded_list();";
 	@Override
 	public List<Object[]> getForwardedList() throws Exception {
 		
 		Query query=manager.createNativeQuery(TICKETFORWARDEDLIST);
-		//query.setParameter("EmpId", empId);
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		
 		return list;
 	}
+	
 	@Override
 	public long ReturnTicket(HelpdeskTicket desk) throws Exception {
 		
@@ -214,9 +223,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	public List<Object[]> getReturnedList() throws Exception {
 		
 		Query query=manager.createNativeQuery(TICKETRETURNEDLIST);
-		//query.setParameter("EmpId", empId);
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
-		
 		return list;
 	}
 
@@ -225,7 +232,6 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	public List<Object[]> getCategoryList() throws Exception {
 		
 		Query query=manager.createNativeQuery(CATEGORYLIST);
-		
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
@@ -234,15 +240,13 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	@Override
 	public List<Object[]> getSubCategoryList(String CategoryId) throws Exception {
 		
-		
-        Query query=manager.createNativeQuery(SUBCATEGORYLIST);
+		 Query query=manager.createNativeQuery(SUBCATEGORYLIST);
 		query.setParameter("CategoryId", CategoryId);
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
 
-
-	@Override
+    @Override
 	public long closeTicket(HelpdeskTicket desk) throws Exception {
 		
 		manager.merge(desk);
@@ -250,18 +254,18 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		return desk.getTicketId();
 	}
 
-	public static final String CLOSEDTICKETLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.RaisedDate,b.FileName,b.TicketStatus,b.Closedby,b.ClosedDate ,a2.EmpName AS closedByname FROM helpdesk_tickets b,employee a , employee a1,employee a2 WHERE b.isActive='1' AND a.EmpNo=b.RaisedBy AND b.TicketStatus IN ('C') AND b.Closedby=a1.EmpNo AND a2.EmpNo=b.Closedby ORDER BY ClosedDate DESC";
+	public static final String CLOSEDTICKETLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.RaisedDate,b.FileName,b.TicketStatus,b.Closedby,b.ClosedDate ,a2.EmpName AS closedByname FROM helpdesk_tickets b,employee a ,employee a1,employee a2 WHERE b.isActive='1' AND a.EmpNo=b.RaisedBy AND b.TicketStatus IN ('C') AND b.Closedby=a1.EmpNo AND a2.EmpNo=b.Closedby AND DATE (b.ClosedDate) BETWEEN  :FromDate AND :ToDate ORDER BY ClosedDate DESC";
 	@Override
-	public List<Object[]> getClosedList() throws Exception {
+	public List<Object[]> getClosedList(String fromDate, String toDate) throws Exception {
 	
-		
 		Query query=manager.createNativeQuery(CLOSEDTICKETLIST);
-		
+		query.setParameter("FromDate",fromDate );
+		query.setParameter("ToDate", toDate);
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
 
-	public static final String TICKETCLOSEDEFORMODAL=" SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.Priority ,c.TicketCategory,d.TicketSubCategory,b.FileName,b.AssignedDate,b.AssignedTo,b.TicketStatus,b.ClosedBy,b.ClosedDate ,a1.EmpName AS caseworkername,a2.Empname AS assignedbyname,a3.EmpName AS closedbyname,b.AssignedBy,b.Feedback FROM helpdesk_tickets b,employee a ,employee a1,employee a2,employee a3, helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.ticketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketStatus IN ('C') AND b.AssignedTo=a1.EmpNo AND b.AssignedBy=a2.EmpNo AND b.ClosedBy=a3.EmpNo  AND TicketId=:TicketId ORDER BY ClosedDate";
+	public static final String TICKETCLOSEDEFORMODAL=" CALL ticket_closed_list(:TicketId)";
 	@Override
 	public List<Object[]> getTicketClosedList(String ticketId) {
 		
@@ -270,9 +274,8 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
 		return list;
 	}
-
-
-	@Override
+	
+    @Override
 	public long savefeedback(HelpdeskTicket desk) throws Exception {
 		
 		manager.merge(desk);
@@ -280,25 +283,8 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		return desk.getTicketId();
 	}
 
-	public static final String TICKETRAISEDLIST="SELECT b.TicketId,a.EmpNo,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.TicketStatus,c.TicketCategory,d.TicketSubCategory,b.FileName,b.FeedBackRequired,b.Feedback FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND RaisedDate>=:FromDate AND RaisedDate<=:ToDate  AND a.EmpNo=:EmpNo ORDER BY RaisedDate DESC";
-	@Override
-	public List<Object[]> getTicketRaisedDetails(String empNo,String fromDate, String toDate) {
-		
-		List<Object[]> list=null;			
-		try {
-			
-			Query query = manager.createNativeQuery(TICKETRAISEDLIST);				
-			query.setParameter("FromDate",fromDate);
-			query.setParameter("ToDate", toDate);
-			query.setParameter("EmpNo", empNo);				
-		 list = query.getResultList();				
-		} catch (Exception e) {
-			logger.error(new Date() +" Inside DAO getTicketRaisedDetails "+ e);
-			e.printStackTrace();
-		}
-		return list;
-	
-	}
+
+
 
 	public static final String TICKETCATEGORYLIST = "SELECT TicketCategoryId,TicketCategory from helpdesk_category";
 	@Override
@@ -314,9 +300,8 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			  return null; 
 	    }
 	}
-
-
-	@Override
+	
+   @Override
 	public Long TicketCategoryAdd(HelpdeskCategory helpdeskCategory) throws Exception {
 		try {
 			manager.persist(helpdeskCategory);
@@ -328,9 +313,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			return 0L;
 		}
 	}
-
-
-	@Override
+   @Override
 	public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception {
 		try {
 			manager.merge(helpdeskCategory);
@@ -348,14 +331,200 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		
 		try {
 			return manager.find(HelpdeskCategory.class, tcId);	
-		}catch (Exception e) {
+		    }catch (Exception e) {
 			logger.error(new Date() + "Inside DAO TicketCategoryAdd() "+e);
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+   public static final String EMPLOYEELIST="SELECT EmpNo,EmpName FROM employee WHERE isActive='1' AND EmpNo NOT IN(SELECT EmpNo FROM helpdesk_employee WHERE EmpType='P')";
+	@Override
+	public List<Object[]> getEmployeeList() throws Exception {
 		
-}
+		Query query=manager.createNativeQuery(EMPLOYEELIST);
+        List<Object[]> list =  (List<Object[]>)query.getResultList();
+		return list;
+	}
+
+	public static final String CONTRACTEMPLOYEELIST="SELECT ContractEmpNo,EmpName FROM employee_contract WHERE isActive='1' AND ContractEmpNo NOT IN(SELECT EmpNo FROM helpdesk_employee  WHERE EmpType='C')";
+	@Override
+	public List<Object[]> getContractEmployee() throws Exception {
+		
+		Query query=manager.createNativeQuery(CONTRACTEMPLOYEELIST);
+        List<Object[]> list =  (List<Object[]>)query.getResultList();
+		return list;
+	}
+
+	public static final String HELPDESKEMPLOYEELIST="SELECT a.helpDeskEmpId,a.EmpNo,a.EmpType ,c.EmpName,a.ValidTill FROM helpdesk_employee a ,employee_contract c WHERE a.isActive='1' AND a.EmpNo=c.contractEmpNo UNION SELECT a.helpDeskEmpId,a.EmpNo,a.EmpType,b.EmpName ,a.ValidTill FROM helpdesk_employee a,employee b WHERE a.isActive='1' AND a.EmpNo=b.EmpNo ORDER BY helpDeskEmpId DESC";
+	@Override
+	public List<Object[]> getHelpDeskEmployeeList() throws Exception {
+		
+		Query query=manager.createNativeQuery(HELPDESKEMPLOYEELIST);
+        List<Object[]> list =  (List<Object[]>)query.getResultList();
+		return list;
+	}
+
+    @Override
+	public long EmployeeAddSubmit(HelpDeskEmployee employee) throws Exception {
+		
+		try {
+			manager.persist(employee);
+			manager.flush();		
+			return employee.getHelpDeskEmpId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeAddSubmit() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+	public static final String EMPLOYEDELETE="UPDATE helpdesk_employee SET IsActive=:isactive WHERE HelpDeskEmpId=:HelpDeskEmpId";
+	@Override
+	public long EmployeeDelete(String helpDeskEmpId) throws Exception {
+		
+		Query query=manager.createNativeQuery(EMPLOYEDELETE);
+		query.setParameter("isactive", 0);
+		query.setParameter("HelpDeskEmpId", helpDeskEmpId);
+		long count= (long) query.executeUpdate();
+		
+		return count;
+	}
+
+    @Override
+	public HelpDeskEmployee getHelpDeskEmployeeList(Long helpDeskEmpId) throws Exception {
+		
+		try {
+			HelpDeskEmployee emp = manager.find(HelpDeskEmployee.class, (helpDeskEmpId));
+			return emp;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO GetTicket() "+e);
+			e.printStackTrace();
+			return null;
+		}	
+	
+	}
+
+   @Override
+	public long getEmployeeupdate(HelpDeskEmployee he) {
+		
+		try {
+			manager.merge(he);
+			manager.flush();		
+			return he.getHelpDeskEmpId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO divsionGroupEdit() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+	public static final String SUBCATEGORYEDITLIST="SELECT TicketSubCategoryId,TicketCategoryId,TicketSubCategory FROM helpdesk_sub_category WHERE isActive='1'";
+	@Override
+	public List<Object[]> getSubCategoryList() throws Exception {
+		
+		 Query query=manager.createNativeQuery(SUBCATEGORYEDITLIST);
+			
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+	}
+
+	public static final String TICKETRETURNEDLISTFORMODAL="CALL ticket_returned_list(:TicketId) ";
+	@Override
+	public List<Object[]> getTicketReturnedList(String ticketId) throws Exception {
+		
+		Query query=manager.createNativeQuery(TICKETRETURNEDLISTFORMODAL);
+		query.setParameter("TicketId",ticketId );
+		List<Object[]> list =  (List<Object[]>)query.getResultList();
+		return list;
+	}
+
+	public static final String ITHELPDESKDASHBOARDCOUNTDATA="CALL ItHelpdesk_Dashboard_Count(:EmpNo,:LoginType,:FromDate,:ToDate)";
+	@Override
+	public Object[] IThelpdeskDashboardCountData(String empNo,String logintype,String fromDate, String toDate) throws Exception {
+		
+		try {
+			Query query = manager.createNativeQuery(ITHELPDESKDASHBOARDCOUNTDATA);
+			query.setParameter("EmpNo", empNo);
+			query.setParameter("LoginType", logintype);
+			query.setParameter("FromDate",fromDate );
+			query.setParameter("ToDate", toDate);
+			return (Object[])query.getSingleResult();
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside DAO IThelpdeskDashboardCountData " + e);
+			return null;
+		}
+	}
+	
+   public static final String ITHELPDESKDASHBOARDGRAPHDATA="CALL IThelpDesk_Dashboard_GraphData(:FromDate,:ToDate)";
+    @Override
+   public List<Object[]> IThelpdeskDashboardGraphData(String fromDate, String toDate) throws Exception {
+   try {
+		Query query = manager.createNativeQuery(ITHELPDESKDASHBOARDGRAPHDATA);
+		query.setParameter("FromDate",fromDate );
+		query.setParameter("ToDate", toDate);
+		return (List<Object[]>)query.getResultList();
+		
+	}
+	catch(Exception e) {
+		logger.error(new Date()  + "Inside DAO IThelpdeskDashboardGraphData " + e);
+		return null;
+	}
+ }
+
+   public static final String ITHELPDESKDASHBOARDPIECHARTDATA="CALL IThelpDesk_Dashboard_PieChart(:FromDate,:ToDate)";
+	@Override
+	public List<Object[]> IThelpdeskDashboardPieChartData(String fromDate, String toDate) throws Exception {
+		
+		try {
+			Query query = manager.createNativeQuery(ITHELPDESKDASHBOARDPIECHARTDATA);
+			query.setParameter("FromDate",fromDate );
+			query.setParameter("ToDate", toDate);
+			return (List<Object[]>)query.getResultList();
+			
+		}
+		catch(Exception e) {
+			logger.error(new Date()  + "Inside DAO IThelpdeskDashboardPieChartData " + e);
+			return null;
+		}
+  }
+    @Override
+	public long NotificationAdd(EMSNotification notification) throws Exception {
+		{
+			try {
+				manager.persist(notification);
+				manager.flush();
+				
+				return notification.getNotificationId();
+			}catch (Exception e) {
+				logger.error(new Date()  + "Inside DAO NotificationAdd " + e);
+				e.printStackTrace();
+				return 0;
+			}
+		}
+	}
+
+	private static final String EMSTICKETNOTIFICATION  ="SELECT e.empno,e.empname,ed.desigid, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.desigid = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType";
+	@Override
+	public List<Object[]> SendNotification(String Logintype) throws Exception {
+		try {
+				
+				Query query= manager.createNativeQuery(EMSTICKETNOTIFICATION);
+				query.setParameter("loginType", Logintype);
+				List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+			}catch (Exception e) {
+				logger.error(new Date()  + "Inside DAO SendNotification " + e);
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+	}
+
+
+	
+
 	
 

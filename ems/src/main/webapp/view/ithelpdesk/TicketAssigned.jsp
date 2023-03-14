@@ -20,8 +20,6 @@
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> AssignedList=(List<Object[]>)request.getAttribute("TicketAssignedList");
 	
-	String tab = (String)request.getAttribute("tab");
-	String EmpId=(String)request.getAttribute("EmpId");
 	
 %>
 
@@ -75,9 +73,9 @@
 										 <th style="width: 3%;">SN</th>
 											<th style="width: 7%">Raised By</th>
 											<th style="width: 7%">Category</th>
-											<th style="width: 7%">Sub-Category</th>
+											<!-- <th style="width: 7%">Sub-Category</th> -->
 											<th style="width: 7%">Description</th>
-											<th style="width: 1%">Priority</th>
+											<!-- <th style="width: 1%">Priority</th> -->
 											<th style="width: 7%;text-align: center;" >Raised Date</th>
 											<th style="width: 8%;text-align: center;" >Assigned To</th>
 											<th style="width: 8%;text-align: center;" >Assigned By</th>
@@ -96,23 +94,23 @@
 								<%for(Object[] assignedList:AssignedList) {
 									String description=assignedList[5].toString();
 								
-								if(assignedList[13].toString().equalsIgnoreCase("A"))
+								if(assignedList[13].toString().equalsIgnoreCase("A") )
 								{%>
 								
 								<tr>
 									<td style="width: 3%; text-align: center;"><%=count %></td>
 									<td style="width: 7%" ><%=assignedList[2] %></td>
 									<td style="width: 7%"><%=assignedList[8] %></td>
-									<td style="width: 7%"><%=assignedList[9] %></td>
+									<%-- <td style="width: 7%"><%=assignedList[9] %></td> --%>
 									
 									<td style="width: 7%;word-wrap: break-word;word-break: break-all;white-space: normal !important;">
-									<%if(description.length()<90){%> <%=description%> <%}else{%><%=description.substring(0,90)%>
+									<%if(description.length()<30){%> <%=description%> <%}else{%><%=description.substring(0,30)%>
 								                 <button type="button" class="editable-click" style="border-style:none;" name="TicketId"  id="TicketId" value="<%=assignedList[0]%>" onclick="descmodal('<%=assignedList[0]%>')">
 													<b><span style="color:#1176ab;font-size: 14px;">......(View More)</span></b>
 										         </button>
 										         <%}%> 
 									</td>
-									<td style="text-align: center;width: 1%;"><% if(assignedList[7].toString().equalsIgnoreCase("L")){%><%=Low %><%} else if(assignedList[7].toString().equalsIgnoreCase("M")){%><%=Medium %><%}else{%><%=High%><%} %></td>
+									<%-- <td style="text-align: center;width: 1%;"><% if(assignedList[7].toString().equalsIgnoreCase("L")){%><%=Low %><%} else if(assignedList[7].toString().equalsIgnoreCase("M")){%><%=Medium %><%}else{%><%=High%><%} %></td> --%>
 									<td style="text-align: center;width: 7%;"><%=rdf.format(sdf.parse(assignedList[6].toString()))%></td>
 									<td style="width: 8%;text-align: left;"><%=assignedList[14] %></td>
 									<td style="width: 8%;text-align: left;"><%=assignedList[15] %></td>
@@ -126,10 +124,24 @@
 										
 										          <%} %>
 										          &nbsp;&nbsp;
-										       
+										       <% if(assignedList[13].toString().equalsIgnoreCase("A")){%>
 										          <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=assignedList[0]%>"  onclick="openModal('<%=assignedList[0]%>')"   data-toggle="tooltip" title="" data-original-title="ReAssign To">
 															<i class="fas fa-angle-double-left " style="color: black;"></i>
 														</button>
+														<%} %>
+														&nbsp;
+														<input type="hidden" name="RaisedDate<%=assignedList[0]%>"  id="RaisedDate<%=assignedList[0]%>"   value="<%=rdf.format(sdf.parse(assignedList[6].toString())) %>" >
+														<input type="hidden" name="RaisedBy<%=assignedList[0]%>"  id="RaisedBy<%=assignedList[0]%>"   value="<%=assignedList[2] %>" >
+														<input type="hidden" name="Category<%=assignedList[0]%>"  id="Category<%=assignedList[0]%>"   value="<%=assignedList[8] %>" >
+														<input type="hidden" name="SubCategory<%=assignedList[0]%>"  id="SubCategory<%=assignedList[0]%>"   value="<%=assignedList[9] %>" >
+														<input type="hidden" name="AssignedBy<%=assignedList[0]%>"  id="AssignedBy<%=assignedList[0]%>"   value="<%=assignedList[15] %>" >
+														<input type="hidden" name="AssignedDate<%=assignedList[0]%>"  id="AssignedDate<%=assignedList[0]%>"   value="<%=rdf.format(sdf.parse(assignedList[11].toString())) %>" >
+														<input type="hidden" name="AssignedTo<%=assignedList[0]%>"  id="AssignedTo<%=assignedList[0]%>"   value="<%=assignedList[14] %>" >
+														<input type="hidden" name="Priority<%=assignedList[0]%>"  id="Priority<%=assignedList[0]%>"   value="<%=assignedList[7] %>" >
+														 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=assignedList[0]%>"  onclick="SeeDetails('<%=assignedList[0]%>')"   data-toggle="tooltip" title="" data-original-title="Assigned Details">
+															<i class="fa fa-eye " style="color: black;"></i>
+														</button>
+														
 											
 													<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 													
@@ -240,7 +252,7 @@
 							
 						</table>
 						<div align="center" style="margin-top:10px;" >
-								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" >Submit</button>
+								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" onclick="return confirm('Are You Sure to Submit?');" >Submit</button>
 									
 						</div>
 						<input type="hidden"  name="TicketId1" id="TicketId1" value="">
@@ -250,6 +262,65 @@
 					
 				
 						</form>
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	
+	  <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="assigned-details">
+		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
+			<div class="modal-content">
+					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
+				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Assigned Details</h4>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				    </div> 
+				<div class="modal-body" align="center" style="margin-top:-4px;">
+					<form action="#" method="post" autocomplete="off"  >
+						<table style="width: 100%;">
+							
+							<tr>
+								<th style="padding: 5px;" >Raised By :</th>
+								<td style="padding: 5px;" id="raisedby"></td>
+								<th style="padding: 5px;" >Raised Date :</th>
+								<td style="padding: 5px;" id="raiseddate"></td>
+							</tr>
+							<tr>
+								<th style="padding: 5px;width:17%;" >Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="category"></td>
+								<th style="padding: 5px;width:20%;" >Sub-Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="subcategory"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:17%;" >Assigned By :</th>
+								<td style="padding: 5px;" class="tabledata" id="assignedby"></td>
+								<th style="padding: 5px" >Assigned Date :</th>
+								<td style="padding: 5px;" class="tabledata" id="assigneddate"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:17%;" > Assigned To :</th>
+								<td style="padding: 5px;" class="tabledata" id="assignedto"></td>
+								<th style="padding: 5px;width:20%;" >Priority :</th>
+								<td style="padding: 5px;" class="tabledata" id="priority"></td>
+							</tr>
+						</table>
+						
+						
+						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						
+						
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+						</form>
+						
+						
+				 	       
 					
 				</div>
 				
@@ -341,14 +412,17 @@ $("#TicketId").val(TicketId);
 					var val1= assignTo;
 					for (i = 0; i < values.length; i++) 
 					{
-						console.log(val1);
-						var EmpNo = values[i][0];
-						console.log(EmpNo);
 						
+						var EmpNo = values[i][0];
 						if(EmpNo ===val1){
-							s += '<option value="'+values[i][0]+'" selected="selected" >'+values[i][1] +  '</option>';
+							s += '<option value="'+values[i][0]+'/'+values[i][1]+'" selected="selected" >'+values[i][3] +  ' ['+values[i][2]+']' +  '&emsp;('+values[i][5]+') </option>';
 						}else{
-							s += '<option value="'+values[i][0]+'">'+values[i][1]  + '</option>';
+							if(values[i][2]=="P"){
+							s += '<option value="'+values[i][0]+'/'+values[i][1]+'">'+values[i][3]  + ' &emsp;('+values[i][5]+') </option>';
+							}
+							else{
+								s += '<option value="'+values[i][0]+'/'+values[i][1]+'">'+values[i][3]  + ' ['+values[i][2]+'] '+  '&emsp;('+values[i][5]+')</option>';
+							}
 						}
 					} 
 					console.log(s);
@@ -444,19 +518,45 @@ function descmodal(TicketId)
 }
 
 
+
+function SeeDetails(TicketId)
+{
+	
+	$("#TicketId").val(TicketId);
+	
+	 $('#raisedby').html($('#RaisedBy'+TicketId).val())
+	 $('#raiseddate').html($('#RaisedDate'+TicketId).val())
+	$('#category').html($('#Category'+TicketId).val())
+	$('#subcategory').html($('#SubCategory'+TicketId).val())
+	$('#assignedby').html($('#AssignedBy'+TicketId).val())
+	$('#assigneddate').html($('#AssignedDate'+TicketId).val())
+	$('#assignedto').html($('#AssignedTo'+TicketId).val())
+	var type=$('#Priority'+TicketId).val()
+	 if(type=="L")
+    {
+	   L="Low"
+	   $('#priority').html(L);
+	}
+   if(type=="M")
+   {
+	   M="Medium"
+	   $('#priority').html(M);
+   }
+   if(type=="H")
+   {
+	   H="High"
+	   $('#priority').html(H);
+   }
+   
+	
+	 $('#assigned-details').modal('toggle'); 
+}
+
+
+
+
 </script>
 
 
-<!-- <script type="text/javascript"> 
-$(document).ready(function(){
-	  $("#myTable").DataTable({
-	 "lengthMenu": [ 5, 10,25, 50, 75, 100 ],
-	 "pagingType": "simple",
-	 "pageLength": 5
-	});
-  });
 
-
-</script>
- -->
 </html>

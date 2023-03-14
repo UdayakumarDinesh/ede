@@ -24,6 +24,5 @@ public class HelpdeskSubCategory {
 	private String  ModifiedBy;
 	private String  ModifiedDate;
 	private int isActive;
-	
 
 }

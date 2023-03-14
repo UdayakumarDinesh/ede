@@ -82,9 +82,9 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 	
 	@Override
-	public List<EMSNotification> NotificationList(long EmpId)throws Exception
+	public List<EMSNotification> NotificationList(String EmpNo)throws Exception
 	{
-		return dao.NotificationList(EmpId);
+		return dao.NotificationList(EmpNo);
 	}
 	
 	@Override

@@ -27,7 +27,5 @@ import lombok.Setter;
 		private String  ModifiedBy;
 		private Date  ModifiedDate;
 		private int isActive;
-		
 	
-
 }

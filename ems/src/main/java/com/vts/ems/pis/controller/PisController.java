@@ -2284,6 +2284,7 @@ public class PisController {
 		{
 			String Username = (String) ses.getAttribute("Username");
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
 			logger.info(new Date() +"Inside FamilyFormForwardRet.htm "+Username);		
 			try {
 				String formid = req.getParameter("formid");
@@ -2319,7 +2320,7 @@ public class PisController {
 //			    	formmember.setCreatedBy(Username);
 //			    	long count=service.PisFamFormMembersAdd(formmember);
 //				}
-				long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,remarks,req,res);
+				long result= service.FamilyMemDetailsForward(formid,action,Username,EmpId,EmpNo,remarks,req,res);
 				if(result>0) 
 				{
 					if(action.equalsIgnoreCase("F")) {

@@ -116,9 +116,9 @@
 							</div>
 							
 								
-								<div class="col-2" style="margin-left:101px;" >
+								<div class="col-2" style="margin-left:116px;" >
 									<b>File :</b> 
-							<input type="file"  style="width: 150%" class="form-control input-sm "  value="" id="formFile" name="FormFile" 
+							<input type="file"  style="width: 150%;" class="form-control input-sm "  value="" id="formFile" name="FormFile" 
 							
 							accept=".xlsx,.xls,.pdf,.doc,.docx "
 							>
@@ -153,12 +153,12 @@
 						
 						</div>
 						
-						<div class="col-2" style="margin-left: 3%; font-color: black;">
+						<div class="col-2" style="margin-left: 7%; font-color: black;">
 							<h6 style="color:#000000;" >From Date : &nbsp;</h6>
 						</div>
 						<div class="col-1" style="margin-left: -9%">
 							<input type="text"
-								style="width: 175%; background-color: white; text-align: left;"
+								style="width: 147%; background-color: white; text-align: left;"
 								class="form-control input-sm"
 								 <%if(fromdate!=null){%>
 								value="<%=fromdate%>" <%} %> onchange="this.form.submit()" 
@@ -169,11 +169,11 @@
 						</div>
 
 
-						<div class="col-2" style="margin-left: 3%">
+						<div class="col-2" style="margin-left: 1%">
 							<h6 style="color:#000000;">To Date : &nbsp;</h6>
 						</div>
 						<div class="col-1" style="margin-left: -11%">
-							<input type="text" style="width: 175%; background-color: white;"
+							<input type="text" style="width: 147%; background-color: white;"
 								class="form-control input-sm mydate"
 								
 								  <%if(todate!=null){ %>  value="<%=todate%>"<%}%> 
@@ -258,7 +258,7 @@
 												</button>
 												<%} %>
 												<%if( UserList[10].toString().equalsIgnoreCase("Y") && UserList[11]==null){%>
-												<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=UserList[0]%>"  onclick="openfeedback('<%=UserList[0] %>')"  data-toggle="tooltip" title="" data-original-title="Feedback">
+												<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=UserList[0]%>/<%=UserList[12] %>"  onclick="openfeedback('<%=UserList[0] %>','<%=UserList[12] %>')"  data-toggle="tooltip" title="" data-original-title="Feedback">
 															<i class="fas fa-reply" style="color: black;"></i>
 														</button> 
 														<%} %>
@@ -333,6 +333,7 @@
   	      			<input type="submit" class="btn btn-md submit-btn "  value="Submit" name="action"  onclick="return confirm('Are You Sure To Submit ?')" > 
   	      		</div>
   	      		<input type="hidden" name="TicketId2" id="TicketId2">
+  	      		<input type="hidden" name="EmpNo" id="EmpNo">
   	      		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   	      	</form>
   	      </div>
@@ -466,9 +467,10 @@ function descmodal(TicketId)
 	  });
 	
 	
-	function openfeedback(TicketId2)
+	function openfeedback(TicketId2,EmpNo)
 	{
 		$("#TicketId2").val(TicketId2);
+		$("#EmpNo").val(EmpNo);
 		$('#feedback').modal('toggle');
 	}
 	

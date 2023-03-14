@@ -64,6 +64,8 @@
 								List<Object[]> subcategory=(List<Object[]>)request.getAttribute("subcategory"); 
 								
 								HelpdeskTicket desk=(HelpdeskTicket)request.getAttribute("desk");
+								
+								int val=desk.getTicketSubCategoryId();
 						%>
 		
 		<div class="card" >
@@ -74,10 +76,10 @@
 						
 							<div class="col-3" >
 									<b>Category :</b><span class="mandatory"	style="color: red;">*</span>
-							        <select class="form-control select2" style="margin:10px;" name="Category" required="required" id="Category" >
+							        <select class="form-control select2" style="margin:10px;" name="Category" onchange="GetCatgory()" required="required" id="Category" >
 								<option></option>
 								    <%for(Object[] catgry:category){%>
-								      <option  value="<%=catgry[0]%>" <% if(catgry[0].equals(desk.getTicketCategoryId())){%> selected="selected" <%} %>><%=catgry[1]%></option>
+								      <option  value="<%=catgry[0]%>" <% if(catgry[0].toString().equalsIgnoreCase(String.valueOf(desk.getTicketCategoryId()))){%> selected="selected" <%} %>><%=catgry[1]%></option>
 								      <%} %>
 								    	 
 							        
@@ -90,12 +92,10 @@
 								<div class="col-2">
 									<b>Sub-Category :</b><span class="mandatory"	style="color: red;">*</span>	
 							<select class="form-control select2" name="SubCategory" required="required" id="SubCategory" >
-							<%for(Object[] subcatgry:subcategory){%>
-								      <option  value="<%=subcatgry[0]%>" <% if(subcatgry[0].equals(desk.getTicketSubCategoryId())){%> selected="selected" <%} %>><%=subcatgry[2]%></option>
-								      <%} %>
-								
-								
-							</select>
+								 <%-- 	<%for(Object[] subcatgry:subcategory){%>
+								      <option  value="<%=subcatgry[0]%>" <% if(subcatgry[0].toString().equalsIgnoreCase(String.valueOf(desk.getTicketSubCategoryId()))){%> selected="selected" <%} %>><%=subcatgry[2]%></option>
+								      <%} %>  --%>
+								      </select>
 							
 								</div>
 								
@@ -203,8 +203,11 @@ $(function(){
 
 
 $(document).ready(function() {
-    $('#Category').on('change', function() {
-      var selectedValue = $(this).val();
+	GetCatgory()
+});
+	
+     function GetCatgory() {
+      var selectedValue = $("#Category").val();
       console.log(selectedValue);
       $.ajax({
         type: "GET",
@@ -214,8 +217,7 @@ $(document).ready(function() {
         	selectedValue:selectedValue,
         },
         success: function(result) {
-        
-        var result1 = JSON.parse(result);
+         var result1 = JSON.parse(result);
         console.log("sublist--"+result1);
         var values = Object.keys(result1).map(function(e) {
 			return result1[e];
@@ -223,20 +225,26 @@ $(document).ready(function() {
         $('#SubCategory').html("");	
         
         var s = '';
-		
+       var v=<%=val%>
+       
 		for (i = 0; i < values.length; i++) 
 		{
+			var a=values[i][0];
+			if(v===a)
+		    {
+				s += '<option value="'+values[i][0]+'" selected="selected">'+values[i][2]  + '</option>';
+			}
+			else{
+			s += '<option value="'+values[i][0]+'">'+values[i][2]  + '</option>';
+			}
 		
-			 {
-				s += '<option value="'+values[i][0]+'">'+values[i][2]  + '</option>';
-			} 
-		} 
+		}
 		$('#SubCategory').html(s);	
         
         }
       });
-    });
-  });
+    }
+
 
 </script>
 </html>
