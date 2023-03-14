@@ -17,14 +17,13 @@
 </head>
 <body>
 
-	  <% String fromdate =(String)request.getAttribute("frmDt");		
-		String todate = (String)request.getAttribute("toDt");
-	 
-	  List<Object[]> HelpDeskUserList=(List<Object[]>)request.getAttribute("HelpDeskUserList");
-	  SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
-	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
-	List<Object[]> CategoryList=(List<Object[]>)request.getAttribute("CategoryList");
-	String EmpNo=(String)request.getAttribute("EmpNo");
+	  <%  String fromdate =(String)request.getAttribute("frmDt");		
+		  String todate = (String)request.getAttribute("toDt");
+	      List<Object[]> HelpDeskUserList=(List<Object[]>)request.getAttribute("HelpDeskUserList");
+	      SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	      SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+	      List<Object[]> CategoryList=(List<Object[]>)request.getAttribute("CategoryList");
+	      String EmpNo=(String)request.getAttribute("EmpNo");
 	
 	%>
 	<div></div>
@@ -80,56 +79,30 @@
 								    
 								    <option value="<%=category[0]%>"><%=category[1] %></option>
 								    <%} %>
-								    	
-							        
-								
 							</select>
-							
-								</div>
-								
+							   </div>
 								<div class="col-2">
 									<b>Sub-Category :</b><span class="mandatory"	style="color: red;">*</span>
 							<select class="form-control select2 " name="SubCategory" required="required"  id="SubCategory">
 								  <option value="" disabled="disabled" selected="selected"
 					                     hidden="true">Select</option>
-								
-								  
-								 
 							</select>
 								</div>
-								
-								
-								<!-- <div class="col-2">
-									<b>Priority :</b><span class="mandatory"	style="color: red;">*</span>
-							<select class="form-control select2" name="priority" required="required" >
-								
-								<option value="L">Low</option>
-								<option value="M">Medium</option>
-								<option value="H">High</option>
-								
-							</select>
-								</div> -->
 								
 								<div class="col-3" style="margin-left:-2px;" >
 								<b>Description : </b><span class="mandatory"	style="color: red;">*</span>
 								<input type="text" class="form-control w-145" name="Description" value=""   id="Desc" style="width:145%;">
 							</div>
 							
-								
-								<div class="col-2" style="margin-left:116px;" >
+							   <div class="col-2" style="margin-left:116px;" >
 									<b>File :</b> 
 							<input type="file"  style="width: 150%;" class="form-control input-sm "  value="" id="formFile" name="FormFile" 
+							accept=".xlsx,.xls,.pdf,.doc,.docx ">
 							
-							accept=".xlsx,.xls,.pdf,.doc,.docx "
-							>
-								</div>
-							
-							
-							
+							  </div>
 						</div>
 						<br>
 						<div class="row">
-							
 						</div>
 						
 						<div class="row justify-content-center">
@@ -164,8 +137,8 @@
 								value="<%=fromdate%>" <%} %> onchange="this.form.submit()" 
 							readonly="readonly"
 								 id="fromdate" name="FromDate"
-								required="required"> <!-- <label
-								class="input-group-addon btn" for="testdate"></label> -->
+								required="required"> 
+								
 						</div>
 
 
@@ -179,9 +152,8 @@
 								  <%if(todate!=null){ %>  value="<%=todate%>"<%}%> 
 								  onchange="this.form.submit()"
 								readonly="readonly"
-								  id="todate" name="ToDate"
-								> <!-- <label
-								class="input-group-addon btn" for="testdate"></label> -->
+								  id="todate" name="ToDate"> 
+								
 						</div>
 					</div>
 					<input type="hidden" name="${_csrf.parameterName}"
@@ -191,8 +163,6 @@
 		</div>
 
 		
-			
-
 		<div class="card-body main-card" style=" max-height: 25rem; overflow-y:auto;" >
 
 			<form action="#" method="POST" >
@@ -210,17 +180,14 @@
 								<th style="width: 8%">Raised Date</th>
 								<th style="width: 6%">Status</th>
 								<th style="width: 10%">Action</th>
-								
-								
-							</tr>
+						   </tr>
 						</thead>
 						<tbody>
 							<%int count=0;
 							for(Object[] UserList:HelpDeskUserList){
-							  String description=UserList[4].toString();
-							%>
+							  String description=UserList[4].toString();	%>
+						
 							<tr>
-							
 							<% 
 							String Initiated="Initiated";
 							String Assigned="Assigned";
@@ -228,7 +195,7 @@
 							String Returned="Returned";
 							String Closed="Closed";
 							%>
-							<%-- <div><%=UserList[8] %></div> --%>
+							
 								<td style="text-align: center;"><%=++count %></td>
 								<td style="text-align: center;"><%=UserList[7]%></td>
 								<td style="text-align: center;"><%=UserList[8]%></td>
@@ -262,31 +229,17 @@
 															<i class="fas fa-reply" style="color: black;"></i>
 														</button> 
 														<%} %>
-												
 								</td>
-							
 							</tr>
 							 
 							<%} %>
-							
-							
-
 						</tbody>
 					</table>
-
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					
-					
+                       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				</div>
-
-				
-
-			</form>
-
-
-		</div>
-
-	</div>
+          </form>
+      </div>
+  </div>
 
 
 <div class="modal fade" id="descmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -344,17 +297,7 @@
 
 </body>
 <script>
-/* function CheckAll(){
-	
-	var $Des = $('#Desc').val();
-	if($Des.trim()==='')
-	   {
-		 alert('Please fill the Description');
-		 return false
-	   }
-	return true
-	 
-} */
+
 
 $("#ticketsubmit").on('submit', function (e) {
 
@@ -390,15 +333,6 @@ function descmodal(TicketId)
 			var result1 = $.parseJSON(result);
 			
 			$.each(result1, function(key, value) {
-				
-			/* var result= JSON.parse(result);
-			var values= Object.keys(result).map(function(e){
-				
-				return result[e]
-				
-			}) */
-
-			console.log("res---"+value[5])
 			$('#descdata').html(value[5]);
 			$('#descmodal').modal('toggle');
 		})
@@ -406,11 +340,7 @@ function descmodal(TicketId)
 	});
 }
 
-/* $('#Desc').attr('required', 'required'); */
-	 
 
- 
-	
 	$(function(){
 	    $("#formFile").on('change', function(event)
 		{
@@ -429,12 +359,10 @@ function descmodal(TicketId)
 	    });
 	});
 	
-	
 	$(document).ready(function() {
 	    $('#Category').on('change', function() {
 	      var selectedValue = $(this).val();
-	      console.log(selectedValue);
-	      $.ajax({
+	       $.ajax({
 	        type: "GET",
 	        url: "GetSubCategoryListAjax.htm",
 	        data: { 
@@ -444,18 +372,14 @@ function descmodal(TicketId)
 	        success: function(result) {
 	        
 	        var result1 = JSON.parse(result);
-	        console.log("sublist--"+result1);
 	        var values = Object.keys(result1).map(function(e) {
 				return result1[e];
 			});
-	        //$('#SubCategory').html("");	
-	        
+	      
 	        var s = '';
-			
 			for (i = 0; i < values.length; i++) 
 			{
-			
-				 {
+			    {
 					s += '<option value="'+values[i][0]+'">'+values[i][2]  + '</option>';
 				} 
 			} 
@@ -474,9 +398,7 @@ function descmodal(TicketId)
 		$('#feedback').modal('toggle');
 	}
 	
-	
-
-	 $("#Feedbackadd").on('submit', function (e) {
+	$("#Feedbackadd").on('submit', function (e) {
 
 		  var data =$('#feedbacknote').val();;
 		  if(data=='' ){

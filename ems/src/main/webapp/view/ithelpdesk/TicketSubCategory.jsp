@@ -74,9 +74,8 @@
 								</tbody>
 							</table>
 						</div>
-					  
-					
-					<div class="row text-center">
+						
+					 <div class="row text-center">
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="ADD"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="action" value="EDIT"  Onclick="Edit(table)" >EDIT </button>
@@ -111,32 +110,6 @@ $(document).ready(function(){
 		return true;
 	}
 	
-	
-
-	/* function Delete(myfrm){ 
-		
-		var fields = $("input[name='TicketCategory']").serializeArray();
-
-		if (fields.length === 0){
-			alert("Please Select Atleast One SubCategory");
-			event.preventDefault();
-			return false;
-		}
-		
-		var cnf = confirm("Are You Sure To Delete!");
-
-		if(cnf){
-			
-			document.getElementById("empForm").submit();
-			return true;
-
-		}else{
-			
-			event.preventDefault();
-			return false;
-		}
-	} */
-
 </script>
 
 </html>

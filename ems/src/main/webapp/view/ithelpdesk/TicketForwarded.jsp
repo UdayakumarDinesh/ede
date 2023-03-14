@@ -20,12 +20,9 @@
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> ForwardedList=(List<Object[]>)request.getAttribute("TicketForwardedList");
 	
-
 %>
 
-
-
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Ticket Forwarded</h5>
@@ -40,9 +37,7 @@
 		</div>
 	</div>
 
-	
-		
-		  <div class="page card dashboard-card">
+	<div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -62,8 +57,7 @@
 	
 		<div class="card" >
 				<div class="card-body " >
-				
-					<form action="##" method="POST"  >
+				  <form action="##" method="POST"  >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="" > 
@@ -72,9 +66,7 @@
 										<th style="width: 3%;">SN</th>
 											<th style="width: 8%">Raised By</th>
 											<th style="width: 8%">Category</th>
-											<!-- <th style="width: 8%">Sub-Category</th> -->
 											<th style="width: 12%">Description</th>
-											<!-- <th style="width: 8%">Priority</th> -->
 											<th style="width: 7%;text-align: center;" >Raised Date</th>
 											<th style="width: 10%;text-align: center;" >Forwarded By</th>
 											<th style="width: 7%;text-align: center;" >Forwarded Date</th>
@@ -89,13 +81,8 @@
 							<%int count=1; %>
 								<%for(Object[] fwrdlist:ForwardedList) {
 									String description=fwrdlist[5].toString();
-								
-									 
-									 
-								if(fwrdlist[13].toString().equalsIgnoreCase("F") )
-								{%>
-								
-								<tr>
+								   if(fwrdlist[13].toString().equalsIgnoreCase("F") )	{%>
+							    <tr>
 									<td style="width: 3%; text-align: center;"><%=count %></td>
 									<td style="width: 2%" ><%=fwrdlist[2] %></td>
 									<td style="width: 2%"><%=fwrdlist[8] %></td>
@@ -106,7 +93,6 @@
 										         </button>
 										         <%}%> 
 									</td>
-									
 									<td style="width: 2%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[6].toString()))%></td>
 									<td style="width: 2%"><%=fwrdlist[14] %></td>
 									<td style="width: 2%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[18].toString()))%></td>
@@ -115,7 +101,6 @@
 									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=fwrdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-										
 										<%} %>
 										                <input type="hidden" name="RaisedDate<%=fwrdlist[0]%>"  id="RaisedDate<%=fwrdlist[0]%>"   value="<%=rdf.format(sdf.parse(fwrdlist[6].toString())) %>" >
 														<input type="hidden" name="RaisedBy<%=fwrdlist[0]%>"  id="RaisedBy<%=fwrdlist[0]%>"   value="<%=fwrdlist[2] %>" >
@@ -128,13 +113,7 @@
 														 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeDetails('<%=fwrdlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Forwarded Details">
 															<i class="fa fa-eye " style="color: black;"></i>
 														</button>
-										 
-										 
-										  <%-- <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeRemarks('<%=fwrdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Remarks">
-															<i class="fas fa-envelope" style="color: black;"></i>
-														</button> 
-														 --%>
-												<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>/<%=fwrdlist[12] %>"   onclick="ReturnTicket('<%=fwrdlist[0] %>','<%=fwrdlist[12] %>')"  data-toggle="tooltip" title="" data-original-title="Return">
+										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>/<%=fwrdlist[12] %>"   onclick="ReturnTicket('<%=fwrdlist[0] %>','<%=fwrdlist[12] %>')"  data-toggle="tooltip" title="" data-original-title="Return">
 															<i class="fas fa-reply" style="color: black;"></i>
 														</button>		
 										 
@@ -158,19 +137,13 @@
 								
 								</tbody>
 							</table>
-							
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
-					
-					
-					
-			   </form>		
+				</form>		
 			  </div>
 		   	 </div>				
 	        </div>
 	        </div>	
-		
-		
 		
 	<div class="modal fade" id="descmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70% !important;height: 40%;">
@@ -245,10 +218,6 @@
 			</div>
 		</div>
 		
-		
-		
-		
-		
 		 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="closeticket">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 31% ;height: 62% ;">
 			<div class="modal-content">
@@ -262,22 +231,15 @@
 				    </div>
 				<div class="modal-body" align="center" style="margin-top:-3px;">
 					<form action="TicketClose.htm" method="post" autocomplete="off"  >
-						
 						<table   style="width:100%">
-							
 							<tr>
-								
-							   <th style="width:16%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
-							   <td style="width:43%;" >
+								<th style="width:16%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
+							    <td style="width:43%;" >
 									<select class="form-control select2  "  name="Feedback"  required="required"  style="width:152px;" >
-													
-														
-														<option value="N">No</option>
+													   <option value="N">No</option>
 														<option value="Y">Yes</option>
-														
-									 </select>
+									</select>
 							</tr>
-							
 						</table>
 						<div align="center" style="margin-top:21px;" >
 								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit"  onclick="return confirm('Are You Sure To Close The Ticket ?')">Submit</button>
@@ -285,22 +247,14 @@
 						</div>
 						<input type="hidden"  name="TicketId3" id="TicketId3" value="">
 						<input type="hidden"  name="EmpNo" id="EmpNo" value="">
-						
-						
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					
-				
-						</form>
-					
+					</form>
 				</div>
-				
 			</div>
 		</div>
 	</div>
 		
-	
-		
-		<div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="forwarded-details">
+	   <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="forwarded-details">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
 					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
@@ -344,30 +298,20 @@
 								<td style="padding: 5px;width:20%;word-wrap:break-word;color:red;" colspan="3" class="tabledata" id="remarks"></td>
 						         
 							</tr>
-							 
-							 
 						</table>
-						
-						
 						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-						
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
-						</form>
+				</form>
 						
 						
 				 	       
 					
-				</div>
-				
 			</div>
+				
 		</div>
 	</div>
-		
-		
-		
-		    
+</div>
 		   
 </body>
 <script type="text/javascript">

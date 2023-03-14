@@ -88,9 +88,6 @@
 		   	 		
 	       
 <script type="text/javascript">
-
-
-
 function Edit(myfrm) {
 
 	var fields = $("input[name='TicketCategoryId']").serializeArray();

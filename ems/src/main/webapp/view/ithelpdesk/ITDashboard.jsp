@@ -242,27 +242,21 @@
 }
   
 </style>
-
 </head>
-
 <body>
 	
-	
 	<%
-	    
-	String Fromdate=(String)request.getAttribute("FromDate");
-	String Todate=(String)request.getAttribute("ToDate"); 
-	Object[] TotalCountData = (Object[])request.getAttribute("countdata");
-	String LoginType=(String)request.getAttribute("LoginType");
-	List<Object[]> graphdata  = (List<Object[]> )request.getAttribute("graphdata");
-	List<Object[]> piechartdata  = (List<Object[]> )request.getAttribute("piechartdata");
-	double total=0;
-	for(Object[] obj:piechartdata){
-    	
-		total=total+(Double.parseDouble(obj[4].toString()))	;
-	}
-	
-%>
+      String Fromdate=(String)request.getAttribute("FromDate");
+      String Todate=(String)request.getAttribute("ToDate"); 
+      Object[] TotalCountData = (Object[])request.getAttribute("countdata");
+      String LoginType=(String)request.getAttribute("LoginType");
+      List<Object[]> graphdata  = (List<Object[]> )request.getAttribute("graphdata");
+      List<Object[]> piechartdata  = (List<Object[]> )request.getAttribute("piechartdata");
+      double total=0;
+	  for(Object[] obj:piechartdata){
+    	 total=total+(Double.parseDouble(obj[4].toString()))	;
+	   }
+	%>
 	
 	<div class="card-header page-top"   style="padding: 0.25rem 1.25rem;">
 		<div class="row">
@@ -278,8 +272,6 @@
 				</nav>
 			</div>		
 			</div>
-			
-			
 	</div>	
 
 
@@ -291,9 +283,7 @@
 				<div class="alert alert-danger" role="alert">
 					<%=ses1 %>
 				</div>
-					
 			<%}if(ses!=null){ %>
-				
 				<div class="alert alert-success" role="alert">
 					<%=ses %>
 				</div>
@@ -309,8 +299,7 @@
 						<div class="col-7">
 						<div class="col-md-4 d-flex justify-content-center"  >
 			        </div>
-						
-				</div>
+				 </div>
 						
 						<div class="col-2" style="margin-left: 7%; font-color: black;">
 							<h6 style="color:#000000;" >From Date : &nbsp;</h6>
@@ -346,15 +335,13 @@
 			</div>
 		</div>
 		
-		
-		
 		<div class="card-body " style="padding-top: 6px;">
 		<div class="container-fluid" >
 		 <div class="row" >
 					  <div class="col-md-10">
 					   	<div class="container" >
 							<div class="row">
-							     <%--  <%if(LoginType.toString().equalsIgnoreCase("A") || LoginType.toString().equalsIgnoreCase("U") ) {%>  --%>
+							    
 							        <div class="col-md-4" style="max-width:19.333%;">
 							            <div class="counter purple">
 							           <%--  <%totalcount=(Long.parseLong(TotalCountData[0].toString()))+(Long.parseLong(TotalCountData[1].toString()))+(Long.parseLong(TotalCountData[4].toString())); %> --%>
@@ -362,13 +349,12 @@
 							                <h3>TOTAL</h3>
 							            </div>
 							        </div>
-							      <%--   <%} %> --%>
+							      
 							        <%if(LoginType.toString().equalsIgnoreCase("A") || LoginType.toString().equalsIgnoreCase("U") ) {%> 
 							        <div class="col-md-4" style="max-width:19.333%;">
 							           <div class="counter blue" style="cursor: pointer;" >
 							            <span class="counter-value"> <%=TotalCountData[1] %></span>
 							                <h3>PENDING</h3>
-							                
 							            </div>
 							        </div>
 							       <%} %>
@@ -386,27 +372,19 @@
 							             </div>
 							        </div>
 							        <%} %>
-							         
 							        <div class="col-md-4" style="max-width:19.333%;">
 							            <div class="counter red">
 							                <span class="counter-value"><%=TotalCountData[5] %></span>
 							                <h3>CLOSED</h3>
 							            </div>
 							        </div>
-							       
-							      
-							    </div>
-						
-							</div>
-						
-					    </div>
-					    
-					   
-						
-						</div>
+							     </div>
+						   </div>
+						 </div>
+					  </div>
 					    	
 					   <hr>
-					   <%-- <%if(LoginType.toString().equalsIgnoreCase("A")) {%> --%>
+					  
 					    <div class="row">
 					   		<div class="col-md-6">
 					   			 <div id="container" style="display:block;" ></div>
@@ -417,14 +395,9 @@
 							    <div id="container-speed" style="display: block" ></div> 
 					   		</div>
 					   </div>
-		<%-- 		<%} %> --%>
-				
-				
-				</div>
-				
-		</div>
-	
-	</div>
+                    </div>
+			 </div>
+	    </div>
 	 
 
 <script type="text/javascript">
@@ -439,8 +412,6 @@
 	    title: {
 	        text: 'Category'
 	    },
-	    
-	    
 	    
 	    xAxis: {
 	         categories: [ <% for (Object[]  obj : graphdata ) { %>   '<%=obj[0]%>' ,   <%}%>  ] 
@@ -594,10 +565,8 @@
 	        	
 	        	<% int j=0;{
 	        	  for(Object[] obj : piechartdata ) { 
-	        	  Double no=((((Double.parseDouble(obj[4].toString()))/total)*100));
-	        	  
-	        	  %>
-		        { 
+	        	  Double no=((((Double.parseDouble(obj[4].toString()))/total)*100));  %>
+	        	{ 
 		        	name: '<%=obj[0] %>',
 		        	  y:<%=(Math.round(no * 100.0)/100.0)%>,
 		                <%-- color: Highcharts.getOptions().colors[<%=j%>]    --%>
@@ -638,18 +607,6 @@
             }]
         }
 	});
-	 
-	
-
-
-	/********************************************* Unit Graph Month Wise ************************************** */
-	
-
-	
-	
-	
-	
-
 
 
 $('#fromdate').daterangepicker({
@@ -687,8 +644,5 @@ $(document).ready(function(){
 });
 
 </script>
-
-
-
 
 </html>

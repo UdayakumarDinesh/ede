@@ -15,18 +15,13 @@
 <body>
 <body>
 <%
-	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> PendingList=(List<Object[]>)request.getAttribute("TicketPendList");
 	List<Object[]> CaseWorkerList=(List<Object[]>)request.getAttribute("CaseworkerList");
 	
-	
 %>
-
-
-
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Ticket Pending List</h5>
@@ -41,10 +36,7 @@
 		</div>
 	</div>
 
-	
-		
-		
-		  <div class="page card dashboard-card">
+	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -82,7 +74,7 @@
 								</thead>
 								<tbody>
 									
-							<%int count=1; %>
+							    <%int count=1; %>
 								<%for(Object[] pendinglist:PendingList) {
 									String description=pendinglist[5].toString();
 								
@@ -138,9 +130,7 @@
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
 					
-					
-					
-			   </form>		
+				</form>		
 			  </div>
 		   	 </div>				
 	        </div>
@@ -169,9 +159,7 @@
 			</div>
 		</div>
 	
-	
-		    
-		    <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
+	     <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% !important;height: 60% !important;">
 			<div class="modal-content">
 			  <div class="modal-body" align="center" style="margin-top:-4px;">
@@ -194,7 +182,6 @@
 								<th style="width:17%;padding: 5px;"> Description :</th>
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="modal-Desc"></td>
 							</tr>
-							
 							
 						</table>
 						</form>
@@ -227,20 +214,14 @@
 									
 						</div>
 						<input type="hidden"  name="TicketId1" id="TicketId1" value="">
-						
-						
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					
-				
-						</form>
+					</form>
 					
 				</div>
 				
 			</div>
 		</div>
 	</div>
-	
-	
 	
 	<div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="returned-details">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
@@ -294,36 +275,22 @@
 							 
 							 
 						</table>
+						  <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-						
-						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
-						
-						
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
-						</form>
-						
-						
-				 	       
-					
+					</form>
 				</div>
 				
 			</div>
 		</div>
 	</div>
 	
-	
-	
-	
 </body>
 <script type="text/javascript">
-
 
 function openModal(TicketId){
 	
 $("#TicketId").val(TicketId);
-	
-	
 	$.ajax({
 
 		type : "GET",
@@ -334,7 +301,7 @@ $("#TicketId").val(TicketId);
 		},
 		datatype : 'json',
 		success : function(result) {
-		/* var result1 = JSON.parse(result) */
+		
 		var result1 = $.parseJSON(result);
 		
 		$.each(result1, function(key, value) {
@@ -379,9 +346,6 @@ $("#TicketId").val(TicketId);
 		datatype : 'json',
 		success : function(result) {
 		var result1 = JSON.parse(result);
-		console.log("caseworkerlist--"+result1);
-		
-		/* $('#modal-select').html(result1); */
 		var $select = $('.modal-select');
 		$select.find('option').remove();
 		 $('.modal-select').append("<option selected='selected' disabled='disabled'>Choose</option>");
@@ -425,16 +389,12 @@ function descmodal(TicketId)
 			
 			$.each(result1, function(key, value) {
 				
-			
-			console.log("res---"+value[5])
 			$('#descdata').html(value[5]);
 			$('#descmodal').modal('toggle');
 		})
 		}
 	});
 }
-
-
 </script>	  
 
 <script type="text/javascript">
@@ -444,7 +404,6 @@ var M=null;
 var H=null;
 
 function SeeDetails(TicketId){
-	
 
 $("#TicketId").val(TicketId);
 	

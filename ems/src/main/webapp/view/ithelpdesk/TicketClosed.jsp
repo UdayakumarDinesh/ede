@@ -39,10 +39,7 @@ String todate = (String)request.getAttribute("toDt");
 		</div>
 	</div>
 
-	
-		
-		
-		  <div class="page card dashboard-card">
+	 <div class="page card dashboard-card">
 	       <div class="card-body" >		
 			 <div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -68,9 +65,7 @@ String todate = (String)request.getAttribute("toDt");
 					<div class="row justify-content-right">
 						<div class="col-7">
 						<div class="col-md-4 d-flex justify-content-center"  >
-			
-		            </div>
-						
+			            </div>
 						</div>
 						
 						<div class="col-2" style="margin-left: 7%; font-color: black;">
@@ -81,7 +76,6 @@ String todate = (String)request.getAttribute("toDt");
 								style="width: 147%; background-color: white; text-align: left;"
 								class="form-control input-sm"
 								onchange="this.form.submit()" 
-								
 								 <%if(fromdate!=null){%>
 								value="<%=fromdate%>" <%} %>
 								readonly="readonly" 
@@ -133,11 +127,7 @@ String todate = (String)request.getAttribute("toDt");
 									
 							<%int count=1; %>
 								<%for(Object[] closedlist:ClosedList) {
-									
-								
-								if(closedlist[5].toString().equalsIgnoreCase("C") )
-								{%>
-								
+								if(closedlist[5].toString().equalsIgnoreCase("C") ){%>
 								<tr>
 									<td style="width: 2%; text-align: center;"><%=count %></td>
 									<td style="width: 2%" ><%=closedlist[2] %></td>
@@ -169,25 +159,15 @@ String todate = (String)request.getAttribute("toDt");
 								<%} %>
 								</tbody>
 							</table>
-							
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
-					
-					
-					
-			   </form>		
+				</form>		
 			  </div>
 		   	 </div>				
 	        </div>
 	        </div>	
 		
-			
-		
-	
-	
-	
-		    
-		    <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
+		 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
 					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
@@ -199,7 +179,6 @@ String todate = (String)request.getAttribute("toDt");
 				<div class="modal-body" align="center" style="margin-top:-4px;">
 					<form action="#" method="post" autocomplete="off"  >
 						<table style="width: 100%;">
-							
 							<tr>
 								<th style="padding: 5px;" >Raised By :</th>
 								<td style="padding: 5px;" id="modal-raisedby"></td>
@@ -227,7 +206,6 @@ String todate = (String)request.getAttribute("toDt");
 								<td style="padding: 5px;" class="tabledata" id="modal-closeddate"></td>
 							</tr>
 							
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned To :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assignedto"></td>
@@ -242,7 +220,6 @@ String todate = (String)request.getAttribute("toDt");
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="modal-Desc"></td>
 							</tr>
 							
-							
 							<tr id="feed">
 								<th style="width:17%;padding: 5px;"> Feedback :</th>
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;color:blue;" colspan="3" id="modal-feedback"></td>
@@ -250,9 +227,7 @@ String todate = (String)request.getAttribute("toDt");
 							
 						</table>
 						</form>
-						
-						
-				 	<input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+					         <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
 						
 						
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -299,12 +274,6 @@ $("#TicketId").val(TicketId);
 			$('#modal-closedby').html(value[18]);
 			$('#modal-assignedto').html(value[16]);
 			
-			/* if(value[20]==""){
-				$('#modal-feedback').hide();
-			}
-			else{
-			$('#modal-feedback').html(value[20]);
-			} */
 			if(value[20]===null){
 				$("#feed").hide();
 			}
@@ -339,10 +308,8 @@ $("#TicketId").val(TicketId);
 			    if (day.length < 2){ 
 			        day = '0' + day;}
 			    var demandDate=[day,month,year].join('-');
-			   // console.log("res     :"+demandDate);	
-			
-				
-			    var d1 = new Date(value[11]),
+			    
+			 	var d1 = new Date(value[11]),
 				 
 		        month = '' + (d1.getMonth() + 1),
 		        day = '' + d1.getDate(),
@@ -353,7 +320,6 @@ $("#TicketId").val(TicketId);
 		    if (day.length < 2){ 
 		        day = '0' + day;}
 		    var demandDate1=[day,month,year].join('-');
-		    
 		    
 		    var d2 = new Date(value[11]),
 			 
@@ -380,9 +346,6 @@ $("#TicketId").val(TicketId);
 		
     }
 });
-	
-	
-	
 	
 }
 
@@ -419,14 +382,6 @@ $('#todate').daterangepicker({
 		       $('#myform').submit();
 		    });
 		});
-	
-
-
-	
 
 </script>
-
-
-
-
 </html>

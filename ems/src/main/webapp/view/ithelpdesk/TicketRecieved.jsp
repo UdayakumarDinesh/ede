@@ -16,17 +16,13 @@
 <body>
 <body>
 <%
-	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> RecievedList=(List<Object[]>)request.getAttribute("TicketRecievedList");
 
-
 %>
 
-
-
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Ticket Recieved</h5>
@@ -41,9 +37,7 @@
 		</div>
 	</div>
 
-	
-		
-		  <div class="page card dashboard-card">
+	<div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -68,27 +62,18 @@
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable" > 
-				   		
-								<thead>
-								
-								
-									<tr>
-									
-									
-									
-										<th style="width: 3%;">SN</th>
+				   		     <thead>
+								 <tr>
+									        <th style="width: 3%;">SN</th>
 											<th style="width: 8%">Raised By</th>
 											<th style="width: 5%">Category</th>
-											<!-- <th style="width: 5%">Sub-Category</th> -->
 											<th style="width: 10%">Description</th>
-											<!-- <th style="width: 8%">Priority</th> -->
-											<th style="width: 8%;text-align: center;" >Raised Date</th>
+									        <th style="width: 8%;text-align: center;" >Raised Date</th>
 											<th style="width: 10%;text-align: center;" >Assigned By</th>
 											<th style="width: 8%;text-align: center;" >Assigned Date</th>
 											<th style="width: 8%;text-align: center;" >Returned Date</th>
-										
-											<th style="width: 8%" >Action</th>																	
-									</tr>
+										    <th style="width: 8%" >Action</th>																	
+								</tr>
 								</thead>
 								<tbody>
 									<% String Low="Low";
@@ -101,13 +86,11 @@
 								
 								if(recvdlist[15].toString().equalsIgnoreCase("A") || recvdlist[15].toString().equalsIgnoreCase("R"))
 								{%>	
-							
-								
-								<tr>
+							  <tr>
 									<td style="width: 3%; text-align: center;"><%=count %></td>
 									<td style="width: 8%" ><%=recvdlist[2] %></td>
 									<td style="width: 5%"><%=recvdlist[8] %></td>
-									<%-- <td style="width: 5%"><%=recvdlist[9] %></td> --%>
+									
 									
 									<td style="width: 10%;word-wrap: break-word;word-break: break-all;white-space: normal !important;">
 									<%if(description.length()<30){%> <%=description%> <%}else{%><%=description.substring(0,30)%>
@@ -116,22 +99,17 @@
 										         </button>
 										         <%}%> 
 									</td>
-									<%-- <td style="width: 8%"><% if(recvdlist[7].toString().equalsIgnoreCase("L")){%><%=Low %><%} else if(recvdlist[7].toString().equalsIgnoreCase("M")){%><%=Medium %><%}else{%><%=High%><%} %></td> --%>
 									<td style="width: 8%;text-align: center;"><%=rdf.format(sdf.parse(recvdlist[6].toString()))%></td>
 									<td style="width: 10%"><%=recvdlist[17] %></td>
 									<td style="width: 8%;text-align: center;"><%=rdf.format(sdf.parse(recvdlist[11].toString()))%></td>
 									<td style="width: 8%;text-align: center;"><%if(recvdlist[12]!=null){%><%=rdf.format(sdf.parse(recvdlist[12].toString()))%><%}else{%>-<%} %>
-									
 									</td>	
-								
-									<td style="width: 8%;text-align: center;" >
+								    <td style="width: 8%;text-align: center;" >
 									<%if(!recvdlist[10].toString().equals("")) {%>
 									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=recvdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-										
-										<%} %>
-										
+									<%} %>
 										<input type="hidden" name="RaisedDate<%=recvdlist[0]%>"  id="RaisedDate<%=recvdlist[0]%>"   value="<%=rdf.format(sdf.parse(recvdlist[6].toString())) %>" >
 														<input type="hidden" name="RaisedBy<%=recvdlist[0]%>"  id="RaisedBy<%=recvdlist[0]%>"   value="<%=recvdlist[2] %>" >
 														<input type="hidden" name="Category<%=recvdlist[0]%>"  id="Category<%=recvdlist[0]%>"   value="<%=recvdlist[8] %>" >
@@ -144,17 +122,10 @@
 										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="SeeDetails('<%=recvdlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Assigned Details">
 															<i class="fa fa-eye " style="color: black;"></i>
 														</button>
-														
 										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="ForwardTicket('<%=recvdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Forward">
 															<i class="fas fa-angle-double-right" style="color: black;"></i>
 														</button> 
-														<%-- <%if(recvdlist[13]!=null){ %>
-											<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="SeeRemarks('<%=recvdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Remarks">
-															<i class="fas fa-envelope" style="color: black;"></i>
-														</button> 
-														<%} %>	 --%>		
-										
-										 <%-- <input id="remarks<%=recvdlist[0]%>" value="<%=recvdlist[13]%>" type="hidden"> --%>
+																
 										<input type="hidden" name="TicketId" value="">
 										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 										
@@ -162,10 +133,6 @@
 								</tr>
 								 <%count++;%>
 								<%}}%>
-								<%-- <%if(RecievedList.size()==0){ %> --%>
-								<!-- <tbody></tbody> -->
-							<!-- <tr><td  colspan="11" style="text-align: center;"> No Recieved Forms </td></tr> -->
-							<%-- 	<%} %> --%>
 								
 								</tbody>
 								
@@ -174,16 +141,12 @@
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
 					
-					
-					
-			   </form>		
+				 </form>		
 			  </div>
 		   	 </div>				
 	        </div>
 	        </div>	
 		
-		
-			
 		
 	<div class="modal fade" id="descmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70% !important;height: 40%;">
@@ -206,8 +169,6 @@
 			</div>
 		</div>
 		
-		
-		
 		<div class="modal fade" id="SeeRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
 				<div class="modal-content" style="min-height: 45%;" >
@@ -227,11 +188,6 @@
 				</div>
 			</div>
 		</div>
-		
-		
-		
-		
-		
 		
 		<div class="modal fade" id="forwardticket" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
@@ -261,7 +217,6 @@
 				</div>
 			</div>
 		</div>
-	
 	
 	
 	<div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="assigned-details">
@@ -310,27 +265,16 @@
 						         
 							</tr>
 							 
-							 
 						</table>
+						  <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
-						
-						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
-						
-						
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						
-						</form>
-						
-						
-				 	       
-					
+					</form>
 				</div>
 				
 			</div>
 		</div>
 	</div>
-		    
-		   
 </body>
 
 <script type="text/javascript">
@@ -356,8 +300,6 @@ function descmodal(TicketId)
 			
 			$.each(result1, function(key, value) {
 				
-			
-			console.log("res---"+value[5])
 			$('#descdata').html(value[5]);
 			$('#descmodal').modal('toggle');
 		})
@@ -404,7 +346,7 @@ function SeeDetails(TicketId)
 	$('#assigneddate').html($('#AssignedDate'+TicketId).val())
 	
 	var returndate=$('#ReturnedDate'+TicketId).val();
-     console.log("returndate  :"+returndate);
+   
 		   if(returndate=="")
 		   {
 			 $('#return').hide();
@@ -434,7 +376,7 @@ function SeeDetails(TicketId)
    }
    
    var remarks=$('#Remarks'+TicketId).val();
-   console.log("remarks  :"+remarks);
+  
    if(remarks===null || remarks=="null")
    {
 	   $('#REMARK').hide();
@@ -445,12 +387,6 @@ function SeeDetails(TicketId)
 	 $('#assigned-details').modal('toggle'); 
 }
 
-
-
 </script>
-
-
-
-
 
 </html>
