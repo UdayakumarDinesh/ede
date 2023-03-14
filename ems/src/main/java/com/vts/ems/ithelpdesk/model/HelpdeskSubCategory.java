@@ -17,7 +17,7 @@ public class HelpdeskSubCategory {
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
 	private long    TicketSubCategoryId;
-	private long TicketCategoryId;
+	private long  TicketCategoryId;
 	private String  TicketSubCategory;
 	private String  CreatedBy;
 	private String  CreatedDate;
