@@ -1,9 +1,11 @@
 package com.vts.ems.ithelpdesk.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
 import com.vts.ems.model.EMSNotification;
 
@@ -39,7 +41,15 @@ public interface helpdeskDao {
         public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception;
         public HelpdeskCategory getTicketCategoryById(Long tcId) throws Exception;
         public List<Object[]> getTicketCategoryList() throws Exception;
-		public List<Object[]> getEmployeeList()throws Exception;
+        public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception;
+	    public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId,String ticketCategory) throws Exception;
+	    public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception;
+	    public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception;
+	    public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception;
+	    public List<Object[]> getTicketSubCategoryList() throws Exception;
+	    public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception;
+	    public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId,String ticketCategory) throws Exception;
+        public List<Object[]> getEmployeeList()throws Exception;
 		public List<Object[]> getContractEmployee() throws Exception;
 		public List<Object[]> getHelpDeskEmployeeList() throws Exception;
 		public long EmployeeAddSubmit(HelpDeskEmployee employee)throws Exception;
@@ -53,10 +63,5 @@ public interface helpdeskDao {
 		public List<Object[]> IThelpdeskDashboardPieChartData(String fromDate, String toDate)throws Exception;
 		public long NotificationAdd(EMSNotification notification) throws Exception;
 		public List<Object[]> SendNotification(String Logintype) throws Exception;
-
-		
-		
-	
-
-
+	        
 }

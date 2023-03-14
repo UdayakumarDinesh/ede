@@ -111,12 +111,12 @@
 			
 			<div class="card" style="width:48%;" >
 				  <div class="card-body main-card " > 
-				<form action="CaseworkerAddSubmit.htm" method="post" autocomplete="off" id="" >
+				<form action="ContractEmployeeAddSubmit.htm" method="post" autocomplete="off" id="" >
 					
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				 <div class="row" > 
 							<div class="col-6"  style="margin-left:0px;margin-top:0px;">
-									<b>Caseworker Name :</b><span class="mandatory" style="color: red;">*</span>
+									<b>ContractEmployee Name :</b><span class="mandatory" style="color: red;">*</span>
 							        <select class="form-control select2"  name="Caseworker" required="required" id="">
 							        <option value="" disabled="disabled" selected="selected"
 					                     hidden="true">Select</option>
@@ -151,12 +151,7 @@
 		</div> 
 		</div>
 		</div>
-			 
-			
-			
 		
-			
-
 		<div class="card-body main-card" style=" max-height: 30rem; overflow-y:auto;" >
 
 			<form action="#" method="POST" >
@@ -172,8 +167,6 @@
 								<th style="width: 10%">Employee Name</th>
 								<th style="width: 10%">Valid Till</th>
 								<th style="width: 10%">Action</th>
-								
-								
 							</tr>
 						</thead>
 						<tbody>
@@ -182,11 +175,8 @@
 							String Contract="Contract";
 							for(Object[] obj:HelpDeskEmpList){
 								Date date1=sdf.parse(sdf.format(obj[4]));
-								Date date2=sdf.parse(sdf.format(new Date()));
-							 
-							%>
+								Date date2=sdf.parse(sdf.format(new Date()));%>
 							<tr>
-							
 							    <td style="text-align: center;"><%=++count %></td>
 								<td style="text-align: left;"><% if(obj[2].toString().equalsIgnoreCase("P")){%><%=Permanent%><%} else if(obj[2].toString().equalsIgnoreCase("C")){%><%=Contract %><%} %></td>
 								<td style="text-align: left;"><%=obj[3]%></td>
@@ -196,54 +186,25 @@
 								<input type="hidden" name="Empname<%=obj[0]%>"  id="Empname<%=obj[0]%>"   value="<%=obj[3] %>" >
 								<input type="hidden" name="Emptype<%=obj[0]%>"   id="Emptype<%=obj[0]%>"   value="<%=obj[2] %>" >
 								<input type="hidden" name="ValidTill<%=obj[0]%>"   id="ValidTill<%=obj[0]%>"  value="<%=rdf.format(sdf.parse(obj[4].toString())) %>" >
-								
-								
 								<button type="button" class="btn btn-sm edit-btn" name="HelpDeskEmpId" value="<%=obj[0]%>" onclick="openeditmodal('<%=obj[0] %>')" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
-								
-													<i class="fa fa-pencil"></i>
-													</button>
-												
-												
-												<button type="submit" class="btn btn-sm " name="HelpDeskEmpId" value="<%=obj[0]%>" formaction="EmployeeDelete.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
-													<i class="fa-solid fa-trash-can " style="color: red"></i>
-												</button>
-											
-												
+								 <i class="fa fa-pencil"></i></button>
+								<button type="submit" class="btn btn-sm " name="HelpDeskEmpId" value="<%=obj[0]%>" formaction="EmployeeDelete.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
+								<i class="fa-solid fa-trash-can " style="color: red"></i></button>
 												
 								</td>
-							
 							</tr>
-							 
 							<%} %>
-							
-							
-
 						</tbody>
 					</table>
-
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					
-					
+                       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				</div>
-
-				
-
-			</form>
-
-
-		</div>
-
-	</div>
-
-
-
-	
-	
-	
-		    <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-edit-modal">
+          </form>
+      </div>
+</div>
+           <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-edit-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
-					 <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
+					    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
 				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Employee Edit</h4>
 				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 				          <span aria-hidden="true">&times;</span>
@@ -252,44 +213,32 @@
 				<div class="modal-body" align="center" style="margin-top:-4px;">
 					<form action="EmployeeUpdate.htm" method="post" autocomplete="off"  >
 						<table style="width: 100%;">
-							
 							<tr>
 								<th style="padding: 5px;" >Employee Name :</th>
 								<td style="padding: 5px;" id="empname"></td>
 								<th style="padding: 5px">Employee Type :</th>
 								<td style="padding: 5px;" id="emptype"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;" >Valid Till: <span class="mandatory"	style="color: red;">*</span></th>
 								<td style="padding: 5px;" >
 								<input type="text" class="form-control" name="ValidTill" id="validupto" style="width:50%;">
 								</td>
 							</tr>
-							
 						</table>
 						<div align="center" style="margin-top:10px;">
 								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" >UPDATE</button>
-									
 						</div>
 						 <input type="hidden"  name="HelpDeskEmpId" id="HelpDeskEmpId" value=""> 
 						        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						</form>
-						
-					
 				</div>
-				
 			</div>
 		</div>
 	</div>	
-		
-		
-		
-
 </body>
 
 <script type="text/javascript">
-
 $('#validtill').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -301,7 +250,6 @@ $('#validtill').daterangepicker({
 	}
 });
 
-	
 	$('#validtill1').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
@@ -338,19 +286,13 @@ function openeditmodal(HelpDeskEmpId){
    $('#my-edit-modal').modal('toggle'); 
 	}
 
-
-
 </script>
 <script type="text/javascript">
-
-
-
 $( document ).ready(function() {
 $('#validupto').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	
 	showDropdowns : true,
 	locale : {
 		format : 'DD-MM-YYYY'
@@ -358,8 +300,5 @@ $('#validupto').daterangepicker({
 });
 })
 
-
 </script>
-
-
 </html>

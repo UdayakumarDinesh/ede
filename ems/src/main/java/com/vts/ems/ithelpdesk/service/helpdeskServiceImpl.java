@@ -3,6 +3,7 @@ package com.vts.ems.ithelpdesk.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ import com.vts.ems.ithelpdesk.dao.helpdeskDao;
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -482,14 +484,73 @@ public class helpdeskServiceImpl implements helpdeskService {
      }
      @Override
      public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception {
-     	
-     	return dao.TicketCategoryEdit(helpdeskCategory);
+    	 HelpdeskCategory hc = dao.getTicketCategoryById(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategoryId(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategory(helpdeskCategory.getTicketCategory());
+    	 hc.setModifiedBy(helpdeskCategory.getModifiedBy());
+    	 hc.setModifiedDate(helpdeskCategory.getModifiedDate());
+    	 
+     	return dao.TicketCategoryEdit(hc);
      }
     @Override
      public HelpdeskCategory getTicketCategoryById(Long tcId) throws Exception {
      	
      	return dao.getTicketCategoryById(tcId);
      }
+
+	@Override
+	public List<Object[]> getSubCategoryList() throws Exception {
+		
+		return dao.getSubCategoryList();
+	}
+    
+	@Override
+	 public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception {
+		
+		return dao.ticketCategoryDuplicateAddCheck(ticketCategory);
+	 }
+    
+    @Override
+	public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId, String ticketCategory)throws Exception {
+		
+		return dao.ticketCategoryDuplicateEditCheck(ticketCategoryId, ticketCategory);
+	}
+    
+	@Override
+	public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.TicketSubCategoryAdd(helpdeskSubCategory);
+	}
+    @Override
+	public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		HelpdeskSubCategory hsc = dao.getTicketSubCategoryById(helpdeskSubCategory.getTicketSubCategoryId());
+		hsc.setTicketSubCategory(helpdeskSubCategory.getTicketSubCategory());
+		hsc.setTicketCategoryId(helpdeskSubCategory.getTicketCategoryId());
+		hsc.setModifiedBy(helpdeskSubCategory.getModifiedBy());
+		hsc.setModifiedDate(helpdeskSubCategory.getModifiedDate());
+		return dao.TicketSubCategoryEdit(hsc);
+	}
+    @Override
+	public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception {
+		
+		return dao.getTicketSubCategoryById(tscId);
+	}
+    @Override
+	public List<Object[]> getTicketSubCategoryList() throws Exception {
+		
+		return dao.getTicketSubCategoryList();
+	}
+    @Override
+	public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateAddCheck(ticketCategoryId,ticketCategory);
+	}
+    @Override
+	public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId, String ticketCategory)throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateEditCheck(ticketSubCategoryId,ticketCategoryId, ticketCategory);
+	}
+
     @Override
 	public List<Object[]> getEmployeeList() throws Exception {
 		
@@ -526,11 +587,6 @@ public class helpdeskServiceImpl implements helpdeskService {
 		return dao.getEmployeeupdate(he);
 	}
 
-	@Override
-	public List<Object[]> getSubCategoryList() throws Exception {
-		
-		return dao.getSubCategoryList();
-	}
    @Override
 	public List<Object[]> getTicketReturnedList(String ticketId) throws Exception {
 		
@@ -554,5 +610,5 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		return dao.IThelpdeskDashboardPieChartData(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
-
+	
 }
