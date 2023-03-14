@@ -2,8 +2,6 @@ package com.vts.ems.ithelpdesk.dao;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;

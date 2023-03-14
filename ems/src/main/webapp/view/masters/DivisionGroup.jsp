@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Group Master</title>
+<title>Group</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
@@ -67,7 +67,7 @@
 									<% if(list!=null){ for(Object[] obj:list){ %>
 										<tr>
 											<td style="text-align: center;"><input type="radio" name="groupId" value="<%=obj[0] %>"> </td>
-											<td><%=obj[1]%></td>
+											<td style="text-align: center;"><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
 											<td><%=obj[3]+", "+obj[4]%> </td>
 											

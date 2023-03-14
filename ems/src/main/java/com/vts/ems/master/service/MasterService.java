@@ -84,7 +84,8 @@ public interface MasterService {
 	public int editDivisionGroup(DivisionGroup divisionGroup) throws Exception;
 	public DivisionGroup getDivisionGroupById(int id) throws Exception;
 	public List<Object[]> getDivisionGroupList() throws Exception;
-	public Object[] checkDuplicate(String groupCode) throws Exception;
+	public BigInteger checkAddDuplicate(String groupCode) throws Exception;
+	public BigInteger getDuplicateCountEdit(String groupId,String groupCode) throws Exception;
 	public List<Object[]> getEmployeeList() throws Exception;
 	public List<Object[]> getGroupList() throws Exception;
 	

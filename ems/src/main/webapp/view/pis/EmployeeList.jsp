@@ -134,6 +134,7 @@
 
 							<!-- <button type="submit" class="btn btn-sm view-btn" style="margin-right: 5px;" name="action" value="view" formaction="EmployeeDetails.htm"  Onclick="Edit(empForm)" >VIEW </button> -->
 							<button type="submit" class="btn btn-sm view-btn" style="background-color: #4b6a9c;" name="action"  value="UpdateSeniority" formaction="UpdateEmployeeSeniority.htm"  Onclick="Edit(empForm)" >UPDATE SENIORITY </button>
+							<button type="submit" class="btn btn-sm view-btn" style="background-color: #609966;" formaction="AllowAnnualDeclaration.htm"  Onclick="AnnualDecEdit(empForm)" >Allow Annual Declaration </button>
 							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>
 							<button type="button" class="btn btn-sm submit-btn" name="action" value="view"  >SUBMIT </button>
 							<button type="button" class="btn btn-sm delete-btn" name="action" value="view"  >DELETE </button>
@@ -188,6 +189,19 @@
 		return true;
 	}
 
+	function AnnualDecEdit(myfrm) {
+
+		var fields = $("input[name='empid']").serializeArray();
+
+		if (fields.length === 0) {
+			alert("Please Select Atleast One Employee ");
+
+			event.preventDefault();
+			return confirm('Are You Sure To Allow Annual Declaration to this Employee?');
+		}
+		return true;
+	}
+	
 	function Delete(myfrm) {
 
 		var fields = $("input[name='empid']").serializeArray();

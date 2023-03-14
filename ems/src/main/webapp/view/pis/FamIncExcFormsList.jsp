@@ -21,7 +21,12 @@
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String formmoduleid =(String) session.getAttribute("formmoduleid");
-	int count=(int)request.getAttribute("formdecyear");
+	Object[] AnnualDecFlag=(Object[])request.getAttribute("AnnualDecFlag");
+	String DeclarationFlag = "Y";
+	if(AnnualDecFlag!=null && AnnualDecFlag[1]!=null)
+	{
+		DeclarationFlag = AnnualDecFlag[1].toString();
+	}
 %>
 
 
@@ -136,8 +141,7 @@
 					<div align="center">
 						<button type="submit" class="btn btn-sm " style=" background: #231955; color: #ffffff " name="formid" value="0" formaction="DepInclusionFormView.htm"  name="action" value="add" >Inclusion Form</button>
 						<button type="submit" class="btn btn-sm " style=" background: #A10035; color: #ffffff " name="formid" value="0" formaction="DepExclusionFormView.htm"  name="action" value="add" >Exclusion Form</button>
-						
-							<%if(count==0){ %>
+						<%if(DeclarationFlag.equalsIgnoreCase("Y")){ %>
 						<button type="submit" class="btn btn-sm " style=" background: #37783B; color: #ffffff "name="formid" value="0" formaction="DepDeclareFormView.htm"  name="action" value="add" >Initial Admission / Annual Declaration </button>
 						<%}%> 
 					</div>

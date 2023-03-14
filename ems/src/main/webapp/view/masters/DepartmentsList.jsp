@@ -51,9 +51,10 @@
 								<thead>
 									<tr>
 										<th> Select            </th>
-										<th> Department Code    </th>
+										<th> Department Code   </th>
 										<th> Department        </th>
-										<th> Department Head    </th>
+									    <th> Group Code        </th> 
+										<th> Department Head   </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -64,7 +65,8 @@
 								        <td style="text-align: center;"><input type="radio" value="<%=obj[0] %>" name="Depid" > </td>
 								        <td style="text-align: center;width:14%;"><%=obj[1]%></td>
 								        <td><%=obj[2]%></td>
-								         <td><%=obj[3]%></td>
+								        <td style="text-align: center;width:14%;"><%=obj[3]%></td>
+								        <td><%=obj[4]%></td>
 								      </tr>  
 								      <%}} %>
 							   </tbody>

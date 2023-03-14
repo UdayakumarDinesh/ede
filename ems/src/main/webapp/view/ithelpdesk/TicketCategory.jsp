@@ -8,6 +8,7 @@
 <title>Ticket Category</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+
 </head>
 <body>
 
@@ -22,15 +23,15 @@
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-						 <li class="breadcrumb-item "><a href="MasterDashBoard.htm"> IT Support </a></li> 					
+						 <li class="breadcrumb-item "><a href="ITDashboard.htm"> IT Help Desk   </a></li> 					
 						<li class="breadcrumb-item active " aria-current="page">Ticket Category List</li>
 					</ol>
 				</div>
 			</div>
 		 </div>
 		 
-		<div class="page card dashboard-card">
-	<div class="card-body" >		
+  <div class="page card dashboard-card">
+	<div class="card-body" id="card-body">		
 		<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
 		String ses1=(String)request.getParameter("resultfail");
@@ -46,18 +47,17 @@
 			</div>
 		<%} %>
 	</div> 
-	
-		 <div class="card" >
-				<div class="card-body ">			
+		 <div class="card" style="width:55% !important;margin-left:22%;">
+				<div class="card-body">			
 					<form action="TicketCategory.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
 						<div class="table-responsive">		
-								<div align="center">	
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable" style="width:50%;"> 				   			
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="table"> 				   			
 								<thead>
 									<tr>
 										<th> Select          </th>
 										<th> Ticket Category </th>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -71,32 +71,45 @@
 								</tbody>
 							</table>
 						</div>	
-						</div>		
+								
 						<div class="row text-center">
 						<div class="col-md-12">
 						
 							<button type="submit" class="btn btn-sm add-btn" name="action" value="ADD"   >ADD </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="action" value="EDIT"  Onclick="Edit(table)" >EDIT </button>
 						</div>
 						</div>
 			   </form>		
 			  </div>
 			  </div>
-		   	  </div>				
-	        </div>
+			  </div>
+			  </div>
+			
+		   	 		
+	       
 <script type="text/javascript">
+
+
+
 function Edit(myfrm) {
 
-	var fields = $("input[name='groupId']").serializeArray();
+	var fields = $("input[name='TicketCategoryId']").serializeArray();
 
 	if (fields.length === 0) {
-		alert("Please Select Atleast One Group Code ");
+		alert("Please Select Atleast One Ticket Category");
 
 		event.preventDefault();
 		return false;
 	}
 	return true;
 }
+
+$(document).ready(function(){
+	  $("#table").DataTable({
+	 "lengthMenu": [ 5, 10, 25, 50, 75, 100 ],
+	 "pagingType": "simple",
+});
+});
 </script>
 </body>
 </html>

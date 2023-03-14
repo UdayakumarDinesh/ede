@@ -24,7 +24,7 @@ public class DivisionGroup implements Serializable {
 	private String groupCode;
 	private String groupName;
 	private int groupHeadId;
-	private String IsActive;
+	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

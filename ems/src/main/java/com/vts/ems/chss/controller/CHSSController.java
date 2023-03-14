@@ -5291,8 +5291,6 @@ public class CHSSController
 			test.setModifiedBy(Username);
 			test.setUpdateByEmpId(EmpId);
 			test.setUpdateByRole(LoginType);
-
-
 			
 			long count = service.IPDTestRemAmountEdit(test);
 						
@@ -5567,6 +5565,7 @@ public class CHSSController
 		}
 		
 	}
+	
 	@RequestMapping(value = "DependantsList.htm", method = {RequestMethod.POST , RequestMethod.GET } )
 	public String DependantsList(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -5576,31 +5575,31 @@ public class CHSSController
 		String EmpNo=null;
 		List<Object[]> dependantList=null;
 			
-	try {
-		ses.setAttribute("SidebarActive","DependantsList_htm");
-		EmpNo= req.getParameter("EmpNo");
-		
-		List<Object[]> Emplist=service.getEmpList();
-		if(EmpNo!=null) {				
+		try {
+			ses.setAttribute("SidebarActive","DependantsList_htm");
+			EmpNo= req.getParameter("EmpNo");
+			
+			List<Object[]> Emplist=service.getEmpList();
+			if(EmpNo!=null) {				
+				dependantList=service.getDependantsList(EmpNo);
+				req.setAttribute("dependantList", dependantList);
+				req.setAttribute("EmpNo", EmpNo);
+			}
+			else {
+			Long  EmpId=(Long)ses.getAttribute("EmpId");
+			EmpNo=EmpId.toString();
 			dependantList=service.getDependantsList(EmpNo);
 			req.setAttribute("dependantList", dependantList);
 			req.setAttribute("EmpNo", EmpNo);
+			}
+			req.setAttribute("Emplist", Emplist);
+			return"chss/DependantsList";
+		} catch (Exception e) {		
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependantsList.htm "+Username, e);
+			return "static/Error";
+			
 		}
-		else {
-		Long  EmpId=(Long)ses.getAttribute("EmpId");
-		EmpNo=EmpId.toString();
-		dependantList=service.getDependantsList(EmpNo);
-		req.setAttribute("dependantList", dependantList);
-		req.setAttribute("EmpNo", EmpNo);
-		}
-		req.setAttribute("Emplist", Emplist);
-		return"chss/DependantsList";
-	} catch (Exception e) {		
-		e.printStackTrace();
-		logger.error(new Date() +" Inside DependantsList.htm "+Username, e);
-		return "static/Error";
-		
-	}
 		
 	}
 }

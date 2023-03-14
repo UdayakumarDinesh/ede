@@ -5,9 +5,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -794,7 +792,7 @@ public class helpdeskcontroller {
  				HelpdeskCategory category = new HelpdeskCategory();
  				category.setTicketCategory(ticketCategory);
  				category.setCreatedBy(UserId);
- 				category.setCreatedDate(new Date());
+ 				category.setCreatedDate(sdf1.format(new Date()));
  				category.setIsActive(1);
  				Long result = service.TicketCategoryAdd(category);
  				if (result != 0) {
