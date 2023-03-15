@@ -254,7 +254,7 @@
       List<Object[]> piechartdata  = (List<Object[]> )request.getAttribute("piechartdata");
       double total=0;
 	  for(Object[] obj:piechartdata){
-    	 total=total+(Double.parseDouble(obj[4].toString()))	;
+    	 total=total+(Double.parseDouble(obj[4].toString()));
 	   }
 	%>
 	
@@ -275,7 +275,7 @@
 	</div>	
 
 
-<div class="card dashboard-card" >
+ <div class="card dashboard-card" > 
 	<div align="center">
 			<%String ses=(String)request.getParameter("result"); 
 			String ses1=(String)request.getParameter("resultfail");
@@ -290,7 +290,7 @@
 			<%} %>
 		</div>
 		
-		<div class="card">
+		<div class="card" >
 			<div class="card-header" style="height: 4rem">
 				<form  action="ITDashboard.htm " method="POST" id="myform">
 				   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -300,7 +300,6 @@
 						<div class="col-md-4 d-flex justify-content-center"  >
 			        </div>
 				 </div>
-						
 						<div class="col-2" style="margin-left: 7%; font-color: black;">
 							<h6 style="color:#000000;" >From Date : &nbsp;</h6>
 						</div>
@@ -333,16 +332,15 @@
 						value="${_csrf.token}" />
 				</form>
 			</div>
-		</div>
 		
-		<div class="card-body " style="padding-top: 6px;">
+		
+		<div class="card-body " style="padding-top: 6px;max-height:50rem;">
 		<div class="container-fluid" >
-		 <div class="row" >
+		<div class="row" >
 					  <div class="col-md-10">
-					   	<div class="container" >
+					   
 							<div class="row">
-							    
-							        <div class="col-md-4" style="max-width:19.333%;">
+							    <div class="col-md-4" style="max-width:19.333%;">
 							            <div class="counter purple">
 							           <%--  <%totalcount=(Long.parseLong(TotalCountData[0].toString()))+(Long.parseLong(TotalCountData[1].toString()))+(Long.parseLong(TotalCountData[4].toString())); %> --%>
 							               <span class="counter-value"><%=TotalCountData[0] %></span>
@@ -378,7 +376,6 @@
 							                <h3>CLOSED</h3>
 							            </div>
 							        </div>
-							     </div>
 						   </div>
 						 </div>
 					  </div>
@@ -388,17 +385,17 @@
 					    <div class="row">
 					   		<div class="col-md-6">
 					   			 <div id="container" style="display:block;" ></div>
-							    <div id="container3" style="display:block;" ></div> 
+							     
 					   		</div>
 					   		<div class="col-md-6">
 					   			 <div id="container4"  style="display: block"></div> 
-							    <div id="container-speed" style="display: block" ></div> 
+							   
 					   		</div>
 					   </div>
                     </div>
 			 </div>
-	    </div>
-	 
+	    </div> 
+	 </div>
 
 <script type="text/javascript">
 
@@ -439,9 +436,9 @@
 	        }]  */
 	   },
 	     colors: [
-	        '#187498',
-	        '#36AE7C',
-	    	'#DB7093',
+	        '#3371FF',
+	        '#58FF33',
+	    	'#FF33FC',
 	    ], 
 	      series: [{
 	        type: 'column',
@@ -546,10 +543,10 @@
 	                
 	            },
 	            colors: [
-	            	      '#187498',
-	            	      '#117864',
-	            	      '#D4AC0D',
-	            	      '#D35400',
+	            	      '#ECFF33',
+	            	      '#4CFF33',
+	            	      '#F033FF',
+	            	      '#334FFF',
 	            	      '#FF9655', 
 	  	                  '#FFF263', 
 	  	                  '#6AF9C4'
