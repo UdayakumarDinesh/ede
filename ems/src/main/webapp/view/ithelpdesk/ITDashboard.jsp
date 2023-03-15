@@ -555,7 +555,6 @@
 	              ],
 	        }
 	    },
-
 	    series: [{
 	        name: 'Percentage',
 	        data: [
