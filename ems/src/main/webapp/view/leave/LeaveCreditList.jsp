@@ -122,8 +122,8 @@ String ses=(String)request.getParameter("result");
 				    </div>
 			    
 				    <div class="col-md-2">
-					    <div class="group-form">
-						    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type">
+					    <div class="group-form" style="width:105px;">
+						    <select class="form-control  selectpicker" required="required" name="month"  id="month1" title="Select Type" >
 						    <option value="LOB">Opening</option>
 						    <option value="January">Jan</option>
 						    <option value="July">Jul</option>
@@ -228,7 +228,7 @@ String ses=(String)request.getParameter("result");
 	  <th>CL</th>
 	  <th>EL</th>
 	  <th>HPL</th>
-	  <th>CML</th>
+	  <!-- <th>CML</th> -->
 	  <th>RH</th>
 	  <th>Month</th>
 	  <th>Year</th>
@@ -245,7 +245,7 @@ String ses=(String)request.getParameter("result");
 	  <td style="text-align: center;width: 100px;"><%=hlo[3] %></td>
 	  <td style="text-align: center;width: 100px;"><%=hlo[4] %></td>
 	   <td style="text-align: center;width: 100px;"><%=hlo[5] %></td>
-	    <td style="text-align: center;width: 100px;"><%=hlo[6] %></td>
+	   <%--  <td style="text-align: center;width: 100px;"><%=hlo[6] %></td> --%>
 	     <td style="text-align: center;width: 100px;"><%=hlo[7] %></td>
 	      <td style="text-align: center;width: 100px;"><%=hlo[8] %></td>
 	       <td style="text-align: center;width: 100px;"><%=hlo[9] %></td>

@@ -12,6 +12,7 @@
 </head>
 <body>
 <%
+SimpleDateFormat st=new SimpleDateFormat("HH:mm");
 List<Object[]> dutylist = (List<Object[]>)request.getAttribute("typedutylist"); 
 List<Object[]> projectlist = (List<Object[]>)request.getAttribute("projectlist");
 MtUserApply apply=(MtUserApply)request.getAttribute("editdata");
@@ -502,10 +503,10 @@ List<Object[]> fifthpply=(List<Object[]>)request.getAttribute("fifthpply");%>
 		<tr>
 	      	 
 	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[0]%></td>
-	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[1]%>  To <%=trip[14]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=sdf.format(trip[1])%>  To <br><%=sdf.format(trip[14])%></td>
 	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[2]%></td>
 	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[3]%></td>
-	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[4]%>-<%=trip[5]%></td>
+	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=st.format(trip[4])%> - <br><%=st.format(trip[5])%></td>
 	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%if(trip[6]!=null){ %> <%=trip[6]%><%}else{ %>--<%} %></td>
 	      	<td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[7]%></td>
 	        <td style="overflow-wrap: break-word; word-break: break-all; white-space: normal;font-size: 12px;"><%=trip[8]%></td>

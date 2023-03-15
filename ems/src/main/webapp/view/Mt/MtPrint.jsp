@@ -16,6 +16,8 @@ SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 List<Object[]> plist=(List<Object[]>)request.getAttribute("printlist");
 String empname = (String)request.getAttribute("empname");
+String month=(String)request.getAttribute("month");
+
 %>
 
 <div class="card-header page-top ">
@@ -44,11 +46,15 @@ String empname = (String)request.getAttribute("empname");
 <div class="nav navbar auditnavbar" style="background-color: white;margin-top: 18px" align="left">
 
 		<div class="row"></div>
-		<form name="myfrm" action="MtPrint.htm" method="GET" >
-			<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-					<label style="margin-right: 10px; margin-top: 5px; font-weight: bold;">Month: <span class="mandatory" style="color: red;">*</span></label>
-					<input class="input-lg" id="month" name="month" required="required" style="margin-top: 3px; width: 100px; height: 30px; margin-right:30px;" /> 
-					<input type="submit" class="btn btn-sm submit-btn" style="margin-top: -3px; " />	
+		<form  action="MtPrint.htm" method="POST" id="myform">
+			 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
+			<table>
+			<tr>
+				<th>	<label   style="margin-right: 10px; margin-top: 5px; font-weight: bold;">Month :</label></th>
+				<td>	<input class="form-control input-lg" id="month" name="month" value="<%if(month!=null){%><%= month%><%}%>" required="required" style="margin-top: 3px; width: 100px; height: 30px; margin-right:30px;" /></td> 
+					
+	   </tr>
+	   </table>
 	    </form> 
 </div>
 	
@@ -113,11 +119,16 @@ $('#month').datepicker({
 	format: "mm-yyyy",
 	    viewMode: "months", 
 	    minViewMode: "months",
+	    minDate:new Date(),
 	    autoclose: true,
 	    todayHighlight: true
 });
-$('#month').datepicker("setDate", new Date());
-
+//$('#month').datepicker("setDate", new Date());
+$(document).ready(function(){
+	   $('#month').change(function(){
+	       $('#myform').submit();
+	    });
+	});
 
 function Edit(myfrm) {
 	var fields = $("input[name='printdata']").serializeArray();

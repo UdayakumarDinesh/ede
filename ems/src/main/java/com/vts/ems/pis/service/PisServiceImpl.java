@@ -363,6 +363,7 @@ public class PisServiceImpl implements PisService
 		login.setPassword("$2y$12$QTTMcjGKiCVKNvNa242tVu8SPi0SytTAMpT3XRscxNXHHu1nY4Kui");
 		login.setEmpId(Long.parseLong(useradd.getEmpId()));
 		login.setLoginType(useradd.getLoginType());
+		login.setFormRoleId((long) 1);
 		login.setIsActive(1);		
 		login.setCreatedBy(useradd.getCreatedBy());
 		login.setCreatedDate(useradd.getCreatedDate());

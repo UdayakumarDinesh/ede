@@ -204,7 +204,7 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 			<td ><%if(obj[7]!=null && obj[8]!=null){%>  <%=obj[7]%>  <%=obj[8]%>    <%}%></td>
 	      	<td ><%if(obj[4]!=null ){%> <%=obj[4]%> <%}%></td>
 	      	<td ><%if(obj[0]!=null ){%> <%=obj[0]%> <%}%></td>
-	      	<td align="center" ><%if(obj[5]!=null ){%> <%=sdf.format(obj[5])%> <b>To</b>  <%=sdf.format(obj[9])%> <%}%></td>
+	      	<td align="center" ><%if(obj[5]!=null ){%> <%=sdf.format(obj[5])%> <b>To</b> <br> <%=sdf.format(obj[9])%> <%}%></td>
 	      	<td align="center"><%if(obj[6]!=null ){%>   <%=obj[6]%>  <%}%></td>
 	      	<td style="max-width:200px; font-size:x-small; overflow: hidden; word-break: break-word !important; white-space: normal !important; ">
 			    <%for(Object[] reqlink:reqlinkduty){	    	 
@@ -267,12 +267,14 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 	         </thead>
 	  <tbody>
 	  <tr>
-		<%for(Object[] alist:firstapply){%>
+		<%for(Object[] alist:firstapply){
+		System.out.println("endDate="+sdf.format(alist[16]));
+		%>
 			
 	      	  
 			      	<td align="center"><input type="radio" name="Aid" value="<%=alist[0]%>" required="required" ></td> 
 			      	<td><%=alist[2]%> <%=alist[3]%></td>
-			      	<td ><%=sdf.format(alist[4])%> ( To ) <%=sdf.format(alist[16])%></td>
+			      	<td ><%=sdf.format(alist[4])%> <b>To </b> <%=sdf.format(alist[16])%></td>
 			      	<td ><%=alist[5]%>-<%=alist[6]%></td>
 			      	<td ><%=alist[7]%></td>
 			      	<td ><%=alist[8]%></td>
@@ -333,7 +335,7 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 	      	<tr>
 	      	<td align="center"><input type="radio" name="Aid" value="<%=alist[0]%>" required="required" ></td> 
 	      	<td ><%=alist[2]%>(<%=alist[3]%>)</td>      	
-	      	<td ><%=sdf.format(alist[4])%> </td>
+	      	<td style="width:98px;" ><%=sdf.format(alist[4])%><br> To <br><%=sdf.format(alist[16])%> </td>
 	      	<td ><%=alist[5]%>-<%=alist[6]%></td>
 	      	<td ><%=alist[7]%></td>
 	      	<td ><%=alist[8]%></td>

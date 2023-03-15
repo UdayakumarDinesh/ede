@@ -18,10 +18,7 @@ import com.vts.ems.athithi.model.IntimationEmp;
 @Service
 public class IntimationServiceImpl implements IntimationService {
 
-	private int year = Calendar.getInstance().get(Calendar.YEAR);
-	private int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-	private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	private  SimpleDateFormat sdf4=new SimpleDateFormat("dd-MMM-yyyy");
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm:ss");

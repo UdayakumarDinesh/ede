@@ -154,7 +154,7 @@
 							                         <td style="text-align: center;"><%if(obj[3]!=null){%><%=sdf.format(obj[3])%><%}else {%>-<%} %></td>
 							                         <td style="text-align: center;color:blue;"><%if(obj[3]!=null){%><%=stf.format(obj[3])%><%}else {%>-<%} %></td>
 							                         <td style="text-align: center;"><%if(obj[4]!=null){%><%=sdf.format(obj[4])%><%}else {%>-<%} %></td>
-							                         <td style="text-align: center;color:blue;"><%if(obj[4]!=null){%><%=stf.format(obj[4])%><%}else {%>-<%} %></td>
+							                         <td style="text-align: center;color:blue;"><%if(obj[4]!=null){%><%=stf.format(sdf.parse(obj[4].toString()))%><%}else {%>-<%} %></td>
 							                         <td <%if(obj[5]!=null){if(some.before(time)){%> style="color:red;font-weight: bold;text-align: center;"<%}else{%> style="font-weight:bold;text-align:center;"<%}%>><%=obj[5]%><%}else {%>00:00<%} %></td>
 							                   </tr>
 							                   <%}} %>          			           

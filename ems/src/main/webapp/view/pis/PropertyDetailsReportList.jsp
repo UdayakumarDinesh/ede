@@ -113,7 +113,7 @@ margin-left: 42%;
 	               </table>	  
 	                <button type="submit" id="add" class="btn btn-sm add-btn" value="ADD" name="action" <%if(Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="margin-left: 43%;display:none;" <%} %> formnovalidate="formnovalidate">ADD</button>    
 	             <button type="submit" id="edit" class="btn btn-sm edit-btn" value="EDIT" name="action" <%if(list==null||list.isEmpty()||Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="display:none;" <%} %>>EDIT</button>
-	              <button type="submit" id="delete"class="btn btn-sm delete-btn" name="action" value="DELETE" <%if(list==null||list.isEmpty()||Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="display:none;"<%} %>>delete</button>
+	              <button type="submit" id="delete"class="btn btn-sm delete-btn" name="action" onclick="return confirm('Are You Sure Want to Delete?')"  value="DELETE" <%if(list==null||list.isEmpty()||Integer.parseInt(year)!=LocalDate.now().minusYears(1).getYear()){ %>style="display:none;"<%} %>>delete</button>
 	               <button type="submit" id="print" class="btn btn-sm print-btn" formaction="PrintPropertyReport.htm" formtarget="_target"  formmethod="post" name="year" value="<%=year%>" <%if(list==null||list.isEmpty()){ %> style="display:none;" <%} else%>style="margin-left: 56%;margin-top:-57px;"
 	                      formnovalidate="formnovalidate">PRINT</button> 
 	                       

@@ -140,19 +140,19 @@ List<Object[]> resAddress = (List<Object[]>)request.getAttribute("ResAddress");
 							<th>Res.Address</th>
 							<th>Res.From</th>
 							<th>Mobile No.</th>	
-							<th>Email</th>
-							<th>Ext No</th>
+							<!-- <th>Email</th>
+							<th>Ext No</th> -->
 					   </tr>
 					   </thead>
 					   <tbody>
 					   		<%for(Object[] obj : resAddress){ %>
 							<tr align="center">
 							<td style="text-align: center;"><input type="radio" name="addressid" value="<%=obj[1]%>"> </td>					    
-						    <td><%=obj[2]%></td>
-							<td><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>
-							<td><%=obj[4]%></td>
-							<td><%=obj[6]%></td>
-							<td><%=obj[7]%></td>		
+						    <td style="text-align: left;"><%=obj[2]%> , <%=obj[9]%> , <%=obj[8]%> , <%=obj[10]%></td>
+							<td><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
+						<td><%if(!obj[4].toString().isEmpty()){%><%=obj[4]%><%}else{%>-<%}%></td>																		
+							<%-- <td><%=obj[6]%></td>
+							<td><%=obj[7]%></td> --%>		
 					   </tr>
 					   <%} %>
 					</tbody>

@@ -2,6 +2,7 @@ package com.vts.ems.Mt.controller;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -846,13 +847,13 @@ public class MtController {
 		}
 	}
 	
-	@RequestMapping(value="MtPrint.htm",method=RequestMethod.GET)
+	@RequestMapping(value="MtPrint.htm",method= {RequestMethod.POST,RequestMethod.GET})
 	public String MtPrint(HttpServletRequest req,HttpSession ses) throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside MtPrint.htm "+Username);	
-		
+	
 		try {
-			String year3=req.getParameter("month");
+			String year3=req.getParameter("month");		
 			
 			int year1=0;
 			int month1=0;
@@ -870,9 +871,17 @@ public class MtController {
 				int lengthOfMonth = yearMonth.lengthOfMonth();
 				
 				req.setAttribute("printlist",service.PrintList(year1+"-"+month1+"-"+"01",year1+"-"+month1+"-"+lengthOfMonth));
-
+				req.setAttribute("month", year3);
 			}else {	
-				req.setAttribute("printlist",service.PrintList(year+"-"+month+"-"+"01",year+"-"+month+"-"+day));
+				Date date =new Date();
+				Calendar cal=Calendar.getInstance();
+				cal.setTime(date);
+			    int month=cal.get(Calendar.MONTH);
+		        int year=cal.get(Calendar.YEAR);
+		      int m2=month+1;
+		      YearMonth m1=YearMonth.of( year,m2);
+				req.setAttribute("printlist",service.PrintList(year+"-"+m2+"-"+"01",year+"-"+m2+"-"+m1.lengthOfMonth()));
+				req.setAttribute("month", m2+"-"+year);
 			}
 			
 			req.setAttribute("comp","print");
@@ -910,7 +919,8 @@ public class MtController {
 				  List<LabMaster> labdetails= (List<LabMaster>)service.GetLabDetails();
 				  req.setAttribute("labdetails", labdetails);
 				  req.setAttribute("printdata",print1);
-			 
+				 
+				  
 			return "Mt/MtTripPrint";
 			}else {
 				String  print=req.getParameter("printdata");
@@ -1224,7 +1234,9 @@ public class MtController {
 		try {
 			String FromDate=req.getParameter("Fromdate");
 			String ToDate=req.getParameter("Todate");
+			System.out.println("InCon"+ToDate);
 			if(FromDate!=null&&ToDate!=null) {
+				
 				req.setAttribute("TripList", service.TripList(DateTimeFormatUtil.dateConversionSql(FromDate),DateTimeFormatUtil.dateConversionSql(ToDate)));
 				req.setAttribute("FromDate", FromDate);
 				req.setAttribute("ToDate", ToDate);
@@ -1238,6 +1250,7 @@ public class MtController {
 				req.setAttribute("TripList", service.TripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(now.getTime())));
 				req.setAttribute("FromDate", sdf.format(new Date().getTime()));
 				req.setAttribute("ToDate", sdf.format(now.getTime()));
+				
 			}
 			
 			req.setAttribute("fromdate",FromDate );

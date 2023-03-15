@@ -210,7 +210,24 @@ public class PisController {
 			return "static/Error";
 		}
 	}	
+	@RequestMapping(value="FamilyDetailsUpdate.htm",method=RequestMethod.POST)
+	public String EmpFamilyDetailsUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
+	{String Username = (String) ses.getAttribute("Username");
+	logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);
+	try {
+	String Dob=req.getParameter("DOB");
+	String occupation = req.getParameter("Occupation");
+	String income = req.getParameter("Income");
 	
+		
+	} catch (Exception e) {
+		logger.error(new Date() +" Inside EmployeeDetails.htm "+Username, e);
+		e.printStackTrace();
+		return "static error";
+	}
+		return null;
+		
+	}
 	@RequestMapping(value = "EmployeeAdd.htm")
 	public String EmployeeAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
@@ -802,7 +819,7 @@ public class PisController {
 				
     	  UserManageAdd useradd = new UserManageAdd();
     	  useradd.setUserName(req.getParameter("UserName"));
-    	  useradd.setLoginType(req.getParameter("LoginType"));
+    	  useradd.setLoginType(req.getParameter("LoginType"));   	 
     	  useradd.setEmpId(req.getParameter("Employee"));
     	  useradd.setCreatedBy(Username);
     	  useradd.setCreatedDate(sdf.format(new Date()));
