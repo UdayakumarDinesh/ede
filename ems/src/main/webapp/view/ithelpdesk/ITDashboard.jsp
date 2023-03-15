@@ -559,8 +559,6 @@
 	    series: [{
 	        name: 'Percentage',
 	        data: [
-		        
-	        	
 	        	<% int j=0;{
 	        	  for(Object[] obj : piechartdata ) { 
 	        	  Double no=((((Double.parseDouble(obj[4].toString()))/total)*100));  %>
