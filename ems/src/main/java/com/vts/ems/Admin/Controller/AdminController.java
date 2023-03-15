@@ -879,7 +879,13 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				String EmailId=req.getParameter("EmailId");
 				String mobileNo=req.getParameter("MobileNo");
 				String empNo=service.getMaxContractEmpNo();
-				int EmpNo=Integer.parseInt(empNo);
+				int EmpNo;
+				if(empNo!=null) {
+				 EmpNo=Integer.parseInt(empNo);
+				}
+				else {
+					EmpNo=0;
+				}
 				Long MobileNo=null;
 				if(!mobileNo.isEmpty()) {
 					MobileNo=Long.parseLong(mobileNo);

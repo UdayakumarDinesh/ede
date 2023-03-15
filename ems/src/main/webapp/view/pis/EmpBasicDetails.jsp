@@ -542,20 +542,22 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 								<!-- <span style="float: right;"><a class="btn btn-sm submit-btn" href="FamIncExcFwdList.htm"> Include / Exclude </a></span> -->
 							</td>
 						</tr>
-
+                        
 						<tr>
 							<td><b>Member Name</b></td>
 							<td><b>Relation</b></td>
-							<td><b>Date Of Birth</b></td>
+							<td><b>Date Of Birth</b></td>														
+																			
 						</tr>
 							
 						<%if(familydetails!=null){for(Object[] O:familydetails){ %>
 						<tr>
 							<td><%if(O[0]!=null){%><%=O[0]%><%}else{%>--<%}%></td>
 							<td><%if(O[1]!=null){%><%=O[1]%><%}else{%>--<%}%></td>
-							<td><%if(O[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>						
+							<td><%if(O[2]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(O[2].toString())%><%}else{%>--<%}%></td>																			
 						</tr>						
 						<%}} %>
+						
 					</tbody>
 				</table>
 			

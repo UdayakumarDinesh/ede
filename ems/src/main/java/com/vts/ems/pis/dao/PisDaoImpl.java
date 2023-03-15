@@ -863,7 +863,7 @@ public class PisDaoImpl implements PisDao {
 		return address.getAddress_per_id();
 	}
 	
-	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext  FROM pis_address_res  WHERE empid=:empid AND IsActive=1";
+	private static final String RESADDRESS="SELECT empid,address_res_id,res_addr,from_res_addr,mobile,QtrType,EmailOfficial,ext,state,city,pin  FROM pis_address_res  WHERE empid=:empid AND IsActive=1";
 	@Override
 	public List<Object[]> getResAddress(String empid)throws Exception{
 		try {

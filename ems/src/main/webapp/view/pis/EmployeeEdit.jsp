@@ -455,7 +455,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            </div>
 			            
 			            <div class="col-md-2" >
-			            	<label> Height(In Centimeters) <span class=" mandatory ">*</span></label>
+			            	<label> Height(In Cms) <span class=" mandatory ">*</span></label>
 			            	<input id="height" name="Height" maxlength="3" class=" form-control input-sm " <%if(employee!=null && employee.getHeight()!=null){%> value="<%=employee.getHeight()%>" <%}%> placeholder="Enter Height">
 			            </div>
 			            

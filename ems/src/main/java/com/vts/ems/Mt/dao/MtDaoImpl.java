@@ -528,6 +528,7 @@ public class MtDaoImpl implements MtDao {
 		List<Object[]> driverlist=null;
 		
 		try {
+			
 			Query query=manager.createNativeQuery("CALL mt_printlist(:formdate,:todate)");
 			query.setParameter("formdate", fromDate);
 			query.setParameter("todate", toDate);
@@ -559,13 +560,14 @@ public class MtDaoImpl implements MtDao {
 			return null;
 		}
 	}
-	
+	private static final String MTDRIVEREMPLIST="SELECT a.EmpId,a.empName,a.empno,b.designation FROM employee a, employee_desig b ,employee_details c WHERE a.EmpNo=c.EmpNo AND c.EmpStatus='P' AND c.isActive='1' AND a.DesigId IN(33,34,35) AND a.Desigid=b.Desigid;";
 	@Override
 	public List<Object[]> getEmployeeList() throws Exception {
 		List<Object[]> driverlist=null;
 		
 		try {
 			Query query=manager.createNativeQuery("CALL mt_employeelist()");
+			//Query query=manager.createNativeQuery(MTDRIVEREMPLIST);
 			driverlist = (List<Object[]>)query.getResultList();			
 			return driverlist;
 	
@@ -698,7 +700,7 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> DateWiseProjectReport(Date FromDate, Date ToDate, int DriverId, int VehicleId) throws Exception {
 		List<Object[]> reportlist=null;
-		
+
 		try {
 			Query query=manager.createNativeQuery("CALL mt_datewisereport(:FromDate,:ToDate,:DriverId,:VehicleId)");
 			query.setParameter("FromDate", FromDate);
@@ -767,7 +769,7 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> TripList(Date FromDate, Date ToDate) throws Exception {
 		List<Object[]> reportlist=null;
-		
+		System.out.println("DAo"+ FromDate+","+ToDate);
 		try {
 			Query query=manager.createNativeQuery("CALL mt_triplist_mto(:FromDate,:ToDate)");
 			query.setParameter("FromDate", FromDate);

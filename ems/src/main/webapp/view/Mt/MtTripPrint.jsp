@@ -36,12 +36,14 @@ color:blue;
 <body>
 <%List<List<Object[]>> printdata1=(List<List<Object[]>>)request.getAttribute("printdata"); 
  List<LabMaster> labdetails = (List<LabMaster>)request.getAttribute("labdetails"); 
+ System.out.println("labdetails:"+labdetails);
  LabMaster englabdetails=null;
  LabMaster hindilabdetails=null;
 if(labdetails!=null && labdetails.size()>0){
  englabdetails=labdetails.get(0);
- hindilabdetails=labdetails.get(1);
+ hindilabdetails=labdetails.get(0);
 } 
+SimpleDateFormat stf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 for(List<Object[]> printdata:printdata1){
@@ -61,7 +63,7 @@ for(Object[] obj:printdata){
             TimeUnit.MILLISECONDS.toSeconds(difference) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(difference)));
 %>
 
-<center><p ><b><%if(labdetails!=null && hindilabdetails!=null){%><%=hindilabdetails.getLabName()%> (<%=hindilabdetails.getLabCode()%>),  <%=hindilabdetails.getLabAddress()%>,<%=hindilabdetails.getLabCity()%>-<%=hindilabdetails.getLabPin()%> <%}%></b></p></center>
+<center><p ><b><%if(labdetails!=null && hindilabdetails!=null){%><%=hindilabdetails.getLabNameH()%> (<%=hindilabdetails.getLabCodeH()%>),  <%=hindilabdetails.getLabAddressH()%>,<%=hindilabdetails.getLabCityH()%>-<%=hindilabdetails.getLabPin()%> <%}%></b></p></center>
 <center><p ><b><%if(labdetails!=null && englabdetails!=null){%><%=englabdetails.getLabName()%> (<%=englabdetails.getLabCode()%>),  <%=englabdetails.getLabAddress()%>,<%=englabdetails.getLabCity()%>-<%=englabdetails.getLabPin()%> <%}%></b></p></center>
 <center><p >टेलिफोन<b >/Tele:28381155/ 0388/ 2402/ 6807</b></p></center>
 <center>सरकारी परिवहन के लिए मांगपत्र/<b>REQUISITION FOR GOVT TRANSPORT</b></b></center>
@@ -163,10 +165,10 @@ Mto Comments(if any) :&nbsp; &nbsp; &nbsp;<b><%if(obj[14]!=null){ %><%=obj[14] %
 <div class="row" >
 <div class="col-md-4"></div>
 <div class="col-md-4"><span style="margin-left: 10px;"> 
-<b><%=obj[0] %></b><br><b><%=obj[15] %></b></span>
+<b><%=obj[0] %></b><br><b><%=stf.format(format.parse((obj[15].toString()))) %></b></span>
 </div>
 <div class="col-md-4"><span style="margin-left: 10px;"> 
-<b><%if(obj[16]!=null){ %> <%=obj[16] %><%}else{ %><b>--</b><%} %></b><br><b><%if(obj[17]!=null){ %><%=obj[17] %><%=obj[17] %><%}else{ %><b>--</b><%} %></b></span>
+<b><%if(obj[16]!=null){ %> <%=obj[16] %><%}else{ %><b>--</b><%} %></b><br><b><%if(obj[17]!=null){ %><%=stf.format(format.parse((obj[17].toString()))) %><%}else{ %><b>--</b><%} %></b></span>
 </div>
 </div>
 
@@ -226,7 +228,7 @@ Mto Comments(if any) :&nbsp; &nbsp; &nbsp;<b><%if(obj[14]!=null){ %><%=obj[14] %
 <div class="row" >
 <div class="col-md-8"></div>
 <div class="col-md-4"><span style="margin-left: 10px;"> 
-<b><%=obj[18] %></b><br><b><%=obj[19] %></b></span>
+<b><%=obj[18] %></b><br><b><%=stf.format(format.parse(obj[19].toString())) %></b></span>
 </div>
 
 </div>

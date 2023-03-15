@@ -39,11 +39,11 @@ String empname = (String)request.getAttribute("empname");
 </div>
 
 <div class="container-fluid">	
- <form name="myfrm" action="MtTripList.htm" method="GET">
+ <form name="myfrm" action="MtTripList.htm" method="GET"id="myform">
 	<div class="nav navbar bg-light dashboard-margin custom-navbar">
 	
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="col-md-3"></div>
+		<div class="col-md-7"></div>
 		
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
 		<input  class="form-control form-control" <%if(fromdate!=null && fromdate!=""){%>value="<%=fromdate%>"<%}%>  data-date-format="dd-mm-yyyy" id="fromdate"  name="Fromdate"  required="required"  style="width: 120px;">
@@ -51,9 +51,9 @@ String empname = (String)request.getAttribute("empname");
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" <%if(todate!=null && todate!=""){%>value="<%=todate%>"<%}%>  id="todate"  name="Todate"  style="width: 120px;">
 		
-		<div class="col-md-4 d-flex justify-content-center" >
+		<!-- <div class="col-md-4 d-flex justify-content-center" >
 			<button type="submit" class="btn btn-sm submit-btn" style="margin-left: -50%;" name="action" value="submit" > Submit</button>
-		</div>
+		</div> -->
 		
 	</div>
 </form>
@@ -128,9 +128,13 @@ $('#todate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
+$(document).ready(function(){
+	   $('#fromdate, #todate').change(function(){
+	       $('#myform').submit();
+	    });
+	});
 
-
-$( "#fromdate" ).change(function() {
+/* $( "#fromdate" ).change(function() {
 	
 	$('#todate').daterangepicker({
 		"singleDatePicker" : true,
@@ -144,6 +148,6 @@ $( "#fromdate" ).change(function() {
 			format : 'DD-MM-YYYY'
 		}
 	});
-});
+}); */
 </script>
 </html>

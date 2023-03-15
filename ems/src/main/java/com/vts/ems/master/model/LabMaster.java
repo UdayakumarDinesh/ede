@@ -24,10 +24,14 @@ public class LabMaster implements Serializable
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private long LabMasterId;
 	private String LabCode;
+	private String LabCodeH;
 	private String LabName;
+	private String LabNameH;
 	private String LabUnitCode;
 	private String LabAddress;
+	private String LabAddressH;
 	private String LabCity;
+	private String LabCityH;
 	private String LabPin;
 	private String LabTelNo;
 	private String LabFaxNo;

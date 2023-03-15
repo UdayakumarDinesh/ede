@@ -110,7 +110,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
     String empNo=(String)request.getAttribute("EmpNo");
     SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
     long roleid=(Long)session.getAttribute("FormRole");
-	   %>
+ %>
 <div class="page card dashboard-card">
 
 			 
@@ -376,8 +376,8 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <!-- Leave address -->
 	                    <div class="form-group">
 	                        <div class="row">
-	                            <div class="col-sm-3" align="right">
-	                                <label for="from">Leave address : </label>
+	                            <div class="col-sm-3" align="right" >
+	                                <label for="from" style="margin-top:0.7rem">Leave address : </label>
 	                            </div> 
 	                            <div class="col-sm-8">
 	                                <textarea class="form-control"  name="leaveadd" required> As Per SB Record </textarea>
@@ -402,7 +402,7 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
 	                    <div class="form-group">
 	                        <div class="row">
 	                            <div class="col-sm-3" align="right">
-	                                <label for="from">Handing Over To:</label>
+	                                <label for="from" style="width:117px;">Handing Over To:</label>
 	                            </div>
 	                            <div class="col-sm-8">
 	                                <select name="HandingOverEmpid" class="form-control input-sm selectpicker" data-live-search="true">
@@ -611,11 +611,11 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                     <table class="table table-bordered table-hover table-striped table-condensed" id="MyTable2">
                         <thead>
                             <tr style="font-size: 12px; line-height: 0px;">
-                                <th >FROM-TO</th>
-                                <th>TYPE</th>
-                                <th>APPLIED ON</th>
-                                <th>PURPOSE</th>
-                                <th>STATUS</th>
+                                <th >From-To</th>
+                                <th>Type</th>
+                                <th>Applied on</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
                                 <th>Edit &amp; Delete</th>
                             </tr>
                         </thead>
@@ -676,11 +676,11 @@ padding: 0.05rem 0rem 0.05rem 0rem !important;
                     <table class="table table-bordered table-hover table-striped table-condensed" id="MyTable3">
                         <thead>
                             <tr style="font-size: 12px; line-height: 0px;">
-                                <th >FROM-TO</th>
-                                <th>TYPE</th>
-                                <th>APPLIED ON</th>
-                                <th>PURPOSE</th>
-                                <th>STATUS</th>
+                                <th >From-To</th>
+                                <th>Type</th>
+                                <th>Applied on</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
                                 <th>Modify &amp; Cancel</th>
                             </tr>
                         </thead>

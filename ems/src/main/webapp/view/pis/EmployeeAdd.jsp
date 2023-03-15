@@ -62,7 +62,7 @@ function validateform(){
 		       event.preventDefault();
 		       return false;
 		}
-		if(dcmafno==null || dcmafno=="" || dcmafno=="null"){
+		/* if(dcmafno==null || dcmafno=="" || dcmafno=="null"){
 			 alert("Check DCMAF Number!");
 		       event.preventDefault();
 		       return false;
@@ -81,7 +81,7 @@ function validateform(){
 			 alert("Check Benovelent Fund Number!");
 		       event.preventDefault();
 		       return false;
-		}
+		} */
 	      return true;
 	  
 	  }else{
@@ -434,7 +434,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			            
 			            <div class="col-md-2" >
-			            	<label> Height(In Centimeters) <span class=" mandatory ">*</span></label>
+			            	<label> Height(In Cms) <span class=" mandatory ">*</span></label>
 			            	<input id="height" name="Height" maxlength="3" class=" form-control input-sm " placeholder="Enter In Centimeters">
 			            </div>
 			            
