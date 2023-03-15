@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Group Master</title>
+<title>Group</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
@@ -128,6 +128,8 @@ $('#groupCode').keypress(function (e) {
 function checkDuplicateAdd(frmid)
 {
 	 var $groupCode1 = $("#groupCode").val();	
+	 var $groupName1 = $('#groupName').val().trim();
+		var $groupHeadId1 =$('#groupHeadId'); 
 	
 	 var count=true;
 		$.ajax({
@@ -148,9 +150,7 @@ function checkDuplicateAdd(frmid)
 				else if(count){
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
-					var $groupCode1 = $("#groupCode").val();	
-					var $groupName1 = $('#groupName').val();
-					var $groupHeadId1 =$('#groupHeadId').val(); 
+					
 					if($groupCode1==null || $groupCode1==""||$groupCode1=="null" || $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
 						alert('Enter Data Properly');
 						
@@ -175,20 +175,22 @@ function checkDuplicateAdd(frmid)
 function checkDuplicateEdit(frmid)
 {
 	 var $groupCode1 = $("#groupCode").val();	
-		
+	 var $groupId1 = $('#divgrpid').val();
+	 var $groupName1 = $('#groupName').val().trim();
+	 var $groupHeadId1 =$('#groupHeadId').val();	
 	 var count=true;
 		$.ajax({
 			type : "GET",
-			url : "DivisionAddcheck.htm",	
+			url : "DivisionEditcheck.htm",	
 			datatype : 'json',
 			data : {
-				groupCode : $groupCode1,				
+				groupCode : $groupCode1,	
+				groupId : $groupId1,
 			},
 			success : function(result) {
 				var ajaxresult = JSON.parse(result);
 				
-				
-				if(ajaxresult>1){
+				if(ajaxresult>0){
 					alert('Group Code Already Exists');
 					event.preventDefault();
 					return false;
@@ -196,14 +198,13 @@ function checkDuplicateEdit(frmid)
 				else if(count){
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
-					var $groupCode1 = $("#groupCode").val();	
-					var $groupName1 = $('#groupName').val();
-					var $groupHeadId1 =$('#groupHeadId').val();
+					
 					if($groupCode1==null || $groupCode1==""||$groupCode1=="null"|| $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
 						alert('Enter Data Properly');
 						
 						return false;
 					}else{
+						
 						$('#'+frmid).submit();
 						return true;
 					}	

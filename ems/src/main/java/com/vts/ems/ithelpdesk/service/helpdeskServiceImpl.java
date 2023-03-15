@@ -3,6 +3,7 @@ package com.vts.ems.ithelpdesk.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,8 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.ithelpdesk.dao.helpdeskDao;
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
+import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 
@@ -42,55 +46,40 @@ public class helpdeskServiceImpl implements helpdeskService {
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	
 	@Override
-	public List<Object[]> getHelpDeskList(String empno) throws Exception {
+	public List<Object[]> getHelpDeskList(String empno,String fromDate, String toDate) throws Exception {
 		
-		return dao.getHelpDeskList(empno);
+		return dao.getHelpDeskList(empno,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
-
 	
-
-
-	@Override
-	public long saveTicket(itheldeskdto dto, String userId) throws Exception {
+    @Override
+	public long saveTicket(itheldeskdto dto, String userId,String EmpNo) throws Exception {
 		
 		MultipartFile FormFile = dto.getFormFile();
-		System.out.println("path"+FormFile);
-		
 		LocalDate today= LocalDate.now();
 		String start="";
 		start=String.valueOf(today.getYear());
-		System.out.println("yearrrr"+start);
-		
 		
 		long maxTicketId = dao.MaxOfEmsTicketId()+1;
 		String storagePath="";
 		String TicketNumber="";
-		
 		try {
 		while(new File(FilePath+"//Ticketfiles//Ticket-"+maxTicketId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
 		{
 			maxTicketId++;
 		}
-		
 		if(!FormFile.getOriginalFilename().toString().equals("")) {
 		saveFile(FilePath+"//Ticketfiles//","Ticket-"+maxTicketId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);}
-		
 		if(!FormFile.getOriginalFilename().toString().equals(""))
 		{	
 			storagePath="//Ticketfiles//Ticket-"+maxTicketId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
-			}
-		
-		
+		}
 		TicketNumber="IT"+start+"-"+maxTicketId;
-		System.out.println("ticketnumber-------"+TicketNumber);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			return 0;
 		}
-
 		
-
 		HelpdeskTicket desk =HelpdeskTicket.builder()
 				.TicketCategoryId(Integer.parseInt(dto.getTicketCategoryId()))
 				.TicketNo(TicketNumber)
@@ -107,9 +96,27 @@ public class helpdeskServiceImpl implements helpdeskService {
 				.CreatedDate(sdf1.format(new Date()))
 				.build();
 			
-				
-				
 		
+		List <Object[]> notifyto = dao.SendNotification("A");
+		int i=0;
+	    for( Object[] obj : notifyto ){
+			
+		EMSNotification notify = new EMSNotification();
+		notify.setEmpNo((obj[i].toString()));
+	    notify.setNotificationUrl("TicketPending.htm");
+		notify.setNotificationMessage("Ticket Raised");
+		
+		if(desk.getTicketStatus()=="I" & notify.getEmpNo()!=null)
+		{
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy((EmpNo));
+			notify.setIsActive(1);
+			notify.setCreatedBy(userId);
+			notify.setCreatedDate(sdf1.format(new Date()));
+			dao.NotificationAdd(notify);
+		}
+	
+	}
 		return  dao.saveTicket(desk);
 		
 	}
@@ -118,7 +125,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		logger.info(new Date() +"Inside SERVICE saveFile ");
 	    Path uploadPath = Paths.get(FilePath);
-	    System.out.println("path"+uploadPath);
+	   
 	          
 	    if (!Files.exists(uploadPath)) {
 	    	Files.createDirectories(uploadPath);
@@ -127,9 +134,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	       
 	    try (InputStream inputStream = multiparfile.getInputStream()) {
 	    	Path filePath = uploadPath.resolve(FileName);
-	    	
-	    	System.out.println("savepath"+filePath);
-	        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+	    	Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException ioe) {       
 	    	throw new IOException("Could not save image file: " + FileName, ioe);
 	    }     
@@ -233,17 +238,33 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long assignedTicket(itheldeskdto dto) throws Exception {
+	public long assignedTicket(itheldeskdto dto,String userId,String EmpNo,String s2) throws Exception {
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-				
-				desk.setTicketId(Long.parseLong(dto.getTicketId()));
+		 
+		        desk.setTicketId(Long.parseLong(dto.getTicketId()));
 				desk.setAssignedTo(dto.getAssignedTo());
 				desk.setPriority(dto.getPriority());
 				desk.setAssignedDate(sdf1.format(new Date()));
 				desk.setTicketStatus("A");
-			   desk.setAssignedBy(dto.getAssignedBy());
-			
+			    desk.setAssignedBy(dto.getAssignedBy());
+			    
+			    EMSNotification notify = new EMSNotification();
+				List<Object[]> notifyto = dao.SendNotification(s2);
+				
+			    notify.setEmpNo(dto.getAssignedTo());
+				notify.setNotificationUrl("TicketRecieved.htm");
+				notify.setNotificationMessage("Ticket Assigned");
+				
+			   if(desk.getTicketStatus()=="A" & notify.getEmpNo()!=null)
+				{
+					notify.setNotificationDate(LocalDate.now().toString());
+					notify.setNotificationBy((EmpNo));
+					notify.setIsActive(1);
+					notify.setCreatedBy(userId);
+					notify.setCreatedDate(sdf1.format(new Date()));
+					dao.NotificationAdd(notify);
+				}
 				
 		return dao.assignedTicket(desk);
 		
@@ -265,11 +286,9 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long reAssignedTicket(itheldeskdto dto) throws Exception {
-		
+	public long reAssignedTicket(itheldeskdto dto,String userId,String EmpNo,String s2) throws Exception {
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-		
 		desk.setTicketId(Long.parseLong(dto.getTicketId()));
 		desk.setAssignedTo(dto.getAssignedTo());
 		desk.setAssignedDate(sdf1.format(new Date()));
@@ -277,10 +296,22 @@ public class helpdeskServiceImpl implements helpdeskService {
 		desk.setTicketStatus("A");
 	    desk.setAssignedBy(dto.getAssignedBy());
 	
+	    EMSNotification notify = new EMSNotification();
+		List<Object[]> notifyto = dao.SendNotification(s2);
+		notify.setEmpNo(dto.getAssignedTo());
+		notify.setNotificationUrl("TicketRecieved.htm");
+		notify.setNotificationMessage("Ticket Assigned");
 		
-       return dao.reAssignedTicket(desk);
-		
-		
+		if(desk.getTicketStatus()=="A" & notify.getEmpNo()!=null)
+		{
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(EmpNo);
+			notify.setIsActive(1);
+			notify.setCreatedBy(userId);
+			notify.setCreatedDate(sdf1.format(new Date()));
+			dao.NotificationAdd(notify);
+		}
+	   return dao.reAssignedTicket(desk);
 	}
 
 	@Override
@@ -289,19 +320,36 @@ public class helpdeskServiceImpl implements helpdeskService {
 		return dao.getRecievedList(empno);
 	}
 
-	
-
 	@Override
-	public long ForwardTicket(itheldeskdto dto) throws Exception {
+	public long ForwardTicket(itheldeskdto dto,String userId,String EmpNo) throws Exception {
 		
-       HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-		
+        HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		desk.setTicketId(Long.parseLong(dto.getTicketId()));
 		desk.setCWRemarks(dto.getCWRemarks());
 		desk.setForwardedDate(sdf1.format(new Date()));
-		 desk.setTicketStatus("F");
+		desk.setTicketStatus("F");
 		 
-	     return dao.ForwardTicket(desk);
+		 List <Object[]> notifyto = dao.SendNotification("A");
+			int i=0;
+		    for( Object[] obj : notifyto ){
+				
+			EMSNotification notify = new EMSNotification();
+			
+			notify.setEmpNo((obj[i].toString()));
+		    notify.setNotificationUrl("TicketForwarded.htm");
+			notify.setNotificationMessage("Ticket Forwarded");
+			
+			if(desk.getTicketStatus()=="F" & notify.getEmpNo()!=null)
+			{
+				notify.setNotificationDate(LocalDate.now().toString());
+				notify.setNotificationBy((EmpNo));
+				notify.setIsActive(1);
+				notify.setCreatedBy(userId);
+				notify.setCreatedDate(sdf1.format(new Date()));
+				dao.NotificationAdd(notify);
+			}
+		 }
+		 return dao.ForwardTicket(desk);
 	}
 
 	@Override
@@ -311,17 +359,31 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
 	@Override
-	public long ReturnTicket(itheldeskdto dto) throws Exception {
+	public long ReturnTicket(itheldeskdto dto,String userId,String EmpNo,String s2) throws Exception {
 		
 		 HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-			
 			desk.setTicketId(Long.parseLong(dto.getTicketId()));
 			desk.setARemarks(dto.getARemarks());
 			desk.setReturneddate(sdf1.format(new Date()));
 			desk.setAssignedBy(dto.getAssignedBy());
-			 desk.setTicketStatus("R");
+			desk.setTicketStatus("R");
 			 
-		     return dao.ReturnTicket(desk);
+			 EMSNotification notify = new EMSNotification();
+				List<Object[]> notifyto = dao.SendNotification(s2);
+				 notify.setEmpNo(s2);
+				notify.setNotificationUrl("TicketRecieved.htm");
+				notify.setNotificationMessage("Ticket Returned");
+				
+				 if(desk.getTicketStatus()=="R" & notify.getEmpNo()!=null)
+				{
+					notify.setNotificationDate(LocalDate.now().toString());
+					notify.setNotificationBy((EmpNo));
+					notify.setIsActive(1);
+					notify.setCreatedBy(userId);
+					notify.setCreatedDate(sdf1.format(new Date()));
+					dao.NotificationAdd(notify);
+				}
+			 return dao.ReturnTicket(desk);
 	}
 
 	@Override
@@ -329,47 +391,51 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		return dao.getReturnedList();
 	}
-
-
-
-
-	@Override
+    @Override
 	public List<Object[]> getCategoryList() throws Exception {
 		
 		return dao.getCategoryList();
 	}
 
-
-
-
-	@Override
+   @Override
 	public List<Object[]> getSubCategoryList(String CategoryId) throws Exception {
 		
 		return dao.getSubCategoryList(CategoryId);
 	}
-
-
-
-
-	@Override
-	public long closeTicket(itheldeskdto dto) throws Exception {
+    @Override
+	public long closeTicket(itheldeskdto dto,String userId,String EmpNo,String s2) throws Exception {
 		
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-		
 		desk.setTicketId(Long.parseLong(dto.getTicketId()));
 		desk.setFeedBackRequired(dto.getFeedBackRequired());
 		desk.setClosedDate(sdf1.format(new Date()));
 		desk.setClosedBy(dto.getClosedBy());
-		 desk.setTicketStatus("C");
+		desk.setTicketStatus("C");
+		 
+		EMSNotification notify = new EMSNotification();
+		List<Object[]> notifyto = dao.SendNotification("U");
+		notify.setEmpNo((s2));
+		notify.setNotificationUrl("ITTicketList.htm");
+		notify.setNotificationMessage("Ticket Closed");
+		
+		if(desk.getTicketStatus()=="C" & notify.getEmpNo()!=null)
+		{
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(EmpNo);
+			notify.setIsActive(1);
+			notify.setCreatedBy(userId);
+			notify.setCreatedDate(sdf1.format(new Date()));
+			dao.NotificationAdd(notify);
+		}
 		 
 	     return dao.closeTicket(desk);
 	}
 
 
 	@Override
-	public List<Object[]> getClosedList() throws Exception {
+	public List<Object[]> getClosedList(String fromDate, String toDate) throws Exception {
 		
-		return dao.getClosedList();
+		return dao.getClosedList(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
 	
    @Override
@@ -379,25 +445,30 @@ public class helpdeskServiceImpl implements helpdeskService {
 	}
 
   @Override
-  public long savefeedback(itheldeskdto dto) throws Exception {
+  public long savefeedback(itheldeskdto dto,String userId,String EmpNo,String s2) throws Exception {
 	
 	  HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
-		
-		desk.setTicketId(Long.parseLong(dto.getTicketId()));
-		
 		desk.setFeedback(dto.getFeedback());
 		 desk.setTicketStatus("C");
 		 
+		 EMSNotification notify = new EMSNotification();
+			List<Object[]> notifyto = dao.SendNotification("A");
+			
+		    notify.setEmpNo(s2);
+			notify.setNotificationUrl("TicketClosed.htm");
+			notify.setNotificationMessage("Feedback Submitted");
+			desk.setTicketId(Long.parseLong(dto.getTicketId()));
+			if(desk.getTicketStatus()=="C" & notify.getEmpNo()!=null)
+			{
+				notify.setNotificationDate(LocalDate.now().toString());
+				notify.setNotificationBy(EmpNo);
+				notify.setIsActive(1);
+				notify.setCreatedBy(userId);
+				notify.setCreatedDate(sdf1.format(new Date()));
+				dao.NotificationAdd(notify);
+			}
+		 
 	     return dao.savefeedback(desk);
-  }
-
-
-
-
-     @Override
-     public List<Object[]> getTicketRaisedDetails(String empNo, String fromDate, String toDate) throws Exception {
-	
-	return dao.getTicketRaisedDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
   }
 
      
@@ -406,33 +477,138 @@ public class helpdeskServiceImpl implements helpdeskService {
      	
      	return dao.getTicketCategoryList();
      }
-
-
-
-
      @Override
      public Long TicketCategoryAdd(HelpdeskCategory helpdeskCategory) throws Exception {
      	
      	return dao.TicketCategoryAdd(helpdeskCategory);
      }
-
-
-
-
      @Override
      public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception {
-     	
-     	return dao.TicketCategoryEdit(helpdeskCategory);
+    	 HelpdeskCategory hc = dao.getTicketCategoryById(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategoryId(helpdeskCategory.getTicketCategoryId());
+    	 hc.setTicketCategory(helpdeskCategory.getTicketCategory());
+    	 hc.setModifiedBy(helpdeskCategory.getModifiedBy());
+    	 hc.setModifiedDate(helpdeskCategory.getModifiedDate());
+    	 
+     	return dao.TicketCategoryEdit(hc);
      }
-
-
-
-
-     @Override
+    @Override
      public HelpdeskCategory getTicketCategoryById(Long tcId) throws Exception {
      	
      	return dao.getTicketCategoryById(tcId);
      }
 
+	@Override
+	public List<Object[]> getSubCategoryList() throws Exception {
+		
+		return dao.getSubCategoryList();
+	}
+    
+	@Override
+	 public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception {
+		
+		return dao.ticketCategoryDuplicateAddCheck(ticketCategory);
+	 }
+    
+    @Override
+	public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId, String ticketCategory)throws Exception {
+		
+		return dao.ticketCategoryDuplicateEditCheck(ticketCategoryId, ticketCategory);
+	}
+    
+	@Override
+	public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.TicketSubCategoryAdd(helpdeskSubCategory);
+	}
+    @Override
+	public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
+		HelpdeskSubCategory hsc = dao.getTicketSubCategoryById(helpdeskSubCategory.getTicketSubCategoryId());
+		hsc.setTicketSubCategory(helpdeskSubCategory.getTicketSubCategory());
+		hsc.setTicketCategoryId(helpdeskSubCategory.getTicketCategoryId());
+		hsc.setModifiedBy(helpdeskSubCategory.getModifiedBy());
+		hsc.setModifiedDate(helpdeskSubCategory.getModifiedDate());
+		return dao.TicketSubCategoryEdit(hsc);
+	}
+    @Override
+	public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception {
+		
+		return dao.getTicketSubCategoryById(tscId);
+	}
+    @Override
+	public List<Object[]> getTicketSubCategoryList() throws Exception {
+		
+		return dao.getTicketSubCategoryList();
+	}
+    @Override
+	public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateAddCheck(ticketCategoryId,ticketCategory);
+	}
+    @Override
+	public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId, String ticketCategory)throws Exception {
+		
+		return dao.ticketSubCategoryDuplicateEditCheck(ticketSubCategoryId,ticketCategoryId, ticketCategory);
+	}
 
- }
+    @Override
+	public List<Object[]> getEmployeeList() throws Exception {
+		
+		return dao.getEmployeeList();
+	}
+    @Override
+	public List<Object[]> getContractEmployee() throws Exception {
+		
+		return dao.getContractEmployee();
+	}
+    @Override
+	public List<Object[]> getHelpDeskEmployeeList() throws Exception {
+		
+		return dao.getHelpDeskEmployeeList();
+	}
+    @Override
+	public long EmployeeAddSubmit(HelpDeskEmployee employee) throws Exception {
+		
+		return dao.EmployeeAddSubmit(employee);
+	}
+   @Override
+	public long EmployeeDelete(String helpDeskEmpId) throws Exception {
+		
+		return dao.EmployeeDelete(helpDeskEmpId);
+	}
+   @Override
+	public long Employeeupdate(HelpDeskEmployee employee) throws Exception {
+	
+	 HelpDeskEmployee he=dao.getHelpDeskEmployeeList(employee.getHelpDeskEmpId());
+		he.setHelpDeskEmpId(employee.getHelpDeskEmpId());
+   	    he.setValidTill(employee.getValidTill());
+   	    he.setModifiedBy(employee.getModifiedBy());
+   	    he.setModifiedDate(employee.getModifiedDate());
+		return dao.getEmployeeupdate(he);
+	}
+
+   @Override
+	public List<Object[]> getTicketReturnedList(String ticketId) throws Exception {
+		
+		return dao.getTicketReturnedList(ticketId);
+	}
+
+	@Override
+	public Object[] IThelpdeskDashboardCountData(String empNo,String logintype,String fromDate, String toDate ) throws Exception {
+		
+		return dao.IThelpdeskDashboardCountData(empNo,logintype,sdf.format(rdf.parse(fromDate)), sdf.format(rdf.parse(toDate)));
+	  }
+   
+    @Override
+	public List<Object[]> IThelpdeskDashboardGraphData(String fromDate, String toDate) throws Exception {
+		
+		return dao.IThelpdeskDashboardGraphData(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
+	}
+
+	@Override
+	public List<Object[]> IThelpdeskDashboardPieChartData(String fromDate, String toDate) throws Exception {
+		
+		return dao.IThelpdeskDashboardPieChartData(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
+	}
+	
+}

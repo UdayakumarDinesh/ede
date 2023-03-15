@@ -490,6 +490,7 @@ public class MasterServiceImpl implements MasterService {
 			department.setDivisionCode(dep.getDivisionCode());
 			department.setDivisionName(dep.getDivisionName());
 			department.setDivisionHeadId(dep.getDivisionHeadId());
+			department.setGroupId(dep.getGroupId());
 			department.setModifiedBy(dep.getModifiedBy());
 			department.setModifiedDate(dep.getModifiedDate());
 			return dao.updateDepartment(department);
@@ -535,7 +536,14 @@ public class MasterServiceImpl implements MasterService {
 		@Override
 		public int editDivisionGroup(DivisionGroup divisionGroup) throws Exception {
 			
-			return dao.divisionGroupEdit(divisionGroup);
+			DivisionGroup divgrp =dao.getDivisionGroupById(divisionGroup.getGroupId()) ;
+			divgrp.setGroupId(divisionGroup.getGroupId());
+			divgrp.setGroupCode(divisionGroup.getGroupCode());
+			divgrp.setGroupName(divisionGroup.getGroupName());
+			divgrp.setGroupHeadId(divisionGroup.getGroupHeadId());
+			divgrp.setModifiedBy(divisionGroup.getModifiedBy());
+			divgrp.setModifiedDate(divisionGroup.getModifiedDate());
+			return dao.divisionGroupEdit(divgrp);
 		}
 
 		@Override
@@ -555,16 +563,19 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		@Override
-		public Object[] checkDuplicate(String groupCode) throws Exception {
+		public BigInteger checkAddDuplicate(String groupCode) throws Exception {
 			
-			logger.info(new Date() +"Inside SERVICE DesignationAddCheck ");
-			Object[] returnobj=new Object[1];
-			returnobj[0]=dao.getDuplicateCount(groupCode)[0].toString();
-			return returnobj;
+			return dao.getDuplicateCount(groupCode);
 		}
 		@Override
 		public List<Object[]> getGroupList() throws Exception {
 			
 			return dao.getGroupList();
+		}
+
+		@Override
+		public BigInteger getDuplicateCountEdit(String groupId,String groupCode) throws Exception {
+			
+			return dao.getDuplicateCountEdit(groupId,groupCode);
 		}
 }

@@ -1,8 +1,6 @@
 package com.vts.ems.ithelpdesk.model;
 
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +10,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name="helpdesk_category")
  public class HelpdeskCategory {
@@ -23,11 +21,9 @@ import lombok.Setter;
 		private long TicketCategoryId;
 		private String TicketCategory;
 		private String  CreatedBy;
-		private Date  CreatedDate;
+		private String  CreatedDate;
 		private String  ModifiedBy;
-		private Date  ModifiedDate;
+		private String  ModifiedDate;
 		private int isActive;
-		
 	
-
 }

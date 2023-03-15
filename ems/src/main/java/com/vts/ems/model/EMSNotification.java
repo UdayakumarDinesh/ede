@@ -22,8 +22,8 @@ public class EMSNotification implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long NotificationId;
-	private Long EmpId;
-	private Long NotificationBy;
+	private String EmpNo;
+	private String NotificationBy;
 	private String NotificationDate;
 	private String NotificationMessage;
 	private String NotificationUrl;

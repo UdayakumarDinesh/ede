@@ -20,12 +20,9 @@
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> ForwardedList=(List<Object[]>)request.getAttribute("TicketForwardedList");
 	
-
 %>
 
-
-
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Ticket Forwarded</h5>
@@ -40,9 +37,7 @@
 		</div>
 	</div>
 
-	
-		
-		  <div class="page card dashboard-card">
+	<div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -62,22 +57,19 @@
 	
 		<div class="card" >
 				<div class="card-body " >
-				
-					<form action="##" method="POST"  >
+				  <form action="##" method="POST"  >
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="" > 
 								<thead>
 									<tr>
-										<th style="width: 5%;">SN</th>
+										<th style="width: 3%;">SN</th>
 											<th style="width: 8%">Raised By</th>
 											<th style="width: 8%">Category</th>
-											<th style="width: 8%">Sub-Category</th>
 											<th style="width: 12%">Description</th>
-											<th style="width: 8%">Priority</th>
-											<th style="width: 9%;text-align: center;" >Raised Date</th>
+											<th style="width: 7%;text-align: center;" >Raised Date</th>
 											<th style="width: 10%;text-align: center;" >Forwarded By</th>
-											<th style="width: 9%;text-align: center;" >Forwarded Date</th>
+											<th style="width: 7%;text-align: center;" >Forwarded Date</th>
 											<th style="width: 10%" >Action</th>																	
 									</tr>
 								</thead>
@@ -89,51 +81,46 @@
 							<%int count=1; %>
 								<%for(Object[] fwrdlist:ForwardedList) {
 									String description=fwrdlist[5].toString();
-								
-									 
-									 
-								if(fwrdlist[13].toString().equalsIgnoreCase("F") )
-								{%>
-								
-								<tr>
-									<td style="width: 2%; text-align: center;"><%=count %></td>
+								   if(fwrdlist[13].toString().equalsIgnoreCase("F") )	{%>
+							    <tr>
+									<td style="width: 3%; text-align: center;"><%=count %></td>
 									<td style="width: 2%" ><%=fwrdlist[2] %></td>
 									<td style="width: 2%"><%=fwrdlist[8] %></td>
-									<td style="width: 2%"><%=fwrdlist[9] %></td>
 									<td style="width: 5%;word-wrap: break-word;word-break: break-all;white-space: normal !important;">
-									<%if(description.length()<90){%> <%=description%> <%}else{%><%=description.substring(0,90)%>
+									<%if(description.length()<30){%> <%=description%> <%}else{%><%=description.substring(0,30)%>
 								                 <button type="button" class="editable-click" style="border-style:none;" name="TicketId"  id="TicketId" value="<%=fwrdlist[0]%>" onclick="descmodal('<%=fwrdlist[0]%>')">
 													<b><span style="color:#1176ab;font-size: 14px;">......(View More)</span></b>
 										         </button>
 										         <%}%> 
 									</td>
-									<td style="width: 2%"><% if(fwrdlist[7].toString().equalsIgnoreCase("L")){%><%=Low %><%} else if(fwrdlist[7].toString().equalsIgnoreCase("M")){%><%=Medium %><%}else{%><%=High%><%} %></td>
-									<td style="width: 3%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[6].toString()))%></td>
-									
+									<td style="width: 2%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[6].toString()))%></td>
 									<td style="width: 2%"><%=fwrdlist[14] %></td>
-									<td style="width: 2%"><%=rdf.format(sdf.parse(fwrdlist[18].toString()))%></td>
+									<td style="width: 2%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[18].toString()))%></td>
 									<td style="width: 2%;text-align: center;" >
 									<%if(!fwrdlist[10].toString().equals("")) {%>
 									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=fwrdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-										
 										<%} %>
-										 <%-- <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="ForwardTicket('<%=fwrdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Forward">
-															<i class="fas fa-angle-double-right" style="color: black;"></i>
-														</button> 
-										 --%> <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeRemarks('<%=fwrdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Remarks">
-															<i class="fas fa-envelope" style="color: black;"></i>
-														</button> 
-														
-												<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"   onclick="ReturnTicket('<%=fwrdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Return">
+										                <input type="hidden" name="RaisedDate<%=fwrdlist[0]%>"  id="RaisedDate<%=fwrdlist[0]%>"   value="<%=rdf.format(sdf.parse(fwrdlist[6].toString())) %>" >
+														<input type="hidden" name="RaisedBy<%=fwrdlist[0]%>"  id="RaisedBy<%=fwrdlist[0]%>"   value="<%=fwrdlist[2] %>" >
+														<input type="hidden" name="Category<%=fwrdlist[0]%>"  id="Category<%=fwrdlist[0]%>"   value="<%=fwrdlist[8] %>" >
+														<input type="hidden" name="SubCategory<%=fwrdlist[0]%>"  id="SubCategory<%=fwrdlist[0]%>"   value="<%=fwrdlist[9] %>" >
+														<input type="hidden" name="ForwardedBy<%=fwrdlist[0]%>"  id="ForwardedBy<%=fwrdlist[0]%>"   value="<%=fwrdlist[14] %>" >
+														<input type="hidden" name="ForwardedDate<%=fwrdlist[0]%>"  id="ForwardedDate<%=fwrdlist[0]%>"   value="<%=rdf.format(sdf.parse(fwrdlist[18].toString()))%>" >
+														<input type="hidden" name="Priority<%=fwrdlist[0]%>"  id="Priority<%=fwrdlist[0]%>"   value="<%=fwrdlist[7] %>" >
+														<input type="hidden" name="Remarks<%=fwrdlist[0]%>"  id="Remarks<%=fwrdlist[0]%>"   value="<%=fwrdlist[17] %>" >
+														 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeDetails('<%=fwrdlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Forwarded Details">
+															<i class="fa fa-eye " style="color: black;"></i>
+														</button>
+										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>/<%=fwrdlist[12] %>"   onclick="ReturnTicket('<%=fwrdlist[0] %>','<%=fwrdlist[12] %>')"  data-toggle="tooltip" title="" data-original-title="Return">
 															<i class="fas fa-reply" style="color: black;"></i>
 														</button>		
 										 
-										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="CloseTicket('<%=fwrdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Close">
+										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>/<%=fwrdlist[1] %>"  onclick="CloseTicket('<%=fwrdlist[0] %>','<%=fwrdlist[1] %>')"  data-toggle="tooltip" title="" data-original-title="Close">
 															<i class="fas fa-close" style="color: red;"></i>
 														</button> 
-										 <input id="remarks<%=fwrdlist[0]%>" value="<%=fwrdlist[17]%>" type="hidden">
+										 <input id="remarks<%=fwrdlist[0]%>" value="<%=fwrdlist[17]%>" type="hidden"> 
 										 
 										<input type="hidden" name="TicketId" value="">
 										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -150,19 +137,13 @@
 								
 								</tbody>
 							</table>
-							
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
-					
-					
-					
-			   </form>		
+				</form>		
 			  </div>
 		   	 </div>				
 	        </div>
 	        </div>	
-		
-		
 		
 	<div class="modal fade" id="descmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70% !important;height: 40%;">
@@ -186,11 +167,11 @@
 		</div>
 		
 		
-		<div class="modal fade" id="SeeRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		 <div class="modal fade" id="SeeRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
 				<div class="modal-content" style="min-height: 45%;" >
 				    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374"> Remarks<!-- By <span id="feedby1"></span> --></h4>
+				    	<h4 class="modal-title" id="model-card-header" style="color: #145374"> RemarksBy <span id="feedby1"></span></h4>
 				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 				          <span aria-hidden="true">&times;</span>
 				         
@@ -204,7 +185,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> 
 		
 		
 		<div class="modal fade" id="returnticket" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -228,17 +209,14 @@
   	      		<div align="center">
   	      			<input type="submit" class="btn btn-md submit-btn "  value="Submit" name="action"  onclick="return confirm('Are You Sure To Submit ?')" > 
   	      		</div>
-  	      		<input type="hidden" name="TicketId2" id="TicketId2">
+  	      		<input type="hidden" name="TicketId2" id="TicketId2" value="">
+  	      		<input type="hidden" name="ReturnTo" id="ReturnTo" value="">
   	      		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   	      	</form>
   	      </div>
 				</div>
 			</div>
 		</div>
-		
-		
-		
-		
 		
 		 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="closeticket">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 31% ;height: 62% ;">
@@ -253,43 +231,87 @@
 				    </div>
 				<div class="modal-body" align="center" style="margin-top:-3px;">
 					<form action="TicketClose.htm" method="post" autocomplete="off"  >
-						
 						<table   style="width:100%">
-							
 							<tr>
-								
-							   <th style="width:16%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
-							   <td style="width:43%;" >
+								<th style="width:16%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
+							    <td style="width:43%;" >
 									<select class="form-control select2  "  name="Feedback"  required="required"  style="width:152px;" >
-													
-														
-														<option value="N">No</option>
+													   <option value="N">No</option>
 														<option value="Y">Yes</option>
-														
-									 </select>
+									</select>
 							</tr>
-							
 						</table>
 						<div align="center" style="margin-top:21px;" >
 								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit"  onclick="return confirm('Are You Sure To Close The Ticket ?')">Submit</button>
 									
 						</div>
 						<input type="hidden"  name="TicketId3" id="TicketId3" value="">
-						
-						
+						<input type="hidden"  name="EmpNo" id="EmpNo" value="">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					
-				
-						</form>
-					
+					</form>
 				</div>
-				
 			</div>
 		</div>
 	</div>
 		
-	
-		    
+	   <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="forwarded-details">
+		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
+			<div class="modal-content">
+					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
+				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Forwarded Details</h4>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				    </div> 
+				<div class="modal-body" align="center" style="margin-top:-4px;">
+					<form action="#" method="post" autocomplete="off"  >
+						<table style="width: 100%;">
+							
+							<tr>
+								<th style="padding: 5px;" >Raised By :</th>
+								<td style="padding: 5px;" id="raisedby"></td>
+								<th style="padding: 5px;width:20%;" >Raised Date :</th>
+								<td style="padding: 5px;width:20%;" id="raiseddate"></td>
+							</tr>
+							<tr>
+								<th style="padding: 5px;width:17%;" >Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="category"></td>
+								<th style="padding: 5px;width:23%;" >Sub-Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="subcategory"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:20%;" >Forwarded By :</th>
+								<td style="padding: 5px;" class="tabledata" id="forwardedby"></td>
+								<th style="padding: 5px;width:22%;" >Forwarded Date :</th>
+								<td style="padding: 5px;" class="tabledata"  id="forwardeddate"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:17%;" > Priority :</th>
+								<td style="padding: 5px;" class="tabledata" id="priority"></td>
+							    
+							</tr>
+							<tr><th><hr style="width:500%;"/></th></tr>
+							<tr >
+							    <th style="padding: 5px;" > Remarks :</th>
+								<td style="padding: 5px;width:20%;word-wrap:break-word;color:red;" colspan="3" class="tabledata" id="remarks"></td>
+						         
+							</tr>
+						</table>
+						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+				</form>
+						
+						
+				 	       
+					
+			</div>
+				
+		</div>
+	</div>
+</div>
 		   
 </body>
 <script type="text/javascript">
@@ -330,16 +352,19 @@ function SeeRemarks(TicketId)
 	$("#REMARKS").html($("#remarks"+TicketId).val());
 }
 
-function ReturnTicket(TicketId2)
+function ReturnTicket(TicketId2,ReturnTo)
 {
 	$("#TicketId2").val(TicketId2);
+	$("#ReturnTo").val(ReturnTo);
 	$('#returnticket').modal('toggle');
 }
 
-function CloseTicket(TicketId3)
+function CloseTicket(TicketId3,EmpNo)
 
 {
+	
 	$("#TicketId3").val(TicketId3);
+	$("#EmpNo").val(EmpNo);
 	$('#closeticket').modal('toggle');
 
 }
@@ -357,6 +382,42 @@ $("#Returnremarks").on('submit', function (e) {
 		  return true;
 	  }  
 }); 
+
+
+function SeeDetails(TicketId)
+{
+	
+	$("#TicketId").val(TicketId);
+	
+	 $('#raisedby').html($('#RaisedBy'+TicketId).val())
+	 $('#raiseddate').html($('#RaisedDate'+TicketId).val())
+	$('#category').html($('#Category'+TicketId).val())
+	$('#subcategory').html($('#SubCategory'+TicketId).val())
+	$('#forwardedby').html($('#ForwardedBy'+TicketId).val())
+	$('#forwardeddate').html($('#ForwardedDate'+TicketId).val())
+	
+	var type=$('#Priority'+TicketId).val()
+	 if(type=="L")
+    {
+	   L="Low"
+	   $('#priority').html(L);
+	}
+   if(type=="M")
+   {
+	   M="Medium"
+	   $('#priority').html(M);
+   }
+   if(type=="H")
+   {
+	   H="High"
+	   $('#priority').html(H);
+   }
+   
+	   $('#remarks').html($('#Remarks'+TicketId).val())
+     
+   
+    $('#forwarded-details').modal('toggle'); 
+}
 
 
 </script>

@@ -1443,7 +1443,7 @@ public class PisDaoImpl implements PisDao {
 		return result;
 	}
 	
-	private static final String EMPLOYEERESADDR="SELECT empid,res_addr,mobile,landline FROM pis_address_res WHERE  empid= :empid AND isactive=1 ORDER BY from_res_addr DESC LIMIT 1;";
+	private static final String EMPLOYEERESADDR="SELECT empid,res_addr,mobile,landline, city, state, pin FROM pis_address_res WHERE  empid= :empid AND isactive=1 ORDER BY from_res_addr DESC LIMIT 1;";
 	
 	@Override
 	public  Object[] employeeResAddr(String empid) throws Exception
@@ -3078,19 +3078,52 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			return null;
 		}
 	}
-private static final String FORMDECYEAR="SELECT COUNT(FamilyFormId) FROM pis_emp_family_form WHERE YEAR(ForwardedDateTime)=:year and FormType='D' AND empid=:EmpId and IsActive=1";
+	
+	private static final String FORMDECYEAR="SELECT ed.empno,ed.annualdec FROM employee e,employee_details ed WHERE e.empno=ed.empno AND e.empid=:EmpId ";
 	@Override
-	public BigInteger getFormYear(int year,Long empId) throws Exception {
+	public Object[] getFormYear(Long empId) throws Exception {
 		try {
 			Query query = manager.createNativeQuery(FORMDECYEAR);
-			query.setParameter("year", year);
 			query.setParameter("EmpId", empId);
-			BigInteger count=(BigInteger) query.getSingleResult();
-			return count;
+			return (Object[] ) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}	
 	}
+	
+	
+	private static final String DISALLOWANNUALDECLARATION="UPDATE  employee e,employee_details ed SET ed.AnnualDec =:status  WHERE e.empno=ed.empno AND e.empid=:Empid";
+	@Override
+	public int ChangeAnnualDeclarationStatus(String Empid,String status) throws Exception 
+	{
+		try {
+			Query query = manager.createNativeQuery(DISALLOWANNUALDECLARATION);
+			query.setParameter("Empid", Empid);
+			query.setParameter("status", status);
+			return query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO DisallowAnnualDeclaration "+e);
+			return 0;
+		}
+		
+	}
+	
+	
+	private static final String UPDATEANNUALDECLARATIONALLEMP="UPDATE employee_details SET AnnualDec = :status WHERE isactive=1";
+	@Override
+	public void UpdateAnnualDeclarationAllEmp(String status) throws Exception 
+	{
+		try {
+			Query query = manager.createNativeQuery(UPDATEANNUALDECLARATIONALLEMP);
+			query.setParameter("status", status);
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO UpdateAnnualDeclarationAllEmp "+e);
+		}	
+	}
+	
 }
 	

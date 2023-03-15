@@ -25,7 +25,6 @@ public class HelpdeskTicket implements Serializable {
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
 	private long TicketId;
-	//private int EmpId;
 	private String TicketNo;
 	private  String RaisedBy;
 	private String  RaisedDate;
@@ -52,7 +51,5 @@ public class HelpdeskTicket implements Serializable {
 	private String  ModifiedBy;
 	private String  ModifiedDate;
 	private int isActive;
-	
-	
-	
+
 }

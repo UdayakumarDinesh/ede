@@ -11,14 +11,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-
-
 public class itheldeskdto {
 	
 	
 	//private int    TicketId;
 	private String  TicketId;
 	private String  EmpNo;
+	private String LoginType;
 	private String  TicketCategoryId;
 	private String  TicketSubCategoryId;
 	private String     RaisedBy;

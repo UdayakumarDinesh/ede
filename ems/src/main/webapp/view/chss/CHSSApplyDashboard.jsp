@@ -443,7 +443,7 @@
 													<i class="fa-solid fa-trash-can " style="color: red"></i>
 												</button>
 												<%} %>
-											<% } %>
+											<%} %>
 												
 											<button type="submit" class="btn btn-sm view-icon" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSFormEdit.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 												<i class="fa-solid fa-eye"></i>

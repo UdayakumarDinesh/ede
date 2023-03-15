@@ -1,16 +1,18 @@
 package com.vts.ems.ithelpdesk.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
+import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
+import com.vts.ems.model.EMSNotification;
 
 
 public interface helpdeskDao {
 
-	    List<Object[]> getHelpDeskList(String empno) throws Exception;
+	    public List<Object[]> getHelpDeskList(String empno,String fromDate, String toDate) throws Exception;
         long saveTicket(HelpdeskTicket desk) throws Exception;
         public HelpdeskTicket GetTicketId(String ticketId) throws Exception;
         public HelpdeskTicket GetTicket(String ticketId) throws Exception;
@@ -32,15 +34,34 @@ public interface helpdeskDao {
         public List<Object[]> getCategoryList() throws Exception;
         public List<Object[]> getSubCategoryList(String categoryId)throws Exception;
         public long closeTicket(HelpdeskTicket desk) throws Exception;
-        public List<Object[]> getClosedList() throws Exception;
+        public List<Object[]> getClosedList(String fromDate, String toDate) throws Exception;
         public List<Object[]> getTicketClosedList(String ticketId) throws Exception;
         public long savefeedback(HelpdeskTicket desk) throws Exception;
-        public List<Object[]> getTicketRaisedDetails(String empNo, String fromDate, String toDate);
         public Long TicketCategoryAdd(HelpdeskCategory helpdeskCategory) throws Exception;
         public Long TicketCategoryEdit(HelpdeskCategory helpdeskCategory) throws Exception;
         public HelpdeskCategory getTicketCategoryById(Long tcId) throws Exception;
         public List<Object[]> getTicketCategoryList() throws Exception;
-	
-
-
+        public BigInteger ticketCategoryDuplicateAddCheck(String ticketCategory) throws Exception;
+	    public BigInteger ticketCategoryDuplicateEditCheck(String ticketCategoryId,String ticketCategory) throws Exception;
+	    public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception;
+	    public Long TicketSubCategoryEdit(HelpdeskSubCategory helpdeskSubCategory) throws Exception;
+	    public HelpdeskSubCategory getTicketSubCategoryById(Long tscId) throws Exception;
+	    public List<Object[]> getTicketSubCategoryList() throws Exception;
+	    public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception;
+	    public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId,String ticketCategory) throws Exception;
+        public List<Object[]> getEmployeeList()throws Exception;
+		public List<Object[]> getContractEmployee() throws Exception;
+		public List<Object[]> getHelpDeskEmployeeList() throws Exception;
+		public long EmployeeAddSubmit(HelpDeskEmployee employee)throws Exception;
+		public long EmployeeDelete(String helpDeskEmpId) throws Exception;
+		public HelpDeskEmployee getHelpDeskEmployeeList(Long helpDeskEmpId) throws Exception;
+		public long getEmployeeupdate(HelpDeskEmployee he);
+		public List<Object[]> getSubCategoryList() throws Exception;
+		public List<Object[]> getTicketReturnedList(String ticketId) throws Exception;
+		public Object[] IThelpdeskDashboardCountData(String empNo,String logintype,String fromDate, String toDate) throws Exception;
+		public List<Object[]> IThelpdeskDashboardGraphData(String fromDate, String toDate) throws Exception;
+		public List<Object[]> IThelpdeskDashboardPieChartData(String fromDate, String toDate)throws Exception;
+		public long NotificationAdd(EMSNotification notification) throws Exception;
+		public List<Object[]> SendNotification(String Logintype) throws Exception;
+	        
 }

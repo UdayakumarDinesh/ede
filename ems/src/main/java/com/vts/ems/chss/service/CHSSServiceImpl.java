@@ -1120,9 +1120,10 @@ public class CHSSServiceImpl implements CHSSService {
 	
 	
 	@Override
-	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
+	public long CHSSUserForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String EmpNo,String LoginType) throws Exception 
 	{
 		logger.info(new Date() +"Inside SERVICE CHSSUserForward ");
+		
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
 		EMSNotification notify = new EMSNotification();
@@ -1148,9 +1149,9 @@ public class CHSSServiceImpl implements CHSSService {
 				claim.setPOAcknowledge(0);
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo((notifyto[0].toString()));
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo((notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				
@@ -1165,9 +1166,9 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo((notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				claim.setPOId(Long.parseLong(EmpId));
@@ -1193,7 +1194,7 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				claim.setCHSSStatusId(3);
 			
-				notify.setEmpId(claim.getEmpId());
+				notify.setEmpNo(claim.getEmpId().toString());
 				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
 				notify.setNotificationUrl("CHSSApplyDashboard.htm");
@@ -1206,9 +1207,9 @@ public class CHSSServiceImpl implements CHSSService {
 				claim.setCHSSStatusId(5);
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo((notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				notify.setNotificationUrl("CHSSApprovalsList.htm");
@@ -1229,10 +1230,10 @@ public class CHSSServiceImpl implements CHSSService {
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.CHSSApplyTransactionAdd(transac);
 		
-		if(claim.getCHSSStatusId()!=6 && notify.getEmpId()>0)
+		if(claim.getCHSSStatusId()!=6 && notify.getEmpNo()!=null)
 		{		
 			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(Long.parseLong(EmpId));
+			notify.setNotificationBy(EmpNo);
 			notify.setIsActive(1);
 			notify.setCreatedBy(Username);
 			notify.setCreatedDate(sdtf.format(new Date()));
@@ -1541,9 +1542,10 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long CHSSClaimsApprove(CHSSContingentDto dto) throws Exception 
+	public long CHSSClaimsApprove(CHSSContingentDto dto,String EmpNo) throws Exception 
 	{
 		logger.info(new Date() +"Inside SERVICE CHSSClaimsApprove ");
+		
 		long continid=0;		
 		CHSSContingent contingent = dao.getCHSSContingent(dto.getContingentid());
 		int continstatus = contingent.getContingentStatusId();
@@ -1553,7 +1555,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		notify.setNotificationUrl("ContingentApprovals.htm");
 		notify.setNotificationDate(LocalDate.now().toString());
-		notify.setNotificationBy(Long.parseLong(dto.getEmpId()));
+		notify.setNotificationBy(EmpNo);
 		notify.setIsActive(1);
 		notify.setCreatedBy(dto.getUsername());
 		notify.setCreatedDate(sdtf.format(new Date()));
@@ -1573,10 +1575,10 @@ public class CHSSServiceImpl implements CHSSService {
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto==null) 
 				{
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else 
 				{
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo(notifyto[0].toString());
 					
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
@@ -1590,10 +1592,10 @@ public class CHSSServiceImpl implements CHSSService {
 				Object[] notifyto = dao.CHSSApprovalAuth("W");
 				if(notifyto==null) 
 				{
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else 
 				{
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo(notifyto[0].toString());
 					
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
@@ -1607,10 +1609,10 @@ public class CHSSServiceImpl implements CHSSService {
 				Object[] notifyto = dao.CHSSApprovalAuth("Z");
 				if(notifyto==null) 
 				{
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else 
 				{
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo(notifyto[0].toString());
 					
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
@@ -1626,10 +1628,10 @@ public class CHSSServiceImpl implements CHSSService {
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) 
 				{
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else 
 				{
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo(notifyto[0].toString());
 					
 					if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 				}
@@ -1683,10 +1685,10 @@ public class CHSSServiceImpl implements CHSSService {
 			Object[] notifyto = dao.CHSSApprovalAuth("K");
 			if(notifyto==null) 
 			{
-				notify.setEmpId(0L);
+				notify.setEmpNo(notifyto[0].toString());
 			}else 
 			{
-				notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+				notify.setEmpNo(notifyto[0].toString());
 				
 				if(notifyto[5]!=null &&  !notifyto[5].toString().equalsIgnoreCase("")) { 	Emaillist.add(notifyto[5].toString());		}
 			}
@@ -1747,7 +1749,7 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		
 		
-		if(notify.getEmpId()!=null && notify.getEmpId()>0) {
+		if( notify.getEmpNo()!=null) {
 			dao.NotificationAdd(notify);
 		}
 		
@@ -2157,7 +2159,7 @@ public class CHSSServiceImpl implements CHSSService {
 	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception
 	{
 		logger.info(new Date() +"Inside SERVICE ClaimDisputeSubmit ");
-		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		String EmpNo = ((String) ses.getAttribute("EmpNo"));
 		String Username = (String) ses.getAttribute("Username");
 		dispute.setRaisedTime(sdtf.format(new Date()));
 		dispute.setIsActive(1);
@@ -2171,7 +2173,7 @@ public class CHSSServiceImpl implements CHSSService {
 			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
 			notify.setNotificationUrl("ClaimDisputeList.htm");
 			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(EmpId);
+			notify.setNotificationBy(EmpNo);
 			notify.setIsActive(1);
 			notify.setCreatedBy(Username);
 			notify.setCreatedDate(sdtf.format(new Date()));
@@ -2179,13 +2181,13 @@ public class CHSSServiceImpl implements CHSSService {
 			
 			Object[] notifyto = dao.CHSSApprovalAuth("K");
 			if(notifyto==null) {
-				notify.setEmpId(0L);
+				notify.setEmpNo(notifyto[0].toString());
 			}else {
-				notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+				notify.setEmpNo((notifyto[0].toString()));
 				
 			}
 			
-			if(notify.getEmpId()!=null && notify.getEmpId()>0) {
+			if(notify.getEmpNo()!=null) {
 				dao.NotificationAdd(notify);
 			}
 		}
@@ -2198,6 +2200,7 @@ public class CHSSServiceImpl implements CHSSService {
 	{
 		logger.info(new Date() +"Inside SERVICE ClaimDisputeResponseSubmit ");
 		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		String EmpNo = ((String) ses.getAttribute("EmpNo"));
 		String Username = (String) ses.getAttribute("Username");
 		
 		CHSSApplyDispute dispute = dao.getCHSSApplyDispute(String.valueOf(modal.getCHSSApplyId()));
@@ -2215,13 +2218,13 @@ public class CHSSServiceImpl implements CHSSService {
 			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
 			notify.setNotificationUrl("CHSSApplyDashboard.htm");
 			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(EmpId);
+			notify.setNotificationBy(EmpNo);
 			notify.setIsActive(1);
 			notify.setCreatedBy(Username);
 			notify.setCreatedDate(sdtf.format(new Date()));
 			notify.setNotificationMessage("Response For Dispute Over Claim "+apply.getCHSSApplyNo()+"<br> Recieved");
 			
-			notify.setEmpId(apply.getEmpId());
+			notify.setEmpNo(apply.getEmpId().toString());
 			
 			dao.NotificationAdd(notify);
 		}
@@ -2999,9 +3002,10 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long CHSSUserIPDForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String LoginType) throws Exception 
+	public long CHSSUserIPDForward(String CHSSApplyId,String Username, String action,String remarks, String EmpId,String EmpNo,String LoginType) throws Exception 
 	{
 		logger.info(new Date() +"Inside SERVICE CHSSUserIPDForward ");
+		
 		CHSSApply claim = dao.getCHSSApply(CHSSApplyId);
 		int claimstatus = claim.getCHSSStatusId();
 		EMSNotification notify = new EMSNotification();
@@ -3028,9 +3032,9 @@ public class CHSSServiceImpl implements CHSSService {
 				claim.setPOAcknowledge(0);
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo(notifyto[0].toString());
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				
@@ -3045,9 +3049,9 @@ public class CHSSServiceImpl implements CHSSService {
 				
 				Object[] notifyto = dao.CHSSApprovalAuth("V");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo((notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				claim.setPOId(Long.parseLong(EmpId));
@@ -3073,7 +3077,7 @@ public class CHSSServiceImpl implements CHSSService {
 			{
 				claim.setCHSSStatusId(3);
 			
-				notify.setEmpId(claim.getEmpId());
+				notify.setEmpNo(claim.getEmpId().toString());
 				 Object[] emp= dao.getEmployee(claim.getEmpId().toString());				
 				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
 				notify.setNotificationUrl("CHSSApplyDashboard.htm");
@@ -3086,9 +3090,9 @@ public class CHSSServiceImpl implements CHSSService {
 				claim.setCHSSStatusId(5);
 				Object[] notifyto = dao.CHSSApprovalAuth("K");
 				if(notifyto==null) {
-					notify.setEmpId(0L);
+					notify.setEmpNo(notifyto[0].toString());
 				}else {
-					notify.setEmpId(Long.parseLong(notifyto[0].toString()));
+					notify.setEmpNo((notifyto[0].toString()));
 					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
 				}
 				notify.setNotificationUrl("CHSSIPDApprovalsList.htm");
@@ -3109,10 +3113,10 @@ public class CHSSServiceImpl implements CHSSService {
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.CHSSApplyTransactionAdd(transac);
 		
-		if(claim.getCHSSStatusId()!=6 && notify.getEmpId()>0)
+		if(claim.getCHSSStatusId()!=6 && notify.getEmpNo()!=null)
 		{		
 			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(Long.parseLong(EmpId));
+			notify.setNotificationBy((EmpNo));
 			notify.setIsActive(1);
 			notify.setCreatedBy(Username);
 			notify.setCreatedDate(sdtf.format(new Date()));

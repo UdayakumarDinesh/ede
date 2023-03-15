@@ -151,14 +151,14 @@ public class EmsDaoImpl implements EmsDao
 	}
 	
 	@Override
-	public List<EMSNotification> NotificationList(long EmpId)throws Exception
+	public List<EMSNotification> NotificationList(String EmpNo)throws Exception
 	{
 		try {
 			List<EMSNotification> notylist = null;
 			CriteriaBuilder cb = manager.getCriteriaBuilder();
 			CriteriaQuery<EMSNotification> cq= cb.createQuery(EMSNotification.class);
 			Root<EMSNotification> root= cq.from(EMSNotification.class);
-			Predicate p1 = cb.equal(root.get("EmpId"), EmpId);			
+			Predicate p1 = cb.equal(root.get("EmpNo"), EmpNo);			
 			Predicate p2 = cb.equal(root.get("IsActive"), 1);			
 			cq=cq.select(root).where(p1,p2);
 			TypedQuery<EMSNotification> allQuery = manager.createQuery(cq);

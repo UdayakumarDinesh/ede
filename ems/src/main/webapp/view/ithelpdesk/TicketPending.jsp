@@ -1,4 +1,4 @@
-<%@page import="java.text.SimpleDateFormat"%>
+ <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
      <%@page import="java.util.List"%>
      <%@page import="java.time.LocalDate"%>
@@ -15,18 +15,13 @@
 <body>
 <body>
 <%
-	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> PendingList=(List<Object[]>)request.getAttribute("TicketPendList");
 	List<Object[]> CaseWorkerList=(List<Object[]>)request.getAttribute("CaseworkerList");
 	
-	
 %>
-
-
-
-	<div class="card-header page-top">
+<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Ticket Pending List</h5>
@@ -41,10 +36,7 @@
 		</div>
 	</div>
 
-	
-		
-		
-		  <div class="page card dashboard-card">
+	 <div class="page card dashboard-card">
 	<div class="card-body" >		
 			<div align="center">
 		<%String ses=(String)request.getParameter("result"); 
@@ -82,7 +74,7 @@
 								</thead>
 								<tbody>
 									
-							<%int count=1; %>
+							    <%int count=1; %>
 								<%for(Object[] pendinglist:PendingList) {
 									String description=pendinglist[5].toString();
 								
@@ -109,6 +101,14 @@
 														</button>
 										
 										<%} %>
+										
+										<%if(pendinglist[10].toString().equalsIgnoreCase("R")) {%>
+										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=pendinglist[0]%>"  onclick="SeeDetails('<%=pendinglist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Returned Details">
+															<i class="fa fa-eye " style="color: black;"></i>
+														</button>
+														
+										
+										<%} %>
 										<%if(pendinglist[10].toString().equalsIgnoreCase("I")){ %>
 										<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=pendinglist[0]%>"  onclick="openModal('<%=pendinglist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Assign To">
 															<i class="fas fa-angle-double-right " style="color: black;"></i>
@@ -130,9 +130,7 @@
 							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						</div>
 					
-					
-					
-			   </form>		
+				</form>		
 			  </div>
 		   	 </div>				
 	        </div>
@@ -161,18 +159,10 @@
 			</div>
 		</div>
 	
-	
-		    
-		    <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
+	     <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% !important;height: 60% !important;">
 			<div class="modal-content">
-				
-					
-					 <!-- <button type="button" class="close" style="margin-left:530px;margin-top:-4px;color:red;" data-dismiss="modal" aria-label="Close"  data-toggle="tooltip"   data-original-title="Close">
-						<span aria-hidden="true">&times;</span>
-					</button> -->
-				 <!-- </div>  -->
-				<div class="modal-body" align="center" style="margin-top:-4px;">
+			  <div class="modal-body" align="center" style="margin-top:-4px;">
 					<form action="#" method="post" autocomplete="off"  >
 						<table style="width: 100%;">
 							
@@ -193,7 +183,6 @@
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="modal-Desc"></td>
 							</tr>
 							
-							
 						</table>
 						</form>
 						<hr>
@@ -205,7 +194,7 @@
 								<th style="width:23%;padding: 5px;">Assign To :&nbsp;<span class="mandatory" style="color: red;">*</span></th>
 								<td style="width:34%;" >
 										<select class="form-control select2 modal-select  "  name="AssignTo" id="assignto"  required="required" style="width:232px;" >
-													<option selected="selected" disabled="disabled">Choose..</option>
+													<!-- <option selected="selected" disabled="disabled">Choose..</option> -->
 										 </select>
 							   </td>
 							   <th style="width:16%;padding: 5px;">Priority :<span class="mandatory" style="color: red;">*</span></th>
@@ -221,31 +210,87 @@
 							
 						</table>
 						<div align="center" style="margin-top:10px;" >
-								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" onclick="CheckAll();"  >Submit</button>
+								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" onclick="return confirm('Are You Sure to Submit?');" >Submit</button>
 									
 						</div>
 						<input type="hidden"  name="TicketId1" id="TicketId1" value="">
-						
-						
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					
-				
-						</form>
+					</form>
 					
 				</div>
 				
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="returned-details">
+		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
+			<div class="modal-content">
+					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
+				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Returned Details</h4>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				    </div> 
+				<div class="modal-body" align="center" style="margin-top:-4px;">
+					<form action="#" method="post" autocomplete="off"  >
+						<table style="width: 100%;">
+							
+							<tr>
+								<th style="padding: 5px;" >Raised By :</th>
+								<td style="padding: 5px;" id="raisedby"></td>
+								<th style="padding: 5px;" >Raised Date :</th>
+								<td style="padding: 5px;" id="raiseddate"></td>
+							</tr>
+							<tr>
+								<th style="padding: 5px;width:17%;" >Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="category"></td>
+								<th style="padding: 5px;width:20%;" >Sub-Category :</th>
+								<td style="padding: 5px;" class="tabledata" id="subcategory"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:17%;" >Assigned By :</th>
+								<td style="padding: 5px;" class="tabledata" id="assignedby"></td>
+								<th style="padding: 5px" >Assigned Date :</th>
+								<td style="padding: 5px;" class="tabledata" id="assigneddate"></td>
+							</tr>
+							
+							<tr>
+								<th style="padding: 5px;width:17%;" > Returned To :</th>
+								<td style="padding: 5px;" class="tabledata" id="returnedto"></td>
+								 <th style="padding: 5px;width:20%;" > Returned Date :</th>
+								<td style="padding: 5px;" class="tabledata" > <span id="returneddate"></span> </td>
+							</tr>
+							<tr>
+								<th style="padding: 5px;width:17%;" > Priority :</th>
+								<td style="padding: 5px;" class="tabledata" id="Priority"></td>
+							</tr>
+							<tr><th><hr style="width:600%;"/></th></tr>
+							<tr >
+							    <th style="padding: 5px;" > Remarks :</th>
+								<td style="padding: 5px;width:18%;word-wrap:break-word;color:red;" colspan="3" class="tabledata" id="remarks"></td>
+						         
+							</tr>
+							 
+							 
+						</table>
+						  <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+					</form>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
 </body>
 <script type="text/javascript">
-
 
 function openModal(TicketId){
 	
 $("#TicketId").val(TicketId);
-	
-	
 	$.ajax({
 
 		type : "GET",
@@ -256,7 +301,7 @@ $("#TicketId").val(TicketId);
 		},
 		datatype : 'json',
 		success : function(result) {
-		/* var result1 = JSON.parse(result) */
+		
 		var result1 = $.parseJSON(result);
 		
 		$.each(result1, function(key, value) {
@@ -266,23 +311,7 @@ $("#TicketId").val(TicketId);
 			$('#modal-category').html(value[7]);
 			
 			$('#modal-subcategory').html(value[8]);
-			
-			
-			
-			 /* if(value[7]=="L"){
-				L="Low"
-				$("#modal-priority").html(L);	
-			} 
-			 if(value[7]=="M"){
-				M="Medium"
-				$('#modal-priority').html(M);	
-			}
-			 if(value[7]=="H"){
-				H="High"
-				$("#modal-priority").html(H);
-			} 
-			  */
-			 document.getElementById('TicketId1').value= value[0];
+		    document.getElementById('TicketId1').value= value[0];
 			
 		
 			  var d = new Date(value[6]),
@@ -296,14 +325,8 @@ $("#TicketId").val(TicketId);
 			    if (day.length < 2){ 
 			        day = '0' + day;}
 			    var demandDate=[day,month,year].join('-');
-			   // console.log("res     :"+demandDate);	
-			
-									   	    
-			$('#modal-raiseddate').html(demandDate);
-			$('#modal-Desc').html(value[5]);
-			
-			
-			
+			   $('#modal-raiseddate').html(demandDate);
+			  $('#modal-Desc').html(value[5]);
 		}
 		
 		);
@@ -323,15 +346,20 @@ $("#TicketId").val(TicketId);
 		datatype : 'json',
 		success : function(result) {
 		var result1 = JSON.parse(result);
-		console.log("caseworkerlist--"+result1);
-		
-		/* $('#modal-select').html(result1); */
 		var $select = $('.modal-select');
 		$select.find('option').remove();
 		 $('.modal-select').append("<option selected='selected' disabled='disabled'>Choose</option>");
 		 $.each(result1, function(key, value) {
 			 
-			 $('.modal-select').append("<option value='"+value[0]+"'>"+value[1]+"</option>");
+			 if(value[2]=="P"){
+			    $('.modal-select').append("<option value='"+value[0]+"/"+value[1]+"'>"+value[3]+"&emsp;("+value[5]+")</option>");
+			 }
+			 if(value[2]=="C"){
+				 
+				 $('.modal-select').append("<option value='"+value[0]+"/"+value[1]+"'>"+value[3]+" [ "+value[2]+" ]" +"&emsp;("+value[5]+")</option>");
+			 }
+			 
+				
 		}) ;
 		
 		}
@@ -361,29 +389,130 @@ function descmodal(TicketId)
 			
 			$.each(result1, function(key, value) {
 				
-			
-			console.log("res---"+value[5])
 			$('#descdata').html(value[5]);
 			$('#descmodal').modal('toggle');
 		})
 		}
 	});
 }
+</script>	  
 
-function CheckAll(){
+<script type="text/javascript">
+
+var L=null;
+var M=null;
+var H=null;
+
+function SeeDetails(TicketId){
+
+$("#TicketId").val(TicketId);
 	
 	
-	if(Number($('#assignto').val())<0){
+	$.ajax({
+
+		type : "GET",
+		url : "GetReturnTicketDataAjax.htm",
+		data : {
+				
+			TicketId : TicketId,
+		},	
 		
-		alert('Please Select AssignTo!');
-	}
+		datatype : 'json',
+		success : function(result) {
+		var result1 = JSON.parse(result);
+		
+		$.each(result1, function(key, value) {
+			
+			$('#raisedby').html(value[2]);
+			$('#category').html(value[8]);
+			$('#subcategory').html(value[9]);
+			$('#assignedby').html(value[18]);
+			$('#returnedto').html(value[17]);
+			$('#remarks').html(value[16]);
+			
+			 var d = new Date(value[6]),
+			 
+		        month = '' + (d.getMonth() + 1),
+		        day = '' + d.getDate(),
+		        year = d.getFullYear();
+		 
+		    if (month.length < 2){ 
+		        month = '0' + month;}
+		    if (day.length < 2){ 
+		        day = '0' + day;}
+		    var demandDate=[day,month,year].join('-');
+		   $('#raiseddate').html(demandDate);
+		   
+		   
+		   var d1 = new Date(value[13]),
+			 
+	        month = '' + (d1.getMonth() + 1),
+	        day = '' + d1.getDate(),
+	        year = d1.getFullYear();
+	 
+	    if (month.length < 2){ 
+	        month = '0' + month;}
+	    if (day.length < 2){ 
+	        day = '0' + day;}
+	    var demandDate1=[day,month,year].join('-');
+		   
+	    $('#assigneddate').html(demandDate1);
+	    
+	    var d2 = new Date(value[15]),
+		 
+        month = '' + (d2.getMonth() + 1),
+        day = '' + d2.getDate(),
+        year = d2.getFullYear();
+ 
+      if (month.length < 2){ 
+        month = '0' + month;}
+      if (day.length < 2){ 
+        day = '0' + day;}
+      var demandDate2=[day,month,year].join('-');
+      $('#returneddate').html(demandDate2);  
+    
+			
+		   if(value[7]=="L"){
+				L="Low"
+				$("#Priority").html(L);	
+			} 
+			 if(value[7]=="M"){
+				M="Medium"
+				$('#Priority').html(M);	
+			}
+			 if(value[7]=="H"){
+				H="High"
+				$("#Priority").html(H);
+			} 
+			
+		}
+		);
+	     $('#returned-details').modal('toggle'); 
 	
 }
-	  
-	  
+	});
+}
+
+
+$("#formsubmit").on('submit', function (e) {
+
+	  var data =$('#assignto').val();
+	  var data1 =$('#priority').val();
+	  if(data==="" || data===null ){
+		  alert("Please Select AssignTo!");
+		  return false;
+	  }else if(data1==="" || data1===null){
+		  alert("Please Select Priority");
+		  return false;
+	  }else{
+		  return true;
+	  }  
+}); 
 
 
 </script>
+
+
 
 
 

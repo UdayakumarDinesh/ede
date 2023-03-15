@@ -17,13 +17,12 @@ public class HelpdeskSubCategory {
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
 	private long    TicketSubCategoryId;
-	private String TicketCategoryId;
+	private long  TicketCategoryId;
 	private String  TicketSubCategory;
 	private String  CreatedBy;
 	private String  CreatedDate;
 	private String  ModifiedBy;
 	private String  ModifiedDate;
 	private int isActive;
-	
 
 }

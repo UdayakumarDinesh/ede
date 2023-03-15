@@ -63,12 +63,13 @@ List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
 											<th><label>Department Name <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control" 
 												placeholder=" Enter Department Name" type="text" name="DepartmentName" value="<%if(dept!=null){%><%=dept[2]%><%} %>"
-												required="required" maxlength="255" style="font-size: 15px;text-transform:capitalize" id="department"></td>
+												required="required" maxlength="255" style="font-size: 15px;" id="department"></td>
 												
 										</tr>
 										<tr>
 										     <th><label>Department Head <span class="mandatory" style="color: red;">*</span></label>
-										     <td><select class="form-control form-control select2" name="DepartmentHead" style="width:100%;required">
+										     <td><select class="form-control form-control select2" name="DepartmentHead" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+										     <option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 										     <%if(EmpList!=null){
 										    	 for(Object[] emp:EmpList){
 										    	 %>
@@ -81,13 +82,13 @@ List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
 										     </td>
 										</tr>
 										<tr>
-										   <th> <label>Group Code <span class="mandatory" style="color: red;">*</span></label> </th>
+										   <th> <label>Group <span class="mandatory" style="color: red;">*</span></label> </th>
 										   <td> <select class="form-control select2"  name="groupCode" id="groupCode" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 										        <%if(groupList!=null){
 										    	 for(Object[] grp:groupList){
 										    	 %>
-										     <option value="<%=grp[0]%>" <%if(dept!=null){if((Long.parseLong(dept[3].toString()))==(Long.parseLong(grp[0].toString()))){%>selected="selected"<%}}%>><%=grp[1] %></option>
+										     <option value="<%=grp[0]%>" <%if(dept!=null){if((Long.parseLong(dept[4].toString()))==(Long.parseLong(grp[0].toString()))){%>selected="selected"<%}}%>><%=grp[1] %></option>
 										     <%}} %>
 										 </select> </td> 
 										</tr>
@@ -249,9 +250,14 @@ $('#depcode').keypress(function (e) {
 	<script type="text/javascript">
 	function DepartmentEditcheck()
 	{
+<<<<<<< HEAD
+		var $depcode=$('#depcode').val();
+		var $department=$('#department').val();
+=======
 		var depcode=$('#depcode').val();
 		var department=$('#department').val();
 		var Deptid=$('#Deptid').val();
+>>>>>>> branch 'master' of https://dineshvedts@bitbucket.org/susant-vedts/ems.git
 		var count =true;
 		$.ajax({
 
@@ -260,7 +266,11 @@ $('#depcode').keypress(function (e) {
 			data : {
 				
 				Departmentcode:depcode.trim(),			
+<<<<<<< HEAD
+				Deptid :$department
+=======
 				Deptid:Deptid.trim(),
+>>>>>>> branch 'master' of https://dineshvedts@bitbucket.org/susant-vedts/ems.git
 			},
 			datatype : 'json',
 			success : function(result)

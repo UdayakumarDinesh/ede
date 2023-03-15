@@ -263,8 +263,8 @@ public class MtController {
 					
 					for(BigInteger str:mtoemp) {
 						EMSNotification notification = new EMSNotification();
-						notification.setEmpId(Long.parseLong(str.toString()));
-						notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
+						notification.setEmpNo((str.toString()));
+						notification.setNotificationBy((String)ses.getAttribute("EmpNo"));
 						notification.setNotificationDate(sdtf.format(new Date()));
 						notification.setNotificationMessage("Trip Requested by "+ (String)ses.getAttribute("EmpName") + "is Pending for approval");
 						notification.setNotificationUrl("MTTripLink.htm");
@@ -276,8 +276,8 @@ public class MtController {
 				}else {
 					EMSNotification notification = new EMSNotification();
 					//String empid = service.GetRecOfficer((String)ses.getAttribute("EmpNo")); 
-					notification.setEmpId(Long.parseLong(RecOfficer));
-					notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
+					notification.setEmpNo(RecOfficer);
+					notification.setNotificationBy((String)ses.getAttribute("EmpNo"));
 					notification.setIsActive(1);
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationUrl("MtGhApprove.htm");
@@ -682,8 +682,8 @@ public class MtController {
 					EMSNotification notification=new EMSNotification();
 					
 					String empid  = service.EmpIdOfMtRequest(Integer.parseInt(str.split("-")[0]));
-					notification.setEmpId(Long .parseLong(empid));
-					notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
+					notification.setEmpNo((empid));
+					notification.setNotificationBy((String)ses.getAttribute("EmpNo"));
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationMessage("Trip Request Recommended By GH");
 					notification.setNotificationUrl("MtList.htm");
@@ -700,8 +700,8 @@ public class MtController {
 				EMSNotification notification=new EMSNotification();
 				
 				String empid  = service.EmpIdOfMtRequest(Integer.parseInt(str1.split("-")[0]));
-				notification.setEmpId(Long.parseLong(str.toString()));
-				notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
+				notification.setEmpNo(str.toString());
+				notification.setNotificationBy((String)ses.getAttribute("EmpNo"));
 				notification.setNotificationDate(sdtf.format(new Date()));
 				notification.setNotificationMessage("Trip Requested by "+ str1.split("-")[1]+ "is Pending for approval");
 				notification.setNotificationUrl("MTTripLink.htm");
@@ -817,8 +817,8 @@ public class MtController {
 						}
 						
 						EMSNotification notification=new EMSNotification();
-						notification.setEmpId(Long.parseLong(req.getParameter("EmpId")));
-						notification.setNotificationBy( (Long)ses.getAttribute("EmpId"));
+						notification.setEmpNo(req.getParameter("Empno"));
+						notification.setNotificationBy( (String)ses.getAttribute("EmpNo"));
 						notification.setNotificationDate(sdtf.format(new Date()));
 						notification.setNotificationMessage(Msg);
 						notification.setNotificationUrl("MTUserHome.htm");
@@ -1201,7 +1201,7 @@ public class MtController {
 				
 				EMSNotification notification=new EMSNotification();
 					//notification.setEmpId(Long.parseLong(req.getParameter("EmpId")));
-					notification.setNotificationBy((Long)ses.getAttribute("EmpId"));
+					notification.setNotificationBy((String)ses.getAttribute("EmpNo"));
 					notification.setNotificationDate(sdtf.format(new Date()));
 					notification.setNotificationMessage("Trip Cancle By MTO");
 					notification.setNotificationUrl("MTUserHome.htm");

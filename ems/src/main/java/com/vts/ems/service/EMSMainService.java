@@ -15,7 +15,7 @@ public interface EMSMainService {
 	public int  LoginStampingUpdate(String Logid,String LogoutType)throws Exception;
 	public Employee EmployeeInfo(long EmpId) throws Exception;
 	public Object[] EmployeeData(String EmpId) throws Exception;
-	public List<EMSNotification> NotificationList(long EmpId) throws Exception;
+	public List<EMSNotification> NotificationList(String EmpNo) throws Exception;
 	public int NotificationUpdate(String NotificationId) throws Exception;
 	public Object[] LoginExistCheck(String username) throws Exception;
 	public String getPasswordResetOTP(String loginid) throws Exception;

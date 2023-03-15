@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -879,7 +880,7 @@ public class PisServiceImpl implements PisService
 		
 		
 		@Override
-		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception
+		public long FamilyMemDetailsForward(String formid,String action,String usernmae,String empid,String EmpNo,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception
 		{
 			logger.info(new Date() +"Inside SERVICE FamilyMemDetailsForward ");
 			long count=0;
@@ -904,8 +905,8 @@ public class PisServiceImpl implements PisService
 				{
 					notify.setNotificationUrl("FamFormsApproveList.htm");
 					notify.setNotificationDate(LocalDate.now().toString());
-					notify.setEmpId(Long.parseLong(loginTypeEmpData.get(0)[1].toString()));
-					notify.setNotificationBy(Long.parseLong(formdata[1].toString()));
+					notify.setEmpNo(loginTypeEmpData.get(0)[1].toString());
+					notify.setNotificationBy(formdata[1].toString());
 					
 					if(formtype.equalsIgnoreCase("I")) 
 					{
@@ -939,8 +940,8 @@ public class PisServiceImpl implements PisService
 				
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
-				notify.setEmpId(Long.parseLong(formdata[1].toString()));
-				notify.setNotificationBy(Long.parseLong(empid));
+				notify.setEmpNo(formdata[1].toString());
+				notify.setNotificationBy(EmpNo);
 				
 			}
 			else if(action.equalsIgnoreCase("A"))
@@ -970,8 +971,8 @@ public class PisServiceImpl implements PisService
 				}
 				notify.setNotificationUrl("FamIncExcFwdList.htm");
 				notify.setNotificationDate(LocalDate.now().toString());
-				notify.setEmpId(Long.parseLong(formdata[1].toString()));
-				notify.setNotificationBy(Long.parseLong(empid));
+				notify.setEmpNo((formdata[1].toString()));
+				notify.setNotificationBy(EmpNo);
 			}
 				
 			
@@ -980,7 +981,7 @@ public class PisServiceImpl implements PisService
 			notify.setIsActive(1);
 			notify.setCreatedBy(usernmae);
 			notify.setCreatedDate(sdtf.format(new Date()));
-			if(notify.getEmpId()>0 && count>0) {
+			if(notify.getEmpNo()!=null && count>0) {
 				dao.NotificationAdd(notify);
 			}
 		
@@ -1285,8 +1286,13 @@ public class PisServiceImpl implements PisService
 		@Override
 		public long EmpFamilyFormAdd(PisEmpFamilyForm form) throws Exception
 		{
+			if(form.getFormType().equalsIgnoreCase("D")) 
+			{
+				ChangeAnnualDeclarationStatus(form.getEmpid()+"","N");
+			}
 			return dao.EmpFamilyFormAdd(form);
 		}
+		
 		
 		@Override
 		public Object[] GetFamFormData(String familyformid) throws Exception
@@ -2063,8 +2069,30 @@ public class PisServiceImpl implements PisService
 		}
 
 		@Override
-		public BigInteger getFormYear(int year,Long empId) throws Exception {
-			
-			return dao.getFormYear(year,empId);
+		public Object[] getFormYear(Long empId) throws Exception 
+		{
+			return dao.getFormYear(empId);
+		}
+		
+		// change annual declaration form status every year 1st of jan to allow employee to submit declaration
+		@Scheduled(cron = "0 0 0 1 1 ?")
+		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("Y");
+		}
+		
+		
+		
+		// change annual declaration form status every year 1st of march to disallow employee to submit declaration		
+		@Scheduled(cron = "0 0 0 1 3 ?")
+		public void UpdateAnnualDeclarationAllEmpDisAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("N");
+		}
+		
+		@Override
+		public int ChangeAnnualDeclarationStatus(String Empid,String status) throws Exception 
+		{
+			return dao.ChangeAnnualDeclarationStatus(Empid, status);
 		}
 }

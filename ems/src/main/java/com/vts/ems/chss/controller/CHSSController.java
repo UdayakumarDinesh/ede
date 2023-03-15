@@ -1844,6 +1844,7 @@ public class CHSSController
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSUserForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -1853,7 +1854,7 @@ public class CHSSController
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
-			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
+			long count = service.CHSSUserForward(chssapplyid, Username, action,remarks,EmpId,EmpNo,LoginType);
 			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
@@ -2334,7 +2335,7 @@ public class CHSSController
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSContingentApprove.htm "+Username);
 		try {
 			String contingentid = req.getParameter("contingentid");
@@ -2353,7 +2354,7 @@ public class CHSSController
 			dto.setBillcontent(billcontent);
 			dto.setPO(billcontent);
 			
-			long count= service.CHSSClaimsApprove( dto);
+			long count= service.CHSSClaimsApprove( dto,EmpNo);
 			
 			if(action.equalsIgnoreCase("F")) 
 			{
@@ -5063,6 +5064,7 @@ public class CHSSController
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSUserIPDForward.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -5072,7 +5074,7 @@ public class CHSSController
 			CHSSApply claim1 = service.CHSSApplied(chssapplyid);
 			int chssstatusid= claim1.getCHSSStatusId();
 			long contingentid=claim1.getContingentId();
-			long count = service.CHSSUserIPDForward(chssapplyid, Username, action,remarks,EmpId,LoginType);
+			long count = service.CHSSUserIPDForward(chssapplyid, Username, action,remarks,EmpId,EmpNo,LoginType);
 			
 			if (chssstatusid == 1 || chssstatusid ==3 ) 
 			{
@@ -5289,8 +5291,6 @@ public class CHSSController
 			test.setModifiedBy(Username);
 			test.setUpdateByEmpId(EmpId);
 			test.setUpdateByRole(LoginType);
-
-
 			
 			long count = service.IPDTestRemAmountEdit(test);
 						
@@ -5565,6 +5565,7 @@ public class CHSSController
 		}
 		
 	}
+	
 	@RequestMapping(value = "DependantsList.htm", method = {RequestMethod.POST , RequestMethod.GET } )
 	public String DependantsList(Model model, HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
@@ -5574,31 +5575,31 @@ public class CHSSController
 		String EmpNo=null;
 		List<Object[]> dependantList=null;
 			
-	try {
-		ses.setAttribute("SidebarActive","DependantsList_htm");
-		EmpNo= req.getParameter("EmpNo");
-		
-		List<Object[]> Emplist=service.getEmpList();
-		if(EmpNo!=null) {				
+		try {
+			ses.setAttribute("SidebarActive","DependantsList_htm");
+			EmpNo= req.getParameter("EmpNo");
+			
+			List<Object[]> Emplist=service.getEmpList();
+			if(EmpNo!=null) {				
+				dependantList=service.getDependantsList(EmpNo);
+				req.setAttribute("dependantList", dependantList);
+				req.setAttribute("EmpNo", EmpNo);
+			}
+			else {
+			Long  EmpId=(Long)ses.getAttribute("EmpId");
+			EmpNo=EmpId.toString();
 			dependantList=service.getDependantsList(EmpNo);
 			req.setAttribute("dependantList", dependantList);
 			req.setAttribute("EmpNo", EmpNo);
+			}
+			req.setAttribute("Emplist", Emplist);
+			return"chss/DependantsList";
+		} catch (Exception e) {		
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DependantsList.htm "+Username, e);
+			return "static/Error";
+			
 		}
-		else {
-		Long  EmpId=(Long)ses.getAttribute("EmpId");
-		EmpNo=EmpId.toString();
-		dependantList=service.getDependantsList(EmpNo);
-		req.setAttribute("dependantList", dependantList);
-		req.setAttribute("EmpNo", EmpNo);
-		}
-		req.setAttribute("Emplist", Emplist);
-		return"chss/DependantsList";
-	} catch (Exception e) {		
-		e.printStackTrace();
-		logger.error(new Date() +" Inside DependantsList.htm "+Username, e);
-		return "static/Error";
-		
-	}
 		
 	}
 }

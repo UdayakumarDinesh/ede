@@ -109,7 +109,7 @@ public interface PisService {
 	public Object[] GetEmpDetails(String empid)throws Exception;
 	public int UpdateSeniorityNumber(String empid, String newSeniorityNumber)throws Exception;
 	public EmpFamilyDetails getFamilyMemberModal(String familydetailsid) throws Exception;
-	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception;
+	public long FamilyMemDetailsForward(String formid,String action,String usernmae, String empid,String EmpNo,String Remarks,HttpServletRequest req, HttpServletResponse res) throws Exception;
 	public List<Object[]> FamMemFwdEmpList() throws Exception;
 	public List<Object[]> GetFormMembersList(String formid) throws Exception;
 	public Object[] getEmployeeInfo(String empid) throws Exception;
@@ -214,10 +214,11 @@ public interface PisService {
 	public int deletePropertyDetails(String propertyId,String Username)throws Exception;
 	public List<Object[]> familyDetailsList(String empid) throws Exception;
 	public PISEmpFamilyDeclaration getEmpFamilyDeclaration(String formid) throws Exception;
-	public BigInteger getFormYear(int year, Long empId)throws Exception;
+	public Object[] getFormYear( Long empId)throws Exception;
 	public void DepIncFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
 	public void DepExcFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
 	public void DepDeclareFormFreeze(HttpServletRequest req, HttpServletResponse res, String formid) throws Exception;
+	public int ChangeAnnualDeclarationStatus(String Empid, String status) throws Exception;
 	
 	
 }
