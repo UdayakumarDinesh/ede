@@ -335,7 +335,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 				
 			EMSNotification notify = new EMSNotification();
 			
-			notify.setEmpNo((obj[i].toString()));
+			notify.setEmpNo(obj[i].toString());
 		    notify.setNotificationUrl("TicketForwarded.htm");
 			notify.setNotificationMessage("Ticket Forwarded");
 			
