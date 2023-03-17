@@ -269,8 +269,9 @@ String empname = (String)request.getAttribute("empname");
            </div>
       </div>     
 </div>
-
-<%-- 	<div class="modal-content">
+<div class="modal fade" id="editdelete1" role="dialog">
+		<div class="modal-dialog modal-lg">
+	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-litle">List Mt Request</h4>
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -308,9 +309,9 @@ String empname = (String)request.getAttribute("empname");
 							</tr>
 
 							<%count++;}%>
-							<tr style="font-size: 12px; line-height: 0px;">
+							<!-- <tr style="font-size: 12px; line-height: 0px;">
 								<td colspan="6" align="center"><a class="badge badge-info" href=""	data-toggle="modal" data-target="#editdelete1"	style="font-size: 12px;">See More</a></td>
-							</tr>
+							</tr> -->
 							<%}else{%>
 							<tr style="font-size: 12px; line-height: 0px;">
 								<td colspan="6" align="center"><span class="badge badge-warning">No Sanction Trip Present </span></td>
@@ -321,8 +322,9 @@ String empname = (String)request.getAttribute("empname");
 				</div>
 			</div>
 		</div>
-	</div> --%>
-
+	</div> 
+</div>
+</div>
 
 
 	<div class="modal fade" id="pending1" role="dialog">
