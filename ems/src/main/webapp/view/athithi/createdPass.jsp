@@ -37,7 +37,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 				<div class="card shadow-nohover">
 					<div class="card-header">
 						<div class="col-md-12" >
-					   			<form class="form-inline" method="post" action="createdPass" >
+					   			<form class="form-inline" method="post" action="createdPass.htm" >
 					   			<h5>Pending Pass List</h5>
 								<div class="col-md-4"></div>
 								<div class="form-group">

@@ -101,27 +101,30 @@ public class MtController {
 			 fifthpply=new ArrayList<Object[]>();
 			
 			 for(Object[] list:listapply) {
-				if(sdtf.format(new Date()).equalsIgnoreCase(sdtf.format(list[1]))) {
+				
+				 	Date date1=sdf.parse(sdf.format(list[1]));
+					Date date11=sdf.parse(sdf.format(new Date()));
+					Date date2=sdf.parse(sdf.format(new Date(new Date().getTime()+(24*60*60*1000))));
+					Date date3=sdf.parse(sdf.format(new Date(new Date().getTime()+(2*24*60*60*1000))));
+					Date date4=sdf.parse(sdf.format(new Date(new Date().getTime()+(3*24*60*60*1000))));
+					Date date5=sdf.parse(sdf.format(new Date(new Date().getTime()+(4*24*60*60*1000))));
+				if(date1.compareTo(date11) == 0) {
 					firstapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date2) == 0) {
 					secondapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(2*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date3) == 0) {
 					thirdapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(3*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date4) == 0) {
 					fourthapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(4*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date5) == 0) {
 					fifthpply.add(list);	
 				}
-				
 			}
+
 			req.setAttribute("firstapply", firstapply);
 			req.setAttribute("secondapply", secondapply);
 			req.setAttribute("thirdapply", thirdapply);

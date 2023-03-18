@@ -163,7 +163,7 @@
 		</div>
 
 		
-		<div class="card-body main-card" style=" max-height: 25rem; overflow-y:auto;" >
+		<div class="card-body main-card" style="max-height: 42rem; overflow-y:auto;" >
 
 			<form action="#" method="POST" >
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

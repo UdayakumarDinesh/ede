@@ -136,7 +136,7 @@ String groupname=(String)request.getAttribute("groupcode");
 			              
 			              <div class="col-md-3" >					        	
 					                <label style="margin-left: -13.2px;">Traveler Name/Phone No:<span class=" mandatory ">*</span></label>
-					                <input type="text" <%if(apply!=null&&apply.getUserRemarks()!=null){%>value="<%=apply.getUserRemarks()%>"<%}%> name="Remarks" id="remarks" class=" form-control input-sm " maxlength="99"   placeholder="Source "  required="required">
+					                <input type="text" <%if(apply!=null&&apply.getUserRemarks()!=null){%>value="<%=apply.getUserRemarks()%>"<%}%> name="Remarks" id="remarks" class=" form-control input-sm " maxlength="99"   placeholder="Traveler Name/Phone No "  required="required">
 							</div>
 						</div>
 					</div>
