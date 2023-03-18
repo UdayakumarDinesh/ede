@@ -6549,5 +6549,43 @@ public class PisController {
 			
 			
 		}
-		
+		@RequestMapping(value="OrganisationStructure.htm",method=RequestMethod.POST)
+		public String organisationStructure(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{			
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
+			try {
+				List<Object[]> grouplist=service.getGroupListGH();
+				List<Object[]> divisionlist=service.getDivisionListDH();
+				req.setAttribute("grouplist", grouplist);
+				req.setAttribute("divisionlist", divisionlist);
+				req.setAttribute("Director", service.getDirectorDetails());
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside OrganisationStructure.htm "+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+			}
+			
+			return "pis/OrganisationStructure";
+			
+		}
+		@RequestMapping(value="DeptEmpListAjax.htm",method = RequestMethod.GET)
+		public @ResponseBody String deptEmpListAjax(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
+			
+			try {
+				String divisionId = req.getParameter("divisionId");
+			List<Object[]> deptEmpList=service.getDeptEmpList(divisionId);
+				
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DeptEmpListAjax.htm"+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+				}
+			
+			
+			return uploadpath;
+			
+		}
 }

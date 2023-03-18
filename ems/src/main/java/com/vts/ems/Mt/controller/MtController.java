@@ -1269,7 +1269,8 @@ public class MtController {
 	
 	@RequestMapping(value="DirectorTrip.htm",method=RequestMethod.GET)
 	public String DirectorDuty(HttpServletRequest req,HttpSession ses) throws Exception {
-		
+		SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+		SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DirectorTrip.htm "+Username);	
 		try {
@@ -1281,11 +1282,12 @@ public class MtController {
 				 req.setAttribute("dutylist",service.DirectorTripList(DateTimeFormatUtil.dateConversionSql(FDate),DateTimeFormatUtil.dateConversionSql(TDate)));
 			
 			}else{
-				
-				 Calendar cal = Calendar.getInstance();
-				 cal.add(Calendar.DAY_OF_MONTH, 30);
-				 String newDate = sdf.format(cal.getTime()); 
-				 req.setAttribute("dutylist",service.DirectorTripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(sdf.parse(newDate).getTime())));
+				String fd = LocalDate.now().minusMonths(1).toString();
+				String td = LocalDate.now().toString();
+				FDate=rdf.format(sf.parse(fd.toString()));
+				TDate=rdf.format(sf.parse(td.toString()));
+								
+				 req.setAttribute("dutylist",service.DirectorTripList(DateTimeFormatUtil.dateConversionSql(FDate),DateTimeFormatUtil.dateConversionSql(TDate)));
 			}
 			
 			req.setAttribute("fromdate", FDate);

@@ -3124,6 +3124,62 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			logger.error(new Date() + "Inside DAO UpdateAnnualDeclarationAllEmp "+e);
 		}	
 	}
+private static String GROUPLISTGH="SELECT a.GroupId,a.GroupName,a.GroupHeadId,b.EmpName,b.EmpNo FROM division_group a,employee b WHERE a.GroupHeadId=b.EmpId  ORDER BY GroupId";
+	@Override
+	public List<Object[]> getGroupListGH() throws Exception {
+		List<Object[]> resultList=null;
+		try {
+			
+			Query query= manager.createNativeQuery(GROUPLISTGH);
+			 resultList = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+		e.printStackTrace();
+		logger.error(new Date() + "Inside DAO getGroupListGH "+e);
+		}
+		return resultList;
+	}
+private static final String DIVISIONLISTDH="SELECT a.DivisionId,a.DivisionName,a.DivisionHeadId,b.EmpName,b.EmpNo,a.GroupId FROM division_master a, employee b,division_group c  WHERE a.DivisionHeadId=b.EmpId AND a.GroupId=c.GroupId ORDER BY DivisionId";
+	@Override
+	public List<Object[]> getDivisionListDH() throws Exception {
+		List<Object[]> resultList=null;
+		try {
+			Query query = manager.createNativeQuery(DIVISIONLISTDH);
+			 resultList =(List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO  getDivisionListDH "+e);
+		
+		}
+		return resultList;
+	}
+private static  final String DIRECTORDETAILS="SELECT a.EmpName,a.EmpNo,b.Designation FROM employee a, employee_desig b WHERE a.DesigId=b.DesigId AND b.Designation='Director'";
+	@Override
+	public Object[] getDirectorDetails() throws Exception {
+		Object[] result=null;
+	try {
+		
+		Query query = manager.createNativeQuery(DIRECTORDETAILS);
+		 result = (Object[]) query.getSingleResult();
+	} catch (Exception e) {
+		e.printStackTrace();
+		logger.error(new Date() + "Inside DAO  getDirectorDetails "+e);
+	}
+		return result;
+	}
+private static final String DEPEMPLIST="SELECT a.EmpName,a.EmpNo ,b.designation,c.DivisionName,  FROM  employee a,employee_desig b, division_master c WHERE  a.desigId=b.desigId AND a.divisionId=c.divisionId AND a.divisionId=:divisionId  ORDER BY a.SrNo";
+	@Override
+	public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
+		List<Object[]> emplist=null;
+		try {
+			Query query = manager.createNativeQuery(DEPEMPLIST);
+			query.setParameter("divisionId", divisionId);
+			 emplist =(List<Object[]>) query.getResultList();
+			
+		} catch (Exception e) {
+
+		}
+		return emplist;
+	}
 	
 }
 	
