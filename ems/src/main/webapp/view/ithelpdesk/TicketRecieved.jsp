@@ -105,26 +105,31 @@
 									<td style="width: 8%;text-align: center;"><%if(recvdlist[12]!=null){%><%=rdf.format(sdf.parse(recvdlist[12].toString()))%><%}else{%>-<%} %>
 									</td>	
 								    <td style="width: 8%;text-align: center;" >
-									<%if(!recvdlist[10].toString().equals("")) {%>
-									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=recvdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+									<%-- <%if(!recvdlist[10].toString().equals("")) {%>
+									<button type="submit" class="btn btn-sm " name="TICKETID" value="<%=recvdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-									<%} %>
-										<input type="hidden" name="RaisedDate<%=recvdlist[0]%>"  id="RaisedDate<%=recvdlist[0]%>"   value="<%=rdf.format(sdf.parse(recvdlist[6].toString())) %>" >
+									<%} %> --%>
+										                <input type="hidden" name="RaisedDate<%=recvdlist[0]%>"  id="RaisedDate<%=recvdlist[0]%>"   value="<%=rdf.format(sdf.parse(recvdlist[6].toString())) %>" >
 														<input type="hidden" name="RaisedBy<%=recvdlist[0]%>"  id="RaisedBy<%=recvdlist[0]%>"   value="<%=recvdlist[2] %>" >
+														<input type="hidden" name="Description<%=recvdlist[0]%>" id="Description<%=recvdlist[0]%>" value="<%=recvdlist[5] %>" >
 														<input type="hidden" name="Category<%=recvdlist[0]%>"  id="Category<%=recvdlist[0]%>"   value="<%=recvdlist[8] %>" >
 														<input type="hidden" name="SubCategory<%=recvdlist[0]%>"  id="SubCategory<%=recvdlist[0]%>"   value="<%=recvdlist[9] %>" >
+														<input type="hidden" name="FileName<%=recvdlist[0]%>"  id="FileName<%=recvdlist[0]%>"   value="<%=recvdlist[10] %>" >
 														<input type="hidden" name="AssignedBy<%=recvdlist[0]%>"  id="AssignedBy<%=recvdlist[0]%>"   value="<%=recvdlist[17] %>" >
 														<input type="hidden" name="AssignedDate<%=recvdlist[0]%>"  id="AssignedDate<%=recvdlist[0]%>"   value="<%=rdf.format(sdf.parse(recvdlist[11].toString())) %>" >
 														<input type="hidden" name="ReturnedDate<%=recvdlist[0]%>"  id="ReturnedDate<%=recvdlist[0]%>"   value="<%if(recvdlist[12]!=null){%><%=rdf.format(sdf.parse(recvdlist[12].toString()))%><%}%>">
 														<input type="hidden" name="Priority<%=recvdlist[0]%>"  id="Priority<%=recvdlist[0]%>"   value="<%=recvdlist[7] %>" >
-														<input type="hidden" name="Remarks<%=recvdlist[0]%>"  id="Remarks<%=recvdlist[0]%>"   value="<%=recvdlist[13] %>" >
-										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="SeeDetails('<%=recvdlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Assigned Details">
+														<input type="hidden" name="ARemarks<%=recvdlist[0]%>"  id="ARemarks<%=recvdlist[0]%>"   value="<%=recvdlist[13] %>" >
+														<input type="hidden" name="CERemarks<%=recvdlist[0]%>"  id="CERemarks<%=recvdlist[0]%>"   value="<%=recvdlist[19] %>" >
+														<input type="hidden" name="AttachmentName<%=recvdlist[0]%>"  id="AttachmentName<%=recvdlist[0]%>"   value="<%=recvdlist[21] %>" >
+										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="SeeDetails('<%=recvdlist[0]%>','<%=recvdlist[20] %>')"   data-toggle="tooltip" title="" data-original-title="Assigned Details">
 															<i class="fa fa-eye " style="color: black;"></i>
 														</button>
 										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=recvdlist[0]%>"  onclick="ForwardTicket('<%=recvdlist[0] %>')"  data-toggle="tooltip" title="" data-original-title="Forward">
 															<i class="fas fa-angle-double-right" style="color: black;"></i>
 														</button> 
+														
 																
 										<input type="hidden" name="TicketId" value="">
 										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -169,43 +174,29 @@
 			</div>
 		</div>
 		
-		<div class="modal fade" id="SeeRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="forwardticket" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
 				<div class="modal-content" style="min-height: 45%;" >
-				    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374"> Remarks<!-- By <span id="feedby1"></span> --></h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-				          <span aria-hidden="true">&times;</span>
-				         
-				        </button>
-				    </div>
-				   
-				    <div class="modal-body"  style="padding: 0.5rem !important;">
-						<div class="card-body" style="min-height:30% ;max-height: 93% !important;overflow-y: auto;">
-							<span id="REMARKS"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="modal fade" id="forwardticket" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
-				<div class="modal-content" style="min-height: 45%;" >
-				    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Forward <!-- By <span id="feedby1"></span> --></h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				    <div class="modal-header" style="background-color: #0e6fb6;">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Forward </h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #F9F9F9">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div>
 				     <div class="modal-body">
   	      
-  	      	<form action="TicketForward.htm" method="POST"  id="Remarksadd">
+  	      	<form action="TicketForward.htm" method="POST"  id="Remarksadd" enctype="multipart/form-data">
   	      		<div class="row">
-					<div class="col-md-12" > <b>Remarks : </b><br>
+					<div class="col-md-12" > <b>Remarks : </b><span class="mandatory"	style="color: red;">*</span><br>
   	      		    		<textarea rows="2" style="display:block; " class="form-control"  id="Remarks" name="Remarks"  placeholder="Enter Remarks..!!"  required="required"></textarea>
   	      		    </div>
+  	      		    
   	      		</div>
+  	      		 <div class="col-2" style="margin-left:-12px;" >
+									<b>File :</b> 
+							<input type="file"  style="width: 230%;" class="form-control input-sm "  value="" id="formFile" name="FormFile" 
+							accept=".xlsx,.xls,.pdf,.doc,.docx ">
+				</div>
   	      		<br>
   	      		<div align="center">
   	      			<input type="submit" class="btn btn-md submit-btn "  value="Submit" name="action"  onclick="return confirm('Are You Sure To Submit ?')" > 
@@ -222,9 +213,9 @@
 	<div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="assigned-details">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
-					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Recieved Details</h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+					<div class="modal-header" style="background-color:#0e6fb6 ">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Ticket Recieved Details</h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #F9F9F9">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div> 
@@ -248,25 +239,40 @@
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned By :</th>
 								<td style="padding: 5px;" class="tabledata" id="assignedby"></td>
-								<th style="padding: 5px" >Assigned Date :</th>
+								<th style="padding: 5px" >Assigned Date:</th>
 								<td style="padding: 5px;" class="tabledata" id="assigneddate"></td>
 							</tr>
 							
 							<tr>
 								<th style="padding: 5px;width:17%;" > Priority :</th>
 								<td style="padding: 5px;" class="tabledata" id="priority"></td>
-								 <th id="return" style="padding: 5px;width:20%;" > Returned Date :</th>
+								<th id="return" style="padding: 5px;width:23%;" >Returned Date:</th>
 								<td style="padding: 5px;" class="tabledata" > <span id="returneddate"></span> </td>
 							</tr>
+						<tr><th><hr style="width:600%;"/></th></tr>
+							<tr>
+								<th style="width:17%;padding: 5px;"> Description :</th>
+								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="Desc"></td>
+								 <td id="Fileattach"><button type="submit" class="btn btn-sm " name="TICKETID" id="TicketId2" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: green;"></i>
+								</button>
+							</tr>
 							
+							<tr id="CEREMARK">
+							    <th  style="padding: 5px;" > Assignee&nbsp;Remarks&nbsp;:</th><br>
+							    <td style="padding: 5px;width:18%;word-wrap:break-word;color:red" colspan="3" class="tabledata" id="CEremarks"></td>
+								<td id="CEAttach"><button type="submit" class="btn btn-sm" name="AttachmentId" id="attachmentid" formaction="TicketForwardAttachmentDownload.htm" formmethod="post"  formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+								<i style="color: #019267" class="fa-solid fa-download"></i>
+									</button></td>
+							</tr>
 							<tr id="REMARK" >
-							    <th style="padding: 5px;" > Remarks :</th>
-								<td style="padding: 5px;width:18%;word-wrap:break-word;color:red" colspan="3" class="tabledata" id="remarks"></td>
+							    <th style="padding: 5px;" > Assignor&nbsp;Remarks&nbsp;:</th>
+								<td style="padding: 5px;width:18%;word-wrap:break-word;color:red" colspan="3" class="tabledata" id="Aremarks"></td>
 						         
 							</tr>
-							 
 						</table>
-						  <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						
+						  <input type="hidden"  name="TicketId1" id="TicketId2" value=""> 
 						  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 					</form>
@@ -312,11 +318,11 @@ function ForwardTicket(TicketId1)
 	$("#TicketId1").val(TicketId1);
 	$('#forwardticket').modal('toggle');
 }
-function SeeRemarks(TicketId)
+/* function SeeRemarks(TicketId)
 {
 	$('#SeeRemarks').modal('toggle');
 	$("#REMARKS").html($("#remarks"+TicketId).val());
-}
+} */
 
 $("#Remarksadd").on('submit', function (e) {
 
@@ -332,20 +338,20 @@ $("#Remarksadd").on('submit', function (e) {
 	  }  
 }); 
 
-
-
-function SeeDetails(TicketId)
+function SeeDetails(TicketId2,AttachmentId)
 {
 	
-	$("#TicketId").val(TicketId);
-	$('#raisedby').html($('#RaisedBy'+TicketId).val())
-	$('#raiseddate').html($('#RaisedDate'+TicketId).val())
-	$('#category').html($('#Category'+TicketId).val())
-	$('#subcategory').html($('#SubCategory'+TicketId).val())
-	$('#assignedby').html($('#AssignedBy'+TicketId).val())
-	$('#assigneddate').html($('#AssignedDate'+TicketId).val())
+	$("#TicketId2").val(TicketId2);
+	$("#attachmentid").val(AttachmentId);
+	$('#raisedby').html($('#RaisedBy'+TicketId2).val())
+	$('#raiseddate').html($('#RaisedDate'+TicketId2).val())
+	$('#Desc').html($('#Description'+TicketId2).val())
+	$('#category').html($('#Category'+TicketId2).val())
+	$('#subcategory').html($('#SubCategory'+TicketId2).val())
+	$('#assignedby').html($('#AssignedBy'+TicketId2).val())
+	$('#assigneddate').html($('#AssignedDate'+TicketId2).val())
 	
-	var returndate=$('#ReturnedDate'+TicketId).val();
+	var returndate=$('#ReturnedDate'+TicketId2).val();
    
 		   if(returndate=="")
 		   {
@@ -355,38 +361,84 @@ function SeeDetails(TicketId)
 		   else{
 			   $('#return').show();
 			   $('#returneddate').show();
-			   $('#returneddate').html($('#ReturnedDate'+TicketId).val())
+			   $('#returneddate').html($('#ReturnedDate'+TicketId2).val())
 		   }
 	 
-	var type=$('#Priority'+TicketId).val()
+	var type=$('#Priority'+TicketId2).val()
 	 if(type=="L")
     {
 	   L="Low"
-	   $('#priority').html(L);
+	   $('#priority').html(L).css('color','#0e6fb6');
 	}
    if(type=="M")
    {
 	   M="Medium"
-	   $('#priority').html(M);
+	   $('#priority').html(M).css('color','green');
    }
    if(type=="H")
    {
 	   H="High"
-	   $('#priority').html(H);
+	   $('#priority').html(H).css('color','red');
    }
-   
-   var remarks=$('#Remarks'+TicketId).val();
+    var remarks=$('#ARemarks'+TicketId2).val();
   
    if(remarks===null || remarks=="null")
    {
 	   $('#REMARK').hide();
    }else{
 	   $('#REMARK').show();
-   		$('#remarks').html($('#Remarks'+TicketId).val());
+   		$('#Aremarks').html($('#ARemarks'+TicketId2).val());
    }
-	 $('#assigned-details').modal('toggle'); 
+   var name=$('#AttachmentName'+TicketId2).val();
+   
+   if(name=="" || name===null || name=="null")
+	{
+	   $('#CEAttach').hide();
+	}
+   else{
+	   $('#CEAttach').show();
+   }
+   
+var filename=$('#FileName'+TicketId2).val()
+   
+   if(filename=="" || filename===null)
+	   {
+	   $('#Fileattach').hide();
+	   
+	   }
+   else{
+	   $('#Fileattach').show();
+   }
+   var CERemark=$('#CERemarks'+TicketId2).val();
+   if(CERemark=="" || CERemark===null || CERemark=="null") {
+	   $('#CEREMARK').hide();
+   }
+   else{
+	   $('#CEREMARK').show();
+      $('#CEremarks').html($('#CERemarks'+TicketId2).val());
+   }
+   
+   $('#assigned-details').modal('toggle'); 
 }
 
+
+$(function(){
+    $("#formFile").on('change', function(event)
+	{
+    	
+    	var file = $("#formFile").val();
+    	console.log(file);
+       	var upld = file.split('.').pop(); 
+       	if(!(upld.toLowerCase().trim()==='pdf' || upld.toLowerCase().trim()==='xlsx' 
+       				|| upld.toLowerCase().trim()==='xls' || upld.toLowerCase().trim()==='doc' || upld.toLowerCase().trim()==='docx')  )
+       	{
+    	    alert("Only PDF,Word and Excel documents are allowed to Upload")
+    	    document.getElementById("formFile").value = "";
+    	    return;
+    	}
+        
+    });
+});
 </script>
 
 </html>

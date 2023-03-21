@@ -101,7 +101,7 @@
 							<div class="col-md-2" >
 							<%if(!desk.getFileName().toString().equals("")){ %>
 							<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="margin-left:204px; margin-top:-65px;" 
-									name="TicketId" value="<%=desk.getTicketId() %>"
+									name="TICKETID" value="<%=desk.getTicketId() %>"
 									 formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										  <i style="color: #019267" class="fa-solid fa-download fa-1x" ></i>
 									</button>

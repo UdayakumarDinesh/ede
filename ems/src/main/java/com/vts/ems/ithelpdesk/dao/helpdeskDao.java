@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
+import com.vts.ems.ithelpdesk.model.HelpdeskAttachments;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
@@ -63,5 +64,9 @@ public interface helpdeskDao {
 		public List<Object[]> IThelpdeskDashboardPieChartData(String fromDate, String toDate)throws Exception;
 		public long NotificationAdd(EMSNotification notification) throws Exception;
 		public List<Object[]> SendNotification(String Logintype) throws Exception;
+		public long ForwardAttachment(HelpdeskAttachments attach)throws Exception;
+		public long MaxOfAttachmentId()throws Exception;
+		public HelpdeskAttachments  getattachId(String ticketId)throws Exception;
+		public List<Object[]> getRevokedList(String fromDate, String toDate) throws Exception;
 	        
 }

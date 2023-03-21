@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
+import com.vts.ems.ithelpdesk.model.HelpdeskAttachments;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
@@ -34,7 +35,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 	@PersistenceContext
 	EntityManager manager;
 	
-	private static final String HELPDESKLIST="SELECT b.TicketId,a.EmpNo,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.TicketStatus,c.TicketCategory,d.TicketSubCategory,b.FileName,b.FeedBackRequired,b.Feedback,b.AssignedBy FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND a.EmpNo=:EmpNo AND DATE(b.RaisedDate) BETWEEN :FromDate AND :ToDate  ORDER BY RaisedDate DESC";
+	private static final String HELPDESKLIST="SELECT b.TicketId,a.EmpNo,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,b.TicketStatus,c.TicketCategory,d.TicketSubCategory,b.FileName,b.FeedBackRequired,b.Feedback,b.AssignedBy,(SELECT MAX(att.AttachmentId) FROM helpdesk_attachments att WHERE att.ticketid= b.ticketid) AS 'attachmentid' FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='1'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy AND a.EmpNo=:EmpNo AND DATE(b.RaisedDate) BETWEEN :FromDate AND :ToDate  ORDER BY RaisedDate DESC";
 	@Override
 	public List<Object[]> getHelpDeskList(String empno,String fromDate, String toDate) throws Exception {
 		
@@ -119,7 +120,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		manager.flush();
 		return desk.getTicketId();
 	}
-	public final static String TICKETPENDINGLIST= "SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.FileName,b.TicketStatus FROM helpdesk_tickets b,employee a , helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND b.TicketStatus IN ('I','R') AND a.EmpNo=b.RaisedBy ORDER BY RaisedDate DESC ";
+	public final static String TICKETPENDINGLIST= "SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.FileName,b.TicketStatus,(SELECT MAX(att.AttachmentId) FROM helpdesk_attachments att WHERE att.ticketid= b.ticketid) AS 'attachmentid'  FROM helpdesk_tickets b,employee a , helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND b.TicketStatus IN ('I','R') AND a.EmpNo=b.RaisedBy ORDER BY RaisedDate DESC ";
 			
 	@Override
 	public List<Object[]> getTicketPending() throws Exception {
@@ -165,7 +166,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			return list;
 	}
 	
-	public final static String TICKETASSIGNEDLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.Priority,b.AssignedTo FROM helpdesk_tickets b,employee a,helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketId=:TicketId ";
+	public final static String TICKETASSIGNEDLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.Priority,b.AssignedTo,b.FileName FROM helpdesk_tickets b,employee a,helpdesk_category c ,helpdesk_sub_category d WHERE b.isActive='1' AND c.TicketCategoryId=b.TicketCategoryId AND d.TicketSubCategoryId=b.TicketSubCategoryId  AND a.EmpNo=b.RaisedBy AND b.TicketId=:TicketId ";
 	@Override
 	public List<Object[]> getTicketAssignedList(String ticketId) throws Exception {
 		Query query=manager.createNativeQuery(TICKETASSIGNEDLIST);
@@ -208,7 +209,6 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		
 		Query query=manager.createNativeQuery(TICKETFORWARDEDLIST);
 		List<Object[]> list =  (List<Object[]>)query.getResultList();
-		
 		return list;
 	}
 	
@@ -255,7 +255,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		return desk.getTicketId();
 	}
 
-	public static final String CLOSEDTICKETLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.RaisedDate,b.FileName,b.TicketStatus,b.Closedby,b.ClosedDate ,a2.EmpName AS closedByname FROM helpdesk_tickets b,employee a ,employee a1,employee a2 WHERE b.isActive='1' AND a.EmpNo=b.RaisedBy AND b.TicketStatus IN ('C') AND b.Closedby=a1.EmpNo AND a2.EmpNo=b.Closedby AND DATE (b.ClosedDate) BETWEEN  :FromDate AND :ToDate ORDER BY ClosedDate DESC";
+	public static final String CLOSEDTICKETLIST="SELECT b.TicketId,a.EmpNo ,a.EmpName,b.RaisedDate,b.FileName,b.TicketStatus,b.Closedby,b.ClosedDate ,a2.EmpName AS closedByname,(SELECT MAX(att.AttachmentId) FROM helpdesk_attachments att WHERE att.ticketid= b.ticketid) AS 'attachmentid' FROM helpdesk_tickets b,employee a ,employee a1,employee a2 WHERE b.isActive='1' AND a.EmpNo=b.RaisedBy AND b.TicketStatus IN ('C') AND b.Closedby=a1.EmpNo AND a2.EmpNo=b.Closedby AND DATE (b.ClosedDate) BETWEEN  :FromDate AND :ToDate ORDER BY ClosedDate DESC";
 	@Override
 	public List<Object[]> getClosedList(String fromDate, String toDate) throws Exception {
 	
@@ -636,10 +636,62 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			}
 			
 		}
-	
-	
-	
+
+    @Override
+	public long ForwardAttachment(HelpdeskAttachments attach) throws Exception {
+		
+		    manager.persist(attach);
+			manager.flush();
+			return attach.getTicketId();
 	}
+
+	private static final String MAXOFATTACHMENTID="SELECT IFNULL(MAX(AttachmentId),0) as 'MAX' FROM helpdesk_attachments";
+	@Override
+	public long MaxOfAttachmentId() throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(MAXOFATTACHMENTID);
+			BigInteger ticktid=(BigInteger)query.getSingleResult();
+			return ticktid.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO MaxOfAttachmentId "+ e);
+			return 0;
+		}
+	}
+
+
+	@Override
+	public HelpdeskAttachments getattachId(String AttachmentId) throws Exception {
+		try {
+
+			  HelpdeskAttachments attach = manager.find(HelpdeskAttachments.class, Long.parseLong(AttachmentId));
+				return attach;
+	
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside DAO getTicketId() "+e);
+				e.printStackTrace();
+				return null;
+			}
+	
+	   }
+
+	private static final String REVOKEDLIST="SELECT b.TicketId,a.EmpNo,a.EmpName,b.TicketCategoryId,b.TicketSubCategoryId,b.TicketDesc,b.RaisedDate,c.TicketCategory,d.TicketSubCategory,b.FileName FROM helpdesk_tickets b,employee a ,helpdesk_category c,helpdesk_sub_category d WHERE b.isActive='0'AND c.TicketCategoryId=b.TicketCategoryId  AND d.TicketSubCategoryId=b.TicketSubCategoryId AND a.EmpNo=b.RaisedBy  AND DATE(b.RaisedDate) BETWEEN :FromDate AND :ToDate  ORDER BY RaisedDate DESC";
+	@Override
+	public List<Object[]> getRevokedList(String fromDate, String toDate) throws Exception {
+		try {
+			Query query= manager.createNativeQuery(REVOKEDLIST);
+			query.setParameter("FromDate", fromDate);
+			query.setParameter("ToDate", toDate);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getRevokedList " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+		
+}
 
 
 	

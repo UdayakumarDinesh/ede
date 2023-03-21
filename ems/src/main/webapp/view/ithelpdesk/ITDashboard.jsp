@@ -350,7 +350,7 @@
 							      
 							        <%if(LoginType.toString().equalsIgnoreCase("A") || LoginType.toString().equalsIgnoreCase("U") ) {%> 
 							        <div class="col-md-4" style="max-width:19.333%;">
-							           <div class="counter blue" style="cursor: pointer;" >
+							           <div class="counter blue"  >
 							            <span class="counter-value"> <%=TotalCountData[1] %></span>
 							                <h3>PENDING</h3>
 							            </div>
@@ -436,9 +436,9 @@
 	        }]  */
 	   },
 	     colors: [
-	        '#3371FF',
-	        '#58FF33',
-	    	'#FF33FC',
+	        '#187498',
+	        '#36AE7C',
+	    	'#FF6347',
 	    ], 
 	      series: [{
 	        type: 'column',
@@ -543,14 +543,14 @@
 	                
 	            },
 	            colors: [
-	            	      '#ECFF33',
-	            	      '#4CFF33',
-	            	      '#F033FF',
-	            	      '#334FFF',
-	            	      '#33FFFF',
-	  	                  '#FF3352',
-	  	                  '#33FFAC',
-	  	                  '#273746'
+	            	      '#5FD068',
+	            	      '#FF7800',
+	            	      '#F037A5',
+	            	      '#3AB0FF',
+	            	      '#F3C623',
+	  	                  '#D32626',
+	  	                  '#2A363B',
+	  	                  '#643579'
 	            	   
 	              ],
 	        }

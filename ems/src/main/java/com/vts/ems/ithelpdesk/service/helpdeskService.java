@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
+import com.vts.ems.ithelpdesk.model.HelpdeskAttachments;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
@@ -59,5 +60,7 @@ public interface helpdeskService {
 	public Object[] IThelpdeskDashboardCountData(String empNo, String logintype,String fromDate, String toDate) throws Exception;
 	public List<Object[]> IThelpdeskDashboardGraphData(String fromDate, String toDate)  throws Exception;
 	public List<Object[]>IThelpdeskDashboardPieChartData(String fromDate, String toDate) throws Exception;
+	public HelpdeskAttachments getattachId(String AttachmentId)  throws Exception;
+	public List<Object[]> getRevokedList(String fromDate, String toDate) throws Exception;
 	
 }

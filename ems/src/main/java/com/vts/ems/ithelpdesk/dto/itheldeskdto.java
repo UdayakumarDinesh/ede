@@ -38,6 +38,7 @@ public class itheldeskdto {
 	private String  CloseDate;
 	private String ClosedBy;
 	private String FeedBackRequired;
+	private String FeedBackType; 
 	private String Feedback;
 	private String  CreatedBy;
 	private String  CreatedDate;
