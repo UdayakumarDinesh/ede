@@ -192,21 +192,18 @@ String todate = (String)request.getAttribute("toDt");
 								<th style="padding: 5px;width:20%;" >Sub-Category :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-subcategory"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned By :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assignedby"></td>
 								<th style="padding: 5px" >Assigned Date :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assigneddate"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Closed By :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-closedby"></td>
 								<th style="padding: 5px;width:20%;" >Closed Date :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-closeddate"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned To :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assignedto"></td>
