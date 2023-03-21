@@ -101,27 +101,30 @@ public class MtController {
 			 fifthpply=new ArrayList<Object[]>();
 			
 			 for(Object[] list:listapply) {
-				if(sdtf.format(new Date()).equalsIgnoreCase(sdtf.format(list[1]))) {
+				
+				 	Date date1=sdf.parse(sdf.format(list[1]));
+					Date date11=sdf.parse(sdf.format(new Date()));
+					Date date2=sdf.parse(sdf.format(new Date(new Date().getTime()+(24*60*60*1000))));
+					Date date3=sdf.parse(sdf.format(new Date(new Date().getTime()+(2*24*60*60*1000))));
+					Date date4=sdf.parse(sdf.format(new Date(new Date().getTime()+(3*24*60*60*1000))));
+					Date date5=sdf.parse(sdf.format(new Date(new Date().getTime()+(4*24*60*60*1000))));
+				if(date1.compareTo(date11) == 0) {
 					firstapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date2) == 0) {
 					secondapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(2*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date3) == 0) {
 					thirdapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(3*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date4) == 0) {
 					fourthapply.add(list);	
 				}
-				
-				if(sdtf.format(new Date(new Date().getTime()+(4*24*60*60*1000))).equalsIgnoreCase(sdtf.format(list[1]))) {
+				if(date1.compareTo(date5) == 0) {
 					fifthpply.add(list);	
 				}
-				
 			}
+
 			req.setAttribute("firstapply", firstapply);
 			req.setAttribute("secondapply", secondapply);
 			req.setAttribute("thirdapply", thirdapply);
@@ -1269,7 +1272,8 @@ public class MtController {
 	
 	@RequestMapping(value="DirectorTrip.htm",method=RequestMethod.GET)
 	public String DirectorDuty(HttpServletRequest req,HttpSession ses) throws Exception {
-		
+		SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+		SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DirectorTrip.htm "+Username);	
 		try {
@@ -1281,11 +1285,12 @@ public class MtController {
 				 req.setAttribute("dutylist",service.DirectorTripList(DateTimeFormatUtil.dateConversionSql(FDate),DateTimeFormatUtil.dateConversionSql(TDate)));
 			
 			}else{
-				
-				 Calendar cal = Calendar.getInstance();
-				 cal.add(Calendar.DAY_OF_MONTH, 30);
-				 String newDate = sdf.format(cal.getTime()); 
-				 req.setAttribute("dutylist",service.DirectorTripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(sdf.parse(newDate).getTime())));
+				String fd = LocalDate.now().minusMonths(1).toString();
+				String td = LocalDate.now().toString();
+				FDate=rdf.format(sf.parse(fd.toString()));
+				TDate=rdf.format(sf.parse(td.toString()));
+								
+				 req.setAttribute("dutylist",service.DirectorTripList(DateTimeFormatUtil.dateConversionSql(FDate),DateTimeFormatUtil.dateConversionSql(TDate)));
 			}
 			
 			req.setAttribute("fromdate", FDate);

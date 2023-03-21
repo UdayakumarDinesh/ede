@@ -103,7 +103,7 @@ String month=(String)request.getAttribute("month");
    </table>
     </div>
     </div>
-    <div align="center"><button type="submit" value="print" name="sub" class="btn btn-primary btn-sm" onclick="Edit(myfrm)"  formtarget="_blank">PRINT</button>
+    <div align="center"><button type="submit" value="print" name="sub" class="btn btn-primary btn-sm"  onclick="Edit(frm)" formtarget="_blank">PRINT</button>
     <button type="submit" value="delete" name="sub" class="btn btn-danger btn-sm"  onclick="Delete(frm)" style="margin-left: 10px;" >DELETE</button>
     </div>
     </form>
@@ -132,12 +132,12 @@ $(document).ready(function(){
 
 function Edit(myfrm) {
 	var fields = $("input[name='printdata']").serializeArray();
+	console.log("filed:"+fields);
 	if (fields.length === 0) {
 		alert("Please Select Atleast One ");
 		event.preventDefault();
 		return false;
 	}
-	return true;
 }
 
 function Delete(myfrm){ 

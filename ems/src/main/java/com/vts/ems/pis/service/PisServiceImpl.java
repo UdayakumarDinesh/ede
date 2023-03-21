@@ -2095,4 +2095,28 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.ChangeAnnualDeclarationStatus(Empid, status);
 		}
+
+		@Override
+		public List<Object[]> getGroupListGH() throws Exception {
+			
+			return dao.getGroupListGH();
+		}
+
+		@Override
+		public List<Object[]> getDivisionListDH() throws Exception {
+			
+			return dao. getDivisionListDH();
+		}
+
+		@Override
+		public Object[] getDirectorDetails() throws Exception {
+			
+			return dao.getDirectorDetails();
+		}
+
+		@Override
+		public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
+		
+			return dao.getDeptEmpList( divisionId);
+		}
 }

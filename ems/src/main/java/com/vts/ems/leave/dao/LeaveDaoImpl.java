@@ -59,7 +59,7 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String LEAVEAPPLIED="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LAU','LR1','LR2','LR3','LRO','LVA') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String OPENINGBALANCE="FROM LeaveRegister WHERE STATUS='LOB' AND YEAR=:yr AND EMPID=:EmpNo";
     private static final String REGISTERBYYEAR="SELECT a.registerid,a.empid,a.cl,a.el,a.hpl,a.cml,a.rh,a.ccl,a.sl,a.ml,a.pl,a.year,a.month,MONTH(STR_TO_DATE(a.month,'%M')) AS monthid,a.status,b.oldstatus,a.from_date,a.to_date,a.appl_id,a.remarks  FROM leave_register a, leave_status_desc b WHERE  a.STATUS=b.status AND :yr=a.year and  a.empid=:empNo ORDER BY a.year ASC,monthid ASC , b.sortpriority ASC,a.registerid ASC";
-    private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND  (a.fromdate BETWEEN  :fromDate AND :toDate OR a.todate BETWEEN :fromDate AND :toDate)";   
+    private static final String CHECKLEAVEEL="SELECT a.applid, a.leavecode, a.fnan FROM leave_appl a WHERE a.empid=:empno AND a.leaveyear in(YEAR(:fromDate),YEAR(:fromDate)+1)  AND  (a.fromdate  BETWEEN  :fromDate AND :toDate OR a.todate  BETWEEN :fromDate AND :toDate)";   
     private static final String LEAVESANC="Select a.leaveapplid,a.empid,b.leave_name,a.fromdate,a.todate,a.status,a.purleave,a.createdby,a.leaveamend,a.createddate,a.applid from leave_appl a , leave_code b where b.leave_code=a.leavecode  and a.status in('LSO','LDO') and a.empid=:empNo order by a.leaveapplid desc";
     private static final String LEAVEYRS="SELECT DISTINCT(YEAR) FROM leave_register WHERE YEAR<=:yr AND empid=:empNo ORDER BY YEAR ASC";
 	private static final String LEAVEDIRRECC="CALL leave_dir_recc(:empNo)";
@@ -362,6 +362,7 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception {
+		System.out.println( "fromDate"+fromDate+"toDate"+toDate);
 		Query query = manager.createNativeQuery(CHECKLEAVEEL);
 		query.setParameter("empno", EmpNo);
 		query.setParameter("fromDate", fromDate);

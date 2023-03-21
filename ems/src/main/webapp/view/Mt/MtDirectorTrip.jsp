@@ -74,14 +74,14 @@
 				<div class="col-md-2" align="left">
 					<label style=" font-weight: 800">From Date: <span class="mandatory" style="color: red;">*</span></label>
 					<div class=" input-group">	
-					<input type="text" class="form-control input-sm fromdate" <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate %>" <%}%>  readonly="readonly"   id="fromdate" name="fromdate"  required="required"  > 
+					<input type="text" class="form-control input-sm fromdate" <%-- <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate %>" <%}%> --%>  readonly="readonly"   id="fromdate" name="fromdate"  required="required"  > 
 				    </div>
 				</div>
 
 				<div class="col-md-2" align="left">
 					<label style=" font-weight: 800">To Date: <span class="mandatory" style="color: red;">*</span></label>
 					<div class=" input-group">	
-					<input type="text" class="form-control input-sm todate" <%if(todate!=null && todate!=""){%> value="<%=todate %>" <%}%>    readonly="readonly"  id="todate" name="todate"  required="required" > 			
+					<input type="text" class="form-control input-sm todate"<%--  <%if(todate!=null && todate!=""){%> value="<%=todate %>" <%}%> --%>    readonly="readonly"  id="todate" name="todate"  required="required" > 			
 			        </div>
 				</div>
 				<div class="col-md-2" align="left">
@@ -95,21 +95,21 @@
 </div>
 <br>
 <div class="container-fluid">	
- <form  class="navbar-form  ml-auto " action="DirectorTrip.htm" method="GET">
+ <form  class="navbar-form  ml-auto " action="DirectorTrip.htm" method="GET" id="myform">
 	<div class="nav navbar bg-light dashboard-margin custom-navbar" style="padding-top: 10px;">
 	
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="col-md-3"></div>
+		<div class="col-md-8"></div>
 		
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
-		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Fdate"  name="Fromdate"  required="required" <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate%>" <%}%>  style="width: 120px;">
+		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="fdate" readonly="readonly"  name="Fromdate"  required="required" <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate%>" <%}%>  style="width: 120px;">
 	
 		<label style="font-weight: 800;padding-left: 5px">To Date :  &nbsp; </label>
-		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="Tdate"  name="Todate" <%if(todate!=null && todate!=""){%> value="<%=todate%>" <%}%>  style="width: 120px;">
+		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="tdate" readonly="readonly"  name="Todate" <%if(todate!=null && todate!=""){%> value="<%=todate%>" <%}%>  style="width: 120px;">
 		
-		<div class="col-md-4 d-flex justify-content-center" >
+		<!-- <div class="col-md-4 d-flex justify-content-center" >
 			<button type="submit" class="btn btn-sm submit-btn" style="margin-left: -50%;" name="action" value="submit" > Submit</button>
-		</div>
+		</div> -->
 		
 	</div>
 </form>
@@ -196,7 +196,7 @@ $( "#fromdate" ).change(function() {
 
 
 
-$('#Fdate').daterangepicker({
+/* $('#Fdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,	
@@ -234,7 +234,37 @@ $( "#Fdate" ).change(function() {
 			format : 'DD-MM-YYYY'
 		}
 	});
-});
+}); */
 </script>
+<script>
 
+$('#fdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,	 
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+	
+	$('#tdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :$("#fromdate").val(),  
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	$(document).ready(function(){
+		   $('#fdate, #tdate').change(function(){
+		       $('#myform').submit();
+		    });
+		});
+</script> 
 </html>

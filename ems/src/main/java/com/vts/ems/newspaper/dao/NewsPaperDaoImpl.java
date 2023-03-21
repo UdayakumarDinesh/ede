@@ -577,7 +577,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	}
 	
 	
-	private static final String GETLABDETAILS = " From lab_master";
+	private static final String GETLABDETAILS = " From LabMaster";
 	
 	@Override
 	public LabMaster getLabDetails() throws Exception

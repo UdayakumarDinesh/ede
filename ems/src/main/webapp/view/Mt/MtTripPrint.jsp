@@ -238,7 +238,7 @@ Mto Comments(if any) :&nbsp; &nbsp; &nbsp;<b><%if(obj[14]!=null){ %><%=obj[14] %
 <div class="row" style="margin-bottom: 10px;">
 
 <div class="col-md-6"></div>
-<div class="col-md-6"><span style="margin-left: 10px;">
+<div class="col-md-6"><span style="margin-left: 200px;">
 अनुबंधित अधिकारी का हस्ताक्षर /Signature of approving authority
 
 </span>

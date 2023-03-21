@@ -219,4 +219,8 @@ public interface PisDao {
 	public Object[] getFormYear(Long empId)throws Exception;
 	public void UpdateAnnualDeclarationAllEmp(String status) throws Exception;
 	public int ChangeAnnualDeclarationStatus(String Empid, String status) throws Exception;
+	public List<Object[]> getGroupListGH() throws Exception;
+	public List<Object[]> getDivisionListDH()throws Exception;
+	public Object[] getDirectorDetails()throws Exception;
+	public List<Object[]> getDeptEmpList(String divisionId)throws Exception;
 }

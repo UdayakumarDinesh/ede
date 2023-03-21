@@ -129,7 +129,13 @@ String empNo=(String)request.getAttribute("empNo");
   	      		    </div>
   	      		    <div class="col-md-2">
   	      		    RA No:<br>
-  	      		    <input class="form-control" type="number" name="RANO" <%if(ReccSancById!=null){ %> value="<%=ReccSancById.getRANO() %>" <%}else{ %> value="1" <%} %> required="required"  min="0"  max="3">
+  	      		   <%--  <input class="form-control" type="number" name="RANO" <%if(ReccSancById!=null){ %> value="<%=ReccSancById.getRANO() %>" <%}else{ %> value="1" <%} %> required="required"  min="0"  max="3"> --%>
+  	      		  <select class="form-control  selectpicker" required="required" name="RANO">
+  	      		  <option value="1" <%if(ReccSancById!=null && "1".equalsIgnoreCase(ReccSancById.getRANO().toString())) {%> selected="selected" <%} %>>1</option>
+  	      		  <option value="2" <%if(ReccSancById!=null && "2".equalsIgnoreCase(ReccSancById.getRANO().toString())) {%> selected="selected" <%} %>>2</option>
+  	      		  <option value="3"<%if(ReccSancById!=null && "3".equalsIgnoreCase(ReccSancById.getRANO().toString())) {%> selected="selected" <%} %>>3</option>
+  	      		  
+  	      		  </select>
   	      		    </div>
   	      			<div class="col-md-4" >
   	      		    RA1 Name:<br>

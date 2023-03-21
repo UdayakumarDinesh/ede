@@ -201,7 +201,7 @@ public class EmsController {
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		String Empno = ( ses.getAttribute("EmpNo")).toString();
-		System.out.println("notif----"+Empno);
+		//System.out.println("notif----"+Empno);
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
     	List <Object[]> attendlist=null;
@@ -222,6 +222,7 @@ public class EmsController {
 				String td = LocalDate.now().toString();
 				fromDate=rdf.format(sdf.parse(fd.toString()));
 				toDate=rdf.format(sdf.parse(td.toString()));
+				
 			}
 										
 			if(empNo!=null && fromDate!=null && fromDate!=null) {
