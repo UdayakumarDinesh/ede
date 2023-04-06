@@ -79,6 +79,29 @@ public class AdminDaoImpl implements AdminDao{
 		return HeaderSchedulesList;
 	}
 	
+	
+	
+	private static final String FORMOPTIONLIST = "SELECT fo.formoptionid,fo.Formoption FROM form_option fo WHERE fo.formoptionid IN (SELECT DISTINCT fm.formoptionid FROM form_module fm WHERE fm.formmoduleid IN ( SELECT DISTINCT fd.formmoduleid FROM form_detail fd WHERE fd.formdetailid IN (SELECT DISTINCT fra.formdetailid FROM form_role_access fra WHERE fra.logintype=:LOGINTYPE AND fra.isactive=1) AND fd.isactive = 1 )) AND fo.isactive=1";
+	@Override
+	public List<Object[]> FormOptionList(String LoginType) throws Exception {
+		Query query = manager.createNativeQuery(FORMOPTIONLIST);
+		query.setParameter("LOGINTYPE", LoginType);
+		List<Object[]> FormModuleList= query.getResultList();
+		return FormModuleList;
+	}
+	
+	
+	private static final String HEADERMODULEDROPDOWNLIST = "SELECT DISTINCT fm.formmodulename,fm.moduleurl,fm.formmoduleid FROM form_module fm WHERE fm.formmoduleid IN ( SELECT DISTINCT fd.formmoduleid FROM form_detail fd WHERE fd.formdetailid IN (SELECT DISTINCT fra.formdetailid FROM form_role_access fra WHERE fra.logintype=:LOGINTYPE AND fra.isactive=1) AND fd.isactive = 1 ) AND fm.FormOptionId = :FormOptionId";
+	@Override
+	public List<Object[]> HeaderModuleDropDownList(String LoginType,String FormOptionId) throws Exception {
+		Query query = manager.createNativeQuery(HEADERMODULEDROPDOWNLIST);
+		query.setParameter("LOGINTYPE", LoginType);
+		query.setParameter("FormOptionId", FormOptionId);
+		List<Object[]> FormModuleList= query.getResultList();
+		return FormModuleList;
+	}
+	
+	
 	private static final String FROMMODULELIST = "SELECT DISTINCT a.formmoduleid , a.formmodulename  , a.moduleurl,a.isactive ,a.moduleicon FROM form_module a, form_detail b, form_role_access c WHERE a.isactive='1' AND a.formmoduleid=b.formmoduleid AND b.formdetailid=c.formdetailid AND c.logintype=:LOGINTYPE AND c.isactive=1 ORDER BY a.formmoduleid";
 	@Override
 	public List<Object[]> FormModuleList(String LoginType) throws Exception {
@@ -87,6 +110,10 @@ public class AdminDaoImpl implements AdminDao{
 		List<Object[]> FormModuleList= query.getResultList();
 		return FormModuleList;
 	}
+	
+	
+	
+	
 	private static final String FORMROLEACTIVELIST="SELECT isactive FROM form_role_access WHERE formroleaccessid=:formroleaccessid";
 	@Override
 	public List<BigInteger> FormRoleActiveList(String formroleaccessid) throws Exception {

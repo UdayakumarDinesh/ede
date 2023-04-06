@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.athithi.dto.ComEmp;
 import com.vts.ems.athithi.dto.NewIntimation;
 import com.vts.ems.athithi.model.Company;
@@ -32,6 +33,11 @@ public class IntimationController {
 	
 	@Autowired
 	IntimationService service;
+	
+	@Autowired
+	AdminService adminservice;
+	
+	private final String formmoduleid = "12";
 	
 	SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm:ss");
 	private static final Logger logger = LogManager.getLogger(IntimationController.class);
@@ -226,8 +232,9 @@ public class IntimationController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER IntimationList "+UserId);		
 		try {
-//			String groupId =ses.getAttribute("groupId").toString();
-			ses.setAttribute("SidebarActive","IntimationList_htm");
+			String logintype = (String)ses.getAttribute("LoginType");
+			ses.setAttribute("formmoduleid", "28");
+			ses.setAttribute("SidebarActive","IntimationList.htm");		
 			req.setAttribute("IntimationList", service.getItimationList("0"));
 			return "athithi/IntimationList";
 		}

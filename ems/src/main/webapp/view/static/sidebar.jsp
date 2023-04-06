@@ -188,8 +188,9 @@ $(document).ready(function () {
 				  return result[e];
 				});
 			var sidebarmodule = "";
+			console.log(formmoduleid);
 			for (i = 0; i < values.length; i++) {
-		
+				
 				sidebarmodule+="<a class='nav-link mb-1 shadow custom_width' id='"+values[i][1].replace('.','_') +"'  href='"+values[i][1]+"'><i class='fa-solid fa-star'></i>&nbsp; <span class=' large ' >"+values[i][0]+"</span></a>";
  
 			}

@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.math.BigInteger"%>
 <%@page import="java.math.MathContext"%>
@@ -172,6 +173,8 @@ th,td
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
+	
+	boolean ProcessFlag = false;
 
 %>
 
@@ -294,6 +297,10 @@ th,td
 											BigDecimal discount = new BigDecimal(0);/*,  GST=0 */;
 											for(int i=0;i<chssbillslist.size();i++)
 											{
+												LocalDate billdate = LocalDate.parse(chssbillslist.get(i)[4].toString());
+												if(billdate.isAfter(LocalDate.parse("2023-03-30"))){
+													ProcessFlag = true;
+												}
 												billstotal =billstotal.add (new BigDecimal(chssbillslist.get(i)[7].toString()));
 												if(Double.parseDouble(chssbillslist.get(i)[8].toString())>0)
 												{
@@ -415,6 +422,9 @@ th,td
 										</div>
 									</div>
 								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
+									<% if(ProcessFlag && allowEdit ){%>
+										<b style="color: #C60000;">This Claim Contains Bills with date after 31-03-2023</b>
+									<%} %>
 									<table>
 										<tbody>
 											
@@ -963,7 +973,7 @@ th,td
 									</table>
 								<%} %>
 							</div>
-							<%}else { %>
+							<%}else { %>n
 								<div class="col-md-5" ></div>
 							<%} %>
 							<%if(Arrays.asList("UF","E").contains(view_mode) && chssstatusid < 14){ %>	
@@ -975,7 +985,9 @@ th,td
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 								</div>
 							<%} %>
-							
+							<% if(ProcessFlag && allowEdit ){%>
+								<b style="color: #C60000;">This Claim Contains Bills with date after 31-03-2023</b><br>
+							<%} %>
 							<%if(chssstatusid==2 ||  chssstatusid==5 ){ %>
 								
 								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Process</button>
@@ -1065,7 +1077,7 @@ th,td
 							</div>
 							
 					</form>
-					
+						
 					<%if(chssstatusid==15 && ActivateDisp!=null && ActivateDisp.equalsIgnoreCase("Y") && ClaimDisputeData==null){ %>
 						
 						<form action="ClaimDisputeSubmit.htm" method="post">
