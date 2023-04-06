@@ -57,6 +57,8 @@ public interface AdminService {
 	public BigInteger contractEmpAddcheck(String cuserName)throws Exception;
 	public BigInteger contractEmpEditcheck(String username, String contractEmpId)throws Exception;
 	public Long ContractEmpEditComments(MasterEdit masteredit, MasterEditDto masterdto)throws Exception;
+	public List<Object[]> FormOptionList(String LoginType) throws Exception;
+	public List<Object[]> HeaderModuleDropDownList(String LoginType, String FormOptionId) throws Exception;
 	
 	
 	

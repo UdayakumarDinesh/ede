@@ -650,7 +650,7 @@ public class LeaveController {
 		logger.info(new Date() +"Inside LeaveApprovalAdm.htm "+UserId);		
 		try {
 			ses.setAttribute("SidebarActive", "LeaveApprovalAdm_htm");
-			String empNo=empNo=(String)ses.getAttribute("EmpNo");
+			String empNo=(String)ses.getAttribute("EmpNo");
 		    req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
 	    }
 	     catch (Exception e) {
