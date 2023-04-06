@@ -1005,27 +1005,5 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					  return json.toJson(username);
 				}		 
 			 
-//			 @RequestMapping(value = "ITDashboard.htm", method = RequestMethod.GET)
-//				public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
-//					String Username = (String) ses.getAttribute("Username");
-//					logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
-//					try {
-//						String logintype = (String)ses.getAttribute("LoginType");
-//						String EmpNo = (String)ses.getAttribute("EmpNo");
-//				        
-//						List<Object[]> admindashboard = service.HeaderSchedulesList("11" ,logintype); 
-//						
-//						req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo));
-//						
-//						
-//						ses.setAttribute("formmoduleid", "11"); 
-//						req.setAttribute("dashboard", admindashboard);
-//						ses.setAttribute("SidebarActive", "ITDashboard_htm");
-//						return "ithelpdesk/ITDashboard";
-//					} catch (Exception e) {
-//						logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
-//						e.printStackTrace();	
-//						return "static/Error";
-//					}
-//				}
+
 }		
