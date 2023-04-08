@@ -20,7 +20,6 @@ import com.vts.ems.leave.model.LeaveHandingOver;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.master.model.LabMaster;
-import com.vts.ems.pis.model.Employee;
 
 
 
@@ -64,16 +63,16 @@ public class LeaveDaoImpl implements LeaveDao{
     private static final String LEAVEYRS="SELECT DISTINCT(YEAR) FROM leave_register WHERE YEAR<=:yr AND empid=:empNo ORDER BY YEAR ASC";
 	private static final String LEAVEDIRRECC="CALL leave_dir_recc(:empNo)";
 	private static final String LEAVEDIRNR="CALL leave_dir_nr(:empNo)";
-	private static final String LEAVEADM="CALL leav_adm(:empNo)";
+	private static final String LEAVEADM="CALL leave_adm(:empNo)";
     @Override
 	public List<Object[]> PisHolidayList(String year) throws Exception {
 		Query query = manager.createNativeQuery(HOLIDAYLIST);
 		query.setParameter("holiyear", year);
 		List<Object[]> FormModuleList= query.getResultList();
 		return FormModuleList;
-	
 	}
 
+	
 
 	@Override
 	public List<Object[]> LeaveCreditList(String month, String year) throws Exception {

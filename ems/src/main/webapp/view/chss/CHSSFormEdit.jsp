@@ -172,7 +172,8 @@ th,td
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
-	String chssapplyid = (String)request.getAttribute("chssapplyid");	
+	
+	boolean ProcessFlag = false;
 
 %>
 
@@ -223,7 +224,7 @@ th,td
 			<div class="card" style="padding-top:0px;margin-top: -15px;">
 				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="center">
 				
-				<input type="hidden" id="chssapplyid" name="chssapplyid" value="<%=chssapplyid %>">
+				
 							
 								<table style="border: 0px; width: 100%">
 									<tr>

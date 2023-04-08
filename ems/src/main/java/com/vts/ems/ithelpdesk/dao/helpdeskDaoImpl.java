@@ -521,7 +521,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			HelpDeskEmployee emp = manager.find(HelpDeskEmployee.class, (helpDeskEmpId));
 			return emp;
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO GetTicket() "+e);
+			logger.error(new Date() + "Inside DAO getHelpDeskEmployeeList() "+e);
 			e.printStackTrace();
 			return null;
 		}	
@@ -536,7 +536,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 			manager.flush();		
 			return he.getHelpDeskEmpId();
 		}	catch (Exception e) {
-			logger.error(new Date() + "Inside DAO divsionGroupEdit() "+e);
+			logger.error(new Date() + "Inside DAO getEmployeeupdate() "+e);
 			e.printStackTrace();
 			return 0L;
 		}
