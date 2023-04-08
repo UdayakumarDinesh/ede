@@ -183,20 +183,10 @@ th,td
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<%if(dispReplyEnable!=null && dispReplyEnable.equalsIgnoreCase("Y")){ %>
-						<li class="breadcrumb-item "><a href="ClaimDisputeList.htm">Claim Disputes</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("CHSSDashboard_htm")) {%>
+						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>	
 						<li class="breadcrumb-item "><a href="CHSSDashboard.htm">CHSS</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("CHSSApprovalsList_htm")) {%>
-						<li class="breadcrumb-item "><a href="CHSSApprovalsList.htm">Claims Pending</a></li>
-						<%} else if(SidebarActive.equalsIgnoreCase("ClaimsList_htm")) {%>
-						<li class="breadcrumb-item "><a href="ClaimsList.htm">Claims List</a></li>
-						<%}else if(SidebarActive.equalsIgnoreCase("ApprovedBills_htm")) {%>
-						<li class="breadcrumb-item "><a href="ApprovedBills.htm">Approved Bills List</a></li>
-						<%} %>
-						
-						<li class="breadcrumb-item active " aria-current="page">Claim</li>
+						<li class="breadcrumb-item "><a href="DisputeList.htm">DisputeList</a></li>
+						<li class="breadcrumb-item active " aria-current="page">ClaimReApply</li>
 					</ol>
 				</div>
 			</div>
@@ -236,7 +226,7 @@ th,td
 								<table style="margin-top: 5px;">	
 									<tbody>
 										<tr>
-											<th colspan="3" style="border: 0px"> Claim No : <%=chssapplydata[16] %></th>
+											<th colspan="3" style="border: 0px"> Dispute Claim Against Claim No : <%=chssapplydata[16] %></th>
 										</tr>
 										<tr>
 											<th>Name</th>
@@ -268,7 +258,6 @@ th,td
 										
 									</tbody>
 								</table>
-								
 								
 								<table style="margin-bottom: 0px;">	
 									<tbody>
@@ -415,7 +404,7 @@ th,td
 											
 										</div>
 									</div>
-								<form action="ConsultRemAmountEdit.htm" method="post" autocomplete="off">
+								<form action="CHSSReApplySubmit.htm" method="post" autocomplete="off">
 									<table>
 										<tbody>
 											
@@ -429,10 +418,11 @@ th,td
 												</tr> 
 												<!-- --------------- consultation -------------------- -->
 												<tr>
-													<th class="center" colspan="4" style="width: 55%;">Particulars</th>
+												    <th class="center" style="border-right:none; "></th>
+													<th class="center" colspan="4" style="width: 55%;border:none;">Particulars</th>
 													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
 													<th class="right" style="width: 10%;">Reimbursable under CHSS (&#8377;)</th>
-													<th class="center" style="width: 25%;">Comments</th>											
+													<th class="center" style="width: 20%;">Comments</th>											
 												</tr>
 												<% 	BigDecimal itemstotal=new BigDecimal("0.0");
 													BigDecimal totalremamount=new BigDecimal("0.0"); 
@@ -441,7 +431,8 @@ th,td
 												{ %>
 													<%if(i==1){ %>
 														<tr>
-															<td colspan="4" style="text-align: center;">
+														<td style="border-right:none;"></td>
+															<td colspan="4" style="text-align: center;border-left:none;">
 																<b>Consultation Charges </b>
 																<%if(allowEdit || historyBtn){ %>
 																	<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(1)" data-toggle="tooltip" data-placement="top" title="History" >       
@@ -457,16 +448,18 @@ th,td
 															<td></td>															
 														</tr>
 														<tr>
+														    <th class="center">Select</th> 
 															<th>Bill No</th>
-															<th>Doctor</th>
-															<th style="width:10%;">Type</th>
-															<th style="width:15%;" class="center">Date</th>
+															<th style="width:23%">Doctor</th>
+															<th style="width:8%;">Type</th>
+															<th style="width:8%;" class="center">Date</th>
 															<th></th>
 															<th></th>
 															<th></th>																														
 														</tr>			
 													<% } %>
 													<tr>
+													    <td class="center"> <input type="checkbox" name="consultationId" value="<%=consult[0]%>"> </td>
 														<td  class="text-blue" ><%=consult[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(consult[9] .toString()))%>) --%></td>
 														<td class="text-blue" ><%=consult[3] %>&nbsp;(<%=consult[11] %>)</td>
 														<td class="text-blue" >
@@ -533,7 +526,8 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;">
+													    <td style="border-right:none;"></td>
+														<td colspan="4" style="text-align: center;border-left:none;">
 															<b>Tests / Procedures</b> 
 															<%if(allowEdit || historyBtn){ %>
 																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="TestSub.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
@@ -553,6 +547,7 @@ th,td
 														<td ></td>												
 													</tr>
 													<tr>
+													    <th class="center">Select</th> 
 														<th>Bill No</th>
 														<th colspan="3">Test</th>
 														<th></th>
@@ -561,6 +556,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
+												    <td class="center"> <input type="checkbox" name="CHSSTestId" value="<%=test[0] %>"> </td>
 													<td class="text-blue" ><%=test[8] %><%-- &nbsp;(<%=rdf.format(sdf.parse(test[9] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="3"><%=test[6] %>(<%=test[10] %>)</td>
 													<td class="right text-blue"><%=test[4] %></td>
@@ -615,7 +611,8 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;">
+													    <td style="border-right:none;"></td>
+														<td colspan="4" style="text-align: center;border-left:none;">
 															<b>Medicines</b>
 															<%if(allowEdit || historyBtn){ %>
 																<button type="submit" style="margin-left: 5px;background: #5A8F7B;color: #ffffff;" formaction="MedicineList.htm" class="btn btn-sm btn-history" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Medicines List">
@@ -635,6 +632,7 @@ th,td
 														<td ></td>														
 													</tr>
 													<tr>
+													    <th class="center">Select</th>
 														<th>Bill No</th>
 														<th>Medicine Name</th>
 														<th style="width:10%;text-align: center;">Rx<br> Qty.</th>
@@ -645,6 +643,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
+												    <td class="center"> <input type="checkbox" name="CHSSMedicineId" value="<%=medicine[0] %>"> </td>
 													<td  class="text-blue" ><%=medicine[7] %><%-- &nbsp;(<%=rdf.format(sdf.parse(medicine[8] .toString()))%>) --%></td>
 													<td  class="text-blue" >	
 														<%=medicine[2] %>
@@ -712,7 +711,8 @@ th,td
 											{%>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;">
+													    <td style="border-rigth:none;"></td>
+														<td colspan="4" style="text-align: center;border-left:none">
 															<b>Others</b>
 															<%if(historyBtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(4)" data-toggle="tooltip" data-placement="top" title="History">
@@ -728,16 +728,17 @@ th,td
 														<td ></td>														
 													</tr>
 													<tr>
+													    <th class="center">Select</th>
 														<th>Bill No</th>
 														<th colspan="3">Other Items</th>
 														<th></th>
 														<th></th>
 														<th></th>
-														
-														
+																												
 													</tr>			
 												<%} %>
 												<tr>
+												    <td class="center"> <input type="checkbox" name="CHSSOtherId" value="<%=other[0] %>"> </td>
 													<td  class="text-blue" ><%=other[6] %><%-- &nbsp;(<%=rdf.format(sdf.parse(other[7] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="3"><%=other[4] %></td>
 													<td class="right text-blue"><%=other[3] %></td>
@@ -790,7 +791,8 @@ th,td
 											{ %>
 												<%if(i==1){ %>
 													<tr>
-														<td colspan="4" style="text-align: center;">
+													    <td style="border-right:none;"></td>
+														<td colspan="4" style="text-align: center;border-left:none;">
 															<b>Miscellaneous</b>
 															<%if(historyBtn){ %>
 																<button type="button" class="btn btn-sm btn-history"  onclick ="ShowHistory(5)" data-toggle="tooltip" data-placement="top" title="History">
@@ -807,6 +809,7 @@ th,td
 														
 													</tr>
 													<tr>
+													     <th class="center">Select</th>
 														<th>Bill No</th>
 														<th colspan="2">Item</th>
 														<th style="text-align: center;">Qty</th>
@@ -817,6 +820,7 @@ th,td
 													</tr>			
 												<%} %>
 												<tr>
+												    <td class="center"> <input type="checkbox" name="ChssMiscId" value="<%=misc[0] %>"> </td>
 													<td class="text-blue" ><%=misc[5] %><%-- &nbsp;(<%=rdf.format(sdf.parse(misc[6] .toString()))%>) --%></td>
 													<td  class="text-blue" colspan="2"><%=misc[2] %></td>
 													<td class="text-blue"  style="text-align: center;"><%if(misc[8]!=null){ %><%=misc[8] %><%} %></td>
@@ -873,6 +877,7 @@ th,td
 												<% } %>
 											</td>
 											<td></td>
+											<td></td>
 											
 										</tr>
 							
@@ -881,7 +886,7 @@ th,td
 											<td class="right text-blue"><b><%=discount %></b></td>
 											<td class="right text-green"></td>
 											<td ></td>
-											
+											<td></td>
 										</tr>
 															
 										<tr>						
@@ -894,23 +899,24 @@ th,td
 												<%} %>
 											</td>
 											<td ></td>
+											<td ></td>
 											
 										</tr>
 																				
 										<tr>
 									
-											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td> 
+											<td colspan="8" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td> 
 									
 										</tr>
 										
 										<tr>
 									
-											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>										
+											<td colspan="8" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>										
 										</tr>
 										
 										<tr>
 									
-											<td colspan="7" class="text-green">Admitted to Rs.
+											<td colspan="8" class="text-green">Admitted to Rs.
 											
 												<%if(showRemAmt || allowEdit){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
@@ -921,7 +927,7 @@ th,td
 										</tr>
 										
 										<tr>
-											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>									
+											<td colspan="8" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>									
 										<tr>
 										<tr>
 											<td colspan="4" style="border-top: 0;border-right : 0;">
@@ -950,12 +956,7 @@ th,td
 										
 									</tbody>				
 								</table>
-							
-								</form>
-							</div>
-					
-				
-					<form action="CHSSUserForward.htm" method="post" id="fwdform">
+								
 						<div class="row">
 						<%if(ClaimRemarksHistory.size()>0){ %>
 							<div class="col-md-5" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
@@ -981,39 +982,7 @@ th,td
 								<div class="col-md-5" ></div>
 							<%} %>
 							<%if(Arrays.asList("UF","E").contains(view_mode) && chssstatusid < 14){ %>	
-							<div class="col-md-6" align="center" style="margin-top: 5px;">
-							
-							<%if(chssstatusid!=8  ){ %>
-								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-									Remarks : <br>
-									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
-								</div>
-							<%} %>
-							
-							<%if(chssstatusid==2 ||  chssstatusid==5 ){ %>
-								
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Process</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
-							
-							<%}else if( chssstatusid==4 ){ %>
-								
-								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Verify</button>
-								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>
-							
-							<%}else if(chssstatusid==1 || chssstatusid==3 ||  chssstatusid==7){ %>
-							
-								<button type="button" class="btn btn-sm submit-btn" name="claimaction" value="F"   <%if(chssstatusid==3){ %> onclick="remarkscheck();" <%}else{%>data-toggle="modal" data-target=".my-encl-modal" <%} %> >
-									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
-								</button>
-								<button type="submit" class="btn btn-sm edit-btn" name="action" value="edit"  formaction="CHSSConsultMainData.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">
-									Edit
-								</button>
-								<input type="hidden" name="claimaction" value="F" >	
-									
-							<%}else if(chssstatusid==6 ||chssstatusid==9 || chssstatusid==11 ||  chssstatusid==13){ %>
-								<button type="submit" class="btn btn-sm delete-btn"  name="claimaction" value="R" onclick="return remarkRequired('R'); " >Return</button>
-							<%} %>
-							</div>
+						
 							<%}else if(chssstatusid ==15 && ClaimDisputeData !=null) { %>
 							<div class="col-md-6" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
 							
@@ -1046,10 +1015,31 @@ th,td
 							<%} %>
 						</div>
 						<% } %>
+					
 						</div>
+							<!-- <div class="col-md-12" align="left" style="margin-bottom: 5px;">
+									Remarks : <br>
+									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarksdisp" maxlength="500"></textarea>
+								</div> -->
+								<br>
+					<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="CHSSReApplySubmit.htm" name="chssapplyid" value="<%=chssapplydata[0]%>" >
+									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
+								</button>
+								</form>
+							</div>
+					
+					
+					
+					<form action="CHSSUserForward.htm" method="post" id="fwdform">
+
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						
+						
+						
+						
+						
 						
 							<div class="modal my-encl-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" align="center" style="left: 15%;">
 								<div class="modal-dialog  modal-dialog-centered"  >
@@ -2030,72 +2020,20 @@ function auto_grow(element) {
     element.style.height = (element.scrollHeight)+"px";
 }
 
-
-
-function showsimilarmeds($medname)
-{
-	$('#m-header').html('Medicine List');
-	$.ajax({
-
-		type : "GET",
-		url : "MedsNameListAjax.htm",
-		data : {
-				
-			medname : $medname,
-		},
-		datatype : 'json',
-		success : function(result) {
-			var result = JSON.parse(result);
-			var $medslist = Object.keys(result).map(function(e){
-				return result[e]
-			})	
-			var $TblStr = '';
-
-			$TblStr+=	'<thead><tr>';
-			$TblStr+=		'<th>SN</th>';
-			$TblStr+=		'<th>Medicine No</th>';
-			$TblStr+=		'<th>Medicine Name</th>';
-			$TblStr+=		'<th>Admissible</th>';
-			$TblStr+=	'</tr></thead>';
-			$TblStr+=	'<tbody>';
-			
-			for(var med=0;med< $medslist.length;med++)
-			{
-				$TblStr+=	'<tr>';
-				$TblStr+=		'<td style="width:15%;">'+(med+1)+'</td>';
-				$TblStr+=		'<td  style="width:10%;" >'+$medslist[med][1]+'</td>';
-				$TblStr+=		'<td>'+$medslist[med][4]+'</td>';
-				if($medslist[med][5]==='N'){
-					$TblStr+=		'<td style="color:red" ><b>InAdmissible</b></td>';
-				}else{
-					$TblStr+=		'<td style="color:green" ><b>Admissible</b></td>';
-				}	
-				$TblStr+=	'</tr>';
-			}
-			
-			
-			$TblStr+=	'</tbody>';
-			$("#modal-history-table").DataTable().clear().destroy();
-			$('#modal-history-table').html($TblStr);
-			$("#modal-history-table").DataTable({
-		        "lengthMenu": [10, 25, 50, 75, 100],
-		        "pagingType": "simple",
-		        "language": {
-				      "emptyTable": "No Record Found"
-				    }
-
-		    });
-			$('.my-history-modal').modal('toggle');
-		}
-	});
-	
-	
-	
-	
-}
-
 </script>
-
+<script type="text/javascript">
+$(document).ready(function() {
+	  $('#finalSubmission').click(function() {
+		  if(confirm('Are you Sure to Submit?')){
+	     return true;
+	  }
+		  else{
+			  event.preventDefault();
+			  return false;
+		  }
+	  });
+	});
+</script>
 <!-- <script type="text/javascript">
 $(document).ready(function() {
 	  $('#raiseDispute1,#raiseDispute2,#raiseDispute3,#raiseDispute4,#raiseDispute5').click(function() {

@@ -541,6 +541,8 @@ public class CHSSController
 			
 			req.setAttribute("consultmain", service.getCHSSConsultMain(consultmainid));
 			req.setAttribute("consultmainid", consultmainid);	
+			req.setAttribute("valueb", req.getParameter("valueb"));
+			
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
@@ -2007,6 +2009,7 @@ public class CHSSController
 
 			req.setAttribute("logintype", LoginType);
 			req.setAttribute("view_mode", view_mode);
+			req.setAttribute("chssapplyid",chssapplyid);
 			
 			req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
 			req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
@@ -3483,8 +3486,7 @@ public class CHSSController
 			req.setAttribute("chssapplydata", apply);
 			req.setAttribute("employee", service.getEmployee(EmpId));
 			req.setAttribute("treattypelist", service.CHSSTreatTypeList());
-			
-			
+		
 			if(apply[3].toString().equalsIgnoreCase("N")) 
 			{
 				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
@@ -4435,18 +4437,30 @@ public class CHSSController
 			
 			String chssapplyid = req.getParameter("chssapplyid");
 			String disputemsg = req.getParameter("Responcemsg"); 
+			String action =(String) req.getParameter("claimaction");
 			
 			CHSSApplyDispute dispute= new CHSSApplyDispute();
 			dispute.setCHSSApplyId(Long.parseLong(chssapplyid));
 			dispute.setResponseMsg(disputemsg);
 			
-			long count=service.ClaimDisputeResponseSubmit(dispute, ses);
+			long count=service.ClaimDisputeResponseSubmit(dispute, ses,action);
 			
-			if (count > 0) {
-				redir.addAttribute("result", "Dispute Response Submitted Successfully");
-			} else {
-				redir.addAttribute("resultfail", "Dispute Response Submission Unsuccessful");	
-			}	
+			if(action.equalsIgnoreCase("Y")) {
+				if (count > 0) {
+					redir.addAttribute("result", "Dispute Response Submitted Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Dispute Response Submission Unsuccessful");	
+				}	
+			}
+			if(action.equalsIgnoreCase("N")) {
+				if (count > 0) {
+					redir.addAttribute("result", "Dispute Response Rejected Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Dispute Response Rejection Unsuccessful");	
+				}	
+			}
+			
+				
 			
 			
 			redir.addFlashAttribute("chssapplyid",chssapplyid);
@@ -5601,5 +5615,180 @@ public class CHSSController
 			
 		}
 		
+	}
+	
+	@RequestMapping(value="DisputeList.htm", method = {RequestMethod.POST , RequestMethod.GET })
+	public String UserDisputeList(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception {
+		String Username = (String) ses.getAttribute("Username");
+		ses.setAttribute("SidebarActive", "DisputeList_htm");
+		logger.info(new Date() +"Inside DisputeList.htm "+Username);	
+		try {
+			req.setAttribute("DisputeList", service.DisputeList());			
+			return "chss/DisputeList";
+		}catch (Exception e) {		
+			e.printStackTrace();
+			logger.error(new Date() +" Inside DisputeList.htm "+Username, e);
+			return "static/Error";
+			
+		}
+	}
+	@RequestMapping(value="ClaimReApply.htm", method = {RequestMethod.POST , RequestMethod.GET })
+	public String DisputeRiseOPD(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside ClaimReApply_htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			if (chssapplyid == null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+			}
+			
+			String view_mode=req.getParameter("view_mode");
+			if (view_mode == null) 
+			{
+				Map md=model.asMap();
+				view_mode=(String)md.get("view_mode");
+			}
+			
+			
+			Object[] chssapplydata = service.CHSSAppliedData(chssapplyid);
+			Object[] employee = service.getEmployee(chssapplydata[1].toString());
+			
+			req.setAttribute("chssbillslist", service.CHSSBillsList(chssapplyid));
+			req.setAttribute("consultmainlist", service.ClaimConsultMainList(chssapplyid));
+						
+			req.setAttribute("ConsultDataList", service.CHSSConsultDataList(chssapplyid));
+			req.setAttribute("TestsDataList", service.CHSSTestsDataList(chssapplyid));
+			req.setAttribute("MedicineDataList", service.CHSSMedicineDataList(chssapplyid));
+			req.setAttribute("OtherDataList", service.CHSSOtherDataList(chssapplyid));
+			req.setAttribute("MiscDataList", service.CHSSMiscDataList(chssapplyid));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("chssapplydata", chssapplydata);
+			req.setAttribute("employee", employee);
+			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+
+			req.setAttribute("logintype", LoginType);
+			req.setAttribute("view_mode", view_mode);
+			req.setAttribute("chssapplyid",chssapplyid);
+			
+			req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
+			req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
+			req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
+			
+			return "chss/ClaimReApply";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimReApply.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	@RequestMapping(value = "ClaimReApplyIPD.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String DisputeRiseIPD(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside ClaimReApplyIPD.htm "+Username);
+		try {
+			
+			String chssapplyid = req.getParameter("chssapplyid");
+			
+			String view_mode = req.getParameter("view_mode");
+			
+			if (chssapplyid == null) 
+			{
+				Map md=model.asMap();
+				chssapplyid=(String)md.get("chssapplyid");
+			}	
+			
+			if(chssapplyid==null) {
+				redir.addAttribute("result", "Refresh Not Allowed");
+				return "redirect:/CHSSApplyDashboard.htm";
+			}		
+			Object[] apply = service.CHSSAppliedData(chssapplyid);
+			Object[] employee = service.getEmployee(apply[1].toString());
+			req.setAttribute("chssapplydata", apply);
+			req.setAttribute("employee", employee);
+			
+			if(apply[3].toString().equalsIgnoreCase("N")) 
+			{
+				req.setAttribute("familyMemberData", service.familyMemberData(apply[2].toString()));
+			}
+			
+			long basicpay=0;
+			if(employee[4]!=null) {
+				 basicpay=Long.parseLong(employee[4].toString());
+			}		
+			CHSSOtherPermitAmt chssremamt = service.getCHSSOtherPermitAmt("1",basicpay);
+			
+				List<Object[]> chssbill = service.CHSSConsultMainBillsList("0",chssapplyid);
+				String billid ="0";
+				if(chssbill.size()>0){
+					billid = chssbill.get(0)[0].toString();
+				}
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("ipdbasicinfo", service.IpdClaimInfo(chssapplyid));
+				req.setAttribute("chssbill", chssbill );
+				req.setAttribute("NonPackageItems", service.IPDBillOtherItems(billid));
+				
+				req.setAttribute("ClaimPackages", service.ClaimPackagesList(billid));
+				req.setAttribute("ClaimPkgItems", service.ClaimAllPackageItemsList(billid));
+				
+				req.setAttribute("consultations", service.CHSSConsultDataList(chssapplyid));
+				req.setAttribute("billtests",service.CHSSTestsDataList(chssapplyid));
+				req.setAttribute("miscitems",service.CHSSMiscDataList(chssapplyid));
+				
+				req.setAttribute("equipments", service.ClaimEquipmentList(chssapplyid));
+				req.setAttribute("implants", service.ClaimImplantList(chssapplyid));
+				
+				req.setAttribute("ClaimAttachDeclare", service.IPDClaimAttachments(chssapplyid));
+				
+				req.setAttribute("view_mode", view_mode);
+				req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
+				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+				req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
+				req.setAttribute("logintype", LoginType);
+				req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
+				req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
+				
+				return "chss/ClaimReApplyIPD";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside ClaimReApplyIPD.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "CHSSReApplySubmit.htm",method= {RequestMethod.POST ,RequestMethod.GET})
+	public String CHSSReApplySubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		logger.info(new Date() +"Inside CHSSReApplySubmit.htm "+Username);
+		try {
+			String chssapplyid = req.getParameter("chssapplyid");
+			String[] consultationId = req.getParameterValues("consultationId");
+			String[] CHSSTestId = req.getParameterValues("CHSSTestId");
+			String[] CHSSMedicineId = req.getParameterValues("CHSSMedicineId");
+			String[] ChssMiscId = req.getParameterValues("ChssMiscId");
+			
+			
+		    long count = service.CHSSReApplyDetails(chssapplyid,consultationId,CHSSTestId,CHSSMedicineId,ChssMiscId);
+			
+		    if (count > 0) {
+				redir.addAttribute("result", "Claim Created Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Claim Create Unsuccessful");	
+			}	
+			return "redirect:/DisputeList.htm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside CHSSReApplySubmit.htm "+Username, e);
+			return "static/Error";
+		}
 	}
 }

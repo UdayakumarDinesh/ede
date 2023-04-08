@@ -2196,38 +2196,51 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal,HttpSession ses) throws Exception
+	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal,HttpSession ses,String action) throws Exception
 	{
 		logger.info(new Date() +"Inside SERVICE ClaimDisputeResponseSubmit ");
 		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		String EmpNo = ((String) ses.getAttribute("EmpNo"));
 		String Username = (String) ses.getAttribute("Username");
-		
+		EMSNotification notify = new EMSNotification();
 		CHSSApplyDispute dispute = dao.getCHSSApplyDispute(String.valueOf(modal.getCHSSApplyId()));
-		dispute.setResponseMsg(modal.getResponseMsg());
-		dispute.setResponderEmpid(EmpId);
-		dispute.setResponseTime(sdtf.format(new Date()));
-		dispute.setDispStatus("C");
-		dispute.setModifiedBy(Username);
-		dispute.setModifiedDate(sdtf.format(new Date()));
-		long count= dao.ClaimDisputeAdd(dispute);
+		CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
+		Object[] empNo2 = dao.getEmpNo(apply.getEmpId().toString());
+		long count=0L;
+	
+			dispute.setResponseMsg(modal.getResponseMsg());
+			dispute.setResponderEmpid(EmpId);
+			dispute.setResponseTime(sdtf.format(new Date()));
+			dispute.setDispStatus("C");
+			dispute.setModifiedBy(Username);
+			dispute.setModifiedDate(sdtf.format(new Date()));
+			if(action.equalsIgnoreCase("Y")) {
+				dispute.setAction("Y");
+			}
+			else {
+				dispute.setAction("N");
+			}
+			count= dao.ClaimDisputeAdd(dispute);
+			
+			if(count>0) 
+			{
+				notify.setNotificationUrl("CHSSApplyDashboard.htm");
+				notify.setNotificationDate(LocalDate.now().toString());
+				notify.setNotificationBy(EmpNo);
+				notify.setIsActive(1);
+				notify.setCreatedBy(Username);
+				notify.setCreatedDate(sdtf.format(new Date()));
+				if(action.equalsIgnoreCase("Y")) {
+				    notify.setNotificationMessage("Response For Dispute Over Claim "+apply.getCHSSApplyNo()+"<br> Accepted");
+				}
+				else {
+					notify.setNotificationMessage("Response For Dispute Over Claim "+apply.getCHSSApplyNo()+"<br> Rejected");
+				}
+				notify.setEmpNo(empNo2[0].toString());
+				
+				dao.NotificationAdd(notify);
+			}
 		
-		if(count>0) 
-		{
-			EMSNotification notify = new EMSNotification();
-			CHSSApply apply = dao.getCHSSApply(String.valueOf(dispute.getCHSSApplyId()));
-			notify.setNotificationUrl("CHSSApplyDashboard.htm");
-			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(EmpNo);
-			notify.setIsActive(1);
-			notify.setCreatedBy(Username);
-			notify.setCreatedDate(sdtf.format(new Date()));
-			notify.setNotificationMessage("Response For Dispute Over Claim "+apply.getCHSSApplyNo()+"<br> Recieved");
-			
-			notify.setEmpNo(apply.getEmpId().toString());
-			
-			dao.NotificationAdd(notify);
-		}
 		
 		return count;
 	}
@@ -3555,5 +3568,114 @@ public class CHSSServiceImpl implements CHSSService {
 		return dao.getDependantsList(empNo);
 	}
 
+	@Override
+	public List<Object[]> DisputeList() throws Exception {
+		
+		return dao.DisputeList();
+	}
+
+	@Override
+	public long CHSSReApplyDetails(String CHSSApplyId,String[] consultationId,String[] CHSSTestId,String[] CHSSMedicineId,String[] ChssMiscId) throws Exception{
+		
+		 logger.info(new Date() +"Inside SERVICE CHSSReApplyDetails ");		
+			try {
+				 Object[] reApply = dao.CHSSReApplyDetails(CHSSApplyId);
+				long applyid=0;
+				
+					CHSSApply apply= new CHSSApply();
+					apply.setEmpId(Long.parseLong(reApply[2].toString()));
+					apply.setPatientId(Long.parseLong(reApply[3].toString()));
+					apply.setIsSelf(reApply[4].toString());				
+					apply.setFollowUp("N");
+					apply.setCHSSNewId(0L);
+					apply.setCHSSType(reApply[5].toString());
+					apply.setTreatTypeId(Integer.parseInt(reApply[6].toString()));
+					apply.setNoEnclosures(Integer.parseInt(reApply[7].toString()));
+					apply.setAilment(reApply[1].toString());
+					apply.setCHSSStatusId(2);
+					apply.setIsActive(1);
+					apply.setCreatedBy(reApply[8].toString());
+					apply.setCreatedDate(sdtf.format(new Date()));
+					apply.setCHSSApplyDate(sdf.format(new Date()));	
+					apply.setCHSSForwardDate(sdf.format(new Date()));
+					apply.setCHSSApplyNo(GenerateCHSSClaimNo());
+					apply.setParentCHSSApplyNo(reApply[0].toString());
+					apply.setPOAcknowledge(0);
+					apply.setPOId(0L);
+					apply.setVOId(0L);
+					apply.setContingentId(0L);
+					apply.setAmountClaimed(new BigDecimal(0.00));
+					applyid=dao.CHSSApplyAdd(apply);
+					
+					CHSSApplyTransaction transac =new CHSSApplyTransaction();
+					transac.setCHSSApplyId(applyid);
+					transac.setCHSSStatusId(2);
+					transac.setRemark("");
+					transac.setActionBy(Long.parseLong(reApply[2].toString()));
+					transac.setActionDate(sdtf.format(new Date()));
+					dao.CHSSApplyTransactionAdd(transac);
+														
+				long conmainid =0;
+				long billid =0;
+				long consultId =0;
+	
+				for(int i=0;consultationId!=null&&i<consultationId.length;i++)
+				{
+					CHSSBillConsultation consult = new CHSSBillConsultation();
+					
+				    Object[] consultData = dao.CHSSReApplyConsult(consultationId[i]);
+				    Object[] BillData = dao.CHSSReApplyBill(consultData[0].toString());
+				    Object[] consultMainData = dao.CHSSReApplyConsultMain(BillData[1].toString());
+				    
+				    CHSSBill bill = new CHSSBill();
+					bill.setCHSSApplyId(applyid);
+					
+					CHSSConsultMain conmain = new CHSSConsultMain();
+					conmain.setDocQualification(Integer.parseInt(consultMainData[2].toString()));
+					conmain.setCHSSApplyId(applyid);
+					conmain.setDocName(consultMainData[1].toString());
+					conmain.setCreatedBy(reApply[8].toString());
+					conmain.setCreatedDate(sdtf.format(new Date()));
+					conmain.setIsActive(1);
+					conmainid = dao.CHSSConsultMainAdd(conmain);
+					
+					bill.setCHSSConsultMainId(conmainid);
+					bill.setBillNo(BillData[2].toString());
+					bill.setCenterName(BillData[4].toString());
+					bill.setBillDate(BillData[3].toString());
+					bill.setAdmissibleTotal(0.00);
+					bill.setGSTAmount(0.00);
+					bill.setDiscount(CropTo2Decimal(BillData[5].toString()));
+					bill.setDiscountPercent(CropTo6Decimal(BillData[6].toString()));
+					bill.setFinalBillAmt(CropTo2Decimal(BillData[7].toString()));
+					bill.setIsActive(1);
+					bill.setCreatedBy(reApply[8].toString());
+					bill.setCreatedDate(sdtf.format(new Date()));
+					
+					billid=dao.CHSSBillAdd(bill);
+					consult.setBillId(billid);	
+					consult.setConsultType(consultData[1].toString());
+					consult.setDocName(WordUtils.capitalize(consultData[2].toString()));
+					consult.setDocQualification(Integer.parseInt(consultData[3].toString()));
+					consult.setConsultDate(consultData[8].toString());
+					consult.setConsultCharge(Double.parseDouble(consultData[4].toString()));				
+					consult.setIsActive(1);
+					consult.setCreatedBy(reApply[8].toString());
+					consult.setCreatedDate(sdtf.format(new Date()));		
+					consult.setAmountPaid(Double.parseDouble(consultData[5].toString()));
+					consult.setConsultRemAmount(Double.parseDouble(consultData[6].toString()));
+					consult.setComments(consultData[7].toString());
+					consultId = dao.ConsultationBillAdd(consult);
+					
+				}
+				
+				return consultId;
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside SERVICE CHSSReApplyDetails ");
+				return 0;
+			}
+	}
 	
 }
