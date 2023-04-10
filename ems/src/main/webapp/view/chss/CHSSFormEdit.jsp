@@ -172,6 +172,8 @@ th,td
 	
 	List<Object[]> ClaimRemarksHistory = (List<Object[]>)request.getAttribute("ClaimRemarksHistory");
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
+	
+	boolean ProcessFlag = false;
 
 %>
 
@@ -419,7 +421,7 @@ th,td
 										<tbody>
 											
 												<tr>
-													<td colspan="7" style="text-align: center;padding: 0;">
+													<td colspan="8" style="text-align: center;padding: 0;">
 														<h4><span>MEDICAL REIMBURSEMENT DETAILS</span>  </h4>
 														<span style="float: right; margin:3px 3px 0px 0px;">
 														
@@ -431,7 +433,7 @@ th,td
 													<th class="center" colspan="4" style="width: 55%;">Particulars</th>
 													<th class="right" style="width: 7%;">Amount Claimed (&#8377;)</th>
 													<th class="right" style="width: 10%;">Reimbursable under CHSS (&#8377;)</th>
-													<th class="center" style="width: 25%;">Comments</th>
+													<th class="center" style="width: 25%;">Comments</th>											
 												</tr>
 												<% 	BigDecimal itemstotal=new BigDecimal("0.0");
 													BigDecimal totalremamount=new BigDecimal("0.0"); 
@@ -452,8 +454,8 @@ th,td
 																<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 															</td>
-															<td ></td>
-															<td ></td>
+															<td></td>
+															<td></td>															
 														</tr>
 														<tr>
 															<th>Bill No</th>
@@ -462,7 +464,7 @@ th,td
 															<th style="width:15%;" class="center">Date</th>
 															<th></th>
 															<th></th>
-															<th></th>
+															<th></th>																														
 														</tr>			
 													<% } %>
 													<tr>
@@ -480,6 +482,7 @@ th,td
 														</td>
 														<td class="center text-blue"><%=rdf.format(sdf.parse(consult[5].toString()))%></td>
 														<td class="right text-blue"><%=consult[6] %></td>
+														
 														
 													<%if(showRemAmt){ %>
 														<td class="right ">
@@ -518,10 +521,8 @@ th,td
 														</td>
 													<% }else {%>
 														<td></td>
-														<td></td>
-													<%} %>	
-														
-																											
+														<td></td>														
+													<%} %>														
 													</tr>					
 												<%	i++;
 													itemstotal =itemstotal.add (new BigDecimal(consult[6].toString()));
@@ -550,14 +551,14 @@ th,td
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 														</td>
 														<td ></td>
-														<td ></td>
+														<td ></td>												
 													</tr>
 													<tr>
 														<th>Bill No</th>
 														<th colspan="3">Test</th>
 														<th></th>
 														<th></th>
-														<th></th>
+														<th ></th>														
 													</tr>			
 												<%} %>
 												<tr>
@@ -600,8 +601,8 @@ th,td
 														</td>
 													<% }else {%>
 														<td></td>
-														<td></td>	
-													<%} %>											
+														<td></td>															
+													<%} %>																						
 												</tr>					
 											<%i++;
 																						
@@ -632,7 +633,7 @@ th,td
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														</td>
 														<td ></td>
-														<td ></td>
+														<td ></td>														
 													</tr>
 													<tr>
 														<th>Bill No</th>
@@ -641,7 +642,7 @@ th,td
 														<th style="width:15%;text-align: center;">Pur<br> Qty.</th>
 														<th></th>
 														<th></th>
-														<th></th>
+														<th></th>														
 													</tr>			
 												<%} %>
 												<tr>
@@ -698,9 +699,8 @@ th,td
 														</td>
 													<%} else {%>
 														<td></td>
-														<td></td>
-													<%} %>
-														
+														<td></td>														
+													<%} %>														
 												</tr>					
 											<%i++;
 											
@@ -726,7 +726,7 @@ th,td
 															<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														</td>
 														<td ></td>
-														<td ></td>
+														<td ></td>														
 													</tr>
 													<tr>
 														<th>Bill No</th>
@@ -734,6 +734,8 @@ th,td
 														<th></th>
 														<th></th>
 														<th></th>
+														
+														
 													</tr>			
 												<%} %>
 												<tr>
@@ -775,6 +777,7 @@ th,td
 													<%} else {%>
 														<td></td>
 														<td></td>
+														
 													<%} %>
 														
 													
@@ -802,6 +805,7 @@ th,td
 														</td>
 														<td ></td>
 														<td ></td>
+														
 													</tr>
 													<tr>
 														<th>Bill No</th>
@@ -810,6 +814,7 @@ th,td
 														<th></th>
 														<th></th>
 														<th></th>
+														
 													</tr>			
 												<%} %>
 												<tr>
@@ -851,6 +856,7 @@ th,td
 													<% } else { %>
 														<td></td>
 														<td></td>
+														
 													<%} %>
 													
 												</tr>					
@@ -859,7 +865,8 @@ th,td
 											totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 											}%>
 										<tr>
-											<td colspan="4" class="right"><b>Total</b></td>
+										
+											<td colspan="4" class="right"><b>Total</b></td>						
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
 												<%if(showRemAmt || allowEdit){ %>	 
@@ -867,6 +874,7 @@ th,td
 												<% } %>
 											</td>
 											<td></td>
+											
 										</tr>
 							
 										<tr>
@@ -874,9 +882,10 @@ th,td
 											<td class="right text-blue"><b><%=discount %></b></td>
 											<td class="right text-green"></td>
 											<td ></td>
+											
 										</tr>
 															
-										<tr>
+										<tr>						
 											<td colspan="4" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
@@ -886,18 +895,24 @@ th,td
 												<%} %>
 											</td>
 											<td ></td>
+											
 										</tr>
 																				
 										<tr>
+									
 											<td colspan="7" class="text-blue">(In words Rupees <%=awc.convert1(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)</td> 
+									
 										</tr>
 										
 										<tr>
-											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>
+									
+											<td colspan="7" class="center"><span style="text-decoration: underline;"><b>FOR OFFICE USE ONLY</b></span></td>										
 										</tr>
 										
 										<tr>
+									
 											<td colspan="7" class="text-green">Admitted to Rs.
+											
 												<%if(showRemAmt || allowEdit){ %>
 												<%= nfc.rupeeFormat(String.valueOf(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %> (Rupees  <%=awc.convert1(totalremamount.setScale(0, BigDecimal.ROUND_HALF_UP).longValue()) %> Only)
 												<%}else{ %>
@@ -907,7 +922,7 @@ th,td
 										</tr>
 										
 										<tr>
-											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>
+											<td colspan="7" style="text-align:center; ;border-bottom : 0;text-decoration: underline;"><b>Finance and Accounts Department</b></td>									
 										<tr>
 										<tr>
 											<td colspan="4" style="border-top: 0;border-right : 0;">
@@ -1089,9 +1104,12 @@ th,td
 									<br><b>Response For Dispute Raised by  : </b><br>
 									<textarea rows="5" style="width: 100%;" maxlength="1000" name="Responcemsg" id="Responcemsg" required="required"></textarea>
 								</div>
-								<div class="col-md-12 w-100" align="center">
-									<button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit Response</button>
+								<div class="col-md-12" align="center">
+									<!-- <button type="submit" class="btn btn-sm submit-btn" onclick="return checkDisputeMsg('Responcemsg')">submit Response</button> -->
+									<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="Y" onclick="return DremarkRequired('Y'); " formnovalidate="formnovalidate">Accept</button>
+								    <button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="N" onclick="return DremarkRequired('N'); " formnovalidate="formnovalidate">Reject</button>
 								</div>
+								
 								
 							</div>
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -1311,7 +1329,7 @@ th,td
 
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	function checkDisputeMsg(textareaid)
 	{
 		var msg = $('#'+textareaid).val();
@@ -1326,8 +1344,26 @@ th,td
 		}
 	}
 						
-</script>
+</script> -->
+<script type="text/javascript">
+function DremarkRequired(action)
+{
+	if(action === 'N'){
+		$('#Responcemsg').attr('required', true);
+		if($('#Responcemsg').val().trim()===''){
+			alert('Please Fill Remarks to Reject! ');
+			return false;
+		}else{
+				return confirm('Are You Sure To Reject?');
+		}
+		
+	}else{
+		$('#Responcemsg').attr('required', false);
+		return confirm('Are You Sure To Accept?');
+	}
 	
+}
+</script>	
 	
 <script type="text/javascript">
 
@@ -2059,10 +2095,47 @@ function showsimilarmeds($medname)
 	
 }
 
-
-
 </script>
 
+<!-- <script type="text/javascript">
+$(document).ready(function() {
+	  $('#raiseDispute1,#raiseDispute2,#raiseDispute3,#raiseDispute4,#raiseDispute5').click(function() {
+		  if(confirm('Are you Sure to Raise Dispute?')){
+	    $(this).removeClass('btn-danger').addClass('btn-success');
+	    $(this).prop('disabled', true); // Disable the button
+	    $(this).text("Raised"); // Change the button text
+	    $(this).append('&nbsp;&nbsp;<i class="fa fa-check-circle" aria-hidden="true"></i>');
+	  }
+		  else{
+			  event.preventDefault();
+		  }
+	  });
+	});
+</script>
+ -->
+<!-- <script type="text/javascript">
+function raiseDispute(){
+	 var $raiseDispute1 = $("#raiseDispute1").val();		
+	 var $chssapplyid = $("#chssapplyid").val();		
+	 var	
+	 var count=true;
+		$.ajax({
+			type : 'GET',
+			url : 'DisputeRaiseSubmit.htm',	
+			datatype : 'json',
+			data : {
+				raiseDispute1 : $raiseDispute1
+				chssapplyid : $chssapplyid
+			},
+			success : function(result) {
+				var ajaxresult = JSON.parse(result);
+				
+				
+			}
+		});
+		
+}
+</script> -->
 </body>
 
 </html>

@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
+import com.vts.ems.ithelpdesk.model.HelpdeskAttachments;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
@@ -39,7 +40,6 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class helpdeskcontroller {
-	
 	
 	private static final Logger logger = LogManager.getLogger(helpdeskcontroller.class);
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -56,13 +56,15 @@ public class helpdeskcontroller {
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
 	
-	
-	private static final String formmoduleid="11";
+	private static final String formmoduleid="31";
 	@RequestMapping(value = "ITDashboard.htm")
 	public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
 		try {
+			ses.setAttribute("formmoduleid", "31"); 
+			ses.setAttribute("SidebarActive", "ITDashboard_htm");
+			
 			String logintype = (String)ses.getAttribute("LoginType");
 		    String EmpNo = (String)ses.getAttribute("EmpNo");
 		    List<Object[]> admindashboard = adminservice.HeaderSchedulesList("11" ,logintype); 
@@ -82,7 +84,6 @@ public class helpdeskcontroller {
 			req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo,logintype,fromDate,toDate));
 			req.setAttribute("graphdata", service.IThelpdeskDashboardGraphData(fromDate,toDate));
 			req.setAttribute("piechartdata", service.IThelpdeskDashboardPieChartData(fromDate,toDate));
-			ses.setAttribute("formmoduleid", "11"); 
 			req.setAttribute("dashboard", admindashboard);
 			ses.setAttribute("SidebarActive", "ITDashboard_htm");
 			req.setAttribute("LoginType", logintype);
@@ -91,7 +92,7 @@ public class helpdeskcontroller {
 			logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
-		}
+		} 
 	}
 	
 
@@ -197,7 +198,7 @@ public class helpdeskcontroller {
     			logger.info(new Date() +"Inside TicketFormDownload.htm "+UserId);
     			try {
     				
-    				String TicketId=req.getParameter("TicketId");
+    				String TicketId=req.getParameter("TICKETID");
     				HelpdeskTicket form=service.GetTicketId(TicketId);
     				res.setContentType("Application/octet-stream");	
     				File my_file=new File(emsfilespath+form.getFilePath());
@@ -216,8 +217,38 @@ public class helpdeskcontroller {
     				logger.error(new Date() +"Inside TicketFormDownload.htm "+UserId,e);
     				e.printStackTrace();
     			}
-    	    
-      }
+    			
+    		}
+    			
+    			 @RequestMapping(value = "TicketForwardAttachmentDownload.htm")
+    	    	    public void TicketForwardAttachment(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
+    	    		{				
+    	    			String UserId=(String)ses.getAttribute("Username");
+    	    			logger.info(new Date() +"Inside TicketForwardAttachment.htm "+UserId);
+    	    			try {
+    	    				
+    	    				String AttachmentId=req.getParameter("AttachmentId");
+    	    				System.out.println("AttachmentId--------"+AttachmentId);
+    	    				HelpdeskAttachments attach=service.getattachId(AttachmentId);
+    	    				res.setContentType("Application/octet-stream");	
+    	    				File my_file=new File(emsfilespath+attach.getFilePath());
+    	    				System.out.println("FilePath--------"+my_file);
+    	    				res.setHeader("Content-disposition","attachment;filename="+attach.getFileName());
+    	    				OutputStream out=res.getOutputStream();
+    	    				FileInputStream in=new FileInputStream(my_file);
+    	    				byte[] buffer=new byte[4096];
+    	    				int length;
+    	    				while((length=in.read(buffer))>0){
+    	    				out.write(buffer,0,length);
+    	    				}
+    	    				in.close();
+    	    				out.flush();
+    	    				out.close();
+    	    			}catch(Exception e) {
+    	    				logger.error(new Date() +"Inside TicketForwardAttachment.htm "+UserId,e);
+    	    				e.printStackTrace();
+    	    			}
+    	}
 
     	  @RequestMapping(value = "TicketEdit.htm",method= {RequestMethod.GET,RequestMethod.POST} )
     		public String TicketEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
@@ -483,8 +514,7 @@ public class helpdeskcontroller {
   				 long save=service.reAssignedTicket(dto,UserId,EmpNo,s2);
   	    		  
   	    		  if (save > 0) {
-  	  				
-  	                  redir.addAttribute("result", "Ticket ReAssigned Successfully ");
+  	  				 redir.addAttribute("result", "Ticket ReAssigned Successfully ");
 
   	 			} else {
   	                  redir.addAttribute("resultfail", "Ticket ReAssigned Unsuccessful");
@@ -524,7 +554,7 @@ public class helpdeskcontroller {
     	  
   }
     	 @RequestMapping(value = "TicketForward.htm",method = {RequestMethod.GET,RequestMethod.POST} )
-    		public String TicketForward( HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+    		public String TicketForward( HttpServletRequest req, HttpSession ses, RedirectAttributes redir,@RequestPart("FormFile") MultipartFile FormFile)  throws Exception 
     		{
     			String UserId=(String)ses.getAttribute("Username");
     			String EmpId =  ses.getAttribute("EmpId").toString();
@@ -537,17 +567,17 @@ public class helpdeskcontroller {
     				itheldeskdto dto= itheldeskdto.builder()
     						  .TicketId(TicketId)
     	    				  .CWRemarks(req.getParameter("Remarks"))
+    	    				  .FormFile(FormFile)
+    	    				  .FileName(EmpNo)
     	    				  .build();
     				 long save=service.ForwardTicket(dto,UserId,EmpNo);
     	    		  if (save > 0) {
-    	  				
-    	                  redir.addAttribute("result", "Ticket Forwarded Successfully ");
+    	  				redir.addAttribute("result", "Ticket Forwarded Successfully ");
 
     	 			} else {
     	                  redir.addAttribute("resultfail", "Ticket Forward Unsuccessful");
     	 			}
-    				
-    	    		  redir.addAttribute("EmpId",EmpId );
+    				redir.addAttribute("EmpId",EmpId );
   				
     			return "redirect:/TicketRecieved.htm";
     			}
@@ -670,7 +700,7 @@ public class helpdeskcontroller {
 			String toDate=req.getParameter("ToDate");	
 			logger.info(new Date() +"Inside TicketClosed.htm"+UserId);
 			try {
-				ses.setAttribute("SidebarActive","TicketClosed_htm");
+				
 				if(fromDate==null  && toDate==null) 
 				{
 					String fd = LocalDate.now().minusMonths(1).toString();
@@ -729,6 +759,7 @@ public class helpdeskcontroller {
 			    itheldeskdto dto= itheldeskdto.builder()
 					  .TicketId(s1)
     				  .Feedback(req.getParameter("Feedback"))
+    				  .FeedBackType(req.getParameter("FeedbackType"))
     				  .build();
 			
 			 long save=service.savefeedback(dto,UserId,EmpNo,s2);
@@ -749,9 +780,38 @@ public class helpdeskcontroller {
 			  e.printStackTrace();
 			  return "static/Error";
         }
+		}
 	  
-}
-   	@RequestMapping(value="TicketCategory.htm",method= {RequestMethod.POST,RequestMethod.GET})
+			  @RequestMapping(value = "TicketRevokeList.htm" ,method= {RequestMethod.GET,RequestMethod.POST})
+				public String TicketRevokeList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+				{
+					String UserId=(String)ses.getAttribute("Username");
+					ses.setAttribute("SidebarActive","TicketRevokeList_htm");
+					String fromDate=req.getParameter("FromDate");
+					String toDate=req.getParameter("ToDate");	
+					logger.info(new Date() +"Inside TicketRevokeList.htm "+UserId);
+					try {
+						if(fromDate==null  && toDate==null) 
+						{
+							String fd = LocalDate.now().minusMonths(1).toString();
+							String td = LocalDate.now().toString();
+							fromDate=rdf.format(sdf.parse(fd.toString()));
+							toDate=rdf.format(sdf.parse(td.toString()));
+						}
+						req.setAttribute("frmDt", fromDate);
+						req.setAttribute("toDt",  toDate);
+						List<Object[]> revokedlist=service.getRevokedList(fromDate,toDate);
+						req.setAttribute("revokedlist",  revokedlist);
+					    return "ithelpdesk/TicketRevoked";
+				        
+					} catch (Exception e) {
+						  logger.error(new Date() +"Inside TicketRevokeList.htm "+UserId ,e);
+						  e.printStackTrace();
+						  return "static/Error";
+					}
+				}	
+			
+	@RequestMapping(value="TicketCategory.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String ticketCategory(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
     {
   	  String UserId=(String)ses.getAttribute("Username");
@@ -1059,7 +1119,7 @@ public class helpdeskcontroller {
       
     } 
      
-     @RequestMapping(value="EmployeeAddSubmit.htm",method= {RequestMethod.GET,RequestMethod.POST})
+     @RequestMapping(value="EmployeeAddSubmits.htm",method= {RequestMethod.GET,RequestMethod.POST})
      public String EmployeeAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) {
 	
   	  String UserId=(String)ses.getAttribute("Username");
@@ -1175,12 +1235,7 @@ public class helpdeskcontroller {
 			} 
      
      }
+      
+    
 }
-
-    	  
-    	  
-    	  
-
-
-	
 

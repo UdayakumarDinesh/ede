@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vts.ems.ithelpdesk.dao.helpdeskDao;
 import com.vts.ems.ithelpdesk.dto.itheldeskdto;
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
+import com.vts.ems.ithelpdesk.model.HelpdeskAttachments;
 import com.vts.ems.ithelpdesk.model.HelpdeskCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskSubCategory;
 import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
@@ -56,8 +57,8 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		MultipartFile FormFile = dto.getFormFile();
 		LocalDate today= LocalDate.now();
-		String start="";
-		start=String.valueOf(today.getYear());
+		String year="";
+		year=String.valueOf(today.getYear());
 		
 		long maxTicketId = dao.MaxOfEmsTicketId()+1;
 		String storagePath="";
@@ -73,7 +74,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 		{	
 			storagePath="//Ticketfiles//Ticket-"+maxTicketId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
 		}
-		TicketNumber="IT"+start+"-"+maxTicketId;
+		TicketNumber="IT"+year+"-"+maxTicketId;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -125,11 +126,8 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		logger.info(new Date() +"Inside SERVICE saveFile ");
 	    Path uploadPath = Paths.get(FilePath);
-	   
-	          
 	    if (!Files.exists(uploadPath)) {
 	    	Files.createDirectories(uploadPath);
-	    	
 	    }
 	       
 	    try (InputStream inputStream = multiparfile.getInputStream()) {
@@ -188,12 +186,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 //						FilePath+"//Ticketfiles//"+FilenameUtils.getPath(storagePath), 
 //						FilenameUtils.getBaseName(storagePath)+ "." + FilenameUtils.getExtension(FormFile.getOriginalFilename()),
 //						FormFile);
-				
-				
 				desk.setFileName(FormFile.getOriginalFilename());
-			
-						
-				
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -202,26 +195,19 @@ public class helpdeskServiceImpl implements helpdeskService {
 			
 		}
 		desk.setTicketId(Long.parseLong(dto.getTicketId()));
-		
 		desk.setTicketDesc(dto.getTicketDesc());
 		desk.setTicketCategoryId(Integer.parseInt(dto.getTicketCategoryId()));
 		desk.setTicketSubCategoryId(Integer.parseInt(dto.getTicketSubCategoryId()));
 		desk.setModifiedBy(dto.getModifiedBy());
 		desk.setFilePath(storagePath);
         desk.setModifiedDate(sdf1.format(new Date()));
-		
 		return dao.ticketUpdate(desk);
-		
-		
 	}
 
 	@Override
 	public List<Object[]> getPendingList() throws Exception {
 		
-		
-		 
 		return dao.getTicketPending();
-		
 	}
 
 	@Override
@@ -267,10 +253,6 @@ public class helpdeskServiceImpl implements helpdeskService {
 				}
 				
 		return dao.assignedTicket(desk);
-		
-		
-				
-		
 	}
 
 	@Override
@@ -323,12 +305,47 @@ public class helpdeskServiceImpl implements helpdeskService {
 	@Override
 	public long ForwardTicket(itheldeskdto dto,String userId,String EmpNo) throws Exception {
 		
-        HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
+		MultipartFile FormFile = dto.getFormFile();
+		long maxattachId = dao.MaxOfAttachmentId()+1;
+		String storagePath="";
+		try {
+			while(new File(FilePath+"//TicketForwardedAttachments//TicketForwarded-"+maxattachId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
+			{
+				maxattachId++;
+			}
+			if(!FormFile.getOriginalFilename().toString().equals("")) {
+			saveFile(FilePath+"//TicketForwardedAttachments//","TicketForwarded-"+maxattachId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);}
+			if(!FormFile.getOriginalFilename().toString().equals(""))
+			{	
+				storagePath="//TicketForwardedAttachments//TicketForwarded-"+maxattachId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
+			}
+			System.out.println("storagepath---"+storagePath);
+			
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		
+		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		desk.setTicketId(Long.parseLong(dto.getTicketId()));
 		desk.setCWRemarks(dto.getCWRemarks());
 		desk.setForwardedDate(sdf1.format(new Date()));
 		desk.setTicketStatus("F");
-		 
+		
+		if(desk.getTicketStatus()=="F" ) {
+			HelpdeskAttachments attach= HelpdeskAttachments.builder()
+		            .TicketId(Long.parseLong(dto.getTicketId()))
+		            .EmpNo(EmpNo)
+					.FileName(FormFile.getOriginalFilename())
+					.isActive(1)
+					.FilePath(storagePath)
+					.CreatedBy(userId)
+					.CreatedDate(sdf1.format(new Date()))
+					.build();
+			 dao.ForwardAttachment(attach);
+		}
+		
 		 List <Object[]> notifyto = dao.SendNotification("A");
 			int i=0;
 		    for( Object[] obj : notifyto ){
@@ -427,8 +444,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 			notify.setCreatedDate(sdf1.format(new Date()));
 			dao.NotificationAdd(notify);
 		}
-		 
-	     return dao.closeTicket(desk);
+		 return dao.closeTicket(desk);
 	}
 
 
@@ -449,6 +465,7 @@ public class helpdeskServiceImpl implements helpdeskService {
 	
 	  HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		desk.setFeedback(dto.getFeedback());
+		desk.setFeedBackType(dto.getFeedBackType());
 		 desk.setTicketStatus("C");
 		 
 		 EMSNotification notify = new EMSNotification();
@@ -518,7 +535,6 @@ public class helpdeskServiceImpl implements helpdeskService {
     
 	@Override
 	public Long TicketSubCategoryAdd(HelpdeskSubCategory helpdeskSubCategory) throws Exception {
-		// TODO Auto-generated method stub
 		return dao.TicketSubCategoryAdd(helpdeskSubCategory);
 	}
     @Override
@@ -610,5 +626,17 @@ public class helpdeskServiceImpl implements helpdeskService {
 		
 		return dao.IThelpdeskDashboardPieChartData(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
 	}
-	
+
+	@Override
+	public HelpdeskAttachments  getattachId(String AttachmentId) throws Exception {
+		
+		return dao. getattachId(AttachmentId);
+	}
+
+	@Override
+	public List<Object[]> getRevokedList(String fromDate, String toDate) throws Exception {
+		
+		return dao.getRevokedList(sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
+	}
+
 }

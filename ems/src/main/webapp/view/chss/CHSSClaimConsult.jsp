@@ -264,10 +264,11 @@ table th:last-child{
 														</select>
 													</td>
 													<td>
-														
+														<%if(chssapplydata[16].toString()!=null) {%>
 														<button type="submit"  class="btn btn-sm update-btn" formaction="CHSSConsultMainEdit.htm"  Onclick="return confirm('Are You Sure To Update?');" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip" data-placement="top" title="Update Consultation Details">														
 															update
 														</button>
+														<%} %>
 														<button type="submit" class="btn btn-sm" style="background-color: #34B3F1;color:#ffffff;"  formaction="CHSSConsultBills.htm" name="consultmainid" value="<%=cmain[0]%>" data-toggle="tooltip"  data-placement="top" title="Add Bills" >
 															Bills
 														</button>		

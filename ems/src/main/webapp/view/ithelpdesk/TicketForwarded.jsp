@@ -97,20 +97,25 @@
 									<td style="width: 2%"><%=fwrdlist[14] %></td>
 									<td style="width: 2%;text-align: center;"><%=rdf.format(sdf.parse(fwrdlist[18].toString()))%></td>
 									<td style="width: 2%;text-align: center;" >
-									<%if(!fwrdlist[10].toString().equals("")) {%>
-									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=fwrdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+									<%-- <%if(!fwrdlist[10].toString().equals("")) {%>
+									<button type="submit" class="btn btn-sm " name="TICKETID" value="<%=fwrdlist[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-										<%} %>
+										<%} %> --%>
 										                <input type="hidden" name="RaisedDate<%=fwrdlist[0]%>"  id="RaisedDate<%=fwrdlist[0]%>"   value="<%=rdf.format(sdf.parse(fwrdlist[6].toString())) %>" >
 														<input type="hidden" name="RaisedBy<%=fwrdlist[0]%>"  id="RaisedBy<%=fwrdlist[0]%>"   value="<%=fwrdlist[2] %>" >
+														<input type="hidden" name="Description<%=fwrdlist[0]%>" id="Description<%=fwrdlist[0]%>" value="<%=fwrdlist[5] %>" >
 														<input type="hidden" name="Category<%=fwrdlist[0]%>"  id="Category<%=fwrdlist[0]%>"   value="<%=fwrdlist[8] %>" >
 														<input type="hidden" name="SubCategory<%=fwrdlist[0]%>"  id="SubCategory<%=fwrdlist[0]%>"   value="<%=fwrdlist[9] %>" >
+														<input type="hidden" name="FileName<%=fwrdlist[0]%>"  id="FileName<%=fwrdlist[0]%>"   value="<%=fwrdlist[10] %>" >
 														<input type="hidden" name="ForwardedBy<%=fwrdlist[0]%>"  id="ForwardedBy<%=fwrdlist[0]%>"   value="<%=fwrdlist[14] %>" >
 														<input type="hidden" name="ForwardedDate<%=fwrdlist[0]%>"  id="ForwardedDate<%=fwrdlist[0]%>"   value="<%=rdf.format(sdf.parse(fwrdlist[18].toString()))%>" >
 														<input type="hidden" name="Priority<%=fwrdlist[0]%>"  id="Priority<%=fwrdlist[0]%>"   value="<%=fwrdlist[7] %>" >
 														<input type="hidden" name="Remarks<%=fwrdlist[0]%>"  id="Remarks<%=fwrdlist[0]%>"   value="<%=fwrdlist[17] %>" >
-														 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeDetails('<%=fwrdlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Forwarded Details">
+														<input type="hidden" name="ARemarks<%=fwrdlist[0]%>"  id="ARemarks<%=fwrdlist[0]%>"   value="<%=fwrdlist[20] %>" >
+														<input type="hidden" name="AttachmentId<%=fwrdlist[0]%>"  id="AttachmentId<%=fwrdlist[0]%>"   value="<%=fwrdlist[19] %>" > 
+														<input type="hidden" name="AttachmentName<%=fwrdlist[0]%>"  id="AttachmentName<%=fwrdlist[0]%>"   value="<%=fwrdlist[21] %>" > 
+														<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>"  onclick="SeeDetails('<%=fwrdlist[0]%>','<%=fwrdlist[19] %>')"   data-toggle="tooltip" title="" data-original-title="Forwarded Details">
 															<i class="fa fa-eye " style="color: black;"></i>
 														</button>
 										 <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=fwrdlist[0]%>/<%=fwrdlist[12] %>"   onclick="ReturnTicket('<%=fwrdlist[0] %>','<%=fwrdlist[12] %>')"  data-toggle="tooltip" title="" data-original-title="Return">
@@ -166,7 +171,7 @@
 			</div>
 		</div>
 		
-		
+		<!-- 
 		 <div class="modal fade" id="SeeRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
 				<div class="modal-content" style="min-height: 45%;" >
@@ -185,15 +190,15 @@
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>  -->
 		
 		
 		<div class="modal fade" id="returnticket" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 53% !important;height: 45%;">
 				<div class="modal-content" style="min-height: 45%;" >
-				    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Return  <!-- By <span id="feedby1"></span> --></h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				    <div class="modal-header" style="background-color:#0e6fb6;">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Return </h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#F9F9F9"  >
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div>
@@ -223,9 +228,9 @@
 			<div class="modal-content">
 				
 					
-				 <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Close  <!-- By <span id="feedby1"></span> --></h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				 <div class="modal-header" style="background-color:#0e6fb6;">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Ticket Close</h3>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#F9F9F9">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div>
@@ -233,9 +238,9 @@
 					<form action="TicketClose.htm" method="post" autocomplete="off"  >
 						<table   style="width:100%">
 							<tr>
-								<th style="width:16%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
+								<th style="width:28%;padding: 5px;">FeedBack Required :<span class="mandatory" style="color: red;">*</span></th>
 							    <td style="width:43%;" >
-									<select class="form-control select2  "  name="Feedback"  required="required"  style="width:152px;" >
+									<select class="form-control select2  "  name="Feedback"  required="required"  style="width:80px;" >
 													   <option value="N">No</option>
 														<option value="Y">Yes</option>
 									</select>
@@ -257,9 +262,9 @@
 	   <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="forwarded-details">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
-					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Forwarded Details</h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+					<div class="modal-header" style="background-color: #0e6fb6;">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Ticket Forwarded Details</h3>
+				        <button type="button" class="close" style="color:#F9F9F9" data-dismiss="modal" aria-label="Close" >
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div> 
@@ -271,44 +276,57 @@
 								<th style="padding: 5px;" >Raised By :</th>
 								<td style="padding: 5px;" id="raisedby"></td>
 								<th style="padding: 5px;width:20%;" >Raised Date :</th>
-								<td style="padding: 5px;width:20%;" id="raiseddate"></td>
+								<td style="padding: 5px;width:27%;" id="raiseddate"></td>
 							</tr>
 							<tr>
 								<th style="padding: 5px;width:17%;" >Category :</th>
 								<td style="padding: 5px;" class="tabledata" id="category"></td>
-								<th style="padding: 5px;width:23%;" >Sub-Category :</th>
+								<th style="padding: 5px;width:31%;" >Sub-Category :</th>
 								<td style="padding: 5px;" class="tabledata" id="subcategory"></td>
 							</tr>
 							
 							<tr>
 								<th style="padding: 5px;width:20%;" >Forwarded By :</th>
 								<td style="padding: 5px;" class="tabledata" id="forwardedby"></td>
-								<th style="padding: 5px;width:22%;" >Forwarded Date :</th>
+								
+								<th style="padding: 5px;width:30%;" >Forwarded Date :</th>
 								<td style="padding: 5px;" class="tabledata"  id="forwardeddate"></td>
 							</tr>
 							
 							<tr>
 								<th style="padding: 5px;width:17%;" > Priority :</th>
 								<td style="padding: 5px;" class="tabledata" id="priority"></td>
-							    
 							</tr>
 							<tr><th><hr style="width:500%;"/></th></tr>
-							<tr >
-							    <th style="padding: 5px;" > Remarks :</th>
-								<td style="padding: 5px;width:20%;word-wrap:break-word;color:red;" colspan="3" class="tabledata" id="remarks"></td>
-						         
+							<tr>
+								<th style="width:17%;padding: 5px;"> Description :</th>
+								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="Desc"></td>
+								<td id="Fileattach"><button type="submit" class="btn btn-sm " name="TICKETID" id="TicketId1" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: #019267;"></i>
+														</button>
+								</td> 
 							</tr>
+							 <tr >
+							    <th style="padding: 5px;" > Assignee&nbsp;Remarks&nbsp;:</th>
+								<td style="padding: 5px;width:18%;word-wrap:break-word;color:red" colspan="3" class="tabledata" id="remarks"></td>
+						         <td style="margin-top:2px;" id="CEREMARK"><button type="submit" class="btn btn-sm" name="AttachmentId" id="attachmentid" formaction="TicketForwardAttachmentDownload.htm" formmethod="post"  formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+								<i style="color: #019267" class="fa-solid fa-download"></i>
+									</button></td>
+								</td>
+							</tr>
+							<tr id="AREMARK" >
+							    <th style="padding: 5px;" >Assignor&nbsp;Remarks&nbsp;:</th>
+								<td style="padding: 5px;width:20%;word-wrap:break-word;color:red;" colspan="3" class="tabledata" id="Aremarks">
+								
+						    </tr>
+						   
 						</table>
-						 <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+						
+						<input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
 						 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						
 				</form>
-						
-						
-				 	       
-					
 			</div>
-				
 		</div>
 	</div>
 </div>
@@ -346,11 +364,11 @@ function descmodal(TicketId)
 	});
 }
 
-function SeeRemarks(TicketId)
+/* function SeeRemarks(TicketId)
 {
 	$('#SeeRemarks').modal('toggle');
 	$("#REMARKS").html($("#remarks"+TicketId).val());
-}
+} */
 
 function ReturnTicket(TicketId2,ReturnTo)
 {
@@ -360,9 +378,7 @@ function ReturnTicket(TicketId2,ReturnTo)
 }
 
 function CloseTicket(TicketId3,EmpNo)
-
 {
-	
 	$("#TicketId3").val(TicketId3);
 	$("#EmpNo").val(EmpNo);
 	$('#closeticket').modal('toggle');
@@ -384,39 +400,69 @@ $("#Returnremarks").on('submit', function (e) {
 }); 
 
 
-function SeeDetails(TicketId)
+function SeeDetails(TicketId,AttachmentId)
 {
+	$("#TicketId1").val(TicketId);
+	$("#attachmentid").val(AttachmentId);
+	$('#raisedby').html($('#RaisedBy'+TicketId).val())
+	$('#raiseddate').html($('#RaisedDate'+TicketId).val())
 	
-	$("#TicketId").val(TicketId);
-	
-	 $('#raisedby').html($('#RaisedBy'+TicketId).val())
-	 $('#raiseddate').html($('#RaisedDate'+TicketId).val())
+	$('#Desc').html($('#Description'+TicketId).val())
 	$('#category').html($('#Category'+TicketId).val())
 	$('#subcategory').html($('#SubCategory'+TicketId).val())
 	$('#forwardedby').html($('#ForwardedBy'+TicketId).val())
 	$('#forwardeddate').html($('#ForwardedDate'+TicketId).val())
-	
+	 $('#remarks').html($('#Remarks'+TicketId).val())
 	var type=$('#Priority'+TicketId).val()
 	 if(type=="L")
     {
 	   L="Low"
-	   $('#priority').html(L);
+	   $('#priority').html(L).css('color','#0e6fb6');
 	}
    if(type=="M")
    {
 	   M="Medium"
-	   $('#priority').html(M);
+	   $('#priority').html(M).css('color','green');
    }
    if(type=="H")
    {
 	   H="High"
-	   $('#priority').html(H);
+	   $('#priority').html(H).css('color','red');
+   }
+     
+   var name=$('#AttachmentName'+TicketId).val()
+      
+      if(name==""|| name===null || name=="null" )
+	{
+	   $('#CEREMARK').hide();
+	}
+   else{
+	   $('#CEREMARK').show();
+	   
+   }
+      var filename=$('#FileName'+TicketId).val()
+   
+   if(filename=="" || filename===null)
+	   {
+	   $('#Fileattach').hide();
+	   
+	   }
+   else{
+	   $('#Fileattach').show();
    }
    
-	   $('#remarks').html($('#Remarks'+TicketId).val())
-     
-   
-    $('#forwarded-details').modal('toggle'); 
+      
+      var remarks=$('#ARemarks'+TicketId).val();
+      
+      if(remarks===null || remarks=="null")
+      {
+   	   $('#AREMARK').hide();
+      }else{
+   	   $('#AREMARK').show();
+      		$('#Aremarks').html($('#ARemarks'+TicketId).val());
+      }
+      
+     $('#forwarded-details').modal('toggle'); 
 }
 
 

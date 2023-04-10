@@ -12,6 +12,7 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
+
 <body>
 <body>
 <%
@@ -136,14 +137,14 @@ String todate = (String)request.getAttribute("toDt");
 									
 									<td style="width: 3%;text-align: center;"><%=rdf.format(sdf.parse(closedlist[7].toString()))%></td>
 									<td style="width: 2%;text-align: center;" >
-									<%if(!closedlist[4].toString().equals("")) {%>
-									<button type="submit" class="btn btn-sm " name="TicketId" value="<%=closedlist[0]%>" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+									<%-- <%if(!closedlist[4].toString().equals("")) {%>
+									<button type="submit" class="btn btn-sm " name="TICKETID" value="<%=closedlist[0]%>" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
 										
-										<%} %>
+										<%} %> --%>
 										
-										<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=closedlist[0]%>"  onclick="openModal('<%=closedlist[0]%>')"   data-toggle="tooltip" title="" data-original-title="Closed Details">
+										<button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=closedlist[0]%>"  onclick="openModal('<%=closedlist[0]%>',<%=closedlist[9] %>)"   data-toggle="tooltip" title="" data-original-title="Closed Details">
 															<i class="fa fa-eye " style="color: black;"></i>
 														</button>
 										
@@ -170,15 +171,15 @@ String todate = (String)request.getAttribute("toDt");
 		 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-ticket-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width: 42% ;height: 60% ;">
 			<div class="modal-content">
-					<div class="modal-header" style="background-color: rgba(0,0,0,.03);">
-				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Ticket Closed Details</h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+					<div class="modal-header" style="background-color: #0e6fb6;">
+				    	<h3 class="modal-title" id="model-card-header" style="color: #FFFFFF">Ticket Closed Details</h3>
+				        <button type="button" class="close" style="color:#F9F9F9" data-dismiss="modal" aria-label="Close" >
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				    </div> 
 				<div class="modal-body" align="center" style="margin-top:-4px;">
 					<form action="#" method="post" autocomplete="off"  >
-						<table style="width: 100%;">
+						<table style="width: 100%; border: 1px ; border-radius: 10px;border-color:blue">
 							<tr>
 								<th style="padding: 5px;" >Raised By :</th>
 								<td style="padding: 5px;" id="modal-raisedby"></td>
@@ -191,21 +192,18 @@ String todate = (String)request.getAttribute("toDt");
 								<th style="padding: 5px;width:20%;" >Sub-Category :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-subcategory"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned By :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assignedby"></td>
 								<th style="padding: 5px" >Assigned Date :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assigneddate"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Closed By :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-closedby"></td>
 								<th style="padding: 5px;width:20%;" >Closed Date :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-closeddate"></td>
 							</tr>
-							
 							<tr>
 								<th style="padding: 5px;width:17%;" >Assigned To :</th>
 								<td style="padding: 5px;" class="tabledata" id="modal-assignedto"></td>
@@ -214,26 +212,44 @@ String todate = (String)request.getAttribute("toDt");
 								</td>
 							</tr>
 							
-					<tr><th><hr style="width:600%;"/></th></tr>
+					<tr><th><hr style="width:440%;"/></th></tr>
 							<tr>
 								<th style="width:17%;padding: 5px;"> Description :</th>
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="modal-Desc"></td>
+								 <td id="Fileattach"><button type="submit" class="btn btn-sm " name="TICKETID" id="TicketId1" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: green;"></i>
+														</button>
+								</td>
+							</tr>
+							
+							<tr>
+								<th style="width:24%;padding: 5px;"> Assignee Remarks:</th>
+								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;color:red;" colspan="3" id="modal-CWRemarks"></td>
+								<td id="CEREMARK"><button type="submit" class="btn btn-sm" name="AttachmentId" id="attachmentid" formaction="TicketForwardAttachmentDownload.htm" formmethod="post"  formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+								<i style="color: #019267" class="fa-solid fa-download"></i>
+									</button></td>
+								</td>
+							</tr>
+							
+							<tr id="remark">
+								<th style="width:24%;padding: 5px;"> Assignor Remarks:</th>
+								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;color:red;" colspan="3" id="modal-ARemark"></td>
+								 
 							</tr>
 							
 							<tr id="feed">
 								<th style="width:17%;padding: 5px;"> Feedback :</th>
-								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;color:blue;" colspan="3" id="modal-feedback"></td>
-							</tr>
-							
-						</table>
-						</form>
-					         <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
-						
-						
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					
-				</div>
+								<!-- <td style="color:blue;width:28%;word-wrap:break-word;" id="modal-feedbacktype" ></td>  -->
+							    <td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;color:#0002A1;" colspan="3"  id="modal-feedback"></td>
+			
+		                   </tr>
+					</table>
 				
+					         <input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
+					         
+						   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -243,9 +259,10 @@ String todate = (String)request.getAttribute("toDt");
 var L=null;
 var M=null;
 var H=null;
-function openModal(TicketId){
+function openModal(TicketId,AttachmentId){
 	
 $("#TicketId").val(TicketId);
+$("#attachmentid").val(AttachmentId);
 	
 	
 	$.ajax({
@@ -255,6 +272,7 @@ $("#TicketId").val(TicketId);
 		data : {
 				
 			TicketId : TicketId,
+			AttachmentId:AttachmentId,
 		},
 		datatype : 'json',
 		success : function(result) {
@@ -279,24 +297,49 @@ $("#TicketId").val(TicketId);
 			}
 			else{
 				$("#feed").show();
-				$('#modal-feedback').html(value[20]);
+				$('#modal-feedback').html("["+value[23]+"] "+value[20]);
+				
 			}
+			$('#modal-CWRemarks').html(value[21]);
 			
-			  if(value[7]=="L"){
+			 if(value[24]===null ||value[24]=="" )
+			{
+			   $('#CEREMARK').hide();
+			}
+		   else{
+			   $('#CEREMARK').show();
+			}
+			 
+			if(value[22]===null){
+				$("#remark").hide();
+			}
+			else{
+				$("#remark").show();
+				$('#modal-ARemark').html(value[22]);
+			}
+
+			   if(value[10]==null || value[10]=="")
+				   {
+				   $('#Fileattach').hide();
+				   }
+			   else{
+				   $('#Fileattach').show();
+			   }
+			
+			if(value[7]=="L"){
 				L="Low"
-				$("#modal-priority").html(L);	
+				$("#modal-priority").html(L).css('color','#0e6fb6');	
 			} 
 			 if(value[7]=="M"){
 				M="Medium"
-				$('#modal-priority').html(M);	
+				$('#modal-priority').html(M).css('color','green');	
 			}
 			 if(value[7]=="H"){
 				H="High"
-				$("#modal-priority").html(H);
+				$("#modal-priority").html(H).css('color','red');
 			} 
 			  
 			 document.getElementById('TicketId1').value= value[0];
-			
 			  var d = new Date(value[6]),
 			 
 			        month = '' + (d.getMonth() + 1),

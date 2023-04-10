@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -136,7 +137,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			
 				List<Object[]> admindashboard = service.HeaderSchedulesList("5" ,logintype); 
 			
-				ses.setAttribute("formmoduleid", "5"); 
+				ses.setAttribute("formmoduleid", "8"); 
 				ses.setAttribute("SidebarActive", "LeaveDashBoard_htm");
 				req.setAttribute("dashboard", admindashboard);
 
@@ -158,9 +159,9 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = service.HeaderSchedulesList("7" ,logintype); 
-				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("formmoduleid", "21");
 				ses.setAttribute("SidebarActive", "NewspaperDashBoard_htm");
-				req.setAttribute("dashboard", admindashboard);
+				req.setAttribute("dashboard", admindashboard); 
 
 				return "newspaper/NewspaperDashboard";
 			}catch (Exception e) {
@@ -179,7 +180,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 				
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = service.HeaderSchedulesList("8" ,logintype); 
-				ses.setAttribute("formmoduleid", "8"); 
+				ses.setAttribute("formmoduleid", "22"); 
 				ses.setAttribute("SidebarActive", "TelephoneDashBoard_htm");
 				req.setAttribute("dashboard", admindashboard);
 
@@ -214,24 +215,46 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			
 		}
 		
-		@RequestMapping(value = "HeaderModuleList.htm" , method = RequestMethod.GET)
-		public @ResponseBody String HeaderModuleList(HttpServletRequest request ,HttpSession ses) throws Exception {
-			
+		
+		
+		@RequestMapping(value = "HeaderOptionList.htm" , method = RequestMethod.GET)
+		public @ResponseBody String HeaderOptionList(HttpServletRequest request ,HttpSession ses) throws Exception 
+		{
+			Gson json = new Gson();
+			List<Object[]> HeaderModuleList = null;
+			String UserId = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside HeaderOptionList.htm "+UserId);		
+			try {
+				String LoginType = ((String) ses.getAttribute("LoginType"));
+
+			    HeaderModuleList =service.FormOptionList(LoginType);
+			}
+			catch (Exception e) {
+					e.printStackTrace();
+					logger.error(new Date() +" Inside HeaderOptionList.htm "+UserId, e);
+			}
+				return json.toJson(HeaderModuleList);	
+		}
+		
+		
+		@RequestMapping(value = "HeaderModuleDropDownList.htm" , method = RequestMethod.GET)
+		public @ResponseBody String HeaderModuleDropDownList(HttpServletRequest req ,HttpSession ses) throws Exception 
+		{
 			Gson json = new Gson();
 			List<Object[]> HeaderModuleList = null;
 			String UserId = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside HeaderModuleList.htm "+UserId);		
 			try {
 				String LoginType = ((String) ses.getAttribute("LoginType"));
+				String formOptionId =  req.getParameter("formOptionId");
 
-			    HeaderModuleList =service.FormModuleList(LoginType);
-			    request.setAttribute("ProjectInitiationList", "");    
+			    HeaderModuleList =service.HeaderModuleDropDownList(LoginType, formOptionId);
 			}
 			catch (Exception e) {
 					e.printStackTrace();
 					logger.error(new Date() +" Inside HeaderModuleList.htm "+UserId, e);
 			}
-				return json.toJson(HeaderModuleList);	
+			return json.toJson(HeaderModuleList);	
 		}
 		
 		@RequestMapping(value ="SidebarModuleList.htm", method = RequestMethod.GET)
@@ -245,6 +268,7 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			try {
 				
 				String Formmoduleid = req.getParameter("formmoduleid");
+				System.out.println(Formmoduleid);
 				FormDetailList = service.HeaderSchedulesList(Formmoduleid ,logintype);
 				
 				
@@ -676,8 +700,8 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					String logintype = (String)ses.getAttribute("LoginType");
 					List<Object[]> admindashboard = service.HeaderSchedulesList("9" ,logintype); 
 				    
-					ses.setAttribute("formmoduleid", "9"); 
-					ses.setAttribute("SidebarActive", "");
+					ses.setAttribute("formmoduleid", "6"); 
+					ses.setAttribute("SidebarActive", "CircularDashBoard_tm");
 					req.setAttribute("dashboard", admindashboard);
 					List<Object[]> SearchList=new ArrayList<Object[]>();
 					String search = req.getParameter("search");
@@ -1004,28 +1028,4 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					Gson json = new Gson();
 					  return json.toJson(username);
 				}		 
-			 
-//			 @RequestMapping(value = "ITDashboard.htm", method = RequestMethod.GET)
-//				public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
-//					String Username = (String) ses.getAttribute("Username");
-//					logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
-//					try {
-//						String logintype = (String)ses.getAttribute("LoginType");
-//						String EmpNo = (String)ses.getAttribute("EmpNo");
-//				        
-//						List<Object[]> admindashboard = service.HeaderSchedulesList("11" ,logintype); 
-//						
-//						req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo));
-//						
-//						
-//						ses.setAttribute("formmoduleid", "11"); 
-//						req.setAttribute("dashboard", admindashboard);
-//						ses.setAttribute("SidebarActive", "ITDashboard_htm");
-//						return "ithelpdesk/ITDashboard";
-//					} catch (Exception e) {
-//						logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
-//						e.printStackTrace();	
-//						return "static/Error";
-//					}
-//				}
 }		

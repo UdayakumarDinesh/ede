@@ -44,8 +44,9 @@ public class HelpdeskTicket implements Serializable {
 	private String Returneddate;
 	private String  ClosedDate;
 	private String ClosedBy;
-	private String FeedBackRequired;
-	private String Feedback;
+	private String  FeedBackRequired;
+	private String  FeedBackType;
+	private String  Feedback;
 	private String  CreatedBy;
 	private String  CreatedDate;
 	private String  ModifiedBy;

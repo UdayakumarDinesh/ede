@@ -75,9 +75,19 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
+	public List<Object[]> HeaderModuleDropDownList(String LoginType,String FormOptionId) throws Exception {
+		return dao.HeaderModuleDropDownList(LoginType, FormOptionId);
+	}
+	@Override
 	public List<Object[]> FormModuleList(String LoginType)throws Exception 
 	{
 		return dao.FormModuleList(LoginType);
+	}
+	
+	
+	@Override
+	public List<Object[]> FormOptionList(String LoginType) throws Exception {
+		return dao.FormOptionList(LoginType);
 	}
 	
 	@Override

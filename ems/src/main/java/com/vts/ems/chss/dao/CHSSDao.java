@@ -203,5 +203,11 @@ public interface CHSSDao {
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> getEmpList() throws Exception;
 	public List<Object[]> getDependantsList(String empNo)throws Exception;
+	public Object[] getEmpNo(String EmpId) throws Exception;
+	public List<Object[]> DisputeList() throws Exception;
+	public Object[] CHSSReApplyDetails(String CHSSApplyId) throws Exception;
+	public Object[] CHSSReApplyConsult(String ConsultationId) throws Exception;
+	public Object[] CHSSReApplyBill(String BillId) throws Exception;
+	public Object[] CHSSReApplyConsultMain(String consultaionMainId) throws Exception;
 	
 }

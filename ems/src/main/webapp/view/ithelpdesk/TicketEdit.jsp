@@ -101,7 +101,7 @@
 							<div class="col-md-2" >
 							<%if(!desk.getFileName().toString().equals("")){ %>
 							<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="margin-left:204px; margin-top:-65px;" 
-									name="TicketId" value="<%=desk.getTicketId() %>"
+									name="TICKETID" value="<%=desk.getTicketId() %>"
 									 formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 										  <i style="color: #019267" class="fa-solid fa-download fa-1x" ></i>
 									</button>
@@ -115,7 +115,7 @@
 						
 						<div class="row justify-content-center">
 						<input type="hidden" name="TicketId" value="<%=desk.getTicketId()%>">
-						 <button type="submit" class="btn btn-sm submit-btn"    onclick="return confirm('Are You Sure To Update ?')" >UPDATE</button> <!-- Onclick="return confirm('Are You Sure To Submit?')"  -->						
+						 <button type="submit" class="btn btn-sm submit-btn"    onclick="return confirm('Are You Sure To Update ?')" >UPDATE</button>				
 						</div>
 					</form>
 				</div>

@@ -147,6 +147,7 @@ public class PisController {
 			List<Object[]> EmployeeDetailsList =new ArrayList<Object[]>();
 			EmployeeDetailsList = service.EmployeeDetailsList(LoginType, EmpId);				
 			req.setAttribute("EmployeeDetailsList", EmployeeDetailsList);
+			ses.setAttribute("formmoduleid", "3"); 
 			ses.setAttribute("SidebarActive","PisAdminEmpList_htm");
 			return "pis/EmployeeList";
 		}catch (Exception e) {
@@ -154,7 +155,7 @@ public class PisController {
 			e.printStackTrace();	
 			return "static/Error";
 		}
-	}
+	} 
 	
 	
 	@RequestMapping(value = "EmployeeDetails.htm", method = {RequestMethod.POST , RequestMethod.GET})
@@ -6552,12 +6553,14 @@ public class PisController {
 			
 			
 		}
-		@RequestMapping(value="OrganisationStructure.htm",method=RequestMethod.POST)
+		@RequestMapping(value="OrganisationStructure.htm")
 		public String organisationStructure(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{			
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
 			try {
+				ses.setAttribute("formmoduleid", "1");
+				ses.setAttribute("SidebarActive","OrganisationStructure_htm");
 				List<Object[]> grouplist=service.getGroupListGH();
 				List<Object[]> divisionlist=service.getDivisionListDH();
 				req.setAttribute("grouplist", grouplist);

@@ -98,11 +98,11 @@
 									<td style="width: 8%;text-align: left;"><%=assignedList[15] %></td>
 									<td style="text-align: center;width: 7%;"><%=rdf.format(sdf.parse(assignedList[11].toString()))%></td>
 									<td style="width: 8%;text-align: center;">
-												<%if(!assignedList[10].toString().equals("")) {%>
-									             <button type="submit" class="btn btn-sm " name="TicketId" value="<%=assignedList[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+												<%-- <%if(!assignedList[10].toString().equals("")) {%>
+									             <button type="submit" class="btn btn-sm " name="TICKETID" value="<%=assignedList[0]%>" formaction="TicketFormDownload.htm" formtarget="_blank" formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
 															<i class="fa-solid fa-download " style="color: green;"></i>
 														</button>
-										         <%} %>
+										         <%} %> --%>
 										          &nbsp;&nbsp;
 										       <% if(assignedList[13].toString().equalsIgnoreCase("A")){%>
 										          <button type="button" class="btn btn-sm " name="TicketId" id="TicketId" value="<%=assignedList[0]%>"  onclick="openModal('<%=assignedList[0]%>')"   data-toggle="tooltip" title="" data-original-title="ReAssign To">
@@ -186,9 +186,14 @@
 							<tr>
 								<th style="width:17%;padding: 5px;"> Description :</th>
 								<td class="tabledata" style="width:90%;padding: 5px;word-wrap:break-word;" colspan="3" id="modal-Desc"></td>
+								 <td id="Fileattach"><button type="submit" class="btn btn-sm " name="TICKETID" id="TicketId1" formaction="TicketFormDownload.htm"  formmethod="post" data-toggle="tooltip"  formnovalidate="formnovalidate" data-placement="top" title="" data-original-title="Download">
+															<i class="fa-solid fa-download " style="color: green;"></i>
+														</button>
 							</tr>
 						</table>
-						</form>
+						       <input type="hidden"  name="TICKETID" id="TicketId1" value="">
+						        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
+					</form>
 						<hr>
 						<form action="TicketReAssigned.htm" method="post" autocomplete="off"  >
 						<table   style="width:100%">
@@ -212,7 +217,7 @@
 						<div align="center" style="margin-top:10px;" >
 								<button type="submit"  class="btn btn-sm submit-btn"  name="action"  value="submit" onclick="return confirm('Are You Sure to Submit?');" >Submit</button>
 						</div>
-						<input type="hidden"  name="TicketId1" id="TicketId1" value="">
+						<input type="hidden"  name="TicketId1" id="TicketId2" value="">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 				</div>
@@ -262,8 +267,10 @@
 							</tr>
 						</table>
 						<input type="hidden"  name="TicketId1" id="TicketId1" value=""> 
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                  </form>
 					</div>
+					
 			</div>
 		</div>
 	</div>
@@ -301,13 +308,18 @@ $("#TicketId").val(TicketId);
 			$('#modal-subcategory').html(value[8]);
 			
 			 document.getElementById('TicketId1').value= value[0];
+			 document.getElementById('TicketId2').value= value[0];
+			 
+			 if(value[11]==null || value[11]=="")
+			   {
+			   $('#Fileattach').hide();
+			   }
+		   else{
+			   $('#Fileattach').show();
+		   }
 			  assignTo= value[10];
-			  console.log("assignTo--"+assignTo);
-			  
-			  priority=value[9];
-			  console.log("pp--"+priority);
-		
-			  var d = new Date(value[6])
+			 priority=value[9];
+			 var d = new Date(value[6])
 			 
 			        month = '' + (d.getMonth() + 1),
 			        day = '' + d.getDate(),
@@ -437,17 +449,17 @@ function SeeDetails(TicketId)
 	 if(type=="L")
     {
 	   L="Low"
-	   $('#priority').html(L);
+	   $('#priority').html(L).css('color','blue');;
 	}
    if(type=="M")
    {
 	   M="Medium"
-	   $('#priority').html(M);
+	   $('#priority').html(M).css('color','green');
    }
    if(type=="H")
    {
 	   H="High"
-	   $('#priority').html(H);
+	   $('#priority').html(H).css('color','red');
    }
      $('#assigned-details').modal('toggle'); 
 }
