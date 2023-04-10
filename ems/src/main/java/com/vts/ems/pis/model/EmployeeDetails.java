@@ -70,6 +70,7 @@ public class EmployeeDetails {
 	private String DCMAFNo;
 	private String ITICreditSocNo;
 	private String BenovelentFundNo;
+	private Long AnnualDec;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

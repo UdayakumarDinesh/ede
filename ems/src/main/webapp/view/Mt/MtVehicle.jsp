@@ -50,7 +50,7 @@ String empname = (String)request.getAttribute("empname");
 				<form name="frm" action="MtVehicleC.htm" method="POST" id="empForm">					
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
-				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable7"> 
 								         <thead>
 								                <tr>
 									             	 <th>Select</th>
@@ -94,6 +94,12 @@ String empname = (String)request.getAttribute("empname");
 </div>
 
 </body>
+<script>
+$("#myTable7").DataTable({
+	"lengthMenu": [5, 10, 25, 50, 75, 100]
+});
+
+</script>
 <script type="text/javascript">
 
 function Edit(myfrm){

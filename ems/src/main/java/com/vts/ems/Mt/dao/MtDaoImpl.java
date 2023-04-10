@@ -769,7 +769,7 @@ public class MtDaoImpl implements MtDao {
 	@Override
 	public List<Object[]> TripList(Date FromDate, Date ToDate) throws Exception {
 		List<Object[]> reportlist=null;
-		System.out.println("DAo"+ FromDate+","+ToDate);
+		//System.out.println("DAo"+ FromDate+","+ToDate);
 		try {
 			Query query=manager.createNativeQuery("CALL mt_triplist_mto(:FromDate,:ToDate)");
 			query.setParameter("FromDate", FromDate);
@@ -783,16 +783,14 @@ public class MtDaoImpl implements MtDao {
 			return null;
 		}
 	}
-	
-	
-	
+			
 	@Override
 	public List<Object[]> DirectorTripList(Date FromDate, Date ToDate) throws Exception {
 		List<Object[]> reportlist=null;
 		
 		try {
-			Query query=manager.createNativeQuery("CALL mt_director_triplist(:FormDate,:ToDate)");
-			query.setParameter("FormDate", FromDate);
+			Query query=manager.createNativeQuery("call mt_director_triplist(:FromDate,:ToDate)");
+			query.setParameter("FromDate", FromDate);
 			query.setParameter("ToDate", ToDate);
 			reportlist =(List<Object[]>)query.getResultList();		
 			return reportlist;
