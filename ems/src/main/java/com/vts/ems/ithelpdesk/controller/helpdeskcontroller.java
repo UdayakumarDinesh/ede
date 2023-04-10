@@ -56,12 +56,15 @@ public class helpdeskcontroller {
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
 	
-	private static final String formmoduleid="11";
+	private static final String formmoduleid="31";
 	@RequestMapping(value = "ITDashboard.htm")
 	public String ITDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside ITDashboard.htm "+Username);		
 		try {
+			ses.setAttribute("formmoduleid", "31"); 
+			ses.setAttribute("SidebarActive", "ITDashboard_htm");
+			
 			String logintype = (String)ses.getAttribute("LoginType");
 		    String EmpNo = (String)ses.getAttribute("EmpNo");
 		    List<Object[]> admindashboard = adminservice.HeaderSchedulesList("11" ,logintype); 
@@ -81,7 +84,6 @@ public class helpdeskcontroller {
 			req.setAttribute("countdata", service.IThelpdeskDashboardCountData(EmpNo,logintype,fromDate,toDate));
 			req.setAttribute("graphdata", service.IThelpdeskDashboardGraphData(fromDate,toDate));
 			req.setAttribute("piechartdata", service.IThelpdeskDashboardPieChartData(fromDate,toDate));
-			ses.setAttribute("formmoduleid", "11"); 
 			req.setAttribute("dashboard", admindashboard);
 			ses.setAttribute("SidebarActive", "ITDashboard_htm");
 			req.setAttribute("LoginType", logintype);
@@ -90,7 +92,7 @@ public class helpdeskcontroller {
 			logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
-		}
+		} 
 	}
 	
 
@@ -1233,6 +1235,7 @@ public class helpdeskcontroller {
 			} 
      
      }
+      
     
 }
 

@@ -24,7 +24,7 @@
 	      String EmpNo=(String)request.getAttribute("EmpNo");
 	
 	%>
-	<div></div>
+	
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">

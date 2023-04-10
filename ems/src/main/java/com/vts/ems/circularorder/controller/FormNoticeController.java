@@ -201,6 +201,9 @@ public class FormNoticeController {
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside EMSNotices.htm "+UserId);
 		try {
+			ses.setAttribute("formmoduleid", "7"); 
+			ses.setAttribute("SidebarActive", "EMSNotices_htm");
+			
 			String FromDate=req.getParameter("FromDate");
 			String ToDate=req.getParameter("ToDate");
 

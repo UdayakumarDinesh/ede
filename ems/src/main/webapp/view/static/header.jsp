@@ -29,18 +29,16 @@
    	
 }
 
-.custom-button:hover{
-	color: white !important;
-	
-}
-
 .custom-button{
+	background-color: #0E6FB6;;
 	color: white !important;
-	
+	font-weight: 100 !important;
+    
+
 }
 
 .bg-transparent{
-	    margin: 7px;
+	   
     background-color: transparent;
     text-transform: capitalize;
     color: white;
@@ -60,7 +58,44 @@
 	font-size: 14px !important;
 	font-weight: 800 !important;
 }
+
+
+
 </style>
+
+<style type="text/css">
+	
+	@media (min-width: 992px){
+	.dropdown-menu .dropdown-toggle:after{
+		border-top: .3em solid transparent;
+	    border-right: 0;
+	    border-bottom: .3em solid transparent;
+	    border-left: .3em solid;
+	}
+	.dropdown-menu .dropdown-menu{
+		margin-left:0;
+		margin-right: 0;
+	}
+	.dropdown-menu li{
+		position: relative;
+	}
+	.nav-item .submenu{ 
+		display: none;
+		position: absolute;
+		left:100%; 
+		top:-7px;
+	}
+	.nav-item .submenu-left{ 
+		right:100%;
+		left:auto;
+	}
+	.dropdown-menu > li:hover{ background-color: #f1f1f1 }
+	.dropdown-menu > li:hover > .submenu{
+		display: block;
+	}
+}
+</style>
+
 
 </head>
 
@@ -100,7 +135,7 @@
 							<ul class="navbar-nav ml-auto ">
 								
 								<li class="nav-item active">
-									<a class=" btn bg-transparent custom-button " href="MainDashBoard.htm" type="button" aria-haspopup="true" aria-expanded="false" style="background-color: transparent" ><i class="fa fa-home"	aria-hidden="true" ></i> Home</a> 	
+									<a class=" btn bg-transparent custom-button " href="MainDashBoard.htm" type="button" aria-haspopup="true" aria-expanded="false" style="background-color: transparent" ><i class="fa fa-home"	aria-hidden="true" ></i></a> 	
 								</li>
 
 								<li class="nav-item dropdown">
@@ -249,7 +284,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type : "GET",
-			url : "HeaderModuleList.htm",
+			url : "HeaderOptionList.htm",
 			
 			datatype : 'json',
 			success :  function(result){
@@ -260,14 +295,15 @@ $(document).ready(function() {
 				})
 				var module= "";
 				var logintype= $('#logintype').val();
-				var chsscount=0;
+				
 				for(i=0; i<values.length;i++)
 				{
 					var name=values[i][1].replace(/ /g,'');
-					module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>';
-					if(name.trim()==='CHSS'){
-						chsscount=1;
-					}
+					/* module+='<li class="nav-item dropdown " >  <a href="'+values[i][2]+'" class=" btn bg-transparent custom-button" >'+name+'</a></li>'; */
+					
+					module+="<li class='nav-item dropdown uppernav ' style='padding: 0rem 0.25rem'>"
+					module+= "<button type='button' class='btn dropdown-toggle custom-button'  value='"+values[i][0]+"_"+values[i][2]+"' id='header-btn-"+values[i][0]+"'  data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' onclick='checkme("+values[i][0]+")' >"+values[i][1]+"</button> <div class='dropdown-menu dropdown-menu-right' id='scheduledropdown"+values[i][0]+"' style='width:13rem'> </div></li>";
+					
 				}
 				$('#module').html(module); 
 				
@@ -275,6 +311,42 @@ $(document).ready(function() {
 		})	
 	});
     
+	
+	function checkme(value){
+
+		  var $formOptionid =  $("#header-btn-"+value).val(); 
+				
+	      var $logintype = $('#logintype').val(); 
+	      	      
+						$.ajax({
+
+							type : "GET",
+							url :  "HeaderModuleDropDownList.htm" ,
+							data : {
+								formOptionId : $formOptionid
+							},
+							datatype : 'json',
+							success : function(result) {
+
+								var result = JSON.parse(result);
+							
+								
+								var values = Object.keys(result).map(function(e) {
+								  return result[e]
+								})
+								
+								var s = '';
+								for (i = 0; i < values.length; i++) {
+									s += '<a class="dropdown-item" href="'+values[i][1]+'">' +values[i][0]+ '</a>';
+
+								}
+								
+								$('#scheduledropdown'+value).html(s);
+				
+							}
+						});
+		
+		}
 	
 	$(document).ready(function(){
 		

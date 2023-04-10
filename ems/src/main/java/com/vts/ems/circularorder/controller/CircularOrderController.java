@@ -395,6 +395,7 @@ public class CircularOrderController {
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside OfficeOrder.htm "+UserId);
 		try {
+			ses.setAttribute("formmoduleid", "5");
 			ses.setAttribute("SidebarActive", "OfficeOrder_htm");
 			
 			String fromdate= req.getParameter("fromdate");
