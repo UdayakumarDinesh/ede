@@ -90,6 +90,7 @@ public interface MasterDao {
 	public int divisionGroupAdd(DivisionGroup divisiongroup) throws Exception;
 	public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception;
 	public List<Object[]> getGroupList() throws Exception;
+	public List<Object[]> getQualificationList()throws Exception;
 	
 	
 	

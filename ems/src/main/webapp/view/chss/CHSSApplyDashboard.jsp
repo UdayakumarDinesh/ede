@@ -437,7 +437,7 @@
 													<button type="submit" class="btn btn-sm edit-btn" name="chssapplyid" value="<%=obj[0] %>" formaction="CHSSConsultMainData.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="Edit">
 														Edit
 													</button>
-												
+												<input type="hidden" name="editValue" value="editValue">
 												<%if(Integer.parseInt(obj[9].toString())==1 && obj[16]!=null && obj[16].toString().trim().equals("-")){ %>
 												<button type="submit" class="btn btn-sm " name="chssapplyid" value="<%=obj[0] %>" formaction="ClaimDeleteEmp.htm" onclick="return confirm('Are You Sure to Delete?');"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Delete Claim">
 													<i class="fa-solid fa-trash-can " style="color: red"></i>

@@ -217,7 +217,7 @@ Object[] Director=(Object[])request.getAttribute("Director");
 						<div class=" action-box" >
 						<div  class="action-box-header" >
 												
-						  <span style="font-size: 1.7em;cursor:pointer;"> 
+						  <span style="font-size: 1.5em;cursor:pointer;"> 
 						    
 			                          			 
 			                   <%=group[1] %> <% if( grouplist!=null && grouplist.size()>0 ){ %>  <i class="fa fa-info-circle " style="font-size: 1.1rem;cursor:pointer; position:absolute; right:21px;top:11px;" aria-hidden="true"></i> <%} %></span>
@@ -228,7 +228,7 @@ Object[] Director=(Object[])request.getAttribute("Director");
 														<table class="card-body-table">
 					                          			<tr>
 					                          				<th style="">GH :</th>
-					                          				<td  >&nbsp; <%if(grouplist!=null  && grouplist.size()>0){ %><%= group[3]%><%} else{ %>-<%} %> </td>
+					                          				<td style="font-size: 12px;" >&nbsp; <%if(grouplist!=null  && grouplist.size()>0){ %><%= group[3]%><%} else{ %>-<%} %> </td>
 					                          			</tr>
 												</table>
 												
@@ -246,7 +246,7 @@ Object[] Director=(Object[])request.getAttribute("Director");
 						<div class=" action-box" >
 						<div  class="action-box-header" >
 												
-						  <span style="font-size: 1.7em;cursor:pointer;"<%--  <%if(division[0]!=null) {%>onclick="DeptEmpList('<%=division[0] %>')"<%} %> --%> >
+						  <span style="font-size: 1.5em;cursor:pointer;"  <%if(division[0]!=null) {%>onclick="DeptEmpList('<%=division[0] %>')"<%} %>  data-toggle="modal" data-target=".employee">
 			                          			 
 			                   <%=division[1] %> <% if( divisionlist!=null && divisionlist.size()>0 ){ %>  <i class="fa fa-info-circle " style="font-size: 1.1rem;cursor:pointer; position:absolute; right:21px;top:11px;" aria-hidden="true"></i> <%} %></span>
 			                          			 
@@ -256,7 +256,7 @@ Object[] Director=(Object[])request.getAttribute("Director");
 														<table class="card-body-table">
 					                          			<tr>
 					                          				<th style="">DH Name :</th>
-					                          				<td  >&nbsp; <%if(divisionlist!=null  && divisionlist.size()>0){ %><%= division[3]%><%} else{ %>-<%} %> </td>
+					                          				<td style="font-size: 12px;" >&nbsp; <%if(divisionlist!=null  && divisionlist.size()>0){ %><%= division[3]%><%} else{ %>-<%} %> </td>
 					                          			</tr>
 												</table>
 												
@@ -278,9 +278,55 @@ Object[] Director=(Object[])request.getAttribute("Director");
            </ul>
        </div>  
      </div>
+     <!--*******************************************************  Modal For EmpList   -->
+   
+     <div class="modal employee" id="emplist" role="dialog" >
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header"><h5 class="modal-litle" >LIST OF EMPLOYEES  </h5>
+                 <button  type="button"  class="close" data-dismiss="modal">&times;</button>
+                </div>
+     
+   <div class="modal-body">
+             
+         <div class="row">
+              
+          <div class="col-md-12" >
+              <div class="row" style="margin-top: 15px;">
+    
+     <div class="col-md-12">
+
+	    <div class="table-responsive">
+	  <table class="table table-bordered table-hover table-striped table-condensed"  id="myTable1">
+   	
+    <thead>
+    	
+	             <tr style="color: #000080;">
+	               	
+	                 <th style="font-size: 12px;">EMP Name</th>
+	        	     <th style="font-size: 12px;">Designation</th>
+	        	     <th style="font-size: 12px;">Emp No</th>
+	                   
+	               </tr>
+	         </thead>
+	      <tbody id="modal_progress_table">
+	     
+	     </tbody>
+	  </table>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	  </div>
+	 
+    
 <script type="text/javascript">
 
-  $(function () {
+ /*  $(function () {
 	    $('.organisation-tree ul').hide();
 	    $('.organisation-tree>ul').show();
 	    $('.organisation-tree ul.active').show();
@@ -293,10 +339,11 @@ Object[] Director=(Object[])request.getAttribute("Director");
 	        e.stopPropagation();
 	    });
 	});
-
+ */
 </script> 
 <script type="text/javascript">
 function DeptEmpList(divisionId){
+	$("#modal_progress_table").DataTable().destroy();
 	$.ajax({
 		type:"GET",
 		url:"DeptEmpListAjax.htm",
@@ -305,7 +352,8 @@ function DeptEmpList(divisionId){
 		},
 		datatype:'json',
 		success:function(result){
-			var result:JSON.parse(result);
+		var  result=JSON.parse(result);
+		document.getElementById("empname").innerHTML =result[0];
 		}
 	})
 	

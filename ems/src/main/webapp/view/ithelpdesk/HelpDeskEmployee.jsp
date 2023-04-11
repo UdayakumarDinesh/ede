@@ -70,7 +70,7 @@
 		<div class="row">	
 		<div class="card" style="width:48%;margin-left:2%"; >
 				 <div class="card-body main-card "  > 
-					<form action="EmployeeAddSubmit.htm" method="post" autocomplete="off" id="" >
+					<form action="EmployeeAddSubmits.htm" method="post" autocomplete="off" id="" >
 					
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="row">

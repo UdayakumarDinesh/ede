@@ -22,6 +22,7 @@ public class CHSSApply implements Serializable {
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long CHSSApplyId;
 	private String CHSSApplyNo;
+	private String ParentCHSSApplyNo;
 	private String Ailment;
 	private Long EmpId; 
 	private Long PatientId;

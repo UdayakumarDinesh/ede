@@ -3134,4 +3134,92 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 	}
 		
 	}
+
+
+	private static final String GETEMPNO = "SELECT EmpNo,EmpName FROM employee WHERE EmpId=:EmpId";
+	@Override
+	public Object[] getEmpNo(String EmpId) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(GETEMPNO);
+			query.setParameter("EmpId", EmpId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getEmpNo "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static final String DISPUTELIST="SELECT c.CHSSDisputeId,a.CHSSApplyId,d.EmpName,a.CHSSApplyNo,b.member_name,a.ailment,a.AmountClaimed,a.AmountSettled,c.ResponseMsg,c.Action,a.CHSSType FROM chss_apply a,pis_emp_family_details b,chss_apply_dispute c,employee d WHERE b.family_details_id=a.PatientId AND c.CHSSApplyId=a.CHSSApplyId AND d.EmpId=a.EmpId AND c.Action IS NOT NULL";
+	@Override
+	public List<Object[]> DisputeList() throws Exception {
+		List<Object[]> list=null;
+		try {
+			Query query= manager.createNativeQuery(DISPUTELIST);
+			list= (List<Object[]>)query.getResultList();
+			manager.flush();
+			return list;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO DisputeList "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String CHSSREAPPLYDETAILS = "SELECT CHSSApplyNo,Ailment,EmpId,PatientId,IsSelf,CHSSType,TreatTypeId,NoEnclosures,CreatedBy FROM chss_apply WHERE CHSSApplyId=:CHSSApplyId";
+	@Override
+	public Object[] CHSSReApplyDetails(String CHSSApplyId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(CHSSREAPPLYDETAILS);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyDetails "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYCONSULT="SELECT BillId,ConsultType,DocName,DocQualification,ConsultCharge,AmountPaid,ConsultRemAmount,Comments,ConsultDate FROM chss_bill_consultation WHERE ConsultationId=:ConsultationId";
+	@Override
+	public Object[] CHSSReApplyConsult(String ConsultationId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(REAPPLYCONSULT);
+			query.setParameter("ConsultationId", ConsultationId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyConsult "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYBILL="SELECT CHSSApplyId,CHSSConsultMainId,BillNo,BillDate,CenterName,Discount,DiscountPercent,FinalBillAmt FROM chss_bill WHERE BillId=:BillId";
+	@Override
+	public Object[] CHSSReApplyBill(String BillId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(REAPPLYBILL);
+			query.setParameter("BillId", BillId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyBill "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYCONSULTMAIN="  SELECT CHSSApplyId,DocName,DocQualification FROM chss_consult_main WHERE CHSSconsultMainId=:consultaionMainId";
+	@Override
+	public Object[] CHSSReApplyConsultMain(String consultaionMainId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(REAPPLYCONSULTMAIN);
+			query.setParameter("consultaionMainId", consultaionMainId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyConsultMain "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

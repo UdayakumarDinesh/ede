@@ -92,7 +92,7 @@ public class helpdeskcontroller {
 			logger.error(new Date() +" Inside ITDashboard.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
-		}
+		} 
 	}
 	
 
@@ -1117,7 +1117,7 @@ public class helpdeskcontroller {
       
     } 
      
-     @RequestMapping(value="EmployeeAddSubmit.htm",method= {RequestMethod.GET,RequestMethod.POST})
+     @RequestMapping(value="EmployeeAddSubmits.htm",method= {RequestMethod.GET,RequestMethod.POST})
      public String EmployeeAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) {
 	
   	  String UserId=(String)ses.getAttribute("Username");
@@ -1233,6 +1233,7 @@ public class helpdeskcontroller {
 			} 
      
      }
+      
     
 }
 

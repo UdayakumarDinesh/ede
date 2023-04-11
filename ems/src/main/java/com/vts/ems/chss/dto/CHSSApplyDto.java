@@ -9,6 +9,7 @@ public class CHSSApplyDto {
 
 	private String CHSSApplyId;
 	private String CHSSApplyNo;
+	private String ParentCHSSApplyNo;
 	private String EmpId; 
 	private String PatientId;
 	private String RelationId;

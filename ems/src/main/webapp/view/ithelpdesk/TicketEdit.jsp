@@ -115,7 +115,7 @@
 						
 						<div class="row justify-content-center">
 						<input type="hidden" name="TicketId" value="<%=desk.getTicketId()%>">
-						 <button type="submit" class="btn btn-sm submit-btn"    onclick="return confirm('Are You Sure To Update ?')" >UPDATE</button> <!-- Onclick="return confirm('Are You Sure To Submit?')"  -->						
+						 <button type="submit" class="btn btn-sm submit-btn"    onclick="return confirm('Are You Sure To Update ?')" >UPDATE</button>				
 						</div>
 					</form>
 				</div>

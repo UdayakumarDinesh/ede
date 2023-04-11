@@ -1026,5 +1026,4 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					Gson json = new Gson();
 					  return json.toJson(username);
 				}		 
-			 
 }		

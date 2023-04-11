@@ -11,14 +11,16 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
-
+body{
+background-image: url("view/images/d7.jpg");
+}
 
 </style>
 </head>
 <body>
 
 
-<div class="card-header page-top ">
+<div class="card-header page-top " >
 		<div class="row">
 			<div class="col-md-6">
 				<h5>NewsPaper/Telephone Dashboard</h5>
@@ -49,7 +51,7 @@
 	</div>
 	<%} %>
 
-<div class="page card dashboard-card">
+<div class="page card dashboard-card" style="background: transparent;">
    <div class="card-body" align="center" >
   		<h3>NewsPaper/Telephone Dashboard</h3>
    

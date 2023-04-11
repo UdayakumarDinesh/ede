@@ -220,7 +220,7 @@ public class MtServiceImpl implements MtService {
 		edittrip.setTripDate(trip.getTripDate());
 		edittrip.setTripEndDate(trip.getTripEndDate());
 		edittrip.setTripId(trip.getTripId());
-		edittrip.setTripNo(trip.getTripNo());
+		//edittrip.setTripNo(trip.getTripNo());
 		edittrip.setVehicleId(trip.getVehicleId());
 		edittrip.setModifiedby(trip.getModifiedby());
 		edittrip.setModifiedDate(trip.getModifiedDate());

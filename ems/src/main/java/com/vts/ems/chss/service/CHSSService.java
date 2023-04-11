@@ -149,7 +149,7 @@ public interface CHSSService
 	public long ClaimDisputeSubmit(CHSSApplyDispute dispute,HttpSession ses) throws Exception;
 	public Object[] getClaimDisputeData(String chssapplyid) throws Exception;
 	public List<Object[]> ClaimDisputeList(String fromdate, String todate) throws Exception;
-	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal, HttpSession ses) throws Exception;
+	public long ClaimDisputeResponseSubmit(CHSSApplyDispute modal, HttpSession ses,String action) throws Exception;
 	public long EquipmentItemAdd(CHSSEquipDto dto) throws Exception;
 	public List<CHSSBillEquipment> CHSSEquipmentList(String billid) throws Exception;
 	public long EquipmentItemEdit(CHSSBillEquipment modal) throws Exception;
@@ -202,5 +202,6 @@ public interface CHSSService
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> getEmpList() throws Exception;
 	public List<Object[]> getDependantsList(String empNo) throws Exception;
-
+	public List<Object[]> DisputeList() throws Exception;
+	public long CHSSReApplyDetails( String chssapplyid,String[] consultationId,String[] CHSSTestId,String[] CHSSMedicineId,String[] ChssMiscId) throws Exception;
 }

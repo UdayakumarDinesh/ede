@@ -447,7 +447,7 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			            </div>
 			
 			            <div class="col-md-2">
-			                <label>Per Pass No</label>
+			                <label>Per Pass No<span class="mandatory">*</span></label>
 			                <input type="text" id="permpassno" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"  placeholder="Permanent Pass No">
 			            </div> 
 			         </div>
