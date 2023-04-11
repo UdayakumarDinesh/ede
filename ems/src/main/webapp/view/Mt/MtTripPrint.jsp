@@ -36,7 +36,6 @@ color:blue;
 <body>
 <%List<List<Object[]>> printdata1=(List<List<Object[]>>)request.getAttribute("printdata"); 
  List<LabMaster> labdetails = (List<LabMaster>)request.getAttribute("labdetails"); 
- System.out.println("labdetails:"+labdetails);
  LabMaster englabdetails=null;
  LabMaster hindilabdetails=null;
 if(labdetails!=null && labdetails.size()>0){

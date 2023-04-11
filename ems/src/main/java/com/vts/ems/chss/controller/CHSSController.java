@@ -214,7 +214,6 @@ public class CHSSController
 				PatientName=req.getParameter("patientname");
 			}
 			
-			System.out.println("IsSelf"+IsSelf);
 			String FromDate= req.getParameter("fromdate");
 			String ToDate= req.getParameter("todate");						
 			LocalDate today=LocalDate.now();

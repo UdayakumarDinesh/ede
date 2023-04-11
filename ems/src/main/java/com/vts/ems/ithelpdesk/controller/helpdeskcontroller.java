@@ -228,11 +228,9 @@ public class helpdeskcontroller {
     	    			try {
     	    				
     	    				String AttachmentId=req.getParameter("AttachmentId");
-    	    				System.out.println("AttachmentId--------"+AttachmentId);
     	    				HelpdeskAttachments attach=service.getattachId(AttachmentId);
     	    				res.setContentType("Application/octet-stream");	
     	    				File my_file=new File(emsfilespath+attach.getFilePath());
-    	    				System.out.println("FilePath--------"+my_file);
     	    				res.setHeader("Content-disposition","attachment;filename="+attach.getFileName());
     	    				OutputStream out=res.getOutputStream();
     	    				FileInputStream in=new FileInputStream(my_file);

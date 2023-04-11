@@ -112,30 +112,28 @@
 
 
 		<div id="content" >
-        	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 1rem !important;">              
+        	<nav class="navbar navbar-expand-lg navbar-light  " style="padding: 0.1rem 0.5rem !important;">              
             	<div class="container-fluid">
-
-					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:6% ">
+					<button class=" btn btn-sm" id = "header-sidebar-menu-btn"  type="button" style="display: none; margin-right: 5px;background-color: #143F6B;color: #FFFFFF;" onclick="SideBarToggle()"  data-toggle="tooltip" data-placement="right" title="Sidebar Menu">
+						<i class="fa-solid fa-bars"></i>
+					</button>
+					<a class="navbar-brand" href="MainDashBoard.htm" id="brandname"	style=" margin-left: 5px ;margin-right: 5px;font-family: 'Montserrat', sans-serif; color: white;text-align: initial;width:6% ">
 						<img class="" style="width: 28%;" src="view/images/lablogoui.png" alt=""><b style="font-family: Montserrat, sans-serif;font-size: 19px"> &nbsp; SEIP &nbsp;&nbsp;</b>
 					</a>
-						<span id="p1" style="font-family:Lato, sans-serif;font-size: 19px;font-weight: 700; color: orange;"></span>
-						<span style="font-family: Lato, sans-serif;font-size: 15px;padding: 0px 16px 0px 10px;text-transform: capitalize !important;color: white;"><%=LocalDate.now().getMonth().toString().substring(0,3) %> &nbsp; <%=LocalDate.now().getYear() %> </span>
-
-					
-
+						<span style="margin-bottom: -10px;">
+							<span id="p1" style="font-family:Lato, sans-serif;font-size: 12px;font-weight: 700; color: orange;"></span>
+							<span style="font-family: Lato, sans-serif;font-size: 12px;padding: 0px 0px 0px 5px;text-transform: capitalize !important;color: white;"><%=LocalDate.now().getMonth().toString().substring(0,3) %> &nbsp; <%=LocalDate.now().getYear() %> </span>
+						</span>
+						<span>
+							
+						</span>
 
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						
-						<div class="mr-auto" style="margin-left: 20px; color: white;">
-	                               <%--  <span style="font-size: 20px"><%=EmpName %></span>  --%>
-	                    </div> 
-	                    
 	                    <!-- Search Bar -->
-							
 							<ul class="navbar-nav ml-auto ">
 								
 								<li class="nav-item active">
-									<a class=" btn bg-transparent custom-button " href="MainDashBoard.htm" type="button" aria-haspopup="true" aria-expanded="false" style="background-color: transparent" ><i class="fa fa-home"	aria-hidden="true" ></i></a> 	
+									<a class=" btn bg-transparent custom-button " href="MainDashBoard.htm" type="button" aria-haspopup="true" aria-expanded="false" style="background-color: transparent" data-toggle="tooltip" data-placement="bottom" title="Home"><i class="fa fa-home"	aria-hidden="true" ></i></a> 	
 								</li>
 
 								<li class="nav-item dropdown">
@@ -225,6 +223,11 @@
 
 
 <script type="text/javascript">
+
+function SideBarToggle(){
+	$('#sidebar').toggle();
+}
+
 
 $(document).ready(function() {
 	

@@ -62,4 +62,5 @@ public interface LeaveService {
 	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception;
 	public long McFcAttachmentFile(LeaveAttachmentDto dto)throws Exception;
 	public LeaveMC_FC getMcFc(String ApplId) throws Exception;
+	public LeaveRaSa getLeaveRASADAta(String empno) throws Exception;
 }

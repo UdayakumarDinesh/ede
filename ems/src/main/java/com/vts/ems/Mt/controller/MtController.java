@@ -1237,7 +1237,6 @@ public class MtController {
 		try {
 			String FromDate=req.getParameter("Fromdate");
 			String ToDate=req.getParameter("Todate");
-			System.out.println("InCon"+ToDate);
 			if(FromDate!=null&&ToDate!=null) {
 				
 				req.setAttribute("TripList", service.TripList(DateTimeFormatUtil.dateConversionSql(FromDate),DateTimeFormatUtil.dateConversionSql(ToDate)));

@@ -78,13 +78,14 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
     </div>
 	<%} %>
 <br>
-		<div class="card">
-			<div class="card-header" style="height: 4rem">
-				<div class="row " >
-					<div class="col-9"></div>
-					<div class="col-1.5" style="font-color:black;"><h6>Department :  &nbsp;</h6></div>
+
+
+		<div class="card-body main-card">
+				<div class="row "  align="right">
+					<div class="col-8"></div>
+					<div class="col-2" style="font-color:black;float: right;" ><h6>Department :  &nbsp;</h6></div>
 					<div class="col-2" >
-						<form action="EMSForms.htm" method="post" style="margin-top:-20%;">
+						<form action="EMSForms.htm" method="post" >
 							<select class="form-control select2" name="DepTypeId" onchange="this.form.submit();">
 								<option value="A" <%if(DepTypeId.equalsIgnoreCase("A")){ %>selected <%} %>>All</option>
 								
@@ -97,12 +98,6 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
 						</form>
 					</div>
 				</div>
-
-			</div>
-		</div>
-
-
-		<div class="card-body main-card">
        
         <form action="#" method="POST" id="Form">
              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -127,11 +122,11 @@ String DepTypeId = (String)request.getAttribute("DepTypeId");
                      %> 
                      <tr>
                       
-                      <%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>
-					  		<td style="text-align: center;"> <input type="radio" name="EMSFormId" value="<%=form[0] %>" required="required" > </td>
-					 	<%}else{ %>
-					 		<td style="text-align: center;"> <%=FormsList.indexOf(form)+1 %> </td>
-					 	<%} %>
+                     <%if(LoginType!=null && (LoginType.equalsIgnoreCase("A") || LoginType.equalsIgnoreCase("P"))){ %>
+					  	<td style="text-align: center;"> <input type="radio" name="EMSFormId" value="<%=form[0] %>" required="required" > </td>
+					 <%}else{ %>
+					 	<td style="text-align: center;"> <%=FormsList.indexOf(form)+1 %> </td>
+					 <%} %>
                          
                          <td style="text-align: center;" ><%=form[2]%></td>
                          <td><%=form[3]%></td>
