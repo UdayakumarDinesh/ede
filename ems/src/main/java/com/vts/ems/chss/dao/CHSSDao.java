@@ -15,6 +15,7 @@ import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSBillPkg;
 import com.vts.ems.chss.model.CHSSBillPkgItems;
+import com.vts.ems.chss.model.CHSSBillReapply;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
@@ -209,5 +210,14 @@ public interface CHSSDao {
 	public Object[] CHSSReApplyConsult(String ConsultationId) throws Exception;
 	public Object[] CHSSReApplyBill(String BillId) throws Exception;
 	public Object[] CHSSReApplyConsultMain(String consultaionMainId) throws Exception;
+	public Object[] CHSSReApplyTest(String CHSSTestId) throws Exception;
+	public Object[] CHSSReApplyMedicine(String CHSSTMedicineId) throws Exception;
+	public Object[] CHSSReApplyMisc(String CHSSMiscId) throws Exception;
+	public Object[] CHSSReApplyBillIds(String OldBillId) throws Exception;
+	public long CHSSReApplyBillAdd(CHSSBillReapply chssBilllReapply) throws Exception;
+	public long UpdateCHSSDispute(String CHSSApplyId) throws Exception;
+	public long CHSSReApplyBillRemove();
+	public Object[] CHSSDispReApplyStatus(String CHSSApplyId) throws Exception;
+	public Object[] OldCHSSApplyDetails(String CHSSApplyNo) throws Exception;
 	
 }

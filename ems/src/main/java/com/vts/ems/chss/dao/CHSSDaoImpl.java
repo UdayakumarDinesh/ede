@@ -33,6 +33,7 @@ import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSBillPkg;
 import com.vts.ems.chss.model.CHSSBillPkgItems;
+import com.vts.ems.chss.model.CHSSBillReapply;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
@@ -1577,7 +1578,7 @@ public class CHSSDaoImpl implements CHSSDao {
 		
 	}
 	
-	private static final String CHSSAPPROVALAUTH  ="SELECT e.empid,e.empname,ed.desigid, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.desigid = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType  ";
+	private static final String CHSSAPPROVALAUTH  ="SELECT e.empno,e.empname,ed.desigid, l.LoginType,lt.LoginDesc,e.Email FROM employee e, employee_desig ed,login l,login_type lt WHERE l.empid=e.empid AND e.desigid = ed.DesigId AND l.LoginType = lt.LoginType  AND l.loginType =:loginType";
 	@Override
 	public Object[] CHSSApprovalAuth(String Logintype) throws Exception
 	{
@@ -3151,7 +3152,7 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 		}
 	}
 
-	private static final String DISPUTELIST="SELECT c.CHSSDisputeId,a.CHSSApplyId,d.EmpName,a.CHSSApplyNo,b.member_name,a.ailment,a.AmountClaimed,a.AmountSettled,c.ResponseMsg,c.Action,a.CHSSType FROM chss_apply a,pis_emp_family_details b,chss_apply_dispute c,employee d WHERE b.family_details_id=a.PatientId AND c.CHSSApplyId=a.CHSSApplyId AND d.EmpId=a.EmpId AND c.Action IS NOT NULL";
+	private static final String DISPUTELIST="CALL chss_dispute_list()";
 	@Override
 	public List<Object[]> DisputeList() throws Exception {
 		List<Object[]> list=null;
@@ -3180,21 +3181,7 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 			return null;
 		}
 	}
-	
-	private static final String REAPPLYCONSULT="SELECT BillId,ConsultType,DocName,DocQualification,ConsultCharge,AmountPaid,ConsultRemAmount,Comments,ConsultDate FROM chss_bill_consultation WHERE ConsultationId=:ConsultationId";
-	@Override
-	public Object[] CHSSReApplyConsult(String ConsultationId) throws Exception{
-		try {
-			Query query = manager.createNativeQuery(REAPPLYCONSULT);
-			query.setParameter("ConsultationId", ConsultationId);
-			return (Object[])query.getSingleResult();
-		}catch (Exception e) {
-			logger.error(new Date() +" Inside DAO CHSSReApplyConsult "+ e);
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
+		
 	private static final String REAPPLYBILL="SELECT CHSSApplyId,CHSSConsultMainId,BillNo,BillDate,CenterName,Discount,DiscountPercent,FinalBillAmt FROM chss_bill WHERE BillId=:BillId";
 	@Override
 	public Object[] CHSSReApplyBill(String BillId) throws Exception{
@@ -3223,4 +3210,139 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 		}
 	}
 	
+	private static final String REAPPLYCONSULT="SELECT BillId,ConsultType,DocName,DocQualification,ConsultCharge,AmountPaid,ConsultRemAmount,Comments,ConsultDate FROM chss_bill_consultation WHERE ConsultationId=:ConsultationId";
+	@Override
+	public Object[] CHSSReApplyConsult(String ConsultationId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(REAPPLYCONSULT);
+			query.setParameter("ConsultationId", ConsultationId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyConsult "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYTEST="SELECT BillId,TestMainId,TestSubId,TestCost,AmountPaid,TestRemAmount,Comments FROM chss_bill_tests WHERE CHSSTestId=:CHSSTestId";
+	@Override
+	public Object[] CHSSReApplyTest(String CHSSTestId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(REAPPLYTEST);
+			query.setParameter("CHSSTestId", CHSSTestId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyTest "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYMEDICINE="SELECT BillId,MedicineName,MedQuantity,PresQuantity,MedicineCost,AmountPaid,MedsRemAmount,Comments FROM chss_bill_medicine WHERE CHSSMedicineId=:CHSSTMedicineId";
+	@Override
+	public Object[] CHSSReApplyMedicine(String CHSSTMedicineId) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(REAPPLYMEDICINE);
+			query.setParameter("CHSSTMedicineId", CHSSTMedicineId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyMedicine "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static final String REAPPLYMISC="SELECT BillId,MiscItemName,MiscItemCost,AmountPaid,MiscRemAmount,MiscCount,Comments FROM chss_bill_misc WHERE ChssMiscId=:CHSSMiscId";
+	@Override
+	public Object[] CHSSReApplyMisc(String CHSSMiscId) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(REAPPLYMISC);
+			query.setParameter("CHSSMiscId", CHSSMiscId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyMisc "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String REAPPLYBILLIDS="SELECT NewBillId,OldBillId FROM chss_bill_reapply WHERE OldBillId=:OldBillId";
+	@Override
+	public Object[] CHSSReApplyBillIds(String OldBillId) throws Exception {
+		Object[] BillId=null;
+		try {
+			Query query = manager.createNativeQuery(REAPPLYBILLIDS);
+			query.setParameter("OldBillId", OldBillId);
+			BillId=(Object[])query.getSingleResult();
+			return BillId;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyBillIds "+ e);
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public long CHSSReApplyBillAdd(CHSSBillReapply chssBilllReapply) throws Exception
+	{
+		manager.persist(chssBilllReapply);
+		manager.flush();
+		
+		return chssBilllReapply.getNewBillId();
+	}
+	
+	private static final String UPDATEDISPUTE="UPDATE chss_apply_dispute SET DispReapplyStatus='S' WHERE CHSSApplyId=:CHSSApplyId";
+	@Override
+	public long UpdateCHSSDispute(String CHSSApplyId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATEDISPUTE);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO UpdateCHSSDispute "+ e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+	
+	private static final String CHSSREAPPLYBILLREMOVE = "TRUNCATE chss_bill_reapply";
+	@Override
+	public long CHSSReApplyBillRemove() {
+		try {
+			Query query = manager.createNativeQuery(CHSSREAPPLYBILLREMOVE);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSReApplyBillRemove "+ e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+	
+	private static final String DISPREAPPLYSTATUS = "SELECT a.Action,a.DispReapplyStatus FROM chss_apply_dispute a WHERE CHSSApplyId =:CHSSApplyId";
+	@Override
+	public Object[] CHSSDispReApplyStatus(String CHSSApplyId) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(DISPREAPPLYSTATUS);
+			query.setParameter("CHSSApplyId", CHSSApplyId);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO CHSSDispReApplyStatus "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String OLDCHSSAPPLYDETAILS = "SELECT CHSSApplyId,CHSSApplyNo FROM chss_apply WHERE CHSSApplyNo=:CHSSApplyNo";
+	@Override
+	public Object[] OldCHSSApplyDetails(String CHSSApplyNo) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(OLDCHSSAPPLYDETAILS);
+			query.setParameter("CHSSApplyNo", CHSSApplyNo);
+			return (Object[])query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside DAO OldCHSSApplyDetails "+ e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

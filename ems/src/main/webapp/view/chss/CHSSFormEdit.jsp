@@ -237,7 +237,17 @@ th,td
 								<table style="margin-top: 5px;">	
 									<tbody>
 										<tr>
+										<%if(chssapplydata[21]!=null) {%>
+										    <th colspan="3" style="border: 0px"> 
+										    
+										    <b>Claim No : <%=chssapplydata[16] %></b> 
+									
+										    <b style="color:red;margin-left:24%;">Dispute Claim Against Claim No : <%=chssapplydata[21] %></b> 
+										    
+										    </th>
+										<%}else{ %>
 											<th colspan="3" style="border: 0px"> Claim No : <%=chssapplydata[16] %></th>
+										<%} %>
 										</tr>
 										<tr>
 											<th>Name</th>
@@ -978,20 +988,55 @@ th,td
 									</table>
 								<%} %>
 							</div>
-							<%}else { %>
+							<%} if(chssapplydata[21]!=null&& ClaimDisputeData !=null) { %>
+							<div class="col-md-6" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+							
+							
+							<%if(ClaimDisputeData !=null){ %>
+								<table style="margin: 3px;padding: 0px">
+									<tr>
+										<td style="border:none;padding: 0px">
+											<h6 style="text-decoration: underline;">Dispute :</h6> 
+										</td>											
+									</tr>
+									
+									<tr>
+										<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+											<%=employee[2] %>&nbsp; :
+											<span style="border:none; color: red;" >	<%=ClaimDisputeData[2] %></span>
+										</td>
+									</tr>
+									<%if(ClaimDisputeData[8]!=null){ %>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												Response By&nbsp;<%=ClaimDisputeData[8] %>&nbsp; :
+												<span style="border:none;" class="text-blue" >	<%=ClaimDisputeData[3] %></span>
+											</td>
+										</tr>
+									
+									<% } %>
+									
+								</table>
+							<%} %>
+						</div>
+						<% }	else { %>
+							
 								<div class="col-md-5" ></div>
 							<%} %>
 							<%if(Arrays.asList("UF","E").contains(view_mode) && chssstatusid < 14){ %>	
 							<div class="col-md-6" align="center" style="margin-top: 5px;">
 							
-							<%if(chssstatusid!=8  ){ %>
+							<%if(chssstatusid!=8){ %>
 								<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-									Remarks : <br>
+									Remarks :  <br>
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 								</div>
-							<%} %>
 							
-							<%if(chssstatusid==2 ||  chssstatusid==5 ){ %>
+							<% }if(chssapplydata[21]!=null){%>
+							<div class="col-md-12" align="left" style="margin-bottom: 5px;">
+							 <b>NOTE :</b> &nbsp;&nbsp;<b style="color:red;">Dispute Claim Against Claim No : &nbsp;&nbsp;<%=chssapplydata[21] %></b> <br>
+							</div>
+							<%}if(chssstatusid==2 ||  chssstatusid==5 ){ %>
 								
 								<button type="submit" class="btn btn-sm submit-btn" name="claimaction" value="F" onclick="return remarkRequired('F'); " formnovalidate="formnovalidate">Process</button>
 								<button type="submit" class="btn btn-sm delete-btn" name="claimaction" value="R" onclick="return remarkRequired('R'); " formnovalidate="formnovalidate">Return</button>

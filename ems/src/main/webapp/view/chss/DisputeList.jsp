@@ -61,11 +61,12 @@
 												<th style="width:12%;">Claim No</th>
 												<th style="">Employee</th>
 												<th style="">Patient</th>
-												<th style="">Aliment</th>
+												<th style="">Ailment</th>
 												<th style="width:8%;">Total <br>Claimed</th>
 												<th style="width:8%;">Total<br> Settled</th>
 												<th >Remarks</th>												
-											    <th style="width: 10%;">Action</th>
+												<th >Status</th>												
+											    <th style="width: 8%;">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -82,21 +83,42 @@
 													<td><%=obj[5] %></td>
 													<td style="text-align:right;"><%=obj[6] %></td>
 													<td style="text-align:right;"><%=obj[7] %></td>
-													<td style=""><%=obj[8] %></td>										    		
-													<td style="text-align:center;">
+													<td style=""><%=obj[8] %></td>		
+													
+													<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
+													  <%if(obj[12]!=null || obj[13]!=null || obj[14]!=null) {%>
+									                  <button class="btn btn-sm btn-link w-100 " formaction="Chss-Status-details.htm" name="chssapplyid" value="<%=obj[14]%>" formtarget="_blank" 
+									                   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[13]%>; font-weight: 600;">  &nbsp;<%=obj[12] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+									                   <%}else{ %>
+									                   <button type="button" class="btn btn-sm btn-link w-100"
+									                   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:red; font-weight: 600;">  &nbsp;Claim not initiated <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+									                   <%} %>
+													</td>							    		
+													<td style="">
 													<%if(obj[9].toString().equalsIgnoreCase("Y")) {
 													if(obj[10].toString().equalsIgnoreCase("OPD")){
 													%>								 
-													 <button class="btn btn-sm btn-link w-100 " formaction="ClaimReApply.htm" name="chssapplyid" value="<%=obj[1] %>" 
-														 data-toggle="tooltip" data-placement="top" title="Re-Apply OPD" style=" color: green; font-weight: 600;" >
-													  &nbsp;ReApply <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+													 <button type="submit" class="btn btn-sm view-icon" formaction="ClaimReApply.htm" name="chssapplyid" value="<%=obj[1] %>" 
+														 data-toggle="tooltip" data-placement="top"
 														 
-													<%} else if(obj[10].toString().equalsIgnoreCase("IPD")) {%> 
-													 <button class="btn btn-sm btn-link w-100 " formaction="ClaimReApplyIPD.htm" name="chssapplyid" value="<%=obj[1] %>" 
-														 data-toggle="tooltip" data-placement="top" title="Re-Apply IPD" style=" color: green; font-weight: 600;" >
-													  &nbsp;ReApply <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
+														 <%if(obj[11].toString().equalsIgnoreCase("S")) {%>
+														  title="Applied" style=" font-weight: 600;"> 														  												  
+														  <%}else{ %>
+														  title="Re-Apply OPD" style="font-weight: 600;">
+														  <%} %>					
+													<i class="fa-solid fa-eye"></i></button>
+													 <%if(obj[14]!=null){ %>
+														<button type="submit" class="btn btn-sm" name="chssapplyid" value="<%=obj[14] %>" formaction="CHSSFormEmpDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+												        <i style="color: #019267" class="fa-solid fa-download"></i>
+										            	</button>
+										            	
+													<%} }else if(obj[10].toString().equalsIgnoreCase("IPD")) {%> 
+													 <button type="submit" class="btn btn-sm view-icon" formaction="ClaimReApplyIPD.htm" name="chssapplyid" value="<%=obj[1] %>" 
+														 data-toggle="tooltip" data-placement="top" title="Re-Apply IPD" style="font-weight: 600;" >
+													 <i class="fa-solid fa-eye"></i></button>
 													<%} }%>
 													<input type="hidden" name="view_mode" value="U">
+													
 													</td>
 												</tr>
 											<%} %> 											

@@ -203,5 +203,9 @@ public interface CHSSService
 	public List<Object[]> getEmpList() throws Exception;
 	public List<Object[]> getDependantsList(String empNo) throws Exception;
 	public List<Object[]> DisputeList() throws Exception;
-	public long CHSSReApplyDetails( String chssapplyid,String[] consultationId,String[] CHSSTestId,String[] CHSSMedicineId,String[] ChssMiscId) throws Exception;
+	public long CHSSReApplyDetails( String chssapplyid,String[] consultationId,String[] CHSSTestId,String[] CHSSMedicineId,String[] ChssMiscId,String EmpNo) throws Exception;
+	public long CHSSbillIdReApply(long CHSSpplyId, String BillId, String Username) throws Exception;
+	public long UpdateCHSSDispute(String CHSSApplyId) throws Exception;
+	public Object[] CHSSDispReApplyStatus(String CHSSApplyId) throws Exception;
+	public Object[] OldCHSSApplyDetails(String CHSSApplyNo) throws Exception;
 }

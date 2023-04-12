@@ -174,6 +174,7 @@ th,td
 	String SidebarActive = (String)session.getAttribute("SidebarActive");	
 	String chssapplyid = (String)request.getAttribute("chssapplyid");	
 
+	Object[] DispReapplyStatus = (Object[])request.getAttribute("DispReapplyStatus");
 %>
 
 	<div class="card-header page-top">
@@ -226,7 +227,7 @@ th,td
 								<table style="margin-top: 5px;">	
 									<tbody>
 										<tr>
-											<th colspan="3" style="border: 0px"> Dispute Claim Against Claim No : <%=chssapplydata[16] %></th>
+											<th colspan="3" style="border: 0px;color:red;"> Dispute Claim Against Claim No : <%=chssapplydata[16] %></th>
 										</tr>
 										<tr>
 											<th>Name</th>
@@ -1022,15 +1023,18 @@ th,td
 									<textarea class="w-100 form-control" rows="4" cols="100" id="remarks" name="remarksdisp" maxlength="500"></textarea>
 								</div> -->
 								<br>
-					<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="CHSSReApplySubmit.htm" name="chssapplyid" value="<%=chssapplydata[0]%>" >
+								<% if(DispReapplyStatus!=null &&DispReapplyStatus[1].toString().equalsIgnoreCase("N")){ %>
+				                	<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="CHSSReApplySubmit.htm" name="chssapplyid" value="<%=chssapplydata[0]%>" >
 									<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for processing	
 								</button>
+							     <%} %>
 								</form>
+                              <input type="hidden" value=" <%=DispReapplyStatus[1] %> ">
 							</div>
 					
 					
 					
-					<form action="CHSSUserForward.htm" method="post" id="fwdform">
+			<%-- 		<form action="CHSSUserForward.htm" method="post" id="fwdform">
 
 						<input type="hidden" name="chssapplyidcb" value="<%=chssapplydata[0]%>">
 						<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
@@ -1068,7 +1072,7 @@ th,td
 								</div>	
 							</div>
 							
-					</form>
+					</form> --%>
 					
 					<%if(chssstatusid==15 && ActivateDisp!=null && ActivateDisp.equalsIgnoreCase("Y") && ClaimDisputeData==null){ %>
 						
@@ -2025,6 +2029,15 @@ function auto_grow(element) {
 $(document).ready(function() {
 	  $('#finalSubmission').click(function() {
 		  if(confirm('Are you Sure to Submit?')){
+				 var consultationId = $("input[name='consultationId']").serializeArray();
+				 var CHSSTestId = $("input[name='CHSSTestId']").serializeArray();
+				 var CHSSMedicineId = $("input[name='CHSSMedicineId']").serializeArray();
+				 var ChssMiscId = $("input[name='ChssMiscId']").serializeArray();
+				  if (consultationId.length === 0 && CHSSTestId.length === 0  && CHSSMedicineId.length === 0 && ChssMiscId.length === 0){
+					 alert("Please Select Atleast One Record");
+						 event.preventDefault();
+					  return false;
+			  }
 	     return true;
 	  }
 		  else{
@@ -2073,6 +2086,7 @@ function raiseDispute(){
 		
 }
 </script> -->
+
 </body>
 
 </html>

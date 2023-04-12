@@ -213,8 +213,7 @@ public class CHSSController
 			if(req.getParameter("patientname")!=null) {
 				PatientName=req.getParameter("patientname");
 			}
-			
-			System.out.println("IsSelf"+IsSelf);
+					
 			String FromDate= req.getParameter("fromdate");
 			String ToDate= req.getParameter("todate");						
 			LocalDate today=LocalDate.now();
@@ -2005,13 +2004,23 @@ public class CHSSController
 			req.setAttribute("chssapplydata", chssapplydata);
 			req.setAttribute("employee", employee);
 			req.setAttribute("ClaimapprovedPOVO", service.ClaimApprovedPOVOData(chssapplyid));
-			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			
+			if(chssapplydata[21]!=null && chssapplydata[21]!="") {				
+				Object[] oldCHSSApplyId = service.OldCHSSApplyDetails(chssapplydata[21].toString());
+				req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(oldCHSSApplyId[0].toString()));
+				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(oldCHSSApplyId[0].toString()));
+			}
+			else {
+				req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
+				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
+			}
+	
 
 			req.setAttribute("logintype", LoginType);
 			req.setAttribute("view_mode", view_mode);
 			req.setAttribute("chssapplyid",chssapplyid);
 			
-			req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
+		
 			req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
 			req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
 			
@@ -5619,13 +5628,14 @@ public class CHSSController
 		
 	}
 	
-	@RequestMapping(value="DisputeList.htm", method = {RequestMethod.POST , RequestMethod.GET })
+	@RequestMapping(value="DisputeList.htm", method = RequestMethod.GET)
 	public String UserDisputeList(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		ses.setAttribute("SidebarActive", "DisputeList_htm");
+		ses.setAttribute("formmoduleid", formmoduleid);
 		logger.info(new Date() +"Inside DisputeList.htm "+Username);	
 		try {
-			req.setAttribute("DisputeList", service.DisputeList());			
+			req.setAttribute("DisputeList", service.DisputeList());		
 			return "chss/DisputeList";
 		}catch (Exception e) {		
 			e.printStackTrace();
@@ -5674,13 +5684,14 @@ public class CHSSController
 			req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 
 			req.setAttribute("logintype", LoginType);
+			
 			req.setAttribute("view_mode", view_mode);
 			req.setAttribute("chssapplyid",chssapplyid);
 			
 			req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
 			req.setAttribute("ActivateDisp", req.getParameter("ActivateDisp"));
 			req.setAttribute("dispReplyEnable", req.getParameter("dispReplyEnable"));
-			
+			req.setAttribute("DispReapplyStatus", service.CHSSDispReApplyStatus(chssapplyid));
 			return "chss/ClaimReApply";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -5770,6 +5781,7 @@ public class CHSSController
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside CHSSReApplySubmit.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("chssapplyid");
@@ -5779,14 +5791,15 @@ public class CHSSController
 			String[] ChssMiscId = req.getParameterValues("ChssMiscId");
 			
 			
-		    long count = service.CHSSReApplyDetails(chssapplyid,consultationId,CHSSTestId,CHSSMedicineId,ChssMiscId);
+		    long count = service.CHSSReApplyDetails(chssapplyid,consultationId,CHSSTestId,CHSSMedicineId,ChssMiscId,EmpNo);
 			
 		    if (count > 0) {
+		    	service.UpdateCHSSDispute(chssapplyid);
 				redir.addAttribute("result", "Claim Created Successfully");
 			} else {
 				redir.addAttribute("resultfail", "Claim Create Unsuccessful");	
 			}	
-			return "redirect:/DisputeList.htm";
+			return "redirect:/CHSSApplyDashboard.htm";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside CHSSReApplySubmit.htm "+Username, e);
