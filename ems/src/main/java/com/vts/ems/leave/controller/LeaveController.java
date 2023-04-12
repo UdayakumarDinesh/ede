@@ -320,7 +320,6 @@ public class LeaveController {
 		String UserId=req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside applyLeaveAdd.htm "+UserId);		
 		try {
-			System.out.println("handover="+req.getParameter("HandingOverEmpid"));
 			LeaveApplyDto dto=new LeaveApplyDto();
 			dto.setEmpNo(req.getParameter("empNo"));
 			dto.setLTC(req.getParameter("elcash"));
@@ -411,19 +410,78 @@ public class LeaveController {
 
 	}
 	
-	@RequestMapping(value = "LeaveApproval.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "LeaveApproval.htm")
 	public String LeaveApproval(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
 		String UserId =req.getUserPrincipal().getName();
+		String empNo = ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside LeaveApproval.htm "+UserId);		
 		try {
-			ses.setAttribute("SidebarActive", "LeaveApproval_htm");
-			String empNo=empNo=(String)ses.getAttribute("EmpNo");
-		    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
+			LeaveRaSa leaverasa = service.getLeaveRASADAta(empNo);
+			if(leaverasa!=null) 
+			{
+				if(leaverasa.getLeave_Status().equalsIgnoreCase("H") || leaverasa.getLeave_Status().equalsIgnoreCase("G") ) 
+				{
+					ses.setAttribute("SidebarActive", "LeaveApproval_htm");
+				    req.setAttribute("GhApprovalList", service.LeaveApprovalGh(empNo));
+				    return "leave/LeaveApprovalGh";
+				}else if(leaverasa.getLeave_Status().equalsIgnoreCase("D") ) {
+					req.setAttribute("LeaveApprovalDir", service.LeaveApprovalDir(empNo));
+				    req.setAttribute("LeaveApprovalDirRecc", service.LeaveApprovalDirRecc(empNo));
+				    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
+				    return "leave/LeaveApprovalDir";
+				}else if(leaverasa.getLeave_Status().equalsIgnoreCase("A") ) {
+					req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
+					return "leave/LeaveApprovalAdm";
+				}else {
+					
+					redir.addAttribute("resultfail","Approval List Not Found");
+					return "redirect:/LeaveDashBoard.htm";
+				}
+			}else {
+				
+				redir.addAttribute("resultfail","Leave Recc-Sanc Not Found, Please Assing Recc-Sanc !");
+				return "redirect:/LeaveDashBoard.htm";
+			}
+	    }
+	    catch (Exception e) {
+	    	e.printStackTrace();
+	    	logger.error(new Date() +" Inside LeaveApproval.htm "+UserId, e);
+			redir.addAttribute("resultfail","Error Occurred while Fetching List");
+			return "redirect:/LeaveDashBoard.htm";
+	    }
+	}
+	
+	@RequestMapping(value = "LeaveApprovalDir.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveApprovalDir(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveApprovalDir.htm "+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "LeaveApprovalDir_htm");
+			String empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("LeaveApprovalDir", service.LeaveApprovalDir(empNo));
+		    req.setAttribute("LeaveApprovalDirRecc", service.LeaveApprovalDirRecc(empNo));
+		    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
 	    }
 	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApproval.htm "+UserId, e);
+			 logger.error(new Date() +" Inside LeaveApprovalDir.htm "+UserId, e);
 	       }
-	   return "leave/LeaveApprovalGh";
+	   return "leave/LeaveApprovalDir";
+
+	}	
+	
+	@RequestMapping(value = "LeaveApprovalAdm.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	public String LeaveApprovalAdm(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside LeaveApprovalAdm.htm "+UserId);		
+		try {
+			ses.setAttribute("SidebarActive", "LeaveApprovalAdm_htm");
+			String empNo=(String)ses.getAttribute("EmpNo");
+		    req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
+	    }
+	     catch (Exception e) {
+			 logger.error(new Date() +" Inside LeaveApprovalAdm.htm "+UserId, e);
+	       }
+	   return "leave/LeaveApprovalAdm";
 
 	}
 	
@@ -465,13 +523,14 @@ public class LeaveController {
 	     catch (Exception e) {
 			 logger.error(new Date() +" Inside leaveApprovals.htm "+UserId, e);
 	       }
-		if(dto.getType().equals("GH")) {
-			returnType="redirect:/LeaveApproval.htm";
-		}else if(dto.getType().equals("DIR")) {
-			returnType="redirect:/LeaveApprovalDir.htm";
-		}else if(dto.getType().equals("ADM")) {
-			returnType="redirect:/LeaveApprovalAdm.htm";
-		}
+		returnType="redirect:/LeaveApproval.htm";
+//		if(dto.getType().equals("GH")) {
+//			returnType="redirect:/LeaveApproval.htm";
+//		}else if(dto.getType().equals("DIR")) {
+//			returnType="redirect:/LeaveApprovalDir.htm";
+//		}else if(dto.getType().equals("ADM")) {
+//			returnType="redirect:/LeaveApprovalAdm.htm";
+//		}
 		return returnType;
 		}
 	
@@ -644,39 +703,9 @@ public class LeaveController {
 	return "leave/LeaveStatus";	
 	}
 	
-	@RequestMapping(value = "LeaveApprovalAdm.htm", method = {RequestMethod.GET,RequestMethod.POST})
-	public String LeaveApprovalAdm(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
-		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveApprovalAdm.htm "+UserId);		
-		try {
-			ses.setAttribute("SidebarActive", "LeaveApprovalAdm_htm");
-			String empNo=(String)ses.getAttribute("EmpNo");
-		    req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
-	    }
-	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApprovalAdm.htm "+UserId, e);
-	       }
-	   return "leave/LeaveApprovalAdm";
-
-	}
 	
-	@RequestMapping(value = "LeaveApprovalDir.htm", method = {RequestMethod.GET,RequestMethod.POST})
-	public String LeaveApprovalDir(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {
-		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside LeaveApprovalDir.htm "+UserId);		
-		try {
-			ses.setAttribute("SidebarActive", "LeaveApprovalDir_htm");
-			String empNo=empNo=(String)ses.getAttribute("EmpNo");
-		    req.setAttribute("LeaveApprovalDir", service.LeaveApprovalDir(empNo));
-		    req.setAttribute("LeaveApprovalDirRecc", service.LeaveApprovalDirRecc(empNo));
-		    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
-	    }
-	     catch (Exception e) {
-			 logger.error(new Date() +" Inside LeaveApprovalDir.htm "+UserId, e);
-	       }
-	   return "leave/LeaveApprovalDir";
-
-	}	
+	
+	
 	
 	@RequestMapping(value = "AssignReccSanc.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String AssignReccSanc(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception {

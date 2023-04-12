@@ -82,6 +82,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.invalidSessionUrl("/login?session=1")
 
 		;
+		
+		http.headers().cacheControl().disable();
 
 	}
 

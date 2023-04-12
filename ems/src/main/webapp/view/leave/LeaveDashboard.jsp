@@ -12,13 +12,15 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 
-
+body{
+ background-image: url("view/images/d6.jpg");
+}
 </style>
 </head>
 <body>
 
 
-<div class="card-header page-top ">
+<div class="card-header page-top " >
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Leave Dashboard</h5>
@@ -48,8 +50,8 @@ String ses=(String)request.getParameter("result");
                    </div></center>
                     <%} %>
 
-<div class="page card dashboard-card">
-   <div class="card-body" align="center" >
+<div class="page card dashboard-card" style="background: transparent;">
+   <div class="card-body" align="center" style="background: transparent;" >
   		<h3>Leave Dashboard</h3>
    
 

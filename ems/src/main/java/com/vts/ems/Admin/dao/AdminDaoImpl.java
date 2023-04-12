@@ -735,8 +735,6 @@ private static final String USERNAMECOUNTINEDIT="SELECT COUNT(ContractEmpId) FRO
 	@Override
 	public BigInteger contractEmpEditcheck(String username, String contractEmpId) throws Exception {
 		try {
-			System.out.println("username"+username);
-			System.out.println("contractEmpId"+contractEmpId);
 			Query query = manager.createNativeQuery(USERNAMECOUNTINEDIT);
 			query.setParameter("UserName", username);
 			query.setParameter("ContractEmpId", contractEmpId);

@@ -451,7 +451,6 @@ public class CHSSDaoImpl implements CHSSDao {
 	public List<Object[]> empCHSSList(String empid,String PatientId, LocalDate FromDate, LocalDate Todate, String IsSelf) throws Exception
 	{
 		try {
-			System.out.println(empid+"  "+ PatientId+"  "+ FromDate+"  "+ Todate+"  "+ IsSelf);
 			Query query = manager.createNativeQuery(EMPCHSSLIST);
 			query.setParameter("empid", empid);
 			query.setParameter("patientid", PatientId);

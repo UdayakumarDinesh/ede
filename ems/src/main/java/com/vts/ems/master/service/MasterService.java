@@ -88,6 +88,7 @@ public interface MasterService {
 	public BigInteger getDuplicateCountEdit(String groupId,String groupCode) throws Exception;
 	public List<Object[]> getEmployeeList() throws Exception;
 	public List<Object[]> getGroupList() throws Exception;
+	public List<Object[]> getQualificationList() throws Exception;
 	
 
 

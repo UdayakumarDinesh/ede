@@ -971,8 +971,10 @@ public class PisController {
     	   String medicaldepdate = req.getParameter("medicaldepdate");
     	   String ltcdep  = req.getParameter("ltcdep");
     	   String LTC = req.getParameter("LTC");
-    	   String marriagestatus = req.getParameter("married_unmarried");
-    	   String emp_unemp = req.getParameter("emp_unemp");
+    	   String ceadep  = req.getParameter("ceadep");
+    	   String ceadate = req.getParameter("CEA");
+    	   String marriagestatus = req.getParameter("maritalstatus");
+    	   String emp_unemp = req.getParameter("employement");
     	   String gender = req.getParameter("Gender");
     	   String empid = req.getParameter("empid");
     	   String memberOccupation = req.getParameter("memberOccupation");
@@ -998,26 +1000,27 @@ public class PisController {
     	   details.setMar_unmarried(marriagestatus);
     	   details.setEmp_unemp(emp_unemp);
     	   details.setEmpid(empid);
-
-           if(emp_unemp.equalsIgnoreCase("Y")) {
+           details.setCea_dep(ceadep);  
+           details.setCea_dep_from(DateTimeFormatUtil.dateConversionSql(ceadate));
+           //  if(emp_unemp.equalsIgnoreCase("E")) {
     	   	   details.setMemberOccupation(memberOccupation);
-    	   	   if(memberIncome!=null) {
+    	 //  	   if(memberIncome!=null) {
     	   		   details.setMemberIncome(Long.parseLong(memberIncome));
-    	   	   }
-           }else {
-        	   details.setMemberOccupation(null);
-        	   details.setMemberIncome(0l);
-           }
+    	//   	   }
+      //     }else {
+      //  	   details.setMemberOccupation(null);
+       // 	   details.setMemberIncome(0l);
+      //     }
            
     	   
     	   
     	   details.setIsActive(1);
     	   details.setCreatedBy(Username);
     	   details.setCreatedDate(sdf.format(new Date()));
-    	   if(emp_unemp.equalsIgnoreCase("Y")) 
-    	   {
+    	 //  if(emp_unemp.equalsIgnoreCase("E")) 
+    	//   {
     		   details.setEmpStatus((String)req.getParameter("EmpStatus"));
-    	   }
+    	//   }
     	   Long result = service.AddFamilyDetails(details);
     	   if(result>0){
     		   redir.addAttribute("result", "Family Member Details Saved Successfully");	
@@ -6580,15 +6583,13 @@ public class PisController {
 			try {
 				String divisionId = req.getParameter("divisionId");
 			List<Object[]> deptEmpList=service.getDeptEmpList(divisionId);
-				
+			Gson json = new Gson();
+			return json.toJson(deptEmpList);
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside DeptEmpListAjax.htm"+Username, e);
 				e.printStackTrace();
 				return "static/Error";
 				}
-			
-			
-			return uploadpath;
-			
+	
 		}
 }

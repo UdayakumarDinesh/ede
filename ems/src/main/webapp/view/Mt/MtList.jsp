@@ -270,7 +270,7 @@ String empname = (String)request.getAttribute("empname");
       </div>     
 </div>
 
- 	<div class="modal fade" id="editdelete1" role="dialog">
+ 	 <div class="modal fade" id="editdelete1" role="dialog">
 		<div class="modal-dialog modal-lg">
         <div class="modal-content">
 		<div class="modal-header">
@@ -325,7 +325,7 @@ String empname = (String)request.getAttribute("empname");
 		</div>
 	</div> 
 </div>
-</div>
+</div> 
 
 
 	<div class="modal fade" id="pending1" role="dialog">

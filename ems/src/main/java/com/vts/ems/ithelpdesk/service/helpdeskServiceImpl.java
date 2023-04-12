@@ -171,7 +171,6 @@ public class helpdeskServiceImpl implements helpdeskService {
 		HelpdeskTicket desk=dao.GetTicket(dto.getTicketId());
 		String storagePath=desk.getFilePath();
 		long maxTicketId = dao.MaxOfEmsTicketId();
-		System.out.println("FilePath"+storagePath);
 		if(!FormFile.isEmpty()) {
 			try {
 				String path= FilePath+desk.getFilePath();
@@ -319,7 +318,6 @@ public class helpdeskServiceImpl implements helpdeskService {
 			{	
 				storagePath="//TicketForwardedAttachments//TicketForwarded-"+maxattachId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
 			}
-			System.out.println("storagepath---"+storagePath);
 			
 			}
 			catch (Exception e) {

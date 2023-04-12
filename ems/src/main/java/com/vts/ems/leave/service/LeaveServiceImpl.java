@@ -2352,8 +2352,12 @@ public class LeaveServiceImpl implements LeaveService{
 		return mcFcRepo.findByApplId(ApplId);
 	}
 	 
-
-	
+	@Override
+	public LeaveRaSa getLeaveRASADAta(String empno) throws Exception
+	{
+		return dao.getLeaveRASADAta(empno);
+				
+	}
 
 		
 		

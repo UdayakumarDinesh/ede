@@ -268,7 +268,6 @@ List<Object[]> reqlinkduty=(List<Object[]>)request.getAttribute("linkrequestlist
 	  <tbody>
 	  <tr>
 		<%for(Object[] alist:firstapply){
-		System.out.println("endDate="+sdf.format(alist[16]));
 		%>
 			
 	      	  

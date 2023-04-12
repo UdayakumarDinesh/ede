@@ -3166,7 +3166,7 @@ private static  final String DIRECTORDETAILS="SELECT a.EmpName,a.EmpNo,b.Designa
 	}
 		return result;
 	}
-private static final String DEPEMPLIST="SELECT a.EmpName,a.EmpNo ,b.designation,c.DivisionName,  FROM  employee a,employee_desig b, division_master c WHERE  a.desigId=b.desigId AND a.divisionId=c.divisionId AND a.divisionId=:divisionId  ORDER BY a.SrNo";
+private static final String DEPEMPLIST="SELECT a.EmpName,a.EmpNo ,b.designation,c.DivisionName  FROM  employee a,employee_desig b, division_master c WHERE  a.desigId=b.desigId AND a.divisionId=c.divisionId AND a.divisionId=:divisionId  ORDER BY a.SrNo";
 	@Override
 	public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
 		List<Object[]> emplist=null;

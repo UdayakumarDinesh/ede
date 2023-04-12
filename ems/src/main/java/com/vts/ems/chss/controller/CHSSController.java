@@ -213,7 +213,7 @@ public class CHSSController
 			if(req.getParameter("patientname")!=null) {
 				PatientName=req.getParameter("patientname");
 			}
-					
+			
 			String FromDate= req.getParameter("fromdate");
 			String ToDate= req.getParameter("todate");						
 			LocalDate today=LocalDate.now();

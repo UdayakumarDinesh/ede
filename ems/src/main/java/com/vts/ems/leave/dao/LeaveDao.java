@@ -5,6 +5,7 @@ import java.util.List;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.master.model.LabMaster;
@@ -62,4 +63,5 @@ public interface LeaveDao {
 	public List<Object[]> getReccSanc(String empNo) throws Exception ;
 	public List<Object[]> getRaSaStatus() throws Exception;
 	public List<Object[]> UploadMcFc(String EmpId,String Year) throws Exception;
+	public LeaveRaSa getLeaveRASADAta(String empno) throws Exception;
 }

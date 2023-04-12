@@ -205,37 +205,61 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 		                        </div><!-- /input-group -->
 		                    </div> 
 		                </div><!-- LTC Dependent -->
-		          
+		           <!-- CEA Dependent -->
+		                <div class="col-4">
+		                    <label>CEA Dependent:<span class="mandatory">*</span></label>
+		                    <div class="form-group">
+		                        <div class="input-group">
+		                          <span class="input-group-addon" style="padding: 3px 6px;">
+		                          <select name="ceadep" class="form-control input-sm" style="width: 100%; height: 30px;">
+		                          <option value="Y" >Yes</option>
+		                          <option value="N">No</option>
+		                          </select>
+		                               
+		                          </span>
+		                         <input type="text" class="form-control input-sm mydate"  readonly="readonly" value="<%=LocalDate.now() %>" placeholder=""  id="CEA" name="CEA"  required="required"  >
+		                        </div><!-- /input-group -->
+		                    </div> 
+		                </div><!-- CEA  Dependent -->
+		              </div>
 		          
 		         
 		          
-		         
+		         <div class="row">
                    <div class="col-2">
                        <div class="form-group">
-		                	<label>Married:<span class="mandatory">*</span></label>
-		                    <select name="married_unmarried" class="form-control input-sm" style="width:70px; height: 30px;">
-		                    <option value="N">No</option>
-		                    <option value="Y">Yes</option>
+		                	<label>Marital Status<span class="mandatory">*</span></label>
+		                    <select name="maritalstatus" class="form-control input-sm" style="width:117px; height: 30px;">
+		                    <option value="U">Unmarried</option>
+		                    <option value="M">Married</option>
+		                    <option value="D">Divorced</option>
+		                    <option value="W">Widow</option>
+		                     <option value="S">Separated</option>
 		                    </select>
 		                 </div>
                     </div>
                     
                     
-                     <div class="col-2">
+                     <div class="col-3">
                        <div class="form-group">
-		                	<label>Employed:<span class="mandatory">*</span></label>
-		                    <select name="emp_unemp"  class="form-control input-sm" id="mem-employed" style="width:70px; height: 30px;">
-		                    <option value="N">No</option>
-		                    <option value="Y">Yes</option>       
+		                	<label>Employment<span class="mandatory">*</span></label>
+		                    <select name="employement"  class="form-control input-sm" id="mem-employed" style="width:135px; height: 30px; padding:-0.625rem!;" required="required">
+		                    <option disabled="disabled" value="" selected="selected">select</option>
+		                    <option value="E">Employed</option>
+		                    <option value="U">Unemployed</option>
+		                    <option value="B">Business</option>
+		                    <option value="H">Home maker</option>
+		                    <option value="S">Student</option>
+		                    <option value="I">Infant</option>
 		                    </select>
 		                 </div>
                     </div>
-		           </div> 
+		        
                 <!--// dependency ,Employed,Married-->
-						<div class="row" id = "EmpHide">
+						<!-- <div class="row" id = "EmpHide"> -->
 								<div class="col-md-3" >
 			                    	<div class="form-group">
-			                        <label>Employed Status:<span class="mandatory">*</span></label>
+			                        <label>Employed Status:</label>
 			                        	<select class="form-control input-sm" name="EmpStatus" id="mem-employed-status">
 				                            <option value="" selected disabled >Select Status</option>
 						                    <option value="Private">Private</option>
@@ -248,17 +272,17 @@ List<Object[]> StatusList = (List<Object[]>)request.getAttribute("FamilyStatus")
 			               		<div class="col-md-3" >
 			                    	<div class="form-group">
 			                        <label>Occupation:<span class="mandatory">*</span></label>
-			                        	<input type="text" class="form-control" name="memberOccupation" value="" id="mem-occupation" maxlength="100">
+			                        	<input type="text" class="form-control" name="memberOccupation" value="" id="mem-occupation" maxlength="100"  placeholder="Occupation">
 			                        </div>  
 			               		</div>
-			               		
+			               		</div>
 			               		<div class="col-md-3" >
 			                    	<div class="form-group">
 			                        <label>Income (Rs / Month)<span class="mandatory">*</span></label>
 			                        	<input type="number" class="form-control numberonly" name="memberIncome" value="0" id="mem-income" min="0" max="9999999999" >
 			                        </div>  
 			               		</div>
-							</div>
+							
 		
 						<div class="row">
 							<div class="col-12" align="center">
@@ -291,13 +315,13 @@ $('.mydate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
+</script> 
 
-
-$("#mem-employed").on("change",function(e){
+<!-- $("#mem-employed").on("change",function(e){
 	   
 	 var EmpValue =$("#mem-employed").val();
 	 
-	    if(!(EmpValue=="Y")){
+	    if(!(EmpValue=="E")){
 			
 	    	$("#EmpHide").hide();
 	    	$('#mem-employed-status').removeAttr('required');
@@ -319,7 +343,7 @@ $("#mem-employed").on("change",function(e){
 	 var EmpValue =$("#mem-employed").val();
 	    
 	 
-	    if(!(EmpValue=="N")){
+	    if(!(EmpValue=="U"||EmpValue=="B"||EmpValue=="H"||EmpValue=="S"||EmpValue=="I")){
 		
 	    	  $("#EmpHide").show();
 	    	  
@@ -334,8 +358,8 @@ $("#mem-employed").on("change",function(e){
 $(document).ready(function(){
 
 	   $("#EmpHide").hide();
-});
-</script>
+});-->
+
 
 <script type="text/javascript">
 

@@ -238,7 +238,6 @@ Highcharts.chart('container4', {
 	        <%  if(list!=null){	       
 	         int j=0;
         	for(Object[] obj:list){
-        		//System.out.println(obj[1]+","+obj[0]);
 	       %>
 		        {
 		        	 name: '<%=obj[1]%> , Count: <%=obj[0]%>',

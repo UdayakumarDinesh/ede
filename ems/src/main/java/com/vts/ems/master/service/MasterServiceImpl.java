@@ -578,4 +578,10 @@ public class MasterServiceImpl implements MasterService {
 			
 			return dao.getDuplicateCountEdit(groupId,groupCode);
 		}
+
+		@Override
+		public List<Object[]> getQualificationList() throws Exception{
+		
+			return dao. getQualificationList();
+		}
 }

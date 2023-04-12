@@ -1729,5 +1729,25 @@ public class MasterController {
 		  
 		 return json.toJson(duplicate);    
 	}
-	
+	@RequestMapping(value="Qualification.htm", method={RequestMethod.GET,RequestMethod.POST} )
+	public String QualificationList(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside Qualification.htm"+UserId);
+		String action = req.getParameter("action");
+		try {
+			if(("Add").equalsIgnoreCase(action)){
+				return "masters/QualificationAdd";
+			}
+			else if(("Edit").equalsIgnoreCase(action)) {
+				return "masters/QualificationEdit";
+			}
+			req.setAttribute("QualificationList", service.getQualificationList());
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside Qualification.htm "+UserId ,e);
+			e.printStackTrace();
+		}
+		return "masters/QualificationList";
+
+	}
 }

@@ -99,7 +99,7 @@
 	<div class="nav navbar bg-light dashboard-margin custom-navbar" style="padding-top: 10px;">
 	
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		<div class="col-md-8"></div>
+		<div class="col-md-7"></div>
 		
 		<label style=" font-weight: 800">From Date : &nbsp; </label>
 		<input  class="form-control form-control" data-date-format="dd-mm-yyyy" id="fdate" readonly="readonly"  name="Fromdate"  required="required" <%if(fromdate!=null && fromdate!=""){%> value="<%=fromdate%>" <%}%>  style="width: 120px;">
@@ -121,7 +121,7 @@
              <div class="form-group">
               <%if(dutylist!=null&&dutylist.size()!=0){%> 
                   <div class="table-responsive">
-  						<table class="table table-bordered table-hover table-striped table-condensed" id="myTable"> 
+  						<table class="table table-bordered table-hover table-striped table-condensed" id="myTable2"> 
 		           <thead>
 			           <tr>
 			               <th>Vehicle Operator</th>
@@ -132,7 +132,10 @@
 			           </tr>
 		           </thead>
 		           <tbody>
-				           <%for(Object[] obj:dutylist){%>
+				           <%for(Object[] obj:dutylist){
+				          System.out.println(obj[0] +"and"+ obj[1]); 
+				           
+				           %>				          
 				       <tr>
 					        <td><%=obj[0]%></td>
 					        <td align="center"><%=sdf.format(obj[1])%></td>
@@ -153,6 +156,13 @@
   </div>
 
 </body>
+
+<script>
+$("#myTable2").DataTable({
+    "ordering": false
+});
+</script>
+
 <script type="text/javascript">
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,

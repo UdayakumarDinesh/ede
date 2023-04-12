@@ -1115,4 +1115,19 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 				return null;
 			}
 		}
+private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM pis_quali_code WHERE is_active='1'";
+		@Override
+		public List<Object[]> getQualificationList() throws Exception {
+			List <Object[]> list =null;
+			try {
+				Query query = manager.createNativeQuery(QUALIFICATIONLIST);
+				list =(List <Object[]>) query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getQualificationList "+ e);
+				e.printStackTrace();
+			}
+			
+			
+			return list;
+		}
 }
