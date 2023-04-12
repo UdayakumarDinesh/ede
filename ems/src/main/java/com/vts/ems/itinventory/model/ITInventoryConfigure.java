@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Entity(name="it_inventory_configure")
 public class ITInventoryConfigure {
-	
+	                                  
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
