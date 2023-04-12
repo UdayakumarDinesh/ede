@@ -159,11 +159,14 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 	        $.ajax({
 				type : "post",
 				url : "uploadPhoto",
+				datatype : "application/json;charset=utf-8",
+				
 				data : {
 					project : base64,
-					vistoriId:visitor 
+					vistoriId:visitor,
+					${_csrf.parameterName} : '${_csrf.token}'
 				},
-				datatype : 'json',
+				
 				success : function(result) {
 					$('#isPhoto'+e).val(e);
 				}

@@ -16,15 +16,10 @@
 	height: 100%;
 	z-index: -1;
 }
-#wrapper{
-		background-image: url("vtsfolder/images/background.png") !important;
-		background-repeat: no-repeat;
-		background-size:  100%;
-		width: 100%;
-	}
+
 </style>
 </head>
-<body style="background-image: url('vtsfolder/images/background.png')">
+<body>
 <%
 List<Object[]> passList=(List<Object[]>)request.getAttribute("createdPassList");
 String fdate=request.getAttribute("fdate").toString();

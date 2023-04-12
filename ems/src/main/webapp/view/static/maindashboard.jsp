@@ -133,7 +133,7 @@
 							                       <th>In Time</th>
 							                       <th>Out Date</th>		                       
 							                       <th>Out Time</th>
-							                       <th>Work Time </th>
+							                       <th>Duration </th>
 							                  </tr>	
 							                  	           			           
 							           </thead>

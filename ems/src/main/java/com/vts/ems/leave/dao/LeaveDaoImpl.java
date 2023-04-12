@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.leave.model.LeaveAppl;
 import com.vts.ems.leave.model.LeaveHandingOver;
+import com.vts.ems.leave.model.LeaveRaSa;
 import com.vts.ems.leave.model.LeaveRegister;
 import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.master.model.LabMaster;
@@ -90,8 +91,6 @@ public class LeaveDaoImpl implements LeaveDao{
 		Query query = manager.createNativeQuery(EMPLIST);
 		List<Object[]> EmpList= (List<Object[]>)query.getResultList();
 		for(Object[] emp:EmpList) {
-			System.out.println(emp[0]);
-			System.out.println(emp[1]);
 		}
 		return EmpList;
 	
@@ -361,7 +360,6 @@ public class LeaveDaoImpl implements LeaveDao{
 	
 	@Override
 	public List<Object[]> checkLeaveEl(String EmpNo,String fromDate,String toDate) throws Exception {
-		System.out.println( "fromDate"+fromDate+"toDate"+toDate);
 		Query query = manager.createNativeQuery(CHECKLEAVEEL);
 		query.setParameter("empno", EmpNo);
 		query.setParameter("fromDate", fromDate);
@@ -668,5 +666,22 @@ public class LeaveDaoImpl implements LeaveDao{
 		query.setParameter("yr", Year);
 		List<Object[]> getRaSaStatus= query.getResultList();
 		return getRaSaStatus;
+	}
+	
+	private static final String GETLEAVERASADATA  ="from LeaveRaSa where EMPID=:empno";
+	@Override
+	public LeaveRaSa getLeaveRASADAta(String empno) throws Exception
+	{
+		try {
+			Query query= manager.createQuery(GETLEAVERASADATA);
+			query.setParameter("empno", empno);
+			LeaveRaSa leaverasa = (LeaveRaSa)query.getResultList().get(0);
+			return leaverasa;
+		}catch (Exception e) {
+			logger.error(new Date() +"Inside DAO getLabCode "+e);
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 }

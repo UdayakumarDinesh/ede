@@ -30,12 +30,12 @@
     /* background: #7386D5; */
     color: #fff;
     transition: all 0.3s;
-    margin:6px;
+    margin:5px;
     
 }
 
 #sidebar.active {
-    /* toggle-collapse handle margin-left: -250px; */
+    toggle-collapse handle margin-left: -250px; 
 }
 
 
@@ -45,7 +45,6 @@
 
 #content {
     width: 100%;
-    /* padding: 20px; */
     min-height: 90vh;
     transition: all 0.3s;
 }
@@ -73,11 +72,13 @@
 .nav-pills-custom .nav-link {
     color: white;
     background: #055C9D;
-    position: relative;
+    padding: 0.8rem;
+    border-bottom :1px solid #FFFFFF;
+   
 }
 
 .nav-pills-custom .nav-link.active {
-    color: white;
+    
     background: #143F6B;
     /* border:2px solid #45b649; */
 }
@@ -85,8 +86,8 @@
 .nav-pills{
 	    background-color: #0e6fb6;
     /* height: 600px; */
-    padding: 11px;
-    border-radius: 6px;
+    padding: 0px;
+    border-radius: 5px;
 }
 
 /* Add indicator arrow for the active tab */
@@ -115,10 +116,10 @@
 	font-family: 'Muli',sans-serif !important;
 }
 
-.custom_width{
+/* .custom_width{
 	padding: 0.5rem 0.5rem !important;
 }
-
+ */
 .sidebar-container{
 	overflow-y:auto !important; 
 }
@@ -188,10 +189,9 @@ $(document).ready(function () {
 				  return result[e];
 				});
 			var sidebarmodule = "";
-			console.log(formmoduleid);
 			for (i = 0; i < values.length; i++) {
 				
-				sidebarmodule+="<a class='nav-link mb-1 shadow custom_width' id='"+values[i][1].replace('.','_') +"'  href='"+values[i][1]+"'><i class='fa-solid fa-star'></i>&nbsp; <span class=' large ' >"+values[i][0]+"</span></a>";
+				sidebarmodule+="<a class='nav-link  shadow custom_width' id='"+values[i][1].replace('.','_') +"'  href='"+values[i][1]+"'><i class='fa-solid fa-star'></i>&nbsp; <span class=' large ' >"+values[i][0]+"</span></a>";
  
 			}
 			$('#sidebarmodule').html(sidebarmodule); 
@@ -203,6 +203,8 @@ $(document).ready(function () {
    
     
 });
+
+$('#header-sidebar-menu-btn').show();
 </script>
 </body>
 </html>

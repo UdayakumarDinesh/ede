@@ -268,7 +268,6 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			try {
 				
 				String Formmoduleid = req.getParameter("formmoduleid");
-				System.out.println(Formmoduleid);
 				FormDetailList = service.HeaderSchedulesList(Formmoduleid ,logintype);
 				
 				
@@ -653,7 +652,6 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 			String UserId = (String)ses.getAttribute("Username");			
 			logger.info(new Date() +"Inside AllNotificationList.htm "+UserId);
 			String EmpNo = (String)ses.getAttribute("EmpNo");
-			System.out.println("-------------------not-----"+EmpNo);
 			try {			
 				 
 				List<Object[]>  list = service.AllNotificationLists(EmpNo);

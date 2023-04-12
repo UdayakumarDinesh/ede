@@ -201,7 +201,6 @@ public class EmsController {
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		String Empno = ( ses.getAttribute("EmpNo")).toString();
-		//System.out.println("notif----"+Empno);
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
     	List <Object[]> attendlist=null;

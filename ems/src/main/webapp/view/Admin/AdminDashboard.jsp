@@ -6,11 +6,16 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+<style type="text/css">
+body{
+ background-image: url("view/images/d3.jpg");
+}
+</style>
 </head>
 <body>
 <%List<Object[]> list = (List<Object[]>)request.getAttribute("dashboard"); %>
 
-	<div class="card-header page-top">
+	<div class="card-header page-top" >
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Admin DASHBOARD</h5>
@@ -45,8 +50,8 @@
 		</div>
 		<form action="#" method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			<div class="page card dashboard-card" >
-				<div class="card-body " align="center">
+			<div class="page card dashboard-card" style="background: transparent;">
+				<div class="card-body " align="center" style="background: transparent;">
 				
 						<h3>Admin Dashboard Details</h3>
 						

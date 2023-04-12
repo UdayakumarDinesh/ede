@@ -9,6 +9,11 @@
 <title>MT Apply</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+<!-- <style type="text/css">
+body{
+ background-image: url("view/images/b10.jpg");
+}
+</style> -->
 </head>
 <body>
 <%
@@ -19,7 +24,7 @@ MtUserApply apply=(MtUserApply)request.getAttribute("editdata");
 String username= (String)request.getAttribute("empname");
 String groupname=(String)request.getAttribute("groupcode");
 %>
-<div class="card-header page-top ">
+<div class="card-header page-top "  >
 		<div class="row">
 			<div class="col-md-6">
 				<h5>Request Trip <small><%if(username!=null){%><%=username%><%}%></small> </h5>
@@ -34,14 +39,14 @@ String groupname=(String)request.getAttribute("groupcode");
 			</div>
 </div>	
 
- <div class=" page card dashboard-card">
+ <div class=" page card dashboard-card" >
 	
 	
-	<div class="card-body" >
-	<div class="row">
-	<div class="col-9">
+	<div class="card-body"   >
+	<div class="row" >
+	<div class="col-9" >
 		<div class="card" >					
-			<div class="card-body">
+			<div class="card-body" >
 				<form action="MtUserApplyAddEdit.htm" method="post" autocomplete="off" id="requesttripform">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				    <div class="form-group">
@@ -201,7 +206,7 @@ List<Object[]> fifthpply=(List<Object[]>)request.getAttribute("fifthpply");%>
 
      
      <div class="col-md-3" style="margin-top: 20px;">
-				    <button style="font-size:small;margin-left: 250px; background-color: #17a2b8; height: 35px;"  class="btn  btn-info btn-xs " data-toggle="modal" data-target="#statusFullForm">Click Me To See LIST OF REQUEST FOR  NEXT 5 DAYS</button>
+				    <button style="font-size:small;margin-left: 250px; background-color: #17a2b8; height: 35px;"  class="btn  btn-info btn-xs " data-toggle="modal" data-target="#statusFullForm">Click Here To See LIST OF REQUEST FOR  NEXT 5 DAYS</button>
 				    </div>
 				    <!-- //Status Full Form Button -->
 				    <!-- Status Full Form Modal -->

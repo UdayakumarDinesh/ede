@@ -30,7 +30,6 @@ import com.vts.ems.Mt.model.MtTrip;
 import com.vts.ems.Mt.model.MtUserApply;
 import com.vts.ems.Mt.model.MtVehicle;
 import com.vts.ems.Mt.service.MtService;
-import com.vts.ems.leave.controller.LeaveController;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -44,7 +43,8 @@ public class MtController {
 	private static final Logger logger = LogManager.getLogger(MtController.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-	
+	 SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
 	@Autowired                   
 	private MtService service;
 	
@@ -555,6 +555,7 @@ public class MtController {
 				}else {
 					trip.setVehicleId(Integer.parseInt(req.getParameter("Vehicle")));
 				}
+				
 				trip.setPlace(req.getParameter("Place"));
 				trip.setMtoComments(req.getParameter("Comments"));
 				trip.setTripDate(DateTimeFormatUtil.dateConversionSql(req.getParameter("DutyDate")));
@@ -1237,7 +1238,6 @@ public class MtController {
 		try {
 			String FromDate=req.getParameter("Fromdate");
 			String ToDate=req.getParameter("Todate");
-			System.out.println("InCon"+ToDate);
 			if(FromDate!=null&&ToDate!=null) {
 				
 				req.setAttribute("TripList", service.TripList(DateTimeFormatUtil.dateConversionSql(FromDate),DateTimeFormatUtil.dateConversionSql(ToDate)));
@@ -1245,15 +1245,21 @@ public class MtController {
 				req.setAttribute("ToDate", ToDate);
 			}else{
 				
-				Date now = new Date();    
-				Calendar myCal = Calendar.getInstance();
-				    myCal.setTime(now);    
-				myCal.add(Calendar.MONTH, +1);    
-				now = myCal.getTime();
-				req.setAttribute("TripList", service.TripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(now.getTime())));
-				req.setAttribute("FromDate", sdf.format(new Date().getTime()));
-				req.setAttribute("ToDate", sdf.format(now.getTime()));
+				//Date now = new Date();    
+				//Calendar myCal = Calendar.getInstance();
+				//    myCal.setTime(now);    
+				//myCal.add(Calendar.MONTH, +1);    
+				//now = myCal.getTime();
 				
+				//req.setAttribute("TripList", service.TripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(now.getTime())));
+				//req.setAttribute("FromDate", sdf.format(new Date().getTime()));
+				//req.setAttribute("ToDate", sdf.format(now.getTime()));
+				
+				String fd = LocalDate.now().minusMonths(1).toString();
+				String td = LocalDate.now().toString();
+				FromDate=rdf.format(sf.parse(fd.toString()));
+				ToDate=rdf.format(sf.parse(td.toString()));
+				req.setAttribute("TripList",service.TripList(DateTimeFormatUtil.dateConversionSql(FromDate),DateTimeFormatUtil.dateConversionSql(ToDate)));
 			}
 			
 			req.setAttribute("fromdate",FromDate );
@@ -1272,8 +1278,7 @@ public class MtController {
 	
 	@RequestMapping(value="DirectorTrip.htm",method=RequestMethod.GET)
 	public String DirectorDuty(HttpServletRequest req,HttpSession ses) throws Exception {
-		SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
-		SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
+		
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DirectorTrip.htm "+Username);	
 		try {
@@ -1328,10 +1333,12 @@ public class MtController {
 			}else {
 				redir.addAttribute("resultfail","Trip Add UnSuccessful");
 			}
-				Calendar cal = Calendar.getInstance();
-				 cal.add(Calendar.DAY_OF_MONTH, 30);
-				 String newDate = sdf.format(cal.getTime()); 
-				req.setAttribute("dutylist",service.DirectorTripList(new java.sql.Date(new Date().getTime()),new java.sql.Date(sdf.parse(newDate).getTime())));
+			/*
+			 * Calendar cal = Calendar.getInstance(); cal.add(Calendar.DAY_OF_MONTH, 30);
+			 * String newDate = sdf.format(cal.getTime());
+			 * req.setAttribute("dutylist",service.DirectorTripList(new java.sql.Date(new
+			 * Date().getTime()),new java.sql.Date(sdf.parse(newDate).getTime())));
+			 */
 			return "redirect:/DirectorTrip.htm";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside DirectorTrip.htm "+Username, e);

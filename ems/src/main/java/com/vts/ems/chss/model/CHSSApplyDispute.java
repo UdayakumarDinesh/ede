@@ -28,6 +28,8 @@ public class CHSSApplyDispute implements Serializable
 	private long ResponderEmpid;
 	private String ResponseTime;
 	private String DispStatus;
+	private String DispReapplyStatus;
+	private String Action;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
