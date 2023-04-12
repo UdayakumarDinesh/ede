@@ -31,7 +31,7 @@
 			String laptop="[Laptop]";
 			%>
 			
-				<h5>Inventory Configuration  <%if(ItemType.toString().equals("C")){%><%=Desktop%><%}else{%><%=laptop%><%} %></h5>
+				<h5>Inventory Configuration  <%if(ItemType.toString().equals("D")){%><%=Desktop%><%}else{%><%=laptop%><%} %></h5>
 			</div>
 			<div class="col-md-8 ">
 				<ol class="breadcrumb">
@@ -241,7 +241,7 @@
 							<tr>
 							  
 							    <td style="text-align: center;"><%=++count %></td>
-							    <td style="text-align: left;"><%if(Config[1].toString().equals("C")){ %><%=Computer %><%} else { %><%=Laptop %><%} %></td>
+							    <td style="text-align: left;"><%if(Config[1].toString().equals("D")){ %><%=Computer %><%} else  { %><%=Laptop %><%} %></td>
 							    <td style="text-align: left;"><%if(Config[2].toString().equals("L")){%><%=LAN %><%}else if(Config[2].toString().equals("I")){%><%=Internet %><%} else{%><%=StandAlone%><%} %></td>
 								<td style="text-align: left;"><%=Config[3] %></td>
 								<td style="text-align: left;"><%if(Config[12].toString().equals("W")){%><%=Windows %><%} else{%><%=Linux %><%} %> </td>
@@ -250,7 +250,7 @@
 								<i class="fa fa-edit" style="color: #333C83"></i>
 								</button>
 								
-								 <input type="hidden" name="ItemType<%=Config[0]%>"	id="ItemType<%=Config[0]%>" value="<%if(Config[1].toString().equals("C")){ %><%=Computer  %><%} else { %><%=Laptop %><%} %>" >
+								 <input type="hidden" name="ItemType<%=Config[0]%>"	id="ItemType<%=Config[0]%>" value="<%if(Config[1].toString().equals("D")){ %><%=Computer  %><%} else { %><%=Laptop %><%} %>" >
 								<input type="hidden" name="ConnectionType<%=Config[0]%>"  id="ConnectionType<%=Config[0]%>"   value="<%if(Config[2].toString().equals("L")){%><%=LAN %><%}else if(Config[2].toString().equals("I")){%><%=Internet %><%} else{%><%=StandAlone%><%} %>" >
 								<input type="hidden" name="CPU<%=Config[0]%>"  id="CPU<%=Config[0]%>" value="<%=Config[3] %>">
 								<input type="hidden" name="Monitor<%=Config[0]%>"  id="Monitor<%=Config[0]%>" value="<%=Config[4] %>">
@@ -376,6 +376,16 @@ function openModal(ConfigureId){
 	$('#os').html($('#OS'+ConfigureId).val())
 	$('#pdf').html($('#PDF'+ConfigureId).val())
 	$('#browser').html($('#Browser'+ConfigureId).val())
+	
+	/*  var itemtype=$('#ItemType'+ConfigureId).val())
+	if(itemtype=="D"){
+		D="Desktop"
+		$('#itemtype').html(D);
+		
+	}else{
+		L="Laptop"
+			$('#itemtype').html(L);
+	}  */
 	
 	var k=$('#Kavach'+ConfigureId).val()
 	if(k=="N"){

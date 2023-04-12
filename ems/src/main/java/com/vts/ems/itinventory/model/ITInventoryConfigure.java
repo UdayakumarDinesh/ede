@@ -18,7 +18,7 @@ public class ITInventoryConfigure {
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
 	private long InventoryConfigureId;
 	private long ItInventoryId;
-	private String EmpNo;
+	private String ConfiguredBy;
 	private String ItemType;
 	private String ConnectionType;
 	private String CPU;

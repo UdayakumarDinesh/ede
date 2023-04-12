@@ -50,7 +50,7 @@
 	<%} %>
 		
 	<%
-		  int currentyear= java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+		 
 		  List<Object[]> InventoryQuantityList =(List<Object[]>)request.getAttribute("InventoryQuantityList");
 	%>
 		
@@ -101,7 +101,7 @@
 				</td>
 				<td>
 				<button type="submit" class="btn btn-sm update-btn" name="Itinventoryid" value="<%=QtyList[0] %>" formaction="QuantityEditSubmit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update ?');">update</button>&emsp;
-				<% if(!QtyList[1].toString().equals("0")){%><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/C" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
+				<% if(!QtyList[1].toString().equals("0")){%><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/D" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
 				</td>
 			</tr>
 									 

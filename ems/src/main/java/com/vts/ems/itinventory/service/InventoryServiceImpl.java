@@ -152,7 +152,7 @@ public long ForwardDetails(ITInventory inventory,String UserId,String EmpNo) thr
 	    
 	    EMSNotification notify = new EMSNotification();
 		notify.setEmpNo(obj[i].toString());
-		notify.setNotificationUrl("InventoryDetailsForwarded.htm");
+		notify.setNotificationUrl("InventoryDetailsDeclared.htm");
 		notify.setNotificationMessage("Inventory Details Forwarded");
 		
 	   if(inventory.getStatus()=="F" & notify.getEmpNo()!=null)
@@ -171,13 +171,15 @@ public long ForwardDetails(ITInventory inventory,String UserId,String EmpNo) thr
   @Override
   public List<Object[]> getInventoryList(String empNo,String DeclarationYear) throws Exception {
 	
+	 System.out.println("en0---"+empNo);
+	 System.out.println("dyear---"+DeclarationYear);
 	return dao.getInventoryList(empNo,DeclarationYear);
   }
 
   @Override
-  public List<Object[]> getInventoryForwardedList() throws Exception {
+  public List<Object[]> getInventoryDeclaredList() throws Exception {
 	
-	return dao.getInventoryForwardedList();
+	return dao.getInventoryDeclaredList();
 }
 
 @Override
@@ -187,22 +189,83 @@ public List<Object[]> getInventoryConfigure(String ITInventoryId) throws Excepti
 }
 
 @Override
-public List<Object[]> getInventoryForwardedListPreview(String iTInventoryId) throws Exception {
+public List<Object[]> getApprovedForm(String iTInventoryId) throws Exception {
 	
-	return dao.getInventoryForwardedListPreview(iTInventoryId);
+	return dao.getApprovedForm(iTInventoryId);
 }
 
 @Override
-public long inventoryDetailsApprove(ITInventory inventory) throws Exception {
+public long inventoryDetailsApprove(ITInventory inventory,String empNo, String eno) throws Exception {
 	
+	EMSNotification notify = new EMSNotification();
+	List<Object[]> notifyto = dao.SendNotification("U");
+	
+	notify.setEmpNo(eno);
+	notify.setNotificationUrl("InventoryDetailsApproved.htm");
+	notify.setNotificationMessage("Inventory Details Approved");
+	
+   if(inventory.getStatus()=="A" & notify.getEmpNo()!=null)
+	{
+		notify.setNotificationDate(LocalDate.now().toString());
+		notify.setNotificationBy((empNo));
+		notify.setIsActive(1);
+		notify.setCreatedBy(empNo);
+		notify.setCreatedDate(sdf1.format(new Date()));
+		dao.NotificationAdd(notify);
+	}
+   
 	return dao.inventoryDetailsApprove(inventory);
 	
  }
 
 @Override
-public long inventoryDetailsReturn(ITInventory inventory) throws Exception {
+public long inventoryDetailsReturn(ITInventory inventory,String empNo, String eno) throws Exception {
+	
+	EMSNotification notify = new EMSNotification();
+	List<Object[]> notifyto = dao.SendNotification("U");
+	
+	notify.setEmpNo(eno);
+	notify.setNotificationUrl("InventoryList.htm");
+	notify.setNotificationMessage("Inventory Details Returned");
+	
+   if(inventory.getStatus()=="R" & notify.getEmpNo()!=null)
+	{
+		notify.setNotificationDate(LocalDate.now().toString());
+		notify.setNotificationBy((empNo));
+		notify.setIsActive(1);
+		notify.setCreatedBy(empNo);
+		notify.setCreatedDate(sdf1.format(new Date()));
+		dao.NotificationAdd(notify);
+	}
 	
 	return dao.inventoryDetailsReturn(inventory);
+
+  }
+
+ @Override
+ public List<Object[]> getInventoryApprovedList(String Year,String empNo,String LoginType) throws Exception {
+	
+	
+	return dao.getInventoryApprovedList(Year,empNo,LoginType);
+	
+  }
+
+ @Override
+ public List<Object[]> getInventoryDeclaredListPreview(String iTInventoryId) throws Exception {
+	
+	return dao.getInventoryDeclaredListPreview(iTInventoryId);
+ }
+
+@Override
+public List<Object[]> getEmployeeList() throws Exception {
+	
+	return dao.getEmployeeList();
 }
-		
+
+@Override
+public List<Object[]> getInventoryDashboardCount(String empno, String year) {
+	
+	return dao.getInventoryDashboardCount(empno,year);
 }
+}
+

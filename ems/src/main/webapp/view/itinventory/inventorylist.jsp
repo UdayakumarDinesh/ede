@@ -17,11 +17,11 @@
 <body>
 <%
 
-    int currentyear= java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+    
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	List<Object[]> InventoryList=(List<Object[]>)request.getAttribute("InventoryList");
-	
+	List<Object[]> InventoryApprovedList=(List<Object[]>)request.getAttribute("InventoryApprovedList");
 	
 %>
 
@@ -59,7 +59,8 @@
 	</div>
 	
 	
-<div class="card-body main-card"   >
+<div class="card" >
+  <div class="card-body " >
       <form action="#" method="POST" >
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
 				 <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable" style="width:100% ;" >
@@ -80,7 +81,6 @@
 					 <% int count=0;
 						String Forwarded="Forwarded";
 						String Initiated="Initiated";
-						String Approved ="Approved";
 						String Returned="Returned";
 						int total=0;
 						int item=0;
@@ -92,7 +92,13 @@
 						if(Integer.parseInt(obj[11].toString())!=0){%><%item++; %><%}  if(Integer.parseInt(obj[14].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[17].toString())!=0){%><%item++; %><%}   if(Integer.parseInt(obj[20].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[23].toString())!=0){%><%item++; %><%} if(Integer.parseInt(obj[26].toString())!=0){%><%item++; %><%}
-						if(Integer.parseInt(obj[29].toString())!=0){%><%item++; %><%}%>
+						if(Integer.parseInt(obj[29].toString())!=0){%><%item++; %><%}
+			
+						
+						
+						
+						%>
+						 
 						
 							
 					      <tr>
@@ -101,8 +107,15 @@
 									<td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[32].toString())) %></td>
 									<td style="width: 2%;text-align:center;"><%=item %></td>  
 									<td style="width: 2%;text-align:center;"><%=total %></td>
-									<td style="width: 2%;text-align:center;" ><%if(obj[33].toString().equals("I")){ %><%=Initiated %><%} else if(obj[33].toString().equals("F")){%><%=Forwarded %><%} else if(obj[33].toString().equals("R")){%><%=Returned %><%} else if(obj[33].toString().equals("A")){%><%=Approved%><%} %></td>
-									<td style="width: 2%;text-align:left;"><%if(obj[35]!=null){%><%=obj[35] %><%} else{ %>-<%}%></td>
+									<td style="width: 2%;text-align:center;" ><%if(obj[33].toString().equals("I")){ %><%=Initiated %><%} else if(obj[33].toString().equals("F")){%><%=Forwarded %><%} else if(obj[33].toString().equals("R")){%><%=Returned %><%}  %></td>
+									<td style="width: 2%;text-align:left;word-wrap: break-word;word-break: break-all;white-space: normal !important;"><% if(obj[35]!=null){ if(obj[35].toString().length()<10){%><%=obj[35] %><%}  else if(obj[35].toString().length()>10)
+									{%><%=obj[35].toString().substring(0,10) %> <button type="button" class="editable-click" style="border-style:none;" name=""  id="InventoryId" value="<%=obj[0] %>" onclick="descmodal('<%=obj[0]%>')">
+													<b><span style="color:#1176ab;font-size: 14px;">......(View More)</span></b>
+										</button><%}} else{%>-<%} %>
+									 
+									<input type="hidden" name="Remark<%=obj[0]%>"  id="Remark<%=obj[0]%>" value="<%=obj[35] %>">
+									
+									</td>
 									<td style="width: 2%;text-align:center;">
 									<%if(obj[33].toString().equals("I") || obj[33].toString().equals("R")){ %>
 									<button type="submit" class="btn btn-sm " name=" " value=""  formaction="ITAsset.htm" formmethod="POST" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
@@ -117,10 +130,8 @@
 									<button type="submit" class="btn btn-sm "  formaction="InventoryFormPreview.htm" formmethod="GET"  formtarget="blank" data-toggle="tooltip" title="" data-original-title="Preview">
 									<i class="fa fa-eye " style="color: black;"></i>
 									</button> 
-									<%} else { %><button type="submit" class="btn btn-sm " name="inventoryid" value="<%=obj[0] %>" formaction="InventoryFormDownload.htm" formmethod="GET"   data-toggle="tooltip" title="" data-original-title="Download">
-									<i style="color: #019267" class="fa-solid fa-download"></i>
-									</button> 
-									 <%} %>
+									<%} %>
+									 
 									</td>
 							</tr>
 							
@@ -128,7 +139,7 @@
 						</tbody>
 					</table>
 					<div class="col-12" align="center">
-					  <%if(InventoryList.size()==0){%>   
+					  <%if(InventoryList.size()==0  && InventoryApprovedList.size()==0 ){%>   
 					<button type="submit" class ="btn btn-sm add-btn " name="" value="" formaction="ITAsset.htm" formmethod="POST" >Inventory Declaration</button>
 					   <%}%>  
 					</div>
@@ -139,7 +150,42 @@
       </div>
    </div>
    </div>
+   </div>
 
+  <div class="modal fade" id="descmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 75% !important;height: 40%;">
+				<div class="modal-content" style="min-height: 80%;" >
+				    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
+				    	<h4 class="modal-title" id="model-card-header" style="color: #145374">Remarks</h4>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				    </div>
+				    
+					<div class="modal-body"  style="padding: 0.5rem !important;">
+						<div class="card-body" style="min-height:50% ;max-height: 25% ;">
+							<div  class="row" id="descdata">
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
 </body>
+<script>
+function descmodal(InventoryId)
+{
+	        $("#InventoryId").val(InventoryId);
+	        $('#descdata').html($('#Remark'+InventoryId).val())
+			$('#descmodal').modal('toggle');
+		
+}
+
+
+
+
+</script>
 
 </html>

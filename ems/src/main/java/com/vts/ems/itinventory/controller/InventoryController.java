@@ -64,19 +64,40 @@ public class InventoryController {
 	@Autowired
 	InventoryService service;
 
-    public static final String formmoduleid="12";
+    public static final String formmoduleid="32";
 	@RequestMapping(value = "ITInventoryDashboard.htm")
 		public String ITInventoryDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
-			
+		    ses.setAttribute("formmoduleid", "32"); 
+		    ses.setAttribute("SidebarActive", "ITInventoryDashboard_htm");
 			String UserId=(String)ses.getAttribute("Username");
+			String logintype = (String)ses.getAttribute("LoginType");
+			
 			logger.info(new Date()+"Inside ITInventoryDashboard.htm "+UserId);
 			try {
-				 String logintype = (String)ses.getAttribute("LoginType");
+				List<Object[]> InventoryDashBoardCount=null;
 				 List<Object[]> admindashboard = adminservice.HeaderSchedulesList("12" ,logintype); 
-				 req.setAttribute("dashboard", admindashboard);
-				 ses.setAttribute("formmoduleid", "12"); 
-				 ses.setAttribute("SidebarActive", "ITInventoryDashboard_htm");
+				 String Year = req.getParameter("DeclarationYear");
+				    LocalDate today= LocalDate.now();
+					
+					if(Year== null) {
+						String start ="";
+						
+						start = String.valueOf(today.getYear());
+						Year=start;
+					}
+					
+				String empno=req.getParameter("EmpName");
+			
+				List<Object[]> EmpList=service.getEmployeeList();
+				InventoryDashBoardCount= service.getInventoryDashboardCount(empno,Year);
+				
+				req.setAttribute("InventoryDashBoardCount", InventoryDashBoardCount);
+				req.setAttribute("empNo", empno);
+				req.setAttribute("EmployeeList", EmpList);
+				req.setAttribute("DeclarationYear", Year);
+				
+				req.setAttribute("dashboard", admindashboard);
 				 return "itinventory/inventorydashboard";
 				 
 			} catch (Exception e) 
@@ -119,7 +140,7 @@ public class InventoryController {
 				LocalDate today= LocalDate.now();
 				String DeclarationYear=String.valueOf(today.getYear());
 				ITInventory inventory=new ITInventory(); 
-				inventory.setEmpNo(EmpNo);
+				inventory.setDeclaredBy(EmpNo);
 				inventory.setDeclarationYear(DeclarationYear);
 				inventory.setDate(sdf1.format(new Date()));
 				inventory.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
@@ -161,6 +182,7 @@ public class InventoryController {
 			  	 else {
 			  		redir.addAttribute("resultfail", "Inventory Quantity Add Unsuccessful");
 			  		}
+				 
 				return "redirect:/InventoryList.htm";
 			}
 			catch (Exception e) {
@@ -180,7 +202,7 @@ public class InventoryController {
 			logger.info(new Date() +"Inside QuantityEditSubmit.htm "+UserId);
 			try {
 				
-				LocalDate today= LocalDate.now();
+			    LocalDate today= LocalDate.now();
 				String DeclarationYear=String.valueOf(today.getYear());
 				String Itinventoryid=req.getParameter("Itinventoryid");
 				ITInventory inventory=new ITInventory();
@@ -249,9 +271,7 @@ public class InventoryController {
 				      String ItemType=arr[1];
 				      
 			    List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo);
-			    System.out.println("Itinventoryid ---"+inventoryid);
-				System.out.println("Item Type---"+ItemType);
-				req.setAttribute("inventoryid",inventoryid );
+			    req.setAttribute("inventoryid",inventoryid );
 				req.setAttribute("itemtype",ItemType);
 				req.setAttribute("inventoryconfig",inventoryconfig);
 				}
@@ -275,7 +295,7 @@ public class InventoryController {
 			try {
 				
 				ITInventoryConfigure  details = new  ITInventoryConfigure();
-				details.setEmpNo(EmpNo);
+				details.setConfiguredBy(EmpNo);
 				details.setItInventoryId(Long.parseLong(req.getParameter("Itinventoryid")));
 				details.setItemType(req.getParameter("ItemType"));
 				details.setConnectionType(req.getParameter("ConnectionType"));
@@ -455,7 +475,7 @@ public class InventoryController {
 
 	 
 	 @RequestMapping(value = "InventoryFormDownload.htm",method=RequestMethod.GET)
-		public void CHSSFormEmpDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		public void CHSSFormEmpDownload(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 		{
 			String UserId = (String) ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
@@ -466,7 +486,7 @@ public class InventoryController {
 				LocalDate today= LocalDate.now();
 		        String DeclarationYear=String.valueOf(today.getYear());
 		        String ITInventoryId=req.getParameter("inventoryid");
-				req.setAttribute("inventoryqty", service.getInventoryForwardedListPreview(ITInventoryId));
+				req.setAttribute("inventoryqty", service.getApprovedForm(ITInventoryId));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfigure(ITInventoryId));
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
@@ -511,8 +531,6 @@ public class InventoryController {
 
 		}
 		
-	 
-	 
 	 @RequestMapping(value = "InventoryView.htm", method ={RequestMethod.GET,RequestMethod.POST})
 	  public String InventoryPreview(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 	  { 
@@ -538,6 +556,39 @@ public class InventoryController {
 	  
 	  }
 	 
+	 @RequestMapping(value = "InventoryList.htm", method ={RequestMethod.GET,RequestMethod.POST})
+	  public String InventoryForwarded(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
+	  { 
+		  String UserId=(String)ses.getAttribute("Username"); 
+		  String EmpNo =ses.getAttribute("EmpNo").toString();
+		  String LoginType=ses.getAttribute("LoginType").toString();
+		  ses.setAttribute("SidebarActive","InventoryList_htm");
+		  ses.setAttribute("formmoduleid", formmoduleid);
+		  logger.info(new Date() +"Inside InventoryList.htm "+UserId); 
+		  try {
+			  String Year = req.getParameter("DeclarationYear");
+			    LocalDate today= LocalDate.now();
+				
+				if(Year== null) {
+					String start ="";
+					
+					start = String.valueOf(today.getYear());
+					Year=start;
+					
+				}
+			  
+			  
+			  String DeclarationYear=String.valueOf(today.getYear());
+		      req.setAttribute("InventoryList", service.getInventoryList(EmpNo,DeclarationYear));
+		      req.setAttribute("InventoryApprovedList", service.getInventoryApprovedList(Year,EmpNo,LoginType));
+			  return "itinventory/inventorylist";
+	          
+	 }catch (Exception e) { 
+		 e.printStackTrace(); 
+		 logger.error(new Date() +" Inside InventoryList.htm "+UserId, e); 
+		 return "static/Error"; 
+		 }
+	}
 	  @RequestMapping(value = "InventoryDetailsForward.htm", method ={RequestMethod.GET,RequestMethod.POST})
 		  public String InventoryDetailsForward(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 		  { 
@@ -568,74 +619,96 @@ public class InventoryController {
 			 }
 	}
 	  
-	  @RequestMapping(value = "InventoryList.htm", method ={RequestMethod.GET,RequestMethod.POST})
-	  public String InventoryForwarded(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
-	  { 
-		  String UserId=(String)ses.getAttribute("Username"); 
-		  String EmpNo =ses.getAttribute("EmpNo").toString();
-		  ses.setAttribute("SidebarActive","InventoryDetails_htm");	
-		  logger.info(new Date() +"Inside InventoryList.htm "+UserId); 
-		  try {
-			  LocalDate today= LocalDate.now();
-			  String DeclarationYear=String.valueOf(today.getYear());
-			  List<Object[]> InventoryList=service.getInventoryList(EmpNo,DeclarationYear);
-			  req.setAttribute("InventoryList", InventoryList);
-			  return "itinventory/inventorylist";
-	          
-	 }catch (Exception e) { 
-		 e.printStackTrace(); 
-		 logger.error(new Date() +" Inside InventoryList.htm "+UserId, e); 
-		 return "static/Error"; 
-		 }
-		  
-	}
 	  
-	  @RequestMapping(value = "InventoryDetailsForwarded.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	  
+	  @RequestMapping(value = "InventoryDetailsDeclared.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String InventoryDetailsForwarded(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			String UserId=(String)ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			ses.setAttribute("SidebarActive","InventoryDetailsForwarded_htm");	
+			ses.setAttribute("SidebarActive","InventoryDetailsDeclared_htm");	
 			ses.setAttribute("formmoduleid", formmoduleid);
-			logger.info(new Date() +"Inside InventoryDetailsForwarded.htm "+UserId);
+			logger.info(new Date() +"Inside InventoryDetailsDeclared.htm "+UserId);
 			try {
 				
-				List<Object[]> InventoryForwardedList=service.getInventoryForwardedList();
-				req.setAttribute("InventoryForwardedList", InventoryForwardedList);
-				return "itinventory/inventoryforwarded";
+				
+				req.setAttribute("InventoryDeclaredList", service.getInventoryDeclaredList());
+				return "itinventory/inventoryDeclared";
 				
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				logger.error(new Date() +" Inside InventoryDetailsForwarded.htm "+UserId, e);
+				logger.error(new Date() +" Inside InventoryDetailsDeclared.htm "+UserId, e);
 				return "static/Error";
 			}
 		} 
 	  
 	  
-	  @RequestMapping(value = "InventoryForwardedView.htm", method ={RequestMethod.GET,RequestMethod.POST})
+	  @RequestMapping(value = "InventoryDeclaredView.htm", method ={RequestMethod.GET,RequestMethod.POST})
 	  public String InventoryForwardedPreview(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 	  { 
 		  String UserId=(String)ses.getAttribute("Username"); 
-		  String EmpNo =ses.getAttribute("EmpNo").toString();
+		 
+		  String EmpName=ses.getAttribute("EmpName").toString();
 		  String LoginType=ses.getAttribute("LoginType").toString();
-		  logger.info(new Date() +"Inside InventoryPreview.htm "+UserId); 
+		  logger.info(new Date() +"Inside InventoryDeclaredView.htm "+UserId); 
 		  try {
 			    String ITInventoryId=req.getParameter("inventoryid");
-			    req.setAttribute("inventoryqty", service.getInventoryForwardedListPreview(ITInventoryId));
+			    req.setAttribute("inventoryqty", service.getInventoryDeclaredListPreview(ITInventoryId));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfigure(ITInventoryId));
 			    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			    req.setAttribute("LoginType", LoginType);
+			    req.setAttribute("EmpName", EmpName);
 			    return "itinventory/inventorypreview";
 	          
 	 }catch (Exception e) { 
 		 e.printStackTrace(); 
-		 logger.error(new Date() +" Inside InventoryPreview.htm "+UserId, e); 
+		 logger.error(new Date() +" Inside InventoryDeclaredView.htm "+UserId, e); 
 		 return "static/Error"; 
 		 }
-		
-	  
+		  
 	  }
+		
+		  @RequestMapping(value = "InventoryDetailsReturn.htm", method ={RequestMethod.GET,RequestMethod.POST})
+		  public String InventoryDetailsReturn(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
+		  { 
+			  String UserId=(String)ses.getAttribute("Username"); 
+			  String EmpNo =ses.getAttribute("EmpNo").toString();
+			  String LoginType=ses.getAttribute("LoginType").toString();
+			  logger.info(new Date() +"Inside InventoryDetailsReturn.htm "+UserId); 
+			  try {
+				    ITInventory inventory=new ITInventory();
+				   String split=req.getParameter("inventoryid");
+				   if(split!=null && !split.equals("null")) {
+					   String arr[]=split.split("/");
+					     String itid=arr[0]; 
+						  String eno=arr[1];
+						  
+				  
+				   inventory.setItInventoryId(Long.parseLong(itid));
+				   inventory.setARemarks(req.getParameter("remarks"));
+				   inventory.setStatus("R");
+				   inventory.setReturnedBy(EmpNo);
+				   inventory.setDate(sdf1.format(new Date()));
+				   long save=service.inventoryDetailsReturn(inventory,EmpNo,eno);
+				   if(save!=0){
+			        	  redir.addAttribute("result", "Inventory Details Returned Successfully");
+				  	   }
+				  	else {
+				  			redir.addAttribute("resultfail", "Inventory Details Return Unsuccessful");
+				  		}
+				   }
+				  return "redirect:/InventoryDetailsDeclared.htm";
+		          
+		 }catch (Exception e) { 
+			 e.printStackTrace(); 
+			 logger.error(new Date() +" Inside InventoryDetailsReturn.htm "+UserId, e); 
+			 return "static/Error"; 
+			 }
+		}
+		  
+	  
+	 
 	  @RequestMapping(value = "InventoryDetailsApprove.htm", method ={RequestMethod.GET,RequestMethod.POST})
 	  public String InventoryDetailsApprove(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 	  { 
@@ -644,18 +717,27 @@ public class InventoryController {
 		  String LoginType=ses.getAttribute("LoginType").toString();
 		  logger.info(new Date() +"Inside InventoryDetailsApprove.htm "+UserId); 
 		  try {
-			    ITInventory inventory=new ITInventory();
-			   inventory.setItInventoryId(Long.parseLong(req.getParameter("inventoryid")));
+			  
+			  
+			   ITInventory inventory=new ITInventory();
+			   String split=req.getParameter("inventoryid");
+			   if(split!=null && !split.equals("null")) {
+				   String arr[]=split.split("/");
+				     String itid=arr[0]; 
+					  String eno=arr[1];
+					  
+			   inventory.setItInventoryId(Long.parseLong(itid));
 			   inventory.setStatus("A");
 			   inventory.setDate(sdf1.format(new Date()));
-			   long save=service.inventoryDetailsApprove(inventory);
+			   long save=service.inventoryDetailsApprove(inventory,EmpNo,eno);
 			   if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Approved Successfully");
 			  	   }
 			  	else {
 			  			redir.addAttribute("resultfail", "Inventory Details Approve Unsuccessful");
 			  		}
-			  return "redirect:/InventoryDetailsForwarded.htm";
+			   }
+			  return "redirect:/InventoryDetailsApproved.htm";
 	          
 	 }catch (Exception e) { 
 		 e.printStackTrace(); 
@@ -666,35 +748,38 @@ public class InventoryController {
 	  
 	  
 	  
-	  @RequestMapping(value = "InventoryDetailsReturn.htm", method ={RequestMethod.GET,RequestMethod.POST})
-	  public String InventoryDetailsReturn(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
+	 
+	  @RequestMapping(value = "InventoryDetailsApproved.htm", method ={RequestMethod.GET,RequestMethod.POST})
+	  public String InventoryDetailsApproved(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 	  { 
 		  String UserId=(String)ses.getAttribute("Username"); 
 		  String EmpNo =ses.getAttribute("EmpNo").toString();
 		  String LoginType=ses.getAttribute("LoginType").toString();
-		  logger.info(new Date() +"Inside InventoryDetailsReturn.htm "+UserId); 
+		  ses.setAttribute("SidebarActive","InventoryDetailsApproved_htm");	
+		  ses.setAttribute("formmoduleid", formmoduleid);
+		  logger.info(new Date() +"Inside InventoryDetailsApproved.htm "+UserId); 
 		  try {
-			    ITInventory inventory=new ITInventory();
-			   inventory.setItInventoryId(Long.parseLong(req.getParameter("inventoryid")));
-			   inventory.setARemarks(req.getParameter("remarks"));
-			   inventory.setStatus("R");
-			   inventory.setDate(sdf1.format(new Date()));
-			   long save=service.inventoryDetailsReturn(inventory);
-			   if(save!=0){
-		        	  redir.addAttribute("result", "Inventory Details Returned Successfully");
-			  	   }
-			  	else {
-			  			redir.addAttribute("resultfail", "Inventory Details Return Unsuccessful");
-			  		}
-			  return "redirect:/InventoryDetailsForwarded.htm";
+			   
+			    String Year = req.getParameter("DeclarationYear");
+			    LocalDate today= LocalDate.now();
+				
+				if(Year== null) {
+					String start ="";
+					
+					start = String.valueOf(today.getYear());
+					Year=start;
+				}
+				req.setAttribute("InventoryApprovedList", service.getInventoryApprovedList(Year,EmpNo,LoginType));
+			    req.setAttribute("DeclarationYear", Year);
+			    req.setAttribute("LoginType", LoginType);
+			    return "itinventory/inventoryapprovedlist";
 	          
 	 }catch (Exception e) { 
 		 e.printStackTrace(); 
-		 logger.error(new Date() +" Inside InventoryDetailsReturn.htm "+UserId, e); 
+		 logger.error(new Date() +" Inside InventoryDetailsApproved.htm "+UserId, e); 
 		 return "static/Error"; 
 		 }
-	}
-	  
+	 } 
 }
 
 

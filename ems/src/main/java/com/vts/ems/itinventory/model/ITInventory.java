@@ -20,7 +20,7 @@ public class ITInventory implements Serializable {
 	private long ItInventoryId;
 	private String DeclarationYear;
 	private String Date;
-	private String EmpNo;
+	private String DeclaredBy;
 	private int Desktop;
 	private String DesktopIntendedBy;
 	private String DesktopRemarks;
@@ -50,6 +50,7 @@ public class ITInventory implements Serializable {
 	private String  MiscellaneousRemarks;
     private String  Status;
     private String  ARemarks;
+    private String  ReturnedBy;
     private String  ERemarks;
 	private String  CreatedBy;
 	private String  CreatedDate;

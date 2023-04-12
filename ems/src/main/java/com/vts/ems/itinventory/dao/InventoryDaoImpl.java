@@ -32,7 +32,7 @@ public class InventoryDaoImpl implements InventoryDao{
 	EntityManager manager;
 
 	
-	private static final String INVENTORYQUANTITYLIST="SELECT ItInventoryId,Desktop,DesktopIntendedBy,DesktopRemarks,Laptop,LaptopIntendedBy,LaptopRemarks,USBPendrive,USBPendriveIntendedBy,USBPendriveRemarks,Printer,PrinterIntendedBy,PrinterRemarks,Telephone,TelephoneIntendedBy,TelephoneRemarks,FaxMachine,FaxMachineIntendedBy,FaxMachineRemarks,Scanner,ScannerIntendedBy,ScannerRemarks,XeroxMachine,XeroxMachineIntendedBy,XeroxMachineRemarks,Miscellaneous,MiscellaneousIntendedBy,MiscellaneousRemarks FROM it_inventory WHERE isActive='1' AND EmpNo=:EmpNo";
+	private static final String INVENTORYQUANTITYLIST="SELECT ItInventoryId,Desktop,DesktopIntendedBy,DesktopRemarks,Laptop,LaptopIntendedBy,LaptopRemarks,USBPendrive,USBPendriveIntendedBy,USBPendriveRemarks,Printer,PrinterIntendedBy,PrinterRemarks,Telephone,TelephoneIntendedBy,TelephoneRemarks,FaxMachine,FaxMachineIntendedBy,FaxMachineRemarks,Scanner,ScannerIntendedBy,ScannerRemarks,XeroxMachine,XeroxMachineIntendedBy,XeroxMachineRemarks,Miscellaneous,MiscellaneousIntendedBy,MiscellaneousRemarks FROM it_inventory WHERE isActive='1' AND DeclaredBy=:EmpNo";
 	@Override
 	public List<Object[]> getInventoryQuantityList(String empNo) throws Exception {
 
@@ -95,7 +95,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		}
 	}
 	
-	private static final String INVENTORYCONFIGURATION="SELECT InventoryConfigureId,ItemType,ConnectionType,CPU,Monitor,RAM,AdditionalRAM,Keyboard,Mouse,Externalharddisk,ExtraInternalharddisk,Office,OS,PDF,Browser,Kavach FROM it_inventory_configure WHERE isActive='1' AND EmpNo=:EmpNo";
+	private static final String INVENTORYCONFIGURATION="SELECT InventoryConfigureId,ItemType,ConnectionType,CPU,Monitor,RAM,AdditionalRAM,Keyboard,Mouse,Externalharddisk,ExtraInternalharddisk,Office,OS,PDF,Browser,Kavach FROM it_inventory_configure WHERE isActive='1' AND ConfiguredBy=:EmpNo  ORDER BY InventoryConfigureId DESC";
 	@Override
 	public List<Object[]> getInventoryConfiguration(String empNo) throws Exception {
 		
@@ -131,7 +131,7 @@ public class InventoryDaoImpl implements InventoryDao{
 			return 0L;
 		}
 	}
-	public static final String INVENTORYQTYLIST="CALL IT_Inventory_Quantity(:EmpNo,:DeclarationYear)";
+	public static final String INVENTORYQTYLIST="CALL IT_Inventory_List(:EmpNo,:DeclarationYear)";
 	@Override
 	public List<Object[]> getInventoryQtylist(String empNo,String DeclarationYear) throws Exception {
 		
@@ -152,7 +152,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("date", inventory.getDate());
 		return query.executeUpdate();
 	}
-	public static final String INVENTORYLIST="CALL IT_Inventory_Quantity(:EmpNo,:DeclarationYear)";
+	public static final String INVENTORYLIST="CALL IT_Inventory_List(:EmpNo,:DeclarationYear)";
 	@Override
 	public List<Object[]> getInventoryList(String empNo,String DeclarationYear) throws Exception {
 	
@@ -193,11 +193,11 @@ public class InventoryDaoImpl implements InventoryDao{
 				}
 				
 	}
-	private static final String INVENTORYFORWARDEDLIST ="SELECT it.ItInventoryId,e.EmpName,it.EmpNo,dm.DivisionName,ed.Designation,it.Desktop,it.DesktopIntendedBy,it.DesktopRemarks,it.Laptop,it.LaptopIntendedBy,it.LaptopRemarks, it.USBPendrive,it.USBPendriveIntendedBy,it.USBPendriveRemarks,it.Printer,it.PrinterIntendedBy,it.PrinterRemarks,it.Telephone,it.TelephoneIntendedBy,it.TelephoneRemarks,it.FaxMachine,it.FaxMachineIntendedBy,it.FaxMachineRemarks,it.Scanner,it.ScannerIntendedBy,it.ScannerRemarks,it.XeroxMachine,it.XeroxMachineIntendedBy,it.XeroxMachineRemarks, it.Miscellaneous,it.MiscellaneousIntendedBy,it.MiscellaneousRemarks,DATE(it.Date),it.status,it.DeclarationYear,it.ERemarks FROM it_inventory it,employee e, employee_desig ed,division_master dm  WHERE it.isActive='1' AND it.EmpNo=e.EmpNo AND ed.DesigId=e.DesigId AND e.divisionid=dm.divisionid AND it.status IN('F','A','R') ORDER BY it.Date  DESC";
+	private static final String INVENTORYDECLAREDLIST ="SELECT it.ItInventoryId,e.EmpName,it.DeclarationYear,it.Date,it.Desktop,it.Laptop, it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ERemarks FROM it_inventory it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo  AND it.status IN('F','R')  ORDER BY it.Date  DESC";
 	@Override
-	public List<Object[]> getInventoryForwardedList() throws Exception {
+	public List<Object[]> getInventoryDeclaredList() throws Exception {
 		
-		Query query=manager.createNativeQuery(INVENTORYFORWARDEDLIST);
+		Query query=manager.createNativeQuery(INVENTORYDECLAREDLIST);
 		return (List<Object[]>)query.getResultList();
 	}
 		
@@ -209,10 +209,10 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("inventoryid", ITInventoryId);
 		return (List<Object[]>)query.getResultList();
 	}
-	private static final String INVENTORYFORWARDEDLISTPREVIEW="CALL IT_Inventory_Forwarded(:inventoryid)"; 
+	private static final String INVENTORYAPPROVEDFORMDOWNLOAD="CALL IT_Inventory_Approved(:inventoryid)"; 
 	@Override
-	public List<Object[]> getInventoryForwardedListPreview(String iTInventoryId) throws Exception {
-		Query query=manager.createNativeQuery(INVENTORYFORWARDEDLISTPREVIEW);
+	public List<Object[]> getApprovedForm(String iTInventoryId) throws Exception {
+		Query query=manager.createNativeQuery(INVENTORYAPPROVEDFORMDOWNLOAD);
 		query.setParameter("inventoryid", iTInventoryId);
 		return (List<Object[]>)query.getResultList();
 		
@@ -228,7 +228,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		return query.executeUpdate();
 	}
 	
-	private static final String INVENTORYDETIALSRETURN="UPDATE it_inventory SET ARemarks=:remarks,Date=:date,Status=:status WHERE ItInventoryId=:ItinventoryId";
+	private static final String INVENTORYDETIALSRETURN="UPDATE it_inventory SET ARemarks=:remarks,Date=:date,Status=:status,ReturnedBy=:returnedby WHERE ItInventoryId=:ItinventoryId";
 	@Override
 	public long inventoryDetailsReturn(ITInventory inventory) throws Exception {
 	
@@ -237,7 +237,46 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("remarks", inventory.getARemarks());
 		query.setParameter("status", inventory.getStatus());
 		query.setParameter("date", inventory.getDate());
+		query.setParameter("returnedby", inventory.getReturnedBy());
 		return query.executeUpdate();
+	}
+	
+	private static final String INVENTORYAPPROVEDLIST="SELECT it.ItInventoryId,e.EmpName,it.DeclarationYear,it.Date,it.Desktop,it.Laptop,it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ARemarks FROM it_inventory it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo AND it.status IN('A')  AND  CASE WHEN 'A'=:LoginType THEN it.DeclarationYear= :DeclarationYear ELSE it.DeclaredBy=:EmpNo END ORDER BY it.Date DESC";
+	@Override
+	public List<Object[]> getInventoryApprovedList(String year,String empNo,String LoginType) throws Exception {
+		
+		Query query=manager.createNativeQuery(INVENTORYAPPROVEDLIST);
+		query.setParameter("DeclarationYear", year);
+		query.setParameter("EmpNo", empNo);
+		query.setParameter("LoginType", LoginType);
+		return (List<Object[]>)query.getResultList();
+	}
+	
+	private static final String DECLAREDLISTPREVIEW="CALL IT_Inventory_Forwarded(:iTInventoryId)";
+	@Override
+	public List<Object[]> getInventoryDeclaredListPreview(String iTInventoryId) throws Exception {
+		
+		Query query=manager.createNativeQuery(DECLAREDLISTPREVIEW);
+		query.setParameter("iTInventoryId", iTInventoryId);
+		
+		return (List<Object[]>)query.getResultList();
+	}
+	
+	private static final String EMPLOYEELIST="SELECT e.EmpNo,e.EmpName FROM employee e,login l WHERE e.isActive='1' AND e.EmpId=l.EmpId AND l.LoginType='U'";
+	@Override
+	public List<Object[]> getEmployeeList() throws Exception {
+		
+		Query query=manager.createNativeQuery(EMPLOYEELIST);
+		return (List<Object[]>)query.getResultList();
+	}
+	private static final String INVENTORYDASHBOARDCOUNT="CALL IT_Inventory_Dashboard_Count(:EmpNo,:Year)";
+	@Override
+	public List<Object[]> getInventoryDashboardCount(String empno, String year) {
+		
+		Query query=manager.createNativeQuery(INVENTORYDASHBOARDCOUNT);
+		query.setParameter("EmpNo", empno);
+		query.setParameter("Year", year);
+		return (List<Object[]>)query.getResultList();
 	}
 
 }
