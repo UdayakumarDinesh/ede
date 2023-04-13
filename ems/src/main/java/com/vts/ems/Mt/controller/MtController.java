@@ -45,6 +45,9 @@ public class MtController {
 	 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	 SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
+	
+	String formmoduleid = "30";
+	
 	@Autowired                   
 	private MtService service;
 	
@@ -60,7 +63,7 @@ public class MtController {
 			String logintype = (String)ses.getAttribute("LoginType");
 			List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 		
-			ses.setAttribute("formmoduleid", "30"); 
+			ses.setAttribute("formmoduleid", formmoduleid ); 
 			ses.setAttribute("SidebarActive", "MtDashboard_htm");
 			req.setAttribute("dashboard", admindashboard);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
@@ -313,7 +316,7 @@ public class MtController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside MtList.htm "+Username);
 		try {
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 
 			req.setAttribute("Mtapplylist",service.GetApplyDataOFApplyStatus((String)ses.getAttribute("EmpNo")));
 			req.setAttribute("Mtapplysanclist",service.GetApplyDataOfSancApplyStatus((String)ses.getAttribute("EmpNo")));	
@@ -520,7 +523,7 @@ public class MtController {
 			req.setAttribute("triplist",service.getListOfTrip());
 			req.setAttribute("linkrequestlist",service.GetLinkRequest());
 			
-			ses.setAttribute("formmoduleid", "6"); 
+			ses.setAttribute("formmoduleid", formmoduleid); 
 			ses.setAttribute("SidebarActive", "MTHome_htm");
 			
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
@@ -642,7 +645,7 @@ public class MtController {
 		try {
 			req.setAttribute("GhApproveList", service.GhApproveList((String)ses.getAttribute("EmpNo")));	
 			ses.setAttribute("SidebarActive", "MtGhApprove_htm");
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
@@ -776,7 +779,7 @@ public class MtController {
 			req.setAttribute("triplist",service.getListOfTrip());
 			req.setAttribute("comp","link");
 			ses.setAttribute("SidebarActive", "MTTripLink_htm");
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);

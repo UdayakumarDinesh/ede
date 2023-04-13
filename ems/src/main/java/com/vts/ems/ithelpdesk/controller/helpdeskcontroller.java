@@ -85,7 +85,6 @@ public class helpdeskcontroller {
 			req.setAttribute("graphdata", service.IThelpdeskDashboardGraphData(fromDate,toDate));
 			req.setAttribute("piechartdata", service.IThelpdeskDashboardPieChartData(fromDate,toDate));
 			req.setAttribute("dashboard", admindashboard);
-			ses.setAttribute("SidebarActive", "ITDashboard_htm");
 			req.setAttribute("LoginType", logintype);
 			return "ithelpdesk/ITDashboard";
 		} catch (Exception e) {

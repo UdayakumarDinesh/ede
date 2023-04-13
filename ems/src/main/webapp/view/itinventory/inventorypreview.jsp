@@ -85,6 +85,7 @@ tr.noBorder td {
     String LabLogo = (String)request.getAttribute("LabLogo");
     List<Object[]> inventoryquantity=( List<Object[]>)request.getAttribute("inventoryqty");
     List<Object[]> inventoryconfigure=(List<Object[]>)request.getAttribute("inventoryconfigure");
+    String EmpName=(String)request.getAttribute("EmpName");
     String LoginType=(String)request.getAttribute("LoginType");
 
 %>
@@ -101,7 +102,7 @@ tr.noBorder td {
 							<%if(LoginType.toString().equals("U")){ %>
 							<li class="breadcrumb-item "><a href="InventoryList.htm">Inventory </a></li>
 							<%}else{ %>
-							<li class="breadcrumb-item "><a href="InventoryDetailsForwarded.htm">Inventory Declared </a></li>
+							<li class="breadcrumb-item "><a href="InventoryDetailsDeclared.htm">Inventory Declared </a></li>
 							<%} %>
 					        <li class="breadcrumb-item active" aria-current="page">Inventory Preview
 						</li>
@@ -116,7 +117,7 @@ tr.noBorder td {
 	 <div class="page card dashboard-card"> 
 		<div class="card-body"  >
 			<div class="card" style="padding-top:0px;margin-top: -15px;">
-				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="center">
+				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="left">
 				<form action="##" id="forward">
 				<div class="" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
 				
@@ -130,7 +131,7 @@ tr.noBorder td {
 								</div>
 								<%for(Object[] inventoryqty:inventoryquantity ){ %>
 								<%if(inventoryqty[32]!=null){ %>
-								 <div><span style="border: 0px;margin-right:-900px;font-weight: 600">Date :&nbsp;<%=rdf.format(sdf.parse(inventoryqty[32].toString())) %> </span>
+								 <div align="right"><span style="border: 0px;font-weight: 600">Date :&nbsp;<%=rdf.format(sdf.parse(inventoryqty[32].toString())) %> </span>
 								</div>
 								<%} %>
 								 
@@ -350,20 +351,11 @@ tr.noBorder td {
 								<%} %>	
 						</table>
 					</div>					
-					 <%-- <div style="margin-left:600px;margin-top:0px;" >
-								<span style="font-weight: 600; font-size: 18px;">Signature </span><br>
-								<span  style="font-weight: 600; font-size: 18px; ">Name:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span> </span><br>
-								<span  style="font-weight: 600; font-size: 18px;">EmpNo:&nbsp;<span class="text-blue" ><%=inventoryqty[2]%></span> </span>
-							</div>   --%>
-						
-				<%-- <div class="col-sm-12">
-				<%if((inventoryqty[33].toString().equals("I") || inventoryqty[33].toString().equals("R")) && LoginType.toString().equals("U")){ %>
-				 <button type="submit" class="btn btn-sm submit-btn"   name="inventoryid01"  id="ITinventoryid"   formaction="InventoryDetailsForward.htm" formmethod="get"  onclick="message(<%=inventoryqty[0]%>)">Forward</button>
-				 <%} %> --%>
+					 
 				 
 				</div>
 				<%if(LoginType.toString().equals("U") && inventoryqty[33].toString().equals("R")) {%>
-				 <div class="col-md-5" align="center" style="margin: -1% 33% -7% -24%; padding:0px;border: 1px solid black;border-radius: 5px;">
+				 <div class="col-md-5" align="left" style="margin-left:1rem;margin-top:-1rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px">
 					<tr>
 						<td style="border:none;padding: 0px">
@@ -372,7 +364,10 @@ tr.noBorder td {
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-							<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
+						
+						    <%if(!inventoryqty[36].toString().equals("")){%><span style="font-weight:800;" ><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
+							<span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
+							
 						</td>
 					</tr>
 				</table>
@@ -380,7 +375,7 @@ tr.noBorder td {
 			</div> 
 				<%} %>
 				<%if(LoginType.toString().equals("A") && inventoryqty[33].toString().equals("F") && !inventoryqty[35].toString().equals("")) {%>
-				<div class="col-md-5" align="center" style="margin: -1% 33% -7% -24%; padding:0px;border: 1px solid black;border-radius: 5px;">
+				<div class="col-md-5" align="left" style="margin-left:1rem;margin-top:-1rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px">
 					<tr>
 						<td style="border:none;padding: 0px">
@@ -389,7 +384,8 @@ tr.noBorder td {
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-							<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
+						    <%if(inventoryqty[36]!=null){%><span style="font-weight:800;"><%=EmpName %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
+							<span style="font-weight:800;"><%=inventoryqty[1] %></span> :&emsp; <span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
 						</td>
 					</tr>
 				</table>
@@ -398,21 +394,21 @@ tr.noBorder td {
 			<%} %>
 			
 				<%if(LoginType.toString().equals("A") && inventoryqty[33].toString().equals("F")) {%>
-				<div class="col-md-6" align="center" style="margin-top: 3%;margin-left:40%;">
+				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
 				  </div>
-                 <button type="submit" class="btn btn-sm submit-btn"  name="inventoryid"  value="<%=inventoryqty[0]%>" formaction="InventoryDetailsApprove.htm"  formmethod="GET"  onclick="return confirm('Are You Sure To Approve ?');">Approve</button>
-				<button type="submit" class="btn btn-sm delete-btn" name="inventoryid"  value="<%=inventoryqty[0]%>" formaction="InventoryDetailsReturn.htm"  formmethod="GET"  onclick="return remarkRequired('R');" formnovalidate="formnovalidate">Return</button>
-				</div>
+                 <button type="submit" class="btn btn-sm submit-btn"  name="inventoryid"  value="<%=inventoryqty[0]%>/<%=inventoryqty[2]%>" formaction="InventoryDetailsApprove.htm"  formmethod="GET"  onclick="return confirm('Are You Sure To Approve ?');">Approve</button>
+				<button type="submit" class="btn btn-sm delete-btn" name="inventoryid"  value="<%=inventoryqty[0]%>/<%=inventoryqty[2]%>" formaction="InventoryDetailsReturn.htm"  formmethod="GET"  onclick="return remarkRequired('R');" formnovalidate="formnovalidate">Return</button>
+				 </div> 
 				<%} %>
 				
-				<%if((inventoryqty[33].toString().equals("I") || inventoryqty[33].toString().equals("R")) && LoginType.toString().equals("U")){ %>
-				<div class="col-md-6" align="center" style="margin-top: 3%;margin-left:44%;">
+				<%if(LoginType.toString().equals("U") && (inventoryqty[33].toString().equals("R") || inventoryqty[33].toString().equals("I"))){ %>
+				<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
-					 <textarea class="w-100 form-control" rows="3" cols="100"  name="Remarks" <% if(inventoryqty[33].toString().equals("R")){ %> required="required"<%} %> maxlength="500"></textarea>
+					 <textarea class="w-100 form-control" rows="3" cols="100"  id="remark" name="Remarks"  maxlength="500"></textarea>
 				  </div>
-                <button type="submit" class="btn btn-sm submit-btn"   name="inventoryid01"  id="ITinventoryid"   formaction="InventoryDetailsForward.htm" formmethod="get"  onclick="message(<%=inventoryqty[0]%>)">Forward</button>
+                <button type="submit" class="btn btn-sm submit-btn"   name="inventoryid01"  id="ITinventoryid"   formaction="InventoryDetailsForward.htm" formmethod="get"  onclick="message('<%=inventoryqty[0]%>','<%=inventoryqty[33] %>')">Forward</button>
 				 </div>
 				 <%} %>
 				 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
@@ -429,11 +425,19 @@ tr.noBorder td {
 </body>
 
 <script>
-function message(inventoryid){
+function message(inventoryid,status){
 	
-	console.log(inventoryid);
+	
 	 let text = "Are You Sure To Submit\nOnce submitted, data can't be changed";
-	  if (confirm(text) == true) {
+	 if(status === 'R'){
+		 $('#remark').attr('required', true);
+			if($('#remark').val().trim()===''){
+				alert('Please Fill Remarks to Forward! ');
+				return false; 
+		 
+	   }
+	 } 
+		 if (confirm(text) == true) {
 		  $("#ITinventoryid").val(inventoryid);
 		  $('#forward').submit();
 		 
@@ -441,7 +445,7 @@ function message(inventoryid){
 		  event.preventDefault();
 	      return false;
 	  }
-	  
+	
 }
 function remarkRequired(action)
 {
