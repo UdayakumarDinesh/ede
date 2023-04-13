@@ -20,8 +20,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,7 +61,6 @@ import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSBillPkg;
 import com.vts.ems.chss.model.CHSSBillPkgItems;
-import com.vts.ems.chss.model.CHSSBillReapply;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
@@ -3572,9 +3573,9 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 
 	@Override
-	public List<Object[]> DisputeList() throws Exception {
+	public List<Object[]> DisputeList(long EmpId) throws Exception {
 		
-		return dao.DisputeList();
+		return dao.DisputeList(EmpId);
 	}
 
 	@Override
@@ -3618,15 +3619,21 @@ public class CHSSServiceImpl implements CHSSService {
 					transac.setActionDate(sdtf.format(new Date()));
 					dao.CHSSApplyTransactionAdd(transac);
 														
-				long billId =0;
+				Long billId =0L;
 				long consultId =0;
 	            
+				
+				Map<String,Long> map = new HashMap<String,Long>();
+				Map<String,Long> mapConMainId = new HashMap<String,Long>();
 				for(int i=0; consultationId!=null && i<consultationId.length; i++)
 				{
 					CHSSBillConsultation consult = new CHSSBillConsultation();					
 				    Object[] consultData = dao.CHSSReApplyConsult(consultationId[i]);		
 				 
-				    billId = CHSSbillIdReApply(applyid,consultData[0].toString(),reApply[8].toString());
+				    billId = map.get(consultData[0].toString());
+				    if(billId==null) {
+				    	 billId = CHSSbillIdReApply(applyid,consultData[0].toString(),reApply[8].toString(),map,mapConMainId);
+				    }				   
 				  	
 					consult.setBillId(billId);	
 					consult.setConsultType(consultData[1].toString());
@@ -3652,8 +3659,10 @@ public class CHSSServiceImpl implements CHSSService {
                     Object[] TestData = dao.CHSSReApplyTest(CHSSTestId[i]);
 					
                     
-                    billId = CHSSbillIdReApply(applyid,TestData[0].toString(),reApply[8].toString());                    	
-                   
+                    billId = map.get(TestData[0].toString());
+				    if(billId==null) {
+				    	 billId = CHSSbillIdReApply(applyid,TestData[0].toString(),reApply[8].toString(),map,mapConMainId);
+				    }	                   
                 	test.setBillId(billId);
 					test.setTestMainId(Long.parseLong(TestData[1].toString() ));
 					test.setTestSubId(Long.parseLong(TestData[2].toString() ));
@@ -3675,8 +3684,10 @@ public class CHSSServiceImpl implements CHSSService {
 					Object[] MedicineData = dao.CHSSReApplyMedicine(CHSSMedicineId[i]);
                     
 				
-					billId = CHSSbillIdReApply(applyid,MedicineData[0].toString(),reApply[8].toString()); 
-					
+					billId = map.get(MedicineData[0].toString());
+				    if(billId==null) {
+				    	 billId = CHSSbillIdReApply(applyid,MedicineData[0].toString(),reApply[8].toString(),map,mapConMainId);
+				    }						
 					meds.setBillId(billId);
 					meds.setMedicineName(MedicineData[1].toString());
 					meds.setPresQuantity(Integer.parseInt(MedicineData[3].toString() ));
@@ -3698,8 +3709,10 @@ public class CHSSServiceImpl implements CHSSService {
 					CHSSBillMisc  misc = new CHSSBillMisc();
 					Object[] MiscData = dao.CHSSReApplyMisc(ChssMiscId[i]);
 			
-					billId = CHSSbillIdReApply(applyid,MiscData[0].toString(),reApply[8].toString()); 	
-					
+					billId = map.get(MiscData[0].toString());
+				    if(billId==null) {
+				    	 billId = CHSSbillIdReApply(applyid,MiscData[0].toString(),reApply[8].toString(),map,mapConMainId);
+				    }						
 					misc.setBillId(billId);
 					misc.setMiscItemName(MiscData[1].toString());
 					misc.setMiscItemCost(Double.parseDouble(MiscData[2].toString()));
@@ -3757,27 +3770,21 @@ public class CHSSServiceImpl implements CHSSService {
 	}
 	
 	@Override
-	public long CHSSbillIdReApply(long CHSSpplyId,String BillId,String Username) throws Exception {
+	public long CHSSbillIdReApply(long CHSSpplyId,String OldBillId,String Username,Map<String,Long> map,Map<String,Long> mapConMainId) throws Exception {
 		
-		Object[] BillData = dao.CHSSReApplyBill(BillId);
-		Object[] BillIds = dao.CHSSReApplyBillIds(BillId);
+		Object[] BillData = dao.CHSSReApplyBill(OldBillId);	
 		CHSSBill bill = new CHSSBill();
-		long billId=0;
-		if(BillIds==null) {
-    	Object[] consultMainData = dao.CHSSReApplyConsultMain(BillData[1].toString());
-	 				
-		long conmainId=0;
-		CHSSConsultMain conmain = new CHSSConsultMain();
-		conmain.setDocQualification(Integer.parseInt(consultMainData[2].toString()));
-		conmain.setCHSSApplyId(CHSSpplyId);
-		conmain.setDocName(consultMainData[1].toString());
-		conmain.setCreatedBy(Username);
-		conmain.setCreatedDate(sdtf.format(new Date()));
-		conmain.setIsActive(1);
-		conmainId = dao.CHSSConsultMainAdd(conmain);
+		Long billId=0L;
+		Long conMainId=0L;
 		
+		
+		conMainId = mapConMainId.get(BillData[1].toString());
+	    if(conMainId==null) {
+	    	conMainId = CHSSConMainIdReApply(CHSSpplyId,BillData[1].toString(),Username,mapConMainId);
+	    }	
+				
 		bill.setCHSSApplyId(CHSSpplyId);
-		bill.setCHSSConsultMainId(conmainId);
+		bill.setCHSSConsultMainId(conMainId);
 		bill.setBillNo(BillData[2].toString());
 		bill.setCenterName(BillData[4].toString());
 		bill.setBillDate(BillData[3].toString());
@@ -3792,22 +3799,38 @@ public class CHSSServiceImpl implements CHSSService {
 		
 		billId = dao.CHSSBillAdd(bill);
 		
-		CHSSBillReapply chssBillReapply = new CHSSBillReapply();
-		chssBillReapply.setOldBillId(Long.parseLong(BillId));
-		chssBillReapply.setNewBillId(billId);
-		dao.CHSSReApplyBillAdd(chssBillReapply);
-		}
-		else {
-			
-			billId= Long.parseLong(BillIds[0].toString());
+		if(billId>0) {
+		map.put(OldBillId, billId);
 		}
 		
 		return billId;
 	}
 
 	@Override
+	public long CHSSConMainIdReApply(long CHSSpplyId,String OldConMainId,String Username,Map<String,Long> mapConMainId) throws Exception {
+		
+		Object[] consultMainData = dao.CHSSReApplyConsultMain(OldConMainId);
+			
+		long conmainId=0;
+		CHSSConsultMain conmain = new CHSSConsultMain();
+		conmain.setDocQualification(Integer.parseInt(consultMainData[2].toString()));
+		conmain.setCHSSApplyId(CHSSpplyId);
+		conmain.setDocName(consultMainData[1].toString());
+		conmain.setCreatedBy(Username);
+		conmain.setCreatedDate(sdtf.format(new Date()));
+		conmain.setIsActive(1);
+		conmainId = dao.CHSSConsultMainAdd(conmain);
+		
+		if(conmainId>0){
+			mapConMainId.put(OldConMainId, conmainId);
+		}
+		return conmainId;
+		
+	}
+	
+	@Override
 	public long UpdateCHSSDispute(String CHSSApplyId) throws Exception {
-		       dao.CHSSReApplyBillRemove();
+		     
 		return dao.UpdateCHSSDispute(CHSSApplyId);
 	}
 	

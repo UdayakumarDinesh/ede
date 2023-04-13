@@ -3,6 +3,7 @@ package com.vts.ems.chss.service;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -202,10 +203,11 @@ public interface CHSSService
 	public List<Object[]> GetDoctorEmpanelledList() throws Exception;
 	public List<Object[]> getEmpList() throws Exception;
 	public List<Object[]> getDependantsList(String empNo) throws Exception;
-	public List<Object[]> DisputeList() throws Exception;
+	public List<Object[]> DisputeList(long EmpId) throws Exception;
 	public long CHSSReApplyDetails( String chssapplyid,String[] consultationId,String[] CHSSTestId,String[] CHSSMedicineId,String[] ChssMiscId,String EmpNo) throws Exception;
-	public long CHSSbillIdReApply(long CHSSpplyId, String BillId, String Username) throws Exception;
+	public long CHSSbillIdReApply(long CHSSpplyId, String BillId, String Username,Map<String,Long> map,Map<String, Long> mapConMainId) throws Exception;
 	public long UpdateCHSSDispute(String CHSSApplyId) throws Exception;
 	public Object[] CHSSDispReApplyStatus(String CHSSApplyId) throws Exception;
 	public Object[] OldCHSSApplyDetails(String CHSSApplyNo) throws Exception;
+	public long CHSSConMainIdReApply(long CHSSpplyId, String OldConMainId, String Username, Map<String, Long> mapConMainId) throws Exception;
 }

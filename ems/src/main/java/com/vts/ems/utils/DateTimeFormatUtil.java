@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -308,5 +309,25 @@ public class DateTimeFormatUtil
 		return(actualdate);
 	
 	}
-	
-}
+
+	public static long dayDifference(String datebaseDate) {
+		 long diff=0;
+		try {
+			 Date date = sqlDateFormat.parse(datebaseDate); // Convert the string to a Date object
+	        	
+	         
+	         if(date.compareTo(new Date())<=0) {
+	         Calendar cal1 = Calendar.getInstance();
+	         Calendar cal2 = Calendar.getInstance();
+	         cal1.setTime(date);
+	         cal2.setTime(new Date());                                         
+	         diff = cal2.getTimeInMillis() - cal1.getTimeInMillis();		
+	         diff/=(24 * 60 * 60 * 1000);
+		}
+		}catch(Exception e){e.printStackTrace();}
+		
+		return diff;
+
+	}
+}	
+

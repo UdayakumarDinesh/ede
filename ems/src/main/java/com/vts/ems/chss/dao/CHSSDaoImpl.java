@@ -33,7 +33,6 @@ import com.vts.ems.chss.model.CHSSBillMisc;
 import com.vts.ems.chss.model.CHSSBillOther;
 import com.vts.ems.chss.model.CHSSBillPkg;
 import com.vts.ems.chss.model.CHSSBillPkgItems;
-import com.vts.ems.chss.model.CHSSBillReapply;
 import com.vts.ems.chss.model.CHSSBillTests;
 import com.vts.ems.chss.model.CHSSConsultMain;
 import com.vts.ems.chss.model.CHSSContingent;
@@ -3151,12 +3150,13 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 		}
 	}
 
-	private static final String DISPUTELIST="CALL chss_dispute_list()";
+	private static final String DISPUTELIST="CALL chss_dispute_list(:EmpId)";
 	@Override
-	public List<Object[]> DisputeList() throws Exception {
+	public List<Object[]> DisputeList(long EmpId) throws Exception {
 		List<Object[]> list=null;
 		try {
 			Query query= manager.createNativeQuery(DISPUTELIST);
+			query.setParameter("EmpId", EmpId);
 			list= (List<Object[]>)query.getResultList();
 			manager.flush();
 			return list;
@@ -3281,14 +3281,7 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 		
 	}
 	
-	@Override
-	public long CHSSReApplyBillAdd(CHSSBillReapply chssBilllReapply) throws Exception
-	{
-		manager.persist(chssBilllReapply);
-		manager.flush();
-		
-		return chssBilllReapply.getNewBillId();
-	}
+
 	
 	private static final String UPDATEDISPUTE="UPDATE chss_apply_dispute SET DispReapplyStatus='S' WHERE CHSSApplyId=:CHSSApplyId";
 	@Override
@@ -3303,20 +3296,7 @@ private static final String DEPENDANTLIST="SELECT a.EmpNo,a.EmpName ,b.member_na
 			return 0L;
 		}
 	}
-	
-	private static final String CHSSREAPPLYBILLREMOVE = "TRUNCATE chss_bill_reapply";
-	@Override
-	public long CHSSReApplyBillRemove() {
-		try {
-			Query query = manager.createNativeQuery(CHSSREAPPLYBILLREMOVE);
-			return (long)query.executeUpdate();
-		}catch (Exception e) {
-			logger.error(new Date() +" Inside DAO CHSSReApplyBillRemove "+ e);
-			e.printStackTrace();
-			return 0L;
-		}
-	}
-	
+		
 	private static final String DISPREAPPLYSTATUS = "SELECT a.Action,a.DispReapplyStatus FROM chss_apply_dispute a WHERE CHSSApplyId =:CHSSApplyId";
 	@Override
 	public Object[] CHSSDispReApplyStatus(String CHSSApplyId) throws Exception {
