@@ -79,8 +79,8 @@ List<Object[]> triplist=(List<Object[]>)request.getAttribute("triplist");
 				    <input type="hidden" name="appid" value="<%=list[12] %>">
 				    <input type="hidden" name="EmpId" value="<%=list[1] %>">
 		    
-				   
-					     <select class="form-control select2"   name="tripid" id="tripid" data-container="body" data-live-search="true"  required="required" >
+
+					<select class="form-control select2"  style="width:100%" name="tripid" id="tripid" data-container="body" data-live-search="true"  required="required" >
 						<option value="" disabled="disabled" selected="selected" hidden="true" >--Select--</option>
 						
 					    <%for(Object[] trip:triplist){

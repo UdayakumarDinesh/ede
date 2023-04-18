@@ -50,7 +50,7 @@ if(NewspaperUserPrintData!=null)
 
 <div align="center"> 
 
-<div style="width: 790px !important; "align="left" >
+<div style="width: 790px !important; "align="left">
 
 <div class="container-fluid">
 <div class="row">

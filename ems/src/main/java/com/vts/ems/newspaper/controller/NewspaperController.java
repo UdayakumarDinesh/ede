@@ -273,7 +273,7 @@ public class NewspaperController {
 				mv.addObject("LabDetails", service.getLabDetails());
 				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
 				mv.addObject("NewsClaimHeader",NewsClaimHeader);
-				mv.setViewName("newspaper/NewspaperUserClaimPrint");
+				mv.setViewName("newspaper/NewspaperUserClaimPrint1");
 				
 				return mv;				
 			} 
