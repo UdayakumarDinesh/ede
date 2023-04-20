@@ -261,6 +261,8 @@ public class NewspaperController {
 			String Username = (String) ses.getAttribute("Username");
 			String name = (String) ses.getAttribute("EmpName");
 			String designation = (String) ses.getAttribute("EmpDesig");
+			
+			String empNo=(String)ses.getAttribute("EmpNo");//--me added
 			logger.info(new Date() + "Inside NewspaperPrint.htm " + Username);
 			
 			ModelAndView mv = new ModelAndView();
@@ -268,12 +270,13 @@ public class NewspaperController {
 				String NewspaperId = request.getParameter("NewspaperId");
 				Object[] NewspaperUserPrintData = service.getNewspaperUserPrintData(NewspaperId);
 				mv.addObject("name", name);
+				mv.addObject("empNo", empNo);//-me added
 				mv.addObject("desig", designation);
 				mv.addObject("NewspaperUserPrintData", NewspaperUserPrintData);
 				mv.addObject("LabDetails", service.getLabDetails());
 				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
 				mv.addObject("NewsClaimHeader",NewsClaimHeader);
-				mv.setViewName("newspaper/NewspaperUserClaimPrint1");
+				mv.setViewName("newspaper/NewspaperUserClaimPrint");
 				
 				return mv;				
 			} 

@@ -268,7 +268,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 	}
 
-	private static final String GETNEWSPAPERUSERPRINTDATA = "SELECT a.ClaimMonth,a.ClaimYear,a.ClaimAmount,a.RestrictedAmount,a.PayableAmount,b.PayLevel FROM pis_newspaper a,pis_pay_level b  WHERE  a.PayLevelId=b.PayLevelId AND  a.NewspaperId=:NewspaperId";
+	private static final String GETNEWSPAPERUSERPRINTDATA = "SELECT a.ClaimMonth,a.ClaimYear,a.ClaimAmount,a.RestrictedAmount,a.PayableAmount,b.PayLevel,b.PayGrade FROM pis_newspaper a,pis_pay_level b  WHERE  a.PayLevelId=b.PayLevelId AND  a.NewspaperId=:NewspaperId";
 	
 	@Override
 	public Object[] getNewspaperUserPrintData(String NewspaperId)throws Exception

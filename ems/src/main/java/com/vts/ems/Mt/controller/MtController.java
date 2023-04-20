@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -783,6 +784,12 @@ public class MtController {
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
+			
+			req.setAttribute("reqDate",req.getParameter("reqDate"));
+			req.setAttribute("mtRequestNo",req.getParameter("mtRequestNo"));
+			req.setAttribute("appid", req.getParameter("appidRet"));
+			req.setAttribute("EmpId", req.getParameter("EmpIdRet"));
+			
 			return "Mt/MtLink";	
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MTTripLink.htm "+Username, e);
@@ -809,7 +816,12 @@ public class MtController {
 					if(count!=0) {
 						MtApplyTransaction trx=new MtApplyTransaction();
 						trx.setMtStatus("S");
-						trx.setMtRemarks("Link By MTO");
+						if(req.getParameter("comment")==null || "".equals(req.getParameter("comment"))) {
+							trx.setMtRemarks("Link By MTO");
+						}
+						else {
+							trx.setMtRemarks(req.getParameter("comment"));
+						}
 						trx.setMtApplId(Integer.parseInt(req.getParameter("appid")));
 						trx.setActionBy((String)ses.getAttribute("EmpNo"));
 						trx.setActionDate(sdtf.format(new Date()));
