@@ -26,7 +26,6 @@
 <body>
 <%
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
-Object[] empdata = (Object[])request.getAttribute("Empdata");
 
 AddressRes addres = (AddressRes)request.getAttribute("addres"); 
 %>
@@ -35,17 +34,14 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 					<div class="row">
 						<div class="col-md-6">
 						<%if(addres!=null){ %>
-							<h5> Residential Address Edit<small><b>&nbsp;&nbsp; <%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%> 
-									</b></small></h5><%}else{ %>
-									<h5>Residential Address Add<small><b>&nbsp;&nbsp; <%if(empdata!=null){%><%=empdata[0]%>(<%=empdata[1]%>)<%}%> 
-									</b></small></h5><%}%>
+							<h5> Residential Address Edit</h5><%}else{ %>
+									<h5>Residential Address Add</h5><%}%>
 						</div>
 						   <div class="col-md-6">
 								<ol class="breadcrumb ">
-									<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-									<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-									<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
-									<li class="breadcrumb-item  " aria-current="page"><a href="Address.htm?empid=<%if(empdata!=null){%><%=empdata[2]%><%}%>">Address List</a></li>
+									<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				                    <li class="breadcrumb-item"><a href="PersonalIntimation.htm">Personal Intimations</a></li>
+				                    <li class="breadcrumb-item"><a href="PersonalIntimation.htm">Address</a> </li>
 									<li class="breadcrumb-item active " aria-current="page">Residential Address </li>
 								</ol>
 							</div>
@@ -59,11 +55,10 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 		<div class="row">
 		<div class="col-2"></div>
 		<%if(addres!=null){ %>
-				<form action="EditResAddressDetails.htm" method="POST" autocomplete="off" enctype="multipart/form-data" >
+				<form action="ResidentialAddressEdit.htm" method="POST" autocomplete="off" id="myform">
 		<%}else{ %>
-				<form action="AddResAddressDetails.htm" method="POST" autocomplete="off">
+				<form action="ResidentialAddressAdd.htm" method="POST" autocomplete="off" id="myform">
 		<%}%>
-		 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%>  <%}%>"> 
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="card"  style="width: 80%;" > 
 		<div class="card-header" align="left">
@@ -82,12 +77,12 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                    <div class="col-md-3">
                         <div class="form-group">
                           <label>State<span class="mandatory">*</span></label>
-                           <select  name="state" class="form-control input-sm selectpicker" data-live-search="true" required="required">
+                           <select id="state" name="state" class="form-control input-sm selectpicker" data-live-search="true" required>
                                 <option disabled="disabled" value="" selected="selected"> Select</option>
 								<%if(States!=null){ 
 								for (Object[] O : States) {%>
 								<%if(addres!=null){ %>
-								<option value="<%=O[1]%>"   <%if(addres.getState().equalsIgnoreCase(O[1].toString())){%> selected<%}%>><%=O[1]%></option>
+								<option value="<%=O[1]%>"   <%if(addres.getState()!=null && addres.getState().equalsIgnoreCase(O[1].toString())){%> selected<%}%>><%=O[1]%></option>
 								<%}else{%>
 								<option value="<%=O[1]%>"   ><%=O[1]%></option>
 								<%}}}%>
@@ -115,7 +110,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         
                          <div class="col-md-2">
                         <div class="form-group">
-                         <label>Mobile No.</label>
+                         <label>Mobile No.<span class="mandatory">*</span></label>
                            <input id="MobileTextBox" type="text" value="<%if(addres!=null&&addres.getMobile()!=null){%> <%=addres.getMobile()%> <%}%>" class="form-control input-sm " name="mobile"  maxlength="10"  placeholder="Enter Mobile No. " onblur="checknegative(this)" >  
                         </div>
                         </div>
@@ -222,59 +217,17 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 							 <div class="form-group">
 							<%if(addres!=null){ %>
 							<input type="hidden"  name="addressresid" value="<%=addres.getAddress_res_id()%>">
-				              <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="action" value="submit" onclick="return CommentsModel();" >SUBMIT</button>
+				              <button type="submit" class="btn btn-sm submit-btn" name="Action" value="EDIT" onclick="return CommentsModel();" >SUBMIT</button>
 								<%}else{%>
-			                   <button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="ADD">SUBMIT</button>
+			                   <button type="submit" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>
 								<%}%>
-		                       <a href="Address.htm?empid=<%if(empdata!=null){%><%=empdata[2]%><%}%>"   class="btn btn-sm  btn-info">BACK</a>
+		                     
 							 </div>
 							</div>
 						   </div> 
 					      </div>							
 						 </div>	
-						 <%if(addres!=null){ %>
-<!--------------------------- container ------------------------->
-			<div class="container">
-					
-				<!-- The Modal -->
-				<div class="modal" id="myModal">
-					 <div class="modal-dialog">
-					    <div class="modal-content">
-					     
-					        <!-- Modal Header -->
-					        <div class="modal-header">
-					          <h4 class="modal-title">The Reason For Edit</h4>
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        </div>
-					        <!-- Modal body -->
-					         <div class="modal-body">
-					             <div class="form-inline">
-					        	 <div class="form-group "  >
-					               <label>File : &nbsp;&nbsp;&nbsp;</label> 
-					               <input type="file" class=" form-control w-100"   id="file" name="selectedFile"  > 
-					      		 </div>
-					      		 </div>
-					        	
-					        	<div class="form-inline">
-					        	<div class="form-group w-100">
-					               <label>Comments : &nbsp;&nbsp;&nbsp;</label> 
-					              <textarea  class=" form-control w-100" maxlength="1000" style="text-transform:capitalize;"  id="comments"  name="comments" required="required" ></textarea> 
-					      		</div>
-					      		</div>
-					        </div>
-					      
-					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					        <!-- Modal footer -->
-					        <div class="modal-footer" >
-					        	<button type="submit"  class="btn btn-sm submit-btn" onclick="return confirm('Are You Sure To Submit?');" name="Action" value="EDIT">SUBMIT</button>
-					        </div>
-					       
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					<!----------------------------- container Close ---------------------------->
-					<%}%>
+					<input type="hidden" name="intimation" value="intimation">
 					<%if(addres!=null){ %> </form>
 					 <%}else{%></form><%}%>
 				         </div>
@@ -287,6 +240,7 @@ function CommentsModel()
 	
 	  var ResAdd =$("#resAdd").val();
 	  var City =$("#city").val();
+	  var State =$("#state").val();
 	  var CityPin= $("#CityPinTextBox").val();
 	  var Mobile = $("#MobileTextBox").val();
 	  var AltMobile = $("#AltMobileTextBox").val();
@@ -300,8 +254,13 @@ function CommentsModel()
 	  var EOutlook = $("#eOutlook").val();
 	  var fromRes=$("#fromRes").val();
 	  var currdate=new Date();
+	  
+	  if(confirm('Are You Sure to Submit?')){
 	  if(ResAdd==null || ResAdd=='' || ResAdd=="null" ){
-			alert('Enter the Permanent Address!');
+			alert('Enter the Residential Address!');
+			return false;
+		}else if(State==null || State=='' || State=="null" ){
+			alert('Please Select State!');
 			return false;
 		}else if(City==null || City=='' || City=="null" ){
 			alert('Enter the City Name!');
@@ -314,10 +273,10 @@ function CommentsModel()
 			return false;
 		}
 	   
-	  /*  else if(Mobile==null || Mobile=='' || Mobile=="null" ){
+	   else if(Mobile==null || Mobile=='' || Mobile=="null" ){
 			alert('Enter the Mobile Number!');
 			return false;
-		}else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
+		} /*else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
 			alert('Enter the Alt Mobile Number!');
 			return false;
 		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
@@ -344,9 +303,14 @@ function CommentsModel()
 		}else if(EOutlook==null || EOutlook=='' || EOutlook=="null" ){
 			alert('Enter the Email Outlook!');
 			return false;
-		} */ else{
-			$('#myModal').modal('show');
+		}  */ else{
+			$('#myform').submit();
+			return true;
 		}
+	  event.preventDefault;
+	  }else{
+		  return false;
+	  }
 
 }
 </script>

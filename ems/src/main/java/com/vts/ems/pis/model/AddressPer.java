@@ -33,7 +33,7 @@ public class AddressPer implements Serializable{
     private String state;
     private String city;
     private String pin;
-    
+    private String PerAdStatus;
     private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

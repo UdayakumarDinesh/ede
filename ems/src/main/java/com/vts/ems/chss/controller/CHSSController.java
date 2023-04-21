@@ -4455,7 +4455,7 @@ public class CHSSController
 			
 			CHSSApplyDispute dispute= new CHSSApplyDispute();
 			dispute.setCHSSApplyId(Long.parseLong(chssapplyid));
-			dispute.setResponseMsg(disputemsg);
+			dispute.setResponseMsg(disputemsg.trim());
 			
 			long count=service.ClaimDisputeResponseSubmit(dispute, ses,action);
 			
