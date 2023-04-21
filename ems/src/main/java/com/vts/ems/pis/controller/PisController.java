@@ -6560,29 +6560,28 @@ public class PisController {
 				e.printStackTrace();	
 				return "static/Error";
 			}
-			
-			
 		}
 		@RequestMapping(value="OrganisationStructure.htm")
 		public String organisationStructure(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{			
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
+//			ses.setAttribute("formmoduleid", "1");
+//			ses.setAttribute("SidebarActive","OrganisationStructure_htm");
 			try {
-				ses.setAttribute("formmoduleid", "1");
-				ses.setAttribute("SidebarActive","OrganisationStructure_htm");
-				List<Object[]> grouplist=service.getGroupListGH();
-				List<Object[]> divisionlist=service.getDivisionListDH();
-				req.setAttribute("grouplist", grouplist);
-				req.setAttribute("divisionlist", divisionlist);
-				req.setAttribute("Director", service.getDirectorDetails());
+				
+//				List<Object[]> grouplist=service.getGroupListGH();
+//				List<Object[]> divisionlist=service.getDivisionListDH();
+//				req.setAttribute("grouplist", grouplist);
+//				req.setAttribute("divisionlist", divisionlist);
+//				req.setAttribute("Director", service.getDirectorDetails());
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside OrganisationStructure.htm "+Username, e);
 				e.printStackTrace();
 				return "static/Error";
 			}
 			
-			return "pis/OrganisationStructure";
+			return "pis/OrganisationTree";
 			
 		}
 		@RequestMapping(value="DeptEmpListAjax.htm",method = RequestMethod.GET)

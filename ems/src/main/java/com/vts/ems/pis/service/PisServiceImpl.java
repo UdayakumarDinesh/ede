@@ -2089,8 +2089,8 @@ public class PisServiceImpl implements PisService
 		
 		
 		
-		// change annual declaration form status every year 1st of march to disallow employee to submit declaration		
-		@Scheduled(cron = "0 0 0 1 3 ?")
+		// change annual declaration form status every year 1st of febuary to disallow employee to submit declaration		
+		@Scheduled(cron = "0 0 0 1 2 ?")
 		public void UpdateAnnualDeclarationAllEmpDisAllow() throws Exception 
 		{
 			dao.UpdateAnnualDeclarationAllEmp("N");

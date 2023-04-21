@@ -67,7 +67,7 @@
 						<thead>
 							<tr>
 								<th style="width: 2%">SN</th>
-								<th style="width: 3%">Declaration Year</th>
+								<!-- <th style="width: 3%">Declaration Year</th> -->
 								<th style="width: 4%"> Date</th>
 								<th style="width: 4%">No of Items</th> 
 								<th style="width: 3%">Total Qty</th>
@@ -94,16 +94,10 @@
 						if(Integer.parseInt(obj[23].toString())!=0){%><%item++; %><%} if(Integer.parseInt(obj[26].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[29].toString())!=0){%><%item++; %><%}
 			
-						
-						
-						
 						%>
-						 
-						
-							
-					      <tr>
+						 <tr>
 							  <td style="width: 1%; text-align: center;"><%=++count %></td>
-									<td style="width: 2%;text-align:center;" ><%=obj[34].toString().substring(0,4) %></td>
+									<%-- <td style="width: 2%;text-align:center;" ><%=obj[34].toString().substring(0,4) %></td> --%>
 									<td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[32].toString())) %></td>
 									<td style="width: 2%;text-align:center;"><%=item %></td>  
 									<td style="width: 2%;text-align:center;"><%=total %></td>
@@ -117,12 +111,12 @@
 									
 									</td>
 									<td style="width: 2%;text-align:center;">
-									<%if(obj[33].toString().equals("I") || obj[33].toString().equals("R")){ %>
+									<%if(obj[33].toString().equals("I") || obj[33].toString().equals("R") || obj[33].toString().equals("A")){ %>
 									<button type="submit" class="btn btn-sm " name=" " value=""  formaction="ITAsset.htm" formmethod="POST" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
 								    <i class="fa fa-edit" style="color: #333C83"></i>
 								    </button>
 								    <%} %>
-								    <%if(obj[33].toString().equals("I") || obj[33].toString().equals("R")) {%>
+								    <%if(obj[33].toString().equals("I") || obj[33].toString().equals("R") || obj[33].toString().equals("A") ) {%>
 									<button type="submit" class="btn btn-sm "  formaction="InventoryView.htm" formmethod="POST"  data-toggle="tooltip" title="" data-original-title="Inventory Details">
 									<i class="fa fa-eye " style="color: black;"></i>
 									</button> 
@@ -131,8 +125,8 @@
 									<i class="fa fa-eye " style="color: black;"></i>
 									</button> 
 									<%} %>
-									 
-									</td>
+									
+								</td>
 							</tr>
 							
 								<%item=0;}%>

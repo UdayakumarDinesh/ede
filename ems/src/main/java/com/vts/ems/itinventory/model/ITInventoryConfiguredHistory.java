@@ -10,13 +10,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name="it_inventory_configure")
-public class ITInventoryConfigure {
-	                                  
+@Entity(name="it_inventory_configured_history")
+public class ITInventoryConfiguredHistory {
+	
+	
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
-	private long InventoryConfigureId;
+	private long ConfigHistoryId;
 	private long ItInventoryId;
 	private String ConfiguredBy;
 	private String ItemType;
@@ -34,10 +35,9 @@ public class ITInventoryConfigure {
 	private String PDF;
 	private String Browser;
 	private String Kavach;
-	private String  CreatedBy;
-	private String  CreatedDate;
-	private String  ModifiedBy;
-	private String  ModifiedDate;
+	private String CreatedBy;
+	private String CreatedDate;
+	
 	private int isActive;
 
 }
