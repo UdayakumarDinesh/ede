@@ -6552,8 +6552,6 @@ public class PisController {
 				e.printStackTrace();	
 				return "static/Error";
 			}
-			
-			
 		}
 		@RequestMapping(value="OrganisationStructure.htm")
 		public String organisationStructure(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
