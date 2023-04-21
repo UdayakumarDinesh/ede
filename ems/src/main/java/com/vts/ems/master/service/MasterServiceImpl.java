@@ -30,6 +30,7 @@ import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DgmMaster;
 import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
@@ -583,5 +584,48 @@ public class MasterServiceImpl implements MasterService {
 		public List<Object[]> getQualificationList() throws Exception{
 		
 			return dao. getQualificationList();
+		}
+
+		@Override
+		public List<Object[]> getDgmList() throws Exception {
+			
+			return dao.getDgmList();
+		}
+
+		@Override
+		public DgmMaster getDgmById(int DGMId) throws Exception {
+			
+			return dao.getDgmById(DGMId);
+		}
+
+		@Override
+		public long dgmAdd(DgmMaster dgmMaster) throws Exception {
+			
+			return dao.dgmAdd(dgmMaster);
+		}
+		
+		@Override
+		public long dgmEdit(DgmMaster dgmMaster) throws Exception {
+			
+			DgmMaster dgm = dao.getDgmById(dgmMaster.getDGMId());
+			dgm.setDGMCode(dgmMaster.getDGMCode());
+			dgm.setDGMName(dgmMaster.getDGMName());
+			dgm.setDGMEmpNo(dgmMaster.getDGMEmpNo());
+			dgm.setModifiedBy(dgmMaster.getModifiedBy());
+			dgm.setModifiedDate(dgmMaster.getModifiedDate());
+			
+			return dao.dgmEdit(dgm);			
+		}
+
+		@Override
+		public BigInteger duplicateDgmCodeCountAdd(String dgmCode) throws Exception {
+			
+			return dao.duplicateDgmCodeCountAdd(dgmCode);
+		}
+
+		@Override
+		public BigInteger duplicateDgmCodeCountEdit(String dgmId, String dgmCode) throws Exception {
+			
+			return dao.duplicateDgmCodeCountEdit(dgmId, dgmCode);
 		}
 }

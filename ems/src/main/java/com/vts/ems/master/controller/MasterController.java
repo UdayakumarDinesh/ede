@@ -37,6 +37,7 @@ import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DgmMaster;
 import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
@@ -1729,6 +1730,7 @@ public class MasterController {
 		  
 		 return json.toJson(duplicate);    
 	}
+	
 	@RequestMapping(value="Qualification.htm", method={RequestMethod.GET,RequestMethod.POST} )
 	public String QualificationList(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 	{
@@ -1749,5 +1751,166 @@ public class MasterController {
 		}
 		return "masters/QualificationList";
 
+	}
+	
+	@RequestMapping(value="Dgm.htm" , method={ RequestMethod.POST ,RequestMethod.GET })
+	public String DgmList(HttpServletRequest req ,HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside Dgm.htm"+UserId);
+		try {
+			ses.setAttribute("SidebarActive", "Dgm_htm");
+			String action=req.getParameter("action");
+			
+			List<Object[]> emp = service.getEmployeeList();
+			req.setAttribute("emplist", emp);
+			if("ADD".equalsIgnoreCase(action)) {
+				
+				return "masters/DgmAddEdit";
+			}
+			else if("EDIT".equalsIgnoreCase(action)) {
+				String dgmId = req.getParameter("dgmId");
+				DgmMaster dgmMaster = service.getDgmById(Integer.parseInt(dgmId));
+				req.setAttribute("dgm", dgmMaster);
+				
+				return "masters/DgmAddEdit";
+			}
+			else {
+				List<Object[]> list = service.getDgmList();
+				req.setAttribute("dgmList", list);
+				
+				return "masters/DgmList";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside Dgm.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value="DgmAdd.htm", method={RequestMethod.POST} )
+	public String DgmAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DgmAdd.htm "+UserId);
+		try {
+		
+			DgmMaster dgm = new DgmMaster();
+			dgm.setDGMCode(req.getParameter("dgmCode").toUpperCase().trim());
+			dgm.setDGMName(req.getParameter("dgmName").trim());
+			dgm.setDGMEmpNo(req.getParameter("dgmEmpNo"));
+			dgm.setIsActive(1);
+			dgm.setCreatedBy(UserId);
+			dgm.setCreatedDate(sdtf.format(new Date()));
+            long result = service.dgmAdd(dgm);
+			
+			if (result != 0) {
+				 redir.addAttribute("result", "DGM Added Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "DGM Added Unsuccessfull");
+			}
+			
+			return "redirect:/Dgm.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DgmAdd.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	@RequestMapping(value="DgmEdit.htm", method={RequestMethod.POST} )
+	public String DgmEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DgmEdit.htm "+UserId);
+		try {
+			long dgmId = Long.parseLong(req.getParameter("dgmId")) ;
+			DgmMaster dgm = new DgmMaster();
+			dgm.setDGMId(dgmId);
+			dgm.setDGMCode(req.getParameter("dgmCode").toUpperCase().trim());
+			dgm.setDGMName(req.getParameter("dgmName").trim());
+			dgm.setDGMEmpNo(req.getParameter("dgmEmpNo"));
+			dgm.setModifiedBy(UserId);
+			dgm.setModifiedDate(sdtf.format(new Date()));
+                    
+            String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(dgmId);
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("dgm_master");
+	    	   
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   service.AddMasterEditComments(masteredit , masterdto);
+	    	 
+	    	   long result = service.dgmEdit(dgm);
+	    	   
+			if (result != 0) {
+				 redir.addAttribute("result", "DGM Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "DGM Update Unsuccessfull");
+			}
+			
+			 return "redirect:/Dgm.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DgmEdit.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	
+	@RequestMapping(value="DgmCodeAddCheckDuplicate.htm", method=RequestMethod.GET)
+	public @ResponseBody String DgmCodeAddCheckDuplicate(HttpSession ses, HttpServletRequest req) throws Exception {
+		String UserId=(String)ses.getAttribute("Username");
+		BigInteger duplicate=null;
+		logger.info(new Date() +"Inside DgmCodeAddCheckDuplicate.htm "+UserId);
+		try
+		{	  
+			String dgmCode = req.getParameter("dgmCode");
+			 if(dgmCode!=null) {
+				 duplicate = service.duplicateDgmCodeCountAdd(dgmCode);
+			 }
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DgmCodeAddCheckDuplicate.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  Gson json = new Gson();
+		  return json.toJson(duplicate);           
+		  
+	}
+	
+	@RequestMapping(value="DgmCodeEditCheckDuplicate.htm", method=RequestMethod.GET)
+	public @ResponseBody String DgmCodeEditCheckDuplicate(HttpSession ses, HttpServletRequest req) throws Exception {
+		
+		String UserId=(String)ses.getAttribute("Username");
+		
+		BigInteger duplicate=null;
+		logger.info(new Date() +"Inside DgmCodeEditCheckDuplicate.htm "+UserId);
+		Gson json = new Gson();
+		
+		try
+		{	  
+			String dgmCode = req.getParameter("dgmCode");
+			String dgmId = req.getParameter("dgmId");
+			if(dgmCode!=null && dgmId!=null) {
+				duplicate = service.duplicateDgmCodeCountEdit(dgmId, dgmCode);
+			}
+	          
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DgmCodeEditCheckDuplicate.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  
+		 return json.toJson(duplicate);    
 	}
 }

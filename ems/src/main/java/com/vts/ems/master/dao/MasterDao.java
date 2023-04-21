@@ -10,6 +10,7 @@ import com.vts.ems.chss.model.CHSSTestSub;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DgmMaster;
 import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
@@ -91,7 +92,12 @@ public interface MasterDao {
 	public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception;
 	public List<Object[]> getGroupList() throws Exception;
 	public List<Object[]> getQualificationList()throws Exception;
-	
+	public List<Object[]> getDgmList() throws Exception;
+	public DgmMaster getDgmById(long l) throws Exception;
+	public long dgmAdd(DgmMaster dgmMaster) throws Exception;
+	public long dgmEdit(DgmMaster dgmMaster) throws Exception;
+	public BigInteger duplicateDgmCodeCountAdd(String dgmCode) throws Exception;
+	public BigInteger duplicateDgmCodeCountEdit(String dgmId, String dgmCode) throws Exception;
 	
 	
 	
