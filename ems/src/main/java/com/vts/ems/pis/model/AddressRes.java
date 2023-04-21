@@ -29,6 +29,7 @@ public class AddressRes implements Serializable{
 	private String alt_mobile;
 	private String ext;
     private Date from_res_addr;
+    private Date to_res_addr;
     private String QtrNo;
 	private String QtrType;
 	private String QtrDetails;
@@ -40,6 +41,12 @@ public class AddressRes implements Serializable{
 	private String state;
 	private String city;
 	private String pin;
+	private String ResAdStatus;
+	private String SubmittedOn;
+	private String VerifiedOn;
+	private String ReceivedOn;
+	private String ApprovedOn;
+	private int PISStatusId;
 	
 	private int IsActive;
 	private String CreatedBy;

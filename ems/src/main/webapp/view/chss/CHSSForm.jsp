@@ -738,13 +738,16 @@ th,td
 						<td class="right text-green"></td>
 						<td ></td>
 					</tr> --%>
+					<%if(chssapplydata[21]==null) {%>
 					<tr>
+					   
 						<td colspan="4" class="right"><b>Total Discount (-)</b></td>
 						<td class="right text-blue"><b><%=discount %></b></td>
 						<td class="right text-green"></td>
 						<td ></td>
+						
 					</tr>
-										
+						<%} %>				
 					<tr>
 						<td colspan="4" class="right"><b>Total</b></td>
 						<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>

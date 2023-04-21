@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,9 @@ public class MtController {
 	 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	 SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sf= DateTimeFormatUtil.getSqlDateFormat();
+	
+	String formmoduleid = "30";
+	
 	@Autowired                   
 	private MtService service;
 	
@@ -60,7 +64,7 @@ public class MtController {
 			String logintype = (String)ses.getAttribute("LoginType");
 			List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 		
-			ses.setAttribute("formmoduleid", "30"); 
+			ses.setAttribute("formmoduleid", formmoduleid ); 
 			ses.setAttribute("SidebarActive", "MtDashboard_htm");
 			req.setAttribute("dashboard", admindashboard);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
@@ -313,7 +317,7 @@ public class MtController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside MtList.htm "+Username);
 		try {
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 
 			req.setAttribute("Mtapplylist",service.GetApplyDataOFApplyStatus((String)ses.getAttribute("EmpNo")));
 			req.setAttribute("Mtapplysanclist",service.GetApplyDataOfSancApplyStatus((String)ses.getAttribute("EmpNo")));	
@@ -520,7 +524,7 @@ public class MtController {
 			req.setAttribute("triplist",service.getListOfTrip());
 			req.setAttribute("linkrequestlist",service.GetLinkRequest());
 			
-			ses.setAttribute("formmoduleid", "6"); 
+			ses.setAttribute("formmoduleid", formmoduleid); 
 			ses.setAttribute("SidebarActive", "MTHome_htm");
 			
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
@@ -642,7 +646,7 @@ public class MtController {
 		try {
 			req.setAttribute("GhApproveList", service.GhApproveList((String)ses.getAttribute("EmpNo")));	
 			ses.setAttribute("SidebarActive", "MtGhApprove_htm");
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
@@ -776,10 +780,16 @@ public class MtController {
 			req.setAttribute("triplist",service.getListOfTrip());
 			req.setAttribute("comp","link");
 			ses.setAttribute("SidebarActive", "MTTripLink_htm");
-			ses.setAttribute("formmoduleid", "6");
+			ses.setAttribute("formmoduleid", formmoduleid);
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
+			
+			req.setAttribute("reqDate",req.getParameter("reqDate"));
+			req.setAttribute("mtRequestNo",req.getParameter("mtRequestNo"));
+			req.setAttribute("appid", req.getParameter("appidRet"));
+			req.setAttribute("EmpId", req.getParameter("EmpIdRet"));
+			
 			return "Mt/MtLink";	
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MTTripLink.htm "+Username, e);
@@ -806,7 +816,12 @@ public class MtController {
 					if(count!=0) {
 						MtApplyTransaction trx=new MtApplyTransaction();
 						trx.setMtStatus("S");
-						trx.setMtRemarks("Link By MTO");
+						if(req.getParameter("comment")==null || "".equals(req.getParameter("comment"))) {
+							trx.setMtRemarks("Link By MTO");
+						}
+						else {
+							trx.setMtRemarks(req.getParameter("comment"));
+						}
 						trx.setMtApplId(Integer.parseInt(req.getParameter("appid")));
 						trx.setActionBy((String)ses.getAttribute("EmpNo"));
 						trx.setActionDate(sdtf.format(new Date()));

@@ -2015,7 +2015,9 @@ public class CHSSController
 				req.setAttribute("ClaimDisputeData", service.getClaimDisputeData(chssapplyid));
 				req.setAttribute("ClaimRemarksHistory", service.ClaimRemarksHistory(chssapplyid));
 			}
-	
+	        if(chssapplydata[22]!=null && chssapplydata[22].toString()!="0") {
+	        	req.setAttribute("contingentdata", service.CHSSContingentData(chssapplydata[22].toString() ));
+	        }
 
 			req.setAttribute("logintype", LoginType);
 			req.setAttribute("view_mode", view_mode);
@@ -4453,7 +4455,7 @@ public class CHSSController
 			
 			CHSSApplyDispute dispute= new CHSSApplyDispute();
 			dispute.setCHSSApplyId(Long.parseLong(chssapplyid));
-			dispute.setResponseMsg(disputemsg);
+			dispute.setResponseMsg(disputemsg.trim());
 			
 			long count=service.ClaimDisputeResponseSubmit(dispute, ses,action);
 			
@@ -5632,11 +5634,12 @@ public class CHSSController
 	@RequestMapping(value="DisputeList.htm", method = RequestMethod.GET)
 	public String UserDisputeList(HttpServletRequest req, HttpServletResponse response, HttpSession ses) throws Exception {
 		String Username = (String) ses.getAttribute("Username");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
 		ses.setAttribute("SidebarActive", "DisputeList_htm");
 		ses.setAttribute("formmoduleid", formmoduleid);
 		logger.info(new Date() +"Inside DisputeList.htm "+Username);	
 		try {
-			req.setAttribute("DisputeList", service.DisputeList());		
+			req.setAttribute("DisputeList", service.DisputeList(EmpId));		
 			return "chss/DisputeList";
 		}catch (Exception e) {		
 			e.printStackTrace();

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="java.util.List" %>
+    <%@ page import="java.util.List,com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +17,7 @@
 <body>
 <%
  List<Object[]> DisputeList =(List<Object[]>)request.getAttribute("DisputeList");
+
 %>
    <div class="card-header page-top">
 		<div class="row">
@@ -71,6 +72,7 @@
 										</thead>
 										<tbody>
 											<%long slno=0;
+											if(DisputeList!=null){
 											for(Object[] obj : DisputeList){ 
 												slno++; 
 												
@@ -83,7 +85,8 @@
 													<td><%=obj[5] %></td>
 													<td style="text-align:right;"><%=obj[6] %></td>
 													<td style="text-align:right;"><%=obj[7] %></td>
-													<td style=""><%=obj[8] %></td>		
+												    <td><%if(!obj[8].toString().isEmpty()){%><%=obj[8]%><%}else{%>-<%}%></td>
+													<%-- <td style=""> <%if(obj[8]!=null && obj[8].toString().trim()!="") {%> <%=obj[8] %> <%}else{%>--<%}%></td> --%>		
 													
 													<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
 													  <%if(obj[12]!=null || obj[13]!=null || obj[14]!=null) {%>
@@ -94,17 +97,20 @@
 									                   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:red; font-weight: 600;">  &nbsp;Claim not initiated <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
 									                   <%} %>
 													</td>							    		
-													<td style="">
-													<%if(obj[9].toString().equalsIgnoreCase("Y")) {
-													if(obj[10].toString().equalsIgnoreCase("OPD")){
-													%>								 
+													<td>
+													<%										              
+													   long diff = DateTimeFormatUtil.dayDifference(obj[15].toString());
+                                                     if(obj[9].toString().equalsIgnoreCase("Y") && diff<=15) {
+													 if(obj[10].toString().equalsIgnoreCase("OPD")){
+													%>		
+																														 
 													 <button type="submit" class="btn btn-sm view-icon" formaction="ClaimReApply.htm" name="chssapplyid" value="<%=obj[1] %>" 
 														 data-toggle="tooltip" data-placement="top"
 														 
 														 <%if(obj[11].toString().equalsIgnoreCase("S")) {%>
 														  title="Applied" style=" font-weight: 600;"> 														  												  
 														  <%}else{ %>
-														  title="Re-Apply OPD" style="font-weight: 600;">
+														  title="Re-Claim" style="font-weight: 600;">
 														  <%} %>					
 													<i class="fa-solid fa-eye"></i></button>
 													 <%if(obj[14]!=null){ %>
@@ -114,14 +120,14 @@
 										            	
 													<%} }else if(obj[10].toString().equalsIgnoreCase("IPD")) {%> 
 													 <button type="submit" class="btn btn-sm view-icon" formaction="ClaimReApplyIPD.htm" name="chssapplyid" value="<%=obj[1] %>" 
-														 data-toggle="tooltip" data-placement="top" title="Re-Apply IPD" style="font-weight: 600;" >
+														 data-toggle="tooltip" data-placement="top" title="Re-Claim" style="font-weight: 600;" >
 													 <i class="fa-solid fa-eye"></i></button>
 													<%} }%>
 													<input type="hidden" name="view_mode" value="U">
 													
 													</td>
 												</tr>
-											<%} %> 											
+											<%} }%> 											
 										</tbody>										
 									</table>
 								</div>

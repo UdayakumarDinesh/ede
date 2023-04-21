@@ -75,7 +75,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                      <div class="col-md-6">
 		                <div class="form-group">
 		                	<label>Residential  Address <span class="mandatory">*</span></label>
-		                    <input type="text"  value="<%if(addres!=null&&addres.getRes_addr()!=null){%><%=addres.getRes_addr()%><%}%>" class="form-control input-sm" maxlength="4000" id="resAdd" name="resAdd" required="required" placeholder="Enter Residential  Address" onclick="return trim(this)" onchange="return trim(this)">
+		                    <input type="text"  value="<%if(addres!=null&&addres.getRes_addr()!=null){%> <%=addres.getRes_addr()%><%}%>" class="form-control input-sm" maxlength="4000" id="resAdd" name="resAdd" required="required" placeholder="Enter Residential  Address" onclick="return trim(this)" onchange="return trim(this)">
 		                </div>
 		                </div>
          

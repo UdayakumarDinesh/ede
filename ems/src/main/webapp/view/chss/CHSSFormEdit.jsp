@@ -130,6 +130,7 @@ th,td
 	
 <%
 	Object[] chssapplydata = (Object[])request.getAttribute("chssapplydata");
+	Object[] contingentdata = (Object[])request.getAttribute("contingentdata");
 	List<Object[]> chssbillslist = (List<Object[]>)request.getAttribute("chssbillslist");
 	
 	List<Object[]> ConsultDataList = (List<Object[]>)request.getAttribute("ConsultDataList");
@@ -242,7 +243,7 @@ th,td
 										    
 										    <b>Claim No : <%=chssapplydata[16] %></b> 
 									
-										    <b style="color:red;margin-left:24%;">Dispute Claim Against Claim No : <%=chssapplydata[21] %></b> 
+										    <b style="color:red;margin-left:24%;">This is ReClaim Against Claim No : <%=chssapplydata[21] %></b> 
 										    
 										    </th>
 										<%}else{ %>
@@ -875,7 +876,7 @@ th,td
 											totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 											}%>
 										<tr>
-										
+							
 											<td colspan="4" class="right"><b>Total</b></td>						
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
@@ -888,10 +889,13 @@ th,td
 										</tr>
 							
 										<tr>
-											<td colspan="4" class="right"><b>Total Discount (-)</b></td>
+											<% if(chssapplydata[21]==null){%>
+										    <td colspan="4" class="right"><b>Total Discount (-)</b></td>
 											<td class="right text-blue"><b><%=discount %></b></td>
 											<td class="right text-green"></td>
 											<td ></td>
+									     	<%} %>
+											
 											
 										</tr>
 															
@@ -1034,7 +1038,7 @@ th,td
 							
 							<% }if(chssapplydata[21]!=null){%>
 							<div class="col-md-12" align="left" style="margin-bottom: 5px;">
-							 <b>NOTE :</b> &nbsp;&nbsp;<b style="color:red;">Dispute Claim Against Claim No : &nbsp;&nbsp;<%=chssapplydata[21] %></b> <br>
+							 <b>NOTE :</b> &nbsp;&nbsp;<b style="color:red;">This is ReClaim Against Claim No : &nbsp;&nbsp;<%=chssapplydata[21] %></b> <br>
 							</div>
 							<%}if(chssstatusid==2 ||  chssstatusid==5 ){ %>
 								
@@ -1130,14 +1134,22 @@ th,td
 						
 						<form action="ClaimDisputeSubmit.htm" method="post">
 							<div class="row">
+							<div class="col-md-12 w-100" align="left">
+									<br><b>NOTE :</b> <b style="color:red;">Dispute can be raised within 30 days of settlement </b>									
+								</div>
+								<%
+								long diff = DateTimeFormatUtil.dayDifference(contingentdata[9].toString());
+								if(contingentdata[9]!=null && diff<=30) {
+									
+								%>													
 								<div class="col-md-12 w-100" align="left">
-									<br><b>Raise Dispute:</b><br>
+									<b>Raise Dispute:</b><br>
 									<textarea rows="5" style="width: 100%;" maxlength="1000" name="disputemsg" id="disputemsg" required="required"></textarea>
 								</div>
 								<div class="col-md-12 w-100" align="center">
 									<button type="submit" class="btn btn-sm submit-btn"  onclick="return checkDisputeMsg('disputemsg')" >submit dispute</button>
 								</div>
-								
+								<%} %>
 							</div>
 							<input type="hidden" name="chssapplyid" value="<%=chssapplydata[0]%>">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

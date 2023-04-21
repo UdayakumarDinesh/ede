@@ -431,7 +431,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		}
 	}
 
-    public static final String DUPLICATESUBCATEGORYADD = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category AS a, helpdesk_category AS b WHERE b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategory=:ticketSubCategory";
+    public static final String DUPLICATESUBCATEGORYADD = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category a, helpdesk_category b WHERE a.TicketCategoryId=b.TicketCategoryId AND b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategory=:ticketSubCategory";
 	@Override
 	public BigInteger ticketSubCategoryDuplicateAddCheck(String ticketCategoryId,String ticketCategory) throws Exception {
 		try {
@@ -446,7 +446,7 @@ public class helpdeskDaoImpl implements helpdeskDao {
 		}
 	}
 
-	public static final String DUPLICATESUBCATEGORYEDIT = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category AS a, helpdesk_category AS b WHERE b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategoryId!=:ticketSubCategoryId AND a.TicketSubCategory=:ticketSubCategory";
+	public static final String DUPLICATESUBCATEGORYEDIT = "SELECT COUNT(a.TicketSubCategory) FROM helpdesk_sub_category a, helpdesk_category b WHERE a.TicketCategoryId=b.TicketCategoryId AND b.TicketCategoryId=:ticketCategoryId AND a.TicketSubCategoryId!=:ticketSubCategoryId AND a.TicketSubCategory=:ticketSubCategory";
 	@Override
 	public BigInteger ticketSubCategoryDuplicateEditCheck(String ticketSubCategoryId,String ticketCategoryId, String ticketCategory) throws Exception {
 		try {
