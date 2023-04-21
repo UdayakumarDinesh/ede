@@ -876,7 +876,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return null;
 			}
 		}
-         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,b.EmpName  AS 'DivisionHEAD' ,c.empname AS 'DGM' FROM division_master  a,employee  b  , employee c  WHERE b.Empno=a.DivisionHeadId  AND c.empno=a.dgmid and a.isactive=1";
+         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,b.EmpName  AS 'DivisionHEAD' ,c.dgmcode AS 'DGM' FROM division_master  a,employee  b  , dgm_master c WHERE b.Empno=a.DivisionHeadId  AND c.dgmid=a.dgmid AND a.isactive=1";
 		@Override
 		public List<Object[]> getDepartmentsList() throws Exception {
 			List <Object[]>list=null;

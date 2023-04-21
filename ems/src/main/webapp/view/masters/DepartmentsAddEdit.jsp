@@ -42,10 +42,10 @@ List<Object[]> DGMList=(List<Object[]>)request.getAttribute("DGMList");
 			<div class="card" >
 				<div class="card-body  " align="center" >
 					<%if(dept!=null){ %>
-					<form name="myfrm" action="DepartmentEdit.htm" method="POST" id="addfrm" autocomplete="off"  enctype="multipart/form-data" >	
-						<%}else{%>
-					<form name="myfrm" action="DepartmentAdd.htm" method="POST" id="addfrm" autocomplete="off" >	
-						<%}%>
+						<form name="myfrm" action="DepartmentEdit.htm" method="POST" id="addfrm" autocomplete="off"  enctype="multipart/form-data" >	
+							<%}else{%>
+						<form name="myfrm" action="DepartmentAdd.htm" method="POST" id="addfrm" autocomplete="off" >	
+					<%}%>
 							
 						<div class="form-group">
 							<div class="table-responsive">
