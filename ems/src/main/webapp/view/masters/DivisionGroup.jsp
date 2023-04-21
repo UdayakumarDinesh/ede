@@ -60,7 +60,7 @@
 										<th> Group Code    </th>
 										<th> Group Name    </th>
 										<th> Group Head </th>
-										<!-- <th> Designation   </th> -->
+										<th> Division Name   </th> 
 									</tr>
 								</thead>
 								<tbody>
@@ -69,8 +69,8 @@
 											<td style="text-align: center;"><input type="radio" name="groupId" value="<%=obj[0] %>"> </td>
 											<td style="text-align: center;"><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
-											<td><%=obj[3]+", "+obj[4]%> </td>
-											
+											<td style="text-align: center;"><%=obj[3]+", "+obj[4]%> </td>
+											<td><%=obj[5]%> </td>
 										</tr>
 									 <%} }%>
 								</tbody>

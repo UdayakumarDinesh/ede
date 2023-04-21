@@ -21,8 +21,8 @@ public class DivisionMaster
 	private long DivisionId;
 	private String DivisionCode;
 	private String DivisionName;
-	private long DivisionHeadId;
-	private long GroupId;
+	private String DivisionHeadId;
+	private String DGMId;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;
