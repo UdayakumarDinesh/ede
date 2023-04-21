@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -146,7 +147,29 @@ public class PisDaoImpl implements PisDao {
 		}
 		return divlist;
 	}
+	@Override
+	public List<DivisionGroup> GroupList() throws Exception
+	{
+		List<DivisionGroup> divlist = new ArrayList<DivisionGroup>();
+		try {
 
+			CriteriaBuilder cb = manager.getCriteriaBuilder();
+			CriteriaQuery<DivisionGroup> cq = cb.createQuery(DivisionGroup.class);
+			Root<DivisionGroup> root = cq.from(DivisionGroup.class);
+
+			Predicate p1 = cb.equal(root.get("IsActive"), 1);
+
+			cq = cq.select(root).where(p1);
+
+			TypedQuery<DivisionGroup> allquery = manager.createQuery(cq);
+			divlist = allquery.getResultList();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO Group List"+e);
+			e.printStackTrace();
+		}
+		return divlist;
+	}
 	@Override
 	public List<EmployeeDesig> DesigList() throws Exception {
 		List<EmployeeDesig> desiglist = new ArrayList<EmployeeDesig>();
@@ -375,14 +398,10 @@ public class PisDaoImpl implements PisDao {
 	{
 		EmployeeDetails employee = null;
 		try {
-			CriteriaBuilder cb = manager.getCriteriaBuilder();
-			CriteriaQuery<EmployeeDetails> cq = cb.createQuery(EmployeeDetails.class);
-			Root<EmployeeDetails> root = cq.from(EmployeeDetails.class);
-			Predicate p1 = cb.equal(root.get("EmpNo"),  Long.parseLong(empno));
-			cq = cq.select(root).where(p1);
-			TypedQuery<EmployeeDetails> allquery = manager.createQuery(cq);
-			employee = allquery.getResultList().get(0);		
-
+			
+			Query query = manager.createQuery("FROM EmployeeDetails WHERE EmpNo=:empno AND IsActive=1");
+			query.setParameter("empno",empno);
+			employee =(EmployeeDetails)query.getSingleResult();
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO getEmployeeDetailsData "+e);
 			e.printStackTrace();
@@ -3180,6 +3199,24 @@ private static final String DEPEMPLIST="SELECT a.EmpName,a.EmpNo ,b.designation,
 		}
 		return emplist;
 	}
+	private static final String GETDIVLIST="SELECT groupid , groupname FROM division_group WHERE divisionid=:divisionId";
+
+	@Override
+	public List<Object[]> GetDivisionList(String divisionId)throws Exception
+	{
+
+		List<Object[]> emplist=null;
+		try {
+			
+			Query query = manager.createNativeQuery(GETDIVLIST);
+			query.setParameter("divisionId", divisionId);
+			 emplist =(List<Object[]>) query.getResultList();
+			
+		} catch (Exception e) {
+
+		}
+		return emplist;
 	
+	}
 }
 	

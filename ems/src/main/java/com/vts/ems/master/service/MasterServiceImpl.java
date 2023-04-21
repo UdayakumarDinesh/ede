@@ -29,11 +29,11 @@ import com.vts.ems.master.dao.MasterDao;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
-import com.vts.ems.master.model.Department;
 import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 
 @Service
@@ -471,7 +471,7 @@ public class MasterServiceImpl implements MasterService {
 			return dao.getEmpList();
 		}
 		@Override
-		public int DepartmentAdd(Department dep) throws Exception {
+		public int DepartmentAdd(DivisionMaster dep) throws Exception {
 			
 			return dao.DepartmentAdd(dep);
 		}
@@ -483,14 +483,14 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		@Override
-		public int UpdateDepartment(Department dep) throws Exception {
+		public int UpdateDepartment(DivisionMaster dep) throws Exception {
 			logger.info(new Date() +"Inside SERVICE UpdateDepartment ");
-			Department department=dao.departmentEdit(dep.getDivisionId());
+			DivisionMaster department=dao.departmentEdit(dep.getDivisionId());
 			department.setDivisionId(dep.getDivisionId());
 			department.setDivisionCode(dep.getDivisionCode());
 			department.setDivisionName(dep.getDivisionName());
 			department.setDivisionHeadId(dep.getDivisionHeadId());
-			department.setGroupId(dep.getGroupId());
+			department.setDGMId(dep.getDGMId());
 			department.setModifiedBy(dep.getModifiedBy());
 			department.setModifiedDate(dep.getModifiedDate());
 			return dao.updateDepartment(department);
@@ -540,6 +540,7 @@ public class MasterServiceImpl implements MasterService {
 			divgrp.setGroupId(divisionGroup.getGroupId());
 			divgrp.setGroupCode(divisionGroup.getGroupCode());
 			divgrp.setGroupName(divisionGroup.getGroupName());
+			divgrp.setDivisionId(divisionGroup.getDivisionId());
 			divgrp.setGroupHeadId(divisionGroup.getGroupHeadId());
 			divgrp.setModifiedBy(divisionGroup.getModifiedBy());
 			divgrp.setModifiedDate(divisionGroup.getModifiedDate());
@@ -584,4 +585,10 @@ public class MasterServiceImpl implements MasterService {
 		
 			return dao. getQualificationList();
 		}
+		@Override
+		public List<Object[]> getDGMList()throws Exception
+		{
+			return dao.getDGMList();
+		}
+
 }

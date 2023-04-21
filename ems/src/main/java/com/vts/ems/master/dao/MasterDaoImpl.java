@@ -30,6 +30,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -875,7 +876,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 				return null;
 			}
 		}
-         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,c.GroupCode,b.EmpName AS DivisionHEAD FROM division_master AS a,employee AS  b,division_group AS c WHERE b.EmpId=a.DivisionHeadId AND c.GroupId=a.GroupId";
+         private static final String DEPARTMENTLIST="SELECT a.DivisionId,a.DivisionCode,a.DivisionName,b.EmpName  AS 'DivisionHEAD' ,c.empname AS 'DGM' FROM division_master  a,employee  b  , employee c  WHERE b.Empno=a.DivisionHeadId  AND c.empno=a.dgmid and a.isactive=1";
 		@Override
 		public List<Object[]> getDepartmentsList() throws Exception {
 			List <Object[]>list=null;
@@ -892,7 +893,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			
 		}
 		
-		 private static final String EMPLIST="select EmpId,EmpName from employee where isactive=1";
+		 private static final String EMPLIST="select EmpId,EmpName , empno from employee where isactive=1";
 		 
 		 @Override public List<Object[]> getEmpList() throws Exception {
 		 List<Object[]> emplist=null;
@@ -910,7 +911,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		 }
 
 		@Override
-		public int DepartmentAdd(Department dep) throws Exception {
+		public int DepartmentAdd(DivisionMaster dep) throws Exception {
 			try {
 				manager.persist(dep);
 				manager.flush();
@@ -922,7 +923,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 			
 		}
-      private static final String DEPTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId,GroupId from division_master where DivisionId=:deptId";
+      private static final String DEPTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId,DGMId from division_master where DivisionId=:deptId";
 
 		@Override
 		public Object[] departmentEdit(String deptId) throws Exception {			
@@ -938,12 +939,11 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 			}
 			
 		}
-		 private static final String DEPARTMENTEDIT="select DivisionId,DivisionCode,DivisionName,DivisionHeadId from division_master where DivisionId=:deptId";
 		@Override
-		public Department departmentEdit(long divisionId) throws Exception {
+		public DivisionMaster departmentEdit(long divisionId) throws Exception {
 			try {
 				
-				return manager.find(Department.class, divisionId);	
+				return manager.find(DivisionMaster.class, divisionId);	
 				
 			} catch (Exception e) {
 				 logger.error(new Date()+" Inside DAO departmentEdit "+ e);
@@ -953,7 +953,7 @@ private static final String DUPLICATEDOCQUALIFICATION = "SELECT COUNT(docqualifi
 		}
 
 		@Override
-		public int updateDepartment(Department department) throws Exception {
+		public int updateDepartment(DivisionMaster department) throws Exception {
 			try {
 				 manager.merge(department);
 				 manager.flush();
@@ -1051,8 +1051,7 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 			}
 		}
 		
-		private static final String DIVISIONGROUPLIST = "SELECT a.GroupId,UPPER (a.GroupCode),a.GroupName, b.EmpName AS DivisionHead, c.Designation FROM division_group a,employee b,employee_desig c\r\n"
-				+ "WHERE b.EmpId =a.GroupHeadId AND c.DesigId = b.DesigId ORDER BY a.GroupId DESC"; 
+		private static final String DIVISIONGROUPLIST = "SELECT a.GroupId,UPPER (a.GroupCode),a.GroupName, b.EmpName AS DivisionHead, c.Designation , d.divisionname FROM division_group a,employee b,employee_desig c , division_master d  WHERE b.Empno =a.GroupHeadId AND c.DesigId = b.DesigId AND d.divisionid=a.divisionid ORDER BY a.GroupId DESC"; 
 		@Override
 		public List<Object[]> getDivisionGroupsList() throws Exception {
 			List <Object[]>list=null;
@@ -1067,7 +1066,7 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 			}
 			
 		}
-		public static final String EMPLOYEELIST = "SELECT EmpId, EmpName FROM employee";
+		public static final String EMPLOYEELIST = "SELECT EmpId, EmpName , Empno FROM employee";
 		@Override
 		public List<Object[]> getEmployeeList() throws Exception {
 			List <Object[]>list=null;
@@ -1130,4 +1129,21 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 			
 			return list;
 		}
+		
+		private static final String DGMLIST="SELECT dgmid, dgmcode , dgmname FROM dgm_master WHERE isactive=1";
+
+		@Override
+		public List<Object[]> getDGMList()throws Exception
+		{
+			List <Object[]> list =null;
+			try {
+				Query query = manager.createNativeQuery(DGMLIST);
+				list =(List <Object[]>) query.getResultList();
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside DAO getDGMList "+ e);
+				e.printStackTrace();
+			}
+			return list;
+		}
+
 }

@@ -42,6 +42,7 @@ import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -1466,11 +1467,11 @@ public class MasterController {
 			ses.setAttribute("SidebarActive", "DepartmentsList_htm");
 			String action=req.getParameter("action");
 			List<Object[]> EmpList=service.getEmpList();
-			List<Object[]> groupList = service.getGroupList();
+			List<Object[]> dgmList=service.getDGMList();
 			if("Add".equalsIgnoreCase(action)) {
 				
 				req.setAttribute("Emplist",EmpList );
-				req.setAttribute("groupList", groupList);
+				req.setAttribute("DGMList", dgmList);
 				return "masters/DepartmentsAddEdit";
 			}
 			else if("Edit".equalsIgnoreCase(action)) {
@@ -1478,7 +1479,7 @@ public class MasterController {
 				Object[] deptdetails=(Object[])service.departmentEdit(DeptId);
 			    req.setAttribute("Department", deptdetails);
 			    req.setAttribute("Emplist",EmpList );
-			    req.setAttribute("groupList", groupList);
+			    req.setAttribute("DGMList", dgmList);
 				return "masters/DepartmentsAddEdit";
 			}else {
 				 Deparmentslist=service.getDepartmentslist();
@@ -1504,15 +1505,15 @@ public class MasterController {
 				String depCode = req.getParameter("Departmentcode");
 				String depName = req.getParameter("DepartmentName");
 				String depHead = req.getParameter("DepartmentHead");
-				String groupId = req.getParameter("groupCode");
+				String dgmid = req.getParameter("DGMId");
 				
-				Department dep=new Department();
+				DivisionMaster dep=new DivisionMaster();
 				 dep.setDivisionCode(depCode.toUpperCase().trim());
 				 dep.setDivisionName(depName.trim());
-				 dep.setDivisionHeadId(Long.parseLong(depHead));
+				 dep.setDivisionHeadId(depHead);
 				 dep.setCreatedBy(UserId);
 				 dep.setCreatedDate(sdtf.format(new Date()));
-				 dep.setGroupId( Long.parseLong(groupId));
+				 dep.setDGMId(dgmid);
 				 dep.setIsActive(1);
 				int result=service.DepartmentAdd(dep);
 				if(result>0) {
@@ -1539,14 +1540,14 @@ public class MasterController {
 			String depCode = req.getParameter("Departmentcode");
 			String depName = req.getParameter("DepartmentName");
 			String depHead = req.getParameter("DepartmentHead");
-			String groupId = req.getParameter("groupCode");
+			String DGMId = req.getParameter("DGMId");
 			
-			Department dep=new Department();
+			DivisionMaster dep=new DivisionMaster();
 			dep.setDivisionId(Long.parseLong(deptId));
 			dep.setDivisionCode(depCode.toUpperCase().trim());
 			dep.setDivisionName(depName.trim());
-			dep.setDivisionHeadId(Long.parseLong(depHead));
-			dep.setGroupId( Long.parseLong(groupId));
+			dep.setDivisionHeadId(depHead);
+			dep.setDGMId(DGMId);
 			dep.setModifiedBy(UserId);
 			dep.setModifiedDate(sdtf.format(new Date()));					
 			String comments = (String)req.getParameter("comments");
@@ -1587,6 +1588,8 @@ public class MasterController {
 			
 			List<Object[]> emp = service.getEmployeeList();
 			req.setAttribute("grpheadlist", emp);
+			List<Object[]>	 Deparmentslist=service.getDepartmentslist();
+			req.setAttribute("Deparmentlist", Deparmentslist);
 			if("ADD".equalsIgnoreCase(action)) {
 				
 				return "masters/DivisionGroupAddEdit";
@@ -1625,11 +1628,12 @@ public class MasterController {
 			String groupCode = (String)req.getParameter("groupCode");
 			String groupName = (String)req.getParameter("groupName");
 			String groupHeadId = (String)req.getParameter("groupHeadId");
-			
+			String divisionid = (String)req.getParameter("DepartmentId");
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupCode(groupCode.toUpperCase());
 			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
+			grp.setGroupHeadId(groupHeadId);
+			grp.setDivisionId(Integer.parseInt(divisionid));
 			grp.setCreatedBy(UserId);
 			grp.setCreatedDate(sdtf.format(new Date()));
 			grp.setIsActive(1);
@@ -1660,13 +1664,14 @@ public class MasterController {
 			String groupCode = (String)req.getParameter("groupCode");
 			String groupName = (String)req.getParameter("groupName");
 			String groupHeadId = (String)req.getParameter("groupHeadId");
-			
+			String divisionid = (String)req.getParameter("DepartmentId");
 			
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupId(Integer.parseInt(groupId));
 			grp.setGroupCode(groupCode.toUpperCase());
 			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
+			grp.setGroupHeadId(groupHeadId);
+			grp.setDivisionId(Integer.parseInt(divisionid));
 //			grp.setIsActive(1);
 			grp.setModifiedBy(UserId);
 			grp.setModifiedDate(sdtf.format(new Date()));

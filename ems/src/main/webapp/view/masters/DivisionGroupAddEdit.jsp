@@ -15,6 +15,7 @@
   <%
   DivisionGroup divgrp =(DivisionGroup) request.getAttribute("divgrp");
   List<Object[]> list = (List<Object[]>)request.getAttribute("grpheadlist");
+  List<Object[]> deptlist = (List<Object[]>)request.getAttribute("Deparmentlist");
   %>
   
   <div class="card-header page-top">
@@ -70,11 +71,21 @@
 											<th><label>Group Head Name <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><select class="form-control select2"  name="groupHeadId" id="groupHeadId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
-												<option value="<%=O[0]%>" <%if(divgrp!=null){if(divgrp.getGroupHeadId()==Long.parseLong(O[0].toString())){%> selected   <%}}%> > <%=O[1]%></option>
+												<%if(list!=null&&list.size()>0){for(Object[] emp:list){ %>
+												<option value="<%=emp[2]%>" <%if(divgrp!=null){if(divgrp.getGroupHeadId().equalsIgnoreCase(emp[2].toString())){%> selected   <%}}%> > <%=emp[1]%></option>
 												<%}}%>
 											    </select></td>
 										</tr>	
+										<tr>
+											<th><label>Department Name <span class="mandatory"	style="color: red;">*</span></label></th>
+											<td><select class="form-control select2"  name="DepartmentId" id="DepartmentId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
+												<%if(list!=null&&list.size()>0){
+													for(Object[] div:deptlist){ %>
+												<option value="<%=div[0]%>" <%if(divgrp!=null){if(divgrp.getDivisionId()==Long.parseLong(div[0].toString())){%> selected   <%}}%> > <%=div[2]%></option>
+												<%}}%>
+											    </select></td>
+										</tr>
 									
 								</table>
 							</div>

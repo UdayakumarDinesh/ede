@@ -14,6 +14,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 
 public interface MasterDao {
@@ -74,10 +75,10 @@ public interface MasterDao {
 	public List<Object[]> GetEmpanelledHostpitalList() throws Exception;
 	public List<Object[]> getDepartmentsList() throws Exception;
 	public List<Object[]> getEmpList() throws Exception;
-	public int DepartmentAdd(Department dep) throws Exception;
+	public int DepartmentAdd(DivisionMaster dep) throws Exception;
 	public Object[] departmentEdit(String deptId) throws Exception;
-	public Department departmentEdit(long divisionId)throws Exception;
-	public int updateDepartment(Department department)throws Exception;
+	public DivisionMaster departmentEdit(long divisionId)throws Exception;
+	public int updateDepartment(DivisionMaster department)throws Exception;
 	public BigInteger DepartmentCodeCheck(String depCode) throws Exception;
 	public Long AddDeptEditComments(MasterEdit masteredit)throws Exception;
 	public BigInteger DepartmentEditcheck(String depCode, String deptId)throws Exception;
@@ -91,7 +92,8 @@ public interface MasterDao {
 	public int divisionGroupEdit(DivisionGroup divisionGroup) throws Exception;
 	public List<Object[]> getGroupList() throws Exception;
 	public List<Object[]> getQualificationList()throws Exception;
-	
+	public List<Object[]> getDGMList()throws Exception;
+
 	
 	
 	
