@@ -39,7 +39,7 @@ public class TourController {
 		try {
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		return "Tour/";
 	}
