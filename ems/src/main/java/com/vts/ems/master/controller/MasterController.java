@@ -1626,15 +1626,11 @@ public class MasterController {
 		logger.info(new Date() +"Inside DivisionGroupAdd.htm "+UserId);
 		try {
 			
-			String groupCode = (String)req.getParameter("groupCode");
-			String groupName = (String)req.getParameter("groupName");
-			String groupHeadId = (String)req.getParameter("groupHeadId");
-			String divisionid = (String)req.getParameter("DepartmentId");
 			DivisionGroup grp = new DivisionGroup();
-			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(groupHeadId);
-			grp.setDivisionId(Integer.parseInt(divisionid));
+			grp.setGroupCode(req.getParameter("groupCode").toUpperCase());
+			grp.setGroupName(req.getParameter("groupName").trim());
+			grp.setGroupHeadId(req.getParameter("groupHeadId"));
+			grp.setDivisionId(Integer.parseInt(req.getParameter("DepartmentId")));
 			grp.setCreatedBy(UserId);
 			grp.setCreatedDate(sdtf.format(new Date()));
 			grp.setIsActive(1);
@@ -1655,27 +1651,36 @@ public class MasterController {
 	}
 	
 	@RequestMapping(value="DivisionGroupEdit.htm", method={RequestMethod.POST} )
-	public String DivisionGroupEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	public String DivisionGroupEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
 	{
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DivisionGroupEdit.htm "+UserId);
 		try {
 			
-			String groupId = (String)req.getParameter("divgrpid");	
-			String groupCode = (String)req.getParameter("groupCode");
-			String groupName = (String)req.getParameter("groupName");
-			String groupHeadId = (String)req.getParameter("groupHeadId");
-			String divisionid = (String)req.getParameter("DepartmentId");
-			
+			String groupId =  req.getParameter("divgrpid");	
+	
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupId(Integer.parseInt(groupId));
-			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(groupHeadId);
-			grp.setDivisionId(Integer.parseInt(divisionid));
-//			grp.setIsActive(1);
+			grp.setGroupCode(req.getParameter("groupCode").toUpperCase().trim());
+			grp.setGroupName(req.getParameter("groupName").trim());
+			grp.setGroupHeadId(req.getParameter("groupHeadId"));
+			grp.setDivisionId(Integer.parseInt(req.getParameter("DepartmentId")));
 			grp.setModifiedBy(UserId);
 			grp.setModifiedDate(sdtf.format(new Date()));
+			
+			String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(groupId));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("division_group");
+	    	     
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   service.AddDeptEditComments(masteredit , masterdto);
+	    	   
 			int result = service.editDivisionGroup(grp);
 			if (result != 0) {
 				 redir.addAttribute("result", "Group Updated Successfully");
@@ -1700,8 +1705,7 @@ public class MasterController {
 		logger.info(new Date() +"Inside DivisionAddcheck.htm "+UserId);
 		try
 		{	  
-			String groupCode = req.getParameter("groupCode");
-			 duplicate = service.checkAddDuplicate(groupCode);
+			 duplicate = service.checkAddDuplicate(req.getParameter("groupCode"));
 		}
 		catch (Exception e) {
 			logger.error(new Date() +"Inside DivisionAddcheck.htm "+UserId ,e);

@@ -97,9 +97,9 @@
 
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-									<%if(list!=null){ %>
-<!--------------------------- container ------------------------->
-			<div class="container">
+						<%if(list!=null){ %>
+                <!--------------------------- container ------------------------->
+			    <div class="container">
 					
 				<!-- The Modal -->
 				<div class="modal" id="myModal">
@@ -248,7 +248,7 @@ function checkDuplicateEdit(frmid)
 						return false;
 					}else{
 						
-						$('#myModal').modal('show')
+						$('#myModal').modal('show');
 						return true;
 					}	
 					}else{

@@ -1147,7 +1147,7 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 			return list;
 		}
 
-		private static final String DGMLIST = "SELECT a.DGMId,a.DGMCode,a.DGMName,b.EmpName FROM dgm_master a,employee b WHERE a.DGMEmpNo = b.EmpNo AND a.IsActive=1 ORDER BY a.DGMId DESC";
+		private static final String DGMLIST = "SELECT a.DGMId,a.DGMCode,a.DGMName,b.EmpName,a.DGMEmpNo FROM dgm_master a,employee b WHERE a.DGMEmpNo = b.EmpNo AND a.IsActive=1 ORDER BY a.DGMId DESC";
 		@Override
 		public List<Object[]> getDgmList() throws Exception {
 			

@@ -83,7 +83,7 @@ List<Object[]> DGMList=(List<Object[]>)request.getAttribute("DGMList");
 											   <select class="form-control select2"  name="DGMId" id="DGMId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 													<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 											    <%if(DGMList!=null){ for(Object[] dgm:DGMList){%>
-											     	<option value="<%=dgm[0]%>" <%if(dept!=null){if(dept[3].toString().equalsIgnoreCase(dgm[0].toString())){%>selected="selected"<%}}%>><%=dgm[2] %></option>
+											     	<option value="<%=dgm[0]%>" <%if(dept!=null){if(dept[4].toString().equalsIgnoreCase(dgm[0].toString())){%>selected="selected"<%}}%>><%=dgm[2] %></option>
 											 	 <%}}%>
 											   </select> 
 										   </td> 
