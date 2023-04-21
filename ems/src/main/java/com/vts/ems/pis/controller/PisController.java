@@ -1243,6 +1243,7 @@ public class PisController {
     	   peraddress.setPer_addr(perAdd);
     	   
     	   if("ADD".equalsIgnoreCase(Action)) {
+    		   peraddress.setIsActive(1);
     		   peraddress.setCreatedBy(Username);
         	   peraddress.setCreatedDate(sdf.format(new Date()));
         	  long result  =  service.AddPerAddress(peraddress); 
@@ -1297,6 +1298,7 @@ public class PisController {
     	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
+    	   peraddress.setPerAdStatus("N");
     	   
     	 if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
@@ -1451,7 +1453,7 @@ public class PisController {
 			resadd.setState(state);
 			resadd.setCity(city);
 			resadd.setPin(pin);
-		
+			resadd.setResAdStatus("N");
 			
 		if("ADD".equalsIgnoreCase(Action)) {
 			resadd.setIsActive(1);

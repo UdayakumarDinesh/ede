@@ -3640,7 +3640,8 @@ public class CHSSServiceImpl implements CHSSService {
 					consult.setDocName(WordUtils.capitalize(consultData[2].toString()));
 					consult.setDocQualification(Integer.parseInt(consultData[3].toString()));
 					consult.setConsultDate(consultData[8].toString());
-					consult.setConsultCharge(Double.parseDouble(consultData[4].toString()));				
+					consult.setConsultCharge(Double.parseDouble(consultData[4].toString()));
+//					consult.setConsultCharge(Double.parseDouble(consultData[5].toString()));
 					consult.setIsActive(1);
 					consult.setCreatedBy(reApply[8].toString());
 					consult.setCreatedDate(sdtf.format(new Date()));		
@@ -3667,6 +3668,7 @@ public class CHSSServiceImpl implements CHSSService {
 					test.setTestMainId(Long.parseLong(TestData[1].toString() ));
 					test.setTestSubId(Long.parseLong(TestData[2].toString() ));
 					test.setTestCost(Double.parseDouble(TestData[3].toString() ));
+//					test.setTestCost(Double.parseDouble(TestData[4].toString() ));
 					test.setIsActive(1);				
 					test.setCreatedBy(reApply[8].toString());
 					test.setCreatedDate(sdtf.format(new Date()));
@@ -3693,6 +3695,7 @@ public class CHSSServiceImpl implements CHSSService {
 					meds.setPresQuantity(Integer.parseInt(MedicineData[3].toString() ));
 					meds.setMedQuantity(Integer.parseInt(MedicineData[2].toString() ));
 					meds.setMedicineCost(Double.parseDouble(MedicineData[4].toString()));
+//					meds.setMedicineCost(Double.parseDouble(MedicineData[5].toString()));
 					meds.setIsActive(1);
 					meds.setCreatedBy(reApply[8].toString());
 					meds.setCreatedDate(sdtf.format(new Date()));
@@ -3716,6 +3719,7 @@ public class CHSSServiceImpl implements CHSSService {
 					misc.setBillId(billId);
 					misc.setMiscItemName(MiscData[1].toString());
 					misc.setMiscItemCost(Double.parseDouble(MiscData[2].toString()));
+//					misc.setMiscItemCost(Double.parseDouble(MiscData[3].toString()));
 					misc.setMiscCount(Integer.parseInt(MiscData[5].toString()));
 					misc.setIsActive(1);
 					misc.setCreatedBy(reApply[8].toString());
@@ -3790,8 +3794,10 @@ public class CHSSServiceImpl implements CHSSService {
 		bill.setBillDate(BillData[3].toString());
 		bill.setAdmissibleTotal(0.00);
 		bill.setGSTAmount(0.00);
-		bill.setDiscount(CropTo2Decimal(BillData[5].toString()));
-		bill.setDiscountPercent(CropTo6Decimal(BillData[6].toString()));
+//		bill.setDiscount(CropTo2Decimal(BillData[5].toString()));
+//		bill.setDiscountPercent(CropTo6Decimal(BillData[6].toString()));
+		bill.setDiscount(0.00);
+		bill.setDiscountPercent(0.00);
 		bill.setFinalBillAmt(CropTo2Decimal(BillData[7].toString()));
 		bill.setIsActive(1);
 		bill.setCreatedBy(Username);

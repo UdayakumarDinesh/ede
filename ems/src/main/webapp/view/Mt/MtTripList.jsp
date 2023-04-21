@@ -17,7 +17,7 @@
 </head>
 <body>
 <%
-List<Object[]> TripList=(List<Object[]>)request.getAttribute("TripList"); 
+List<Object[]> TripList=(List<Object[]>)request.getAttribute("TripList");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 String fromdate = (String)request.getAttribute("fromdate");
 String todate = (String)request.getAttribute("todate");

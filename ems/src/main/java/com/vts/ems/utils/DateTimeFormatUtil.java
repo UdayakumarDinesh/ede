@@ -329,5 +329,30 @@ public class DateTimeFormatUtil
 		return diff;
 
 	}
+	
+	public static java.sql.Date getMinusOneDay(String toDate){
+		try {
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	        LocalDate locdate = LocalDate.parse(toDate, formatter);
+	        LocalDate minusDate = locdate.minusDays(1);
+	        String minusToDate = minusDate.format(formatter);
+	        return dateConversionSql(minusToDate);
+		}catch(Exception e){e.printStackTrace();}
+		return null;
+		
+	}
+	
+	public static String getDateTimeToRegularDate(String date) {
+		SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate=null;
+        try {
+            Date date1 = inputDateFormat.parse(date);
+            formattedDate = outputDateFormat.format(date1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return formattedDate;
+	}
 }	
 

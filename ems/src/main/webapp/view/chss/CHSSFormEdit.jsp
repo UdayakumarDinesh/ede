@@ -876,7 +876,7 @@ th,td
 											totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 											}%>
 										<tr>
-										
+							
 											<td colspan="4" class="right"><b>Total</b></td>						
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
@@ -889,10 +889,13 @@ th,td
 										</tr>
 							
 										<tr>
-											<td colspan="4" class="right"><b>Total Discount (-)</b></td>
+											<% if(chssapplydata[21]==null){%>
+										    <td colspan="4" class="right"><b>Total Discount (-)</b></td>
 											<td class="right text-blue"><b><%=discount %></b></td>
 											<td class="right text-green"></td>
 											<td ></td>
+									     	<%} %>
+											
 											
 										</tr>
 															

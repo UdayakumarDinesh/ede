@@ -85,7 +85,8 @@
 													<td><%=obj[5] %></td>
 													<td style="text-align:right;"><%=obj[6] %></td>
 													<td style="text-align:right;"><%=obj[7] %></td>
-													<td style=""><%=obj[8] %></td>		
+												    <td><%if(!obj[8].toString().isEmpty()){%><%=obj[8]%><%}else{%>-<%}%></td>
+													<%-- <td style=""> <%if(obj[8]!=null && obj[8].toString().trim()!="") {%> <%=obj[8] %> <%}else{%>--<%}%></td> --%>		
 													
 													<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
 													  <%if(obj[12]!=null || obj[13]!=null || obj[14]!=null) {%>

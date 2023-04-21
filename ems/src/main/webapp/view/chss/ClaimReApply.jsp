@@ -869,8 +869,8 @@ th,td
 											totalremamount =totalremamount.add (new BigDecimal(misc[4].toString()));
 											}%>
 										<tr>
-										
-											<td colspan="4" class="right"><b>Total</b></td>						
+											
+											<td colspan="5" class="right"><b>Total</b></td>						
 											<td class="right text-blue"><b> <%=itemstotal %></b></td>
 											<td class="right text-green">
 												<%if(showRemAmt || allowEdit){ %>	 
@@ -878,20 +878,19 @@ th,td
 												<% } %>
 											</td>
 											<td></td>
-											<td></td>
-											
+										
 										</tr>
 							
 										<tr>
-											<td colspan="4" class="right"><b>Total Discount (-)</b></td>
+											<td colspan="5" class="right"><b>Total Discount (-)</b></td>
 											<td class="right text-blue"><b><%=discount %></b></td>
 											<td class="right text-green"></td>
 											<td ></td>
-											<td></td>
+									
 										</tr>
 															
 										<tr>						
-											<td colspan="4" class="right"><b>Total</b></td>
+											<td colspan="5" class="right"><b>Total</b></td>
 											<td class="right text-blue"><b><%=nfc.rupeeFormat(String.valueOf(itemstotal.subtract(discount).setScale(0, BigDecimal.ROUND_HALF_UP).longValue())) %></b></td>
 															
 											<td class="right text-green">
@@ -900,7 +899,7 @@ th,td
 												<%} %>
 											</td>
 											<td ></td>
-											<td ></td>
+									
 											
 										</tr>
 																				
