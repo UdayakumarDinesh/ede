@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vts.ems.ithelpdesk.dao.helpdeskDaoImpl;
 import com.vts.ems.ithelpdesk.model.HelpDeskEmployee;
 import com.vts.ems.itinventory.model.ITInventory;
-import com.vts.ems.itinventory.model.ITInventoryConfigure;
+import com.vts.ems.itinventory.model.ITInventoryHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfiguredHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfigured;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 @Transactional
@@ -32,7 +35,7 @@ public class InventoryDaoImpl implements InventoryDao{
 	EntityManager manager;
 
 	
-	private static final String INVENTORYQUANTITYLIST="SELECT ItInventoryId,Desktop,DesktopIntendedBy,DesktopRemarks,Laptop,LaptopIntendedBy,LaptopRemarks,USBPendrive,USBPendriveIntendedBy,USBPendriveRemarks,Printer,PrinterIntendedBy,PrinterRemarks,Telephone,TelephoneIntendedBy,TelephoneRemarks,FaxMachine,FaxMachineIntendedBy,FaxMachineRemarks,Scanner,ScannerIntendedBy,ScannerRemarks,XeroxMachine,XeroxMachineIntendedBy,XeroxMachineRemarks,Miscellaneous,MiscellaneousIntendedBy,MiscellaneousRemarks FROM it_inventory WHERE isActive='1' AND DeclaredBy=:EmpNo";
+	private static final String INVENTORYQUANTITYLIST="SELECT ItInventoryId,Desktop,DesktopIntendedBy,DesktopRemarks,Laptop,LaptopIntendedBy,LaptopRemarks,USBPendrive,USBPendriveIntendedBy,USBPendriveRemarks,Printer,PrinterIntendedBy,PrinterRemarks,Telephone,TelephoneIntendedBy,TelephoneRemarks,FaxMachine,FaxMachineIntendedBy,FaxMachineRemarks,Scanner,ScannerIntendedBy,ScannerRemarks,XeroxMachine,XeroxMachineIntendedBy,XeroxMachineRemarks,Miscellaneous,MiscellaneousIntendedBy,MiscellaneousRemarks,DeclarationYear,Status FROM it_inventory WHERE isActive='1' AND DeclaredBy=:EmpNo";
 	@Override
 	public List<Object[]> getInventoryQuantityList(String empNo) throws Exception {
 
@@ -82,7 +85,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		}
 	}
 	@Override
-	public long InventoryDetailsAddSubmit(ITInventoryConfigure details) throws Exception {
+	public long InventoryDetailsAddSubmit(ITInventoryConfigured details) throws Exception {
 		
 		try {
 			manager.persist(details);
@@ -95,7 +98,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		}
 	}
 	
-	private static final String INVENTORYCONFIGURATION="SELECT InventoryConfigureId,ItemType,ConnectionType,CPU,Monitor,RAM,AdditionalRAM,Keyboard,Mouse,Externalharddisk,ExtraInternalharddisk,Office,OS,PDF,Browser,Kavach FROM it_inventory_configure WHERE isActive='1' AND ConfiguredBy=:EmpNo  ORDER BY InventoryConfigureId DESC";
+	private static final String INVENTORYCONFIGURATION="SELECT InventoryConfigureId,ItemType,ConnectionType,CPU,Monitor,RAM,AdditionalRAM,Keyboard,Mouse,Externalharddisk,ExtraInternalharddisk,Office,OS,PDF,Browser,Kavach FROM it_inventory_configured WHERE isActive='1' AND ConfiguredBy=:EmpNo  ORDER BY InventoryConfigureId DESC";
 	@Override
 	public List<Object[]> getInventoryConfiguration(String empNo) throws Exception {
 		
@@ -107,10 +110,10 @@ public class InventoryDaoImpl implements InventoryDao{
 	
 	
 	@Override
-	public ITInventoryConfigure getInventoryConfigId(Long inventoryconfigid) throws Exception {
+	public ITInventoryConfigured getInventoryConfigId(Long inventoryconfigid) throws Exception {
 	
 		try {
-			 ITInventoryConfigure ic = manager.find(ITInventoryConfigure.class,(inventoryconfigid));
+			 ITInventoryConfigured ic = manager.find(ITInventoryConfigured.class,(inventoryconfigid));
 			return ic ;
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO getInventoryConfigId() "+e);
@@ -119,7 +122,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		}	
 	}
 	@Override
-	public long ConfigureUpdate(ITInventoryConfigure config) throws Exception {
+	public long ConfigureUpdate(ITInventoryConfigured config) throws Exception {
 		
 		try {
 			manager.merge(config);
@@ -141,7 +144,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("DeclarationYear", DeclarationYear);
 		return (List<Object[]>)query.getResultList();
 	}
-	public static final String FORWARDEDDETIALS="UPDATE it_inventory SET Date=:date,Status=:status,ERemarks=:Remarks WHERE ItInventoryId=:ItinventoryId";
+	public static final String FORWARDEDDETIALS="UPDATE it_inventory SET ForwardedDate=:forwardeddate,Status=:status,ERemarks=:Remarks WHERE ItInventoryId=:ItinventoryId";
 	@Override
 	public long ForwardDetails(ITInventory inventory) throws Exception {
 		
@@ -149,18 +152,10 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("ItinventoryId", inventory.getItInventoryId());
 		query.setParameter("status", inventory.getStatus());
 		query.setParameter("Remarks", inventory.getERemarks());
-		query.setParameter("date", inventory.getDate());
+		query.setParameter("forwardeddate", inventory.getForwardedDate());
 		return query.executeUpdate();
 	}
-	public static final String INVENTORYLIST="CALL IT_Inventory_List(:EmpNo,:DeclarationYear)";
-	@Override
-	public List<Object[]> getInventoryList(String empNo,String DeclarationYear) throws Exception {
 	
-		Query query=manager.createNativeQuery(INVENTORYLIST);
-		query.setParameter("EmpNo", empNo);
-		query.setParameter("DeclarationYear", DeclarationYear);
-		return (List<Object[]>)query.getResultList();
-	}
 	
 	 @Override
 		public long NotificationAdd(EMSNotification notification) throws Exception {
@@ -193,7 +188,7 @@ public class InventoryDaoImpl implements InventoryDao{
 				}
 				
 	}
-	private static final String INVENTORYDECLAREDLIST ="SELECT it.ItInventoryId,e.EmpName,it.DeclarationYear,it.Date,it.Desktop,it.Laptop, it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ERemarks FROM it_inventory it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo  AND it.status IN('F','R')  ORDER BY it.Date  DESC";
+	private static final String INVENTORYDECLAREDLIST ="SELECT it.ItInventoryId,e.EmpName,it.DeclarationYear,it.ForwardedDate,it.Desktop,it.Laptop, it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ERemarks FROM it_inventory it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo  AND it.status IN('F','R')  ORDER BY it.ForwardedDate  DESC";
 	@Override
 	public List<Object[]> getInventoryDeclaredList() throws Exception {
 		
@@ -201,7 +196,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		return (List<Object[]>)query.getResultList();
 	}
 		
-	private static final String INVENTORYCONFIGURE="SELECT ic.InventoryConfigureId,ic.ItemType,ic.ConnectionType,ic.CPU,ic.Monitor,ic.RAM,ic.AdditionalRAM,ic.Keyboard,ic.Mouse,ic.Externalharddisk,ic.ExtraInternalharddisk,ic.Office,ic.OS,ic.PDF,ic.Browser,ic.Kavach FROM it_inventory_configure ic,it_inventory it WHERE ic.isActive='1' AND ic.ITInventoryId=it.ITInventoryId AND it.status IN('F','A','R') AND it.ITInventoryId=:inventoryid";	
+	private static final String INVENTORYCONFIGURE="SELECT ic.InventoryConfigureId,ic.ItemType,ic.ConnectionType,ic.CPU,ic.Monitor,ic.RAM,ic.AdditionalRAM,ic.Keyboard,ic.Mouse,ic.Externalharddisk,ic.ExtraInternalharddisk,ic.Office,ic.OS,ic.PDF,ic.Browser,ic.Kavach,ic.ITInventoryId,ic.ConfiguredBy FROM it_inventory_configured ic,it_inventory it WHERE ic.isActive='1' AND ic.ITInventoryId=it.ITInventoryId AND it.status IN('F','A','R') AND it.ITInventoryId=:inventoryid";	
 	@Override
 	public List<Object[]> getInventoryConfigure(String ITInventoryId) throws Exception {
 		
@@ -209,26 +204,44 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("inventoryid", ITInventoryId);
 		return (List<Object[]>)query.getResultList();
 	}
-	private static final String INVENTORYAPPROVEDFORMDOWNLOAD="CALL IT_Inventory_Approved(:inventoryid)"; 
+	private static final String INVENTORYAPPROVEDFORMDOWNLOAD="CALL IT_Inventory_Approved(:ItInventoryHistoryId )"; 
 	@Override
-	public List<Object[]> getApprovedForm(String iTInventoryId) throws Exception {
+	public List<Object[]> getApprovedForm(String invntryhistoryid) throws Exception {
 		Query query=manager.createNativeQuery(INVENTORYAPPROVEDFORMDOWNLOAD);
-		query.setParameter("inventoryid", iTInventoryId);
+		query.setParameter("ItInventoryHistoryId", invntryhistoryid);
 		return (List<Object[]>)query.getResultList();
 		
 	}
-	private static final String INVENTORYDETIALSAPPROVE="UPDATE it_inventory SET Date=:date,Status=:status WHERE ItInventoryId=:ItinventoryId";
-	@Override
-	public long inventoryDetailsApprove(ITInventory inventory) throws Exception {
-		
-		Query query=(Query) manager.createNativeQuery(INVENTORYDETIALSAPPROVE);
-		query.setParameter("ItinventoryId", inventory.getItInventoryId());
-		query.setParameter("status", inventory.getStatus());
-		query.setParameter("date", inventory.getDate());
-		return query.executeUpdate();
-	}
 	
-	private static final String INVENTORYDETIALSRETURN="UPDATE it_inventory SET ARemarks=:remarks,Date=:date,Status=:status,ReturnedBy=:returnedby WHERE ItInventoryId=:ItinventoryId";
+	@Override
+	public long inventoryDetailsApprove(ITInventoryHistory Aprrove ) throws Exception {
+		try {
+			manager.persist(Aprrove);
+			manager.flush();		
+			return Aprrove.getItInventoryHistoryId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO inventoryDetailsApprove() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+		@Override
+		public long inventoryconfigapprove(ITInventoryConfiguredHistory config) throws Exception {
+			
+			try {
+				manager.persist(config);
+				manager.flush();		
+				return config.getConfigHistoryId();
+			}	catch (Exception e) {
+				logger.error(new Date() + "Inside DAO inventoryDetailsApprove() "+e);
+				e.printStackTrace();
+				return 0L;
+			}	
+			
+		}
+	
+	
+	private static final String INVENTORYDETIALSRETURN="UPDATE it_inventory SET ARemarks=:remarks,Status=:status,ReturnedBy=:returnedby WHERE ItInventoryId=:ItinventoryId";
 	@Override
 	public long inventoryDetailsReturn(ITInventory inventory) throws Exception {
 	
@@ -236,12 +249,11 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("ItinventoryId", inventory.getItInventoryId());
 		query.setParameter("remarks", inventory.getARemarks());
 		query.setParameter("status", inventory.getStatus());
-		query.setParameter("date", inventory.getDate());
 		query.setParameter("returnedby", inventory.getReturnedBy());
 		return query.executeUpdate();
 	}
 	
-	private static final String INVENTORYAPPROVEDLIST="SELECT it.ItInventoryId,e.EmpName,it.DeclarationYear,it.Date,it.Desktop,it.Laptop,it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ARemarks FROM it_inventory it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo AND it.status IN('A')  AND  CASE WHEN 'A'=:LoginType THEN it.DeclarationYear= :DeclarationYear ELSE it.DeclaredBy=:EmpNo END ORDER BY it.Date DESC";
+	private static final String INVENTORYAPPROVEDLIST=" SELECT it.ItInventoryHistoryId,e.EmpName,it.DeclarationYear,it.ApprovedDate,it.Desktop,it.Laptop,it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ItInventoryId FROM it_inventory_history it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo AND it.status IN('A')  AND CASE WHEN 'A'=:LoginType THEN it.DeclarationYear=:DeclarationYear  ELSE it.DeclaredBy=:EmpNo END ORDER BY it.ApprovedDate DESC;";
 	@Override
 	public List<Object[]> getInventoryApprovedList(String year,String empNo,String LoginType) throws Exception {
 		
@@ -250,6 +262,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		query.setParameter("EmpNo", empNo);
 		query.setParameter("LoginType", LoginType);
 		return (List<Object[]>)query.getResultList();
+		
 	}
 	
 	private static final String DECLAREDLISTPREVIEW="CALL IT_Inventory_Forwarded(:iTInventoryId)";
@@ -262,21 +275,60 @@ public class InventoryDaoImpl implements InventoryDao{
 		return (List<Object[]>)query.getResultList();
 	}
 	
-	private static final String EMPLOYEELIST="SELECT e.EmpNo,e.EmpName FROM employee e,login l WHERE e.isActive='1' AND e.EmpId=l.EmpId AND l.LoginType='U'";
+	private static final String EMPLOYEELIST="SELECT e.EmpNo,e.EmpName FROM employee e,login l WHERE e.isActive='1' AND l.isactive='1' AND e.EmpId=l.EmpId AND l.loginType IN('U','P','F','Z','K','V','W','B','Y') ";
 	@Override
 	public List<Object[]> getEmployeeList() throws Exception {
 		
 		Query query=manager.createNativeQuery(EMPLOYEELIST);
 		return (List<Object[]>)query.getResultList();
 	}
-	private static final String INVENTORYDASHBOARDCOUNT="CALL IT_Inventory_Dashboard_Count(:EmpNo,:Year)";
+	private static final String INVENTORYDASHBOARDCOUNT="CALL IT_Inventory_Dashboard_Count(:EmpNo,:DeclarationYear)";
 	@Override
 	public List<Object[]> getInventoryDashboardCount(String empno, String year) {
 		
 		Query query=manager.createNativeQuery(INVENTORYDASHBOARDCOUNT);
 		query.setParameter("EmpNo", empno);
-		query.setParameter("Year", year);
+		query.setParameter("DeclarationYear", year);
 		return (List<Object[]>)query.getResultList();
 	}
+	
+	private static final String INVENTORYDETIALSAPPROVE=" UPDATE it_inventory SET Status=:status,ApprovedDate=:approveddate,AllowDecl=:AllowDecl WHERE  ItInventoryId=:ItinventoryId";
+	@Override
+	public long inventoryapprove(ITInventory inventory) throws Exception {
+		
+		Query query=(Query) manager.createNativeQuery(INVENTORYDETIALSAPPROVE);
+		query.setParameter("ItinventoryId", inventory.getItInventoryId());
+		query.setParameter("approveddate", inventory.getApprovedDate());
+		query.setParameter("status", inventory.getStatus());
+		query.setParameter("AllowDecl", inventory.getAllowDecl());
+		return query.executeUpdate();
+	}
+
+	
+	private static final String INVENTORYCONFIGUREAPRROVEDLIST="SELECT ic.ConfigHistoryId,ic.ItemType,ic.ConnectionType,ic.CPU,ic.Monitor,ic.RAM,ic.AdditionalRAM,ic.Keyboard,ic.Mouse,ic.Externalharddisk,ic.ExtraInternalharddisk,ic.Office,ic.OS,ic.PDF,ic.Browser,ic.Kavach,ic.ITInventoryId,ic.ConfiguredBy FROM it_inventory_configured_history ic,it_inventory it WHERE ic.isActive='1' AND ic.ITInventoryId=it.ITInventoryId AND it.status IN('F','A','R') AND it.ITInventoryId=:inventoryid";
+	@Override
+	public List<Object[]> getInventoryConfigureApprovedlist(String iTInventoryId) throws Exception {
+		
+		
+		Query query=manager.createNativeQuery(INVENTORYCONFIGUREAPRROVEDLIST);
+		query.setParameter("inventoryid", iTInventoryId);
+		return (List<Object[]>)query.getResultList();
+	}
+	
+	private static final String ALLOWDECLARATIONALLEMP="UPDATE  it_inventory SET AllowDecl = :Decl WHERE isActive=1";
+	@Override
+	public void UpdateAnnualDeclarationAllEmp(String Decl) throws Exception {
+		
+		try {
+			Query query = manager.createNativeQuery(ALLOWDECLARATIONALLEMP);
+			query.setParameter("Decl", Decl);
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO UpdateAnnualDeclarationAllEmp "+e);
+		}	
+		
+	}
+	
 
 }

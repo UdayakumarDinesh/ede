@@ -1,7 +1,5 @@
 package com.vts.ems.itinventory.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,18 +7,20 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Setter
-@Entity(name="it_inventory")
-public class ITInventory implements Serializable {
+@Entity(name="it_inventory_history")
+public class ITInventoryHistory {
 	
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
+	private long ItInventoryHistoryId;
 	private long ItInventoryId;
 	private String DeclaredBy;
 	private String DeclarationYear;
-    private int Desktop;
+    
+	private int Desktop;
 	private String DesktopIntendedBy;
 	private String DesktopRemarks;
 	private int Laptop;
@@ -47,17 +47,12 @@ public class ITInventory implements Serializable {
 	private int Miscellaneous;
 	private String  MiscellaneousIntendedBy;
 	private String  MiscellaneousRemarks;
-	private String  ForwardedDate;
-	private String  ApprovedDate;
     private String  Status;
-    private String  AllowDecl;
-    private String  ARemarks;
-    private String  ReturnedBy;
-    private String  ERemarks;
-	private String  CreatedBy;
+    private String  ForwardedDate;
+	private String  ApprovedDate;
+    private String  CreatedBy;
 	private String  CreatedDate;
-	private String  ModifiedBy;
-	private String  ModifiedDate;
 	private int isActive;
 	
+
 }

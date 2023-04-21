@@ -39,7 +39,9 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.font.FontProvider;
 import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.itinventory.model.ITInventory;
-import com.vts.ems.itinventory.model.ITInventoryConfigure;
+import com.vts.ems.itinventory.model.ITInventoryHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfiguredHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfigured;
 
 import com.vts.ems.itinventory.service.InventoryService;
 import com.vts.ems.utils.CharArrayWriterResponse;
@@ -71,12 +73,15 @@ public class InventoryController {
 		    ses.setAttribute("formmoduleid", "32"); 
 		    ses.setAttribute("SidebarActive", "ITInventoryDashboard_htm");
 			String UserId=(String)ses.getAttribute("Username");
-			String logintype = (String)ses.getAttribute("LoginType");
-			
+			String LoginType=(String)ses.getAttribute("LoginType");
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			List<Object[]> InventoryDashBoardCount=null;
 			logger.info(new Date()+"Inside ITInventoryDashboard.htm "+UserId);
 			try {
-				List<Object[]> InventoryDashBoardCount=null;
-				 List<Object[]> admindashboard = adminservice.HeaderSchedulesList("12" ,logintype); 
+				
+				 List<Object[]> admindashboard = adminservice.HeaderSchedulesList("12" ,LoginType);
+				 
+				 String empno=req.getParameter("empNo");
 				 String Year = req.getParameter("DeclarationYear");
 				    LocalDate today= LocalDate.now();
 					
@@ -87,19 +92,31 @@ public class InventoryController {
 						Year=start;
 					}
 					
-				String empno=req.getParameter("EmpName");
-			
-				List<Object[]> EmpList=service.getEmployeeList();
-				InventoryDashBoardCount= service.getInventoryDashboardCount(empno,Year);
-				
+					
+					if(empno==null && LoginType.equalsIgnoreCase("A") ) {
+					   empno="0";
+					   InventoryDashBoardCount=service.getInventoryDashboardCount(empno,Year);
+					   req.setAttribute("empno", empno);
+					}
+					else if(empno!=null && LoginType.equalsIgnoreCase("A") ){
+						
+						   InventoryDashBoardCount=service.getInventoryDashboardCount(empno,Year);
+						    req.setAttribute("empno", empno);
+					}	    
+					else if(EmpNo!=null && !LoginType.equalsIgnoreCase("A")){ 
+						InventoryDashBoardCount=service.getInventoryDashboardCount(EmpNo,Year);
+					    req.setAttribute("empno", EmpNo);
+					}
+					
 				req.setAttribute("InventoryDashBoardCount", InventoryDashBoardCount);
-				req.setAttribute("empNo", empno);
+				List<Object[]> EmpList=service.getEmployeeList();
 				req.setAttribute("EmployeeList", EmpList);
 				req.setAttribute("DeclarationYear", Year);
-				
+				req.setAttribute("LoginType", LoginType);
 				req.setAttribute("dashboard", admindashboard);
+						
 				 return "itinventory/inventorydashboard";
-				 
+						 
 			} catch (Exception e) 
 			 { 
 				e.printStackTrace(); 
@@ -109,22 +126,25 @@ public class InventoryController {
 	}
 
 	
-	 @RequestMapping(value = "ITAsset.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	 @RequestMapping(value = "Inventory.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String ITAsset(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			String UserId=(String)ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			logger.info(new Date() +"Inside ITAsset.htm "+UserId);
+			ses.setAttribute("SidebarActive","Inventory_htm");	
+			ses.setAttribute("formmoduleid", formmoduleid);
+			logger.info(new Date() +"Inside Inventory.htm "+UserId);
 			try {
 				
-				List<Object[]> InventoryQuantityList=service.getInventoryQuantityList(EmpNo);
+                List<Object[]> InventoryQuantityList=service.getInventoryQuantityList(EmpNo);
 				req.setAttribute("InventoryQuantityList",InventoryQuantityList );
-				return "itinventory/inventoryasset";
+				
+				return "itinventory/inventory";
 				
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				logger.error(new Date() +" Inside ITAsset.htm "+UserId, e);
+				logger.error(new Date() +" Inside Inventory.htm "+UserId, e);
 				return "static/Error";
 			}
 		}
@@ -142,7 +162,7 @@ public class InventoryController {
 				ITInventory inventory=new ITInventory(); 
 				inventory.setDeclaredBy(EmpNo);
 				inventory.setDeclarationYear(DeclarationYear);
-				inventory.setDate(sdf1.format(new Date()));
+				
 				inventory.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
 				inventory.setDesktopIntendedBy(req.getParameter("DesktopIntendedBy"));
 				inventory.setDesktopRemarks(req.getParameter("DesktopRemarks"));
@@ -183,7 +203,7 @@ public class InventoryController {
 			  		redir.addAttribute("resultfail", "Inventory Quantity Add Unsuccessful");
 			  		}
 				 
-				return "redirect:/InventoryList.htm";
+				return "redirect:/Inventory.htm";
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -191,8 +211,6 @@ public class InventoryController {
 				return "static/Error";
 			}
 		}
-	 
-	 
 	 
 	 @RequestMapping(value = "QuantityEditSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String ITInventoryQuantityAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -202,12 +220,12 @@ public class InventoryController {
 			logger.info(new Date() +"Inside QuantityEditSubmit.htm "+UserId);
 			try {
 				
-			    LocalDate today= LocalDate.now();
-				String DeclarationYear=String.valueOf(today.getYear());
+			   
 				String Itinventoryid=req.getParameter("Itinventoryid");
+				String DeclarationYear=req.getParameter("DeclarationYear");
 				ITInventory inventory=new ITInventory();
 				inventory.setItInventoryId(Long.parseLong(Itinventoryid));
-				inventory.setDeclarationYear(DeclarationYear);
+				inventory.setDeclarationYear(DeclarationYear.toString().substring(0,4));
 				inventory.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
 				inventory.setDesktopIntendedBy(req.getParameter("DesktopIntendedBy"));
 				inventory.setDesktopRemarks(req.getParameter("DesktopRemarks"));
@@ -245,7 +263,7 @@ public class InventoryController {
 			  	else {
 			  			redir.addAttribute("resultfail", "Inventory Quantity Update Unsuccessful");
 			  		  }
-				return "redirect:/ITAsset.htm";
+				return "redirect:/Inventory.htm";
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -294,7 +312,7 @@ public class InventoryController {
 			logger.info(new Date() +"Inside InventoryConfigureAddSubmit.htm "+UserId);
 			try {
 				
-				ITInventoryConfigure  details = new  ITInventoryConfigure();
+				ITInventoryConfigured  details = new  ITInventoryConfigured();
 				details.setConfiguredBy(EmpNo);
 				details.setItInventoryId(Long.parseLong(req.getParameter("Itinventoryid")));
 				details.setItemType(req.getParameter("ItemType"));
@@ -350,7 +368,7 @@ public class InventoryController {
 					 String arr[]=split.split("/");
 				      String inventoryconfigid=arr[0];
 				      String ItemType=arr[1];
-				ITInventoryConfigure configure=service.getInventoryConfigId(Long.parseLong(inventoryconfigid));
+				ITInventoryConfigured configure=service.getInventoryConfigId(Long.parseLong(inventoryconfigid));
 				
 			    List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo);
 			    req.setAttribute("configure",configure);
@@ -378,7 +396,7 @@ public class InventoryController {
 			try {
 				
 				
-				ITInventoryConfigure details= new ITInventoryConfigure();
+				ITInventoryConfigured details= new ITInventoryConfigured();
 				details.setInventoryConfigureId(Long.parseLong(req.getParameter("InventoryConfigureId")));
 				details.setItemType(req.getParameter("ItemType"));
 				details.setConnectionType(req.getParameter("ConnectionType"));
@@ -404,7 +422,7 @@ public class InventoryController {
 			  	}
 			  	else {
 			  			redir.addAttribute("resultfail", "Inventory Configuration Update Unsuccessful");
-			  		  }
+			   }
 				 
 				List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo); 
 				redir.addFlashAttribute("inventoryconfig",inventoryconfig); 
@@ -483,12 +501,14 @@ public class InventoryController {
 			
 			try {
 				
-				LocalDate today= LocalDate.now();
-		        String DeclarationYear=String.valueOf(today.getYear());
-		        String ITInventoryId=req.getParameter("inventoryid");
-				req.setAttribute("inventoryqty", service.getApprovedForm(ITInventoryId));
-			    req.setAttribute("inventoryconfigure", service.getInventoryConfigure(ITInventoryId));
-				
+				String split= req.getParameter("inventoryhistoryid");
+				   if(split!=null && !split.equals("null")) {
+					   String arr[]=split.split("/");
+					     String ITInventoryId=arr[0]; 
+						  String invntryhistoryid=arr[1];
+						
+				req.setAttribute("inventoryqty", service.getApprovedForm(invntryhistoryid));
+			    req.setAttribute("inventoryconfigure", service.getInventoryConfigureApprovedlist(ITInventoryId));
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 				String filename="Inventory-"+ITInventoryId.toString().trim().replace("/", "-");
 				String path=req.getServletContext().getRealPath("/view/temp");
@@ -505,8 +525,6 @@ public class InventoryController {
 		       
 		       
 		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
-		        
-		        
 		        File f=new File(path +File.separator+ filename+".pdf");
 		        FileInputStream fis = new FileInputStream(f);
 		        DataOutputStream os = new DataOutputStream(res.getOutputStream());
@@ -524,6 +542,8 @@ public class InventoryController {
 		        Files.delete(pathOfFile);		
 		       	
 			}
+				   
+			}
 			catch (Exception e) {
 				e.printStackTrace();  
 				logger.error(new Date() +" Inside InventoryFormDownload.htm "+UserId, e); 
@@ -537,58 +557,31 @@ public class InventoryController {
 		  String UserId=(String)ses.getAttribute("Username"); 
 		  String EmpNo =ses.getAttribute("EmpNo").toString();
 		  String LoginType=ses.getAttribute("LoginType").toString();
-		  logger.info(new Date() +"Inside InventoryPreview.htm "+UserId); 
+		  ses.setAttribute("SidebarActive","InventoryView_htm");	
+		  ses.setAttribute("formmoduleid", formmoduleid);
+		  logger.info(new Date() +"Inside InventoryView.htm "+UserId); 
 		  try {
-			    LocalDate today= LocalDate.now();
-			    String DeclarationYear=String.valueOf(today.getYear());
+			    
+			    String DeclarationYear=req.getParameter("declarationyear");
+
 			    req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfiguration(EmpNo));
 			    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			    req.setAttribute("LoginType", LoginType);
+	
+				
 			    return "itinventory/inventorypreview";
 	          
 	 }catch (Exception e) { 
 		 e.printStackTrace(); 
-		 logger.error(new Date() +" Inside InventoryPreview.htm "+UserId, e); 
+		 logger.error(new Date() +" Inside InventoryView.htm "+UserId, e); 
 		 return "static/Error"; 
 		 }
 		
 	  
 	  }
+
 	 
-	 @RequestMapping(value = "InventoryList.htm", method ={RequestMethod.GET,RequestMethod.POST})
-	  public String InventoryForwarded(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
-	  { 
-		  String UserId=(String)ses.getAttribute("Username"); 
-		  String EmpNo =ses.getAttribute("EmpNo").toString();
-		  String LoginType=ses.getAttribute("LoginType").toString();
-		  ses.setAttribute("SidebarActive","InventoryList_htm");
-		  ses.setAttribute("formmoduleid", formmoduleid);
-		  logger.info(new Date() +"Inside InventoryList.htm "+UserId); 
-		  try {
-			  String Year = req.getParameter("DeclarationYear");
-			    LocalDate today= LocalDate.now();
-				
-				if(Year== null) {
-					String start ="";
-					
-					start = String.valueOf(today.getYear());
-					Year=start;
-					
-				}
-			  
-			  
-			  String DeclarationYear=String.valueOf(today.getYear());
-		      req.setAttribute("InventoryList", service.getInventoryList(EmpNo,DeclarationYear));
-		      req.setAttribute("InventoryApprovedList", service.getInventoryApprovedList(Year,EmpNo,LoginType));
-			  return "itinventory/inventorylist";
-	          
-	 }catch (Exception e) { 
-		 e.printStackTrace(); 
-		 logger.error(new Date() +" Inside InventoryList.htm "+UserId, e); 
-		 return "static/Error"; 
-		 }
-	}
 	  @RequestMapping(value = "InventoryDetailsForward.htm", method ={RequestMethod.GET,RequestMethod.POST})
 		  public String InventoryDetailsForward(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 		  { 
@@ -601,7 +594,7 @@ public class InventoryController {
 				  inventory.setItInventoryId(Long.parseLong(req.getParameter("inventoryid01")));
 				  inventory.setStatus("F");
 				  inventory.setERemarks(req.getParameter("Remarks"));
-		          inventory.setDate(sdf1.format(new Date()));
+		          inventory.setForwardedDate(sdf1.format(new Date()));
 		          long save=service.ForwardDetails(inventory,UserId,EmpNo);
 		          if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Forwarded Successfully");
@@ -610,7 +603,7 @@ public class InventoryController {
 			  			redir.addAttribute("resultfail", "Inventory Details Forward Unsuccessful");
 			  		}
 		          
-		          return "redirect:/InventoryList.htm";
+		          return "redirect:/Inventory.htm";
 		          
 		 }catch (Exception e) { 
 			 e.printStackTrace(); 
@@ -618,8 +611,6 @@ public class InventoryController {
 			 return "static/Error"; 
 			 }
 	}
-	  
-	  
 	  
 	  @RequestMapping(value = "InventoryDetailsDeclared.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String InventoryDetailsForwarded(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -681,16 +672,18 @@ public class InventoryController {
 				   String split=req.getParameter("inventoryid");
 				   if(split!=null && !split.equals("null")) {
 					   String arr[]=split.split("/");
-					     String itid=arr[0]; 
-						  String eno=arr[1];
+					   String itid=arr[0]; 
+					   String eno=arr[1];
+					   String declarationyear=arr[2];
+					   System.out.println("declyear-"+declarationyear);
 						  
 				  
 				   inventory.setItInventoryId(Long.parseLong(itid));
 				   inventory.setARemarks(req.getParameter("remarks"));
 				   inventory.setStatus("R");
 				   inventory.setReturnedBy(EmpNo);
-				   inventory.setDate(sdf1.format(new Date()));
-				   long save=service.inventoryDetailsReturn(inventory,EmpNo,eno);
+				   
+				   long save=service.inventoryDetailsReturn(inventory,EmpNo,eno,declarationyear);
 				   if(save!=0){
 			        	  redir.addAttribute("result", "Inventory Details Returned Successfully");
 				  	   }
@@ -718,19 +711,88 @@ public class InventoryController {
 		  logger.info(new Date() +"Inside InventoryDetailsApprove.htm "+UserId); 
 		  try {
 			  
+			  ITInventory inventory = new ITInventory();
 			  
-			   ITInventory inventory=new ITInventory();
+			   ITInventoryHistory Aprrove=new ITInventoryHistory();
 			   String split=req.getParameter("inventoryid");
 			   if(split!=null && !split.equals("null")) {
 				   String arr[]=split.split("/");
 				     String itid=arr[0]; 
 					  String eno=arr[1];
+					
 					  
-			   inventory.setItInventoryId(Long.parseLong(itid));
-			   inventory.setStatus("A");
-			   inventory.setDate(sdf1.format(new Date()));
-			   long save=service.inventoryDetailsApprove(inventory,EmpNo,eno);
-			   if(save!=0){
+				inventory.setItInventoryId(Long.parseLong(itid));
+			    inventory.setStatus("A");
+			    inventory.setApprovedDate(sdf1.format(new Date()));
+			    
+				Aprrove.setItInventoryId(Long.parseLong(itid)); 
+				Aprrove.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
+				Aprrove.setDesktopIntendedBy(req.getParameter("DesktopIntndBy"));
+				Aprrove.setDesktopRemarks(req.getParameter("DesktopRemark"));
+				Aprrove.setLaptop(Integer.parseInt(req.getParameter("Laptop")));
+				Aprrove.setLaptopIntendedBy(req.getParameter("LaptopIntndBy"));
+				Aprrove.setLaptopRemarks(req.getParameter("LaptopRemark"));
+				Aprrove.setUSBPendrive(Integer.parseInt(req.getParameter("USBPendrive")));
+				Aprrove.setUSBPendriveIntendedBy(req.getParameter("USBPendriveIntndBy"));
+				Aprrove.setUSBPendriveRemarks(req.getParameter("USBPendriveRemark"));
+				Aprrove.setPrinter(Integer.parseInt(req.getParameter("Printer")));
+				Aprrove.setPrinterIntendedBy(req.getParameter("PrinterIntndBy"));
+				Aprrove.setPrinterRemarks(req.getParameter("PrinterRemark"));
+				Aprrove.setTelephone(Integer.parseInt(req.getParameter("Telephone")));
+				Aprrove.setTelephoneIntendedBy(req.getParameter("TelephoneIntndBy"));
+				Aprrove.setTelephoneRemarks(req.getParameter("TelephoneRemark"));
+				Aprrove.setFaxMachine(Integer.parseInt(req.getParameter("Faxmachine")));
+				Aprrove.setFaxMachineIntendedBy(req.getParameter("FaxmachineIntndBy"));
+				Aprrove.setFaxMachineRemarks(req.getParameter("FaxmachineRemark"));
+				Aprrove.setScanner(Integer.parseInt(req.getParameter("Scanner")));
+				Aprrove.setScannerIntendedBy(req.getParameter("ScannerIntndBy"));
+				Aprrove.setScannerRemarks(req.getParameter("ScannerRemark"));
+				Aprrove.setXeroxMachine(Integer.parseInt(req.getParameter("Xeroxmachine")));
+				Aprrove.setXeroxMachineIntendedBy(req.getParameter("XeroxmachineIntndBy"));
+				Aprrove.setXeroxMachineRemarks(req.getParameter("XeroxmachineRemark"));
+				Aprrove.setMiscellaneous(Integer.parseInt(req.getParameter("Miscellaneuos")));
+				Aprrove.setMiscellaneousIntendedBy(req.getParameter("MiscellaneuosIntndBy"));
+				Aprrove.setMiscellaneousRemarks(req.getParameter("MiscellaneuosRemark"));
+				Aprrove.setStatus("A");
+				Aprrove.setDeclaredBy(eno);
+				Aprrove.setDeclarationYear(req.getParameter("DeclarationYear"));
+				Aprrove.setForwardedDate(req.getParameter("ForwardedDate"));
+				Aprrove.setApprovedDate(sdf1.format(new Date())); 
+				Aprrove.setCreatedBy(UserId);
+				Aprrove.setCreatedDate(sdf1.format(new Date()));
+				Aprrove.setIsActive(1);
+				
+
+				
+				List<Object[]> configlist=service.getInventoryConfigure(itid);
+				long save=0;
+				for(Object[] obj:configlist) {
+					
+					ITInventoryConfiguredHistory config=new ITInventoryConfiguredHistory();
+					config.setConfiguredBy(obj[17].toString());
+					config.setItInventoryId(Long.parseLong(obj[16].toString()));
+					config.setItemType(obj[1].toString());
+					config.setConnectionType(obj[2].toString());
+					config.setCPU(obj[3].toString());
+					config.setMonitor(obj[4].toString());
+					config.setRAM(obj[5].toString());
+					config.setAdditionalRAM(obj[6].toString());
+					config.setKeyboard(obj[7].toString());
+					config.setMouse(obj[8].toString());
+					config.setExternalharddisk(obj[9].toString());
+					config.setExtraInternalharddisk(obj[10].toString());
+					config.setOffice(obj[11].toString());
+					config.setOS(obj[12].toString());
+					config.setPDF(obj[13].toString());
+					config.setBrowser(obj[14].toString());
+					config.setKavach(obj[15].toString());
+					config.setCreatedBy(UserId);
+					config.setCreatedDate(sdf1.format(new Date()));
+					config.setIsActive(1);
+				    save=service.inventoryDetailsApprove(Aprrove,inventory,config,EmpNo,eno);
+				}
+				
+				 if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Approved Successfully");
 			  	   }
 			  	else {
@@ -746,9 +808,6 @@ public class InventoryController {
 		 }
 	 }
 	  
-	  
-	  
-	 
 	  @RequestMapping(value = "InventoryDetailsApproved.htm", method ={RequestMethod.GET,RequestMethod.POST})
 	  public String InventoryDetailsApproved(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception 
 	  { 
@@ -769,6 +828,7 @@ public class InventoryController {
 					start = String.valueOf(today.getYear());
 					Year=start;
 				}
+				
 				req.setAttribute("InventoryApprovedList", service.getInventoryApprovedList(Year,EmpNo,LoginType));
 			    req.setAttribute("DeclarationYear", Year);
 			    req.setAttribute("LoginType", LoginType);

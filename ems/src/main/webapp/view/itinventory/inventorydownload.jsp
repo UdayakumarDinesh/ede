@@ -139,6 +139,7 @@ tr.noBorder td {
 <%	
     SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
     SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+    
     String LabLogo = (String)request.getAttribute("LabLogo");
     List<Object[]> inventoryquantity=( List<Object[]>)request.getAttribute("inventoryqty");
     List<Object[]> inventoryconfigure=(List<Object[]>)request.getAttribute("inventoryconfigure");
@@ -165,7 +166,7 @@ tr.noBorder td {
 								</div>
 								<%for(Object[] inventoryqty:inventoryquantity ){ %>
 								<%if(inventoryqty[32]!=null){ %>
-								 <div style="margin-left:450px;"><span style="border: 0px;font-weight: 600">Date :&nbsp;<span class="text-blue" ><%=rdf.format(sdf.parse(inventoryqty[32].toString())) %></span> </span>
+							 <div style="margin-left:450px;"><span style="border: 0px;font-weight: 600">Date :&nbsp;<span class="text-blue" ><%=rdf.format(sdf.parse(inventoryqty[32].toString())) %></span> </span>
 								</div>
 								<%} %>
 								 
@@ -178,13 +179,13 @@ tr.noBorder td {
 											<th>Dept</th>
 											<th>Designation</th>
 										</tr>
-										<tr>
+									<tr>
 										
 											<td class="text-blue" style="text-transform: uppercase;"><%=inventoryqty[1]%></td>
 											<td class="text-blue" ><%=inventoryqty[2]%></td>
 											<td class="text-blue" ><%=inventoryqty[3]%></td>
 											<td class="text-blue" ><%=inventoryqty[4]%></td>
-										</tr>
+									</tr>
 										
 									</tbody>
 								</table>
@@ -246,7 +247,7 @@ tr.noBorder td {
 								
 						</tr>
 						<%} %>
-						<%if(!inventoryqty[17].toString().equals("0")) {%>
+					<%if(!inventoryqty[17].toString().equals("0")) {%>
 						<tr>
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Telephone</td>
@@ -296,7 +297,18 @@ tr.noBorder td {
 						<%} %>
 					</table>
 					</div>
-					       <div style="margin-left:450px !important;margin-top:50px;text-align:left;"> 
+					
+					<%if (inventoryqty[33].toString().equalsIgnoreCase("A")){ %>
+					      <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+						        <span style="font-weight: 400; font-size: 16px;">Forwarded By:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Forwarded On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[36].toString().substring(0, 10)) +" "+inventoryqty[36].toString().substring(11,19) %></span></span><br>
+						 </div>
+						 <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+						        <span style="font-weight: 400; font-size: 16px;">Approved By:&nbsp;<span class="text-blue" ><%=inventoryqty[37]%> </span></span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[32].toString().substring(0, 10)) +" "+inventoryqty[32].toString().substring(11,19) %></span></span><br>
+						 </div>
+					<%} %>
+					       <div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>
 								<span style="font-weight: 600; font-size: 18px; ">Name:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
 								<span style="font-weight: 600; font-size: 18px;">EmpNo:&nbsp;<span class="text-blue" ><%=inventoryqty[2]%></span></span>
@@ -308,10 +320,10 @@ tr.noBorder td {
 					      
 					       <div class="row">
 							<%if(inventoryconfigure.size()>0) {%>
-								<div class="col-md-12" align="center">
+							<div class="col-md-12" align="center">
 								<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;">Inventory Configuration </span>
 								 <%} %> 
-							</div>
+							 </div>
 							<table >
 								
 								 <% String LAN="LAN";
@@ -328,9 +340,6 @@ tr.noBorder td {
 						            	
 						         %>
 						       <tr>
-									
-										 
-									 
 									<td colspan="2">
 										<b >Connection Type :&nbsp;&nbsp;<span class="text-blue" style="font-weight: 400;" ><%if(Config[2].toString().equals("L")){%><%=LAN %><%}else if(Config[2].toString().equals("I")){%><%=Internet %><%} else{%><%=StandAlone%><%} %></span></b>
 									</td>
@@ -396,12 +405,22 @@ tr.noBorder td {
 								
 								<% } %>
 								
-								
 							</table>
 						
 					</div>
-					<%if(inventoryconfigure.size()>0) {%>	
-					<div style="margin-left:450px !important;margin-top:50px;text-align:left;"> 
+					<%if(inventoryconfigure.size()>0) {%>
+					
+					 
+					      <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+						        <span style="font-weight: 400; font-size: 16px;">Forwarded By:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Forwarded On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[36].toString().substring(0, 10)) +" "+inventoryqty[36].toString().substring(11,19) %></span></span><br>
+						 </div>
+						 <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+						        <span style="font-weight: 400; font-size: 16px;">Approved By:&nbsp;<span class="text-blue" ><%=inventoryqty[37]%> </span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[32].toString().substring(0, 10)) +" "+inventoryqty[32].toString().substring(11,19) %></span></span><br>
+						 </div>
+				
+					<div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>
 								<span style="font-weight: 600; font-size: 18px; ">Name:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
 								<span style="font-weight: 600; font-size: 18px;">EmpNo:&nbsp;<span class="text-blue" ><%=inventoryqty[2]%></span></span>
