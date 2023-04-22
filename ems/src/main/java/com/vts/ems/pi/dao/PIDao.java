@@ -6,6 +6,8 @@ import java.util.List;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.Employee;
 
 public interface PIDao {
 
@@ -21,5 +23,15 @@ public interface PIDao {
 	public long NotificationAdd(EMSNotification notify) throws Exception;
 	public long AddressResEdit(AddressRes addressRes) throws Exception;
 	public Object[] PerAddressFormData(String addressPerId) throws Exception;
+	public Employee getEmpData(String empid)throws Exception;
+	public String GetCEOEmpNo() throws Exception;
+	public List<String> GetDGMEmpNos() throws Exception;
+	public List<String> GetDHEmpNos() throws Exception;
+	public List<String> GetGHEmpNos() throws Exception;
+	public String GetEmpGHEmpNo(String empno) throws Exception;
+	public String GetEmpDHEmpNo(String empno) throws Exception;
+	public String GetEmpDGMEmpNo(String empno) throws Exception;
+	public List<Object[]> ResAddressApprovalsList(String EmpNo,String LoginType) throws Exception;
+	public DivisionMaster GetDivisionData(long DivisionId) throws Exception;
 
 }

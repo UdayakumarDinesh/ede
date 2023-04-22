@@ -1,5 +1,6 @@
 package com.vts.ems.pi.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,10 @@ import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.Employee;
+
+import net.bytebuddy.implementation.bytecode.Division;
 
 
 @Transactional
@@ -33,7 +38,7 @@ public class PIDaoImp implements PIDao{
 	EntityManager manager;
 	
 	
-	private static final String RESADDRESSDETAILS = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,to_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.StatusColor,a.PISStatusId FROM pis_address_res a,employee b,pis_status c WHERE a.EmpId=:EmpId AND a.IsActive=1 AND a.EmpId=b.EmpId AND a.PISStatusId=c.PISStatusId ORDER BY a.address_res_id DESC";
+	private static final String RESADDRESSDETAILS = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,to_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.PisStatusColor,c.PISStatusId,c.pisstatuscode FROM pis_address_res a,employee b,pis_approval_status c WHERE  a.IsActive=1 AND a.EmpId=b.EmpId AND a.PisStatuscode=c.PisStatuscode AND a.EmpId=:EmpId ORDER BY a.address_res_id DESC ";
 	@Override
 	public List<Object[]> EmployeeAddressDetails(String EmpId)throws Exception{
 		List<Object[]> empData=null;
@@ -50,7 +55,7 @@ public class PIDaoImp implements PIDao{
 	
 	
 	
-	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusId FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
+	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusCode FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
 	@Override
 	public Object[] ResAddressFormData(String addressResId)throws Exception{
 		Object[] empData=null;
@@ -65,7 +70,7 @@ public class PIDaoImp implements PIDao{
 		return empData;
 	}
 	
-	private static final String PERADDRESSDETAILS = "SELECT a.empid,a.address_per_id,a.per_addr,a.from_per_addr,to_per_addr,a.mobile,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.StatusColor,a.PISStatusId FROM pis_address_per a,employee b,pis_status c WHERE a.EmpId=:EmpId AND a.IsActive=1 AND a.EmpId=b.EmpId AND a.PISStatusId=c.PISStatusId ORDER BY a.address_per_id DESC";
+	private static final String PERADDRESSDETAILS = "SELECT a.empid,a.address_per_id,a.per_addr,a.from_per_addr,to_per_addr,a.mobile,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.pisStatusColor,c.PISStatusId FROM pis_address_per a,employee b,pis_approval_status c WHERE a.EmpId=:EmpId AND a.IsActive=1 AND a.EmpId=b.EmpId AND a.PISStatusCode=c.PISStatuscode ORDER BY a.address_per_id DESC";
 	@Override
 	public List<Object[]> PermanentAddressDetails(String EmpId)throws Exception{
 		List<Object[]> empData=null;
@@ -80,7 +85,7 @@ public class PIDaoImp implements PIDao{
 		}
 	}
 	
-	private static final String PERADDRESSDATA = "SELECT a.empid,a.address_per_id,a.per_addr,a.city,a.state,a.pin,a.from_per_addr,a.mobile,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusId FROM pis_address_per a,employee b WHERE a.address_per_id=:addressPerId AND a.IsActive=1 AND a.EmpId=b.EmpId";
+	private static final String PERADDRESSDATA = "SELECT a.empid,a.address_per_id,a.per_addr,a.city,a.state,a.pin,a.from_per_addr,a.mobile,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatuscode FROM pis_address_per a,employee b WHERE a.address_per_id=:addressPerId AND a.IsActive=1 AND a.EmpId=b.EmpId";
 	@Override
 	public Object[] PerAddressFormData(String addressPerId)throws Exception{
 		Object[] empData=null;
@@ -230,4 +235,178 @@ public class PIDaoImp implements PIDao{
 		}
 		
 	}
+	
+	private static final String GETEMPDATA="FROM Employee WHERE EmpId=:empid";
+	@Override
+	public Employee getEmpData(String empid)throws Exception
+	{
+		Employee emp=null;
+		try {
+			Query query = manager.createQuery(GETEMPDATA);
+			query.setParameter("empid", Long.parseLong(empid));
+			emp = (Employee) query.getSingleResult();
+			return emp;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmpData "+e);
+			e.printStackTrace();
+			return null;
+		}				
+	}
+	
+	private static final String GETCEOEMPNO  ="SELECT empno FROM lab_master, employee WHERE labauthorityid=empid";
+	@Override
+	public String GetCEOEmpNo() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETCEOEMPNO);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetCEOEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String GETDGMEMPNOS  ="SELECT dgmempno FROM dgm_master WHERE isactive=1";
+	@Override
+	public List<String> GetDGMEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETDGMEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDGMEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+		
+	}
+	
+	
+	private static final String GETDHEMPNOS  ="SELECT divisionheadid FROM division_master WHERE isactive=1";
+	@Override
+	public List<String> GetDHEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETDHEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDHEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+		
+	}
+	
+	private static final String GETGHEMPNOS  ="SELECT Groupheadid FROM division_Group WHERE isactive=1;";
+	@Override
+	public List<String> GetGHEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETGHEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetGHEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}		
+	}
+	
+	private static final String GETEMPGHEMPNO  ="SELECT dg.groupheadid FROM employee e, division_group dg WHERE e.groupid=dg.groupid AND e.empno=:empno";
+	@Override
+	public String GetEmpGHEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPGHEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpGHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	
+	private static final String GETEMPDHEMPNO  ="SELECT dm.divisionheadid FROM employee e, division_master dm WHERE e.divisionid=dm.divisionid AND e.empno=:empno";
+	@Override
+	public String GetEmpDHEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDHEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	
+	private static final String GETEMPDGMEMPNO  ="SELECT dgm.dgmempno FROM employee e, division_master dm,dgm_master dgm WHERE e.divisionid=dm.divisionid AND dm.dgmid=dgm.dgmid AND e.empno=:empno";
+	@Override
+	public String GetEmpDGMEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDGMEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String RESADDRESSAPPROVALSLIST  ="CALL Pis_ResAddress_approval (:EmpNo,:LoginType);";
+	@Override
+	public List<Object[]> ResAddressApprovalsList(String EmpNo,String LoginType) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(RESADDRESSAPPROVALSLIST);
+			query.setParameter("EmpNo", EmpNo);
+			query.setParameter("LoginType", LoginType);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDHEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
+	@Override
+	public DivisionMaster GetDivisionData(long DivisionId) throws Exception
+	{
+			return manager.find(DivisionMaster.class, DivisionId);
+	}
+	
+	
 }

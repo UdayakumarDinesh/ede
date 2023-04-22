@@ -9,6 +9,9 @@ import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.model.EmployeeContract;
+import com.vts.ems.config.MsAccessDBConnectionConfig;
 import com.vts.ems.login.EmpContractRepo;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
@@ -182,21 +186,10 @@ public class EmsController {
 		return "redirect:/MainDashBoard.htm";
 	}
 
-	
-	
-	
-	@RequestMapping(value = "ForcePasswordChange.htm", method = RequestMethod.GET)
-	public String ForcePasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
-		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() + "Inside ForcePasswordChange.htm "+UserId);
-		req.setAttribute("ForcePwd", "Y");
-		return "pis/PasswordChange";
-	}
-	
-	
 	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
 	{
+		
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
@@ -247,6 +240,17 @@ public class EmsController {
 			return "static/Error";
 		}
 	}
+	
+	
+	@RequestMapping(value = "ForcePasswordChange.htm", method = RequestMethod.GET)
+	public String ForcePasswordChange(HttpServletRequest req, HttpSession ses) throws Exception {
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside ForcePasswordChange.htm "+UserId);
+		req.setAttribute("ForcePwd", "Y");
+		return "pis/PasswordChange";
+	}
+	
+	
 	
 	@RequestMapping(value = "Calendar.htm")
 	public String calendar(HttpServletRequest req, HttpSession ses) throws Exception 

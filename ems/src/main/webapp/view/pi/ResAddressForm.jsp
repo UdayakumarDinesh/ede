@@ -1,3 +1,7 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
@@ -47,6 +51,11 @@ Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
 /* Object[] PerFormData = (Object[])request.getAttribute("PerFormData"); */
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 Date date = new Date();
+
+String isApproval = (String)request.getAttribute("isApproval");
+
+List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 %>
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
@@ -116,23 +125,16 @@ Date date = new Date();
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	
 				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A </div>
 				   <br>
-				    <%if(ResFormData!=null && Long.parseLong(ResFormData[18].toString())==4) {%>	
-				   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="" name="" value="" >Verify</button>
-				     <button type="submit" class="btn btn-sm delete-btn" name="" value="N" onclick="return DremarkRequired('N');" formnovalidate="formnovalidate">Return</button>	
-				   <%}else if(ResFormData!=null && Long.parseLong(ResFormData[18].toString())==2) {%>			   				
-				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="" name="" value="" >Accept</button>
-				     <button type="submit" class="btn btn-sm delete-btn" name="" value="N" onclick="return DremarkRequired('N');" formnovalidate="formnovalidate">Reject</button>				     
-			       <%}else if(ResFormData!=null && ( Long.parseLong(ResFormData[18].toString() )==1 || Long.parseLong(ResFormData[18].toString() )==3 || Long.parseLong(ResFormData[18].toString() )==6) ){ %>
-				   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="F" >
-						<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
-					</button>
+				   	<% if(ResFormData!=null && toUserStatus.contains(ResFormData[18].toString()) || (isApproval!=null && isApproval.equalsIgnoreCase("Y"))){ %>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" >
+							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
+						</button>
 					<%} %>
-                 	<!-- <button type="submit" class="btn btn-sm edit-btn"  name="Action" value="EDIT" formaction="ResAddressAddEdit.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">Edit</button> 		 -->
 	           
 			   </div>
 			   
-			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %> <% }%>">
-			   <input type="hidden" name="resaddressid" value="<%if(ResFormData!=null){ %><%=ResFormData[1] %> <% }%>">
+			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %><% }%>">
+			   <input type="hidden" name="resaddressid" value="<%if(ResFormData!=null){ %><%=ResFormData[1] %><% }%>">
 			</form>
 		</div>
 	   </div>  

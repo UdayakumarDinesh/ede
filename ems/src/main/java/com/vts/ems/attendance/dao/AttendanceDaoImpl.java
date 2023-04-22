@@ -9,8 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +30,8 @@ public class AttendanceDaoImpl implements AttendanceDao{
     EntityManager SQLMnager;
 	
 	@Autowired
-	AttendancePunchDataRepo  attendancepunchdatarepo;
+	AttendancePunchDataRepo attendancepunchdatarepo;
+	
 	
 	private static final String  GETPUNCHINFO= "SELECT  UserID,Status ,Row, Half, PDate ,UserName ,ProcessDate ,Punch1 ,Punch1_Date ,Punch1_Time  ,WorkTime ,WorkTime_HHMM ,FirstHalf ,SecondHalf ,OutPunch ,OutPunch_Date ,OutPunch_Time FROM EMSPunchView WHERE ProcessDate=:ProcessDate" ;
 	@Override

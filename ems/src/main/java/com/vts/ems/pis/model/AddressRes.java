@@ -9,10 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-@Getter
-@Setter
+import lombok.Data;
+@Data
 @Entity
 @Table(name="pis_address_res")
 public class AddressRes implements Serializable{
@@ -46,7 +44,8 @@ public class AddressRes implements Serializable{
 	private String VerifiedOn;
 	private String ReceivedOn;
 	private String ApprovedOn;
-	private int PISStatusId;
+	private String PisStatusCode;
+	private String PisStatusCodeNext;
 	
 	private int IsActive;
 	private String CreatedBy;
