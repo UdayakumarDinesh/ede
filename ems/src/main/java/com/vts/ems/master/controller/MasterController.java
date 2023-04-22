@@ -37,11 +37,13 @@ import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.CHSSDoctorRates;
 import com.vts.ems.master.model.CHSSEmpanelledHospital;
 import com.vts.ems.master.model.Department;
+import com.vts.ems.master.model.DgmMaster;
 import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -1466,11 +1468,11 @@ public class MasterController {
 			ses.setAttribute("SidebarActive", "DepartmentsList_htm");
 			String action=req.getParameter("action");
 			List<Object[]> EmpList=service.getEmpList();
-			List<Object[]> groupList = service.getGroupList();
+			List<Object[]> dgmList=service.getDgmList();
 			if("Add".equalsIgnoreCase(action)) {
 				
 				req.setAttribute("Emplist",EmpList );
-				req.setAttribute("groupList", groupList);
+				req.setAttribute("DGMList", dgmList);
 				return "masters/DepartmentsAddEdit";
 			}
 			else if("Edit".equalsIgnoreCase(action)) {
@@ -1478,7 +1480,7 @@ public class MasterController {
 				Object[] deptdetails=(Object[])service.departmentEdit(DeptId);
 			    req.setAttribute("Department", deptdetails);
 			    req.setAttribute("Emplist",EmpList );
-			    req.setAttribute("groupList", groupList);
+			    req.setAttribute("DGMList", dgmList);
 				return "masters/DepartmentsAddEdit";
 			}else {
 				 Deparmentslist=service.getDepartmentslist();
@@ -1504,15 +1506,15 @@ public class MasterController {
 				String depCode = req.getParameter("Departmentcode");
 				String depName = req.getParameter("DepartmentName");
 				String depHead = req.getParameter("DepartmentHead");
-				String groupId = req.getParameter("groupCode");
+				String dgmid = req.getParameter("DGMId");
 				
-				Department dep=new Department();
+				DivisionMaster dep=new DivisionMaster();
 				 dep.setDivisionCode(depCode.toUpperCase().trim());
 				 dep.setDivisionName(depName.trim());
-				 dep.setDivisionHeadId(Long.parseLong(depHead));
+				 dep.setDivisionHeadId(depHead);
 				 dep.setCreatedBy(UserId);
 				 dep.setCreatedDate(sdtf.format(new Date()));
-				 dep.setGroupId( Long.parseLong(groupId));
+				 dep.setDGMId(dgmid);
 				 dep.setIsActive(1);
 				int result=service.DepartmentAdd(dep);
 				if(result>0) {
@@ -1539,14 +1541,14 @@ public class MasterController {
 			String depCode = req.getParameter("Departmentcode");
 			String depName = req.getParameter("DepartmentName");
 			String depHead = req.getParameter("DepartmentHead");
-			String groupId = req.getParameter("groupCode");
+			String DGMId = req.getParameter("DGMId");
 			
-			Department dep=new Department();
+			DivisionMaster dep=new DivisionMaster();
 			dep.setDivisionId(Long.parseLong(deptId));
 			dep.setDivisionCode(depCode.toUpperCase().trim());
 			dep.setDivisionName(depName.trim());
-			dep.setDivisionHeadId(Long.parseLong(depHead));
-			dep.setGroupId( Long.parseLong(groupId));
+			dep.setDivisionHeadId(depHead);
+			dep.setDGMId(DGMId);
 			dep.setModifiedBy(UserId);
 			dep.setModifiedDate(sdtf.format(new Date()));					
 			String comments = (String)req.getParameter("comments");
@@ -1587,6 +1589,8 @@ public class MasterController {
 			
 			List<Object[]> emp = service.getEmployeeList();
 			req.setAttribute("grpheadlist", emp);
+			List<Object[]>	 Deparmentslist=service.getDepartmentslist();
+			req.setAttribute("Deparmentlist", Deparmentslist);
 			if("ADD".equalsIgnoreCase(action)) {
 				
 				return "masters/DivisionGroupAddEdit";
@@ -1622,14 +1626,11 @@ public class MasterController {
 		logger.info(new Date() +"Inside DivisionGroupAdd.htm "+UserId);
 		try {
 			
-			String groupCode = (String)req.getParameter("groupCode");
-			String groupName = (String)req.getParameter("groupName");
-			String groupHeadId = (String)req.getParameter("groupHeadId");
-			
 			DivisionGroup grp = new DivisionGroup();
-			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
+			grp.setGroupCode(req.getParameter("groupCode").toUpperCase());
+			grp.setGroupName(req.getParameter("groupName").trim());
+			grp.setGroupHeadId(req.getParameter("groupHeadId"));
+			grp.setDivisionId(Integer.parseInt(req.getParameter("DepartmentId")));
 			grp.setCreatedBy(UserId);
 			grp.setCreatedDate(sdtf.format(new Date()));
 			grp.setIsActive(1);
@@ -1650,26 +1651,36 @@ public class MasterController {
 	}
 	
 	@RequestMapping(value="DivisionGroupEdit.htm", method={RequestMethod.POST} )
-	public String DivisionGroupEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	public String DivisionGroupEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile, RedirectAttributes redir)throws Exception
 	{
 		String UserId=(String)ses.getAttribute("Username");
 		logger.info(new Date() +"Inside DivisionGroupEdit.htm "+UserId);
 		try {
 			
-			String groupId = (String)req.getParameter("divgrpid");	
-			String groupCode = (String)req.getParameter("groupCode");
-			String groupName = (String)req.getParameter("groupName");
-			String groupHeadId = (String)req.getParameter("groupHeadId");
-			
-			
+			String groupId =  req.getParameter("divgrpid");	
+	
 			DivisionGroup grp = new DivisionGroup();
 			grp.setGroupId(Integer.parseInt(groupId));
-			grp.setGroupCode(groupCode.toUpperCase());
-			grp.setGroupName(groupName.trim());
-			grp.setGroupHeadId(Integer.parseInt(groupHeadId));
-//			grp.setIsActive(1);
+			grp.setGroupCode(req.getParameter("groupCode").toUpperCase().trim());
+			grp.setGroupName(req.getParameter("groupName").trim());
+			grp.setGroupHeadId(req.getParameter("groupHeadId"));
+			grp.setDivisionId(Integer.parseInt(req.getParameter("DepartmentId")));
 			grp.setModifiedBy(UserId);
 			grp.setModifiedDate(sdtf.format(new Date()));
+			
+			String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(Long.parseLong(groupId));
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("division_group");
+	    	     
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   
+	    	   service.AddDeptEditComments(masteredit , masterdto);
+	    	   
 			int result = service.editDivisionGroup(grp);
 			if (result != 0) {
 				 redir.addAttribute("result", "Group Updated Successfully");
@@ -1694,8 +1705,7 @@ public class MasterController {
 		logger.info(new Date() +"Inside DivisionAddcheck.htm "+UserId);
 		try
 		{	  
-			String groupCode = req.getParameter("groupCode");
-			 duplicate = service.checkAddDuplicate(groupCode);
+			 duplicate = service.checkAddDuplicate(req.getParameter("groupCode"));
 		}
 		catch (Exception e) {
 			logger.error(new Date() +"Inside DivisionAddcheck.htm "+UserId ,e);
@@ -1729,6 +1739,7 @@ public class MasterController {
 		  
 		 return json.toJson(duplicate);    
 	}
+	
 	@RequestMapping(value="Qualification.htm", method={RequestMethod.GET,RequestMethod.POST} )
 	public String QualificationList(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
 	{
@@ -1749,5 +1760,166 @@ public class MasterController {
 		}
 		return "masters/QualificationList";
 
+	}
+	
+	@RequestMapping(value="Dgm.htm" , method={ RequestMethod.POST ,RequestMethod.GET })
+	public String DgmList(HttpServletRequest req ,HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside Dgm.htm"+UserId);
+		try {
+			ses.setAttribute("SidebarActive", "Dgm_htm");
+			String action=req.getParameter("action");
+			
+			List<Object[]> emp = service.getEmployeeList();
+			req.setAttribute("emplist", emp);
+			if("ADD".equalsIgnoreCase(action)) {
+				
+				return "masters/DgmAddEdit";
+			}
+			else if("EDIT".equalsIgnoreCase(action)) {
+				String dgmId = req.getParameter("dgmId");
+				DgmMaster dgmMaster = service.getDgmById(Integer.parseInt(dgmId));
+				req.setAttribute("dgm", dgmMaster);
+				
+				return "masters/DgmAddEdit";
+			}
+			else {
+				List<Object[]> list = service.getDgmList();
+				req.setAttribute("dgmList", list);
+				
+				return "masters/DgmList";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside Dgm.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value="DgmAdd.htm", method={RequestMethod.POST} )
+	public String DgmAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DgmAdd.htm "+UserId);
+		try {
+		
+			DgmMaster dgm = new DgmMaster();
+			dgm.setDGMCode(req.getParameter("dgmCode").toUpperCase().trim());
+			dgm.setDGMName(req.getParameter("dgmName").trim());
+			dgm.setDGMEmpNo(req.getParameter("dgmEmpNo"));
+			dgm.setIsActive(1);
+			dgm.setCreatedBy(UserId);
+			dgm.setCreatedDate(sdtf.format(new Date()));
+            long result = service.dgmAdd(dgm);
+			
+			if (result != 0) {
+				 redir.addAttribute("result", "DGM Added Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "DGM Added Unsuccessfull");
+			}
+			
+			return "redirect:/Dgm.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DgmAdd.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	@RequestMapping(value="DgmEdit.htm", method={RequestMethod.POST} )
+	public String DgmEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside DgmEdit.htm "+UserId);
+		try {
+			long dgmId = Long.parseLong(req.getParameter("dgmId")) ;
+			DgmMaster dgm = new DgmMaster();
+			dgm.setDGMId(dgmId);
+			dgm.setDGMCode(req.getParameter("dgmCode").toUpperCase().trim());
+			dgm.setDGMName(req.getParameter("dgmName").trim());
+			dgm.setDGMEmpNo(req.getParameter("dgmEmpNo"));
+			dgm.setModifiedBy(UserId);
+			dgm.setModifiedDate(sdtf.format(new Date()));
+                    
+            String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(dgmId);
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("dgm_master");
+	    	   
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   service.AddMasterEditComments(masteredit , masterdto);
+	    	 
+	    	   long result = service.dgmEdit(dgm);
+	    	   
+			if (result != 0) {
+				 redir.addAttribute("result", "DGM Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "DGM Update Unsuccessfull");
+			}
+			
+			 return "redirect:/Dgm.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DgmEdit.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	
+	@RequestMapping(value="DgmCodeAddCheckDuplicate.htm", method=RequestMethod.GET)
+	public @ResponseBody String DgmCodeAddCheckDuplicate(HttpSession ses, HttpServletRequest req) throws Exception {
+		String UserId=(String)ses.getAttribute("Username");
+		BigInteger duplicate=null;
+		logger.info(new Date() +"Inside DgmCodeAddCheckDuplicate.htm "+UserId);
+		try
+		{	  
+			String dgmCode = req.getParameter("dgmCode");
+			 if(dgmCode!=null) {
+				 duplicate = service.duplicateDgmCodeCountAdd(dgmCode);
+			 }
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DgmCodeAddCheckDuplicate.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  Gson json = new Gson();
+		  return json.toJson(duplicate);           
+		  
+	}
+	
+	@RequestMapping(value="DgmCodeEditCheckDuplicate.htm", method=RequestMethod.GET)
+	public @ResponseBody String DgmCodeEditCheckDuplicate(HttpSession ses, HttpServletRequest req) throws Exception {
+		
+		String UserId=(String)ses.getAttribute("Username");
+		
+		BigInteger duplicate=null;
+		logger.info(new Date() +"Inside DgmCodeEditCheckDuplicate.htm "+UserId);
+		Gson json = new Gson();
+		
+		try
+		{	  
+			String dgmCode = req.getParameter("dgmCode");
+			String dgmId = req.getParameter("dgmId");
+			if(dgmCode!=null && dgmId!=null) {
+				duplicate = service.duplicateDgmCodeCountEdit(dgmId, dgmCode);
+			}
+	          
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside DgmCodeEditCheckDuplicate.htm "+UserId ,e);
+				e.printStackTrace(); 
+		}
+		  
+		 return json.toJson(duplicate);    
 	}
 }

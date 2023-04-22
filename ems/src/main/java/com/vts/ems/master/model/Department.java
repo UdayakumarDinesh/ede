@@ -20,8 +20,8 @@ public class Department implements Serializable {
 	private long DivisionId;
 	private String DivisionCode;
 	private String DivisionName;
-	private long DivisionHeadId;
-	private long GroupId;
+	private String DivisionHeadId;
+	private String DGMId;
 	private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

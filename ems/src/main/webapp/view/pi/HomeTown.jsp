@@ -95,18 +95,19 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 						<tr> <td style="border: 0;text-decoration:underline;">Kind Attn: Incharge - P&A</td> </tr>
 						<tr> <td style="border: 0;"> I here by declare my hometown as under for entering the same in personal / official records.</td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;">NAME &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;:</td> </tr>
-						<tr> <td style="border: 0;">EMP. NO. &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td> </tr>
-						<tr> <td style="border: 0;">DESIGNATION &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;:</td> </tr>
-						<tr> <td style="border: 0;">HOMETOWN &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td> </tr>
-						<tr> <td style="border: 0;">STATE &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;:</td> </tr>
-						<tr> <td style="border: 0;">NEAREST RAILWAYSTATION &emsp;:</td> </tr>
+						<tr> <td style="border: 0;">NAME<label style="margin-left:166px">:&nbsp;&nbsp;</label></td> </tr>
+						<tr> <td style="border: 0;">EMP. NO.<label style="margin-left:148px">:&nbsp;&nbsp;</label></td> </tr>
+						<tr> <td style="border: 0;">DESIGNATION<label style="margin-left:110px">:&nbsp;&nbsp;</label></td> </tr>
+						<tr> <td style="border: 0;">HOMETOWN<label style="margin-left:119px">:&nbsp;&nbsp;</label></td> </tr>
+						<tr> <td style="border: 0;">STATE<label style="margin-left:169px">:&nbsp;&nbsp;</label></td> </tr>
+						<tr> <td style="border: 0;">NEAREST RAILWAYSTATION<label style="margin-left:18px">:&nbsp;&nbsp;</label></td> </tr>
 					    <tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;"> Employee Signature</td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;">Date:</td> </tr>
+						<tr> <td style="border: 0;">Signature of Employee</td> </tr>
+						<tr> <td style="border: 0;"></td> </tr>
+						<tr> <td style="border: 0;">Date &nbsp;&nbsp;:&nbsp;&nbsp;</td> </tr>
 					  </tbody>
 					</table>
 				 </div>

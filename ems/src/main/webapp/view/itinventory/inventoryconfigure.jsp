@@ -2,7 +2,7 @@
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
-<%@page import="com.vts.ems.itinventory.model.ITInventoryConfigure"%> 
+<%@page import="com.vts.ems.itinventory.model.ITInventoryConfigured"%> 
 <%-- <%@page import="com.vts.ems.itinventory.model.ITInventory"%>  --%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -17,11 +17,12 @@
 <body>
 
   <%
-     String Itinventoryid=(String)request.getAttribute("inventoryid");
-     ITInventoryConfigure configure=(ITInventoryConfigure)request.getAttribute("configure");
-     String ItemType=(String)request.getAttribute("itemtype");
-     List<Object[]> inventoryconfig=(List<Object[]>)request.getAttribute("inventoryconfig"); 
-     
+  
+
+       String Itinventoryid=(String)request.getAttribute("inventoryid");
+       ITInventoryConfigured configure=(ITInventoryConfigured)request.getAttribute("configure");
+       String ItemType=(String)request.getAttribute("itemtype");
+       List<Object[]> inventoryconfig=(List<Object[]>)request.getAttribute("inventoryconfig");
   %>
 
 <div class="card-header page-top">
@@ -36,7 +37,7 @@
 			<div class="col-md-8 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item "><a href="ITAsset.htm">Inventory</a></li>
+					<li class="breadcrumb-item "><a href="Inventory.htm">Inventory</a></li>
 					<% if(configure!=null) {%>
 					<li class="breadcrumb-item active " aria-current="page">Configuration Edit</li>
 					<%} else{ %>

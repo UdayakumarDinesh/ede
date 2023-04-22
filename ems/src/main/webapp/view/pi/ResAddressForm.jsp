@@ -91,35 +91,35 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<table style="margin-top: 5%;border-collapse: collapse;width:100%;">	
 					  <tbody>
 						<tr>
-						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(ResFormData!=null){ %> <%=ResFormData[11] %> <%} %> </td>
+						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%} %> </td>
 						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
 						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; <%=rdf.format(date) %></td>	 </tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null){ %> <%=ResFormData[2]%> <%} %>	" readonly></td> </tr>			
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} %>	" readonly></td> </tr>			
 						 	<tr> <td style="border: 0;"> <input type="text" value="<% if(ResFormData!=null){ %> <%=ResFormData[9]  +", "+ResFormData[8]+" - "+ResFormData[10] %> <%} %> " readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null){ %> <%=ResFormData[4]%> <%} %>" readonly></td> </tr>	
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%=ResFormData[4]%> <%} %>" readonly></td> </tr>	
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	
 						 						       
 					    </tbody>
 					</table>	
-					<div style="width:100%;text-align: right;margin-left:-5%;">	<%if(ResFormData!=null){ %><%=ResFormData[11] %> <%} %>	</div>				
+					<div style="width:100%;text-align: right;margin-left:-5%;">	<%if(ResFormData!=null && ResFormData[11]!=null){ %><%=ResFormData[11] %> <%} %>	</div>				
 					<div style="width:100%;text-align: right;">	Signature of Employee </div>									     
 				   <hr style="border:solid 1px;">
 				   
 				  	<div style="width: 100%;border: 0;text-align: center;"> <b style="font-size:18px;text-decoration:underline">FOR ADMINISTRATION USE</b> </div>
 				    <br>
 				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						Intimation of change of address received on  &nbsp;<input type="text" style="width:10%;text-align:center;" id="data-input" disabled>&nbsp;. The same has been updated in the personal records.																		
+						Intimation of change of address received on  &nbsp;<input type="text" value="" style="width:10%;text-align:center;" id="data-input" disabled>&nbsp;. The same has been updated in the personal records.																		
 				   </div>
 				   <br><br>
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	

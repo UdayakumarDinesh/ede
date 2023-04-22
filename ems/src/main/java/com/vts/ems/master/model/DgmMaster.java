@@ -6,25 +6,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-@Entity
-@Table(name="division_group")
-public class DivisionGroup implements Serializable {
+@Getter
+@Entity(name="dgm_master")
+public class DgmMaster implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private int groupId;
-	private String groupCode;
-	private String groupName;
-	private String groupHeadId;
-	private int DivisionId;
+	private long DGMId;
+	private String DGMCode;
+	private String DGMName;
+	private String DGMEmpNo;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

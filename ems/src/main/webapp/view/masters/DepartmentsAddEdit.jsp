@@ -13,7 +13,7 @@
 <body>
 <% Object[] dept=(Object[])request.getAttribute("Department");
 List<Object[]> EmpList=(List<Object[]>)request.getAttribute("Emplist");
-List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
+List<Object[]> DGMList=(List<Object[]>)request.getAttribute("DGMList");
 %>
 <div class="card-header page-top">
 		<div class="row">
@@ -42,10 +42,10 @@ List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
 			<div class="card" >
 				<div class="card-body  " align="center" >
 					<%if(dept!=null){ %>
-					<form name="myfrm" action="DepartmentEdit.htm" method="POST" id="addfrm" autocomplete="off"  enctype="multipart/form-data" >	
-						<%}else{%>
-					<form name="myfrm" action="DepartmentAdd.htm" method="POST" id="addfrm" autocomplete="off"   >	
-						<%}%>
+						<form name="myfrm" action="DepartmentEdit.htm" method="POST" id="addfrm" autocomplete="off"  enctype="multipart/form-data" >	
+							<%}else{%>
+						<form name="myfrm" action="DepartmentAdd.htm" method="POST" id="addfrm" autocomplete="off" >	
+					<%}%>
 							
 						<div class="form-group">
 							<div class="table-responsive">
@@ -68,41 +68,36 @@ List<Object[]> groupList=(List<Object[]>)request.getAttribute("groupList");
 										</tr>
 										<tr>
 										     <th><label>Department Head <span class="mandatory" style="color: red;">*</span></label>
-										     <td><select class="form-control form-control select2" name="DepartmentHead" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
-										     <option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-										     <%if(EmpList!=null){
-										    	 for(Object[] emp:EmpList){
-										    	 %>
-										     
-										     <option value="<%=emp[0]%>" <%if(dept!=null){if((Long.parseLong(dept[3].toString()))==(Long.parseLong(emp[0].toString()))){%>selected="selected"<%}}%>><%=emp[1] %></option>
-										     
-										 <%}} %>
-										     </select>
-								     
+										     <td>
+											     <select class="form-control form-control select2" name="DepartmentHead" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+											        <option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
+											     <%if(EmpList!=null){ for(Object[] emp:EmpList){%>
+											     	<option value="<%=emp[2]%>" <%if(dept!=null){if(dept[3].toString().equalsIgnoreCase(emp[2].toString())){%>selected="selected"<%}}%>><%=emp[1] %></option>
+											 	 <%}}%>
+											     </select>
 										     </td>
 										</tr>
 										<tr>
-										   <th> <label>Group <span class="mandatory" style="color: red;">*</span></label> </th>
-										   <td> <select class="form-control select2"  name="groupCode" id="groupCode" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
-												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-										        <%if(groupList!=null){
-										    	 for(Object[] grp:groupList){
-										    	 %>
-										     <option value="<%=grp[0]%>" <%if(dept!=null){if((Long.parseLong(dept[4].toString()))==(Long.parseLong(grp[0].toString()))){%>selected="selected"<%}}%>><%=grp[1] %></option>
-										     <%}} %>
-										 </select> </td> 
+										   <th> <label>DGM <span class="mandatory" style="color: red;">*</span></label> </th>
+										   <td> 
+											   <select class="form-control select2"  name="DGMId" id="DGMId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+													<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
+											    <%if(DGMList!=null){ for(Object[] dgm:DGMList){%>
+											     	<option value="<%=dgm[0]%>" <%if(dept!=null){if(dept[4].toString().equalsIgnoreCase(dgm[0].toString())){%>selected="selected"<%}}%>><%=dgm[2] %></option>
+											 	 <%}}%>
+											   </select> 
+										   </td> 
 										</tr>
-									
 								</table>
-								<%if(dept!=null){%>
+							</div>
+						</div>
+						<%if(dept!=null){%>
 								 <input type="hidden" name="Deptid" id="Deptid" value="<%=dept[0]%>">
 								<button class="btn btn-sm submit-btn" onclick="return DepartmentEditcheck(addfrm)">Submit</button>
 								<%}else {%>
-								<button class="btn btn-sm submit-btn" onclick="return DepartmentAddcheck()">Submit</button>
+								<button type="button" class="btn btn-sm submit-btn" onclick="return DepartmentAddcheck()">Submit</button>
 								<%} %>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-							</div>
-						</div>
 						<%if(dept!=null){ %>
 						<!--------------------------- container ------------------------->
 			<div class="container">
@@ -250,14 +245,9 @@ $('#depcode').keypress(function (e) {
 	<script type="text/javascript">
 	function DepartmentEditcheck()
 	{
-<<<<<<< HEAD
-		var $depcode=$('#depcode').val();
-		var $department=$('#department').val();
-=======
 		var depcode=$('#depcode').val();
 		var department=$('#department').val();
 		var Deptid=$('#Deptid').val();
->>>>>>> branch 'master' of https://dineshvedts@bitbucket.org/susant-vedts/ems.git
 		var count =true;
 		$.ajax({
 
@@ -266,11 +256,7 @@ $('#depcode').keypress(function (e) {
 			data : {
 				
 				Departmentcode:depcode.trim(),			
-<<<<<<< HEAD
-				Deptid :$department
-=======
 				Deptid:Deptid.trim(),
->>>>>>> branch 'master' of https://dineshvedts@bitbucket.org/susant-vedts/ems.git
 			},
 			datatype : 'json',
 			success : function(result)

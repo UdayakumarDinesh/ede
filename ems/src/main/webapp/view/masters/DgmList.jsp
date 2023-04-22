@@ -5,25 +5,25 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Group</title>
+<title>DGM</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 <body>
 <%
-  List<Object[]> list =(List<Object[]>) request.getAttribute("divisiongroup");
+  List<Object[]> list =(List<Object[]>) request.getAttribute("dgmList");
 %>
 
 <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Group List</h5>
+				<h5>DGM List</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						 <li class="breadcrumb-item "><a href="MasterDashBoard.htm"> Master </a></li> 					
-						<li class="breadcrumb-item active " aria-current="page">Group List</li>
+						<li class="breadcrumb-item active " aria-current="page">DGM List</li>
 					</ol>
 				</div>
 			</div>
@@ -50,27 +50,25 @@
 		
 		 <div class="card" >
 				<div class="card-body ">			
-					<form action="DivisionGroup.htm" method="POST" id="empForm">
+					<form action="Dgm.htm" method="POST" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
 						<div class="table-responsive">					
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
 								<thead>
 									<tr>
-										<th> Select        </th>
-										<th> Group Code    </th>
-										<th> Group Name    </th>
-										<th> Group Head </th>
-										<th> Division Name   </th> 
+										<th> Select   </th>
+										<th> DGM Code </th>
+										<th> DGM Name </th>
+										<th> Employee </th>
 									</tr>
 								</thead>
 								<tbody>
 									<% if(list!=null){ for(Object[] obj:list){ %>
 										<tr>
-											<td style="text-align: center;"><input type="radio" name="groupId" value="<%=obj[0] %>"> </td>
+											<td style="text-align: center;"><input type="radio" name="dgmId" value="<%=obj[0] %>"> </td>
 											<td style="text-align: center;"><%=obj[1]%></td>
 											<td><%=obj[2]%></td>
-											<td style="text-align: center;"><%=obj[3]+", "+obj[4]%> </td>
-											<td><%=obj[5]%> </td>
+											<td><%=obj[3]%> </td>
 										</tr>
 									 <%} }%>
 								</tbody>
@@ -93,10 +91,10 @@
 <script type="text/javascript">
 function Edit(myfrm) {
 
-	var fields = $("input[name='groupId']").serializeArray();
+	var fields = $("input[name='dgmId']").serializeArray();
 
 	if (fields.length === 0) {
-		alert("Please Select Atleast One Group Code ");
+		alert("Please Select Atleast One DGM Code ");
 
 		event.preventDefault();
 		return false;

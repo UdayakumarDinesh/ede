@@ -41,6 +41,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.model.LoginPasswordHistory;
 import com.vts.ems.login.Login;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.dto.UserManageAdd;
@@ -148,6 +149,11 @@ public class PisServiceImpl implements PisService
 	public List<DivisionMaster> DivisionList() throws Exception
 	{
 		return dao.DivisionList();
+	}
+	@Override
+	public List<DivisionGroup> GroupList() throws Exception
+	{
+		return dao.GroupList();
 	}
 	
 	@Override
@@ -2083,8 +2089,8 @@ public class PisServiceImpl implements PisService
 		
 		
 		
-		// change annual declaration form status every year 1st of march to disallow employee to submit declaration		
-		@Scheduled(cron = "0 0 0 1 3 ?")
+		// change annual declaration form status every year 1st of febuary to disallow employee to submit declaration		
+		@Scheduled(cron = "0 0 0 1 2 ?")
 		public void UpdateAnnualDeclarationAllEmpDisAllow() throws Exception 
 		{
 			dao.UpdateAnnualDeclarationAllEmp("N");
@@ -2118,5 +2124,10 @@ public class PisServiceImpl implements PisService
 		public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
 		
 			return dao.getDeptEmpList( divisionId);
+		}
+		@Override
+		public List<Object[]> GetDivisionList(String divisionId)throws Exception
+		{
+			return dao.GetDivisionList(divisionId);
 		}
 }

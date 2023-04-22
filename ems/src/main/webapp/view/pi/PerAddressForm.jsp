@@ -81,28 +81,28 @@ Date date = new Date();
 					<table style="margin-top: 5%;border-collapse: collapse;width:100%;">	
 					  <tbody>
 						<tr>
-						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %> </td>
+						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(PerFormData!=null && PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %> </td>
 						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
 						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; <%=rdf.format(date) %></td>	 </tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(PerFormData[6]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(PerFormData!=null && PerFormData[6]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(PerFormData[2]!=null){ %> <%=PerFormData[2]%> <%} %>	" readonly></td> </tr>			
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(PerFormData!=null && PerFormData[2]!=null){ %> <%=PerFormData[2]%> <%} %>	" readonly></td> </tr>			
 						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(PerFormData!=null){ %> <%=PerFormData[3]  +", "+PerFormData[4]+" - "+PerFormData[5] %> <%} %> " readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(PerFormData[7]!=null){ %> <%=PerFormData[7]%> <%} %>" readonly></td> </tr>	
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(PerFormData!=null && PerFormData[7]!=null){ %> <%=PerFormData[7]%> <%} %>" readonly></td> </tr>	
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	
 						 						       
 					    </tbody>
 					</table>	
-					<div style="width:100%;text-align: right;margin-left:-5%;">	<%if(PerFormData[8]!=null){ %><%=PerFormData[8] %> <%} %>	</div>				
+					<div style="width:100%;text-align: right;margin-left:-5%;">	<%if(PerFormData!=null && PerFormData[8]!=null){ %><%=PerFormData[8] %> <%} %>	</div>				
 					<div style="width:100%;text-align: right;">	Signature of Employee </div>									     
 				   <hr style="border:solid 1px;">
 				   
@@ -127,8 +127,8 @@ Date date = new Date();
 	                <%} %>
 			   </div>
 			   
-			   <input type="hidden" name="empid" value="<%if(PerFormData!=null){ %><%=PerFormData[0] %> <% }%>">
-			   <input type="hidden" name="peraddressid" value="<%if(PerFormData!=null){ %><%=PerFormData[1] %> <% }%>">
+			   <input type="hidden" name="empid" value="<%if(PerFormData!=null && PerFormData[0]!=null ){ %><%=PerFormData[0] %> <% }%>">
+			   <input type="hidden" name="peraddressid" value="<%if(PerFormData!=null && PerFormData[1]!=null){ %><%=PerFormData[1] %> <% }%>">
 			</form>
 		</div>
 	   </div>  

@@ -220,13 +220,12 @@ public class EmsController {
 			if(empNo!=null && fromDate!=null && fromDate!=null) {
 				 attendlist=service.getAttendanceDetails(empNo,fromDate,toDate);
 				 req.setAttribute("EmpNo", empNo);
-				}else {
+				}else {   
 					if(Empno!=null && fromDate!=null && fromDate!=null)
 					 attendlist=service.getAttendanceDetails(Empno,fromDate,toDate);				
 					req.setAttribute("EmpNo", Empno);
 				}
 			
-			   
 			req.setAttribute("ToDate", toDate);
 			req.setAttribute("FromDate",fromDate);						
 			req.setAttribute("attendlist", attendlist);

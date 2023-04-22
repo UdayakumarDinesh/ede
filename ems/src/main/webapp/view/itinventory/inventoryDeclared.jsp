@@ -67,12 +67,12 @@
 						<thead>
 							<tr>
 								<th style="width: 2%">SN</th>
-								<th style="width: 4%">Employee </th> 
-								<th style="width: 3%">Declaration Year</th>
-								<th style="width: 4%"> Date</th>
+								<th style="width: 6%">Declared By </th> 
+								<!-- <th style="width: 3%">Declaration Year</th> -->
 								<th style="width: 4%">No of Items</th> 
 								<th style="width: 3%">Total Qty</th>
 								<th style="width: 5%">Status</th>
+								<th style="width: 4%">Date</th>
 								<th style="width: 5%">Remarks</th>
 								<th style="width: 5%">Action</th>																		
 							</tr>
@@ -96,19 +96,20 @@
 						if(Integer.parseInt(obj[10].toString())!=0){%><%item++; %><%}  if(Integer.parseInt(obj[11].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[12].toString())!=0){%><%item++; %><%}
 						String Remarks=obj[14].toString();
-						System.out.println("remark---"+Remarks);
+						
 						%>
 						
 							
 					      <tr>
 							        <td style="width: 1%; text-align: center;"><%=++count %></td>
-							        <td style="width: 1%; text-align: left;"><%=obj[1] %></td>
-									<td style="width: 2%;text-align:center;" ><%=obj[2].toString().substring(0,4) %></td>
-									<td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td>
+							        <td style="width: 2%; text-align: left;"><%=obj[1] %></td>
+									<%-- <td style="width: 2%;text-align:center;" ><%=obj[2].toString().substring(0,4) %></td> --%>
+									
 									<td style="width: 2%;text-align:center;"><%=item %></td>  
 									<td style="width: 2%;text-align:center;"><%=total %></td>
 									<td style="width: 2%;text-align:center;" ><%if(obj[13].toString().equals("I")){ %><%=Initiated %><%} else if(obj[13].toString().equals("F")){%><%=Forwarded %><%} else if(obj[13].toString().equals("R")){%><%=Returned %><%} else if(obj[13].toString().equals("A")){%><%=Approved%><%} %></td>
-									<td style="width: 2%;text-align:left;word-wrap: break-word;word-break: break-all;white-space: normal !important;"><% if( !Remarks.equals("")){ if(Remarks.length()<10){%><%=Remarks %><%} else if(Remarks.length()>10){ %><%=Remarks.substring(0,10) %> 
+									<td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td>
+									<td style="width: 2%;text-align:left;word-wrap: break-word;word-break: break-all;white-space: normal !important;"><% if( !Remarks.equals("")){ if(Remarks.length()<=10){%><%=Remarks %><%} else if(Remarks.length()>10){ %><%=Remarks.substring(0,10) %> 
 									<button type="button" class="editable-click" style="border-style:none;" name=""  id="InventoryId" value="<%=obj[0] %>" onclick="descmodal('<%=obj[0]%>')">
 													<b><span style="color:#1176ab;font-size: 14px;">......(View More)</span></b>
 										</button><%}} else{%>-<%} %>

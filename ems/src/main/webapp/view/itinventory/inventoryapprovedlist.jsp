@@ -1,8 +1,8 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
-     <%@page import="java.util.List"%>
-     <%@page import="java.time.LocalDate"%>
-     <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
+  <%@page import="java.text.SimpleDateFormat"%>
+  <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
+  <%@page import="java.util.List"%>
+  <%@page import="java.time.LocalDate"%>
+  <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
      
      
 <!DOCTYPE html>
@@ -20,19 +20,19 @@
 	List<Object[]> InventoryApprovedList=(List<Object[]>)request.getAttribute("InventoryApprovedList");
 	String DeclarationYear=(String)request.getAttribute("DeclarationYear");
 	String LoginType=(String)request.getAttribute("LoginType");
-	/* String Todate=(String)request.getAttribute("Todate");  */
+	
    %>
 
  <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Inventory Approved List</h5>
+				<h5>Inventory History</h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 					<li class="breadcrumb-item "><a href="ITInventoryDashboard.htm">Dashboard </a></li>
-					<li class="breadcrumb-item active " aria-current="page">Approved List</li>
+					<li class="breadcrumb-item active " aria-current="page">History</li>
 				</ol>
 			</div>
 		</div>
@@ -86,13 +86,13 @@
 						<thead>
 							<tr>
 								<th style="width: 2%">SN</th>
-								<th style="width: 4%">Declared By </th> 
+								<%if(LoginType.toString().equals("A")){ %><th style="width: 4%">Declared By </th> <%} %>
 								<th style="width: 3%">Declaration Year</th>
-								<th style="width: 4%"> Date</th>
+								<!-- <th style="width: 4%"> Date</th> -->
 								<th style="width: 4%">No of Items</th> 
 								<th style="width: 3%">Total Qty</th>
 								<th style="width: 5%">Status</th>
-								<th style="width: 5%">Remarks</th>
+								<!-- <th style="width: 5%">Remarks</th> -->
 								<th style="width: 5%">Action</th>																		
 							</tr>
 						</thead>
@@ -113,27 +113,27 @@
 						if(Integer.parseInt(obj[8].toString())!=0){%><%item++; %><%}   if(Integer.parseInt(obj[9].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[10].toString())!=0){%><%item++; %><%}  if(Integer.parseInt(obj[11].toString())!=0){%><%item++; %><%}
 						if(Integer.parseInt(obj[12].toString())!=0){%><%item++; %><%}
-						String Remarks=obj[14].toString();
+						 /* String Remarks=obj[14].toString();  */
 						%>
 						
 						 <tr>
 							        <td style="width: 1%; text-align: center;"><%=++count %></td>
-							        <td style="width: 1%; text-align: left;"><%=obj[1] %></td>
+							        <%if(LoginType.toString().equals("A")){ %><td style="width: 1%; text-align: left;"><%=obj[1] %></td><%} %>
 									<td style="width: 2%;text-align:center;" ><%=obj[2].toString().substring(0,4) %></td>
-									<td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td>
+									<%-- <td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td> --%>
 									<td style="width: 2%;text-align:center;"><%=item %></td>  
 									<td style="width: 2%;text-align:center;"><%=total %></td>
 									<td style="width: 2%;text-align:center;" ><%if(obj[13].toString().equals("A")){ %><%=Approved %><%}  %></td>
-									<td style="width: 2%;text-align:left;word-wrap: break-word;word-break: break-all;white-space: normal !important;"><% if( !Remarks.equals("") && Remarks.length()<10){%><%=Remarks %><%} else if(Remarks.length()>10){ %><%=Remarks.substring(0,10) %> 
+									<%-- <td style="width: 2%;text-align:left;word-wrap: break-word;word-break: break-all;white-space: normal !important;"><% if( !Remarks.equals("") && Remarks.length()<10){%><%=Remarks %><%} else if(Remarks.length()>10){ %><%=Remarks.substring(0,10) %> 
 									<button type="button" class="editable-click" style="border-style:none;" name=""  id="InventoryId" value="<%=obj[0] %>" onclick="descmodal('<%=obj[0]%>')">
 													<b><span style="color:#1176ab;font-size: 14px;">......(View More)</span></b>
 										</button><%} else {%>-<%} %>
 									<input type="hidden" name="Remark<%=obj[0]%>"  id="Remark<%=obj[0]%>" value="<%=obj[14] %>">
-									</td>
+									</td> --%>
 									
 									<td style="width: 2%;text-align:center;">
 									
-									<button type="submit" class="btn btn-sm " name="inventoryid" value="<%=obj[0] %>" formaction="InventoryFormDownload.htm" formmethod="GET"  data-toggle="tooltip" title="" data-original-title="Downlaod">
+									<button type="submit" class="btn btn-sm " name="inventoryhistoryid" value="<%=obj[0] %>/<%=obj[14] %>" formaction="InventoryFormDownload.htm" formmethod="GET"  data-toggle="tooltip" title="" data-original-title="Downlaod">
 									<i style="color: #019267" class="fa-solid fa-download"></i>
 									</button> 
 									</td>

@@ -9,13 +9,16 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.vts.ems.ithelpdesk.controller.helpdeskcontroller;
 import com.vts.ems.itinventory.controller.InventoryController;
 import com.vts.ems.itinventory.dao.InventoryDao;
 import com.vts.ems.itinventory.model.ITInventory;
-import com.vts.ems.itinventory.model.ITInventoryConfigure;
+import com.vts.ems.itinventory.model.ITInventoryHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfiguredHistory;
+import com.vts.ems.itinventory.model.ITInventoryConfigured;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -86,7 +89,7 @@ public class InventoryServiceImpl implements InventoryService{
 	}
 
 @Override
-public long InventoryDetailsAddSubmit( ITInventoryConfigure details) throws Exception {
+public long InventoryDetailsAddSubmit( ITInventoryConfigured details) throws Exception {
 	
 	
 	return dao.InventoryDetailsAddSubmit(details);
@@ -105,15 +108,15 @@ public List<Object[]> getInventoryConfiguration(String empNo) throws Exception {
 }
 
 @Override
-public ITInventoryConfigure getInventoryConfigId(long inventoryconfigid) throws Exception {
+public ITInventoryConfigured getInventoryConfigId(long inventoryconfigid) throws Exception {
 
 	return dao.getInventoryConfigId(inventoryconfigid);
 }
 
 @Override
-public long ConfigureUpdate(ITInventoryConfigure details) throws Exception {
+public long ConfigureUpdate(ITInventoryConfigured details) throws Exception {
 	
-	ITInventoryConfigure config=dao.getInventoryConfigId(details.getInventoryConfigureId());
+	ITInventoryConfigured config=dao.getInventoryConfigId(details.getInventoryConfigureId());
 	config.setInventoryConfigureId(details.getInventoryConfigureId());
 	config.setItemType(details.getItemType());
 	config.setConnectionType(details.getConnectionType());
@@ -168,13 +171,7 @@ public long ForwardDetails(ITInventory inventory,String UserId,String EmpNo) thr
 	return dao.ForwardDetails(inventory);
 }
 
-  @Override
-  public List<Object[]> getInventoryList(String empNo,String DeclarationYear) throws Exception {
-	
-	 System.out.println("en0---"+empNo);
-	 System.out.println("dyear---"+DeclarationYear);
-	return dao.getInventoryList(empNo,DeclarationYear);
-  }
+ 
 
   @Override
   public List<Object[]> getInventoryDeclaredList() throws Exception {
@@ -189,13 +186,14 @@ public List<Object[]> getInventoryConfigure(String ITInventoryId) throws Excepti
 }
 
 @Override
-public List<Object[]> getApprovedForm(String iTInventoryId) throws Exception {
+public List<Object[]> getApprovedForm(String invntryhistoryid) throws Exception {
 	
-	return dao.getApprovedForm(iTInventoryId);
+	return dao.getApprovedForm(invntryhistoryid);
 }
 
 @Override
-public long inventoryDetailsApprove(ITInventory inventory,String empNo, String eno) throws Exception {
+public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inventory,ITInventoryConfiguredHistory config,String empNo, String eno) throws Exception {
+	
 	
 	EMSNotification notify = new EMSNotification();
 	List<Object[]> notifyto = dao.SendNotification("U");
@@ -204,7 +202,7 @@ public long inventoryDetailsApprove(ITInventory inventory,String empNo, String e
 	notify.setNotificationUrl("InventoryDetailsApproved.htm");
 	notify.setNotificationMessage("Inventory Details Approved");
 	
-   if(inventory.getStatus()=="A" & notify.getEmpNo()!=null)
+   if(Aprrove.getStatus()=="A" & notify.getEmpNo()!=null)
 	{
 		notify.setNotificationDate(LocalDate.now().toString());
 		notify.setNotificationBy((empNo));
@@ -214,18 +212,42 @@ public long inventoryDetailsApprove(ITInventory inventory,String empNo, String e
 		dao.NotificationAdd(notify);
 	}
    
-	return dao.inventoryDetailsApprove(inventory);
+   if(Aprrove.getStatus()=="A" )
+   {
+	  dao.inventoryapprove(inventory);
+   }
+   
+   if(Aprrove.getStatus()=="A" )
+   {
+	  dao.inventoryconfigapprove(config);
+   }
+   
+   return dao.inventoryDetailsApprove(Aprrove);
 	
  }
 
+       //change annual declaration form status every year 1st of jan to allow employee to submit declaration
+		@Scheduled(cron = "0 0 0 1 1 ?")
+		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("Y");
+		}
+		//change annual declaration form status every year 1st of feb to disallow employee to submit declaration
+		@Scheduled(cron = "0 0 0 1 2 ?")
+		public void ChangeAnnualDeclarationAllEmpAllow() throws Exception 
+		{
+			dao.UpdateAnnualDeclarationAllEmp("N");
+		}
+		
+		
 @Override
-public long inventoryDetailsReturn(ITInventory inventory,String empNo, String eno) throws Exception {
+public long inventoryDetailsReturn(ITInventory inventory,String empNo, String eno,String declarationyear) throws Exception {
 	
 	EMSNotification notify = new EMSNotification();
 	List<Object[]> notifyto = dao.SendNotification("U");
 	
 	notify.setEmpNo(eno);
-	notify.setNotificationUrl("InventoryList.htm");
+	notify.setNotificationUrl("InventoryView.htm?declarationyear="+declarationyear+"");
 	notify.setNotificationMessage("Inventory Details Returned");
 	
    if(inventory.getStatus()=="R" & notify.getEmpNo()!=null)
@@ -263,9 +285,17 @@ public List<Object[]> getEmployeeList() throws Exception {
 }
 
 @Override
-public List<Object[]> getInventoryDashboardCount(String empno, String year) {
-	
+public List<Object[]> getInventoryDashboardCount(String empno, String year)  throws Exception{
+	 
 	return dao.getInventoryDashboardCount(empno,year);
 }
+
+@Override
+public List<Object[]> getInventoryConfigureApprovedlist(String iTInventoryId)  throws Exception {
+	
+	return dao.getInventoryConfigureApprovedlist(iTInventoryId);
+}
+
+
 }
 

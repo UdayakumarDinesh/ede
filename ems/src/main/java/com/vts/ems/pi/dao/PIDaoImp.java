@@ -124,7 +124,7 @@ public class PIDaoImp implements PIDao{
 			query.setParameter("EmpId", EmpId);
 			IdData =(Object[]) query.getSingleResult();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO ToAddressId "+e);
+			logger.error(new Date() + "Inside DAO ResToAddressId "+e);
 	
 		}
 		return IdData;
@@ -140,7 +140,7 @@ public class PIDaoImp implements PIDao{
 			query.setParameter("address_res_id", resAddressId);
 			return (long)query.executeUpdate();
 		}catch (Exception e) {
-			logger.error(new Date() + "Inside DAO UpdatetoDate "+e);
+			logger.error(new Date() + "Inside DAO ResUpdatetoDate "+e);
 			e.printStackTrace();
 		}	
 		return 0L;
@@ -229,7 +229,7 @@ public class PIDaoImp implements PIDao{
 			
 			return addressRes.getAddress_res_id();
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside DAO CHSSApplyEdit " + e);
+			logger.error(new Date()  + "Inside DAO AddressResEdit " + e);
 			e.printStackTrace();
 			return 0;
 		}
