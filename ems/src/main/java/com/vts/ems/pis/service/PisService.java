@@ -222,7 +222,11 @@ public interface PisService {
 	public List<Object[]> getGroupListGH() throws Exception;
 	public List<Object[]> getDivisionListDH() throws Exception;
 	public Object[] getDirectorDetails()throws Exception;
-	public List<Object[]> getDeptEmpList(String divisionId)throws Exception;
+	public List<Object[]> EmpListModal(String id,String code)throws Exception;
+	public List<Object[]> getDgmDetails() throws Exception;
+	public List<Object[]> getEmpModalList()throws Exception;
+	public  List<Object[]>  getdivisionreportceo() throws Exception;
+
 	
 	
 }

@@ -3124,7 +3124,7 @@ private static final String GETFAMFORMDATA="SELECT ff.FamilyFormId,ff.Empid,ff.F
 			logger.error(new Date() + "Inside DAO UpdateAnnualDeclarationAllEmp "+e);
 		}	
 	}
-private static String GROUPLISTGH="SELECT a.GroupId,a.GroupName,a.GroupHeadId,b.EmpName,b.EmpNo FROM division_group a,employee b WHERE a.GroupHeadId=b.EmpId  ORDER BY GroupId";
+private static String GROUPLISTGH="SELECT dg.GroupId,dg.GroupCode,dg.GroupName,dg.GroupHeadId,e.EmpName,ed.Designation,dg.Divisionid FROM division_group dg,employee e,employee_desig ed  WHERE e.EmpNo=dg.GroupHeadId AND e.DesigId =ed.DesigId AND dg.isActive='1' ORDER BY dg.GroupId "; 
 	@Override
 	public List<Object[]> getGroupListGH() throws Exception {
 		List<Object[]> resultList=null;
@@ -3138,7 +3138,7 @@ private static String GROUPLISTGH="SELECT a.GroupId,a.GroupName,a.GroupHeadId,b.
 		}
 		return resultList;
 	}
-private static final String DIVISIONLISTDH="SELECT a.DivisionId,a.DivisionName,a.DivisionHeadId,b.EmpName,b.EmpNo,a.GroupId FROM division_master a, employee b,division_group c  WHERE a.DivisionHeadId=b.EmpId AND a.GroupId=c.GroupId ORDER BY DivisionId";
+private static final String DIVISIONLISTDH="SELECT a.DivisionId,a.DivisionCode,a.DivisionHeadId,b.EmpName,a.DGMId,ed.Designation FROM division_master a,employee b,employee_desig ed WHERE a.DivisionHeadId=b.EmpNo AND b.DesigId =ed.DesigId  ORDER BY DivisionId";
 	@Override
 	public List<Object[]> getDivisionListDH() throws Exception {
 		List<Object[]> resultList=null;
@@ -3152,33 +3152,82 @@ private static final String DIVISIONLISTDH="SELECT a.DivisionId,a.DivisionName,a
 		}
 		return resultList;
 	}
-private static  final String DIRECTORDETAILS="SELECT a.EmpName,a.EmpNo,b.Designation FROM employee a, employee_desig b WHERE a.DesigId=b.DesigId AND b.Designation='Director'";
+private static  final String DIRECTORDETAILS="SELECT e.EmpName,l.LabAuthority FROM employee e,lab_master l WHERE l.LabAuthorityId = e.EmpId AND e.isActive='1'";
 	@Override
 	public Object[] getDirectorDetails() throws Exception {
 		Object[] result=null;
 	try {
 		
 		Query query = manager.createNativeQuery(DIRECTORDETAILS);
-		 result = (Object[]) query.getSingleResult();
+		 result= (Object[]) query.getSingleResult();
+		 
 	} catch (Exception e) {
 		e.printStackTrace();
 		logger.error(new Date() + "Inside DAO  getDirectorDetails "+e);
 	}
-		return result;
+	return result;
+		
 	}
-private static final String DEPEMPLIST="SELECT a.EmpName,a.EmpNo ,b.designation,c.DivisionName  FROM  employee a,employee_desig b, division_master c WHERE  a.desigId=b.desigId AND a.divisionId=c.divisionId AND a.divisionId=:divisionId  ORDER BY a.SrNo";
+private static final String EMPLOYEELIST="CALL EmpLoyee_List(:Id,:Code)";
 	@Override
-	public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
+	public List<Object[]> EmpListModal(String id,String code) throws Exception {
 		List<Object[]> emplist=null;
 		try {
-			Query query = manager.createNativeQuery(DEPEMPLIST);
-			query.setParameter("divisionId", divisionId);
+			Query query = manager.createNativeQuery(EMPLOYEELIST);
+			query.setParameter("Id", id);
+			query.setParameter("Code", code);
 			 emplist =(List<Object[]>) query.getResultList();
 			
 		} catch (Exception e) {
 
 		}
 		return emplist;
+	}
+
+	private static final String DGMLIST="SELECT  d.DGMId,d.DGMCode,d.DGMName,e.EmpName,de.designation FROM employee e,dgm_master d, employee_desig de WHERE d.DGMEmpNo=e.EmpNo AND e.DesigId =de.DesigId ORDER BY d.DGMId";
+	@Override
+	public List<Object[]> getDgmDetails() throws Exception {
+		List<Object[]> dgmlist=null;
+		try {
+			Query query = manager.createNativeQuery(DGMLIST);
+			dgmlist= (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO  getDgmDetails "+e);
+		
+		}
+		return dgmlist;
+		
+	}
+	private static final String EMPLOYEEMODALLIST="SELECT e.SrNo,e.EmpName,dgm.DGMId,e.divisionid,e.groupid FROM employee e,employee_desig ed,dgm_master dgm ,division_master dm WHERE e.isActive='1' AND ed.DesigId=e.DesigId AND dgm.DGMId=dm.DGMId AND e.DivisionId=dm.DivisionId ";;
+	@Override
+	public List<Object[]> getEmpModalList() throws Exception {
+		
+		List<Object[]> EmpModalList=null;
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEEMODALLIST);
+			EmpModalList= (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO  getEmpModalList "+e);
+		
+		}
+		return EmpModalList;
+	}
+
+	private static final String DIVREPORTCEO="SELECT dm.divisionId,dm.DivisionCode,dm.DGMId,e.EmpName,ed.Designation FROM division_master dm,employee e ,employee_desig ed WHERE DGMId=0 AND e.EmpNo=dm.DivisionHeadId AND ed.DesigId=e.DesigId";
+	@Override
+	public List<Object[]> getdivisionreportceo() throws Exception {
+		List<Object[]> Divisionreportceo=null;
+		try {
+			Query query = manager.createNativeQuery(DIVREPORTCEO);
+			Divisionreportceo= (List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO  getdivisionreportceo "+e);
+		
+		}
+		return Divisionreportceo;
 	}
 	
 }

@@ -6553,7 +6553,7 @@ public class PisController {
 				return "static/Error";
 			}
 		}
-		@RequestMapping(value="OrganisationStructure.htm")
+		@RequestMapping(value="OrganisationStructure.htm", method = { RequestMethod.GET, RequestMethod.POST })
 		public String organisationStructure(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{			
 			String Username = (String) ses.getAttribute("Username");
@@ -6562,35 +6562,44 @@ public class PisController {
 //			ses.setAttribute("SidebarActive","OrganisationStructure_htm");
 			try {
 				
-//				List<Object[]> grouplist=service.getGroupListGH();
-//				List<Object[]> divisionlist=service.getDivisionListDH();
-//				req.setAttribute("grouplist", grouplist);
-//				req.setAttribute("divisionlist", divisionlist);
-//				req.setAttribute("Director", service.getDirectorDetails());
+				List<Object[]> grouplist=service.getGroupListGH();
+				List<Object[]> divisionlist=service.getDivisionListDH();
+				req.setAttribute("DivReportCeo", service.getdivisionreportceo()); // division directly reporting to ceo 
+				req.setAttribute("grouplist", grouplist);
+       			req.setAttribute("divisionlist", divisionlist);
+				req.setAttribute("Director", service.getDirectorDetails());
+				req.setAttribute("DGMLIST", service.getDgmDetails());
+				req.setAttribute("EmpModalList", service.getEmpModalList());
+				
+				
+				return "pis/OrganisationTree";
+				
 			} catch (Exception e) {
 				logger.error(new Date() +" Inside OrganisationStructure.htm "+Username, e);
 				e.printStackTrace();
 				return "static/Error";
 			}
 			
-			return "pis/OrganisationTree";
-			
 		}
-		@RequestMapping(value="DeptEmpListAjax.htm",method = RequestMethod.GET)
-		public @ResponseBody String deptEmpListAjax(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
-			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
+		@RequestMapping(value="EmpListAjax.htm",method = RequestMethod.GET)
+		public @ResponseBody String EmpListAjax(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
 			
-			try {
-				String divisionId = req.getParameter("divisionId");
-			List<Object[]> deptEmpList=service.getDeptEmpList(divisionId);
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside EmpListAjax.htm " + Username);
 			Gson json = new Gson();
-			return json.toJson(deptEmpList);
+			List<Object[]> EmpList=null;
+			try {
+				
+				String id = req.getParameter("id");
+				String code = req.getParameter("code");
+				EmpList=service.EmpListModal(id,code);
+			
+			
 			} catch (Exception e) {
-				logger.error(new Date() +" Inside DeptEmpListAjax.htm"+Username, e);
+				logger.error(new Date() +" Inside EmpListAjax.htm"+Username, e);
 				e.printStackTrace();
 				return "static/Error";
 				}
-	
+			return json.toJson(EmpList);
 		}
 }
