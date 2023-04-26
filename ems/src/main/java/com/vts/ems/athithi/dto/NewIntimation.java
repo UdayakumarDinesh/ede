@@ -11,6 +11,7 @@ public class NewIntimation {
 	private String fdate;
 	private String tdate;
 	private String duration;
+	private String VisitExpectedTime;
 	private String officer;
 	private String purpose;
 	private String spermission;
@@ -53,6 +54,18 @@ public class NewIntimation {
 	public void setDuration(String duration) {
 		this.duration = duration;
 	}
+	public String getExpectedTime() {
+		return VisitExpectedTime;
+	}
+	public void setExpectedTime(String expectedTime) {
+		VisitExpectedTime = expectedTime;
+	}
+	public String getSpermission() {
+		return spermission;
+	}
+	public void setSpermission(String spermission) {
+		this.spermission = spermission;
+	}
 	public String getOfficer() {
 		return officer;
 	}
@@ -65,12 +78,6 @@ public class NewIntimation {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
-	public String getSpermission() {
-		return spermission;
-	}
-	public void setSpermission(String spermission) {
-		this.spermission = spermission;
-	}
 	
 	public String getIntimationByEmpNo() {
 		return IntimationByEmpNo;
@@ -80,8 +87,9 @@ public class NewIntimation {
 	}
 	@Override
 	public String toString() {
-		return "NewIntimation [createBy=" + createBy + ", compnayId=" + compnayId + ", visitors="
-				+ Arrays.toString(visitors) + ", fdate=" + fdate + ", tdate=" + tdate + ", duration=" + duration
-				+ ", officer=" + officer + ", purpose=" + purpose + ", spermission=" + spermission + "]";
+		return "NewIntimation [IntimationByEmpNo=" + IntimationByEmpNo + ", createBy=" + createBy + ", compnayId="
+				+ compnayId + ", visitors=" + Arrays.toString(visitors) + ", fdate=" + fdate + ", tdate=" + tdate
+				+ ", duration=" + duration + ", ExpectedTime=" + VisitExpectedTime + ", officer=" + officer + ", purpose="
+				+ purpose + ", spermission=" + spermission + "]";
 	}
 }

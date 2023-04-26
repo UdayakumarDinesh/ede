@@ -50,8 +50,9 @@ public class PassController {
 	@RequestMapping(value = "pendingIntimations.htm",method =RequestMethod.GET)
 	public String pendingIntimations(HttpServletRequest req,HttpSession ses) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER pendingIntimations.htm "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER pendingIntimations_htm "+UserId);		
 		try {
+			ses.setAttribute("SidebarActive", "pendingIntimations_htm");
 			req.setAttribute("pendingList", service.pendingIntimations());
 			return "athithi/pendingIntimations";
 		}
@@ -189,7 +190,9 @@ public class PassController {
 	{
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER createdPass.htm "+UserId);		
-		try {	
+		try {
+			ses.setAttribute("SidebarActive", "createdPass_htm");
+
 			String fDate=req.getParameter("fdate");
 			String tDate=req.getParameter("tdate");
 			
@@ -264,6 +267,8 @@ public class PassController {
     	String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER passReport.htm "+UserId);
 		try {
+			ses.setAttribute("SidebarActive", "passReport_htm");
+
 	    	String fDate=req.getParameter("fdate");
 			String tDate=req.getParameter("tdate");
 		

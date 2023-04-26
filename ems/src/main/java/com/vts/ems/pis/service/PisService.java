@@ -1,6 +1,5 @@
 package com.vts.ems.pis.service;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vts.ems.login.Login;
+import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -43,6 +43,7 @@ public interface PisService {
 	public List<Object[]> EmployeeDetailsList(String LoginType, String Empid) throws Exception;
 	public Object[] EmployeeDetails(String empid) throws Exception;
 	public List<DivisionMaster> DivisionList() throws Exception;
+	public List<DivisionGroup> GroupList() throws Exception;
 	public List<PisPayLevel> PayLevelList() throws Exception;
 	public List<EmployeeDesig> DesigList() throws Exception;
 	public List<PisCategory> PisCategoryList() throws Exception;
@@ -226,7 +227,6 @@ public interface PisService {
 	public List<Object[]> getDgmDetails() throws Exception;
 	public List<Object[]> getEmpModalList()throws Exception;
 	public  List<Object[]>  getdivisionreportceo() throws Exception;
-
-	
-	
+	//public List<Object[]> getDeptEmpList(String divisionId)throws Exception;
+	public List<Object[]> GetDivisionList(String divisionId)throws Exception;
 }

@@ -67,6 +67,7 @@ public class IntimationServiceImpl implements IntimationService {
 	        inti.setFromDate(new Date(sdf.parse(intimation.getFdate()).getTime()));
 	        inti.setToDate(new Date(sdf.parse(intimation.getTdate()).getTime()));
 	        inti.setDuration(intimation.getDuration());
+	        inti.setExpectedTime(intimation.getExpectedTime());
 	        inti.setPurpose(intimation.getPurpose());
 	        inti.setSpecialPermission(intimation.getSpermission());
 	        inti.setOfficerEmpId(intimation.getOfficer());

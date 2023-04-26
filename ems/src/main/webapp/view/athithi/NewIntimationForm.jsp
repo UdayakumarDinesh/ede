@@ -4,13 +4,22 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
+
+<spring:url value="/webresources/css/multiselect.css" var="MultiselectCss" />     
+<link href="${MultiselectCss}" rel="stylesheet" />
+ 
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
+ <spring:url value="/webresources/js/multiselect.js" var="multiselectjs" />  
+<script src="${multiselectjs}"></script> 
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script> -->
 <style type="text/css">
 .wave {
 	position: fixed;
@@ -40,6 +49,41 @@ label {
 
 .table thead tr td ,.table thead tr th{
 	color: black;
+}
+
+
+.spermission {
+  width: 100%;
+  height: 34px;
+  padding: 6px 90px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+ .spermission option {
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+
+option:checked {
+  background-color: #337ab7;
+  color: #fff;
+}
+.multiselect{
+padding: 4px 90px;
+background-color:#E0E0E0;
 }
 </style>
 
@@ -214,32 +258,41 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 						<div class="otherDetails" id="otherDetailsId">
 							<div class="form-row" style="margin-top: 10px;">
 					
-							<div class="form-group col-md-1">
+							    <div class="form-group col-md-1">
 									<label class="label" >Dates <span class="mandatory"  style="color: red;">*</span> </label>
 									
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-4">
 								<div class="form-row">
-								<div class="col-md-5">
-								<input class="form-control"   type="text" id="fdate" name="fdate" required="required" readonly="readonly">
+								<div class="col-md-4">
+								<input class="form-control" type="text" id="fdate" name="fdate" required="required" readonly="readonly">
 								 
 								</div>
 								<label> - </label>
-								<div class="col-md-5">
-								<input class="form-control"   type="text" id="tdate" name="tdate" required="required"  readonly="readonly" >
+								<div class="col-md-4">
+								<input class="form-control" type="text" id="tdate" name="tdate" required="required"  readonly="readonly" >
 								</div>
 								</div>
 								</div>
 								<div class="form-group col-md-1" >
-									<label >Duration<span class="mandatory" style="color: red;">*</span> </label>
+									<label style="margin-left:-115%;">Duration<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
-						        		<div class="col-md-1">
+						        <div class="col-md-1" style="margin-left:-8.5%;">
 								 <input class="form-control" type="number" id="duration" name="duration" placeholder="In hours" required="required" min="1" max="24">
 								</div>
-									<div class="form-group col-md-1" >
+								<div class="form-group col-md-2" >
+									<label >Visit Expected Time<span class="mandatory" style="color: red;">*</span> </label>
+								</div>
+						        <div class="col-lg-3">
+								 <input class="form-control" type="time" value="09:30" id="expectedTime" name="expectedTime" required="required">
+								</div>
+									
+							</div>
+							<div class="form-row" style="margin-top: 10px;">
+							 <div class="form-group col-md-1" >
 									<label > Officer  <span class="mandatory" style="color: red;">*</span> </label>
 								</div>
-						        		<div class="col-md-5"  >
+						        <div class="col-md-5"  >
 								<select class="form-control col-md-5  CompanyID"  style="width: 33rem;"   name="officer" required>
 								  <option></option>
 								    <%for(Object[] data:officerList){ %>
@@ -248,22 +301,33 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 								    </select>
 								    
 								</div>
+								<div class="form-group col-md-2">
+									<label>Special Permission</label>
+									
+								</div>
+								
+								 <div class="col-md-3">			
+								<!--  <input class="form-control" name="spermission"  id="specialPermission"  maxlength="255" placeholder="Enter max 255 characters" > -->
+								 <select class="form-control col-lg-12 spermission" id="options" name="spermission" multiple required>
+								    <option value="Not Applicable">Not Applicable</option>
+								    <option value="Laptop">Laptop</option>
+								    <option value="Mobile">Mobile</option>
+								    <option value="Pendrive">Pendrive</option>
+								    <option value="CD/DVD">CD/DVD</option>
+								    <option value="Vehicle">Vehicle</option>
+								    </select> 
+								    								    
+								</div> 
 							</div>
 							<div class="form-row" style="margin-top: 10px;">
 								<div class="form-group col-md-1">
 									<label>Purpose<span class="mandatory"  style="color: red;">*</span> </label>
 									
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-5">
 								 <input class="form-control" name="purpose"  id="purposeId"  maxlength="255" placeholder="Enter max 255 characters" required>
 								</div>
-								<div class="form-group col-md-2">
-									<label>Special Permission</label>
-									
-								</div>
-								<div class="col-md-5">
-								 <input class="form-control" name="spermission"  id="specialPermission"  maxlength="255" placeholder="Enter max 255 characters" >
-								</div>
+								
 							
 								
 							
@@ -750,7 +814,54 @@ $( "#tdate" ).daterangepicker({
 
 
 </script>
-  
+  <script type="text/javascript">
+ /*  $(document).ready(function() {
+	  $("#dropdown-submit").click(function() {
+	    var selectedOptions = [];
+	    $("input[type=checkbox]:checked").each(function() {
+	      selectedOptions.push($(this).val());
+	    });
+	    console.log(selectedOptions); // or use the selected options for further processing
+	  });
+	});
+ */
+ 
+ $(document).ready(function() {
+	  $("#dropdown-submit").click(function() {
+	    var selectedOptions = [];
+	    $("input[type=checkbox]:checked").each(function() {
+	      selectedOptions.push($(this).val());
+	    });
+	    if (selectedOptions.length > 0) {
+	      $("#dropdownMenuButton").text(selectedOptions.join(", "));
+	    } else {
+	      $("#dropdownMenuButton").text("Select options");
+	    }
+	  });
+	});
 
+  </script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+$('#options').multiselect({
+includeSelectAllOption: true,
+enableFiltering: true,
+maxHeight: 200,
+buttonWidth: '100%',
+onChange: function(option, checked) {
+  if(checked) {
+    // Option selected
+    console.log('Option selected: ' + $(option).val());
+  } else {
+    // Option deselected
+    console.log('Option deselected: ' + $(option).val());
+  }
+}
+});
+});
+
+</script>
 </body>
 </html>

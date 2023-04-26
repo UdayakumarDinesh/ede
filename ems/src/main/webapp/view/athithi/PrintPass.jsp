@@ -101,8 +101,10 @@ String LabLogo =(String)request.getAttribute("LabLogo");
                      <td style="width:10rem;text-align: left"><b><%=data.get(0)[6]%></b> <td>        
                 </tr>
                 <tr  >
-                  <td style="width:17rem; text-align: left;"> Intimated By : <td>
-                     <td style="width:10rem; text-align: left"><b><%=data.get(0)[13]%></b> <td>                  
+                     <td style="width:17rem; text-align: left;"> Intimated By : <td>
+                     <td style="width:10rem; text-align: left"><b><%=data.get(0)[13]%></b> <td>     
+                      <td style="width:17rem; text-align: left;"> Visit Expected Time : <td>
+                     <td style="width:10rem; text-align: left"><b><%=data.get(0)[14]%></b> <td>                  
                 </tr>
                  <tr  >
                   <td style="width:17rem; text-align: left;"> Company: <td>

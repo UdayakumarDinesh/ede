@@ -22,7 +22,8 @@ public class Intimation {
       private Date FromDate;
       private Date ToDate;
       private String Duration;
-      private String Purpose;
+      private String VisitExpectedTime;
+  	  private String Purpose;
       private String SpecialPermission;
       private String OfficerEmpId;
       private String VpStatus;
@@ -32,6 +33,13 @@ public class Intimation {
       private String ModifiedDate;
       private int IsActive;
       
+      public String getExpectedTime() {
+		return VisitExpectedTime;
+	}
+	public void setExpectedTime(String expectedTime) {
+		VisitExpectedTime = expectedTime;
+	}
+
       
 	public Long getIntimationId() {
 		return IntimationId;
@@ -88,11 +96,18 @@ public class Intimation {
 	public void setPurpose(String purpose) {
 		Purpose = purpose;
 	}
+	
 	public String getSpecialPermission() {
 		return SpecialPermission;
 	}
 	public void setSpecialPermission(String specialPermission) {
 		SpecialPermission = specialPermission;
+	}
+	public String getIntimationByEmpNo() {
+		return IntimationByEmpNo;
+	}
+	public void setIntimationId(Long intimationId) {
+		IntimationId = intimationId;
 	}
 	public String getOfficerEmpId() {
 		return OfficerEmpId;

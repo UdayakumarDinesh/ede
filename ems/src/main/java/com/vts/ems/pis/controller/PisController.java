@@ -241,7 +241,9 @@ public class PisController {
 			req.setAttribute("piscaderlist", service.PisCaderList());
 			req.setAttribute("empstatuslist", service.EmpStatusList());
 			req.setAttribute("paylevellist", service.PayLevelList());	
-			req.setAttribute("divisionlist", service.DivisionList());			
+			req.setAttribute("divisionlist", service.DivisionList());	
+			req.setAttribute("Grouplist", service.GroupList());
+		
 			return "pis/EmployeeAdd";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside EmployeeAdd.htm "+Username, e);
@@ -287,7 +289,7 @@ public class PisController {
 			String phoneno = req.getParameter("PhoneNo");
 			String AltPhoneno = req.getParameter("AltPhoneno");
 			String uanno = req.getParameter("UANNo");
-			
+			String groupid = req.getParameter("groupid");
 			String empstatus = req.getParameter("empstatus");
 			
 			String empstatusdate = req.getParameter("EmpStatusDate");
@@ -302,7 +304,9 @@ public class PisController {
 			Employee employee = new Employee();
 			employee.setEmail(email);
 			employee.setDivisionId(Long.parseLong(divisionid));
-			
+			if(groupid!=null){
+				employee.setGroupId(Long.parseLong(groupid));
+			}
 			employee.setDesigId(Long.parseLong(Designationid));
 			employee.setEmpName(WordUtils.capitalize(empname.trim()));
 			employee.setSrNo(Long.parseLong("0"));
@@ -423,7 +427,7 @@ public class PisController {
 		logger.info(new Date() +"Inside EmployeeEdit.htm "+Username);		
 		try {
 			String empid=req.getParameter("empid");
-				
+				System.out.println("empid:"+empid);
 			req.setAttribute("emp", service.getEmp(empid));
 			req.setAttribute("employee", service.getEmployeeDetailsData(service.getEmp(empid).getEmpNo()));			
 			req.setAttribute("desiglist", service.DesigList());
@@ -432,7 +436,7 @@ public class PisController {
 			req.setAttribute("piscaderlist", service.PisCaderList());
 			req.setAttribute("empstatuslist", service.EmpStatusList());
 			req.setAttribute("paylevellist", service.PayLevelList());	
-			
+			req.setAttribute("Grouplist", service.GroupList());
 			req.setAttribute("divisionlist", service.DivisionList());			
 			return "pis/EmployeeEdit";
 		}catch (Exception e) {
@@ -486,13 +490,17 @@ public class PisController {
 			String exman = req.getParameter("ExMan");
 			String permpassno =  req.getParameter("PermPassNo");
 			String dop=req.getParameter("DOP");
-			
+			String groupid=req.getParameter("groupid");
+
 			String chssno=req.getParameter("CHSSNo");
 			String dcmafno=req.getParameter("DCMAFNo");
 			String benovelentfundno=req.getParameter("BenovelentNo");
 			String iticreditsocno=req.getParameter("ITICreditSocNo");
 			Employee employee=new Employee();
 				employee.setEmpNo(PunchCardNo);
+				if(groupid!=null) {
+					employee.setGroupId(Long.parseLong(groupid));
+				}
 				employee.setEmpName(WordUtils.capitalize(empname.trim()));
 				employee.setDesigId(Long.parseLong(Designationid));
 				employee.setEmail(email);
@@ -6602,4 +6610,23 @@ public class PisController {
 				}
 			return json.toJson(EmpList);
 		}
+		
+		@RequestMapping(value = "GetDivisionList.htm" , method = RequestMethod.GET)
+		public @ResponseBody String GetDivisionList(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) {
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() + "Inside GetDivisionList.htm " + Username);
+			
+			try {
+				String divisionId = req.getParameter("divisionId");
+				List<Object[]> divlist=service.GetDivisionList(divisionId);
+				Gson json = new Gson();
+				return json.toJson(divlist);
+			} catch (Exception e) {
+				logger.error(new Date() +" Inside GetDivisionList.htm"+Username, e);
+				e.printStackTrace();
+				return "static/Error";
+				}
+	
+		}
+		
 }

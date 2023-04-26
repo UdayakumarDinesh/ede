@@ -210,12 +210,23 @@ public class IntimationController {
 			intimation.setCompnayId(req.getParameter("company"));
 			intimation.setVisitors(req.getParameterValues("visitors"));
 			intimation.setDuration(req.getParameter("duration"));
+			intimation.setExpectedTime(req.getParameter("expectedTime"));
 			intimation.setFdate(req.getParameter("fdate"));
 			intimation.setTdate(req.getParameter("tdate"));
 	        intimation.setOfficer(req.getParameter("officer"));
 	        intimation.setPurpose(req.getParameter("purpose"));
-			intimation.setSpermission(req.getParameter("spermission"));
-			
+//			intimation.setSpermission(req.getParameter("spermission"));	       
+	        String[] sp = req.getParameterValues("spermission");
+	        
+	        String sPermission ="";
+	        for(int i=0; i<sp.length; i++) {
+	        	sPermission += sp[i];
+	        	  
+	        	  if(i != sp.length-1) {
+	        		  sPermission += ",";
+	        	  } 
+	        }
+	        intimation.setSpermission(sPermission);
 			Long re=service.addNewIntimation(intimation);
 			
 			return "redirect:/IntimationList.htm";
@@ -234,7 +245,7 @@ public class IntimationController {
 		try {
 			String logintype = (String)ses.getAttribute("LoginType");
 			ses.setAttribute("formmoduleid", "28");
-			ses.setAttribute("SidebarActive","IntimationList.htm");		
+			ses.setAttribute("SidebarActive","IntimationList_htm");		
 			req.setAttribute("IntimationList", service.getItimationList("0"));
 			return "athithi/IntimationList";
 		}

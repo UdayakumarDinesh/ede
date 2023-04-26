@@ -1,3 +1,4 @@
+<%@page import="com.vts.ems.master.model.DivisionGroup"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="java.time.LocalDate"%>
@@ -103,7 +104,7 @@ List<PisCadre> piscaderlist=(List<PisCadre>)request.getAttribute("piscaderlist")
 List<EmpStatus> empstatuslist=(List<EmpStatus>)request.getAttribute("empstatuslist");
 List<PisPayLevel> paylevellist=(List<PisPayLevel>)request.getAttribute("paylevellist");
 List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("divisionlist");
-
+List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Grouplist");
 
 %>
 
@@ -170,11 +171,11 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 				
 						<div class="col-md-2">
 			                <label>Department <span class="mandatory">*</span></label>
-			                <select name="divisionid" class="form-control input-sm select2" required data-live-search="true">
+			                <select name="divisionid" id="division" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
 								<%} %>			
-			
+							
 			                </select>
 			            </div>
 			
@@ -183,7 +184,16 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			
 			    <div class="form-group">
 			        <div class="row">
+						<div class="col-md-2">
+			                <label>Group </label>
+			                <select name="groupid" id="groupid" class="form-control input-sm select2" required data-live-search="true">
+			               	 <option value="0">Not Applicable</option>
+								<%for( DivisionGroup group: grouplist){ %>
+									<option value="<%=group.getGroupId()%>"><%=group.getGroupName()%></option>
+								<%} %>			
 			
+			                </select>
+			            </div>
 			           <div class="col-md-2">
 			                <label>Gender<span class="mandatory">*</span></label>
 			                <select name="gender" class="form-control input-sm" required>
@@ -235,20 +245,18 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 							</div>
 			            </div>
 					          
+				 		 </div>
+			        </div>
+			   
+			    <div class="form-group">
+			        <div class="row">	          
 						<div class="col-md-2">
 			                <label>Home Town </label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Home Town " 
 			                    onclick=" Validate() ">
 			            </div>
-			            
-			            
-			          </div>
-			        </div>
-			   
-			    <div class="form-group">
-			        <div class="row">
-			            
+
 			             <div class="col-md-2">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
 			                <input type="text" name="PhoneNo"  value="" maxlength="10"
@@ -281,17 +289,15 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Aadhaar No" required>
 			            </div>
 			            
+			        </div>
+			    </div>
+			    <div class="form-group">
+			        <div class="row">    
+			            
 			            <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
 			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="PAN">
 			            </div>
-
-			    	</div>
-			    </div>
-			
-			
-			    <div class="form-group">
-			        <div class="row">
 			       
 			        	 <div class="col-md-2">
 			                <label>UAN No</label>
@@ -326,6 +332,10 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    placeholder="GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			            
+			         </div>
+			    </div>
+				<div class="form-group">
+				   <div class="row">    
 			            <div class="col-md-2">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
@@ -338,14 +348,6 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 			                    <option value="Contract">  Contract</option>
 			                </select>
 			            </div>
-			            
-						            
-			
-			        </div>
-			    </div>
-			    
-				    <div class="form-group">
-				        <div class="row">
     
     					 <div class="col-md-2">
 			                <label>Religion</label>
@@ -392,25 +394,23 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
  
 			             <div class="col-md-2">
 			                <label>Physically Handicap</label>
-			                
 			                 <select name="ph" class=" form-control input-sm select2 " >
 			                 	<option value="N">No</option>
 								<option value="Y">YES</option>								
 			                </select>	
-
-			            </div>      
+			            </div> 
+			            
+			         </div>
+				</div>  
+			     <div class="form-group">
+			        <div class="row">      
 			                
 			             <div class="col-md-2">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-					</div>
-				</div>
-			            
-			            
-			     <div class="form-group">
-			        <div class="row"> 
+				
 			        
 			            <div class="col-md-2">
 			                <label>Emp Status<span class="mandatory">*</span></label>
@@ -445,15 +445,16 @@ List<DivisionMaster> divisionlist=(List<DivisionMaster>)request.getAttribute("di
 								<option value="Y"> Yes </option>	
 			                 </select>	
 			            </div>
+			            
+			             </div>
+			    </div> 			    
+                <div class="form-group">
+			        <div class="row">   
 			
 			            <div class="col-md-2">
 			                <label>Per Pass No<span class="mandatory">*</span></label>
 			                <input type="text" id="permpassno" name="PermPassNo" value="" class=" form-control input-sm " maxlength="10"  placeholder="Permanent Pass No">
 			            </div> 
-			         </div>
-			    </div> 			    
-                <div class="form-group">
-			        <div class="row">
 			        
 			            <div class="col-md-2">
 			                <label>Date of Promotion</label>
@@ -724,6 +725,31 @@ function isNumber(evt)
 }
 
 
+$('#division').on('change', function() { 
+	  var division =$("#division").val();
+	    console.log(division);
+	 $.ajax({
+         url:"GetDivisionList.htm",
+         type:"GET",
+     	  data:{divisionId:division},
+         dataType:'Json',
+         success:function(data){
+            var grouplist='';
+            var result = data;
+    		$('#groupid').html('');
+    		if(result.length>0){
+    			grouplist+='<option value="'0'"  >'+Not Applicable+'</option>';
+    			for(var c=0;c<result.length;c++){
+                	grouplist+='<option value="'+result[c][0]+'"  >'+result[c][1]+'</option>';	
+                } 
+    		}else{
+    			grouplist+='<option value="##" disabled="disabled">--Select--</option>';
+    			grouplist+='<option value="0" >Not Applicable</option>';
+    		}
+             $('#groupid').html(grouplist);
+  		}
+   });
+});
 
 
 </script>

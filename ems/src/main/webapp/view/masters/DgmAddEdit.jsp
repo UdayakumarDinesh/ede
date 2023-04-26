@@ -1,30 +1,29 @@
-<%@page import="com.vts.ems.master.model.DivisionGroup"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import=" java.util.List,com.vts.ems.pis.model.Employee" %>
+    <%@page import="com.vts.ems.master.model.DgmMaster,java.util.List,com.vts.ems.pis.model.Employee"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Group</title>
+<title>DGM</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
 </head>
 <body>
   <%
-  DivisionGroup divgrp =(DivisionGroup) request.getAttribute("divgrp");
-  List<Object[]> list = (List<Object[]>)request.getAttribute("grpheadlist");
-  List<Object[]> deptlist = (List<Object[]>)request.getAttribute("Deparmentlist");
+  DgmMaster dgm =(DgmMaster) request.getAttribute("dgm");
+  List<Object[]> list = (List<Object[]>)request.getAttribute("emplist");
   %>
   
   <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-			<%if(divgrp!=null){ %>
-				<h5>Group Edit</h5>
+			<%if(dgm!=null){ %>
+				<h5>DGM Edit</h5>
 				<%}else{ %>
-				<h5>Group Add</h5>
+				<h5>DGM Add</h5>
 				<%}%>
 			</div>
 			
@@ -32,11 +31,11 @@
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 					    <li class="breadcrumb-item "><a href="MasterDashBoard.htm"> Master </a></li> 
-						<li class="breadcrumb-item "><a href="DivisionGroup.htm">Group List </a></li>
-						<%if(divgrp!=null){ %>						
-						<li class="breadcrumb-item active " aria-current="page">Group Edit</li>
+						<li class="breadcrumb-item "><a href="Dgm.htm">DGM List </a></li>
+						<%if(dgm!=null){ %>						
+						<li class="breadcrumb-item active " aria-current="page">DGM Edit</li>
 						<%}else{ %>
-						<li class="breadcrumb-item active " aria-current="page">Group Add</li>
+						<li class="breadcrumb-item active " aria-current="page">DGM Add</li>
 						<%} %>
 					</ol>
 				</div>
@@ -45,47 +44,37 @@
     <div class="page card dashboard-card">
 	<div class="card-body" >			
 			<div class="card" >
-				<div class="card-body  " align="center" >
-					<%if(divgrp!=null){ %>
-					<form name="myfrm" action="DivisionGroupEdit.htm" method="POST" id="addfrm1" autocomplete="off"  enctype="multipart/form-data">	
+				<div class="card-body" align="center" >
+					<%if(dgm!=null){ %>
+					<form name="myfrm" action="DgmEdit.htm" method="POST" id="addfrm1" autocomplete="off" enctype="multipart/form-data">	
 						<%}else{%>
-					<form name="myfrm" action="DivisionGroupAdd.htm" method="POST" id="addfrm1" autocomplete="off"   >	
+					<form name="myfrm" action="DgmAdd.htm" method="POST" id="addfrm1" autocomplete="off">	
 						<%}%>
 						<div class="form-group">
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">								
 										<tr>
-											<th><label>Group Code<span class="mandatory"	style="color: red;">*</span></label></th>
+											<th><label>DGM Code<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control form-control" style="text-transform:uppercase"
-												placeholder=" Enter Group Code" type="text" id="groupCode" name="groupCode" value="<%if(divgrp!=null){ %><%=divgrp.getGroupCode()%><%} %>"
-												required="required" maxlength="3" style="font-size: 15px;"></td>
+												placeholder="Enter DGM Code" type="text" id="dgmCode" name="dgmCode" value="<%if(dgm!=null){ %><%=dgm.getDGMCode()%><%} %>"
+												required="required"  maxlength="3" style="font-size: 15px;"></td>
 										</tr>
 										<tr>
-											<th><label>Group Name <span class="mandatory" style="color: red;">*</span></label></th>
-											<td><input class="form-control form-control" style="text-transform:capitalize"
-												placeholder=" Enter Group Name" type="text" name="groupName" value="<%if(divgrp!=null){%><%=divgrp.getGroupName()%> <%} %>"
-												required="required" maxlength="255" style="font-size: 15px;" id="groupName"></td>
+											<th><label>DGM Name <span class="mandatory" style="color: red;">*</span></label></th>
+											<td><input class="form-control form-control" style=""
+												placeholder=" Enter DGM Name" type="text" name="dgmName" value="<%if(dgm!=null){%><%=dgm.getDGMName()%> <%} %>"
+												required="required" maxlength="255" style="font-size: 15px;" id="dgmName"></td>
 												
 										</tr>
 										<tr>
-											<th><label>Group Head Name <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"  name="groupHeadId" id="groupHeadId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
-												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-												<%if(list!=null&&list.size()>0){for(Object[] emp:list){ %>
-												<option value="<%=emp[2]%>" <%if(divgrp!=null){if(divgrp.getGroupHeadId().equalsIgnoreCase(emp[2].toString())){%> selected   <%}}%> > <%=emp[1]%></option>
+											<th><label>DGM Employee <span class="mandatory"	style="color: red;">*</span></label></th>
+											<td><select class="form-control select2"  name="dgmEmpNo" id="dgmEmpNo" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+												<option disabled="disabled" selected="selected" hidden="true" value="">--Select--</option>
+												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
+												<option value="<%=O[2]%>" <%if(dgm!=null){if( dgm.getDGMEmpNo().equalsIgnoreCase(O[2].toString())  ){%> selected   <%}}%> > <%=O[1]%></option>
 												<%}}%>
 											    </select></td>
 										</tr>	
-										<tr>
-											<th><label>Department Name <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"  name="DepartmentId" id="DepartmentId" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
-												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
-												<%if(list!=null&&list.size()>0){
-													for(Object[] div:deptlist){ %>
-												<option value="<%=div[0]%>" <%if(divgrp!=null){if(divgrp.getDivisionId()==Long.parseLong(div[0].toString())){%> selected   <%}}%> > <%=div[2]%></option>
-												<%}}%>
-											    </select></td>
-										</tr>
 									
 								</table>
 							</div>
@@ -93,8 +82,8 @@
 
 						<div class="row" style="margin-left: 47%;" align="center">
 							<div id="UsernameSubmit">
-							<%if(divgrp!=null){ %>
-							<input type="hidden" id="divgrpid" name="divgrpid" value="<%=divgrp.getGroupId()%>">
+							<%if(dgm!=null){ %>
+							<input type="hidden" id="dgmId" name="dgmId" value="<%=dgm.getDGMId()%>">
 								<button type="button" class="btn btn-sm submit-btn"
 									onclick="return checkDuplicateEdit('addfrm1');"
 									name="action"  value="EDIT">SUBMIT</button>
@@ -150,8 +139,8 @@
 					  </div>
 					</div>
 			<!----------------------------- container Close ---------------------------->	
-						<%}%>				
-					<%if(divgrp!=null){ %>
+						<%}%>		
+					<%if(dgm!=null){ %>
 					</form>
 					<%}else{ %>
 					</form>
@@ -164,7 +153,7 @@
 
 <script type="text/javascript">
 
-$('#groupCode').keypress(function (e) {
+/* $('#dgmCode').keypress(function (e) {
     var regex = new RegExp("^[A-Za-z0-9]*$" );
     var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
     if (regex.test(str)) {
@@ -176,27 +165,28 @@ $('#groupCode').keypress(function (e) {
     alert('Please Enter Alphabates And Numbers');
     return false;
     }
-});
+}); */
+
 
 function checkDuplicateAdd(frmid)
 {
-	 var $groupCode1 = $("#groupCode").val();	
-	 var $groupName1 = $('#groupName').val().trim();
-		var $groupHeadId1 =$('#groupHeadId'); 
+	 var $dgmCode = $("#dgmCode").val();	
+	 var $dgmName = $('#dgmName').val().trim();
+		var $dgmEmpNo =$('#dgmEmpNo').val(); 
 	
 	 var count=true;
 		$.ajax({
 			type : "GET",
-			url : "DivisionAddcheck.htm",	
+			url : "DgmCodeAddCheckDuplicate.htm",	
 			datatype : 'json',
 			data : {
-				groupCode : $groupCode1,				
+				dgmCode : $dgmCode,				
 			},
 			success : function(result) {
 				var ajaxresult = JSON.parse(result);
 				
 				if(ajaxresult>0){
-					alert('Group Code Already Exists');
+					alert('DGM Code Already Exists');
 					event.preventDefault();
 					return false;
 				}
@@ -204,7 +194,7 @@ function checkDuplicateAdd(frmid)
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
 					
-					if($groupCode1==null || $groupCode1==""||$groupCode1=="null" || $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
+					if($dgmCode==null || $dgmCode==""||$dgmCode=="null" || $dgmName==null || $dgmName=="" || $dgmName=="null" || $dgmEmpNo==null || $dgmEmpNo==""|| $dgmEmpNo=="null"){
 						alert('Enter Data Properly');
 						
 						return false;
@@ -227,24 +217,24 @@ function checkDuplicateAdd(frmid)
 
 function checkDuplicateEdit(frmid)
 {
-	 var $groupCode1 = $("#groupCode").val();	
-	 var $groupId1 = $('#divgrpid').val();
-	 var $groupName1 = $('#groupName').val().trim();
-	 var $groupHeadId1 =$('#groupHeadId').val();	
+	 var $dgmCode = $("#dgmCode").val();	
+	 var $dgmId = $('#dgmId').val();
+	 var $dgmName = $('#dgmName').val().trim();
+	 var $dgmEmpNo =$('#dgmEmpNo').val();	
 	 var count=true;
 		$.ajax({
 			type : "GET",
-			url : "DivisionEditcheck.htm",	
+			url : "DgmCodeEditCheckDuplicate.htm",	
 			datatype : 'json',
 			data : {
-				groupCode : $groupCode1,	
-				groupId : $groupId1,
+				dgmCode : $dgmCode,	
+				dgmId : $dgmId,
 			},
 			success : function(result) {
 				var ajaxresult = JSON.parse(result);
 				
 				if(ajaxresult>0){
-					alert('Group Code Already Exists');
+					alert('DGM Code Already Exists');
 					event.preventDefault();
 					return false;
 				}
@@ -252,11 +242,12 @@ function checkDuplicateEdit(frmid)
 				var ret = confirm('Are you Sure To Submit ?') ;
 				if(ret){
 					
-					if($groupCode1==null || $groupCode1==""||$groupCode1=="null"|| $groupName1==null || $groupName1=="" || $groupName1=="null" || $groupHeadId1==null || $groupHeadId1==""|| $groupHeadId1=="null"){
+					if($dgmCode==null || $dgmCode==""||$dgmCode=="null"|| $dgmName==null || $dgmName=="" || $dgmName=="null" || $dgmEmpNo==null || $dgmEmpNo==""|| $dgmEmpNo=="null"){
 						alert('Enter Data Properly');
 						
 						return false;
-					}else{						
+					}else{
+						
 						$('#myModal').modal('show');
 						return true;
 					}	
@@ -275,6 +266,16 @@ function checkDuplicateEdit(frmid)
 
 
 </script>
+<script type="text/javascript">
+$(document).ready(function() {
+	  // Prevent spaces in input field
+	  $('#dgmCode').on('keypress', function(e) {
+	    if (e.which === 32) {
+	      return false;
+	    }
+	  });
+	});
 
+</script>
 </body>
 </html>
