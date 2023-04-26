@@ -91,6 +91,7 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception {
 		try {
+			System.out.println(empid);
 			Query query = manager.createNativeQuery(EMPLOYEEDETAILS);
 			query.setParameter("empid", empid);
 			List<Object[]> list =(List<Object[]>)query.getResultList();

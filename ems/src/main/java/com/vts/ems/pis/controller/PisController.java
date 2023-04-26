@@ -117,7 +117,6 @@ public class PisController {
 	private String uploadpath;
 	                                                   
 	private static final String profileformmoduleid="3";
-	private static final String adminformmoduleid="4";
 	
 	
 	@RequestMapping(value = "PisUserDashboard.htm", method = RequestMethod.GET)
@@ -170,7 +169,7 @@ public class PisController {
 			req.setAttribute("dashboard", chssdashboard);
 			ses.setAttribute("SidebarActive","EmployeeDetails_htm");
 			
-			String empid=req.getParameter("empid");
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
 			if(empid==null)  {
 				Map md=model.asMap();
 				empid=(String)md.get("empid");
@@ -191,7 +190,6 @@ public class PisController {
             String basevalue=null;
             if(empdata!=null && empdata[3]!=null) {
             	basevalue=service.getimage(empdata[3].toString());
-
             }        		
             
 			req.setAttribute("empid", empid);
@@ -211,24 +209,27 @@ public class PisController {
 			return "static/Error";
 		}
 	}	
+	
+	
 	@RequestMapping(value="FamilyDetailsUpdate.htm",method=RequestMethod.POST)
 	public String EmpFamilyDetailsUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
-	{String Username = (String) ses.getAttribute("Username");
-	logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);
-	try {
-	String Dob=req.getParameter("DOB");
-	String occupation = req.getParameter("Occupation");
-	String income = req.getParameter("Income");
-	
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);
+		try {
+		String Dob=req.getParameter("DOB");
+		String occupation = req.getParameter("Occupation");
+		String income = req.getParameter("Income");
 		
-	} catch (Exception e) {
-		logger.error(new Date() +" Inside EmployeeDetails.htm "+Username, e);
-		e.printStackTrace();
-		return "static error";
-	}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside FamilyDetailsUpdate.htm "+Username, e);
+			e.printStackTrace();
+			return "static error";
+		}
 		return null;
-		
 	}
+	
 	@RequestMapping(value = "EmployeeAdd.htm")
 	public String EmployeeAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
@@ -2198,7 +2199,7 @@ public class PisController {
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
 				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
-				ses.setAttribute("formmoduleid", "4");
+				ses.setAttribute("formmoduleid", "5");
 				ses.setAttribute("SidebarActive",controllerMapping.replace(".", "_"));
 				
 				String empid = ((Long) ses.getAttribute("EmpId")).toString();	

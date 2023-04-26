@@ -72,12 +72,12 @@ public class PIController {
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside PersonalIntimation.htm"+Username);		
 		try {		
 			ses.setAttribute("formmoduleid", formmoduleid);			
 			ses.setAttribute("SidebarActive","PersonalIntimation_htm");
-			req.setAttribute("resAddress", service.ResAddressDetails(EmpId));	
-			req.setAttribute("perAddress", service.PermanentAddressDetails(EmpId));
+			
 			String resaddressId = req.getParameter("resaddressId");
 			String peraddressId = req.getParameter("peraddressId");
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
@@ -87,6 +87,7 @@ public class PIController {
 					ses.setAttribute("SidebarActive","AddressApprovals_htm");
 				}
 				req.setAttribute("isApproval", isApproval);
+				req.setAttribute("ApprovalEmpData", service.ResAddressTransactionApprovalData(resaddressId));
 				req.setAttribute("ResFormData", service.ResAddressFormData(resaddressId));				
                 return "pi/ResAddressForm";
 			}else if(peraddressId!=null) {
@@ -98,6 +99,17 @@ public class PIController {
 				req.setAttribute("PerFormData", service.PerAddressFormData(peraddressId));				
 				return "pi/PerAddressForm";
 			}
+			
+			req.setAttribute("resAddress", service.ResAddressDetails(EmpId));	
+			req.setAttribute("perAddress", service.PermanentAddressDetails(EmpId));
+			
+			req.setAttribute("Employee", service.getEmpData(EmpId));
+			List<String> DGMs = service.GetDGMEmpNos();
+			
+			if(!DGMs.contains(EmpNo)) {
+				req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
+			}
+			req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 			
 			return "pi/PIAddressList";
 		}catch (Exception e) {
@@ -359,6 +371,7 @@ public class PIController {
 			    resadd.setResAdStatus("N");
 			    resadd.setPisStatusCode("INI");
 			    resadd.setPisStatusCodeNext("INI");
+			    
 				if("ADD".equalsIgnoreCase(Action)) {
 					resadd.setIsActive(1);
 					resadd.setCreatedBy(Username);
@@ -375,7 +388,7 @@ public class PIController {
 		        		} else {
 		        			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
 		        	    }
-		        	    redir.addFlashAttribute("resaddressId", result);
+		        	    redir.addAttribute("resaddressId", result);
 				}
 				
 			} catch (Exception e) {
@@ -494,7 +507,7 @@ public class PIController {
 				AddressRes address = service.ResAddressIntimated(resAddressId);
 				String  pisStatusCode = address.getPisStatusCode();
 				long count = service.ResAddressForward(resAddressId, Username, action,remarks,EmpNo,LoginType);
-				if(pisStatusCode.equalsIgnoreCase("INI")) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Address application Sent for verification Successfully");
 					} else {
@@ -534,6 +547,7 @@ public class PIController {
 				
 				String filename="";
 				if(resaddressId!=null) {
+					req.setAttribute("ApprovalEmpData", service.ResAddressTransactionApprovalData(resaddressId));
 					req.setAttribute("ResFormData", service.ResAddressFormData(resaddressId));	
 					filename="Address-Res";
 				}else if(peraddressId!=null) {
@@ -550,7 +564,13 @@ public class PIController {
 				req.setAttribute("path",path);
 		        
 		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-				req.getRequestDispatcher("/view/pi/AddressFormPrint.jsp").forward(req, customResponse);
+		        req.getRequestDispatcher("/view/pi/ResAddressFormPrint.jsp").forward(req, customResponse);
+//		        if(resaddressId!=null) {
+//		        	req.getRequestDispatcher("/view/pi/AddressFormPrint.jsp").forward(req, customResponse);
+//				}else if(peraddressId!=null) {
+//					req.getRequestDispatcher("/view/pi/AddressFormPrint.jsp").forward(req, customResponse);
+//				}
+				
 				String html = customResponse.getOutput();        
 		        
 		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
@@ -633,5 +653,23 @@ public class PIController {
 			}
 			
 		}	
+		
+//		ResAddrTransactionStatus
+		
+		@RequestMapping(value = "ResAddrTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String ChssStatusDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside ResAddrTransactionStatus.htm "+Username);
+			try {
+				String addressresid = req.getParameter("addressresid");
+				req.setAttribute("TransactionList", service.ResAddressTransactionList(addressresid));				
+				return "pi/ResAddrTransactionStatus";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside ResAddrTransactionStatus.htm "+Username, e);
+				return "static/Error";
+			}
+		}
 		
 }

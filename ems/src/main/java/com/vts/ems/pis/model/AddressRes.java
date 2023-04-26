@@ -44,6 +44,7 @@ public class AddressRes implements Serializable{
 	private String VerifiedOn;
 	private String ReceivedOn;
 	private String ApprovedOn;
+	private String Remarks;
 	private String PisStatusCode;
 	private String PisStatusCodeNext;
 	

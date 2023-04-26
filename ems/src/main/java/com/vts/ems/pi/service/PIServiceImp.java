@@ -14,6 +14,7 @@ import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.service.CHSSServiceImpl;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -33,6 +34,7 @@ public class PIServiceImp implements PIService{
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	
 	
 	@Override
 	public List<Object[]> ResAddressDetails(String EmpId) throws Exception {
@@ -77,45 +79,43 @@ public class PIServiceImp implements PIService{
 	}
 
 	@Override
-	public long ResAddressForward(String resAddressId, String username, String action, String remarks, String ApprEmpNo,String LoginType) throws Exception
+	public long ResAddressForward(String resAddressId, String username, String action, String remarks, String ForwardingEmpNo,String LoginType) throws Exception
 	{
 		try {
 			AddressRes address = dao.ResAddressIntimated(resAddressId);
 			Employee emp = dao.getEmpData(address.getEmpid());
 			String formempno = emp.getEmpNo();
 			String  pisStatusCode = address.getPisStatusCode();
-			List<String> DGMs = dao.GetDGMEmpNos();
-			List<String> DHs = dao.GetDHEmpNos();
-			List<String> GHs = dao.GetGHEmpNos();
-			
-			String CEO = dao.GetCEOEmpNo();
-			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
-			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
-			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
-			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 			String pisStatusCodeNext = address.getPisStatusCodeNext();
+			List<String> DGMs = dao.GetDGMEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			String CEO = dao.GetCEOEmpNo();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 			
 			if(action.equalsIgnoreCase("A"))
 			{
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI")) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
-						address.setPisStatusCode("APR");
-						address.setPisStatusCodeNext("APR");
+						address.setPisStatusCode("VPA");
+						address.setPisStatusCodeNext("VPA");
 						address.setIsActive(1);
 						address.setResAdStatus("A");				
 					}
-					else if(DGMs.contains(formempno)) 
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 					{
 						address.setPisStatusCodeNext("VPA");
-					}else 
+					}
+					else 
 					{
 						address.setPisStatusCodeNext("VDG");
-					}
-					
+					}					
 				}
 				//approving	flow 
 				else
@@ -128,16 +128,85 @@ public class PIServiceImp implements PIService{
 						address.setResAdStatus("A");
 					}
 				}		
+				address.setRemarks(remarks);
 				dao.AddressResEdit(address);
+				
 			}
 			else if(action.equalsIgnoreCase("R")) 
 			{
-				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
 					address.setPisStatusCode("RDG");	
-				}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
 					address.setPisStatusCode("RPA");	
 				}
+				
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					address.setPisStatusCodeNext("VPA");
+				}
+				else 
+				{
+					address.setPisStatusCodeNext("VDG");
+				}
+				address.setRemarks(remarks);
+				dao.AddressResEdit(address);
 			}
+			
+			PisAddressResTrans transaction = PisAddressResTrans.builder()	
+												.address_res_id(address.getAddress_res_id())
+												.PisStatusCode(address.getPisStatusCode())
+												.ActionBy(ForwardingEmpNo)
+												.Remarks(remarks)
+												.ActionDate(sdtf.format(new Date()))
+												.build();
+			dao.AddressResTransactionAdd(transaction);
+			
+			
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+//			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+//			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+			
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && address.getResAdStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Residential Address Change Request Approved");
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( address.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				}
+				notification.setNotificationUrl("AddressApprovals.htm");
+				notification.setNotificationMessage("Recieved Residential Address Change Request From "+emp.getEmpName());
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Residential Address Change Request Returned");
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
 			return 1;
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside ResAddressForward "+ e);
@@ -201,5 +270,28 @@ public class PIServiceImp implements PIService{
 	public DivisionMaster GetDivisionData(long DivisionId) throws Exception
 	{
 		return dao.GetDivisionData(DivisionId);
+	}
+	
+	@Override
+	public List<Object[]> ResAddressTransactionList(String addressresid)throws Exception
+	{
+		return dao.ResAddressTransactionList(addressresid);
+	}
+	
+	@Override
+	public List<Object[]> ResAddressTransactionApprovalData(String addressresid)throws Exception
+	{
+		return dao.ResAddressTransactionApprovalData(addressresid);
+	}
+	
+	@Override
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception
+	{
+		return dao.GetEmpDGMEmpName(empno);
+	}
+	@Override
+	public Object[] GetPandAEmpName() throws Exception
+	{
+		return dao.GetPandAEmpName();
 	}
 }

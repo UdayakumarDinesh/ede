@@ -1514,7 +1514,7 @@ public class MasterController {
 				 dep.setDivisionHeadId(depHead);
 				 dep.setCreatedBy(UserId);
 				 dep.setCreatedDate(sdtf.format(new Date()));
-				 dep.setDGMId(dgmid);
+				 dep.setDGMId(Integer.parseInt(dgmid));
 				 dep.setIsActive(1);
 				int result=service.DepartmentAdd(dep);
 				if(result>0) {
@@ -1548,7 +1548,7 @@ public class MasterController {
 			dep.setDivisionCode(depCode.toUpperCase().trim());
 			dep.setDivisionName(depName.trim());
 			dep.setDivisionHeadId(depHead);
-			dep.setDGMId(DGMId);
+			dep.setDGMId(Integer.parseInt(DGMId));
 			dep.setModifiedBy(UserId);
 			dep.setModifiedDate(sdtf.format(new Date()));					
 			String comments = (String)req.getParameter("comments");

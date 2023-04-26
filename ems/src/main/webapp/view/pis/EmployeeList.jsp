@@ -130,9 +130,7 @@
 							<button type="submit" class="btn btn-sm add-btn" style="margin-right: 5px;" name="action" value="add" formaction="EmployeeAdd.htm"  >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" style="margin-right: 5px;" name="action" value="edit" formaction="EmployeeEdit.htm" Onclick="Edit(empForm)" >EDIT </button>
 
-							<!-- <button type="submit" class="btn btn-sm edit-btn" name="action" value="view" formaction="EmployeeDetails.htm" Onclick="ViewEmp(empForm)">VIEW </button> -->
 
-							<!-- <button type="submit" class="btn btn-sm view-btn" style="margin-right: 5px;" name="action" value="view" formaction="EmployeeDetails.htm"  Onclick="Edit(empForm)" >VIEW </button> -->
 							<button type="submit" class="btn btn-sm view-btn" style="background-color: #4b6a9c;" name="action"  value="UpdateSeniority" formaction="UpdateEmployeeSeniority.htm"  Onclick="Edit(empForm)" >UPDATE SENIORITY </button>
 							<button type="submit" class="btn btn-sm view-btn" style="background-color: #609966;" formaction="AllowAnnualDeclaration.htm"  Onclick="AnnualDecEdit(empForm)" >Allow Annual Declaration </button>
 							<!-- <button type="button" class="btn btn-sm update-btn" name="action" value="view"  >UPDATE </button>

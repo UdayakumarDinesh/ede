@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -18,7 +19,7 @@ public interface PIDao {
 	public Object[] ResToAddressId(String EmpId) throws Exception;
 	public long ResUpdatetoDate(Date toDate, String resAddressId) throws Exception;
 	public AddressRes ResAddressIntimated(String resaddressid) throws Exception;
-	public AddressRes getResAddressDet(String resaddressid) throws Exception;
+	 AddressRes getResAddressDet(String resaddressid) throws Exception;
 	public Object[] AddressIntimationAuth(String Logintype) throws Exception;
 	public long NotificationAdd(EMSNotification notify) throws Exception;
 	public long AddressResEdit(AddressRes addressRes) throws Exception;
@@ -33,5 +34,12 @@ public interface PIDao {
 	public String GetEmpDGMEmpNo(String empno) throws Exception;
 	public List<Object[]> ResAddressApprovalsList(String EmpNo,String LoginType) throws Exception;
 	public DivisionMaster GetDivisionData(long DivisionId) throws Exception;
+	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception;
+	public List<Object[]> ResAddressTransactionList(String addressresid) throws Exception;
+	public List<Object[]> ResAddressTransactionApprovalData(String addressresid) throws Exception;
+	public long AddNotifications(EMSNotification notification) throws Exception;
+	public List<String> GetPandAAdminEmpNos() throws Exception;
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception;
+	public Object[] GetPandAEmpName() throws Exception;
 
 }

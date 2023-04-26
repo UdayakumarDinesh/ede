@@ -3,6 +3,7 @@ package com.vts.ems.pi.service;
 import java.util.Date;
 import java.util.List;
 
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -29,4 +30,8 @@ public interface PIService {
 	public String GetEmpDGMEmpNo(String empno) throws Exception;
 	public List<Object[]> ResAddressApprovalsList(String EmpNo,String LoginType) throws Exception;
 	public DivisionMaster GetDivisionData(long DivisionId) throws Exception;
+	public List<Object[]> ResAddressTransactionList(String addressresid) throws Exception;
+	public List<Object[]> ResAddressTransactionApprovalData(String addressresid) throws Exception;
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception;
+	public Object[] GetPandAEmpName() throws Exception;
 }

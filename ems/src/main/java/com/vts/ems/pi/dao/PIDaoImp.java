@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -55,7 +56,7 @@ public class PIDaoImp implements PIDao{
 	
 	
 	
-	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusCode FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
+	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusCode,a.remarks FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
 	@Override
 	public Object[] ResAddressFormData(String addressResId)throws Exception{
 		Object[] empData=null;
@@ -405,8 +406,99 @@ public class PIDaoImp implements PIDao{
 	@Override
 	public DivisionMaster GetDivisionData(long DivisionId) throws Exception
 	{
-			return manager.find(DivisionMaster.class, DivisionId);
+		return manager.find(DivisionMaster.class, DivisionId);
 	}
 	
+	@Override
+	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception
+	{
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getResTransactionId();
+	}
+	
+	
+	
+	private static final String RESADDRESSTRANSACTIONLIST="SELECT tra.ResTransactionId,emp.empno,emp.empname,des.designation,tra.actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor  FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_res par WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND par.address_res_id =:addressresid ORDER BY actiondate";
+	@Override
+	public List<Object[]> ResAddressTransactionList(String addressresid)throws Exception
+	{
+		Query query = manager.createNativeQuery(RESADDRESSTRANSACTIONLIST);
+		query.setParameter("addressresid", Long.parseLong(addressresid));
+		return (List<Object[]>) query.getResultList();
+	}
+	
+	private static final String RESADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.ResTransactionId,emp.empno,emp.empname,des.designation,MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_res par WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND sta.pisstatuscode IN ('FWD','VDG','VPA')AND par.address_res_id = :addressresid GROUP BY sta.pisstatuscode ORDER BY actiondate ASC;";
+	@Override
+	public List<Object[]> ResAddressTransactionApprovalData(String addressresid)throws Exception
+	{
+		Query query = manager.createNativeQuery(RESADDRESSTRANSACTIONAPPROVALDATA);
+		query.setParameter("addressresid", Long.parseLong(addressresid));
+		return (List<Object[]>) query.getResultList();
+	}
+	
+	@Override
+	public long AddNotifications(EMSNotification notification) throws Exception
+	{
+		manager.persist(notification);
+		manager.flush();
+		return notification.getNotificationId();
+	}
+	
+	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT e.empno FROM employee e,login l WHERE e.empid=l.empid AND l.logintype='P' AND l.isactive=1 AND e.isActive=1";
+	@Override
+	public List<String> GetPandAAdminEmpNos()throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETPANDAADMINEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}
+		catch (Exception e) 
+		{
+			logger.error(new Date()  + "Inside DAO GetDGMEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+	}
+	
+	private static final String GETEMPDGMPANDAEMPNO  ="SELECT dgm.dgmempno , e2.empname FROM employee e, division_master dm,dgm_master dgm , employee e2 WHERE e.divisionid=dm.divisionid AND dm.dgmid=dgm.dgmid AND dgm.dgmempno=e2.empno AND e.empno=:empno";
+	@Override
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDGMPANDAEMPNO);
+			query.setParameter("empno", empno);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDGMEmpName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT e.empno,e.empname FROM employee e,login l WHERE e.empid=l.empid AND l.logintype='P' AND l.isactive=1 AND e.isActive=1 LIMIT 1";
+	@Override
+	public Object[] GetPandAEmpName() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETPANDAEMPNAME);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetPandAEmpName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
 	
 }
