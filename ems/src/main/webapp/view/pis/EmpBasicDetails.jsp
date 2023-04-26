@@ -81,9 +81,10 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
-					<%if("A".equalsIgnoreCase(LoginType)){ %>
-					<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-					<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li><%}%>
+					<%-- <%if("A".equalsIgnoreCase(LoginType)){ %>
+						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
+						<li class="breadcrumb-item "><a href="PisAdminEmpList.htm">Employee List</a></li>
+					<%}%> --%>
 					<li class="breadcrumb-item active " aria-current="page">Employee info</li>
 				</ol>
 			</div>	
@@ -120,8 +121,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			<div class="card" style="background-color: #ebf0f2;">
 			<div class="card-body text-center"  >
 			<form action="PisEmployeeImageUpload.htm" method="POST" enctype="multipart/form-data" id="myForm" > 
-			<%if(employeedetails[29]!=null){ %>
-			
+			<%if(employeedetails[29]!=null){ %>			
 			
 			 <div class="pic1" >
 			 <img src="data:image/<%=FilenameUtils.getExtension(employeedetails[29].toString())%>;base64,<%=path%>" class="img-responsive img-rounded" style=" width: 100%; height:124px; cursor: pointer;" id="profileImage1" >
@@ -165,7 +165,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						</tr>
 						<tr>
 							<td><%if(employeedetails[22]!=null){%><%=employeedetails[22]%><%}else{%>--<%}%></td>						
-					     	<td><%if(employeedetails[23]!=null&&employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
+					     	<td><%if(employeedetails[23]!=null && employeedetails[24]!=null){%> <%=employeedetails[23]%>(<%=employeedetails[24] %>) <%}else{%>--<%}%></td>
 							<td><%if(employeedetails[5]!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[5].toString())%> <%}else{%>--<%}%></td>
 						    <td><%if(employeedetails[2]!=null){%><%=employeedetails[2]%><%}else{%>--<%}%></td>
 						    <td><%if(employeedetails[33]!=null){%><%=employeedetails[33]%><%}else{%>--<%}%></td>

@@ -263,18 +263,6 @@ public class EMSMainServiceImpl implements EMSMainService
 	}
 
 	@Override
-	public List<Object[]> EmployeeList() throws Exception {
-		
-		return dao.EmployeeList();
-	}
-
-	@Override
-	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {		
-		
-		return dao.getAttendanceDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
-	}
-
-	@Override
 	public Object[]getEmpCountThirdSes(String date) throws Exception {
 	
 		return dao.getEmpCountThirdSes( date);
@@ -310,9 +298,4 @@ public class EMSMainServiceImpl implements EMSMainService
 		return dao.getEmpCountFirstSes(date);
 	}
 
-	@Override
-	public Object getlastSyncDateTime() throws Exception {
-	
-		return dao.getlastSyncDateTime();
-	}
 }

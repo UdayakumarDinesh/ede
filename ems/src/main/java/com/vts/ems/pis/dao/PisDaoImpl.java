@@ -64,7 +64,8 @@ public class PisDaoImpl implements PisDao {
 	EntityManager manager;
 
 	private static final String EMPLOYEEDETAILSLIST = "SELECT e.empid,e.empno,e.empname,e.srno, ed.designation ,eds.dob FROM employee e, employee_desig ed,employee_details eds WHERE  e.empno=eds.empno  AND   e.isactive=1 AND e.desigid=ed.desigid ORDER BY e.srno=0,e.srno ";
-	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,  dg.groupname,  dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno ,pp.paygrade,ee.basicpay FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND dm.groupid = dg.groupid AND e.empno=ee.empno and ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
+	private static final String EMPLOYEEDETAILS = "SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,   '-' AS groupname , '-' AS  GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno ,pp.paygrade,ee.basicpay       FROM   employee e,  division_master dm,   employee_desig ed , employee_details ee , pis_pay_level pp       WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND e.empno=ee.empno AND e.groupid=0    AND ee.paylevelid = pp.paylevelid  AND e.empid =:empid    \r\n"
+			+ "UNION SELECT   e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,  e.desigid,  e.divisionid,  ee.groupid,  ee.SBIAccNo,  ee.CategoryId,   ed.designation,  dm.divisionname,  dm.DivisionCode,   dg.groupname , dg.GroupCode,ee.hometown, ee.quarters ,ee.photo, ee.phoneno , pp.paylevel,e.extno ,pp.paygrade,ee.basicpay       FROM   employee e,  division_master dm,   employee_desig ed , employee_details ee , pis_pay_level pp , division_group dg      WHERE e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND e.empno=ee.empno AND e.groupid=dg.groupid    AND ee.paylevelid = pp.paylevelid  AND e.empid =:empid           ";
 	private static final String EMPLOYEENO = "SELECT COUNT(empno) FROM employee_details WHERE empno=:empno";
 	private static final String PHOTOPATH = "select photo from employee_details where empno=:empno";
 	private static final String PHOTOUPDATE = "update employee_details set photo=:Path where empno=:empno";
@@ -91,7 +92,6 @@ public class PisDaoImpl implements PisDao {
 	@Override
 	public Object[] EmployeeDetails(String empid) throws Exception {
 		try {
-			System.out.println(empid);
 			Query query = manager.createNativeQuery(EMPLOYEEDETAILS);
 			query.setParameter("empid", empid);
 			List<Object[]> list =(List<Object[]>)query.getResultList();
@@ -103,7 +103,8 @@ public class PisDaoImpl implements PisDao {
 		} catch (Exception e) {
 			logger.error(new Date() + "Inside DAO EmployeeDetails "+e);
 			e.printStackTrace();
-			return null;
+			throw e;
+//			return null;
 		}
 	}
 	private static final String GETALLDETAILS="SELECT e.empid,  e.srno,  e.empno,  e.empname,  ee.Title,  ee.dob,  ee.DOJL,  ee.DOA,  ee.DOR,  ee.gender,  ee.BloodGroup,  ee.maritalStatus, ee.Religion,  ee.pan,  ee.punchcard,  ee.uid,  e.email,     ee.SBIAccNo,  c.Category_type,   ed.designation,  dm.divisionname,  dm.DivisionCode, ee.gpfno, dg.GroupCode,ee.hometown,  ee.quarters ,  ee.photo,   ee.phoneno ,   pp.paylevel,  ee.pranno ,  pp.paygrade,  ee.basicpay,  cat.cat_name,  cad.cadre  ,  ee.perpassno,  ee.exserviceman, ee.servicestatus,  ee.empstatus ,  ee.ph FROM   employee e,  division_master dm,  division_group dg,  employee_desig ed , employee_details ee , pis_pay_level pp ,pis_category c, pis_cat_class cat ,pis_cadre cad WHERE cat.cat_id=ee.catid AND ee.categoryid=c.category_id AND ee.cadreid=cad.cadreid AND  e.isactive = 1  AND e.desigid = ed.desigid  AND e.divisionid = dm.divisionid  AND  dm.groupid = dg.groupid AND e.empno=ee.empno AND ee.paylevelid = pp.paylevelid  AND empid =:empid ORDER BY e.srno DESC";
