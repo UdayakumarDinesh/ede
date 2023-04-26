@@ -340,9 +340,10 @@ $(document).ready(function() {
 								
 								var s = '';
 								for (i = 0; i < values.length; i++) {
+									
 									s += '<a class="dropdown-item" href="'+values[i][1]+'">' +values[i][0]+ '</a>';
-
-								}
+									
+                                   }
 								
 								$('#scheduledropdown'+value).html(s);
 				

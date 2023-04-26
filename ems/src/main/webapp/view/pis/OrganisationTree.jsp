@@ -1,3 +1,4 @@
+<%@page import="org.apache.logging.log4j.core.pattern.EqualsIgnoreCaseReplacementConverter"%>
 <%@page import="java.math.BigDecimal"%>
 
 <%@page import="java.util.ArrayList"%>
@@ -13,7 +14,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Item Tree</title>
+<title>Organization Tree</title>
 <jsp:include page="../static/dependancy.jsp"></jsp:include>
  
 
@@ -202,25 +203,25 @@
 
 .Q1
 {
-	background-color: #DC3535;
+	background-color: #428bca;
 	color: #FFFFFF;
 }
 
 .Q2
 {
-	background-color: #FF7000;
+	background-color: #EA5455;
 	color: #FFFFFF;
 }
 
 .Q3
 {
-	background-color: #FED049;
+	background-color: #E86A33;
 	color: #000000;
 }
 
 .Q4
 {
-	background-color: #5F8D4E;
+	background-color: #643A6B;
 	color: #FFFFFF;
 }
 
@@ -246,81 +247,149 @@ td
     white-space: -pre-wrap; 
 }
 
+.h3{
+font-size:2rem;
+}
 
+.btn1{
+	border-top-left-radius: 5px !important;
+	border-bottom-left-radius: 5px !important;
+}
 
+.btn2{
+	
+    border-left: 1px solid black;
+}
+.btn4{
+	margin: 0px 10px;
+	color:green !important;
+}
 </style>
 
 </head>
 
-<%
+  <%
   
-      
+Object[] Director=(Object[])request.getAttribute("Director"); 
+List<Object[]> dgmlist=(List<Object[]>)request.getAttribute("DGMLIST");
+List<Object[]> divisionlist=(List<Object[]>)request.getAttribute("divisionlist"); 
+List<Object[]> grouplist=(List<Object[]>)request.getAttribute("grouplist"); 
+List<Object[]> EmpModalList=(List<Object[]>)request.getAttribute("EmpModalList");
+List<Object[]> DGMModalList=(List<Object[]>)request.getAttribute("DGMModalList");
+List<Object[]> DivReportCeo=(List<Object[]>)request.getAttribute("DivReportCeo");
+
    
-%>
 
+ %>
 
-        
-
-<body style="background-color:#FFFFFF;overflow-y:auto " class="body genealogy-body genealogy-scroll">
+<body style="background-color:#FFFFFF;overflow-y:auto ;" class="body genealogy-body genealogy-scroll">
 
 	<div>
 		<h3>SITAR ORGANISATION STRUCTURE</h3>
-		<hr style="width:19%; margin-top:-7px;" >
+		<!--  <hr style="width:30%; margin-top:-7px;" >  -->
 	</div>
-	
-		<div>
-	    <div class="genealogy-tree" >
+<div align="right">
+   <div style="float: right;padding:0px;margin-top:-48px;">
+		  	 <div class="btn-group "> 
+		  	 	
+	            <button class="btn btn1" id="submit"><i class="fa fa-chevron-circle-left" style="font-size:24px"></i></button>
+		        <button class="btn btn2" ><i class="fa fa-chevron-circle-right" style="font-size:24px" ></i></button>
+		       
+		      </div>
+		  </div>	
+		  
+		<div class="" style="display: block" id="colorcode">
+			<div style="font-weight: bold; ">
+				<span  style="margin:0px 0px 10px  10px;">CEO :&ensp; 	<span class="Q1" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				<span  style="margin:0px 0px 10px  15px;">DGM :&ensp; 	<span class="Q2" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				<span  style="margin:0px 0px 10px  15px;">Division:&ensp; 	<span class="Q3" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				<span  style="margin:0px 0px 10px  15px;">Group :&ensp; <span class="Q4" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				
+			</div>
+		</div>
+		
+		<div class="" style="display: none" id=colorcode1>
+			<div style="font-weight: bold; ">
+				<span  style="margin:0px 0px 10px  10px;">CEO :&ensp; 	<span class="Q1" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				<span  style="margin:0px 0px 10px  15px;">Division:&ensp; 	<span class="Q3" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				<span  style="margin:0px 0px 10px  15px;">Group :&ensp; <span class="Q4" style="padding: 0px 15px;border-radius: 3px;"></span></span>
+				
+			</div>
+		</div>
+		
+	</div>
+		<div style="display: block"  id="tree" >
+	    <div class="genealogy-tree"  >
 	        
 	  		<ul>
 				<li>      
 	
 						 <div class="member-view-box action-view-box">
 			                    
-			                         <div class=" action-box" style="border:0px;" > 
+			                         <div class=" action-box" style="border:-1px;" > 
 			                         	
 			                         	<div  class="action-box-header" >
-												
-												<span style="font-size: 1.7em;cursor:pointer;" >CEO</span>
+			                         	
+			                         	 <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                onclick="EmpDetails('-1','CEO','','','','yes')">
+			                          			                 CEO  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                         right:24px;top:21px;" aria-hidden="true"></i>
+			                          		 </span>
+			                         	
+											
 			                          			 
 			                          			 
 										</div>
-			                       <div class="action-box-body" align="center" style="cursor: pointer;background-color:#428bca;color: #FFFFFF;font-size: 1.6em;
-			                          	border-top-right-radius: 5px;border-top-left-radius: 5px;border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;">
+			                       <div class="action-box-body" style="cursor: pointer;background-color:#FFFF;color: #FFFFFF;font-size: 1.0em;">
 			                          	
-			                          	<span style="font-weight: 600;"> 
-							                          									                 		
-														
-										</span >
-			                          		
-												    
-			                 </div>
+			                          	<span style="font-weight: 600;color:black;"> 
+							                <%=Director[0] %><br>
+							                [<%=Director[1] %>]	
+							                		
+									    </span > 
+			                          	<% if(dgmlist!=null && dgmlist.size()>0) {%>
+			                          	 <div style="margin-top:-2px;"><i class="fa fa-caret-down" aria-hidden="true" style="font-size: 1.2rem;color:#428bca;;padding-top:0px;padding-bottom:2px;cursor: pointer ;"></i></div>
+			                          	 <%}%>	
+			                          	 
+			                   </div>
 			                         
 			                    </div>
 			                    </div>
 			               
 			        <!-- --------------------------------------------------------   LEVEL 1 ---------------------------------------------------- -->
 			                <ul class="active">	                
-			               
-									<li>			    
+			                <% for(Object[] dgm :dgmlist ){%>
+			                	<li>			    
 									           
 											<div class="member-view-box action-view-box">
 												<div class=" action-box" >
+												<% List<Object[]> list= EmpModalList.stream().filter(e-> dgm[0].toString().equalsIgnoreCase(e[2].toString())).collect(Collectors.toList());%>
+												<div  class="action-box-header"style="background-color:#EA5455;" >
 												
-												<div  class="action-box-header" >
+										  <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+										      <% if(list!=null  && list.size()>0){ %> 
+			                          			                onclick="EmpDetails('<%=dgm[0]%>','<%=dgm[1] %>','<%=dgm[1] %>','','','yes')" <%} %>>
+			                          			                   <%=dgm[1]  %>   <% if(list!=null  && list.size()>0){ %>  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                         right:24px;top:21px;" aria-hidden="true"></i><%} %>
+			                          		 </span>
 												
-												<span style="font-size: 1.7em;cursor:pointer;" 
-			                          			 ></span>
-			                          			 
+											   </div>
+													
+													<% List<Object[]> level1 =divisionlist.stream().filter(e-> dgm[0].toString().equalsIgnoreCase(e[4].toString()) ).collect(Collectors.toList()); 
+                                                     %>
+													
+													<div  <% if(level1!=null && level1.size()>0){%> class="action-box-body" <%} %>  align="center" style="cursor: pointer ;" >
+													
+													<span style="font-weight: 600;color:black;" ><%=dgm[3] %> <br>[<%=dgm[4]%>]</span>
+													
+													<% if(level1!=null && level1.size()>0) {%>
+												       <div style="margin-top:-2px;"><i class="fa fa-caret-up " aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;;padding-top:0px;padding-bottom:2px;cursor: pointer ;"></i></div>
+			                          	            <%} 
+													else{%><div style="margin-top:22px;" ></div><%} %>
+			                          	            
+														
+													
 													</div>
-													
-													<div class="action-box-body"  align="center" style="cursor: pointer ;" >
-													
-														<div style="margin-top:-6px;"><i class="fa fa-caret-down whiteiconcolor" aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;;padding-top:0px;padding-bottom:2px;cursor: pointer ;"></i></div>
-													
-													<div style="margin-top:12px;"></div>
-													
-													
-			                          		       </div>
 													
 												</div>
 											</div>
@@ -328,137 +397,87 @@ td
 									    
 								<!-- --------------------------------------------------------   LEVEL 2 ---------------------------------------------------- -->
 						                <ul class="">	
-						                
+						                 <% for(Object[] division : divisionlist){
+						                	if(dgm[0].toString().equalsIgnoreCase(division[4].toString())){ 
+						                  %>
 							             
 												<li>			    
 												           
 													<div class="member-view-box action-view-box">
 															<div class=" action-box" >
-															<div class="action-box-header">
 															
-												               <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" >
-			                          			                </span>
-			                          			
-													               </div>
-													              
-																<div class="action-box-body"  align="center" style="cursor: pointer ;">
+															<% List<Object[]> list1= EmpModalList.stream().filter(e-> division[0].toString().equalsIgnoreCase(e[3].toString())).collect(Collectors.toList()); %>
+															
+															<div class="action-box-header" style="background-color: #E86A33;">
+														
+															<span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                              <% if(list1!=null  && list1.size()>0 ){ %> onclick="EmpDetails('<%=division[0]%>','<%=division[1] %>','<%=dgm[1] %>','<%=division[1] %>' , '','no')" <%} %>>
+			                          			                                 <%=division[1]  %> <%if(list1!=null  && list1.size()>0 ){ %> <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                                 right:24px;top:21px;" aria-hidden="true"></i> <%} %>
+			                          			            </span>
+												             
+			                          			             </div>
+													              <% List<Object[]> level2 =grouplist.stream().filter(e-> division[0].toString().equalsIgnoreCase(e[6].toString()) ).collect(Collectors.toList()); %>
+																<div    <% if(level2!=null && level2.size()>0){%> class="action-box-body" <%} %> align="center" style="cursor: pointer ;">
 																
+																	<span style="font-weight: 600;color:black;" ><%=division[3] %><br>[<%=division[5] %>]</span>
 																	
-									                          			       
-																					  <div style="margin-top:-5px;"  style="cursor: pointer ;"><i class="fa fa-caret-down whiteiconcolor" aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;"></i></div>
-									
-									                          			       <div style="margin-top:12px;" ></div>
-									                          			   
-																					
-																			</div>
+																	<% if(level2!=null && level2.size()>0){%>
+									                          			  <div style="margin-top:-2px;"  style="cursor: pointer ;"><i class="fa fa-caret-up" aria-hidden="true" style="font-size: 1.2rem;color:#E86A33;"></i></div>
+									                               <%} else{%>
+																	
+																	<div style="margin-top:22px;" ></div>
+																	<%} %>
+																	
+																  </div>
 																			
 																					
-																		</div>
-																	</div>
+																</div>
+															</div>
 												    
 												    <!-- --------------------------------------------------------   LEVEL 3 ---------------------------------------------------- -->
 										                <ul class="">	                
-										                		    
-																           
+										                	<% for(Object[] group : grouplist){
+										                	if(group[6].toString().equalsIgnoreCase(division[0].toString())){
+										                	  %>	    
+																  <li>         
 																	<div class="member-view-box action-view-box">
 																		<div class=" action-box" >
-																		<div class="action-box-header">
+																		<% List<Object[]> list2= EmpModalList.stream().filter(e-> group[0].toString().equalsIgnoreCase(e[4].toString())).collect(Collectors.toList()); %>
+																		<div class="action-box-header" style="background-color: #643A6B;">
 																		
-												                            <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;"> 
-			                          			                             </span>
-			                          			
+																		
+																		<span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                              <% if(list2!=null  && list2.size()>0 ){ %> onclick="EmpDetails('<%=group[0]%>','<%=group[1] %>','<%=dgm[1] %>','<%=division[1] %>','<%=group[1] %>' ,'no')" <%} %>>
+			                          			                                 <%=group[1]  %> <%if(list2!=null  && list2.size()>0 ){ %> <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                                 right:24px;top:21px;" aria-hidden="true"></i> <%} %>
+			                          			                          </span>
+												                                              			
 													                        </div>
 													                       
 																				<div class="action-box-body"  align="center" style="cursor: pointer ;">
 																				
+																					<span style="font-weight: 600;color:black;" ><%=group[4] %><br>[<%=group[5] %>]</span>
 																					
-																											  <div style="margin-top:-5px;" style="cursor: pointer ;"><i class="fa fa-caret-down whiteiconcolor" aria-hidden="true" style="font-size:1.2rem;color:#FF6347;"></i></div>
-																											
-														                          		            <div style="margin-top:12px;" ></div>
-														                          		         
-																											
-																											  
-																			                     </div>
+																				 </div>
 																			                     
-																							</div>
-																						</div>
+																			</div>
+																	</div>
 																    														    
 																    
-																    <!-- --------------------------------------------------------   LEVEL 4 ---------------------------------------------------- -->
-															                <ul class="">	                
-															                
-																					<li>			    
-																					           
-																						<div class="member-view-box action-view-box">
-																								<div class=" action-box" >
-																								<div class="action-box-header">
-																								
-												                                                      <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;"> 
-			                          			                                               </span>
-			                          			
-													                                                 </div>
-																									
-																									<div class="action-box-body"  align="center" style="cursor: pointer ;">
-																										
-																										
-																	                          		          
-																											  <div style="margin-top:-5px;"  style="cursor: pointer ;"><i class="fa fa-caret-down whiteiconcolor" aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;"></i></div>
-																											
-																	                          		         else<div style="margin-top:12px;" ></div>
-																	                          		          
-																											</div>
-																											
-																										</div>
-																									</div>
-																					<!-- -------------------------------------------------------------LEVEL-5 ---------------------------------------------->		
-																					    
-																					         <ul class="">	                
-															             			   
-																					<li>			    
-																					           
-																						<div class="member-view-box action-view-box">
-																								<div class=" action-box" >
-																									<div class="action-box-header">
-																									
-												                                                      <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" >
-			                          			                                                        </span>
-													                                                 </div>
-													                                                
-																									
-																									<div style="cursor: pointer ;">
-																									
-																											<div style="margin-top:-5px;" style="cursor: pointer ;"><i class="fa fa-caret-down whiteiconcolor" aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;"></i></div>
-																											<div style="margin-top:12px;" ></div>
-															                          		          
-																										
-																									</div>
-																									
-																								</div>
-																							</div>
-																																	    
-																					    
-															                		</li>
-																				
-																			
-															                </ul> 
-															              <!-- --------------------------------------------------------   LEVEL 5 ---------------------------------------------------- -->      
-    
-															                		</li>
-																				
-																			
-															                </ul>
-															                
-															        <!-- --------------------------------------------------------   LEVEL 4 ---------------------------------------------------- --> 
-																    
+																
 										                		</li>
 															
-														
+														    <% } %>
+														<% } %>
 										                </ul>
 										                
 										        <!-- --------------------------------------------------------   LEVEL 3 ---------------------------------------------------- -->  
 												
 												</li>
-											
+												
+											<% } %>
+								         <% } %> 
 										
 						                </ul>
 						                
@@ -466,8 +485,8 @@ td
 								    
 			                		</li>
 			                		
-								
-							
+			                		<% } %>
+							    
 			                </ul>
 			                
 			        <!-- --------------------------------------------------------   LEVEL 1 ---------------------------------------------------- -->        
@@ -478,20 +497,210 @@ td
 	
 	    </div>
 	</div>
+	
+	<!-- ---------------------------------------------------- tree------------------------------------------------------------ -->
+	
+	
+	<div style="display: none"  id="tree1" >
+	    <div class="genealogy-tree"  >
+	        
+	  		<ul>
+				<li>      
+	
+						 <div class="member-view-box action-view-box">
+			                    
+			                         <div class=" action-box" style="border:-1px;" > 
+			                         	
+			                         	<div  class="action-box-header" >
+			                         	
+			                         	 <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                onclick="EmpDetails('-1','CEO' ,'','','','yes')">
+			                          			                 CEO  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                         right:24px;top:21px;" aria-hidden="true"></i>
+			                          		 </span>
+			                         	
+											
+			                          			 
+			                          			 
+										</div>
+			                       <div class="action-box-body" style="cursor: pointer;background-color:#FFFF;color: #FFFFFF;font-size: 1.0em;">
+			                          	
+			                          	<span style="font-weight: 600;color:black;"> 
+							                <%=Director[0] %><br>
+							                [<%=Director[1] %>]	
+							                		
+									    </span > 
+			                          	<% if(dgmlist!=null && dgmlist.size()>0) {%>
+			                          	 <div style="margin-top:-2px;"><i class="fa fa-caret-down" aria-hidden="true" style="font-size: 1.2rem;color:#428bca;;padding-top:0px;padding-bottom:2px;cursor: pointer ;"></i></div>
+			                          	 <%}%>	
+			                          	 
+			                   </div>
+			                         
+			                    </div>
+			                    </div>
+			               
+			        <!-- --------------------------------------------------------   LEVEL 1 ---------------------------------------------------- -->
+			               <%--  <ul class="active">	                
+			                <% for(Object[] dgm :dgmlist ){ %>
+			                	<li>			    
+									           
+											<div class="member-view-box action-view-box">
+												<div class=" action-box" >
+												<% List<Object[]> list= EmpModalList.stream().filter(e-> dgm[0].toString().equalsIgnoreCase(e[2].toString())).collect(Collectors.toList());%>
+												<div  class="action-box-header"style="background-color:#EA5455;" >
+												
+										  <span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+										      <% if(list!=null  && list.size()>0){ %> 
+			                          			                onclick="EmpDetails('<%=dgm[0]%>','<%=dgm[1] %>','<%=dgm[1] %>')" <%} %>>
+			                          			                   <%=dgm[1]  %>   <% if(list!=null  && list.size()>0){ %>  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                         right:24px;top:21px;" aria-hidden="true"></i><%} %>
+			                          		 </span>
+												
+											   </div>
+													
+													<% List<Object[]> level1 =divisionlist.stream().filter(e-> dgm[0].toString().equalsIgnoreCase(e[4].toString()) ).collect(Collectors.toList()); 
+                                                     %>
+													
+													<div  <% if(level1!=null && level1.size()>0){%> class="action-box-body" <%} %>  align="center" style="cursor: pointer ;" >
+													
+													<span style="font-weight: 600;color:black;" ><%=dgm[3] %> <br>[<%=dgm[4]%>]</span>
+													
+													<% if(level1!=null && level1.size()>0) {%>
+												       <div style="margin-top:-2px;"><i class="fa fa-caret-up " aria-hidden="true" style="font-size: 1.2rem;color:#FF6347;;padding-top:0px;padding-bottom:2px;cursor: pointer ;"></i></div>
+			                          	            <%} 
+													else{%><div style="margin-top:22px;" ></div><%} %>
+			                          	            
+														
+													
+													</div>
+													
+												</div>
+											</div> --%>
+	
+									    
+								<!-- --------------------------------------------------------   LEVEL 2 ---------------------------------------------------- -->
+						                <ul class="active">	
+						                 <% for(Object[] div : DivReportCeo){
+						                	
+						                  %>
+							             
+												<li>			    
+												           
+													<div class="member-view-box action-view-box">
+															<div class=" action-box" >
+															
+															
+															
+															<div class="action-box-header" style="background-color: #E86A33;">
+														
+															<span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                               onclick="EmpDetails('<%=div[0]%>','<%=div[1] %>','','<%=div[1]  %>','')">
+			                          			                                 <%=div[1]  %>  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                                 right:24px;top:21px;" aria-hidden="true"></i> 
+			                          			            </span>
+												             
+			                          			             </div>
+													              <% List<Object[]> level2 =grouplist.stream().filter(e-> div[0].toString().equalsIgnoreCase(e[6].toString()) ).collect(Collectors.toList()); %>
+																<div    <% if(level2!=null && level2.size()>0){%> class="action-box-body" <%} %> align="center" style="cursor: pointer ;">
+																
+																	<span style="font-weight: 600;color:black;" ><%=div[3] %><br>[<%=div[4] %>]</span>
+																	
+																	<% if(level2!=null && level2.size()>0){%>
+									                          			  <div style="margin-top:-2px;"  style="cursor: pointer ;"><i class="fa fa-caret-up" aria-hidden="true" style="font-size: 1.2rem;color:#E86A33;"></i></div>
+									                               <%} else{%>
+																	
+																	<div style="margin-top:22px;" ></div>
+																	<%} %>
+																	
+																  </div>
+																			
+																					
+																</div>
+															</div>
+												    
+												    <!-- --------------------------------------------------------   LEVEL 3 ---------------------------------------------------- -->
+										               <ul class="">
+										               	                
+										                	<% for(Object[] group : grouplist){
+										                	if(group[6].toString().equalsIgnoreCase(div[0].toString())){
+										                	  %>	    
+																  <li>         
+																	<div class="member-view-box action-view-box">
+																		<div class=" action-box" >
+																		<% List<Object[]> list2= EmpModalList.stream().filter(e-> group[0].toString().equalsIgnoreCase(e[4].toString())).collect(Collectors.toList()); %>
+																		<div class="action-box-header" style="background-color: #643A6B;">
+																		
+																		
+																		<span style="cursor:pointer;font-weight: 600;font-size: 1.7em;" 
+			                          			                              onclick="EmpDetails('<%=group[0]%>','<%=group[1] %>','','<%=div[1] %>','<%=group[1] %>','no')" >
+			                          			                                 <%=group[1]  %>  <i class="fa fa-plus-circle fa-lg " style="font-size: 1.2rem;background-color:#643A6B;cursor:pointer; position:absolute; 
+			                          			                                 right:24px;top:21px;" aria-hidden="true"></i>
+			                          			                          </span>
+												                                              			
+													                        </div>
+													                       
+																				<div  class="action-box-body"  align="center" style="cursor: pointer ;">
+																				
+																					<span style="font-weight: 600;color:black;" ><%=group[4] %><br>[<%=group[5] %>]</span>
+																					
+																				 </div>
+																			                     
+																			</div>
+																	</div>
+																    														    
+																    
+																
+										                		</li>
+															
+														    <% } %>
+														<% } %>
+										                </ul>
+										                
+										        <!-- --------------------------------------------------------   LEVEL 3 ---------------------------------------------------- -->  
+												
+												</li>
+												
+											<% } %>
+								         
+										
+						                </ul>
+						                
+						        <!-- --------------------------------------------------------   LEVEL 2 ---------------------------------------------------- -->    
+							</li>
+	        		
+		        </ul>
+		    
+			                	
+			        <!-- --------------------------------------------------------   LEVEL 1 ---------------------------------------------------- -->        
+			           		
+						
+	        		
+	    </div>
+	</div>
+	<!-- ------------------------------------------------------tree1---------------------------------------------------------------- -->
 
 <!-- ----------------------------------------------------------List box ---------------------------------------------->
 
-	<div class=" modal bd-example-modal-lg" tabindex="-1" role="dialog" id="item_modal">
-		<div class="modal-dialog modal-lg" role="document" style=" margin-left: 15%;">
-			<div class="modal-content" style="width:120% !important;">
-				<div class="modal-header" style="background-color: #FFE0AD; ">
+	<div class=" modal bd-example-modal-lg" tabindex="-1" role="dialog" id="table_modal">
+		<div class="modal-dialog modal-lg" role="document" style=" margin-left: 30%;">
+			<div class="modal-content" style="width:80% !important;">
+				<div class="modal-header" style="background-color: #F2E3DB; ">
 					<div class="row w-100"  >
 						<div class="col-md-12" >
-							<h5 class="modal-title" id="modal_item_name" style="font-weight:700; font-size:1.7em;color: #A30808;"></h5>
-						</div>
+						  <div class="row w-100" style="margin-left:0%;">
+						  
+						  <div   id="modal_ceo" style="font-weight:700;margin-left:0%; font-size:1.7em;color: #428bca;"></div>
+						  <div   id="modal_dgmcode" style="font-weight:700; font-size:1.7em;color: #EA5455;"></div>
+						   <div  id="modal_divcode" style="font-weight:700; font-size:1.7em;color: #E86A33;"></div>&nbsp;
+						   <div  id="modal_groupcode" style="font-weight:700; font-size:1.7em;color: #643A6B;"></div>
+						    
+                          
+						
+					    </div>
 					</div>
+				</div>
 					
-					 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
@@ -503,15 +712,13 @@ td
 							<thead> 
 								<tr style="background-color: #055C9D; color: white;">
 									<th style="text-align: center;width:5% !important;">SN</th>
-									<th style="text-align: center;width:20% !important;">Description </th>
-									<th style="text-align: center;width:15% !important;">Make</th>
-									<th style="text-align: center;width:5% !important;">Unit</th>
-									<th style="text-align: center;width:5% !important;">Quantity</th>
-									<th style="text-align: center;width:5% !important;">Rate</th>
-									<th style="text-align:center;width:5% !important;">Cost(&#8377; In lakhs)</th>
+									<th style="text-align: center;width:20% !important;">Name</th>
+									<th style="text-align: center;width:15% !important;">Designation</th>
+									<th id="div" style="text-align: center;width:20% !important;">Division</th>
+									
 								</tr>
 							</thead>
-							<tbody id="modal_progress_table_body">
+							<tbody id="modal_table_body">
 								
 							</tbody>
 						</table>
@@ -520,15 +727,7 @@ td
 						</form>
 					      
 				</div>
-				<div class="modal-footer" align="center"  >
-					       	  
-							<div class="col-md-12" >
-							<h5 class="modal-title" style="font-weight:700; color: #A30808;">Total Cost(&#8377; In lakhs): <span id="totalCost1"></span> </h5>
-							</div>	
-								
-							
-				 </div>
-						
+				
 				
 			</div>
 		</div>
@@ -549,79 +748,119 @@ td
 	    
 	    $('.genealogy-tree li .action-box-body').on('click', function (e) {
 			
-	        var children = $(this).parent().parent().parent().find('> ul');
-	        if (children.is(":visible")) children.hide('fast').removeClass('active');
-	        else children.show('fast').addClass('active');
-	        e.stopPropagation();
+	    	 /* var children = $(this).parent().parent().parent().find('> ul');
+		        if (children.is(":visible")) children.hide('fast').removeClass('active');
+		        else children.show('fast').addClass('active');
+		        e.stopPropagation(); */
+	        
+	     var children = $(this).parent().parent().parent().find('> ul');
+	        if (children.is(":visible")) {
+	        	children.hide('fast').removeClass('active');
+	        	$(this).find('i').removeClass('fa fa-caret-down');
+	        	$(this).find('i').addClass('fa fa-caret-up');
+	        } else {
+	        	children.show('fast').addClass('active');
+	        	$(this).find('i').removeClass('fa fa-caret-up');
+	        	$(this).find('i').addClass('fa fa-caret-down');
+	    	}
+	        e.stopPropagation(); 
 	    });
 	});
 
 </script> 
 <script type="text/javascript">
-	function ItemDetails(sbrmasterid,itemname)
+	 function EmpDetails(id,code,dgmcode,divcode,groupcode,YN)
 	{
-		
-		
+		 console.log(id);
+		 console.log(code);
+		 console.log(dgmcode);
+		 console.log(divcode);
+		 console.log(groupcode);
+		 console.log(YN);
+
 	$("#modal_progress_table").DataTable().destroy();
 	$.ajax({		
 	type : "GET",
-	url : "itemModelListAjax.htm",
+	url : "EmpListAjax.htm",
 	data : {
-		sbrmasterid : sbrmasterid
+		id : id,
+		code :code
 	},
 	datatype : 'json',
 	success : function(result) {
 	var result = JSON.parse(result);
-	console.log("res     :"+result);
 	
-	$('#modal_item_name').html(itemname);
-	
+	$('#modal_ceo').html('CEO');
+
+	if(dgmcode!==""){
+	$('#modal_dgmcode').html('<i class="fa fa-long-arrow-right" aria-hidden="true" style="color:#4D4D4D;font-size:25px;margin-top:8px;"></i>'+dgmcode);
+	}
+	else{
+		$('#modal_dgmcode').html("");
+	}
+	if(divcode!==""){
+		$('#modal_divcode').html('<i class="fa fa-long-arrow-right" aria-hidden="true" style="color:#4D4D4D;font-size:25px;margin-top:8px;"></i>'+divcode);
+	}
+	else{
+		$('#modal_divcode').html("");
+	}
+	if(groupcode!==""){
+		$('#modal_groupcode').html('<i class="fa fa-long-arrow-right" aria-hidden="true" style="color:#4D4D4D;font-size:25px;margin-top:8px;"></i>'+groupcode);
+	}
+	else{
+		$('#modal_groupcode').html("");
+	}
+
 	
 	var htmlStr='';
 	
-	if(result.length> 0){
-		var totalcost=0;
+	
+	
+	if(result.length>0){
+		
 	for(var v=0;v<result.length;v++)
     {
-	var cost=(result[v][6]/100000);
-	var total= (new Intl.NumberFormat('en-IN').format(result[v][6]/100000));
-	totalcost=totalcost + cost ;
-	var totalcost1=(new Intl.NumberFormat('en-IN').format(totalcost));
+	
+	
 	htmlStr += '<tr>';
 	
-	htmlStr += '<td class="tabledata" style="text-align: center;" >'+ (v+1) + '</td>';
+	htmlStr += '<td class="tabledata" style="text-align: center;" >'+ (v+1) +  '</td>';
 	htmlStr += '<td class="tabledata" style="text-align: left;" >'+ result[v][1] + '</td>';
-	htmlStr += '<td class="tabledata" style="text-align: left;" >'+ result[v][4] + ' </td>';
 	htmlStr += '<td class="tabledata" style="text-align: left;" >'+ result[v][2] + ' </td>';
-	htmlStr += '<td class="tabledata" style="text-align: right;" >'+ result[v][3] + ' </td>';
-	htmlStr += '<td class="tabledata" style="text-align: right;" >'+ result[v][5] + ' </td>';
-	htmlStr +=  '<td class="tabledata" style="text-align: right;" >'+ total + ' </td>';
+	if(YN=='yes'){
+    htmlStr += '<td class="tabledata" style="text-align: center;" >'+ result[v][3] + ' </td>';
+    $('#div').show();
+	}
+	else{
+		  $('#div').hide();
+	}
+	
+	
 	htmlStr += '</tr>';
 	}
 
-	$('#totalCost1').html(totalcost1);
 	
 	}
 	else
 	{
-		var totalcost=0;
+		
 	htmlStr += '<tr>';
 	
-	htmlStr += '<td colspan="7" style="text-align: center;"> Item Data Unavailable </td>';
+	htmlStr += '<td colspan="4" style="text-align: center;"> No Record Found </td>';
 	
 	htmlStr += '</tr>';
-	$('#totalCost1').html(totalcost);
+	
 	}
 	setModalDataTable();
-	$('#modal_progress_table_body').html(htmlStr);
+	$('#modal_table_body').html(htmlStr);
 	
-	$('#item_modal').modal('toggle');
+	$('#table_modal').modal('toggle');
 	
 	}
 	});
 	
 	
-	}
+	} 
 	setModalDataTable();
 	function setModalDataTable()
 	{
@@ -631,8 +870,56 @@ td
 			"pageLength": 5
 		});
 	}
+	
+		
 </script>
+<script>
 
+
+window.onload = function() {
+	  var button = document.getElementById('submit');
+	  
+	  $('.btn1').css('background-color','green');
+	  
+		$('.btn1').css('color','white');
+		
+	 
+};
+	
+$('.btn1').click(function(){
+
+	$('.btn1').css('background-color','green');
+	$('.btn1').css('color','white');
+	
+	$('.btn2').css('background-color','white');
+	$('.btn2').css('color','black');
+	
+	
+	$('#tree').css("display","block");
+	$('#tree1').css("display","none");
+	$('#colorcode').css("display","block");
+	$('#colorcode1').css("display","none");
+	
+})
+
+$('.btn2').click(function(){
+	
+	$('.btn2').css('background-color','green');
+	$('.btn2').css('color','white');
+	
+	$('.btn1').css('background-color','white');
+	$('.btn1').css('color','black');
+	
+	$('#tree').css("display","none");
+	$('#tree1').css("display","block");
+	$('#colorcode1').css("display","block");
+	$('#colorcode').css("display","none");
+	
+	
+})
+
+
+</script>
 
 
 </body>

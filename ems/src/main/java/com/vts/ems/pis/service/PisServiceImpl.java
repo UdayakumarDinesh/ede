@@ -2121,10 +2121,28 @@ public class PisServiceImpl implements PisService
 		}
 
 		@Override
-		public List<Object[]> getDeptEmpList(String divisionId) throws Exception {
+		public List<Object[]> EmpListModal(String id,String code) throws Exception {
 		
-			return dao.getDeptEmpList( divisionId);
+			return dao.EmpListModal(id,code);
 		}
+		@Override
+		public List<Object[]> getDgmDetails() throws Exception {
+			
+			return dao.getDgmDetails();
+		}
+
+		@Override
+		public List<Object[]> getEmpModalList() throws Exception {
+			
+			return dao.getEmpModalList();
+		}
+
+		@Override
+		public List<Object[]> getdivisionreportceo() throws Exception {
+			
+			return dao.getdivisionreportceo();
+		}
+
 		@Override
 		public List<Object[]> GetDivisionList(String divisionId)throws Exception
 		{
