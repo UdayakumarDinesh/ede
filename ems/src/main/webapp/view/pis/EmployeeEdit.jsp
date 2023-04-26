@@ -185,7 +185,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            
 			         <div class="col-md-2">
 			                <label>Department <span class="mandatory">*</span></label>
-			                <select name="divisionid" id="division" class="form-control input-sm select2" required data-live-search="true">
+			                <select name="divisionid" id="division" onchange="GetGroup()" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"<%if(employee!=null   && division.getDivisionId()==emp.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>
 								<%} %>			
@@ -775,12 +775,11 @@ function isNumber(evt)
 }
 
 
+GetGroup();
 
 
-
-$('#division').on('change', function() { 
+ function GetGroup(){ 
 	  var division =$("#division").val();
-	    console.log(division);
 	 $.ajax({
          url:"GetDivisionList.htm",
          type:"GET",
@@ -803,7 +802,7 @@ $('#division').on('change', function() {
              $('#groupid').html(grouplist);
   		}
    });
-});
+}
 </script>
 
 </body>
