@@ -236,11 +236,10 @@
 		 	</div>
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
-	               	<tr>
+	               		<tr>
 	                		<td class="trup" style="background: #E8E46E;">
 	                			User 
 	                		</td>
-			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
