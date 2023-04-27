@@ -2148,4 +2148,16 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.GetDivisionList(divisionId);
 		}
+
+		@Override
+		public long ResAddrUpdate(String EmpId) throws Exception {
+			
+			return dao.ResAddrUpdate(EmpId);
+		}
+
+		@Override
+		public long PerAddrUpdate(String EmpId) throws Exception {
+			
+			return dao.PerAddrUpdate(EmpId);
+		}
 }
