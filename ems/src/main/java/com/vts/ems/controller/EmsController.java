@@ -193,45 +193,14 @@ public class EmsController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
 		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		String Empno = ( ses.getAttribute("EmpNo")).toString();
+//		String Empno = ( ses.getAttribute("EmpNo")).toString();
     	String LoginType=(String)ses.getAttribute("LoginType");
     	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
-    	List <Object[]> attendlist=null;
     	try {
     		req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
 			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
 			req.setAttribute("logintype", LoginType);
 			ses.setAttribute("SidebarActive","Home");
-		    List<Object[]>  emplist=service.EmployeeList();
-			req.setAttribute("Emplist", emplist);
-			String empNo=req.getParameter("empNo");
-			String fromDate=req.getParameter("FromDate");
-			String toDate=req.getParameter("ToDate");	
-			
-			if(fromDate==null  && toDate==null) 
-			{
-				String fd = LocalDate.now().minusMonths(1).toString();
-				String td = LocalDate.now().toString();
-				fromDate=rdf.format(sdf.parse(fd.toString()));
-				toDate=rdf.format(sdf.parse(td.toString()));
-				
-			}
-										
-			if(empNo!=null && fromDate!=null && fromDate!=null) {
-				 attendlist=service.getAttendanceDetails(empNo,fromDate,toDate);
-				 req.setAttribute("EmpNo", empNo);
-				}else {   
-					if(Empno!=null && fromDate!=null && fromDate!=null)
-					 attendlist=service.getAttendanceDetails(Empno,fromDate,toDate);				
-					req.setAttribute("EmpNo", Empno);
-				}
-			
-			req.setAttribute("ToDate", toDate);
-			req.setAttribute("FromDate",fromDate);						
-			req.setAttribute("attendlist", attendlist);
-			req.setAttribute("EmpId",EmpId);
-			req.setAttribute("LastSyncDateTime", service.getlastSyncDateTime());
-			
 			return "static/maindashboard";
     	}catch (Exception e) {
     		e.printStackTrace();

@@ -8,7 +8,9 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 <body>
-<%List<Object[]> list = (List<Object[]>)request.getAttribute("dashboard"); %>
+<%
+List<Object[]> list = (List<Object[]>)request.getAttribute("dashboard"); 
+%>
 
 	<div class="card-header page-top">
 		<div class="row">

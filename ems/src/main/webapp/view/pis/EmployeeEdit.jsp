@@ -185,7 +185,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			            
 			         <div class="col-md-2">
 			                <label>Department <span class="mandatory">*</span></label>
-			                <select name="divisionid" id="division" class="form-control input-sm select2" required data-live-search="true">
+			                <select name="divisionid" id="division" onchange="GetGroup()" class="form-control input-sm select2" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"<%if(employee!=null   && division.getDivisionId()==emp.getDivisionId()){%>selected<%}%>><%=division.getDivisionName()%></option>
 								<%} %>			
@@ -203,7 +203,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <select name="groupid" id="groupid" class="form-control input-sm select2" required data-live-search="true">
 			                		<option value="0">Not Applicable</option>
 								<%if(grouplist!=null && grouplist.size()>0){ for( DivisionGroup group: grouplist){ %>
-									<option value="<%=group.getGroupId()%>"<%if(employee!=null && group.getGroupId()==emp.getGroupId()){%>selected<%}%>><%=group.getGroupName()%></option>	
+									<option value="<%=group.getGroupId()%>"<%if(emp!=null && group.getGroupId()==emp.getGroupId()){%>selected<%}%>><%=group.getGroupName()%></option>	
 								<%}}%>	
 			                </select>
 			            </div>
@@ -775,12 +775,12 @@ function isNumber(evt)
 }
 
 
+GetGroup();
 
 
-
-$('#division').on('change', function() { 
+ function GetGroup(){ 
 	  var division =$("#division").val();
-	    console.log(division);
+	  var groupid = <%=emp.getGroupId()%>
 	 $.ajax({
          url:"GetDivisionList.htm",
          type:"GET",
@@ -793,8 +793,13 @@ $('#division').on('change', function() {
     		if(result.length>0){
     			grouplist+='<option value="0" >Not Applicable</option>';
     			for(var c=0;c<result.length;c++){
-                	grouplist+='<option value="'+result[c][0]+'"  >'+result[c][1]+'</option>';	
-                } 
+    				if(result[c][0]==groupid){
+                		grouplist+='<option value="'+result[c][0]+'" selected >'+result[c][1]+'</option>';	
+    				}else{
+                		grouplist+='<option value="'+result[c][0]+'" >'+result[c][1]+'</option>';	
+
+    				}
+    			} 
     		}else{
     			grouplist+='<option value="##" disabled="disabled">--Select--</option>';
     			grouplist+='<option value="0" >Not Applicable</option>';
@@ -803,7 +808,7 @@ $('#division').on('change', function() {
              $('#groupid').html(grouplist);
   		}
    });
-});
+}
 </script>
 
 </body>

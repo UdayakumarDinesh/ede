@@ -213,6 +213,7 @@ public class PisServiceImpl implements PisService
 		logger.info(new Date() +"Inside SERVICE EmployeeEditSubmit ");
 		Employee employee = dao.getEmp(String.valueOf(emp.getEmpId()));
 		employee.setEmpName(emp.getEmpName());
+		employee.setGroupId(emp.getGroupId());;
 		employee.setEmail(emp.getEmail());
 		employee.setExtNo(emp.getExtNo());
 		employee.setDivisionId(emp.getDivisionId());

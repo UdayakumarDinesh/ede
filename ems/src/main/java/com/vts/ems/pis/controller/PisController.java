@@ -205,7 +205,6 @@ public class PisController {
 			req.setAttribute("familydetails", familydetails);
             req.setAttribute("basevalue", basevalue);
  
-            
 			return "pis/EmpBasicDetails";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside EmployeeDetails.htm "+Username, e);

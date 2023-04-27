@@ -23,7 +23,6 @@ float: left;
 	List<Object[]> driverlist=(List<Object[]>)request.getAttribute("DriverList");
 	List<MtVehicle> vehiclelist=(List<MtVehicle>)request.getAttribute("vehiclelist");
 	String username= (String)request.getAttribute("empname");
-	String groupname=(String)request.getAttribute("groupcode");
  %>
 <div class="card-header page-top ">
 		<div class="row">
