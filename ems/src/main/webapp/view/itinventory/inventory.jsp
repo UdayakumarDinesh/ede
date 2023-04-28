@@ -75,7 +75,7 @@
 		
 	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Inventory Details must be declared within January of every year *</b> </marquee></div>
 	
-	<%if(InventoryQuantityList.size()>0) {%>
+	<% if(InventoryQuantityList.size()>0) {%>
 			<div class="card"  style="max-height: 40rem; overflow-y:auto;">
 			<div class="card-body " >	
 			<form action="##">
@@ -145,7 +145,7 @@
 			</td>
 			<td style="width: 2%">
 			
-				 <input type="text" class="form-control"  value="<%=QtyList[6] %>"  name="LaptopRemarks" maxlength="500">
+				 <input type="text" class="form-control"  value="<%=QtyList[6] %>"  name="LaptopRemarks" maxlength="500" >
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -160,7 +160,7 @@
 				<td style="width: 2%" >USB Pendrive</td>
 			 <td style="width: 2%;text-align: center;">
 			 
-				<input type="number" class="form-control"   style="width:50%;margin-left:40px;" value="<%=QtyList[7] %>" min="0"  max="99"name="USBPendrive" >
+				<input type="number" class="form-control"   style="width:50%;margin-left:40px;" value="<%=QtyList[7] %>" min="0"  max="99"name="USBPendrive"  >
 			</td>
 			<td>
 				<select class="form-control" name="USBPendriveIntendedBy" >
@@ -171,7 +171,7 @@
 			</td>
 				<td style="width: 2%">
 				
-				 <input type="text" class="form-control"  value="<%=QtyList[9] %>"  name="USBPendriveRemarks" maxlength="500">
+				 <input type="text" class="form-control"  value="<%=QtyList[9] %>"  name="USBPendriveRemarks" maxlength="500" >
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -196,7 +196,7 @@
 			</td>
 			<td style="width: 2%">
 				
-				  <input type="text" class="form-control" value="<%=QtyList[12] %>" name="PrinterRemarks" maxlength="500">
+				  <input type="text" class="form-control" value="<%=QtyList[12] %>" name="PrinterRemarks" maxlength="500" >
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -211,7 +211,7 @@
 			    <td style="width: 2%" >Telephone</td>
 			<td style="width: 2%;text-align: center;">
 			
-				<input type="number" class="form-control "    style="width:50%;margin-left:40px;"  value="<%=QtyList[13] %>" min="0"  max="99" name="Telephone"> 
+				<input type="number" class="form-control"  style="width:50%;margin-left:40px;"  value="<%=QtyList[13] %>" min="0"  max="99" name="Telephone"> 
 		   </td>
 			<td>
 				<select class="form-control" name="TelephoneIntendedBy" >
@@ -222,9 +222,9 @@
 		   </td>
 			<td style="width: 2%">
 			
-				 <input type="text" class="form-control" value="<%=QtyList[15] %>" name="TelephoneRemarks" maxlength="500">
+				 <input type="text" class="form-control" value="<%=QtyList[15] %>" name="TelephoneRemarks" maxlength="500" >
 			</td>
-			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
+			 <% if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
 				<button type="submit" class="btn btn-sm update-btn" name="Itinventoryid" value="<%=QtyList[0] %>"  formaction="QuantityEditSubmit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update ?');">update</button>
 			</td>
@@ -248,7 +248,7 @@
 		   </td>
 			<td style="width: 2%">
 			
-				<input type="text" class="form-control" value="<%=QtyList[18] %>" name="FaxMachineRemarks" maxlength="500">
+				<input type="text" class="form-control" value="<%=QtyList[18] %>" name="FaxMachineRemarks" maxlength="500" >
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -274,7 +274,7 @@
 			
 			<td style="width: 2%">
 			
-				<input type="text" class="form-control" value="<%=QtyList[21] %>" name="ScannerRemarks" maxlength="500">
+				<input type="text" class="form-control" value="<%=QtyList[21] %>" name="ScannerRemarks" maxlength="500" >
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -288,7 +288,7 @@
 				<td style="width: 2%" >Xerox Machine</td>
 			<td style="width: 2%;text-align: center;">
 			
-				<input type="number" class="form-control "   style="width:50%;margin-left:40px;"  value="<%=QtyList[22] %>"  min="0"  max="99" name="XeroxMachine"> 
+				<input type="number" class="form-control "   style="width:50%;margin-left:40px;"  value="<%=QtyList[22] %>"  min="0"  max="99" name="XeroxMachine" required="required"> 
 			</td>
 			<td>
 				<select class="form-control" name="XeroxMachineIntendedBy" >
@@ -299,7 +299,8 @@
 			</td>
 			<td style="width: 2%">
 			
-				<input type="text" class="form-control" value="<%=QtyList[24] %>" name="XeroxMachineremarks" maxlength="500">
+				<input type="text" class="form-control" value="<%=QtyList[24] %>" name="XeroxMachineremarks" maxlength="500" >
+				
 			</td>
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
@@ -324,7 +325,7 @@
 			</td>
 			<td style="width: 2%">
 			
-				<input type="text" class="form-control" value="<%=QtyList[27] %>" name="Miscellaneousremarks" maxlength="500">
+				<input type="text" class="form-control" value="<%=QtyList[27] %>" name="Miscellaneousremarks" maxlength="500" >
 				
 				<input type="hidden" name="DeclarationYear" value="<%=QtyList[28] %>">
 			
@@ -338,7 +339,7 @@
 		
 								
 			</table>
-			<%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>
+			<% if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>
 			 <div class="row" align="center">
 			    <div class="col-sm-12">
 			       <input type="hidden" name ="declarationyear" value="<%=QtyList[28] %>">
@@ -346,7 +347,7 @@
 		
 			   </div>
 			 </div> 
-			 <%}else{ %>
+			 <% }else{ %>
 			  <div class="row" align="center">
 			    <div class="col-sm-12">
 			
@@ -364,7 +365,7 @@
 	
 		
 		<!----------------------------------------------------------------------------------------------------------  -->
-		<%  if (InventoryQuantityList.size()==0) {%> 
+	<%  if (InventoryQuantityList.size()==0) {%> 
 			<div class="card"  style="max-height: 40rem; overflow-y:auto;">
 			<div class="card-body " >	
 			<form action="ITInventoryQuantityAddSubmit.htm" method="POST"  >
@@ -396,7 +397,7 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1"  style="display:block; " class="form-control"  name="DesktopRemarks"  maxlength="500"></textarea>
+									 <textarea  rows="1"  style="display:block; " class="form-control"  name="DesktopRemarks"  maxlength="500" ></textarea>
 									</td>
 									
 								</tr>
@@ -414,7 +415,7 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1" style="display:block; " class="form-control"  name="LaptopRemarks" maxlength="500" ></textarea>
+									 <textarea  rows="1" style="display:block; " class="form-control"  name="LaptopRemarks" maxlength="500"  ></textarea>
 									</td>
 								</tr>
 							    
@@ -431,7 +432,7 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1" style="display:block; " class="form-control"  name="USBPendriveRemarks"  maxlength="500"></textarea>
+									 <textarea  rows="1" style="display:block; " class="form-control"  name="USBPendriveRemarks"  maxlength="500" ></textarea>
 									</td>
 								</tr>
 									
@@ -449,7 +450,7 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1" style="display:block; " class="form-control"  name="PrinterRemarks"  maxlength="500"></textarea>
+									 <textarea  rows="1" style="display:block; " class="form-control"  name="PrinterRemarks"  maxlength="500" ></textarea>
 									</td>
 								</tr>
 									 
@@ -458,7 +459,7 @@
 									
 								    <td style="width: 2%" >Telephone</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control "   style="width:50%;margin-left:30px;" value="0" min="0"   max="99" name="Telephone"> 
+									<input type="number" class="form-control "   style="width:50%;margin-left:30px;" value="0" min="0" max="99" name="Telephone"> 
 									</td>
 									<td><select class="form-control" name="TelephoneIntendedBy" >
 									<option value="" selected="selected" disabled="disabled">Select</option>
@@ -467,7 +468,7 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1" style="display:block; " class="form-control"  name="TelephoneRemarks"  maxlength="500"></textarea>
+									 <textarea  rows="1" style="display:block; " class="form-control"  name="TelephoneRemarks"  maxlength="500" ></textarea>
 									</td>
 								</tr>
 								
@@ -535,14 +536,14 @@
 									</select>
 									</td>
 									<td style="width: 2%">
-									 <textarea  rows="1" style="display:block; " class="form-control"  name="MiscellaneousRemarks"  maxlength="500"></textarea>
+									 <textarea  rows="1" style="display:block; " class="form-control"  name="MiscellaneousRemarks"  maxlength="500" ></textarea>
 									</td>
 								</tr>
 							</table>
 							
-							<div class="row justify-content-center">
+						<div class="row justify-content-center">
 							 <button type="submit" style="margin-left:0px;" class="btn btn-sm submit-btn " name="action" value="submit" onclick="return confirm('Are You Sure To Add ?')" >Submit</button>
-							 </div>
+						</div>
 						   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 				
 				</form>		
@@ -550,7 +551,7 @@
 		 </div>
 	 
 	
-   <%} %>
+   <%}%> 
 		
 	 
 			

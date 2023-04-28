@@ -50,6 +50,7 @@ public class ITInventoryHistory {
     private String  Status;
     private String  ForwardedDate;
 	private String  ApprovedDate;
+	private String  ApprovedBy;
     private String  CreatedBy;
 	private String  CreatedDate;
 	private int isActive;
