@@ -229,4 +229,5 @@ public interface PisDao {
 	public List<Object[]> getdivisionreportceo() throws Exception;
 	//public List<Object[]> getDeptEmpList(String divisionId)throws Exception;
 	public List<Object[]> GetDivisionList(String divisionId)throws Exception;
+	public List<Object[]> EmployeeDropDownList(String empno, String LoginType) throws Exception;
 }

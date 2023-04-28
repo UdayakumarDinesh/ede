@@ -55,6 +55,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 <body>
 
 <%
+	String ThisEmpId = String.valueOf((Long)session.getAttribute("EmpId"));
 	String empid = (String) request.getAttribute("empid");
 	Object[] employeedetails = (Object[]) request.getAttribute("employeedetails");
 	Object[] empdata = (Object[]) request.getAttribute("empdata");
@@ -64,6 +65,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 	Object[] Perdetails  = (Object[]) request.getAttribute("peraddressdetails");
 	String path=(String)request.getAttribute("basevalue");
 	List<Object[]> familydetails = (List<Object[]>) request.getAttribute("familydetails");
+	
+	List<Object[]> DropDownEmployeeList = (List<Object[]>) request.getAttribute("DropDownEmployeeList");
 	
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 	String LoginType = (String) session.getAttribute("LoginType");
@@ -93,12 +96,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
                     
  <div class=" page card dashboard-card">
 	
-	
-	
-	
-	<div class="card-body" >
-		
-			<div align="center" style="margin-top: 15px;">
+	<div align="center"  style="margin-top: 15px;">
 				<%String ses=(String)request.getParameter("result"); 
 				String ses1=(String)request.getParameter("resultfail");
 				if(ses1!=null){ %>
@@ -114,9 +112,32 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 				<%} %>
 			</div> 
 	
+	
+	<div class="card-body"  >
+			
+			<div class="row" style="margin-top: -25px;">
+				<div class="col-md-12">
+					<form action="EmployeeDetails.htm" method="post" style="float: right;">
+						<div class="form-inline">
+							<b>Employee : &nbsp;</b> 
+							<select class="form-control select2" name="empid" onchange="this.form.submit();" style="margin-top: -5px;width: 200px;align:right;">
+								<%for(Object[] employee : DropDownEmployeeList){ %>
+									<option value="<%=employee[0]%>" <%if(employee[0].toString().equalsIgnoreCase(empid)){ %>selected <%} %>><%=employee[2]%></option>
+								<%} %>
+							</select>
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						</div>
+					</form> 
+				</div>
+			</div>
+			
+			
 		<div class="card" >
 			<div class="card-body " >
-				<div class="row">
+			
+			
+			<br>
+			<div class="row">
 			<div class="col-md-2" style="padding-bottom: 10px;" >
 			<div class="card" style="background-color: #ebf0f2;">
 			<div class="card-body text-center"  >
@@ -171,17 +192,19 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						    <td><%if(employeedetails[33]!=null){%><%=employeedetails[33]%><%}else{%>--<%}%></td>
 							<td><%if(employeedetails[34]!=null){%><%=employeedetails[34]%><%}else{%>--<%}%></td>
 						</tr>
-						<%if(!"P".equalsIgnoreCase(LoginType)){ %>
-							<tr>
-								<td colspan="6"  style="background-color: white; " > 
+						
+						<tr>
+							<td colspan="6"  style="background-color: white; " > 
+								<%if(!"P".equalsIgnoreCase(LoginType) && ThisEmpId.equalsIgnoreCase(empid)){ %>
 									<form action="EmpRequestMsg.htm" method="GET" style="float: right;">
 								 		<span><b style="color: red;">Note :</b> Any changes in profile request to Admin  &nbsp;&nbsp;&nbsp;&nbsp;
 											<button type="submit" class="btn btn-sm misc-btn"  name="action" value="msg" >REQUEST MESSAGE</button>
 								    	</span>
 							    	</form>
-						       </td>
-					       </tr> 
-					    <%}%>
+							    <%}%>
+						    </td>
+					    </tr> 
+					    
 					</tbody>
 				</table>
 			 </div>
@@ -224,7 +247,7 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 									Male
 								<%}else if(employeedetails[9]!=null && employeedetails[9].toString().equalsIgnoreCase("F")){ %>
 									Female
-								<%}else{%>--<%}%> 
+								<%}else{ %>--<% }%> 
 							</td>
 							<td> <b>Group</b> </td>
 							<td><%if(employeedetails[25]!=null && employeedetails[26]!=null){%><%=employeedetails[25] %>(<%=employeedetails[26] %>) <%}else{%>--<%}%></td>
@@ -240,7 +263,6 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 							<td><%if(employeedetails[8]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(employeedetails[8].toString())%><%}else{%>--<%}%></td>
 							<td> <b>Mobile No</b> </td>
 							<td><%if(employeedetails[30]!=null){%><%=employeedetails[30].toString()%><%}else{%>--<%}%></td>
-							
 						</tr>
 						
 						<tr>
@@ -280,7 +302,9 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 								                </select>
 							                </td>
 							                <td style="width:25%; border: 0px;padding: 0px;">
+							                	<%if(!"P".equalsIgnoreCase(LoginType) && ThisEmpId.equalsIgnoreCase(empid)){ %>
 							                	<button type="submit" class="btn btn-sm update-btn" style="float: right;" name="" value="" onclick="return confirm('Are You Sure to Update?');">Update</button>
+							                	<%} %>
 							                </td>
 						                </tr>
 						           	</table>
@@ -310,7 +334,6 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 						<tr></tr>
 						<tr></tr>
 						<tr></tr>
-						
 						<tr>
 							<td > <b>Per Address</b> </td>
 							<td colspan="3"><%if(Perdetails[6]!=null){%><%=Perdetails[6]%><%}else{%>--<%}%></td>

@@ -9,9 +9,6 @@ import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,7 +40,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.model.EmployeeContract;
-import com.vts.ems.config.MsAccessDBConnectionConfig;
 import com.vts.ems.login.EmpContractRepo;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
@@ -94,7 +90,8 @@ public class EmsController {
 			}
 			
 			LabMaster labinfo =service.getLabDetails();
-			if(labinfo!=null && labinfo.getLabCode()!=null) {
+			if(labinfo!=null && labinfo.getLabCode()!=null) 
+			{
 				ses.setAttribute("LabCode", labinfo.getLabCode());
 			}
 			else
@@ -105,52 +102,46 @@ public class EmsController {
 			
         	String IpAddress="Not Available";
      		try{
-     		
-	     		 IpAddress = req.getRemoteAddr();
-	     		 
+	     		IpAddress = req.getRemoteAddr();
 	     		if("0:0:0:0:0:0:0:1".equalsIgnoreCase(IpAddress))
 	     		{     			
 	     			InetAddress ip = InetAddress.getLocalHost();
 	     			IpAddress= ip.getHostAddress();
 	     		}
-     		
      		}
      		catch(Exception e)
      		{
 	     		IpAddress="Not Available";	
 	     		e.printStackTrace();	
      		}
-
-			
-			
 			if(!isContractEmp) 
 			{
 			
-					Login login = Repository.findByUsername(req.getUserPrincipal().getName());
-					ses.setAttribute("LoginId", login.getLoginId());
-					ses.setAttribute("Username", req.getUserPrincipal().getName());
-					ses.setAttribute("LoginType", login.getLoginType());
-					ses.setAttribute("EmpId", login.getEmpId());
-					ses.setAttribute("FormRole", login.getFormRoleId());
-					
-					Employee employee = service.EmployeeInfo(login.getEmpId());
-					ses.setAttribute("EmpNo", employee.getEmpNo());
-					ses.setAttribute("EmpName", employee.getEmpName());
-					ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
-					
-					long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
-					if(pwdCount==0) 
-					{
-						return "redirect:/ForcePasswordChange.htm";
-					}
+				Login login = Repository.findByUsername(req.getUserPrincipal().getName());
+				ses.setAttribute("LoginId", login.getLoginId());
+				ses.setAttribute("Username", req.getUserPrincipal().getName());
+				ses.setAttribute("LoginType", login.getLoginType());
+				ses.setAttribute("EmpId", login.getEmpId());
+				ses.setAttribute("FormRole", login.getFormRoleId());
+				
+				Employee employee = service.EmployeeInfo(login.getEmpId());
+				ses.setAttribute("EmpNo", employee.getEmpNo());
+				ses.setAttribute("EmpName", employee.getEmpName());
+				ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
+				
+				long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
+				if(pwdCount==0) 
+				{
+					return "redirect:/ForcePasswordChange.htm";
+				}
 		     		
-		     		AuditStamping stamping=new AuditStamping();
-			        stamping.setLoginId(login.getLoginId());
-			        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
-			        stamping.setUsername(login.getUsername());
-			        stamping.setIpAddress(IpAddress);
-			        stamping.setLoginDateTime(LocalDateTime.now().toString());
-			        service.LoginStampingInsert(stamping);
+	     		AuditStamping stamping=new AuditStamping();
+		        stamping.setLoginId(login.getLoginId());
+		        stamping.setLoginDate(new java.sql.Date(new Date().getTime()));
+		        stamping.setUsername(login.getUsername());
+		        stamping.setIpAddress(IpAddress);
+		        stamping.setLoginDateTime(LocalDateTime.now().toString());
+		        service.LoginStampingInsert(stamping);
 			        
 			}
 			else

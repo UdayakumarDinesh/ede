@@ -35,9 +35,10 @@ public class MyErrorController implements ErrorController {
 	
 	@RequestMapping("UnderConstruction.htm")
 	public String UnderConstruction(HttpServletRequest req) {
-		Object status = req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-
-		
-		return "static/UnderConstruction";
+		return "static/UnderConstruction2";
 	}
+	
+	
+	
+	
 }

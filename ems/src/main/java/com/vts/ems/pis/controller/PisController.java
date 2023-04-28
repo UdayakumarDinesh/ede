@@ -162,6 +162,7 @@ public class PisController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String logintype = (String)ses.getAttribute("LoginType");
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date() +"Inside EmployeeDetails.htm "+Username);		
 		try {
 			List<Object[]> chssdashboard = adminservice.HeaderSchedulesList("3" ,logintype);
@@ -169,7 +170,7 @@ public class PisController {
 			req.setAttribute("dashboard", chssdashboard);
 			ses.setAttribute("SidebarActive","EmployeeDetails_htm");
 			
-			String empid = ((Long) ses.getAttribute("EmpId")).toString();
+			String empid = req.getParameter("empid");
 			if(empid==null)  {
 				Map md=model.asMap();
 				empid=(String)md.get("empid");
@@ -180,12 +181,6 @@ public class PisController {
 			}
 			
 			Object[] empdata = service.GetEmpData(empid);
-			Object[] employeedetails = service.EmployeeDetails(empid);	
-			Object[] emeaddressdetails = service.EmployeeEmeAddressDetails(empid);	
-			Object[] nextaddressdetails = service.EmployeeNextAddressDetails(empid);	
-			Object[] peraddressdetails = service.EmployeePerAddressDetails(empid);	
-			List<Object[]> resaddressdetails  = service.EmployeeResAddressDetails(empid);	
-			List<Object[]> familydetails = service.getFamilydetails(empid);
 						
             String basevalue=null;
             if(empdata!=null && empdata[3]!=null) {
@@ -193,13 +188,15 @@ public class PisController {
             }        		
             
 			req.setAttribute("empid", empid);
-			req.setAttribute("employeedetails", employeedetails);
-			req.setAttribute("emeaddressdetails", emeaddressdetails);
-			req.setAttribute("nextaddressdetails", nextaddressdetails);
-			req.setAttribute("resaddressdetails", resaddressdetails);
-			req.setAttribute("peraddressdetails", peraddressdetails);
-			req.setAttribute("familydetails", familydetails);
+			req.setAttribute("employeedetails", service.EmployeeDetails(empid));
+			req.setAttribute("emeaddressdetails", service.EmployeeEmeAddressDetails(empid));
+			req.setAttribute("nextaddressdetails", service.EmployeeNextAddressDetails(empid));
+			req.setAttribute("resaddressdetails", service.EmployeeResAddressDetails(empid));
+			req.setAttribute("peraddressdetails", service.EmployeePerAddressDetails(empid));
+			req.setAttribute("familydetails", service.getFamilydetails(empid));
             req.setAttribute("basevalue", basevalue);
+            
+            req.setAttribute("DropDownEmployeeList", service.EmployeeDropDownList(EmpNo,logintype));
  
 			return "pis/EmpBasicDetails";
 		}catch (Exception e) {

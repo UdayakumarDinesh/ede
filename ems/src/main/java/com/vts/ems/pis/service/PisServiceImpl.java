@@ -2149,4 +2149,10 @@ public class PisServiceImpl implements PisService
 		{
 			return dao.GetDivisionList(divisionId);
 		}
+		
+		@Override
+		public List<Object[]> EmployeeDropDownList(String empno,String LoginType) throws Exception 
+		{
+			return dao.EmployeeDropDownList(empno, LoginType);
+		}
 }
