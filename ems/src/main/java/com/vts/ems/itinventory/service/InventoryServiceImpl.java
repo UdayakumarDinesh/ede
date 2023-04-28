@@ -228,7 +228,6 @@ public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inven
    return dao.inventoryDetailsApprove(Aprrove);
 	
  }
-
        //change annual declaration form status every year 1st of jan to allow employee to submit declaration
 		@Scheduled(cron = "0 0 0 1 1 ?")
 		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
