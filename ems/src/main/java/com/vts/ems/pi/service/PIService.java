@@ -34,4 +34,10 @@ public interface PIService {
 	public List<Object[]> ResAddressTransactionApprovalData(String addressresid) throws Exception;
 	public Object[] GetEmpDGMEmpName(String empno) throws Exception;
 	public Object[] GetPandAEmpName() throws Exception;
+	public List<Object[]> PerAddressTransactionApprovalData(String peraddressId) throws Exception;
+	public AddressPer PerAddressIntimated(String peraddressid) throws Exception;
+	public long PerAddressForward(String perAddressId, String username, String action, String remarks, String empNo,String loginType) throws Exception;
+	public Object[] PerToAddressId(String empId) throws Exception;
+	public long PerUpdatetoDate(Date toDate, String perAddressId) throws Exception;
+	public List<Object[]> PerAddressTransactionList(String addressperid) throws Exception;
 }

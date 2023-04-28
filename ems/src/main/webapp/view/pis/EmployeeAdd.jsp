@@ -171,7 +171,7 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 				
 						<div class="col-md-2">
 			                <label>Department <span class="mandatory">*</span></label>
-			                <select name="divisionid" id="division" class="form-control input-sm select2" required data-live-search="true">
+			                <select name="divisionid" id="division" class="form-control input-sm select2" onchange="GetGroup()" required data-live-search="true">
 								<%for( DivisionMaster division: divisionlist){ %>
 									<option value="<%=division.getDivisionId()%>"><%=division.getDivisionName()%></option>
 								<%} %>			
@@ -723,9 +723,10 @@ function isNumber(evt)
   }
    return true; 
 }
+GetGroup();
 
 
-$('#division').on('change', function() { 
+function GetGroup(){ 
 	  var division =$("#division").val();
 	    console.log(division);
 	 $.ajax({
@@ -738,7 +739,7 @@ $('#division').on('change', function() {
             var result = data;
     		$('#groupid').html('');
     		if(result.length>0){
-    			grouplist+='<option value="'0'"  >'+Not Applicable+'</option>';
+    			grouplist+='<option value="0"  >Not Applicable</option>';
     			for(var c=0;c<result.length;c++){
                 	grouplist+='<option value="'+result[c][0]+'"  >'+result[c][1]+'</option>';	
                 } 
@@ -749,7 +750,7 @@ $('#division').on('change', function() {
              $('#groupid').html(grouplist);
   		}
    });
-});
+};
 
 
 </script>

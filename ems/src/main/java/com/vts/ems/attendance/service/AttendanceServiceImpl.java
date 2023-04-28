@@ -87,5 +87,22 @@ public class AttendanceServiceImpl implements AttendanceService{
 		return count;
 	}
 	
+	@Override
+	public List<Object[]> EmployeeList() throws Exception {
+		
+		return dao.EmployeeList();
+	}
 	
+	
+	@Override
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {		
+		
+		return dao.getAttendanceDetails(empNo,sdf.format(rdf.parse(fromDate)),sdf.format(rdf.parse(toDate)));
+	}
+	
+	@Override
+	public Object getlastSyncDateTime() throws Exception {
+	
+		return dao.getlastSyncDateTime();
+	}
 }

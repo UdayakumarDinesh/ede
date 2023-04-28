@@ -229,4 +229,6 @@ public interface PisService {
 	public  List<Object[]>  getdivisionreportceo() throws Exception;
 	//public List<Object[]> getDeptEmpList(String divisionId)throws Exception;
 	public List<Object[]> GetDivisionList(String divisionId)throws Exception;
+	public long ResAddrUpdate(String EmpId) throws Exception;
+	public long PerAddrUpdate(String EmpId) throws Exception;
 }

@@ -7,11 +7,14 @@ import com.vts.ems.attendance.model.AttendancePunchData;
 
 public interface AttendanceDao {
 
-	List<PunchInfoSQLDto> getPunchInfo(String Date) throws Exception;
-	List<AttendancePunchData> AttendPunchInfo(String AttendanceDate) throws Exception;
-	long DeletePunchInfo(String AttendanceDate) throws Exception;
-	long PunchListSize() throws Exception;
-	List<PunchInfoSQLDto> getPunchInfoAllAfter(String after) throws Exception;
-	long insertPunchInfo(List<AttendancePunchData> punchlist) throws Exception;
+	public List<PunchInfoSQLDto> getPunchInfo(String Date) throws Exception;
+	public List<AttendancePunchData> AttendPunchInfo(String AttendanceDate) throws Exception;
+	public long DeletePunchInfo(String AttendanceDate) throws Exception;
+	public long PunchListSize() throws Exception;
+	public List<PunchInfoSQLDto> getPunchInfoAllAfter(String after) throws Exception;
+	public long insertPunchInfo(List<AttendancePunchData> punchlist) throws Exception;
 	
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception;
+	public List<Object[]> EmployeeList() throws Exception;
+	public Object getlastSyncDateTime() throws Exception;
 }

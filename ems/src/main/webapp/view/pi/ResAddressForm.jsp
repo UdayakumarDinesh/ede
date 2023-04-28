@@ -111,7 +111,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:12%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
@@ -166,14 +166,14 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   
 				   </div>
 				   <br>
-				   <% if(ResFormData!=null && toUserStatus.contains(ResFormData[18].toString())){ %>
+				   <% if(ResFormData!=null && toUserStatus.contains(ResFormData[14].toString())){ %>
 				   		<div align="left">
-				   			 <%if(ResFormData[19]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[19] %> <%} %>
+				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
 				   		
 				   		</div>
 					   <div align="left">
 						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="125" name="remarks" id="remarksarea"></textarea>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
 					   </div>
 				   	
 				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
@@ -183,12 +183,12 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
 						<div align="left">
-				   			 <%if(ResFormData[19]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[19] %> <%} %>
+				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
 				   		
 				   		</div>
 						<div align="left">
 						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="125" name="remarks" id="remarksarea"></textarea>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
 					   </div>
 				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
 							 Verify	
@@ -200,7 +200,6 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<%} %>
 	           
 			   </div>
-			   
 			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %><% }%>">
 			   <input type="hidden" name="resaddressid" value="<%if(ResFormData!=null){ %><%=ResFormData[1] %><% }%>">
 			</form>
@@ -225,13 +224,6 @@ function validateTextBox() {
 
 </script>
 
-<script>
-  var loginType = '<%=LoginType%>';
-  var dataInput = document.getElementById("data-input");
-  if (loginType === "P") {
-    dataInput.disabled = false;
-  }
-</script>
 <%if(LoginType.equalsIgnoreCase("p") && LoginType!=null) {%>
 <script type="text/javascript">
 $('#data-input').daterangepicker({
@@ -249,23 +241,5 @@ $('#data-input').daterangepicker({
 
 </script>
 <%} %>
-<script type="text/javascript">
-function DremarkRequired(action)
-{
-	if(action === 'N'){
-		$('#Responcemsg').attr('required', true);
-		if($('#Responcemsg').val().trim()===''){
-			alert('Please Fill Remarks to Reject! ');
-			return false;
-		}else{
-				return confirm('Are You Sure To Reject?');
-		}
-		
-	}else{
-		$('#Responcemsg').attr('required', false);
-		return confirm('Are You Sure To Accept?');
-	}
-	
-}
-</script>
+
 </html>

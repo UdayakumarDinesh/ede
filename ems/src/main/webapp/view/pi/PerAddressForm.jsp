@@ -1,6 +1,10 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
+ <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,8 +48,19 @@ input:focus {
 String LabLogo = (String)request.getAttribute("LabLogo");
 String LoginType = (String)session.getAttribute("LoginType");
 Object[] PerFormData = (Object[])request.getAttribute("PerFormData");
+List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+
+SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
+
 Date date = new Date();
+
+String isApproval = (String)request.getAttribute("isApproval");
+
+List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
+
 %>
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
@@ -85,12 +100,19 @@ Date date = new Date();
 						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
 						 </tr>					
 						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
-						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; <%=rdf.format(date) %></td>	 </tr>	
+						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
+						  <%for(Object[] apprInfo : ApprovalEmpData){ %>
+							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
+					   			<%break;
+					   			} %>
+						   		<%} %>
+						  </td>	 </tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(PerFormData!=null && PerFormData[6]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(PerFormData!=null && PerFormData[6]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"")%>  <%} %>" readonly style="width:12%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
@@ -109,22 +131,62 @@ Date date = new Date();
 				  	<div style="width: 100%;border: 0;text-align: center;"> <b style="font-size:18px;text-decoration:underline">FOR ADMINISTRATION USE</b> </div>
 				    <br>
 				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						Intimation of change of address received on  &nbsp;<input type="text" style="width:10%;text-align:center;" id="data-input" disabled>&nbsp;. The same has been updated in the personal records.																		
+						Intimation of change of address received on  &nbsp;
+						<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
+				   				
+				   			<%
+				   				break;
+				   			} %>
+				   		<%} %> &nbsp;. The same has been updated in the personal records.																		
 				   </div>
 				   <br><br>
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	
-				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A </div>
-				   <br>				   
-				   <%if(LoginType!=null && LoginType.equalsIgnoreCase("p")) {%>
-				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="" name="" value="" >Accept</button>
-				     <button type="submit" class="btn btn-sm delete-btn" name="" value="N" onclick="return DremarkRequired('N');" formnovalidate="formnovalidate">Reject</button>
-				     
-				   <%} else{%>
-				   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="PerAddressFormSubmit.htm" name="Action" value="F" >
-						<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
-					</button>
-                 	<!-- <button type="submit" class="btn btn-sm edit-btn"  name="Action" value="EDIT" formaction="ResAddressAddEdit.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">Edit</button> 		 -->
-	                <%} %>
+				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+				   <br>	
+				   <br>
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> 
+				   		</div>
+				   						   <br>
+				   <% if(PerFormData!=null && toUserStatus.contains(PerFormData[11].toString())){ %>
+				   		<div align="left">
+				   			 <%if(PerFormData[12]!=null){ %> <span style="color: red">Remarks :</span> <%=PerFormData[12] %> <%} %>
+				   		
+				   		</div>
+					   <div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					   </div>
+				   	
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="PerAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
+							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
+						</button>
+					<%} %>
+					
+					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
+						<div align="left">
+				   			 <%if(PerFormData[12]!=null){ %> <span style="color: red">Remarks :</span> <%=PerFormData[12] %> <%} %>
+				   		
+				   		</div>
+						<div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					   </div>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="PerAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							 Verify	
+						</button>
+					
+				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="PerAddressFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							 Return
+						</button>
+					<%} %>
+				   					   				
 			   </div>
 			   
 			   <input type="hidden" name="empid" value="<%if(PerFormData!=null && PerFormData[0]!=null ){ %><%=PerFormData[0] %> <% }%>">
@@ -136,6 +198,20 @@ Date date = new Date();
 	</div>	
  </div>
 </body>
+<script>
+
+function validateTextBox() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Return?');
+    	
+    } else {
+        alert("Please enter Remarks");
+        return false;
+    }
+}
+
+</script>
+
 <script>
   var loginType = '<%=LoginType%>';
   var dataInput = document.getElementById("data-input");

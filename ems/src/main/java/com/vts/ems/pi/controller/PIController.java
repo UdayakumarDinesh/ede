@@ -81,29 +81,11 @@ public class PIController {
 			String resaddressId = req.getParameter("resaddressId");
 			String peraddressId = req.getParameter("peraddressId");
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			if(resaddressId!=null) {
-				String isApproval = req.getParameter("isApproval");
-				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-					ses.setAttribute("SidebarActive","AddressApprovals_htm");
-				}
-				req.setAttribute("isApproval", isApproval);
-				req.setAttribute("ApprovalEmpData", service.ResAddressTransactionApprovalData(resaddressId));
-				req.setAttribute("ResFormData", service.ResAddressFormData(resaddressId));				
-                return "pi/ResAddressForm";
-			}else if(peraddressId!=null) {
-				String isApproval = req.getParameter("isApproval");
-				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-					ses.setAttribute("SidebarActive","AddressApprovals_htm");
-				}
-				req.setAttribute("isApproval", isApproval);
-				req.setAttribute("PerFormData", service.PerAddressFormData(peraddressId));				
-				return "pi/PerAddressForm";
-			}
 			
 			req.setAttribute("resAddress", service.ResAddressDetails(EmpId));	
 			req.setAttribute("perAddress", service.PermanentAddressDetails(EmpId));
 			
-			req.setAttribute("Employee", service.getEmpData(EmpId));
+			req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 			List<String> DGMs = service.GetDGMEmpNos();
 			
 			if(!DGMs.contains(EmpNo)) {
@@ -111,6 +93,31 @@ public class PIController {
 			}
 			req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 			
+			if(resaddressId!=null) {
+				String isApproval = req.getParameter("isApproval");
+				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+					ses.setAttribute("SidebarActive","AddressApprovals_htm");
+				}
+				req.setAttribute("isApproval", isApproval);
+				req.setAttribute("ApprovalEmpData", service.ResAddressTransactionApprovalData(resaddressId));
+				req.setAttribute("ResFormData", service.ResAddressFormData(resaddressId));
+				req.setAttribute("Employee", service.getEmpData(EmpId));
+                return "pi/ResAddressForm";
+                            
+			}
+			
+			else if(peraddressId!=null) {
+				String isApproval = req.getParameter("isApproval");
+				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+					ses.setAttribute("SidebarActive","AddressApprovals_htm");
+				}
+				req.setAttribute("isApproval", isApproval);
+				req.setAttribute("ApprovalEmpData", service.PerAddressTransactionApprovalData(peraddressId));
+				req.setAttribute("PerFormData", service.PerAddressFormData(peraddressId));	
+				req.setAttribute("Employee", service.getEmpData(EmpId));
+				return "pi/PerAddressForm";
+			}
+								
 			return "pi/PIAddressList";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside PersonalIntimation.htm"+Username, e);
@@ -184,7 +191,9 @@ public class PIController {
 	    	   peraddress.setCity(city);  	  
 	    	   peraddress.setEmpid(EmpId);
 	    	   peraddress.setPer_addr(perAdd);
-	    	   peraddress.setPerAdStatus("N");	    	   
+	    	   peraddress.setPerAdStatus("N");	
+	    	   peraddress.setPisStatusCode("INI");
+	    	   peraddress.setPisStatusCodeNext("INI");
 	    	   
 	    	   if("ADD".equalsIgnoreCase(Action)) {
 	    		   peraddress.setIsActive(1);
@@ -192,12 +201,17 @@ public class PIController {
 	        	   peraddress.setCreatedDate(sdtf.format(new Date()));
 	        	  long result  =  pisservice.AddPerAddress(peraddress); 
 	        	 
+                  Object[] toAddressId = service.PerToAddressId(EmpId);
+		        	
+	     	    	if(toAddressId!=null) {    	    		    	    		
+	     	    	long count = service.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromPer) , toAddressId[0].toString());
+	     	    	}
 	        	    if(result>0) {
-	        	    	 redir.addAttribute("result", "Parmanent Address Add Successfull");	
+	        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
 	        		} else {
-	        			 redir.addAttribute("resultfail", "Parmanent Address Add Unsuccessful");	
+	        			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
 	        	    }
-	        	    redir.addFlashAttribute("Employee", EmpId);
+	        	    redir.addAttribute("peraddressId", result);
 	    	   }
 	    	    
 		   } catch (Exception e) {
@@ -252,9 +266,9 @@ public class PIController {
 	        	   long result  =  pisservice.EditPerAddress(peraddress); 
 	          	 
 		       	    if(result>0) {
-		       	    	 redir.addAttribute("result", "Parmanent Address Edit Successfull");	
+		       	    	 redir.addAttribute("result", "Permanent Address Edit Successfull");	
 		       		} else {
-		       			 redir.addAttribute("resultfail", "Parmanent Address Edit Unsuccessful");	
+		       			 redir.addAttribute("resultfail", "Permanent Address Edit Unsuccessful");	
 		       	    }
 		       	    redir.addFlashAttribute("Employee", EmpId);
 	    	   }
@@ -267,7 +281,65 @@ public class PIController {
 	       return "redirect:/PersonalIntimation.htm";
 	   }
 	   
-		
+	   @RequestMapping(value = "PerAddressFormSubmit.htm")
+		public String PerAddressFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			logger.info(new Date() +"Inside PerAddressFormSubmit.htm"+Username);
+			try {
+				String perAddressId = req.getParameter("peraddressid").trim();
+				String action = req.getParameter("Action");
+				String remarks = req.getParameter("remarks");
+				
+				AddressPer address = service.PerAddressIntimated(perAddressId);
+				String  pisStatusCode = address.getPisStatusCode();
+				
+				long count = service.PerAddressForward(perAddressId, Username, action,remarks,EmpNo,LoginType);
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
+					if (count > 0) {
+						redir.addAttribute("result", "Address application Sent for verification Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Address application Sent for verification Unsuccessful");	
+					}	
+					return "redirect:/PersonalIntimation.htm";
+				}
+				else  
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Address verification Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
+					}	
+					return "redirect:/AddressApprovals.htm";
+				}
+				
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside PerAddressFormSubmit.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+	   
+	   @RequestMapping(value = "PerAddrTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String PerAddrTransactionStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside PerAddrTransactionStatus.htm "+Username);
+			try {
+				String peraddressid = req.getParameter("peraddressid");
+				req.setAttribute("TransactionList", service.PerAddressTransactionList(peraddressid));				
+				return "pi/PerAddrTransactionStatus";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside PerAddrTransactionStatus.htm "+Username, e);
+				return "static/Error";
+			}
+		}
+	   
 	   @RequestMapping(value = "ResidentialAddEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
 		public String ResAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{   
@@ -506,6 +578,7 @@ public class PIController {
 				
 				AddressRes address = service.ResAddressIntimated(resAddressId);
 				String  pisStatusCode = address.getPisStatusCode();
+				
 				long count = service.ResAddressForward(resAddressId, Username, action,remarks,EmpNo,LoginType);
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
@@ -552,6 +625,7 @@ public class PIController {
 					filename="Address-Res";
 				}else if(peraddressId!=null) {
 					filename="Address-Per";
+					req.setAttribute("ApprovalEmpData", service.PerAddressTransactionApprovalData(peraddressId));
 					req.setAttribute("PerFormData", service.PerAddressFormData(peraddressId));	
 				}
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
@@ -642,7 +716,7 @@ public class PIController {
 				
 				ses.setAttribute("formmoduleid", formmoduleid);			
 				ses.setAttribute("SidebarActive","AddressApprovals_htm");	
-				System.out.println("EmpNo = "+EmpNo);
+				
 				req.setAttribute("ApprovalList", service.ResAddressApprovalsList(EmpNo, LoginType));
 				
 				return "pi/ResAddressApproval";
@@ -671,5 +745,34 @@ public class PIController {
 				return "static/Error";
 			}
 		}
-		
+		@RequestMapping(value = "PIMobileNumber.htm")
+		public String PIMobileNumber(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			String Username = (String) ses.getAttribute("Username");
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+			logger.info(new Date() +"Inside PIMobileNumber.htm"+Username);		
+			try {		
+				ses.setAttribute("formmoduleid", formmoduleid);			
+				ses.setAttribute("SidebarActive","PersonalIntimation_htm");
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+								
+				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+				List<String> DGMs = service.GetDGMEmpNos();
+				
+				if(!DGMs.contains(EmpNo)) {
+					req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
+				}
+				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
+													
+				return "pi/PIMobileList";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside PIMobileNumber.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}	
 }
