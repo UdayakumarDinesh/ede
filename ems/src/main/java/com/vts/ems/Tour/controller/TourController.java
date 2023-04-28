@@ -216,15 +216,12 @@ public class TourController {
 				ses.setAttribute("SidebarActive","TourApplyList_htm");
 				return "tour/TourApplyList";
 			}
-
-			
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TourApplyList.htm "+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
 	}
-	
 	
 	@RequestMapping(value = "checktour.htm", method = RequestMethod.GET)
 	public @ResponseBody String TdCheck(HttpServletRequest request, HttpServletResponse response ,HttpSession ses) throws IOException {
@@ -234,7 +231,6 @@ public class TourController {
 		Gson json = new Gson();
 		try {
 			String empno = (String) ses.getAttribute("EmpNo");
-
 			String DepartureDate = request.getParameter("DepartureDate");
 			String ArrivalDate = request.getParameter("ArrivalDate");
 			Result= service.checkTDAlreadyPresentForSameEmpidAndSameDates( empno, DepartureDate, ArrivalDate);
