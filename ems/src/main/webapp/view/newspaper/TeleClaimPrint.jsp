@@ -1,58 +1,137 @@
-
-
+<%@page import="com.sun.xml.bind.v2.schemagen.xmlschema.Import"%>
 <%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="java.lang.Math"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Re-imbursemrnt bill</title>
+<title>Re-imbursement bill</title>
 <style type="text/css">
- @media print {
-  #printPageButton {
-    display: none;
-  }
-}
-  </style> 
-<style>
-/* css buttom border */
-h1 {
-    border-bottom: 2px solid black;
-    width:52%;
-}
-h2 {
-    border-bottom: 2px solid black;
-    width:26%;
-}
-.alignleft {
-	float: left;
+@media print {
+	#printPageButton {
+		display: none;
+	}
 }
 
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+* {
+	font-family: Calibri, sans-serif;
 }
+
+table {
+	border-collapse: collapse;
+	width: 620px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+table tr, th, td {
+	padding: 5px;
+}
+
+.table1 {
+	border: 2px solid black;
+	height: 100px;
+	text-align: center;
+}
+
+.infoDiv {
+	margin-top: 15px;
+	font-size: 16px;
+}
+
+.table2 {
+	border: 1px solid black;
+}
+
+.table2 td:first-child:not(.exclude) {
+	width: 5%;
+}
+
+.table2 td:nth-child(2):not(.exclude) {
+	width: 38%;
+}
+
+#infoTable tr, th, td {
+	border: 1px solid black;
+	border-top: none;
+	height: 15px;
+}
+
+.textNsign {
+	width: 620px;
+	margin-top: 10px;
+	text-align: justify;
+}
+
+.sign {
+	margin-top: 30px;
+	display: flex;
+	justify-content: space-between;
+	font-weight: bold;
+	padding-right: 60px;
+}
+
+.note {
+	margin-top: 20px;
+}
+
+.accDPT {
+	width: 620px;
+	margin-top: 30px;
+}
+
+.accDPT table {
+	width: 620px;
+	border: 1px solid black;
+	margin-top: 20px;
+	font-weight: normal;
+}
+
+.accDPT table td:first-child:not(.exclude) {
+	width: 45%;
+}
+
+.FASign {
+	width: 620px;
+	text-align: right;
+	margin-top: 45px;
+}
+
+.spouse{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
 </style>
 </head>
 <body>
-<%
+	<%
 AmountWordConveration nw=new AmountWordConveration();
 List<Object[]> TelephoneUserPrintSingleData=(List)request.getAttribute("TelephoneUserPrintSingleData");
 List<Object[]> TelephoneUserPrintMultiData=(List)request.getAttribute("TelephoneUserPrintMultiData");
 
 LabMaster LabDetails =(LabMaster)request.getAttribute("LabDetails");
 
+SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+Date today=new Date();
 
 String name="Not Available";
 String designation="Not Available";
 String SbiAcc="Not Available";
 String OtherAcc="Not Available";
 String GPFNO="Not Available";
+
+String empNo="Not Available";
+String payLevel="Not Available";
+String payGrade="Not Available";
+String spouse="Not Available";
 
 if(request.getAttribute("TelephoneUserPrintSingleData")!=null){
     for(Object ls[]:TelephoneUserPrintSingleData){
@@ -63,152 +142,182 @@ if(request.getAttribute("TelephoneUserPrintSingleData")!=null){
    	    OtherAcc=ls[12].toString();
     	}
    	    GPFNO=ls[2].toString();
-    	
+		empNo=ls[13].toString();
+		payLevel=ls[14].toString();
+		payGrade=ls[15].toString();
+		if(ls[16]!=null){
+		spouse=ls[16].toString();
+		}else{
+			spouse="NA";
+		}
+		
      break;  
     }}
 
 %>
-<center><input type="button"  class="btn btn-info btn-xs center-block"  id="printPageButton" value="Print" onClick="window.print()"></center>
-<center><h2><font size="+1">दूरभाष  बिल क़ी प्रतिपूति॔ </font></h2></center>
 
-<center><h1><font size="+1">RE-IMBURSEMENT OF TELEPHONE BILL</font></h1></center>
- स्थापना / Estt.: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-वायु वाहित प्रणाली केंद्र,बंगलोर / <%=LabDetails.getLabCode() %>, <%=LabDetails.getLabCity() %>
-<br><br>
- नाम / Name:<%=name %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;पदनाम / Designation:<%=designation%>
-<br><br>
-स्टेटबैंक / SBI A/c No.:<%=SbiAcc%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other A/c No.:<%=OtherAcc %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;जीपीएफ  GPF / PRAN NO.:<%=GPFNO%>
-<br><br>
-<table>
-  <tr>
-    <th rowspan="3">&nbsp;क्रमसं/<br>&nbsp;S.NO.</th>
-    <th colspan="9">विवरण / Details</th>
-    <th rowspan="3">देय राशि /<br>Amt Payable<br>₹</th>
-    </tr>
-    
-    <tr>
-      <td colspan="3">अवधि / Period</td>
-      <td rowspan="2">दूरभाष /मोबाइलसं <br>Land Line/Mob<br>No/Broadband No.</td>
-      <td rowspan="2">बिल /प्राप्तिसंख्या<br>Bill/Inv No.</td>
-      <td rowspan="2">बिल तारीख<br>Bill Date</td>
-       <td rowspan="2">Device<br>Bill<br>Amount</td>
-      <td rowspan="2">कुल बिल <br>राशि<br>Total Bill<br>Amount</td>
-      <td rowspan="2">स्वीकाय॔ राशि <br>कर सहित<br> Amount <br>admissible<br>including tax</td>
-   
-    </tr>
-     <tr>
-     <td>Broad<br>Band</td>
-     <td>से<br>From</td>  
-     <td>तक<br>To</td>
-     
-     
-     </tr>
-    
-                    <%int count=1;
+	<%int count=1;
                      double TotalPayable=0.00;
                       
                      if(TelephoneUserPrintSingleData!=null&&TelephoneUserPrintSingleData.size()>0){ 
             		 for(Object ls[]:TelephoneUserPrintSingleData){
             		 String TeleId=ls[4].toString();
             		 TotalPayable=TotalPayable+Double.parseDouble(ls[9].toString());
-            		 %>            		
-                                   
-                         <tr>
-                         <td colspan="10" style="text-align:center;">Month: <%=ls[5]%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year: <%=ls[6]%><td>
-                         <tr>
-                          
-                          <tr>
-                           <td>
-                             <%for(Object ls0[]:TelephoneUserPrintMultiData){ 
-                             if(TeleId.equalsIgnoreCase(ls0[0].toString())){%>
-                             <%=count%><br>
-                            <%count++;}}%>
-                          </td>
-                          
-                          <td><%if("Y".equalsIgnoreCase(ls[11].toString())){%><%="Yes"%><%}else{%><%="No"%><%} %></td>
-                          
-                            <td>
-                            <%for(Object ls1[]:TelephoneUserPrintMultiData){ 
-                            if(TeleId.equalsIgnoreCase(ls1[0].toString())){%>
-                            <%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls1[1].toString())%><br>
-                            <%}}%>
-                            </td>
-                          
-                          
-                          
-                         
-                             <td ><%for(Object ls2[]:TelephoneUserPrintMultiData){ 
-                             if(TeleId.equalsIgnoreCase(ls2[0].toString())){%>
-                             <%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls2[2].toString())%><br>
-                             <%}}%>
-                             </td>
-                         
-                          <td>
-                             <%for(Object ls3[]:TelephoneUserPrintMultiData){ 
+            		 %>
+
+	<div align="center">
+		<div>
+			<table class="table1">
+				<tr>
+					<td rowspan="2"><span style="font-size: 28px;">STARC</span> <br>
+						BANGALORE</td>
+					<td rowspan="2">CLAIM FORM FOR REIMBURSEMENT OF<br>RESIDENTIAL
+						TELEPHONE EXPENSES FOR<br>EXECUTIVES (MOBILE & / OR LANDLINE)
+					</td>
+					<td>STARC-BNG- <br> P&A-028
+					</td>
+					<td>Rev.: 00</td>
+				</tr>
+				<tr>
+					<td>Date of Issue:<br><%=dateFormat.format(today) %>
+					</td>
+					<td>Total Pages-1</td>
+				</tr>
+			</table>
+		</div>
+		<div class="infoDiv">
+			<table class="table2">
+				<tr>
+					<td>1.</td>
+					<td>Name of the Employee</td>
+					<td colspan="2"><%=name %></td>
+				</tr>
+				<tr>
+					<td>2.</td>
+					<td>Emp. No.</td>
+					<td colspan="2"><%=empNo %></td>
+				</tr>
+				<tr>
+					<td>3.</td>
+					<td>Designation</td>
+					<td colspan="2"><%=designation%></td>
+				</tr>
+				<tr>
+					<td>4.</td>
+					<td>Grade & Level in the Pay Matrix</td>
+					<td><%=payGrade %></td>
+					<td><%=payLevel %></td>
+				</tr>
+				<tr>
+					<td>5.</td>
+					<td>Function (for E-2 & E-3 only)</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td>6.</td>
+					<td>State whether broadband facility is available or not</td>
+					<td colspan="2">
+						<%if("Y".equalsIgnoreCase(ls[11].toString())){%><%="Yes"%> <%}else{%><%="No"%>
+						<%} %>
+					</td>
+				</tr>
+				<tr>
+					<td>7.</td>
+					<td colspan="3">Details of the claim are as under:</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<table id="infoTable">
+				<tr>
+					<th rowspan="2">Type & <br>Number
+					</th>
+					<th colspan="2">Period of claim</th>
+					<th rowspan="2">Bill No. & <br>Date
+					</th>
+					<!-- <th rowspan="2">Receipt No.<br> & Date
+					</th> -->
+					<th colspan="2">Details of claim <br>(Rs.)
+					</th>
+				</tr>
+				<tr>
+					<th>From</th>
+					<th>To</th>
+					<th width="60">Rental & <br>Usage
+					</th>
+					<th>Taxes</th>
+				</tr>
+
+
+
+
+
+				<% int c=0;
+				for(Object ls3[]:TelephoneUserPrintMultiData){ 
                              if(TeleId.equalsIgnoreCase(ls3[0].toString())){%>
-                             <%=ls3[7]%><br>
-                            <%}}%>
-                          </td>
-                           
-                         
-                           <td>
-                             <%for(Object ls4[]:TelephoneUserPrintMultiData){ 
-                             if(TeleId.equalsIgnoreCase(ls4[0].toString())){%>
-                             <%=ls4[5]%><br>
-                            <%}}%>
-                          </td>
-                          
-                            <td ><%for(Object ls5[]:TelephoneUserPrintMultiData){ 
-                             if(TeleId.equalsIgnoreCase(ls5[0].toString())){%>
-                             <%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls5[6].toString())%><br>
-                             <%}}%>
-                             </td>
-                        
-                         
-                           <td style="text-align:right;">
-                             <%for(Object ls6[]:TelephoneUserPrintMultiData){ 
-                             if(TeleId.equalsIgnoreCase(ls6[0].toString())){%>
-                             <%=ls6[3]%><br>
-                            <%}}%>
-                            
-                          </td>
-                          <td style="text-align:right;"><%=ls[7]%> </td>
-                          <td style="text-align:right;"><%=ls[8]%> </td>
-                          <td style="text-align:right;"><%=ls[9]%> </td>
-                          </tr>
-    
-           <%}}%>
-          <%
-             String total=String.valueOf(TotalPayable);
-     	    
-     	    String RupeeInNonFormat=String.valueOf( Math.round(Float.parseFloat(total)));     
-     	    String RUPEES=IndianRupeeFormat.rupeeFormat(RupeeInNonFormat);
-     	    String RupeeInWords  = nw.convert1(Integer.parseInt(RupeeInNonFormat));
-                    
-          %> 
-           
-      <tr>
-      
-     <td colspan="11" style="text-align:right;">Total Amount:<%=RUPEES%></td>
-     
-     </tr>
-</table>
-<br>
-<b>Rupees In Words: <%=RupeeInWords %> only</b><br>
-एक माह हेतु अधिकतम स्वीकाय॔ राशि ₹ 3000/- + 18% कर अथा॔त  ₹ 3540/- अथवा वास्तबिक बिल राशि जो भी कम हो ।<br><br>
-Maximum admissible for reimbursement for one month is ₹ 3000/- + 18% Tax i.e ₹ 3540/- or the actual bill amount is less.<br>
-मे निवेदन करता हूँ  कि प्रतिपुति॔ शीघ्र कि जाये । I request that , I may be reimbursement the admissible amount at the earliest.
-<br><br><br><br>
-<center>
-हस्ताक्षर/Signature:<br>
-नाम/Name:<br>
-आंतरिक दूरभाष संख्या Internal Phone No.:
-</center>
-<br>
-<b>प्रतिहस्ताक्षरित/COUNTERSIGNED BY</b>
+				<tr>
+					<td><%=ls3[9]%>&nbsp; & <br><%=ls3[7]%><br></td>
+					<td><%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls3[1].toString())%><br></td>
+					<td><%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls3[2].toString())%><br></td>
+					<td><%=ls3[5]%>&nbsp; & <br><%=DateTimeFormatUtil.fromDatabaseToActual_inNumericShortForm(ls3[6].toString())%><br></td>
+					<td><%=ls3[3]%><br></td>
+					<td style="text-align:right;"><%=ls3[10]%><br></td>
+					<%--<%if(c==0){ %>
+					 <td rowspan="<%=c %>" style="text-align: right;"><%=ls[8]%></td><%}%> --%>
+					 <%c++; }}%>	
+
+				</tr>
+
+			
+
+			</table>
+		</div>
+		<div class="textNsign">
+			Certified that my spouse  <span class="spouse"><%=spouse %></span>  is unemployed / employed
+			and he / she is not availing reimbursement of the telephone bills
+			from his / her department. (Strike off whichever is not applicable).
+			It is also certified that there is no ISD facility on my Landline.
+
+			<div class="sign">
+				<div>Date:</div>
+				<div>
+					Signature of Employee <br>STARC Intercom No:
+				</div>
+			</div>
+			<div class="note">
+				Note: 1.The bill for reimbursement should be claimed on or before
+				25th of the subsequent &nbsp; &nbsp; &nbsp; &nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+				month of payment of bills. <br> &nbsp; &nbsp; &nbsp; &nbsp;
+				&nbsp;&nbsp;&nbsp;2.The original bill and payment receipt should be
+				enclosed
+			</div>
+		</div>
+		<div class="accDPT">
+			<div
+				style="text-decoration: underline; font-weight: bold; margin-bottom: 20px;">FOR
+				ACCOUNTS DEPARTMENT USE</div>
+			<table>
+				<tr>
+					<td>Claimed Amount</td>
+					<td>Rs. <%=ls[7]%></td>
+				</tr>
+				<tr>
+					<td>Eligible Amount</td>
+					<td>Rs. <%=ls[8]%></td>
+				</tr>
+				<tr>
+					<td>Amount passed for payment</td>
+					<td>Rs. <%=ls[9]%></td>
+				</tr>
+			</table>
+
+		</div>
+
+		<div class="FASign">
+			<b>F&A Dept.</b>
+		</div>
+	</div>
+<%}} %>
 </body>
 </html>

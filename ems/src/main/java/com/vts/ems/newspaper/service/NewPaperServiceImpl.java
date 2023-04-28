@@ -400,6 +400,12 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		return dao.getTelephoneUserPrintSingleData(TeleForwardId)  ;
 	}
 	
+	@Override
+	public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId) {
+		
+		return dao.getTelephoneUserPrintSingleDataByMonth(TeleForwardId, teleId);
+	}
+	
 //////////////////////telephone//////////////////////////////////////
 	  
 	@Override
