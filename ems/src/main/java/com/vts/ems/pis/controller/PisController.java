@@ -6590,8 +6590,7 @@ public class PisController {
 		{			
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
-//			ses.setAttribute("formmoduleid", "1");
-//			ses.setAttribute("SidebarActive","OrganisationStructure_htm");
+
 			try {
 				
 				List<Object[]> grouplist=service.getGroupListGH();

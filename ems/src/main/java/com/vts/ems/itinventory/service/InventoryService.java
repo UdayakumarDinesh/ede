@@ -10,7 +10,7 @@ import com.vts.ems.itinventory.model.ITInventoryConfigured;
 
 public interface InventoryService {
 	
-   public List<Object[]> getInventoryQuantityList(String empNo) throws Exception;
+   public List<Object[]> getInventoryQuantityList(String empNo,String DeclarationYear) throws Exception;
    public long InventoryQtyAdd(ITInventory inventory) throws Exception;
    public long QuantityUpdate(ITInventory inventory) throws Exception;
    public long InventoryDetailsAddSubmit( ITInventoryConfigured details) throws Exception;

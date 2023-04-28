@@ -10,7 +10,7 @@ import com.vts.ems.model.EMSNotification;
 
 
 public interface InventoryDao {
-	public List<Object[]> getInventoryQuantityList(String empNo) throws Exception;
+	public List<Object[]> getInventoryQuantityList(String empNo,String DeclarationYear) throws Exception;
 	public long InventoryQtyAdd(ITInventory inventory)throws Exception;
 	public ITInventory getITInventoryId(Long ItinventoryId) throws Exception;
 	public long QuantityUpdate(ITInventory invntry) throws Exception;

@@ -36,9 +36,9 @@ public class InventoryServiceImpl implements InventoryService{
 	InventoryDao dao;
 	
 	@Override
-	public List<Object[]> getInventoryQuantityList(String empNo) throws Exception {
+	public List<Object[]> getInventoryQuantityList(String empNo,String DeclarationYear) throws Exception {
 	
-		return dao.getInventoryQuantityList(empNo);
+		return dao.getInventoryQuantityList(empNo,DeclarationYear);
 	}
 	
 	@Override
@@ -167,6 +167,8 @@ public long ForwardDetails(ITInventory inventory,String UserId,String EmpNo) thr
 			notify.setCreatedDate(sdf1.format(new Date()));
 			dao.NotificationAdd(notify);
 		}
+	   
+
 	 }
 	return dao.ForwardDetails(inventory);
 }
@@ -194,7 +196,7 @@ public List<Object[]> getApprovedForm(String invntryhistoryid) throws Exception 
 @Override
 public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inventory,ITInventoryConfiguredHistory config,String empNo, String eno) throws Exception {
 	
-	
+	 System.out.println("invrntory---"+inventory);
 	EMSNotification notify = new EMSNotification();
 	List<Object[]> notifyto = dao.SendNotification("U");
 	
@@ -214,6 +216,7 @@ public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inven
    
    if(Aprrove.getStatus()=="A" )
    {
+	 
 	  dao.inventoryapprove(inventory);
    }
    
@@ -225,7 +228,6 @@ public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inven
    return dao.inventoryDetailsApprove(Aprrove);
 	
  }
-
        //change annual declaration form status every year 1st of jan to allow employee to submit declaration
 		@Scheduled(cron = "0 0 0 1 1 ?")
 		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 

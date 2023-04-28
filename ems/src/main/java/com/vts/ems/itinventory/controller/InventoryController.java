@@ -134,10 +134,26 @@ public class InventoryController {
 			ses.setAttribute("SidebarActive","Inventory_htm");	
 			ses.setAttribute("formmoduleid", formmoduleid);
 			logger.info(new Date() +"Inside Inventory.htm "+UserId);
+			List<Object[]> InventoryQuantityList=null;
 			try {
 				
-                List<Object[]> InventoryQuantityList=service.getInventoryQuantityList(EmpNo);
-				req.setAttribute("InventoryQuantityList",InventoryQuantityList );
+				LocalDate today= LocalDate.now();
+				String DeclarationYear=String.valueOf(today.getYear());
+				String declarationYear="";
+				declarationYear=String.valueOf(today.getYear()-1);
+				InventoryQuantityList=service.getInventoryQuantityList(EmpNo,DeclarationYear );
+				
+				if(InventoryQuantityList!=null && InventoryQuantityList.size()>0) {
+					
+					System.out.println(" DeclarationYear   :"+DeclarationYear);
+					InventoryQuantityList=service.getInventoryQuantityList(EmpNo,DeclarationYear );
+				}else {
+					
+					InventoryQuantityList=service.getInventoryQuantityList(EmpNo,declarationYear);
+					System.out.println(" PreviousYear   :"+declarationYear);
+				}
+                
+                req.setAttribute("InventoryQuantityList",InventoryQuantityList );
 				
 				return "itinventory/inventory";
 				
@@ -155,14 +171,13 @@ public class InventoryController {
 			String UserId=(String)ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
 			logger.info(new Date() +"Inside ITInventoryQuantityAddSubmit.htm "+UserId);
+		
 			try {
-				
+				ITInventory inventory=new ITInventory(); 
 				LocalDate today= LocalDate.now();
 				String DeclarationYear=String.valueOf(today.getYear());
-				ITInventory inventory=new ITInventory(); 
-				inventory.setDeclaredBy(EmpNo);
 				inventory.setDeclarationYear(DeclarationYear);
-				
+				inventory.setDeclaredBy(EmpNo);
 				inventory.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
 				inventory.setDesktopIntendedBy(req.getParameter("DesktopIntendedBy"));
 				inventory.setDesktopRemarks(req.getParameter("DesktopRemarks"));
@@ -191,6 +206,7 @@ public class InventoryController {
 				inventory.setMiscellaneousIntendedBy(req.getParameter("MiscellaneousIntendedBy"));
 				inventory.setMiscellaneousRemarks(req.getParameter("MiscellaneousRemarks"));
 				inventory.setStatus("I");
+				inventory.setAllowDecl("Y");
 				inventory.setCreatedBy(UserId);
 				inventory.setCreatedDate(sdf1.format(new Date()));
 				inventory.setIsActive(1);
@@ -256,7 +272,8 @@ public class InventoryController {
 				inventory.setModifiedBy(UserId);
 				inventory.setModifiedDate(sdf1.format(new Date()));
 				long update=service.QuantityUpdate(inventory);
-				 if(update!=0)
+				
+				if(update!=0)
 				 {
 			  	   redir.addAttribute("result", "Inventory Quantity Updated Successfully");
 			  	}
@@ -368,6 +385,7 @@ public class InventoryController {
 					 String arr[]=split.split("/");
 				      String inventoryconfigid=arr[0];
 				      String ItemType=arr[1];
+				      
 				ITInventoryConfigured configure=service.getInventoryConfigId(Long.parseLong(inventoryconfigid));
 				
 			    List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo);
@@ -444,12 +462,26 @@ public class InventoryController {
 		{
 			String UserId = (String) ses.getAttribute("Username");
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			logger.info(new Date() +"Inside InventoryFormDownload.htm "+UserId);
-			
+			logger.info(new Date() +"Inside InventoryFormPreview.htm "+UserId);
+			List<Object[]> InventoryQtyList=null;
 			try {
 				    LocalDate today= LocalDate.now();
 			        String DeclarationYear=String.valueOf(today.getYear());
-				    req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
+			        String declarationYear="";
+					declarationYear=String.valueOf(today.getYear()-1);
+					
+					declarationYear=String.valueOf(today.getYear()-1);
+					InventoryQtyList=service.getInventoryQtylist(EmpNo,DeclarationYear);
+					
+					if(InventoryQtyList!=null && InventoryQtyList.size()>0) {
+						req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
+						
+					}else {
+						System.out.println(" declarationYear   :"+declarationYear);
+						req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,declarationYear));
+						
+					}
+					
 				    req.setAttribute("inventoryconfigure", service.getInventoryConfiguration(EmpNo));
 				    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 				    String path = req.getServletContext().getRealPath("/view/temp");
@@ -504,8 +536,10 @@ public class InventoryController {
 				String split= req.getParameter("inventoryhistoryid");
 				   if(split!=null && !split.equals("null")) {
 					   String arr[]=split.split("/");
-					     String ITInventoryId=arr[0]; 
-						  String invntryhistoryid=arr[1];
+					     String invntryhistoryid=arr[0]; 
+						  String ITInventoryId=arr[1];
+						  
+				
 						
 				req.setAttribute("inventoryqty", service.getApprovedForm(invntryhistoryid));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfigureApprovedlist(ITInventoryId));
@@ -563,8 +597,7 @@ public class InventoryController {
 		  try {
 			    
 			    String DeclarationYear=req.getParameter("declarationyear");
-
-			    req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
+                req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfiguration(EmpNo));
 			    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			    req.setAttribute("LoginType", LoginType);
@@ -589,13 +622,17 @@ public class InventoryController {
 			  String EmpNo =ses.getAttribute("EmpNo").toString();
 			  logger.info(new Date() +"Inside InventoryDetailsForward.htm "+UserId); 
 			  try {
+				    LocalDate today= LocalDate.now();
+			        String DeclarationYear=String.valueOf(today.getYear());
 				  
 				  ITInventory inventory=new ITInventory();
 				  inventory.setItInventoryId(Long.parseLong(req.getParameter("inventoryid01")));
 				  inventory.setStatus("F");
 				  inventory.setERemarks(req.getParameter("Remarks"));
 		          inventory.setForwardedDate(sdf1.format(new Date()));
+		          inventory.setDeclarationYear(DeclarationYear);
 		          long save=service.ForwardDetails(inventory,UserId,EmpNo);
+		          
 		          if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Forwarded Successfully");
 			  	   }
@@ -611,6 +648,10 @@ public class InventoryController {
 			 return "static/Error"; 
 			 }
 	}
+	  
+	  
+	  
+	  
 	  
 	  @RequestMapping(value = "InventoryDetailsDeclared.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String InventoryDetailsForwarded(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -720,12 +761,12 @@ public class InventoryController {
 				     String itid=arr[0]; 
 					  String eno=arr[1];
 					
-					  
-				inventory.setItInventoryId(Long.parseLong(itid));
+                inventory.setItInventoryId(Long.parseLong(itid));
 			    inventory.setStatus("A");
+			    inventory.setAllowDecl("N");
 			    inventory.setApprovedDate(sdf1.format(new Date()));
 			    
-				Aprrove.setItInventoryId(Long.parseLong(itid)); 
+				Aprrove.setItInventoryId(Long.parseLong(itid));
 				Aprrove.setDesktop(Integer.parseInt(req.getParameter("Desktop")));
 				Aprrove.setDesktopIntendedBy(req.getParameter("DesktopIntndBy"));
 				Aprrove.setDesktopRemarks(req.getParameter("DesktopRemark"));
@@ -757,6 +798,7 @@ public class InventoryController {
 				Aprrove.setDeclaredBy(eno);
 				Aprrove.setDeclarationYear(req.getParameter("DeclarationYear"));
 				Aprrove.setForwardedDate(req.getParameter("ForwardedDate"));
+				Aprrove.setApprovedBy(EmpNo);
 				Aprrove.setApprovedDate(sdf1.format(new Date())); 
 				Aprrove.setCreatedBy(UserId);
 				Aprrove.setCreatedDate(sdf1.format(new Date()));
@@ -765,10 +807,10 @@ public class InventoryController {
 
 				
 				List<Object[]> configlist=service.getInventoryConfigure(itid);
+				ITInventoryConfiguredHistory config=new ITInventoryConfiguredHistory();
 				long save=0;
 				for(Object[] obj:configlist) {
 					
-					ITInventoryConfiguredHistory config=new ITInventoryConfiguredHistory();
 					config.setConfiguredBy(obj[17].toString());
 					config.setItInventoryId(Long.parseLong(obj[16].toString()));
 					config.setItemType(obj[1].toString());
@@ -789,8 +831,9 @@ public class InventoryController {
 					config.setCreatedBy(UserId);
 					config.setCreatedDate(sdf1.format(new Date()));
 					config.setIsActive(1);
-				    save=service.inventoryDetailsApprove(Aprrove,inventory,config,EmpNo,eno);
 				}
+				
+				save=service.inventoryDetailsApprove(Aprrove,inventory,config,EmpNo,eno);
 				
 				 if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Approved Successfully");
