@@ -305,7 +305,7 @@
 							      
 							        <span class="count-numbers"><%if(item!=0){%><%=item %><%}else{ %>0<%} %></span>
 							        
-							        <span class="count-name">No Of Items</span>
+							        <span class="count-name">No of Items</span>
 							      </div>
 							    </div>
 							  

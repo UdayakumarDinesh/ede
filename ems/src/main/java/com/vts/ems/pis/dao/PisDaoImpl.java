@@ -3267,6 +3267,36 @@ private static final String EMPLOYEELIST="CALL EmpLoyee_List(:Id,:Code)";
 		}
 		return emplist;
 	}
+	
+	private static final String UPDATERESADDR = "UPDATE pis_address_res SET ResAdStatus ='E' WHERE empid=:EmpId AND to_res_addr IS NULL AND ResAdStatus='A' AND IsActive=1";
+	@Override
+	public long ResAddrUpdate(String EmpId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATERESADDR);
+			query.setParameter("EmpId", EmpId);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ResAddrUpdate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+		
+	}
+	
+	private static final String UPDATEPERADDR = "UPDATE pis_address_per SET PerAdStatus ='E' WHERE empid=:EmpId AND to_per_addr IS NULL AND PerAdStatus='A' AND IsActive=1";
+	@Override
+	public long PerAddrUpdate(String EmpId) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATEPERADDR);
+			query.setParameter("EmpId", EmpId);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PerAddrUpdate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+		
+	}
 
 	private static final String EMPLOYEEDROPDOWNLIST="CALL Employee_Dropdown_list (:empno , :LoginType )";
 	@Override

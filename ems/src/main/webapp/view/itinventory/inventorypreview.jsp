@@ -100,11 +100,9 @@ tr.noBorder td {
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-							<%if(LoginType.toString().equals("A")){ %>
-							<li class="breadcrumb-item "><a href="InventoryDetailsDeclared.htm">Inventory Declared  </a></li>
-							<%}else{ %>
+							
 							<li class="breadcrumb-item "><a href="Inventory.htm">Inventory  </a></li>
-							<%} %>
+							
 					        <li class="breadcrumb-item active" aria-current="page">Inventory Preview
 						</li>
 				</ol>
@@ -262,7 +260,7 @@ tr.noBorder td {
 					</table>
 					</div>
 					       <div class="row">
-							<%if(inventoryconfigure.size()>0) {%>
+							<% if(inventoryconfigure.size()>0) {%>
 								<div class="col-md-12" align="center">
 								<span style="font-weight: 600; font-size: 20px;color: #CA4E79;text-decoration: underline;">Inventory Configuration </span>
 								<%} %>
@@ -282,7 +280,7 @@ tr.noBorder td {
 						         %>
 						        
 								<tr>
-									 <%for(Object[] Config:inventoryconfigure) {%>
+									 <% for(Object[] Config:inventoryconfigure) {%>
 									<td colspan="2">
 										<b >Connection Type :&nbsp;&nbsp;<span class="text-blue" style="font-weight: 400;" ><%if(Config[2].toString().equals("L")){%><%=LAN %><%}else if(Config[2].toString().equals("I")){%><%=Internet %><%} else{%><%=StandAlone%><%} %></span></b>
 									</td>
@@ -352,7 +350,8 @@ tr.noBorder td {
 					 
 				 
 				</div>
-				<%if(!LoginType.toString().equals("A") && inventoryqty[33].toString().equals("R")) {%>
+					
+			 	<% if(inventoryqty[33].toString().equals("R")) {%>
 				 <div class="col-md-5" align="left" style="margin-left:1rem;margin-top:-1rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px">
 					<tr>
@@ -363,17 +362,17 @@ tr.noBorder td {
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
 						
-						    <%if(!inventoryqty[36].toString().equals("")){%><span style="font-weight:800;" ><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
-							<span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
+						     <%if(!inventoryqty[35].toString().equals("")){%><span style="font-weight:800;" ><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span><br><%} %> 
+							<span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span>
 							
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />			
 			</div> 
-				<%} %>
+				<%} %> 
 				
-				<%if(LoginType.toString().equals("A") && !inventoryqty[35].toString().equals("") && (inventoryqty[33].toString().equals("F") || inventoryqty[33].toString().equals("R"))) {%>
+				<% if ((inventoryqty[33].toString().equals("F")) && !inventoryqty[35].toString().equals("") ) {%>
 				<div class="col-md-5" align="left" style="margin-left:1rem;margin-top:-1rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px">
 					<tr>
@@ -383,16 +382,17 @@ tr.noBorder td {
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-						    <%if(inventoryqty[36]!=null){%><span style="font-weight:800;"><%=EmpName %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
-							 <span style="font-weight:800;"> <%=inventoryqty[1] %></span> :&emsp; <span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
+						    <% if(inventoryqty[36]!=null) {%><span style="font-weight:800;"><%=EmpName %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
+							<span style="font-weight:800;"><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />			
 			</div> 
-			<%} %>
 			
-				<%if(LoginType.toString().equals("A") && inventoryqty[33].toString().equals("F")) {%>
+			<%} %> 
+			 
+			<% if(inventoryqty[33].toString().equals("F")) {%>
 				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100" id="remarks" name="remarks" maxlength="500"></textarea>
@@ -430,24 +430,42 @@ tr.noBorder td {
 				<input type="hidden" name="ForwardedDate"	  id="ForwardedDate" value="<%=inventoryqty[32].toString()%>" >	
 				
 			
-			 
-                <button type="submit" class="btn btn-sm submit-btn"  name="inventoryid"  value="<%=inventoryqty[0]%>/<%=inventoryqty[2]%>/" formaction="InventoryDetailsApprove.htm"  formmethod="GET"  onclick="return confirm('Are You Sure To Approve ?');">Approve</button>
+			    <button type="submit" class="btn btn-sm submit-btn"  name="inventoryid"  value="<%=inventoryqty[0]%>/<%=inventoryqty[2]%>" formaction="InventoryDetailsApprove.htm"  formmethod="GET"  onclick="return confirm('Are You Sure To Approve ?');">Approve</button>
 				<button type="submit" class="btn btn-sm delete-btn" name="inventoryid"  value="<%=inventoryqty[0]%>/<%=inventoryqty[2]%>/<%=inventoryqty[34].toString().substring(0,4)%>" formaction="InventoryDetailsReturn.htm"  formmethod="GET"  onclick="return remarkRequired('R');" formnovalidate="formnovalidate">Return</button>
-				 </div> 
-				<%} %>
+			</div>
+				  
+			<%} %>
 				
 				
 				
-				<%if(!LoginType.toString().equalsIgnoreCase("A")  && inventoryqty[38].toString().equalsIgnoreCase("Y") && (inventoryqty[33].toString().equalsIgnoreCase("R") || inventoryqty[33].toString().equalsIgnoreCase("I") || inventoryqty[33].toString().equalsIgnoreCase("A")))
+				<% if(inventoryqty[33].toString().equalsIgnoreCase("I") || inventoryqty[33].toString().equalsIgnoreCase("R"))
 					
 				{ %>
+				
 				<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100"  id="remark" name="Remarks"  maxlength="500"></textarea>
 				  </div>
                 <button type="submit" class="btn btn-sm submit-btn"   name="inventoryid01"  id="ITinventoryid"   formaction="InventoryDetailsForward.htm" formmethod="get"  onclick="message('<%=inventoryqty[0]%>','<%=inventoryqty[33] %>')">Forward</button>
 				 </div>
-				 <%} %>
+				 
+				<% } %>
+				
+				 <% if( inventoryqty[33].toString().equalsIgnoreCase("A") && inventoryqty[38].toString().equalsIgnoreCase("Y"))
+					 
+				 { %>
+				 
+				   
+				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
+				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
+					 <textarea class="w-100 form-control" rows="3" cols="100"  id="remark" name="Remarks"  maxlength="500"></textarea>
+				  </div>
+                <button type="submit" class="btn btn-sm submit-btn"   name="inventoryid01"  id="ITinventoryid"   formaction="InventoryDetailsForward.htm" formmethod="get"  onclick="message('<%=inventoryqty[0]%>','<%=inventoryqty[33] %>')">Forward</button>
+                
+				</div>
+				 
+				 
+				<% } %>
 				 
 				 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 				</form>

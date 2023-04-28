@@ -81,7 +81,7 @@
 			    <div class="form-group">
 			        <div class="row">
 			         <div class="col-md-2">
-			                <label>Connection Type<span class="mandatory">*</span></label><br>
+			                <label>Connection Type</label><br>
 			                 <select class=" form-control select2" name="ConnectionType" required="required">
 			                  <option value="" selected="selected" disabled="disabled">Select</option>
 								<option  value="L" <%if(configure!=null){ if(configure.getConnectionType().toString().equals("L")){%> selected  <% }}%>>LAN</option>
@@ -92,24 +92,24 @@
 			
 			
 			            <div class="col-md-4">
-			                <label>CPU<span class="mandatory">*</span></label> 
+			                <label>CPU</label> 
 			            	<input type="text" name="CPU" required="required"  maxlength="100" value="<%if(configure!=null){ %><%=configure.getCPU() %><%} %>" class="form-control input-sm"   placeholder="CPU" >
 			            </div>			
 			            	
 			            <div class="col-md-2">
-			                <label>Monitor <span class=" mandatory ">*</span></label>
+			                <label>Monitor </label>
 			                <input type="text" id="" name="Monitor"   maxlength="100" value="<%if(configure!=null){ %><%=configure.getMonitor() %><%} %>"
 			                    class=" form-control input-sm " placeholder="Monitor" required="required"
 			                    >
 			            </div>
 			            <div class="col-md-2">
-			                <label>RAM <span class=" mandatory ">*</span></label>
+			                <label>RAM </label>
 			                <input type="text" id="" name="RAM"   maxlength="100" value="<%if(configure!=null){ %><%=configure.getRAM()%><%} %>"
 			                    class=" form-control input-sm " placeholder=" RAM " required="required"
 			                     >
 			            </div>
 			             <div class="col-md-2">
-			                <label>Additional RAM <span class=" mandatory ">*</span></label>
+			                <label>Additional RAM </label>
 			                <input type="text" id="" name="AdditionalRAM"    maxlength="100" value="<%if(configure!=null){ %><%=configure.getAdditionalRAM()%><%} %>"
 			                    class=" form-control input-sm " placeholder=" Additional RAM " required="required"
 			                    >
@@ -120,40 +120,40 @@
 			    <div class="form-group">
 			        <div class="row">
 			          <div class="col-md-2">
-			                <label>Keyboard <span class=" mandatory ">*</span></label>
+			                <label>Keyboard </label>
 			                <input type="text" id="" name="Keyboard"   maxlength="100" value="<%if(configure!=null){ %><%=configure.getKeyboard()%><%} %>"
 			                    class=" form-control input-sm " placeholder="Keyboard "  required="required"
 			                    >
 			            </div>
 			            
 			             <div class="col-md-2">
-			                <label>Mouse <span class=" mandatory ">*</span></label>
+			                <label>Mouse </label>
 			                <input type="text" id="" name="Mouse"    maxlength="100" value="<%if(configure!=null){ %><%=configure.getMouse()%><%} %>"
 			                   class=" form-control input-sm " placeholder="Mouse "  required="required"
 			                    >
 			            </div>
 			            <div class="col-md-2">
-			                <label>External harddisk <span class=" mandatory ">*</span></label>
+			                <label>External harddisk </label>
 			                <input type="text" id="" name="Externalharddisk"   maxlength="100" value="<%if(configure!=null){ %><%=configure.getExternalharddisk()%><%} %>"
 			                    class=" form-control input-sm " placeholder="External harddisk "  required="required"
 			                   >
 			            </div>
 			            
 			             <div class="col-md-2">
-			                <label>Extra Internal harddisk <span class=" mandatory ">*</span></label>
+			                <label>Extra Internal harddisk </label>
 			                <input type="text" id="" name="ExtraInternalhardisk"   maxlength="100"  value="<%if(configure!=null){ %><%=configure.getExtraInternalharddisk()%><%} %>"  required="required"
-			                    class=" form-control input-sm " placeholder="External harddisk " 
+			                    class=" form-control input-sm " placeholder="External harddisk "  required="required"
 			                    >
 			            </div>
 			            
 			            <div class="col-md-2">
-			                <label>Office <span class=" mandatory ">*</span></label>
+			                <label>Office </label>
 			                <input type="text" id="" name="Office"    maxlength="100" value="<%if(configure!=null){ %><%=configure.getOffice()%><%} %>"
 			                   class=" form-control input-sm " placeholder="Office "  required="required"
 			                   >
 			            </div>
 			           <div class="col-md-2">
-			                <label>OS<span class="mandatory">*</span></label>
+			                <label>OS </label>
 			                <select name="OS" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="W" <%if(configure!=null){ if(configure.getOS().toString().equals("W")){%> selected  <% }}%>>Windows</option>
@@ -166,7 +166,7 @@
 			    <div class="form-group">
 			        <div class="row">
 			            <div class="col-md-2">
-			                <label class="text-nowrap">PDF<span class="mandatory">*</span></label>
+			                <label class="text-nowrap">PDF</label>
 			                <select name="PDF" class="form-control input-sm select2" required="required">
 			                    <option value="N" <%if(configure!=null){ if(configure.getPDF().toString().equals("N")){%> selected  <% }}%>>No</option>
 			                    <option value="Y" <%if(configure!=null){ if(configure.getPDF().toString().equals("Y")){%> selected  <% }}%>>Yes</option>
@@ -176,14 +176,14 @@
 			            </div>
 			
 			             <div class="col-md-2">
-			                <label>Browser<span class=" mandatory ">*</span></label>
+			                <label>Browser</label>
 			                <input type="text" name="Browser"    maxlength="100" value="<%if(configure!=null){ %><%=configure.getBrowser()%><%} %>"
 			                    class=" form-control input-sm " placeholder="Browser" required="required"
 			                    >
 			              </div>
 			              
 			              <div class="col-md-2">
-			                <label>Kavach<span class=" mandatory ">*</span></label>
+			                <label>Kavach</label>
 			               <select name="Kavach" class="form-control input-sm select2"   required="required">
 			                     <option value="N"  <%if(configure!=null){ if(configure.getKavach().toString().equals("N")){%> selected  <% }}%>>No</option>
 			                    <option value="Y" <%if(configure!=null){ if(configure.getKavach().toString().equals("Y")){%> selected  <% }}%>>Yes</option>

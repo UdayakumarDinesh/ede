@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.chss.model.CHSSApply;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
@@ -39,16 +40,16 @@ public class PIDaoImp implements PIDao{
 	EntityManager manager;
 	
 	
-	private static final String RESADDRESSDETAILS = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,to_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.PisStatusColor,c.PISStatusId,c.pisstatuscode FROM pis_address_res a,employee b,pis_approval_status c WHERE  a.IsActive=1 AND a.EmpId=b.EmpId AND a.PisStatuscode=c.PisStatuscode AND a.EmpId=:EmpId ORDER BY a.address_res_id DESC ";
+	private static final String RESADDRESSDETAILS = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,to_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,c.PISStatus,c.PisStatusColor,c.PISStatusId,c.pisstatuscode FROM pis_address_res a,employee b,pis_approval_status c WHERE  a.IsActive=1 AND a.EmpId=b.EmpId AND a.PisStatuscode=c.PisStatuscode AND a.EmpId=:EmpId ORDER BY a.address_res_id DESC";
 	@Override
-	public List<Object[]> EmployeeAddressDetails(String EmpId)throws Exception{
+	public List<Object[]> ResAddressDetails(String EmpId)throws Exception{
 		List<Object[]> empData=null;
 		try {
 			Query query = manager.createNativeQuery(RESADDRESSDETAILS);
 			query.setParameter("EmpId", EmpId);
 			empData =(List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeAddressDetails "+e);
+			logger.error(new Date() + "Inside DAO ResAddressDetails "+e);
 	
 		}
 		return empData;
@@ -56,7 +57,7 @@ public class PIDaoImp implements PIDao{
 	
 	
 	
-	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatusCode,a.remarks FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
+	private static final String RESADDRESSDATA = "SELECT a.empid,a.address_res_id,a.res_addr,a.from_res_addr,a.mobile,a.QtrType,a.EmailOfficial,a.ext,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.ResAdStatus,a.PISStatusCode,a.remarks FROM pis_address_res a,employee b WHERE a.address_res_id=:addressResId AND a.IsActive=1 AND a.EmpId=b.EmpId";
 	@Override
 	public Object[] ResAddressFormData(String addressResId)throws Exception{
 		Object[] empData=null;
@@ -71,7 +72,7 @@ public class PIDaoImp implements PIDao{
 		return empData;
 	}
 	
-	private static final String PERADDRESSDETAILS = "SELECT a.empid,a.address_per_id,a.per_addr,a.from_per_addr,to_per_addr,a.mobile,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,c.PISStatus,c.pisStatusColor,c.PISStatusId FROM pis_address_per a,employee b,pis_approval_status c WHERE a.EmpId=:EmpId AND a.IsActive=1 AND a.EmpId=b.EmpId AND a.PISStatusCode=c.PISStatuscode ORDER BY a.address_per_id DESC";
+	private static final String PERADDRESSDETAILS = "SELECT a.empid,a.address_per_id,a.per_addr,a.from_per_addr,to_per_addr,a.mobile,a.state,a.city,a.pin,b.EmpName,b.EmpNo,a.PerAdStatus,c.PISStatus,c.pisStatusColor,c.PISStatusId,c.pisstatuscode FROM pis_address_per a,employee b,pis_approval_status c WHERE a.EmpId=:EmpId AND a.IsActive=1 AND a.EmpId=b.EmpId AND a.PISStatusCode=c.PISStatuscode ORDER BY a.address_per_id DESC";
 	@Override
 	public List<Object[]> PermanentAddressDetails(String EmpId)throws Exception{
 		List<Object[]> empData=null;
@@ -86,7 +87,7 @@ public class PIDaoImp implements PIDao{
 		}
 	}
 	
-	private static final String PERADDRESSDATA = "SELECT a.empid,a.address_per_id,a.per_addr,a.city,a.state,a.pin,a.from_per_addr,a.mobile,b.EmpName,b.EmpNo,a.PerAdStatus,a.submittedOn,a.VerifiedOn,a.ReceivedOn,a.ApprovedOn,a.PISStatuscode FROM pis_address_per a,employee b WHERE a.address_per_id=:addressPerId AND a.IsActive=1 AND a.EmpId=b.EmpId";
+	private static final String PERADDRESSDATA = "SELECT a.empid,a.address_per_id,a.per_addr,a.city,a.state,a.pin,a.from_per_addr,a.mobile,b.EmpName,b.EmpNo,a.PerAdStatus,a.PISStatuscode,a.Remarks FROM pis_address_per a,employee b WHERE a.address_per_id=:addressPerId AND a.IsActive=1 AND a.EmpId=b.EmpId";
 	@Override
 	public Object[] PerAddressFormData(String addressPerId)throws Exception{
 		Object[] empData=null;
@@ -116,7 +117,7 @@ public class PIDaoImp implements PIDao{
 		return addres;
 	}
 	
-	private static final String TOADDRESSDATEID = "SELECT address_res_id,empid FROM pis_address_res WHERE empid=:EmpId AND to_res_addr IS NULL AND ApprovedOn IS NOT NULL"; 
+	private static final String TOADDRESSDATEID = "SELECT address_res_id,empid FROM pis_address_res WHERE empid=:EmpId AND to_res_addr IS NULL AND ResAdStatus='E' "; 
 	@Override
 	public Object[] ResToAddressId(String EmpId)throws Exception{
 		Object[] IdData=null;
@@ -136,6 +137,7 @@ public class PIDaoImp implements PIDao{
 	@Override
 	public long ResUpdatetoDate(Date toDate,String resAddressId) throws Exception{
 		try {
+	
 			Query query = manager.createNativeQuery(UPDATERESTODATE);
 			query.setParameter("to_res_addr", toDate);
 			query.setParameter("address_res_id", resAddressId);
@@ -428,7 +430,7 @@ public class PIDaoImp implements PIDao{
 		return (List<Object[]>) query.getResultList();
 	}
 	
-	private static final String RESADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.ResTransactionId,emp.empno,emp.empname,des.designation,MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_res par WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND sta.pisstatuscode IN ('FWD','VDG','VPA')AND par.address_res_id = :addressresid GROUP BY sta.pisstatuscode ORDER BY actiondate ASC;";
+	private static final String RESADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.ResTransactionId,emp.empno,emp.empname,des.designation,MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_res par WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND sta.pisstatuscode IN ('FWD','VDG','VPA')AND par.address_res_id = :addressresid GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
 	@Override
 	public List<Object[]> ResAddressTransactionApprovalData(String addressresid)throws Exception
 	{
@@ -456,7 +458,7 @@ public class PIDaoImp implements PIDao{
 		}
 		catch (Exception e) 
 		{
-			logger.error(new Date()  + "Inside DAO GetDGMEmpNo " + e);
+			logger.error(new Date()  + "Inside DAO GetPandAAdminEmpNos " + e);
 			e.printStackTrace();
 			return new ArrayList<String>();
 		}
@@ -500,5 +502,96 @@ public class PIDaoImp implements PIDao{
 			return null;
 		}		
 	}
+
+	private static final String PERADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.PerTransactionId,emp.empno,emp.empname,des.designation,MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode FROM pis_address_per_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_per par WHERE par.address_per_id = tra.address_per_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND sta.pisstatuscode IN ('FWD','VDG','VPA')AND par.address_per_id =:peraddressId GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
+	@Override
+	public List<Object[]> PerAddressTransactionApprovalData(String peraddressId) throws Exception {
+		
+		Query query = manager.createNativeQuery(PERADDRESSTRANSACTIONAPPROVALDATA);
+		query.setParameter("peraddressId", Long.parseLong(peraddressId));
+		return (List<Object[]>) query.getResultList();
+	}
 	
+	@Override
+	public AddressPer PerAddressIntimated(String peraddressid) throws Exception
+	{
+		AddressPer intimate= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<AddressPer> cq= cb.createQuery(AddressPer.class);
+			Root<AddressPer> root= cq.from(AddressPer.class);					
+			Predicate p1=cb.equal(root.get("address_per_id") , Long.parseLong(peraddressid));
+			cq=cq.select(root).where(p1);
+			TypedQuery<AddressPer> allquery = manager.createQuery(cq);
+			intimate= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date()  + "Inside DAO PerAddressIntimated " + e);
+		}
+		return intimate;
+	}
+	private static final String PERTOADDRESSDATEID = "SELECT address_per_id,empid FROM pis_address_per WHERE empid=:EmpId AND to_per_addr IS NULL AND PerAdStatus='E' "; 
+	@Override
+	public Object[] PerToAddressId(String EmpId) throws Exception {
+		
+		Object[] IdData=null;
+		try {
+			Query query = manager.createNativeQuery(PERTOADDRESSDATEID);
+			query.setParameter("EmpId", EmpId);
+			IdData =(Object[]) query.getSingleResult();
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PerToAddressId "+e);
+	
+		}
+		return IdData;
+	}
+
+	private static final String UPDATEPERTODATE = "UPDATE pis_address_per SET to_per_addr=:to_per_addr WHERE address_per_id=:perAddressId";
+	@Override
+	public long PerUpdatetoDate(Date toDate, String perAddressId) throws Exception {
+		
+		try {
+			Query query = manager.createNativeQuery(UPDATEPERTODATE);
+			query.setParameter("to_per_addr", toDate);
+			query.setParameter("perAddressId", perAddressId);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO PerUpdatetoDate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+	}
+
+	@Override
+	public long AddressPerEdit(AddressPer address) throws Exception {
+		
+		try {
+			manager.merge(address);
+			manager.flush();
+			
+			return address.getAddress_per_id();
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO AddressPerEdit " + e);
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception
+	{
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getPerTransactionId();
+	}
+	
+	private static final String PERADDRESSTRANSACTIONLIST="SELECT tra.PerTransactionId,emp.empno,emp.empname,des.designation,tra.actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor  FROM pis_address_per_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_address_per par WHERE par.address_per_id = tra.address_per_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND par.address_per_id =:addressperid ORDER BY actiondate";
+	@Override
+	public List<Object[]> PerAddressTransactionList(String addressperid)throws Exception
+	{
+		Query query = manager.createNativeQuery(PERADDRESSTRANSACTIONLIST);
+		query.setParameter("addressperid", Long.parseLong(addressperid));
+		return (List<Object[]>) query.getResultList();
+	}
 }

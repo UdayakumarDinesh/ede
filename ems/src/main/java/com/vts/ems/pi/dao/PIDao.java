@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
@@ -12,7 +13,7 @@ import com.vts.ems.pis.model.Employee;
 
 public interface PIDao {
 
-	public List<Object[]> EmployeeAddressDetails(String EmpId) throws Exception;
+	public List<Object[]> ResAddressDetails(String EmpId) throws Exception;
 	public Object[] ResAddressFormData(String addressResId) throws Exception;
 	public List<Object[]> PermanentAddressDetails(String EmpId) throws Exception;
 	public AddressPer getPerAddressData(String addressperid) throws Exception;
@@ -41,5 +42,14 @@ public interface PIDao {
 	public List<String> GetPandAAdminEmpNos() throws Exception;
 	public Object[] GetEmpDGMEmpName(String empno) throws Exception;
 	public Object[] GetPandAEmpName() throws Exception;
+	public List<Object[]> PerAddressTransactionApprovalData(String peraddressId) throws Exception;
+	public AddressPer PerAddressIntimated(String peraddressid) throws Exception;
+	public Object[] PerToAddressId(String EmpId) throws Exception;
+	public long PerUpdatetoDate(Date toDate, String perAddressId) throws Exception;
+	public long AddressPerEdit(AddressPer address) throws Exception;
+//	public List<Object[]> PerAddressApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
+	public List<Object[]> PerAddressTransactionList(String addressperid) throws Exception;
+//	public long ResAddrUpdate(String empid) throws Exception;
 
 }

@@ -1,6 +1,8 @@
 <%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java"%>
 
 <!DOCTYPE html>
@@ -122,6 +124,11 @@ tr, th, td {
 		AdmissibleRupee = IndianRupeeFormat.rupeeFormat(AdmissibleAmountRsPaisA[0]);
 
 	}
+	
+	
+	SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+	Date today=new Date();
+	
 	%>
 
 
@@ -139,7 +146,7 @@ tr, th, td {
 				<td>Rev.: 04</td>
 			</tr>
 			<tr>
-				<td>Date of Issue: <br>09.04.2018
+				<td>Date of Issue: <br><%=dateFormat.format(today) %>
 				</td>
 				<td>Total<br> Pages-1
 				</td>
@@ -178,7 +185,13 @@ tr, th, td {
 				<tr>
 					<td>6.</td>
 					<td>Amount of Reimbursement @ ` 500/- p.m.</td>
+					<% String amt=AdmissibleRupee;
+						amt=amt.replace(",", "");
+					if(Integer.parseInt(amt)<=3000){ %>
+					<td colspan="2">Rs <%=AdmissibleRupee%> /-</td>
+					<%}else {%>
 					<td colspan="2">Rs 3000 /-</td>
+					<%} %>
 				</tr>
 			</table>
 		</div>

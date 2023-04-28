@@ -58,6 +58,7 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -112,6 +113,9 @@ public class PisController {
 	
 	@Autowired
 	AdminService adminservice;
+	
+	@Autowired
+	private PIService piservice;
 	
 	@Value("${EMSFilesPath}")
 	private String uploadpath;
@@ -1238,17 +1242,27 @@ public class PisController {
     	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
+    	   peraddress.setPerAdStatus("A");
+    	   peraddress.setPisStatusCode("VPA");
+    	   peraddress.setPisStatusCodeNext("VPA");
     	   
     	   if("ADD".equalsIgnoreCase(Action)) {
     		   peraddress.setIsActive(1);
     		   peraddress.setCreatedBy(Username);
         	   peraddress.setCreatedDate(sdf.format(new Date()));
-        	  long result  =  service.AddPerAddress(peraddress); 
-        	 
+        	  
+        	   Object[] toAddressId = piservice.PerToAddressId(empid);
+        	   if(toAddressId!=null) {    	    		    	    		
+	     	    	long count = piservice.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromPer) , toAddressId[0].toString());
+	     	    	}
+        	   
+        	   service.PerAddrUpdate(empid);
+        	   long result  =  service.AddPerAddress(peraddress); 
+        	   
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Parmanent Address Add Successfull");	
+        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
         		} else {
-        			 redir.addAttribute("resultfail", "Parmanent Address Add Unsuccessful");	
+        			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
     	   }
@@ -1295,7 +1309,7 @@ public class PisController {
     	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
-    	   peraddress.setPerAdStatus("N");
+    
     	   
     	 if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
@@ -1450,15 +1464,25 @@ public class PisController {
 			resadd.setState(state);
 			resadd.setCity(city);
 			resadd.setPin(pin);
-			resadd.setResAdStatus("N");
-			
+			resadd.setResAdStatus("A");
+		    resadd.setPisStatusCode("VPA");
+		    resadd.setPisStatusCodeNext("VPA");
+			           
 		if("ADD".equalsIgnoreCase(Action)) {
 			resadd.setIsActive(1);
 			resadd.setCreatedBy(Username);
 			resadd.setCreatedDate(sdf.format(new Date()));
-        	  long result  =  service.AddResAddress(resadd); 
-        	 
+			
+			service.ResAddrUpdate(empid);
+			
+            long result  =  service.AddResAddress(resadd); 
+            
+            Object[] toAddressId = piservice.ResToAddressId(empid);
+            if(toAddressId!=null) {    	    		    	    		
+     	    	long count = piservice.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromRes) , toAddressId[0].toString());
+     	    	}
         	    if(result>0) {
+        	    	
         	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
@@ -4560,7 +4584,7 @@ public class PisController {
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 			
-				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("formmoduleid", "3"); 
 				ses.setAttribute("SidebarActive", "PIS_htm");
 				req.setAttribute("dashboard", admindashboard);
 				Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
@@ -6563,8 +6587,7 @@ public class PisController {
 		{			
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
-//			ses.setAttribute("formmoduleid", "1");
-//			ses.setAttribute("SidebarActive","OrganisationStructure_htm");
+
 			try {
 				
 				List<Object[]> grouplist=service.getGroupListGH();

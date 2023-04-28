@@ -65,6 +65,8 @@ public interface NewsPaperService {
 	public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId);
 	
+	public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId);
+	
 	public int AddTelephoneClaim(String sessionEmpid, String TotalBasic, String TotalTax, String GrossTotal,
 			String RestrictedAmount, String[] TeleFromDate, String[] TeleToDate, String[] TeleUsersId,
 			String[] TeleBillNo, String[] TeleBillDate, String[] BasicAmount, String[] TaxAmount, String[] TotalAmount,

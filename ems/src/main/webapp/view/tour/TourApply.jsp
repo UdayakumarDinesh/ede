@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalTime"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"  pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.*"%>
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
 </head>
 <body>
 <%
-List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
+/* List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist"); */
 List<Object[]> ModeOfTravelList=(List<Object[]>)request.getAttribute("ModeOfTravelList");
 List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 
@@ -45,14 +46,16 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 		<div class="card-body" >
 				<div class="row">
 					<div class="col-12">
-						<div class="card">					
+						<div class="card">
+							<div class="card-header" style="height: 43px;"> <h4>Tour Application  	<span id="sp" style=" float: right;"></span></h4>
+							</div>					
 							<div class="card-body">
-								<form action="TourApplyAdd.htm" method="post" autocomplete="off" id="requesttourform">
+								<form action="TourApplyAdd.htm" method="post" autocomplete="off" id="TourRequestForm">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								    <div class="form-group">
 								        <div class="row">
 								        	<div class="col-md-3">
-										 		<label>Departure Date:<span class="mandatory">*</span></label>
+										 		<label>Departure Date :<span class="mandatory">*</span></label>
 												<div class=" input-group">
 												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="doD" name="DepartureDate"  required="required"  > 
 												    <label class="input-group-addon btn" for="testdate">						      
@@ -61,7 +64,7 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 										     </div>
 										     
 										     <div class="col-md-3">
-										 		<label>Arrival Date:<span class="mandatory">*</span></label>
+										 		<label>Arrival Date :<span class="mandatory">*</span></label>
 												<div class=" input-group">
 												    <input type="text" class="form-control input-sm " readonly="readonly"  placeholder=""  id="doA" name="ArrivalDate"  required="required"  > 
 												    <label class="input-group-addon btn" for="testdate">						      
@@ -69,63 +72,53 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 												</div>
 										     </div>
 										     <div class="col-md-3">					        	
-									                <label>Place Of Stay:<span class=" mandatory ">*</span></label>
+									                <label>Place Of Stay :<span class=" mandatory ">*</span></label>
 									                <input type="text" value="" name="POS" id="pos" class=" form-control input-sm " maxlength="255"   placeholder="Place Of Stay "  required="required">
 											</div>
 											<div class="col-md-3">					        	
-									                <label>Purpose:<span class=" mandatory ">*</span></label>
+									                <label>Purpose :<span class=" mandatory ">*</span></label>
 									                <input type="text" value="" name="Purpose" id="purpose" class=" form-control input-sm " maxlength="255"   placeholder="Enter Purpose "  required="required">
 											</div>
 									     </div>
 									</div>
 									<div class="form-group">
 								        <div class="row">
-								       		 <div class="col-md-4">					        	
-									                <label>Employees proposed to be deputed:<span class=" mandatory ">*</span></label>
-									                <select class="form-control select2"  name="EmpNo" id="empno" data-container="body" data-live-search="true"  required="required" > 
-											              	<%if(emplist!=null){
-															for(Object[] emp:emplist){ %>
-															<option value="<%=emp[1]%>" ><%=emp[2]%>(<%=emp[3]%>)</option>
-															<%}} %>
-													</select>
-											 </div>
 											 <div class="col-md-5">					        	
-									                <label>Air Travel of non-entitled employee (if applicable): </label>
+									                <label>Air Travel of non-entitled employee (if applicable) : </label>
 									                <input type="text" value="" name="airtraveljusti" id="airtraveljusti" class=" form-control input-sm " maxlength="255"   placeholder="Enter Air Travel Justification  "  required="required">
 											</div>
 											 <div class="col-md-3">
-												 <label >Required Advance Amt: <span class=" mandatory ">*</span></label>
+												 <label >Required Advance Amt : <span class=" mandatory ">*</span></label>
 												  <input  type="text"  name="reqadvamt"  id="reqadvamt" class=" form-control input-sm " placeholder="Enter Amount"   value=""  maxlength="12" required="required">                     	
+											 </div>
+											 <div class="col-md-4">	
+											 		<label>Remarks : </label>
+													<input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" value=""  maxlength="250" required="required">                     	
 											 </div>
 								        </div>
 								    </div>   
 								    <div class="form-group" id="tabledata" ></div>    
 								    <div class="form-group">
-								    	<label> Earliest presence required at destination :</label>  <label style="margin-left: 525px;"> Remarks :</label>
+								    	<label> Earliest presence required at destination :</label>  
 								        <div class="row">
 								        <div class="col-md-1">	</div>
 								       		 <div class="col-md-2">	  	
 													<div class=" input-group">
-														<label>Time:<span class=" mandatory ">*</span></label>&nbsp;&nbsp;&nbsp;
-													     <input  class="form-control" id="earliesttime" placeholder="Start Time"   name="EarliestTime" value=""  maxlength="250" required="required">                     
+														<label>Time :<span class=" mandatory ">*</span></label>&nbsp;&nbsp;&nbsp;
+													     <input  class="form-control" id="earliesttime" placeholder="Start Time"   name="EarliestTime" value="<%=LocalTime.now() %>"  maxlength="250" required="required">                     
 													</div>
 											 </div>
 											  <div class="col-md-3">			
 													<div class=" input-group">
-													<label>Date:<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;        	
+													<label>Date :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;        	
   													<input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="earliestdate" name="EarliestDate"  required="required"  > 
 												    <label class="input-group-addon btn" for="testdate"></label>      													
 												    </div>
 											 </div>
 											  <div class="col-md-3">			
 													<div class=" input-group">
-														<label>Place:<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        	
+														<label>Place :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        	
 													     <input  class=" form-control input-sm " id="earliestplace" placeholder="Place"   name="EarliestPlace" value=""  maxlength="250" required="required">                     
-													</div>
-											 </div>
-											 <div class="col-md-3">			
-													<div class=" input-group">
-													     <input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" value=""  maxlength="250" required="required">                     
 													</div>
 											 </div>
 											 
@@ -151,7 +144,7 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 						         			<input type="text" class="form-control input-sm DepDate" readonly="readonly"  placeholder=""  id="DepDate" name="DepDate"  required="required"  > 
 						         		</td>      						         		 
 						         		<td width="15%">						         		
-						         			<input  class="form-control DepTime" id="time" placeholder="Time"   name="tourtime" value=""  maxlength="250" required="required">                     					         		
+						         			<input  class="form-control DepTime" id="time" placeholder="Time"   name="tourtime" value="<%=LocalTime.now() %>"  maxlength="250" required="required">                     					         		
 										</td>
 						         		<td width="20%">
 						         		 	<select class="form-control test-type multipleSelect selectpicker "  style="width: 100%" data-size="auto" name="modeoftravel"  data-live-search="true" data-container="body" >
@@ -191,10 +184,12 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 	         </div>
 	         
 	         <div align="center">
-		         	<button type="button" class="btn btn-sm submit-btn" name="action" value="submit" onclick="TourApply()">Submit</button>	
+	         		 <button type="button" class="btn btn-sm submit-btn" style="background-color: #417ccd;" id="tour" name="action" value="submit" onclick="TourCheck()">Check Tour</button> 	
 	         </div>
-
-								</form>		 
+	         <div align="center">
+	         	<button type="button" class="btn btn-sm submit-btn" id="submitbtn" name="action" value="submit" onclick="TourApply()">Submit</button>	         	
+	         </div>
+		</form>		 
 							</div>
 						</div>
 					</div>
@@ -218,33 +213,29 @@ function setTooltip()
 
 var EmpCount = 1;
 $("table").on('click','.tbl-row-add-tests' ,function() 
-		{
-			
-		   	var $tr = $('.tr_clone_tests').last('.tr_clone_tests');
-		   	var $clone = $tr.clone();
-		    $tr.after($clone);
-		    $clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
-		    $clone.find('.selectpicker').selectpicker('render'); 
-		    $clone.find('.bootstrap-input').replaceWith(function() { return $('input', this); })  ;  
+{
+	var $tr = $('.tr_clone_tests').last('.tr_clone_tests');
+	var $clone = $tr.clone();
+	$tr.after($clone);
+	$clone.find('.bootstrap-select').replaceWith(function() { return $('select', this); })  ;  
+	$clone.find('.selectpicker').selectpicker('render'); 
+	$clone.find('.bootstrap-input').replaceWith(function() { return $('input', this); })  ;  
 		   			   			   	
-		   	$clone.find(".items").val("").end();  
-		   	DepDate();
-		  	setTooltip();
+	$clone.find(".items").val("").end();  
+	DepDate();
+	setTooltip();
 		  
-		});
+});
 
 
 $("table").on('click','.tbl-row-rem_tests' ,function() {
 	var cl=$('.tr_clone_tests').length;
 	if(cl>1){
-	          
 	   var $tr = $(this).closest('.tr_clone_tests');
 	   var $clone = $tr.remove();
 	   $tr.after($clone);
-	  
-	}
-	  
-	});
+	} 
+});
 
 
 $(function() {
@@ -269,9 +260,8 @@ $(function() {
 			"singleDatePicker" : true,
 			"linkedCalendars" : false,
 			"showCustomRangeLabel" : true,	
-			<%-- <%if(apply!=null&&apply.getDateOfTravel()!=null){%>
-			"startDate" : new Date("<%=apply.getDateOfTravel()%>"),
-			<%}%> --%>
+			"minDate":$("#doD").val(),
+			"maxDate" :$('#doA').val(),
 			"cancelClass" : "btn-default",
 			showDropdowns : true,
 			locale : {
@@ -295,14 +285,12 @@ $(function() {
 		
 			
 	}
-	
-	$('#earliestdate').daterangepicker({
+$('#earliestdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,	
-	<%-- <%if(apply!=null&&apply.getDateOfTravel()!=null){%>
-	"startDate" : new Date("<%=apply.getDateOfTravel()%>"),
-	<%}%> --%>
+	"showCustomRangeLabel" : true,
+	"minDate":$("#doD").val(),
+	"maxDate" :$('#doA').val(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -314,9 +302,6 @@ $('#doD').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,	
-	<%-- <%if(apply!=null&&apply.getDateOfTravel()!=null){%>
-	"startDate" : new Date("<%=apply.getDateOfTravel()%>"),
-	<%}%> --%>
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -329,9 +314,6 @@ $('#doA').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	"minDate" :$('#dos').val(),
-	<%-- <%if(apply!=null&&apply.getEndDateOfTravel()!=null){%>
-	"startDate" :new Date("<%=apply.getEndDateOfTravel()%>"),
-	<%}%> --%>
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {
@@ -357,37 +339,32 @@ $( "#doD" ).change(function() {
 });
 
 
-function getEmpList()
-{
-	var j=0;
-	var empid = $("#empid").val();
-	var emplist = [<%int i=0; for (Object[] obj:emplist) { %> ['<%= obj[1]%>', '<%= obj[2]%>', '<%= obj[3]%>', '<%= obj[4]%>' , '<%= obj[5]%>', '<%= obj[6]%>',' <%= obj[7]%>'     ] <%= i + 1 < emplist.size() ? ",":"" %><% } %>];
-	var table='';
-	   table+='<table class="table meeting" > '
-	   table+='<thead style="height: 0px;"><tr><th style="font-weight: 600;">SN</th><th style="font-weight: 600;">Name</th><th style="font-weight: 600;">EmpNo</th><th style="font-weight: 600;">DOB</th><th style="font-weight: 600;">Level</th><th style="font-weight: 600;">Mobile No</th><th style="font-weight: 600;">Email</th></tr></thead>';
-	   table+='<tbody>';
-	   for(var i=0;i<emplist.length;i++){
-		   if(empid.includes(emplist[i][0])){
-			   table+='<tr>';
-				   table+='<td>'+(++j)+'</td>';
-				   table+='<td>'+emplist[i][1]+'('+emplist[i][2] +')</td>';
-				   table+='<td>'+emplist[i][0]+'</td>';
-				   table+='<td>'+emplist[i][3]+'</td>';
-				   table+='<td>'+emplist[i][4]+'</td>';
-				   table+='<td>'+emplist[i][5]+'</td>';
-				   table+='<td>'+emplist[i][6]+'</td>';
-			   table+='</tr>';
-		   }
-   		}
-   table+='</tbody></table> <hr style="margin-top: -15px;">'
-   if(empid.length>0){
-	   $("#tabledata").html(table);
-   }else{
-	   $("#tabledata").html('');
-   }
-}
-
-
+ $( "#doA" ).change(function() { 
+	$('#earliestdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,	
+		"minDate":$("#doD").val(),
+		"maxDate" :$('#doA').val(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+	$('.DepDate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,	
+		"minDate":$("#doD").val(),
+		"maxDate" :$('#doA').val(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+});
 
 function TourApply(){
 	var placeofstay = $("#pos").val();
@@ -406,7 +383,6 @@ function TourApply(){
 	$("input[name='DepDate']").each(function() {
 		departuredate.push($(this).val());
 	});
-	
 	var modeoftravel =  $(".multipleSelect :selected").map(function(i, el) {
 	    return $(el).val();
 	}).get();
@@ -419,13 +395,14 @@ function TourApply(){
 	    return $(el).val();
 	}).get();
 
-	console.log(earlisttime);
 	if(placeofstay.trim() =='' || placeofstay==null || placeofstay =='null' || placeofstay ==undefined){
 		alert("Enter the Place Of Stay!");
 	}else if (purpose.trim()=='' || purpose==null || purpose =='null' || purpose ==undefined){
 		alert("Enter the Tour purpose!");
 	}else if(reqadvamt.trim() =='' || purpose==null || purpose =='null' || purpose ==undefined){
 		alert("Enter the Required Advance Amount!");
+	}else if(reqadvamt<=0){
+		alert("Advance Amount Can't be Negtive!");
 	}else if(earlisttime.trim() =='00:00' || earlisttime.trim() =='' || earlisttime==null || earlisttime =='null' || earlisttime ==undefined){
 		alert("Enter the Earliest presence time!");
 	}else if(earliestdate.trim() =='' || earliestdate==null || earliestdate =='null' || earliestdate ==undefined){
@@ -441,9 +418,12 @@ function TourApply(){
 	}else if(tocity.includes('0')){
 		alert("Select the  Tocity!");
 	}else{
-		if(confirm("Are you sure to submit?")){
-			document.getElementById("requesttourform").submit();
+		TourCheck();
+		if(confirm("Are you sure to submit?"))
+		{
+			$("#TourRequestForm").submit();
 		}
+		
 	}
 
 }
@@ -466,5 +446,39 @@ function setInputFilter(obj, inputFilter) {
 	  });
 	}
 
+ $("#submitbtn").hide();
+function TourCheck()
+{
+	$("#submitbtn").hide();
+	var departuredate=$("#doD").val();
+	var arrivaldate=$("#doA").val();
+	var advamt = $("#reqadvamt").val();
+	$.ajax({
+		
+		type : "GET",
+		url : "checktour.htm",
+		data : {
+			AdvanceReqAmount    :	advamt,
+			DepartureDate : departuredate,
+			ArrivalDate   :arrivaldate,
+		},
+		datatype : 'json',
+		success : function(result) {
+			console.log(result);
+		 var result = JSON.parse(result);
+		 var sp=document.getElementById("sp");
+			if(result[1]=='Fail'){
+		     sp.innerHTML="<b style='color:red; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
+			}else if(result[1]=='Pass'){
+				 $("#tour").hide();
+				 $("#submitbtn").show();
+				 sp.innerHTML="<b style='color:green; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
+				 
+			}	
+		}
+	});
+	
+	
+} 
 </script>
 </html>

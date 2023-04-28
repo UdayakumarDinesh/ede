@@ -1126,9 +1126,6 @@ function halffull()
 			 $("#submit").show();
 			 sp.innerHTML="<b style='color:green; text-align: center; font-size: 17px;'>"+result[0]+"</b><br><b style='color:orange; text-align: center; font-size: 15px;margin-left:10px;'>No Of Days: "+result[2]+"</b>";
 		}
-		
-		
-			
 		}
 	});
  }

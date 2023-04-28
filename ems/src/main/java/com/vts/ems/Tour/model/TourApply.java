@@ -2,6 +2,7 @@ package com.vts.ems.Tour.model;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@Entity
 @Table(name = "tour_apply")
 public class TourApply {
 
@@ -22,7 +24,6 @@ public class TourApply {
 	private Long TourApplyId;
 	private String TourNo;
 	private String EmpNo;
-	private String ApplyEmpNo;
 	private Long DivisionId;
 	private String Purpose;
 	private Date IssueDate;

@@ -7,7 +7,9 @@
 <!DOCTYPE html>
 <html>
  <% 
+ 
  List<Object[]> itinventoryqty=( List<Object[]>)request.getAttribute("inventoryqty");
+ 
  %>
 <head>
 <meta charset="ISO-8859-1">
@@ -298,15 +300,17 @@ tr.noBorder td {
 					</table>
 					</div>
 					
-					<%if (inventoryqty[33].toString().equalsIgnoreCase("A")){ %>
+					<% if (inventoryqty[33].toString().equalsIgnoreCase("A")){ %>
 					      <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 400; font-size: 16px;">Forwarded By:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Forwarded On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[36].toString().substring(0, 10)) +" "+inventoryqty[36].toString().substring(11,19) %></span></span><br>
 						 </div>
+						 
 						 <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
-						        <span style="font-weight: 400; font-size: 16px;">Approved By:&nbsp;<span class="text-blue" ><%=inventoryqty[37]%> </span></span></span><br>
+						        <span style="font-weight: 400; font-size: 16px;">Approved By:&nbsp;<span class="text-blue" ><%=inventoryqty[37]%> </span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[32].toString().substring(0, 10)) +" "+inventoryqty[32].toString().substring(11,19) %></span></span><br>
-						 </div>
+						 </div> 
+						
 					<%} %>
 					       <div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>
@@ -408,23 +412,27 @@ tr.noBorder td {
 							</table>
 						
 					</div>
-					<%if(inventoryconfigure.size()>0) {%>
 					
-					 
-					      <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+					<% if(inventoryqty[33].toString().equalsIgnoreCase("A") && inventoryconfigure.size()>0) {%>
+				         <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 400; font-size: 16px;">Forwarded By:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Forwarded On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[36].toString().substring(0, 10)) +" "+inventoryqty[36].toString().substring(11,19) %></span></span><br>
 						 </div>
-						 <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
+						 
+						  <div style="margin-left:0px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 400; font-size: 16px;">Approved By:&nbsp;<span class="text-blue" ><%=inventoryqty[37]%> </span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(inventoryqty[32].toString().substring(0, 10)) +" "+inventoryqty[32].toString().substring(11,19) %></span></span><br>
 						 </div>
-				
+						 
+					<%} %>	 
+						 
+				<% if(inventoryconfigure.size()>0 ) { %>	 
 					<div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>
 								<span style="font-weight: 600; font-size: 18px; ">Name:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
 								<span style="font-weight: 600; font-size: 18px;">EmpNo:&nbsp;<span class="text-blue" ><%=inventoryqty[2]%></span></span>
 				 </div>
+				 
 				 <%} %>
 					<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 			    </div>

@@ -1114,7 +1114,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			return (result);
 		}
 		
-		private static final String GETTELEPHONEUSERPRINTSINGLEDATA = "SELECT em.EmpName,a.SBIACCNO,a.GPFNO,b.designation,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.SBIACCNO AS 'OTHER_ACC_NO' FROM employee_details a, employee_desig b, pis_tele c, employee em WHERE em.desigid=b.desigid AND em.empno=a.empno  AND  a.EMPno=c.Empid AND TeleForwardId=:TeleForwardId ;";
+		private static final String GETTELEPHONEUSERPRINTSINGLEDATA = "SELECT em.EmpName,a.SBIACCNO,a.GPFNO,b.designation,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.SBIACCNO AS 'OTHER_ACC_NO', em.EmpNo, d.PayLevel FROM employee_details a, employee_desig b, pis_tele c, employee em, pis_pay_level d WHERE em.desigid=b.desigid AND em.empno=a.empno  AND  a.EMPno=c.Empid AND TeleForwardId=:TeleForwardId AND a.PayLevelId=d.PayLevelId";
 		@Override
 		public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId) 
 		{
@@ -1132,11 +1132,34 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			return (TelephoneUserPrintSingleData);
 
 		}
-
-
-		private static final String GETTELEPHONEUSERPRINTMULTIDATA =  "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.TotalAmount,b.TeleDId,b.TeleBillNo,b.TeleBillDate,c.DeviceNo,a.TeleForwardId from pis_tele a ,pis_tele_d b,pis_tele_users c WHERE a.TeleId=b.TeleId AND b.TeleUsersId=c.TeleUsersId AND a.TeleForwardId=:TeleForwardId";
+	
+		// me added
+		
+		 
+		  private static final String GETTELEPHONEUSERPRINTSINGLEDATABYMONTH = "SELECT em.EmpName,a.SBIACCNO,a.GPFNO,b.designation,c.TeleId,c.ClaimMonth,c.ClaimYear,c.GrossTotal,c.RestrictedAmt,c.PayableAmount,c.TeleForwardId,c.IsBroadBand,a.SBIACCNO AS 'OTHER_ACC_NO', em.EmpNo, d.PayLevel,d.PayGrade, (SELECT member_name FROM pis_emp_family_details e WHERE e.empid=em.empid  AND relation_id IN (5,8)) AS 'member name' FROM employee_details a, employee_desig b, pis_tele c, employee em, pis_pay_level d WHERE em.desigid=b.desigid AND em.empno=a.empno  AND  a.EMPno=c.Empid AND TeleForwardId=:TeleForwardId AND TeleId=:teleId AND a.PayLevelId=d.PayLevelId ";
 		@Override
-		public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId) 
+		public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId) 
+		{
+			List<Object[]> TelephoneUserPrintSingleData = new ArrayList<>();
+			try {
+
+				Query q = manager.createNativeQuery(GETTELEPHONEUSERPRINTSINGLEDATABYMONTH);
+				q.setParameter("TeleForwardId", Integer.parseInt(TeleForwardId));
+				q.setParameter("teleId", Integer.parseInt(teleId));
+				TelephoneUserPrintSingleData = (List<Object[]>) q.getResultList();
+
+			} catch (Exception e) {
+				logger.error(new Date() +"Inside DAO getTelephoneUserPrintSingleData "+ e);
+				e.printStackTrace();
+			}
+			return (TelephoneUserPrintSingleData);
+
+		}
+
+
+		private static final String GETTELEPHONEUSERPRINTMULTIDATA =  "SELECT a.TeleId,b.TeleFromDate,b.TeleToDate,b.TotalAmount,b.TeleDId,b.TeleBillNo,b.TeleBillDate,c.DeviceNo,a.TeleForwardId, d.DeviceName, b.TaxAmount from pis_tele a ,pis_tele_d b,pis_tele_users c, pis_tele_device d WHERE a.TeleId=b.TeleId AND b.TeleUsersId=c.TeleUsersId AND a.TeleForwardId=:TeleForwardId AND c.DeviceId=d.DeviceId";
+		@Override
+		public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId) 											
 		{
 			List<Object[]> TelephoneUserPrintMultiData = new ArrayList<>();
 			try {

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Claim Status</title>
+<title>Intimation Status</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 
 <style type="text/css">

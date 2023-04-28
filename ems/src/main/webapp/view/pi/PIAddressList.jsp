@@ -47,9 +47,8 @@
 	
 	Object[] DGMEmpName = (Object[])request.getAttribute("DGMEmpName");
 	Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
-	Employee emp=(Employee)request.getAttribute("Employee");
+	Employee emp=(Employee)request.getAttribute("EmployeeD");
 %>
-
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
@@ -94,7 +93,6 @@
 									
 					    <tr align="center">
 					       <th>Select</th>
-					       <th>Employee</th>
 					       <th>Per.Address</th>
 					       <th>Per.From</th>
 					       <th>Per.To</th>
@@ -109,24 +107,38 @@
 					   		for(Object[] obj : perAddress){ %>
 							<tr align="center">
 							<td style="text-align: center;width:4%;">
-							<%if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("N")){ %>
+							<%if(obj[15].toString().equalsIgnoreCase("INI") ){ %>
 							<input type="radio" name="peraddressid" value="<%=obj[1]%>"> <%}else{ %>
 							<input type="radio" name="peraddressid" value="<%=obj[1]%>" hidden="hidden">
 							<%} %>							
-							</td>		
-							<td style="text-align: left;width:13%;"><%=obj[9] %> </td>				    
+							</td>					    
 						    <td style="text-align: left;"><%=obj[2]%> , <%=obj[7]%> , <%=obj[6]%> - <%=obj[8]%></td>
-							<td style="width:8%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
-							<td style="width:8%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>																								
+							<td style="width:10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
+							<td style="width:10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>																								
 							<td style="width:8%;"> <%if(obj[5]!=null){ %> <%=obj[5] %> <%}else{ %>--<%} %> </td>	
-							<td>
-							<%if(obj[15]!=null){%>
-							 <button type="button" class="btn btn-sm btn-link w-100"
-									 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[17] %>; font-weight: 600;">  &nbsp; <%=obj[16] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
-							<%} %>
+							<td style="width:16%;">
+							<%if(obj[12]!=null){%>
+								  
+								 	<%if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("A") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="PerAddrTransactionStatus.htm" value="<%=obj[1] %>" name="peraddressid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+								    	
+							    	<%}else if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="PerAddrTransactionStatus.htm" value="<%=obj[1] %>" name="peraddressid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    		
+							    	<%}else{ %>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="PerAddrTransactionStatus.htm" value="<%=obj[1] %>" name="peraddressid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[13] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=obj[12] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    	<%} %>  
+								 
+								<%} %>
 							</td>
 							
-							<td style="text-align: left;width:8%;">						
+							<td style="text-align: left;width:9%;">						
 							<button type="submit" class="btn btn-sm view-icon" formaction="PersonalIntimation.htm" name="peraddressId" value="<%=obj[1] %>" data-toggle="tooltip" data-placement="top" title="Form For Permanent Address Change" style="font-weight: 600;" >
 									<i class="fa-solid fa-eye"></i>
 							</button>
@@ -165,7 +177,6 @@
 					   <thead>
 						    <tr align="center">
 						        <th>Select</th>
-						        <th>Employee</th>
 								<th>Res.Address</th>
 								<th>Res.From</th>
 								<th>Res.To</th>
@@ -178,34 +189,39 @@
 					   		<% for(Object[] obj : resAddress){ %>
 							<tr align="center">
 							<td style="text-align: center;width:4%;">
-								<%if(obj[22].toString().equalsIgnoreCase("INI") ){ %>
+								<%if(obj[18].toString().equalsIgnoreCase("INI") ){ %>
 									<input type="radio" name="resaddressid" value="<%=obj[1]%>"> <%}else{ %>
 									<input type="radio" name="resaddressid" value="<%=obj[1]%>" hidden="hidden">
 								<%} %>
-							</td>									
-							<td style="text-align: left;width:13%;"><%=obj[12] %> </td>				    
+							</td>												    
 						    <td style="text-align: left;"><%=obj[2]%> , <%=obj[10]%> , <%=obj[9]%> - <%=obj[11]%></td>
-							<td style="width:8%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
-							<td style="width:8%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>							
+							<td style="width:10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
+							<td style="width:10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>							
 						    <td style="width:8%;"><%if(obj[5]!=null){ %> <%=obj[5] %> <%}else{ %>--<%} %> </td>																		
-							<td>							
-								<%if(obj[19]!=null){%>
+							
+							<td style="width:16%;">
+													
+								<%if(obj[15]!=null){%>
 								  
 								 	<%if(obj[14]!=null && obj[14].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ResAddrTransactionStatus.htm" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
+							    	<%}else if(obj[14]!=null && obj[14].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ResAddrTransactionStatus.htm" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
 							    		
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ResAddrTransactionStatus.htm" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[20] %>; font-weight: 600;" formtarget="_blank">
-								    		&nbsp; <%=obj[19] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ResAddrTransactionStatus.htm" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[16] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=obj[15] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
 								 
 								<%} %>
 							</td>
 							
-							<td style="text-align: left;width:8%;">
+							<td style="text-align: left;width:9%;">
 								<button type="submit" class="btn btn-sm view-icon" formaction="PersonalIntimation.htm" name="resaddressId" value="<%=obj[1] %>" data-toggle="tooltip" data-placement="top" title="Form For Residential Address Change" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
@@ -311,7 +327,7 @@ function EditRes(myfrm) {
 
 	var fields = $("input[name='resaddressid']").serializeArray();
 	if (fields.length === 0) {
-		alert("Please Select Atleast One Employee");
+		alert("Please Select Atleast One Residential Address");
 
 		event.preventDefault();
 		return false;
@@ -326,7 +342,7 @@ function EditPer(myfrm) {
 	var fieldsperadd = $("input[name='peraddressid']").serializeArray();
  
 	if (fieldsperadd.length === 0) {
-		alert("Please Select Atleast One Employee");
+		alert("Please Select Atleast One Permanent Address");
 
 		event.preventDefault();
 		return false;

@@ -96,7 +96,7 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
 	                                	 <span class="label label-warning">Sent Back</span>
 	                                <%}else if( Integer.parseInt(ls[9].toString())!=0 && Integer.parseInt(ls[7].toString())==0 && ls[8]==null ){ %>
 	                                <span class="label label-warning">Forwarded</span>
-	                                <% }else if((Integer.parseInt(ls[9].toString()))!=0&&(Integer.parseInt(ls[7].toString()))!=0&&ls[8]!=null){%>
+	                                <% }else if((Integer.parseInt(ls[9].toString()))!=0 && (Integer.parseInt(ls[7].toString()))!=0 && ls[8]!=null){%>
 	                                <span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span>
 	                                <%}%>
                                 </td>
@@ -116,8 +116,8 @@ List<Object[]> Sendbackdata=(List<Object[]>)request.getAttribute("Sendbackdata")
 					       <% }%>
 				       </div> 
 				       
-				       	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div>
-						<div  class="text-center" style="color:black;text-align: center; font-size:15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
+				       	<!-- <div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>*Minimum Three month Claim Is Required To Forward For Approval</b> </marquee></div> -->
+						<div  class="text-center" style="color:black;text-align: center; font-size:15px; margin-top: 15px;"><b>*Note :-</b>Please Apply Between 1st To 21st Of The Month!</div>
 				       
 				      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				</form>
@@ -308,7 +308,8 @@ function check(){
 	var today = new Date();
     var day = today.getDate();
  
-     if(day>=21 && day<=31){
+    /*  if(day>=21 && day<=31){ */
+    	 if(false){
     	
     	alert("You Can't Apply For Telehpone Reimbursement from 21st to 31st of the month!");
     }else{
