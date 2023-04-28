@@ -50,5 +50,6 @@ public interface PIDao {
 //	public List<Object[]> PerAddressApprovalsList(String EmpNo, String LoginType) throws Exception;
 	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
 	public List<Object[]> PerAddressTransactionList(String addressperid) throws Exception;
+//	public long ResAddrUpdate(String empid) throws Exception;
 
 }

@@ -201,11 +201,12 @@ public class PIController {
 	        	   peraddress.setCreatedDate(sdtf.format(new Date()));
 	        	  long result  =  pisservice.AddPerAddress(peraddress); 
 	        	 
-                  Object[] toAddressId = service.PerToAddressId(EmpId);
-		        	
-	     	    	if(toAddressId!=null) {    	    		    	    		
-	     	    	long count = service.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromPer) , toAddressId[0].toString());
-	     	    	}
+//	        	  Object[] toAddressId = service.PerToAddressId(EmpId);
+//		        	
+//	     	    	if(toAddressId!=null) {    	    		    	    		
+//	     	    	long count = service.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromPer) , toAddressId[0].toString());
+//	     	    	}
+	        	  
 	        	    if(result>0) {
 	        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
 	        		} else {
@@ -450,11 +451,12 @@ public class PIController {
 					resadd.setCreatedDate(sdtf.format(new Date()));
 	
 		        	long result  =  pisservice.AddResAddress(resadd); 
-		        	Object[] toAddressId = service.ResToAddressId(EmpId);
 		        	
-	     	    	if(toAddressId!=null) {    	    		    	    		
-	     	    	long count = service.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromRes) , toAddressId[0].toString());
-	     	    	}
+//		        	Object[] toAddressId = service.ResToAddressId(EmpId);
+//		        	
+//	     	    	if(toAddressId!=null) {    	    		    	    		
+//	     	    	long count = service.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromRes) , toAddressId[0].toString());
+//	     	    	}
 		        	    if(result>0) {
 		        	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
 		        		} else {
@@ -681,29 +683,6 @@ public class PIController {
 		}
 		
 
-		@RequestMapping(value = "PIHomeTown.htm")
-		public String PIHomeTown(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-		{
-			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-	    	String LoginType=(String)ses.getAttribute("LoginType");
-			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() +"Inside PIHomeTown.htm"+Username);		
-			try {		
-				ses.setAttribute("formmoduleid", formmoduleid);			
-				ses.setAttribute("SidebarActive","PIHomeTown_htm");	
-				ses.setAttribute("LoginType", LoginType);
-				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-				return "pi/HomeTown";
-			}catch (Exception e) {
-				logger.error(new Date() +" Inside PIHomeTown.htm"+Username, e);
-				e.printStackTrace();	
-				return "static/Error";
-			}
-			
-		}	
-		
-		
-
 		@RequestMapping(value = "AddressApprovals.htm")
 		public String AddressApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
@@ -745,17 +724,39 @@ public class PIController {
 				return "static/Error";
 			}
 		}
-		@RequestMapping(value = "PIMobileNumber.htm")
-		public String PIMobileNumber(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		
+//		@RequestMapping(value = "#")
+//		public String PIHomeTown(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+//		{
+//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+//	    	String LoginType=(String)ses.getAttribute("LoginType");
+//			String Username = (String) ses.getAttribute("Username");
+//			logger.info(new Date() +"Inside PIHomeTown.htm"+Username);		
+//			try {		
+//				ses.setAttribute("formmoduleid", formmoduleid);			
+//				ses.setAttribute("SidebarActive","PIHomeTown_htm");	
+//				ses.setAttribute("LoginType", LoginType);
+//				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+//				return "pi/HomeTown";
+//			}catch (Exception e) {
+//				logger.error(new Date() +" Inside PIHomeTown.htm"+Username, e);
+//				e.printStackTrace();	
+//				return "static/Error";
+//			}
+//			
+//		}	
+		
+		@RequestMapping(value = "PIHomeTownMobile.htm")
+		public String PIHomeTown(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 	    	String LoginType=(String)ses.getAttribute("LoginType");
 			String Username = (String) ses.getAttribute("Username");
 			String EmpNo = (String) ses.getAttribute("EmpNo");
-			logger.info(new Date() +"Inside PIMobileNumber.htm"+Username);		
+			logger.info(new Date() +"Inside PIHomeTownMobile.htm"+Username);		
 			try {		
 				ses.setAttribute("formmoduleid", formmoduleid);			
-				ses.setAttribute("SidebarActive","PersonalIntimation_htm");
+				ses.setAttribute("SidebarActive","PIHomeTownMobile_htm");
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 								
@@ -767,12 +768,69 @@ public class PIController {
 				}
 				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 													
-				return "pi/PIMobileList";
+				return "pi/HomeTownAndMobile";
 			}catch (Exception e) {
-				logger.error(new Date() +" Inside PIMobileNumber.htm"+Username, e);
+				logger.error(new Date() +" Inside PIHomeTownMobile.htm"+Username, e);
 				e.printStackTrace();	
 				return "static/Error";
 			}
 			
-		}	
+		}
+		
+		 @RequestMapping(value ="HomeTownAddEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		 public String HomeTownAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside HomeTownAddEdit.htm "+Username);
+		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		       try {
+
+		    	   String Action = (String) req.getParameter("Action");
+		    	
+		    	   	if("EDITPerAddress".equalsIgnoreCase(Action)) {
+		    	   	
+		    	   		AddressPer peraddress = service.getPerAddressData(req.getParameter("peraddressid"));
+		    	   		
+		    	   		List<Object[]> States = pisservice.getStates();
+		    	   		 req.setAttribute("peraddress", peraddress);
+		 	   		     req.setAttribute("States", States);
+		    	   	      return "pi/PerAddressAddEdit";
+		           }else{
+		    	   		List<Object[]> States = pisservice.getStates();
+		    	   		req.setAttribute("States", States);
+		    	   	 return "pi/HomeTownAddEdit";
+		    	   	}
+		    	   	
+			    } catch (Exception e) {
+			    	 logger.error(new Date() +"Inside HomeTownAddEdit.htm "+Username ,e);
+			 	    e.printStackTrace();
+			 	    return "static/Error";
+			    }
+		      
+		}
+		 @RequestMapping(value ="MobileNumberAddEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		 public String MobileNumberAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside MobileNumberAddEdit.htm "+Username);
+		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		       try {
+
+		    	   String Action = (String) req.getParameter("Action");
+		    	
+		    	   	if("EDITPerAddress".equalsIgnoreCase(Action)) {
+		    	   		    	   		
+		    	   		
+		    	   	      return "pi/MobileNumberAddEdit";
+		           }else{
+
+		    	   	 return "pi/MobileNumberAddEdit";
+		    	   	}
+		    	   	
+			    } catch (Exception e) {
+			    	 logger.error(new Date() +"Inside MobileNumberAddEdit.htm "+Username ,e);
+			 	    e.printStackTrace();
+			 	    return "static/Error";
+			    }
+		      
+		}
+	  	 
 }

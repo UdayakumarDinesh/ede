@@ -40,10 +40,10 @@ public class AddressRes implements Serializable{
 	private String city;
 	private String pin;
 	private String ResAdStatus;
-	private String SubmittedOn;
-	private String VerifiedOn;
-	private String ReceivedOn;
-	private String ApprovedOn;
+//	private String SubmittedOn;
+//	private String VerifiedOn;
+//	private String ReceivedOn;
+//	private String ApprovedOn;
 	private String Remarks;
 	private String PisStatusCode;
 	private String PisStatusCodeNext;

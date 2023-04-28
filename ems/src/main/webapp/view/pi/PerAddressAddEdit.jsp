@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Add Permanent Address </title>
+<title>Permanent Address </title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
@@ -192,13 +192,13 @@ function CommentsModel()
 		}else if(Mobile==null || Mobile=='' || Mobile=="null" ){
 			alert('Enter the Mobile Number!');
 			return false;
-		}else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
+		}/*else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
 			alert('Enter the Alt Mobile Number!');
 			return false;
 		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
 			alert('Enter the LandLine Number!');
 			return false;
-		}/* else{
+		} else{
 			$('#myModal').modal('show');
 		} */else{
 			$('#myform').submit();

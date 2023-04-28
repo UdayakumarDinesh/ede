@@ -16,6 +16,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
+import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -28,7 +29,8 @@ public class PIServiceImp implements PIService{
 	@Autowired
 	PIDao dao;
 	
-
+	@Autowired
+	private PisDao pisdao;
 	
 	private static final Logger logger = LogManager.getLogger(PIService.class);
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
@@ -103,6 +105,14 @@ public class PIServiceImp implements PIService{
 					address.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
+						pisdao.ResAddrUpdate(address.getEmpid());
+						Object[] resToAddressId = dao.ResToAddressId(address.getEmpid());
+						String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_res_addr().toString());
+						if(resToAddressId!=null) {						
+							dao.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,resToAddressId[0].toString());								
+
+						}
+						
 						address.setPisStatusCode("VPA");
 						address.setPisStatusCodeNext("VPA");
 						address.setIsActive(1);
@@ -119,7 +129,15 @@ public class PIServiceImp implements PIService{
 				}
 				//approving	flow 
 				else
-				{
+				{	
+					pisdao.ResAddrUpdate(address.getEmpid());
+					Object[] resToAddressId = dao.ResToAddressId(address.getEmpid());
+					String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_res_addr().toString());
+					if(resToAddressId!=null) {						
+						dao.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,resToAddressId[0].toString());								
+
+					}
+					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
 						address.setPisStatusCodeNext("VPA");
@@ -325,12 +343,25 @@ public class PIServiceImp implements PIService{
 			
 			if(action.equalsIgnoreCase("A"))
 			{
+//				if( (pisStatusCode.equalsIgnoreCase("VDG") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) || 
+//				     (pisStatusCode.equalsIgnoreCase("FWD") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) ){
+//					
+//				}
 				// first time forwarding
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
+						pisdao.PerAddrUpdate(address.getEmpid());
+	                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
+	                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_per_addr().toString());
+	                    
+	                    if(perToAddressId!=null) {
+	                    
+	    					dao.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,perToAddressId[0].toString() );
+	                    }
+	              
 						address.setPisStatusCode("VPA");
 						address.setPisStatusCodeNext("VPA");
 						address.setIsActive(1);
@@ -348,6 +379,15 @@ public class PIServiceImp implements PIService{
 				//approving	flow 
 				else
 				{
+					pisdao.PerAddrUpdate(address.getEmpid());
+                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
+                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_per_addr().toString());
+                    
+                    if(perToAddressId!=null) {
+                    
+    					dao.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,perToAddressId[0].toString() );
+                    }
+                    			    					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
 						address.setPisStatusCodeNext("VPA");

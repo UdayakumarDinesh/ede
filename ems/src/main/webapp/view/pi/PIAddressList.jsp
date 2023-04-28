@@ -208,7 +208,7 @@
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%}else if(obj[14]!=null && obj[14].toString().equalsIgnoreCase("E") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="#" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ResAddrTransactionStatus.htm" value="<%=obj[1] %>" name="addressresid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
@@ -327,7 +327,7 @@ function EditRes(myfrm) {
 
 	var fields = $("input[name='resaddressid']").serializeArray();
 	if (fields.length === 0) {
-		alert("Please Select Atleast One Employee");
+		alert("Please Select Atleast One Residential Address");
 
 		event.preventDefault();
 		return false;
@@ -342,7 +342,7 @@ function EditPer(myfrm) {
 	var fieldsperadd = $("input[name='peraddressid']").serializeArray();
  
 	if (fieldsperadd.length === 0) {
-		alert("Please Select Atleast One Employee");
+		alert("Please Select Atleast One Permanent Address");
 
 		event.preventDefault();
 		return false;

@@ -49,7 +49,7 @@ public class PIDaoImp implements PIDao{
 			query.setParameter("EmpId", EmpId);
 			empData =(List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			logger.error(new Date() + "Inside DAO EmployeeAddressDetails "+e);
+			logger.error(new Date() + "Inside DAO ResAddressDetails "+e);
 	
 		}
 		return empData;
@@ -117,7 +117,7 @@ public class PIDaoImp implements PIDao{
 		return addres;
 	}
 	
-	private static final String TOADDRESSDATEID = "SELECT address_res_id,empid FROM pis_address_res WHERE empid=:EmpId AND to_res_addr IS NULL AND ResAdStatus='A'"; 
+	private static final String TOADDRESSDATEID = "SELECT address_res_id,empid FROM pis_address_res WHERE empid=:EmpId AND to_res_addr IS NULL AND ResAdStatus='E' "; 
 	@Override
 	public Object[] ResToAddressId(String EmpId)throws Exception{
 		Object[] IdData=null;
@@ -137,6 +137,7 @@ public class PIDaoImp implements PIDao{
 	@Override
 	public long ResUpdatetoDate(Date toDate,String resAddressId) throws Exception{
 		try {
+	
 			Query query = manager.createNativeQuery(UPDATERESTODATE);
 			query.setParameter("to_res_addr", toDate);
 			query.setParameter("address_res_id", resAddressId);
@@ -457,7 +458,7 @@ public class PIDaoImp implements PIDao{
 		}
 		catch (Exception e) 
 		{
-			logger.error(new Date()  + "Inside DAO GetDGMEmpNo " + e);
+			logger.error(new Date()  + "Inside DAO GetPandAAdminEmpNos " + e);
 			e.printStackTrace();
 			return new ArrayList<String>();
 		}
@@ -530,7 +531,7 @@ public class PIDaoImp implements PIDao{
 		}
 		return intimate;
 	}
-	private static final String PERTOADDRESSDATEID = "SELECT address_per_id,empid FROM pis_address_per WHERE empid=:EmpId AND to_per_addr IS NULL AND PerAdStatus='A' "; 
+	private static final String PERTOADDRESSDATEID = "SELECT address_per_id,empid FROM pis_address_per WHERE empid=:EmpId AND to_per_addr IS NULL AND PerAdStatus='E' "; 
 	@Override
 	public Object[] PerToAddressId(String EmpId) throws Exception {
 		
