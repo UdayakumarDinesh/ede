@@ -58,6 +58,7 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
 import com.vts.ems.pis.model.AddressNextKin;
@@ -113,11 +114,13 @@ public class PisController {
 	@Autowired
 	AdminService adminservice;
 	
+	@Autowired
+	private PIService piservice;
+	
 	@Value("${EMSFilesPath}")
 	private String uploadpath;
 	                                                   
 	private static final String profileformmoduleid="3";
-	private static final String adminformmoduleid="4";
 	
 	
 	@RequestMapping(value = "PisUserDashboard.htm", method = RequestMethod.GET)
@@ -170,7 +173,7 @@ public class PisController {
 			req.setAttribute("dashboard", chssdashboard);
 			ses.setAttribute("SidebarActive","EmployeeDetails_htm");
 			
-			String empid=req.getParameter("empid");
+			String empid = ((Long) ses.getAttribute("EmpId")).toString();
 			if(empid==null)  {
 				Map md=model.asMap();
 				empid=(String)md.get("empid");
@@ -191,7 +194,6 @@ public class PisController {
             String basevalue=null;
             if(empdata!=null && empdata[3]!=null) {
             	basevalue=service.getimage(empdata[3].toString());
-
             }        		
             
 			req.setAttribute("empid", empid);
@@ -203,7 +205,6 @@ public class PisController {
 			req.setAttribute("familydetails", familydetails);
             req.setAttribute("basevalue", basevalue);
  
-            
 			return "pis/EmpBasicDetails";
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside EmployeeDetails.htm "+Username, e);
@@ -211,24 +212,27 @@ public class PisController {
 			return "static/Error";
 		}
 	}	
+	
+	
 	@RequestMapping(value="FamilyDetailsUpdate.htm",method=RequestMethod.POST)
 	public String EmpFamilyDetailsUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)
-	{String Username = (String) ses.getAttribute("Username");
-	logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);
-	try {
-	String Dob=req.getParameter("DOB");
-	String occupation = req.getParameter("Occupation");
-	String income = req.getParameter("Income");
-	
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside EmployeeAdd.htm "+Username);
+		try {
+		String Dob=req.getParameter("DOB");
+		String occupation = req.getParameter("Occupation");
+		String income = req.getParameter("Income");
 		
-	} catch (Exception e) {
-		logger.error(new Date() +" Inside EmployeeDetails.htm "+Username, e);
-		e.printStackTrace();
-		return "static error";
-	}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside FamilyDetailsUpdate.htm "+Username, e);
+			e.printStackTrace();
+			return "static error";
+		}
 		return null;
-		
 	}
+	
 	@RequestMapping(value = "EmployeeAdd.htm")
 	public String EmployeeAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) 
 	{
@@ -1241,17 +1245,27 @@ public class PisController {
     	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
+    	   peraddress.setPerAdStatus("A");
+    	   peraddress.setPisStatusCode("VPA");
+    	   peraddress.setPisStatusCodeNext("VPA");
     	   
     	   if("ADD".equalsIgnoreCase(Action)) {
     		   peraddress.setIsActive(1);
     		   peraddress.setCreatedBy(Username);
         	   peraddress.setCreatedDate(sdf.format(new Date()));
-        	  long result  =  service.AddPerAddress(peraddress); 
-        	 
+        	  
+        	   Object[] toAddressId = piservice.PerToAddressId(empid);
+        	   if(toAddressId!=null) {    	    		    	    		
+	     	    	long count = piservice.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromPer) , toAddressId[0].toString());
+	     	    	}
+        	   
+        	   service.PerAddrUpdate(empid);
+        	   long result  =  service.AddPerAddress(peraddress); 
+        	   
         	    if(result>0) {
-        	    	 redir.addAttribute("result", "Parmanent Address Add Successfull");	
+        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
         		} else {
-        			 redir.addAttribute("resultfail", "Parmanent Address Add Unsuccessful");	
+        			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
         	    }
         	    redir.addFlashAttribute("Employee", empid);
     	   }
@@ -1298,7 +1312,7 @@ public class PisController {
     	   peraddress.setCity(city);  	  
     	   peraddress.setEmpid(empid);
     	   peraddress.setPer_addr(perAdd);
-    	   peraddress.setPerAdStatus("N");
+    
     	   
     	 if("EDIT".equalsIgnoreCase(Action)) {
     		   String addressid = (String)req.getParameter("addressId");
@@ -1453,15 +1467,25 @@ public class PisController {
 			resadd.setState(state);
 			resadd.setCity(city);
 			resadd.setPin(pin);
-			resadd.setResAdStatus("N");
-			
+			resadd.setResAdStatus("A");
+		    resadd.setPisStatusCode("VPA");
+		    resadd.setPisStatusCodeNext("VPA");
+			           
 		if("ADD".equalsIgnoreCase(Action)) {
 			resadd.setIsActive(1);
 			resadd.setCreatedBy(Username);
 			resadd.setCreatedDate(sdf.format(new Date()));
-        	  long result  =  service.AddResAddress(resadd); 
-        	 
+			
+			service.ResAddrUpdate(empid);
+			
+            long result  =  service.AddResAddress(resadd); 
+            
+            Object[] toAddressId = piservice.ResToAddressId(empid);
+            if(toAddressId!=null) {    	    		    	    		
+     	    	long count = piservice.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromRes) , toAddressId[0].toString());
+     	    	}
         	    if(result>0) {
+        	    	
         	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
@@ -2198,7 +2222,7 @@ public class PisController {
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
 				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
-				ses.setAttribute("formmoduleid", "4");
+				ses.setAttribute("formmoduleid", "5");
 				ses.setAttribute("SidebarActive",controllerMapping.replace(".", "_"));
 				
 				String empid = ((Long) ses.getAttribute("EmpId")).toString();	
@@ -4563,7 +4587,7 @@ public class PisController {
 				String logintype = (String)ses.getAttribute("LoginType");
 				List<Object[]> admindashboard = adminservice.HeaderSchedulesList("5" ,logintype); 
 			
-				ses.setAttribute("formmoduleid", "7"); 
+				ses.setAttribute("formmoduleid", "3"); 
 				ses.setAttribute("SidebarActive", "PIS_htm");
 				req.setAttribute("dashboard", admindashboard);
 				Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 

@@ -1,3 +1,7 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
@@ -44,9 +48,16 @@ input:focus {
 String LabLogo = (String)request.getAttribute("LabLogo");
 String LoginType = (String)session.getAttribute("LoginType");
 Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
-/* Object[] PerFormData = (Object[])request.getAttribute("PerFormData"); */
+List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
+SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 Date date = new Date();
+
+String isApproval = (String)request.getAttribute("isApproval");
+
+List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 %>
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
@@ -86,12 +97,21 @@ Date date = new Date();
 						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
 						 </tr>					
 						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
-						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; <%=rdf.format(date) %></td>	 </tr>	
+						 <tr> 
+						  	<td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
+							  <%for(Object[] apprInfo : ApprovalEmpData){ %>
+							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
+					   			<%break;
+					   			} %>
+						   		<%} %>
+					   		</td>	 
+					   	</tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:10%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:12%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
@@ -103,36 +123,85 @@ Date date = new Date();
 						 						       
 					    </tbody>
 					</table>	
-					<div style="width:100%;text-align: right;margin-left:-5%;">	<%if(ResFormData!=null && ResFormData[11]!=null){ %><%=ResFormData[11] %> <%} %>	</div>				
-					<div style="width:100%;text-align: right;">	Signature of Employee </div>									     
+					<div style="width:100%;text-align: right;margin-left:-5%;">	
+						Signature of Employee<br>
+						<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> 
+				   		
+				   		
+					</div>				
 				   <hr style="border:solid 1px;">
 				   
 				  	<div style="width: 100%;border: 0;text-align: center;"> <b style="font-size:18px;text-decoration:underline">FOR ADMINISTRATION USE</b> </div>
 				    <br>
-				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+				   <!-- <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						Intimation of change of address received on  &nbsp;<input type="text" value="" style="width:10%;text-align:center;" id="data-input" disabled>&nbsp;. The same has been updated in the personal records.																		
+				   </div> -->
+				   
+				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+						Intimation of change of address received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
+				   				
+				   			<%
+				   				break;
+				   			} %>
+				   		<%} %> . The same has been updated in<br>  the personal records.																		
 				   </div>
 				   <br><br>
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	
-				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A </div>
+				   <div style="border:0px;width: 100%; text-align: right;"> 
+				   		Incharge-P&A
+				   		<br>
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> 
+				   
+				   </div>
 				   <br>
-				    <%if(ResFormData!=null && Long.parseLong(ResFormData[18].toString())==4) {%>	
-				   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="" name="" value="" >Verify</button>
-				     <button type="submit" class="btn btn-sm delete-btn" name="" value="N" onclick="return DremarkRequired('N');" formnovalidate="formnovalidate">Return</button>	
-				   <%}else if(ResFormData!=null && Long.parseLong(ResFormData[18].toString())==2) {%>			   				
-				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="" name="" value="" >Accept</button>
-				     <button type="submit" class="btn btn-sm delete-btn" name="" value="N" onclick="return DremarkRequired('N');" formnovalidate="formnovalidate">Reject</button>				     
-			       <%}else if(ResFormData!=null && ( Long.parseLong(ResFormData[18].toString() )==1 || Long.parseLong(ResFormData[18].toString() )==3 || Long.parseLong(ResFormData[18].toString() )==6) ){ %>
-				   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="F" >
-						<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
-					</button>
+				   <% if(ResFormData!=null && toUserStatus.contains(ResFormData[14].toString())){ %>
+				   		<div align="left">
+				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
+				   		
+				   		</div>
+					   <div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					   </div>
+				   	
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
+							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
+						</button>
 					<%} %>
-                 	<!-- <button type="submit" class="btn btn-sm edit-btn"  name="Action" value="EDIT" formaction="ResAddressAddEdit.htm" formnovalidate="formnovalidate" data-toggle="tooltip" data-placement="top" title="Edit">Edit</button> 		 -->
+					
+					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
+						<div align="left">
+				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
+				   		
+				   		</div>
+						<div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					   </div>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							 Verify	
+						</button>
+					
+				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							 Return
+						</button>
+					<%} %>
 	           
 			   </div>
-			   
-			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %> <% }%>">
-			   <input type="hidden" name="resaddressid" value="<%if(ResFormData!=null){ %><%=ResFormData[1] %> <% }%>">
+			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %><% }%>">
+			   <input type="hidden" name="resaddressid" value="<%if(ResFormData!=null){ %><%=ResFormData[1] %><% }%>">
 			</form>
 		</div>
 	   </div>  
@@ -140,13 +209,21 @@ Date date = new Date();
 	</div>	
  </div>
 </body>
+
 <script>
-  var loginType = '<%=LoginType%>';
-  var dataInput = document.getElementById("data-input");
-  if (loginType === "P") {
-    dataInput.disabled = false;
-  }
+
+function validateTextBox() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Return?');
+    	
+    } else {
+        alert("Please enter Remarks");
+        return false;
+    }
+}
+
 </script>
+
 <%if(LoginType.equalsIgnoreCase("p") && LoginType!=null) {%>
 <script type="text/javascript">
 $('#data-input').daterangepicker({
@@ -164,23 +241,5 @@ $('#data-input').daterangepicker({
 
 </script>
 <%} %>
-<script type="text/javascript">
-function DremarkRequired(action)
-{
-	if(action === 'N'){
-		$('#Responcemsg').attr('required', true);
-		if($('#Responcemsg').val().trim()===''){
-			alert('Please Fill Remarks to Reject! ');
-			return false;
-		}else{
-				return confirm('Are You Sure To Reject?');
-		}
-		
-	}else{
-		$('#Responcemsg').attr('required', false);
-		return confirm('Are You Sure To Accept?');
-	}
-	
-}
-</script>
+
 </html>

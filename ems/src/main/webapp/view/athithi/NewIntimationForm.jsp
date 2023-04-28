@@ -145,10 +145,10 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 						<form action="newIntimationSubmit" method="post"  onSubmit="remove(); return confirm('Do you want to submit?'); " >
 							<div class="form-row">
 								<div class="form-group col-md-1">
-									<label >Company <span class="mandatory" style="color: red;">*</span> </label>
+									<label style="width:104%;">Company<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
-								<div class="col-md-5">
-								    <select class="form-control form-control CompanyID" id="CompanyID"  name="company" required>
+								<div class="col-md-4">
+								    <select class="form-control form-control CompanyID" id="CompanyID" style="width:100%;"  name="company" required>
 						         	  <option></option>
 								    <%for(Object[] data:compnyList){ %>
 								    <option value="<%=data[0]%>"><%=data[1]%></option>
@@ -163,7 +163,7 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 								
 								</div>
 								<div class="col-md-4">
-								    <select class="form-control CompanyID"  multiple="multiple"  id="EmppIDs"  name="visitors" required>
+								    <select class="form-control CompanyID"  multiple="multiple"  id="EmppIDs" style="width:100%;"  name="visitors" required>
 								   
 				                    <option value="QQ"style="font-weight: 5px;">Add New Employee</option> 
 								         
@@ -293,7 +293,7 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 									<label > Officer  <span class="mandatory" style="color: red;">*</span> </label>
 								</div>
 						        <div class="col-md-5"  >
-								<select class="form-control col-md-5  CompanyID"  style="width: 33rem;"   name="officer" required>
+								<select class="form-control col-md-5  CompanyID"  style="width: 100%;;"   name="officer" required>
 								  <option></option>
 								    <%for(Object[] data:officerList){ %>
 								    <option value="<%=data[0]%>"><%=data[1]%>,&nbsp;<%=data[2]%> </option>

@@ -31,4 +31,13 @@ public class MyErrorController implements ErrorController {
 	public String getErrorPath() {
 		return "/error";
 	}
+	
+	
+	@RequestMapping("UnderConstruction.htm")
+	public String UnderConstruction(HttpServletRequest req) {
+		Object status = req.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+
+		
+		return "static/UnderConstruction";
+	}
 }

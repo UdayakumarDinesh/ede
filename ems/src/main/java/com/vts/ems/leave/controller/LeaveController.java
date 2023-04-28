@@ -429,10 +429,11 @@ public class LeaveController {
 				    req.setAttribute("LeaveApprovalDirRecc", service.LeaveApprovalDirRecc(empNo));
 				    req.setAttribute("LeaveApprovalDirNR", service.LeaveApprovalDirNR(empNo));
 				    return "leave/LeaveApprovalDir";
-				}else if(leaverasa.getLeave_Status().equalsIgnoreCase("A") ) {
-					req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo));
-					return "leave/LeaveApprovalAdm";
-				}else {
+				} /*
+					 * else if(leaverasa.getLeave_Status().equalsIgnoreCase("A") ) {
+					 * req.setAttribute("LeaveApprovalAdm", service.LeaveApprovalAdm(empNo)); return
+					 * "leave/LeaveApprovalAdm"; }
+					 */else {
 					
 					redir.addAttribute("resultfail","Approval List Not Found");
 					return "redirect:/LeaveDashBoard.htm";
@@ -528,9 +529,10 @@ public class LeaveController {
 //			returnType="redirect:/LeaveApproval.htm";
 //		}else if(dto.getType().equals("DIR")) {
 //			returnType="redirect:/LeaveApprovalDir.htm";
-//		}else if(dto.getType().equals("ADM")) {
-//			returnType="redirect:/LeaveApprovalAdm.htm";
-//		}
+//		}else 
+		if(dto.getType().equals("ADM")) {
+			returnType="redirect:/LeaveApprovalAdm.htm";
+		}
 		return returnType;
 		}
 	

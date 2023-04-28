@@ -2,6 +2,7 @@ package com.vts.ems.attendance.dao;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -32,7 +33,9 @@ public class AttendanceDaoImpl implements AttendanceDao{
     EntityManager SQLMnager;
 	
 	@Autowired
-	AttendancePunchDataRepo  attendancepunchdatarepo;
+	AttendancePunchDataRepo attendancepunchdatarepo;
+	
+	private static final Logger logger=LogManager.getLogger(AttendanceDaoImpl.class);
 	
 	private static final String  GETPUNCHINFO= "SELECT  UserID,Status ,Row, Half, PDate ,UserName ,ProcessDate ,Punch1 ,Punch1_Date ,Punch1_Time  ,WorkTime ,WorkTime_HHMM ,FirstHalf ,SecondHalf ,OutPunch ,OutPunch_Date ,OutPunch_Time FROM EMSPunchView WHERE ProcessDate=:ProcessDate" ;
 	@Override
@@ -124,5 +127,47 @@ public class AttendanceDaoImpl implements AttendanceDao{
 		return count.longValue();
 	}
 	
+	private static final String EMPLIST="select e.EmpNo,e.EmpName,e.EmpId from employee e ,employee_details ed where e.EmpNo=ed.EmpNo and ed.EmpStatus='P'and  e.isactive=1"; 
+	@Override
+	public List<Object[]> EmployeeList() throws Exception 
+	{
+		List<Object[]> list=null;
+		try {
+			Query query = manager.createNativeQuery(EMPLIST);
+			 list =(List<Object[]>) query.getResultList();
+			    manager.flush();
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO EmployeeList "+ e);
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
+	
+	private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from attand_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo ORDER BY AttendanceDate DESC";  
+	@Override
+	public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception 
+	{
+		List<Object[]> list=null;			
+		try {
+			
+			Query query = manager.createNativeQuery(ATTENDANCEREPORT);				
+			query.setParameter("FromDate",fromDate);
+			query.setParameter("ToDate", toDate);
+			query.setParameter("EmpNo", empNo);				
+		 list = query.getResultList();				
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside DAO getAttendanceDetails "+ e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private final static String LASTSYNCDATETIME="select max(CreatedDate) from attand_punch_data";
+	@Override
+	public Object getlastSyncDateTime() throws Exception {
+		Query query = manager.createNativeQuery(LASTSYNCDATETIME);
+					
+		return query.getSingleResult();
+	}
 }

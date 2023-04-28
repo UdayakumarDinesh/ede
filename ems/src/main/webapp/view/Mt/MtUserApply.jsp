@@ -22,7 +22,6 @@ List<Object[]> dutylist = (List<Object[]>)request.getAttribute("typedutylist");
 List<Object[]> projectlist = (List<Object[]>)request.getAttribute("projectlist");
 MtUserApply apply=(MtUserApply)request.getAttribute("editdata");
 String username= (String)request.getAttribute("empname");
-String groupname=(String)request.getAttribute("groupcode");
 %>
 <div class="card-header page-top "  >
 		<div class="row">

@@ -22,7 +22,7 @@ public class DivisionMaster
 	private String DivisionCode;
 	private String DivisionName;
 	private String DivisionHeadId;
-	private String DGMId;
+	private int DGMId;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

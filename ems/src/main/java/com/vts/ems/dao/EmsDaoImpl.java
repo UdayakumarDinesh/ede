@@ -439,46 +439,8 @@ public class EmsDaoImpl implements EmsDao
 				return null;
 			}
 		}
-   private static final String EMPLIST="select e.EmpNo,e.EmpName,e.EmpId from employee e ,employee_details ed where e.EmpNo=ed.EmpNo and ed.EmpStatus='P'and  e.isactive=1"; 
-		@Override
-		public List<Object[]> EmployeeList() throws Exception {
-			List<Object[]> list=null;
-			try {
-				Query query = manager.createNativeQuery(EMPLIST);
-				 list =(List<Object[]>) query.getResultList();
-				    manager.flush();
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO EmployeeList "+ e);
-				e.printStackTrace();
-			}
-			return list;
-		}
-		private static final String ATTENDANCEREPORT="select EmpNo ,status,AttendanceDate,PunchInTime,PunchOutTime,time_format(Worktime,'%H:%i') from attand_punch_data where AttendanceDate>=:FromDate and AttendanceDate<=:ToDate and EmpNo=:EmpNo ORDER BY AttendanceDate DESC";  
-		@Override
-		public List<Object[]> getAttendanceDetails(String empNo, String fromDate, String toDate) throws Exception {
-			List<Object[]> list=null;			
-			try {
-				
-				Query query = manager.createNativeQuery(ATTENDANCEREPORT);				
-				query.setParameter("FromDate",fromDate);
-				query.setParameter("ToDate", toDate);
-				query.setParameter("EmpNo", empNo);				
-			 list = query.getResultList();				
-			} catch (Exception e) {
-				logger.error(new Date() +" Inside DAO getAttendanceDetails "+ e);
-				e.printStackTrace();
-			}
-			return list;
-		}
 		
-		private final static String LASTSYNCDATETIME="select max(CreatedDate) from attand_punch_data";
-		@Override
-		public Object getlastSyncDateTime() throws Exception {
-			Query query = manager.createNativeQuery(LASTSYNCDATETIME);
-						
-			return query.getSingleResult();
-		}
-private static final String GETSECONDDATA="SELECT COUNT(a.AttendPunchId),'9:00-9:30' FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and TIME(a.PunchInTime) BETWEEN'09:00:00' AND '09:30:00'AND a.AttendanceDate=:Date";
+		private static final String GETSECONDDATA="SELECT COUNT(a.AttendPunchId),'9:00-9:30' FROM attand_punch_data a,employee b WHERE a.EmpNo=b.EmpNo and TIME(a.PunchInTime) BETWEEN'09:00:00' AND '09:30:00'AND a.AttendanceDate=:Date";
 
 		@Override
 		public Object[] getEmpCountSecondSes(String date) throws Exception {

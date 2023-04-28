@@ -9,6 +9,9 @@ import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.model.EmployeeContract;
+import com.vts.ems.config.MsAccessDBConnectionConfig;
 import com.vts.ems.login.EmpContractRepo;
 import com.vts.ems.login.Login;
 import com.vts.ems.login.LoginRepository;
@@ -133,7 +137,7 @@ public class EmsController {
 					ses.setAttribute("EmpNo", employee.getEmpNo());
 					ses.setAttribute("EmpName", employee.getEmpName());
 					ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
-					
+					ses.setAttribute("DivisionId", employee.getDivisionId());
 					long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
 					if(pwdCount==0) 
 					{
@@ -182,7 +186,28 @@ public class EmsController {
 		return "redirect:/MainDashBoard.htm";
 	}
 
-	
+	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
+	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
+	{
+		
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+//		String Empno = ( ses.getAttribute("EmpNo")).toString();
+    	String LoginType=(String)ses.getAttribute("LoginType");
+    	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
+    	try {
+    		req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
+			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
+			req.setAttribute("logintype", LoginType);
+			ses.setAttribute("SidebarActive","Home");
+			return "static/maindashboard";
+    	}catch (Exception e) {
+    		e.printStackTrace();
+			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);
+			return "static/Error";
+		}
+	}
 	
 	
 	@RequestMapping(value = "ForcePasswordChange.htm", method = RequestMethod.GET)
@@ -194,58 +219,6 @@ public class EmsController {
 	}
 	
 	
-	@RequestMapping(value = "MainDashBoard.htm", method = {RequestMethod.GET, RequestMethod.POST})
-	public String MainDashBoard(HttpServletRequest req, HttpSession ses) throws Exception 
-	{
-		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() + "Inside MainDashBoard.htm "+UserId);
-		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		String Empno = ( ses.getAttribute("EmpNo")).toString();
-    	String LoginType=(String)ses.getAttribute("LoginType");
-    	String LoginId=((Long) ses.getAttribute("LoginId")).toString();
-    	List <Object[]> attendlist=null;
-    	try {
-    		req.setAttribute("alerts-marquee", service.getCircularOrdersNotice());
-			req.setAttribute("logintypeslist",service.EmpHandOverLoginTypeList(EmpId,LoginId));
-			req.setAttribute("logintype", LoginType);
-			ses.setAttribute("SidebarActive","Home");
-		    List<Object[]>  emplist=service.EmployeeList();
-			req.setAttribute("Emplist", emplist);
-			String empNo=req.getParameter("empNo");
-			String fromDate=req.getParameter("FromDate");
-			String toDate=req.getParameter("ToDate");	
-			
-			if(fromDate==null  && toDate==null) 
-			{
-				String fd = LocalDate.now().minusMonths(1).toString();
-				String td = LocalDate.now().toString();
-				fromDate=rdf.format(sdf.parse(fd.toString()));
-				toDate=rdf.format(sdf.parse(td.toString()));
-				
-			}
-										
-			if(empNo!=null && fromDate!=null && fromDate!=null) {
-				 attendlist=service.getAttendanceDetails(empNo,fromDate,toDate);
-				 req.setAttribute("EmpNo", empNo);
-				}else {   
-					if(Empno!=null && fromDate!=null && fromDate!=null)
-					 attendlist=service.getAttendanceDetails(Empno,fromDate,toDate);				
-					req.setAttribute("EmpNo", Empno);
-				}
-			
-			req.setAttribute("ToDate", toDate);
-			req.setAttribute("FromDate",fromDate);						
-			req.setAttribute("attendlist", attendlist);
-			req.setAttribute("EmpId",EmpId);
-			req.setAttribute("LastSyncDateTime", service.getlastSyncDateTime());
-			
-			return "static/maindashboard";
-    	}catch (Exception e) {
-    		e.printStackTrace();
-			logger.error(new Date() +" Inside MainDashBoard.htm "+UserId, e);
-			return "static/Error";
-		}
-	}
 	
 	@RequestMapping(value = "Calendar.htm")
 	public String calendar(HttpServletRequest req, HttpSession ses) throws Exception 

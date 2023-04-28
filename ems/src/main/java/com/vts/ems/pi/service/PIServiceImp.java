@@ -14,8 +14,12 @@ import com.vts.ems.chss.dao.CHSSDao;
 import com.vts.ems.chss.service.CHSSServiceImpl;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
+import com.vts.ems.pi.model.PisAddressPerTrans;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
+import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.Employee;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -24,18 +28,18 @@ public class PIServiceImp implements PIService{
 	@Autowired
 	PIDao dao;
 	
-	@Autowired
-	CHSSDao chssdao;
+
 	
 	private static final Logger logger = LogManager.getLogger(PIService.class);
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	
+	
 	@Override
 	public List<Object[]> ResAddressDetails(String EmpId) throws Exception {
 		
-		return dao.EmployeeAddressDetails(EmpId);
+		return dao.ResAddressDetails(EmpId);
 	}
 
 	@Override
@@ -75,97 +79,385 @@ public class PIServiceImp implements PIService{
 	}
 
 	@Override
-	public long ResAddressForward(String resAddressId, String username, String action, String remarks, String empId,String empNo, String loginType) throws Exception
+	public long ResAddressForward(String resAddressId, String username, String action, String remarks, String ForwardingEmpNo,String LoginType) throws Exception
 	{
-		logger.info(new Date() +"Inside SERVICE ResAddressForward");
-		
-		AddressRes resadd = dao.getResAddressDet(resAddressId);
-		int pisstatusid = resadd.getPISStatusId();
-		EMSNotification notify = new EMSNotification();
-		String mailbody = "";
-		String Email="";
-		
-		if(action.equalsIgnoreCase("F")) 
-		{			
-			notify.setNotificationUrl("IntimationVerification.htm");
-			notify.setNotificationMessage("intimation of Address change Application Received");
-			if(pisstatusid==1 || pisstatusid==3 || pisstatusid==6) 
+		try {
+			AddressRes address = dao.ResAddressIntimated(resAddressId);
+			Employee emp = dao.getEmpData(address.getEmpid());
+			String formempno = emp.getEmpNo();
+			String  pisStatusCode = address.getPisStatusCode();
+			String pisStatusCodeNext = address.getPisStatusCodeNext();
+			List<String> DGMs = dao.GetDGMEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			String CEO = dao.GetCEOEmpNo();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			if(action.equalsIgnoreCase("A"))
 			{
-				resadd.setPISStatusId(2);
-				if(pisstatusid==1) {
-				resadd.setSubmittedOn(sdtf.format(new Date()));
+				// first time forwarding
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				{
+					address.setPisStatusCode("FWD");
+					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					{
+						address.setPisStatusCode("VPA");
+						address.setPisStatusCodeNext("VPA");
+						address.setIsActive(1);
+						address.setResAdStatus("A");				
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						address.setPisStatusCodeNext("VPA");
+					}
+					else 
+					{
+						address.setPisStatusCodeNext("VDG");
+					}					
 				}
-				Object[] notifyto = dao.AddressIntimationAuth("");
-				if(notifyto==null) {
-					notify.setEmpNo((notifyto[0].toString()));
-				}else {
-					notify.setEmpNo((notifyto[0].toString()));
-					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
-				}
+				//approving	flow 
+				else
+				{
+					address.setPisStatusCode(pisStatusCodeNext);
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						address.setPisStatusCodeNext("VPA");
+					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+						address.setIsActive(1);
+						address.setResAdStatus("A");
+					}
+				}		
+				address.setRemarks(remarks);
+				dao.AddressResEdit(address);
+				
 			}
-			else if(pisstatusid==2) 
+			else if(action.equalsIgnoreCase("R")) 
 			{
-				resadd.setPISStatusId(4);
-				resadd.setVerifiedOn(sdtf.format(new Date()));
-				Object[] notifyto = dao.AddressIntimationAuth("");
-				if(notifyto==null) {
-					notify.setEmpNo((notifyto[0].toString()));
-				}else {
-					notify.setEmpNo((notifyto[0].toString()));
-					if(notifyto[5]!=null) { 	Email = notifyto[5].toString();		}
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					address.setPisStatusCode("RDG");	
 				}
-			}
-			else if(pisstatusid==4) 
-			{
-				resadd.setPISStatusId(7);
-				resadd.setApprovedOn(sdtf.format(new Date()));
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					address.setPisStatusCode("RPA");	
+				}
+				
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					address.setPisStatusCodeNext("VPA");
+				}
+				else 
+				{
+					address.setPisStatusCodeNext("VDG");
+				}
+				address.setRemarks(remarks);
+				dao.AddressResEdit(address);
 			}
 			
+			PisAddressResTrans transaction = PisAddressResTrans.builder()	
+												.address_res_id(address.getAddress_res_id())
+												.PisStatusCode(address.getPisStatusCode())
+												.ActionBy(ForwardingEmpNo)
+												.Remarks(remarks)
+												.ActionDate(sdtf.format(new Date()))
+												.build();
+			dao.AddressResTransactionAdd(transaction);
 			
-			mailbody = "Intimation of Address change Application Received for Verification";
-						
-		}
-		else if(action.equalsIgnoreCase("R"))
-		{
-			notify.setNotificationMessage("Intimation of Address change Application Returned");
-			mailbody = "Intimation of Address change Application is Returned";
 			
-			if(pisstatusid==2 || pisstatusid==4) 
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+//			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+//			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+			
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && address.getResAdStatus().equalsIgnoreCase("A"))
 			{
-				if(pisstatusid==2) {
-				    resadd.setPISStatusId(3);
-				}else if(pisstatusid==4) {
-					resadd.setPISStatusId(6);
-				}
-				notify.setEmpNo(resadd.getEmpid().toString());
-				 Object[] emp= chssdao.getEmployee(resadd.getEmpid().toString());				
-				if( emp[7]!=null) { 	Email =  emp[7].toString();		}
-				notify.setNotificationUrl("PersonalIntimation.htm");
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Residential Address Change Request Approved");
+				notification.setNotificationBy(ForwardingEmpNo);
 			}
-						
-
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( address.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				}
+				notification.setNotificationUrl("AddressApprovals.htm");
+				notification.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Residential Address Change Request Returned");
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
+			return 1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside ResAddressForward "+ e);
+			e.printStackTrace();
+			return 0;
 		}
-		resadd.setModifiedBy(username);
-		resadd.setModifiedDate(sdtf.format(new Date()));
-		
-		if( notify.getEmpNo()!=null)
-		{		
-			notify.setNotificationDate(LocalDate.now().toString());
-			notify.setNotificationBy(empNo);
-			notify.setIsActive(1);
-			notify.setCreatedBy(username);
-			notify.setCreatedDate(sdtf.format(new Date()));
-			dao.NotificationAdd(notify);
-		}
-		
-		long count = dao.AddressResEdit(resadd);
-		
-		return count;
 	}
 
 	@Override
 	public Object[] PerAddressFormData(String addressPerId) throws Exception {
 		
 		return dao.PerAddressFormData(addressPerId);
+	}
+
+	@Override
+	public Employee getEmpData(String empid) throws Exception {
+		return dao.getEmpData(empid);		
+	}
+
+	@Override
+	public String GetCEOEmpNo() throws Exception {
+		return dao.GetCEOEmpNo();		
+	}
+
+	@Override
+	public List<String> GetDGMEmpNos() throws Exception {
+		return dao.GetDGMEmpNos();		
+	}
+
+	@Override
+	public List<String> GetDHEmpNos() throws Exception {
+		return dao.GetDHEmpNos();		
+	}
+
+	@Override
+	public List<String> GetGHEmpNos() throws Exception {
+		return dao.GetGHEmpNos();		
+	}
+
+	@Override
+	public String GetEmpGHEmpNo(String empno) throws Exception {
+		return dao.GetEmpGHEmpNo(empno);		
+	}
+
+	@Override
+	public String GetEmpDHEmpNo(String empno) throws Exception {
+		return dao.GetEmpDHEmpNo(empno);
+	}
+
+	@Override
+	public String GetEmpDGMEmpNo(String empno) throws Exception {
+		return dao.GetEmpDGMEmpNo(empno);
+	}
+	
+	@Override
+	public List<Object[]> ResAddressApprovalsList(String EmpNo,String LoginType) throws Exception
+	{
+		return dao.ResAddressApprovalsList(EmpNo, LoginType);
+	}
+	@Override
+	public DivisionMaster GetDivisionData(long DivisionId) throws Exception
+	{
+		return dao.GetDivisionData(DivisionId);
+	}
+	
+	@Override
+	public List<Object[]> ResAddressTransactionList(String addressresid)throws Exception
+	{
+		return dao.ResAddressTransactionList(addressresid);
+	}
+	
+	@Override
+	public List<Object[]> ResAddressTransactionApprovalData(String addressresid)throws Exception
+	{
+		return dao.ResAddressTransactionApprovalData(addressresid);
+	}
+	
+	@Override
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception
+	{
+		return dao.GetEmpDGMEmpName(empno);
+	}
+	@Override
+	public Object[] GetPandAEmpName() throws Exception
+	{
+		return dao.GetPandAEmpName();
+	}
+
+	@Override
+	public List<Object[]> PerAddressTransactionApprovalData(String peraddressId) throws Exception{
+		
+		return dao.PerAddressTransactionApprovalData(peraddressId);
+	}
+
+	@Override
+	public AddressPer PerAddressIntimated(String peraddressid) throws Exception {
+		
+		return dao.PerAddressIntimated(peraddressid);
+	}
+
+	@Override
+	public long PerAddressForward(String perAddressId, String username, String action, String remarks, String ForwardingEmpNo,String LoginType) throws Exception {
+		try {
+			AddressPer address = dao.PerAddressIntimated(perAddressId);
+			Employee emp = dao.getEmpData(address.getEmpid());
+			String formempno = emp.getEmpNo();
+			String  pisStatusCode = address.getPisStatusCode();
+			String pisStatusCodeNext = address.getPisStatusCodeNext();
+			List<String> DGMs = dao.GetDGMEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			String CEO = dao.GetCEOEmpNo();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			if(action.equalsIgnoreCase("A"))
+			{
+				// first time forwarding
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				{
+					address.setPisStatusCode("FWD");
+					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					{
+						address.setPisStatusCode("VPA");
+						address.setPisStatusCodeNext("VPA");
+						address.setIsActive(1);
+						address.setPerAdStatus("A");				
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						address.setPisStatusCodeNext("VPA");
+					}
+					else 
+					{
+						address.setPisStatusCodeNext("VDG");
+					}					
+				}
+				//approving	flow 
+				else
+				{
+					address.setPisStatusCode(pisStatusCodeNext);
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						address.setPisStatusCodeNext("VPA");
+					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+						address.setIsActive(1);
+						address.setPerAdStatus("A");
+					}
+				}		
+				address.setRemarks(remarks);
+				dao.AddressPerEdit(address);
+				
+			}
+			else if(action.equalsIgnoreCase("R")) 
+			{
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					address.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					address.setPisStatusCode("RPA");	
+				}
+				
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					address.setPisStatusCodeNext("VPA");
+				}
+				else 
+				{
+					address.setPisStatusCodeNext("VDG");
+				}
+				address.setRemarks(remarks);
+				dao.AddressPerEdit(address);
+			}
+			
+			PisAddressPerTrans transaction = PisAddressPerTrans.builder()	
+												.address_per_id(address.getAddress_per_id())
+												.PisStatusCode(address.getPisStatusCode())
+												.ActionBy(ForwardingEmpNo)
+												.Remarks(remarks)
+												.ActionDate(sdtf.format(new Date()))
+												.build();
+			dao.AddressPerTransactionAdd(transaction);
+			
+			
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+//			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+//			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+			
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && address.getPerAdStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Permanent Address Change Request Approved");
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( address.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				}
+				notification.setNotificationUrl("AddressApprovals.htm");
+				notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PersonalIntimation.htm");
+				notification.setNotificationMessage("Permanent Address Change Request Returned");
+				notification.setNotificationBy(ForwardingEmpNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
+			return 1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside PerAddressForward "+ e);
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+
+	@Override
+	public Object[] PerToAddressId(String empId) throws Exception {
+		
+		return dao.PerToAddressId(empId);
+	}
+
+	@Override
+	public long PerUpdatetoDate(Date toDate, String perAddressId) throws Exception {
+		
+	    return dao.PerUpdatetoDate(toDate, perAddressId);
+	}
+	
+	@Override
+	public List<Object[]> PerAddressTransactionList(String addressperid)throws Exception
+	{
+		return dao.PerAddressTransactionList(addressperid);
 	}
 }

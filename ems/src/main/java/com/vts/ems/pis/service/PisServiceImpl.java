@@ -213,6 +213,7 @@ public class PisServiceImpl implements PisService
 		logger.info(new Date() +"Inside SERVICE EmployeeEditSubmit ");
 		Employee employee = dao.getEmp(String.valueOf(emp.getEmpId()));
 		employee.setEmpName(emp.getEmpName());
+		employee.setGroupId(emp.getGroupId());;
 		employee.setEmail(emp.getEmail());
 		employee.setExtNo(emp.getExtNo());
 		employee.setDivisionId(emp.getDivisionId());
@@ -2147,5 +2148,17 @@ public class PisServiceImpl implements PisService
 		public List<Object[]> GetDivisionList(String divisionId)throws Exception
 		{
 			return dao.GetDivisionList(divisionId);
+		}
+
+		@Override
+		public long ResAddrUpdate(String EmpId) throws Exception {
+			
+			return dao.ResAddrUpdate(EmpId);
+		}
+
+		@Override
+		public long PerAddrUpdate(String EmpId) throws Exception {
+			
+			return dao.PerAddrUpdate(EmpId);
 		}
 }

@@ -29,11 +29,15 @@ public class AddressPer implements Serializable{
 	private String alt_mobile;
     private String hometown;
     private Date from_per_addr;
-	
+    private Date to_per_addr;
     private String state;
     private String city;
+    
     private String pin;
     private String PerAdStatus;
+	private String Remarks;
+	private String PisStatusCode;
+	private String PisStatusCodeNext;
     private String CreatedBy;
 	private String CreatedDate;
 	private String ModifiedBy;

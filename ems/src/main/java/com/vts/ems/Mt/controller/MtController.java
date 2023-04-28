@@ -139,7 +139,6 @@ public class MtController {
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
-			req.setAttribute("groupcode", emp[3]);
 			req.setAttribute("typedutylist", typeofduty);
 			req.setAttribute("projectlist", projectlist);
 			ses.setAttribute("SidebarActive", "MtRequestTrip_htm");
@@ -396,7 +395,6 @@ public class MtController {
 				  Object[] emp=service.getEmpData((String)ses.getAttribute("EmpId")); 
 				  String Name=emp[1]+""+emp[2];
 				  req.setAttribute("empname",Name);
-				 req.setAttribute("groupcode", emp[3]);
 				return "Mt/MtUserApply";
 			
 			}
@@ -452,7 +450,6 @@ public class MtController {
 				  Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 				  String  Name=emp[1]+" "+emp[2];
 				  req.setAttribute("empname",Name);
-				  req.setAttribute("groupcode", emp[3]);
 				  req.setAttribute("projectlist",service.GetProjectList());
 				  ses.setAttribute("SidebarActive", "MtRequestTrip_htm");
 					return "Mt/MtUserApply";
@@ -530,7 +527,6 @@ public class MtController {
 			Object[] emp =service.getEmpData((String)ses.getAttribute("EmpNo")); 
 			String Name=emp[1]+"  ("+emp[2]+")";
 			req.setAttribute("empname",Name);
-			req.setAttribute("groupcode", emp[3]);
 			return "Mt/AssignTrip";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside MTHome.htm "+Username, e);

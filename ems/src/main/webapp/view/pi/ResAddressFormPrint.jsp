@@ -1,10 +1,11 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
    <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
     
 <!DOCTYPE html>
 <html>
-<% 
+<%
 Object[] PerFormData = (Object[])request.getAttribute("PerFormData");
 Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
 %>
@@ -139,7 +140,12 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 String LoginType = (String)session.getAttribute("LoginType");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 Date date = new Date();
+
+List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 %>
+
 <div class="center">
              <div style="width: 100%;float:left;">
 				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
@@ -160,7 +166,9 @@ Date date = new Date();
 						  <td style="border: 0;width:17%;">To &nbsp;: &nbsp;P&A Dept</td>
 						 </tr>					
 						 <tr>  <td style="border: 0;">Emp. No. <label style="margin-left: 6px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%}else if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
-						  <tr> <td style="border: 0;">Date<label style="margin-left: 38px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[14]!=null){ %> <%=DateTimeFormatUtil.getDateTimeToRegularDate(ResFormData[14].toString()) %> <%}else if(PerFormData!=null && PerFormData[11]!=null){ %> <%=DateTimeFormatUtil.getDateTimeToRegularDate(PerFormData[11].toString()) %> <%} %></td> </tr>
+						  <tr> 
+						  	<td style="border: 0;">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %> <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>		<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %> <%break;} %><%} %> </td>	 
+					   	</tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
@@ -186,19 +194,50 @@ Date date = new Date();
 					    </tbody>
 					</table>
 					<br>	
-					<div style="width:100%;text-align: right;margin-left:-7px;">	<%if(ResFormData!=null && ResFormData[11]!=null){ %><%=ResFormData[11] %> <%} else if(PerFormData!=null &&PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %>	</div>				
-					<div style="width:100%;text-align: right;">	Signature of Employee </div>	
+					<div style="width:100%;text-align: right;margin-left:-5%;">	
+						Signature of Employee<br>
+						<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<%} %>
+				   		<%} %> 
+				   		
+				   		
+					</div>		
 					<br>								     
 				   <hr style="border:solid 1px;margin-left:20px;">
 				   <br><br>
 				  	<div style="width: 100%;border: 0;text-align: center;"> <b style="font-size:18px;text-decoration:underline">FOR ADMINISTRATION USE</b> </div>
 				    <br>
-				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+				  <%--  <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						Intimation of change of address received on  &nbsp;<input type="text" value="<%if(ResFormData!=null && ResFormData[16]!=null){ %> <%=DateTimeFormatUtil.getDateTimeToRegularDate(ResFormData[16].toString()) %> <%}else if(PerFormData!=null && PerFormData[13]!=null){ %> <%=DateTimeFormatUtil.getDateTimeToRegularDate(PerFormData[13].toString()) %> <%} %>" style="width:15%;text-align:center;">&nbsp;. The same has been updated in<br>  the personal records.																		
+				   </div> --%>
+				   
+				    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+						Intimation of change of address received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
+				   				
+				   			<%
+				   				break;
+				   			} %>
+				   		<%} %> . The same has been updated in<br>  the personal records.																		
 				   </div>
+				   
 				   <br><br>
 				   <div style="width:100%;text-align: right;margin-left:-5px;"> </div>	
-				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A </div>
+				   <div style="border:0px;width: 100%; text-align: right;"> 
+				   		Incharge-P&A
+				   		<br>
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<%} %>
+				   		<%} %> 
+				   
+				   </div>
 				   <br>				   				  
 			   </div>			   			  
 			
