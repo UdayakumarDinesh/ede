@@ -15,5 +15,10 @@ public interface TourDao {
 	public Long AddTourOnwardReturn(TourOnwardReturn tourdetails)throws Exception;
 	public Long AddTourTransaction(TourTransaction transaction)throws Exception;
 	public List<Object[]> GetTourApplyList()throws Exception;
-
+	public Long  checkTDAlreadyPresentForSameEmpidAndSameDates(String empid,String DepartureDate,String ArrivalDate);
+	public TourApply  getTourApplyData(Long tourid) throws Exception;
+	public List<TourOnwardReturn> getTourOnwardReturnData(Long tourid)throws Exception;
+	public Long  UpdateTourApply(TourApply apply) throws Exception;
+	public int DeleteOnwardReturnData(Long tourid) throws Exception;
+	public int ForwardTour(String tourapplyid , String empno)throws Exception;
 }

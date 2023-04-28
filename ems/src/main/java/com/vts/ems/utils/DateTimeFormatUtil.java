@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
@@ -353,6 +354,32 @@ public class DateTimeFormatUtil
             e.printStackTrace();
         }
 		return formattedDate;
+	}
+	public static String fromDatabaseToActual(String databaseDate){
+		String actualdate=null;
+		try{
+	       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           Date d = sdf.parse(databaseDate);
+           sdf.applyPattern("dd-MMM-yyyy");
+            actualdate = sdf.format(d);
+	       
+		  }
+		catch(Exception e){System.out.println(e);}
+		return(actualdate);
+	
+	}
+	public static long CountNoOfDaysBwdates(String fromdate , String todate)throws Exception
+	{
+		try {
+				LocalDate dateBefore = LocalDate.parse(fromdate);
+			    LocalDate dateAfter = LocalDate.parse(todate);
+	
+			    long daysDiff = ChronoUnit.DAYS.between(dateBefore, dateAfter);
+			    return daysDiff;
+			}catch(Exception e){
+			    e.printStackTrace();
+			    return 0l;
+			}
 	}
 }	
 

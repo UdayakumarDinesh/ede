@@ -137,7 +137,7 @@ public class EmsController {
 					ses.setAttribute("EmpNo", employee.getEmpNo());
 					ses.setAttribute("EmpName", employee.getEmpName());
 					ses.setAttribute("EmpDesig",service.DesignationInfo(employee.getDesigId()).getDesignation() );
-					
+					ses.setAttribute("DivisionId", employee.getDivisionId());
 					long pwdCount = service.PasswordChangeHystoryCount(String.valueOf(login.getLoginId()));
 					if(pwdCount==0) 
 					{
