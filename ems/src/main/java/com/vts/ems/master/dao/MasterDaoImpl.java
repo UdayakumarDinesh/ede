@@ -1248,9 +1248,7 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 				 logger.error(new Date()+" Inside DAO PandAFandAAdminData "+ e);
 					return null;
 			}
-			
 		}
-		
 	
 		@Override
 		public PisAdmins getPandAFandAById(long adminsId) throws Exception {
@@ -1276,7 +1274,6 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 				return 0L;
 			}
 		}
-		
 
 		@Override
 		public long PandAFandAEdit(PisAdmins admins) throws Exception {
