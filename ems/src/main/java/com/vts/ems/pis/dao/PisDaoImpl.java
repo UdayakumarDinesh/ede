@@ -3298,6 +3298,15 @@ private static final String EMPLOYEELIST="CALL EmpLoyee_List(:Id,:Code)";
 		
 	}
 
-	
+	private static final String EMPLOYEEDROPDOWNLIST="CALL Employee_Dropdown_list (:empno , :LoginType )";
+	@Override
+	public List<Object[]> EmployeeDropDownList(String empno,String LoginType) throws Exception 
+	{
+		Query query = manager.createNativeQuery(EMPLOYEEDROPDOWNLIST);
+		query.setParameter("empno", empno);
+		query.setParameter("LoginType",LoginType);
+		List<Object[]> List=(List<Object[]>) query.getResultList();
+		return List;
+	}
 }
 	

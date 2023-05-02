@@ -5,7 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>SEIP</title>
-
+<jsp:include page="../static/header.jsp"></jsp:include>
 <style type="text/css">
 
 /* @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Fira+Mono:wght@500&display=swap'); */
@@ -62,12 +62,8 @@ svg{
     animation-delay: 1.8s;
 }
 @keyframes appear {
-    from{
-        opacity: 0;
-    }
-    to{
-        opacity: 1;
-    }
+    from{  opacity: 0;   }
+    to{    opacity: 1;   }
 }
 a{
     color:#F66947;
@@ -79,7 +75,7 @@ a{
 
 
 </head>
-<body>
+<body style="background-color: black !important">
 	<div  align="center">
     <div style="width: 40rem;height: 25rem;" align="center">
         <svg width="1123" height="837" viewBox="0 0 1123 837" fill="none" >
@@ -175,11 +171,10 @@ a{
     </div>
     </div>
     <div class="text">
-        <h1>Sorry !</h1>  
+      <h1>Sorry !</h1>  
       <h2>Couldn't launch Your Request</h2>
       <h2>Module Under Development </h2> 
 	  <a class="btn btn-sm" style="background-color: white;border-radius: 20px;padding: 10px;margin: 5px;color: red;font-weight: bold;" href="MainDashBoard.htm">Return Home</a>
-         
     </div>
 </body>
 
