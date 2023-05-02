@@ -1,21 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
  <%@page import="java.util.List"%>
-  <%@page import="com.vts.ems.pis.model.AddressPer"%>
+  <%@page import="com.vts.ems.pi.model.PisMobileNumber"%>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>HomeTown</title>
+<title>Mobile Number</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
 </head>
 <body>
 	<%
-	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
-	AddressPer mobile =(AddressPer)request.getAttribute("mobile");
+	PisMobileNumber mobile =(PisMobileNumber)request.getAttribute("mobile");
 	%>
 	
 	<div class="card-header page-top">
@@ -60,8 +59,8 @@
 				        
 				       <div class="col-md-4">
                         <div class="form-group">
-                         <label>Mobile No.<span class="mandatory">*</span></label>
-                           <input id="MobileTextBox" type="text" value="" class="form-control input-sm " name="mobile"  maxlength="10"  placeholder="Enter Mobile No. " onblur="checknegative(this)" >  
+                         <label>Mobile Number<span class="mandatory">*</span></label>
+                           <input id="MobileTextBox" type="text" value="<%if(mobile!=null && mobile.getMobileNumber()!=null){ %> <%=mobile.getMobileNumber() %> <%} %>" class="form-control input-sm " name="mobile"  maxlength="10"  placeholder="Enter Mobile No. " onblur="checknegative(this)" >  
                         </div>
                         </div>
                          
@@ -69,7 +68,7 @@
                            <div class="col-md-4">
                            <div class="form-group">
                             <label> Alt Mobile No.</label>
-                            <input id="AltMobileTextBox" type="text" value="" class="form-control input-sm " name="altMobile"  maxlength="10"   placeholder="Enter Alternate Mobile No." onblur="checknegative(this)"/>
+                            <input id="AltMobileTextBox" type="text" value="<%if(mobile!=null && mobile.getAltMobileNumber()!=null){ %> <%=mobile.getAltMobileNumber() %> <%} %> " class="form-control input-sm " name="altMobile"  maxlength="10"   placeholder="Enter Alternate Mobile No." onblur="checknegative(this)"/>
                            </div>
                         </div>
 		                
@@ -77,7 +76,7 @@
                         <div class="form-group">
                             <label>Mobile From<span class="mandatory">*</span></label>
                             
-                            <input type="text"  value="" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" >   
+                            <input type="text"  value="<%if(mobile!=null && mobile.getMobileFrom()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(mobile.getMobileFrom().toString())%> <%}%>" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" >   
                         </div>
                        </div>
 		         
@@ -91,7 +90,7 @@
 							<div class="col-12" align="center">
 							 <div class="form-group">
 							<%if(mobile!=null){ %>
-							<input type="hidden" name="hometownId" value="">
+							<input type="hidden" name="mobileNumberId" value="<%=mobile.getMobileNumberId() %>">
 			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>
 							<%}else{%>
 				              <button type="submit" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>

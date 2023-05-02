@@ -31,6 +31,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.model.PisAdmins;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -1236,7 +1237,58 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 			
 			
 	}
+		private static final String PANDAFANDAADMINDATA="SELECT a.AdminsId,b.EmpName AS 'P&A',c.Designation AS 'P&A Designation',(SELECT DISTINCT b.EmpName FROM pis_admins a,employee b WHERE a.FandAAdmin=b.EmpNo AND a.IsActive=1) AS 'F&A',(SELECT DISTINCT c.Designation FROM pis_admins a,employee b,employee_desig c WHERE a.FandAAdmin=b.EmpNo AND a.IsActive=1 AND b.DesigId=c.DesigId) AS 'F&A Designation',a.RevisedOn FROM pis_admins a,employee b,employee_desig c WHERE a.PandAAdmin=b.EmpNo AND a.IsActive=1 AND b.DesigId=c.DesigId";
 
+		@Override
+		public Object[] PandAFandAAdminData() throws Exception {			
+			try {
+				Query query = manager.createNativeQuery(PANDAFANDAADMINDATA);
+				return (Object[]) query.getSingleResult();
+			} catch (Exception e) {
+				 logger.error(new Date()+" Inside DAO PandAFandAAdminData "+ e);
+					return null;
+			}
+			
+		}
+		
+	
+		@Override
+		public PisAdmins getPandAFandAById(long adminsId) throws Exception {
+			
+			try {
+				return manager.find(PisAdmins.class, adminsId);	
+			}catch (Exception e) {
+				logger.error(new Date() + "Inside DAO getPandAFandAById "+e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		public long PandAFandAAdd(PisAdmins admins) throws Exception {
+			try {
+				manager.persist(admins);
+				manager.flush();
+				return admins.getAdminsId();
+			}  catch (Exception e) {
+				logger.error(new Date() + "Inside DAO PandAFandAAdd "+e);
+				e.printStackTrace();
+				return 0L;
+			}
+		}
 		
 
+		@Override
+		public long PandAFandAEdit(PisAdmins admins) throws Exception {
+			
+			try {
+				manager.merge(admins);
+				manager.flush();		
+				return admins.getAdminsId();
+			}	catch (Exception e) {
+				logger.error(new Date() + "Inside DAO PandAFandAEdit "+e);
+				e.printStackTrace();
+				return 0L;
+			}
+		}
 }

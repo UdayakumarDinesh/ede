@@ -6,8 +6,7 @@
 <!DOCTYPE html>
 <html>
 <%
-Object[] PerFormData = (Object[])request.getAttribute("PerFormData");
-Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
+Object[] MobFormData = (Object[])request.getAttribute("MobFormData");
 %>
 <head>
 <style type="text/css">
@@ -50,11 +49,8 @@ Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
 				@top-left {
 					margin-top: 30px;
 					margin-left: 10px;
-					<% if(ResFormData!=null){%>
-					content: "Emp No: <%=ResFormData[12] %>";
-					<%} else if(PerFormData!=null){%>
-					content: "Emp No: <%=PerFormData[9] %>";
-					<% } %>
+					content: "Emp No: <%=MobFormData[1] %>";
+				
 				}
 
 				@top-center {
@@ -150,7 +146,7 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
              <div style="width: 100%;float:left;">
 				<div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
 				<div style="margin-left:auto; margin-right:auto;"><h3 ><span style="margin-left: -85px; "> FORM FOR INTIMATION OF CHANGE OF  </span></h3> </div>
-				<div style="margin-left:auto; margin-right:auto;margin-top:-10px;"><h3 ><span style="margin-left: -85px; "><%if(ResFormData!=null){ %>RESIDENTIAL <%}else if(PerFormData!=null){%>PERMANENT <%} %> ADDRESS </span></h3> </div>
+				<div style="margin-left:auto; margin-right:auto;margin-top:-10px;"><h3 ><span style="margin-left: -85px; ">MOBILE NUMBER </span></h3> </div>
 			</div>	
 			<br><br>	        					
 					<table style="margin-top: 40px;border-collapse: collapse;width:100%;">	
@@ -162,10 +158,10 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;"> </td> </tr>
 						<tr>		
-						  <td style="border: 0;width:78%">From <label style="margin-left: 30px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%}else if(PerFormData!=null &&PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %> </td>
+						  <td style="border: 0;width:78%">From <label style="margin-left: 30px;">:</label>&nbsp;<%if(MobFormData!=null && MobFormData[8]!=null){ %> <%=MobFormData[8] %> <%} %>  </td>
 						  <td style="border: 0;width:17%;">To &nbsp;: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No. <label style="margin-left: 6px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%}else if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp. No. <label style="margin-left: 6px;">:</label>&nbsp;<%if(MobFormData!=null && MobFormData[1]!=null){ %> <%=MobFormData[1] %> <%} %></td> </tr>
 						  <tr> 
 						  	<td style="border: 0;">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %> <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>		<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %> <%break;} %><%} %> </td>	 
 					   	</tr>	
@@ -173,20 +169,15 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;
-						     <input type="text" value="<%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%> <%}else if(PerFormData!=null && PerFormData[6]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"") %> <%} %>" style="width:15%;text-align:center;" readonly>
-						     and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my mobile number with effect from.&nbsp;
+						     <input type="text" value="<%if(MobFormData!=null && MobFormData[4]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(MobFormData[4]+"")%> <%} %>" style="width:15%;text-align:center;" readonly>
+						     &nbsp; and the present mobile number and the alternate mobile number is as under:
 						   </td> 
 						 </tr> 
-						     <tr> <td style="border: 0;"></td> </tr>
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} else if(PerFormData!=null && PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %>" readonly></td> </tr>			
-						 	<tr> 
-						 	<td style="border: 0;">
-						 	  <input type="text" value="<% if(ResFormData!=null){%> <%=ResFormData[9]+", "+ResFormData[8]+" - "+ResFormData[10]%>
-						 		                  <%} else if(PerFormData!=null ){%> <%=PerFormData[3]+", "+PerFormData[4]+" - "+PerFormData[5]%> <%} %>" readonly>
-						 	 </td> 
-						 	 </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%="Mobile: "+ResFormData[4]%> <%}else if(PerFormData!=null && PerFormData[7]!=null){ %> <%="Mobile: "+PerFormData[7]%> <%} %> " readonly></td> </tr>	
+						    <tr> <td style="border: 0;"></td> </tr>
+						 								 				
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(MobFormData!=null && MobFormData[2]!=null){ %> <%="Mobile: "+MobFormData[2]%> <%} %> " readonly></td> </tr>	
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(MobFormData!=null && MobFormData[3]!=null){ %> <%="Alt Mobile: "+MobFormData[3]%> <%}%>" readonly></td> </tr>	
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;"> </td> </tr>
 						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	
@@ -215,7 +206,7 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				   </div> --%>
 				   
 				    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						Intimation of change of address received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
+						Intimation of change of mobile number received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
 				   				

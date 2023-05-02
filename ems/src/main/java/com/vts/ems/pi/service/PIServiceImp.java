@@ -16,6 +16,9 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisMobileNumber;
+import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.dao.PisDao;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
@@ -130,18 +133,19 @@ public class PIServiceImp implements PIService{
 				//approving	flow 
 				else
 				{	
-					pisdao.ResAddrUpdate(address.getEmpid());
-					Object[] resToAddressId = dao.ResToAddressId(address.getEmpid());
-					String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_res_addr().toString());
-					if(resToAddressId!=null) {						
-						dao.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,resToAddressId[0].toString());								
-
-					}
 					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
 						address.setPisStatusCodeNext("VPA");
 					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+						pisdao.ResAddrUpdate(address.getEmpid());
+						Object[] resToAddressId = dao.ResToAddressId(address.getEmpid());
+						String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_res_addr().toString());
+						if(resToAddressId!=null) {						
+							dao.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,resToAddressId[0].toString());								
+
+						}
+						
 						address.setIsActive(1);
 						address.setResAdStatus("A");
 					}
@@ -240,8 +244,8 @@ public class PIServiceImp implements PIService{
 	}
 
 	@Override
-	public Employee getEmpData(String empid) throws Exception {
-		return dao.getEmpData(empid);		
+	public Employee getEmpData(String EmpId) throws Exception {
+		return dao.getEmpData(EmpId);		
 	}
 
 	@Override
@@ -379,19 +383,20 @@ public class PIServiceImp implements PIService{
 				//approving	flow 
 				else
 				{
-					pisdao.PerAddrUpdate(address.getEmpid());
-                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
-                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_per_addr().toString());
-                    
-                    if(perToAddressId!=null) {
-                    
-    					dao.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,perToAddressId[0].toString() );
-                    }
+					
                     			    					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
 						address.setPisStatusCodeNext("VPA");
 					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+						pisdao.PerAddrUpdate(address.getEmpid());
+	                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
+	                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_per_addr().toString());
+	                    
+	                    if(perToAddressId!=null) {
+	                    
+	    					dao.PerUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate) ,perToAddressId[0].toString() );
+	                    }
 						address.setIsActive(1);
 						address.setPerAdStatus("A");
 					}
@@ -454,7 +459,7 @@ public class PIServiceImp implements PIService{
 				}
 				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
 				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0).toString():null);
 				}
 				notification.setNotificationUrl("AddressApprovals.htm");
 				notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
@@ -499,5 +504,283 @@ public class PIServiceImp implements PIService{
 	public List<Object[]> PerAddressTransactionList(String addressperid)throws Exception
 	{
 		return dao.PerAddressTransactionList(addressperid);
+	}
+
+	@Override
+	public List<Object[]> MobileNumberDetails(String EmpNo) throws Exception {
+		
+		return dao.MobileNumberDetails(EmpNo);
+	}
+
+	@Override
+	public Long addMobileNumber(PisMobileNumber mobile) throws Exception {
+		
+		return dao.addMobileNumber(mobile);
+	}
+
+	@Override
+	public PisMobileNumber getMobileNumberData(String mobileNumberId) throws Exception {
+		
+		return dao.getMobileNumberData(mobileNumberId);
+	}
+
+	@Override
+	public long EditMobileNumber(PisMobileNumber mobile) throws Exception {
+		PisMobileNumber mob = dao.getMobileDataById(mobile.getMobileNumberId());
+		
+		mob.setMobileNumber(mobile.getMobileNumber());
+		mob.setAltMobileNumber(mobile.getAltMobileNumber());
+		mob.setMobileFrom(mobile.getMobileFrom());
+		mob.setModifiedBy(mobile.getModifiedBy());
+		mob.setModifiedDate(mobile.getModifiedDate());
+		return dao.EditMobileNumber(mob);
+	}
+
+	@Override
+	public List<Object[]> MobileTransactionList(String mobilenumberid) throws Exception {
+		
+		return dao.MobileTransactionList(mobilenumberid);
+	}
+
+	@Override
+	public List<Object[]> MobileTransactionApprovalData(String mobileNumberId) throws Exception {
+		
+		return dao.MobileTransactionApprovalData(mobileNumberId);
+	}
+
+	@Override
+	public Object[] MobileFormData(String mobileNumberId) throws Exception {
+		
+		return dao.MobileFormData(mobileNumberId);
+	}
+
+	@Override
+	public List<Object[]> MobileApprovalsList(String EmpNo, String LoginType) throws Exception {
+		
+		return dao.MobileApprovalsList(EmpNo, LoginType);
+	}
+
+	@Override
+	public PisMobileNumber getMobileDataById(long mobilenumberid) throws Exception {
+		
+		return dao.getMobileDataById(mobilenumberid);
+	}
+
+	@Override
+	public long MobileNumberForward(String mobileNumberId, String username, String action, String remarks,String ApprEmpNo, String LoginType) throws Exception {
+		
+		try {
+			
+			PisMobileNumber mobile = dao.getMobileDataById(Long.parseLong(mobileNumberId) );
+			Employee emp = dao.getEmpDataByEmpNo(mobile.getEmpNo());
+			String formempno = emp.getEmpNo();
+			String  pisStatusCode = mobile.getPisStatusCode();
+			String pisStatusCodeNext = mobile.getPisStatusCodeNext();
+			List<String> DGMs = dao.GetDGMEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			String CEO = dao.GetCEOEmpNo();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			if(action.equalsIgnoreCase("A"))
+			{
+//			
+				// first time forwarding
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				{
+					mobile.setPisStatusCode("FWD");
+					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					{
+					    
+					    dao.MobileStatusUpdate(mobile.getEmpNo());
+					    Object[] mobileNumber = dao.GetMobileNumberId(mobile.getEmpNo());
+	              
+	                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(mobile.getMobileFrom().toString());
+	                    
+	                    if(mobileNumber!=null) {
+	                    
+	                    	dao.MobileNumberUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate), mobileNumber[0].toString());	    					
+	                    }
+	                    
+						mobile.setPisStatusCode("VPA");
+						mobile.setPisStatusCodeNext("VPA");
+						mobile.setIsActive(1);
+						mobile.setMobileStatus("A");				
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						mobile.setPisStatusCodeNext("VPA");
+					}
+					else 
+					{
+						mobile.setPisStatusCodeNext("VDG");
+					}					
+				}
+				//approving	flow 
+				else
+				{
+				   
+					mobile.setPisStatusCode(pisStatusCodeNext);
+					
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						mobile.setPisStatusCodeNext("VPA");
+					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+						
+						 dao.MobileStatusUpdate(mobile.getEmpNo());
+						    Object[] mobileNumber = dao.GetMobileNumberId(mobile.getEmpNo());
+				              
+		                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(mobile.getMobileFrom().toString());
+		                    
+		                    if(mobileNumber!=null) {
+		                    
+		                    	dao.MobileNumberUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromDate), mobileNumber[0].toString());	    					
+		                    }
+		                    
+						mobile.setIsActive(1);
+						mobile.setMobileStatus("A");
+					}
+				}		
+				mobile.setRemarks(remarks);
+				dao.EditMobileNumber(mobile);
+						
+			}
+			else if(action.equalsIgnoreCase("R")) 
+			{
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					mobile.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					mobile.setPisStatusCode("RPA");	
+				}
+				
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					mobile.setPisStatusCodeNext("VPA");
+				}
+				else 
+				{
+					mobile.setPisStatusCodeNext("VDG");
+				}
+				mobile.setRemarks(remarks);
+				dao.EditMobileNumber(mobile);
+			}
+			
+			PisMobileNumberTrans transaction = PisMobileNumberTrans.builder()
+					                           .MobileNumberId(mobile.getMobileNumberId())
+					                           .PisStatusCode(mobile.getPisStatusCode())
+					                           .ActionBy(ApprEmpNo)
+					                           .Remarks(remarks)
+					                           .ActionDate(sdtf.format(new Date()))
+					                           .build();
+			
+			dao.MobileNumberTransactionAdd(transaction);
+							
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+//			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+//			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+			
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && mobile.getMobileStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PIHomeTownMobile.htm");
+				notification.setNotificationMessage("Mobile Number Change Request Approved");
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( mobile.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				}
+				notification.setNotificationUrl("MobileApprovals.htm");
+				notification.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PIHomeTownMobile.htm");
+				notification.setNotificationMessage("Mobile Number Change Request Returned");
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
+			return 1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside MobileNumberForward "+ e);
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public long UpdateEmployeeMobileNumber(String MobileNumber, String AltMobileNumber, String EmpNo) throws Exception {
+		
+		return dao.UpdateEmployeeMobileNumber(MobileNumber, AltMobileNumber, EmpNo);
+	}
+
+	@Override
+	public Long addHometown(PisHometown hometown) throws Exception {
+		
+		return dao.addHometown(hometown);
+	}
+
+	@Override
+	public Long EditHometown(PisHometown hometown) throws Exception {
+		PisHometown home = dao.getHometownById(hometown.getHometownId());
+		
+		home.setHometown(hometown.getHometown());
+		home.setNearestRailwayStation(hometown.getNearestRailwayStation());
+		home.setState(hometown.getState());
+		home.setModifiedBy(hometown.getModifiedBy());
+		home.setModifiedDate(hometown.getModifiedDate());
+		
+		return dao.EditHometown(home);
+	}
+
+	@Override
+	public PisHometown getHometownById(long hometownId) throws Exception {
+		
+		return dao.getHometownById(hometownId);
+	}
+
+	@Override
+	public List<Object[]> HometownDetails(String EmpNo) throws Exception {
+		
+		return dao.HometownDetails(EmpNo);
+	}
+
+	@Override
+	public Object[] GetGroupHeadName(String EmpNo) throws Exception {
+		
+		return dao.GetGroupHeadName(EmpNo);
+	}
+
+	@Override
+	public Object[] GetDivisionHeadName(String EmpNo) throws Exception {
+		
+		return dao.GetDivisionHeadName(EmpNo);
+	}
+
+	@Override
+	public Object[] GetCeoName() throws Exception {
+		
+		return dao.GetCeoName();
 	}
 }

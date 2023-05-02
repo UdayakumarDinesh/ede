@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.vts.ems.pi.model.PisAddressResTrans;
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisMobileNumber;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -40,4 +42,23 @@ public interface PIService {
 	public Object[] PerToAddressId(String empId) throws Exception;
 	public long PerUpdatetoDate(Date toDate, String perAddressId) throws Exception;
 	public List<Object[]> PerAddressTransactionList(String addressperid) throws Exception;
+	public List<Object[]> MobileNumberDetails(String EmpId) throws Exception;
+	public Long addMobileNumber(PisMobileNumber mobile) throws Exception;
+	public PisMobileNumber getMobileNumberData(String mobileNumberId) throws Exception;
+	public long EditMobileNumber(PisMobileNumber mobile) throws Exception;
+	public List<Object[]> MobileTransactionList(String mobilenumberid) throws Exception;
+	public List<Object[]> MobileTransactionApprovalData(String mobileNumberId) throws Exception;
+	public Object[] MobileFormData(String mobileNumberId) throws Exception;
+	public List<Object[]> MobileApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public PisMobileNumber getMobileDataById(long mobilenumberid) throws Exception;
+	public long MobileNumberForward(String mobileNumberId, String username, String action, String remarks, String ApprEmpNo,String LoginType) throws Exception;
+	public long UpdateEmployeeMobileNumber(String MobileNumber, String AltMobileNumber, String EmpNo) throws Exception;
+	public Long addHometown(PisHometown hometown) throws Exception;
+	public Long EditHometown(PisHometown hometown) throws Exception;
+	public PisHometown getHometownById(long hometownId) throws Exception;
+	public List<Object[]> HometownDetails(String EmpNo) throws Exception;
+	public Object[] GetGroupHeadName(String EmpNo) throws Exception;
+	public Object[] GetDivisionHeadName(String EmpNo) throws Exception;
+	public Object[] GetCeoName() throws Exception;
+	
 }

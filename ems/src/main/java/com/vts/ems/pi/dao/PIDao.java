@@ -6,6 +6,9 @@ import java.util.List;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisMobileNumber;
+import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -51,5 +54,27 @@ public interface PIDao {
 	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
 	public List<Object[]> PerAddressTransactionList(String addressperid) throws Exception;
 //	public long ResAddrUpdate(String empid) throws Exception;
+	public List<Object[]> MobileNumberDetails(String EmpId) throws Exception;
+	public Long addMobileNumber(PisMobileNumber mobile) throws Exception;
+	public PisMobileNumber getMobileNumberData(String mobileNumberId) throws Exception;
+	public PisMobileNumber getMobileDataById(long mobilenumberid) throws Exception;
+	public Long EditMobileNumber(PisMobileNumber mobile) throws Exception;
+	public List<Object[]> MobileTransactionList(String mobilenumberid) throws Exception;
+	public List<Object[]> MobileTransactionApprovalData(String mobileNumberId) throws Exception;
+	public Object[] MobileFormData(String mobileNumberId) throws Exception;
+	public List<Object[]> MobileApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public long MobileNumberTransactionAdd(PisMobileNumberTrans transaction) throws Exception;
+	public long MobileStatusUpdate(String EmpId) throws Exception;
+	public Object[] GetMobileNumberId(String EmpId) throws Exception;
+	public long MobileNumberUpdatetoDate(Date MobileTo, String MobileNumberId) throws Exception;
+	public long UpdateEmployeeMobileNumber(String MobileNumber, String AltMobileNumber, String EmpNo) throws Exception;
+	public Employee getEmpDataByEmpNo(String empNo) throws Exception;
+	public Long addHometown(PisHometown hometown) throws Exception;
+	public Long EditHometown(PisHometown hometown) throws Exception;
+	public PisHometown getHometownById(long hometownId) throws Exception;
+	public List<Object[]> HometownDetails(String EmpNo) throws Exception;
+	public Object[] GetGroupHeadName(String EmpNo) throws Exception;
+	public Object[] GetDivisionHeadName(String EmpNo) throws Exception;
+	public Object[] GetCeoName() throws Exception;
 
 }

@@ -19,20 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "pis_mobile_number")
-public class PisMobileNumber implements Serializable{
+@Table(name = "pis_hometown")
+public class PisHometown implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long MobileNumberId;
+	private long HometownId;
 	private String EmpNo;
-	private String MobileNumber;
-	private String AltMobileNumber;
-	private Date MobileFrom;
-	private Date MobileTo;
-	private String MobileStatus;
+	private String Hometown;
+	private String NearestRailwayStation;
+	private String State;
+	private String HometownStatus;
 	private String Remarks;
 	private String PisStatusCode;
 	private String PisStatusCodeNext;
@@ -42,5 +41,5 @@ public class PisMobileNumber implements Serializable{
 	private String CreatedDate;
 	private String ModifiedBy;
 	private String ModifiedDate;
-	
+
 }

@@ -42,6 +42,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.model.PisAdmins;
 import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
@@ -1921,5 +1922,132 @@ public class MasterController {
 		}
 		  
 		 return json.toJson(duplicate);    
+	}
+	
+	@RequestMapping(value="PandAFandAAdmin.htm" , method={ RequestMethod.POST ,RequestMethod.GET })
+	public String PandAFandAAdmin(HttpServletRequest req ,HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside PandAFandAAdmin.htm"+UserId);
+		try {
+			ses.setAttribute("SidebarActive", "PandAFandAAdmin_htm");
+			String action=req.getParameter("Action");
+			String adminsId = req.getParameter("adminsId");
+			
+			List<Object[]> emp = service.getEmployeeList();
+			req.setAttribute("emplist", emp);
+			if("ADD".equalsIgnoreCase(action)) {
+				
+				return "masters/PandAFandAAdminAddEdit";
+			}
+			else if("EDIT".equalsIgnoreCase(action)) {
+				 req.setAttribute("PandA", service.getPandAFandAById(Long.parseLong(adminsId)));
+				return "masters/PandAFandAAdminAddEdit";
+			}
+			else {
+				;
+				req.setAttribute("PandAFandAData", service.PandAFandAAdminData());
+				
+				return "masters/PandAFandAAdmin";
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside PandAFandAAdmin.htm"+UserId,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value="PandAFandAAdd.htm", method={RequestMethod.POST} )
+	public String PandAFandAAdd(HttpServletRequest req, HttpSession ses, HttpServletResponse res , RedirectAttributes redir)throws Exception
+	{
+		
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside PandAFandAAdd.htm "+UserId);
+		try {
+		
+			PisAdmins pisAdmins = new PisAdmins();
+			
+			pisAdmins.setPandAAdmin(req.getParameter("panda"));
+			pisAdmins.setFandAAdmin(req.getParameter("fanda"));
+			pisAdmins.setIsActive(1);
+			pisAdmins.setCreatedBy(UserId);
+			pisAdmins.setCreatedDate(sdtf.format(new Date()));
+			
+			long result = service.PandAFandAAdd(pisAdmins);
+     			
+			if (result != 0) {
+				 redir.addAttribute("result", "P&A And F&A Added Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "P&A And F&A Add Unsuccessfull");
+			}
+			
+			return "redirect:/PandAFandAAdmin.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside PandAFandAAdd.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
+	}
+	
+	@RequestMapping(value="PandAFandAEdit.htm", method={RequestMethod.POST} )
+	public String PandAFandAEdit(HttpServletRequest req, HttpSession ses, HttpServletResponse res ,@RequestPart("selectedFile") MultipartFile selectedFile , RedirectAttributes redir)throws Exception
+	{
+		String UserId=(String)ses.getAttribute("Username");
+		logger.info(new Date() +"Inside PandAFandAEdit.htm "+UserId);
+		try {
+			long adminsId = Long.parseLong(req.getParameter("adminsId")) ;
+			
+			 PisAdmins editpisAdmins = new PisAdmins();
+			 			
+			 editpisAdmins.setAdminsId(adminsId);
+			 editpisAdmins.setRevisedOn(sdtf.format(new Date()));
+			 editpisAdmins.setIsActive(0);
+			 editpisAdmins.setModifiedBy(UserId);
+			 editpisAdmins.setModifiedDate(sdtf.format(new Date()));
+			 
+			 long EditCount = service.PandAFandAEdit(editpisAdmins);
+			 long result =0L;
+			 if(EditCount>0) {
+             PisAdmins pisAdmins = new PisAdmins();
+			            
+			 pisAdmins.setPandAAdmin(req.getParameter("panda"));
+			 pisAdmins.setFandAAdmin(req.getParameter("fanda"));
+			 pisAdmins.setIsActive(1);
+			 pisAdmins.setCreatedBy(UserId);
+			 pisAdmins.setCreatedDate(sdtf.format(new Date()));
+			 
+			 result = service.PandAFandAAdd(pisAdmins);
+			
+			 }
+                    
+               String comments = (String)req.getParameter("comments");
+	    	   MasterEdit masteredit  = new MasterEdit();
+	    	   masteredit.setCreatedBy(UserId);
+	    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+	    	   masteredit.setTableRowId(adminsId);
+	    	   masteredit.setComments(comments);
+	    	   masteredit.setTableName("pis_admins");
+	    	   
+	    	   MasterEditDto masterdto = new MasterEditDto();
+	    	   masterdto.setFilePath(selectedFile);
+	    	   service.AddMasterEditComments(masteredit , masterdto);
+	    	 
+	    	   
+			if (result != 0) {
+				 redir.addAttribute("result", "P&A And F&A Updated Successfully");
+			} else {
+				 redir.addAttribute("resultfail", "P&A And F&A Update Unsuccessfull");
+			}
+			
+			 return "redirect:/PandAFandAAdmin.htm";
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside PandAFandAEdit.htm "+UserId,e);
+			e.printStackTrace();
+			 return "static/Error";
+		}
+		                                                                     
 	}
 }

@@ -41,11 +41,18 @@
 <body>
 <%
 	String LoginType = (String)session.getAttribute("LoginType");
-	String edit = (String)request.getAttribute("edit");
 	
+    Object[] CeoName = (Object[])request.getAttribute("CeoName");
+    Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
 	Object[] DGMEmpName = (Object[])request.getAttribute("DGMEmpName");
-	Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
+	Object[] DivisionHeadName = (Object[])request.getAttribute("DivisionHeadName");
+	Object[] GroupHeadName = (Object[])request.getAttribute("GroupHeadName");
+	
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
+	
+	List<Object[]> mobile =(List<Object[]>)request.getAttribute("MobileDetails");
+	List<Object[]> home =(List<Object[]>)request.getAttribute("HometownDetails");
+	
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -92,29 +99,161 @@
 					    <tr align="center">
 					       <th>Select</th>
 					       <th>Hometown</th>
-					       <th>State</th>
-					       <th>Nearest Railway Station</th>
-						  <!--  <th>Mobile No.</th> -->							
+					       <th>Nearest Railway Station</th>	
+					       <th>State</th>					       								
 						   <th>Status</th>
 						   <th>Action</th> 
 					   </tr>
 					   </thead>
 					   <tbody>
-
+                           <%
+					        for(Object[] obj : home){ %>
+					   		<tr align="center">
+					   		<td style="text-align: center;width:4%;">
+								<%if(obj[11].toString().equalsIgnoreCase("INI") ){ %>
+									<input type="radio" name="hometownid" value="<%=obj[0]%>"> <%}else{ %>
+									<input type="radio" name="hometownid" value="<%=obj[0]%>" disabled>
+								<%} %>
+							</td>
+						    <td style="text-align: left;"><%if(obj[2]!=null){ %> <%=obj[2] %> <%} %> </td>
+						    <td style="text-align: left;"><%if(obj[3]!=null){ %> <%=obj[3] %> <%} %> </td>
+						    <td style="text-align: left;"><%if(obj[4]!=null){ %> <%=obj[4] %> <%} %> </td>
+					   		<td style="">
+													
+								<%if(obj[8]!=null){%>
+								  
+								 	<%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    	<%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    		
+							    	<%}else{ %>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="MobileNumberTransStatus.htm" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[9] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=obj[8] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    	<%} %>  
+								 
+								<%} %>
+							</td>
+					   		
+					   		<td style="text-align: left;width:9%;">
+								<button type="submit" class="btn btn-sm view-icon" formaction="HometownPreview.htm" name="hometownId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Hometown Change" style="font-weight: 600;" >
+								   <i class="fa-solid fa-eye"></i>
+								</button>
+								<button type="submit" class="btn btn-sm" name="mobilenumberId" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
+                            </td>	
+                            
+					   		</tr>
+					   		<%} %>
 					   </tbody>
 				    </table>
 				   </div>	
 				   <div class="row text-center">
 						<div class="col-md-12">
 						     <%-- <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> --%>
-							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDPerAddress"   >ADD </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITPerAddress"  Onclick="EditPer(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDHometown"   >ADD </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITHometown"  Onclick="EditPer(empForm)" >EDIT </button>
 					    	<!-- <button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button> -->
 					    </div>
 					    </div>							
 				</form>
-             </div>
-		</div>			 
+						<hr>
+			<div class="row"  >
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Hometown</b></div>
+		 	</div>
+		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+	              <table align="center"  >
+	               		<tr>
+	                		<td class="trup" style="background: #E8E46E;">
+	                			User 
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%if(GroupHeadName!=null){ %>
+	                		<td class="trup" style="background: #B39DDB;">
+	                			Group Head 
+	                		</td>
+			                		 
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		<%if(DivisionHeadName!=null){ %>
+	                		<td class="trup" style="background: #90CAF9;">
+	                			Division Head 
+	                		</td>
+			                		 
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		<%if(DGMEmpName!=null){ %>
+	                		<td class="trup" style="background: #FBC7F7;">
+	                			DGM 
+	                		</td>
+			                		 
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		<%if(PandAEmpName!=null){ %>
+	                		<td class="trup" style="background: #A5D6A7;" >
+	                			P&A
+	                		</td>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		<%if(CeoName!=null){ %>
+	                		<td class="trup" style="background: #4DB6AC;" >
+	                			CEO
+	                		</td>
+	             
+	               		<%} %>
+	               	</tr>			   
+		                	
+	               	<tr>
+	               		<td class="trdown" style="background: #E8E46E;" >	
+				              <%=emp.getEmpName() %>
+	                	</td>
+	                	<%if(GroupHeadName!=null){ %>
+	                		<td class="trdown" style="background: #B39DDB;" >	
+				                <%=GroupHeadName[1] %>
+	                		</td>
+	               		 <%} %>
+	               		<%if(DivisionHeadName!=null){ %>
+	                		<td class="trdown" style="background: #90CAF9;" >	
+				                <%=DivisionHeadName[1] %>
+	                		</td>
+	               		 <%} %>
+	               		<%if(DGMEmpName!=null){ %>
+	                		<td class="trdown" style="background: #FBC7F7;" >	
+				                <%=DGMEmpName[1] %>
+	                		</td>
+	               		 <%} %>
+	               		 <%if(PandAEmpName!=null){ %>
+	               			<td class="trdown" style="background: #A5D6A7;" >	
+			                	<%=PandAEmpName[1] %>
+		           			</td>
+		           		 <%} %>
+		           		 <%if(CeoName!=null){ %>
+	               			<td class="trdown" style="background: #4DB6AC;" >	
+			                	<%=CeoName[1] %>
+		           			</td>
+		           		 <%} %>
+		            	</tr>             	
+			           </table>			             
+			       </div>
+       </div>
+</div>			 
 		 
 		 
 		 
@@ -139,8 +278,52 @@
 						   </tr>
 					   </thead>
 					   <tbody>
+					        <%
+					        for(Object[] obj : mobile){ %>
+					   		<tr align="center">
+					   		<td style="text-align: center;width:4%;">
+								<%if(obj[12].toString().equalsIgnoreCase("INI") ){ %>
+									<input type="radio" name="mobilenumberid" value="<%=obj[0]%>"> <%}else{ %>
+									<input type="radio" name="mobilenumberid" value="<%=obj[0]%>" disabled>
+								<%} %>
+							</td>
+						    <td style=""><%if(obj[2]!=null){ %> <%=obj[2] %> <%} %> </td>
+							<td style=""><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>	
+							<td style=""><%if(obj[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[5]+"")%><%}else{%>--<%}%></td>	
+					   		<td style="">
+													
+								<%if(obj[9]!=null){%>
+								  
+								 	<%if(obj[6]!=null && obj[6].toString().equalsIgnoreCase("A") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MobileNumberTransStatus.htm" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    	<%}else if(obj[6]!=null && obj[6].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MobileNumberTransStatus.htm" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    		
+							    	<%}else{ %>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="MobileNumberTransStatus.htm" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[10] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=obj[9] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    	<%} %>  
+								 
+								<%} %>
+							</td>
 					   		
-					</tbody>
+					   		<td style="text-align: left;width:9%;">
+								<button type="submit" class="btn btn-sm view-icon" formaction="MobileNumberPreview.htm" name="mobileNumberId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Mobile Number Change" style="font-weight: 600;" >
+								   <i class="fa-solid fa-eye"></i>
+								</button>
+								<button type="submit" class="btn btn-sm" name="mobilenumberId" value="<%=obj[0] %>" formaction="MobileFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
+                            </td>	
+                            
+					   		</tr>
+					   		<%} %>
+				       </tbody>
 					</table>
 					</div>	
 					<div class="row text-center">
@@ -156,7 +339,7 @@
 				
 		<hr>
 			<div class="row"  >
-		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow</b></div>
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Mobile</b></div>
 		 	</div>
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
@@ -177,7 +360,7 @@
 	                		</td>
 	               		<%} %>
 	               		<%if(PandAEmpName!=null){ %>
-	                		<td class="trup" style="background: #FBC7F7;" >
+	                		<td class="trup" style="background: #4DB6AC;" >
 	                			P&A
 	                		</td>
 	               		<%} %>
@@ -193,7 +376,7 @@
 	                		</td>
 	               		 <%} %>
 	               		 <%if(PandAEmpName!=null){ %>
-	               			<td class="trdown" style="background: #FBC7F7;" >	
+	               			<td class="trdown" style="background: #4DB6AC;" >	
 			                	<%=PandAEmpName[1] %>
 		           			</td>
 		           		 <%} %>
@@ -233,7 +416,7 @@ $("#myTable3").DataTable({
 <script type="text/javascript">
 function EditRes(myfrm) {
 
-	var fields = $("input[name='mobileNumberId']").serializeArray();
+	var fields = $("input[name='mobilenumberid']").serializeArray();
 	if (fields.length === 0) {
 		alert("Please Select Atleast One Mobile Number");
 
@@ -247,7 +430,7 @@ function EditRes(myfrm) {
 <script type="text/javascript">
 function EditPer(myfrm) {
 
-	var fieldsperadd = $("input[name='homeTownId']").serializeArray();
+	var fieldsperadd = $("input[name='hometownid']").serializeArray();
  
 	if (fieldsperadd.length === 0) {
 		alert("Please Select Atleast One HomeTown");

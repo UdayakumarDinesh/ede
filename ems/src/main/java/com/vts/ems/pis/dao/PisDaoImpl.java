@@ -792,7 +792,7 @@ public class PisDaoImpl implements PisDao {
 		}
 		return Details.getFamily_details_id();
 	}
-	private static final String PERMNENTADDRESS="SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid";
+	private static final String PERMNENTADDRESS="SELECT empid,address_per_id,per_addr,from_per_addr,mobile,alt_mobile,landline,state,city,pin  FROM pis_address_per  WHERE empid=:empid And PerAdStatus='A' ";
 	@Override
 	public Object[] getPerAddress(String Empid)throws Exception{
 		try {
@@ -1187,7 +1187,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String PERADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , per_addr , pin ,state FROM pis_address_per WHERE empid =:empid AND PerAdStatus='Y' ";
+	private static final String PERADDRESSDETAILS="SELECT alt_mobile , city ,from_per_addr , hometown ,landline , mobile , per_addr , pin ,state FROM pis_address_per WHERE empid =:empid AND PerAdStatus='A' ";
 	@Override
 	public Object[] EmployeePerAddressDetails(String empid) throws Exception {
 		try {
@@ -1205,7 +1205,7 @@ public class PisDaoImpl implements PisDao {
 		}
 	}
 	
-	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state,ext,qtrno,qtrtype,emailofficial FROM pis_address_res WHERE empid =:empid AND ResAdStatus='Y'";
+	private static final String RESADDRESSDETAILS="SELECT alt_mobile , city ,from_res_addr  ,landline , mobile , res_addr , pin ,state,ext,qtrno,qtrtype,emailofficial FROM pis_address_res WHERE empid =:empid AND ResAdStatus='A'";
 	@Override
 	public List<Object[]> EmployeeResAddressDetails(String empid) throws Exception {
 		try {

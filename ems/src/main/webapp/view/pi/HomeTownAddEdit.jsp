@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
  <%@page import="java.util.List"%>
-  <%@page import="com.vts.ems.pis.model.AddressPer"%>
+  <%@page import="com.vts.ems.pi.model.PisHometown"%>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
 <body>
 	<%
 	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
-	AddressPer hometown =(AddressPer)request.getAttribute("hometown");
+	PisHometown hometown =(PisHometown)request.getAttribute("Hometown");
 	%>
 	
 	<div class="card-header page-top">
@@ -61,41 +61,38 @@
 				        <div class="col-md-5">
 				        <div class="form-group">
 		                     <label>Hometown:<span class="mandatory">*</span></label>
-		                     <input type="text" value="" class="form-control input-sm" maxlength="250" id="perAdd" name="perAdd" required="required" placeholder="Enter HomeTown" onclick="return trim(this)" onchange="return trim(this)"> 
+		                     <input type="text" value="<%if(hometown!=null && hometown.getHometown()!=null) {%> <%=hometown.getHometown() %> <%} %> " class="form-control input-sm" maxlength="250" id="hometown" name="hometown" required="required" placeholder="Enter HomeTown" onclick="return trim(this)" onchange="return trim(this)"> 
 		                </div>
 		                </div>
 		                
 	             <div class="col-md-4">
                     <div class="form-group">
                             <label>Nearest Railway Station:<span class="mandatory">*</span></label>
-                            <input type="text"  id="city"  name="city" class="form-control input-sm" maxlength="150"  value="" placeholder="Enter Nearest Railway Station"   required="required" onclick="return trim(this)" onchange="return trim(this)">
+                            <input type="text" value="<%if(hometown!=null && hometown.getNearestRailwayStation()!=null) {%> <%=hometown.getNearestRailwayStation() %> <%} %>" id="nearestRailwayStation"  name="nearestRailwayStation" class="form-control input-sm" maxlength="250"  placeholder="Enter Nearest Railway Station"   required="required" onclick="return trim(this)" onchange="return trim(this)">
                     </div>
                     </div> 
 		         
 		                <div class="col-md-3">
                         <div class="form-group">
                               <label>State:<span class="mandatory">*</span></label>
-                              <select id="state" name="state" class="form-control input-sm selectpicker" data-live-search="true">
+                              <select id="state" name="state" class="form-control input-sm selectpicker" data-live-search="true" required>
                                       <%if(States!=null){ 
 					                        for(Object[] O:States){%>
 					                        <%if(hometown!=null){%>
-					                        <option value="<%=O[1]%>"><%=O[1]%></option>				                        
+					                        <option value="<%=O[1]%>" <%if(hometown!=null){if( hometown.getState().equalsIgnoreCase(O[1].toString())  ){%> selected   <%}}%> ><%=O[1]%></option>				                        
 					                        <%}else{ %>
 					                        <option value="<%=O[1]%>" ><%=O[1]%></option>
 					                        <%}}}%>
                               </select>
                        </div>
                        </div>	                    
-			</div>
-            
-                
-    		
-		</div>
+			        </div> 		
+	         	  </div>
 						<div class="row">
 							<div class="col-12" align="center">
 							 <div class="form-group">
 							<%if(hometown!=null){ %>
-							<input type="hidden" name="hometownId" value="">
+							<input type="hidden" name="hometownId" value="<%=hometown.getHometownId() %>">
 			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>
 							<%}else{%>
 				              <button type="submit" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>
@@ -117,40 +114,22 @@
 <script type="text/javascript">
 function CommentsModel()
 {
-	  var PerAdd =$("#perAdd").val();
+	  var NearestRailwayStation =$("#nearestRailwayStation").val();
 	  var State =$("#state").val();
-	  var City =$("#city").val();
-	  var CityPin= $("#CityPinTextBox").val();
-	  var Mobile = $("#MobileTextBox").val();
-	  var AltMobile = $("#AltMobileTextBox").val();
-	  var LandLine = $("#LandLineTextBox").val();
+	  var Hometown =$("#hometown").val();
 	  
 	  if(confirm('Are You Sure to Submit?')){
 	  
-	  if(PerAdd==null || PerAdd=='' || PerAdd=="null" ){
-			alert('Enter the Permanent Address!');
+	  if(Hometown==null || Hometown=='' || Hometown=="null" ){
+			alert('Enter the Hometown!');
 			return false;
 		}else if(State==null || State=='' || State=="null" ){
 			alert('Please Select the State!');
 			return false;
-		}else if(City==null || City=='' || City=="null" ){
-			alert('Enter the City Name!');
+		}else if(NearestRailwayStation==null || NearestRailwayStation=='' || NearestRailwayStation=="null" ){
+			alert('Enter the Nearest Railway Station!');
 			return false;
-		}else if(CityPin==null || CityPin=='' || CityPin=="null" ){
-			alert('Enter the City Pin!');
-			return false;
-		}else if(Mobile==null || Mobile=='' || Mobile=="null" ){
-			alert('Enter the Mobile Number!');
-			return false;
-		}/*else if(AltMobile==null || AltMobile=='' || AltMobile=="null" ){
-			alert('Enter the Alt Mobile Number!');
-			return false;
-		}else if(LandLine==null || LandLine=='' || LandLine=="null" ){
-			alert('Enter the LandLine Number!');
-			return false;
-		} else{
-			$('#myModal').modal('show');
-		} */else{
+		}else{
 			$('#myform').submit();
 			return true;
 		}
@@ -161,65 +140,4 @@ function CommentsModel()
 }
 </script>
 
-<script type="text/javascript">
-$('.mydate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	//"minDate" :new Date(), 
-	"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-$('.mydate1').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	//"minDate" :new Date(), 
-	//"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-</script>
-<script type="text/javascript">
-
-setPatternFilter($("#CityPinTextBox"), /^-?\d*$/);
-setPatternFilter($("#MobileTextBox"), /^-?\d*$/);
-setPatternFilter($("#AltMobileTextBox"), /^-?\d*$/);
-setPatternFilter($("#LandLineTextBox"), /^-?\d*$/);
-
-function setPatternFilter(obj, pattern) {
-	  setInputFilter(obj, function(value) { return pattern.test(value); });
-	}
-
-function setInputFilter(obj, inputFilter) {
-	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-	    if (inputFilter(this.value)) {
-	      this.oldValue = this.value;
-	      this.oldSelectionStart = this.selectionStart;
-	      this.oldSelectionEnd = this.selectionEnd;
-	    } else if (this.hasOwnProperty("oldValue")) {
-	      this.value = this.oldValue;
-	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-	    }
-	  });
-	}
-
-
-function checknegative(str) {
-    if (parseFloat(document.getElementById(str.id).value) < 0) {
-        document.getElementById(str.id).value = "";
-        document.getElementById(str.id).focus();
-        alert('Negative Values Not allowed');
-        return false;
-    }
-}
-</script>
 </html>

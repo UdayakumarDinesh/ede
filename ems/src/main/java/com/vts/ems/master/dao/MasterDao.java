@@ -15,6 +15,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.model.PisAdmins;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 
@@ -98,6 +99,10 @@ public interface MasterDao {
 	public long dgmEdit(DgmMaster dgmMaster) throws Exception;
 	public BigInteger duplicateDgmCodeCountAdd(String dgmCode) throws Exception;
 	public BigInteger duplicateDgmCodeCountEdit(String dgmId, String dgmCode) throws Exception;
+	public Object[] PandAFandAAdminData() throws Exception;
+	public PisAdmins getPandAFandAById(long adminsId) throws Exception;
+	public long PandAFandAAdd(PisAdmins admins) throws Exception;
+	public long PandAFandAEdit(PisAdmins admins) throws Exception;
 
 	
 }

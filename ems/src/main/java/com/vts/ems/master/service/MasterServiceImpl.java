@@ -34,6 +34,7 @@ import com.vts.ems.master.model.DivisionGroup;
 import com.vts.ems.master.model.DoctorList;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.master.model.MasterEdit;
+import com.vts.ems.master.model.PisAdmins;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
 
@@ -627,5 +628,35 @@ public class MasterServiceImpl implements MasterService {
 		public BigInteger duplicateDgmCodeCountEdit(String dgmId, String dgmCode) throws Exception {
 			
 			return dao.duplicateDgmCodeCountEdit(dgmId, dgmCode);
+		}
+
+		@Override
+		public Object[] PandAFandAAdminData() throws Exception {
+			
+			return dao.PandAFandAAdminData();
+		}
+
+		@Override
+		public PisAdmins getPandAFandAById(long adminsId) throws Exception {
+			
+			return dao.getPandAFandAById(adminsId);
+		}
+
+		@Override
+		public long PandAFandAAdd(PisAdmins admins) throws Exception {
+			
+			return dao.PandAFandAAdd(admins);
+		}
+
+		@Override
+		public long PandAFandAEdit(PisAdmins admins) throws Exception {
+			PisAdmins pisadmins = dao.getPandAFandAById(admins.getAdminsId());
+			
+			pisadmins.setIsActive(admins.getIsActive());
+			pisadmins.setRevisedOn(admins.getRevisedOn());
+			pisadmins.setModifiedBy(admins.getModifiedBy());
+			pisadmins.setModifiedDate(admins.getModifiedDate());
+			
+			return dao.PandAFandAEdit(pisadmins);
 		}
 }

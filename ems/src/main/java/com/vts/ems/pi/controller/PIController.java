@@ -30,8 +30,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.Service.AdminService;
-
-
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisMobileNumber;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
@@ -710,7 +710,7 @@ public class PIController {
 //		ResAddrTransactionStatus
 		
 		@RequestMapping(value = "ResAddrTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
-		public String ChssStatusDetails(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		public String ResAddrTransactionStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside ResAddrTransactionStatus.htm "+Username);
@@ -752,22 +752,33 @@ public class PIController {
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 	    	String LoginType=(String)ses.getAttribute("LoginType");
 			String Username = (String) ses.getAttribute("Username");
-			String EmpNo = (String) ses.getAttribute("EmpNo");
+			String EmpNo = (String) ses.getAttribute("EmpNo").toString().trim();
 			logger.info(new Date() +"Inside PIHomeTownMobile.htm"+Username);		
 			try {		
 				ses.setAttribute("formmoduleid", formmoduleid);			
 				ses.setAttribute("SidebarActive","PIHomeTownMobile_htm");
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-								
-				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+				
+				req.setAttribute("CeoName", service.GetCeoName());
+				
+				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
+				
 				List<String> DGMs = service.GetDGMEmpNos();
 				
 				if(!DGMs.contains(EmpNo)) {
 					req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
 				}
-				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
-													
+				
+				req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
+				
+				req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
+				
+				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+				
+				req.setAttribute("MobileDetails", service.MobileNumberDetails(EmpNo));
+				req.setAttribute("HometownDetails", service.HometownDetails(EmpNo));
+				
 				return "pi/HomeTownAndMobile";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PIHomeTownMobile.htm"+Username, e);
@@ -775,8 +786,340 @@ public class PIController {
 				return "static/Error";
 			}
 			
+		}		
+		 
+		 @RequestMapping(value ="MobileNumberAddEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
+		 public String MobileNumberAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside MobileNumberAddEdit.htm "+Username);
+		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		       try {
+
+		    	   String Action = (String) req.getParameter("Action");
+		    	
+		    	   	if("EDIT".equalsIgnoreCase(Action)) {
+		    	   		
+		    	   		req.setAttribute("mobile",  service.getMobileNumberData(req.getParameter("mobilenumberid"))	);
+		    	   		   				 		
+		    	   	      return "pi/MobileNumberAddEdit";
+		           }else{
+                        
+		    	   	 return "pi/MobileNumberAddEdit";
+		    	   	}
+		    	   	
+			    } catch (Exception e) {
+			    	 logger.error(new Date() +"Inside MobileNumberAddEdit.htm "+Username ,e);
+			 	    e.printStackTrace();
+			 	    return "static/Error";
+			    }
+		      
+		}
+		 
+		@RequestMapping(value="MobileNumberAdd.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		public String MobileNumberAdd(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+			  
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside MobileNumberAdd.htm "+Username);  
+		       String Action = (String)request.getParameter("Action");
+		       String EmpNo = (String) ses.getAttribute("EmpNo");
+			   try {
+
+					String fromRes = request.getParameter("fromRes");
+					String mobileNumber = request.getParameter("mobile").trim().replaceAll(" +", " ");
+					String altMobile = request.getParameter("altMobile").trim().replaceAll(" +", " ");
+														
+					
+					long mobileInt = 1;
+					long altMobileInt = 1;	
+
+					if (!"".equalsIgnoreCase(mobileNumber)) {
+						mobileInt = Long.parseLong(mobileNumber);
+					}
+
+					if (!"".equalsIgnoreCase(altMobile)) {
+						altMobileInt = Long.parseLong(altMobile);
+					}
+					
+					PisMobileNumber mobile = new PisMobileNumber();
+					
+					mobile.setEmpNo(EmpNo);
+					mobile.setMobileNumber(mobileNumber);
+					mobile.setAltMobileNumber(altMobile);
+					mobile.setMobileFrom(DateTimeFormatUtil.dateConversionSql(fromRes));
+					mobile.setMobileStatus("N");
+					mobile.setPisStatusCode("INI");
+					mobile.setPisStatusCodeNext("INI");
+								    
+					if("ADD".equalsIgnoreCase(Action)) {
+						mobile.setIsActive(1);
+						mobile.setCreatedBy(Username);
+						mobile.setCreatedDate(sdtf.format(new Date()));
+		
+			        	long result  =  service.addMobileNumber(mobile);
+			        	
+
+			        	    if(result>0) {
+			        	    	 redir.addAttribute("result", "Mobile Number Added Successfully");	
+			        		} else {
+			        			 redir.addAttribute("resultfail", "Mobile Number Add Unsuccessful");	
+			        	    }
+			        	    redir.addAttribute("mobileNumberId", result);
+					}
+					
+				} catch (Exception e) {
+					logger.error(new Date() +"Inside MobileNumberAdd.htm "+Username ,e);  
+					e.printStackTrace();
+					return "static/Error";
+				}
+			   return "redirect:/MobileNumberPreview.htm";
+		} 
+		
+		@RequestMapping(value="MobileNumberEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		public String MobileNumberEdit(HttpServletRequest request , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+			  
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside MobileNumberEdit.htm "+Username);  
+		       String Action = (String)request.getParameter("Action");
+		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			   try {
+
+					String mobileNumber = request.getParameter("mobile").trim().replaceAll(" +", " ");
+					String altMobile = request.getParameter("altMobile").trim().replaceAll(" +", " ");
+					String fromRes = request.getParameter("fromRes");
+																	
+					long mobileInt = 1;
+					long altMobileInt = 1;	
+
+					if (!"".equalsIgnoreCase(mobileNumber)) {
+						mobileInt = Long.parseLong(mobileNumber);
+					}
+
+					if (!"".equalsIgnoreCase(altMobile)) {
+						altMobileInt = Long.parseLong(altMobile);
+					}
+					
+					PisMobileNumber mobile = new PisMobileNumber();
+					
+					mobile.setMobileNumber(mobileNumber);
+					mobile.setAltMobileNumber(altMobile);
+					mobile.setMobileFrom(DateTimeFormatUtil.dateConversionSql(fromRes));
+								    
+					if("EDIT".equalsIgnoreCase(Action)) {
+						String mobileNumberId = (String)request.getParameter("mobileNumberId");
+						mobile.setMobileNumberId(Long.parseLong(mobileNumberId));
+						mobile.setModifiedBy(Username);
+						mobile.setModifiedDate(sdtf.format(new Date()));
+		
+			        	long result  =  service.EditMobileNumber(mobile);
+			        	
+
+			        	    if(result>0) {
+			        	    	 redir.addAttribute("result", "Mobile Number Edited Successfully");	
+			        		} else {
+			        			 redir.addAttribute("resultfail", "Mobile Number Edit Unsuccessful");	
+			        	    }
+			        	    redir.addAttribute("mobileNumberId", result);
+					}
+					
+				} catch (Exception e) {
+					logger.error(new Date() +"Inside MobileNumberEdit.htm "+Username ,e);  
+					e.printStackTrace();
+					return "static/Error";
+				}
+			   return "redirect:/PIHomeTownMobile.htm";
 		}
 		
+		@RequestMapping(value = "MobileNumberTransStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String MobileNumberTransStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MobileNumberTransStatus.htm "+Username);
+			try {
+				String mobilenumberid = req.getParameter("mobilenumberid").trim();
+				req.setAttribute("TransactionList", service.MobileTransactionList(mobilenumberid)) ;				
+				return "pi/MobileNumberTransStatus";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside MobileNumberTransStatus.htm "+Username, e);
+				return "static/Error";
+			}
+		}
+		
+		@RequestMapping(value = "MobileNumberPreview.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String MobileNumberPreview(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			String Username = (String) ses.getAttribute("Username");
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+			logger.info(new Date() +"Inside MobileNumberPreview.htm "+Username);
+			try {
+				String mobileNumberId = req.getParameter("mobileNumberId").trim();
+					
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+					if(mobileNumberId!=null) {
+						String isApproval = req.getParameter("isApproval");
+						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+							ses.setAttribute("SidebarActive","MobileApprovals_htm");
+						}
+						req.setAttribute("isApproval", isApproval);
+						req.setAttribute("MobFormData", service.MobileFormData(mobileNumberId));
+						req.setAttribute("ApprovalEmpData", service.MobileTransactionApprovalData(mobileNumberId));
+						req.setAttribute("Employee", service.getEmpData(EmpId));
+		              		                            
+					}
+					
+					return "pi/MobileNumberForm";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside MobileNumberPreview.htm "+Username, e);
+				return "static/Error";
+			}
+		}
+		
+		@RequestMapping(value = "MobileFormSubmit.htm")
+		public String MobileFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			logger.info(new Date() +"Inside MobileFormSubmit.htm"+Username);
+			try {
+				String mobileNumberId = req.getParameter("mobileNumberId").trim();
+				String action = req.getParameter("Action");
+				String remarks = req.getParameter("remarks");
+				
+		
+				PisMobileNumber mobile = service.getMobileDataById(Long.parseLong(mobileNumberId));
+				String  pisStatusCode = mobile.getPisStatusCode();
+				
+				
+				long count = service.MobileNumberForward(mobileNumberId, Username, action, remarks, EmpNo, LoginType);
+								
+				PisMobileNumber mobile2 = service.getMobileDataById(Long.parseLong(mobileNumberId));
+				String  pisStatusCode2 = mobile2.getPisStatusCode();
+				String pisStatusCodeNext2 = mobile2.getPisStatusCodeNext();
+				
+				if(pisStatusCode2.equalsIgnoreCase("VPA") && pisStatusCodeNext2.equalsIgnoreCase("VPA")) {									
+					service.UpdateEmployeeMobileNumber(mobile2.getMobileNumber().trim(), mobile2.getAltMobileNumber().trim(), mobile2.getEmpNo());
+				}
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
+					if (count > 0) {
+						redir.addAttribute("result", "Mobile Form Sent for verification Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Mobile Form Sent for verification Unsuccessful");	
+					}	
+					return "redirect:/PIHomeTownMobile.htm";
+				}
+				else  
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Address verification Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
+					}	
+					return "redirect:/MobileApprovals.htm";
+				}
+				
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside MobileFormSubmit.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+		
+		@RequestMapping(value = "MobileApprovals.htm")
+		public String HometownMobileApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside MobileApprovals.htm.htm"+Username);		
+			try {				
+				
+				ses.setAttribute("formmoduleid", formmoduleid);			
+				ses.setAttribute("SidebarActive","MobileApprovals_htm");	
+				
+				req.setAttribute("MobApprovalList", service.MobileApprovalsList(EmpNo, LoginType));
+				
+				return "pi/MobileApproval";
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside MobileApprovals.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
+		
+		@RequestMapping(value = "MobileFormDownload.htm")
+		public void MobileNumberFormDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+
+			logger.info(new Date() +"Inside MobileFormDownload.htm "+UserId);
+			
+			try {	
+				String mobileNumberId = req.getParameter("mobilenumberId");
+				String pagePart =  req.getParameter("pagePart");
+				
+				String filename="";
+				if(mobileNumberId!=null) {
+					req.setAttribute("ApprovalEmpData", service.MobileTransactionApprovalData(mobileNumberId));
+					req.setAttribute("MobFormData", service.MobileFormData(mobileNumberId));	
+					filename="Mobile_Number";
+				}
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("pagePart","3" );
+				
+				req.setAttribute("view_mode", req.getParameter("view_mode"));
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+		        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+		        req.getRequestDispatcher("/view/pi/MobileNumberFormPrint.jsp").forward(req, customResponse);
+
+				String html = customResponse.getOutput();        
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        res.setContentType("application/pdf");
+		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		       
+		       
+		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+		        
+		        
+		        File f=new File(path +File.separator+ filename+".pdf");
+		        FileInputStream fis = new FileInputStream(f);
+		        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+		        res.setHeader("Content-Length",String.valueOf(f.length()));
+		        byte[] buffer = new byte[1024];
+		        int len = 0;
+		        while ((len = fis.read(buffer)) >= 0) {
+		            os.write(buffer, 0, len);
+		        } 
+		        os.close();
+		        fis.close();
+		       
+		       
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+		       	
+			}
+			catch (Exception e) {
+				e.printStackTrace();  
+				logger.error(new Date() +" Inside MobileFormDownload.htm "+UserId, e); 
+			}
+
+	    }
+
 		 @RequestMapping(value ="HomeTownAddEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
 		 public String HomeTownAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 			   String Username = (String) ses.getAttribute("Username");
@@ -786,14 +1129,12 @@ public class PIController {
 
 		    	   String Action = (String) req.getParameter("Action");
 		    	
-		    	   	if("EDITPerAddress".equalsIgnoreCase(Action)) {
-		    	   	
-		    	   		AddressPer peraddress = service.getPerAddressData(req.getParameter("peraddressid"));
-		    	   		
+		    	   	if("EDITHometown".equalsIgnoreCase(Action)) {
+		    	 		    	   		
 		    	   		List<Object[]> States = pisservice.getStates();
-		    	   		 req.setAttribute("peraddress", peraddress);
-		 	   		     req.setAttribute("States", States);
-		    	   	      return "pi/PerAddressAddEdit";
+		 	   		    req.setAttribute("States", States);
+		 	   		    req.setAttribute("Hometown", service.getHometownById(Long.parseLong(req.getParameter("hometownid"))));
+		    	   	      return "pi/HomeTownAddEdit";
 		           }else{
 		    	   		List<Object[]> States = pisservice.getStates();
 		    	   		req.setAttribute("States", States);
@@ -807,30 +1148,108 @@ public class PIController {
 			    }
 		      
 		}
-		 @RequestMapping(value ="MobileNumberAddEdit.htm" , method= {RequestMethod.GET,RequestMethod.POST})
-		 public String MobileNumberAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
-			   String Username = (String) ses.getAttribute("Username");
-		       logger.info(new Date() +"Inside MobileNumberAddEdit.htm "+Username);
-		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-		       try {
+		
+		 @RequestMapping(value="HomeTownAdd.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+			public String HometownAdd(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+				  
+				   String Username = (String) ses.getAttribute("Username");
+			       logger.info(new Date() +"Inside HomeTownAdd.htm "+Username);  
+			       String Action = req.getParameter("Action");
+			       String EmpNo = (String) ses.getAttribute("EmpNo").toString();
+				   try {
+						
+						
+						PisHometown hometown = new PisHometown();
+						
+						hometown.setEmpNo(EmpNo);
+						hometown.setHometown(req.getParameter("hometown").trim());
+						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
+						hometown.setState(req.getParameter("state"));
+						hometown.setHometownStatus("N");
+						hometown.setPisStatusCode("INI");
+						hometown.setPisStatusCodeNext("INI");
+															    
+						if("ADD".equalsIgnoreCase(Action)) {
+							hometown.setIsActive(1);
+							hometown.setCreatedBy(Username);
+							hometown.setCreatedDate(sdtf.format(new Date()));
+			
+				        	long result  =  service.addHometown(hometown);
+				        	
 
-		    	   String Action = (String) req.getParameter("Action");
-		    	
-		    	   	if("EDITPerAddress".equalsIgnoreCase(Action)) {
-		    	   		    	   		
-		    	   		
-		    	   	      return "pi/MobileNumberAddEdit";
-		           }else{
+				        	    if(result>0) {
+				        	    	 redir.addAttribute("result", "Hometown Added Successfully");	
+				        		} else {
+				        			 redir.addAttribute("resultfail", "Hometown Add Unsuccessful");	
+				        	    }
+				        	    redir.addAttribute("hometownId", result);
+						}
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside HomeTownAdd.htm "+Username ,e);  
+						e.printStackTrace();
+						return "static/Error";
+					}
+				   return "redirect:/HometownPreview.htm";
+		}  
+		 
+		 @RequestMapping(value="HomeTownEdit.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		  public String HometownEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+				  
+				   String Username = (String) ses.getAttribute("Username");
+			       logger.info(new Date() +"Inside HomeTownEdit.htm "+Username);  
+			       String Action = (String)req.getParameter("Action");
+				   try {
 
-		    	   	 return "pi/MobileNumberAddEdit";
-		    	   	}
-		    	   	
-			    } catch (Exception e) {
-			    	 logger.error(new Date() +"Inside MobileNumberAddEdit.htm "+Username ,e);
-			 	    e.printStackTrace();
-			 	    return "static/Error";
-			    }
-		      
+					   PisHometown hometown = new PisHometown();
+						
+						hometown.setHometown(req.getParameter("hometown").trim());
+						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
+						hometown.setState(req.getParameter("state"));
+									    
+						if("EDIT".equalsIgnoreCase(Action)) {
+							String hometownId = req.getParameter("hometownId");
+							
+							hometown.setHometownId(Long.parseLong(hometownId));
+							hometown.setModifiedBy(Username);
+							hometown.setModifiedDate(sdtf.format(new Date()));
+			
+				        	long result  =  service.EditHometown(hometown);
+				        	
+
+				        	    if(result>0) {
+				        	    	 redir.addAttribute("result", "Hometown Edited Successfully");	
+				        		} else {
+				        			 redir.addAttribute("resultfail", "Hometown Edit Unsuccessful");	
+				        	    }
+				        	    redir.addAttribute("mobileNumberId", result);
+						}
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside HomeTownEdit.htm "+Username ,e);  
+						e.printStackTrace();
+						return "static/Error";
+					}
+				   return "redirect:/PIHomeTownMobile.htm";
 		}
-	  	 
+		 
+		@RequestMapping(value = "HometownPreview.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String HometownPreview(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+			{
+				String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		    	String LoginType=(String)ses.getAttribute("LoginType");
+				String Username = (String) ses.getAttribute("Username");
+				String EmpNo = (String) ses.getAttribute("EmpNo");
+				logger.info(new Date() +"Inside HometownPreview.htm "+Username);
+				try {
+						
+						req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					
+						return "pi/HomeTownForm";
+				}catch (Exception e) {
+					e.printStackTrace();
+					logger.error(new Date() +" Inside MobileNumberPreview.htm "+Username, e);
+					return "static/Error";
+				}
+		} 
 }

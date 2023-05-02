@@ -93,7 +93,7 @@
 									
 					    <tr align="center">
 					       <th>Select</th>
-					       <th>Per.Address</th>
+					       <th>Permanent Address</th>
 					       <th>Per.From</th>
 					       <th>Per.To</th>
 						   <th>Mobile No.</th>							
@@ -109,14 +109,14 @@
 							<td style="text-align: center;width:4%;">
 							<%if(obj[15].toString().equalsIgnoreCase("INI") ){ %>
 							<input type="radio" name="peraddressid" value="<%=obj[1]%>"> <%}else{ %>
-							<input type="radio" name="peraddressid" value="<%=obj[1]%>" hidden="hidden">
+							<input type="radio" name="peraddressid" value="<%=obj[1]%>" disabled>
 							<%} %>							
 							</td>					    
 						    <td style="text-align: left;"><%=obj[2]%> , <%=obj[7]%> , <%=obj[6]%> - <%=obj[8]%></td>
 							<td style="width:10%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
 							<td style="width:10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>																								
 							<td style="width:8%;"> <%if(obj[5]!=null){ %> <%=obj[5] %> <%}else{ %>--<%} %> </td>	
-							<td style="width:16%;">
+							<td style="width:20%;">
 							<%if(obj[12]!=null){%>
 								  
 								 	<%if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("A") ){ %>
@@ -177,7 +177,7 @@
 					   <thead>
 						    <tr align="center">
 						        <th>Select</th>
-								<th>Res.Address</th>
+								<th>Residential Address</th>
 								<th>Res.From</th>
 								<th>Res.To</th>
 								<th>Mobile No.</th>	
@@ -191,7 +191,7 @@
 							<td style="text-align: center;width:4%;">
 								<%if(obj[18].toString().equalsIgnoreCase("INI") ){ %>
 									<input type="radio" name="resaddressid" value="<%=obj[1]%>"> <%}else{ %>
-									<input type="radio" name="resaddressid" value="<%=obj[1]%>" hidden="hidden">
+									<input type="radio" name="resaddressid" value="<%=obj[1]%>" disabled>
 								<%} %>
 							</td>												    
 						    <td style="text-align: left;"><%=obj[2]%> , <%=obj[10]%> , <%=obj[9]%> - <%=obj[11]%></td>
@@ -199,7 +199,7 @@
 							<td style="width:10%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>							
 						    <td style="width:8%;"><%if(obj[5]!=null){ %> <%=obj[5] %> <%}else{ %>--<%} %> </td>																		
 							
-							<td style="width:16%;">
+							<td style="width:20%;">
 													
 								<%if(obj[15]!=null){%>
 								  
@@ -269,7 +269,7 @@
 	                		</td>
 	               		<%} %>
 	               		<%if(PandAEmpName!=null){ %>
-	                		<td class="trup" style="background: #FBC7F7;" >
+	                		<td class="trup" style="background: #4DB6AC;" >
 	                			P&A
 	                		</td>
 	               		<%} %>
@@ -285,7 +285,7 @@
 	                		</td>
 	               		 <%} %>
 	               		 <%if(PandAEmpName!=null){ %>
-	               			<td class="trdown" style="background: #FBC7F7;" >	
+	               			<td class="trdown" style="background: #4DB6AC;" >	
 			                	<%=PandAEmpName[1] %>
 		           			</td>
 		           		 <%} %>
