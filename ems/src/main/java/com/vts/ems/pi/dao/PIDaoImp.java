@@ -1,5 +1,6 @@
 package com.vts.ems.pi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.model.PisMobileNumber;
 import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.model.AddressPer;
@@ -930,5 +932,118 @@ public class PIDaoImp implements PIDao{
 			e.printStackTrace();
 			return null;
 		}		
+	}
+	
+	private static final String HOMETOWNFORMDATA = "SELECT a.HometownId,a.EmpNo,a.Hometown,a.NearestRailwayStation,a.State,a.HometownStatus,a.Remarks,a.PisStatusCode,b.EmpName,c.Designation FROM pis_hometown a,employee b,employee_desig c WHERE a.HometownId=:hometownId AND a.IsActive=1 AND a.EmpNo=b.EmpNo AND b.DesigId=c.DesigId";
+	@Override
+	public Object[] HometownFormData(String hometownId)throws Exception{
+
+		try {
+			Query query = manager.createNativeQuery(HOMETOWNFORMDATA);
+			query.setParameter("hometownId", hometownId);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}	
+			
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO HometownFormData "+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final String HOMETOWNTRANSACTIONAPPROVALDATA="SELECT tra.HomTransactionId,emp.EmpNo,emp.EmpName,des.Designation,MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode FROM pis_hometown_trans tra,pis_approval_status sta,employee emp,employee_desig des,pis_hometown par WHERE par.HometownId=tra.HometownId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND emp.DesigId=des.DesigId AND sta.PisStatusCode IN ('FWD','VGI','VDI','VDG','VPA','APR') AND par.HometownId=:hometownId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
+	@Override
+	public List<Object[]> HometownTransactionApprovalData(String hometownId) throws Exception {
+		
+		Query query = manager.createNativeQuery(HOMETOWNTRANSACTIONAPPROVALDATA);
+		query.setParameter("hometownId", Long.parseLong(hometownId));
+		return (List<Object[]>) query.getResultList();
+	}
+	
+	@Override
+	public long HometownTransactionAdd(PisHometownTrans transaction) throws Exception
+	{
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getHomTransactionId();
+	}
+	
+	private static final String HOMETOWNAPPROVALSLIST  =" CALL Pis_Hometown_Approval(:EmpNo,:LoginType)";
+	@Override
+	public List<Object[]> HometownApprovalsList(String EmpNo,String LoginType) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(HOMETOWNAPPROVALSLIST);
+			query.setParameter("EmpNo", EmpNo);
+			query.setParameter("LoginType", LoginType);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO HometownApprovalsList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+	
+	private static final String HOMETOWNTRANSACTIONLIST="SELECT tra.HomTransactionId,emp.empno,emp.empname,des.designation,tra.actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor  FROM pis_hometown_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_hometown par WHERE par.HometownId = tra.HometownId AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND par.HometownId =:hometownid ORDER BY actiondate";
+	@Override
+	public List<Object[]> HometownTransactionList(String hometownid)throws Exception
+	{
+		Query query = manager.createNativeQuery(HOMETOWNTRANSACTIONLIST);
+		query.setParameter("hometownid", Long.parseLong(hometownid));
+		return (List<Object[]>) query.getResultList();
+	}
+	
+	public static final String HOMETOWNAPPROVECOUNT = "SELECT COUNT(a.HometownId) FROM pis_hometown a WHERE (a.HometownStatus='A' OR a.HometownStatus='E' ) AND a.EmpNo=:EmpNo";
+	@Override
+	public BigInteger HometownApprovalCount(String EmpNo) throws Exception {
+		try {
+			Query query =manager.createNativeQuery(HOMETOWNAPPROVECOUNT);
+			query.setParameter("EmpNo", EmpNo);
+			 return (BigInteger)query.getSingleResult();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO HometownApprovalCount "+e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String UPDATEHOMETOWNSTATUS = "UPDATE pis_hometown SET HometownStatus ='E' WHERE EmpNo=:EmpNo AND HometownStatus='A' AND IsActive=1";
+	@Override
+	public long HometownStatusUpdate(String EmpNo) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATEHOMETOWNSTATUS);
+			query.setParameter("EmpNo", EmpNo);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO HometownStatusUpdate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+		
+	}
+	
+	private static final String INTIMATIONAPPROVALSLIST  ="CALL Intimation_Approval (:EmpNo,:LoginType);";
+	@Override
+	public List<Object[]> IntimationApprovalsList(String EmpNo,String LoginType) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(INTIMATIONAPPROVALSLIST);
+			query.setParameter("EmpNo", EmpNo);
+			query.setParameter("LoginType", LoginType);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO IntimationApprovalsList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
 	}
 }

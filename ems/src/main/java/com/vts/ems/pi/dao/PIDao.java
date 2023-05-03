@@ -1,5 +1,6 @@
 package com.vts.ems.pi.dao;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.model.PisMobileNumber;
 import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.model.AddressPer;
@@ -76,5 +78,13 @@ public interface PIDao {
 	public Object[] GetGroupHeadName(String EmpNo) throws Exception;
 	public Object[] GetDivisionHeadName(String EmpNo) throws Exception;
 	public Object[] GetCeoName() throws Exception;
+	public Object[] HometownFormData(String hometownId) throws Exception;
+	public List<Object[]> HometownTransactionApprovalData(String hometownId) throws Exception;
+	public long HometownTransactionAdd(PisHometownTrans transaction) throws Exception;
+	public List<Object[]> HometownApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public List<Object[]> HometownTransactionList(String hometownid) throws Exception;
+	public BigInteger HometownApprovalCount(String EmpNo) throws Exception;
+	public long HometownStatusUpdate(String EmpNo) throws Exception;
+	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception;
 
 }

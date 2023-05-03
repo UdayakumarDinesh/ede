@@ -59,9 +59,25 @@ String isApproval = (String)request.getAttribute("isApproval");
 List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 %>
+<!-- <div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-4">
+				<h5 style="width:113%;">Intimation For Residential Address </h5>
+			</div>
+			<div class="col-md-8" >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				    <li class="breadcrumb-item"><a href="PersonalIntimation.htm">Personal Intimations</a></li>
+				    <li class="breadcrumb-item active" aria-current="page">Residential Address</li>
+				  </ol>
+				</nav>
+			</div>			
+		</div>
+	</div> -->
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
-     <div class="row">
+
 		<div align="center">
 		   <% String ses=(String)request.getParameter("result"); 
 			  String ses1=(String)request.getParameter("resultfail");

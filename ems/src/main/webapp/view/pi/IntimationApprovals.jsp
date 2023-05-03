@@ -36,7 +36,7 @@
 <div class="card-header page-top ">
 	<div class="row">
 		<div class="col-md-5">
-			<h5>Address Approval List</h5>
+			<h5>Intimation Approval List</h5>
 		</div>
 			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
@@ -100,11 +100,19 @@
                             	<button type="submit" class="btn btn-sm" name="resaddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
-						 		<%} else{ %>
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permanent Address")){ %>
 						 		<button type="submit" class="btn btn-sm" name="peraddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
-						 		<%} %>
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Mobile Number")){ %>
+						 		<button type="submit" class="btn btn-sm" name="mobileNumberId" value="<%=form[4] %>" formaction="MobileNumberPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Hometown")){ %>
+						 		<button type="submit" class="btn btn-sm" name="hometownId" value="<%=form[4] %>" formaction="HometownPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 	<%} %>
 						 	</td>
                             
                         </tr>

@@ -1,5 +1,6 @@
 package com.vts.ems.pi.service;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface PIService {
 	public Object[] PerAddressFormData(String addressPerId) throws Exception;
 	public Employee getEmpData(String empid)throws Exception;
 	public String GetCEOEmpNo() throws Exception;
+	public List<String> GetPandAAdminEmpNos() throws Exception;
 	public List<String> GetDGMEmpNos() throws Exception;
 	public List<String> GetDHEmpNos() throws Exception;
 	public List<String> GetGHEmpNos() throws Exception;
@@ -60,5 +62,12 @@ public interface PIService {
 	public Object[] GetGroupHeadName(String EmpNo) throws Exception;
 	public Object[] GetDivisionHeadName(String EmpNo) throws Exception;
 	public Object[] GetCeoName() throws Exception;
+	public Object[] HometownFormData(String hometownId) throws Exception;
+	public List<Object[]> HometownTransactionApprovalData(String hometownId) throws Exception;
+	public long HometownForward(String hometownId, String username, String action, String remarks, String ApprEmpNo,String LoginType) throws Exception;
+	public List<Object[]> HometownApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public List<Object[]> HometownTransactionList(String hometownid) throws Exception;
+	public BigInteger HometownApprovalCount(String EmpNo) throws Exception;
+	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception;
 	
 }

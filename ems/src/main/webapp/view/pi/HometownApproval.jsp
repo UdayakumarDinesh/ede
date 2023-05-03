@@ -28,7 +28,7 @@
 <body>
 <%	
 	
-	List<Object[]> ApprovalList=(List<Object[]>)request.getAttribute("MobApprovalList");
+	List<Object[]> ApprovalList=(List<Object[]>)request.getAttribute("HomApprovalList");
 
 %>
 
@@ -36,7 +36,7 @@
 <div class="card-header page-top ">
 	<div class="row">
 		<div class="col-md-5">
-			<h5>Mobile Approval List</h5>
+			<h5>Hometown Approval List</h5>
 		</div>
 			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
@@ -96,7 +96,7 @@
                             <td ><%=form[2] %></td>
                             <td ><%=form[3]%></td>
                             <td style="text-align: center;">                  
-						 		<button type="submit" class="btn btn-sm" name="mobileNumberId" value="<%=form[4] %>" formaction="MobileNumberPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 		<button type="submit" class="btn btn-sm" name="hometownId" value="<%=form[4] %>" formaction="HometownPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
 						

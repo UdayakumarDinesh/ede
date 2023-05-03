@@ -1,5 +1,6 @@
 package com.vts.ems.pi.service;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -17,6 +18,7 @@ import com.vts.ems.pi.dao.PIDao;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.model.PisMobileNumber;
 import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.dao.PisDao;
@@ -106,7 +108,7 @@ public class PIServiceImp implements PIService{
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
-					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
 						pisdao.ResAddrUpdate(address.getEmpid());
 						Object[] resToAddressId = dao.ResToAddressId(address.getEmpid());
@@ -210,7 +212,7 @@ public class PIServiceImp implements PIService{
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
 				}
-				notification.setNotificationUrl("AddressApprovals.htm");
+				notification.setNotificationUrl("IntimationApprovals.htm");
 				notification.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
 				notification.setNotificationBy(ForwardingEmpNo);
 			}
@@ -253,6 +255,11 @@ public class PIServiceImp implements PIService{
 		return dao.GetCEOEmpNo();		
 	}
 
+	@Override
+	public List<String> GetPandAAdminEmpNos() throws Exception {
+		
+		return dao.GetPandAAdminEmpNos();
+	}
 	@Override
 	public List<String> GetDGMEmpNos() throws Exception {
 		return dao.GetDGMEmpNos();		
@@ -355,7 +362,7 @@ public class PIServiceImp implements PIService{
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
-					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
 						pisdao.PerAddrUpdate(address.getEmpid());
 	                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
@@ -461,7 +468,7 @@ public class PIServiceImp implements PIService{
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0).toString():null);
 				}
-				notification.setNotificationUrl("AddressApprovals.htm");
+				notification.setNotificationUrl("IntimationApprovals.htm");
 				notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
 				notification.setNotificationBy(ForwardingEmpNo);
 			}
@@ -591,7 +598,7 @@ public class PIServiceImp implements PIService{
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					mobile.setPisStatusCode("FWD");
-					if(CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
+					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
 					    
 					    dao.MobileStatusUpdate(mobile.getEmpNo());
@@ -702,7 +709,7 @@ public class PIServiceImp implements PIService{
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
 				}
-				notification.setNotificationUrl("MobileApprovals.htm");
+				notification.setNotificationUrl("IntimationApprovals.htm");
 				notification.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
 				notification.setNotificationBy(ApprEmpNo);
 			}
@@ -783,4 +790,262 @@ public class PIServiceImp implements PIService{
 		
 		return dao.GetCeoName();
 	}
+
+	@Override
+	public Object[] HometownFormData(String hometownId) throws Exception {
+		
+		return dao.HometownFormData(hometownId);
+	}
+
+	@Override
+	public List<Object[]> HometownTransactionApprovalData(String hometownId) throws Exception {
+		
+		return dao.HometownTransactionApprovalData(hometownId);
+	}
+
+	@Override
+	public long HometownForward(String hometownId, String username, String action, String remarks, String ApprEmpNo,String LoginType) throws Exception {
+		
+        try {
+			PisHometown hometown = dao.getHometownById(Long.parseLong(hometownId));
+			
+			Employee emp = dao.getEmpDataByEmpNo(hometown.getEmpNo());
+			String formempno = emp.getEmpNo();
+			String  pisStatusCode = hometown.getPisStatusCode();
+			String pisStatusCodeNext = hometown.getPisStatusCodeNext();
+			
+			String CEO = dao.GetCEOEmpNo();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			List<String> DGMs = dao.GetDGMEmpNos();
+			List<String> DHs = dao.GetDHEmpNos();
+			List<String> GHs = dao.GetGHEmpNos();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			// Accepted
+			if(action.equalsIgnoreCase("A"))
+			{
+//			
+				// first time forwarding
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RGI") || pisStatusCode.equalsIgnoreCase("RDI") || 
+				   pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") ) 
+				{
+					hometown.setPisStatusCode("FWD");
+					if(CEO.equalsIgnoreCase(formempno) ) 
+					{ 
+					    dao.HometownStatusUpdate(hometown.getEmpNo());
+ 
+						hometown.setPisStatusCode("APR");
+						hometown.setPisStatusCodeNext("APR");
+						hometown.setIsActive(1);
+						hometown.setHometownStatus("A");				
+					}
+					else if(PandAs.contains(formempno) || LoginType.equalsIgnoreCase("P")) 
+					{
+						hometown.setPisStatusCodeNext("APR");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						hometown.setPisStatusCodeNext("VPA");
+					}
+					else if(DHs.contains(formempno))
+					{
+						hometown.setPisStatusCodeNext("VDG");
+					}
+					else if(GHs.contains(formempno))
+					{
+						hometown.setPisStatusCodeNext("VDI");
+					}
+					else 
+					{
+						hometown.setPisStatusCodeNext("VGI");
+					}
+					
+				}
+				
+				//approving	flow 
+				else
+				{
+				   
+					hometown.setPisStatusCode(pisStatusCodeNext);
+					
+					if(pisStatusCodeNext.equalsIgnoreCase("VGI"))
+					{
+						hometown.setPisStatusCodeNext("VDI");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VDI")) 
+					{
+						hometown.setPisStatusCodeNext("VDG");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						hometown.setPisStatusCodeNext("VPA");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+					{
+						hometown.setPisStatusCodeNext("APR");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("APR")) {	
+						dao.HometownStatusUpdate(hometown.getEmpNo());
+						hometown.setIsActive(1);
+						hometown.setHometownStatus("A");
+					}
+				}		
+				hometown.setRemarks(remarks);
+				dao.EditHometown(hometown);
+						
+			}
+			
+			//Returned
+			else if(action.equalsIgnoreCase("R")) 
+			{
+				// Setting PisStatusCode
+				if(pisStatusCodeNext.equalsIgnoreCase("VGI")) 
+				{
+					hometown.setPisStatusCode("RGI");
+				}
+			    else if(pisStatusCodeNext.equalsIgnoreCase("VDI")) 
+				{
+			    	hometown.setPisStatusCode("RDI");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					hometown.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					hometown.setPisStatusCode("RPA");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("APR")) 
+				{
+					hometown.setPisStatusCode("RCE");	
+				}
+				
+				//Setting PisStatusCodeNext
+				if(CEO.equalsIgnoreCase(formempno) ) 
+				{ 
+					hometown.setPisStatusCodeNext("APR");					
+				}
+				else if(PandAs.contains(formempno) || LoginType.equalsIgnoreCase("P")) 
+				{
+					hometown.setPisStatusCodeNext("APR");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					hometown.setPisStatusCodeNext("VPA");
+				}
+				else if(DHs.contains(formempno))
+				{
+					hometown.setPisStatusCodeNext("VDG");
+				}
+				else if(GHs.contains(formempno))
+				{
+					hometown.setPisStatusCodeNext("VDI");
+				}
+				else 
+				{
+					hometown.setPisStatusCodeNext("VGI");
+				}
+				
+				hometown.setRemarks(remarks);
+				dao.EditHometown(hometown);
+			}
+			
+			PisHometownTrans transaction = PisHometownTrans.builder()
+					                           .HometownId(hometown.getHometownId())
+					                           .PisStatusCode(hometown.getPisStatusCode())
+					                           .ActionBy(ApprEmpNo)
+					                           .Remarks(remarks)
+					                           .ActionDate(sdtf.format(new Date()))
+					                           .build();
+			
+			dao.HometownTransactionAdd(transaction);
+							
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+		
+			//Notification
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && hometown.getHometownStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PIHomeTownMobile.htm");
+				notification.setNotificationMessage("Hometown Change Request Approved");
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VGI")) 
+				{
+					notification.setEmpNo(GIEmpNo);					
+				}
+				else if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDI")) 
+				{
+					notification.setEmpNo(DIEmpNo);					
+				}
+				else if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				}
+				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
+				{
+					notification.setEmpNo(CEO);
+				}
+				notification.setNotificationUrl("IntimationApprovals.htm");
+				notification.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("PIHomeTownMobile.htm");
+				notification.setNotificationMessage("Hometown Change Request Returned");
+				notification.setNotificationBy(ApprEmpNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
+			return 1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside HometownForward "+ e);
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public List<Object[]> HometownApprovalsList(String EmpNo, String LoginType) throws Exception {
+		
+		return dao.HometownApprovalsList(EmpNo, LoginType);
+	}
+
+	@Override
+	public List<Object[]> HometownTransactionList(String hometownid) throws Exception {
+		
+		return dao.HometownTransactionList(hometownid);
+	}
+
+	@Override
+	public BigInteger HometownApprovalCount(String EmpNo) throws Exception {
+		
+		return dao.HometownApprovalCount(EmpNo);
+	}
+
+	@Override
+	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception {
+		
+		return dao.IntimationApprovalsList(EmpNo, LoginType);
+	}
+
+	
 }

@@ -48,11 +48,18 @@
 	Object[] DivisionHeadName = (Object[])request.getAttribute("DivisionHeadName");
 	Object[] GroupHeadName = (Object[])request.getAttribute("GroupHeadName");
 	
+	String CEO = (String)request.getAttribute("CEOEmpNos");
+	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
+	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
+	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
+	
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
 	List<Object[]> mobile =(List<Object[]>)request.getAttribute("MobileDetails");
 	List<Object[]> home =(List<Object[]>)request.getAttribute("HometownDetails");
 	
+	Integer ApprovalCount = (Integer)request.getAttribute("ApprovalCount");
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -123,16 +130,16 @@
 								<%if(obj[8]!=null){%>
 								  
 								 	<%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="HometownTransStatus.htm" value="<%=obj[0] %>" name="hometownid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="HometownTransStatus.htm" value="<%=obj[0] %>" name="hometownid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="MobileNumberTransStatus.htm" value="<%=obj[0] %>" name="mobilenumberid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[9] %>; font-weight: 600;" formtarget="_blank">
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="HometownTransStatus.htm" value="<%=obj[0] %>" name="hometownid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[9] %>; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; <%=obj[8] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
@@ -144,7 +151,7 @@
 								<button type="submit" class="btn btn-sm view-icon" formaction="HometownPreview.htm" name="hometownId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Hometown Change" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
-								<button type="submit" class="btn btn-sm" name="mobilenumberId" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								<button type="submit" class="btn btn-sm" name="hometownId" value="<%=obj[0] %>" formaction="HometownFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 								   <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>
                             </td>	
@@ -154,14 +161,23 @@
 					   </tbody>
 				    </table>
 				   </div>	
-				   <div class="row text-center">
+				   <div>
+				   </div>
+				   <div class="row">
+						<div class="col-md-12 w-100" align="left">
+							<br><b>NOTE :</b> <b style="color:red;">You Can Change Your Hometown Only Once In A Lifetime. </b>									
+						</div>
+					</div>
+					<%if(ApprovalCount<2 ) {%>
+				    <div class="row text-center">
 						<div class="col-md-12">
 						     <%-- <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> --%>
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDHometown"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITHometown"  Onclick="EditPer(empForm)" >EDIT </button>
 					    	<!-- <button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button> -->
 					    </div>
-					    </div>							
+				    </div>	
+					<%} %>						
 				</form>
 						<hr>
 			<div class="row"  >
@@ -170,13 +186,15 @@
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
+	               		<%if(!CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	                		<td class="trup" style="background: #E8E46E;">
 	                			User 
 	                		</td>
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	               		<%if(GroupHeadName!=null){ %>
+	                	<%} %>
+	               		<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #B39DDB;">
 	                			Group Head 
 	                		</td>
@@ -185,7 +203,7 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(DivisionHeadName!=null){ %>
+	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #90CAF9;">
 	                			Division Head 
 	                		</td>
@@ -194,7 +212,7 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(DGMEmpName!=null){ %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
 	                			DGM 
 	                		</td>
@@ -203,8 +221,8 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(PandAEmpName!=null){ %>
-	                		<td class="trup" style="background: #A5D6A7;" >
+	               		<%if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	                		<td class="trup" style="background: #BCAAA3;" >
 	                			P&A
 	                		</td>
 	                		
@@ -212,7 +230,7 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(CeoName!=null){ %>
+	               		<%if(CeoName!=null ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			CEO
 	                		</td>
@@ -221,30 +239,32 @@
 	               	</tr>			   
 		                	
 	               	<tr>
+	                 	<%if( !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	               		<td class="trdown" style="background: #E8E46E;" >	
 				              <%=emp.getEmpName() %>
 	                	</td>
-	                	<%if(GroupHeadName!=null){ %>
+	                	<%} %>
+	                	<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trdown" style="background: #B39DDB;" >	
 				                <%=GroupHeadName[1] %>
 	                		</td>
 	               		 <%} %>
-	               		<%if(DivisionHeadName!=null){ %>
+	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trdown" style="background: #90CAF9;" >	
 				                <%=DivisionHeadName[1] %>
 	                		</td>
 	               		 <%} %>
-	               		<%if(DGMEmpName!=null){ %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trdown" style="background: #FBC7F7;" >	
 				                <%=DGMEmpName[1] %>
 	                		</td>
 	               		 <%} %>
-	               		 <%if(PandAEmpName!=null){ %>
-	               			<td class="trdown" style="background: #A5D6A7;" >	
+	               		 <%if(PandAEmpName!=null && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	               			<td class="trdown" style="background: #BCAAA3;" >	
 			                	<%=PandAEmpName[1] %>
 		           			</td>
 		           		 <%} %>
-		           		 <%if(CeoName!=null){ %>
+		           		 <%if(CeoName!=null ){ %>
 	               			<td class="trdown" style="background: #4DB6AC;" >	
 			                	<%=CeoName[1] %>
 		           			</td>
@@ -344,13 +364,15 @@
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
+	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	                		<td class="trup" style="background: #E8E46E;">
 	                			User 
 	                		</td>
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	               		<%if(DGMEmpName!=null){ %>
+	                		<%} %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo())  ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
 	                			DGM 
 	                		</td>
@@ -359,25 +381,37 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(PandAEmpName!=null){ %>
+	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			P&A
+	                		</td>
+	               		<%} %>
+	               		<%if(CeoName!=null && CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	                		<td class="trup" style="background: #4DB6AC;" >
+	                			CEO
 	                		</td>
 	               		<%} %>
 	               	</tr>			   
 		                	
 	               	<tr>
+	               	<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	               		<td class="trdown" style="background: #E8E46E;" >	
 				              <%=emp.getEmpName() %>
 	                	</td>
-	               		<%if(DGMEmpName!=null){ %>
+	                	<%} %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	                		<td class="trdown" style="background: #FBC7F7;" >	
 				                <%=DGMEmpName[1] %>
 	                		</td>
 	               		 <%} %>
-	               		 <%if(PandAEmpName!=null){ %>
+	               		 <%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	               			<td class="trdown" style="background: #4DB6AC;" >	
 			                	<%=PandAEmpName[1] %>
+		           			</td>
+		           		 <%} %>
+		           		  <%if(CeoName!=null  && CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	               			<td class="trdown" style="background: #4DB6AC;" >	
+			                	<%=CeoName[1] %>
 		           			</td>
 		           		 <%} %>
 		            	</tr>             	

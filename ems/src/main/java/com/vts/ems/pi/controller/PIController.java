@@ -25,7 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -86,13 +86,22 @@ public class PIController {
 			req.setAttribute("perAddress", service.PermanentAddressDetails(EmpId));
 			
 			req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+			
+			String CEO = service.GetCEOEmpNo();
+			List<String> PandAs = service.GetPandAAdminEmpNos();
 			List<String> DGMs = service.GetDGMEmpNos();
 			
 			if(!DGMs.contains(EmpNo)) {
 				req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
 			}
-			req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 			
+			req.setAttribute("CEOEmpNos", CEO);
+			req.setAttribute("PandAsEmpNos", PandAs);		
+			req.setAttribute("DGMEmpNos", DGMs);
+			
+			req.setAttribute("CeoName", service.GetCeoName());
+			req.setAttribute("PandAEmpName", service.GetPandAEmpName());
+	
 			if(resaddressId!=null) {
 				String isApproval = req.getParameter("isApproval");
 				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
@@ -310,11 +319,11 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfully");
+						redir.addAttribute("result", "Address verification Successfull");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
-					return "redirect:/AddressApprovals.htm";
+					return "redirect:/IntimationApprovals.htm";
 				}
 				
 			}catch (Exception e) {
@@ -333,7 +342,7 @@ public class PIController {
 			try {
 				String peraddressid = req.getParameter("peraddressid");
 				req.setAttribute("TransactionList", service.PerAddressTransactionList(peraddressid));				
-				return "pi/PerAddrTransactionStatus";
+				return "pi/PiTransactionStatus";
 			}catch (Exception e) {
 				e.printStackTrace();
 				logger.error(new Date() +" Inside PerAddrTransactionStatus.htm "+Username, e);
@@ -593,11 +602,11 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfully");
+						redir.addAttribute("result", "Address verification Successfull");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
-					return "redirect:/AddressApprovals.htm";
+					return "redirect:/IntimationApprovals.htm";
 				}
 				
 			}catch (Exception e) {
@@ -683,24 +692,25 @@ public class PIController {
 		}
 		
 
-		@RequestMapping(value = "AddressApprovals.htm")
+		@RequestMapping(value = "IntimationApprovals.htm")
 		public String AddressApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 			String EmpNo = (String) ses.getAttribute("EmpNo");
 	    	String LoginType=(String)ses.getAttribute("LoginType");
 			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() +"Inside AddressApprovals.htm"+Username);		
+			logger.info(new Date() +"Inside IntimationApprovals.htm"+Username);		
 			try {				
 				
 				ses.setAttribute("formmoduleid", formmoduleid);			
-				ses.setAttribute("SidebarActive","AddressApprovals_htm");	
+				ses.setAttribute("SidebarActive","IntimationApprovals_htm");	
 				
-				req.setAttribute("ApprovalList", service.ResAddressApprovalsList(EmpNo, LoginType));
+//				req.setAttribute("ApprovalList", service.ResAddressApprovalsList(EmpNo, LoginType));
+				req.setAttribute("ApprovalList", service.IntimationApprovalsList(EmpNo, LoginType));
 				
-				return "pi/ResAddressApproval";
+				return "pi/IntimationApprovals";
 			}catch (Exception e) {
-				logger.error(new Date() +" Inside AddressApprovals.htm"+Username, e);
+				logger.error(new Date() +" Inside IntimationApprovals.htm"+Username, e);
 				e.printStackTrace();	
 				return "static/Error";
 			}
@@ -717,7 +727,7 @@ public class PIController {
 			try {
 				String addressresid = req.getParameter("addressresid");
 				req.setAttribute("TransactionList", service.ResAddressTransactionList(addressresid));				
-				return "pi/ResAddrTransactionStatus";
+				return "pi/PiTransactionStatus";
 			}catch (Exception e) {
 				e.printStackTrace();
 				logger.error(new Date() +" Inside ResAddrTransactionStatus.htm "+Username, e);
@@ -725,26 +735,6 @@ public class PIController {
 			}
 		}
 		
-//		@RequestMapping(value = "#")
-//		public String PIHomeTown(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-//		{
-//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-//	    	String LoginType=(String)ses.getAttribute("LoginType");
-//			String Username = (String) ses.getAttribute("Username");
-//			logger.info(new Date() +"Inside PIHomeTown.htm"+Username);		
-//			try {		
-//				ses.setAttribute("formmoduleid", formmoduleid);			
-//				ses.setAttribute("SidebarActive","PIHomeTown_htm");	
-//				ses.setAttribute("LoginType", LoginType);
-//				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-//				return "pi/HomeTown";
-//			}catch (Exception e) {
-//				logger.error(new Date() +" Inside PIHomeTown.htm"+Username, e);
-//				e.printStackTrace();	
-//				return "static/Error";
-//			}
-//			
-//		}	
 		
 		@RequestMapping(value = "PIHomeTownMobile.htm")
 		public String PIHomeTown(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -759,26 +749,38 @@ public class PIController {
 				ses.setAttribute("SidebarActive","PIHomeTownMobile_htm");
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+						
+				String CEO = service.GetCEOEmpNo();
+				List<String> PandAs = service.GetPandAAdminEmpNos();
+				List<String> DGMs = service.GetDGMEmpNos();
+				List<String> DHs = service.GetDHEmpNos();
+				List<String> GHs = service.GetGHEmpNos();
 				
-				req.setAttribute("CeoName", service.GetCeoName());
+				
+                req.setAttribute("CeoName", service.GetCeoName());
+                req.setAttribute("CEOEmpNos", CEO);
 				
 				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
-				
-				List<String> DGMs = service.GetDGMEmpNos();
+				req.setAttribute("PandAsEmpNos", PandAs);
 				
 				if(!DGMs.contains(EmpNo)) {
 					req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
 				}
+				req.setAttribute("DGMEmpNos", DGMs);
 				
 				req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
+				req.setAttribute("DivisionHeadEmpNos", DHs);
+				
 				
 				req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
+				req.setAttribute("GroupHeadEmpNos", GHs);
 				
 				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				
 				req.setAttribute("MobileDetails", service.MobileNumberDetails(EmpNo));
 				req.setAttribute("HometownDetails", service.HometownDetails(EmpNo));
 				
+				req.setAttribute("ApprovalCount", service.HometownApprovalCount(EmpNo).intValue());
 				return "pi/HomeTownAndMobile";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PIHomeTownMobile.htm"+Username, e);
@@ -937,7 +939,7 @@ public class PIController {
 			try {
 				String mobilenumberid = req.getParameter("mobilenumberid").trim();
 				req.setAttribute("TransactionList", service.MobileTransactionList(mobilenumberid)) ;				
-				return "pi/MobileNumberTransStatus";
+				return "pi/PiTransactionStatus";
 			}catch (Exception e) {
 				e.printStackTrace();
 				logger.error(new Date() +" Inside MobileNumberTransStatus.htm "+Username, e);
@@ -1016,11 +1018,11 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfully");
+						redir.addAttribute("result", "Address verification Successfull");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
-					return "redirect:/MobileApprovals.htm";
+					return "redirect:/IntimationApprovals.htm";
 				}
 				
 			}catch (Exception e) {
@@ -1031,29 +1033,29 @@ public class PIController {
 			
 		}
 		
-		@RequestMapping(value = "MobileApprovals.htm")
-		public String HometownMobileApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-		{
-			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-			String EmpNo = (String) ses.getAttribute("EmpNo");
-	    	String LoginType=(String)ses.getAttribute("LoginType");
-			String Username = (String) ses.getAttribute("Username");
-			logger.info(new Date() +"Inside MobileApprovals.htm.htm"+Username);		
-			try {				
-				
-				ses.setAttribute("formmoduleid", formmoduleid);			
-				ses.setAttribute("SidebarActive","MobileApprovals_htm");	
-				
-				req.setAttribute("MobApprovalList", service.MobileApprovalsList(EmpNo, LoginType));
-				
-				return "pi/MobileApproval";
-			}catch (Exception e) {
-				logger.error(new Date() +" Inside MobileApprovals.htm"+Username, e);
-				e.printStackTrace();	
-				return "static/Error";
-			}
-			
-		}
+//		@RequestMapping(value = "MobileApprovals.htm")
+//		public String MobileApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+//		{
+//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+//			String EmpNo = (String) ses.getAttribute("EmpNo");
+//	    	String LoginType=(String)ses.getAttribute("LoginType");
+//			String Username = (String) ses.getAttribute("Username");
+//			logger.info(new Date() +"Inside MobileApprovals.htm.htm"+Username);		
+//			try {				
+//				
+//				ses.setAttribute("formmoduleid", formmoduleid);			
+//				ses.setAttribute("SidebarActive","MobileApprovals_htm");	
+//				
+//				req.setAttribute("MobApprovalList", service.MobileApprovalsList(EmpNo, LoginType));
+//				
+//				return "pi/MobileApproval";
+//			}catch (Exception e) {
+//				logger.error(new Date() +" Inside MobileApprovals.htm"+Username, e);
+//				e.printStackTrace();	
+//				return "static/Error";
+//			}
+//			
+//		}
 		
 		@RequestMapping(value = "MobileFormDownload.htm")
 		public void MobileNumberFormDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
@@ -1242,14 +1244,176 @@ public class PIController {
 				String EmpNo = (String) ses.getAttribute("EmpNo");
 				logger.info(new Date() +"Inside HometownPreview.htm "+Username);
 				try {
-						
-						req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					String hometownId = req.getParameter("hometownId");	
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 					
-						return "pi/HomeTownForm";
+					if(hometownId!=null) {
+						String isApproval = req.getParameter("isApproval");
+						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+							req.setAttribute("SidebarActive","HometownApprovals_htm");
+						}
+						req.setAttribute("isApproval", isApproval);
+						req.setAttribute("HomFormData", service.HometownFormData(hometownId));
+						req.setAttribute("ApprovalEmpData", service.HometownTransactionApprovalData(hometownId));
+						req.setAttribute("Employee", service.getEmpData(EmpId));
+		              		                            
+					}
+					return "pi/HomeTownForm";
 				}catch (Exception e) {
 					e.printStackTrace();
-					logger.error(new Date() +" Inside MobileNumberPreview.htm "+Username, e);
+					logger.error(new Date() +" Inside HometownPreview.htm "+Username, e);
 					return "static/Error";
+				} finally {
 				}
-		} 
+	    }
+		
+		@RequestMapping(value = "HometownFormSubmit.htm")
+		public String HometownFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			logger.info(new Date() +"Inside HometownFormSubmit.htm"+Username);
+			try {
+				String hometownId = req.getParameter("hometownId").trim();
+				String action = req.getParameter("Action");
+				String remarks = req.getParameter("remarks");
+				
+				PisHometown hometown = service.getHometownById(Long.parseLong(hometownId) );
+				String pisStatusCode = hometown.getPisStatusCode();
+				
+								
+				long count = service.HometownForward(hometownId, Username, action,remarks,EmpNo,LoginType);
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RGI") || pisStatusCode.equalsIgnoreCase("RDI") || 
+				   pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE")) {
+					if (count > 0) {
+						redir.addAttribute("result", "Hometown application Sent for verification Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Hometown application Sent for verification Unsuccessful");	
+					}	
+					return "redirect:/PIHomeTownMobile.htm";
+				}
+				else  
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Hometown verification Successfull");
+					} else {
+						redir.addAttribute("resultfail", "Hometown verification Unsuccessful");	
+					}	
+					return "redirect:/IntimationApprovals.htm";
+				}
+				
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside HometownFormSubmit.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+	    }
+		
+//		@RequestMapping(value = "HometownApprovals.htm")
+//		public String HometownApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+//		{
+//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+//			String EmpNo = (String) ses.getAttribute("EmpNo");
+//	    	String LoginType=(String)ses.getAttribute("LoginType");
+//			String Username = (String) ses.getAttribute("Username");
+//			logger.info(new Date() +"Inside HometownApprovals.htm"+Username);		
+//			try {				
+//				
+//				ses.setAttribute("formmoduleid", formmoduleid);			
+//				ses.setAttribute("SidebarActive","HometownApprovals_htm");	
+//				
+//				req.setAttribute("HomApprovalList", service.HometownApprovalsList(EmpNo, LoginType));
+//				
+//				return "pi/HometownApproval";
+//			}catch (Exception e) {
+//				logger.error(new Date() +" Inside HometownApprovals.htm"+Username, e);
+//				e.printStackTrace();	
+//				return "static/Error";
+//			}
+//			
+//		}
+		
+		@RequestMapping(value = "HometownTransStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String HometownTransStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+			String Username = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside HometownTransStatus.htm "+Username);
+			try {
+				String hometownid = req.getParameter("hometownid").trim();
+				req.setAttribute("TransactionList", service.HometownTransactionList(hometownid)) ;				
+				return "pi/PiTransactionStatus";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside HometownTransStatus.htm "+Username, e);
+				return "static/Error";
+			}
+		}
+		
+		@RequestMapping(value = "HometownFormDownload.htm")
+		public void HometownFormDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+
+			logger.info(new Date() +"Inside HometownFormDownload.htm "+UserId);
+			
+			try {	
+				String hometownId = req.getParameter("hometownId").trim();
+				String pagePart =  req.getParameter("pagePart");
+				
+				String filename="";
+				if(hometownId!=null) {
+					req.setAttribute("ApprovalEmpData", service.HometownTransactionApprovalData(hometownId));
+					req.setAttribute("HomFormData", service.HometownFormData(hometownId));	
+					filename="Hometown";
+				}
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				req.setAttribute("pagePart","3" );
+				
+				req.setAttribute("view_mode", req.getParameter("view_mode"));
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				
+				String path=req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("path",path);
+		        
+		        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+		        req.getRequestDispatcher("/view/pi/HometownFormPrint.jsp").forward(req, customResponse);
+
+				String html = customResponse.getOutput();        
+		        
+		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+		         
+		        res.setContentType("application/pdf");
+		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		       
+		       
+		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+		        
+		        
+		        File f=new File(path +File.separator+ filename+".pdf");
+		        FileInputStream fis = new FileInputStream(f);
+		        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+		        res.setHeader("Content-Length",String.valueOf(f.length()));
+		        byte[] buffer = new byte[1024];
+		        int len = 0;
+		        while ((len = fis.read(buffer)) >= 0) {
+		            os.write(buffer, 0, len);
+		        } 
+		        os.close();
+		        fis.close();
+		       
+		       
+		        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+		        Files.delete(pathOfFile);		
+		       	
+			}
+			catch (Exception e) {
+				e.printStackTrace();  
+				logger.error(new Date() +" Inside HometownFormDownload.htm "+UserId, e); 
+			}
+
+	    }
 }

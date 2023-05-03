@@ -46,7 +46,6 @@ input:focus {
 
 <%
 String LabLogo = (String)request.getAttribute("LabLogo");
-String LoginType = (String)session.getAttribute("LoginType");
 Object[] MobFormData = (Object[])request.getAttribute("MobFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
 
@@ -62,9 +61,25 @@ List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 
 %>
+<!--  <div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-4">
+				<h5 style="width:113%;">Intimation For Mobile Number </h5>
+			</div>
+			<div class="col-md-8" >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				    <li class="breadcrumb-item"><a href="PersonalIntimation.htm">Personal Intimations</a></li>
+				    <li class="breadcrumb-item"><a href="PIHomeTownMobile.htm">Hometown & Mobile</a></li>				    
+				    <li class="breadcrumb-item active" aria-current="page">Mobile Number</li>
+				  </ol>
+				</nav>
+			</div>			
+		</div>
+	</div>  -->
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
-     <div class="row">
 		<div align="center">
 		   <% String ses=(String)request.getParameter("result"); 
 			  String ses1=(String)request.getParameter("resultfail");
@@ -151,8 +166,8 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
 				   		<%} %> 
-				   		</div>
-				   						   <br>
+				   </div>
+				   	 <br>
 				   <% if(MobFormData!=null && toUserStatus.contains(MobFormData[7].toString())){ %>
 				   		<div align="left">
 				   			 <%if(MobFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=MobFormData[6] %> <%} %>
