@@ -4,9 +4,12 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
+import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.model.PisMobileNumber;
+import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
 import com.vts.ems.pis.model.DivisionMaster;
@@ -69,5 +72,9 @@ public interface PIService {
 	public List<Object[]> HometownTransactionList(String hometownid) throws Exception;
 	public BigInteger HometownApprovalCount(String EmpNo) throws Exception;
 	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public long MobileNumberTransactionAdd(PisMobileNumberTrans transaction) throws Exception;
+	public long HometownTransactionAdd(PisHometownTrans transaction) throws Exception;
+	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
+	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception;
 	
 }

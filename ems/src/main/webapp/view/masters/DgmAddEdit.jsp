@@ -97,7 +97,7 @@
 
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-						<%if(list!=null){ %>
+						<%if(dgm!=null){ %>
                 <!--------------------------- container ------------------------->
 			    <div class="container">
 					

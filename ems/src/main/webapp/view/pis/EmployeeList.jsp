@@ -78,8 +78,8 @@
 		<%} %>
 	</div>
 		
-		<div class="card" >
-				<div class="card-body " >
+		<div class="card" style="width:106%;">
+				<div class="card-body" >
 					<form action="#" method="post" id="empForm">
 				<div align="right">
 				<%if("P".equalsIgnoreCase(logintype)){ %>
@@ -141,7 +141,7 @@
 						</div> 
 					</div>
 					
-				 <div  class="btn-group1" id = "dis" style="margin-top:20px;" align="center">
+				 <div  class="btn-group1" id = "dis" style="margin-top:20px;margin-left:-3%;width:112%" align="center">
 					<div class="col-md-12">
 					 	<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="family"      value="family"      formaction="FamilyMembersList.htm" Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-user-group"></i> &nbsp;&nbsp;Family</button>
 				        <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Education"   value="Education"   formaction="EducationList.htm"     Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-user-graduate"></i>&nbsp;&nbsp; Education</button>
@@ -151,6 +151,7 @@
 						<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="address"     value="address"     formaction="Address.htm"           Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-map-location-dot"></i> &nbsp;&nbsp;Address</button>
 				        <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Publication" value="Publication" formaction="PublicationList.htm"   Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-earth-asia"></i>&nbsp;&nbsp; Publication</button>
 						<button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Passport"    value="Passport"    formaction="PassportList.htm"      Onclick="Edit(empForm)" formmethod="post"><i class="fa-solid fa-passport"></i>&nbsp;&nbsp; Passport</button> 
+					    <button type="submit" class="btn btn-sm btnclr"  style="margin-left: 5px;" name="Hometown"     value="hometown"     formaction="Hometown.htm"        Onclick="Edit(empForm)" formmethod="post"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;&nbsp;Hometown</button>
 					</div>
 				</div> 
 				</form>	

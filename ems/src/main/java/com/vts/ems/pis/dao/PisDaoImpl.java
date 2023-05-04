@@ -3308,5 +3308,21 @@ private static final String EMPLOYEELIST="CALL EmpLoyee_List(:Id,:Code)";
 		List<Object[]> List=(List<Object[]>) query.getResultList();
 		return List;
 	}
+
+	private static final String HOMETOWNDETAILS = "SELECT a.HometownId,a.EmpNo,a.Hometown,a.NearestRailwayStation,a.State FROM pis_hometown a WHERE  a.IsActive=1  AND a.EmpNo=:EmpNo ORDER BY a.HometownId DESC";
+	@Override
+	public List<Object[]> HometownDetails(String empNo) {
+		List<Object[]> hometowndata=null;
+		try {
+			Query query = manager.createNativeQuery(HOMETOWNDETAILS);
+			query.setParameter("EmpNo",empNo);
+			hometowndata =(List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO HometownDetails "+e);
+	
+		}
+		return hometowndata;
+	}
 }
 	

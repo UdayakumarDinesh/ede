@@ -1047,5 +1047,29 @@ public class PIServiceImp implements PIService{
 		return dao.IntimationApprovalsList(EmpNo, LoginType);
 	}
 
+	@Override
+	public long MobileNumberTransactionAdd(PisMobileNumberTrans transaction) throws Exception {
+		
+		return dao.MobileNumberTransactionAdd(transaction);
+	}
+
+	@Override
+	public long HometownTransactionAdd(PisHometownTrans transaction) throws Exception {
+		
+		return dao.HometownTransactionAdd(transaction);
+	}
+
+	@Override
+	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception {
+		
+		return dao.AddressPerTransactionAdd(transaction);
+	}
+
+	@Override
+	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception {
+		
+		return dao.AddressResTransactionAdd(transaction);
+	}
+
 	
 }

@@ -1,7 +1,10 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="java.util.List,com.vts.ems.utils.DateTimeFormatUtil" %>
+<%@ page import="java.util.List,com.vts.ems.utils.DateTimeFormatUtil" %>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,9 +16,9 @@
 
 .trup
 		{
-			padding:5px 10px 0px 10px ;			
-			border-top-left-radius : 5px; 
-			border-top-right-radius: 5px;
+			padding:6px 10px 6px 10px ;			
+
+			border-radius: 5px;
 			font-size: 14px;
 			font-weight: 600;
 			
@@ -55,6 +58,8 @@
 	
 	
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
+	
+	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -110,11 +115,11 @@
 					   </thead>
 					   <tbody>
 					   		<%
-					  
+					        if(perAddress!=null){
 					   		for(Object[] obj : perAddress){ %>
 							<tr align="center">
 							<td style="text-align: center;width:4%;">
-							<%if(obj[15].toString().equalsIgnoreCase("INI") ){ %>
+							<%if( toUserStatus.contains(obj[15].toString()) ){ %>
 							<input type="radio" name="peraddressid" value="<%=obj[1]%>"> <%}else{ %>
 							<input type="radio" name="peraddressid" value="<%=obj[1]%>" disabled>
 							<%} %>							
@@ -154,7 +159,7 @@
 							</button>
                             </td>		
 					   </tr>
-					   <%} %>
+					   <%} }%>
 					</tbody>
 					</table>
 					</div>	
@@ -193,10 +198,12 @@
 						   </tr>
 					   </thead>
 					   <tbody>
-					   		<% for(Object[] obj : resAddress){ %>
+					   		<% 
+					   		if(resAddress!=null){
+					   		for(Object[] obj : resAddress){ %>
 							<tr align="center">
 							<td style="text-align: center;width:4%;">
-								<%if(obj[18].toString().equalsIgnoreCase("INI") ){ %>
+								<%if(toUserStatus.contains(obj[18].toString()) ){ %>
 									<input type="radio" name="resaddressid" value="<%=obj[1]%>"> <%}else{ %>
 									<input type="radio" name="resaddressid" value="<%=obj[1]%>" disabled>
 								<%} %>
@@ -238,7 +245,7 @@
                             </td>	
                             	
 					   </tr>
-					   <%} %>
+					   <%} }%>
 					</tbody>
 					</table>
 					</div>	
@@ -262,7 +269,7 @@
 	               		<tr>
 	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	                		<td class="trup" style="background: #E8E46E;">
-	                			User 
+	                			User -  <%=emp.getEmpName() %>
 	                		</td>
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
@@ -270,7 +277,7 @@
 	                	<%} %>
 	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM 
+	                			DGM -  <%=DGMEmpName[1] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
@@ -279,17 +286,17 @@
 	               		<%} %>
 	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
-	                			P&A
+	                			P&A - <%=PandAEmpName[1] %>
 	                		</td>
 	               		<%} %>
 	               		<%if(CeoName!=null && CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
-	                			CEO
+	                			CEO - <%=CeoName[1] %>
 	                		</td>
 	               		<%} %>
 	               	</tr>			   
 		                	
-	               	<tr>
+	               	<%-- <tr>
 	               	    <%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo())  ) {%>
 	               		<td class="trdown" style="background: #E8E46E;" >	
 				              <%=emp.getEmpName() %>
@@ -310,7 +317,7 @@
 			                	<%=CeoName[1] %>
 		           			</td>
 		           		 <%} %>
-		            	</tr>             	
+		            	</tr>              --%>	
 			           </table>			             
 			 	</div>
              

@@ -250,12 +250,12 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 			   
 			    <div class="form-group">
 			        <div class="row">	          
-						<div class="col-md-2">
+						<!-- <div class="col-md-2">
 			                <label>Home Town </label>
 			                <input type="text" id="txtName" name="HomeTown" style=" text-transform:uppercase " value=""
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Home Town " 
 			                    onclick=" Validate() ">
-			            </div>
+			            </div> -->
 
 			             <div class="col-md-2">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
@@ -289,16 +289,16 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 			                <input id="UIDTextBox" type="text" name="uid" value="" class="form-control input-sm" maxlength="12" placeholder="Aadhaar No" required>
 			            </div>
 			            
+			             <div class="col-md-2">
+			                <label>PAN<span class="mandatory">*</span></label>
+			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="PAN">
+			            </div>
+			            
 			        </div>
 			    </div>
 			    <div class="form-group">
 			        <div class="row">    
-			            
-			            <div class="col-md-2">
-			                <label>PAN<span class="mandatory">*</span></label>
-			                <input  type="text"   id="PAN" name="pan" style="text-transform:uppercase" value="" class="form-control input-sm "  maxlength="10" placeholder="PAN">
-			            </div>
-			       
+			 
 			        	 <div class="col-md-2">
 			                <label>UAN No</label>
 			                <input type="text"  name="UANNo" id="UANNo" value="" maxlength="12"
@@ -332,10 +332,6 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 			                    placeholder="GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
 			            
-			         </div>
-			    </div>
-				<div class="form-group">
-				   <div class="row">    
 			            <div class="col-md-2">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
@@ -348,6 +344,11 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 			                    <option value="Contract">  Contract</option>
 			                </select>
 			            </div>
+			            
+			         </div>
+			    </div>
+				<div class="form-group">
+				   <div class="row">    
     
     					 <div class="col-md-2">
 			                <label>Religion</label>
@@ -400,18 +401,18 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 			                </select>	
 			            </div> 
 			            
-			         </div>
-				</div>  
-			     <div class="form-group">
-			        <div class="row">      
 			                
 			             <div class="col-md-2">
 			                <label>Identification Mark</label>
 			                <input type="text" value="" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-				
-			        
+			            
+			         </div>
+				</div>  
+			     <div class="form-group">
+			        <div class="row">      
+
 			            <div class="col-md-2">
 			                <label>Emp Status<span class="mandatory">*</span></label>
 			                <select id="Emptype" name="empstatus"  id="empstatus" class=" form-control input-sm select2 " required data-live-search="true"  >
@@ -420,7 +421,7 @@ List<DivisionGroup> grouplist = (List<DivisionGroup>)request.getAttribute("Group
 								<%}%>
 			                </select>
 			            </div> 
-			            <div class="col-md-2">
+			            <div class="col-md-4">
 			                <label>Availed Govt Quarters</label>          
 			                <select name="gq" class=" form-control input-sm select2" >
 			                	<option value="N">No</option>

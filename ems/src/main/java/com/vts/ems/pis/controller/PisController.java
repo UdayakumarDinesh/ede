@@ -58,6 +58,8 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.dto.UserManageAdd;
 import com.vts.ems.pis.model.AddressEmec;
@@ -6647,6 +6649,138 @@ public class PisController {
 				return "static/Error";
 				}
 	
+	    }
+		
+		   @RequestMapping(value="Hometown.htm"  , method= {RequestMethod.GET,RequestMethod.POST})
+		   public String HometownDashboard(Model model,HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception
+		   {
+			
+			   String Username = (String) ses.getAttribute("Username");
+		       logger.info(new Date() +"Inside Hometown.htm "+Username);
+		       String empid =null;
+			   try {
+				   String Action = (String) req.getParameter("Action");
+				    empid = (String)req.getParameter("empid");
+				    
+				   if(empid==null) {
+					   Map md=model.asMap();
+						empid=(String)md.get("Employee");
+						if((String)md.get("Employee")==null) {
+							return "redirect:/PisAdminEmpList.htm";
+						}
+				   }
+				   
+				   if("EDITHometown".equalsIgnoreCase(Action)) {
+					   List<Object[]> States = service.getStates();
+		 	   		   req.setAttribute("States", States);
+		 	   		   req.setAttribute("Hometown", piservice.getHometownById(Long.parseLong(req.getParameter("hometownid"))));
+		    	    return "pis/AddEditHomeTown";  
+				   }
+				   
+				   else if("ADDHometown".equalsIgnoreCase(Action)) {
+					   List<Object[]> States = service.getStates();
+		 	   		   req.setAttribute("States", States);
+				    return "pis/AddEditHomeTown";  
+				   }
+				   else {
+				   Employee empData = piservice.getEmpData(empid);
+	               
+				   req.setAttribute("HometownDetails", service.HometownDetails(empData.getEmpNo()) );
+				   req.setAttribute("Empdata", service.GetEmpData(empid));
+				   }
+				   
+			   }catch (Exception e){
+				   logger.error(new Date() +"Inside Hometown.htm "+Username,e);
+				  e.printStackTrace();
+				  return "static/Error";
+			   }
+			   
+			   return "pis/HometownList";
 		}
+		
+		   @RequestMapping(value="AddHomeTown.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+			public String addHometown(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+				  
+				   String Username = (String) ses.getAttribute("Username");
+			       logger.info(new Date() +"Inside AddHomeTown.htm "+Username);  
+			       String Action = req.getParameter("Action");
+			       String EmpNo = (String) ses.getAttribute("EmpNo").toString();
+				   try {
+						
+						
+						PisHometown hometown = new PisHometown();
+						
+						hometown.setEmpNo(EmpNo);
+						hometown.setHometown(req.getParameter("hometown").trim());
+						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
+						hometown.setState(req.getParameter("state"));
+						hometown.setHometownStatus("N");
+						hometown.setPisStatusCode("INI");
+						hometown.setPisStatusCodeNext("INI");
+															    
+						if("ADD".equalsIgnoreCase(Action)) {
+							hometown.setIsActive(1);
+							hometown.setCreatedBy(Username);
+							hometown.setCreatedDate(sdtf.format(new Date()));
+			
+				        	long result  =  piservice.addHometown(hometown);
+				        	
+
+				        	    if(result>0) {
+				        	    	 redir.addAttribute("result", "Hometown Added Successfully");	
+				        		} else {
+				        			 redir.addAttribute("resultfail", "Hometown Add Unsuccessful");	
+				        	    }
+				        	    redir.addAttribute("hometownId", result);
+						}
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside AddHomeTown.htm "+Username ,e);  
+						e.printStackTrace();
+						return "static/Error";
+					}
+				   return "redirect:/Hometown.htm";
+		}  
+		 
+		 @RequestMapping(value="EditHomeTown.htm" , method= {RequestMethod.POST,RequestMethod.GET})
+		  public String HometownEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+				  
+				   String Username = (String) ses.getAttribute("Username");
+			       logger.info(new Date() +"Inside EditHomeTown.htm "+Username);  
+			       String Action = (String)req.getParameter("Action");
+				   try {
+
+					   PisHometown hometown = new PisHometown();
+						
+						hometown.setHometown(req.getParameter("hometown").trim());
+						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
+						hometown.setState(req.getParameter("state"));
+									    
+						if("EDIT".equalsIgnoreCase(Action)) {
+							String hometownId = req.getParameter("hometownId");
+							
+							hometown.setHometownId(Long.parseLong(hometownId));
+							hometown.setModifiedBy(Username);
+							hometown.setModifiedDate(sdtf.format(new Date()));
+			
+				        	long result  =  piservice.EditHometown(hometown);
+				        	
+
+				        	    if(result>0) {
+				        	    	 redir.addAttribute("result", "Hometown Edited Successfully");	
+				        		} else {
+				        			 redir.addAttribute("resultfail", "Hometown Edit Unsuccessful");	
+				        	    }
+				        	    redir.addAttribute("hometownId", result);
+						}
+						
+					} catch (Exception e) {
+						logger.error(new Date() +"Inside EditHomeTown.htm "+Username ,e);  
+						e.printStackTrace();
+						return "static/Error";
+					}
+				   return "redirect:/HomeTown.htm";
+		}   
+		   
 		
 }

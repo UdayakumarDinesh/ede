@@ -232,4 +232,6 @@ public interface PisDao {
 	public List<Object[]> EmployeeDropDownList(String empno, String LoginType) throws Exception;
 	public long ResAddrUpdate(String EmpId) throws Exception;
 	public long PerAddrUpdate(String EmpId) throws Exception;
+	public List<Object[]> HometownDetails(String empNo);
+	
 }

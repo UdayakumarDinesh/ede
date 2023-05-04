@@ -2166,4 +2166,10 @@ public class PisServiceImpl implements PisService
 			
 			return dao.PerAddrUpdate(EmpId);
 		}
+
+		@Override
+		public List<Object[]> HometownDetails(String empNo) {
+			
+			return dao.HometownDetails(empNo);
+		}
 }

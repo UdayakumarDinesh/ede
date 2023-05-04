@@ -30,8 +30,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.Admin.Service.AdminService;
+import com.vts.ems.pi.model.PisAddressPerTrans;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.model.PisMobileNumber;
+import com.vts.ems.pi.model.PisMobileNumberTrans;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.AddressRes;
@@ -173,6 +177,7 @@ public class PIController {
 	       logger.info(new Date() +"Inside PermanentAddressAdd.htm "+Username);  
 	       String Action = (String)req.getParameter("Action");
 	       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+	       String EmpNo = (String) ses.getAttribute("EmpNo");
 	       try {
 	    	   String state =(String)req.getParameter("state");
 	    	   String city  =(String)req.getParameter("city");
@@ -217,6 +222,16 @@ public class PIController {
 //	     	    	}
 	        	  
 	        	    if(result>0) {
+	        	    	
+	        	    	PisAddressPerTrans transaction = PisAddressPerTrans.builder()	
+								.address_per_id(peraddress.getAddress_per_id())
+								.PisStatusCode(peraddress.getPisStatusCode())
+								.ActionBy(EmpNo)
+								.Remarks("")
+								.ActionDate(sdtf.format(new Date()))
+								.build();
+                        service.AddressPerTransactionAdd(transaction);
+
 	        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
 	        		} else {
 	        			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
@@ -391,6 +406,7 @@ public class PIController {
 	       logger.info(new Date() +"Inside ResidentialAddressAdd.htm "+Username);  
 	       String Action = (String)request.getParameter("Action");
 	       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+	       String EmpNo = ((String) ses.getAttribute("EmpNo")).toString();
 		   try {
 			    String resAdd = request.getParameter("resAdd").trim().replaceAll(" +", " ");
 				String fromRes = request.getParameter("fromRes");
@@ -467,6 +483,16 @@ public class PIController {
 //	     	    	long count = service.ResUpdatetoDate(DateTimeFormatUtil.getMinusOneDay(fromRes) , toAddressId[0].toString());
 //	     	    	}
 		        	    if(result>0) {
+		        	    	
+		        	    	PisAddressResTrans transaction = PisAddressResTrans.builder()	
+									.address_res_id(resadd.getAddress_res_id())
+									.PisStatusCode(resadd.getPisStatusCode())
+									.ActionBy(EmpNo)
+									.Remarks("")
+									.ActionDate(sdtf.format(new Date()))
+									.build();
+                                  service.AddressResTransactionAdd(transaction);
+
 		        	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
 		        		} else {
 		        			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
@@ -861,6 +887,16 @@ public class PIController {
 			        	
 
 			        	    if(result>0) {
+			        	    	
+			        	    	PisMobileNumberTrans transaction = PisMobileNumberTrans.builder()
+				                           .MobileNumberId(mobile.getMobileNumberId())
+				                           .PisStatusCode(mobile.getPisStatusCode())
+				                           .ActionBy(EmpNo)
+				                           .Remarks("")
+				                           .ActionDate(sdtf.format(new Date()))
+				                           .build();
+			        	    	service.MobileNumberTransactionAdd(transaction);
+			        	    	
 			        	    	 redir.addAttribute("result", "Mobile Number Added Successfully");	
 			        		} else {
 			        			 redir.addAttribute("resultfail", "Mobile Number Add Unsuccessful");	
@@ -1129,7 +1165,7 @@ public class PIController {
 		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 		       try {
 
-		    	   String Action = (String) req.getParameter("Action");
+		    	   String Action = req.getParameter("Action");
 		    	
 		    	   	if("EDITHometown".equalsIgnoreCase(Action)) {
 		    	 		    	   		
@@ -1180,6 +1216,16 @@ public class PIController {
 				        	
 
 				        	    if(result>0) {
+				        	    	
+				        	    	PisHometownTrans transaction = PisHometownTrans.builder()
+					                           .HometownId(hometown.getHometownId())
+					                           .PisStatusCode(hometown.getPisStatusCode())
+					                           .ActionBy(EmpNo)
+					                           .Remarks("")
+					                           .ActionDate(sdtf.format(new Date()))
+					                           .build();
+				        	    	service.HometownTransactionAdd(transaction);
+				        	    	
 				        	    	 redir.addAttribute("result", "Hometown Added Successfully");	
 				        		} else {
 				        			 redir.addAttribute("resultfail", "Hometown Add Unsuccessful");	
@@ -1224,7 +1270,7 @@ public class PIController {
 				        		} else {
 				        			 redir.addAttribute("resultfail", "Hometown Edit Unsuccessful");	
 				        	    }
-				        	    redir.addAttribute("mobileNumberId", result);
+				        	    redir.addAttribute("hometownId", result);
 						}
 						
 					} catch (Exception e) {

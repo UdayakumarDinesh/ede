@@ -50,6 +50,7 @@ public class EmployeeDetails {
 	private String PH;
 	private String Photo;	
 	private String HomeTown;
+	private String HomeAllowed;
 	private String ServiceStatus;
 	private Date ResigDate;
 	private int PayLevelId;
