@@ -859,7 +859,7 @@ public class PIDaoImp implements PIDao{
 		}
 	}
 	
-	private static final String HOMETOWNDETAILS = "SELECT a.HometownId,a.EmpNo,a.Hometown,a.NearestRailwayStation,a.State,a.HometownStatus,a.Remarks,b.EmpName,c.PISStatus,c.PisStatusColor,c.PISStatusId,c.pisstatuscode FROM pis_hometown a,employee b,pis_approval_status c WHERE  a.IsActive=1 AND a.EmpNo=b.EmpNo AND a.PisStatuscode=c.PisStatuscode AND a.EmpNo=:EmpNo ORDER BY a.HometownId DESC";
+	private static final String HOMETOWNDETAILS = "SELECT a.HometownId,a.EmpNo,a.Hometown,a.NearestRailwayStation,a.State,a.HometownStatus,a.Remarks,b.EmpName,c.PISStatus,c.PisStatusColor,c.PISStatusId,c.pisstatuscode,d.HomeAllowed FROM pis_hometown a,employee b,pis_approval_status c,employee_details d WHERE  a.IsActive=1 AND a.EmpNo=b.EmpNo AND a.PisStatuscode=c.PisStatuscode AND a.EmpNo=:EmpNo AND d.EmpNo=a.EmpNo ORDER BY a.HometownId DESC";
 	@Override
 	public List<Object[]> HometownDetails(String EmpNo)throws Exception{
 		List<Object[]> hometowndata=null;
@@ -1029,14 +1029,13 @@ public class PIDaoImp implements PIDao{
 		
 	}
 	
-	private static final String INTIMATIONAPPROVALSLIST  ="CALL Intimation_Approval (:EmpNo,:LoginType);";
+	private static final String INTIMATIONAPPROVALSLIST  ="CALL Intimation_Approval (:EmpNo);";
 	@Override
-	public List<Object[]> IntimationApprovalsList(String EmpNo,String LoginType) throws Exception
+	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception
 	{
 		try {			
 			Query query= manager.createNativeQuery(INTIMATIONAPPROVALSLIST);
 			query.setParameter("EmpNo", EmpNo);
-			query.setParameter("LoginType", LoginType);
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 				return list;
 		}catch (Exception e) {
@@ -1045,5 +1044,22 @@ public class PIDaoImp implements PIDao{
 			return new ArrayList<Object[]>();
 		}
 		
+	}
+	
+	private static final String HOMETOWNALLOWEDEMPNO  ="SELECT DISTINCT EmpNo FROM employee_details WHERE HomeAllowed='Y'";
+	@Override
+	public List<String> GetHometownAllowedEmpNo() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(HOMETOWNALLOWEDEMPNO);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}
+		catch (Exception e) 
+		{
+			logger.error(new Date()  + "Inside DAO GetHometownAllowedEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}	
 	}
 }

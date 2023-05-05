@@ -63,7 +63,10 @@
 	
 	
 	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
-
+	
+	List<String> HometownAllowedEmpNo = (List<String>)request.getAttribute("HometownAllowedEmpNo");
+	int size = home.size();
+	
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -172,15 +175,19 @@
 							<br><b>NOTE :</b> <b style="color:red;">You Can Change Your Hometown Only Once In A Lifetime. </b>									
 						</div>
 					</div>
-			
+			        
+			        <%if(HometownAllowedEmpNo!=null && HometownAllowedEmpNo.contains(emp.getEmpNo()) ) {%>
 				    <div class="row text-center">
 						<div class="col-md-12">
 						     <%-- <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> --%>
+							<%if(size<2){ %>
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDHometown"   >ADD </button>
+							<%} %>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITHometown"  Onclick="EditPer(empForm)" >EDIT </button>
 					    	<!-- <button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button> -->
 					    </div>
-				   </div>	
+				   </div>
+				   	<%} %>
 				</form>
 						<hr>
 			<div class="row"  >

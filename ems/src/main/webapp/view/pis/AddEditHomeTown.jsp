@@ -16,6 +16,7 @@
 	<%
 	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	PisHometown hometown =(PisHometown)request.getAttribute("Hometown");
+	 Object[] empdata = (Object[])request.getAttribute("Empdata");
 	%>
 	
 	<div class="card-header page-top">
@@ -30,6 +31,7 @@
 						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
 				        <li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<li class="breadcrumb-item  " aria-current="page"><a href="Hometown.htm?empid=<%=empdata[2] %> ">Hometown List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Hometown</li>
 					</ol>
 				</div>
@@ -37,15 +39,16 @@
 	</div>
 
 <div class="page card dashboard-card"> 
-   <div class="card-body">
+   <div class="card-body" >
 	 <div class="row">
-
+       <div class="col-1"></div>
 		<%if(hometown!=null){ %>
 		<form action="EditHomeTown.htm" method="POST" autocomplete="off" id="myform" enctype="multipart/form-data">
 		<%}else{%>
 		<form action="AddHomeTown.htm" method="POST" autocomplete="off" id="myform">
 		<%}%>
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	
 		<div class="card" style="width: 140%;" > 
 		<div class="card-header">
 		<h5>Fill Hometown Details</h5>
@@ -87,16 +90,20 @@
 						<div class="row">
 							<div class="col-12" align="center">
 							 <div class="form-group">
+							 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							 <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2].toString()%><%}%>"> 
+		                      <input type="hidden" name="EmpNo" value="<%if(empdata!=null){%><%=empdata[3].toString()%><%}%>"> 
 							<%if(hometown!=null){ %>
+								
 							<input type="hidden" name="hometownId" value="<%=hometown.getHometownId() %>">
-			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>
+			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModelEdit();">SUBMIT</button>
 							<%}else{%>
 				              <button type="submit" class="btn btn-sm submit-btn"	onclick="return CommentsModelAdd();" name="Action" value="ADD">SUBMIT</button>
 							<%}%>						
 							 </div>
 							</div>
-						 </div>	
-						 
+					     </div>	
+					 </div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 						<%if(hometown!=null){ %>
                 <!--------------------------- container ------------------------->
@@ -132,7 +139,7 @@
 					        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					        <!-- Modal footer -->
 					        <div class="modal-footer" >
-					        	<button type="submit"  class="btn btn-sm submit-btn" name="action" value="EDITTEST" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
+					        	<button type="submit"  class="btn btn-sm submit-btn" name="Action" value="EDIT" onclick="return confirm('Are You Sure To Submit?');" >SUBMIT</button>
 					        </div>
 					       
 					      </div>
@@ -140,9 +147,7 @@
 					  </div>
 					</div>
 			<!----------------------------- container Close ---------------------------->	
-						<%}%>		 	
-						 		 
-						</div>								
+						<%}%>		 											
 			<%if(hometown!=null){ %>
 			</form>
 			<%}else{ %>
@@ -172,6 +177,35 @@ function CommentsModelAdd()
 			return false;
 		}else{
 			$('#myform').submit();
+			return true;
+		}
+	  event.preventDefault;
+	  }else{
+		  return false;
+	  }
+}
+</script>
+
+<script type="text/javascript">
+function CommentsModelEdit()
+{
+	  var NearestRailwayStation =$("#nearestRailwayStation").val();
+	  var State =$("#state").val();
+	  var Hometown =$("#hometown").val();
+	  
+	  if(confirm('Are You Sure to Submit?')){
+	  
+	  if(Hometown==null || Hometown=='' || Hometown=="null" ){
+			alert('Enter the Hometown!');
+			return false;
+		}else if(State==null || State=='' || State=="null" ){
+			alert('Please Select the State!');
+			return false;
+		}else if(NearestRailwayStation==null || NearestRailwayStation=='' || NearestRailwayStation=="null" ){
+			alert('Enter the Nearest Railway Station!');
+			return false;
+		}else{
+			$('#myModal').modal('show');
 			return true;
 		}
 	  event.preventDefault;

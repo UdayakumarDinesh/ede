@@ -732,7 +732,7 @@ public class PIController {
 				ses.setAttribute("SidebarActive","IntimationApprovals_htm");	
 				
 //				req.setAttribute("ApprovalList", service.ResAddressApprovalsList(EmpNo, LoginType));
-				req.setAttribute("ApprovalList", service.IntimationApprovalsList(EmpNo, LoginType));
+				req.setAttribute("ApprovalList", service.IntimationApprovalsList(EmpNo));
 				
 				return "pi/IntimationApprovals";
 			}catch (Exception e) {
@@ -805,8 +805,8 @@ public class PIController {
 				
 				req.setAttribute("MobileDetails", service.MobileNumberDetails(EmpNo));
 				req.setAttribute("HometownDetails", service.HometownDetails(EmpNo));
+				req.setAttribute("HometownAllowedEmpNo", service.GetHometownAllowedEmpNo());
 				
-				req.setAttribute("ApprovalCount", service.HometownApprovalCount(EmpNo).intValue());
 				return "pi/HomeTownAndMobile";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PIHomeTownMobile.htm"+Username, e);
@@ -1331,6 +1331,15 @@ public class PIController {
 				
 								
 				long count = service.HometownForward(hometownId, Username, action,remarks,EmpNo,LoginType);
+				
+				PisHometown hometown2 = service.getHometownById(Long.parseLong(hometownId) );
+				String pisStatusCode2 = hometown2.getPisStatusCode();
+				String pisStatusCodeNext2 = hometown2.getPisStatusCodeNext();
+				
+				if(pisStatusCode2.equalsIgnoreCase("APR") && pisStatusCodeNext2.equalsIgnoreCase("APR")) {
+					pisservice.EmployeeHometownWithStatusUpdate(hometown2.getHometown(), "N", hometown2.getEmpNo() );
+				}
+				
 				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RGI") || pisStatusCode.equalsIgnoreCase("RDI") || 
 				   pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE")) {
 					if (count > 0) {

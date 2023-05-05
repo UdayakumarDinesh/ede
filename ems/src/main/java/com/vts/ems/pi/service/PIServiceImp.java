@@ -1042,9 +1042,9 @@ public class PIServiceImp implements PIService{
 	}
 
 	@Override
-	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception {
+	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception {
 		
-		return dao.IntimationApprovalsList(EmpNo, LoginType);
+		return dao.IntimationApprovalsList(EmpNo);
 	}
 
 	@Override
@@ -1069,6 +1069,12 @@ public class PIServiceImp implements PIService{
 	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception {
 		
 		return dao.AddressResTransactionAdd(transaction);
+	}
+
+	@Override
+	public List<String> GetHometownAllowedEmpNo() throws Exception {
+		
+		return dao.GetHometownAllowedEmpNo();
 	}
 
 	

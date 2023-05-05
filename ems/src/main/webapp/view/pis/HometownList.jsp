@@ -43,20 +43,21 @@
 
     Object[] empdata = (Object[])request.getAttribute("Empdata");
 	List<Object[]> mobile =(List<Object[]>)request.getAttribute("MobileDetails");
-	List<Object[]> home =(List<Object[]>)request.getAttribute("HometownDetails");
+	Object[] home =(Object[])request.getAttribute("HometownDetails");
+  /*   List<String> HometownAllowedEmpNo =(List<String>)request.getAttribute("HometownAllowedEmpNos"); */
 	
 %>
 <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
-				<h5>Hometown List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%>
+				<h5 style="width:110%;">Hometown List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%>
 						</b></small></h5>
 			</div>
 				<div class="col-md-7">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
-						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
+						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>						
 						<li class="breadcrumb-item active " aria-current="page">Hometown List</li>
 					</ol>
 				</div>
@@ -78,7 +79,7 @@
 			  <%} %>
 		 </div>	
 		 	
-<div class="card">					
+<%--<div class="card">					
 		<div class="card-body">
 			<h5>Hometown List</h5>
 			  <hr>
@@ -103,31 +104,72 @@
 						    <td style="text-align: left;"><%if(obj[2]!=null){ %> <%=obj[2] %> <%} %> </td>
 						    <td style="text-align: left;"><%if(obj[3]!=null){ %> <%=obj[3] %> <%} %> </td>
 						    <td style="text-align: left;"><%if(obj[4]!=null){ %> <%=obj[4] %> <%} %> </td>          
+					   		
 					   		</tr>
-					   		<%} %>
+					   		<%} }%>
 					   </tbody>
 				    </table>
 				   </div>	
-				   <div>
-				   </div>
+				  
 				   <div class="row">
 						<div class="col-md-12 w-100" align="left">
 							<br><b>NOTE :</b> <b style="color:red;">You Can Change Your Hometown Only Once In A Lifetime. </b>									
 						</div>
 					</div>
 
-				    <div class="row text-center">
+
+				     <div class="row text-center">
 						<div class="col-md-12">
-						     <%-- <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> --%>
+						     <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> 
+						     <input type="hidden" name="EmpNo" value="<%if(empdata!=null){%><%=empdata[3]%><%}%>"> 
 							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDHometown"   >ADD </button>
 							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITHometown"  Onclick="EditPer(empForm)" >EDIT </button>
 					    	<!-- <button type="submit" class="btn btn-sm delete-btn" name="Action" value="DELETE" Onclick="Delete(empForm)" >DELETE </button> -->
 					    </div>
-				    </div>	
-					<%} %>						
+				    </div>	 
+					
 				</form>
        </div>
-  </div>			 		 
+  </div>	--%>
+  <div class="card" >		
+		<div class="card-body " >
+				 <h5>Add / Edit Hometown</h5>	
+					<hr>
+					<%if(home!=null){ %>
+					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="">
+					<tbody>
+					    <tr align="center">
+					       <th>Hometown</th>
+					       <th>Nearest Railway Station</th>	
+					       <th>State</th>
+							<th>Edit</th>
+					   </tr>
+					    <tr align="center">
+							<td style="text-align: left;"><%if(home[2]!=null){ %> <%=home[2] %> <%} %> </td>
+						    <td style="text-align: left;"><%if(home[3]!=null){ %> <%=home[3] %> <%} %> </td>
+						    <td style="text-align: left;"><%if(home[4]!=null){ %> <%=home[4] %> <%} %> </td>  
+							<td style="padding-top:5px; padding-bottom: 5px;">
+							<form action="Hometown.htm" method="GET">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> 
+						     <input type="hidden" name="EmpNo" value="<%if(empdata!=null){%><%=empdata[3]%><%}%>">
+							 <input type="hidden" name="hometownid" value="<%if(home!=null){%><%=home[0]%><%}%>">
+						     <button type="submit" class="btn btn-sm" name="Action" value="EDITHometown" data-toggle="tooltip" data-placement="top" title="Edit">
+							<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>	</form></td>
+					   </tr>
+					</tbody>
+					</table>
+						<%}else{%>
+				          <form action="Hometown.htm" method="GET">
+				          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				          <input type="hidden" name="empid" value="<%if(empdata!=null){%><%=empdata[2]%><%}%>"> 
+						     <input type="hidden" name="EmpNo" value="<%if(empdata!=null){%><%=empdata[3]%><%}%>">
+                             <button  type="submit" name="Action" value="ADDHometown"  class="btn btn-sm add-btn" style="margin-bottom:12px;"> Add Hometown</button>
+                          </form>
+					    <%}%>
+						
+		  </div>
+		</div>				 		 
 </div>							
 		
 		
@@ -149,20 +191,7 @@ $("#myTable3").DataTable({
 });
 
 </script>
-<script type="text/javascript">
-function EditRes(myfrm) {
 
-	var fields = $("input[name='mobilenumberid']").serializeArray();
-	if (fields.length === 0) {
-		alert("Please Select Atleast One Mobile Number");
-
-		event.preventDefault();
-		return false;
-	}
-	return true;
-}
-
-</script>
 <script type="text/javascript">
 function EditPer(myfrm) {
 

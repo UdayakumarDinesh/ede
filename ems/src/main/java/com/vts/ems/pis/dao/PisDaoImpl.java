@@ -3309,20 +3309,62 @@ private static final String EMPLOYEELIST="CALL EmpLoyee_List(:Id,:Code)";
 		return List;
 	}
 
-	private static final String HOMETOWNDETAILS = "SELECT a.HometownId,a.EmpNo,a.Hometown,a.NearestRailwayStation,a.State FROM pis_hometown a WHERE  a.IsActive=1  AND a.EmpNo=:EmpNo ORDER BY a.HometownId DESC";
+	private static final String HOMETOWNDETAILS = "SELECT DISTINCT a.HometownId,a.EmpNo,b.Hometown,a.NearestRailwayStation,a.State,b.HomeAllowed FROM pis_hometown a,employee_details b WHERE  a.IsActive=1  AND a.EmpNo=:EmpNo AND a.EmpNo=b.EmpNo AND a.HometownStatus='A' LIMIT 1;";
 	@Override
-	public List<Object[]> HometownDetails(String empNo) {
-		List<Object[]> hometowndata=null;
+	public Object[] HometownDetails(String empNo) {
 		try {
 			Query query = manager.createNativeQuery(HOMETOWNDETAILS);
-			query.setParameter("EmpNo",empNo);
-			hometowndata =(List<Object[]>) query.getResultList();
+			query.setParameter("EmpNo", empNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}	
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error(new Date() + "Inside DAO HometownDetails "+e);
-	
+			e.printStackTrace();
+			return null;
 		}
-		return hometowndata;
 	}
+	
+	private static final String UPDATEEMPLOYEEHOMETOWN = "UPDATE employee_details SET Hometown=:Hometown,HomeAllowed=:HomeAllowed WHERE EmpNo=:EmpNo AND IsActive=1";
+	@Override
+	public long EmployeeHometownWithStatusUpdate(String Hometown,String HomeAllowed, String EmpNo) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATEEMPLOYEEHOMETOWN);
+			query.setParameter("Hometown", Hometown);
+			query.setParameter("HomeAllowed", HomeAllowed);
+			query.setParameter("EmpNo", EmpNo);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeHometownUpdate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+		
+	}
+	
+	private static final String UPDATEONLYEMPLOYEEHOMETOWN = "UPDATE employee_details SET Hometown=:Hometown WHERE EmpNo=:EmpNo AND IsActive=1";
+	@Override
+	public long EmployeeHometownUpdate(String Hometown, String EmpNo) throws Exception{
+		try {
+			Query query = manager.createNativeQuery(UPDATEONLYEMPLOYEEHOMETOWN);
+			query.setParameter("Hometown", Hometown);
+			query.setParameter("EmpNo", EmpNo);
+			return (long)query.executeUpdate();
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmployeeHometownUpdate "+e);
+			e.printStackTrace();
+		}	
+		return 0L;
+		
+	}
+	
+	
+	
+	
+	
 }
 	

@@ -58,6 +58,8 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.master.dto.MasterEditDto;
 import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.service.MasterService;
+import com.vts.ems.pi.model.PisAddressPerTrans;
+import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
 import com.vts.ems.pi.model.PisHometownTrans;
 import com.vts.ems.pi.service.PIService;
@@ -1216,6 +1218,7 @@ public class PisController {
 	   String Username = (String) ses.getAttribute("Username");
        logger.info(new Date() +"Inside AddPerAddressDetails.htm "+Username);  
        String Action = (String)req.getParameter("Action");
+       String EmpNo =(String)ses.getAttribute("EmpNo").toString();
        try {
     	   String state =(String)req.getParameter("state");
     	   String city  =(String)req.getParameter("city");
@@ -1262,6 +1265,17 @@ public class PisController {
         	   long result  =  service.AddPerAddress(peraddress); 
         	   
         	    if(result>0) {
+        	    	
+        	    	PisAddressPerTrans transaction = PisAddressPerTrans.builder()	
+							.address_per_id(result)
+							.PisStatusCode(peraddress.getPisStatusCode())
+							.ActionBy(EmpNo)
+							.Remarks("Approved by Admin")
+							.ActionDate(sdtf.format(new Date()))
+							.build();
+        	    	
+                    piservice.AddressPerTransactionAdd(transaction);
+                    
         	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
@@ -1406,6 +1420,7 @@ public class PisController {
 	   String Username = (String) ses.getAttribute("Username");
        logger.info(new Date() +"Inside AddResAddressDetails.htm "+Username);  
        String Action = (String)request.getParameter("Action");
+       String EmpNo = (String)ses.getAttribute("EmpNo").toString();
 	   try {
 		    String resAdd = request.getParameter("resAdd").trim().replaceAll(" +", " ");
 			String fromRes = request.getParameter("fromRes");
@@ -1485,6 +1500,15 @@ public class PisController {
      	    	}
         	    if(result>0) {
         	    	
+        	    	PisAddressResTrans transaction = PisAddressResTrans.builder()	
+							.address_res_id(result)
+							.PisStatusCode(resadd.getPisStatusCode())
+							.ActionBy(EmpNo)
+							.Remarks("Approved by Admin")
+							.ActionDate(sdtf.format(new Date()))
+							.build();
+                    piservice.AddressResTransactionAdd(transaction);
+                          
         	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
         		} else {
         			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
@@ -6657,18 +6681,20 @@ public class PisController {
 			
 			   String Username = (String) ses.getAttribute("Username");
 		       logger.info(new Date() +"Inside Hometown.htm "+Username);
-		       String empid =null;
+		   
 			   try {
 				   String Action = (String) req.getParameter("Action");
-				    empid = (String)req.getParameter("empid");
+				   String empid = req.getParameter("empid");
 				    
-				   if(empid==null) {
-					   Map md=model.asMap();
-						empid=(String)md.get("Employee");
-						if((String)md.get("Employee")==null) {
-							return "redirect:/PisAdminEmpList.htm";
-						}
-				   }
+//				   if(empid==null) {
+//					   Map md=model.asMap();
+//						empid=(String)md.get("Employee");
+//						if((String)md.get("Employee")==null) {
+//							return "redirect:/PisAdminEmpList.htm";
+//						}
+//				   }
+				   
+				   req.setAttribute("Empdata", service.GetEmpData(empid));
 				   
 				   if("EDITHometown".equalsIgnoreCase(Action)) {
 					   List<Object[]> States = service.getStates();
@@ -6684,9 +6710,8 @@ public class PisController {
 				   }
 				   else {
 				   Employee empData = piservice.getEmpData(empid);
-	               
 				   req.setAttribute("HometownDetails", service.HometownDetails(empData.getEmpNo()) );
-				   req.setAttribute("Empdata", service.GetEmpData(empid));
+				   
 				   }
 				   
 			   }catch (Exception e){
@@ -6704,34 +6729,46 @@ public class PisController {
 				   String Username = (String) ses.getAttribute("Username");
 			       logger.info(new Date() +"Inside AddHomeTown.htm "+Username);  
 			       String Action = req.getParameter("Action");
-			       String EmpNo = (String) ses.getAttribute("EmpNo").toString();
+//			       String EmpNo = (String) ses.getAttribute("EmpNo").toString();
 				   try {
-						
-						
+						String EmpNo = req.getParameter("EmpNo");
+						String EmpId = req.getParameter("empid");
+						System.out.println(EmpId);
 						PisHometown hometown = new PisHometown();
 						
 						hometown.setEmpNo(EmpNo);
 						hometown.setHometown(req.getParameter("hometown").trim());
 						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
 						hometown.setState(req.getParameter("state"));
-						hometown.setHometownStatus("N");
-						hometown.setPisStatusCode("INI");
-						hometown.setPisStatusCodeNext("INI");
+						hometown.setHometownStatus("A");
+						hometown.setPisStatusCode("APR");
+						hometown.setPisStatusCodeNext("APR");
 															    
 						if("ADD".equalsIgnoreCase(Action)) {
 							hometown.setIsActive(1);
 							hometown.setCreatedBy(Username);
 							hometown.setCreatedDate(sdtf.format(new Date()));
 			
-				        	long result  =  piservice.addHometown(hometown);
-				        	
+				       long result  =  piservice.addHometown(hometown);
+				        					     
+				         if(result>0) {
+				        	 service.EmployeeHometownWithStatusUpdate(hometown.getHometown(), "Y", EmpNo);
+				        	 
+				        	 PisHometownTrans transaction = PisHometownTrans.builder()
+			                           .HometownId(result)
+			                           .PisStatusCode(hometown.getPisStatusCode())
+			                           .ActionBy(EmpNo)
+			                           .Remarks("Approved by Admin")
+			                           .ActionDate(sdtf.format(new Date()))
+			                           .build();
+		        	    	       piservice.HometownTransactionAdd(transaction);
+		        	    	       
+				        	 redir.addAttribute("result", "Hometown Added Successfully");	
+				          } else {
+				        	 redir.addAttribute("resultfail", "Hometown Add Unsuccessful");	
+				          }
 
-				        	    if(result>0) {
-				        	    	 redir.addAttribute("result", "Hometown Added Successfully");	
-				        		} else {
-				        			 redir.addAttribute("resultfail", "Hometown Add Unsuccessful");	
-				        	    }
-				        	    redir.addAttribute("hometownId", result);
+				        	 redir.addAttribute("empid", EmpId);
 						}
 						
 					} catch (Exception e) {
@@ -6742,16 +6779,17 @@ public class PisController {
 				   return "redirect:/Hometown.htm";
 		}  
 		 
-		 @RequestMapping(value="EditHomeTown.htm" , method= {RequestMethod.POST,RequestMethod.GET})
-		  public String HometownEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
+		 @RequestMapping(value="EditHomeTown.htm" , method= RequestMethod.POST)
+		  public String editHometown(HttpServletRequest req , HttpSession ses ,@RequestPart("selectedFile") MultipartFile selectedFile ,  RedirectAttributes redir)throws Exception{
 				  
 				   String Username = (String) ses.getAttribute("Username");
 			       logger.info(new Date() +"Inside EditHomeTown.htm "+Username);  
-			       String Action = (String)req.getParameter("Action");
+			       String Action = req.getParameter("Action");
 				   try {
-
+					   String EmpNo = req.getParameter("EmpNo");
+					   String EmpId = req.getParameter("empid");
 					   PisHometown hometown = new PisHometown();
-						
+					   System.out.println(EmpId +"     "+Action);
 						hometown.setHometown(req.getParameter("hometown").trim());
 						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
 						hometown.setState(req.getParameter("state"));
@@ -6765,13 +6803,28 @@ public class PisController {
 			
 				        	long result  =  piservice.EditHometown(hometown);
 				        	
-
+				        	 String comments = (String)req.getParameter("comments");
+					    	   MasterEdit masteredit  = new MasterEdit();
+					    	   masteredit.setCreatedBy(Username);
+					    	   masteredit.setCreatedDate(sdtf.format(new Date()));
+					    	   masteredit.setTableRowId(Long.parseLong(hometownId));
+					    	   masteredit.setComments(comments);
+					    	   masteredit.setTableName("pis_hometown");
+					    	   
+					    	   MasterEditDto masterdto = new MasterEditDto();
+					    	   masterdto.setFilePath(selectedFile);
+					    	   masterservice.AddMasterEditComments(masteredit , masterdto);
+					    	   
+					    	   
 				        	    if(result>0) {
+				        	    	service.EmployeeHometownUpdate(hometown.getHometown(), EmpNo);
 				        	    	 redir.addAttribute("result", "Hometown Edited Successfully");	
 				        		} else {
 				        			 redir.addAttribute("resultfail", "Hometown Edit Unsuccessful");	
 				        	    }
-				        	    redir.addAttribute("hometownId", result);
+				        	    				        	
+				        	    redir.addAttribute("empid", EmpId);
+
 						}
 						
 					} catch (Exception e) {
@@ -6779,7 +6832,7 @@ public class PisController {
 						e.printStackTrace();
 						return "static/Error";
 					}
-				   return "redirect:/HomeTown.htm";
+				   return "redirect:/Hometown.htm";
 		}   
 		   
 		

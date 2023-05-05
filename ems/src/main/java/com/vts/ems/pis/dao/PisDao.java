@@ -232,6 +232,8 @@ public interface PisDao {
 	public List<Object[]> EmployeeDropDownList(String empno, String LoginType) throws Exception;
 	public long ResAddrUpdate(String EmpId) throws Exception;
 	public long PerAddrUpdate(String EmpId) throws Exception;
-	public List<Object[]> HometownDetails(String empNo);
+	public Object[] HometownDetails(String empNo);
+	public long EmployeeHometownWithStatusUpdate(String Hometown, String HomeAllowed, String EmpNo) throws Exception;
+	public long EmployeeHometownUpdate(String Hometown, String EmpNo) throws Exception;
 	
 }

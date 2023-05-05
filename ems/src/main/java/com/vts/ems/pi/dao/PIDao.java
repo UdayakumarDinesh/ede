@@ -85,6 +85,8 @@ public interface PIDao {
 	public List<Object[]> HometownTransactionList(String hometownid) throws Exception;
 	public BigInteger HometownApprovalCount(String EmpNo) throws Exception;
 	public long HometownStatusUpdate(String EmpNo) throws Exception;
-	public List<Object[]> IntimationApprovalsList(String EmpNo, String LoginType) throws Exception;
+	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception;
+	public List<String> GetHometownAllowedEmpNo() throws Exception;
 
+	
 }

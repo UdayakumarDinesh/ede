@@ -2168,8 +2168,20 @@ public class PisServiceImpl implements PisService
 		}
 
 		@Override
-		public List<Object[]> HometownDetails(String empNo) {
+		public Object[] HometownDetails(String empNo) {
 			
 			return dao.HometownDetails(empNo);
+		}
+
+		@Override
+		public long EmployeeHometownWithStatusUpdate(String Hometown, String HomeAllowed, String EmpNo) throws Exception {
+			
+			return dao.EmployeeHometownWithStatusUpdate(Hometown, HomeAllowed, EmpNo);
+		}
+
+		@Override
+		public long EmployeeHometownUpdate(String Hometown, String EmpNo) throws Exception {
+			
+			return dao.EmployeeHometownUpdate(Hometown, EmpNo);
 		}
 }
