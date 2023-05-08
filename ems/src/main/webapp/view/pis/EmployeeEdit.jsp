@@ -263,12 +263,12 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			    </div>
 			    <div class="form-group">
 			        <div class="row">      
-			             <div class=" col-md-2 ">
+			             <%-- <div class=" col-md-2 ">
 			                <label> Home Town </label>
 			                <input type="text" id="txtName" readonly="readonly" name="HomeTown" style=" text-transform:uppercase " value="<%if(employee!=null && employee.getHomeTown()!=null ){%><%=employee.getHomeTown()%><%} %>"
 			                    maxlength=" 240 " class=" form-control input-sm " placeholder="Enter Home Town " 
 			                    onclick=" Validate() ">
-			               </div>	
+			               </div> --%>	
 			    
 			      	  <div class=" col-md-2 ">
 			                <label>Mobile No<span class=" mandatory ">*</span></label>
@@ -301,15 +301,15 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <label>Aadhar No<span class="mandatory">*</span></label>
 			                <input id="UIDTextBox" type="text" name="uid" value="<%if(employee!=null){%><%=employee.getUID()%><%}%>" class="form-control input-sm" maxlength="12" placeholder="Enter UID" required>
 			            </div>
-			        </div>
-			    </div>
-			    <div class=" form-group ">
-			        <div class=" row ">
-			            <div class="col-md-2">
+			            
+			             <div class="col-md-2">
 			                <label>PAN<span class="mandatory">*</span></label>
 			                <input type="text" id="PAN" name="pan" required="required" style="text-transform:uppercase" value="<%if(employee!=null && employee.getPAN()!=null){%><%=employee.getPAN()%><%}%>" class="form-control input-sm " maxlength="10" placeholder="Enter PAN">
 			            </div>
-						
+			        </div>
+			    </div>
+			    <div class=" form-group ">
+			        <div class=" row ">	
 						 <div class=" col-md-2 ">
 			                <label>UAN No</label>
 			                <input type="text"  name="UANNo" id="UANNo" value="<%if(employee!=null && employee.getUANNo()!=null){%><%=employee.getUANNo()%><%}%>" maxlength="12"
@@ -353,11 +353,8 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                <input type="text" name="gpf" value="<%if(employee!=null && employee.getGPFNo()!=null){%><%=employee.getGPFNo()%><%}%>" class=" form-control input-sm " maxlength=" 12 "
 			                    placeholder="Enter GPF " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
-					</div>
-				</div>
-			      <div class=" form-group ">
-			        <div class=" row ">
-						<div class=" col-md-2 ">
+			            
+			            <div class=" col-md-2 ">
 			                <label>Service Status<span class=" mandatory ">*</span></label>
 			                <select name="ServiceStatus" class=" form-control input-sm select2  " required="required"
 			                    data-live-search=" true ">		
@@ -368,6 +365,11 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 			                    <option value=" Contract "  <%if(employee!=null && employee.getServiceStatus()!=null && employee.getServiceStatus().equalsIgnoreCase("Contract")) {%>selected<%}%>>Contract</option>
 			                </select>
 			            </div>
+					</div>
+				</div>
+			      <div class=" form-group ">
+			        <div class=" row ">
+						
 			        	<div class=" col-md-2 ">
 			                <label>Religion </label>
 			                <select name="religion" class=" form-control input-sm select2 " data-live-search=" true ">
@@ -419,16 +421,16 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 								<option value="Y" <%if(employee!=null && employee.getPH()!=null  &&employee.getPH().equalsIgnoreCase("Y")){%>selected<%}%>>YES</option>								
 			                </select>	
 			            </div>
-			      </div>
-			    </div>   
-			    <div class="form-group">
-			        <div class="row">       
 			            
-			            <div class=" col-md-2 ">
+			             <div class=" col-md-2 ">
 			                <label>Identification Mark</label>
 			                <input type="text" value="<%if(employee!=null && employee.getIdMark()!=null){%><%=employee.getIdMark()%><%}%>" name="idMark" class=" form-control input-sm " maxlength="99"
 			                    placeholder="Enter Identification Mark " onclick=" return trim(this) " onchange=" return trim(this) ">
 			            </div>
+			      </div>
+			    </div>   
+			    <div class="form-group">
+			        <div class="row">       
 
 			            <div class="col-md-2">
 			                <label>Emp Status<span class="mandatory">*</span></label>
@@ -438,7 +440,7 @@ SimpleDateFormat dateconvertion = new SimpleDateFormat("yyyy-MM-dd");
 								<%}%>
 			                </select>
 			            </div> 
-			            <div class="col-md-2">
+			            <div class="col-md-4">
 			                <label>Availed Govt Quarters</label>          
 			                <select name="gq" class=" form-control input-sm select2" >
 			                	<option value="N" <%if(employee!=null && employee.getQuarters()!=null &&employee.getQuarters().equalsIgnoreCase("N")){%>selected<%}%>>No</option>

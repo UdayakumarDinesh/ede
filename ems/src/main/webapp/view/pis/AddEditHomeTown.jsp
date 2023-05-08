@@ -99,7 +99,8 @@
 			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModelEdit();">SUBMIT</button>
 							<%}else{%>
 				              <button type="submit" class="btn btn-sm submit-btn"	onclick="return CommentsModelAdd();" name="Action" value="ADD">SUBMIT</button>
-							<%}%>						
+							<%}%>	
+							 <a href="Hometown.htm?empid=<%if(empdata!=null){%><%=empdata[2]%><%}%>"   class="btn btn-sm  btn-info">BACK</a>					
 							 </div>
 							</div>
 					     </div>	

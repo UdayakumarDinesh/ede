@@ -1077,5 +1077,11 @@ public class PIServiceImp implements PIService{
 		return dao.GetHometownAllowedEmpNo();
 	}
 
+	@Override
+	public Employee getEmpDataByEmpNo(String empNo) throws Exception {
+		
+		return dao.getEmpDataByEmpNo(empNo);
+	}
+
 	
 }

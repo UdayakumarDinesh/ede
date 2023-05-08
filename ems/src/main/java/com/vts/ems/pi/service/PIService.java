@@ -56,6 +56,7 @@ public interface PIService {
 	public Object[] MobileFormData(String mobileNumberId) throws Exception;
 	public List<Object[]> MobileApprovalsList(String EmpNo, String LoginType) throws Exception;
 	public PisMobileNumber getMobileDataById(long mobilenumberid) throws Exception;
+	public Employee getEmpDataByEmpNo(String empNo) throws Exception;
 	public long MobileNumberForward(String mobileNumberId, String username, String action, String remarks, String ApprEmpNo,String LoginType) throws Exception;
 	public long UpdateEmployeeMobileNumber(String MobileNumber, String AltMobileNumber, String EmpNo) throws Exception;
 	public Long addHometown(PisHometown hometown) throws Exception;
