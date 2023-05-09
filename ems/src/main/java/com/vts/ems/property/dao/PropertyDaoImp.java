@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.pi.dao.PIDaoImp;
 import com.vts.ems.property.model.PisImmovableProperty;
+import com.vts.ems.property.model.PisImmovablePropertyTrans;
 
 @Transactional
 @Repository
@@ -77,6 +78,23 @@ public class PropertyDaoImp implements PropertyDao{
 			e.printStackTrace();
 		}
 		return immovable.getImmPropertyId();
+	}
+
+	@Override
+	public Long addImmovablePropertyTransaction(PisImmovablePropertyTrans transaction) throws Exception {
+		
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getImmTransactionId();
+	}
+
+	private static final String IMMPROPTRANSLIST="SELECT tra.ImmTransactionId,emp.empno,emp.empname,des.designation,tra.actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor  FROM pis_immovable_property_trans tra, pis_approval_status sta,employee emp,employee_desig des,pis_immovable_property par WHERE par.ImmPropertyId = tra.ImmPropertyId AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND emp.desigid=des.desigid AND par.ImmPropertyId =:ImmPropertyId ORDER BY actiondate";
+	@Override
+	public List<Object[]> immmovablePropertyTransList(String immPropertyId) throws Exception {
+		
+		Query query = manager.createNativeQuery(IMMPROPTRANSLIST);
+		query.setParameter("ImmPropertyId",Long.parseLong(immPropertyId));
+		return (List<Object[]>)query.getResultList();
 	}
 	
 }

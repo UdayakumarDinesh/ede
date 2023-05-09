@@ -18,9 +18,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 <div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<%if(imm!=null){ %>
-				<h5 style="width:115%;">Immovable Property Edit</h5><%}else{ %>
-				<h5 style="width:115%;">Immovable Property Add</h5><%}%>
+				<h5 style="width:115%;">Immovable Property Edit</h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb">
@@ -35,11 +33,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
   <div class="card-body">
 	<div class="row">
 	  <div class="col-1"></div>
-		<%if(imm!=null){ %>
-		<form action="ImmovablePropEdit.htm" method="POST" autocomplete="off" id="myform2">
-		<%}else{%>
-		<form action="ImmovablePropAdd.htm" method="POST" autocomplete="off" id="myform1">
-		<%}%>
+		<form action="ImmovablePropEdit.htm" method="POST" autocomplete="off" id="myform">
 		 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		   <div class="card"> 
 			 <div class="card-body"  >			 
@@ -141,98 +135,90 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			     <div class="row">
 			        <div class="col-md-2">			         
 			            <label>Property Price:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="price" id="price" value="<%if(imm!=null && imm.getPrice()!=null ){ %><%=imm.getPrice()%> <%} %>" maxlength="225" placeholder="Enter price" onblur="checknegative(this)" required>
+			           <input class="form-control" type="text" name="price" id="price" value="<%if(imm!=null && imm.getPrice()!=null ){ %><%=imm.getPrice()%> <%} %>" maxlength="225" placeholder="Enter price" onblur="checknegative(this)">
 			        </div>
-			        <div class="col-md-2" id="finance">
+			        <div class="col-md-2" id="finance" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Personal savings</option>
 			               <option value="Other sources" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
 			           </select>
 			        </div>
-			        <div class="col-md-2" id="others">			         
+			        <div class="col-md-2" id="others" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >			         
 			            <label>Other Sources:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ){ %><%=imm.getFinanceSource()%> <%} %>" maxlength="225" placeholder="Enter Source Details" required>
+			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState()) ){ %><%=imm.getFinanceSource()%> <%} %>" maxlength="225" placeholder="Enter Source Details">
 			        </div>
-			        <div class="col-md-2" id="sanction">
+			        <div class="col-md-2" id="sanction" <%if(imm!=null && imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
 			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
 			           <select name="requisite" id="requisite" class="form-control input-sm select2" required>
-			               <option value="N">No</option>
-			               <option value="Y">Yes</option>
+			               <option value="N" <%if(imm!=null && imm.getRequisiteSanction()!=null && "N".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >No</option>
+			               <option value="Y" <%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >Yes</option>
 			           </select>
 			        </div>
 			        
-			        <div class="col-md-2" id="party">			         
+			        <div id="party" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ){ %> class="col-md-2" <%}else{ %> class="col-md-4"<%} %> >			         
 			            <label>Party's Name:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="partyName" id="partyName" maxlength="225" placeholder="Enter Party Name" required>
+			           <input class="form-control" type="text" name="partyName" id="partyName" value="<%if(imm!=null && imm.getPartyName()!=null) {%> <%=imm.getPartyName()%> <%}%>" maxlength="225" placeholder="Enter Party Name" required>
 			        </div>
 			        <div class="col-md-4">			         
 			            <label>Party's Address:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="partyAddress" id="partyAddress" maxlength="500" placeholder="Enter Party Address" required>
+			           <input class="form-control" type="text" name="partyAddress" id="partyAddress" value="<%if(imm!=null && imm.getPartyAddress()!=null) {%> <%=imm.getPartyAddress()%> <%}%>" maxlength="500" placeholder="Enter Party Address" required>
 			        </div>
 			     </div>
 			     <br>
 			     <div class="row">
 			        <div class="col-md-4">			         
 			            <label>Transaction Arrangement:<span class="mandatory" >*</span></label>
-			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
+			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" value="<%if(imm!=null && imm.getTransArrangement()!=null) {%> <%=imm.getTransArrangement()%> <%}%>" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
 			        </div>			     
 			        <div class="col-md-2">
 			            <label>Is Party Related?<span class="mandatory" >*</span></label>
 			            <select name="partyRealted" id="partyRealted" class="form-control input-sm select2" required>
-			               <option value="N">No</option>
-			               <option value="Y">Yes</option>
+			               <option value="N" <%if(imm!=null && imm.getPartyRelated()!=null && "N".equalsIgnoreCase(imm.getPartyRelated())) {%> selected <%} %> >No</option>
+			               <option value="Y" <%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())) {%> selected <%} %> >Yes</option>
 			            </select>
 			        </div>
-			        <div class="col-md-2" id="relation">			         
+			        <div class="col-md-2" id="relation" <%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())) {%> style="display: block;" <%} else{%> style="display: none;" <%} %> >			         
 			            <label>Relationship:<span class="mandatory" >*</span></label>
-			            <input class="form-control" type="text" name="relationship" id="relationship" maxlength="225" placeholder="Enter relationship" required>
+			            <input class="form-control" type="text" name="relationship" id="relationship" value="<%if(imm!=null && imm.getRelationship()!=null) {%> <%=imm.getRelationship()%> <%}%>" maxlength="225" placeholder="Enter relationship" required>
 			        </div>
 			        <div class="col-md-2">
 			            <label>Any dealings w.party?<span class="mandatory" >*</span></label>
 			            <select name="futureDealings" id="futureDealings" class="form-control input-sm select2" required>
-			               <option value="N">No</option>
-			               <option value="Y">Yes</option>
+			               <option value="N" <%if(imm!=null && imm.getFutureDealings()!=null && "N".equalsIgnoreCase(imm.getFutureDealings())) {%>selected <%} %> >No</option>
+			               <option value="Y" <%if(imm!=null && imm.getFutureDealings()!=null && "Y".equalsIgnoreCase(imm.getFutureDealings())) {%>selected <%} %>>Yes</option>
 			            </select>
 			        </div>
-			        <div class="col-md-2" id="dealing">			         
+			        <div id="dealing"  <%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated()) ){ %> class="col-md-2" <%}else{ %>class="col-md-4"<%} %> >			         
 			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
-			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" maxlength="225" placeholder="Enter Dealing Nature" required>
+			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" value="<%if(imm!=null && imm.getDealingNature()!=null) {%> <%=imm.getDealingNature()%> <%}%>" maxlength="225" placeholder="Enter Dealing Nature" required>
 			        </div>	
 			     </div>
 			     <br>
 			     <div class="row">
-			        <div class="col-md-4" id="sitarSanction">			         
-			            <label>Sanction Under SITAR:<span class="mandatory" >*</span></label>
+			        <div class="col-md-4" id="sitarSanction" <%if(imm!=null && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode()) && "A".equalsIgnoreCase(imm.getTransState()) ) {%> style="display: block;" <%}else{%> style="display: none;" <%} %> >			         
+			            <label>Is Sanction Required Under SITAR:<span class="mandatory" >*</span></label>
 			            <select name="sanctionRequired" id="sanctionRequired" class="form-control input-sm select2" required>
-			               <option value="N">Not Required</option>
-			               <option value="Y">Required</option>
+			               <option value="N" <%if(imm!=null && imm.getSanctionRequired()!=null && "N".equalsIgnoreCase(imm.getSanctionRequired())) {%>selected <%} %> >Not Required</option>
+			               <option value="Y" <%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>selected <%} %>>Required</option>
 			            </select>
 			        </div>
 			        <div class="col-md-4">			         
 			            <label>Any relevant facts:</label>
-			            <input class="form-control" type="text" name="relavantFacts" maxlength="225" placeholder="Enter Relavant facts">
+			            <input class="form-control" type="text" name="relavantFacts" value="<%if(imm!=null && imm.getRelavantFact()!=null) {%> <%=imm.getRelavantFact()%> <%}%>" maxlength="225" placeholder="Enter Relavant facts">
 			        </div>	
 			     </div>	
 	         </div>
 		     	  <div class="row">
 					 <div class="col-12" align="center">
 						<div class="form-group">
-							<%if(imm!=null){ %>
 							<input type="hidden" name="immpropertyId" value="<%=imm.getImmPropertyId()%>">
-			                  <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>
-							<%}else{%>
-				              <button type="button" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>
-							<%}%>						
+			                  <button type="button" class="btn btn-sm submit-btn AddItem" name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>				             						
 					    </div>
 					 </div>
 				 </div>			 
-		   </div>								
-		 <%if(imm!=null){ %>
-		 </form>
-		 <%}else{ %>
-		 </form>
-		 <%}%>				
+		   </div>									
+		 </form>					
 		</div>
 	</div>				
 </div>
@@ -290,7 +276,7 @@ function CommentsModel(){
 		return false;
 	}else{
 		if(confirm('Are You Sure to submit')){
-			$('#myform1').submit();
+			$('#myform').submit();
 			return true;
 		}else{
 			return false;
@@ -361,13 +347,13 @@ if(x=="P"){
 } 
 
 $( document ).ready(function() {
-	$('#sanction').hide();
-	$('#others').hide();
-	$('#relation').hide();	
-	$("#party").addClass("col-md-4");
-	$("#dealing").addClass("col-md-4");
+	/* $('#sanction').hide(); */
+	/* $('#others').hide(); */
+	/* $('#relation').hide();	 */
+	/* $("#party").addClass("col-md-4"); */
+	/* $("#dealing").addClass("col-md-4"); */
 	/* $("#interest").addClass("col-md-4"); */
-	$('#sitarSanction').hide();
+	/* $('#sitarSanction').hide(); */
 });
 
 /*  $("#applicantInterest").change(function(){
@@ -395,6 +381,7 @@ $("#transState").change(function(){
 	    {
 		   $('#others').show();
 	       $("#party").removeClass("col-md-4");
+	       $("#party").addClass("col-md-2");
 		}
 	    if(mode=="Gift")
 	    {
@@ -403,7 +390,9 @@ $("#transState").change(function(){
 	  }
 	  else{
 		$('#finance').hide();
-		$('#sanction').show();
+		 $('#sanction').show(); 
+		 $('#sanction').css('display','block'); 
+		 $('#sanction').html('<label>Requisite Sanctioned?<span class="mandatory" >*</span></label><select name="requisite" id="requisite" class="form-control input-sm select2" required>   <option value="N" <%if(imm!=null && imm.getRequisiteSanction()!=null && "N".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >No</option><option value="Y" <%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >Yes</option></select>');
 		 $('#others').hide(); 
 		 $("#party").addClass("col-md-4");
 		 $('#sitarSanction').hide();
@@ -416,6 +405,7 @@ $("#financeSource").change(function(){
 	  if(otherSource=="Other sources"){
 		$('#others').show();
 		$("#party").removeClass("col-md-4");
+		$("#party").addClass("col-md-2");
 		}
 	  else{
 		$('#others').hide();			
@@ -429,7 +419,9 @@ $("#partyRealted").change(function(){
 
 	  if(relation=="Y"){
 		$('#relation').show();
-		$("#dealing").removeClass("col-md-4");
+		 $("#dealing").removeClass("col-md-4"); 
+		 $("#dealing").addClass("col-md-2"); 
+		 
 		}
 	  else{
 		$('#relation').hide();

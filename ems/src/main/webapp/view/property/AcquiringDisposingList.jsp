@@ -8,7 +8,6 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Acquiring / Disposing List</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
@@ -104,16 +103,16 @@
 								<%if(obj[11]!=null){%>
 								  
 								 	<%if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("A") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%}else if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("E") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[12] %>; font-weight: 600;" formtarget="_blank">
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[12] %>; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; <%=obj[11] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
@@ -122,7 +121,7 @@
 							</td>
 					   		
 					   		<td style="text-align: left;width:9%;">
-								<button type="submit" class="btn btn-sm view-icon" formaction="" name="immPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Hometown Change" style="font-weight: 600;" >
+								<button type="submit" class="btn btn-sm view-icon" formaction="ImmovablePropPreview.htm" name="immPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Hometown Change" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
 								<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
@@ -147,7 +146,7 @@
 				</form>
 				<hr>
 			<div class="row"  >
-		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Hometown</b></div>
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Immovable Property</b></div>
 		 	</div>
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >

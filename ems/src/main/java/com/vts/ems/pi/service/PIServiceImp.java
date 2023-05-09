@@ -848,11 +848,11 @@ public class PIServiceImp implements PIService{
 					{
 						hometown.setPisStatusCodeNext("VPA");
 					}
-					else if(DHs.contains(formempno))
+					else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 					{
 						hometown.setPisStatusCodeNext("VDG");
 					}
-					else if(GHs.contains(formempno))
+					else if(GHs.contains(formempno) || emp.getGroupId()==0)
 					{
 						hometown.setPisStatusCodeNext("VDI");
 					}
@@ -934,11 +934,11 @@ public class PIServiceImp implements PIService{
 				{
 					hometown.setPisStatusCodeNext("VPA");
 				}
-				else if(DHs.contains(formempno))
+				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 				{
 					hometown.setPisStatusCodeNext("VDG");
 				}
-				else if(GHs.contains(formempno))
+				else if(GHs.contains(formempno) || emp.getGroupId()==0)
 				{
 					hometown.setPisStatusCodeNext("VDI");
 				}
