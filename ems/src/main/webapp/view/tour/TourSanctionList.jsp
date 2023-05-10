@@ -11,7 +11,7 @@
 </head>
 <body>
 <%
-List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist");
+List<Object[]>  sanctionlist = (List<Object[]>)request.getAttribute("SanctionList");
 
 %>
 <div class="card-header page-top ">
@@ -47,7 +47,7 @@ List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist"
 <div class="container-fluid">	
 <div class="card">
 	<div class="card-body">
-<form action="TourApplyList.htm" method="post" id="empForm">
+<form action="TourCancel.htm" method="post" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -70,9 +70,9 @@ List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist"
 					  </thead>
 	                  <tbody>
 	  
-							 <%if(tourapplylist!=null&&tourapplylist.size()!=0){
+							 <%if(sanctionlist!=null&&sanctionlist.size()!=0){
 						                            	 int sn=0;  
-                               for(Object[] hlo :tourapplylist){
+                               for(Object[] hlo :sanctionlist){
                             	   String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(hlo[1].toString());
                                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(hlo[2].toString());
                                    String  applydate=DateTimeFormatUtil.fromDatabaseToActual(hlo[3].toString());
@@ -86,9 +86,8 @@ List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist"
 									  <td><%=hlo[4]+"" %></td>
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
-									   <%if(hlo[6].toString().equalsIgnoreCase("INI")){%>
-									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>
-									  		<button type="submit" class="btn btn-sm submit-btn" name="Action" value="ForwardTour/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Forward"><i class="fa fa-forward" aria-hidden="true"></i> </button>
+									   <%if(hlo[6].toString().equalsIgnoreCase("ABC")){%>
+									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="CANCEL/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
 									  	<%}%>	
 									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
@@ -106,19 +105,4 @@ List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist"
 </div>
 </body>
 
- <script type="text/javascript">
- 
- function Edit(myfrm) {
-
-		var fields = $("input[name='tourapplyId']").serializeArray();
-
-		if (fields.length === 0) {
-			alert("Please Select Atleast One ");
-
-			event.preventDefault();
-			return false;
-		}
-		return true;
-	}
- </script>
 </html>

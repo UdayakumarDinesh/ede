@@ -17,6 +17,29 @@
     padding-top: 0.1rem !important;
 }
 
+
+.trup
+		{
+			padding:5px 10px 0px 10px ;			
+			border-top-left-radius : 5px; 
+			border-top-right-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+			
+			
+		}
+		
+		.trdown
+		{
+			padding:0px 10px 5px 10px ;			
+			border-bottom-left-radius : 5px; 
+			border-bottom-right-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+
+
 </style>
 </head>
 <body>
@@ -194,7 +217,54 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 						</div>
 					</div>
 				</div>				
-		</div> 
+
+			<div class="row"  >
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow</b></div>
+		 	</div>
+		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+	              <table align="center"  >
+	               		<tr>
+	                		<td class="trup" style="background: #E8E46E;">
+	                			User 
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		
+	                		<td class="trup" style="background: #FBC7F7;">
+	                			DGM 
+	                		</td>
+			                		 
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		
+	               		
+	                		<td class="trup" style="background: #4DB6AC;" >
+	                			P&A
+	                		</td>
+	               		
+	               	</tr>			   
+		                	
+	               	<tr>
+	               		<td class="trdown" style="background: #E8E46E;" >	
+				             
+	                	</td>
+	               		
+	                		<td class="trdown" style="background: #FBC7F7;" >	
+				               
+	                		</td>
+	               		
+	               		
+	               			<td class="trdown" style="background: #4DB6AC;" >	
+			                	
+		           			</td>
+		           		
+		            	</tr>             	
+			           </table>			             
+			 	</div>
+			<hr>
+	</div>
 </div>
 </body>
 <script type="text/javascript">

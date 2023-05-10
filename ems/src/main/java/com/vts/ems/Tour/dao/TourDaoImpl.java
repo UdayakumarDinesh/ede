@@ -1,6 +1,7 @@
 package com.vts.ems.Tour.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Repository;
 import com.vts.ems.Tour.model.TourApply;
 import com.vts.ems.Tour.model.TourOnwardReturn;
 import com.vts.ems.Tour.model.TourTransaction;
+import com.vts.ems.leave.dto.ApprovalDto;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pis.model.EmployeeDetails;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -92,12 +95,23 @@ public class TourDaoImpl implements TourDao {
 				return 0l;
 			}
 		}
-		
-		private static final String GETAPPLYLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid FROM tour_apply a , employee b WHERE a.empno=b.empno ORDER BY a.tourapplyid DESC";
+		private static final String GETAPPLYLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.empno=:empno  ORDER BY a.tourapplyid DESC";
 		@Override
-		public List<Object[]> GetTourApplyList()throws Exception
+		public List<Object[]> GetTourApplyList(String empno)throws Exception
 		{
 			Query query = manager.createNativeQuery(GETAPPLYLIST);
+			query.setParameter("empno", empno);
+			return (List<Object[]>) query.getResultList();
+		
+		}
+		private static final String GETAPPLYSTATUSLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC') AND a.empno=:empno  AND a.initiateddate BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
+		@Override
+		public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception
+		{
+			Query query = manager.createNativeQuery(GETAPPLYSTATUSLIST);
+			query.setParameter("empno", empno);
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
 			return (List<Object[]>) query.getResultList();
 		}
 	
@@ -186,7 +200,7 @@ public class TourDaoImpl implements TourDao {
 			}
 		}
 		
-		private static final String FORWARDTOUR = "UPDATE tour_apply SET tourstatuscode=:status , modifiedby=:empno , modifieddate=:modifieddate where tourapplyid=:tourid";
+		private static final String FORWARDTOUR = "UPDATE tour_apply SET tourstatuscode=:status , modifiedby=:modifiedby , modifieddate=:modifieddate where tourapplyid=:tourid";
 		@Override
 		public int ForwardTour(String tourapplyid , String empno)throws Exception
 		{
@@ -204,6 +218,269 @@ public class TourDaoImpl implements TourDao {
 				return 0;
 			}
 		}
+		private static final String GETTOURAPPROVALLIST="call tour_approvallist(:empno)";
+	@Override
+	public List<Object[]> GetTourApprovalList(String empno)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery(GETTOURAPPROVALLIST);
+			query.setParameter("empno", empno);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private static final String CANCELLIST="call tour_cancelapprovallist(:empno)";
+	@Override
+	public List<Object[]> GetTourCancelList(String empno)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery(CANCELLIST);
+			query.setParameter("empno", empno);
+			List<Object[]> List=(List<Object[]>) query.getResultList();
+			return List;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
+	private static final String UPDATEAPPL ="UPDATE tour_apply SET tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+	private static final String UPDATEFAAPPL ="UPDATE tour_apply SET tourstatuscode=:statuscode , fundsavailable=:funds, modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
 
+	@Transactional
+	@Override
+	public int getTourUpdate(ApprovalDto dto) throws Exception {
+		
+		try {
+			int count=0;
+			if(dto.getStatus().equalsIgnoreCase("ABF")) {
+				Query query = manager.createNativeQuery(UPDATEFAAPPL);
+				query.setParameter("applid",dto.getApplId());
+				query.setParameter("statuscode",dto.getStatus());
+				query.setParameter("funds", dto.getFunds());
+				query.setParameter("modifiedby", dto.getUserName());
+				query.setParameter("modifieddate", sdtf.format(new Date()));
+				count = (int) query.executeUpdate();
+			}else {
+				Query query = manager.createNativeQuery(UPDATEAPPL);
+				query.setParameter("applid",dto.getApplId());
+				query.setParameter("statuscode",dto.getStatus());
+				query.setParameter("modifiedby", dto.getUserName());
+				query.setParameter("modifieddate", sdtf.format(new Date()));
+				count = (int) query.executeUpdate();
+			}
+			return count;
+		} catch (Exception e) {
+			logger.error(new Date() +"Inside DAO getUpdateAppl "+e);
+			e.printStackTrace();
+			return 0;
+		}	
+	}
+	
+	private static final String UPDATEAPPLFROMPandA ="UPDATE tour_apply SET PandARemarks=:remarks  , tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+
+	@Override
+	public int TourUpdateFromPandA (ApprovalDto dto , String remarks)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery(UPDATEAPPLFROMPandA);
+			query.setParameter("remarks", remarks);
+			query.setParameter("applid",dto.getApplId());
+			query.setParameter("statuscode",dto.getStatus());
+			query.setParameter("modifiedby", dto.getUserName());
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ForwardTour "+e);
+			e.printStackTrace();
+			return 0;
+		}
+	
+		
+	}
+	
+	private static final String UPDATEAPPLFROMCEO ="UPDATE tour_apply SET ApprovedDate=:approveddate , tourno=:tourno , tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+
+	@Override
+	public int TourUpdateFromCEO (ApprovalDto dto , String Tourno)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery(UPDATEAPPLFROMCEO);
+			query.setParameter("tourno", Tourno);
+			query.setParameter("applid",dto.getApplId());
+			query.setParameter("statuscode",dto.getStatus());
+			query.setParameter("approveddate", sdtf.format(new Date()));
+			query.setParameter("modifiedby", dto.getUserName());
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			int count = (int) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ForwardTour "+e);
+			e.printStackTrace();
+			return 0;
+		}	
+	}
+	private static final String TOURSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor  FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC') AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
+	@Override
+	public List<Object[]> TourStatusDetails(String tourapplyid)throws Exception
+	{
+		
+		try {
+			Query query= manager.createNativeQuery(TOURSTATUSDETAILS);
+			query.setParameter("tourapplyid", tourapplyid);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO CHSSStatusDetails " + e);
+			return new ArrayList<Object[]>();
+		}
+	}
+	private static final String TOURCANCELSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor  FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid and a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC')  AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
+	@Override
+	public List<Object[]> TourCancelStatusDetails(String tourapplyid)throws Exception
+	{
+		
+		try {
+			Query query= manager.createNativeQuery(TOURCANCELSTATUSDETAILS);
+			query.setParameter("tourapplyid", tourapplyid);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO CHSSStatusDetails " + e);
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	
+	private static final String GETAPPROVALEMP="";
+	@Override
+	public Object[] GetApprovalEmp(String empno)throws Exception
+	{
+		try {
+			 Query query = manager.createNativeQuery(GETAPPROVALEMP);
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+		}catch (Exception e){
+				logger.error(new Date() +"Inside DAO GetApprovalEmp "+ e);
+				e.printStackTrace();
+				return null;
+		}	
+    }
+	private static final String GETALLTOURNO="SELECT TourApplyId,TourNo FROM tour_apply WHERE SUBSTRING(tourno,1,12)=:finyear  GROUP BY TourApplyId";
+	@Override
+	public List<Object[]> getFinancialyearWiseTourMONoList(String Financialyear)throws Exception
+	{
+		try {
+			Query query= manager.createNativeQuery(GETALLTOURNO);
+			query.setParameter("finyear", Financialyear);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO CHSSStatusDetails " + e);
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	@Override
+	public Long EmpNotificationForTour(EMSNotification notification)throws Exception
+	{
+		try {
+			manager.persist(notification);
+			manager.flush();
+			return notification.getNotificationId();
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EmpNotificationForTour() "+e);
+			e.printStackTrace();
+			return 0l;
+		}
+	}
+	
+	private static final String REVOKETOUR ="UPDATE tour_apply SET  tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+
+	
+	@Override
+	public Long RevokeTour(ApprovalDto dto)throws Exception
+	{
+		try {
+			Query query = manager.createNativeQuery(REVOKETOUR);
+			query.setParameter("applid",dto.getApplId());
+			query.setParameter("statuscode",dto.getStatus());
+			query.setParameter("modifiedby", dto.getUserName());
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			Long count = (long) query.executeUpdate();
+			return count;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ForwardTour "+e);
+			e.printStackTrace();
+			return 0l;
+		}	
+	}
+	
+	private  static final String GETSANCLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND a.tourstatuscode='ABC'"; 
+	@Override
+	public List<Object[]> GetSanctionList(String empno)throws Exception
+	{
+		try {
+			Query query= manager.createNativeQuery(GETSANCLIST);
+			query.setParameter("empno", empno);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetSanctionList " + e);
+			return new ArrayList<Object[]>();
+		}
+	}
+
+	private static final String GETFAPA="SELECT a.AdminsId, a.pandaadmin , fandaadmin , a.RevisedOn FROM pis_admins a WHERE a.IsActive=1 ";
+	@Override
+	public Object[] GetPAFADetails()throws Exception
+	{
+		try {
+			 Query query = manager.createNativeQuery(GETFAPA);
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+		}catch (Exception e){
+				logger.error(new Date() +"Inside DAO GetPAFADetails "+ e);
+				e.printStackTrace();
+				return null;
+		}	
+   }
+	private static final String CANCELTOUR="UPDATE tour_apply SET  tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+   @Override
+   public int CancelTour(ApprovalDto dto)throws Exception
+   {
+	   try{
+			Query query = manager.createNativeQuery(CANCELTOUR);
+			query.setParameter("applid",dto.getApplId());
+			query.setParameter("statuscode",dto.getStatus());
+			query.setParameter("modifiedby", dto.getUserName());
+			query.setParameter("modifieddate", sdtf.format(new Date()));
+			int count = (int) query.executeUpdate();
+			return count;
+		}catch(Exception e){
+			logger.error(new Date() +"Inside DAO CancelTour "+ e);
+			e.printStackTrace();
+			return 0;
+		}
+   }
+   private static final String TOURCANCELSTATUS="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor  FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC') AND a.empno=:empno  AND a.initiateddate BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
+   @Override
+   public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate) throws Exception {
+	
+		Query query = manager.createNativeQuery(TOURCANCELSTATUS);
+		query.setParameter("empno", empno);
+		query.setParameter("fromdate", fromdate);
+		query.setParameter("todate", todate);
+		return (List<Object[]>) query.getResultList();
+	}
 }

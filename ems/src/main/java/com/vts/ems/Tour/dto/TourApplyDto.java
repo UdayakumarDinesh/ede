@@ -13,7 +13,6 @@ public class TourApplyDto {
 	private Long TourApplyId;
 	private String TourNo;
 	private String EmpNo;
-	private String ApplyEmpNo;
 	private Long DivisionId;
 	private String Purpose;
 	private Date IssueDate;

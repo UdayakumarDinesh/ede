@@ -371,7 +371,7 @@ private static final String DOCTORLIST="SELECT a.docrateid , b.treatmentname , a
 			return 0;
 		}		
 	}
-	private static final String LABDETAILS="SELECT labmasterid, labcode ,labname ,labunitcode, labaddress, labcity, labpin FROM lab_master";
+	private static final String LABDETAILS="SELECT labmasterid, labcode ,labname ,labunitcode, labaddress, labcity, labpin , labauthorityid FROM lab_master";
 	@Override
 	public Object[] getLabDetails()throws Exception
 	{

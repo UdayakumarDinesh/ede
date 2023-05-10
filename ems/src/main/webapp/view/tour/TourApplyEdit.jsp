@@ -34,13 +34,13 @@ List<TourOnwardReturn> tourdetails = (List<TourOnwardReturn>)request.getAttribut
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Add Tour Program </h5>
+				<h5>Edit Tour Program </h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="TourProgram.htm"> Tour </a></li>
-						<li class="breadcrumb-item active " aria-current="page">Add Tour Program </li>
+						<li class="breadcrumb-item active " aria-current="page">Edit Tour Program </li>
 					</ol>
 				</div>
 			</div>
@@ -55,7 +55,7 @@ List<TourOnwardReturn> tourdetails = (List<TourOnwardReturn>)request.getAttribut
 							<div class="card-header" style="height: 43px;"> <h4>Tour Application  	<span id="sp" style=" float: right;"></span></h4>
 							</div>					
 							<div class="card-body">
-								<form action="TourApplyAdd.htm" method="post" autocomplete="off" id="TourRequestForm">
+					<form action="TourApplyList.htm" method="POST" autocomplete="off" id="TourRequestForm">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								    <div class="form-group">
 								        <div class="row">
@@ -191,11 +191,12 @@ List<TourOnwardReturn> tourdetails = (List<TourOnwardReturn>)request.getAttribut
 	         </div>
 	         
 	         <div align="center">
-	         		 <button type="button" class="btn btn-sm submit-btn" style="background-color: #417ccd;" id="tour" name="action" value="submit" onclick="TourCheck()">Check Tour</button> 	
+	         		 <button type="button" class="btn btn-sm submit-btn" style="background-color: #417ccd;" id="tour" name="check" value="submit" onclick="TourCheck()">Check Tour</button> 	
 	         </div>
 	         <div align="center">
 	        	 <input type="hidden" name="tourapplyid" <%if(apply!=null && apply.getTourApplyId()!=null){%> value="<%=apply.getTourApplyId()%>" <%}%>>
-	         	<button type="button" class="btn btn-sm submit-btn" id="submitbtn" name="Action" value="SubmitEdit" onclick="TourApply()">Submit</button>	         	
+	        	 <input type="hidden" name="Action"  value="SubmitEdit" >
+	         	<button type="button" class="btn btn-sm submit-btn" id="submitbtn" name="Action1" value="SubmitEdit1" onclick="TourApply()">Submit</button>	         	
 	         </div>
 		</form>		 
 							</div>
