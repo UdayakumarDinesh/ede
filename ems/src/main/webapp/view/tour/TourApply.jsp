@@ -16,8 +16,6 @@
     padding-bottom: 0.1rem !important;
     padding-top: 0.1rem !important;
 }
-
-
 .trup
 		{
 			padding:5px 10px 0px 10px ;			
@@ -25,8 +23,6 @@
 			border-top-right-radius: 5px;
 			font-size: 14px;
 			font-weight: 600;
-			
-			
 		}
 		
 		.trdown
@@ -37,8 +33,6 @@
 			font-size: 14px;
 			font-weight: 600;
 		}
-
-
 
 </style>
 </head>
