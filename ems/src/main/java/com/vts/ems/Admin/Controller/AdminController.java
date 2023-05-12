@@ -1026,4 +1026,44 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 					Gson json = new Gson();
 					  return json.toJson(username);
 				}		 
+			 
+			 @RequestMapping(value = "PayrollDashBoard.htm", method=RequestMethod.GET)
+				public String PayrollDashBoard(HttpServletRequest req, HttpSession ses)  throws Exception {
+					String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() +"Inside PayrollDashBoard.htm "+Username);		
+					try {
+						 String logintype = (String)ses.getAttribute("LoginType"); 
+						 List<Object[]> Payrolldashboard = service.HeaderSchedulesList("7" ,logintype);
+						 ses.setAttribute("formmoduleid", "23"); 
+						 ses.setAttribute("SidebarActive","PayrollDashBoard_htm");
+						 req.setAttribute("dashboard", Payrolldashboard);
+
+						return "payroll/PayrollDashBoard";
+					}catch (Exception e) {
+						logger.error(new Date() +" Inside PayrollDashBoard.htm "+Username, e);
+						e.printStackTrace();	
+						return "static/Error";
+					}
+					
+			 }
+			 
+			 @RequestMapping(value = "VehicleParkingDashBoard.htm", method=RequestMethod.GET)
+				public String vehicleParkingDashBoard(HttpServletRequest req, HttpSession ses)  throws Exception {
+					String Username = (String) ses.getAttribute("Username");
+					logger.info(new Date() +"Inside PayrollDashBoard.htm "+Username);		
+					try {
+						 String logintype = (String)ses.getAttribute("LoginType"); 
+						 List<Object[]> VehicleParkingdashboard = service.HeaderSchedulesList("7" ,logintype);
+						 ses.setAttribute("formmoduleid", "29"); 
+						 ses.setAttribute("SidebarActive","VehicleParkingDashBoard_htm");
+						 req.setAttribute("dashboard", VehicleParkingdashboard);
+
+						return "vehicleparking/VehicleParkingDashBoard";
+					}catch (Exception e) {
+						logger.error(new Date() +" Inside VehicleParkingDashBoard.htm "+Username, e);
+						e.printStackTrace();	
+						return "static/Error";
+					}
+					
+			 }
 }		

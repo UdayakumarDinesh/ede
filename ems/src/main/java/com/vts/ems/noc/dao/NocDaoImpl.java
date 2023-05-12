@@ -1,30 +1,600 @@
 package com.vts.ems.noc.dao;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.vts.ems.model.EMSNotification;
+import com.vts.ems.noc.model.NocPassport;
+import com.vts.ems.noc.model.NocPassportTrans;
+import com.vts.ems.noc.model.NocProceedingAbroad;
+import com.vts.ems.noc.model.NocProceedingAbroadTrans;
+import com.vts.ems.pi.model.PisHometown;
+import com.vts.ems.pis.model.DivisionMaster;
+import com.vts.ems.pis.model.Employee;
 @Transactional
 @Repository
 public class NocDaoImpl implements NocDao {
-
+	private static final Logger logger = LogManager.getLogger(NocDaoImpl.class);
 	
 	@PersistenceContext
 	EntityManager manager;
 
-	private static final String NOCEMPLIST="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,ad.res_addr FROM employee e,employee_desig ed,division_master dm,pis_address_res  ad WHERE ed.DesigId=e.DesigId AND e.divisionid=dm.divisionid AND ad.EmpId=e.EmpNo AND  e.EmpNo=:EmpNo";
+	private static final String EMPDATA="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,res.res_addr,per.per_addr,e.EmpNo FROM employee e, employee_desig ed,division_master dm,pis_address_res res,pis_address_per per WHERE ed.DesigId=e.DesigId  AND e.divisionid=dm.divisionid AND res.Empid=e.Empid AND per.Empid=e.Empid AND res.ResAdStatus='A' AND per.PerAdStatus='A' AND  e.EmpId=:EmpId";
 	@Override
-	public List<Object[]> getNocEmpList(String empNo) throws Exception {
+	public Object[] getNocEmpList(String EmpId) throws Exception {
 		
 		
-		Query query=manager.createNativeQuery(NOCEMPLIST);
+		Query query=manager.createNativeQuery(EMPDATA);
+		query.setParameter("EmpId", EmpId);
+		return (Object[])query.getSingleResult();
+		
+	}
+	
+	private static final String PASSPORTDATA="SELECT PassportType,PassportNo,ValidFrom,ValidTo FROM pis_passport WHERE EmpId=:EmpId";
+	@Override
+	public Object[] getEmpPassportData(String empId) throws Exception {
+		
+
+		Query query=manager.createNativeQuery(PASSPORTDATA);
+		query.setParameter("EmpId", empId);
+		
+		List<Object[]> list =(List<Object[]>) query.getResultList();
+		Object[] result=null;
+		if(list!=null &&list.size()>0) {
+			result =list.get(0);
+		}
+		return result;
+		/* return (Object[])query.getSingleResult(); */
+	}
+	
+	@Override
+	public long NocPassportAdd(NocPassport noc) throws Exception {
+		
+
+		try {
+			manager.persist(noc);
+			manager.flush();		
+			return noc.getNocPassportId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO NocPassportAdd() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+	private static final String MAXOFNOCPASSPORTID="SELECT IFNULL(MAX(NocPassportId),0) as 'MAX' FROM noc_passport";
+	@Override
+	public long MaxOfNocPassportId() throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(MAXOFNOCPASSPORTID);
+			BigInteger PassportId=(BigInteger)query.getSingleResult();
+			return PassportId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO MaxOfNocPassportId "+ e);
+			return 0;
+		}
+	}
+
+	private static final String NOCPASSPORTLIST="SELECT n.NocPassportId,n.NocPassportNo,n.PassportStatus,n.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_passport n,pis_approval_status c,employee e  WHERE n.isActive='1' AND n.NocstatusCode=c.PisStatuscode AND e.EmpNo=n.EmpNo AND n.EmpNo=:EmpNo ORDER BY n.NocPassportId DESC";
+	@Override
+	public List<Object[]> getnocPassportList(String empNo) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSPORTLIST);
 		query.setParameter("EmpNo", empNo);
 		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public NocPassport getNocPassportId(long nocPassportId) throws Exception {
+		
+		try {
+			NocPassport noc = manager.find(NocPassport.class,(nocPassportId));
+			return noc ;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getNocPassportId() "+e);
+			e.printStackTrace();
+			return null;
+		}	
 		
 	}
 
+	@Override
+	public long NOCPassportUpdate(NocPassport noc) throws Exception {
+		
+		manager.merge(noc);
+		manager.flush();
+		return noc.getNocPassportId();
+	
+   }
+	private static final String NOCPASSORTFORMDETAILS="CALL Noc_Passport(:NocPassportId)";
+		
+	@Override
+	public Object[] getPassportFormDetails(String passportid) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSORTFORMDETAILS);
+		query.setParameter("NocPassportId", passportid);
+		
+		List<Object[]> list =(List<Object[]>) query.getResultList();
+		Object[] result=null;
+		if(list!=null &&list.size()>0) {
+			result =list.get(0);
+		}
+		return result;
+	}
+
+	@Override
+	public long NocPassportTransactionAdd(NocPassportTrans transaction) throws Exception {
+	
+		
+			manager.persist(transaction);
+			manager.flush();
+			return transaction.getNocPassportTransId();
+		
+	}
+
+	private static final String NOCPASSPORTTRANSACTIONLIST="SELECT tra.NocPassportTransId,e.empno,e.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM noc_passport_trans tra,noc_passport noc,employee e,employee_desig des,pis_approval_status sta WHERE tra.NocPassportId=noc.NocPassportId  AND tra.ActionBy=e.EmpNo AND e.desigid=des.desigid AND tra.NocStatusCode=sta.PisStatusCode AND noc.NocPassportId=:passportid ORDER BY actiondate";
+	@Override
+	public List<Object[]> NOCPassportTransactionList(String passportid) throws Exception {
+		
+		Query query = manager.createNativeQuery(NOCPASSPORTTRANSACTIONLIST);
+		query.setParameter("passportid",passportid);
+		return (List<Object[]>) query.getResultList();
+	}
+
+	private static final String GETCEOEMPNO  ="SELECT empno FROM lab_master, employee WHERE labauthorityid=empid";
+	@Override
+	public String GetCEOEmpNo() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETCEOEMPNO);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetCEOEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.PandAAdmin AND b.IsActive=1 LIMIT 1";
+	@Override
+	public List<String> GetPandAAdminEmpNos()throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETPANDAADMINEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}
+		catch (Exception e) 
+		{
+			logger.error(new Date()  + "Inside DAO GetPandAAdminEmpNos " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+	}
+	
+	private static final String GETDGMEMPNOS  ="SELECT dgmempno FROM dgm_master WHERE isactive=1";
+	@Override
+	public List<String> GetDGMEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETDGMEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDGMEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+		
+	}
+	
+	
+	private static final String GETDHEMPNOS  ="SELECT divisionheadid FROM division_master WHERE isactive=1";
+	@Override
+	public List<String> GetDHEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETDHEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDHEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+		
+	}
+	
+	private static final String GETGHEMPNOS  ="SELECT Groupheadid FROM division_Group WHERE isactive=1;";
+	@Override
+	public List<String> GetGHEmpNos() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETGHEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetGHEmpNo " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}		
+	}
+	
+	private static final String CEOEMPNO  ="SELECT empno,empname FROM lab_master, employee WHERE labauthorityid=empid";
+	@Override
+	public Object[] GetCeoName() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(CEOEMPNO);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetCeoName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT a.EmpNo,a.EmpName FROM employee a, pis_admins b WHERE a.EmpNo=b.PandAAdmin AND b.IsActive=1 LIMIT 1";
+	@Override
+	public Object[] GetPandAEmpName() throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETPANDAEMPNAME);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetPandAEmpName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GETEMPDGMPANDAEMPNO  ="SELECT dgm.dgmempno , e2.empname FROM employee e, division_master dm,dgm_master dgm , employee e2 WHERE e.divisionid=dm.divisionid AND dm.dgmid=dgm.dgmid AND dgm.dgmempno=e2.empno AND e.empno=:empno";
+	@Override
+	public Object[] GetEmpDGMEmpName(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDGMPANDAEMPNO);
+			query.setParameter("empno", empno);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDGMEmpName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String DIVISIONHEADEMPNO  ="SELECT emp.EmpNo,emp.EmpName FROM employee emp WHERE emp.EmpNo=(SELECT d.DivisionHeadId FROM division_master d WHERE d.DivisionId = (SELECT a.DivisionId FROM employee a WHERE a.EmpNo=:EmpNo))";
+	@Override
+	public Object[] GetDivisionHeadName(String EmpNo) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(DIVISIONHEADEMPNO);
+			query.setParameter("EmpNo", EmpNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetDivisionHeadName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GROUPHEADEMPNO  ="SELECT emp.EmpNo,emp.EmpName FROM employee emp WHERE emp.EmpNo=(SELECT b.GroupHeadId FROM division_group b WHERE b.GroupId = (SELECT a.GroupId FROM employee a WHERE  a.EmpNo=:EmpNo) )";
+	@Override
+	public Object[] GetGroupHeadName(String EmpNo) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GROUPHEADEMPNO);
+			query.setParameter("EmpNo", EmpNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetGroupHeadName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GETEMPDATA="FROM Employee WHERE EmpId=:EmpId";
+	@Override
+	public Employee getEmpData(String EmpId)throws Exception
+	{
+		Employee emp=null;
+		try {
+			Query query = manager.createQuery(GETEMPDATA);
+			query.setParameter("EmpId", Long.parseLong(EmpId));
+			emp = (Employee) query.getSingleResult();
+			return emp;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmpData "+e);
+			e.printStackTrace();
+			return null;
+		}				
+	}
+	
+	private static final String GETEMPDATABYEMPNO="FROM Employee WHERE EmpNo=:EmpNo";
+	@Override
+	public Employee getEmpDataByEmpNo(String EmpNo) throws Exception {
+		
+		Employee emp=null;
+		try {
+			Query query = manager.createQuery(GETEMPDATABYEMPNO);
+			query.setParameter("EmpNo", EmpNo);
+			emp = (Employee) query.getSingleResult();
+			return emp;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmpDataByEmpNo "+e);
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
+	@Override
+	public long AddNotifications(EMSNotification notification) throws Exception
+	{
+		manager.persist(notification);
+		manager.flush();
+		return notification.getNotificationId();
+	}
+	
+
+	private static final String GETEMPDGMEMPNO  ="SELECT dgm.dgmempno FROM employee e, division_master dm,dgm_master dgm WHERE e.divisionid=dm.divisionid AND dm.dgmid=dgm.dgmid AND e.empno=:empno";
+	@Override
+	public String GetEmpDGMEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDGMEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String GETEMPGHEMPNO  ="SELECT dg.groupheadid FROM employee e, division_group dg WHERE e.groupid=dg.groupid AND e.empno=:empno";
+	@Override
+	public String GetEmpGHEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPGHEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpGHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	
+	private static final String GETEMPDHEMPNO  ="SELECT dm.divisionheadid FROM employee e, division_master dm WHERE e.divisionid=dm.divisionid AND e.empno=:empno";
+	@Override
+	public String GetEmpDHEmpNo(String empno) throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETEMPDHEMPNO);
+			query.setParameter("empno", empno);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetEmpDHEmpNo " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	@Override
+	public Long EditNoc(NocPassport noc) throws Exception {
+	
+		try {
+			manager.merge(noc);
+			manager.flush();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditNoc "+e);
+			e.printStackTrace();
+		}
+		return noc.getNocPassportId();
+	}
+	
+	@Override
+	public DivisionMaster GetDivisionData(long DivisionId) throws Exception
+	{
+		return manager.find(DivisionMaster.class, DivisionId);
+	}
+	
+	@Override
+	public long NOCPassportForward(NocPassport noc) throws Exception {
+		
+		return 0;
+	}
+
+	public final static String NOCAPPROVALSLIST="CALL Noc_Approval(:EmpNo)";
+	@Override
+	public List<Object[]> NocApprovalsList(String empNo) throws Exception {
+		
+		try {			
+			Query query= manager.createNativeQuery(NOCAPPROVALSLIST);
+			query.setParameter("EmpNo", empNo);
+			
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO IntimationApprovalsList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+		
+	}
+
+	@Override
+	public long PandAFromUpdate(NocPassport noc) throws Exception {
+		
+		manager.merge(noc);
+		manager.flush();
+		return noc.getNocPassportId();
+	}
+
+	public static final String MAXOFPROCABROADID="SELECT IFNULL(MAX(NocProcId),0) as 'MAX' FROM noc_proceeding_abroad";
+	@Override
+	public long getMaxOfProcAbroadId() throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(MAXOFPROCABROADID);
+			BigInteger ProcAbroadId=(BigInteger)query.getSingleResult();
+			return ProcAbroadId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO getMaxOfProcAbroadId "+ e);
+			return 0;
+		}
+	}
+
+	@Override
+	public long NocProcAbroadAdd(NocProceedingAbroad nocpa) throws Exception {
+		
+		 manager.persist(nocpa);
+			manager.flush();
+			
+			return nocpa.getNocProcId();
+	}
+
+	@Override
+	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans transaction) throws Exception {
+		
+
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getNocProcAbroadTransId();
+		
+		
+	}
+
+	public static final String NOCPROCABROADTLIST="SELECT pa.NocProcId,pa.NocProcAbroadNo,pa.ProcAbroadStatus,pa.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_proceeding_abroad pa,pis_approval_status c,employee e WHERE pa.isActive='1' AND pa.NocstatusCode=c.PisStatuscode AND e.EmpNo=pa.EmpNo AND pa.EmpNo=:EmpNo ORDER BY pa.NocProcId DESC";
+	@Override
+	public List<Object[]> getProcAbroadList(String empNo) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPROCABROADTLIST);
+		query.setParameter("EmpNo", empNo);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	public static final String NOCPROCABROADTRANSACTION="SELECT tra.NocProcAbroadTransId,e.empno,e.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM noc_proc_abroad_trans tra,noc_proceeding_abroad noc,employee e,employee_desig des,pis_approval_status sta WHERE tra.NocProcId=noc.NocProcId  AND tra.ActionBy=e.EmpNo AND e.desigid=des.desigid AND tra.NocStatusCode=sta.PisStatusCode AND noc.NocProcId=:procAbrId ORDER BY actiondate";
+	@Override
+	public List<Object[]> NOCProcAbroadTransactionList(String procAbrId) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPROCABROADTRANSACTION);
+		query.setParameter("procAbrId", procAbrId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public NocProceedingAbroad getNocProceedingAbroadById(long procAbrId) throws Exception {
+		
+		try {
+			NocProceedingAbroad noc = manager.find(NocProceedingAbroad.class,(procAbrId));
+			return noc ;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getNocProceedingAbroadById() "+e);
+			e.printStackTrace();
+			return null;
+		}	
+		
+	}
+
+	@Override
+	public long NocProcAbroadUpdate(NocProceedingAbroad nocpa) throws Exception {
+		
+		manager.merge(nocpa);
+		manager.flush();
+		return nocpa.getNocProcId();
+	}
+
+	public static final String NOCPROCEEDINGABROADDETAILS="CALL Noc_Proc_Abroad(:NocProcId)";
+	@Override
+	public Object[] getNocProcAbroadDetails(String procAbrId) throws Exception {
+		
+
+		
+		try {			
+			Query query= manager.createNativeQuery(NOCPROCEEDINGABROADDETAILS);
+			query.setParameter("NocProcId", procAbrId);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getNocProcAbroadDetails " + e);
+			e.printStackTrace();
+			return null;
+		}		
+		
+	}
 }
+	
+
+
+	
+	
+
+

@@ -771,12 +771,7 @@ List<Object[]> DivReportCeo=(List<Object[]>)request.getAttribute("DivReportCeo")
 <script type="text/javascript">
 	 function EmpDetails(id,code,dgmcode,divcode,groupcode,YN)
 	{
-		 console.log(id);
-		 console.log(code);
-		 console.log(dgmcode);
-		 console.log(divcode);
-		 console.log(groupcode);
-		 console.log(YN);
+		
 
 	$("#modal_progress_table").DataTable().destroy();
 	$.ajax({		
