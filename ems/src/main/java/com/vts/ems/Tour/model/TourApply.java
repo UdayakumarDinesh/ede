@@ -42,6 +42,7 @@ public class TourApply {
 	private String InitiatedDate;
 	private String ApprovedDate;
 	private String Remarks;
+	private String CancelReason;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

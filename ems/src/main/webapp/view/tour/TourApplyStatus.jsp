@@ -136,6 +136,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 </div>
 </body>
 <script type="text/javascript">
+
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -149,8 +150,7 @@ $('#fromdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-console.log(new Date('<%=fromdate%>'));
-console.log(new Date('<%=todate%>'));
+
 $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -165,11 +165,22 @@ $('#todate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-$(document).ready(function(){
-	   $('#fromdate, #todate').change(function(){
-	       $('#myform').submit();
-	    });
+
+$( "#fromdate" ).change(function(){
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" : $('#fromdate').val(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
 	});
+});
+
 </script>
 
  

@@ -356,12 +356,13 @@ public class TourDaoImpl implements TourDao {
 	}
 	
 	
-	private static final String GETAPPROVALEMP="";
+	private static final String GETAPPROVALEMP="CALL tour_approvalflow(:empno)";
 	@Override
 	public Object[] GetApprovalEmp(String empno)throws Exception
 	{
 		try {
 			 Query query = manager.createNativeQuery(GETAPPROVALEMP);
+			 query.setParameter("empno",empno);
 			 List<Object[]> list = (List<Object[]>)query.getResultList();
 			 if(list.size()>0) {
 				 return list.get(0);
@@ -455,12 +456,13 @@ public class TourDaoImpl implements TourDao {
 				return null;
 		}	
    }
-	private static final String CANCELTOUR="UPDATE tour_apply SET  tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
+	private static final String CANCELTOUR="UPDATE tour_apply SET CancelReason=:reason  , tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
    @Override
    public int CancelTour(ApprovalDto dto)throws Exception
    {
 	   try{
 			Query query = manager.createNativeQuery(CANCELTOUR);
+			query.setParameter("reason", dto.getValue());
 			query.setParameter("applid",dto.getApplId());
 			query.setParameter("statuscode",dto.getStatus());
 			query.setParameter("modifiedby", dto.getUserName());
