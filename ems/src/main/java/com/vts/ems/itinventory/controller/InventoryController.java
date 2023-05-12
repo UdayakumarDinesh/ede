@@ -664,8 +664,8 @@ public class InventoryController {
 			try {
 				
 				
-				req.setAttribute("InventoryDeclaredList", service.getInventoryDeclaredList());
-				return "itinventory/inventoryDeclared";
+				     req.setAttribute("InventoryDeclaredList", service.getInventoryDeclaredList());
+				     return "itinventory/inventoryDeclared";
 				
 			}
 			catch (Exception e) {

@@ -17,6 +17,7 @@
 	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	Object[] empdata = (Object[])request.getAttribute("Empdata");
 	Passport passport =(Passport)request.getAttribute("passport");
+	String NOCpassport =(String)request.getAttribute("NOCpassport");
 	%>
 	
 	<div class="card-header page-top">
@@ -30,10 +31,22 @@
 			</div>
 			   <div class="col-md-6">
 					<ol class="breadcrumb ">
-						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+					<%if(NOCpassport!=null){ %>
+					
+						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+					    <li class="breadcrumb-item "><a href="Passport.htm">Passport List</a></li>
+					    <li class="breadcrumb-item active " aria-current="page">Passport Add</li>
+					
+					<%}
+					else{%>
+					
+					    <li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
 						<li class="breadcrumb-item  " aria-current="page"><a href="PisAdminEmpList.htm">Employee List</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Passport Address </li>
+					
+					<%} %>
+					
 					</ol>
 				</div>
 		</div>
@@ -120,10 +133,13 @@
 							<%if(passport!=null){ %>
 							<input type="hidden"  name="passportid"<%if(passport!=null && passport.getPassportId()>0){%> value="<%=passport.getPassportId()%>" <%}%>>
 				              <button type="submit" class="btn btn-sm submit-btn AddItem"	 name="action" value="submit" onclick="return CommentsModel();" >SUBMIT</button>
-								<%}else{%>
-			                   <button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="ADD">SUBMIT</button>
-								<%}%>
-		                    <%if(empdata!=null){%><a href="PassportList.htm?empid=<%=empdata[2]%>"   class="btn btn-sm  btn-info">BACK</a><%}%>
+								<%}else if(passport==null && NOCpassport==null){%>
+			                   <button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="ADD" >SUBMIT</button>
+								<%}
+								else if(NOCpassport!=null){%>
+								 <button type="submit" class="btn btn-sm submit-btn"	onclick="return confirm('Are You Sure To Submit?');" name="Action" value="<%=NOCpassport%>" >SUBMIT</button>
+								<%} %>
+		                    <%if(empdata!=null && NOCpassport==null ){%><a href="PassportList.htm?empid=<%=empdata[2]%>"   class="btn btn-sm  btn-info">BACK</a><%}%>
 							 </div>
 							</div>
 						   </div> 
