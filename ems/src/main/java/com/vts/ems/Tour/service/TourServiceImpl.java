@@ -521,6 +521,7 @@ public class TourServiceImpl implements TourService {
 		int result =  dao.CancelTour(dto);
 		if(result>0) {
 			TourTransaction transaction=new TourTransaction();
+			transaction.setTourRemarks(dto.getValue());
 	        transaction.setActionBy(dto.getEmpNo());
 	        transaction.setActionDate(sdtf.format(new Date()));
 	        transaction.setTourApplyId(Long.parseLong(dto.getApplId()));

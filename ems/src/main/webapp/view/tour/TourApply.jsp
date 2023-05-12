@@ -11,7 +11,7 @@
 <style type="text/css">
 .table thead th {
     color: white;
-    background-color: #0e6fb6;
+   
     text-align: center;
     padding-bottom: 0.1rem !important;
     padding-top: 0.1rem !important;
@@ -44,7 +44,7 @@
 </head>
 <body>
 <%
-/* List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist"); */
+ Object[] emplist = (Object[])request.getAttribute("ApprovalEmp"); 
 List<Object[]> ModeOfTravelList=(List<Object[]>)request.getAttribute("ModeOfTravelList");
 List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 
@@ -224,43 +224,47 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
-	                		<td class="trup" style="background: #E8E46E;">
-	                			User 
+	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
+	                			User <br> <%=session.getAttribute("EmpName")%>
 	                		</td>
-	                		<td rowspan="2">
+	                		<td rowspan="2" >
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		
-	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM 
+	                		<td class="trup" style="background: linear-gradient(to top, #FBC7F7 10%, transparent 115%);">
+	                			Dept Incharge <br> <%=emplist[0]%>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	               		
-	               		
-	                		<td class="trup" style="background: #4DB6AC;" >
-	                			P&A
+	               			<td class="trup"  style="background: linear-gradient(to top, #4DB6AC 10%, transparent 115%);">
+	                			DGM <br> <%=emplist[1]%>
 	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		
+	                		<td class="trup"  style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);" >
+	                			F & A <br> <%=emplist[2]%>
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
+	                			P & A <br> <%=emplist[3]%>
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		<td class="trup" style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
+	                			CEO <br> <%=emplist[4]%>
+	                		</td>
+	                		
 	               		
 	               	</tr>			   
 		                	
-	               	<tr>
-	               		<td class="trdown" style="background: #E8E46E;" >	
-				             
-	                	</td>
-	               		
-	                		<td class="trdown" style="background: #FBC7F7;" >	
-				               
-	                		</td>
-	               		
-	               		
-	               			<td class="trdown" style="background: #4DB6AC;" >	
-			                	
-		           			</td>
-		           		
-		            	</tr>             	
+	                          	
 			           </table>			             
 			 	</div>
 			<hr>

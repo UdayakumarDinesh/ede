@@ -25,7 +25,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 				<div class="col-md-6">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="TourProgram.htm">Tour</a></li>
+						<li class="breadcrumb-item "><a href="TourCancel.htm">Tour</a></li>
 						<li class="breadcrumb-item active " aria-current="page">Tour Cancel List</li>
 					</ol>
 				</div>
@@ -149,8 +149,7 @@ $('#fromdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-console.log(new Date('<%=fromdate%>'));
-console.log(new Date('<%=todate%>'));
+
 $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -165,10 +164,21 @@ $('#todate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-$(document).ready(function(){
-	   $('#fromdate, #todate').change(function(){
-	       $('#myform').submit();
-	    });
+
+$( "#fromdate" ).change(function() {
+	
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" : $('#fromdate').val(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
 	});
+});
 </script>
 </html>

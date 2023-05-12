@@ -64,7 +64,7 @@ public class TourController {
 			List<Object[]> emplist=service.GetEmployeeList(); 
 			List<Object[]> modeoftravel=service.GetModeofTravel(); 
 			List<Object[]> citylist=service.GetCityList();
-			//req.setAttribute("List", service.GetApprovalEmp(ses.getAttribute("EmpNo").toString()));
+			req.setAttribute("ApprovalEmp", service.GetApprovalEmp(ses.getAttribute("EmpNo").toString()));
 			req.setAttribute("ModeOfTravelList", modeoftravel);
 			req.setAttribute("CityList", citylist);
 			req.setAttribute("emplist", emplist);
@@ -444,12 +444,11 @@ public class TourController {
 			
 			if(action!=null ) {
 				act= action.split("/")[0];
-			}
-			
-			System.out.println(action);
+			}		
 			if(action!=null && "CANCEL".equalsIgnoreCase(act)){
 				String tourid  = action.split("/")[1].toString();
 				 ApprovalDto dto=new ApprovalDto();
+				 	dto.setValue(req.getParameter("reason"));
 				 	dto.setStatus("CBU");
 				 	dto.setApplId(tourid);
 			        dto.setEmpNo((String)ses.getAttribute("EmpNo"));
