@@ -38,15 +38,29 @@
 </style>
 </head>
 <body>
+<%
+Object[] empdata = (Object[])request.getAttribute("Empdata");
+
+List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
+List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
+List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+
+String fromdate = (String)request.getAttribute("fromdate");
+String todate = (String)request.getAttribute("todate");
+String empno= (String)request.getAttribute("empno");
+SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+
+%>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Tour Approval</h5>
+			<div class="col-md-6">
+				<h5>Tour Approval <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-6">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item "><a href="LeaveDashBoard.htm">Tour</a></li>
+					<li class="breadcrumb-item "><a href="TourProgram.htm">Tour</a></li>
 					<li class="breadcrumb-item active " aria-current="page">Tour Approval</li>
 				</ol>
 			</div>
@@ -71,17 +85,6 @@
 <div class="card">
 
    <div class="card-body" align="center" >
-<% 
-    List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
-    List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
-    List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
-    List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
-
-    String fromdate = (String)request.getAttribute("fromdate");
-    String todate = (String)request.getAttribute("todate");
-    String empno= (String)request.getAttribute("empno");
-    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-%>
 	    <div class="row" style="margin-top:7px;"> 
 	    <div class="col-md-12">
 
