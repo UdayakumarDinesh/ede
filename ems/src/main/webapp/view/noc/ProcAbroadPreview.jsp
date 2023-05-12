@@ -387,7 +387,6 @@ width:75%;
 	</tr>
 	
 	
-	
 	<!-- <tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4> 14. Type of passport required  <span style="margin-left:55px"> :</span>
        </h4> </td>

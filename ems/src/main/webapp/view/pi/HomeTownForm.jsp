@@ -57,6 +57,7 @@ String isApproval = (String)request.getAttribute("isApproval");
 
 List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
+
 %>
 
 <!-- <div class="card-header page-top ">
@@ -137,7 +138,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 						   	                    	<%} %></td> </tr>
 					  </tbody>					  
 					</table>
-						<% if(HomFormData!=null && toUserStatus.contains(HomFormData[7].toString())){ %>
+						<% if(HomFormData!=null && toUserStatus.contains(HomFormData[7].toString())) { %>
 				   		<div align="left">
 				   			 <%if(HomFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=HomFormData[6] %> <%} %>
 				   		
@@ -157,6 +158,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   			 <%if(HomFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=HomFormData[6] %> <%} %>
 				   		
 				   		</div>
+				   		
 						<div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
