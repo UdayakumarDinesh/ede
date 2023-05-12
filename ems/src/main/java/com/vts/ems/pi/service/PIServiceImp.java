@@ -37,7 +37,7 @@ public class PIServiceImp implements PIService{
 	@Autowired
 	private PisDao pisdao;
 	
-	private static final Logger logger = LogManager.getLogger(PIService.class);
+	private static final Logger logger = LogManager.getLogger(PIServiceImp.class);
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();

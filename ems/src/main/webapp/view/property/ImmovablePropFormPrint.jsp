@@ -1,20 +1,88 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="com.vts.ems.property.model.PisImmovableProperty,com.vts.ems.pis.model.Employee" %>    
-<%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
-<%@page import="java.util.List,java.util.ArrayList,java.util.Arrays"%>
-<%@page import="com.ibm.icu.impl.UResource.Array"%>
+<%@ page import="java.util.List,java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
+<%@ page import="com.vts.ems.property.model.PisImmovableProperty" %>    
 <!DOCTYPE html>
 <html>
+<%
+Object[] emp = (Object[])request.getAttribute("EmpData");
+%>
 <head>
-<meta charset="ISO-8859-1">
-<jsp:include page="../static/header.jsp"></jsp:include>
-<jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
+
+			.break {
+				page-break-after: always;
+			}
+
+			#pageborder {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				border: 2px solid black;
+			}
+
+			@page {
+				size: 790px 1140px;
+				margin-top: 49px;
+				margin-left: 72px;
+				margin-right: 39px;
+				margin-buttom: 49px;
+				border: 2px solid black;
+
+				@bottom-right {
+					counter-increment: page;
+  					counter-reset: page 2;
+					content: "Page "counter(page) " of "counter(pages);
+					margin-bottom: 30px;
+					margin-right: 10px;
+				}
+
+				@top-right {
+					content: "";
+					margin-top: 30px;
+					margin-right: 10px;
+				}
+
+				@top-left {
+					margin-top: 30px;
+					margin-left: 10px;
+					content: "Emp No: <%=emp[0] %>";
+				
+				}
+
+				@top-center {
+					margin-top: 30px;
+					content: "";
+
+				}
+
+				@bottom-center {
+					margin-bottom: 30px;
+					content: "";
+				}
+				
+				
+
+			}
+
+p {
+	text-align: justify;
+	text-justify: inter-word;
+}
+body
+{
+	font-size:14px !important;
+}
+div
+{
+	width: 650px !important;
+}
 table{
 	align: left;
-	width: 100% !important;
-	height:100% !important;
+	width: 650px !important;
+	max-width: 650px !important;
 	margin-top: 10px; 
 	margin-bottom: 10px;
 	margin-left:10px;
@@ -29,6 +97,25 @@ th,td
 	word-break: break-word;
 	overflow-wrap: anywhere;
 	
+	 -ms-word-break: break-all;
+     word-break: break-all;
+
+     /* Non standard for WebKit */
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+        hyphens: auto;
+	
+}
+.center{
+
+	text-align: center;
+}
+
+.right
+{
+	text-align: right;
 }
 input{
 border-width: 0 0 1px 0;
@@ -39,51 +126,29 @@ input:focus {
 }
 
 </style>
+<meta charset="ISO-8859-1">
+<title>Immovable Property Form</title>
 </head>
 <body>
 <%
-String LabLogo=(String) request.getAttribute("LabLogo");
 PisImmovableProperty imm= (PisImmovableProperty)request.getAttribute("ImmPropFormData");
-Object[] emp = (Object[])request.getAttribute("EmpData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
-String isApproval = (String)request.getAttribute("isApproval");
-
+String LabLogo = (String)request.getAttribute("LabLogo");
+SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
-SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
-
-List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
-List<String> adminRemarks  = Arrays.asList("FWD","VPA","APR");
 int slno=0;
 %>
 
-<div class="page card dashboard-card">
-  <div class="card-body" align="center">
-		<div align="center">
-		   <% String ses=(String)request.getParameter("result"); 
-			  String ses1=(String)request.getParameter("resultfail");
-			  if(ses1!=null){ %>
-				<div class="alert alert-danger" role="alert"  style="margin-top: 5px;">
-					<%=ses1 %>
-				</div>
-			  <%}if(ses!=null){ %>
-				<div class="alert alert-success" role="alert"  style="margin-top: 5px;">
-					<%=ses %>
-				</div>
-			  <%} %>
-		 </div>
-
-			<div class="card-body">
-				<div class="card" style="padding-top: 0px; margin-top: -15px; width: 100%;">
-					<form action="" method="post">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-						<div class="card-body main-card" style="padding-top: 0px; margin-top: -15px;" align="center">
-						
-                          <div style="width: 10%; height: 75px; border: 0; display: inline-block;margin:2% 0 10px -90%;"><img style="width: 80px; height: 90px; margin: 5px;" align="left" src="data:image/png;base64,<%=LabLogo%>"></div>									
-                          <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-8%;margin-left:5%;"><h4 style="text-decoration: underline">Form for giving <%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Immovable Property</h4></div>
-						  <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;"><h4>(Eg. Land / Plot / Flat / House / Building / Shop etc.)</h4></div>	
-						  <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;margin-left:5%;"><h4>To be submitted at least 30 days before the proposed date of the transaction</h4></div>	
-							<table style="border: 0px; width: 100%;">
+      <div class="center">
+	        <div style="width: 100%;float:left;">
+		       <div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
+               <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h4 style="">Form for giving <%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Immovable Property</h4></div>
+		      <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top: -70px;"><h4>(Eg. Land / Plot / Flat / House / Building / Shop etc.)</h4></div>	
+		<!-- <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;margin-left:5%;"><h4>To be submitted at least 30 days before the proposed date of the transaction</h4></div> -->	
+	       </div>
+	                <br><br>
+	                       <table style="border: 0px;margin-top: 20px; width: 100%;">
 								<tr>
 									<td style="width: 5%;"><%=++slno%>.</td>
 									<td>Name and Designation</td>
@@ -253,10 +318,9 @@ int slno=0;
 									<td>Any other relevant fact which the applicant may like to mention.</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && !imm.getRelavantFact().isEmpty()) {%> <%=imm.getRelavantFact() %> <%} else{%>-<%} %></td>
 								</tr>
-							</table>
-							
-							<!--DECLARATION  -->
-							<div style="width: 100%;border: 0;text-align: center;margin-top:5%;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+						 </table>
+						 
+						 <div style="width: 100%;border: 0;text-align: center;margin-top:70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
 							<br>
 							<%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> 
 						    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
@@ -276,23 +340,22 @@ int slno=0;
 					   			} %>
 						   		<%} %>
 						     </div>
-						     <div style="margin-right: 4%" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
+						     <div style="" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
 						     <div style="" align="right">Signature of the employee</div>
 						     
-						     <!--Remarks of Administration  -->
-						     <% if( (isApproval!=null && isApproval.equalsIgnoreCase("Y") ) || imm!=null && "APR".equalsIgnoreCase(imm.getPisStatusCode()) ){ %>	
-						     <hr style="border: solid 1px;">				     
-						     <div style="width: 100%;border: 0;text-align: center;margin-top:5%;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
+						     <% if( imm!=null && "APR".equalsIgnoreCase(imm.getPisStatusCode()) ){ %>	
+						     <hr style="border: solid 1px;margin-left:20px;">				     
+						     <div style="width: 100%;border: 0;text-align: center;margin-top:20px;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
 						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						       1. The details of proposed <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> acquisition <%}else {%> disposal <%} %> of Immovable property furnished above by <%if(emp!=null && emp[5]!=null) {%><%=emp[5]%><%} %><input type="text" style="width: 20%;color: blue;text-align: center;" value="<%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %>" readonly>, Emp No <input type="text" style="width: 10%;color: blue;text-align: center;" value="<%if(emp!=null && emp[0]!=null){%> <%=emp[0]%><%} %>" readonly> has been perused and filed in <%if(emp!=null && emp[5]!=null && (emp[5].toString().equalsIgnoreCase("Mr.") || (emp[5].toString().equalsIgnoreCase("Dr.") ) ) ) {%>his <%}else {%>her <%} %> service records.
 						     </div>
 						     <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %>
-						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">
+						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">
 						       2. As per Sl. No. 13 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
 						     </div>	
 						     <%} %>	
-						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">Submitted for kind information.</div>	
+						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	
 						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
 				              <br>	
 				              <br>
@@ -304,62 +367,6 @@ int slno=0;
 				   		     <%} %> 
 				             </div>
 				             <%} %>
-				             
-				             <br>
-				             <%			             
-				             long diff = DateTimeFormatUtil.dayDifference(imm.getTransDate().toString());
-				             
-				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>				           
-				   		      <div align="left">
-				   			 <%if(imm.getRemarks()!=null){ %> <span style="color: red">Remarks :</span> <%=imm.getRemarks() %> <%} %>				   		
-				   		      </div>
-					          <div align="left">
-						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					          </div>
-				   	
-				   		      <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
-							     <i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
-						      </button>
-					        <%} %>
-					
-					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						     <div align="left">
-				   			   <%if(imm.getRemarks()!=null){ %> <span style="color: red">Remarks :</span> <%=imm.getRemarks()%> <%} %>
-				   		     </div>
-						     <div align="left">
-						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					         </div>
-				   		     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Verify	
-						     </button>
-					
-				   		    <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
-							 Return
-						    </button>
-					        <%} %>		     
-						</div>
-						<input type="hidden" name="immPropertyId" value="<%if(imm!=null){ %><%=imm.getImmPropertyId()%><%}%>">
-					</form>
-				</div>
-			</div>
-		</div>
-</div>
-
-<script>
-
-function validateTextBox() {
-    if (document.getElementById("remarksarea").value.trim() != "") {
-    	return confirm('Are You Sure To Return?');
-    	
-    } else {
-        alert("Please enter Remarks");
-        return false;
-    }
-}
-
-</script>
-
+       </div>
 </body>
 </html>

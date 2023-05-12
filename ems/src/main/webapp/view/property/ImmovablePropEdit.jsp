@@ -35,7 +35,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	  <div class="col-1"></div>
 		<form action="ImmovablePropEdit.htm" method="POST" autocomplete="off" id="myform">
 		 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		   <div class="card"> 
+
 			 <div class="card-body"  >			 
                  <div class="row">
 				   <div class="col-md-2">
@@ -137,7 +137,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			            <label>Property Price:<span class="mandatory" >*</span></label>
 			           <input class="form-control" type="text" name="price" id="price" value="<%if(imm!=null && imm.getPrice()!=null ){ %><%=imm.getPrice()%> <%} %>" maxlength="225" placeholder="Enter price" onblur="checknegative(this)">
 			        </div>
-			        <div class="col-md-2" id="finance" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
+			        <div class="col-md-2" id="finance" <%if(imm!=null && imm.getFinanceSource()!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Personal savings</option>
@@ -148,7 +148,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			            <label>Other Sources:<span class="mandatory" >*</span></label>
 			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState()) ){ %><%=imm.getFinanceSource()%> <%} %>" maxlength="225" placeholder="Enter Source Details">
 			        </div>
-			        <div class="col-md-2" id="sanction" <%if(imm!=null && imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
+			        <div class="col-md-2" id="sanction" <%if(imm!=null && imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())){ %> style="visibility: visible;" <%}else{ %> style="visibilty: hidden;"<%} %> >
 			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
 			           <select name="requisite" id="requisite" class="form-control input-sm select2" required>
 			               <option value="N" <%if(imm!=null && imm.getRequisiteSanction()!=null && "N".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >No</option>
@@ -196,7 +196,7 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			     </div>
 			     <br>
 			     <div class="row">
-			        <div class="col-md-4" id="sitarSanction" <%if(imm!=null && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode()) && "A".equalsIgnoreCase(imm.getTransState()) ) {%> style="display: block;" <%}else{%> style="display: none;" <%} %> >			         
+			        <div class="col-md-4" id="sitarSanction" <%if(imm!=null && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode()) && "A".equalsIgnoreCase(imm.getTransState()) ) {%> style="visibility: visible"  <%}else{%> style="visbility: hidden;" <%} %> >			         
 			            <label>Is Sanction Required Under SITAR:<span class="mandatory" >*</span></label>
 			            <select name="sanctionRequired" id="sanctionRequired" class="form-control input-sm select2" required>
 			               <option value="N" <%if(imm!=null && imm.getSanctionRequired()!=null && "N".equalsIgnoreCase(imm.getSanctionRequired())) {%>selected <%} %> >Not Required</option>
@@ -208,9 +208,10 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			            <input class="form-control" type="text" name="relavantFacts" value="<%if(imm!=null && imm.getRelavantFact()!=null) {%> <%=imm.getRelavantFact()%> <%}%>" maxlength="225" placeholder="Enter Relavant facts">
 			        </div>	
 			     </div>	
-	         </div>
+                  
+                  <br>
 		     	  <div class="row">
-					 <div class="col-12" align="center">
+					 <div class="col-md-12" align="center">
 						<div class="form-group">
 							<input type="hidden" name="immpropertyId" value="<%=imm.getImmPropertyId()%>">
 			                  <button type="button" class="btn btn-sm submit-btn AddItem" name="Action" value="EDIT" onclick="return CommentsModel();">SUBMIT</button>				             						
@@ -235,11 +236,14 @@ function CommentsModel(){
 	var price = $('#price').val();
 	var financeSource = $('#financeSource').val();
 	var otherSource = $('#otherSource').val();
+	var partyRealted = $('#partyRealted').val();
+	var relationship = $('#relationship').val();
 	var partyName = $('#partyName').val();	
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
 	var dealingNature = $('#dealingNature').val();	
-
+	var osParticulars = $('#osParticulars').val().trim();	
+	var osShare = $('#osShare').val().trim();	
 	
 	if(location==null || location=="" || location=="null"){
 		alert('Enter Location Details!');
@@ -253,6 +257,12 @@ function CommentsModel(){
 	}else if(pincode==null || pincode=="" || pincode=="null" ){
 		alert('Enter Pincode Details!');
 		return false;
+	}else if(osParticulars.length>0 && osShare.length==0){
+		alert("Enter Share Of Each Member too!");	
+		return false;
+	}else if(osParticulars.length==0 && osShare.length>0){
+		alert("Enter Ownership Particulars too!");	
+		return false;
 	}else if(applicantInterest=="P" && (partialInterest==null || partialInterest=="" || partialInterest=="null") ){
 		alert('Enter Extent Details!');
 		return false;
@@ -261,6 +271,9 @@ function CommentsModel(){
 		return false;
 	}else if(financeSource=="Other sources" && (otherSource==null || otherSource=="" || otherSource=="null") ){
 		alert('Enter Other Source Details!');
+		return false;
+	}else if(partyRealted=="Y" && (relationship==null || relationship=="" || relationship=="null") ){
+		alert('Enter Relationship Details!');
 		return false;
 	}else if(partyName==null || partyName=="" || partyName=="null" ){
 		alert('Enter Party Name!');
@@ -353,7 +366,30 @@ $( document ).ready(function() {
 	/* $("#party").addClass("col-md-4"); */
 	/* $("#dealing").addClass("col-md-4"); */
 	/* $("#interest").addClass("col-md-4"); */
-	/* $('#sitarSanction').hide(); */
+	
+	var acquire = $('#transState').val();
+	var mode = $('#mode').val();
+	
+	if(acquire=="A" && mode=="Gift"){
+		$('#sitarSanction').show();		
+	}else{
+		 $('#sitarSanction').hide(); 
+	}
+	
+	if(acquire=="A"){
+		$('#sanction').hide();
+		
+	}else{
+		$('#sanction').show();
+	}
+	
+	/* if(acquire=="D"){
+		$('#sanction').show();		
+	}else{
+		$('#sanction').hide();
+		
+	} */
+	
 });
 
 /*  $("#applicantInterest").change(function(){
@@ -386,13 +422,14 @@ $("#transState").change(function(){
 	    if(mode=="Gift")
 	    {
 		  $('#sitarSanction').show();
+		  $('#sitarSanction').css('display','block');
 	    }
 	  }
 	  else{
 		$('#finance').hide();
 		 $('#sanction').show(); 
 		 $('#sanction').css('display','block'); 
-		 $('#sanction').html('<label>Requisite Sanctioned?<span class="mandatory" >*</span></label><select name="requisite" id="requisite" class="form-control input-sm select2" required>   <option value="N" <%if(imm!=null && imm.getRequisiteSanction()!=null && "N".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >No</option><option value="Y" <%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >Yes</option></select>');
+		<%--  $('#sanction').html('<label>Requisite Sanctioned?<span class="mandatory" >*</span></label><select name="requisite" id="requisite" class="form-control input-sm select2" required>   <option value="N" <%if(imm!=null && imm.getRequisiteSanction()!=null && "N".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >No</option><option value="Y" <%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){%> selected<%} %> >Yes</option></select>'); --%>
 		 $('#others').hide(); 
 		 $("#party").addClass("col-md-4");
 		 $('#sitarSanction').hide();
@@ -431,9 +468,12 @@ $("#partyRealted").change(function(){
 
 $("#mode").change(function(){
 	var mode = $('#mode').val();
-
-	  if(mode=="Gift"){
+	var acquire = $('#transState').val();
+	
+	  if(mode=="Gift" && acquire=="A"){
 		$('#sitarSanction').show();
+		$('#sitarSanction').css('display','block');
+		<%-- $('#sitarSanction').html('<label>Is Sanction Required Under SITAR:<span class="mandatory" >*</span></label><select name="sanctionRequired" id="sanctionRequired" class="form-control input-sm select2" required> <option value="N" <%if(imm!=null && imm.getSanctionRequired()!=null && "N".equalsIgnoreCase(imm.getSanctionRequired())) {%>selected <%} %> >Not Required</option> <option value="Y" <%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>selected <%} %>>Required</option></select>') --%>
 		}
 	  else{
 		$('#sitarSanction').hide();			

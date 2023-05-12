@@ -89,15 +89,15 @@ Object[] PandAFandAData   = (Object[])request.getAttribute("PandAFandAData");
 					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="">
 					<tbody>
 					    <tr align="center">
-							<th>P And A</th>
-							<th>F And A</th>
-							<th>Revised On</th>
+							<th>P & A</th>
+							<th>F & A</th>
+							<!-- <th>Revised On</th> -->
 							<th>Edit</th>
 					   </tr>
 					    <tr align="center">
 							<td><%=PandAFandAData[1]+", "+PandAFandAData[2]%></td>
 							<td><%=PandAFandAData[3]+", "+PandAFandAData[4]%></td>
-							<td><%if(PandAFandAData[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(PandAFandAData[5].toString())%><%}else{%>--<%}%></td>
+							<%-- <td><%if(PandAFandAData[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(PandAFandAData[5].toString())%><%}else{%>--<%}%></td> --%>
 							<td style="padding-top:5px; padding-bottom: 5px;">
 							<form action="PandAFandAAdmin.htm" method="GET">
 							 <input type="hidden" name="adminsId" value="<%if(PandAFandAData!=null){%><%=PandAFandAData[0]%><%}%>">

@@ -10,6 +10,32 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+
+<style type="text/css">
+
+.trup
+		{
+			padding:6px 10px 6px 10px ;			
+
+			border-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+			
+			
+		}
+		
+		.trdown
+		{
+			padding:0px 10px 5px 10px ;			
+			border-bottom-left-radius : 5px; 
+			border-bottom-right-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+
+
+</style>
 </head>
 <body>
 <%
@@ -26,7 +52,7 @@
 	
 	Employee emp=(Employee)request.getAttribute("Employee");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
+	List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
 %>
 
 <div class="card-header page-top ">
@@ -87,7 +113,7 @@
 					        for(Object[] obj : ImmPropDetails){ %>
 					   		<tr align="center">
 					   		<td style="text-align: center;width:4%;">
-								<%if(toUserStatus.contains(obj[13].toString()) ){ %>
+								<%if(toUserStatus.contains(obj[16].toString()) ){ %>
 									<input type="radio" name="immpropertyid" value="<%=obj[0]%>"> <%}else{ %>
 									<input type="radio" name="immpropertyid" value="<%=obj[0]%>" disabled>
 								<%} %>
@@ -96,24 +122,29 @@
 						    <td style="text-align: left;width:6%;"><%if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("A")){ %><%="Acquisition"%><%}else{%><%="Disposing"%> <%}%> </td>
 						    <td style="text-align: center;width:10%;"><%if(obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"") %> <%} %> </td>
 						    <td style="text-align: left;width:10%;"><%if(obj[5]!=null){ %> <%=obj[5] %> <%} %> </td>
-						    <td style="text-align: left;"><%if(obj[5]!=null){ %> <%=obj[6] %> <%} %> </td>
-						    <td style="text-align: right;width:10%;"><%if(obj[5]!=null){ %> <%=obj[7] %> <%} %> </td>
+						    <td style="text-align: left;">
+						    <%if(obj[6]!=null){ %> <%=obj[6] %> <%} %>
+						    <%if(obj[7]!=null){ %> <%=", "+obj[7] %> <%} %>
+						    <%if(obj[8]!=null){ %> <%=", "+obj[8] %> <%} %>
+						    <%if(obj[9]!=null){ %> <%=" - "+obj[9] %> <%} %>
+						     </td>
+						    <td style="text-align: right;width:10%;"><%if(obj[10]!=null){ %> <%=obj[10] %> <%} %> </td>
 					   		<td style="width:20%;">
 													
-								<%if(obj[11]!=null){%>
+								<%if(obj[14]!=null){%>
 								  
-								 	<%if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("A") ){ %>
+								 	<%if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
-							    	<%}else if(obj[8]!=null && obj[8].toString().equalsIgnoreCase("E") ){ %>
+							    	<%}else if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("E") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Expired <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[12] %>; font-weight: 600;" formtarget="_blank">
-								    		&nbsp; <%=obj[11] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=obj[0] %>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[15] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=obj[14] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
 								 
@@ -124,7 +155,7 @@
 								<button type="submit" class="btn btn-sm view-icon" formaction="ImmovablePropPreview.htm" name="immPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Hometown Change" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
-								<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=obj[0] %>" formaction="ImmovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 								   <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>
                             </td>	
@@ -146,11 +177,11 @@
 				</form>
 				<hr>
 			<div class="row"  >
-		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Immovable Property</b></div>
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Property Acquisition / Disposal</b></div>
 		 	</div>
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
-	               		<%-- <tr>
+	               		 <tr>
 	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
 	                		<td class="trup" style="background: #E8E46E;">
 	                			User - <%=emp.getEmpName() %>
@@ -158,27 +189,21 @@
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	                		<%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo())  ){ %>
-	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM - <%=DGMEmpName[1] %>
+	                		<%} %>             		
+	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	                		<td class="trup" style="background: #FBC7F7;" >
+	                			P&A - <%=PandAEmpName[1] %>
 	                		</td>
-			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
-	                		<td class="trup" style="background: #4DB6AC;" >
-	                			P&A - <%=PandAEmpName[1] %>
-	                		</td>
-	               		<%} %>
-	               		<%if(CeoName!=null && CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	               		<%if(CeoName!=null  ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			CEO - <%=CeoName[1] %>
 	                		</td>
 	               		<%} %>
-	                	</tr> --%>			
+	                	</tr> 			
 			         </table>			             
 			   </div>
        </div>

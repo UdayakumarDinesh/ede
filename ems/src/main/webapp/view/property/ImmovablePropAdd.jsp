@@ -35,7 +35,6 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	  <div class="col-1"></div>	
 		<form action="ImmovablePropAdd.htm" method="POST" autocomplete="off" id="myform1">
 		 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		   <div class="card"> 
 			 <div class="card-body"  >			 
                  <div class="row">
 				   <div class="col-md-2">
@@ -205,9 +204,10 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			            <input class="form-control" type="text" name="relavantFacts" maxlength="225" placeholder="Enter Relavant facts">
 			        </div>	
 			     </div>	
-	         </div>
+
+                  <br>
 		     	  <div class="row">
-					 <div class="col-12" align="center">
+					 <div class="col-md-12" align="center">
 						<div class="form-group">							
 				            <button type="button" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>										
 					    </div>
@@ -231,11 +231,14 @@ function CommentsModel(){
 	var price = $('#price').val();
 	var financeSource = $('#financeSource').val();
 	var otherSource = $('#otherSource').val();
+	var partyRealted = $('#partyRealted').val();
+	var relationship = $('#relationship').val();
 	var partyName = $('#partyName').val();	
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
 	var dealingNature = $('#dealingNature').val();	
-
+	var osParticulars = $('#osParticulars').val().trim();	
+	var osShare = $('#osShare').val().trim();	
 	
 	if(location==null || location=="" || location=="null"){
 		alert('Enter Location Details!');
@@ -249,6 +252,12 @@ function CommentsModel(){
 	}else if(pincode==null || pincode=="" || pincode=="null" ){
 		alert('Enter Pincode Details!');
 		return false;
+	}else if(osParticulars.length>0 && osShare.length==0){
+		alert("Enter Share Of Each Member too!");	
+		return false;
+	}else if(osParticulars.length==0 && osShare.length>0){
+		alert("Enter Ownership Particulars too!");	
+		return false;
 	}else if(applicantInterest=="P" && (partialInterest==null || partialInterest=="" || partialInterest=="null") ){
 		alert('Enter Extent Details!');
 		return false;
@@ -257,6 +266,9 @@ function CommentsModel(){
 		return false;
 	}else if(financeSource=="Other sources" && (otherSource==null || otherSource=="" || otherSource=="null") ){
 		alert('Enter Other Source Details!');
+		return false;
+	}else if(partyRealted=="Y" && (relationship==null || relationship=="" || relationship=="null") ){
+		alert('Enter Relationship Details!');
 		return false;
 	}else if(partyName==null || partyName=="" || partyName=="null" ){
 		alert('Enter Party Name!');
@@ -378,7 +390,7 @@ $("#transState").change(function(){
 		   $('#others').show();
 	       $("#party").removeClass("col-md-4");
 		}
-	    if(mode=="Gift")
+	    if(mode=="Gift" && acquire=="A")
 	    {
 		  $('#sitarSanction').show();
 	    }
@@ -421,8 +433,8 @@ $("#partyRealted").change(function(){
 
 $("#mode").change(function(){
 	var mode = $('#mode').val();
-
-	  if(mode=="Gift"){
+	var acquire = $('#transState').val();
+	  if(mode=="Gift" && acquire=="A"){
 		$('#sitarSanction').show();
 		}
 	  else{

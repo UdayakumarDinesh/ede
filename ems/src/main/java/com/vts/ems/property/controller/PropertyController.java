@@ -1,12 +1,19 @@
 package com.vts.ems.property.controller;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
@@ -15,15 +22,19 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
+import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.property.service.PropertyService;
+import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
 
@@ -82,7 +93,7 @@ public class PropertyController {
 		String EmpNo = (String)ses.getAttribute("EmpNo");
 		
 		try {
-			
+			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive","AcquiringDisposing_htm");
 			
 			String CEO = piservice.GetCEOEmpNo();
@@ -382,9 +393,15 @@ public class PropertyController {
 			String immPropertyId = req.getParameter("immPropertyId");
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			if(immPropertyId!=null) {
+				String isApproval = req.getParameter("isApproval");
+				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+					req.setAttribute("SidebarActive","PropertyApprovals_htm");
+				}
+				req.setAttribute("isApproval", isApproval);
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
-			    req.setAttribute("EmpData", piservice.getEmpDataByEmpNo(immovableProperty.getEmpNo()));
+			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));
 			}
 			return "property/ImmovablePropForm";
 		}catch(Exception e) {
@@ -394,4 +411,218 @@ public class PropertyController {
 		}
 	}
 	
+	@RequestMapping(value="ImmovablePropFormSubmit.htm")
+	public String immovablePropFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ImmovablePropFormSubmit.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		String LoginType=(String)ses.getAttribute("LoginType");
+		try {
+			String immPropertyId = req.getParameter("immPropertyId");
+			String remarks = req.getParameter("remarks");
+			String action = req.getParameter("Action");
+			
+			PisImmovableProperty immovable = service.getImmovablePropertyById(Long.parseLong(immPropertyId));			
+			String pisStatusCode = immovable.getPisStatusCode();
+			
+			long count = service.immovablePropForward(immPropertyId, Username, action, remarks, EmpNo, LoginType);
+			
+			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+			{
+				if(count>0) {
+					redir.addAttribute("result", "Immovable Property Application Sent For Verification Successfully");
+				}else {
+					redir.addAttribute("resultfail","Immovable Property Application Sent For Verification Unsuccessful");
+				}
+				return "redirect:/AcquiringDisposing.htm";
+			}
+			else {
+				if(count>0) {
+					redir.addAttribute("result", "Immovable Property verification Successfull");
+				}else {
+					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
+				}
+				return "redirect:/PropertyApprovals.htm";
+			}
+			
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside ImmovablePropFormSubmit.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="PropertyApprovals.htm")
+	public String propertyApprovals(HttpServletRequest req,HttpSession ses) throws Exception
+	{
+		String Username =(String) ses.getAttribute("Username");
+		logger.info(new Date()+" Inside PropertyApprovals.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
+			ses.setAttribute("SidebarActive","PropertyApprovals_htm");
+			
+			req.setAttribute("ApprovalList", service.propertyApprovalList(EmpNo));
+			return "property/PropertyApprovals";
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside PropertyApprovals.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="ImmovablePropFormDownload.htm")
+	public void immovablePropFormDownload( Model model,HttpServletRequest req,HttpSession ses,RedirectAttributes redir,HttpServletResponse res) throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside ImmovablePropFormDownload.htm "+Username);
+		
+		try {	
+			String immPropertyId = req.getParameter("immPropertyId");
+			String pagePart =  req.getParameter("pagePart");
+			
+			String filename="";
+			if(immPropertyId!=null) {
+				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
+			    req.setAttribute("ImmPropFormData",immovableProperty );	
+			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));	
+				filename="Immovable_Property";
+			}
+			
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("pagePart","3" );
+			
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+	        req.getRequestDispatcher("/view/property/ImmovablePropFormPrint.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	       
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+	       	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ImmovablePropFormDownload.htm "+Username, e); 
+		}
+
+    }
+	
+	@RequestMapping(value="MovablePropTransStatus.htm")
+	public String movablePropTransStatus(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside MovablePropTransStatus.htm"+Username);
+		try {
+			String movPropertyId = req.getParameter("movPropertyId");
+			if(movPropertyId!=null) {
+				req.setAttribute("TransactionList", service.movablePropertyTransList(movPropertyId.trim()));
+			}
+			return "property/PropertyTransStatus";
+		}catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside MovablePropTransStatus.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="MovablePropPreview.htm")
+	public String movablePropPreview(HttpServletRequest req,HttpSession ses) throws Exception
+	{		
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside MovablePropPreview.htm"+Username);
+		try {
+			String movPropertyId = req.getParameter("movPropertyId");
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			if(movPropertyId!=null) {
+				String isApproval = req.getParameter("isApproval");
+				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+					req.setAttribute("SidebarActive","PropertyApprovals_htm");
+				}
+				req.setAttribute("isApproval", isApproval);
+				PisMovableProperty movableProperty = service.getMovablePropertyById(Long.parseLong(movPropertyId.trim()));
+			    req.setAttribute("movPropFormData",movableProperty );	
+			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));
+			}
+			return "property/ImmovablePropForm";
+		}catch(Exception e) {
+			logger.info(new Date()+"Inside MovablePropPreview.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="MovablePropFormSubmit.htm")
+	public String movablePropFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside MovablePropFormSubmit.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		String LoginType=(String)ses.getAttribute("LoginType");
+		try {
+			String movPropertyId = req.getParameter("movPropertyId");
+			String remarks = req.getParameter("remarks");
+			String action = req.getParameter("Action");
+			
+			PisMovableProperty movable = service.getMovablePropertyById(Long.parseLong(movPropertyId.trim()));			
+			String pisStatusCode = movable.getPisStatusCode();
+			
+			long count = service.movablePropForward(movPropertyId, Username, action, remarks, EmpNo, LoginType);
+			
+			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+			{
+				if(count>0) {
+					redir.addAttribute("result", "Movable Property Application Sent For Verification Successfully");
+				}else {
+					redir.addAttribute("resultfail","Movable Property Application Sent For Verification Unsuccessful");
+				}
+				return "redirect:/AcquiringDisposing.htm";
+			}
+			else {
+				if(count>0) {
+					redir.addAttribute("result", "Immovable Property verification Successfull");
+				}else {
+					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
+				}
+				return "redirect:/PropertyApprovals.htm";
+			}
+			
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside MovablePropFormSubmit.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
 }
