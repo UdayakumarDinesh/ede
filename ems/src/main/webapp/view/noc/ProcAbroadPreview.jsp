@@ -286,7 +286,7 @@ width:75%;
 	<td style="width:350px;text-align: left;border: 0;"><h4> 12. Details of passport lost, if any <span style="margin-left:20px"> :</span>
        </h4> </td>
     
-    <td class="text-blue" style="border: 0;"></td>
+    <td class="text-blue" style="border: 0;"><%=obj[37] %></td>
 	</tr>
 	
 	<tr>
@@ -378,14 +378,78 @@ width:75%;
 	</tr>
 	
   <tr>
-	<td style="width:350px;text-align: left;border: 0;"><h4>21. Trip financed by  <span style="margin-left:63px"> :</span>
+	<td style="width:350px;text-align: left;border: 0;"><h4>21. Trip financed by  <span style="margin-left:145px"> :</span>
 	
 	   </h4></td>
       
     
      <td class="text-blue" style="border: 0;"><% if(obj[30].toString().equalsIgnoreCase("S")){ %>SELF<%} else{ %>OTHER PEOPLE<%} %></td>
-	</tr>
+  </tr>
+  
+  <% if(obj[30].toString().equalsIgnoreCase("S")) { %>
+  <tr>
+  <td style="width:350px;text-align: left;border: 0;"><h4>&emsp;&emsp; Amount Spend  <span style="margin-left:141px"> :</span>
 	
+	   </h4></td>
+      
+    
+     <td class="text-blue" style="border: 0;"><%=obj[31]%> &emsp;<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="margin-left:0px; margin-top:0px;" 
+									name="ProcAbrId" value="<%=obj[10] %>"
+									 formaction="NocProcAbroadDownload.htm"  formmethod="get" data-toggle="tooltip" data-placement="top" title="Download">
+										  <i style="color: #019267" class="fa-solid fa-download fa-1x" ></i>
+									</button> </td>
+      <td class="text-blue" style="border: 0;"><%-- <button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="margin-left:0px; margin-top:-65px;" 
+									name="ProcAbrId" value="<%=obj[10] %>"
+									 formaction="NocProcAbroadDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+										  <i style="color: #019267" class="fa-solid fa-download fa-1x" ></i>
+									</button> --%></td>
+  </tr>
+	
+	<%}
+	
+  else if(obj[30].toString().equalsIgnoreCase("OP")){ %> 
+  
+  
+  <tr>
+  <td style="width:350px;text-align: left;border: 0;"><h4> &emsp;&emsp;Name&Nationality <span style="margin-left:105px"> :</span>
+	
+	   </h4></td>
+      
+    
+     <td class="text-blue" style="border: 0;"><%=obj[33] %></td>
+  </tr>
+  
+  
+   <tr>
+  <td style="width:350px;text-align: left;border: 0;"><h4> &emsp;&emsp;Relationship <span style="margin-left:166px"> :</span>
+	
+	   </h4></td>
+      
+    
+     <td class="text-blue" style="border: 0;"><%=obj[34] %></td>
+  </tr>
+  
+   <tr>
+  <td style="width:350px;text-align: left;border: 0;"><h4> &emsp;&emsp;Address <span style="margin-left:208px"> :</span>
+	
+	   </h4></td>
+      
+    
+     <td class="text-blue" style="border: 0;"><%=obj[35] %></td>
+  </tr>
+  
+   <%} %> 
+   
+  <tr>
+	<td style="width:350px;text-align: left;border: 0;"><h4>22. Are you likely to accept any <span style="margin-left:33px"> :</span><br>&emsp;&emsp; foreign Hospitality
+        
+	
+	   </h4></td>
+      
+    
+     <td class="text-blue" style="border: 0;"><% if(obj[36].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
+  </tr>
+
 	
 	<!-- <tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4> 14. Type of passport required  <span style="margin-left:55px"> :</span>
@@ -395,30 +459,36 @@ width:75%;
 	</tr> -->
 	
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;"><h4> 12. I certify that:  <span style="margin-left:180px"> :</span>
+	<td style="width:350px;text-align: left;border: 0;"><h4> 23. I certify that:  <span style="margin-left:180px"> :</span>
        </h4> </td>
     
-    <td  class="tabledata" style="border: 0;">(a) My application for the above passport is not for proceeding to a foreign 
-           country. I shall  separately seek the NO OBJECTION CERTIFICATE  
-           before proceeding to a foreign country. <br>
-           
-           (b) I am not involved in any court / police / disciplinary / vigilance case and there 
-              is no restriction placed by any authority.</td>
+    <td  class="tabledata" style="border: 0;">
+           <% if (obj[18].toString().equalsIgnoreCase("N")){%>
+           I am not involved in any court / police / disciplinary / vigilance case and there 
+              is no restriction placed by any authority. <%} %><br>
+              
+              I undertake that I will return my Identity Card before proceeding abroad <br>
+              I undertake that I shall not settle permanently abroad and rejoin my duty after expiry 
+              of leave
+              
+              </td>
+             
 	</tr>
 	
 	<tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4> 13. I certify that: <span style="margin-left:180px"> :</span>
        </h4> </td>
     
-    <td  style="border: 0;">
+    <td  style="border: 0;"><% if(obj[39].toString().equalsIgnoreCase("N")) {%>
 		  
            I am not under contractual obligation to serve STARC for any specific period.
 		
-		
+		<%} else{ %>
 	        
             I am under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"   ></span>  to   <span class="text-blue"  ></span>
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[40].toString())) %></span>  to   <span class="text-blue"><%=rdf.format(sdf.parse(obj[41].toString())) %></span>
               
+              <%} %>
          </td>
 	</tr>
 	
@@ -432,7 +502,7 @@ width:75%;
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100"   name="remarks"  maxlength="500"></textarea>
 				  </div>
-                <button type="submit" class="btn btn-sm submit-btn"  name="Action" value="A"  formaction=""  onclick="return confirm('Are You Sure To Submit?');" >Forward</button>
+                <button type="submit" class="btn btn-sm submit-btn"  name="Action" value="A"  formaction="NOCProcAbroadForward.htm"  onclick="return confirm('Are You Sure To Submit?');" >Forward</button>
                 
 				</div>
 		
@@ -647,7 +717,7 @@ width:75%;
 					 </div> -->
 					
 				
-				 <input type="hidden" name="passportid" value=""> 						
+				 <input type="hidden" name="ProcAbroadId" value="<%=obj[10]%>"> 						
 	
        </div>
        </div> 

@@ -78,6 +78,8 @@ public interface NocDao {
 	public long NocProcAbroadUpdate(NocProceedingAbroad nocpa)throws Exception;
 
 	public Object[] getNocProcAbroadDetails(String procAbrId)throws Exception;
+
+	public Long EditNocpa(NocProceedingAbroad noc) throws Exception;
 	
 	
 }

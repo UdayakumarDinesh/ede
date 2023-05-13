@@ -590,6 +590,20 @@ public class NocDaoImpl implements NocDao {
 		}		
 		
 	}
+	
+	@Override
+	public Long EditNocpa(NocProceedingAbroad noc) throws Exception {
+
+		try {
+			manager.merge(noc);
+			manager.flush();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditNocpa "+e);
+			e.printStackTrace();
+		}
+		return noc.getNocProcId();
+	}
 }
 	
 

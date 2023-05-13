@@ -59,6 +59,9 @@ public interface NocService {
 
 	public Object[] getNocProcAbroadDetails(String procAbrId)throws Exception;
 
+	public long NOCProcAbraodForward(String procAbroadId, String userId, String action, String remarks, String empNo,String loginType);
+			
+
 	
 
 }

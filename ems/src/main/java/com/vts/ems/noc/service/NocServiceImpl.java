@@ -687,5 +687,234 @@ public class NocServiceImpl implements NocService {
 		
 		return dao.getNocProcAbroadDetails(procAbrId);
 	}
+
+	@Override
+	public long NOCProcAbraodForward(String procAbroadId, String userId, String action, String remarks, String empNo,String loginType) {
+		
+		try {
+			
+		
+        NocProceedingAbroad noc =dao.getNocProceedingAbroadById(Long.parseLong(procAbroadId));
+		Employee emp = dao.getEmpDataByEmpNo(noc.getEmpNo());
+		String formempno = emp.getEmpNo();
+		String  NocStatusCode = noc.getNocStatusCode();
+		String NocStatusCodeNext = noc.getNocStatusCodeNext();
+		
+		String CEO = dao.GetCEOEmpNo();
+		List<String> PandAs = dao.GetPandAAdminEmpNos();
+		List<String> DGMs = dao.GetDGMEmpNos();
+		List<String> DHs = dao.GetDHEmpNos();
+		List<String> GHs = dao.GetGHEmpNos();
+		
+		DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+		
+		// Accepted
+		if(action.equalsIgnoreCase("A"))
+		{
+//		
+			// first time forwarding
+			if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
+					NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE") ) 
+			{
+				noc.setNocStatusCode("FWD");
+				noc.setForwardedDate(sdf1.format(new Date()));
+				if(CEO.equalsIgnoreCase(formempno) ) 
+				{ 
+				    //dao.HometownStatusUpdate(noc.getEmpNo());
+
+					noc.setNocStatusCode("APR");
+					noc.setNocStatusCodeNext("APR");
+					noc.setIsActive(1);
+					noc.setProcAbroadStatus("A");	
+					noc.setApprovedDate(sdf1.format(new Date()));
+				}
+				
+				else if(PandAs.contains(formempno) || loginType.equalsIgnoreCase("P")) 
+				{
+					noc.setNocStatusCodeNext("APR");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					noc.setNocStatusCodeNext("VPA");
+				}
+				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
+				{
+					noc.setNocStatusCodeNext("VDG");
+				}
+				else if(GHs.contains(formempno) || emp.getGroupId()==0)
+				{
+					noc.setNocStatusCodeNext("VDI");
+				}
+				else 
+				{
+					noc.setNocStatusCodeNext("VGI");
+				}
+				
+			}
+			
+			//approving	flow 
+			else
+			{
+			   
+				noc.setNocStatusCode(NocStatusCodeNext);
+				
+				if(NocStatusCodeNext.equalsIgnoreCase("VGI"))
+				{
+					noc.setNocStatusCodeNext("VDI");
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VDI")) 
+				{
+					noc.setNocStatusCodeNext("VDG");
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					noc.setNocStatusCodeNext("VPA");
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					noc.setNocStatusCodeNext("APR");
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("APR")) {	
+					//dao.HometownStatusUpdate(noc.getEmpNo());
+					noc.setIsActive(1);
+					noc.setProcAbroadStatus("A");
+					noc.setApprovedDate(sdf1.format(new Date()));
+				}
+			}
+			
+			noc.setRemarks(remarks);
+			dao.EditNocpa(noc);
+					
+		}
+		
+		//Returned
+		else if(action.equalsIgnoreCase("R")) 
+		{
+			// Setting PisStatusCode
+			if(NocStatusCodeNext.equalsIgnoreCase("VGI")) 
+			{
+				noc.setNocStatusCode(NocStatusCodeNext);
+			}
+		    else if(NocStatusCodeNext.equalsIgnoreCase("VDI")) 
+			{
+		    	noc.setNocStatusCode("RDI");	
+			}
+			else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+			{
+				noc.setNocStatusCode("RDG");	
+			}
+			else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
+			{
+				noc.setNocStatusCode("RPA");	
+			}
+			else if(NocStatusCodeNext.equalsIgnoreCase("APR")) 
+			{
+				noc.setNocStatusCode("RCE");	
+			}
+			
+			//Setting PisStatusCodeNext
+			if(CEO.equalsIgnoreCase(formempno) ) 
+			{ 
+				noc.setNocStatusCodeNext("APR");					
+			}
+			else if(PandAs.contains(formempno) || loginType.equalsIgnoreCase("P")) 
+			{
+				noc.setNocStatusCodeNext("APR");
+			}
+			else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+			{
+				noc.setNocStatusCodeNext("VPA");
+			}
+			else if(DHs.contains(formempno) || emp.getDivisionId()==0)
+			{
+				noc.setNocStatusCodeNext("VDG");
+			}
+			else if(GHs.contains(formempno)  || emp.getGroupId()==0)
+			{
+				noc.setNocStatusCodeNext("VDI");
+			}
+			else 
+			{
+				noc.setNocStatusCodeNext("VGI");
+			}
+			noc.setReturnedDate(sdf1.format(new Date()));
+			noc.setRemarks(remarks);
+			dao.EditNocpa(noc);
+		}
+		
+		NocPassportTrans transaction = NocPassportTrans.builder()	
+				                           .NocPassportId(noc.getNocProcId())
+				                           .NocStatusCode(noc.getNocStatusCode())
+				                           .ActionBy(empNo)
+				                           .Remarks(remarks)
+				                           .ActionDate(sdtf.format(new Date()))
+				                           .build();
+		
+		 dao.NocPassportTransactionAdd(transaction);
+						
+		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+			
+			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+	
+		//Notification
+		EMSNotification notification = new EMSNotification();
+		if(action.equalsIgnoreCase("A") && noc.getProcAbroadStatus().equalsIgnoreCase("A"))
+		{
+			notification.setEmpNo(emp.getEmpNo());
+			notification.setNotificationUrl("ProceedingAbroad.htm");
+			notification.setNotificationMessage("Noc Proceeding Abroad Request Approved");
+			notification.setNotificationBy(empNo);
+		}
+		else if(action.equalsIgnoreCase("A") )
+		{
+			if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
+			{
+				notification.setEmpNo(GIEmpNo);					
+			}
+			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDI")) 
+			{
+				notification.setEmpNo(DIEmpNo);					
+			}
+			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDG")) 
+			{
+				notification.setEmpNo(DGMEmpNo);					
+			}
+			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
+			{
+				notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+			}
+			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("APR")) 
+			{
+				notification.setEmpNo(CEO);
+			}
+			
+			notification.setNotificationUrl("NocApproval.htm");
+			notification.setNotificationMessage("Recieved Noc Proceeding Abroad Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationBy(empNo);
+		}
+		else if(action.equalsIgnoreCase("R"))
+		{
+			notification.setEmpNo(emp.getEmpNo());
+			notification.setNotificationUrl("ProceedingAbroad.htm");
+			notification.setNotificationMessage("Noc Proceeding Abroad Request Returned");
+			notification.setNotificationBy(empNo);
+		}
+		
+		notification.setNotificationDate(LocalDate.now().toString());
+		notification.setIsActive(1);
+		notification.setCreatedBy(userId);
+		notification.setCreatedDate(sdtf.format(new Date()));
+	
+		dao.AddNotifications(notification);	
+		
+		return 1;
+	}catch (Exception e) {
+		logger.error(new Date() +" Inside NOCPassportForward "+ e);
+		e.printStackTrace();
+		return 0;
+	
+    }
+	}
 }
 

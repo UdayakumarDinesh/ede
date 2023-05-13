@@ -855,6 +855,7 @@ public class NocController {
 			try {
 				
 				String ProcAbrId=req.getParameter("ProcAbrId");
+				System.out.println("ProcAbrId---"+ProcAbrId);
 				NocProceedingAbroad form=service.getNocProceedingAbroadById(Long.parseLong(ProcAbrId));
 				res.setContentType("Application/octet-stream");	
 				File my_file=new File(emsfilespath+form.getFilePath());
@@ -925,5 +926,115 @@ public class NocController {
 	    return "static/Error"; 
 		}
 	}
+	
+	
+	@RequestMapping(value = "ProcAbroadPrint.htm",method=RequestMethod.GET)
+	public String ProcAbroadPrint(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
+		String EmpId =  ses.getAttribute("EmpId").toString();
+		logger.info(new Date() +"Inside ProcAbroadPrint.htm "+UserId);
+		
+		try {
+			
+			
+			String ProcAbrId=req.getParameter("ProcAbrId");
+				
+			
+			req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
+
+			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
+			String html = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+            while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);	
+			
+		}
+			   
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ProcAbroadPrint.htm "+UserId, e); 
+		}
+		return "";
+
+	}
+	
+	@RequestMapping(value = "NOCProcAbroadForward.htm" , method={RequestMethod.POST,RequestMethod.GET})
+	public String NOCProcAbroadForward(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+	 
+	    String UserId = (String) ses.getAttribute("Username");
+	    String EmpNo = (String) ses.getAttribute("EmpNo");
+    	String LoginType=(String)ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside NOCProcAbroadForward.htm "+UserId);
+		try {
+			
+			
+			String ProcAbroadId=req.getParameter("ProcAbroadId");
+			System.out.println("ProcAbroadId---"+req.getParameter("ProcAbroadId"));
+			String action = req.getParameter("Action");
+			String remarks = req.getParameter("remarks");
+			
+			NocProceedingAbroad Noc=service.getNocProceedingAbroadById(Long.parseLong(ProcAbroadId));
+			String NocStatusCode = Noc.getNocStatusCode();
+			
+//			NocPassportDto dto=  NocPassportDto.builder()
+//					.NocPassportId(Long.parseLong(passportid))
+//					.NocStatusCode(NocStatusCode)
+//					.Remarks(req.getParameter("remarks"))
+//			        .build();
+			
+			long save=service.NOCProcAbraodForward(ProcAbroadId,UserId,action,remarks,EmpNo,LoginType);
+			if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
+					NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
+						if (save > 0) {
+							redir.addAttribute("result", "NOC Proceeding Abroad  Forwarded Successfully");
+						} else {
+							redir.addAttribute("resultfail", "NOC Proceeding Abroad  Forward Unsuccessful");	
+						}	
+						return "redirect:/ProceedingAbroad.htm";
+					}
+					else  
+					{
+						if (save > 0) {
+							redir.addAttribute("result", "NOC Proceeding Abroad verification Successfull");
+						} else {
+							redir.addAttribute("resultfail", "NOC Proceeding Abroad verification Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm";
+					}
+					
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NOCProcAbroadForward.htm "+UserId, e);
+			return "static/Error";
+		}
+	}
+	
 }
 

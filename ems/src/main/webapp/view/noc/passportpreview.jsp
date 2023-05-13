@@ -129,8 +129,9 @@ width:75%;
 				
 								</div>
 								</div>
-								<!-- <div align="center"><span style="border: 0px;font-weight: 600">PART-I </span>
-								</div> -->
+								
+								 <div align="center"><span style="border: 0px;font-weight: 500;font-size:18px;">PART-I </span>
+								</div> 
 								
 
        <div style="text-align:center;">
@@ -329,12 +330,12 @@ width:75%;
             <td class="text-blue" style="border: 0;text-align: left;"><% if(obj[28].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
             
           </tr>
-          
+          <% if(obj[28].toString().equalsIgnoreCase("N")){ %>
           <tr>
           <td style="width:400px;text-align: left;border: 0;"><h4>&emsp;(b) If not, mention variations <span style="margin-left:35px"> :</span> </h4></td>
           <td class="text-blue" style="border: 0;"><%=obj[29] %></td>
           </tr>
-          
+          <%} %>
           <tr>
            <td style="width:350px;text-align: left;border: 0;"><h4>2.(a) Whether the employee is <span style="margin-left:40px"> :</span> &emsp; &emsp; &emsp; under suspension?
            </h4></td>
@@ -351,7 +352,7 @@ width:75%;
 	          <td class="text-blue" style="border: 0;"><% if(obj[31].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
 	          
 	        </tr>
-	        
+	        <% if(obj[31].toString().equalsIgnoreCase("Y")){ %>
 	        <tr>
 	        <td style="width:350px;text-align: left;border: 0;"><h4>
                 &emsp;(c) If so, details of the case<span style="margin-left:62px"> :</span> </h4></td> 
@@ -359,6 +360,7 @@ width:75%;
             <td class="text-blue" style="border: 0;"><%=obj[32] %></td>
             
            </tr>
+           <%} %>
            
            <tr>
            <td style="width:350px;text-align: left;border: 0;"><h4> &nbsp;3. Applicant is<span style="margin-left:197px"> :</span>  

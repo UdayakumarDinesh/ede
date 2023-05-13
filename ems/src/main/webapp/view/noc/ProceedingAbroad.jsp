@@ -155,7 +155,7 @@
 								    <i class="fa fa-eye " style="color: black;"></i>
 							    </button> 
 							    
-							    <button type="submit" class="btn btn-sm" name="" value="" formaction=""  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+							    <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[0] %>"  formaction="ProcAbroadPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 								  <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>  
 								
