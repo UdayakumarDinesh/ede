@@ -497,7 +497,7 @@ width:75%;
 	
 	<br>
 	<!--  <div align="left" style="margin-left:10px;font-weight:400;" > Dept.Incharge : <span class="text-blue"  ></span></div>	 -->
-	  	
+	  	<% if(obj[43]!=null && toUserStatus.contains(obj[43].toString())) { %>
 	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100"   name="remarks"  maxlength="500"></textarea>
@@ -505,7 +505,7 @@ width:75%;
                 <button type="submit" class="btn btn-sm submit-btn"  name="Action" value="A"  formaction="NOCProcAbroadForward.htm"  onclick="return confirm('Are You Sure To Submit?');" >Forward</button>
                 
 				</div>
-		
+		<%} %>
 		<br>
 		
 		<!-- ----------------------------------------  P&A Department-------------------------------------------------------------------------------------------- -->
@@ -676,14 +676,14 @@ width:75%;
 			    </div>
 			    --%>
 			    
+		 <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
 		
-		
-		<%-- <div align="left">
+		 <div align="left">
 				   	<%if(obj[26]!=null){ %> <span style="color: red">Remarks :</span> <%=obj[26] %> <%} %>
 				   		
-				  </div> --%>
+				  </div> 
 				 
-				  <!-- 
+				   
 				  <div class="col-md-5" align="left" style="margin-left:1rem;margin-top:2rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px;">
 					<tr>
@@ -699,23 +699,21 @@ width:75%;
 				</table>
 					
 			</div>
-			 -->
 			 
-				 
-				  
-		        <!--  <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 
+			 
+				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100" id="remarksarea" name="remarks" maxlength="500"></textarea>
 				  </div>
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCProcAbroadForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
 							 Verify	
 						</button>
 					
-				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="R" onclick="return validateTextBox();">
+				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCProcAbroadForward.htm" name="Action" value="R" onclick="return validateTextBox();">
 							 Return
 						</button>
-					 </div> -->
-					
+					 </div> 
+				<%} %>
 				
 				 <input type="hidden" name="ProcAbroadId" value="<%=obj[10]%>"> 						
 	

@@ -7,6 +7,7 @@ import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.Passport;
 
 public interface NocService {
 
@@ -14,7 +15,7 @@ public interface NocService {
 
 	public Object[] getEmpPassportData(String empId) throws Exception;
 
-	public long NocPassportAdd(NocPassportDto dto,String UserId) throws Exception;
+	public long NocPassportAdd(NocPassportDto dto,String UserId, Passport pport) throws Exception;
 	
 	public String GetCEOEmpNo() throws Exception;
 	public List<String> GetPandAAdminEmpNos() throws Exception;

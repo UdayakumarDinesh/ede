@@ -30,6 +30,7 @@ import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.noc.model.NocProceedingAbroadTrans;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.Passport;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -60,7 +61,7 @@ public class NocServiceImpl implements NocService {
 	}
 
 	@Override
-	public long NocPassportAdd(NocPassportDto dto,String UserId) throws Exception {
+	public long NocPassportAdd(NocPassportDto dto,String UserId,Passport pport) throws Exception {
 		
 		LocalDate today= LocalDate.now();
 		String year="";
@@ -80,6 +81,8 @@ public class NocServiceImpl implements NocService {
 				.build();
 		
           dao.NocPassportTransactionAdd(transaction);
+          
+          dao.AddPassport(pport);
         
 		NocPassport noc =NocPassport.builder()
 				.NocPassportNo(NocPassportNo)
@@ -386,7 +389,6 @@ public class NocServiceImpl implements NocService {
 						
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
-			
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 	
 		//Notification
@@ -842,15 +844,15 @@ public class NocServiceImpl implements NocService {
 			dao.EditNocpa(noc);
 		}
 		
-		NocPassportTrans transaction = NocPassportTrans.builder()	
-				                           .NocPassportId(noc.getNocProcId())
+		NocProceedingAbroadTrans transaction = NocProceedingAbroadTrans.builder()	
+				                           .NocProcAbroadTransId(noc.getNocProcId())
 				                           .NocStatusCode(noc.getNocStatusCode())
 				                           .ActionBy(empNo)
 				                           .Remarks(remarks)
 				                           .ActionDate(sdtf.format(new Date()))
 				                           .build();
 		
-		 dao.NocPassportTransactionAdd(transaction);
+		 dao.NocProcAbroadTransactionAdd(transaction);
 						
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
@@ -914,7 +916,7 @@ public class NocServiceImpl implements NocService {
 		e.printStackTrace();
 		return 0;
 	
-    }
+     }
 	}
 }
 

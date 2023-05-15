@@ -9,6 +9,7 @@ import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadTrans;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.Passport;
 
 public interface NocDao {
 	
@@ -80,6 +81,10 @@ public interface NocDao {
 	public Object[] getNocProcAbroadDetails(String procAbrId)throws Exception;
 
 	public Long EditNocpa(NocProceedingAbroad noc) throws Exception;
+
+	public long AddPassport(Passport pport)throws Exception;
+
+	
 	
 	
 }

@@ -109,7 +109,18 @@
 						 		 <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
-						 	<%} %> 
+						 	<%} else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("ProceedingAbroad")){ %> 
+						 	
+						 		<button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4] %>" formaction="ProcAbroadPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 		
+						 		 <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4]%>" formaction="ProcAbroadPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
+						 		
+						 	<%} %>	
+						 
 						 	<% if(obj[5].toString().equalsIgnoreCase("APR")){ %>
 						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Certificate">
 												<i style="color: #5C469C" class="fa fa-envelope"></i>

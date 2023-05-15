@@ -96,6 +96,17 @@
 			        <div class="row">
 			         
 			
+			  <div class="col-md-2">
+			                <label> Passport Type:</label>
+			                <select name="" class="form-control select2"  required="required">
+			                 
+			                    <option value="N">New</option>
+			                      <option value="R">Renewal</option>
+			                    
+			                </select>
+			             
+			     </div>
+			
 			
 			            <div class="col-md-3">
 			                <label>Name</label> 
@@ -143,20 +154,20 @@
 			            </div> 
 			            
 			              <div class="col-md-2">
-			                <label>Relation Name </label>
+			                <label>Relative Name </label>
 			                <input type="text" id="" name="RelationName"   value="<%if(passport!=null){ %><%=passport.getRelationName() %><%} %>"
 			                   class=" form-control input-sm "  required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
-			                <label>Relation Occupation </label>
+			                <label>Relative Occupation </label>
 			                <input type="text" id="" name="RelationOccupation"   value="<%if(passport!=null){ %><%=passport.getRelationOccupation()%><%} %>"
 			                    class="form-control input-sm "  required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
-			                <label>Relation Address </label>
+			                <label>Relative Address </label>
 			                <input type="text" id="" name="RelationAddress"  value="<%if(passport!=null){ %><%=passport.getRelationAddress()%><%} %>"  required="required"
 			                    class="form-control input-sm " >
 			             
@@ -171,7 +182,7 @@
 			            
 			
 			             <div class="col-md-6">
-			                <label> Details of blood /close relations working in foreign embassy / firms in India / Abroad 
+			                <label> Details of blood / close relations working in foreign embassy / firms in India / Abroad 
                               </label>
                              <div class="col-md-13" style="margin-left:1px;">  
 			                <input type="text" name="RelationAbroad"     value="<%if(passport!=null){ %><%=passport.getRelationAbroad()%><%} %>"
@@ -228,12 +239,59 @@
 			            </div>
 			       <%} else{ %>
 			       
-			    	  <a type="button"  class="btn btn-sm add-btn"  style="margin-bottom:28px;margin-top:28px;margin-left:28px" href="AddEditPassport.htm?empid=<%=Empid %>&NOC=noc">Add Passport</a> 
+			         <div class="col-md-2">
+			                <label>Passport Type:</label>
+                              <select  name="PassportType" class="form-control select2"  data-live-search="true">
+                              
+                                     		<option value="Official" >Official</option>
+					                        <option value="Diplomatic" >Diplomatic</option>
+					                        <option value="Ordinary" >Ordinary</option>				                         
+                              </select>
+			                   
+			            </div>
+			            
+			             <div class="col-md-2">
+                        
+                              <label>Status:</label>
+                              <select  name="Status" class="form-control select2"  data-live-search="true">
+                              
+                                     		<option value="Valid" >Valid</option>
+					                        <option value="Cancelled" >Cancelled</option>
+					                        <option value="Surrendered" >Surrendered</option>
+					                        <option value="Lab Custody" >Lab Custody</option>
+					                        <option value="HQ Custody" >HQ Custody</option>				                         
+                              </select>
+                       
+                       </div>
+			            
+			             <div class="col-md-2">
+	                    
+	                            <label>Passport No:</label>
+	                            <input id="passportno" type="text"  class="form-control input-sm "   name="PassportNo"  required="required" maxlength="6"   onblur="checknegative(this)">
+	                    
+                    </div>
+                    
+                    <div class="col-md-1">
+                      
+                             <label> Valid From  </label>
+	                       	  <input type="text" class="form-control input-sm pisfromdate" style="width: 110px;"value="" name="ValidFrom" id="pisfromdate" required="required"  /> 
+                      
+                     </div>    
+                     
+                      <div class="col-md-1" style="margin-left:20px;">
+	                       
+	                             <label>Valid To </label>
+	                       	     <input type="text" class="form-control input-sm pistodate"  style="width: 110px;" value="" name="ValidTo" id="pistodate" required="required"  />
+	                      
+                       </div>     
+			       
+			       
+			    	  <%--  <a type="button"  class="btn btn-sm add-btn"  style="margin-bottom:28px;margin-top:28px;margin-left:28px" href="AddEditPassport.htm?empid=<%=Empid %>&NOC=noc">Add Passport</a>  --%>
 			    	<%} %> 
 			       
-			        <div class="col-md-4">
-			                <label> Details of passport lost, if any </label>
-			                <input type="text" id="" name="LostPassport"   value="<%if(passport!=null){ %><%=passport.getLostPassport()%><%} %>" 
+			        <div class="col-md-3" style="margin-left:25px;">
+			                <label> Details of passport lost,if any</label>
+			                <input type="text" id="" name="LostPassport"    value="<%if(passport!=null){ %><%=passport.getLostPassport()%><%} %>" 
 			                    class=" form-control input-sm " >
 			             
 			            </div>
@@ -259,7 +317,7 @@
 			            
 			        <div class="col-md-2">
 			                <label>I certify that</label>
-			                <select name="ContractualObligation" class="form-control select2"  style="width:290%;" id="Certify"  required="required">
+			                <select name="ContractualObligation" class="form-control select2"  style="width:320%;" id="Certify"  required="required">
 			                 <!-- <option value="" selected="selected" disabled="disabled">Select</option>  -->
 			                    <option value="N" <%if(passport!=null){ if(passport.getContractualObligation().toString().equalsIgnoreCase("N")){%> selected  <% }}%>>I am not under contractual obligation to serve STARC for any specific period </option>
 			                    <option value="Y" <%if(passport!=null){ if(passport.getContractualObligation().toString().equalsIgnoreCase("Y")){%> selected  <% }}%>> I am under contractual obligation to serve STARC for a specific period</option>
@@ -270,25 +328,25 @@
 			            
 			            
 			            
-			             <div class="col-md-2"  style="margin-left:335px;" id="showfromdate">
+			             <div class="col-md-2"  style="margin-left:420px;" id="showfromdate">
 			                <label>From Date  <span class="mandatory"	style="color: red;">*</span></label>
-			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getFromDate()))%><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
+			               <!-- <div class=" input-group"> -->
+							    <input type="text"  style="width:110px;" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getFromDate()))%><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
+							    <!-- <label class="input-group-addon btn" for="testdate">
 							      
-							    </label>                    
-							</div>
+							    </label>  -->                   
+							<!-- </div> -->
 			                    
 			            </div>
 			           
-			            <div class="col-md-2" style="margin-left:1px;"  id="showtodate">
+			            <div class="col-md-2" style="margin-left:-25px;"  id="showtodate">
 			                <label>To Date <span class="mandatory"	style="color: red;">*</span></label>
-			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"   id="todate" name="todate"  required="required"  > 
-							    <label class="input-group-addon btn" for="testdate">
+			              <!--  <div class=" input-group"> -->
+							    <input type="text" style="width:110px;" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"   id="todate" name="todate"  required="required"  > 
+							    <!-- <label class="input-group-addon btn" for="testdate">
 							      
-							    </label>                    
-							</div>
+							    </label>  -->                   
+							<!-- </div> -->
 			            </div>
 			            
 			           </div>
@@ -366,6 +424,24 @@ $('#todate').daterangepicker({
 	}
 });
 
+$("#fromdate").change( function(){
+	var validdate = $("#fromdate").val();
+	
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" : validdate,
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});	
+	
+});	
+
+
 window.onload = function() {
 	
 	   
@@ -401,8 +477,58 @@ window.onload = function() {
 	
 	
 	
+	$('#pisfromdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		//"minDate" :new Date(), 
+		<%if(passport!=null && passport.getFromDate()!=null){ %>
+		"startDate" : new Date("<%=passport.getFromDate()%>"),
+		<%}%>
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+
+
+	$('#pistodate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" :$('#pisfromdate').val(),    
+		<%if(passport!=null && passport.getToDate()!=null){ %>
+		"startDate" : new Date("<%=passport.getToDate()%>"),
+		<%}%>
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});	
+	
+		
+	
 		    
 		    
+</script>
+
+<script>
+
+function checknegative(str) {
+    if (parseFloat(document.getElementById(str.id).value) < 0) {
+        document.getElementById(str.id).value = "";
+        document.getElementById(str.id).focus();
+        alert('Negative Values Not allowed');
+        return false;
+    }
+}
+
+
+
+
+
 </script>
 
 </body>

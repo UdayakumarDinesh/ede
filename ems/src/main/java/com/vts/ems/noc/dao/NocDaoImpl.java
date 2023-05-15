@@ -23,6 +23,7 @@ import com.vts.ems.noc.model.NocProceedingAbroadTrans;
 import com.vts.ems.pi.model.PisHometown;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
+import com.vts.ems.pis.model.Passport;
 @Transactional
 @Repository
 public class NocDaoImpl implements NocDao {
@@ -604,6 +605,22 @@ public class NocDaoImpl implements NocDao {
 		}
 		return noc.getNocProcId();
 	}
+
+	@Override
+	public long AddPassport(Passport pport) throws Exception {
+		
+		try {
+			manager.persist(pport);
+			manager.flush();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO AddPassport "+e);
+			e.printStackTrace();
+		}
+		return pport.getPassportId();
+	}
+
+	
 }
 	
 

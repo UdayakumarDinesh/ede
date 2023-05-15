@@ -49,6 +49,7 @@ import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.noc.service.NocService;
+import com.vts.ems.pis.model.Passport;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
@@ -204,6 +205,18 @@ public class NocController {
 			logger.info(new Date()+"Inside PassportAddSubmit.htm "+UserId);
 			try {
 				
+				
+				Passport pport= new Passport();
+				pport.setEmpId(EmpId);
+				pport.setPassportType(req.getParameter("PassportType"));
+				pport.setStatus(req.getParameter("Status"));
+				pport.setPassportNo(req.getParameter("PassportNo"));
+				pport.setValidFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("ValidFrom")));
+				pport.setValidTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("ValidTo")));
+				pport.setCreatedBy(UserId);
+				pport.setCreatedDate(sdf.format(new Date()));
+				
+				
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .EmpNo(EmpNo)
 						 .RelationType(req.getParameter("RelationType"))
@@ -219,7 +232,7 @@ public class NocController {
 					     .ToDate(sdf.format(rdf.parse(req.getParameter("todate"))))
 				         .build();
 				
-				long save=service.NocPassportAdd(dto,UserId);
+				long save=service.NocPassportAdd(dto,UserId,pport);
 				  
 				  if (save > 0) {
 		  				

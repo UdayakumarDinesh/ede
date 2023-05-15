@@ -116,7 +116,7 @@ width:75%;
 
    <div class="page card dashboard-card"> 
 		<div class="card-body"  >
-			<div class="card" style="padding-top:0px;margin-top: -15px;">
+			<div class="card" style="padding-top:0px;margin-top: -15px;width:75%;margin-left:160px;">
 				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="left">
 				<form action="##"  >
 				<div class="" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
@@ -306,7 +306,7 @@ width:75%;
 	
 	
 	<br>
-	 <div align="left" style="margin-left:10px;font-weight:400;" > Dept.Incharge : <span class="text-blue"  ><%=obj[23] %></span></div>	
+	<%--  <div align="left" style="margin-left:10px;font-weight:400;" > Dept.Incharge : <span class="text-blue"  ><%=obj[23] %></span></div>	 --%>
 	  	<% if(obj[24]!=null && toUserStatus.contains(obj[24].toString())) { %>
 	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>

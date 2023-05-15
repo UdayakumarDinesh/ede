@@ -289,7 +289,7 @@
 			           </table>			             
 			       </div>
 
-
+<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Permanent and Residential Address must be approved before applying NOC for Passport *</b> </marquee></div>
 		</div>
 
 	</div>
