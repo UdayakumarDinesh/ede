@@ -29,6 +29,7 @@ import com.vts.ems.Tour.model.TourOnwardReturn;
 import com.vts.ems.Tour.service.TourService;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
@@ -39,12 +40,15 @@ public class TourController {
 
 	@Autowired
 	private TourService service;
+	@Autowired
+	private PisService pisserv;
 	
 	@RequestMapping(value = "TourProgram.htm", method = RequestMethod.GET)
 	public String TourDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside TourProgram.htm "+Username);		
 		try {
+			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 				ses.setAttribute("formmoduleid", "14");
 				ses.setAttribute("SidebarActive","TourProgram_htm");
 			return "tour/TourDashboard";
@@ -68,6 +72,7 @@ public class TourController {
 			req.setAttribute("ModeOfTravelList", modeoftravel);
 			req.setAttribute("CityList", citylist);
 			req.setAttribute("emplist", emplist);
+		    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			ses.setAttribute("SidebarActive","TourApply_htm");
 			return "tour/TourApply";
 		} catch (Exception e) {
@@ -261,6 +266,7 @@ public class TourController {
 				List<Object[]> emplist=service.GetEmployeeList(); 
 				req.setAttribute("emplist", emplist);
 				req.setAttribute("applylist", applylist);
+			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 				ses.setAttribute("SidebarActive","TourApplyList_htm");
 				return "tour/TourApplyList";
 			}
@@ -298,6 +304,7 @@ public class TourController {
 			req.setAttribute("empno", empno);		
 			req.setAttribute("emplist", emplist);
 			req.setAttribute("applyStatuslist", applystatuslist);
+		    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			ses.setAttribute("SidebarActive","TourApplyStatus_htm");
 
 		} catch (Exception e) {
@@ -361,6 +368,7 @@ public class TourController {
 			List<Object[]> Canceledlist = service.GetTourCancelList(empno);
 			req.setAttribute("approvallist", approvallist);
 			req.setAttribute("canceledlist", Canceledlist);
+			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			ses.setAttribute("SidebarActive","TourApprovallist_htm");
 			return "tour/TourApprovalList";
 		}catch (Exception e){
@@ -403,6 +411,7 @@ public class TourController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside Tour-Status-details.htm "+Username);
 		try {
+			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			String chssapplyid = req.getParameter("tourapplyid");
 			req.setAttribute("TourStatisDetails", service.TourStatusDetails(chssapplyid));
 			
@@ -437,8 +446,6 @@ public class TourController {
 		String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside TourCancel.htm "+UserId);
 		try {
-			ses.setAttribute("SidebarActive","TourCancel_htm");
-
 			String action= req.getParameter("Action");
 			String act="";
 			
@@ -483,6 +490,7 @@ public class TourController {
 					req.setAttribute("empno", empno);		
 					req.setAttribute("emplist", emplist);
 					req.setAttribute("cancelStatuslist", applystatuslist);
+					req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 					ses.setAttribute("SidebarActive","TourCancel_htm");
 
 				return "tour/TourCancelStatus";

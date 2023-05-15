@@ -29,12 +29,13 @@ List<Object[]> ModeOfTravelList=(List<Object[]>)request.getAttribute("ModeOfTrav
 List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 TourApply apply =(TourApply)request.getAttribute("TourApply");
 List<TourOnwardReturn> tourdetails = (List<TourOnwardReturn>)request.getAttribute("Touronwarddetails");
+Object[] empdata      = (Object[])request.getAttribute("Empdata");
 
 %>
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Edit Tour Program </h5>
+				<h5>Edit Tour Program <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">

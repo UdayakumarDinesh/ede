@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Tour Status</title>
+<title>Intimation Status</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 
 <style type="text/css">
@@ -145,25 +145,10 @@
 </head>
 <body>
 <%
-List<Object[]> statuslist = (List<Object[]>)request.getAttribute("TourStatisDetails");
-Object[] empdata = (Object[])request.getAttribute("Empdata");
-
+	List<Object[]> statuslist = (List<Object[]>)request.getAttribute("TransactionList");
 %>
 
-	<div class="card-header page-top">
-		<div class="row">
-			<div class="col-md-6">
-				<h5>Tour Status    <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
-			</div>
-				<div class="col-md-6">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="TourApplyStatus.htm">Tour</a></li>
-						<li class="breadcrumb-item active " aria-current="page">Tour Status</li>
-					</ol>
-				</div>
-			</div>
-	</div>	
+	
 
 	 <div class="page card dashboard-card">
 	
@@ -171,27 +156,28 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 	      <section id="timeline">
 	      
 	       <% int count=1;
-			 for(Object[] object:statuslist){
-			 SimpleDateFormat month=new SimpleDateFormat("MMM");
+	       	 SimpleDateFormat month=new SimpleDateFormat("MMM");
 			 SimpleDateFormat day=new SimpleDateFormat("dd");
 			 SimpleDateFormat year=new SimpleDateFormat("yyyy");
 			 SimpleDateFormat time=new SimpleDateFormat("HH:mm");
+			 for(Object[] object:statuslist){
+			 
 			 %>
 	      
 			<article>
 				<div class="inner">
 					<span class="date">
-						<span class="day"><%=day.format(object[5]) %></span>
-						<span class="month"><%=month.format(object[5]) %></span>
-						<span class="year"><%=year.format(object[5]) %></span>
+						<span class="day"><%=day.format(object[4]) %></span>
+						<span class="month"><%=month.format(object[4]) %></span>
+						<span class="year"><%=year.format(object[4]) %></span>
 					</span>
-					<h2 style="background-color: <%=object[8]%>;--my-color-var: <%=object[8]%>;" ><%=object[7] %> at <%=time.format(object[5]) %></h2> 
+					<h2 style="background-color: <%=object[7]%>;--my-color-var: <%=object[7]%>;" ><%=object[6] %> at <%=time.format(object[4]) %></h2> 
 					<p style="background-color:  #f0f2f5;">
 						<span class="remarks_title">Action By : </span>
 						<%=object[2] %>, <%=object[3] %><br>
-						<%if(object[6]!= null) { %>
+						<%if(object[5]!= null) { %>
 							<span class="remarks_title">Remarks : </span>
-							<%=object[6] %>
+							<%=object[5] %>
 						<%}else{ %> 
 							<span class="remarks_title">No Remarks </span> 
 						<%} %>
