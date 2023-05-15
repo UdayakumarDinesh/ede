@@ -26,8 +26,9 @@
 <body>
 <%	
 	
-	List<Object[]> ApprovalList=(List<Object[]>)request.getAttribute("ApprovalList");
-	List<Object[]> DGMAllBanks=(List<Object[]>)request.getAttribute("DGMAllBanks");
+	List<Object[]> ApprovalList=(List<Object[]>) request.getAttribute("ApprovalList");
+	List<Object[]> DGMAllBanks=(List<Object[]>) request.getAttribute("DGMAllBanks");
+	Object[] empNameAndDesi=(Object[]) request.getAttribute("empNameAndDesi");
 
 %>
 
@@ -35,17 +36,18 @@
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Bank Details</h5>
+				<h5>Bank Details <small><b>&nbsp; - &nbsp;<%if(empNameAndDesi !=null) %> <%=empNameAndDesi[0] %> (<%=empNameAndDesi[1] %>)</b></small></h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item "><a href="BankDetailapproval.htm">
+					<li class="breadcrumb-item "><a href="BankDetails.htm">
+							Bank Details </a></li>		
+					<li class="breadcrumb-item active " aria-current="page">
 							Bank Details Approval </a></li>
-					<!-- <li class="breadcrumb-item active " aria-current="page">Telephone
-						List</li> -->
+					
 				</ol>
 			</div>
 		</div>
@@ -68,11 +70,7 @@
     </div>
 	<%} %>
 
-  		<div class="card" >
-	        <div class="card-header">
-	   
-                </div>
-            </div>  
+  		
             
    	<div class="card-body main-card">
    		
@@ -122,8 +120,6 @@
   
 <script>
 
-
-	   
 
 </script>
 

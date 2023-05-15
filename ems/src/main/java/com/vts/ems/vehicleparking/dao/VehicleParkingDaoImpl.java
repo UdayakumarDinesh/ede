@@ -78,7 +78,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 		return list;
 	}
-	
+
 	public static final String FINDVEHICLEPARKLISTBYEMPNO="SELECT a.appId, a.EmpNo, em.EmpName  , a.VehicleNo, a.FromDateAndTime, a.ToDateAndTime, a.ApplicStatus, a.ApplicStatusCode, a.Remarks, b.VehStatus  FROM vehicle_park_appli a, employee em, veh_park_approval_status b\r\n"
 			+ "WHERE a.EmpNo=em.EmpNo AND a.ApplicStatusCode=b.VehStatusCode AND a.EmpNo=:empNo ORDER BY a.appId DESC";
 
@@ -113,7 +113,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 		return list;
 	}
-	
+
 	@Override
 	public long editVehiclePark(VehicleParkingApplications vehicleParkingApplication) throws Exception {
 
@@ -129,7 +129,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 
 	}
-	
+
 	@Override
 	public VehicleParkingApplications findVehicleById(long appId) throws Exception {
 		VehicleParkingApplications vehicleParkingApplications=null;
@@ -139,11 +139,11 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		catch(Exception e) {
 			logger.error(new Date() +"Inside DAO findVehicleById "+  e);
 			e.printStackTrace();
-			
+
 		}
 		return vehicleParkingApplications;
 	}
-	
+
 	public static final String GETSECURITYVEHICLEPARKLIST="SELECT a.appId, a.EmpNo, em.EmpName  , a.VehicleNo, a.FromDateAndTime, a.ToDateAndTime, a.ApplicStatus, a.ApplicStatusCode, a.Remarks FROM vehicle_park_appli a, employee em, login b WHERE a.EmpNo=em.EmpNo AND a.ApplicStatusCode='FWD' AND b.UserName=:userName AND b.LoginType='S' ORDER BY a.appId DESC";
 
 	@Override
@@ -160,7 +160,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 		return list;
 	}
-	
+
 	private static final String FINDEMPBYEMPNO  ="FROM Employee WHERE EmpNo=:EmpNo";
 	@Override
 	public Employee findEmpByEmpNo(String empNo) throws Exception{
@@ -177,7 +177,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}		
 		return employee;
 	}
-	
+
 	private static final String SECURITYOFFICERS="SELECT em.EmpNo FROM login a, employee em  WHERE a.EmpId = em.EmpId AND LoginType='S'";
 	@Override
 	public List<String> securityOfficers() throws Exception
@@ -194,7 +194,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 			return null;
 		}
 	}
-	
+
 	public long addNotification(EMSNotification notification) throws Exception{
 		try {
 			manager.persist(notification);
@@ -208,7 +208,7 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 		return 0;
 	}
-	
+
 	public long addVehicleParkingTransa(VehicleParkingTransa VehicleParkingTransa) throws Exception{
 		try {
 			manager.persist(VehicleParkingTransa);
@@ -222,4 +222,57 @@ public class VehicleParkingDaoImpl implements VehicleParkingDao{
 		}
 		return 0;
 	}
+
+	public static final String GETEMPNAMEANDDESI="SELECT em.EmpName, des.Designation FROM employee em, employee_desig des WHERE em.DesigId=des.DesigId AND em.EmpNo=:empNo";
+
+	@Override
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception {
+		Object[] list=null;
+		try {
+			Query query=manager.createNativeQuery(GETEMPNAMEANDDESI);
+			query.setParameter("empNo", empNo);
+			list= (Object[]) query.getSingleResult();
+		}
+		catch(Exception e) {
+			logger.error(new Date() +"Inside DAO getEmpNameAndDesi "+  e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public static final String GETSECVEHICLEPARKAPPRDLIST="SELECT a.appId, a.EmpNo, em.EmpName  , a.VehicleNo, a.FromDateAndTime, a.ToDateAndTime, a.ApplicStatus, a.ApplicStatusCode, a.Remarks FROM vehicle_park_appli a, employee em, login b WHERE a.EmpNo=em.EmpNo AND a.ApplicStatusCode='APR' AND b.UserName=:userName AND b.LoginType='S' ORDER BY a.appId DESC";
+
+	@Override
+	public List<Object[]> getSecVehicleParkApprdList(String userName) throws Exception  {
+		List<Object[]> list=null;
+		try {
+			Query query=manager.createNativeQuery(GETSECVEHICLEPARKAPPRDLIST);
+			query.setParameter("userName", userName);
+			list= query.getResultList();
+		}
+		catch(Exception e) {
+			logger.error(new Date() +"Inside DAO getSecVehicleParkApprdList "+  e);
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+	private static final String VEHTRANSABYID="SELECT tra.VehParkkTransId,emp.empno,emp.empname,des.designation,tra.ActionDate,tra.Remarks,sta.VehStatus,sta.VehStatusColor  \r\n"
+			+ "FROM veh_park_transa tra, veh_park_approval_status sta,employee emp,employee_desig des,vehicle_park_appli veh\r\n"
+			+ "WHERE veh.appId = tra.Veh_Park_App_id_appId AND tra.ApplicStatusCode = sta.VehStatusCode AND tra.ActionBy=emp.empno AND emp.desigid=des.desigid AND veh.appId =:vehAppId ORDER BY actiondate";
+	@Override
+	public List<Object[]> vehTransaById(long vehAppId) throws Exception
+	{
+		List<Object[]> bankDetailList=new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(VEHTRANSABYID);
+			query.setParameter("vehAppId", vehAppId);
+			bankDetailList= query.getResultList();
+		}catch(Exception e) {
+			logger.error(new Date() +"Inside DAO vehTransaById "+e);
+			e.printStackTrace();
+		}
+		return bankDetailList;
+	}
+
 }

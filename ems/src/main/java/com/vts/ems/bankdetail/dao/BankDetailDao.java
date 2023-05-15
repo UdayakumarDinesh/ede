@@ -27,5 +27,7 @@ public interface BankDetailDao {
 	public String GetDGMEmpNo(String empno) throws Exception;
 	public long addNotification(EMSNotification notification) throws Exception;
 	public Employee findEmpByEmpNo(String empNo) throws Exception;
+	public List<Object[]> allActiveBank() throws Exception;
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception;
 	
 }

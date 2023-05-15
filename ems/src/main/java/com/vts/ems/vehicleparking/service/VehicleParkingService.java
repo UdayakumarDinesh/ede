@@ -14,6 +14,9 @@ public interface VehicleParkingService {
 	public long editVehiclePark(VehicleParkingApplications vehicleParkingApplication) throws Exception;
 	public VehicleParkingApplications findVehicleById(long appId) throws Exception;
 	public List<Object[]> getSecurityVehicleParkList(String userName) throws Exception ;
+	public List<Object[]> getSecVehicleParkApprdList(String userName) throws Exception ;
 	public long forwardVehicle(long vehicleAppId, String empNo, String remarks, String userName, String Action) throws Exception;
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception;
+	public List<Object[]> vehTransaById(long vehAppId) throws Exception;
 	
 }

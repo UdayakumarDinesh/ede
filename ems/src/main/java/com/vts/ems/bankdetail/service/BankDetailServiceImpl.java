@@ -79,8 +79,8 @@ public class BankDetailServiceImpl implements BankDetailService{
 			bankDetChangeTransa.setActionBy(empNo);
 			bankDetChangeTransa.setRemarks(remarks);
 			bankDetChangeTransa.setActionDate(sdtf.format(new Date()));
-			bankDetChangeTransa.setBank_detail_id(bankDertails);
-
+			bankDetChangeTransa.setBankDetailId(bankDertails.getBankDetailId());
+			
 			
 
 			dao.editBankdetail(bankDertails);
@@ -97,7 +97,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			notification.setCreatedDate(sdtf.format(new Date()));
 			dao.addNotification(notification);
 			
-			return bankDertails.getBankId();
+			return bankDertails.getBankDetailId();
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside updateForword "+ e);
 			e.printStackTrace();
@@ -133,7 +133,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 		
 		BankDetChangeTransa bankDetChangeTransa=new BankDetChangeTransa();
 		bankDetChangeTransa.setActionBy(EmpNo);
-		bankDetChangeTransa.setBank_detail_id(bankDertails);
+		bankDetChangeTransa.setBankDetailId(bankDertails.getBankDetailId());
 		bankDetChangeTransa.setBankStatusCode("VDG");
 		bankDetChangeTransa.setActionDate(sdtf.format(new Date()));
 		bankDetChangeTransa.setRemarks(remarks);
@@ -150,7 +150,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 		notification.setCreatedDate(sdtf.format(new Date()));
 		dao.addNotification(notification);
 		
-		return bankDertails.getBankId();
+		return bankDertails.getBankDetailId();
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside DGMAccept "+ e);
 			e.printStackTrace();
@@ -169,7 +169,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			
 			BankDetChangeTransa bankDetChangeTransa=new BankDetChangeTransa();
 			bankDetChangeTransa.setActionBy(EmpNo);
-			bankDetChangeTransa.setBank_detail_id(bankDertails);
+			bankDetChangeTransa.setBankDetailId(bankDertails.getBankDetailId());
 			bankDetChangeTransa.setBankStatusCode("RDG");
 			bankDetChangeTransa.setActionDate(sdtf.format(new Date()));
 			bankDetChangeTransa.setRemarks(remarks);
@@ -186,7 +186,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			notification.setCreatedDate(sdtf.format(new Date()));
 			dao.addNotification(notification);
 			
-			return bankDertails.getBankId();
+			return bankDertails.getBankDetailId();
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside DGMReject "+ e);
 				e.printStackTrace();
@@ -225,7 +225,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 
 			BankDetChangeTransa bankDetChangeTransa=new BankDetChangeTransa();
 			bankDetChangeTransa.setActionBy(EmpNo);
-			bankDetChangeTransa.setBank_detail_id(bankDertails);
+			bankDetChangeTransa.setBankDetailId(bankDertails.getBankDetailId());
 			bankDetChangeTransa.setBankStatusCode("VPA");
 			bankDetChangeTransa.setActionDate(sdtf.format(new Date()));
 			bankDetChangeTransa.setRemarks(remarks);
@@ -242,7 +242,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			notification.setCreatedDate(sdtf.format(new Date()));
 			dao.addNotification(notification);
 			
-			return bankDertails.getBankId();
+			return bankDertails.getBankDetailId();
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside PAndAAccept "+ e);
 			e.printStackTrace();
@@ -261,7 +261,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 
 			BankDetChangeTransa bankDetChangeTransa=new BankDetChangeTransa();
 			bankDetChangeTransa.setActionBy(EmpNo);
-			bankDetChangeTransa.setBank_detail_id(bankDertails);
+			bankDetChangeTransa.setBankDetailId(bankDertails.getBankDetailId());
 			bankDetChangeTransa.setBankStatusCode("RPA");
 			bankDetChangeTransa.setActionDate(sdtf.format(new Date()));
 			bankDetChangeTransa.setRemarks(remarks);
@@ -278,7 +278,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			notification.setCreatedDate(sdtf.format(new Date()));
 			dao.addNotification(notification);
 			
-			return bankDertails.getBankId();
+			return bankDertails.getBankDetailId();
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside PAndAAccept "+ e);
 			e.printStackTrace();
@@ -296,7 +296,17 @@ public class BankDetailServiceImpl implements BankDetailService{
 		return dao.GetDGMEmpNo(empno);
 	}
 	
+	@Override
 	public Employee findEmpByEmpNo(String empNo) throws Exception{
 		return dao.findEmpByEmpNo(empNo);
+	}
+	
+	@Override
+	public List<Object[]> allActiveBank() throws Exception{
+		return dao.allActiveBank();
+	}
+	
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception{
+		return dao.getEmpNameAndDesi(empNo);
 	}
 }

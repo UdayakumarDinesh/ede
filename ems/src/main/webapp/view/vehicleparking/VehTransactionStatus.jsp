@@ -148,14 +148,15 @@
 	List<Object[]> statuslist = (List<Object[]>)request.getAttribute("TransactionList");
 %>
 
-	
+
 
 	 <div class="page card dashboard-card">
-	
+
 
 	      <section id="timeline">
 	      
 	       <% int count=1;
+	       
 	       	 SimpleDateFormat month=new SimpleDateFormat("MMM");
 			 SimpleDateFormat day=new SimpleDateFormat("dd");
 			 SimpleDateFormat year=new SimpleDateFormat("yyyy");

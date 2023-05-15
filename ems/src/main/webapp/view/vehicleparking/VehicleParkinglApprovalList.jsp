@@ -33,7 +33,10 @@
 
 	<%
 	List<Object[]> VehicleParkList = (List<Object[]>) request.getAttribute("VehicleParkList");
+	Object[] empNameAndDesi = (Object[]) request.getAttribute("empNameAndDesi");
 	
+	
+	String Pending = (String)request.getAttribute("Pending");
 	String fromdate = (String)request.getAttribute("fromdate");
 	String todate   = (String)request.getAttribute("todate");
 	
@@ -47,16 +50,27 @@
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Vehicle Parking</h5>
+			<div class="col-md-5">
+				<h5>
+					Vehicle Parking <small><b>&nbsp; - &nbsp;<%if(empNameAndDesi!=null){%><%=empNameAndDesi[0]%>
+							(<%=empNameAndDesi[1]%>)<%}%>
+					</b></small>
+				</h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item "><a href="VehicleParkinglApproval.htm">
-							Vehicle Parking Approval</a></li>
+					<li class="breadcrumb-item " ><a href="VehicleParking.htm">	
+							Vehicle Parking </a></li>	
+					<%if(Pending !=null && Pending.equalsIgnoreCase("Pending")) {%>		
+					<li class="breadcrumb-item active " aria-current="page" ><a
+						href="VehicleParkinglApproval.htm"> Parking Pending List</a></li>
+					<%} else { %>
+					<li class="breadcrumb-item active " aria-current="page" ><a
+						href="VehicleParkinglApproval.htm"> Parking Approved List</a></li>
+					<%} %>		
 				</ol>
 			</div>
 		</div>
@@ -83,9 +97,11 @@
 			}
 			%>
 		</div>
-		<%-- <div class="card">
+
+		<%if(fromdate !=null && todate !=null) {%>
+		<div class="card">
 			<div class="card-header" style="height: 4rem">
-				<form action="VehicleParkinglApproval.htm">
+				<form action=VehicleParkinglApproved.htm>
 					<div class="row justify-content-end">
 
 						<div class="col-2" align="right">
@@ -119,7 +135,8 @@
 					</div>
 				</form>
 			</div>
-		</div> --%>
+		</div>
+		<%} %>
 
 		<div class="card">
 			<div class="card-body">
@@ -149,7 +166,9 @@
 									int SN=0;
 									for (Object ls[] : VehicleParkList) {
 								%>
-								<%-- <%if(format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).after(format.parse(fromdate)) && format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).before(format.parse(todate))) { %> --%>
+								<%if(fromdate !=null && todate !=null) {%>
+								<%if(format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).after(format.parse(fromdate)) && format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).before(format.parse(todate))) { %>
+
 								<tr>
 									<td style="text-align: center;"><%=++SN%></td>
 									<td><%=ls[1]%></td>
@@ -168,15 +187,44 @@
 											<i class="fa-solid fa-eye"></i>
 										</button></td>
 								</tr>
+
 								<%
 								}
-									/* } */
+								
+									}
+								else{ %>
+									<tr>
+									<td style="text-align: center;"><%=++SN%></td>
+									<td><%=ls[1]%></td>
+									<td><%=ls[2]%></td>
+									<td><%=ls[3]%></td>
+									<td style="text-align: center;"><%=DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())%></td>
+									<td style="text-align: center;"><%=time.format(ls[4])%></td>
+									<td style="text-align: center;"><%=DateTimeFormatUtil.getDateTimeToRegularDate(ls[5].toString())%></td>
+									<td style="text-align: center;"><%=time.format(ls[5])%></td>
+									<td style="text-align: center;"><button type="submit"
+											class="btn btn-sm" formaction="GetVehicleParkingForm.htm"
+											name="vehicleAppId" value="<%=ls[0]%>"
+											formnovalidate="formnovalidate" data-toggle="tooltip"
+											data-placement="top" title="Vehicle Parking Application"
+											style="font-weight: 600;">
+											<i class="fa-solid fa-eye"></i>
+										</button></td>
+								</tr>
+								<% 
+								}
+									}
 								}
 								%>
 							</tbody>
 						</table>
 					</div>
 					<input type="hidden" name="isApproval" value="Y">
+					<%if(fromdate != null ) {%>
+					<input type="hidden" name="TypeOfAction" value="">
+					<%} else { %>
+					<input type="hidden" name="TypeOfAction" value="Pending">
+					<%} %>
 				</form>
 			</div>
 		</div>

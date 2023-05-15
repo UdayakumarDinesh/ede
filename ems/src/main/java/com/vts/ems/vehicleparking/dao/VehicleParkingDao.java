@@ -17,9 +17,12 @@ public interface VehicleParkingDao {
 	public long editVehiclePark(VehicleParkingApplications vehicleParkingApplication) throws Exception ;
 	public VehicleParkingApplications findVehicleById(long appId) throws Exception ;
 	public List<Object[]> getSecurityVehicleParkList(String userName) throws Exception ;
+	public List<Object[]> getSecVehicleParkApprdList(String userName) throws Exception ;
 	public Employee findEmpByEmpNo(String empNo) throws Exception ;
 	public List<String> securityOfficers() throws Exception;
 	public long addNotification(EMSNotification notification) throws Exception;
 	public long addVehicleParkingTransa(VehicleParkingTransa VehicleParkingTransa) throws Exception;
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception;
+	public List<Object[]> vehTransaById(long vehAppId) throws Exception;
 	
 }

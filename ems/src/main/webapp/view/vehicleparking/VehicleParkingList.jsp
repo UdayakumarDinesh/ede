@@ -33,6 +33,7 @@
 
 	<%
 	List<Object[]> VehicleParkList = (List<Object[]>) request.getAttribute("VehicleParkList");
+	Object[] empNameAndDesi = (Object[]) request.getAttribute("empNameAndDesi");
 
 	String fromdate = (String) request.getAttribute("fromdate");
 	String todate = (String) request.getAttribute("todate");
@@ -44,19 +45,19 @@
 	DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 	%>
 
-
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Vehicle Parking</h5>
+			<div class="col-md-5">
+				<h5>Vehicle Parking <small><b>&nbsp; - &nbsp;<%if(empNameAndDesi!=null){%> <%=empNameAndDesi[0]%> (<%=empNameAndDesi[1]%>)<%}%>
+						</b></small> </h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item "><a href="VehicleParking.htm">
-							Vehicle Parking </a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+							Vehicle Parking </li>
 				</ol>
 			</div>
 		</div>
@@ -83,46 +84,7 @@
 			}
 			%>
 		</div>
-	<%-- 	<div class="card">
-			<div class="card-header" style="height: 4rem">
-				<form action="VehicleParking.htm">
-					<div class="row justify-content-end">
 
-						<div class="col-2" align="right">
-							<h6>From Date :</h6>
-						</div>
-						<div class="col-1">
-							<input type="text" style="width: 145%;"
-								class="form-control input-sm mydate"
-								onchange="this.form.submit()" readonly="readonly"
-								<%if (fromdate != null) {%> value="<%=fromdate%>" <%}%>
-								id="fromdate" name="fromdate" required="required"> <label
-								class="input-group-addon btn" for="testdate"></label>
-						</div>
-
-						<div class="col-2" align="right">
-							<h6>To Date :</h6>
-						</div>
-
-						<div class="col-1">
-							<input type="text" style="width: 145%;"
-								class="form-control input-sm mydate"
-								onchange="this.form.submit()" readonly="readonly"
-								<%if (todate != null) {%> value="<%=todate%>" <%}%> id="todate"
-								name="todate" required="required"> <label
-								class="input-group-addon btn" for="testdate"></label>
-						</div>
-
-						<div class="col-3" align="right"></div>
-
-
-					</div>
-
-				</form>
-
-
-			</div>
-		</div> --%>
 
 		<div class="card">
 			<div class="card-body">
@@ -181,8 +143,8 @@
  if (ls[6] != null && ls[6].toString().equalsIgnoreCase("A")) {
  %>
 										<button type="submit" class="btn btn-sm btn-link w-100"
-											formaction="BankDetTransacStatus.htm" value="<%=ls[0]%>"
-											name="bankId" data-toggle="tooltip" data-placement="top"
+											formaction="VehTransacStatus.htm" value="<%=ls[0]%>"
+											name="vehicleAppId" data-toggle="tooltip" data-placement="top"
 											title="Transaction History" formnovalidate="formnovalidate"
 											style="color: green; font-weight: 600;" formtarget="_blank">
 											&nbsp; Approved <i
@@ -192,8 +154,8 @@
  } else {
  %>
 										<button type="submit" class="btn btn-sm btn-link w-100"
-											formaction="BankDetTransacStatus.htm" value="<%=ls[0]%>"
-											name="bankId" data-toggle="tooltip" data-placement="top"
+											formaction="VehTransacStatus.htm" value="<%=ls[0]%>"
+											name="vehicleAppId" data-toggle="tooltip" data-placement="top"
 											title="Transaction History" formnovalidate="formnovalidate"
 											style=" color: <%=ls[0]%>; font-weight: 600;"
 											formtarget="_blank">
@@ -247,6 +209,7 @@
 							%>
 						</div>
 					</div>
+					<input type="hidden" name="TypeOfAction" value="All">
 				</form>
 			</div>
 		</div>

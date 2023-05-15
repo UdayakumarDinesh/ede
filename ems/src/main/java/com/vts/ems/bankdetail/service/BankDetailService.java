@@ -25,4 +25,7 @@ public interface BankDetailService {
 	public List<Object[]> bankTransaById(long bankId) throws Exception;
 	public String GetDGMEmpNo(String empno) throws Exception;
 	public Employee findEmpByEmpNo(String empNo) throws Exception;
+	public List<Object[]> allActiveBank() throws Exception;
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception;
+	
 }

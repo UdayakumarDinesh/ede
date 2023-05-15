@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long BankTransactionId;
-		@OneToOne
-		private BankDertails Bank_detail_id;
+
+		private long BankDetailId;
 		private String BankStatusCode;
 		private String Remarks;
 		private String ActionBy;

@@ -44,22 +44,43 @@ input:focus {
 	String LabLogo = (String) request.getAttribute("LabLogo");
 
 	Object[] oneVehicle = (Object[]) request.getAttribute("oneVehicle");
+	String TypeOfAction  = (String) request.getAttribute("TypeOfAction");
 	String isApproval = (String) request.getAttribute("isApproval");
 	
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 	%>
+	<%=TypeOfAction %><%=isApproval %>
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Vehicle Parking</h5>
 			</div>
-			<div class="col-md-9 ">
+			
+			<div class="col-md-9">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 					<li class="breadcrumb-item "><a href="VehicleParking.htm">
-							Vehicle Parking Application </a></li>
+							Vehicle Parking Application</a></li>	
+					<%if(TypeOfAction !=null &&  TypeOfAction.equalsIgnoreCase("Pending")) {%>
+					<li class="breadcrumb-item"> <a href="VehicleParkinglApproval.htm">
+							Parking Pending List </a></li>	
+					<li class="breadcrumb-item active " aria-current="page">
+							Application Form </a></li>			
+						
+					<%} else if (TypeOfAction !=null && TypeOfAction.equalsIgnoreCase("All")){ %>
+					
+					<li class="breadcrumb-item active " aria-current="page">
+							Application Form </a></li>	
+					<%}else{ %>	
+					<li class="breadcrumb-item "> <a href="VehicleParkinglApproved.htm">
+							Parking Approved List </a></li>		
+					<li class="breadcrumb-item active " aria-current="page">
+							Application Form </a></li>				
+					<%}%>				
+				
+					
 				</ol>
 			</div>
 		</div>

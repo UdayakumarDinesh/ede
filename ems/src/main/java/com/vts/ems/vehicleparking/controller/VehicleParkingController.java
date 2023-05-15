@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -67,6 +68,7 @@ public class VehicleParkingController {
 			//				req.setAttribute("fromdate", DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat());
 			//				req.setAttribute("todate",DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now()));	
 			//			}
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
 
 			req.setAttribute("VehicleParkList", service.findVehicleParkListByEmpNO(EmpNo));
 		}
@@ -86,10 +88,11 @@ public class VehicleParkingController {
 		try {
 
 			String vehicleAppId =req.getParameter("vehicleAppId");
-			String isApproval =req.getParameter("isApproval");
+			String TypeOfAction =req.getParameter("TypeOfAction");
 			Object[] oneVehicle=service.findByVehicleId(Long.parseLong(vehicleAppId));
 			req.setAttribute("oneVehicle", oneVehicle);
-			req.setAttribute("isApproval", isApproval);
+			req.setAttribute("TypeOfAction", TypeOfAction);
+			req.setAttribute("isApproval", req.getParameter("isApproval"));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 		}
 		catch (Exception e) {
@@ -174,7 +177,7 @@ public class VehicleParkingController {
 		try {
 
 			String action =req.getParameter("Action");
-
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
 			if("Add".equalsIgnoreCase(action)) {
 
 				return "vehicleparking/VehicleParkingAddEdit";
@@ -261,18 +264,12 @@ public class VehicleParkingController {
 		try {
 			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive", "VehicleParkinglApproval_htm");
-			//			String fromdate = req.getParameter("fromdate");
-			//			String todate   =req.getParameter("todate");
-			//			if(fromdate != null && todate != null ) {
-			//				req.setAttribute("fromdate", fromdate);
-			//				req.setAttribute("todate", todate);	
-			//			} else {
-			//				req.setAttribute("fromdate", DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat());
-			//				req.setAttribute("todate",DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now()));	
-			//			}
+			
+			
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
+			req.setAttribute("Pending", "Pending");
 
-
-
+			
 			req.setAttribute("VehicleParkList", service.getSecurityVehicleParkList(Username));
 		}
 		catch (Exception e) {
@@ -329,4 +326,51 @@ public class VehicleParkingController {
 	}
 
 
+	@RequestMapping("VehicleParkinglApproved.htm")
+	public String VehicleParkinglApprovedList(HttpServletRequest req, HttpSession ses){
+		String Username=(String)ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+
+		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
+			ses.setAttribute("SidebarActive", "VehicleParkinglApproved_htm");
+			String fromdate = req.getParameter("fromdate");
+			String todate   =req.getParameter("todate");
+			if(fromdate != null && todate != null ) {
+				req.setAttribute("fromdate", fromdate);
+				req.setAttribute("todate", todate);	
+				
+			} else {
+				req.setAttribute("fromdate", DateTimeFormatUtil.getFirstDayofCurrentMonthRegularFormat());
+				req.setAttribute("todate", DateTimeFormatUtil.SqlToRegularDate( ""+LocalDate.now()));
+			}
+
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
+
+			req.setAttribute("VehicleParkList", service.getSecVehicleParkApprdList(Username));
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside VehicleParkinglApproved.htm "+ Username ,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+		return "vehicleparking/VehicleParkinglApprovalList";
+	}
+
+	
+	@RequestMapping(value = "VehTransacStatus.htm" )
+	public String PerAddrTransactionStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside BankDetTransacStatus.htm "+Username);
+		try {
+			String vehicleAppId = req.getParameter("vehicleAppId");
+			req.setAttribute("TransactionList", service.vehTransaById(Long.parseLong(vehicleAppId)));
+			return "vehicleparking/VehTransactionStatus";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside VehTransacStatus.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 }

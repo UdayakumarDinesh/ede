@@ -52,11 +52,41 @@ input:focus {
 	Date date = new Date();
 
 	String isApproval = (String) request.getAttribute("isApproval");
-
+	String AllActive  = (String) request.getAttribute("AllActive");
 
 	Object[] oneBankDeatil = (Object[]) request.getAttribute("oneBankDeatil");
+	
 	%>
+
 	<div class="page card dashboard-card">
+	<div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-4">
+				<h5>Intimation For Bank Detail </h5>
+			</div>
+			<div class="col-md-8 ">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item ml-auto"><a
+						href="MainDashBoard.htm"><i
+							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
+					<li class="breadcrumb-item "><a href="BankDetails.htm">
+							Bank Details </a></li>	
+					<%if(isApproval !=null &&  isApproval.equalsIgnoreCase("Y") && AllActive!=null && AllActive.equalsIgnoreCase("AllActive")) {%>
+							
+					<li class="breadcrumb-item "> <a href="AllActiveBankDetail.htm">
+							Active Bank Details </a></li>		
+					<%} else if (isApproval !=null &&  isApproval.equalsIgnoreCase("Y") && AllActive == null ){ %>
+					<li class="breadcrumb-item "> <a href="BankDetailapproval.htm">
+							Bank Details Approvals </a></li>	
+					<%}%>				
+					<li class="breadcrumb-item active " aria-current="page">
+							Bank Details Application Form </a></li>
+					
+				</ol>
+			</div>		
+		</div>
+	</div>
+	
 		<div class="card-body" align="center">
 			<div class="row">
 		

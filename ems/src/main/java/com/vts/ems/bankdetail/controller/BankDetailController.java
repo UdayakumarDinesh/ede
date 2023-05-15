@@ -77,9 +77,37 @@ public class BankDetailController {
 			req.setAttribute("EmpName", service.findEmpByEmpNo(EmpNo).getEmpName());
 			req.setAttribute("DGMName", service.findEmpByEmpNo(DGM).getEmpName());
 			req.setAttribute("PANDAName", service.findEmpByEmpNo(PAndAs.get(0)).getEmpName());
+			
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
+			
 			return "Bankdetail/BankDetail";
 		}catch (Exception e) {
 			logger.error(new Date() +"Inside BankDetails.htm"+UserId ,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+
+	}
+
+	@RequestMapping(value="AllActiveBankDetail.htm")
+	public String AllActiveBankDetail(HttpServletRequest req, HttpSession ses) throws Exception {
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		String UserId=(String)ses.getAttribute("Username");
+		
+		ses.setAttribute("formmoduleid", formmoduleid);
+		ses.setAttribute("SidebarActive", "AllActiveBankDetail_htm");
+		try {
+		
+			List<Object[]> allActivBankDetList=service.allActiveBank();
+	
+
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
+			
+			req.setAttribute("allActivBankDetList", allActivBankDetList);
+	
+			return "Bankdetail/AllActiveBankDetail";
+		}catch (Exception e) {
+			logger.error(new Date() +"Inside AllActiveBankDetail.htm"+UserId ,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -102,11 +130,14 @@ public class BankDetailController {
 			String action = (String)req.getParameter("Action");
 			if("Add".equalsIgnoreCase(action)) {
 
+				req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
+				
 				return "Bankdetail/BankDetailAddEdit";
 			}
 			else if("Edit".equalsIgnoreCase(action)) {
 				String bankId = (String)req.getParameter("bankId");
 				Object[] oneBankDeatil=service.findById(Long.parseLong(bankId));
+				req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
 				req.setAttribute("oneBankDeatil", oneBankDeatil);
 				return "Bankdetail/BankDetailAddEdit";
 			}else {
@@ -223,6 +254,8 @@ public class BankDetailController {
 		try {
 			String bankId = req.getParameter("bankId");
 			String isApproval =req.getParameter("isApproval");
+			String AllActive =req.getParameter("AllActive");
+			req.setAttribute("AllActive", AllActive);
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			Object[] oneBankDeatil=service.findById(Long.parseLong(bankId));
 			req.setAttribute("oneBankDeatil", oneBankDeatil);
@@ -256,7 +289,7 @@ public class BankDetailController {
 			}
 			return "redirect:/BankDetails.htm";
 		}catch (Exception e) {
-			logger.error(new Date() +"Inside ForwodApp.htm "+UserName ,e);
+			logger.error(new Date() +"Inside ForwodApp.htm "+UserName ,e) ;
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -275,6 +308,7 @@ public class BankDetailController {
 
 			List<String> DGMs=service.GetEmpDGMEmpNo();
 			List<String> PAndAs=service.GetPandAAdminEmpNos();
+			req.setAttribute("empNameAndDesi", service.getEmpNameAndDesi(EmpNo));
 
 			if(PAndAs.contains(EmpNo)) {
 				List<Object[]> PAndAAllBanks=service.findPAndBankList();

@@ -32,6 +32,7 @@
 
 	<%
 	List<Object[]> BankDetailList = (List<Object[]>) request.getAttribute("BankDetailList");
+	Object[] empNameAndDesi=(Object[]) request.getAttribute("empNameAndDesi");
 	
 	List<String> DGMs = (List<String>) request.getAttribute("DGMs");
 	List<String> PAndAs = (List<String>) request.getAttribute("PAndAs");
@@ -49,18 +50,18 @@
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Bank Details</h5>
+			<div class="col-md-5">
+				<h5>Bank Details <small><b>&nbsp; - &nbsp;<%if(empNameAndDesi !=null) %> <%=empNameAndDesi[0] %> (<%=empNameAndDesi[1] %>)</b></small> </h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item "><a href="BankDetails.htm">
-							Bank Details </a></li>
-					<!-- <li class="breadcrumb-item active " aria-current="page">Telephone
-						List</li> -->
+					<!-- <li class="breadcrumb-item "><a href="BankDetails.htm">
+							Bank Details </a></li> -->
+					<li class="breadcrumb-item active " aria-current="page">Bank Details
+						List</li>
 				</ol>
 			</div>
 		</div>

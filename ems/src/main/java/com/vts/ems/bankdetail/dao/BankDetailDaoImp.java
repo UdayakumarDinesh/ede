@@ -34,7 +34,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 
 	SimpleDateFormat sdtf=DateTimeFormatUtil.getSqlDateAndTimeFormat();
 
-	private static final String allBank="select a.BankId, a.EmpNo, a.BankName, a.Branch, a.IFSC, a.AccountNo, a.ValidFrom, a.ValidTo, a.BankStatus, em.EmpName, c.PISStatus, a.BankStatusCode from bank_detail a, employee em, pis_approval_status c where a.EmpNo=:empNo AND a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode=c.PISStatuscode ORDER BY a.BankId DESC";
+	private static final String allBank="select a.BankDetailId, a.EmpNo, a.BankName, a.Branch, a.IFSC, a.AccountNo, a.ValidFrom, a.ValidTo, a.BankStatus, em.EmpName, c.PISStatus, a.BankStatusCode from bank_detail a, employee em, pis_approval_status c where a.EmpNo=:empNo AND a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode=c.PISStatuscode ORDER BY a.BankDetailId DESC";
 
 	public List<Object[]> findAll(String empNo) throws Exception{
 		List<Object[]> bankDetailList=new ArrayList<Object[]>();
@@ -66,12 +66,12 @@ public class BankDetailDaoImp implements BankDetailDao{
 			logger.error(new Date() + "Inside DAO addBankdetail "+e);
 			e.printStackTrace();
 		}
-		return bankDertail.getBankId();
+		return bankDertail.getBankDetailId();
 	}
 
-	/* private static final StringoneBank="select BankId, EmpNo, BankName, Branch, IFSC, AccountNo from bank_detail where BankId=:bankId"; */
 
-	private static final String ONEBANK="SELECT a.BankId, a.EmpNo, a.BankName, a.Branch, a.IFSC, a.AccountNo, a.ValidFrom, a.ValidTo, a.BankStatus, em.EmpName,a.BankStatusCode, a.Remarks, (SELECT ActionDate FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='FWD' AND Bank_detail_id_BankId=:bankId)) AS ForwordDate, (SELECT ActionDate FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='VPA' AND Bank_detail_id_BankId=:bankId)) AS PAVeriDate, (SELECT EmpName FROM employee WHERE EmpNo=(SELECT ActionBy FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='VPA' AND Bank_detail_id_BankId=:bankId))) AS PAName FROM bank_detail a,employee em WHERE a.BankId=:bankId  AND a.EmpNo=em.EmpNo";
+
+	private static final String ONEBANK="SELECT a.BankDetailId, a.EmpNo, a.BankName, a.Branch, a.IFSC, a.AccountNo, a.ValidFrom, a.ValidTo, a.BankStatus, em.EmpName,a.BankStatusCode, a.Remarks, (SELECT ActionDate FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='FWD' AND BankDetailId=:bankId)) AS ForwordDate, (SELECT ActionDate FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='VPA' AND BankDetailId=:bankId)) AS PAVeriDate, (SELECT EmpName FROM employee WHERE EmpNo=(SELECT ActionBy FROM bank_details_p_transa WHERE BankTransactionId=(SELECT MAX(BankTransactionId) FROM bank_details_p_transa WHERE BankStatusCode='VPA' AND BankDetailId=:bankId))) AS PAName FROM bank_detail a,employee em WHERE a.BankDetailId=:bankId  AND a.EmpNo=em.EmpNo";
 
 	public Object[] findById(long bankId) throws Exception{
 		Object[] oneBank=null;
@@ -111,7 +111,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 			BankD.setModifiedDate(bankDertail.getModifiedDate());
 			BankD.setValidFrom(bankDertail.getValidFrom());
 			manager.merge(BankD);
-			l=BankD.getBankId();
+			l=BankD.getBankDetailId();
 		}
 		catch(Exception e) {
 			logger.error(new Date() +"Inside DAO editBankdetail "+e);
@@ -124,7 +124,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 
 
 
-	private static final String DGMALLBANK="SELECT a.BankId, a.EmpNo, a.BankStatus, em.EmpName, a.BankStatusCode, c.PISStatus FROM bank_detail a, employee em, division_master b, pis_approval_status c ,dgm_master d WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode='FWD' AND em.DivisionId=b.DivisionId AND b.DGMId=d.DGMId AND d.DGMEmpNo=:empNo AND a.BankStatusCode=c.PisStatusCode";
+	private static final String DGMALLBANK="SELECT a.BankDetailId, a.EmpNo, a.BankStatus, em.EmpName, a.BankStatusCode, c.PISStatus FROM bank_detail a, employee em, division_master b, pis_approval_status c ,dgm_master d WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode='FWD' AND em.DivisionId=b.DivisionId AND b.DGMId=d.DGMId AND d.DGMEmpNo=:empNo AND a.BankStatusCode=c.PisStatusCode";
 
 	public List<Object[]> findDGMBankList(String empNo) throws Exception{
 		List<Object[]> bankDetailList=new ArrayList<Object[]>();
@@ -178,7 +178,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 		}		
 	}
 
-	private static final String ALLBANKS="SELECT a.BankId, a.EmpNo, a.BankStatus, em.EmpName, a.BankStatusCode, c.PISStatus FROM bank_detail a, employee em,  pis_approval_status c WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode='VDG' AND a.BankStatusCode=c.PisStatusCode";
+	private static final String ALLBANKS="SELECT a.BankDetailId, a.EmpNo, a.BankStatus, em.EmpName, a.BankStatusCode, c.PISStatus FROM bank_detail a, employee em,  pis_approval_status c WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatusCode='VDG' AND a.BankStatusCode=c.PisStatusCode";
 
 	public List<Object[]> findPAndBankList() throws Exception{
 		List<Object[]> bankDetailList=new ArrayList<Object[]>();
@@ -199,7 +199,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 			manager.merge(bankDertail);
 			manager.flush();
 
-			return bankDertail.getBankId();
+			return bankDertail.getBankDetailId();
 		}
 		catch(Exception e) {
 			logger.error(new Date() +"Inside DAO editBankdetail "+e);
@@ -253,9 +253,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 		return 0;
 	}
 
-	private static final String BANKTRANSABYID="SELECT tra.BankTransactionId,emp.empno,emp.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor  \r\n"
-			+ "FROM bank_details_p_transa tra, pis_approval_status sta,employee emp,employee_desig des,bank_detail ba \r\n"
-			+ "WHERE ba.BankId = tra.Bank_detail_id_BankId AND tra.BankStatusCode = sta.PisStatusCode AND tra.ActionBy=emp.empno AND emp.desigid=des.desigid AND ba.BankId =:bankId ORDER BY actiondate";
+	private static final String BANKTRANSABYID="SELECT tra.BankTransactionId,emp.empno,emp.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor  FROM bank_details_p_transa tra, pis_approval_status sta,employee emp,employee_desig des,bank_detail ba WHERE ba.BankDetailId = tra.BankDetailId AND tra.BankStatusCode = sta.PisStatusCode AND tra.ActionBy=emp.empno AND emp.desigid=des.desigid AND ba.BankDetailId =:bankId ORDER BY actiondate";
 	@Override
 	public List<Object[]> bankTransaById(long bankId) throws Exception
 	{
@@ -317,5 +315,36 @@ public class BankDetailDaoImp implements BankDetailDao{
 
 		}		
 		return employee;
+	}
+	
+	private static final String ALLACTIVEBANKS="SELECT a.BankDetailId, a.EmpNo, em.EmpName, a.BankName, a.Branch, a.IFSC, a.AccountNo, a.ValidFrom FROM bank_detail a, employee em,  pis_approval_status c WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND a.BankStatus='A'  AND a.BankStatusCode='VPA' AND a.BankStatusCode=c.PisStatusCode";
+	
+	@Override
+	public List<Object[]> allActiveBank() throws Exception{
+		List<Object[]> bankDetailList=new ArrayList<Object[]>();
+		try {
+			Query q = manager.createNativeQuery(ALLACTIVEBANKS);
+			bankDetailList=(List<Object[]>) q.getResultList();
+		}
+		catch(Exception e) {
+			logger.error(new Date() +"Inside DAO allActiveBank "+e);
+			e.printStackTrace();
+		}
+		return bankDetailList;
+	}
+	
+	private static String GETEMPNAMEANDDESI="SELECT em.EmpName, des.Designation FROM employee em, employee_desig des WHERE em.DesigId=des.DesigId AND em.EmpNo=:empNo";
+	
+	public Object[] getEmpNameAndDesi(String empNo) throws Exception{
+		Object[] emp=null;
+		try {
+			Query q=manager.createNativeQuery(GETEMPNAMEANDDESI);
+			q.setParameter("empNo", empNo);
+			return (Object[])q.getSingleResult();
+		}
+		catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getEmpNameAndDesi "+  e);
+		}
+		return emp;
 	}
 }

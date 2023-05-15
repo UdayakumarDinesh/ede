@@ -20,7 +20,7 @@ import lombok.ToString;
 public class BankDertails implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long BankId;
+	private long BankDetailId;
 	private String EmpNo;
 	private String BankName;
 	private String Branch;
