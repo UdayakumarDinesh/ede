@@ -541,8 +541,6 @@ public class NocController {
 						 .FromDate(sdf.format(rdf.parse(req.getParameter("FromDate"))))
 						 .ToDate(sdf.format(rdf.parse(req.getParameter("ToDate"))))
 						 .build();
-				
-
 				long save=service.PandAFromUpdate(dto,UserId);
 				  
 				  if (save > 0) {
