@@ -1,4 +1,4 @@
-<%@page import="com.vts.ems.master.model.LabMaster"%>
+
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Date"%>
@@ -82,20 +82,13 @@
 
 }
 
-  .text-center {
-	text-align: center;
-} 
 
-.break
-	 {
-	  	page-break-before:always;
-	 }
 .text-blue
 {
 	color: blue;
 	font-weight:400px;
 }
-table {
+/* table {
 	border-collapse: collapse;
 	
 	width: 620px;
@@ -107,7 +100,7 @@ table {
 }
 .table tr{
 	height: 10px;
-}
+} */
  
 </style>
 

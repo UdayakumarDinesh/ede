@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -42,8 +44,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.font.FontProvider;
 import com.vts.ems.Admin.Service.AdminService;
-import com.vts.ems.ithelpdesk.model.HelpdeskTicket;
-import com.vts.ems.itinventory.model.ITInventoryConfigured;
+
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -75,6 +76,23 @@ public class NocController {
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
+	
+	@Value("${ProjectFiles}")
+	private String LabLogoPath;
+	
+	
+	 public String getLabLogoAsBase64() throws IOException {
+
+			String path = LabLogoPath + "/images/lablogos/lablogo1.png";
+			try {
+				return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+			} catch (FileNotFoundException e) {
+				System.err.println("File Not Found at Path " + path);
+			}
+			return "/print/.jsp";
+		}
+	 
+	 
 	
 	@RequestMapping(value = "NOC.htm")
 	public String NOC(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
@@ -581,6 +599,8 @@ public class NocController {
 			try {
 				   
 				    String passportid=req.getParameter("Passportid");
+				    req.setAttribute("Labmaster", service.getLabMasterDetails().get(0));
+				    req.setAttribute("lablogo",getLabLogoAsBase64());
 				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				    req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
 				    String path = req.getServletContext().getRealPath("/view/temp");
@@ -615,6 +635,7 @@ public class NocController {
 					fis.close();
 					Path pathOfFile2 = Paths.get(path + "/PassportCertificate.pdf");
 					Files.delete(pathOfFile2);
+				    
 
 				} catch (Exception e) {
 					logger.error(new Date() + " Getting Error From  PassportNOCCertificate" + UserId, e);
@@ -622,7 +643,9 @@ public class NocController {
 			
 		}
 		
-	 @RequestMapping(value = "ProceedingAbroad.htm")
+	
+
+	@RequestMapping(value = "ProceedingAbroad.htm")
 		public String ProceedingAbroad(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			

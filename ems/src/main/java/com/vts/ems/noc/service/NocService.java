@@ -2,6 +2,7 @@ package com.vts.ems.noc.service;
 
 import java.util.List;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -61,6 +62,8 @@ public interface NocService {
 	public Object[] getNocProcAbroadDetails(String procAbrId)throws Exception;
 
 	public long NOCProcAbraodForward(String procAbroadId, String userId, String action, String remarks, String empNo,String loginType);
+
+	public List<LabMaster> getLabMasterDetails()throws Exception;
 			
 
 	

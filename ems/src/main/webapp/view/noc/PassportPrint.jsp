@@ -394,10 +394,10 @@ td{
 		  <div><span style="margin-left: -80px;font-weight: 600;font-size: 18px;text-decoration: underline;">Filled by P&A Department</span></div> 
 		  <table style="margin-left:10px; margin-top:35px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
 		 <tr>
-		 <td style="width:350px;text-align: left;border: 0;padding: -5px;"><h4> 1.(a) Are the entries given by the <span style="margin-left:50px"> :</span> <br>&emsp;&emsp;&emsp;applicant in 
+		 <td style="width:350px;text-align: left;border: 0;padding: -5px;"><h4> 1.(a) Are the entries given by the <span style="margin-left:30px"> :</span> <br>&emsp;&emsp;&emsp;applicant in 
              paras 1 to 6 in <br>&emsp;&emsp;Part - I correct?</h4></td>
             
-            <td class="text-blue" style="border: 0;text-align: left;padding: -5px;"><% if(obj[28].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
+            <td class="text-blue" style="border: 0;margin-left:-25px;text-align: left;padding: -5px;"><% if(obj[28].toString().equalsIgnoreCase("Y")){ %><span style="margin-left:0px;">YES</span><%} else{ %>NO<%} %></td>
             
           </tr>
           

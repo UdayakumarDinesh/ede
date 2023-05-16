@@ -2,6 +2,7 @@ package com.vts.ems.noc.dao;
 
 import java.util.List;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
@@ -83,6 +84,8 @@ public interface NocDao {
 	public Long EditNocpa(NocProceedingAbroad noc) throws Exception;
 
 	public long AddPassport(Passport pport)throws Exception;
+
+	public List<LabMaster> getLabMasterDetails()throws Exception;
 
 	
 	

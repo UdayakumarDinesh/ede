@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.dao.NocDao;
 import com.vts.ems.noc.model.NocPassport;
@@ -917,6 +918,12 @@ public class NocServiceImpl implements NocService {
 		return 0;
 	
      }
+	}
+
+	@Override
+	public List<LabMaster> getLabMasterDetails() throws Exception {
+	
+		return dao.getLabMasterDetails();
 	}
 }
 

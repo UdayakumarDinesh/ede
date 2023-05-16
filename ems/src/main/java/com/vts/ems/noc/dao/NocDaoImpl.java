@@ -15,12 +15,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadTrans;
-import com.vts.ems.pi.model.PisHometown;
+
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.Passport;
@@ -620,8 +621,21 @@ public class NocDaoImpl implements NocDao {
 		return pport.getPassportId();
 	}
 
+	public static final String LABMASTERDETAILS="FROM LabMaster";
+	@Override
+	public List<LabMaster> getLabMasterDetails() throws Exception {
+		
+		
+		Query query=manager.createQuery(LABMASTERDETAILS);
+		List<LabMaster> List=(List<LabMaster>)query.getResultList();
+		return List;
+		
+		
 	
+	}
 }
+	
+
 	
 
 
