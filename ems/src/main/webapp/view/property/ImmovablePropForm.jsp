@@ -116,16 +116,12 @@ int slno=0;
 								
 							    <tr>
 								   <td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
-								   <td colspan="4">Purpose of application </td>
-								</tr>
-								<tr>
-								   <td style="border-bottom: 1;border-top: 0"></td>
-								  <%if(imm!=null && imm.getPurpose()!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> <td colspan="4" style="color: blue;">(a) Prior Intimation of transaction</td>
+								   <td >Purpose of application </td>
+								    <%if(imm!=null && imm.getPurpose()!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> <td colspan="2" style="color: blue;">(a) Prior Intimation of transaction</td>
 								  <%}else{%> 
-								  <td colspan="4" style="color: blue;">(b) Prior permission of  transaction (if such transaction is with a person having official dealing w.r.t Sl. No. 13 below and / or if property is situated outside India / transaction is with foreigner.</td> 
+								  <td colspan="2" style="color: blue;">(b) Prior permission of  transaction</td> 
 								  <%}%>
 								</tr>
-								
 								<tr>
 									<td style="width: 5%;"><%=++slno%>.</td>
 									<td>Whether property is being Acquired or Disposed off ?</td>

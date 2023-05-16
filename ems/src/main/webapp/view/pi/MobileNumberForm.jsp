@@ -61,10 +61,10 @@ List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 
 %>
-<!--  <div class="card-header page-top ">
+ <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
-				<h5 style="width:113%;">Intimation For Mobile Number </h5>
+				<h5 style="width:113%;">Mobile Number -Form</h5>
 			</div>
 			<div class="col-md-8" >
 				<nav aria-label="breadcrumb">
@@ -77,7 +77,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				</nav>
 			</div>			
 		</div>
-	</div>  -->
+	</div>  
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
 		<div align="center">

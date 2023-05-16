@@ -33,9 +33,9 @@ public class PassServiceImpl implements PassService {
 	BCryptPasswordEncoder encoder;
 	
 	@Override
-	public List<Object[]> pendingIntimations() throws Exception {
+	public List<Object[]> pendingIntimations(String LoginType) throws Exception {
 		
-		return dao.pendingIntimations();
+		return dao.pendingIntimations(LoginType);
 	}
 
 	@Override
@@ -112,9 +112,9 @@ public class PassServiceImpl implements PassService {
 	}
 
 	@Override
-	public List<Object[]> getCreatedPassList(String fDate, String tDate) throws Exception {
+	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate) throws Exception {
 	
-		return dao.getCreatedPassList(fDate,tDate);
+		return dao.getCreatedPassList(LoginType,EmpNo,fDate,tDate);
 	}
 
 	@Override
@@ -130,9 +130,9 @@ public class PassServiceImpl implements PassService {
 	}
 
 	@Override
-	public List<Object[]> getPassReport(String fdate, String tdate) throws Exception {
+	public List<Object[]> getPassReport(String LoginType,String EmpNo,String fdate, String tdate) throws Exception {
 		
-		return dao.getPassReport(fdate,tdate);
+		return dao.getPassReport(LoginType,EmpNo,fdate,tdate);
 	}
 	@Override
 	public int changepassword(String oldpwd,String newpwd,String empid)throws Exception{

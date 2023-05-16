@@ -1,5 +1,7 @@
 package com.vts.ems.athithi.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +15,7 @@ import com.vts.ems.athithi.model.Company;
 import com.vts.ems.athithi.model.CompanyEmployee;
 import com.vts.ems.athithi.model.Intimation;
 import com.vts.ems.athithi.model.IntimationEmp;
+import com.vts.ems.athithi.model.VpIntimationTrans;
 
 @Repository
 @Transactional
@@ -75,7 +78,6 @@ public class IntimationDaoImpl implements IntimationDao{
 	}
 
 	@Override
-    @Transactional
 	public Long addNewIntimation(Intimation inti) throws Exception 
 	{
 		entityManager.persist(inti);
@@ -98,12 +100,92 @@ public class IntimationDaoImpl implements IntimationDao{
 		return count;
 	}
 	@Override
-	public List<Object[]> getItimationList(String groupId)throws Exception{
+	public List<Object[]> getItimationList(String EmpNo)throws Exception{
 		
-		Query query =entityManager.createNativeQuery("CALL vp_intimation(:GROUPID)");
-        query.setParameter("GROUPID", groupId);
+		Query query =entityManager.createNativeQuery("CALL vp_intimation_list(:EmpNo)");
+        query.setParameter("EmpNo", EmpNo);
 		List<Object[]> itimationList=(List<Object[]>)query.getResultList();
 				
 		return itimationList;
+	}
+	
+	@Override
+	public Long addVpIntimationTrans(VpIntimationTrans transaction) throws Exception{
+		try {
+			entityManager.persist(transaction);
+			entityManager.flush();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return transaction.getVpTransactionId();
+	}
+
+	@Override
+	public Intimation getIntimationById(Long intimationId) throws Exception {
+		
+		try {
+			return entityManager.find(Intimation.class, intimationId);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Long editNewIntimation(Intimation intimation) throws Exception {
+		try {
+			entityManager.merge(intimation);
+			entityManager.flush();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return intimation.getIntimationId();
+	}
+	
+	private static final String GETRECEMPNO  ="SELECT e.EmpNo FROM login l,employee e WHERE l.EmpId=e.EmpId AND l.loginType ='R' LIMIT 1;";
+	@Override
+	public String GetReceptionistEmpNo() throws Exception
+	{
+		try {			
+			Query query= entityManager.createNativeQuery(GETRECEMPNO);
+			List<String> list =  (List<String>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	private static final String VPAPPROVALSLIST = "CALL Vp_Intimation_Approval(:EmpNo)";
+	@Override
+	public List<Object[]> visitorPassApprovalList(String EmpNo) throws Exception {
+		
+		try {			
+			Query query= entityManager.createNativeQuery(VPAPPROVALSLIST);
+			query.setParameter("EmpNo", EmpNo);
+			return  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	private static final String VPTRANSLIST="SELECT tra.VpTransactionId,emp.EmpNo,emp.EmpName,des.Designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM vp_intimation_trans tra, pis_approval_status sta,employee emp,employee_desig des,vp_intimation par WHERE par.IntimationId = tra.IntimationId AND tra.PisStatusCode = sta.PisStatusCode AND tra.ActionBy=emp.EmpNo AND emp.DesigId=des.DesigId AND par.IntimationId =:IntimationId ORDER BY tra.ActionDate";
+	@Override
+	public List<Object[]> vpTransactionList(String IntimationId) throws Exception {
+		
+		try {
+		Query query = entityManager.createNativeQuery(VPTRANSLIST);
+		query.setParameter("IntimationId",Long.parseLong(IntimationId));
+		return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

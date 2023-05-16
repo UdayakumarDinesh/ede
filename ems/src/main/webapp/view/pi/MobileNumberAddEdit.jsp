@@ -15,14 +15,17 @@
 <body>
 	<%
 	PisMobileNumber mobile =(PisMobileNumber)request.getAttribute("mobile");
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	%>
 	
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-6">
 			<%if(mobile!=null){ %>
-				<h5>Mobile Number Edit</h5><%}else{ %>
-						<h5>Mobile Number Add</h5><%}%>
+				<h5>Mobile Number Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}else{ %>
+						<h5>Mobile Number Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}%>
 			</div>
 			   <div class="col-md-6">
 					<ol class="breadcrumb ">

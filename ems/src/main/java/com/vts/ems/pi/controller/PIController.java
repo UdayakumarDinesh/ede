@@ -88,8 +88,8 @@ public class PIController {
 			
 			req.setAttribute("resAddress", service.ResAddressDetails(EmpId));	
 			req.setAttribute("perAddress", service.PermanentAddressDetails(EmpId));
-			
-			req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+						
+			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			
 			String CEO = service.GetCEOEmpNo();
 			List<String> PandAs = service.GetPandAAdminEmpNos();
@@ -144,11 +144,12 @@ public class PIController {
 	   public String PermanentAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 		   String Username = (String) ses.getAttribute("Username");
 	       logger.info(new Date() +"Inside PermanentAddEdit.htm "+Username);
-	       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+	       String EmpId = ((String) ses.getAttribute("EmpId")).toString();
+	       String EmpNo = (String) ses.getAttribute("EmpNo");
 	       try {
 
 	    	   String Action = (String) req.getParameter("Action");
-	    	
+	    	   req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 	    	   	if("EDITPerAddress".equalsIgnoreCase(Action)) {
 	    	   	
 	    	   		AddressPer peraddress = service.getPerAddressData(req.getParameter("peraddressid"));
@@ -369,11 +370,13 @@ public class PIController {
 		public String ResAddressAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{   
 			String Username = (String) ses.getAttribute("Username");
+			String EmpNo = (String) ses.getAttribute("EmpNo");
 			String Action =(String)req.getParameter("Action");
 			String empid = (String)req.getParameter("empid");
 			
 			logger.info(new Date() +"Inside ResidentialAddEdit.htm "+Username); 
 			try {
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				if("ADD".equalsIgnoreCase(Action)){
 					
 					 List<Object[]> States = pisservice.getStates();					
@@ -796,12 +799,11 @@ public class PIController {
 				
 				req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
 				req.setAttribute("DivisionHeadEmpNos", DHs);
-				
-				
+								
 				req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 				req.setAttribute("GroupHeadEmpNos", GHs);
-				
-				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+								
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				
 				req.setAttribute("MobileDetails", service.MobileNumberDetails(EmpNo));
 				req.setAttribute("HometownDetails", service.HometownDetails(EmpNo));
@@ -821,10 +823,11 @@ public class PIController {
 			   String Username = (String) ses.getAttribute("Username");
 		       logger.info(new Date() +"Inside MobileNumberAddEdit.htm "+Username);
 		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		       String EmpNo = (String) ses.getAttribute("EmpNo");
 		       try {
 
 		    	   String Action = (String) req.getParameter("Action");
-		    	
+		    	   req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 		    	   	if("EDIT".equalsIgnoreCase(Action)) {
 		    	   		
 		    	   		req.setAttribute("mobile",  service.getMobileNumberData(req.getParameter("mobilenumberid"))	);
@@ -1163,10 +1166,11 @@ public class PIController {
 			   String Username = (String) ses.getAttribute("Username");
 		       logger.info(new Date() +"Inside HomeTownAddEdit.htm "+Username);
 		       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		       String EmpNo = (String) ses.getAttribute("EmpNo");
 		       try {
 
 		    	   String Action = req.getParameter("Action");
-		    	
+		    	   req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 		    	   	if("EDITHometown".equalsIgnoreCase(Action)) {
 		    	 		    	   		
 		    	   		List<Object[]> States = pisservice.getStates();

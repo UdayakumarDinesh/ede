@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.vts.ems.Admin.Service.AdminService;
@@ -23,7 +24,12 @@ import com.vts.ems.athithi.dto.ComEmp;
 import com.vts.ems.athithi.dto.NewIntimation;
 import com.vts.ems.athithi.model.Company;
 import com.vts.ems.athithi.model.CompanyEmployee;
+import com.vts.ems.athithi.model.Intimation;
+import com.vts.ems.athithi.model.VpIntimationTrans;
 import com.vts.ems.athithi.service.IntimationService;
+import com.vts.ems.pi.service.PIService;
+import com.vts.ems.property.model.PisMovableProperty;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 
 
@@ -37,21 +43,29 @@ public class IntimationController {
 	@Autowired
 	AdminService adminservice;
 	
+	@Autowired
+	private PIService piservice;
+	
 	private final String formmoduleid = "12";
 	
 	SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm:ss");
 	private static final Logger logger = LogManager.getLogger(IntimationController.class);
 	Calendar now = Calendar.getInstance();
 	
+	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+	
 	@RequestMapping(value = "NewIntimation.htm",method =RequestMethod.GET)
 	public String newIntimation(HttpServletRequest req,HttpSession ses) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER AttendanceSync.htm "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER NewIntimation.htm "+UserId);	
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
 //			ses.setAttribute("SidebarActive","NewIntimation_htm");
 //			String groupId=ses.getAttribute("groupId").toString();
-			
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 			req.setAttribute("compnyList", service.getCompnyList(""));
 			req.setAttribute("officer", service.getOfficerList(""));
 			
@@ -59,7 +73,7 @@ public class IntimationController {
 		}
 		catch (Exception e) {
 			e.printStackTrace(); 
-			logger.error(new Date() +"Inside CONTROLLER AttendanceSync.htm "+UserId, e);
+			logger.error(new Date() +"Inside CONTROLLER NewIntimation.htm "+UserId, e);
 			return "static/Error";
 		}	
 	}
@@ -201,7 +215,8 @@ public class IntimationController {
 	public String 	newIntimationSubmit(HttpServletRequest req,HttpSession ses) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER newIntimationSubmit "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER newIntimationSubmit "+UserId);	
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
 			
 			NewIntimation intimation =new NewIntimation();
@@ -220,6 +235,15 @@ public class IntimationController {
 	        
 	        String sPermission ="";
 	        for(int i=0; i<sp.length; i++) {
+	        	if(sp[i].equalsIgnoreCase("Not Applicable")) {
+	        		intimation.setVpStatus("A");
+	        		intimation.setPisStatusCode("APR");
+	        		intimation.setPisStatusCodeNext("APR");
+	        	}else {
+	        		intimation.setVpStatus("N");
+	        		intimation.setPisStatusCode("INI");
+	        		intimation.setPisStatusCodeNext("INI");
+	        	}
 	        	sPermission += sp[i];
 	        	  
 	        	  if(i != sp.length-1) {
@@ -227,7 +251,17 @@ public class IntimationController {
 	        	  } 
 	        }
 	        intimation.setSpermission(sPermission);
-			Long re=service.addNewIntimation(intimation);
+			Long result=service.addNewIntimation(intimation);
+			
+			if(result>0) {
+				VpIntimationTrans transaction = VpIntimationTrans.builder()
+						                        .IntimationId(result)
+						                        .PisStatusCode("INI")
+						                        .Remarks("")
+						                        .ActionBy(EmpNo)
+						                        .ActionDate(sdtf.format(new Date())).build();
+				service.addVpIntimationTrans(transaction);
+			}
 			
 			return "redirect:/IntimationList.htm";
 		}
@@ -241,12 +275,26 @@ public class IntimationController {
 	@RequestMapping(value = "IntimationList.htm",method =RequestMethod.GET)
 	public String IntimationList(HttpServletRequest req,HttpSession ses) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER IntimationList "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER IntimationList "+UserId);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
 		try {
 			String logintype = (String)ses.getAttribute("LoginType");
 			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive","IntimationList_htm");		
-			req.setAttribute("IntimationList", service.getItimationList("0"));
+			req.setAttribute("IntimationList", service.getItimationList(EmpNo));
+			
+			String CEO = piservice.GetCEOEmpNo();
+			List<String> DGMs = piservice.GetDGMEmpNos();
+				
+            req.setAttribute("CeoName", piservice.GetCeoName());
+            req.setAttribute("CEOEmpNos", CEO);
+            
+            if(!DGMs.contains(EmpNo)) {
+				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
+			}
+			req.setAttribute("DGMEmpNos", DGMs);
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
+			
 			return "athithi/IntimationList";
 		}
 		catch (Exception e) {
@@ -256,7 +304,82 @@ public class IntimationController {
 		}	
 	}
 	
+	@RequestMapping(value="VpIntimationApprovalSubmit.htm")
+	public String movablePropFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside VpIntimationApprovalSubmit.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		String LoginType=(String)ses.getAttribute("LoginType");
+		try {
+			String intimationId = req.getParameter("intimationId");
+			String remarks = req.getParameter("remarks");
+			String action = req.getParameter("Action");
+			
+			Intimation intimation = service.getIntimationById(Long.parseLong(intimationId));	
+			String pisStatusCode = intimation.getPisStatusCode();
+			
+			long count = service.vpIntimationForward(intimationId, Username, action, remarks, EmpNo, LoginType);
+			
+			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RCE"))
+			{
+				if(count>0) {
+					redir.addAttribute("result", "Visitor Pass Sent For Verification Successfully");
+				}else {
+					redir.addAttribute("resultfail","Visitor Pass Application Sent For Verification Unsuccessful");
+				}
+				return "redirect:/IntimationList.htm";
+			}
+			else {
+				if(count>0) {
+					redir.addAttribute("result", "Visitor Pass verification Successfull");
+				}else {
+					redir.addAttribute("resultfail", "Visitor Pass verification Unsuccessful");
+				}
+				return "redirect:/VpApprovals.htm";
+			}
+			
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside VpIntimationApprovalSubmit.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		} 
+	}
 	
+	@RequestMapping(value="VpApprovals.htm")
+	public String visitorPassApprovals(HttpServletRequest req,HttpSession ses) throws Exception
+	{
+		String Username =(String) ses.getAttribute("Username");
+		logger.info(new Date()+" Inside VpApprovals.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		try {
+			ses.setAttribute("formmoduleid", "28");
+			ses.setAttribute("SidebarActive","VpApprovals_htm");
+			
+			req.setAttribute("ApprovalList", service.visitorPassApprovalList(EmpNo));
+			return "athithi/IntimationApprovals";
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside VpApprovals.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
 	
-	
+	@RequestMapping(value="VpIntimationTransStatus.htm")
+	public String vpIntimationTransStatus(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String Username =(String) ses.getAttribute("Username");
+		logger.info(new Date()+"Inside VpIntimationTransStatus.htm"+Username);
+		try {
+			String intimationid = req.getParameter("intimationid");
+			if(intimationid!=null) {
+				req.setAttribute("TransactionList", service.vpTransactionList(intimationid.trim()));
+			}
+			return "athithi/VpIntimationTransStatus";
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside VpIntimationTransStatus.htm"+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	}
 }

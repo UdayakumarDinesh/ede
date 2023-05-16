@@ -15,13 +15,16 @@
 
 </head>
 <body>
-
+<%
+Object[] empData=(Object[])request.getAttribute("EmpData");
+%>
 	<div class="card-header page-top" >
 		<div class="row">
-			<div class="col-md-3">
-				<h5 style="width:102%;">PROPERTY DASHBOARD</h5>
+			<div class="col-md-7">
+				<h5>PROPERTY DASHBOARD<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
-			<div class="col-md-9 " >
+			<div class="col-md-5" >
 				<nav aria-label="breadcrumb">
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
@@ -31,7 +34,6 @@
 			</div>			
 		</div>
 	</div>	
-
 		<div align="center">
 				<%String ses=(String)request.getParameter("result"); 
 				String ses1=(String)request.getParameter("resultfail");

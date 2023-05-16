@@ -22,8 +22,9 @@ public class PassDaoImpl implements PassDao {
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Override
-	public List<Object[]> pendingIntimations() throws Exception {
-		Query query =entityManager.createNativeQuery("CALL vp_intimation(0)");
+	public List<Object[]> pendingIntimations(String LoginType) throws Exception {
+		Query query =entityManager.createNativeQuery("CALL vp_pending_intimations(:LoginType)");
+		query.setParameter("LoginType", LoginType);
 		List<Object[]> panddingItim=(List<Object[]>)query.getResultList();
 		return panddingItim;
 	}
@@ -111,9 +112,11 @@ public class PassDaoImpl implements PassDao {
 
 
 	@Override
-	public List<Object[]> getCreatedPassList(String fDate, String tDate) throws Exception {
+	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate) throws Exception {
 
-         Query query=entityManager.createNativeQuery("CALL vp_pass_list(:FROMDATE,:TODATE)");
+         Query query=entityManager.createNativeQuery("CALL vp_pass_list(:LoginType,:EmpNo,:FROMDATE,:TODATE)");
+         query.setParameter("LoginType", LoginType);
+         query.setParameter("EmpNo", EmpNo);
          query.setParameter("FROMDATE",fDate);
          query.setParameter("TODATE",tDate);
 		 List<Object[]>detail=(List<Object[]>)query.getResultList();
@@ -138,9 +141,11 @@ public class PassDaoImpl implements PassDao {
 	}
 
 	@Override
-	public List<Object[]> getPassReport(String fDate, String tDate) throws Exception {
+	public List<Object[]> getPassReport(String LoginType,String EmpNo,String fDate, String tDate) throws Exception {
 
-        Query query=entityManager.createNativeQuery("CALL vp_pass_report(:FROMDATE,:TODATE)");
+        Query query=entityManager.createNativeQuery("CALL vp_pass_report(:LoginType,:EmpNo,:FROMDATE,:TODATE)");
+        query.setParameter("LoginType", LoginType);
+        query.setParameter("EmpNo", EmpNo);
         query.setParameter("FROMDATE",fDate);
         query.setParameter("TODATE",tDate);
 		 List<Object[]>detail=(List<Object[]>)query.getResultList();

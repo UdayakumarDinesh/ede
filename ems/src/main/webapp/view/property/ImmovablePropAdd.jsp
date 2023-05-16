@@ -8,19 +8,25 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
+
+<style type="text/css">
+
+</style>
 </head>
 <body>
 <%
 /* PisImmovableProperty imm = (PisImmovableProperty)request.getAttribute("ImmProperty"); */
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
+Object[] empData=(Object[])request.getAttribute("EmpData");
 %>
 
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h5 style="width:115%;">Immovable Property Add</h5>
-			</div>
-			<div class="col-md-9 ">
+				<div class="col-md-7">
+				<h5>Immovable Property Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
+			   </div>
+			<div class="col-md-5">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
@@ -40,8 +46,8 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 				   <div class="col-md-2">
 				      <label>Purpose:<span class="mandatory">*</span></label> 
 				       <select name="purpose" class="form-control input-sm select2" required>
-			               <option value="I">Intimation of transaction</option>
-			               <option value="P">Permission of transaction</option>
+			               <option value="I">Intimation</option>
+			               <option value="P">Permission</option>
 			           </select>
 				   </div>     
 				   <div class="col-md-2">
@@ -65,18 +71,28 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			               <option value="Others" >Others</option>
 			           </select>
 				   </div>
-				     <div class="col-md-4">
-				       <label>Location:<span class="mandatory">*</span></label>
-				       <input class="form-control" type="text" name="location" id="location" maxlength="225" placeholder="Municipal No, Village, Taluk" required>
-				     </div>              
+				   <div class="col-md-4">
+				       <label>Description:</label>
+				       <input class="form-control" type="text" name="description" maxlength="500" placeholder="Enter Incase of Cultivable or Irrigated land">
+				    </div>                
 			     </div>
 			     <br>
-			     <div class="row">			       
+			     <div class="row">
+			      <div class="col-md-4">
+				       <label>Location:<span class="mandatory">*</span></label>
+				       <input class="form-control" type="text" name="location" id="location" maxlength="225" placeholder="Municipal No, Village, Taluk" required>
+				     </div> 			       
 			        <div class="col-md-2">
 			          <label>District:<span class="mandatory">*</span></label>
 			          <input class="form-control" type="text" name="district" id="district" placeholder="Enter District" required>
 			        </div>
-			         <div class="col-md-2">
+			        <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Pincode:<span class="mandatory">*</span></label>
+                            <input type="text" class="form-control input-sm"  name="pincode" id="CityPinTextBox" maxlength="6" placeholder="Enter PIN" onblur="checknegative(this)">
+                        </div>
+                    </div>
+			         <div class="col-md-4">
                         <div class="form-group">
                           <label>State:<span class="mandatory">*</span></label>
                            <select id="state" name="state" class="form-control input-sm selectpicker" data-live-search="true" required>
@@ -88,36 +104,22 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 							</select>
                        </div>
                     </div>	 			        
+			        
+                   
+				  
+			     </div>
+			     <div class="row">
+			        <div class="col-md-2">			         
+			            <label>Property Price:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="price" id="price" maxlength="225" placeholder="Enter price" onblur="checknegative(this)" required>
+			        </div>
 			        <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Pincode:<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm"  name="pincode" id="CityPinTextBox" maxlength="6" placeholder="Enter PIN" onblur="checknegative(this)">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
 				       <label>Ownership:<span class="mandatory">*</span></label>
 				        <select name="ownership" class="form-control input-sm select2" required>
 			               <option value="F" >Freehold</option>
 			               <option value="L" >LeaseHold</option>
 			           </select>
 				    </div>
-				    <div class="col-md-4">
-				       <label>Description:</label>
-				       <input class="form-control" type="text" name="description" maxlength="500" placeholder="Enter Incase of Cultivable or Irrigated land">
-				    </div> 
-			     </div>
-			     <div class="row">
-			        <div class="col-md-2" id="interest">
-			           <label>Applicant Interest :<span class="mandatory" >*</span></label>
-			           <select  name="applicantInterest" id="applicantInterest" class="form-control input-sm select2" onchange="showcents()" required>
-			               <option value="F" >Full</option>
-			               <option value="P" >Part</option>
-			           </select>
-			        </div>
-			        <div class="col-md-2" id="extent" >			         
-			            <label>Extent :</label>
-			           <input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225" readonly >
-			        </div>
 			        <div class="col-md-4">			         
 			            <label>Ownership Particulars:</label>
 			           <input class="form-control" type="text" name="osParticulars" id="osParticulars" maxlength="500" placeholder="Enter only if transaction is  not exclusive" >
@@ -128,45 +130,8 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			        </div>
 			     </div>
 			      <br>
-			     <div class="row">
-			        <div class="col-md-2">			         
-			            <label>Property Price:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="price" id="price" maxlength="225" placeholder="Enter price" onblur="checknegative(this)" required>
-			        </div>
-			        <div class="col-md-2" id="finance">
-			           <label>Source for finance:<span class="mandatory" >*</span></label>
-			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
-			               <option value="Personal savings" >Personal savings</option>
-			               <option value="Other sources" >Other sources</option>
-			           </select>
-			        </div>
-			        <div class="col-md-2" id="others" >			         
-			            <label>Other Sources:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="otherSource" id="otherSource" maxlength="225" placeholder="Enter Source Details" required>
-			        </div>
-			        <div class="col-md-2" id="sanction">
-			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
-			           <select name="requisite" id="requisite" class="form-control input-sm select2" required>
-			               <option value="N" >No</option>
-			               <option value="Y" >Yes</option>
-			           </select>
-			        </div>
-			        
-			        <div id="party" class="col-md-2" >			         
-			            <label>Party's Name:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="partyName" id="partyName" maxlength="225" placeholder="Enter Party Name" required>
-			        </div>
-			        <div class="col-md-4">			         
-			            <label>Party's Address:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="partyAddress" id="partyAddress" maxlength="500" placeholder="Enter Party Address" required>
-			        </div>
-			     </div>
-			     <br>
-			     <div class="row">
-			        <div class="col-md-4">			         
-			            <label>Transaction Arrangement:<span class="mandatory" >*</span></label>
-			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
-			        </div>			     
+			     
+			     <div class="row">     
 			        <div class="col-md-2">
 			            <label>Is Party Related?<span class="mandatory" >*</span></label>
 			            <select name="partyRealted" id="partyRealted" class="form-control input-sm select2" required>
@@ -185,26 +150,74 @@ List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 			               <option value="Y" >Yes</option>
 			            </select>
 			        </div>
-			        <div class="col-md-2" id="dealing" >			         
-			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
-			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" maxlength="225" placeholder="Enter Dealing Nature" required>
-			        </div>	
+			        <div id="party" class="col-md-2" >			         
+			            <label>Party's Name:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="partyName" id="partyName" maxlength="225" placeholder="Enter Party Name" required>
+			        </div>
+			        <div class="col-md-4">			         
+			            <label>Party's Address:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="partyAddress" id="partyAddress" maxlength="500" placeholder="Enter Party Address" required>
+			        </div>		
 			     </div>
 			     <br>
+			     
 			     <div class="row">
-			        <div class="col-md-4" id="sitarSanction">			         
-			            <label>Sanction Under SITAR:<span class="mandatory" >*</span></label>
-			            <select name="sanctionRequired" id="sanctionRequired" class="form-control input-sm select2" required>
-			               <option value="N" >Not Required</option>
-			               <option value="Y">Required</option>
-			            </select>
+			        <div class="col-md-4">			         
+			            <label>Transaction Arrangement:<span class="mandatory" >*</span></label>
+			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
 			        </div>
+			         <div class="col-md-4" id="dealing" >			         
+			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
+			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" maxlength="225" placeholder="Enter Dealing Nature" required>
+			        </div>	 
+			        
 			        <div class="col-md-4">			         
 			            <label>Any relevant facts:</label>
 			            <input class="form-control" type="text" name="relavantFacts" maxlength="225" placeholder="Enter Relavant facts">
 			        </div>	
 			     </div>	
-
+			     <br>
+                 <div class="row">
+			        <div class="col-md-2" id="interest">
+			           <label>Applicant Interest :<span class="mandatory" >*</span></label>
+			           <select  name="applicantInterest" id="applicantInterest" class="form-control input-sm select2" onchange="showcents()" required>
+			               <option value="F" >Full Property</option>
+			               <option value="P" >Part In Property</option>
+			           </select>
+			        </div>
+			        <div class="col-md-2" id="extent" >			         
+			            <label>Extent :<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225">
+			        </div>
+			        
+			        <div class="col-md-2" id="finance">
+			           <label>Source for finance:<span class="mandatory" >*</span></label>
+			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
+			               <option value="Personal savings" >Personal savings</option>
+			               <option value="Other sources" >Other sources</option>
+			           </select>
+			        </div>
+			        <div class="col-md-2" id="others" >			         
+			            <label>Other Sources:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="otherSource" id="otherSource" maxlength="225" placeholder="Enter Source Details" required>
+			        </div>
+			        <div class="col-md-2" id="sanction">
+			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
+			           <select name="requisite" id="requisite" class="form-control input-sm select2" required>
+			               <option value="N" >No</option>
+			               <option value="Y" >Yes</option>
+			           </select>
+			        </div>
+			        <div class="col-md-2" id="sitarSanction">			         
+			            <label>Sanction ( SITAR ):<span class="mandatory" >*</span></label>
+			            <select name="sanctionRequired" id="sanctionRequired" class="form-control input-sm select2" required>
+			               <option value="N" >Not Required</option>
+			               <option value="Y">Required</option>
+			            </select>
+			        </div>
+			       
+			     </div>
+			     <br>
                   <br>
 		     	  <div class="row">
 					 <div class="col-md-12" align="center">
@@ -343,117 +356,118 @@ function checknegative(str) {
     }
 }
 
-function showcents(){
-var x=$('#applicantInterest').val();
-if(x=="P"){
-	$('#extent').html('<label>Extent <span class="mandatory">*</span></label><input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225" required>')
-}else{
-	
-	$('#extent').html('<label>Extent </label><input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225" readonly>');
-	/* $('#partialInterest').val(''); */
-}
-} 
-
-$( document ).ready(function() {
-	$('#sanction').hide();
-	$('#others').hide(); 
-	$('#relation').hide();	
-    $("#party").addClass("col-md-4"); 
-	$("#dealing").addClass("col-md-4");
-	/* $("#interest").addClass("col-md-4"); */
-	$('#sitarSanction').hide();
-});
-
-/*  $("#applicantInterest").change(function(){
-	var interest = $('#applicantInterest').val();
-	  if(interest=="P"){
-		$('#extent').show();
-		$("#interest").removeClass("col-md-4");
-		}
-	  else{
-		$('#extent').hide();
-		$("#interest").addClass("col-md-4");
-		}
-}); */
-
-$("#transState").change(function(){
-	var acquire = $('#transState').val();
-	var otherSource = $('#financeSource').val();
-	var mode = $('#mode').val();
-	  if(acquire=="A")
-	  {
-		$('#finance').show();
-		$('#sanction').hide();
-		
-	    if(otherSource=="Other sources")
-	    {
-		   $('#others').show();
-	       $("#party").removeClass("col-md-4");
-		}
-	    if(mode=="Gift" && acquire=="A")
-	    {
-		  $('#sitarSanction').show();
-	    }
-	  }
-	  else{
-		$('#finance').hide();
-		$('#sanction').show();
-		 $('#others').hide(); 
-		 $("#party").addClass("col-md-4");
-		 $('#sitarSanction').hide();
-		}
-	});
-	
-$("#financeSource").change(function(){
-	var otherSource = $('#financeSource').val();
-
-	  if(otherSource=="Other sources"){
-		$('#others').show();
-		$("#party").removeClass("col-md-4");
-		}
-	  else{
-		$('#others').hide();			
-		$("#party").addClass("col-md-4");
-		}
-});
-
-
-$("#partyRealted").change(function(){
-	var relation = $('#partyRealted').val();
-
-	  if(relation=="Y"){
-		$('#relation').show();
-		$("#dealing").removeClass("col-md-4");
-		}
-	  else{
-		$('#relation').hide();
-		$("#dealing").addClass("col-md-4");
-		}
-});
-
-$("#mode").change(function(){
-	var mode = $('#mode').val();
-	var acquire = $('#transState').val();
-	  if(mode=="Gift" && acquire=="A"){
-		$('#sitarSanction').show();
-		}
-	  else{
-		$('#sitarSanction').hide();			
-		}
-});
-
-/* function showFinanceSource(){
-  var acquire = $('#transState').val();
-	
-  if(acquire=="A"){
-     $('#finance').css("display","block");
-	$('#sanction').css("display","none");
- 
+/* function showcents(){
+	var x=$('#applicantInterest').val();
+	if(x=="P"){
+		$('#extent').html('<label>Extent <span class="mandatory">*</span></label><input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225" required>')
 	}else{
-		$('#finance').css("display","none");
-		$('#sanction').css("display","block");
+		
+		$('#extent').html('<label>Extent </label><input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225" readonly>');
+		/* $('#partialInterest').val(''); 
 	}
-} */
+	}  */
+
+	$( document ).ready(function() {
+		$('#sanction').hide();
+		$('#others').hide(); 
+		$('#extent').hide(); 
+		$('#relation').hide();	
+	    $("#party").addClass("col-md-4");  
+		/* $("#dealing").addClass("col-md-4"); */
+		/* $("#interest").addClass("col-md-4"); */
+		$('#sitarSanction').hide();
+	});
+
+	  $("#applicantInterest").change(function(){
+		var interest = $('#applicantInterest').val();
+		  if(interest=="P"){
+			$('#extent').show();
+			}
+		  else{
+			$('#extent').hide();
+			}
+	});
+
+	$("#transState").change(function(){
+		var acquire = $('#transState').val();
+		var otherSource = $('#financeSource').val();
+		var mode = $('#mode').val();
+		  if(acquire=="A")
+		  {
+			$('#finance').show();
+			$('#sanction').hide();
+			
+		    if(otherSource=="Other sources")
+		    {
+			   $('#others').show();
+		       /* $("#party").removeClass("col-md-4"); */
+			}
+		    if(mode=="Gift" && acquire=="A")
+		    {
+			  $('#sitarSanction').show();
+		    }
+		  }
+		  else{
+			$('#finance').hide();
+			$('#sanction').show();
+			 $('#others').hide(); 
+			 /* $("#party").addClass("col-md-4"); */
+			 $('#sitarSanction').hide();
+			}
+		});
+		
+	$("#financeSource").change(function(){
+		var otherSource = $('#financeSource').val();
+
+		  if(otherSource=="Other sources"){
+			$('#others').show();
+			/* $("#party").removeClass("col-md-4"); */
+			}
+		  else{
+			$('#others').hide();			
+			/* $("#party").addClass("col-md-4"); */
+			}
+	});
+
+
+	$("#partyRealted").change(function(){
+		var relation = $('#partyRealted').val();
+
+		  if(relation=="Y"){
+			$('#relation').show();
+			$("#party").removeClass("col-md-4");
+			/* $("#dealing").removeClass("col-md-4"); */
+			}
+		  else{
+			$('#relation').hide();
+			$("#party").addClass("col-md-4");
+			/* $("#dealing").addClass("col-md-4"); */
+			}
+	});
+
+	$("#mode").change(function(){
+		var mode = $('#mode').val();
+		var acquire = $('#transState').val();
+		  if(mode=="Gift" && acquire=="A"){
+			$('#sitarSanction').show();
+			}
+		  else{
+			$('#sitarSanction').hide();			
+			}
+	});
+
+	/* function showFinanceSource(){
+	  var acquire = $('#transState').val();
+		
+	  if(acquire=="A"){
+	     $('#finance').css("display","block");
+		$('#sanction').css("display","none");
+	 
+		}else{
+			$('#finance').css("display","none");
+			$('#sanction').css("display","block");
+		}
+	} */
 
 </script> 
 </body>

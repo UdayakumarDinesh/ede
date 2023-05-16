@@ -36,6 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.athithi.service.PassService;
+import com.vts.ems.pi.service.PIService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 
 @Controller
@@ -44,16 +45,20 @@ public class PassController {
 	@Autowired
 	PassService service;
 	
+	@Autowired
+	PIService piservice;
 	private static final Logger logger = LogManager.getLogger(PassController.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	
 	@RequestMapping(value = "pendingIntimations.htm",method =RequestMethod.GET)
 	public String pendingIntimations(HttpServletRequest req,HttpSession ses) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER pendingIntimations_htm "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER pendingIntimations_htm "+UserId);
+		String LoginType = (String)ses.getAttribute("LoginType");
 		try {
+			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive", "pendingIntimations_htm");
-			req.setAttribute("pendingList", service.pendingIntimations());
+			req.setAttribute("pendingList", service.pendingIntimations(LoginType));
 			return "athithi/pendingIntimations";
 		}
 		catch (Exception e) {
@@ -189,10 +194,12 @@ public class PassController {
 	public String createdPass(HttpServletRequest req,HttpSession ses) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
-		logger.info(new Date() +"Inside CONTROLLER createdPass.htm "+UserId);		
+		logger.info(new Date() +"Inside CONTROLLER createdPass.htm "+UserId);	
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
 			ses.setAttribute("SidebarActive", "createdPass_htm");
-
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 			String fDate=req.getParameter("fdate");
 			String tDate=req.getParameter("tdate");
 			
@@ -203,11 +210,11 @@ public class PassController {
 		 	  String from =dateFormat.format(cal.getTime()).toString();
 			
 			if(fDate!=null) {
-				req.setAttribute("createdPassList", service.getCreatedPassList(new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
+				req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
 				req.setAttribute("fdate",fDate);
 				req.setAttribute("tdate",tDate);
 			}else{
-			   req.setAttribute("createdPassList", service.getCreatedPassList(new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
+			   req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
 			   req.setAttribute("fdate",from);
 			   req.setAttribute("tdate",to);
 			}
@@ -266,9 +273,11 @@ public class PassController {
     {
     	String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER passReport.htm "+UserId);
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
 			ses.setAttribute("SidebarActive", "passReport_htm");
-
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 	    	String fDate=req.getParameter("fdate");
 			String tDate=req.getParameter("tdate");
 		
@@ -279,11 +288,11 @@ public class PassController {
 		 	  String from =dateFormat.format(cal.getTime()).toString();
 			
 			if(fDate!=null) {
-				req.setAttribute("passReportList", service.getPassReport(new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
+				req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
 				req.setAttribute("fdate",fDate);
 				req.setAttribute("tdate",tDate);
 			}else{
-			   req.setAttribute("passReportList", service.getPassReport(new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
+			   req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
 			   req.setAttribute("fdate",from);
 				req.setAttribute("tdate",to);
 			}

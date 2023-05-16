@@ -1,6 +1,6 @@
 package com.vts.ems.athithi.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name="vp_intimation")
 public class Intimation {
@@ -27,6 +32,9 @@ public class Intimation {
       private String SpecialPermission;
       private String OfficerEmpId;
       private String VpStatus;
+      private String Remarks;
+      private String PisStatusCode;
+      private String PisStatusCodeNext;
       private String CreatedBy;
       private String CreatedDate;
       private String ModifiedBy;
