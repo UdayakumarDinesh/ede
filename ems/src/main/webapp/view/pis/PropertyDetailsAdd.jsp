@@ -24,12 +24,11 @@
 				</div>
 			</div>
 		 </div>
-		 <div class="page card dashboard-card" style="min-height: 650px;max-height: 660px;overflow: hidden">
+<div class="page card dashboard-card">
      <div class="card-body" >  
      <div style="margin-left: 15%;margin-top: 0px; font-weight: bold;">FORM FOR STATEMENT OF IMMOVABLE PROPERTY FOR THE YEAR ENDING 31<sup style="font-size: 8px;">ST</sup> DECEMBER &nbsp;<%=LocalDate.now().minusYears(1).getYear() %> </div>  
- <form autocomplete="off">	 
-		<div class="form-group">
-			<div class="table-responsive">
+     <form autocomplete="off">	
+      <div class="card-body"  > 	
 				<table class="table table-bordered table-hover table-striped table-condensed " style="width: 63%; margin-left: 15%; margin-top:5px;">					
 						<tr>
                             <th> <label > Description<span class="mandatory"	style="color: red;">*</span></label> </th>
@@ -72,13 +71,11 @@
                              </tr>
                              
                </table>
-               <button id="btn"type="submit" class="btn btn-sm submit-btn" formaction="AddPropertyReoprt.htm" formmethod="get" onclick="return vadidate()" style="margin-left: 40%;margin-top: 0px;">SUBMIT</button>
-            </div>  
-         </div>
-     
-</form>
-
+                      
+      <button id="btn"type="submit" class="btn btn-sm submit-btn" formaction="AddPropertyReoprt.htm" formmethod="get" onclick="return vadidate()" style="margin-left: 40%;margin-top: 0px;">SUBMIT</button>
 </div>
+</form>
+ </div>
 </div>
 	
 <script>

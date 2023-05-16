@@ -146,7 +146,7 @@ int slno=0;
                <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h4 style="">Form for giving <%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Immovable Property</h4></div>
 		      <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top: -70px;"><h4>(Eg. Land / Plot / Flat / House / Building / Shop etc.)</h4></div>	
 		<!-- <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;margin-left:5%;"><h4>To be submitted at least 30 days before the proposed date of the transaction</h4></div> -->	
-	       </div>
+	        </div>
 	                <br><br>
 	                       <table style="border: 0px;margin-top: 20px; width: 100%;">
 								<tr>
@@ -181,13 +181,10 @@ int slno=0;
 								
 							    <tr>
 								   <td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
-								   <td colspan="4">Purpose of application </td>
-								</tr>
-								<tr>
-								   <td style="border-bottom: 1;border-top: 0"></td>
-								  <%if(imm!=null && imm.getPurpose()!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> <td colspan="4" style="color: blue;">(a) Prior Intimation of transaction</td>
+								   <td>Purpose of application </td>
+								    <%if(imm!=null && imm.getPurpose()!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> <td colspan="2" style="color: blue;">(a) Prior Intimation of transaction</td>
 								  <%}else{%> 
-								  <td colspan="4" style="color: blue;">(b) Prior permission of  transaction (if such transaction is with a person having official dealing w.r.t Sl. No. 13 below and / or if property is situated outside India / transaction is with foreigner.</td> 
+								  <td colspan="2" style="color: blue;">(b) Prior permission of  transaction </td> 
 								  <%}%>
 								</tr>
 								
@@ -320,7 +317,7 @@ int slno=0;
 								</tr>
 						 </table>
 						 
-						 <div style="width: 100%;border: 0;text-align: center;margin-top:70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+						 <div style="width: 100%;border: 0;text-align: center;margin-top:100px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
 							<br>
 							<%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> 
 						    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">

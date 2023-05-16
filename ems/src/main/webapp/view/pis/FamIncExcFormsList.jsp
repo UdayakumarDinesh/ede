@@ -32,13 +32,14 @@
 
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>CHSS Forms</h5>
+			<div class="col-md-5">
+				<h5>Family Member Forms</h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-7">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					<li class="breadcrumb-item active " aria-current="page">Include / Exclude</li>
+					<li class="breadcrumb-item"><a href="PersonalIntimation.htm">Personal Intimations</a></li>
+					<li class="breadcrumb-item active " aria-current="page">Family Member</li>
 				</ol>
 			</div>
 		</div>

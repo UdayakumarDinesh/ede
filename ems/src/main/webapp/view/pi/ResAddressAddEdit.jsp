@@ -26,7 +26,7 @@
 <body>
 <%
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
-
+Object[] empData=(Object[])request.getAttribute("EmpData");
 AddressRes addres = (AddressRes)request.getAttribute("addres"); 
 %>
 
@@ -34,8 +34,10 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
 					<div class="row">
 						<div class="col-md-6">
 						<%if(addres!=null){ %>
-							<h5> Residential Address Edit</h5><%}else{ %>
-									<h5>Residential Address Add</h5><%}%>
+							<h5>Residential Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}else{ %>
+						<h5>Residential Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}%>
 						</div>
 						   <div class="col-md-6">
 								<ol class="breadcrumb ">

@@ -82,23 +82,26 @@ option:checked {
   color: #fff;
 }
 .multiselect{
-padding: 4px 90px;
+padding: 4px 50px;
 background-color:#E0E0E0;
 }
 </style>
 
 </head>
 <body>
-
+<%
+Object[] empData=(Object[])request.getAttribute("EmpData");
+%>
 <div class="card-header page-top ">
 	<div class="row">
-		<div class="col-md-3">
-			<h5>Visitors Intimation </h5>
+		<div class="col-md-8">
+			<h5>Visitors Intimation<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 		</div>
-			<div class="col-md-9 ">
+			<div class="col-md-4">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item ml-auto"><a	href="IntimationList.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Intimation List</a></li>
+					<li class="breadcrumb-item"><a	href="IntimationList.htm">Intimation List</a></li>
 					<li class="breadcrumb-item active" aria-current="page">Intimation</li>
 				</ol>
 			</div>
@@ -275,15 +278,15 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 								</div>
 								</div>
 								<div class="form-group col-md-1" >
-									<label style="margin-left:-115%;">Duration<span class="mandatory" style="color: red;">*</span> </label>
+									<label style="margin-left:-130%;">Duration<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
-						        <div class="col-md-1" style="margin-left:-8.5%;">
-								 <input class="form-control" type="number" id="duration" name="duration" placeholder="In hours" required="required" min="1" max="24">
+						        <div class="col-md-1" style="margin-left:-10%;">
+								 <input class="form-control" type="number" id="duration" name="duration" placeholder="In hours" required="required" min="1" max="24" style="width: 118%">
 								</div>
-								<div class="form-group col-md-2" >
-									<label >Visit Expected Time<span class="mandatory" style="color: red;">*</span> </label>
+								<div class="form-group col-md-2" style="margin-left: 1.3%;">
+									<label >Expected Time<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
-						        <div class="col-lg-3">
+						        <div class="col-lg-2">
 								 <input class="form-control" type="time" value="09:30" id="expectedTime" name="expectedTime" required="required">
 								</div>
 									
@@ -302,19 +305,19 @@ List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
 								    
 								</div>
 								<div class="form-group col-md-2">
-									<label>Special Permission</label>
+									<label>Special Permission<span class="mandatory"  style="color: red;">*</span></label>
 									
 								</div>
 								
 								 <div class="col-md-3">			
 								<!--  <input class="form-control" name="spermission"  id="specialPermission"  maxlength="255" placeholder="Enter max 255 characters" > -->
-								 <select class="form-control col-lg-12 spermission" id="options" name="spermission" multiple required>
-								    <option value="Not Applicable">Not Applicable</option>
-								    <option value="Laptop">Laptop</option>
-								    <option value="Mobile">Mobile</option>
-								    <option value="Pendrive">Pendrive</option>
-								    <option value="CD/DVD">CD/DVD</option>
-								    <option value="Vehicle">Vehicle</option>
+								 <select class="form-control col-lg-12 spermission" id="options" name="spermission" multiple required >
+								    <option value="Not Applicable" id="1">Not Applicable</option>
+								    <option  value="Laptop" id="2" >Laptop</option>
+								    <option value="Mobile" id="3">Mobile</option>
+								    <option value="Pendrive" id="4">Pendrive</option>
+								    <option value="CD/DVD" id="5">CD/DVD</option>
+								    <option value="Vehicle" id="6">Vehicle</option>
 								    </select> 
 								    								    
 								</div> 
@@ -814,8 +817,10 @@ $( "#tdate" ).daterangepicker({
 
 
 </script>
-  <script type="text/javascript">
- /*  $(document).ready(function() {
+<!--
+
+<script type="text/javascript">
+  $(document).ready(function() {
 	  $("#dropdown-submit").click(function() {
 	    var selectedOptions = [];
 	    $("input[type=checkbox]:checked").each(function() {
@@ -824,8 +829,7 @@ $( "#tdate" ).daterangepicker({
 	    console.log(selectedOptions); // or use the selected options for further processing
 	  });
 	});
- */
- 
+
  $(document).ready(function() {
 	  $("#dropdown-submit").click(function() {
 	    var selectedOptions = [];
@@ -841,6 +845,8 @@ $( "#tdate" ).daterangepicker({
 	});
 
   </script>
+  -->
+  
 
 <script type="text/javascript">
 
@@ -851,14 +857,22 @@ enableFiltering: true,
 maxHeight: 200,
 buttonWidth: '100%',
 onChange: function(option, checked) {
-  if(checked) {
-    // Option selected
-    console.log('Option selected: ' + $(option).val());
-  } else {
-    // Option deselected
-    console.log('Option deselected: ' + $(option).val());
-  }
-}
+	
+	  if(checked) {
+	    // Option selected
+	    if($(option).val()=="Not Applicable"){
+	    	console.log('Option selected: ' + $(option).val());
+	    	
+	    	const laptop = $('#2').val();
+	    	console.log('Option selected: ' +laptop);
+	    	laptop.disabled = true;
+	    	
+	    }
+	  } else {
+	    // Option deselected
+	    console.log('Option deselected: ' + $(option).val());
+	  }
+	}
 });
 });
 

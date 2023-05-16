@@ -19,6 +19,7 @@ List<Object[]> passList=(List<Object[]>)request.getAttribute("passReportList");
 String fdate=request.getAttribute("fdate").toString();
 String tdate=request.getAttribute("tdate").toString();
 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+Object[] empData=(Object[])request.getAttribute("EmpData");
 %>
 	<div class="container-fluid">
 		<div class="row">
@@ -28,21 +29,27 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 								
 						<div class="col-md-12" >
 					   			<form class="form-inline" method="post" action="passReport.htm" >
-					   			<h5>Pass Report</h5>
-								<div class="col-md-4"></div>
+					   			<div class="col-md-4">
+					   			<h5 style="margin-left: -15%;width: 250%;">Pass Report<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						           </b></small></h5>
+					   			</div>
+								<div class="col-md-4">
 								<div class="form-group">
-									<label for="fdate">From Date:</label>
-									 <input class="form-control" data-date-format="dd/mm/yyyy" id="fdate" name="fdate" required="required" value="<%=fdate%>"  style="margin-left: 5px;">
+									<label for="fdate" style="margin-left: 39%;">From Date:</label>
+									 <input class="form-control" data-date-format="dd/mm/yyyy" id="fdate" name="fdate" required="required" value="<%=fdate%>"  style="margin-left: 5px; width: 35%;" readonly>
 								</div>
+								</div>
+								<div class="col-md-4">
 								<div class="form-group">
-									<label for="tdate" style="margin-left: 5px;">To Date:</label>
-									 <input class="form-control" data-date-format="dd/mm/yyyy" id="tdate" name="tdate" required="required"  value="<%=tdate%>" style="margin-left: 5px;">
+									<label for="tdate" style="">To Date:</label>
+									 <input class="form-control" data-date-format="dd/mm/yyyy" id="tdate" name="tdate" required="required"  value="<%=tdate%>" style="margin-left: 5px;width: 35%;" readonly>
 								</div>
-								<button type="submit" class="btn  btn-sm submit " style="margin-left: 20px;">Submit</button>
+								</div>
+								<button type="submit" class="btn  btn-sm submit-btn " style="margin-left: -12%;" >Submit</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							</form>
 								<div  style="font-size: 20px; margin-top: -35px;"  align="right">
-								<button class="btn" onclick="tableToExcel('myTable1', 'passReport.htm')" type="submit">
+								<button class="btn" onclick="tableToExcel('myTable1', 'passReport.htm')" type="submit" style="margin-right: 1%;">
 									<i class="fa-regular fa-file-excel" aria-hidden="true" style="font-size: 1.5em; color: green;"></i></button>
 								</div>
 		   					</div>
@@ -52,7 +59,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 						<table class="table table-bordered table-hover table-striped table-condensed" id="myTable1">
 							<thead>
 							<tr>
-							<th colspan="8" style="text-align: center;">PASS REPORT: <%=fdate%>&nbsp;to&nbsp;<%=tdate%></th>
+							<th colspan="8" style="text-align: center;background-color: #E91E63">PASS REPORT: <%=fdate%>&nbsp;to&nbsp;<%=tdate%></th>
 							</tr>
 								<tr>
 								    <th style="text-align: center;">SN</th>

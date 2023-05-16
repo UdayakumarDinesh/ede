@@ -2245,8 +2245,10 @@ public class PisController {
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
 				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
-				ses.setAttribute("formmoduleid", "5");
-				ses.setAttribute("SidebarActive",controllerMapping.replace(".", "_"));
+				ses.setAttribute("formmoduleid", "9");
+//				ses.setAttribute("formmoduleid", "5");
+//				 ses.setAttribute("SidebarActive",controllerMapping.replace(".", "_")); 
+				
 				
 				String empid = ((Long) ses.getAttribute("EmpId")).toString();	
 				
@@ -6308,6 +6310,7 @@ public class PisController {
 			try {
 				ses.setAttribute("SidebarActive", "PropertyReport_htm");
 				String action = req.getParameter("action");
+				req.setAttribute("Empdata", service.GetEmpData(EmpId));
 				if ("ADD".equalsIgnoreCase(action)) {
 					return "pis/PropertyDetailsAdd";
 				} else if ("EDIT".equalsIgnoreCase(action)) {
