@@ -128,7 +128,6 @@ input:focus {
 <body>
 	<%
 	String LabLogo = (String) request.getAttribute("LabLogo");
-	String LoginType = (String) session.getAttribute("LoginType");
 	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yyyy");
 	Date date = new Date();
 

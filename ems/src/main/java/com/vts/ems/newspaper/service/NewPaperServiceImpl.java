@@ -195,6 +195,11 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		return dao.getLabDetails();
 	}
 	
+	@Override
+	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception{
+		return dao.NewspaperAllApprovedOrNot(claimMonth, claimYear);
+	}
+	
 	
 /////////////////////////////////////////////////Telephone///////////////////////////////////////////////
 	

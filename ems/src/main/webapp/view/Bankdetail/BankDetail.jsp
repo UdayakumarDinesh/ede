@@ -121,7 +121,7 @@
 								%>
 								<tr>
 									<%
-									if (ls[11].toString().equalsIgnoreCase("INI")) {
+									if (ls[11].toString().equalsIgnoreCase("INI") || ls[11].toString().equalsIgnoreCase("RDG") || ls[11].toString().equalsIgnoreCase("RPA")) {
 									%>
 									<td style="text-align: center;"><input type="radio"
 										name="bankId" value="<%=ls[0]%>" required="required"></td>

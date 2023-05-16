@@ -24,6 +24,7 @@ public interface NewsPaperService {
 	public List<Object[]> getNewspaperReportPrintData(String NewspaperBillId) throws Exception;
 	public Object[] getNewspaperContingentBillPrintData(String NewspaperBillId) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
+	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
 	
 	
 	

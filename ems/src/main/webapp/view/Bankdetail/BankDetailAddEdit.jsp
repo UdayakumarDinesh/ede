@@ -1,7 +1,7 @@
-
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.List, com.vts.ems.utils.DateTimeFormatUtil"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +16,9 @@
 	/* List<Object[]> bankDetailList = (List<Object[]>) request.getAttribute("BankDetailList"); */
 	Object[] oneBankDeatil = (Object[]) request.getAttribute("oneBankDeatil");
 	Object[] empNameAndDesi=(Object[]) request.getAttribute("empNameAndDesi");
+	
+	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	%>
 
 	<div class="card-header page-top">
@@ -103,10 +106,10 @@
 											<th><label>Valid From:<span class="mandatory"
 													style="color: red;">*</span></label></th>
 											<td><input class="form-control"
-												placeholder="Enter Your Account No" type="date" id=""
+												type="text" id="datepicker"
 												name="ValidFrom"
-												value="<%if (oneBankDeatil != null) {%><%=oneBankDeatil[6]%><%}%>"
-												required="required" maxlength="30" style="font-size: 15px;"></td>
+												value="<%if (oneBankDeatil != null) {%><%=rdf.format(sdf.parse(oneBankDeatil[6].toString()))%><%}%>"
+												required="required" maxlength="30" style="font-size: 15px;" readonly></td>
 										</tr>
 
 
@@ -134,6 +137,26 @@
 		</div>
 	</div>
 
-	<script type="text/javascript"></script>
+	<script type="text/javascript">
+	
+	     $("#datepicker").daterangepicker({ 
+	         "minDate": new Date(<%-- <%=DateTimeFormatUtil.fromDatabaseToActual(oneBankDeatil[6].toString())%> --%>),
+	     "singleDatePicker" : true,
+	 	"linkedCalendars" : false,
+	 	"showCustomRangeLabel" : true,
+	 	//"minDate" :new Date(), 
+	 	"cancelClass" : "btn-default",
+	 	showDropdowns : true,
+	 	locale : {
+	 		format : 'DD-MM-YYYY'
+	 	}
+	     });
+
+	/* $(function() {
+	    $( "#datepicker" ).datepicker({ minDate: 0});
+	  }); */
+
+
+	</script>
 </body>
 </html>

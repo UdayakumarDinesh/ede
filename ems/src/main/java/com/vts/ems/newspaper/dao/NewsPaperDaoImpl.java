@@ -599,7 +599,35 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 	}
 	
+	private static final String NEWSPAPERALLAPPROVEDORNOT="SELECT a.ClaimMonth,a.ClaimYear,a.ClaimAmount,a.RestrictedAmount,a.PayableAmount,b.PayLevel,b.PayGrade, em.EmpName, a.EmpNo\r\n"
+			+ "FROM pis_newspaper a, pis_pay_level b, employee em  WHERE  a.PayLevelId=b.PayLevelId AND a.EmpNo=em.EmpNo AND a.ClaimMonth=:claimMonth AND a.Claimyear=:claimYear";
 	
+	@Override
+	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear)throws Exception
+	{
+		List<Object[]> NewspaperUserPrintData = null;
+
+		try {
+
+			Query q = manager.createNativeQuery( NEWSPAPERALLAPPROVEDORNOT);
+			q.setParameter("claimMonth", claimMonth);
+			q.setParameter("claimYear", claimYear);
+			NewspaperUserPrintData =  q.getResultList();
+
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
+
+			 logger.error(new Date() +"Inside DAO NewspaperAllApprovedOrNot "+e);
+			e.printStackTrace();
+		}
+
+		return (NewspaperUserPrintData);
+
+	}
 	
 	
 	
