@@ -90,12 +90,6 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
-					  			 <tr > 
-                                    <td  colspan="6" style=" text-align:center; background-color: white; color:#005C97; ">
-                                    <h5 style="height: 10px;">List of Applied Tour   </h5>
-                                   
-                                    </td>                                  
-                                 </tr>
 								  <tr>
 								  	  <th>SN</th>
 									  <th>Date</th>
@@ -104,7 +98,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 								      <th>Purpose</th>
 								      <th>Status</th>
 								  </tr>
-					  </thead>
+							  </thead>
 	                  <tbody>
 	  
 							 <%if(tourapplylist!=null&&tourapplylist.size()!=0){
@@ -125,7 +119,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 												 <button class="btn btn-sm btn-link w-100 " formaction="Tour-Status-details.htm" name="tourapplyid" value="<%=hlo[7]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=hlo[9]%>; font-weight: 600;" >
 													  &nbsp;<%=hlo[8]%> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
-											</td>
+										</td>
 								</tr> 
                   <%}}%>
 	            </tbody>

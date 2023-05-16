@@ -40,5 +40,7 @@ public interface TourDao {
 	public Object[] GetPAFADetails()throws Exception; 
 	public int CancelTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate) throws Exception ;
+	public Object[] GetTourDetails(String tourapplyid) throws Exception;
+	public List<Object[]> getTourOnwardReturnDetails(String tourapplyid)throws Exception;
 
 }
