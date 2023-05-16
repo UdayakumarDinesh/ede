@@ -14,4 +14,5 @@ public class ApprovalDto {
         private String Status;
         private String Type;
         private String Funds;
+        private String Value;
 }

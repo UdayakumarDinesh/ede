@@ -11,13 +11,11 @@
 <style type="text/css">
 .table thead th {
     color: white;
-    background-color: #0e6fb6;
+   
     text-align: center;
     padding-bottom: 0.1rem !important;
     padding-top: 0.1rem !important;
 }
-
-
 .trup
 		{
 			padding:5px 10px 0px 10px ;			
@@ -25,8 +23,6 @@
 			border-top-right-radius: 5px;
 			font-size: 14px;
 			font-weight: 600;
-			
-			
 		}
 		
 		.trdown
@@ -38,23 +34,23 @@
 			font-weight: 600;
 		}
 
-
-
 </style>
 </head>
 <body>
 <%
-/* List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist"); */
+ Object[] emplist = (Object[])request.getAttribute("ApprovalEmp"); 
 List<Object[]> ModeOfTravelList=(List<Object[]>)request.getAttribute("ModeOfTravelList");
 List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
+Object[] empdata      = (Object[])request.getAttribute("Empdata");
 
 %>
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Add Tour Program </h5>
+			<div class="col-md-6">
+				<h5>Add Tour Program <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%>
+						</b></small></h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-6">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="TourProgram.htm"> Tour </a></li>
@@ -224,43 +220,47 @@ List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
-	                		<td class="trup" style="background: #E8E46E;">
-	                			User 
+	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
+	                			User <br> <%=session.getAttribute("EmpName")%>
 	                		</td>
-	                		<td rowspan="2">
+	                		<td rowspan="2" >
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		
-	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM 
+	                		<td class="trup" style="background: linear-gradient(to top, #FBC7F7 10%, transparent 115%);">
+	                			Dept Incharge <br> <%=emplist[0]%>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	               		
-	               		
-	                		<td class="trup" style="background: #4DB6AC;" >
-	                			P&A
+	               			<td class="trup"  style="background: linear-gradient(to top, #4DB6AC 10%, transparent 115%);">
+	                			DGM <br> <%=emplist[1]%>
 	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		
+	                		<td class="trup"  style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);" >
+	                			F & A <br> <%=emplist[2]%>
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
+	                			P & A <br> <%=emplist[3]%>
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		<td class="trup" style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
+	                			CEO <br> <%=emplist[4]%>
+	                		</td>
+	                		
 	               		
 	               	</tr>			   
 		                	
-	               	<tr>
-	               		<td class="trdown" style="background: #E8E46E;" >	
-				             
-	                	</td>
-	               		
-	                		<td class="trdown" style="background: #FBC7F7;" >	
-				               
-	                		</td>
-	               		
-	               		
-	               			<td class="trdown" style="background: #4DB6AC;" >	
-			                	
-		           			</td>
-		           		
-		            	</tr>             	
+	                          	
 			           </table>			             
 			 	</div>
 			<hr>

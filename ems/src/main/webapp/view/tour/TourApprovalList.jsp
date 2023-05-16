@@ -34,19 +34,43 @@
 .card-header {
     padding: 0.25rem 1.25rem 0.25rem 1.25rem;
     }
-   
+  #blink ,#blink2,#blink3 {
+	  animation: blinker 2s linear infinite;
+	  background-color:red !important;
+	  width: 16px;
+	  top: 3.2px;
+  } 
+  @keyframes blinker {
+  50% {
+    opacity: 0.35;
+  }
+}
 </style>
 </head>
 <body>
+<%
+Object[] empdata = (Object[])request.getAttribute("Empdata");
+
+List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
+List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
+List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+
+String fromdate = (String)request.getAttribute("fromdate");
+String todate = (String)request.getAttribute("todate");
+String empno= (String)request.getAttribute("empno");
+SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+
+%>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Tour Approval</h5>
+			<div class="col-md-6">
+				<h5>Tour Approval <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
-			<div class="col-md-9 ">
+			<div class="col-md-6">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item "><a href="LeaveDashBoard.htm">Tour</a></li>
+					<li class="breadcrumb-item "><a href="TourProgram.htm">Tour</a></li>
 					<li class="breadcrumb-item active " aria-current="page">Tour Approval</li>
 				</ol>
 			</div>
@@ -71,17 +95,6 @@
 <div class="card">
 
    <div class="card-body" align="center" >
-<% 
-    List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
-    List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
-    List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
-    List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
-
-    String fromdate = (String)request.getAttribute("fromdate");
-    String todate = (String)request.getAttribute("todate");
-    String empno= (String)request.getAttribute("empno");
-    SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-%>
 	    <div class="row" style="margin-top:7px;"> 
 	    <div class="col-md-12">
 
@@ -90,10 +103,8 @@
         <h5>
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse0" id="applcollapse"><span  style="font-size:14px">
           
-          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
-         
-          </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(approval!=null){ %>  <%=approval.size()%> <%}else{ %> 0 <%} %></span>
+          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"></i> 
+           <span class="badge badge-danger badge-counter badge-success" id="blink"><% if(approval!=null){ %>  <%=approval.size()%> <%}else{ %> 0 <%} %></span>
           Applied Tour  For Approval </span></a>
         </h5>
       </div>
@@ -156,7 +167,7 @@
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
           </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(fAndAdeptlist!=null){ %>  <%=fAndAdeptlist.size()%> <%}else{ %> 0 <%} %></span>
+           <span class="badge badge-danger badge-counter badge-success" id="blink2"><% if(fAndAdeptlist!=null){ %>  <%=fAndAdeptlist.size()%> <%}else{ %> 0 <%} %></span>
           Applied Tour To F & A Department for Approval</span></a>
         </h5>
       </div>
@@ -223,7 +234,7 @@
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" id="applcollapse2"><span  style="font-size:14px">
           
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(canceledlist!=null){ %>  <%=canceledlist.size()%> <%}else{ %> 0 <%} %></span>
+           <span class="badge badge-danger badge-counter badge-success" id="blink3"><% if(canceledlist!=null){ %>  <%=canceledlist.size()%> <%}else{ %> 0 <%} %></span>
           Canceled Tour  For Approval </span></a>
         </h5>
       </div>

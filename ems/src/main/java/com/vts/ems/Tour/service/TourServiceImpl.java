@@ -116,6 +116,7 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception
 	{
+		
 		 return dao.GetApplyStatusList(empno , fromdate , todate);
 	}
 	
@@ -133,21 +134,21 @@ public class TourServiceImpl implements TourService {
 		
 		if (checkStartDate.before(checkEndDate) || checkStartDate.equals(checkEndDate)) {
 			if (daysdifference <= 180) {
-				
 					try {
 						String fromdate = DateTimeFormatUtil.RegularToSqlDate(DepartureDate);
 						String todate = DateTimeFormatUtil.RegularToSqlDate(ArrivalDate);
+						
 					Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
-					if (checkTDAlreadyPresentForSameEmpidAndSameDate >=0) {
+					if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
 								Result[0]="You Can Apply";
 								Result[1]="Pass";
 								return Result;
-							} else {
+						} else {
 								Result[0]="TD Already Present For Same Period";
 								Result[1]="Fail";
 								Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
 								return Result;
-							}
+						}
 					} catch (Exception e) {
 						Result[0]=" Please Enter Advance Amount Correctly";
 						Result[1]="Fail";
@@ -521,6 +522,7 @@ public class TourServiceImpl implements TourService {
 		int result =  dao.CancelTour(dto);
 		if(result>0) {
 			TourTransaction transaction=new TourTransaction();
+			transaction.setTourRemarks(dto.getValue());
 	        transaction.setActionBy(dto.getEmpNo());
 	        transaction.setActionDate(sdtf.format(new Date()));
 	        transaction.setTourApplyId(Long.parseLong(dto.getApplId()));
@@ -536,5 +538,15 @@ public class TourServiceImpl implements TourService {
 		return dao.GetTourCancelList(empno, fromdate , todate);
 	}
 
-
+	@Override
+	public Object[] GetTourDetails(String tourapplyid) throws Exception
+	{
+		return dao.GetTourDetails(tourapplyid);
+	}
+	
+	@Override
+	public List<Object[]> getTourOnwardReturnDetails(String tourapplyid)throws Exception
+	{
+		return dao.getTourOnwardReturnDetails(tourapplyid);
+	}
 }

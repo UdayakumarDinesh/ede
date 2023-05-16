@@ -26,7 +26,7 @@ import com.vts.ems.utils.DateTimeFormatUtil;
 @Repository
 public class InventoryDaoImpl implements InventoryDao{
 	
-	private static final Logger logger = LogManager.getLogger(helpdeskDaoImpl.class);
+	private static final Logger logger = LogManager.getLogger(InventoryDaoImpl.class);
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	

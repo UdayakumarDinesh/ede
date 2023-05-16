@@ -239,8 +239,7 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				   
 				   </div>
 				   <br>				   				  
-			   </div>			   			  
-			
+			   </div>			   			  	
 </body>
 
 </html>

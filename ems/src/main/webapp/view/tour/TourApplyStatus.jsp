@@ -16,11 +16,13 @@ String fromdate = (String)request.getAttribute("fromdate");
 String todate = (String)request.getAttribute("todate");
 String empno = (String)request.getAttribute("empno");
 List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
+Object[] empdata = (Object[])request.getAttribute("Empdata");
+
 %>
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-6">
-				<h5>Tour Apply StatusList </h5>
+				<h5>Tour Apply StatusList <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 				<div class="col-md-6">
 					<ol class="breadcrumb ">
@@ -88,12 +90,6 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
-					  			 <tr > 
-                                    <td  colspan="6" style=" text-align:center; background-color: white; color:#005C97; ">
-                                    <h5 style="height: 10px;">List of Applied Tour   </h5>
-                                   
-                                    </td>                                  
-                                 </tr>
 								  <tr>
 								  	  <th>SN</th>
 									  <th>Date</th>
@@ -102,7 +98,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 								      <th>Purpose</th>
 								      <th>Status</th>
 								  </tr>
-					  </thead>
+							  </thead>
 	                  <tbody>
 	  
 							 <%if(tourapplylist!=null&&tourapplylist.size()!=0){
@@ -123,7 +119,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 												 <button class="btn btn-sm btn-link w-100 " formaction="Tour-Status-details.htm" name="tourapplyid" value="<%=hlo[7]%>" formtarget="_blank" 
 													 data-toggle="tooltip" data-placement="top" title="Transaction History"  style=" color:<%=hlo[9]%>; font-weight: 600;" >
 													  &nbsp;<%=hlo[8]%> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
-											</td>
+										</td>
 								</tr> 
                   <%}}%>
 	            </tbody>
@@ -136,6 +132,7 @@ List<Object[]> emplist = (List<Object[]>)request.getAttribute("emplist");
 </div>
 </body>
 <script type="text/javascript">
+
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -149,8 +146,7 @@ $('#fromdate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-console.log(new Date('<%=fromdate%>'));
-console.log(new Date('<%=todate%>'));
+
 $('#todate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
@@ -165,11 +161,22 @@ $('#todate').daterangepicker({
 		format : 'DD-MM-YYYY'
 	}
 });
-$(document).ready(function(){
-	   $('#fromdate, #todate').change(function(){
-	       $('#myform').submit();
-	    });
+
+$( "#fromdate" ).change(function(){
+	$('#todate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		"minDate" : $('#fromdate').val(), 
+		"startDate" : new Date(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
 	});
+});
+
 </script>
 
  

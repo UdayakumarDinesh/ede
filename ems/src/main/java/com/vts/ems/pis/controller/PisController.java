@@ -4149,7 +4149,11 @@ public class PisController {
 	       logger.info(new Date() +"Inside AddEditPassport.htm "+Username);
 	       try {
 
+	    	   String NOCpassport=req.getParameter("NOC");
+	    	   System.out.println("NOC--"+NOCpassport);
+	    	   req.setAttribute("NOCpassport", NOCpassport);
 	    	   String Action = (String) req.getParameter("Action");
+	    	   
 	    	   String empid =(String)req.getParameter("empid");
 	    	   
 	    	   	if("PassportEdit".equalsIgnoreCase(Action)) {
@@ -4209,6 +4213,21 @@ public class PisController {
 	        			 redir.addAttribute("resultfail", "Passport details  ADD Unsuccessful");	
 	        	    }
 	        	    redir.addFlashAttribute("Employee", empid);
+			}
+			
+			else if ("noc".equalsIgnoreCase(Action)) {
+				
+				  pport.setCreatedBy(Username);
+				  pport.setCreatedDate(sdf.format(new Date()));
+	        	  long result  =  service.AddPassport(pport); 
+	        	 
+	        	    if(result>0) {
+	        	    	 redir.addAttribute("result", "Passport details Add Successfull");	
+	        		} else {
+	        			 redir.addAttribute("resultfail", "Passport details  ADD Unsuccessful");	
+	        	    }
+	        	    redir.addFlashAttribute("Employee", empid);
+	        	    return "redirect:/PassportAdd.htm";
 			}
 				
 			} catch (Exception e) {

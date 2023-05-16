@@ -12,12 +12,13 @@
 <body>
 <%
 List<Object[]>  sanctionlist = (List<Object[]>)request.getAttribute("SanctionList");
+Object[] empdata = (Object[])request.getAttribute("Empdata");
 
 %>
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-6">
-				<h5>Tour List </h5>
+				<h5>Tour Sanctioned List <small><b>&nbsp;&nbsp; &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 				<div class="col-md-6">
 					<ol class="breadcrumb ">
@@ -52,12 +53,6 @@ List<Object[]>  sanctionlist = (List<Object[]>)request.getAttribute("SanctionLis
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
-					  			 <tr > 
-                                    <td  colspan="6" style=" text-align:center; background-color: white; color:#005C97; ">
-                                    <h5 style="height: 10px;">List of Applied Tour   </h5>
-                                   
-                                    </td>                                  
-                                 </tr>
 								  <tr>
 								  	  <th>SN</th>
 									  <th>Date</th>
@@ -87,7 +82,7 @@ List<Object[]>  sanctionlist = (List<Object[]>)request.getAttribute("SanctionLis
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
 									   <%if(hlo[6].toString().equalsIgnoreCase("ABC")){%>
-									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="CANCEL/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
+									  		<button type="button" class="btn btn-sm edit-btn"  onclick="CancelTour('<%=hlo[7]%>')"  data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
 									  	<%}%>	
 									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
@@ -101,8 +96,39 @@ List<Object[]>  sanctionlist = (List<Object[]>)request.getAttribute("SanctionLis
 						</div>
 				</form>	
 	</div>
+	<!---------------------- Model Open --------------------------------->
+
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <form action="TourCancel.htm">
+		      <div class="modal-header">
+		        <h5 class="modal-title">Reason For Cancel Tour</h5>
+                 <button  type="button"  class="close" data-dismiss="modal">&times;</button>
+		      </div>
+		      <div class="modal-body" align="center">
+		        <textarea rows="3" cols="40"  name="reason" required="required" maxlength="490" placeholder="Enter The Reason........!"></textarea>
+		      </div>
+		      <div class="modal-footer">
+		      	<input type="hidden" name="Action" id="action">
+		        <button type="submit" class="btn btn-sm submit-btn" >Submit</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+<!---------------------- Model Close --------------------------------->
+	
 </div>	
 </div>
+<script type="text/javascript">
+
+function CancelTour(myfrm) {
+	console.log("CANCEL/"+myfrm);
+	 $("#action").val("CANCEL/"+myfrm);
+	 $('#staticBackdrop').modal('toggle');
+}
+</script>
 </body>
 
 </html>
