@@ -8,6 +8,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -95,7 +100,7 @@ public class TourDaoImpl implements TourDao {
 				return 0l;
 			}
 		}
-		private static final String GETAPPLYLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.empno=:empno  ORDER BY a.tourapplyid DESC";
+		private static final String GETAPPLYLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor, a.tourno FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND c.tourstatusid > 0 AND c.tourstatusid < 15 AND a.empno=:empno  ORDER BY a.tourapplyid DESC";
 		@Override
 		public List<Object[]> GetTourApplyList(String empno)throws Exception
 		{
@@ -104,7 +109,7 @@ public class TourDaoImpl implements TourDao {
 			return (List<Object[]>) query.getResultList();
 		
 		}
-		private static final String GETAPPLYSTATUSLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC') AND a.empno=:empno  AND a.initiateddate BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
+		private static final String GETAPPLYSTATUSLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC') AND a.empno=:empno  AND CAST(a.initiateddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
 		@Override
 		public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception
 		{
@@ -115,7 +120,7 @@ public class TourDaoImpl implements TourDao {
 			return (List<Object[]>) query.getResultList();
 		}
 	
-		private static final String CHECKDATE="SELECT a.Empno,a.divisionId FROM tour_apply a WHERE Empno=:empno AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG') AND (:fromdate BETWEEN a.stayfrom  AND a.stayto OR  :todate BETWEEN a.stayfrom  AND a.stayto  OR a.stayfrom BETWEEN :fromdate AND :todate) AND a.IsActive='1'";
+		private static final String CHECKDATE="SELECT a.Empno,a.divisionId FROM tour_apply a WHERE Empno=:empno AND a.tourstatuscode IN ('INI','FWD','VDH','ABD','ABF','ABP','ABC') AND (:fromdate BETWEEN a.stayfrom  AND a.stayto OR  :todate BETWEEN a.stayfrom  AND a.stayto  OR a.stayfrom BETWEEN :fromdate AND :todate) AND a.IsActive='1'";
 		@Override
 		public Long  checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate)
 	   	{
@@ -475,7 +480,7 @@ public class TourDaoImpl implements TourDao {
 			return 0;
 		}
    }
-   private static final String TOURCANCELSTATUS="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor  FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC') AND a.empno=:empno  AND a.initiateddate BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
+   private static final String TOURCANCELSTATUS="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor  FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC') AND a.empno=:empno  AND CAST(a.initiateddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
    @Override
    public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate) throws Exception {
 	
@@ -485,4 +490,33 @@ public class TourDaoImpl implements TourDao {
 		query.setParameter("todate", todate);
 		return (List<Object[]>) query.getResultList();
 	}
+   private static final String TOURDETAILS="SELECT a.tourapplyid , a.tourno , a.empno , e.divisionname , b.empname , c.dob , c.phoneno ,b.email, d.paylevel  , a.purpose , a.earliestdate , a.earliesttime , a.earliestplace , stayfrom , a.stayto , a.stayplace , a.airtravjust , a.advancepropsed ,a.advanceissued , a.tourstatuscode , a.fundsavailable , a.pandaremarks , a.initiateddate , a.remarks FROM tour_apply a , employee b ,employee_details c , pis_pay_level d , division_master e WHERE a.empno = b.empno AND b.empno =c.empno AND d.paylevelid = c.paylevelid AND e.divisionid = a.divisionid AND a.tourapplyid=:tourapplyid";
+   
+    @Override
+	public Object[] GetTourDetails(String tourapplyid) throws Exception
+	{
+		try {
+			 Query query = manager.createNativeQuery(TOURDETAILS);
+			 query.setParameter("tourapplyid", tourapplyid);
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+		}catch (Exception e){
+				logger.error(new Date() +"Inside DAO GetPAFADetails "+ e);
+				e.printStackTrace();
+				return null;
+		}	
+	}
+		
+    private static final String GETTOUTJOURNEYDETAIOLS="SELECT a.tourdate , a.tourtime , c.cityname as'fromname' , d.cityname as'tocity' , b.modename FROM tour_onwardreturn a, tour_mode_of_travel b , tour_city c , tour_city d WHERE a.fromcityid = c.tourcityid AND a.tocityid = d.tourcityid AND a.modeid = b.modeid AND a.tourapplyid=:tourapplyid";
+		@Override
+		public List<Object[]> getTourOnwardReturnDetails(String tourapplyid)throws Exception
+		{
+			Query query = manager.createNativeQuery(GETTOUTJOURNEYDETAIOLS);
+			query.setParameter("tourapplyid", tourapplyid);
+			return (List<Object[]>) query.getResultList();
+   
+		}
 }

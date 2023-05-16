@@ -12,13 +12,12 @@
 <body>
 <%
 List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist");
-Object[] empdata = (Object[])request.getAttribute("Empdata");
 
 %>
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-6">
-				<h5>Tour List <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
+				<h5>Tour List </h5>
 			</div>
 				<div class="col-md-6">
 					<ol class="breadcrumb ">
@@ -53,14 +52,10 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
 								<thead>
-					  			 <tr > 
-                                    <td  colspan="6" style=" text-align:center; background-color: white; color:#005C97; ">
-                                    <h5 style="height: 10px;">List of Applied Tour   </h5>
-                                   
-                                    </td>                                  
-                                 </tr>
+					  			
 								  <tr>
 								  	  <th>SN</th>
+								  	  <th>TourNo</th>
 									  <th>Date</th>
 								      <th>Applied On</th>
 								      <th>Name</th>
@@ -81,12 +76,30 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
                             	   %>
 	                             <tr>
 	                             	  <td align="center"> <%=++sn %></td>
+	                             	 
+	                             	  <td>
+	                             	   <%if(hlo[10]!=null){%>
+	                             	  <button type="submit" class="btn btn-sm btn-link w-100 " formaction="TourApplyReport.htm" formmethod="get" name="tourapplyid" value="<%=hlo[7]%>" formtarget="_blank" 
+													  style=" color:<%=hlo[10]%>; font-weight: 600;" ><%=hlo[10]%></button>
+									  
+	                             	  <%}else{ %>
+	                             	    <button class="btn btn-sm btn-link w-100 ">--</button>
+	                             	  <%}%>
+	                             	   </td>
 									  <td align="center"><%=stayfromdate%> To <%=staytodate%></td>
                                		  <td align="center"><%=applydate %><br/> for <%=noofdays%> Day(s)</td>
 									  <td align="center"><%=hlo[0]+"" %></td>
 									  <td><%=hlo[4]+"" %></td>
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
+									   
+									   		<button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=hlo[7]%>"     data-toggle="tooltip" data-placement="top" title="View Form" >
+									 			<i class="fa-solid fa-eye"></i>
+									 		</button>
+									 		<button type="submit" class="btn btn-sm" name="Action" value="Download/<%=hlo[7]%>" formaction="DownloadTourProposal.htm" formmethod="get" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+															<i style="color: #019267" class="fa-solid fa-download"></i>
+											</button> 
+									   	
 									   <%if(hlo[6].toString().equalsIgnoreCase("INI")){%>
 									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>
 									  		<button type="submit" class="btn btn-sm submit-btn" name="Action" value="ForwardTour/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Forward"><i class="fa fa-forward" aria-hidden="true"></i> </button>
@@ -94,6 +107,9 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
 									  	<%}%>
+									  	<%if(hlo[6].toString().equalsIgnoreCase("ABC")){%>
+									  		<button type="button" class="btn btn-sm edit-btn"  onclick="CancelTour('<%=hlo[7]%>')"  data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
+									  	<%}%>	
 									  </td>
 								</tr> 
                   <%}}%>
@@ -106,20 +122,4 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 </div>	
 </div>
 </body>
-
- <script type="text/javascript">
- 
- function Edit(myfrm) {
-
-		var fields = $("input[name='tourapplyId']").serializeArray();
-
-		if (fields.length === 0) {
-			alert("Please Select Atleast One ");
-
-			event.preventDefault();
-			return false;
-		}
-		return true;
-	}
- </script>
 </html>

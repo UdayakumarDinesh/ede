@@ -34,7 +34,17 @@
 .card-header {
     padding: 0.25rem 1.25rem 0.25rem 1.25rem;
     }
-   
+  #blink ,#blink2,#blink3 {
+	  animation: blinker 2s linear infinite;
+	  background-color:red !important;
+	  width: 16px;
+	  top: 3.2px;
+  } 
+  @keyframes blinker {
+  50% {
+    opacity: 0.35;
+  }
+}
 </style>
 </head>
 <body>
@@ -93,10 +103,8 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
         <h5>
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse0" id="applcollapse"><span  style="font-size:14px">
           
-          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
-         
-          </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(approval!=null){ %>  <%=approval.size()%> <%}else{ %> 0 <%} %></span>
+          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"></i> 
+           <span class="badge badge-danger badge-counter badge-success" id="blink"><% if(approval!=null){ %>  <%=approval.size()%> <%}else{ %> 0 <%} %></span>
           Applied Tour  For Approval </span></a>
         </h5>
       </div>
@@ -159,7 +167,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
          
           </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(fAndAdeptlist!=null){ %>  <%=fAndAdeptlist.size()%> <%}else{ %> 0 <%} %></span>
+           <span class="badge badge-danger badge-counter badge-success" id="blink2"><% if(fAndAdeptlist!=null){ %>  <%=fAndAdeptlist.size()%> <%}else{ %> 0 <%} %></span>
           Applied Tour To F & A Department for Approval</span></a>
         </h5>
       </div>
@@ -226,7 +234,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" id="applcollapse2"><span  style="font-size:14px">
           
           <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> </i> 
-           <span class="badge badge-danger badge-counter badge-success" ><% if(canceledlist!=null){ %>  <%=canceledlist.size()%> <%}else{ %> 0 <%} %></span>
+           <span class="badge badge-danger badge-counter badge-success" id="blink3"><% if(canceledlist!=null){ %>  <%=canceledlist.size()%> <%}else{ %> 0 <%} %></span>
           Canceled Tour  For Approval </span></a>
         </h5>
       </div>
