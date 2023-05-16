@@ -110,9 +110,9 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					  <tbody>
 						<tr>
 						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%} %> </td>
-						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
+						  <td style="border: 0;width:17%;">To: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp.No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
 						 <tr> 
 						  	<td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
 							  <%for(Object[] apprInfo : ApprovalEmpData){ %>
