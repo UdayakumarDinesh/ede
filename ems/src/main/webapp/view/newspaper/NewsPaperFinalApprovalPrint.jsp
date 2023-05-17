@@ -87,6 +87,7 @@ tr, th, td {
 					Dt:&nbsp;<%=rdf.format(date) %>
 				</p>
 			</div>
+			<%if(newsPaperFinalAppro != null && newsPaperFinalAppro.size()>0) {%>
 			<div style="margin-left:25px; margin-right: auto; margin-top: 80px; ">
 				<p>
 					The residential newspaper claims for reimbursement received from the following employees for the period <b>
@@ -104,8 +105,8 @@ tr, th, td {
 					<th>Emp No</th>
 					<th>Name</th>
 					<th>Grade</th>
-					<th>Amount Claimed</th>
-					<th>Amount Admitted</th>
+					<th>Amount Claimed (Rs.)</th>
+					<th>Amount Admitted (Rs.)</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -141,9 +142,10 @@ tr, th, td {
 			Senior Finance Officer</p>
 			<p style="margin-top: 130px;">Dobbidi Ashok Kumar <br>
 			Head-Budget, Finance & Project Accounting</p>
-			<p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned</b></p>
+			<p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned	 </b></p>
 			<p style="text-align:center; margin-top: 60px;"><b>CEO</b></p>
 		</div>
+		<%} else { %> <h1 style="color: red; margin-top: 100px; text-align: center">No Data</h1> <%} %>
 	</div>
 
 </body>

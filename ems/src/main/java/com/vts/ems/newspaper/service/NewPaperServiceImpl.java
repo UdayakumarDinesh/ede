@@ -543,6 +543,10 @@ public class NewPaperServiceImpl implements NewsPaperService {
 
 	}
 
+	@Override
+	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception{
+		return dao.TelePhoneAllApprovedOrNot(claimMonth, claimYear);
+	}
 
 
 ///////////////////*telephone*//////////////////////////////////////

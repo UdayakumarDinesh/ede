@@ -57,7 +57,7 @@ tr, th, td {
 </head>
 <body>
 	<%
-	List<Object[]> newsPaperFinalAppro=(List<Object[]>) request.getAttribute("newsPaperFinalAppro");
+	List<Object[]> TelePhoneFinalAppro=(List<Object[]>) request.getAttribute("TelePhoneFinalAppro");
 	String LabLogo = (String) request.getAttribute("LabLogo");
 	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yyyy");
 	Date date = new Date();
@@ -81,7 +81,7 @@ tr, th, td {
 			<div style="margin-left: auto; margin-right: auto;">
 				<p style="margin: 0; display: inline; float: left; font-family:  Arial, Helvetica, sans-serif">
 
-					<b>Ref:&nbsp; STARC/F&A/NEWSPAPER/2022-23/ </b>
+					<b>Ref:&nbsp; STARC/F&A/TELEPHONE/2022-23/<%if(TelePhoneFinalAppro != null && TelePhoneFinalAppro.size()>0 ) {%> <%=TelePhoneFinalAppro.get(0)[0].toString()%>'<%= TelePhoneFinalAppro.get(0)[1].toString().substring(2,4)%> </b>
 				</p>
 				<p style="margin: 0; display: inline; float: right;">
 					Dt:&nbsp;<%=rdf.format(date) %>
@@ -89,8 +89,21 @@ tr, th, td {
 			</div>
 			<div style="margin-left:25px; margin-right: auto; margin-top: 80px; ">
 				<p>
-					The residential newspaper claims for reimbursement received from the following employees for the period <b>
-					<%if(newsPaperFinalAppro != null && newsPaperFinalAppro.get(0)[0].toString().equalsIgnoreCase("JAN-JUN")) {%>JANUARY to JUNE <%}else{  %>JULY to DECEMBER<%}  %> <%if(newsPaperFinalAppro != null){ %><%=newsPaperFinalAppro.get(0)[1] %> <%} %> </b>have been processed and admitted as under:
+					The claims for reimbursement of Residential Telephone expenses for Executive received from the following employees for the month of <b>
+					<%if(TelePhoneFinalAppro != null ) { String month=TelePhoneFinalAppro.get(0)[0].toString();%> 
+					<% if(month.equalsIgnoreCase("JAN")) {%> <b>JANUARY 
+					<%} else if(month.equalsIgnoreCase("FEB")) {%> FEBRUARY 
+					<%} else if(month.equalsIgnoreCase("MAR")) {%> MARCH 
+					<%} else if(month.equalsIgnoreCase("APR")) {%> APRIL 
+					<%} else if(month.equalsIgnoreCase("MAY")) {%> MAY 
+					<%} else if(month.equalsIgnoreCase("JUN")) {%> JUNE 
+					<%} else if(month.equalsIgnoreCase("JUL")) {%> JULY 
+					<%} else if(month.equalsIgnoreCase("AUG")) {%> AUGUST 
+					<%} else if(month.equalsIgnoreCase("SEP")) {%> SEPTEMBER 
+					<%} else if(month.equalsIgnoreCase("OCT")) {%> OCTOBER 
+					<%} else if(month.equalsIgnoreCase("NOV")) {%> NOVEMBER 
+					<%} else if(month.equalsIgnoreCase("DEC")) {%> DECEMBER 
+					<%}%> &nbsp;-&nbsp; <%=TelePhoneFinalAppro.get(0)[1].toString()%> </b> <%}%></b>have been processed and admitted as under:
 				</p>
 			</div>
 		</div>
@@ -104,27 +117,31 @@ tr, th, td {
 					<th>Emp No</th>
 					<th>Name</th>
 					<th>Grade</th>
-					<th>Amount Claimed</th>
-					<th>Amount Admitted</th>
+					<th>Month of Claim</th>
+					<th>Amount Eligible (Rs.)</th>
+					<th>Amount Claimed (Rs.)</th>
+					<th>Amount Admitted (Rs.)</th>
 				</tr>
 			</thead>
 			<tbody>
-			<% if(newsPaperFinalAppro != null && newsPaperFinalAppro.size()>0) {%>
-			<% for(Object[] obj : newsPaperFinalAppro) {%>
+			<% if(TelePhoneFinalAppro != null && TelePhoneFinalAppro.size()>0) {%>
+			<% for(Object[] obj : TelePhoneFinalAppro) {%>
 			<tr>
 				<%totalClaimAmount +=Math.round(Double.parseDouble(obj[2].toString()));
-				totalAdmittedAm +=Math.round(Double.parseDouble(obj[3].toString()));%>
-				<td style="text-align: center; width: 10%"><%=++i %></td>
-				<td style="text-align: center; width: 15%"><%= obj[8]%></td>
+				totalAdmittedAm +=Math.round(Double.parseDouble(obj[4].toString()));%>
+				<td style="text-align: center; width: 8%"><%=++i %></td>
+				<td style="text-align: center; width: 10%"><%= obj[8]%></td>
 				<td style="text-align: left; width: 30%"><%= obj[7]%></td>
 				<td style="text-align: center;"><%= obj[6]%></td>
-				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[2].toString().substring(0,obj[2].toString().length()-3))%></td>
+				<td style="text-align: center;"><%= obj[0]%>-<%= obj[1].toString().substring(obj[1].toString().length()-2,obj[1].toString().length())%></td>
 				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[3].toString().substring(0,obj[3].toString().length()-3))%></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[2].toString().substring(0,obj[2].toString().length()-3))%></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[4].toString().substring(0,obj[4].toString().length()-3))%></td>
 				
 			</tr>
 			<%}} %>
 			<tr>
-				<td style="text-align: center;" colspan="4"><b>Total</b></td>
+				<td style="text-align: center;" colspan="6"><b>Total</b></td>
 				<td style="text-align: right;"><%= nfc.rupeeFormat(Long.toString(totalClaimAmount)) %></td>
 				<td style="text-align: right;"><%= nfc.rupeeFormat(Long.toString(totalAdmittedAm))  %></td>
 			</tr>
@@ -132,9 +149,8 @@ tr, th, td {
 		</table>
 			
 		<div style="margin-left: 15px; margin-top: 30px;">
-			<p>The claims are accordingly admitted for the above employees and it is requested to condone for those employees who had submitted beyond due date and approve 
-			the reimbursement of residential Newspaper claims.</p>
-			<p style="margin-top: 25px;">Put up for approval please</p>
+			<p>The claims are accordingly admitted for the above employees, it is requested to approve the reimbursement of residential telephone expenses.</p>
+			<p style="margin-top: 25px;">Put up for approval.</p>
 			<p style="margin: 0; display: inline; float: left; margin-top: 40px;">Srikanth KR <br>	
                Executive Officer-Fin</p>
 			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;">Kavya Jayaraman <br>
@@ -144,6 +160,7 @@ tr, th, td {
 			<p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned</b></p>
 			<p style="text-align:center; margin-top: 60px;"><b>CEO</b></p>
 		</div>
+		<%} else {%> <h1 style="color: red; margin-top: 100px; text-align: center">No Data</h1> <%} %>
 	</div>
 
 </body>

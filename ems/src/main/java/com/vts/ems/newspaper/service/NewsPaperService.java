@@ -79,5 +79,6 @@ public interface NewsPaperService {
 			String IsBroadBand, String UserRemark, String id);
 	public int TeleApproval(Map<String, String> map, String FromDate, String ToDate, String Empid);
 	public int TeleSendback(Map<String, String> map, String FromDate, String ToDate, String Empid);
-
+	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception;
+	
 }

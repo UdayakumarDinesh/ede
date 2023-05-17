@@ -629,6 +629,36 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 	}
 	
+	private static final String TELEPHONEALLAPPROVEDORNOT="SELECT a.ClaimMonth,a.ClaimYear,a.GrossTotal,a.RestrictedAmt,a.PayableAmount,b.PayLevel,b.PayGrade, em.EmpName, a.Empid\r\n"
+			+ "FROM pis_tele a, pis_pay_level b, employee em  WHERE  a.PayLevelId=b.PayLevelId AND a.EmpId=em.EmpNo AND a.ClaimMonth=:claimMonth AND a.Claimyear=:claimYear ";
+	
+	@Override
+	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception
+	{
+		List<Object[]>  TelePhoneUserPrintData = null;
+
+		try {
+
+			Query q = manager.createNativeQuery( TELEPHONEALLAPPROVEDORNOT);
+			q.setParameter("claimMonth", claimMonth);
+			q.setParameter("claimYear", claimYear);
+			TelePhoneUserPrintData =  q.getResultList();
+
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
+
+			 logger.error(new Date() +"Inside DAO TelePhoneAllApprovedOrNot "+e);
+			e.printStackTrace();
+		}
+
+		return ( TelePhoneUserPrintData);
+
+	}
+	
 	
 	
 ///////////////////////////////////////// Telephone code ///////////////////////////////////////////////
