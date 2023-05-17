@@ -9,7 +9,7 @@
 <head>
 <meta charset="ISO-8859-1">
 
-<title>Vehicle Parking Form</title>
+<title>Tour Proposal Form</title>
 <%
 	String LabLogo = (String) request.getAttribute("LabLogo");
 
@@ -18,6 +18,8 @@
 	Object[] ApprovalEmp=(Object[])request.getAttribute("ApprovalEmp"); 
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 	%>
+	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+	
 <style type="text/css">
 
 			.break {
@@ -277,10 +279,10 @@ body
 										    tourdetails[19].toString().equalsIgnoreCase("RBP") || tourdetails[19].toString().equalsIgnoreCase("ABP") ||
 										    tourdetails[19].toString().equalsIgnoreCase("RBC") || tourdetails[19].toString().equalsIgnoreCase("ABC") ||
 										    tourdetails[19].toString().equalsIgnoreCase("REV") ){%>
-									<tr>
+									<tr class="break">
 										<td colspan="3">
 										Signature of DGM<br>
-										Name : &nbsp;&nbsp;<%=ApprovalEmp[1] %>
+										Name : &nbsp;&nbsp;<%=ApprovalEmp[1] %><br>
 										</td>
 									</tr>
 									<%}%>
@@ -298,12 +300,13 @@ body
 									
 									<tr>
 										<td> &nbsp; &nbsp;&nbsp; &nbsp;Available :</td>
-										<td colspan="2"></td>
+										<td colspan="2"> <%if(tourdetails[20]!=null && tourdetails[20].toString().equalsIgnoreCase("Y")){%> <b style="color: green;"> Yes</b> <%}%></td>
 									</tr>
 									<tr>
 										<td>&nbsp; &nbsp;&nbsp; &nbsp;Not Available :</td>
-										<td colspan="2"></td>
+										<td colspan="2"> <%if(tourdetails[20]!=null && tourdetails[20].toString().equalsIgnoreCase("N")){%> <b style="color: Red ;"> No</b> <%}%></td>
 									</tr>
+									
 									<tr> 
 										<td colspan="3" style="text-align: right;">
 											(<%=ApprovalEmp[2] %>)<br>

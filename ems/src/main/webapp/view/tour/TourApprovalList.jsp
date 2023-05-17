@@ -65,7 +65,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-6">
-				<h5>Tour Approval <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
+				<h5>Tour Approval <small><b>&nbsp;&nbsp; &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 			<div class="col-md-6">
 				<ol class="breadcrumb ">

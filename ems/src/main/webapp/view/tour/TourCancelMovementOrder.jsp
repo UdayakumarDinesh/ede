@@ -11,6 +11,8 @@
 <jsp:include page="../../view/static/dependancy.jsp"></jsp:include>
         
 <spring:url value="/webresources/css/Header.css" var="Header" />
+<%-- 	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+ --%>
 <title>Tour Report</title>
 <style type="text/css">
 
@@ -28,7 +30,7 @@
     <div class="row">
         <div class="col-md-12"  style="margin-top: 50px; margin-left: 30px">
           <div class="row" style="margin-right: 48px">
-            <div class="col-6" style="font-size: 20px">Our Ref. No. STARC/P & A/1601 </div>
+            <div class="col-6" style="font-size: 20px">Our Ref. No. <%=details[1]%> </div>
             <div class="col-6" style="text-align: right; font-weight: bold">Date : <%=DateTimeFormatUtil .fromDatabaseToActual( LocalDate.now().toString())%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   		  </div>
           &nbsp;
@@ -39,9 +41,9 @@
           </div>
         </div>
              <h3 style="text-align: center;text-decoration: underline; margin-top: 70px">SUB : CANCELLATION OF TOUR PROGRAMME</h3>
-          <P class="para" style="margin-top: 25px ; font-size: 18px">Kindly refer to the Movement order issued vide Ref:No STARC/P&A/   dated  <br>
-          As the tour has been cancelled, the Movement Order dated      Stands 
-          </P>
+          <p class="para" style="margin-top: 25px ; font-size: 18px">Kindly refer to the Movement order issued vide Ref:No &nbsp;<b style="color: #007bff;"><%=details[1]%></b> &nbsp; dated  <br>
+          As the tour has been cancelled, the Movement Order dated  <b style="color: #007bff;"><%=DateTimeFormatUtil .fromDatabaseToActual( LocalDate.now().toString())%>  </b>  Stands 
+          </p>
           
     </div>
     </div>

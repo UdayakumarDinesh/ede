@@ -9,7 +9,7 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
-<title>Vehicle Parking Form</title>
+<title>Tour Proposal Form</title>
 
 </head>
 <body>
@@ -25,7 +25,7 @@
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Tour Program Form</h5>
+				<h5>Tour Proposal Form</h5>
 			</div>
 			<div class="col-md-9 ">
 				<ol class="breadcrumb ">
@@ -266,11 +266,11 @@
 									
 									<tr>
 										<td> &nbsp; &nbsp;&nbsp; &nbsp;Available :</td>
-										<td colspan="2"></td>
+										<td colspan="2"> <%if(tourdetails[20]!=null && tourdetails[20].toString().equalsIgnoreCase("Y")){%> <i class="fa fa-check" aria-hidden="true" style="color: green;"></i> <%}%></td>
 									</tr>
 									<tr>
 										<td>&nbsp; &nbsp;&nbsp; &nbsp;Not Available :</td>
-										<td colspan="2"></td>
+										<td colspan="2"> <%if(tourdetails[20]!=null && tourdetails[20].toString().equalsIgnoreCase("N")){%> <i class="fa fa-times" aria-hidden="true" style="color: red ;"></i> <%}%></td>
 									</tr>
 									
 									<tr> 
@@ -290,10 +290,10 @@
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3"> 1)Above tour program may be approved and sanction an advance amount Rs.___________</td>
+										<td colspan="3"> 1)Above tour program may be approved and sanction an advance amount Rs.<%=tourdetails[17]%></td>
 									</tr>
 									<tr>
-										<td colspan="3" > 2)Remarks, If any:</td>
+										<td colspan="3" > 2)Remarks, If any:  <%=tourdetails[21]%></td>
 									</tr>
 									
 									<tr>

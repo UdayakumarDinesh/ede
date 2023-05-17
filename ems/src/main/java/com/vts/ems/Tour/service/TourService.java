@@ -18,7 +18,7 @@ public interface TourService {
 	public Long AddTourApply(TourApplyDto dto)throws Exception;
 	public List<Object[]> GetTourApplyList(String empno)throws Exception;
 	public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception;
-	public String[]	checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate)throws Exception;
+	public String[]	checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate , String action , String tourid)throws Exception;
 	public TourApply getTourApplyData(Long tourid)throws Exception;
 	public List<TourOnwardReturn> getTourOnwardReturnData(Long tourid)throws Exception;
 	public Long EditTourApply(TourApplyDto dto)throws Exception;
@@ -32,6 +32,7 @@ public interface TourService {
 	public Object[] GetApprovalEmp(String empno)throws Exception;
 	public Long RevokeTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetSanctionList(String empno)throws Exception;
+	public List<Object[]> GetCancelList(String empno)throws Exception;
 	public int CancelTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate)throws Exception;
 	public Object[] GetTourDetails(String tourapplyid) throws Exception;
