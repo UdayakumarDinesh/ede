@@ -86,7 +86,8 @@ public interface NocDao {
 	public long AddPassport(Passport pport)throws Exception;
 
 	public List<LabMaster> getLabMasterDetails()throws Exception;
-
+	
+	public long GetPassportCount(String empid)throws Exception;
 	
 	
 	

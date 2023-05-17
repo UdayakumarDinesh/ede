@@ -40,7 +40,13 @@ public class NocDaoImpl implements NocDao {
 		
 		Query query=manager.createNativeQuery(EMPDATA);
 		query.setParameter("EmpId", EmpId);
-		return (Object[])query.getSingleResult();
+		List<Object[]> list =(List<Object[]>) query.getResultList();
+		
+		Object[] result=null;
+		if(list!=null &&list.size()>0) {
+			result =list.get(0);
+		}
+		return result;
 		
 	}
 	
@@ -633,6 +639,23 @@ public class NocDaoImpl implements NocDao {
 		
 	
 	}
+
+	private static final String GETCOUNT="SELECT  COUNT(*) FROM pis_passport WHERE empid=:empid";
+	@Override
+	public long GetPassportCount(String empid) throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(GETCOUNT);
+			query.setParameter("empid", empid);
+			BigInteger PassportId=(BigInteger)query.getSingleResult();
+			return PassportId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO GetPassportCount "+ e);
+			return 0;
+		}
+	}
+	
+	
 }
 	
 

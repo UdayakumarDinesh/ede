@@ -51,12 +51,14 @@ table {
 
 				 <!-- <div align="left">&nbsp;<span style="font-weight:bold;">(A Government of India Society)</span><br>&nbsp;Vijinapura Road,<br>&nbsp;Dooravani Nagar P.O.,<br>&nbsp;Bangalore-560016 <br>&nbsp;Karnataka,INDIA</div>  -->
 			
-				<div align="left" > 
+				<div align="left" style=""> 
+				
 						        <span style="font-weight:bold;" >&nbsp;(A Government of India Society)</span><br>
+								<div style="margin-top: 20px;">
 								<span style="font-weight: 400;">&nbsp;Vijinapura Road,</span><br>
 								<span style="font-weight: 400;">&nbsp;Dooravani Nagar P.O.,</span><br>
 								<span style="font-weight: 400;">&nbsp;Bangalore-560016</span><br>
-								<span style="font-weight: 400;">&nbsp;Karnataka,INDIA</span>
+								<span style="font-weight: 400;">&nbsp;Karnataka,INDIA</span></div>
 		        </div>
 		        
 				<div style="margin-top:-70px;margin-left:280px !important;"align="left"> 

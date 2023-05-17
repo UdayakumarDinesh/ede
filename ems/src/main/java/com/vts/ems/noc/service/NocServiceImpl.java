@@ -82,12 +82,16 @@ public class NocServiceImpl implements NocService {
 				.build();
 		
           dao.NocPassportTransactionAdd(transaction);
+          long count = dao.GetPassportCount(pport.getEmpId());
+          if(count==0) {
+        	  dao.AddPassport(pport);
+          }
           
-          dao.AddPassport(pport);
         
 		NocPassport noc =NocPassport.builder()
 				.NocPassportNo(NocPassportNo)
 				.EmpNo(dto.getEmpNo())
+				.PassportExist(dto.getPassportExist())
 				.RelationType(dto.getRelationType())
 				.RelationName(dto.getRelationName())
 				.RelationAddress(dto.getRelationAddress())
@@ -128,7 +132,7 @@ public class NocServiceImpl implements NocService {
 		
 		NocPassport noc =dao.getNocPassportId(dto.getNocPassportId());
 		
-		
+		noc.setPassportExist(dto.getPassportExist());
 		noc.setRelationType(dto.getRelationType());
 		noc.setRelationName(dto.getRelationName());
 		noc.setRelationAddress(dto.getRelationAddress());

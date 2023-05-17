@@ -54,6 +54,7 @@
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
+	 Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
 	List<Object[]> PassportList=(List<Object[]>)request.getAttribute("NOCPASSPORTLIST");
@@ -183,7 +184,7 @@
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="submit" class="btn btn-sm add-btn" formaction="PassportAdd.htm">ADD</button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="PassportAdd.htm" <%if(NocEmpList==null){ %> onclick="message()" <%} %>>ADD</button>
 						<button type="submit" class="btn btn-sm edit-btn" formaction="PassportEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCPassport)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm delete-btn" formaction="" name="action" value="DELETECIR" Onclick="Delete(NOCPassport)">DELETE</button> -->
 						
@@ -289,7 +290,7 @@
 			           </table>			             
 			       </div>
 
-<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Permanent and Residential Address must be approved before applying NOC for Passport *</b> </marquee></div>
+<!-- <div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Permanent and Residential Address must be approved before applying NOC for Passport *</b> </marquee></div> -->
 		</div>
 
 	</div>
@@ -338,6 +339,13 @@ function Delete(NOCPassport){
 	}
 }
 
+function message(){
+	
+	alert("Permanent and Residential address is mandatory before applying NOC for Passport");
+	event.preventDefault();
+	return false;
+	
+}
 
 </script>
 

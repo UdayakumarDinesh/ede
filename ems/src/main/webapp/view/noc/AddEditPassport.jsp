@@ -98,12 +98,21 @@
 			
 			  <div class="col-md-2">
 			                <label> Passport Type:</label>
-			                <select name="" class="form-control select2"  required="required">
+			                
 			                 
-			                    <option value="N">New</option>
-			                      <option value="R">Renewal</option>
+			                   
+			                  <% if(EmpPassport!=null) { %>
+			                    <input  class="form-control input-sm " type="text" name="PassportExist" readonly value="Renewal">
 			                    
-			                </select>
+			                    <%}
+			                    else{%>
+			                    <select name="PassportExist" class="form-control select2"  required="required">
+			                         <option value="" selected="selected" disabled="disabled">Select</option>
+			                    	 <option value="New">New</option>
+			                    	   <option value="Renewal">Renewal</option>
+			                    </select>
+			                   <%} %>
+			                
 			             
 			     </div>
 			
@@ -212,28 +221,28 @@
 			         
 			         <div class="col-md-2">
 			                <label> Passport Type </label>
-			                <input type="text" id="" name="Permanent"  value="<%=EmpPassport[0] %>"
+			                <input type="text" id="" name="PassportType"  value="<%=EmpPassport[0] %>"
 			                    class=" form-control input-sm " readonly="readonly">
 			                   
 			            </div>
 			            
 			             <div class="col-md-2">
 			                <label> Passport No. </label>
-			                <input type="text" id="" name="Permanent"    value="<%=EmpPassport[1] %>"
+			                <input type="text" id="" name="PassportNo"    value="<%=EmpPassport[1] %>"
 			                    class=" form-control input-sm "  readonly="readonly">
 			                   
 			            </div> 
 			            
 			              <div class="col-md-2">
 			                <label>Date of Issue  </label>
-			                <input type="text" id="" name="RelationName"    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
+			                <input type="text" id="" name="ValidFrom"    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
 			                   class=" form-control input-sm "   readonly="readonly">
 			                    
 			            </div>
 			            
 			            <div class="col-md-2">
 			                <label>Validity </label>
-			                <input type="text" id="" name="RelationOccupation"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
+			                <input type="text" id="" name="ValidTo"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
 			                    class=" form-control input-sm "  readonly="readonly">
 			                   
 			            </div>

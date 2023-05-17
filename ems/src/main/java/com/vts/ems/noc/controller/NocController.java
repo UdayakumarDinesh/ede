@@ -153,6 +153,7 @@ public class NocController {
 			 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 			 
 			 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+			 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 			 
 			req.setAttribute("NOCPASSPORTLIST",service.getnocPassportList(EmpNo) );
 			return "noc/Passport";
@@ -225,6 +226,7 @@ public class NocController {
 				
 				
 				Passport pport= new Passport();
+				
 				pport.setEmpId(EmpId);
 				pport.setPassportType(req.getParameter("PassportType"));
 				pport.setStatus(req.getParameter("Status"));
@@ -237,6 +239,7 @@ public class NocController {
 				
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .EmpNo(EmpNo)
+						 .PassportExist(req.getParameter("PassportExist"))
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -284,6 +287,8 @@ public class NocController {
 				String NocPassportId = req.getParameter("NocPassportId");
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .NocPassportId(Long.parseLong(NocPassportId))
+						 .PassportExist(req.getParameter("PassportExist"))
+						 .PassportEntries(req.getParameter("PassportEntries"))
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -386,7 +391,7 @@ public class NocController {
 			String passportid=req.getParameter("Passportid");
 				
 			req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
-			
+		    req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="NOCPassport-"+passportid.toString().trim().replace("/", "-");
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
