@@ -15,8 +15,6 @@
 <%
 	List<Object[]> NewspaperApprovalList=(List<Object[]>)request.getAttribute("NewspaperApprovalList");
 %>
-
-
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-6">
