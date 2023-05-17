@@ -113,7 +113,7 @@ tr, th, td {
 			<% for(Object[] obj : newsPaperFinalAppro) {%>
 			<tr>
 				<%totalClaimAmount +=Math.round(Double.parseDouble(obj[2].toString()));
-				totalAdmittedAm +=Math.round(Double.parseDouble(obj[3].toString()));%>
+				totalAdmittedAm +=Math.round(Double.parseDouble(obj[4].toString()));%>
 				<td style="text-align: center; width: 10%"><%=++i %></td>
 				<td style="text-align: center; width: 15%"><%= obj[8]%></td>
 				<td style="text-align: left; width: 30%"><%= obj[7]%></td>
