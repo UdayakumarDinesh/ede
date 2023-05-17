@@ -102,11 +102,11 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 									   <%-- <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
 									  	<%}%> --%>
-									  	<%if(new Date().before(new SimpleDateFormat("dd-MM-yyyy").parse(parsedate))){%>
+									  	<%-- <%if(new Date().before(new SimpleDateFormat("dd-MM-yyyy").parse(parsedate))){%>
 									  	<button class="btn btn-sm" type="submit" formaction="TourModify.htm" formmethod="GET" name="tourapplyid"  value="Modify/<%=hlo[7]%>"  data-toggle="tooltip" data-placement="top" title="Modify">
                                 			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 		</button>
-                                		<%}%>
+                                		<%}%> --%>
 									  </td>
 								</tr> 
                   <%}}%>
