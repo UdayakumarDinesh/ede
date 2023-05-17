@@ -100,7 +100,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 									<td>
 									<input  type="hidden" id="visitorId<%=visitor[0]%>" name="visitorId" value="<%=visitor[0]%>">
 									<div class="row"  id="photoDiv<%=visitor[0]%>" style="margin-left: 1rem;">
-									<%if(visitor[4]==null){ %>
+									<%if(visitor[4]==null || visitor[4].toString().isEmpty()){ %>
 									    <button class="btn btn-primary btn-sm"  style="height: 27px;" onclick="onCamera(<%=visitor[0]%>)">Open Camera</button>
 									<%} else{
 										byte[] fileContent = FileUtils.readFileToByteArray(new File("D:\\visitorPhoto\\"+visitor[4]));

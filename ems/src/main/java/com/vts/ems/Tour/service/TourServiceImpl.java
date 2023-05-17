@@ -121,7 +121,7 @@ public class TourServiceImpl implements TourService {
 	}
 	
 	@Override
-	public String[]	checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate)throws Exception
+	public String[]	checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate , String action , String tourid)throws Exception
 	{
 		String[] Result=new String[5]; 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -138,17 +138,35 @@ public class TourServiceImpl implements TourService {
 						String fromdate = DateTimeFormatUtil.RegularToSqlDate(DepartureDate);
 						String todate = DateTimeFormatUtil.RegularToSqlDate(ArrivalDate);
 						
-					Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
-					if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
+					
+						if(action!=null && action.equalsIgnoreCase("Edit")) {
+							/* Tour Edit */
+							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTourAlreadyPresentForSameEmpidAndSameDates(tourid, empno,fromdate,todate);
+							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
 								Result[0]="You Can Apply";
 								Result[1]="Pass";
 								return Result;
-						} else {
-								Result[0]="TD Already Present For Same Period";
-								Result[1]="Fail";
-								Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
+								} else {
+										Result[0]="TD Already Present For Same Period";
+										Result[1]="Fail";
+										Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
+										return Result;
+								}
+						}else {
+							/* First Tour Apply */
+							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
+							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
+								Result[0]="You Can Apply";
+								Result[1]="Pass";
 								return Result;
+								} else {
+										Result[0]="TD Already Present For Same Period";
+										Result[1]="Fail";
+										Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
+										return Result;
+								}
 						}
+					
 					} catch (Exception e) {
 						Result[0]=" Please Enter Advance Amount Correctly";
 						Result[1]="Fail";
@@ -181,6 +199,11 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public Long EditTourApply(TourApplyDto dto)throws Exception
 	{
+		
+//		String fromdate = 
+//		Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTourAlreadyPresentForSameEmpidAndSameDates(dto.getTourApplyId(), dto.getEmpNo(),dto.getStayFrom(),dto.getStayTo());
+//		
+		
 		TourApply apply = dao.getTourApplyData(dto.getTourApplyId());
 		apply.setStayFrom(dto.getStayFrom());
 		apply.setStayTo(dto.getStayTo());
@@ -416,10 +439,10 @@ public class TourServiceImpl implements TourService {
 						dto.setStatus("CAF");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}else if(status.equalsIgnoreCase("CAF")) {
-						dto.setStatus("CAP");
-						dto.setApplId(dto.getApprove()[i].split("_")[0]);
-					}else if(status.equalsIgnoreCase("CAP")) {
 						dto.setStatus("CAC");
+						dto.setApplId(dto.getApprove()[i].split("_")[0]);
+					}else if(status.equalsIgnoreCase("CAC")) {
+						dto.setStatus("CAP");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}
 					dao.getTourUpdate(dto);
@@ -450,9 +473,9 @@ public class TourServiceImpl implements TourService {
 					}else if(status.equalsIgnoreCase("CAG")) {
 						dto.setStatus("CDF");
 					}else if(status.equalsIgnoreCase("CAF")) {
-						dto.setStatus("CDP");
-					}else if(status.equalsIgnoreCase("CAP")) {
 						dto.setStatus("CDC");
+					}else if(status.equalsIgnoreCase("CAC")) {
+						dto.setStatus("CDP");
 					}
 					dto.setApplId(dto.getReject()[i].split("_")[0]);
 
@@ -516,6 +539,13 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.GetSanctionList(empno);
 	}
+	
+	@Override
+	public List<Object[]> GetCancelList(String empno)throws Exception
+	{
+		return dao.GetCancelList(empno);
+	}
+	
 	@Override
 	public int CancelTour(ApprovalDto dto)throws Exception
 	{

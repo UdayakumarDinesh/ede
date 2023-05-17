@@ -12,6 +12,8 @@
         
 <spring:url value="/webresources/css/Header.css" var="Header" />
 <title>Tour Report</title>
+<%-- 	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+ --%>
 <style type="text/css">
 
 

@@ -311,11 +311,7 @@ function Edit(NOCPassport)
 		return false;
 	}
 	return true;
-	
-}
-	   	   
-	   
-
+}  	   
 function Delete(NOCPassport){ 
 	
 	var fields = $("input[name='NocPassportId']").serializeArray();

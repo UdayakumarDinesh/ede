@@ -144,6 +144,32 @@ public class TourDaoImpl implements TourDao {
 				}  
 	   		}
 		
+		private static final String CHECKTOURFOREDIT="SELECT a.Empno,a.divisionId FROM tour_apply a WHERE Empno=:empno AND a.tourstatuscode IN ('INI','FWD','VDH','ABD','ABF','ABP','ABC') AND (:fromdate BETWEEN a.stayfrom  AND a.stayto OR  :todate BETWEEN a.stayfrom  AND a.stayto  OR a.stayfrom BETWEEN :fromdate AND :todate)  AND a.tourapplyid<>:tourid AND a.IsActive='1'";
+		@Override
+		public Long checkTourAlreadyPresentForSameEmpidAndSameDates(String tourid, String empno,String DepartureDate,String ArrivalDate)throws Exception
+		{
+			  try {
+
+					Query query = manager.createNativeQuery(CHECKTOURFOREDIT);
+						query.setParameter("empno",empno);
+						query.setParameter("tourid", tourid);
+		   		        query.setParameter("fromdate",DepartureDate);
+		   			    query.setParameter("todate",ArrivalDate);
+					List<Object[]> list =(List<Object[]>)query.getResultList();
+					
+					Long result=0l;
+					if(list!=null && list.size()>0) {
+						result=(long) list.size();
+					}
+					return result;
+				} catch (Exception e) {
+					logger.error(new Date() + "Inside DAO EmployeeDetails "+e);
+					e.printStackTrace();
+					return 0l;
+				}  
+	   		}
+
+		
 		@Override
 		public TourApply  getTourApplyData(Long tourid) throws Exception
 		{
@@ -429,7 +455,7 @@ public class TourDaoImpl implements TourDao {
 		}	
 	}
 	
-	private  static final String GETSANCLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND a.tourstatuscode='ABC'"; 
+	private  static final String GETSANCLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor , a.tourno FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND a.tourstatuscode='ABC'"; 
 	@Override
 	public List<Object[]> GetSanctionList(String empno)throws Exception
 	{
@@ -440,6 +466,20 @@ public class TourDaoImpl implements TourDao {
 			
 		}catch (Exception e) {
 			logger.error(new Date()  + "Inside DAO GetSanctionList " + e);
+			return new ArrayList<Object[]>();
+		}
+	}
+	private static final String GETCENCELLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor , a.tourno FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND (a.tourstatuscode='CBU' OR c.tourstatusid >13 AND c.tourstatusid< 24)";
+	@Override
+	public List<Object[]> GetCancelList(String empno)throws Exception
+	{
+		try {
+			Query query= manager.createNativeQuery(GETCENCELLIST);
+			query.setParameter("empno", empno);
+			return (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetCancelList " + e);
 			return new ArrayList<Object[]>();
 		}
 	}

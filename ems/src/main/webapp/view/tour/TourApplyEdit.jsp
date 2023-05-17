@@ -35,7 +35,7 @@ Object[] empdata      = (Object[])request.getAttribute("Empdata");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-3">
-				<h5>Edit Tour Program <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
+				<h5>Edit Tour Program <small><b>&nbsp;&nbsp; &nbsp;&nbsp;<%if(empdata!=null){%><%=empdata[0]%> (<%=empdata[1]%>)<%}%></b></small></h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb">
@@ -476,9 +476,11 @@ function TourCheck()
 		type : "GET",
 		url : "checktour.htm",
 		data : {
+			action : "Edit",
+			tourapplyid : '<%=apply.getTourApplyId()%>',
 			AdvanceReqAmount    :	advamt,
 			DepartureDate : departuredate,
-			ArrivalDate   :arrivaldate,
+			ArrivalDate   : arrivaldate,
 		},
 		datatype : 'json',
 		success : function(result) {

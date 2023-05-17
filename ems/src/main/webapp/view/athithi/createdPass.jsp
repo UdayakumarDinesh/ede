@@ -25,6 +25,7 @@ List<Object[]> passList=(List<Object[]>)request.getAttribute("createdPassList");
 String fdate=request.getAttribute("fdate").toString();
 String tdate=request.getAttribute("tdate").toString();
 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+Object[] empData=(Object[])request.getAttribute("EmpData");
 %>
 	<div class="container-fluid">
 		<div class="row">
@@ -33,18 +34,26 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 					<div class="card-header">
 						<div class="col-md-12" >
 					   			<form class="form-inline" method="post" action="createdPass.htm" >
-					   			<h5>Pending Pass List</h5>
-								<div class="col-md-4"></div>
+					   			<div class="col-md-4">
+					   			<h5 style="margin-left: -12%;width: 250%;">Pending Pass List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						           </b></small></h5>					   			
+					   			</div>
+								<div class="col-md-4">
 								<div class="form-group">
-									<label for="fdate">From Date:</label>
-									 <input class="form-control" data-date-format="dd/mm/yyyy" id="fdate" name="fdate" required="required" value="<%=fdate %>"  style="margin-left: 5px;">
+									<label for="fdate" style="margin-left: 39%;">From Date:</label>
+									 <input class="form-control" data-date-format="dd/mm/yyyy" id="fdate" name="fdate" required="required" value="<%=fdate %>"  style="margin-left: 5px;width: 35%;" readonly>
 								</div>
+								</div>
+								<div class="col-md-4">
 								<div class="form-group">
 									<label for="tdate" style="margin-left: 5px;">To Date:</label>
-									 <input class="form-control" data-date-format="dd/mm/yyyy" id="tdate" name="tdate" required="required"  value="<%=tdate %>" style="margin-left: 5px;">
+									 <input class="form-control" data-date-format="dd/mm/yyyy" id="tdate" name="tdate" required="required"  value="<%=tdate %>" style="margin-left: 5px;width: 35%;" readonly>
 								</div>
-								<button type="submit" class="btn  btn-sm submit " style="margin-left: 20px;">Submit</button>
+								</div>
+								
+								<button type="submit" class="btn btn-sm submit-btn" style="margin-left: -10%;">Submit</button>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							 
 							</form>
 		   					</div>
 					</div>

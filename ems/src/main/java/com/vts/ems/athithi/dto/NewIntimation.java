@@ -2,6 +2,11 @@ package com.vts.ems.athithi.dto;
 
 import java.util.Arrays;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class NewIntimation {
 	
 	private String IntimationByEmpNo;
@@ -15,7 +20,10 @@ public class NewIntimation {
 	private String officer;
 	private String purpose;
 	private String spermission;
-	
+	private String Remarks;
+	private String PisStatusCode;
+	private String PisStatusCodeNext;
+	private String VpStatus;
 	
 	public String getCreateBy() {
 		return createBy;

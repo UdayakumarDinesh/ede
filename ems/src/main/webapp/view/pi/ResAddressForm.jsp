@@ -59,10 +59,10 @@ String isApproval = (String)request.getAttribute("isApproval");
 List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 %>
-<!-- <div class="card-header page-top ">
+<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
-				<h5 style="width:113%;">Intimation For Residential Address </h5>
+				<h5 style="width:113%;">Residential Address - Form</h5>
 			</div>
 			<div class="col-md-8" >
 				<nav aria-label="breadcrumb">
@@ -74,7 +74,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				</nav>
 			</div>			
 		</div>
-	</div> -->
+	</div> 
 <div class="page card dashboard-card">
   <div class="card-body" align="center">
 
@@ -110,9 +110,9 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					  <tbody>
 						<tr>
 						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%} %> </td>
-						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
+						  <td style="border: 0;width:17%;">To: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp.No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
 						 <tr> 
 						  	<td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
 							  <%for(Object[] apprInfo : ApprovalEmpData){ %>

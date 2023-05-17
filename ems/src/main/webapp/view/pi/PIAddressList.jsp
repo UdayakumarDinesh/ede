@@ -57,16 +57,17 @@
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	
 	
-	Employee emp=(Employee)request.getAttribute("EmployeeD");
-	
+	/* Employee emp=(Employee)request.getAttribute("EmployeeD"); */
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
 %>
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-4">
-				<h5>Intimation For Address </h5>
+			<div class="col-md-7">
+				<h5>Address List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
-			<div class="col-md-8" >
+			<div class="col-md-5" >
 				<nav aria-label="breadcrumb">
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
@@ -267,15 +268,15 @@
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
-	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
+	               		<%if( !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
 	                		<td class="trup" style="background: #E8E46E;">
-	                			User -  <%=emp.getEmpName() %>
+	                			User -  <%=empData[1] %>
 	                		</td>
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	                	<%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
 	                			DGM -  <%=DGMEmpName[1] %>
 	                		</td>
@@ -284,12 +285,12 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			P&A - <%=PandAEmpName[1] %>
 	                		</td>
 	               		<%} %>
-	               		<%if(CeoName!=null && CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
+	               		<%if(CeoName!=null && CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			CEO - <%=CeoName[1] %>
 	                		</td>

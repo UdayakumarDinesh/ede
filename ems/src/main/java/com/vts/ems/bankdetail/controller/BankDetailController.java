@@ -123,8 +123,6 @@ public class BankDetailController {
 
 		logger.info(new Date() +"Inside BankDetailAdd.htm "+UserId);
 
-
-
 		try {
 
 			String action = (String)req.getParameter("Action");
@@ -180,7 +178,7 @@ public class BankDetailController {
 			bankDertails.setBankStatusCode("INI");
 			bankDertails.setCreatedBy(UserName);
 			bankDertails.setCreatedDate(sdtf.format(new Date()));
-			bankDertails.setValidFrom(ValidFrom);
+			bankDertails.setValidFrom(DateTimeFormatUtil.dateConversionSql(ValidFrom).toString());
 			long result=service.addBankdetail(bankDertails);
 
 
@@ -223,7 +221,8 @@ public class BankDetailController {
 			bankDertails.setBranch(BranchName);
 			bankDertails.setIFSC(IFSC);
 			bankDertails.setAccountNo(accNo);
-			bankDertails.setValidFrom(ValidFrom);
+			bankDertails.setValidFrom(DateTimeFormatUtil.dateConversionSql(ValidFrom).toString());
+			System.out.println("date---------============="+ValidFrom);
 			bankDertails.setModifiedBy(UserName);
 			bankDertails.setModifiedDate(sdtf.format(new Date()));
 			long result=service.editBankdetail(bankDertails, Long.parseLong(bankId));

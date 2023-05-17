@@ -78,6 +78,6 @@ public interface PIService {
 	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
 	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception;
 	public List<String> GetHometownAllowedEmpNo() throws Exception;
-
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
 	
 }

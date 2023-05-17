@@ -3,6 +3,7 @@ package com.vts.ems.Tour.controller;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ import com.vts.ems.Tour.model.TourApply;
 import com.vts.ems.Tour.service.TourService;
 import com.vts.ems.leave.dto.ApprovalDto;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.noc.service.NocService;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -53,7 +56,25 @@ public class TourController {
 	private PisService pisserv;
 	
 	@Autowired
+	NocService nocservice;
+	
+	@Autowired
 	EmsFileUtils emsfileutils ;
+	
+	@Value("${ProjectFiles}")
+	private String LabLogoPath;
+	
+	
+	 public String getLabLogoAsBase64() throws IOException {
+
+			String path = LabLogoPath + "/images/lablogos/lablogo1.png";
+			try {
+				return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+			} catch (FileNotFoundException e) {
+				System.err.println("File Not Found at Path " + path);
+			}
+			return "/print/.jsp";
+		}
 	
 	@RequestMapping(value = "TourProgram.htm", method = RequestMethod.GET)
 	public String TourDashboard(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception {
@@ -174,7 +195,6 @@ public class TourController {
 				action=actval.split("/")[0];
 			}
 			
-			System.out.println("action    :"+action);
 			if(action!=null && action.equalsIgnoreCase("EDIT")){
 				String tourid = actval.split("/")[1];
 				req.setAttribute("TourApply", service.getTourApplyData(Long.parseLong(tourid)));			
@@ -247,6 +267,7 @@ public class TourController {
 				applydto.setModeofTravel(modeoftravel);
 				applydto.setFromCity(fromcity);
 				applydto.setToCity(tocity);
+				
 				
 				long count = service.EditTourApply(applydto);
 				if (count != 0) {
@@ -342,11 +363,18 @@ public class TourController {
 		logger.info(new Date() +"Inside checktour.htm "+Username);	
 		Gson json = new Gson();
 		try {
+			String tourid = request.getParameter("tourapplyid");
+			String action = request.getParameter("action");
 			String empno = (String) ses.getAttribute("EmpNo");
 			String DepartureDate = request.getParameter("DepartureDate");
 			String ArrivalDate = request.getParameter("ArrivalDate");
-			Result= service.checkTDAlreadyPresentForSameEmpidAndSameDates( empno, DepartureDate, ArrivalDate);
-			System.out.println(Result.toString());
+			System.out.println("tourid     :"+tourid);
+			System.out.println("action     :"+action);
+			System.out.println("empno     :"+empno);
+			System.out.println("DepartureDate     :"+DepartureDate);
+			System.out.println("ArrivalDate     :"+ArrivalDate);
+			Result= service.checkTDAlreadyPresentForSameEmpidAndSameDates( empno, DepartureDate, ArrivalDate , action , tourid);
+			
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside checktour.htm "+Username, e);
 			e.printStackTrace();
@@ -451,14 +479,36 @@ public class TourController {
 		try {
 			
 			List<Object[]> sanclist = service.GetSanctionList((String)ses.getAttribute("EmpNo"));
- 			
+			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			req.setAttribute("SanctionList", sanclist);
+			ses.setAttribute("SidebarActive","TourSanctionedlist_htm");
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside TourSanctionedlist.htm "+Username, e);
 			return "static/Error";
 		}
 		return "tour/TourSanctionList";
+	}
+	
+	@RequestMapping(value = "TourCancelledlist.htm" , method = {RequestMethod.GET , RequestMethod.POST })
+	public String CanceledList(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside TourCancelledlist.htm "+Username);
+		try {
+			
+			List<Object[]> cancellist = service.GetCancelList((String)ses.getAttribute("EmpNo"));
+			ses.setAttribute("SidebarActive","TourCancelledlist_htm");
+			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
+			req.setAttribute("CacncelList", cancellist);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside TourSanctionedlist.htm "+Username, e);
+			return "static/Error";
+		}
+		return "tour/TourCancelList";
 	}
 	
 	@RequestMapping(value = "TourCancel.htm" , method = { RequestMethod.GET,RequestMethod.POST})
@@ -639,19 +689,63 @@ public class TourController {
 			String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside TourApplyReport.htm "+UserId);
 		try {
-			
-				String tourapplyid = req.getParameter("tourapplyid");
-				System.out.println("tourapplyid      :"+tourapplyid);
-				req.setAttribute("tourdetails", service.GetTourDetails(tourapplyid));
-				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
-				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(tourapplyid));
-				
+				String action = req.getParameter("tourapplyid");
+				String actval = action.split("/")[0];
+				String tourapplyid =  action.split("/")[1];
+				req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
+				req.setAttribute("lablogo",getLabLogoAsBase64());
+				if (action!=null &&  actval.equalsIgnoreCase("Cancel"))
+				{
+					Object[] details=service.GetTourDetails(tourapplyid);
+					req.setAttribute("tourdetails",details );
+					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
+					req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+					
+					return "tour/TourCancelMovementOrder";
+					
+
+				}else {
+					Object[] details = service.GetTourDetails(tourapplyid);
+					req.setAttribute("tourdetails", details);
+					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
+					req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+					return "tour/TourApplyMovementOrder";
+				}
+			    
 
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TourApplyReport.htm "+UserId, e);
 			e.printStackTrace();	
+			return "static/Error";
 		}
-		return "tour/TourApplyReport";
+	}
+	
+	@RequestMapping(value = "TourModify.htm" , method = { RequestMethod.POST , RequestMethod.GET})
+	public String TourModify(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside TourApplyReport.htm "+UserId);
+		try {
+			String action = req.getParameter("tourapplyid");
+			String actval = action.split("/")[0];
+			String tourapplyid =  action.split("/")[1];
+			System.out.println("tourapplyid     :"+tourapplyid);
+			if(action!=null && actval!=null && actval.equalsIgnoreCase("Modify")) {
+				
+				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(ses.getAttribute("EmpNo").toString()));
+				req.setAttribute("TourApply", service.getTourApplyData(Long.parseLong(tourapplyid)));			
+				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnData(Long.parseLong(tourapplyid)));
+				req.setAttribute("ModeOfTravelList", service.GetModeofTravel());
+				req.setAttribute("CityList", service.GetCityList());
+			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
+
+			}
+			return "tour/TourModify";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside TourModify.htm "+UserId, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
 	}
 }
 

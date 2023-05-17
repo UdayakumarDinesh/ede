@@ -16,14 +16,17 @@
 	<%
 	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	PisHometown hometown =(PisHometown)request.getAttribute("Hometown");
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	%>
 	
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-6">
 			<%if(hometown!=null){ %>
-				<h5>Hometown Edit</h5><%}else{ %>
-						<h5>Hometown Add</h5><%}%>
+				<h5>Hometown Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}else{ %>
+						<h5>Hometown Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}%>
 			</div>
 			   <div class="col-md-6">
 					<ol class="breadcrumb ">

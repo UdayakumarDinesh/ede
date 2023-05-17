@@ -19,6 +19,7 @@ public interface TourDao {
 	public List<Object[]> GetTourApplyList(String empno)throws Exception;
 	public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception;
 	public Long  checkTDAlreadyPresentForSameEmpidAndSameDates(String empid,String DepartureDate,String ArrivalDate);
+	public Long checkTourAlreadyPresentForSameEmpidAndSameDates(String tourid, String empid,String DepartureDate,String ArrivalDate)throws Exception;
 	public TourApply  getTourApplyData(Long tourid) throws Exception;
 	public List<TourOnwardReturn> getTourOnwardReturnData(Long tourid)throws Exception;
 	public Long  UpdateTourApply(TourApply apply) throws Exception;
@@ -37,6 +38,7 @@ public interface TourDao {
 	public int TourUpdateFromPandA (ApprovalDto dto, String remarks )throws Exception;
 	public Long RevokeTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetSanctionList(String empno)throws Exception;
+	public List<Object[]> GetCancelList(String empno)throws Exception;
 	public Object[] GetPAFADetails()throws Exception; 
 	public int CancelTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate) throws Exception ;

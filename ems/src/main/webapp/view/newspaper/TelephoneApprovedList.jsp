@@ -1,5 +1,6 @@
 
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
    
@@ -102,6 +103,30 @@ List<Object[]> TelephoneClaimApprovedList=(List<Object[]>)request.getAttribute("
 		        <button disabled="disabled" class="btn btn-info">Expenditure Sanction</button>
 	       <%}%>
        </div> 
+       <div style="margin-top: 50px; ">
+					<select class="form-control " style="width: 110px;"
+						name="ClaimMonth">
+						<option value="JAN">JAN</option>
+								<option value="FEB">FEB</option>
+								<option value="MAR">MAR</option>
+								<option value="APR">APR</option>
+								<option value="MAY">MAY</option>
+								<option value="JUN">JUN</option>
+								<option value="JUL">JUL</option>
+								<option value="AUG">AUG</option>
+								<option value="SEP">SEP</option>
+								<option value="OCT">OCT</option>
+								<option value="NOV">NOV</option>
+								<option value="DEC">DEC</option>
+					</select> <input type="text" id="selectYear" required="required"
+						class="form-control input-sm"
+						style="width: 70px; margin-left: 115px; margin-top: -35px; margin-bottom: 10px"
+						name="ClaimYear" value="<%=LocalDate.now().getYear() %>"
+						readonly="readonly" placeholder="Year" />
+					<button type="submit" class="btn btn-success"
+						formaction="TelePhoneFinalAppPrint.htm" formtarget="blank"
+						formnovalidate="formnovalidate">Telephone Final Approval</button>
+				</div>
        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       
 </form>
@@ -110,5 +135,15 @@ List<Object[]> TelephoneClaimApprovedList=(List<Object[]>)request.getAttribute("
 </div>
 </div>
 
+<script type="text/javascript">
+$("#selectYear").datepicker({
+	autoclose: true,
+    format: "yyyy",
+    viewMode: "years", 
+    minViewMode: "years",
+    endDate: new Date(),
+    setDate : new Date(),
+});
+</script>
 </body>
 </html>

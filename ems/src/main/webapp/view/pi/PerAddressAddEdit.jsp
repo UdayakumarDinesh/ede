@@ -16,14 +16,17 @@
 	<%
 	List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 	AddressPer peraddress =(AddressPer)request.getAttribute("peraddress");
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	%>
 	
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-6">
 			<%if(peraddress!=null){ %>
-				<h5>Permanent Address Edit</h5><%}else{ %>
-						<h5>Permanent Address Add</h5><%}%>
+				<h5>Permanent Address Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}else{ %>
+						<h5>Permanent Address Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5><%}%>
 			</div>
 			   <div class="col-md-6">
 					<ol class="breadcrumb ">

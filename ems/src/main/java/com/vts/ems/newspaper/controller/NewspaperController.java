@@ -1,13 +1,23 @@
 package com.vts.ems.newspaper.controller;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
+import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.EmsFileUtils;
 
 // newspaper and Telephone claim controller
 
@@ -52,6 +65,9 @@ public class NewspaperController {
 
 	@Autowired
 	private NewPaperServiceImpl service;
+	
+	@Autowired
+	EmsFileUtils emsfileutils ;
 
 	private static final Logger logger = LogManager.getLogger(NewspaperController.class);
 
@@ -405,7 +421,7 @@ public class NewspaperController {
 
 			return mv;
 		} catch (Exception e) {
-			logger.error(new Date() + " Inside NewspaperReportPrint.htm " + Username, e);
+			logger.error(new Date() + " Inside NewspaperReportPrint.htm" + Username, e);
 			e.printStackTrace();
 			return new ModelAndView("static/Error");
 		}
@@ -1413,5 +1429,128 @@ public class NewspaperController {
 		return mv;
 	} 
 
+	@RequestMapping(value="NewsPaperFinalAppPrint.htm",  method = {RequestMethod.POST,RequestMethod.GET})
+	public String NewsPaperFinalPrint(HttpServletRequest req, HttpSession ses, HttpServletResponse res){
+		String Username=(String)ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+
+		try {
+			String ClaimMonth = req.getParameter("ClaimMonth");
+			String ClaimYear = req.getParameter("ClaimYear");
+			
+
+			String filename="";
+			if( ClaimMonth != null && ClaimYear!= null ) {
+				req.setAttribute("newsPaperFinalAppro", service.NewspaperAllApprovedOrNot(ClaimMonth, ClaimYear));
+				filename="NewsPaper_Final_Approval";
+			}
+
+			req.setAttribute("pagePart","3" );
+
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+
+			CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/newspaper/NewsPaperFinalApprovalPrint.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+
+			HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+
+
+			emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+
+
+			File f=new File(path +File.separator+ filename+".pdf");
+			FileInputStream fis = new FileInputStream(f);
+			DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			res.setHeader("Content-Length",String.valueOf(f.length()));
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) >= 0) {
+				os.write(buffer, 0, len);
+			} 
+			os.close();
+			fis.close();
+
+			Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			Files.delete(pathOfFile);	
+
+			return "redirect:/NewspaperApprovedList.htm";
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside NewsPaperFinalApp.htm "+Username ,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="TelePhoneFinalAppPrint.htm",  method = {RequestMethod.POST,RequestMethod.GET})
+	public String TelePhineFinalPrint(HttpServletRequest req, HttpSession ses, HttpServletResponse res){
+		String Username=(String)ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+
+		try {
+			String ClaimMonth = req.getParameter("ClaimMonth");
+			String ClaimYear = req.getParameter("ClaimYear");
+			
+
+			String filename="";
+			if( ClaimMonth != null && ClaimYear!= null ) {
+				req.setAttribute("newsPaperFinalAppro", service.NewspaperAllApprovedOrNot(ClaimMonth, ClaimYear));
+				filename="NewsPaper_Final_Approval";
+			}
+
+			req.setAttribute("pagePart","3" );
+
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+
+			CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/newspaper/TelePhoneFinalApprovalPrint.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+
+			HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+
+
+			emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+
+
+			File f=new File(path +File.separator+ filename+".pdf");
+			FileInputStream fis = new FileInputStream(f);
+			DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			res.setHeader("Content-Length",String.valueOf(f.length()));
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) >= 0) {
+				os.write(buffer, 0, len);
+			} 
+			os.close();
+			fis.close();
+
+			Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			Files.delete(pathOfFile);	
+
+			return "redirect:/TelephoneApprovedList.htm";
+		}
+		catch (Exception e) {
+			logger.error(new Date() +"Inside TelePhoneFinalAppPrint.htm "+Username ,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
 	
 }

@@ -1083,5 +1083,11 @@ public class PIServiceImp implements PIService{
 		return dao.getEmpDataByEmpNo(empNo);
 	}
 
+	@Override
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
+		
+		return dao.getEmpNameDesig(EmpNo);
+	}
+
 	
 }

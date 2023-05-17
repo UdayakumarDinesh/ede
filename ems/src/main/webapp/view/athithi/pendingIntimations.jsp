@@ -26,7 +26,7 @@
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href=""></a></li>
+						<li class="breadcrumb-item active">Pending Intimations</li>
 					</ol>
 				</div>
 			</div>
@@ -75,7 +75,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 								<tr>
 								<td><%=count++%></td>
 								<td><%=intimation[3]%> </td>
-							    <td><%=intimation[11]%> </td>
+							    <td><%=intimation[10]%> </td>
 							    <td><%=sdf1.format(intimation[5])%>&nbsp; to &nbsp;<%=sdf1.format(intimation[6])%></td>
 				                 <td><%=intimation[9]%></td>
 				                 <td><%=intimation[7]%> </td>

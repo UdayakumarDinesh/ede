@@ -6,6 +6,7 @@ import com.vts.ems.athithi.model.Company;
 import com.vts.ems.athithi.model.CompanyEmployee;
 import com.vts.ems.athithi.model.Intimation;
 import com.vts.ems.athithi.model.IntimationEmp;
+import com.vts.ems.athithi.model.VpIntimationTrans;
 
 public interface IntimationDao {
 
@@ -17,5 +18,11 @@ public interface IntimationDao {
 	public Long addNewIntimation(Intimation inti)throws Exception;
 	public void addVisitor(IntimationEmp newVisitor)throws Exception;
 	public int todayIntionCount()throws Exception;
-	public List<Object[]> getItimationList(String groupId)throws Exception;
+	public List<Object[]> getItimationList(String EmpNo)throws Exception;
+	public Long addVpIntimationTrans(VpIntimationTrans transaction) throws Exception;
+	public Intimation getIntimationById(Long intimationId) throws Exception;
+	public Long editNewIntimation(Intimation intimation) throws Exception;
+	public String GetReceptionistEmpNo() throws Exception;
+	public List<Object[]> visitorPassApprovalList(String EmpNo) throws Exception;
+	public List<Object[]> vpTransactionList(String IntimationId) throws Exception;
 }

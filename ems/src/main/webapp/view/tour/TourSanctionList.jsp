@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.*"%>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
@@ -55,6 +56,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 								<thead>
 								  <tr>
 								  	  <th>SN</th>
+								  	  <th>Tour No</th>
 									  <th>Date</th>
 								      <th>Applied On</th>
 								      <th>Name</th>
@@ -72,9 +74,22 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
                                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(hlo[2].toString());
                                    String  applydate=DateTimeFormatUtil.fromDatabaseToActual(hlo[3].toString());
                                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(hlo[1].toString(), hlo[2].toString());
+                                   SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+                     			   Date d1 = sdf1.parse(hlo[1].toString());
+                     			  sdf1.applyPattern("dd-MM-yyyy");
+                     			  String parsedate = sdf1.format(d1);
                             	   %>
 	                             <tr>
 	                             	  <td align="center"> <%=++sn %></td>
+	                             	   <td>
+	                             	   <%if(hlo[10]!=null){%>
+	                             	  <button type="submit" class="btn btn-sm btn-link w-100 " formaction="TourApplyReport.htm" formmethod="get" name="tourapplyid" value="Apply/<%=hlo[7]%>" formtarget="_blank" 
+													  style=" color:<%=hlo[10]%>; font-weight: 600;" ><%=hlo[10]%></button>
+									  
+	                             	  <%}else{ %>
+	                             	    <button class="btn btn-sm btn-link w-100 ">--</button>
+	                             	  <%}%>
+	                             	   </td>
 									  <td align="center"><%=stayfromdate%> To <%=staytodate%></td>
                                		  <td align="center"><%=applydate %><br/> for <%=noofdays%> Day(s)</td>
 									  <td align="center"><%=hlo[0]+"" %></td>
@@ -84,9 +99,14 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 									   <%if(hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="button" class="btn btn-sm edit-btn"  onclick="CancelTour('<%=hlo[7]%>')"  data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
 									  	<%}%>	
-									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
+									   <%-- <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
-									  	<%}%>
+									  	<%}%> --%>
+									  	<%-- <%if(new Date().before(new SimpleDateFormat("dd-MM-yyyy").parse(parsedate))){%>
+									  	<button class="btn btn-sm" type="submit" formaction="TourModify.htm" formmethod="GET" name="tourapplyid"  value="Modify/<%=hlo[7]%>"  data-toggle="tooltip" data-placement="top" title="Modify">
+                                			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                		</button>
+                                		<%}%> --%>
 									  </td>
 								</tr> 
                   <%}}%>
