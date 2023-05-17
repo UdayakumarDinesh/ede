@@ -113,6 +113,7 @@ public class PropertyController {
 			req.setAttribute("DGMEmpNos", DGMs);			
 			req.setAttribute("Employee", piservice.getEmpDataByEmpNo(EmpNo));			
 			req.setAttribute("ImmPropDetails", service.ImmPropDetails(EmpNo));
+			req.setAttribute("MovPropDetails", service.movPropDetails(EmpNo));
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			return "property/AcquiringDisposingList";
 		}catch (Exception e) {
