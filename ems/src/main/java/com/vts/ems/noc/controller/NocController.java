@@ -92,8 +92,6 @@ public class NocController {
 			return "/print/.jsp";
 		}
 	 
-	 
-	
 	@RequestMapping(value = "NOC.htm")
 	public String NOC(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
@@ -359,6 +357,7 @@ public class NocController {
 			System.out.println("isApproval---"+isApproval);
 			
 			NocPassport passport=service.getNocPassportId(Long.parseLong(passportid));
+			req.setAttribute("NOCPassportRemarkHistory",service.getPassportRemarksHistory(passportid) );
 			req.setAttribute("passport",passport);
 			req.setAttribute("isApproval", isApproval);
 //			req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
@@ -389,7 +388,7 @@ public class NocController {
 			
 			
 			String passportid=req.getParameter("Passportid");
-				
+			req.setAttribute("CeoName", service.GetCeoName());		
 			req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
 		    req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="NOCPassport-"+passportid.toString().trim().replace("/", "-");
@@ -977,12 +976,10 @@ public class NocController {
 		
 		try {
 			
-			
 			String ProcAbrId=req.getParameter("ProcAbrId");
-				
 			
 			req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
-
+			req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);

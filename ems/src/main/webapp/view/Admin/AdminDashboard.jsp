@@ -55,9 +55,7 @@ body{
 				
 						<h3>Admin Dashboard Details</h3>
 						
-				<div align="left">
-				<button style="margin-top:30px;margin-left:20px; " type="Submit" class="btn btn-sm submit-btn" formaction="OrganisationStructure.htm" formmethod="POST" formtarget="target_blank">Organisation Structure</button>
-				</div>			
+						
 				</div>
 				
 			</div>		

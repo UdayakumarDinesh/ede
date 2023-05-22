@@ -12,7 +12,18 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
-<body>
+
+
+<style>
+
+body {
+  
+  overflow-x: hidden;
+  
+}
+
+
+</style>
 <body>
 <%  
     SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
@@ -56,7 +67,7 @@
 		<%} %>
 	</div>
 	
-	<%if(LoginType.toString().equals("A")){ %>
+	<%if(LoginType.toString().equals("I")){ %>
 	   <div class="card">
 			<div class="card-header" style="height: 4rem">
 		       <div class="container" style="margin-bottom: -9px !important">
@@ -86,7 +97,7 @@
 						<thead>
 							<tr>
 								<th style="width: 2%">SN</th>
-								<%if(LoginType.toString().equals("A")){ %><th style="width: 4%">Declared By </th> <%} %>
+								<%if(LoginType.toString().equals("I")){ %><th style="width: 4%">Declared By </th> <%} %>
 								<th style="width: 3%">Declaration Year</th>
 								<!-- <th style="width: 4%"> Date</th> -->
 								<th style="width: 4%">No of Items</th> 
@@ -118,7 +129,7 @@
 						
 						 <tr>
 							        <td style="width: 1%; text-align: center;"><%=++count %></td>
-							        <%if(LoginType.toString().equals("A")){ %><td style="width: 1%; text-align: left;"><%=obj[1] %></td><%} %>
+							        <%if(LoginType.toString().equals("I")){ %><td style="width: 1%; text-align: left;"><%=obj[1] %></td><%} %>
 									<td style="width: 2%;text-align:center;" ><%=obj[2].toString().substring(0,4) %></td>
 									<%-- <td style="width: 2%;text-align:center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td> --%>
 									<td style="width: 2%;text-align:center;"><%=item %></td>  

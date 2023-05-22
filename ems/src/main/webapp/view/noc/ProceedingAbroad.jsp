@@ -124,7 +124,8 @@
 						<% for(Object[] obj:NocProcAbraodList){ %>
 						
 						<tr>
-								<td style="text-align: center;"><input type="radio" name="ProcAbrId" value="<%=obj[0]%>"></td>
+								<td style="text-align: center;"><%if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="ProcAbrId" value="<%=obj[0]%>"><%}
+								else{%><input type="radio" name="ProcAbrId" value="<%=obj[0]%>" disabled>  <%} %></td>
 								<td style="text-align: center;"><%=obj[1] %></td>
 								<!-- <td></td> -->
 								<td style="text-align: center;">

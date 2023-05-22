@@ -455,8 +455,6 @@ public class NocServiceImpl implements NocService {
 	}
 }
 
-		
-
 	@Override
 	public NocPassport getNocPassportById(long passportid) throws Exception {
 		
@@ -849,15 +847,15 @@ public class NocServiceImpl implements NocService {
 			dao.EditNocpa(noc);
 		}
 		
-		NocProceedingAbroadTrans transaction = NocProceedingAbroadTrans.builder()	
-				                           .NocProcAbroadTransId(noc.getNocProcId())
+		NocProceedingAbroadTrans trans = NocProceedingAbroadTrans.builder()	
+				                           .NocProcId(noc.getNocProcId())
 				                           .NocStatusCode(noc.getNocStatusCode())
 				                           .ActionBy(empNo)
 				                           .Remarks(remarks)
 				                           .ActionDate(sdtf.format(new Date()))
 				                           .build();
 		
-		 dao.NocProcAbroadTransactionAdd(transaction);
+		 dao.NocProcAbroadTransactionAdd(trans);
 						
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
@@ -928,6 +926,12 @@ public class NocServiceImpl implements NocService {
 	public List<LabMaster> getLabMasterDetails() throws Exception {
 	
 		return dao.getLabMasterDetails();
+	}
+
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		return dao.getPassportRemarksHistory(passportid);
 	}
 }
 

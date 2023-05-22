@@ -24,14 +24,17 @@ public interface InventoryService {
    public List<Object[]> getInventoryDeclaredList() throws Exception;
    public List<Object[]> getInventoryConfigure(String ITInventoryId)throws Exception;
    public  List<Object[]> getApprovedForm(String invntryhistoryid) throws Exception;
-   public long inventoryDetailsApprove(ITInventoryHistory Aprrove, ITInventory inventory,ITInventoryConfiguredHistory config, String empNo, String eno) throws Exception;
+   public long inventoryDetailsConfigApprove(ITInventoryHistory Aprrove, ITInventory inventory,ITInventoryConfiguredHistory config, String empNo, String eno,String UserId) throws Exception;
    public long inventoryDetailsReturn(ITInventory inventory, String empNo, String eno,String declarationyear) throws Exception;
    public List<Object[]> getInventoryApprovedList(String Year,String empNo,String LoginType) throws Exception;
    public List<Object[]> getInventoryDeclaredListPreview(String iTInventoryId) throws Exception;
    public List<Object[]> getEmployeeList() throws Exception;
    public List<Object[]> getInventoryDashboardCount(String empno, String year) throws Exception;
 
-   public List<Object[]>  getInventoryConfigureApprovedlist(String iTInventoryId)throws Exception;
+   public List<Object[]>  getInventoryConfigureApprovedlist(String invntryhistoryid)throws Exception;
+   public long inventoryDetailsApprove(ITInventoryHistory Aprrove, ITInventory inventory, String empNo, String eno,String UserId)throws Exception;
+   public long MaxOfInventoryHistoryId() throws Exception;
+public long sendNotification(String eno,String EmpNo, String userId)throws Exception;
    
 
  

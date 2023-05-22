@@ -69,7 +69,7 @@ public interface NocDao {
 
 	public long NocProcAbroadAdd(NocProceedingAbroad nocpa) throws Exception;
 
-	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans transaction)throws Exception;
+	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans trans)throws Exception;
 
 	public List<Object[]> getProcAbroadList(String empNo)throws Exception;
 
@@ -88,6 +88,8 @@ public interface NocDao {
 	public List<LabMaster> getLabMasterDetails()throws Exception;
 	
 	public long GetPassportCount(String empid)throws Exception;
+
+	public List<Object[]> getPassportRemarksHistory(String passportid)throws Exception;
 	
 	
 	

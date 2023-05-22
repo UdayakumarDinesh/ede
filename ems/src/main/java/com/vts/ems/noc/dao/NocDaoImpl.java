@@ -526,12 +526,12 @@ public class NocDaoImpl implements NocDao {
 	}
 
 	@Override
-	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans transaction) throws Exception {
+	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans trans) throws Exception {
 		
 
-		manager.persist(transaction);
+		manager.persist(trans);
 		manager.flush();
-		return transaction.getNocProcAbroadTransId();
+		return trans.getNocProcAbroadTransId();
 		
 		
 	}
@@ -653,6 +653,15 @@ public class NocDaoImpl implements NocDao {
 			logger.error(new Date() +"Inside DAO GetPassportCount "+ e);
 			return 0;
 		}
+	}
+
+	private static final String NOCPASSPORTREMARKHISTORY="SELECT trans.NocPassportId,trans.Remarks,e.EmpName FROM noc_passport_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocPassportId=:passportid ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSPORTREMARKHISTORY);
+		query.setParameter("passportid", passportid);
+		return (List<Object[]>)query.getResultList();
 	}
 	
 	

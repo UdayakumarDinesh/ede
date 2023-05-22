@@ -304,13 +304,14 @@ public class InventoryController {
 					 String arr[]=split.split("/");
 				      String inventoryid=arr[0];
 				      String ItemType=arr[1];
+				     
 				      
 			    List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo);
 			    req.setAttribute("inventoryid",inventoryid );
 				req.setAttribute("itemtype",ItemType);
 				req.setAttribute("inventoryconfig",inventoryconfig);
 				}
-			    
+				
 				return "itinventory/inventoryconfigure";
 				
 			}
@@ -328,9 +329,11 @@ public class InventoryController {
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
 			logger.info(new Date() +"Inside InventoryConfigureAddSubmit.htm "+UserId);
 			try {
-				
+				LocalDate today= LocalDate.now();
+				String ConfiguredYear=String.valueOf(today.getYear());
 				ITInventoryConfigured  details = new  ITInventoryConfigured();
 				details.setConfiguredBy(EmpNo);
+				
 				details.setItInventoryId(Long.parseLong(req.getParameter("Itinventoryid")));
 				details.setItemType(req.getParameter("ItemType"));
 				details.setConnectionType(req.getParameter("ConnectionType"));
@@ -386,6 +389,7 @@ public class InventoryController {
 				      String inventoryconfigid=arr[0];
 				      String ItemType=arr[1];
 				      
+				      
 				ITInventoryConfigured configure=service.getInventoryConfigId(Long.parseLong(inventoryconfigid));
 				
 			    List<Object[]> inventoryconfig=service.getInventoryConfiguration(EmpNo);
@@ -413,9 +417,10 @@ public class InventoryController {
 			logger.info(new Date() +"Inside InventoryConfigureEditSubmit.htm "+UserId);
 			try {
 				
-				
+				String ConfiguredYear=req.getParameter("ConfiguredYear");
 				ITInventoryConfigured details= new ITInventoryConfigured();
 				details.setInventoryConfigureId(Long.parseLong(req.getParameter("InventoryConfigureId")));
+				
 				details.setItemType(req.getParameter("ItemType"));
 				details.setConnectionType(req.getParameter("ConnectionType"));
 				details.setCPU(req.getParameter("CPU"));
@@ -542,7 +547,7 @@ public class InventoryController {
 				
 						
 				req.setAttribute("inventoryqty", service.getApprovedForm(invntryhistoryid));
-			    req.setAttribute("inventoryconfigure", service.getInventoryConfigureApprovedlist(ITInventoryId));
+			    req.setAttribute("inventoryconfigure", service.getInventoryConfigureApprovedlist(invntryhistoryid));
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 				String filename="Inventory-"+ITInventoryId.toString().trim().replace("/", "-");
 				String path=req.getServletContext().getRealPath("/view/temp");
@@ -595,12 +600,14 @@ public class InventoryController {
 		  ses.setAttribute("formmoduleid", formmoduleid);
 		  logger.info(new Date() +"Inside InventoryView.htm "+UserId); 
 		  try {
-			    
+			  
+			  
 			    String DeclarationYear=req.getParameter("declarationyear");
                 req.setAttribute("inventoryqty", service.getInventoryQtylist(EmpNo,DeclarationYear));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfiguration(EmpNo));
 			    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			    req.setAttribute("LoginType", LoginType);
+			    req.setAttribute("isApproval","Y");
 	
 				
 			    return "itinventory/inventorypreview";
@@ -686,6 +693,8 @@ public class InventoryController {
 		  logger.info(new Date() +"Inside InventoryDeclaredView.htm "+UserId); 
 		  try {
 			    String ITInventoryId=req.getParameter("inventoryid");
+			    
+			    
 			    req.setAttribute("inventoryqty", service.getInventoryDeclaredListPreview(ITInventoryId));
 			    req.setAttribute("inventoryconfigure", service.getInventoryConfigure(ITInventoryId));
 			    req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
@@ -760,6 +769,7 @@ public class InventoryController {
 				   String arr[]=split.split("/");
 				     String itid=arr[0]; 
 					  String eno=arr[1];
+					 
 					
                 inventory.setItInventoryId(Long.parseLong(itid));
 			    inventory.setStatus("A");
@@ -807,11 +817,18 @@ public class InventoryController {
 
 				
 				List<Object[]> configlist=service.getInventoryConfigure(itid);
-				ITInventoryConfiguredHistory config=new ITInventoryConfiguredHistory();
-				long save=0;
+			long save=0;
+				
+				long InventoryHistoryId = service.MaxOfInventoryHistoryId();
+				
+				
+			if(configlist.size()>0) {
 				for(Object[] obj:configlist) {
 					
+				
+					ITInventoryConfiguredHistory config=new ITInventoryConfiguredHistory();
 					config.setConfiguredBy(obj[17].toString());
+					config.setItInventoryHistoryId(InventoryHistoryId+1);
 					config.setItInventoryId(Long.parseLong(obj[16].toString()));
 					config.setItemType(obj[1].toString());
 					config.setConnectionType(obj[2].toString());
@@ -831,9 +848,18 @@ public class InventoryController {
 					config.setCreatedBy(UserId);
 					config.setCreatedDate(sdf1.format(new Date()));
 					config.setIsActive(1);
+					save=service.inventoryDetailsConfigApprove(Aprrove,inventory,config,EmpNo,eno,UserId);
 				}
+				long notification =service.sendNotification(eno,EmpNo,UserId);
+			}
+			else {
 				
-				save=service.inventoryDetailsApprove(Aprrove,inventory,config,EmpNo,eno);
+				save=service.inventoryDetailsApprove(Aprrove,inventory,EmpNo,eno,UserId);
+				long notification =service.sendNotification(eno,EmpNo,UserId);
+			}
+				
+				
+				//long save=service.inventoryDetailsApprove(Aprrove,inventory,config,EmpNo,eno);
 				
 				 if(save!=0){
 		        	  redir.addAttribute("result", "Inventory Details Approved Successfully");
