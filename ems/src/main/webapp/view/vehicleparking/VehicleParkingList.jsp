@@ -116,9 +116,10 @@
 								if ((format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).after(format.parse(fromdate))
 										&& format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).before(format.parse(todate))) ) {
 								%> --%>
+
 								<tr>
 									<%
-									if (ls[6].toString().equalsIgnoreCase("INI")) {
+									if (ls[7].toString().equalsIgnoreCase("INI") || ls[7].toString().equalsIgnoreCase("RSO")) {
 									%>
 									<td style="text-align: center;"><input type="radio"
 										name="vehicleAppId" value="<%=ls[0]%>" required="required"></td>

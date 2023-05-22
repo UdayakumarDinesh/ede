@@ -6642,6 +6642,7 @@ public class PisController {
 
 			try {
 				
+				
 				List<Object[]> grouplist=service.getGroupListGH();
 				List<Object[]> divisionlist=service.getDivisionListDH();
 				req.setAttribute("DivReportCeo", service.getdivisionreportceo()); // division directly reporting to ceo 

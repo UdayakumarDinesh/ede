@@ -92,8 +92,6 @@ public class NocController {
 			return "/print/.jsp";
 		}
 	 
-	 
-	
 	@RequestMapping(value = "NOC.htm")
 	public String NOC(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
@@ -153,6 +151,7 @@ public class NocController {
 			 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 			 
 			 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+			 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 			 
 			req.setAttribute("NOCPASSPORTLIST",service.getnocPassportList(EmpNo) );
 			return "noc/Passport";
@@ -225,6 +224,7 @@ public class NocController {
 				
 				
 				Passport pport= new Passport();
+				
 				pport.setEmpId(EmpId);
 				pport.setPassportType(req.getParameter("PassportType"));
 				pport.setStatus(req.getParameter("Status"));
@@ -237,6 +237,7 @@ public class NocController {
 				
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .EmpNo(EmpNo)
+						 .PassportExist(req.getParameter("PassportExist"))
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -284,6 +285,8 @@ public class NocController {
 				String NocPassportId = req.getParameter("NocPassportId");
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .NocPassportId(Long.parseLong(NocPassportId))
+						 .PassportExist(req.getParameter("PassportExist"))
+						 .PassportEntries(req.getParameter("PassportEntries"))
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -354,6 +357,7 @@ public class NocController {
 			System.out.println("isApproval---"+isApproval);
 			
 			NocPassport passport=service.getNocPassportId(Long.parseLong(passportid));
+			req.setAttribute("NOCPassportRemarkHistory",service.getPassportRemarksHistory(passportid) );
 			req.setAttribute("passport",passport);
 			req.setAttribute("isApproval", isApproval);
 //			req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
@@ -384,9 +388,9 @@ public class NocController {
 			
 			
 			String passportid=req.getParameter("Passportid");
-				
+			req.setAttribute("CeoName", service.GetCeoName());		
 			req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
-			
+		    req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="NOCPassport-"+passportid.toString().trim().replace("/", "-");
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
@@ -972,12 +976,10 @@ public class NocController {
 		
 		try {
 			
-			
 			String ProcAbrId=req.getParameter("ProcAbrId");
-				
 			
 			req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
-
+			req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);

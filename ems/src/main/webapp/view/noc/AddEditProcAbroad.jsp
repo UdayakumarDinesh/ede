@@ -196,8 +196,9 @@
                              <div class="col-md-7" style="margin-left:-15px;">  
 			                <select name="EmployeeInvolvement" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
-			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("Y")){ %> selected <%}}%>>YES</option>
+			                   
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("N")){ %> selected <%}}%>>NO</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("Y")){ %> selected <%}}%>>YES</option>
 			                   
 			                </select>
 			                   
@@ -212,8 +213,9 @@
                              <div class="col-md-9" style="margin-left:-13px;">  
 			               <select name="PropertyFiled" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
-			                      <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("Y")){ %> selected <%}}%>>YES</option>
+			                     
 			                      <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("N")){ %> selected <%}}%>>NO</option>
+			                       <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("Y")){ %> selected <%}}%>>YES</option>
 			                </select>
 			                   
 			                   </div>
@@ -232,8 +234,9 @@
                            
 			                <select name="ForeignVisit" class="form-control select2"  id="fvisit" required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
-			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("Y")){ %> selected <%}}%> >YES</option>
+			                   
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("N")){ %> selected <%}}%> >NO</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("Y")){ %> selected <%}}%> >YES</option>
 			                   
 			                </select>
 			                   
@@ -519,9 +522,9 @@
                             <select name="Hospatility" class="form-control select2"  id=""  required="required">
 			                 
 			                    <option value="" selected="selected" disabled="disabled">Select</option>
-			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >YES</option>
+			                  
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("N")){ %> selected <%}}%> >NO</option>
-			                   
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >YES</option>
 			                </select>
 			                   
 			               

@@ -64,6 +64,8 @@ public interface NocService {
 	public long NOCProcAbraodForward(String procAbroadId, String userId, String action, String remarks, String empNo,String loginType);
 
 	public List<LabMaster> getLabMasterDetails()throws Exception;
+
+	public List<Object[]> getPassportRemarksHistory(String passportid)throws Exception;
 			
 
 	

@@ -214,7 +214,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Desktop/Computer</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[5]%></td>
-								    <td class="text-blue" style="width: 15%;"><%if(inventoryqty[6]!=null){%><%=inventoryqty[6]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" style="width: 15%;"><%if(inventoryqty[6]!=null && !inventoryqty[6].toString().equals("null") ){%><%=inventoryqty[6]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[7].toString().equalsIgnoreCase("")){%><%=inventoryqty[7]%><%}  else{ %>--<%} %></td>
 								
 						</tr>
@@ -224,7 +224,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Laptop</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[8]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[9]!=null){%><%=inventoryqty[9]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[9]!=null && !inventoryqty[9].toString().equals("null")){%><%=inventoryqty[9]%><%} else{ %>-<%} %></td>
 									<td class="text-blue"style="width: 2%"><%if(!inventoryqty[10].toString().equalsIgnoreCase("")){%><%=inventoryqty[10]%><%}  else{ %>--<%} %></td>
 								
 						</tr>
@@ -234,7 +234,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >USB Pendrive</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[11]%></td>
-								    <td  class="text-blue" ><%if(inventoryqty[12]!=null){%><%=inventoryqty[12]%><%} else{ %>-<%} %></td>
+								    <td  class="text-blue" ><%if(inventoryqty[12]!=null && !inventoryqty[12].toString().equals("null")){%><%=inventoryqty[12]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[13].toString().equalsIgnoreCase("")){%><%=inventoryqty[13]%><%}  else{ %>--<%} %></td>
 								
 						</tr>
@@ -244,7 +244,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Printer</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[14]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[15]!=null){%><%=inventoryqty[15]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[15]!=null && !inventoryqty[15].toString().equals("null")){%><%=inventoryqty[15]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[16].toString().equalsIgnoreCase("")){%><%=inventoryqty[16]%><%}  else{ %>--<%} %></td>
 								
 						</tr>
@@ -254,7 +254,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Telephone</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[17]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[18]!=null){%><%=inventoryqty[18]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[18]!=null  && !inventoryqty[18].toString().equals("null")){%><%=inventoryqty[18]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[19].toString().equalsIgnoreCase("")){%><%=inventoryqty[19]%><%} else{ %>--<%} %></td>
 						
 						</tr>
@@ -264,7 +264,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Fax Machine</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[20]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[21]!=null){%><%=inventoryqty[21]%><%}  else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[21]!=null && !inventoryqty[21].toString().equals("null") ){%><%=inventoryqty[21]%><%}  else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[22].toString().equalsIgnoreCase("")){%><%=inventoryqty[22]%><%} else{ %>--<%} %></td>
 								
 						</tr>
@@ -274,7 +274,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Scanner</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[23]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[24]!=null){%><%=inventoryqty[24]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[24]!=null && !inventoryqty[24].toString().equals("null") ){%><%=inventoryqty[24]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[25].toString().equalsIgnoreCase("")){%><%=inventoryqty[25]%><%} else{ %>--<%} %></td>
 								
 						</tr>
@@ -284,7 +284,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Xerox machine</td>
 								    <td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[26]%></td>
-								    <td class="text-blue" ><%if(inventoryqty[27]!=null){%><%=inventoryqty[27]%><%} else{ %>-<%} %></td>
+								    <td class="text-blue" ><%if(inventoryqty[27]!=null && !inventoryqty[27].toString().equals("null")){%><%=inventoryqty[27]%><%} else{ %>-<%} %></td>
 									<td class="text-blue" style="width: 2%"><%if(!inventoryqty[28].toString().equalsIgnoreCase("")){%><%=inventoryqty[28]%><%} else{ %>--<%} %></td>
 						</tr>
 						<%} %>
@@ -293,7 +293,7 @@ tr.noBorder td {
 						            <td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td colspan="5"  style="width: 2%" >Miscellaneous </td>
 									<td class="text-blue" style="width: 2%;text-align: center;"><%=inventoryqty[29]%></td>
-									<td class="text-blue" ><%=inventoryqty[30]%></td>
+									<td class="text-blue" ><%if(inventoryqty[30]!=null && !inventoryqty[30].toString().equals("null")){%><%=inventoryqty[30]%><%} else{ %>-<%} %></td>
 								    <td class="text-blue" style="width: 2%"><%if(!inventoryqty[31].toString().equalsIgnoreCase("")){%><%=inventoryqty[31]%><%} else{ %>--<%} %></td>
 						</tr>
 						<%} %>
@@ -312,6 +312,9 @@ tr.noBorder td {
 						 </div> 
 						
 					<%} %>
+					
+					<br>
+					<br>
 					       <div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>
 								<span style="font-weight: 600; font-size: 18px; ">Name:&nbsp;<span class="text-blue" ><%=inventoryqty[1]%></span></span><br>
@@ -425,7 +428,10 @@ tr.noBorder td {
 						 </div>
 						 
 					<%} %>	 
-						 
+						
+						<br>
+					    <br> 
+					    
 				<% if(inventoryconfigure.size()>0 ) { %>	 
 					<div style="margin-left:450px !important;margin-top:20px;text-align:left;"> 
 						        <span style="font-weight: 600; font-size: 18px;">Signature </span><br>

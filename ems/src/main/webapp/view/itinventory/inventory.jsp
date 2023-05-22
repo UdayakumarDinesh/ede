@@ -11,8 +11,17 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+	
 		
 </head>
+
+<style>
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+</style>
 <body>
 <div class="card-header page-top ">
 		<div class="row">
@@ -76,8 +85,8 @@
 	<div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Inventory Details must be declared within January of every year *</b> </marquee></div>
 	
 	<% if(InventoryQuantityList.size()>0) {%>
-			<div class="card"  style="max-height: 40rem; overflow-y:auto;">
-			<div class="card-body " >	
+			<div class="card"  style="overflow-y: hidden;" >
+			<div class="card-body">	
 			<form action="##">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<table class="table table-bordered table-hover table-striped table-condensed"   > 
@@ -107,7 +116,7 @@
 				<td style="width: 2%" >Desktop/Computer</td>
 			<td  style="width: 2%" >
 			
-				<input type="number" class="form-control "  style="width:50%;margin-left:40px;"  value="<%=QtyList[1] %>"  min="0" max="99" name="Desktop"> 
+				<input type="number" class="form-control "  style="width:50%;margin-left:40px;"   value="<%=QtyList[1] %>"  min="0" max="99" name="Desktop"> 
 			</td>
 			<td>
 				<select class="form-control" name="DesktopIntendedBy" >
@@ -124,7 +133,7 @@
 			 <%if(Status.equals("I") || Status.equals("R")  || Status.equals("A")){ %>	
 			<td>
 				<button type="submit" class="btn btn-sm update-btn" name="Itinventoryid" value="<%=QtyList[0] %>" formaction="QuantityEditSubmit.htm" formmethod="POST" onclick="return confirm('Are You Sure To Update ?');">update</button>&emsp;
-				<% if(!QtyList[1].toString().equals("0")){%><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/D" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
+				<% if(!QtyList[1].toString().equals("0")){%><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/D/<%=QtyList[28] %>" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
 			</td>
 			<%} %> 
 			</tr>
@@ -150,7 +159,7 @@
 			 <%if(Status.equals("I") || Status.equals("R") ||  Status.equals("A")){ %>	
 			<td>
 			    <button type="submit" class="btn btn-sm update-btn" name="Itinventoryid" value="<%=QtyList[0] %>" formaction="QuantityEditSubmit.htm" formmethod="POST"  onclick="return confirm('Are You Sure To Update ?');">update</button>&emsp;
-				<% if(!QtyList[4].toString().equals("0")){ %><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/L" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
+				<% if(!QtyList[4].toString().equals("0")){ %><button type="submit" class ="btn btn-sm add-btn " name="Itinventoryid" value="<%=QtyList[0]%>/L/<%=QtyList[28] %>" formaction="InventoryConfigure.htm" formmethod="POST" >configure</button> <%} else{ %><%} %>
 			</td>
 			 <%} %> 
 			</tr>
@@ -356,6 +365,7 @@
 			   </div>
 			 </div> 
 			 <%} %>
+			 
 		   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 <%} %>
 	</form>		
@@ -366,7 +376,7 @@
 		
 		<!----------------------------------------------------------------------------------------------------------  -->
 	<%  if (InventoryQuantityList.size()==0) {%> 
-			<div class="card"  style="max-height: 40rem; overflow-y:auto;">
+			<div class="card"  >
 			<div class="card-body " >	
 			<form action="ITInventoryQuantityAddSubmit.htm" method="POST"  >
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -388,12 +398,13 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Desktop/Computer</td>
 								    <td style="width: 1%;text-align: center;" >
-									<input type="number" class="form-control " style="width:50%;margin-left:30px;" value="0" min="0" max="99" name="Desktop">
+									  <input type="number" class="form-control " style="width:50%;margin-left:30px;" value="0"  id="qty" min="0" max="99" name="Desktop">
 									</td>
-									<td ><select class="form-control" name="DesktopIntendedBy" >
-									<option value="" selected="selected" disabled="disabled">Select</option>
-									<option value="SELF">Self</option>
-									<option value="IT">IT</option>
+									<td>
+									<select class="form-control" name="DesktopIntendedBy" id="intndby" >
+									 <option value="" selected="selected" disabled="disabled">Select</option>
+									 <option value="SELF">Self</option>
+									 <option value="IT">IT</option>
 									</select>
 									</td>
 									<td style="width: 2%">
@@ -406,9 +417,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Laptop</td>
 								    <td style="width: 2%">
-									<input type="number" class="form-control"   style="width:50%;margin-left:30px;"  value="0" min="0"  max="99" name="Laptop"> 
+									<input type="number" class="form-control"   style="width:50%;margin-left:30px;"  value="0"  id="qty1" min="0"  max="99" name="Laptop"> 
 									</td>
-									<td><select class="form-control" name="LaptopIntendedBy" >
+									<td><select class="form-control" name="LaptopIntendedBy"  id="intndby1">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -423,9 +434,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >USB Pendrive</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control"  style="width:50%;margin-left:30px;"  value="0" min="0"  max="99" name="USBPendrive" >
+									<input type="number" class="form-control"  style="width:50%;margin-left:30px;"  value="0"  id="qty2" min="0"  max="99" name="USBPendrive" >
 									</td>
-									<td><select class="form-control" name="USBPendriveIntendedBy" >
+									<td><select class="form-control" name="USBPendriveIntendedBy" id="intndby2">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -441,9 +452,9 @@
 									
 								    <td style="width: 2%" >Printer</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control"  style="width:50%;margin-left:30px;"  value="0" min="0"   max="99" name="Printer"> 
+									<input type="number" class="form-control"  style="width:50%;margin-left:30px;"  value="0"   id="qty3" min="0"   max="99" name="Printer"> 
 									</td>
-									<td><select class="form-control" name="PrinterIntendedBy" >
+									<td><select class="form-control" name="PrinterIntendedBy" id="intndby3">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -459,9 +470,9 @@
 									
 								    <td style="width: 2%" >Telephone</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control "   style="width:50%;margin-left:30px;" value="0" min="0" max="99" name="Telephone"> 
+									<input type="number" class="form-control" style="width:50%;margin-left:30px;" value="0"  id="qty4" min="0" max="99" name="Telephone"> 
 									</td>
-									<td><select class="form-control" name="TelephoneIntendedBy" >
+									<td><select class="form-control" name="TelephoneIntendedBy" id="intndby4" >
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -476,9 +487,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Fax Machine</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control"   style="width:50%;margin-left:30px;"  value="0" min="0"   max="99" name="FaxMachine"> 
+									<input type="number" class="form-control"   style="width:50%;margin-left:30px;"  value="0"  id="qty5" min="0" max="99" name="FaxMachine"> 
 									</td>
-									<td><select class="form-control" name="FaxMachineIntendedBy" >
+									<td><select class="form-control" name="FaxMachineIntendedBy" id="intndby5">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -493,9 +504,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Scanner</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control "  style="width:50%;margin-left:30px;"  value="0" min="0"   max="99" name="Scanner"> 
+									<input type="number" class="form-control "  style="width:50%;margin-left:30px;"  value="0"  id="qty6" min="0"   max="99" name="Scanner"> 
 									</td>
-									<td><select class="form-control" name="ScannerIntendedBy" >
+									<td><select class="form-control" name="ScannerIntendedBy" id="intndby6">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -510,9 +521,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Xerox Machine</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control "    style="width:50%;margin-left:30px;" value="0" min="0"   max="99" name="XeroxMachine"> 
+									<input type="number" class="form-control "    style="width:50%;margin-left:30px;" value="0" min="0"   id="qty7"  max="99" name="XeroxMachine"> 
 									</td>
-									<td><select class="form-control" name="XeroxMachineIntendedBy" >
+									<td><select class="form-control" name="XeroxMachineIntendedBy" id="intndby7">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -527,9 +538,9 @@
 									<td style="width: 2%; text-align: center;"><%=++count %></td>
 									<td style="width: 2%" >Miscellaneous</td>
 								    <td style="width: 2%;text-align: center;">
-									<input type="number" class="form-control "  style="width:50%;margin-left:30px;" value="0" min="0"   max="99" name="Miscellaneous"> 
+									<input type="number" class="form-control "  style="width:50%;margin-left:30px;" value="0" min="0"  id="qty8"  max="99" name="Miscellaneous"> 
 									</td>
-									<td><select class="form-control" name="MiscellaneousIntendedBy" >
+									<td><select class="form-control" name="MiscellaneousIntendedBy" id="intndby8">
 									<option value="" selected="selected" disabled="disabled">Select</option>
 									<option value="SELF">Self</option>
 									<option value="IT">IT</option>
@@ -542,7 +553,7 @@
 							</table>
 							
 						<div class="row justify-content-center">
-							 <button type="submit" style="margin-left:0px;" class="btn btn-sm submit-btn " name="action" value="submit" onclick="return confirm('Are You Sure To Add ?')" >Submit</button>
+							 <button type="submit" style="margin-left:0px;" class="btn btn-sm submit-btn " name="action" value="submit" onclick="return Add();" >Submit</button>
 						</div>
 						   <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
 				
@@ -552,16 +563,35 @@
 	 
 	
    <%}%> 
-		
-	 
-			
-	
-
 		 
 			
 </body>
 
 <script>
 
+function Add(){
+	
+	console.log("qty---"+$('#qty').val());
+	console.log("qty1---"+$('#qty1').val());
+	console.log("qty2---"+$('#qty2').val());
+	console.log("qty3---"+$('#qty3').val());
+	console.log("qty4---"+$('#qty4').val());
+	console.log("qty5---"+$('#qty5').val());
+	console.log("qty6---"+$('#qty6').val());
+	console.log("qty7---"+$('#qty7').val());
+	console.log("qty8---"+$('#qty8').val());
+	
+	console.log("intndby---"+$('#intndby').val());
+	if($('#qty').val()==='0' && $('#qty1').val()==='0' && $('#qty2').val()==='0' &&  $('#qty3').val()==='0' &&  $('#qty4').val()==='0'  &&  $('#qty5').val()==='0' &&  $('#qty6').val()==='0' &&  $('#qty7').val()==='0' && $('#qty8').val()==='0'){
+		alert('Please Enter the Quantity! ');
+		return false;
+	}else if ($('#intndby').val()==null && $('#intndby1').val()==null && $('#intndby2').val()==null && $('#intndby3').val()==null && $('#intndby4').val()==null && $('#intndby5').val()==null &&  $('#intndby6').val()==null &&  $('#intndby7').val()==null &&  $('#intndby8').val()==null){
+		alert('Please Enter Intended By! ');
+		return false;
+	}else{
+			return confirm('Are You Sure To Submit?');
+	}
+	
+}
 </script>
 </html>

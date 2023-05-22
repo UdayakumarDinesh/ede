@@ -15,6 +15,12 @@
 <title>Inventory Details</title>
 <style type="text/css">
 
+body {
+  
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
 table{
 	align: left;
 	width: 100% !important;
@@ -86,7 +92,7 @@ tr.noBorder td {
    
     String EmpName=(String)request.getAttribute("EmpName");
     String LoginType=(String)request.getAttribute("LoginType");
-    
+    String isApproval = (String)request.getAttribute("isApproval");
    
 	
 %>
@@ -100,9 +106,14 @@ tr.noBorder td {
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
+							<% if(isApproval==null){ %>
 							
+							<li class="breadcrumb-item "><a href="InventoryDetailsDeclared.htm">Inventory Declared  </a></li>
+							
+							<%}else{%>
 							<li class="breadcrumb-item "><a href="Inventory.htm">Inventory  </a></li>
 							
+							<%}%>
 					        <li class="breadcrumb-item active" aria-current="page">Inventory Preview
 						</li>
 				</ol>
@@ -360,10 +371,11 @@ tr.noBorder td {
 						</td>											
 					</tr>
 					<tr>
+				
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
 						
 						     <%if(!inventoryqty[35].toString().equals("")){%><span style="font-weight:800;" ><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span><br><%} %> 
-							<span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span>
+							 <% if( !inventoryqty[36].toString().equals("") ) {%><span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><%} %>
 							
 						</td>
 					</tr>
@@ -382,7 +394,7 @@ tr.noBorder td {
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-						    <% if(inventoryqty[36]!=null) {%><span style="font-weight:800;"><%=EmpName %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
+						    <% if(!inventoryqty[36].toString().equals("")) {%><span style="font-weight:800;"><%=inventoryqty[37] %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
 							<span style="font-weight:800;"><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
 						</td>
 					</tr>
@@ -391,6 +403,7 @@ tr.noBorder td {
 			</div> 
 			
 			<%} %> 
+			 
 			 
 			<% if(inventoryqty[33].toString().equals("F")) {%>
 				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 
@@ -436,7 +449,7 @@ tr.noBorder td {
 				  
 			<%} %>
 				
-				
+				<% if(isApproval.toString().equalsIgnoreCase("Y")){ %>
 				
 				<% if(inventoryqty[33].toString().equalsIgnoreCase("I") || inventoryqty[33].toString().equalsIgnoreCase("R"))
 					
@@ -466,6 +479,8 @@ tr.noBorder td {
 				 
 				 
 				<% } %>
+				
+				<%} %>
 				 
 				 <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" /> 
 				</form>

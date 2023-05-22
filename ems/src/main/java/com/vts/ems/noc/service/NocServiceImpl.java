@@ -82,12 +82,16 @@ public class NocServiceImpl implements NocService {
 				.build();
 		
           dao.NocPassportTransactionAdd(transaction);
+          long count = dao.GetPassportCount(pport.getEmpId());
+          if(count==0) {
+        	  dao.AddPassport(pport);
+          }
           
-          dao.AddPassport(pport);
         
 		NocPassport noc =NocPassport.builder()
 				.NocPassportNo(NocPassportNo)
 				.EmpNo(dto.getEmpNo())
+				.PassportExist(dto.getPassportExist())
 				.RelationType(dto.getRelationType())
 				.RelationName(dto.getRelationName())
 				.RelationAddress(dto.getRelationAddress())
@@ -128,7 +132,7 @@ public class NocServiceImpl implements NocService {
 		
 		NocPassport noc =dao.getNocPassportId(dto.getNocPassportId());
 		
-		
+		noc.setPassportExist(dto.getPassportExist());
 		noc.setRelationType(dto.getRelationType());
 		noc.setRelationName(dto.getRelationName());
 		noc.setRelationAddress(dto.getRelationAddress());
@@ -450,8 +454,6 @@ public class NocServiceImpl implements NocService {
 		return 0;
 	}
 }
-
-		
 
 	@Override
 	public NocPassport getNocPassportById(long passportid) throws Exception {
@@ -845,15 +847,15 @@ public class NocServiceImpl implements NocService {
 			dao.EditNocpa(noc);
 		}
 		
-		NocProceedingAbroadTrans transaction = NocProceedingAbroadTrans.builder()	
-				                           .NocProcAbroadTransId(noc.getNocProcId())
+		NocProceedingAbroadTrans trans = NocProceedingAbroadTrans.builder()	
+				                           .NocProcId(noc.getNocProcId())
 				                           .NocStatusCode(noc.getNocStatusCode())
 				                           .ActionBy(empNo)
 				                           .Remarks(remarks)
 				                           .ActionDate(sdtf.format(new Date()))
 				                           .build();
 		
-		 dao.NocProcAbroadTransactionAdd(transaction);
+		 dao.NocProcAbroadTransactionAdd(trans);
 						
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
@@ -924,6 +926,12 @@ public class NocServiceImpl implements NocService {
 	public List<LabMaster> getLabMasterDetails() throws Exception {
 	
 		return dao.getLabMasterDetails();
+	}
+
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		return dao.getPassportRemarksHistory(passportid);
 	}
 }
 

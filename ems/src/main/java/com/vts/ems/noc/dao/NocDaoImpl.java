@@ -40,7 +40,13 @@ public class NocDaoImpl implements NocDao {
 		
 		Query query=manager.createNativeQuery(EMPDATA);
 		query.setParameter("EmpId", EmpId);
-		return (Object[])query.getSingleResult();
+		List<Object[]> list =(List<Object[]>) query.getResultList();
+		
+		Object[] result=null;
+		if(list!=null &&list.size()>0) {
+			result =list.get(0);
+		}
+		return result;
 		
 	}
 	
@@ -520,12 +526,12 @@ public class NocDaoImpl implements NocDao {
 	}
 
 	@Override
-	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans transaction) throws Exception {
+	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans trans) throws Exception {
 		
 
-		manager.persist(transaction);
+		manager.persist(trans);
 		manager.flush();
-		return transaction.getNocProcAbroadTransId();
+		return trans.getNocProcAbroadTransId();
 		
 		
 	}
@@ -633,6 +639,32 @@ public class NocDaoImpl implements NocDao {
 		
 	
 	}
+
+	private static final String GETCOUNT="SELECT  COUNT(*) FROM pis_passport WHERE empid=:empid";
+	@Override
+	public long GetPassportCount(String empid) throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(GETCOUNT);
+			query.setParameter("empid", empid);
+			BigInteger PassportId=(BigInteger)query.getSingleResult();
+			return PassportId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO GetPassportCount "+ e);
+			return 0;
+		}
+	}
+
+	private static final String NOCPASSPORTREMARKHISTORY="SELECT trans.NocPassportId,trans.Remarks,e.EmpName FROM noc_passport_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocPassportId=:passportid ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSPORTREMARKHISTORY);
+		query.setParameter("passportid", passportid);
+		return (List<Object[]>)query.getResultList();
+	}
+	
+	
 }
 	
 

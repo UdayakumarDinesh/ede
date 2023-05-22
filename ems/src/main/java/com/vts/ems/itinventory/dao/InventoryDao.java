@@ -34,9 +34,10 @@ public interface InventoryDao {
 	public List<Object[]> getInventoryDashboardCount(String empno, String year) throws Exception ;
 	public long inventoryapprove(ITInventory inventory) throws Exception ;
 	public  long inventoryconfigapprove(ITInventoryConfiguredHistory config) throws Exception ;
-    public List<Object[]> getInventoryConfigureApprovedlist(String iTInventoryId) throws Exception;
+    public List<Object[]> getInventoryConfigureApprovedlist(String invntryhistoryid) throws Exception;
 	
-	public void UpdateAnnualDeclarationAllEmp(String Decl) throws Exception;	
+	public void UpdateAnnualDeclarationAllEmp(String Decl) throws Exception;
+	public long MaxOfInventoryHistoryId()throws Exception;	
 
 	
 }

@@ -109,7 +109,7 @@
 						 		 <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
-						 	<%} else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("ProceedingAbroad")){ %> 
+						 	<%} else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Proceeding Abroad")){ %> 
 						 	
 						 		<button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4] %>" formaction="ProcAbroadPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
@@ -145,12 +145,7 @@
  	
 
   
-<script>
 
-
-	   
-
-</script>
 
 </body>
 </html>

@@ -54,9 +54,11 @@
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
+	 Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
-	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
+	List<Object[]> PassportList=(List<Object[]>)request.getAttribute("NOCPASSPORTLIST");
+	
 	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 	
    %>
@@ -64,15 +66,15 @@
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
-				<h5>NOC Proceeding Abroad</h5>
+				<h5>NOC Passport</h5>
 			</div>
 			<div class="col-md-8 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item active" aria-current="page">Proceeding
-						Abroad</li>
+					<li class="breadcrumb-item active" aria-current="page">Passport
+						List</li>
 				</ol>
 			</div>
 
@@ -100,72 +102,78 @@
 		</div>
 		<%} %>
 		</div>
-		
 
-   <div class="card">					
+<div class="card">					
 		<div class="card-body">
 		<!-- <div class="card-body main-card"> -->
 
-			<form action="#" method="POST" id="NOCProcAbroad">
+			<form action="#" method="POST" id="NOCPassport">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				 <div class="table-responsive"> 
 					 	<table class="table table-bordered table-hover table-striped table-condensed"  id="table"> 
 						<thead>
 							<tr>
 								<th style="width: 6%">Select</th>
-								<th style="width: 10%">NOC Proceeding Abroad</th>
+								<th style="width: 10%">NOC Passport Number</th>
 							    <!-- <th style="width: 25%">NOC Date</th> -->
 								<th style="width: 11%">Status</th>
 								<th style="width: 8%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
+						<% 
+						String Initiated="Initiated";
+						for(Object[] obj:PassportList){
 						
-						<% for(Object[] obj:NocProcAbraodList){ %>
 						
-						<tr>
-								<td style="text-align: center;"><%if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="ProcAbrId" value="<%=obj[0]%>"><%}
-								else{%><input type="radio" name="ProcAbrId" value="<%=obj[0]%>" disabled>  <%} %></td>
+						%>
+							
+							<tr>
+								<td style="text-align: center;"><%if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="NocPassportId" value="<%=obj[0]%>"><%}
+								else{%> <input type="radio" name="NocPassportId" value="<%=obj[0]%>" disabled> <%} %></td>
 								<td style="text-align: center;"><%=obj[1] %></td>
 								<!-- <td></td> -->
 								<td style="text-align: center;">
-								
+								<%if(obj[6]!=null){%>
 								  
 								 	<%if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("A") ){ %>
-							    		 <button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" formmethod="GET"  value="<%=obj[0] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" formmethod="GET"  name="PassportId" value="<%=obj[0] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 								    	
-							    	<%} else if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("E")){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[0] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+							    	<%}else if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[0] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
-							    		<%}
-								 	
+							    		
+							    	<%} 
 							    	else{%>
-							    	
-							    	    <button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[0] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+							    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[0] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;<%=obj[5] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
-								    	</button> 
-							    	<%} %>	
-							    </td>
-							    
+								    	</button>
+							    		
+							    	
+							    	<%} %>  
+								 
+								<%} %>
+								
+								
+								</td>
 								<td style="text-align: center;">
-								    <button type="submit" class="btn btn-sm " name="ProcAbrId" value="<%=obj[0] %>"   formaction="ProcAbroadPreview.htm" formmethod="POST" data-toggle="tooltip" title="" data-original-title="View Details">
-								    <i class="fa fa-eye " style="color: black;"></i>
+								 <button type="submit" class="btn btn-sm " name="Passportid" value="<%=obj[0]%>"   formaction="PassportPreview.htm" formmethod="POST" data-toggle="tooltip" title="" data-original-title="View Details">
+								<i class="fa fa-eye " style="color: black;"></i>
 							    </button> 
-							    
-							    <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[0] %>"  formaction="ProcAbroadPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
-								  <i style="color: #019267" class="fa-solid fa-download"></i>
-								</button>  
+							    <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[0]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
 								
 							</td>
-							<%} %>
 
 							</tr>
 							
-                       </tbody>
+                      <%} %>
+						</tbody>
 					</table>
 
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -176,9 +184,11 @@
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="submit" class="btn btn-sm add-btn" formaction="ProcAbroadAdd.htm">ADD</button>
-						<button type="submit" class="btn btn-sm edit-btn" formaction="ProcAbroadEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCProcAbroad)">EDIT</button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="PassportAdd.htm" <%if(NocEmpList==null){ %> onclick="message()" <%} %>>ADD</button>
+						<button type="submit" class="btn btn-sm edit-btn" formaction="PassportEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCPassport)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm delete-btn" formaction="" name="action" value="DELETECIR" Onclick="Delete(NOCPassport)">DELETE</button> -->
+						
+						
 						
 					</div>
 				</div>
@@ -188,7 +198,7 @@
 			<hr>
 			
             <div class="row"  >
-		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Proceeding Abroad</b></div>
+		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Passport</b></div>
 		 	</div>
 		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
@@ -280,7 +290,7 @@
 			           </table>			             
 			       </div>
 
-
+<!-- <div  class="text-center" style="color:red;text-align: center; font-size:15px;"><marquee><b>* Permanent and Residential Address must be approved before applying NOC for Passport *</b> </marquee></div> -->
 		</div>
 
 	</div>
@@ -291,32 +301,28 @@
 			       
 <script type="text/javascript">
 	
-function Edit(NOCProcAbroad)
+function Edit(NOCPassport)
 {
-	var fields = $("input[name='ProcAbrId']").serializeArray();
+	var fields = $("input[name='NocPassportId']").serializeArray();
 
 	if (fields.length === 0) {
-		alert("Please Select Atleast One  ");
+		alert("Please Select Atleast One Passport ");
         event.preventDefault();
 		return false;
 	}
 	return true;
+}  	   
+function Delete(NOCPassport){ 
 	
-}
-	   	   
-	   
-
-function Delete(NOCProcAbroad){ 
-	
-	var fields = $("input[name='ProcAbrId']").serializeArray();
+	var fields = $("input[name='NocPassportId']").serializeArray();
 
 	if (fields.length === 0){
-		alert("Please Select Atleast One  ");
+		alert("Please Select Atleast One Passport ");
 		event.preventDefault();
 		return false;
 	}
 	
-	/* var cnf = confirm("Are You Sure To Delete!");
+	var cnf = confirm("Are You Sure To Delete!");
     if(cnf){
 		
 		document.getElementById("NOCPassport").submit();
@@ -326,9 +332,16 @@ function Delete(NOCProcAbroad){
 		
 		event.preventDefault();
 		return false;
-	} */
+	}
 }
 
+function message(){
+	
+	alert("Permanent and Residential address is mandatory before applying NOC for Passport");
+	event.preventDefault();
+	return false;
+	
+}
 
 </script>
 

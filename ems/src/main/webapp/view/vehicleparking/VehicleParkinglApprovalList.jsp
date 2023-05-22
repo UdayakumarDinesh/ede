@@ -167,7 +167,7 @@
 									for (Object ls[] : VehicleParkList) {
 								%>
 								<%if(fromdate !=null && todate !=null) {%>
-								<%if(format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).after(format.parse(fromdate)) && format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).before(format.parse(todate))) { %>
+								<%if(format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).after(format.parse(fromdate)) && format.parse(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())).before(format.parse(todate)) || todate.equals(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())) || fromdate.equals(DateTimeFormatUtil.getDateTimeToRegularDate(ls[4].toString())))  { %>
 
 								<tr>
 									<td style="text-align: center;"><%=++SN%></td>

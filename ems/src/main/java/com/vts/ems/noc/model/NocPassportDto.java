@@ -14,6 +14,7 @@ public class NocPassportDto {
 	 private long NocPassportId;
      private String NocPassportNo;
      private String  EmpNo;
+     private String PassportExist;
      private String RelationType; 
      private String RelationName; 
      private String RelationOccupation;

@@ -98,12 +98,21 @@
 			
 			  <div class="col-md-2">
 			                <label> Passport Type:</label>
-			                <select name="" class="form-control select2"  required="required">
+			                
 			                 
-			                    <option value="N">New</option>
-			                      <option value="R">Renewal</option>
+			                   
+			                  <% if(EmpPassport.length>4 ) { %>
+			                    <input  class="form-control input-sm " type="text" name="PassportExist" readonly value="Renewal">
 			                    
-			                </select>
+			                    <%}
+			                    else{%>
+			                    <select name="PassportExist" class="form-control select2"  id="passporttype"required="required">
+			                        
+			                    	 <option value="New">New</option>
+			                    	   <option value="Renewal">Renewal</option>
+			                    </select>
+			                   <%} %>
+			                
 			             
 			     </div>
 			
@@ -205,43 +214,54 @@
 			              
 			          </div>
 			    </div> 
-			    <div class="form-group">
+			    
+			    
+			       
+			        
+			    
+			  
+			         <div class="form-group" >
 			  
 			        <div class="row">
-			         <% if(EmpPassport!=null) { %>
+			         <% if( EmpPassport.length>4 ) { %>
 			         
 			         <div class="col-md-2">
 			                <label> Passport Type </label>
-			                <input type="text" id="" name="Permanent"  value="<%=EmpPassport[0] %>"
+			                <input type="text" id="" name="PassportType"  value="<%=EmpPassport[0] %>"
 			                    class=" form-control input-sm " readonly="readonly">
 			                   
 			            </div>
 			            
 			             <div class="col-md-2">
 			                <label> Passport No. </label>
-			                <input type="text" id="" name="Permanent"    value="<%=EmpPassport[1] %>"
+			                <input type="text" id="" name="PassportNo"    value="<%=EmpPassport[1] %>"
 			                    class=" form-control input-sm "  readonly="readonly">
 			                   
 			            </div> 
 			            
 			              <div class="col-md-2">
 			                <label>Date of Issue  </label>
-			                <input type="text" id="" name="RelationName"    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
+			                <input type="text" id="" name="ValidFrom"    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
 			                   class=" form-control input-sm "   readonly="readonly">
 			                    
 			            </div>
 			            
 			            <div class="col-md-2">
 			                <label>Validity </label>
-			                <input type="text" id="" name="RelationOccupation"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
+			                <input type="text" id="" name="ValidTo"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
 			                    class=" form-control input-sm "  readonly="readonly">
 			                   
 			            </div>
-			       <%} else{ %>
+			            
+			         
+			       <%} %>
+			      
 			       
-			         <div class="col-md-2">
-			                <label>Passport Type:</label>
-                              <select  name="PassportType" class="form-control select2"  data-live-search="true">
+			       
+			      
+			         <div class="col-md-2" id="ptype">
+			                <label>Passport Type</label><br>
+                              <select  name="PassportType" class="form-control select2"  data-live-search="true" style="width:200px;">
                               
                                      		<option value="Official" >Official</option>
 					                        <option value="Diplomatic" >Diplomatic</option>
@@ -250,10 +270,10 @@
 			                   
 			            </div>
 			            
-			             <div class="col-md-2">
+			             <div class="col-md-2" id="status">
                         
-                              <label>Status:</label>
-                              <select  name="Status" class="form-control select2"  data-live-search="true">
+                              <label>Status</label><br>
+                              <select  name="Status" class="form-control select2"  data-live-search="true" style="width:200px;">
                               
                                      		<option value="Valid" >Valid</option>
 					                        <option value="Cancelled" >Cancelled</option>
@@ -264,41 +284,42 @@
                        
                        </div>
 			            
-			             <div class="col-md-2">
+			             <div class="col-md-2" id="pno">
 	                    
 	                            <label>Passport No:</label>
-	                            <input id="passportno" type="text"  class="form-control input-sm "   name="PassportNo"  required="required" maxlength="6"   onblur="checknegative(this)">
+	                            <input id="passportno" type="text"  class="form-control input-sm "   name="PassportNo"  maxlength="6"   onblur="checknegative(this)">
 	                    
                     </div>
                     
-                    <div class="col-md-1">
+                    <div class="col-md-1" id="validfrom">
                       
                              <label> Valid From  </label>
-	                       	  <input type="text" class="form-control input-sm pisfromdate" style="width: 110px;"value="" name="ValidFrom" id="pisfromdate" required="required"  /> 
+	                       	  <input type="text" class="form-control input-sm pisfromdate" style="width: 110px;"value="" name="ValidFrom" id="pisfromdate"   /> 
                       
                      </div>    
                      
-                      <div class="col-md-1" style="margin-left:20px;">
+                      <div class="col-md-1" style="margin-left:20px;" id="validtill">
 	                       
 	                             <label>Valid To </label>
-	                       	     <input type="text" class="form-control input-sm pistodate"  style="width: 110px;" value="" name="ValidTo" id="pistodate" required="required"  />
+	                       	     <input type="text" class="form-control input-sm pistodate"  style="width: 110px;" value="" name="ValidTo" id="pistodate"   />
 	                      
                        </div>     
 			       
 			       
+			         
 			    	  <%--  <a type="button"  class="btn btn-sm add-btn"  style="margin-bottom:28px;margin-top:28px;margin-left:28px" href="AddEditPassport.htm?empid=<%=Empid %>&NOC=noc">Add Passport</a>  --%>
-			    	<%} %> 
-			       
+			    	
 			        <div class="col-md-3" style="margin-left:25px;">
 			                <label> Details of passport lost,if any</label>
 			                <input type="text" id="" name="LostPassport"    value="<%if(passport!=null){ %><%=passport.getLostPassport()%><%} %>" 
 			                    class=" form-control input-sm " >
-			             
-			            </div>
-			          
-			         </div>
-			        
+			              
+			       </div>
+			       
 			     </div>
+			       
+			   </div>
+			         
 			     
 			     <div class="form-group">
 			       <div class="row">
@@ -456,6 +477,27 @@ window.onload = function() {
 		  $("#showfromdate").hide();
 		  $("#showtodate").hide(); 
 	 }
+	   
+	     var select=$('#passporttype').val()
+	     console.log("select--"+select);
+	     if(select=="New" || select==undefined){
+	    	 
+	    	 $('#ptype').hide();
+	    	 $('#status').hide();
+	    	 $('#pno').hide();
+	    	 $('#validfrom').hide();
+	    	 $('#validtill').hide();
+	    	 
+	    }
+	     else{
+	    	 
+	    	 $('#ptype').show();
+	    	 $('#status').show();
+	    	 $('#pno').show();
+	    	 $('#validfrom').show();
+	    	 $('#validtill').show();
+	    	 
+	     }
 	};
 	
 	$(document).ready(function() {
@@ -510,6 +552,31 @@ window.onload = function() {
 	
 		
 	
+	$(document).ready(function() {
+	    $('#passporttype').on('change', function() {
+	    var selectedValue = $(this).val();
+	    if(selectedValue=="New"){
+	    	
+	    	 $('#ptype').hide();
+	    	 $('#status').hide();
+	    	 $('#pno').hide();
+	    	 $('#validfrom').hide();
+	    	 $('#validtill').hide();
+	    	
+	    }
+	    else{
+	    	
+	    	 $('#ptype').show();
+	    	 $('#status').show();
+	    	 $('#pno').show();
+	    	 $('#validfrom').show();
+	    	 $('#validtill').show();
+	    	
+	    }
+	    
+	    });
+	  });
+	
 		    
 		    
 </script>
@@ -525,7 +592,23 @@ function checknegative(str) {
     }
 }
 
-
+setPatternFilter($("#passportno"), /^-?\d*$/);
+function setPatternFilter(obj, pattern) {
+	  setInputFilter(obj, function(value) { return pattern.test(value); });
+	}
+	
+function setInputFilter(obj, inputFilter) {
+	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+	    if (inputFilter(this.value)) {
+	      this.oldValue = this.value;
+	      this.oldSelectionStart = this.selectionStart;
+	      this.oldSelectionEnd = this.selectionEnd;
+	    } else if (this.hasOwnProperty("oldValue")) {
+	      this.value = this.oldValue;
+	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+	    }
+	  });
+	}
 
 
 

@@ -117,6 +117,7 @@ public ITInventoryConfigured getInventoryConfigId(long inventoryconfigid) throws
 public long ConfigureUpdate(ITInventoryConfigured details) throws Exception {
 	
 	ITInventoryConfigured config=dao.getInventoryConfigId(details.getInventoryConfigureId());
+	
 	config.setInventoryConfigureId(details.getInventoryConfigureId());
 	config.setItemType(details.getItemType());
 	config.setConnectionType(details.getConnectionType());
@@ -149,7 +150,7 @@ public List<Object[]> getInventoryQtylist(String empNo,String DeclarationYear) t
 public long ForwardDetails(ITInventory inventory,String UserId,String EmpNo) throws Exception {
 	
 	   
-		List<Object[]> notifyto = dao.SendNotification("A");
+		List<Object[]> notifyto = dao.SendNotification("I");
 		int i=0;
 	    for( Object[] obj : notifyto ){
 	    
@@ -194,42 +195,22 @@ public List<Object[]> getApprovedForm(String invntryhistoryid) throws Exception 
 }
 
 @Override
-public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inventory,ITInventoryConfiguredHistory config,String empNo, String eno) throws Exception {
+public long inventoryDetailsConfigApprove(ITInventoryHistory Aprrove,ITInventory inventory,ITInventoryConfiguredHistory config,String empNo, String eno,String UserId ) throws Exception {
 	
-	 System.out.println("invrntory---"+inventory);
-	EMSNotification notify = new EMSNotification();
-	List<Object[]> notifyto = dao.SendNotification("U");
-	
-	notify.setEmpNo(eno);
-	notify.setNotificationUrl("InventoryDetailsApproved.htm");
-	notify.setNotificationMessage("Inventory Details Approved");
-	
-   if(Aprrove.getStatus()=="A" & notify.getEmpNo()!=null)
-	{
-		notify.setNotificationDate(LocalDate.now().toString());
-		notify.setNotificationBy((empNo));
-		notify.setIsActive(1);
-		notify.setCreatedBy(empNo);
-		notify.setCreatedDate(sdf1.format(new Date()));
-		dao.NotificationAdd(notify);
-	}
-   
-   if(Aprrove.getStatus()=="A" )
+	if(Aprrove.getStatus()=="A" )
    {
-	 
+	   dao.inventoryDetailsApprove(Aprrove);
 	  dao.inventoryapprove(inventory);
-   }
-   
-   if(Aprrove.getStatus()=="A" )
-   {
 	  dao.inventoryconfigapprove(config);
+	  
    }
-   
-   return dao.inventoryDetailsApprove(Aprrove);
+	return 1;
 	
  }
+
+
        //change annual declaration form status every year 1st of jan to allow employee to submit declaration
-		@Scheduled(cron = "0 0 0 1 1 ?")
+		@Scheduled(cron = "0 29 12 20 5 ?")
 		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
 		{
 			dao.UpdateAnnualDeclarationAllEmp("Y");
@@ -241,12 +222,13 @@ public long inventoryDetailsApprove(ITInventoryHistory Aprrove,ITInventory inven
 			dao.UpdateAnnualDeclarationAllEmp("N");
 		}
 		
+
 		
 @Override
 public long inventoryDetailsReturn(ITInventory inventory,String empNo, String eno,String declarationyear) throws Exception {
 	
 	EMSNotification notify = new EMSNotification();
-	List<Object[]> notifyto = dao.SendNotification("U");
+	
 	
 	notify.setEmpNo(eno);
 	notify.setNotificationUrl("InventoryView.htm?declarationyear="+declarationyear+"");
@@ -293,11 +275,71 @@ public List<Object[]> getInventoryDashboardCount(String empno, String year)  thr
 }
 
 @Override
-public List<Object[]> getInventoryConfigureApprovedlist(String iTInventoryId)  throws Exception {
+public List<Object[]> getInventoryConfigureApprovedlist(String invntryhistoryid)  throws Exception {
 	
-	return dao.getInventoryConfigureApprovedlist(iTInventoryId);
+	return dao.getInventoryConfigureApprovedlist(invntryhistoryid);
 }
 
+@Override
+public long inventoryDetailsApprove(ITInventoryHistory Aprrove, ITInventory inventory, String empNo, String eno,String UserId)
+		throws Exception {
+	
+	 
+//	EMSNotification notify = new EMSNotification();
+//	
+//	
+//	notify.setEmpNo(eno);
+//	notify.setNotificationUrl("InventoryDetailsApproved.htm");
+//	notify.setNotificationMessage("Inventory Details Approved");
+//	
+//  if(Aprrove.getStatus()=="A" & notify.getEmpNo()!=null)
+//	{
+//		notify.setNotificationDate(LocalDate.now().toString());
+//		notify.setNotificationBy((empNo));
+//		notify.setIsActive(1);
+//		notify.setCreatedBy(UserId);
+//		notify.setCreatedDate(sdf1.format(new Date()));
+//		dao.NotificationAdd(notify);
+//	}
+//  
+//  if(Aprrove.getStatus()=="A" )
+//  {
+//	 
+//	  dao.inventoryapprove(inventory);
+//  }
+  
+ 
+  return dao.inventoryDetailsApprove(Aprrove);
+	
+  }
 
+@Override
+public long MaxOfInventoryHistoryId() throws Exception {
+	
+	return dao.MaxOfInventoryHistoryId();
 }
+
+@Override
+public long sendNotification(String eno,String EmpNo, String userId) throws Exception {
+	
+
+	 EMSNotification notify = new EMSNotification();
+	
+      notify.setEmpNo(eno);
+	  notify.setNotificationUrl("InventoryDetailsApproved.htm");
+	  notify.setNotificationMessage("Inventory Details Approved");
+	  notify.setNotificationBy((EmpNo)); 
+	 
+	 
+		notify.setNotificationDate(LocalDate.now().toString());
+		notify.setIsActive(1);
+		notify.setCreatedBy(userId);
+		notify.setCreatedDate(sdf1.format(new Date()));
+		return dao.NotificationAdd(notify);
+}
+
+ }
+
+
+
 

@@ -26,6 +26,9 @@ public interface NewsPaperDao {
 	public Object[] getPayLevelAndNewsRectrictAmt(String Empid) throws Exception;
 	public List<Object[]> getNewspaperClaimList(String empid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
+	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
+	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception;
+	
 	
 	public List<Object[]> getDeviceList(String empid) throws Exception;
 	public List<Object[]> getTeleDeviceList(String empid) throws Exception;
@@ -64,6 +67,6 @@ public interface NewsPaperDao {
 	public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId);//me added
-	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
+	
 
 }

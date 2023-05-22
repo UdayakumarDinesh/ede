@@ -1,5 +1,6 @@
 package com.vts.ems.itinventory.dao;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +107,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		Query query=manager.createNativeQuery(INVENTORYCONFIGURATION);
 		query.setParameter("EmpNo", empNo);
 		
+		
 		return (List<Object[]>)query.getResultList();
 	}
 	
@@ -205,6 +207,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		
 		Query query=manager.createNativeQuery(INVENTORYCONFIGURE);
 		query.setParameter("inventoryid", ITInventoryId);
+		
 		return (List<Object[]>)query.getResultList();
 	}
 	private static final String INVENTORYAPPROVEDFORMDOWNLOAD="CALL IT_Inventory_Approved(:ItInventoryHistoryId )"; 
@@ -236,7 +239,7 @@ public class InventoryDaoImpl implements InventoryDao{
 				manager.flush();		
 				return config.getConfigHistoryId();
 			}	catch (Exception e) {
-				logger.error(new Date() + "Inside DAO inventoryDetailsApprove() "+e);
+				logger.error(new Date() + "Inside DAO inventoryconfigapprove() "+e);
 				e.printStackTrace();
 				return 0L;
 			}	
@@ -256,7 +259,7 @@ public class InventoryDaoImpl implements InventoryDao{
 		return query.executeUpdate();
 	}
 	
-	private static final String INVENTORYAPPROVEDLIST=" SELECT it.ItInventoryHistoryId,e.EmpName,it.DeclarationYear,it.ApprovedDate,it.Desktop,it.Laptop,it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ItInventoryId FROM it_inventory_history it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo AND it.status IN('A')  AND CASE WHEN 'A'=:LoginType THEN it.DeclarationYear=:DeclarationYear  ELSE it.DeclaredBy=:EmpNo END ORDER BY it.ApprovedDate DESC;";
+	private static final String INVENTORYAPPROVEDLIST="SELECT it.ItInventoryHistoryId,e.EmpName,it.DeclarationYear,it.ApprovedDate,it.Desktop,it.Laptop,it.USBPendrive,it.Printer,it.Telephone,it.FaxMachine,it.Scanner,it.XeroxMachine,it.Miscellaneous,it.status,it.ItInventoryId FROM it_inventory_history it,employee e WHERE it.isActive='1' AND it.DeclaredBy=e.EmpNo AND it.status IN('A')  AND CASE WHEN 'I'=:LoginType THEN it.DeclarationYear=:DeclarationYear ELSE it.DeclaredBy=:EmpNo END ORDER BY it.ApprovedDate DESC";
 	@Override
 	public List<Object[]> getInventoryApprovedList(String year,String empNo,String LoginType) throws Exception {
 		
@@ -309,13 +312,13 @@ public class InventoryDaoImpl implements InventoryDao{
 	}
 
 	
-	private static final String INVENTORYCONFIGUREAPRROVEDLIST="SELECT ic.ConfigHistoryId,ic.ItemType,ic.ConnectionType,ic.CPU,ic.Monitor,ic.RAM,ic.AdditionalRAM,ic.Keyboard,ic.Mouse,ic.Externalharddisk,ic.ExtraInternalharddisk,ic.Office,ic.OS,ic.PDF,ic.Browser,ic.Kavach,ic.ITInventoryId,ic.ConfiguredBy FROM it_inventory_configured_history ic,it_inventory it WHERE ic.isActive='1' AND ic.ITInventoryId=it.ITInventoryId AND it.status IN('F','A','R') AND it.ITInventoryId=:inventoryid";
+	private static final String INVENTORYCONFIGUREAPRROVEDLIST="SELECT ic.ConfigHistoryId,ic.ItemType,ic.ConnectionType,ic.CPU,ic.Monitor,ic.RAM,ic.AdditionalRAM,ic.Keyboard,ic.Mouse,ic.Externalharddisk,ic.ExtraInternalharddisk,ic.Office,ic.OS,ic.PDF,ic.Browser,ic.Kavach,ic.ITInventoryId,ic.ConfiguredBy FROM it_inventory_configured_history ic,it_inventory it WHERE ic.isActive='1' AND ic.ITInventoryId=it.ITInventoryId AND it.status IN('F','A','R') AND ic.ITInventoryHistoryId=:invntryhistoryid";
 	@Override
-	public List<Object[]> getInventoryConfigureApprovedlist(String iTInventoryId) throws Exception {
+	public List<Object[]> getInventoryConfigureApprovedlist(String invntryhistoryid) throws Exception {
 		
 		
 		Query query=manager.createNativeQuery(INVENTORYCONFIGUREAPRROVEDLIST);
-		query.setParameter("inventoryid", iTInventoryId);
+		query.setParameter("invntryhistoryid", invntryhistoryid);
 		return (List<Object[]>)query.getResultList();
 	}
 	
@@ -333,6 +336,21 @@ public class InventoryDaoImpl implements InventoryDao{
 		}	
 		
 	}
+	private static final String MAXOFINVENTORYHISTORYID="SELECT IFNULL(MAX(ItInventoryHistoryId),0) as 'MAX' FROM it_inventory_history";
+	@Override
+	public long MaxOfInventoryHistoryId() throws Exception {
+		
+		
+			
+			try {
+				Query query =  manager.createNativeQuery(MAXOFINVENTORYHISTORYID);
+				BigInteger InventoryHistoryId=(BigInteger)query.getSingleResult();
+				return InventoryHistoryId.longValue();
+			}catch ( NoResultException e ) {
+				logger.error(new Date() +"Inside DAO MaxOfInventoryHistoryId "+ e);
+				return 0;
+			}
+		}
+	}
 	
 
-}

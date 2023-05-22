@@ -3,7 +3,9 @@ package com.vts.ems.newspaper.controller;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,7 +64,21 @@ public class NewspaperController {
 	@Value("${TeleExpSncFileNo}")
 	private String TeleExpSncFileNo;
 
+	@Value("${ProjectFiles}")
+	private String LabLogoPath;
+	
+	
+	 public String getLabLogoAsBase64() throws IOException {
 
+			String path = LabLogoPath + "/images/lablogos/lablogo1.png";
+			try {
+				return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+			} catch (FileNotFoundException e) {
+				System.err.println("File Not Found at Path " + path);
+			}
+			return "/print/.jsp";
+	}
+	 
 	@Autowired
 	private NewPaperServiceImpl service;
 	
@@ -1503,14 +1519,14 @@ public class NewspaperController {
 
 			String filename="";
 			if( ClaimMonth != null && ClaimYear!= null ) {
-				req.setAttribute("newsPaperFinalAppro", service.NewspaperAllApprovedOrNot(ClaimMonth, ClaimYear));
-				filename="NewsPaper_Final_Approval";
+				req.setAttribute("TelePhoneFinalAppro", service.TelePhoneAllApprovedOrNot(ClaimMonth, ClaimYear));
+				filename="Telephone_Final_Approval";
 			}
 
 			req.setAttribute("pagePart","3" );
 
 			req.setAttribute("view_mode", req.getParameter("view_mode"));
-			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("LabLogo", getLabLogoAsBase64());
 			
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
