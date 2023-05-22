@@ -60,7 +60,7 @@
 										<th> Group Code    </th>
 										<th> Group Name    </th>
 										<th> Group Head </th>
-										<th> Division Name   </th> 
+										<th> Department Name   </th> 
 									</tr>
 								</thead>
 								<tbody>

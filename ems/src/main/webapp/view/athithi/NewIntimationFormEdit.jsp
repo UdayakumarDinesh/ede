@@ -1,7 +1,7 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
 <%@page import="com.ibm.icu.text.SimpleDateFormat"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.List,com.vts.ems.athithi.model.Intimation"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -133,7 +133,9 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
             </div>  --> 
 <%
 List<Object[]> compnyList =(List<Object[]>)request.getAttribute("compnyList"); 
+Intimation inti =(Intimation)request.getAttribute("Intimation"); 
 List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
+List<Object[]> Visitors=(List<Object[]>)request.getAttribute("Visitors");
 List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 %>        
 	<div class="card-body main-card">
@@ -147,22 +149,24 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 						</h5>
 					</div> -->
 					<div class="card-body">
-						<form action="newIntimationSubmit" method="post"  onSubmit="remove(); return confirm('Do you want to submit?'); " >
+						<form action="newIntimationEditSubmit.htm" method="post"  onSubmit="remove(); return confirm('Do you want to submit?'); " >
 							<div class="form-row">
 								<div class="form-group col-md-1">
 									<label style="width:104%;">Company<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
 								<div class="col-md-4">
 								    <select class="form-control form-control CompanyID" id="CompanyID" style="width:100%;"  name="company" required>
-						         	  <option></option>
 								    <%for(Object[] data:compnyList){ %>
-								    <option value="<%=data[0]%>"><%=data[1]%></option>
+								    <%if(inti!=null){ %>
+								   <option value="<%=data[0]%>"   <%if(inti.getCompanyId()!=null && inti.getCompanyId().toString().equalsIgnoreCase(data[0].toString())){%> selected<%}%>><%=data[1]%></option>
+								   <%}%>
+								    <%-- <option value="<%=data[0] %>" <%if(inti!=null && inti.getCompanyId().equals(data[0])) %> ><%=data[1]%></option> --%>
 								    <%} %>
 				                    <option value="QQ">Add New Company</option> 
 								         
 								    </select>
 								</div>
-								   
+								
                          		<div class="form-group col-md-1">
 									<label >Visitors <span class="mandatory" style="color: red;">*</span> </label>
 								
@@ -412,7 +416,7 @@ $(function() {
 $(document).ready(function(){
 	 $("#compyForm").hide();
 	 $("#empForm").hide();
-	 $("#otherDetailsId").hide();
+	/*  $("#otherDetailsId").hide(); */
 /* 	   $("#otherDetailsId").hide(); */
 	$(".CompanyID").select2({
 		placeholder: "---Choose---",	
@@ -567,10 +571,44 @@ function AddCompany() {
 	     $("#newCompanyCity").val("");
   	    $("#compyForm").hide();
 	}
+	
 </script>
 
 
 <script type="text/javascript">
+
+$( document ).ready(function() {
+	$("#CompanyID").select2({disabled:'readonly'});
+ 	$("#EmppIDs").select2({disabled:'readonly'});
+ 	 $("#ConfirmCheck").attr("disabled", true);
+	var x='';
+	 var companyId=$("#CompanyID").val();
+	 $('#CompanyID').val(companyId);
+	 $('#CompanyID').change();
+	 var intimationId = <%=inti.getIntimationId()%>
+	 
+	 $.ajax({
+			type : "GET",
+			url : "GetVisitorsEdit.htm",
+			data : {
+				intimationId : intimationId
+			},
+			datatype : 'json',
+			success : function(result) {
+				var values = JSON.parse(result);              
+               var a=[];
+               for(var i=0;i<values.length;i++){
+            	 
+            	   a.push(values[i][3]) 
+               }
+               $('#EmppIDs').val(a).trigger('change');
+			}
+			});	
+});
+
+
+
+
 $('#CompanyID').change(function() {
 	var x='';
 	 var companyId=$("#CompanyID").val();
@@ -596,6 +634,7 @@ $('#CompanyID').change(function() {
 			}
 			});	
 });
+
 </script>
 <script type="text/javascript">
 
@@ -762,7 +801,7 @@ $('#ConfirmCheck').change(function() {
     if(this.checked) {
  	$("#CompanyID").select2({disabled:'readonly'});
  	$("#EmppIDs").select2({disabled:'readonly'});
-    	  $("#otherDetailsId").show(); 
+      $("#otherDetailsId").show(); 
  
 
     }else{
@@ -933,6 +972,8 @@ $('select').on('change', function() {
 
 	  notApplicableOption.prop('disabled', false);
 	});
+	
+	
 </script>
 </body>
 </html>

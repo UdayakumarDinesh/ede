@@ -435,4 +435,10 @@ public class PropertyServiceImp implements PropertyService{
 			return 0L;
 		}
 	}
+
+	@Override
+	public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception {
+		
+		return dao.immPropertyRemarksHistory(ImmPropertyId);
+	}
 }

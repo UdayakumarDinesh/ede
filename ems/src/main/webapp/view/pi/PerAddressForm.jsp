@@ -49,6 +49,7 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 String LoginType = (String)session.getAttribute("LoginType");
 Object[] PerFormData = (Object[])request.getAttribute("PerFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+List<Object[]> PerIntimationRemarks = (List<Object[]>)request.getAttribute("PerIntimationRemarks");
 
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
@@ -168,12 +169,35 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   			<% break;} %>
 				   		<%} %> 
 				   		</div>
-				   						   <br>
+				   	<br>
+				   	<div class="row">
+						<%if(PerIntimationRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(PerIntimationRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : PerIntimationRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
 				   <% if(PerFormData!=null && toUserStatus.contains(PerFormData[11].toString())){ %>
-				   		<div align="left">
+				   		<%-- <div align="left">
 				   			 <%if(PerFormData[12]!=null){ %> <span style="color: red">Remarks :</span> <%=PerFormData[12] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -185,10 +209,10 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						<div align="left">
+						<%-- <div align="left">
 				   			 <%if(PerFormData[12]!=null){ %> <span style="color: red">Remarks :</span> <%=PerFormData[12] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 						<div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>

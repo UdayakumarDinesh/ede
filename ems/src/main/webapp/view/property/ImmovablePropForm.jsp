@@ -46,6 +46,7 @@ String LabLogo=(String) request.getAttribute("LabLogo");
 PisImmovableProperty imm= (PisImmovableProperty)request.getAttribute("ImmPropFormData");
 Object[] emp = (Object[])request.getAttribute("EmpData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+List<Object[]> ImmIntimationRemarks = (List<Object[]>)request.getAttribute("ImmIntimationRemarks");
 String isApproval = (String)request.getAttribute("isApproval");
 
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -187,7 +188,7 @@ int slno=0;
 								<tr>
 								    <td style="border-bottom: 1;border-top: 0;"></td>
 								    <td>(a) Personal savings</td>
-								    <td colspan="2" style="color: blue;">YES</td>
+								    <td colspan="2" style="color: blue;">Yes</td>
 								</tr>	
 								<%}else if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>
 								<tr>
@@ -199,7 +200,7 @@ int slno=0;
 								 <tr>
 								    <td style="width: 5%;"><%=++slno%>.</td>
 								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition (A copy of the sanction/acknowledgement should be attached)</td>
-								    <td colspan="2" style="color: blue"><%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){ %>YES<%} else{%>NO<%} %></td>
+								    <td colspan="2" style="color: blue"><%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){ %>Yes<%} else{%>No<%} %></td>
 								 </tr>  
 								 <%} %>	
 								 
@@ -217,7 +218,7 @@ int slno=0;
 								<tr>
 									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 									<td>(a) Is the party related to the applicant</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>
 								<tr>
@@ -229,7 +230,7 @@ int slno=0;
 								<tr>
 									<td style="border-bottom: 0;border-top: 0;"></td>
 									<td>(c) Did the applicant have any dealings with the party in his/her official capacity at any time, or is the applicant likely to have any dealing with the party in the near future?</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getFutureDealings()!=null && "Y".equalsIgnoreCase(imm.getFutureDealings())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getFutureDealings()!=null && "Y".equalsIgnoreCase(imm.getFutureDealings())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;"></td>
@@ -241,7 +242,7 @@ int slno=0;
 								<tr>
 									<td style="width: 5%;"><%=++slno%>.</td>
 									<td>In case of acquisition by gift, whether sanction is also required under SITAR Conduct, Discipline & Appeal Rules.</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%} %>
 								<tr>
@@ -302,13 +303,35 @@ int slno=0;
 				             <%} %>
 				             
 				             <br>
+				             <div class="row">
+					  <br>
+						<%if(ImmIntimationRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(ImmIntimationRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : ImmIntimationRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
+					   
 				             <%			             
 				             long diff = DateTimeFormatUtil.dayDifference(imm.getTransDate().toString());
 				             
-				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>				           
-				   		      <div align="left">
-				   			 <%if(imm.getRemarks()!=null){ %> <span style="color: red">Remarks :</span> <%=imm.getRemarks() %> <%} %>				   		
-				   		      </div>
+				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>				           				   		     
 					          <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -320,9 +343,7 @@ int slno=0;
 					        <%} %>
 					
 					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						     <div align="left">
-				   			   <%if(imm.getRemarks()!=null){ %> <span style="color: red">Remarks :</span> <%=imm.getRemarks()%> <%} %>
-				   		     </div>
+						     
 						     <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>

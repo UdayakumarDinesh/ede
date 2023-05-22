@@ -28,6 +28,7 @@ public class PisHometown implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long HometownId;
 	private String EmpNo;
+	private String HomIntimationDate;
 	private String Hometown;
 	private String NearestRailwayStation;
 	private String State;

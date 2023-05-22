@@ -8,7 +8,7 @@ public interface PassService {
 	public List<Object[]> intimationDetail(String intimationId)throws Exception;
 	public List<Object[]> intimationVisitor(String intimationId) throws Exception;
 	public int updatePhoto(String visitorId, String photoName)throws Exception;
-	public Long createPass(String empId, String intimationId, String[] visitorId, String[] visitorBatchId)throws Exception;
+	public Long createPass(String empId, String intimationId, String[] visitorId, String[] visitorBatchId,String EmpNo,String UserId)throws Exception;
 	public List<Object[]> getIntimationDetails(String intimationId,String passId)throws Exception;
 	public List<Object[]> getPassVisitorList(String intimationId, String passId)throws Exception;
 	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate)throws Exception;

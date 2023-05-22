@@ -46,6 +46,7 @@ input:focus {
 String LabLogo = (String)request.getAttribute("LabLogo");
 Object[] HomFormData = (Object[])request.getAttribute("HomFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+List<Object[]> HomIntimationRemarks = (List<Object[]>)request.getAttribute("HomIntimationRemarks");
 
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
@@ -138,11 +139,47 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 						   	                    	<%} %></td> </tr>
 					  </tbody>					  
 					</table>
+					<div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+				   <br>	
+				   <br>
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> 
+				   </div>
+				   <br>
+					<div class="row">
+					  <br>
+						<%if(HomIntimationRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(HomIntimationRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : HomIntimationRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
+					   
 						<% if(HomFormData!=null && toUserStatus.contains(HomFormData[7].toString())) { %>
-				   		<div align="left">
+				   		<%-- <div align="left">
 				   			 <%if(HomFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=HomFormData[6] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -154,10 +191,10 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						<div align="left">
+						<%-- <div align="left">
 				   			 <%if(HomFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=HomFormData[6] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 				   		
 						<div align="left">
 						   <b >Remarks :</b><br>

@@ -18,6 +18,7 @@
 <%
 	List<Object[]> formslist = (List<Object[]>)request.getAttribute("formslist");
 	String empid = (String)request.getAttribute("empid");
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String formmoduleid =(String) session.getAttribute("formmoduleid");
@@ -32,10 +33,11 @@
 
 	<div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-5">
-				<h5>Family Member Forms</h5>
-			</div>
 			<div class="col-md-7">
+				<h5>Family Member Inc / Exc <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
+			</div>
+			<div class="col-md-5">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 					<li class="breadcrumb-item"><a href="PersonalIntimation.htm">Personal Intimations</a></li>

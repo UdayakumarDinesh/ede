@@ -16,14 +16,17 @@
 </style>
 </head>
 <body>
-
+<% 
+Object[] empData=(Object[])request.getAttribute("EmpData");
+%>
 
 <div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-3">
-				<h5>Pending Intimations</h5>
+			<div class="col-md-7">
+				<h5>Pending Intimations<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
-				<div class="col-md-9 ">
+				<div class="col-md-5 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 						<li class="breadcrumb-item active">Pending Intimations</li>
@@ -62,7 +65,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 								<tr>
 								    <th>SNo</th>
 									<th>Company Name</th>
-									<th>Visitor</th>
+									<th>Visitor/s</th>
 									<th style="width:20%;" >Dates</th>
 									<th >Officer</th>
 									<th >Purpose</th>

@@ -827,38 +827,25 @@ public class PIServiceImp implements PIService{
 			{
 //			
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RGI") || pisStatusCode.equalsIgnoreCase("RDI") || 
-				   pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") ) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					hometown.setPisStatusCode("FWD");
-					if(CEO.equalsIgnoreCase(formempno) ) 
-					{ 
-					    dao.HometownStatusUpdate(hometown.getEmpNo());
- 
-						hometown.setPisStatusCode("APR");
-						hometown.setPisStatusCodeNext("APR");
-						hometown.setIsActive(1);
-						hometown.setHometownStatus("A");				
-					}
-					else if(PandAs.contains(formempno) || LoginType.equalsIgnoreCase("P")) 
+					
+					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
 					{
-						hometown.setPisStatusCodeNext("APR");
+						dao.HometownStatusUpdate(hometown.getEmpNo());
+						hometown.setPisStatusCode("VPA");
+						hometown.setPisStatusCodeNext("VPA");
+						hometown.setIsActive(1);
+						hometown.setHometownStatus("A");	
 					}
 					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 					{
 						hometown.setPisStatusCodeNext("VPA");
-					}
-					else if(DHs.contains(formempno) || emp.getDivisionId()==0)
-					{
-						hometown.setPisStatusCodeNext("VDG");
-					}
-					else if(GHs.contains(formempno) || emp.getGroupId()==0)
-					{
-						hometown.setPisStatusCodeNext("VDI");
-					}
+					}					
 					else 
 					{
-						hometown.setPisStatusCodeNext("VGI");
+						hometown.setPisStatusCodeNext("VDG");
 					}
 					
 				}
@@ -869,23 +856,11 @@ public class PIServiceImp implements PIService{
 				   
 					hometown.setPisStatusCode(pisStatusCodeNext);
 					
-					if(pisStatusCodeNext.equalsIgnoreCase("VGI"))
-					{
-						hometown.setPisStatusCodeNext("VDI");
-					}
-					else if(pisStatusCodeNext.equalsIgnoreCase("VDI")) 
-					{
-						hometown.setPisStatusCodeNext("VDG");
-					}
-					else if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
 					{
 						hometown.setPisStatusCodeNext("VPA");
-					}
-					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
-					{
-						hometown.setPisStatusCodeNext("APR");
-					}
-					else if(pisStatusCodeNext.equalsIgnoreCase("APR")) {	
+					}					
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {	
 						dao.HometownStatusUpdate(hometown.getEmpNo());
 						hometown.setIsActive(1);
 						hometown.setHometownStatus("A");
@@ -899,16 +874,7 @@ public class PIServiceImp implements PIService{
 			//Returned
 			else if(action.equalsIgnoreCase("R")) 
 			{
-				// Setting PisStatusCode
-				if(pisStatusCodeNext.equalsIgnoreCase("VGI")) 
-				{
-					hometown.setPisStatusCode("RGI");
-				}
-			    else if(pisStatusCodeNext.equalsIgnoreCase("VDI")) 
-				{
-			    	hometown.setPisStatusCode("RDI");	
-				}
-				else if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
 				{
 					hometown.setPisStatusCode("RDG");	
 				}
@@ -916,37 +882,16 @@ public class PIServiceImp implements PIService{
 				{
 					hometown.setPisStatusCode("RPA");	
 				}
-				else if(pisStatusCodeNext.equalsIgnoreCase("APR")) 
-				{
-					hometown.setPisStatusCode("RCE");	
-				}
 				
-				//Setting PisStatusCodeNext
-				if(CEO.equalsIgnoreCase(formempno) ) 
-				{ 
-					hometown.setPisStatusCodeNext("APR");					
-				}
-				else if(PandAs.contains(formempno) || LoginType.equalsIgnoreCase("P")) 
-				{
-					hometown.setPisStatusCodeNext("APR");
-				}
-				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 				{
 					hometown.setPisStatusCodeNext("VPA");
 				}
-				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
+				else 
 				{
 					hometown.setPisStatusCodeNext("VDG");
 				}
-				else if(GHs.contains(formempno) || emp.getGroupId()==0)
-				{
-					hometown.setPisStatusCodeNext("VDI");
-				}
-				else 
-				{
-					hometown.setPisStatusCodeNext("VGI");
-				}
-				
 				hometown.setRemarks(remarks);
 				dao.EditHometown(hometown);
 			}
@@ -976,25 +921,13 @@ public class PIServiceImp implements PIService{
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
-				if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VGI")) 
-				{
-					notification.setEmpNo(GIEmpNo);					
-				}
-				else if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDI")) 
-				{
-					notification.setEmpNo(DIEmpNo);					
-				}
-				else if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
 					notification.setEmpNo(DGMEmpNo);					
 				}
 				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
-				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
-				{
-					notification.setEmpNo(CEO);
 				}
 				notification.setNotificationUrl("IntimationApprovals.htm");
 				notification.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
@@ -1042,9 +975,9 @@ public class PIServiceImp implements PIService{
 	}
 
 	@Override
-	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception {
+	public List<Object[]> IntimationPendingList(String EmpNo) throws Exception {
 		
-		return dao.IntimationApprovalsList(EmpNo);
+		return dao.IntimationPendingList(EmpNo);
 	}
 
 	@Override
@@ -1087,6 +1020,42 @@ public class PIServiceImp implements PIService{
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
 		
 		return dao.getEmpNameDesig(EmpNo);
+	}
+
+	@Override
+	public List<Object[]> IntimationApprovedList(String EmpNo,String FromDate,String toDate) throws Exception {
+		
+		return dao.IntimationApprovedList(EmpNo,FromDate,toDate);
+	}
+
+	@Override
+	public List<Object[]> resAddressRemarksHistory(String resaddressid) throws Exception {
+		
+		return dao.resAddressRemarksHistory(resaddressid);
+	}
+
+	@Override
+	public List<Object[]> perAddressRemarksHistory(String peraddressid) throws Exception {
+		
+		return dao.perAddressRemarksHistory(peraddressid);
+	}
+
+	@Override
+	public List<Object[]> mobNumberRemarksHistory(String MobileNumberId) throws Exception {
+		
+		return dao.mobNumberRemarksHistory(MobileNumberId);
+	}
+
+	@Override
+	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception {
+		
+		return dao.hometownRemarksHistory(HometownId);
+	}
+
+	@Override
+	public Object[] GetApprovalFlowEmp(String empno) throws Exception {
+		
+		return dao.GetApprovalFlowEmp(empno);
 	}
 
 	

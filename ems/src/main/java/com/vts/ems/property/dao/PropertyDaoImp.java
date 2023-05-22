@@ -244,4 +244,21 @@ public class PropertyDaoImp implements PropertyDao{
 		}
 		
 	}
+	
+	private static final String IMMREMARKSHISTORY  ="SELECT cat.ImmPropertyId,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_immovable_property_trans cat,pis_immovable_property ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.ImmPropertyId = cat.ImmPropertyId AND TRIM(cat.Remarks)<>'' AND ca.ImmPropertyId=:ImmPropertyId ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(IMMREMARKSHISTORY);
+			query.setParameter("ImmPropertyId", ImmPropertyId);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO immPropertyRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

@@ -110,7 +110,8 @@ public class PropertyController {
 			if(!DGMs.contains(EmpNo)) {
 				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
 			}
-			req.setAttribute("DGMEmpNos", DGMs);			
+			req.setAttribute("DGMEmpNos", DGMs);
+			req.setAttribute("EmpApprFlow", piservice.GetApprovalFlowEmp(EmpNo));
 			req.setAttribute("Employee", piservice.getEmpDataByEmpNo(EmpNo));			
 			req.setAttribute("ImmPropDetails", service.ImmPropDetails(EmpNo));
 			req.setAttribute("MovPropDetails", service.movPropDetails(EmpNo));
@@ -404,6 +405,7 @@ public class PropertyController {
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
+			    req.setAttribute("ImmIntimationRemarks", service.immPropertyRemarksHistory(immPropertyId));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));
 			}
 			return "property/ImmovablePropForm";

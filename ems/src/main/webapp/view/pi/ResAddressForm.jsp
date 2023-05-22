@@ -9,7 +9,6 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Residential Address Form</title>
 </head>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
@@ -49,6 +48,7 @@ String LabLogo = (String)request.getAttribute("LabLogo");
 String LoginType = (String)session.getAttribute("LoginType");
 Object[] ResFormData = (Object[])request.getAttribute("ResFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+List<Object[]> ResIntimationRemarks = (List<Object[]>)request.getAttribute("ResIntimationRemarks");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
@@ -182,11 +182,34 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   
 				   </div>
 				   <br>
+				   <div class="row">
+						<%if(ResIntimationRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(ResIntimationRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : ResIntimationRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
 				   <% if(ResFormData!=null && toUserStatus.contains(ResFormData[14].toString())){ %>
-				   		<div align="left">
+				   		<%-- <div align="left">
 				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -198,10 +221,10 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						<div align="left">
+						<%-- <div align="left">
 				   			 <%if(ResFormData[15]!=null){ %> <span style="color: red">Remarks :</span> <%=ResFormData[15] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 						<div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -214,6 +237,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 							 Return
 						</button>
 					<%} %>
+					
 	           
 			   </div>
 			   <input type="hidden" name="empid" value="<%if(ResFormData!=null){ %><%=ResFormData[0] %><% }%>">

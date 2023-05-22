@@ -138,7 +138,7 @@ AddressRes addres = (AddressRes)request.getAttribute("addres");
                         <div class="form-group">
                             <label>From Res Add<span class="mandatory">*</span></label>
                             
-                            <input type="text"  value="<%if(addres!=null && addres.getFrom_res_addr()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(addres.getFrom_res_addr().toString())%> <%}%>" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" >   
+                            <input type="text"  value="<%if(addres!=null && addres.getFrom_res_addr()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(addres.getFrom_res_addr().toString())%> <%}%>" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" readonly>   
                         </div>
                        </div>
                 

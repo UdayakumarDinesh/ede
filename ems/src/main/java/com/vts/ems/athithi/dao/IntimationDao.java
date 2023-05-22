@@ -23,6 +23,11 @@ public interface IntimationDao {
 	public Intimation getIntimationById(Long intimationId) throws Exception;
 	public Long editNewIntimation(Intimation intimation) throws Exception;
 	public String GetReceptionistEmpNo() throws Exception;
-	public List<Object[]> visitorPassApprovalList(String EmpNo) throws Exception;
+	public List<Object[]> visitorPassPendingList(String EmpNo) throws Exception;
 	public List<Object[]> vpTransactionList(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> visitorPassTransactionApprovalData(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassRemarksHistory(String IntimationId) throws Exception;
+	public Object[] visitorPassFormData(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception;
 }

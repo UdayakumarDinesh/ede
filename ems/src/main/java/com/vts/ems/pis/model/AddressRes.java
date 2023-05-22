@@ -21,6 +21,7 @@ public class AddressRes implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long address_res_id;
 	private String empid;
+	private String ResIntimationDate;
 	private String res_addr;
     private String landline;
 	private String mobile;

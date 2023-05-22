@@ -53,12 +53,14 @@ public class PassController {
 	@RequestMapping(value = "pendingIntimations.htm",method =RequestMethod.GET)
 	public String pendingIntimations(HttpServletRequest req,HttpSession ses) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside CONTROLLER pendingIntimations_htm "+UserId);
 		String LoginType = (String)ses.getAttribute("LoginType");
 		try {
 			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive", "pendingIntimations_htm");
 			req.setAttribute("pendingList", service.pendingIntimations(LoginType));
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 			return "athithi/pendingIntimations";
 		}
 		catch (Exception e) {
@@ -117,6 +119,7 @@ public class PassController {
 	public String createPassSubmit(HttpServletRequest req,HttpSession ses,HttpServletResponse res,RedirectAttributes redir) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside CONTROLLER createPassSubmit "+UserId);		
 		try {
 			
@@ -127,7 +130,7 @@ public class PassController {
 			visitorId=visitorId[0].split(",");
 			visitorBatchId=visitorBatchId[0].split(",");
 			
-			Long result =service.createPass(empId,intimationId,visitorId,visitorBatchId);
+			Long result =service.createPass(empId,intimationId,visitorId,visitorBatchId,EmpNo,UserId);
 			redir.addFlashAttribute("intimationId",intimationId);		
 			redir.addFlashAttribute("passID",result+"");	
 			return "redirect:/createdPass.htm";

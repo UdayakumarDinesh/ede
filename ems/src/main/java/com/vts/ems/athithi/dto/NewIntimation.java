@@ -19,6 +19,7 @@ public class NewIntimation {
 	private String VisitExpectedTime;
 	private String officer;
 	private String purpose;
+	private String foreigner;
 	private String spermission;
 	private String Remarks;
 	private String PisStatusCode;

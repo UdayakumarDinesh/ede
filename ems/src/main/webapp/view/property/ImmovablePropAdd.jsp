@@ -53,8 +53,8 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				   <div class="col-md-2">
 				       <label>Transaction State:<span class="mandatory">*</span></label>
 				       <select name="transState" id="transState" class="form-control input-sm select2"  required>
-			               <option value="A" >Acquired</option>
-			               <option value="D" >Disposed off</option>
+			               <option value="A" >Acquired to be</option>
+			               <option value="D" >Disposed to be</option>
 			           </select>
 				   </div>
 				    <div class="col-md-2">

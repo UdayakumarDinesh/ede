@@ -1,18 +1,24 @@
 package com.vts.ems.athithi.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,6 +71,8 @@ public class IntimationController {
 		try {
 //			ses.setAttribute("SidebarActive","NewIntimation_htm");
 //			String groupId=ses.getAttribute("groupId").toString();
+			List<String> DHs = piservice.GetDHEmpNos();
+			req.setAttribute("DHEmpNos", DHs);
 			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 			req.setAttribute("compnyList", service.getCompnyList(""));
 			req.setAttribute("officer", service.getOfficerList(""));
@@ -212,7 +220,7 @@ public class IntimationController {
 	}
 	
 	@RequestMapping(value = "newIntimationSubmit",method =RequestMethod.POST)
-	public String 	newIntimationSubmit(HttpServletRequest req,HttpSession ses) throws Exception 
+	public String 	newIntimationSubmit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER newIntimationSubmit "+UserId);	
@@ -230,25 +238,33 @@ public class IntimationController {
 			intimation.setTdate(req.getParameter("tdate"));
 	        intimation.setOfficer(req.getParameter("officer"));
 	        intimation.setPurpose(req.getParameter("purpose"));
+	        intimation.setForeigner(req.getParameter("foreigner"));
 //			intimation.setSpermission(req.getParameter("spermission"));	       
 	        String[] sp = req.getParameterValues("spermission");
 	        
 	        String sPermission ="";
+	        if(sp!=null && sp.length>0) {	        
 	        for(int i=0; i<sp.length; i++) {
+	        	
 	        	if(sp[i].equalsIgnoreCase("Not Applicable")) {
 	        		intimation.setVpStatus("A");
-	        		intimation.setPisStatusCode("APR");
-	        		intimation.setPisStatusCodeNext("APR");
+		        	intimation.setPisStatusCode("APR");
+		        	intimation.setPisStatusCodeNext("APR");
 	        	}else {
-	        		intimation.setVpStatus("N");
-	        		intimation.setPisStatusCode("INI");
-	        		intimation.setPisStatusCodeNext("INI");
+	        	    intimation.setVpStatus("N");
+	        	    intimation.setPisStatusCode("INI");
+	        	    intimation.setPisStatusCodeNext("INI");
 	        	}
 	        	sPermission += sp[i];
 	        	  
 	        	  if(i != sp.length-1) {
 	        		  sPermission += ",";
 	        	  } 
+	        }
+	        }else {
+	        	intimation.setVpStatus("A");
+        		intimation.setPisStatusCode("APR");
+        		intimation.setPisStatusCodeNext("APR");
 	        }
 	        intimation.setSpermission(sPermission);
 			Long result=service.addNewIntimation(intimation);
@@ -261,9 +277,13 @@ public class IntimationController {
 						                        .ActionBy(EmpNo)
 						                        .ActionDate(sdtf.format(new Date())).build();
 				service.addVpIntimationTrans(transaction);
-			}
-			
-			return "redirect:/IntimationList.htm";
+				
+				redir.addAttribute("result", "Visitor Pass Added Successfully");	
+    		} else {
+    			 redir.addAttribute("resultfail", "Visitor Pass Add Unsuccessful");	
+    	    }
+			redir.addAttribute("intimationId", result);
+			return "redirect:/VisitorPassPreview.htm";
 		}
 		catch (Exception e) {
 			e.printStackTrace(); 
@@ -281,11 +301,30 @@ public class IntimationController {
 			String logintype = (String)ses.getAttribute("LoginType");
 			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive","IntimationList_htm");		
+			
+			String actual = req.getParameter("Action");
+			String  action= null;
+			if(actual!=null) {
+				action=actual.split("/")[0];
+			}
+			if(action!=null && action.equalsIgnoreCase("EDIT")){
+				String IntimationId = actual.split("/")[1];
+				List<String> DHs = piservice.GetDHEmpNos();
+				req.setAttribute("DHEmpNos", DHs);
+				req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
+				req.setAttribute("Intimation", service.getIntimationById(Long.parseLong(IntimationId)));
+				req.setAttribute("Visitors", service.visitorPassVisitorsForm(IntimationId));
+				req.setAttribute("compnyList", service.getCompnyList(""));
+				req.setAttribute("officer", service.getOfficerList(""));
+				return "athithi/NewIntimationFormEdit";
+			}
+			
 			req.setAttribute("IntimationList", service.getItimationList(EmpNo));
 			
 			String CEO = piservice.GetCEOEmpNo();
 			List<String> DGMs = piservice.GetDGMEmpNos();
-				
+			List<String> DHs = piservice.GetDHEmpNos();
+			
             req.setAttribute("CeoName", piservice.GetCeoName());
             req.setAttribute("CEOEmpNos", CEO);
             
@@ -293,8 +332,9 @@ public class IntimationController {
 				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
 			}
 			req.setAttribute("DGMEmpNos", DGMs);
+			req.setAttribute("DHEmpNos", DHs);
 			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
-			
+			req.setAttribute("EmpApprFlow", piservice.GetApprovalFlowEmp(EmpNo));
 			return "athithi/IntimationList";
 		}
 		catch (Exception e) {
@@ -356,7 +396,30 @@ public class IntimationController {
 			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive","VpApprovals_htm");
 			
-			req.setAttribute("ApprovalList", service.visitorPassApprovalList(EmpNo));
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				
+				fromdate=today.withDayOfMonth(1).toString();
+				todate = today.toString();
+				
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("tab", req.getParameter("tab"));
+			
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
+			req.setAttribute("PendingList", service.visitorPassPendingList(EmpNo));
+			req.setAttribute("ApprovedList", service.visitorPassApprovedList(EmpNo, fromdate, todate));
 			return "athithi/IntimationApprovals";
 		}catch (Exception e) {
 			logger.info(new Date()+"Inside VpApprovals.htm"+Username,e);
@@ -381,5 +444,94 @@ public class IntimationController {
 			e.printStackTrace();	
 			return "static/Error";
 		}
+	}
+	
+	@RequestMapping(value = "VisitorPassPreview.htm" , method={RequestMethod.POST,RequestMethod.GET})
+	public String visitorPassPreview(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+    	String LoginType=(String)ses.getAttribute("LoginType");
+		String Username = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		logger.info(new Date() +"Inside VisitorPassPreview.htm "+Username);
+		try {
+			    String intimationId = req.getParameter("intimationId");
+				
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+				String CEO = piservice.GetCEOEmpNo();
+				req.setAttribute("CEOEmpNo", CEO);
+				if(intimationId!=null) {
+					String isApproval = req.getParameter("isApproval");
+					if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+						ses.setAttribute("SidebarActive","VpApprovals_htm");
+					}
+					req.setAttribute("isApproval", isApproval);
+					req.setAttribute("VpFormData", service.visitorPassFormData(intimationId));
+					req.setAttribute("VpVisitorsFormData", service.visitorPassVisitorsForm(intimationId));
+					req.setAttribute("ApprovalEmpData", service.visitorPassTransactionApprovalData(intimationId));
+					req.setAttribute("VpIntimationRemarks", service.visitorPassRemarksHistory(intimationId));
+					req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
+	              		                            
+				}
+				
+				return "athithi/VisitorPassForm";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside VisitorPassPreview.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "VisitorPassRevoke.htm", method = RequestMethod.POST)
+	public String visitorPassRevoke(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		logger.info(new Date() +"Inside VisitorPassRevoke.htm "+Username);
+		try {
+			String intimationId = req.getParameter("intimationId");
+			
+			long count =service.visitorPassUserRevoke(intimationId, Username, EmpNo);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Pass Revoked Successfully");
+			}
+			else if(count==-1) 
+			{
+				redir.addAttribute("resultfail", "Pass Already Generated by Receptionist");	
+			}
+			else {
+				redir.addAttribute("resultfail", "Claim Revoke Unsuccessful");	
+			}	
+			
+			return "redirect:/IntimationList.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside VisitorPassRevoke.htm "+Username, e);
+			return "static/Error";			
+		}
+		
+	}
+	
+	@RequestMapping(value = "GetVisitorsEdit.htm", method = RequestMethod.GET)
+	public @ResponseBody String getVisitorsEdit(HttpServletRequest request,HttpSession ses) throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CONTROLLER GetVisitorsEdit.htm "+UserId);		
+		try {
+			String intimationId=request.getParameter("intimationId");
+	
+			List<Object[]> data = new ArrayList<>();
+			data=service.visitorPassVisitorsForm(intimationId);
+			
+			Gson json = new Gson();
+			return json.toJson(data);
+		}
+		catch (Exception e) {
+			e.printStackTrace(); 
+			logger.error(new Date() +"Inside CONTROLLER GetVisitorsEdit.htm "+UserId, e);
+			return "static/Error";
+		}	
 	}
 }
