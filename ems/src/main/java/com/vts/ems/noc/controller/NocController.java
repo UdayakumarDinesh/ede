@@ -759,8 +759,7 @@ public class NocController {
 		{
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 			String EmpNo = (String) ses.getAttribute("EmpNo");
-	    	
-			String Username = (String) ses.getAttribute("Username");
+	    	String Username = (String) ses.getAttribute("Username");
 		
 			logger.info(new Date() +"Inside ProcAbroadEdit.htm"+Username);		
 			try {				
