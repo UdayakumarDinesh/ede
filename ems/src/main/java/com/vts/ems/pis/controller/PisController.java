@@ -1240,7 +1240,8 @@ public class PisController {
     	   }
     	   if(fromPer!=null) {
     		   peraddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
-    	   }   	  
+    	   } 
+    	   peraddress.setPerIntimationDate(sdf.format(new Date()));
     	   peraddress.setMobile(mobile);
     	   peraddress.setPin(cityPin);
     	   peraddress.setState(state);
@@ -1464,6 +1465,7 @@ public class PisController {
 			
 			AddressRes resadd= new AddressRes();
 			
+			resadd.setResIntimationDate(sdf.format(new Date()));
 			resadd.setEmpid(empid);
 			resadd.setRes_addr(resAdd);
 			resadd.setFrom_res_addr(DateTimeFormatUtil.dateConversionSql(fromRes));
@@ -2241,7 +2243,8 @@ public class PisController {
 		public String FamIncExcFwdList(HttpSession ses , HttpServletRequest req , RedirectAttributes redir)throws Exception
 		{
 			String Username = (String) ses.getAttribute("Username");	
-		Long EmpId=(Long)ses.getAttribute("EmpId");
+		    Long EmpId=(Long)ses.getAttribute("EmpId");
+		    String EmpNo = (String)ses.getAttribute("EmpNo");
 			logger.info(new Date() +"Inside FamIncExcFwdList.htm "+Username);		
 			try {
 				String controllerMapping = new Object(){}.getClass().getEnclosingMethod().getAnnotation(RequestMapping.class).value()[0];
@@ -2255,6 +2258,7 @@ public class PisController {
 				ses.setAttribute("SidebarActive", "FamIncExcFwdList_htm");
 				req.setAttribute("formslist",service.EmpFamFormsList(empid, ""));
 				req.setAttribute("empid", empid);
+				req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 				req.setAttribute("AnnualDecFlag",service.getFormYear(EmpId));
 				return "pis/FamIncExcFormsList";
 			} catch (Exception e) {
@@ -6637,6 +6641,7 @@ public class PisController {
 			logger.info(new Date() + "Inside OrganisationStructure.htm " + Username);
 
 			try {
+				
 				
 				List<Object[]> grouplist=service.getGroupListGH();
 				List<Object[]> divisionlist=service.getDivisionListDH();

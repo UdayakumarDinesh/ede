@@ -27,6 +27,7 @@ public class NocPassport {
 	          private long NocPassportId;
 	          private String NocPassportNo;
 	          private String  EmpNo;
+	          private String PassportExist;
 	          private String RelationType; 
 	          private String RelationName; 
 	          private String RelationOccupation;
@@ -42,24 +43,18 @@ public class NocPassport {
 	          private String NocStatusCode;
 	          private String Remarks;
 	          private String NocStatusCodeNext;
+	          private String InitiatedDate;
 	          private String ForwardedDate;
 	          private String ReturnedDate;
 	          private String ApprovedDate ;
-//	          private String GroupInCharge; 
-//	          private String DeptInCharge;
-//	          private String DGMInCharge; 
-//	          private String PAInCharge; 
-//	          private String CEO;
-	          private String PassportEntries; 
+	        
+              private String PassportEntries; 
 	          private String PassportEntriesDetails;
 	          private String EmployeeSuspensed;
 	          private String EmployeeInvolvement;
 	          private String EmployeeCaseDetails;
-//	          private String PandACreatedBy;
-//	          private String PandACreatedDate;
-	          private String PandAModifiedBy;
+              private String PandAModifiedBy;
 	          private String PandAModifiedDate;
-	          //private String EmployeeObligation;
 	          private String CreatedBy; 
 	          private String CreatedDate; 
 	          private String ModifiedBy; 

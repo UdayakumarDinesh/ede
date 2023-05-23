@@ -13,7 +13,14 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 </head>
 
-<body>
+<style>
+body {
+  
+  overflow-x: hidden;
+  
+}
+
+</style>
 <body>
 <%
 
@@ -118,6 +125,8 @@
 									</td>
 									<td style="width: 2%;text-align:center;">
 									 
+									 
+				                    
 									<button type="submit" class="btn btn-sm "  name="inventoryid" value="<%=obj[0] %>" formaction="InventoryDeclaredView.htm" formmethod="POST"  data-toggle="tooltip" title="" data-original-title="Inventory Details">
 									<i class="fa fa-eye " style="color: black;"></i>
 									</button>
@@ -129,7 +138,7 @@
 								<%item=0;} %>
 						</tbody>
 					</table>
-					
+				
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				
           </form>

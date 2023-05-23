@@ -175,6 +175,11 @@
 	transition-delay:.2s;
 	}
 
+body {
+  
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
   </style>
 	<body>
 	<%

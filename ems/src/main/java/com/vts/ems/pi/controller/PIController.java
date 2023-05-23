@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +92,8 @@ public class PIController {
 						
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			
+			req.setAttribute("EmpApprFlow", service.GetApprovalFlowEmp(EmpNo));
+			
 			String CEO = service.GetCEOEmpNo();
 			List<String> PandAs = service.GetPandAAdminEmpNos();
 			List<String> DGMs = service.GetDGMEmpNos();
@@ -109,10 +112,11 @@ public class PIController {
 			if(resaddressId!=null) {
 				String isApproval = req.getParameter("isApproval");
 				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-					ses.setAttribute("SidebarActive","AddressApprovals_htm");
+					ses.setAttribute("SidebarActive","IntimationApprovals_htm");
 				}
 				req.setAttribute("isApproval", isApproval);
 				req.setAttribute("ApprovalEmpData", service.ResAddressTransactionApprovalData(resaddressId));
+				req.setAttribute("ResIntimationRemarks", service.resAddressRemarksHistory(resaddressId));
 				req.setAttribute("ResFormData", service.ResAddressFormData(resaddressId));
 				req.setAttribute("Employee", service.getEmpData(EmpId));
                 return "pi/ResAddressForm";
@@ -122,10 +126,11 @@ public class PIController {
 			else if(peraddressId!=null) {
 				String isApproval = req.getParameter("isApproval");
 				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-					ses.setAttribute("SidebarActive","AddressApprovals_htm");
+					ses.setAttribute("SidebarActive","IntimationApprovals_htm");
 				}
 				req.setAttribute("isApproval", isApproval);
 				req.setAttribute("ApprovalEmpData", service.PerAddressTransactionApprovalData(peraddressId));
+				req.setAttribute("PerIntimationRemarks", service.perAddressRemarksHistory(peraddressId));
 				req.setAttribute("PerFormData", service.PerAddressFormData(peraddressId));	
 				req.setAttribute("Employee", service.getEmpData(EmpId));
 				return "pi/PerAddressForm";
@@ -144,7 +149,7 @@ public class PIController {
 	   public String PermanentAddEdit(HttpServletRequest req , HttpSession ses ,  RedirectAttributes redir)throws Exception{
 		   String Username = (String) ses.getAttribute("Username");
 	       logger.info(new Date() +"Inside PermanentAddEdit.htm "+Username);
-	       String EmpId = ((String) ses.getAttribute("EmpId")).toString();
+	       String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 	       String EmpNo = (String) ses.getAttribute("EmpNo");
 	       try {
 
@@ -199,7 +204,8 @@ public class PIController {
 	    	   }
 	    	   if(fromPer!=null) {
 	    		   peraddress.setFrom_per_addr(DateTimeFormatUtil.dateConversionSql(fromPer));
-	    	   }   	  
+	    	   } 
+	    	   peraddress.setPerIntimationDate(sdf.format(new Date()));
 	    	   peraddress.setMobile(mobile);
 	    	   peraddress.setPin(cityPin);
 	    	   peraddress.setState(state);
@@ -296,7 +302,7 @@ public class PIController {
 		       		} else {
 		       			 redir.addAttribute("resultfail", "Permanent Address Edit Unsuccessful");	
 		       	    }
-		       	    redir.addFlashAttribute("Employee", EmpId);
+		       	 redir.addAttribute("peraddressId", result);
 	    	   }
 	    	    
 		   } catch (Exception e) {
@@ -452,6 +458,7 @@ public class PIController {
 				
 				AddressRes resadd= new AddressRes();
 				
+				resadd.setResIntimationDate(sdf.format(new Date()));
 				resadd.setEmpid(EmpId);
 				resadd.setRes_addr(resAdd);
 				resadd.setFrom_res_addr(DateTimeFormatUtil.dateConversionSql(fromRes));
@@ -592,7 +599,7 @@ public class PIController {
 	        		} else {
 	        			 redir.addAttribute("resultfail", "Residential Address Edit Unsuccessful");	
 	        	    }
-	        	    redir.addFlashAttribute("Employee", EmpId);
+	        	    redir.addAttribute("resaddressId", result);
 			}
 				
 			} catch (Exception e) {
@@ -690,7 +697,7 @@ public class PIController {
 		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 		         
 		        res.setContentType("application/pdf");
-		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 		       
 		       
 		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
@@ -729,13 +736,36 @@ public class PIController {
 	    	String LoginType=(String)ses.getAttribute("LoginType");
 			String Username = (String) ses.getAttribute("Username");
 			logger.info(new Date() +"Inside IntimationApprovals.htm"+Username);		
-			try {				
+			try {
 				
 				ses.setAttribute("formmoduleid", formmoduleid);			
-				ses.setAttribute("SidebarActive","IntimationApprovals_htm");	
+				ses.setAttribute("SidebarActive","IntimationApprovals_htm");
+									
+				String fromdate = req.getParameter("fromdate");
+				String todate = req.getParameter("todate");
+				
+				LocalDate today=LocalDate.now();
+				
+				if(fromdate==null) 
+				{
+					
+					fromdate=today.withDayOfMonth(1).toString();
+					todate = today.toString();
+					
+				}else
+				{
+					fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+					todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+				}
+	
+				req.setAttribute("fromdate", fromdate);
+				req.setAttribute("todate", todate);
+				req.setAttribute("tab", req.getParameter("tab"));
 				
 //				req.setAttribute("ApprovalList", service.ResAddressApprovalsList(EmpNo, LoginType));
-				req.setAttribute("ApprovalList", service.IntimationApprovalsList(EmpNo));
+				req.setAttribute("PendingList", service.IntimationPendingList(EmpNo));
+				req.setAttribute("ApprovedList", service.IntimationApprovedList(EmpNo,fromdate,todate));
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				
 				return "pi/IntimationApprovals";
 			}catch (Exception e) {
@@ -804,7 +834,7 @@ public class PIController {
 				req.setAttribute("GroupHeadEmpNos", GHs);
 								
 				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-				
+				req.setAttribute("EmpApprFlow", service.GetApprovalFlowEmp(EmpNo));
 				req.setAttribute("MobileDetails", service.MobileNumberDetails(EmpNo));
 				req.setAttribute("HometownDetails", service.HometownDetails(EmpNo));
 				req.setAttribute("HometownAllowedEmpNo", service.GetHometownAllowedEmpNo());
@@ -873,6 +903,7 @@ public class PIController {
 					
 					PisMobileNumber mobile = new PisMobileNumber();
 					
+					mobile.setMobIntimationDate(sdf.format(new Date()));
 					mobile.setEmpNo(EmpNo);
 					mobile.setMobileNumber(mobileNumber);
 					mobile.setAltMobileNumber(altMobile);
@@ -967,7 +998,7 @@ public class PIController {
 					e.printStackTrace();
 					return "static/Error";
 				}
-			   return "redirect:/PIHomeTownMobile.htm";
+			   return "redirect:/MobileNumberPreview.htm";
 		}
 		
 		@RequestMapping(value = "MobileNumberTransStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
@@ -1002,11 +1033,12 @@ public class PIController {
 					if(mobileNumberId!=null) {
 						String isApproval = req.getParameter("isApproval");
 						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-							ses.setAttribute("SidebarActive","MobileApprovals_htm");
+							ses.setAttribute("SidebarActive","IntimationApprovals_htm");
 						}
 						req.setAttribute("isApproval", isApproval);
 						req.setAttribute("MobFormData", service.MobileFormData(mobileNumberId));
 						req.setAttribute("ApprovalEmpData", service.MobileTransactionApprovalData(mobileNumberId));
+						req.setAttribute("MobIntimationRemarks", service.mobNumberRemarksHistory(mobileNumberId));
 						req.setAttribute("Employee", service.getEmpData(EmpId));
 		              		                            
 					}
@@ -1131,7 +1163,7 @@ public class PIController {
 		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 		         
 		        res.setContentType("application/pdf");
-		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 		       
 		       
 		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
@@ -1203,6 +1235,7 @@ public class PIController {
 						
 						PisHometown hometown = new PisHometown();
 						
+						hometown.setHomIntimationDate(sdf.format(new Date()));
 						hometown.setEmpNo(EmpNo);
 						hometown.setHometown(req.getParameter("hometown").trim());
 						hometown.setNearestRailwayStation(req.getParameter("nearestRailwayStation").trim());
@@ -1282,7 +1315,7 @@ public class PIController {
 						e.printStackTrace();
 						return "static/Error";
 					}
-				   return "redirect:/PIHomeTownMobile.htm";
+				   return "redirect:/HometownPreview.htm";
 		}
 		 
 		@RequestMapping(value = "HometownPreview.htm" , method={RequestMethod.POST,RequestMethod.GET})
@@ -1300,11 +1333,12 @@ public class PIController {
 					if(hometownId!=null) {
 						String isApproval = req.getParameter("isApproval");
 						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
-							req.setAttribute("SidebarActive","HometownApprovals_htm");
+							req.setAttribute("SidebarActive","IntimationApprovals_htm");
 						}
 						req.setAttribute("isApproval", isApproval);
 						req.setAttribute("HomFormData", service.HometownFormData(hometownId));
 						req.setAttribute("ApprovalEmpData", service.HometownTransactionApprovalData(hometownId));
+						req.setAttribute("HomIntimationRemarks", service.hometownRemarksHistory(hometownId));
 						req.setAttribute("Employee", service.getEmpData(EmpId));
 		              		                            
 					}
@@ -1340,12 +1374,11 @@ public class PIController {
 				String pisStatusCode2 = hometown2.getPisStatusCode();
 				String pisStatusCodeNext2 = hometown2.getPisStatusCodeNext();
 				
-				if(pisStatusCode2.equalsIgnoreCase("APR") && pisStatusCodeNext2.equalsIgnoreCase("APR")) {
+				if(pisStatusCode2.equalsIgnoreCase("VPA") && pisStatusCodeNext2.equalsIgnoreCase("VPA")) {
 					pisservice.EmployeeHometownWithStatusUpdate(hometown2.getHometown(), "N", hometown2.getEmpNo() );
 				}
 				
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RGI") || pisStatusCode.equalsIgnoreCase("RDI") || 
-				   pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE")) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA")) {
 					if (count > 0) {
 						redir.addAttribute("result", "Hometown application Sent for verification Successfully");
 					} else {
@@ -1446,7 +1479,7 @@ public class PIController {
 		        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 		         
 		        res.setContentType("application/pdf");
-		        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+		        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 		       
 		       
 		        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));

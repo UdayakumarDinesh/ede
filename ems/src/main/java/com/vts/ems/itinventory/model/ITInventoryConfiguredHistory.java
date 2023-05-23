@@ -18,8 +18,10 @@ public class ITInventoryConfiguredHistory {
 	@Id
 	@GeneratedValue(strategy  =  GenerationType.IDENTITY)
 	private long ConfigHistoryId;
+	private long ItInventoryHistoryId;
 	private long ItInventoryId;
 	private String ConfiguredBy;
+
 	private String ItemType;
 	private String ConnectionType;
 	private String CPU;

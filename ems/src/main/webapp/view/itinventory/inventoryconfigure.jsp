@@ -14,6 +14,15 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
 
 </head>
+
+<style>
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+
+</style>
 <body>
 
   <%
@@ -197,6 +206,7 @@
 			        <%if(configure!=null){%>
 			    	<button type="submit" class="btn btn-sm update-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Update')">Update</button>
 			    	<input type="hidden" name="InventoryConfigureId" value="<%=configure.getInventoryConfigureId()%>">
+			    	
 			    	<%}else{ %>
 			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Submit')">SUBMIT</button>
 			    	 <input type="hidden" name="Itinventoryid"	value="<%=Itinventoryid%>" >
@@ -216,7 +226,7 @@
 				<div class="table-responsive"      >
 					<table
 						class="table table-hover  table-striped table-condensed table-bordered table-fixed"
-						id="myTable" style="width:100% ;" >
+						id="table" style="width:100% ;" >
 						<thead>
 							<tr>
 							    <th style="width: 2%">SN</th>
@@ -411,6 +421,16 @@ function openModal(ConfigureId){
 	$('#my-configure-modal').modal('toggle'); 
 }
 
+
+
+</script>
+
+<script type="text/javascript">
+$("#table").DataTable({
+    "lengthMenu": [5, 10, 25, 50, 75, 100],
+    "pagingType": "simple"
+
+});
 
 
 </script>

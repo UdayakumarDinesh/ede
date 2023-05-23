@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.athithi.service.PassService;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class PassController {
@@ -53,12 +55,14 @@ public class PassController {
 	@RequestMapping(value = "pendingIntimations.htm",method =RequestMethod.GET)
 	public String pendingIntimations(HttpServletRequest req,HttpSession ses) throws Exception {
 		String UserId = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside CONTROLLER pendingIntimations_htm "+UserId);
 		String LoginType = (String)ses.getAttribute("LoginType");
 		try {
 			ses.setAttribute("formmoduleid", "28");
 			ses.setAttribute("SidebarActive", "pendingIntimations_htm");
 			req.setAttribute("pendingList", service.pendingIntimations(LoginType));
+			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
 			return "athithi/pendingIntimations";
 		}
 		catch (Exception e) {
@@ -117,6 +121,7 @@ public class PassController {
 	public String createPassSubmit(HttpServletRequest req,HttpSession ses,HttpServletResponse res,RedirectAttributes redir) throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside CONTROLLER createPassSubmit "+UserId);		
 		try {
 			
@@ -127,7 +132,7 @@ public class PassController {
 			visitorId=visitorId[0].split(",");
 			visitorBatchId=visitorBatchId[0].split(",");
 			
-			Long result =service.createPass(empId,intimationId,visitorId,visitorBatchId);
+			Long result =service.createPass(empId,intimationId,visitorId,visitorBatchId,EmpNo,UserId);
 			redir.addFlashAttribute("intimationId",intimationId);		
 			redir.addFlashAttribute("passID",result+"");	
 			return "redirect:/createdPass.htm";
@@ -278,24 +283,35 @@ public class PassController {
 		try {
 			ses.setAttribute("SidebarActive", "passReport_htm");
 			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
-	    	String fDate=req.getParameter("fdate");
-			String tDate=req.getParameter("tdate");
-		
-			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-			  Calendar cal = Calendar.getInstance();
-		 	  String to=dateFormat.format(cal.getTime()).toString();
-			 cal.add(Calendar.MONTH, -1); 
-		 	  String from =dateFormat.format(cal.getTime()).toString();
 			
-			if(fDate!=null) {
-				req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
-				req.setAttribute("fdate",fDate);
-				req.setAttribute("tdate",tDate);
-			}else{
-			   req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
-			   req.setAttribute("fdate",from);
-				req.setAttribute("tdate",to);
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{				
+//				fromdate=today.withDayOfMonth(1).toString();
+				fromdate = today.minusMonths(1).toString();
+				todate = today.toString();
+				
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
+
+//			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//			  Calendar cal = Calendar.getInstance();
+//		 	  String to=dateFormat.format(cal.getTime()).toString();
+//			 cal.add(Calendar.MONTH, -1); 
+//		 	  String from =dateFormat.format(cal.getTime()).toString();
+			
+				req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,fromdate,todate));
+				req.setAttribute("fromdate",fromdate);
+				req.setAttribute("todate",todate);
+
+			
 			return "athithi/passReport";
 		}
 		catch (Exception e) {

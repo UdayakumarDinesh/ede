@@ -20,7 +20,15 @@ public interface IntimationService {
 	public Long addVpIntimationTrans(VpIntimationTrans transaction) throws Exception;
 	public Intimation getIntimationById(Long intimationId) throws Exception;
 	public Long vpIntimationForward(String intimationId, String username, String action, String remarks, String empNo,String loginType);
-	public List<Object[]> visitorPassApprovalList(String EmpNo) throws Exception;
+	public List<Object[]> visitorPassPendingList(String EmpNo) throws Exception;
 	public List<Object[]> vpTransactionList(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception;
+	public List<Object[]> visitorPassTransactionApprovalData(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassRemarksHistory(String IntimationId) throws Exception;
+	public Object[] visitorPassFormData(String IntimationId) throws Exception;
+	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception;
+	public long visitorPassUserRevoke(String intimationId,String Username,String EmpNo)throws Exception;
+	public Long editNewIntimation(NewIntimation intimation) throws Exception;
+	
 	
 }

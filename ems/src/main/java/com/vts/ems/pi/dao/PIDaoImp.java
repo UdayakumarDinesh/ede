@@ -1029,17 +1029,17 @@ public class PIDaoImp implements PIDao{
 		
 	}
 	
-	private static final String INTIMATIONAPPROVALSLIST  ="CALL Intimation_Approval (:EmpNo);";
+	private static final String INTIMATIONPENDINGLIST  ="CALL Intimation_Approval (:EmpNo);";
 	@Override
-	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception
+	public List<Object[]> IntimationPendingList(String EmpNo) throws Exception
 	{
 		try {			
-			Query query= manager.createNativeQuery(INTIMATIONAPPROVALSLIST);
+			Query query= manager.createNativeQuery(INTIMATIONPENDINGLIST);
 			query.setParameter("EmpNo", EmpNo);
 			List<Object[]> list =  (List<Object[]>)query.getResultList();
 				return list;
 		}catch (Exception e) {
-			logger.error(new Date()  + "Inside DAO IntimationApprovalsList " + e);
+			logger.error(new Date()  + "Inside DAO IntimationPendingList " + e);
 			e.printStackTrace();
 			return new ArrayList<Object[]>();
 		}
@@ -1084,4 +1084,109 @@ public class PIDaoImp implements PIDao{
 			return null;
 		}		
 	}
+
+	private static final String INTIMATIONAPPROVEDLIST  ="CALL Intimation_Approved_List (:EmpNo,:FromDate,:ToDate);";
+	@Override
+	public List<Object[]> IntimationApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception {
+		
+		try {			
+			Query query= manager.createNativeQuery(INTIMATIONAPPROVEDLIST);
+			query.setParameter("EmpNo", EmpNo);
+			query.setParameter("FromDate", FromDate);
+			query.setParameter("ToDate", ToDate);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO IntimationApprovedList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	private static final String RESADDRESSREMARKSHISTORY  ="SELECT cat.address_res_id,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_address_res_trans cat,pis_address_res ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.address_res_id = cat.address_res_id AND TRIM(cat.Remarks)<>'' AND ca.address_res_id=:resaddressid ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> resAddressRemarksHistory(String resaddressid) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(RESADDRESSREMARKSHISTORY);
+			query.setParameter("resaddressid", resaddressid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO resAddressRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String PERADDRESSREMARKSHISTORY  ="SELECT cat.address_per_id,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_address_per_trans cat,pis_address_per ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.address_per_id = cat.address_per_id AND TRIM(cat.Remarks)<>'' AND ca.address_per_id=:peraddressid ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> perAddressRemarksHistory(String peraddressid) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(PERADDRESSREMARKSHISTORY);
+			query.setParameter("peraddressid", peraddressid);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO perAddressRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String MOBILEREMARKSHISTORY  ="SELECT cat.MobileNumberId,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_mobile_number_trans cat,pis_mobile_number ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.MobileNumberId = cat.MobileNumberId AND TRIM(cat.Remarks)<>'' AND ca.MobileNumberId=:MobileNumberId ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> mobNumberRemarksHistory(String MobileNumberId) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(MOBILEREMARKSHISTORY);
+			query.setParameter("MobileNumberId", MobileNumberId);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO mobNumberRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String HOMETOWNREMARKSHISTORY  ="SELECT cat.HometownId,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_hometown_trans cat,pis_hometown ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.HometownId = cat.HometownId AND TRIM(cat.Remarks)<>'' AND ca.HometownId=:HometownId ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(HOMETOWNREMARKSHISTORY);
+			query.setParameter("HometownId", HometownId);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO hometownRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String GETAPPROVALEMP="CALL tour_approvalflow(:empno)";
+	@Override
+	public Object[] GetApprovalFlowEmp(String empno)throws Exception
+	{
+		try {
+			 Query query = manager.createNativeQuery(GETAPPROVALEMP);
+			 query.setParameter("empno",empno);
+			 List<Object[]> list = (List<Object[]>)query.getResultList();
+			 if(list.size()>0) {
+				 return list.get(0);
+			 }
+				return null;
+		}catch (Exception e){
+				logger.error(new Date() +"Inside DAO GetApprovalFlowEmp "+ e);
+				e.printStackTrace();
+				return null;
+		}	
+    }
 }

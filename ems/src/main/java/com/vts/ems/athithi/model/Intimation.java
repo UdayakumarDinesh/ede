@@ -29,6 +29,7 @@ public class Intimation {
       private String Duration;
       private String VisitExpectedTime;
   	  private String Purpose;
+  	  private String Foreigner;
       private String SpecialPermission;
       private String OfficerEmpId;
       private String VpStatus;

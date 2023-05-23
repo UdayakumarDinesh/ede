@@ -13,7 +13,7 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
-<title>Passport Preview</title>
+<title>Proceeding Abroad Preview</title>
 
 <style>
 .text-blue
@@ -59,20 +59,12 @@ width:75%;
      
      Object[] obj=(Object[])request.getAttribute("NocProcAbroadDetails");
     
-     
-    
-     
-    
-	
-	%>
+    %>
 
-
-		
-
- <div class="card-header page-top "> 
+<div class="card-header page-top "> 
 		<div class="row">
 			<div class="col-md-4">
-				<h5>Passport Preview</h5>
+				<h5>Proceeding Abroad Preview</h5>
 			</div>
 			<div class="col-md-8 ">
 				<ol class="breadcrumb ">
@@ -118,7 +110,7 @@ width:75%;
 
    <div class="page card dashboard-card"> 
 		<div class="card-body"  >
-			<div class="card" style="padding-top:0px;margin-top: -15px;">
+			<div class="card" style="padding-top:0px;margin-top: -15px;width:75%;margin-left:160px;">
 				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="left">
 				<form action="##"  >
 				<div class="" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
@@ -126,7 +118,7 @@ width:75%;
 								<div align="center">
 								<div style="width: 100%;">
 									<div style="width: 100%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-									 <div ><span style="margin-left: -80px;font-weight: 600;font-size: 18px;">APPLICATION FOR OBTAINING NO OBJECTION CERTIFICATE FOR PROCEEDING ABROAD</span></div> 
+									 <div ><span style="margin-left: 0px;font-weight: 600;font-size: 18px;">APPLICATION FOR OBTAINING NO OBJECTION CERTIFICATE FOR PROCEEDING ABROAD</span></div> 
 									<!-- <div ><span style="margin-left: -90px;font-weight: 600">APPLICATION FOR OBTAINING NO OBJECTION <br>CERTIFICATE FOR PASSPORT</span></div> -->
 				
 								</div>
@@ -206,7 +198,7 @@ width:75%;
 	<td style="width:350px;text-align: left;border: 0;"><h4> 7. Details of blood / close relations <span style="margin-left:6px"> :</span> <br> &emsp; working in foreign embassy / <br> &emsp; firms in India / Abroad 
          </h4> </td>
     
-      
+    
     <td class="text-blue" style="border: 0;"><% if (obj[16].toString().trim().length()>0){%><%=obj[16] %><%} else{ %>N/A<%} %></td>
 	</tr>
 	
@@ -678,12 +670,9 @@ width:75%;
 			    
 		 <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
 		
-		 <div align="left">
-				   	<%if(obj[26]!=null){ %> <span style="color: red">Remarks :</span> <%=obj[26] %> <%} %>
-				   		
-				  </div> 
+		
 				 
-				   
+				   <%if(!obj[45].toString().equalsIgnoreCase("")){ %>
 				  <div class="col-md-5" align="left" style="margin-left:1rem;margin-top:2rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px;">
 					<tr>
@@ -693,12 +682,14 @@ width:75%;
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-						    	
+						    	<% if(obj[45]!=null){ %>  <%=obj[45] %> <%} %>
 						</td>
 					</tr>
 				</table>
 					
 			</div>
+			
+			<%} %>
 			 
 			 
 				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 

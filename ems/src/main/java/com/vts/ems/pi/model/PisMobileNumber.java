@@ -28,6 +28,7 @@ public class PisMobileNumber implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long MobileNumberId;
 	private String EmpNo;
+	private String MobIntimationDate;
 	private String MobileNumber;
 	private String AltMobileNumber;
 	private Date MobileFrom;

@@ -72,12 +72,18 @@ public interface PIService {
 	public List<Object[]> HometownApprovalsList(String EmpNo, String LoginType) throws Exception;
 	public List<Object[]> HometownTransactionList(String hometownid) throws Exception;
 	public BigInteger HometownApprovalCount(String EmpNo) throws Exception;
-	public List<Object[]> IntimationApprovalsList(String EmpNo) throws Exception;
+	public List<Object[]> IntimationPendingList(String EmpNo) throws Exception;
 	public long MobileNumberTransactionAdd(PisMobileNumberTrans transaction) throws Exception;
 	public long HometownTransactionAdd(PisHometownTrans transaction) throws Exception;
 	public long AddressPerTransactionAdd(PisAddressPerTrans transaction) throws Exception;
 	public long AddressResTransactionAdd(PisAddressResTrans transaction) throws Exception;
 	public List<String> GetHometownAllowedEmpNo() throws Exception;
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
+	public List<Object[]> IntimationApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception;
+	public List<Object[]> resAddressRemarksHistory(String resaddressid) throws Exception;
+	public List<Object[]> perAddressRemarksHistory(String peraddressid) throws Exception;
+	public List<Object[]> mobNumberRemarksHistory(String MobileNumberId) throws Exception;
+	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception;
+	public Object[] GetApprovalFlowEmp(String empno) throws Exception;
 	
 }

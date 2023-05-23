@@ -93,6 +93,7 @@ public class IntimationServiceImpl implements IntimationService {
 	        inti.setDuration(intimation.getDuration());
 	        inti.setExpectedTime(intimation.getExpectedTime());
 	        inti.setPurpose(intimation.getPurpose());
+	        inti.setForeigner(intimation.getForeigner());
 	        inti.setSpecialPermission(intimation.getSpermission());
 	        inti.setOfficerEmpId(intimation.getOfficer());
 	        inti.setVpStatus(intimation.getVpStatus());
@@ -111,7 +112,7 @@ public class IntimationServiceImpl implements IntimationService {
 		    	IntimationEmp newVisitor =new IntimationEmp();
 		    	newVisitor.setCompanyEmpId(Long.parseLong(visitor));
 		    	newVisitor.setInitmationId(newIntimationId);
-		    	newVisitor.setCreatedBy(intimation.getCreateBy());
+		    	newVisitor.setCreatedBy(inti.getCreatedBy());
 		    	newVisitor.setCreatedDate(sdf1.format(new  java.util.Date())); 
 		    	newVisitor.setIsActive(1);
 		    	dao.addVisitor(newVisitor);
@@ -171,7 +172,7 @@ public class IntimationServiceImpl implements IntimationService {
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					intimation.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno)) 
@@ -296,15 +297,115 @@ public class IntimationServiceImpl implements IntimationService {
 	}
 
 	@Override
-	public List<Object[]> visitorPassApprovalList(String EmpNo) throws Exception {
+	public List<Object[]> visitorPassPendingList(String EmpNo) throws Exception {
 		
-		return dao.visitorPassApprovalList(EmpNo);
+		return dao.visitorPassPendingList(EmpNo);
 	}
 
 	@Override
 	public List<Object[]> vpTransactionList(String IntimationId) throws Exception {
 		 
 		return dao.vpTransactionList(IntimationId);
+	}
+
+	@Override
+	public List<Object[]> visitorPassApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception {
+		
+		return dao.visitorPassApprovedList(EmpNo, FromDate, ToDate);
+	}
+
+	@Override
+	public List<Object[]> visitorPassTransactionApprovalData(String IntimationId) throws Exception {
+		
+		return dao.visitorPassTransactionApprovalData(IntimationId);
+	}
+
+	@Override
+	public List<Object[]> visitorPassRemarksHistory(String IntimationId) throws Exception {
+		
+		return dao.visitorPassRemarksHistory(IntimationId);
+	}
+
+	@Override
+	public Object[] visitorPassFormData(String IntimationId) throws Exception {
+		
+		return dao.visitorPassFormData(IntimationId);
+	}
+
+	@Override
+	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception {
+		
+		return dao.visitorPassVisitorsForm(IntimationId);
+	}
+
+	@Override
+	public long visitorPassUserRevoke(String intimationId, String Username, String EmpNo) throws Exception {
+		
+		Intimation intimation = dao.getIntimationById(Long.parseLong(intimationId));
+		
+		String vpStatus = intimation.getVpStatus();
+		if(!vpStatus.equalsIgnoreCase("G")) {
+			
+		intimation.setPisStatusCode("REV");
+		intimation.setPisStatusCodeNext("REV");
+		intimation.setVpStatus("N");
+		
+		intimation.setModifiedBy(Username);
+		intimation.setModifiedDate(sdtf.format(new java.util.Date()));
+		
+		VpIntimationTrans transaction = VpIntimationTrans.builder()
+                                        .IntimationId(intimation.getIntimationId())
+                                        .PisStatusCode(intimation.getPisStatusCode())
+                                        .Remarks("")
+                                        .ActionBy(EmpNo)
+                                        .ActionDate(sdtf.format(new java.util.Date()) ).build();
+        dao.addVpIntimationTrans(transaction);
+        
+        return dao.editNewIntimation(intimation);
+		}
+		else {
+			return -1;
+		}
+		
+	}
+
+	@Override
+	public Long editNewIntimation(NewIntimation intimation) throws Exception {
+	     
+		Intimation inti = dao.getIntimationById(intimation.getIntimationId());
+		
+	        inti.setCompanyId( Long.parseLong(intimation.getCompnayId()));
+	        inti.setFromDate(DateTimeFormatUtil.dateConversionSql(intimation.getFdate()));
+	        inti.setToDate(DateTimeFormatUtil.dateConversionSql(intimation.getTdate()));
+	        inti.setDuration(intimation.getDuration());
+	        inti.setExpectedTime(intimation.getExpectedTime());
+	        inti.setPurpose(intimation.getPurpose());
+	        inti.setForeigner(intimation.getForeigner());
+	        inti.setSpecialPermission(intimation.getSpermission());
+	        inti.setOfficerEmpId(intimation.getOfficer());
+	        inti.setVpStatus(intimation.getVpStatus());
+	        inti.setPisStatusCode(intimation.getPisStatusCode());
+	        inti.setPisStatusCodeNext(intimation.getPisStatusCodeNext());
+	        inti.setModifiedBy(intimation.getCreateBy());
+	        inti.setModifiedDate(sdf1.format(new java.util.Date()));
+	        
+		    Long newIntimationId=dao.editNewIntimation(inti);
+     		
+		    dao.editVisitorsIsActive(intimation.getIntimationId().toString());
+		    
+		    String[] visitors= intimation.getVisitors();
+		    
+		    for(String visitor:visitors) {
+		    	IntimationEmp newVisitor =new IntimationEmp();
+		    	newVisitor.setCompanyEmpId(Long.parseLong(visitor));
+		    	newVisitor.setInitmationId(newIntimationId);
+		    	newVisitor.setCreatedBy(intimation.getCreateBy());
+		    	newVisitor.setCreatedDate(sdf1.format(new java.util.Date())); 
+		    	newVisitor.setIsActive(1);
+		    	dao.addVisitor(newVisitor);
+		    }
+		
+		return newIntimationId;
 	}
 	
 

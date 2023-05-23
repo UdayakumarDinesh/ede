@@ -15,13 +15,11 @@
 
 .trup
 		{
-			padding:6px 10px 6px 10px ;			
-
-			border-radius: 5px;
+			padding:5px 10px 0px 10px ;			
+			border-top-left-radius : 5px; 
+			border-top-right-radius: 5px;
 			font-size: 14px;
 			font-weight: 600;
-			
-			
 		}
 		
 		.trdown
@@ -32,7 +30,6 @@
 			font-size: 14px;
 			font-weight: 600;
 		}
-
 
 
 </style>
@@ -49,12 +46,12 @@
 	String CEO = (String)request.getAttribute("CEOEmpNos");
 	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
-	
+	Object[] EmpApprFlow = (Object[])request.getAttribute("EmpApprFlow");
 	
 	Employee emp=(Employee)request.getAttribute("Employee");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RCE");
 %>
 
 <div class="card-header page-top ">
@@ -76,6 +73,7 @@
 </div>
 
 <div class="page card dashboard-card">
+  <div class="card-body" >
    <div align="center">
 		   <% String ses=(String)request.getParameter("result"); 
 			  String ses1=(String)request.getParameter("resultfail");
@@ -89,7 +87,8 @@
 				</div>
 			 <%} %>
 	</div>
-	
+	<div class="row w-100" style="margin-bottom: 10px;">
+	 <div class="col-12">
 	<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background-color: #E1E5E8;padding:0px;">
 		  <li class="nav-item" style="width: 50%;"  >
 		    <div class="nav-link active" style="text-align: center;" id="pills-mov-property-tab" data-toggle="pill" data-target="#pills-mov-property" role="tab" aria-controls="pills-mov-property" aria-selected="true">
@@ -103,16 +102,17 @@
 		    </div>
 		  </li>
 		</ul>
-	
+	</div>
+	</div>
 	<!-- Movable Property List -->
 	<div class="card">					
 		<div class="card-body">
 		<div class="container-fluid" >
             <div class="tab-content" id="pills-tabContent">
                <div class="tab-pane fade show active" id="pills-mov-property" role="tabpanel" aria-labelledby="pills-mov-property-tab">
-		  <h5>Movable Property List</h5>
+		    <h5>Movable Property List</h5>
 			  <hr>
-				<form action="" method="POST" id="empForm">
+				<form action="MovablePropAddEdit.htm" method="POST" id="empForm">
 				  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				  <div class="table-responsive">
 				   	<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -142,7 +142,7 @@
 							</td>
 						    <td style="text-align: left;width:8%;"><%if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("I")){ %><%="Intimation"%><%}else{%><%="Permission"%> <%}%> </td>
 						    <td style="text-align: left;width:6%;"><%if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("A")){ %><%="Acquisition"%><%}else{%><%="Disposing"%> <%}%> </td>
-						    <td style="text-align: center;width:10%;"><%if(obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"") %> <%} %> </td>
+						    <td style="text-align: center;width:11%;"><%if(obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"") %> <%} %> </td>
 						    <td style="text-align: left;width:10%;"><%if(obj[7]!=null){ %> <%=obj[7] %> <%} %> </td>
 						    <td style="text-align: left;">
 						    <%if(obj[5]!=null){ %> <%=obj[5] %> <%} %>
@@ -166,7 +166,7 @@
 								<%} %>
 							</td>
 					   		
-					   		<td style="text-align: left;width:9%;">
+					   		<td style="text-align: left;width:10%;">
 								<button type="submit" class="btn btn-sm view-icon" formaction="" name="movPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Movable Property" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
@@ -184,8 +184,8 @@
 				   </div>				
 				    <div class="row text-center">
 						<div class="col-md-12">
-							<button type="button" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>		
-							<button type="button" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="EditMov(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDMov">ADD </button>		
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITMov" Onclick="EditMov(empForm)" >EDIT </button>
 					    </div>
 				   </div>
 				  
@@ -198,6 +198,7 @@
 		  <h5>Immovable Property List</h5>
 			  <hr>
 				<form action="ImmovablePropAddEdit.htm" method="POST" id="empForm">
+				<input type="hidden" name="tab" value="closed"/>
 				  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				  <div class="table-responsive">
 				   	<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2"> 
@@ -227,7 +228,7 @@
 							</td>
 						    <td style="text-align: left;width:8%;"><%if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("I")){ %><%="Intimation"%><%}else{%><%="Permission"%> <%}%> </td>
 						    <td style="text-align: left;width:6%;"><%if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("A")){ %><%="Acquisition"%><%}else{%><%="Disposing"%> <%}%> </td>
-						    <td style="text-align: center;width:10%;"><%if(obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"") %> <%} %> </td>
+						    <td style="text-align: center;width:11%;"><%if(obj[4]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"") %> <%} %> </td>
 						    <td style="text-align: left;width: 10%;"><%if(obj[5]!=null){ %> <%=obj[5] %> <%} %> </td>
 						    <td style="text-align: left;width: 23%;">
 						    <%if(obj[6]!=null){ %> <%=obj[6] %> <%} %>
@@ -253,7 +254,7 @@
 								<%} %>
 							</td>
 					   		
-					   		<td style="text-align: left;width:9%;">
+					   		<td style="text-align: left;width:10%;">
 								<button type="submit" class="btn btn-sm view-icon" formaction="ImmovablePropPreview.htm" name="immPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Immovable Property" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
@@ -276,38 +277,7 @@
 					    </div>
 				   </div>
 				  
-				</form>
-				<%-- <hr>
-			<div class="row"  >
-		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Property Acquisition / Disposal</b></div>
-		 	</div>
-		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
-	              <table align="center"  >
-	               		 <tr>
-	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
-	                		<td class="trup" style="background: #E8E46E;">
-	                			User - <%=emp.getEmpName() %>
-	                		</td>
-	                		<td rowspan="2">
-	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-	                		</td>
-	                		<%} %>             		
-	               		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(emp.getEmpNo()) ){ %>
-	                		<td class="trup" style="background: #FBC7F7;" >
-	                			P&A - <%=PandAEmpName[1] %>
-	                		</td>
-	                		<td rowspan="2">
-	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-	                		</td>
-	               		<%} %>
-	               		<%if(CeoName!=null  ){ %>
-	                		<td class="trup" style="background: #4DB6AC;" >
-	                			CEO - <%=CeoName[1] %>
-	                		</td>
-	               		<%} %>
-	                	</tr> 			
-			         </table>			             
-			   </div> --%>
+				</form>				
 			   </div>
 			   </div>
 			   </div>
@@ -315,7 +285,7 @@
 			<div class="row"  >
 		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow For Property Acquisition / Disposal</b></div>
 		 	</div>
-		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+		 	<%-- <div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		 <tr>
 	               		<%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
@@ -339,7 +309,50 @@
 	                			CEO - <%=CeoName[1] %>
 	                		</td>
 	               		<%} %>
-	                	</tr> 			
+	                	</tr> --%> 
+	                	
+	                	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+	              <table align="center"  >
+	               		<tr>
+	               		<%if( !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
+	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
+	                			User <br> <%=session.getAttribute("EmpName")%>
+	                		</td>
+	                		<td rowspan="2" >
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               			<%} %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
+	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
+	                			DGM <br> <%=EmpApprFlow[1]%>
+	                		</td>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		 <%} %>
+	                		<%-- <td class="trup"  style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);" >
+	                			F & A <br> <%=EmpApprFlow[2]%>
+	                		</td> 
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td> --%>
+	                		<%if(PandAEmpName!=null && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
+	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
+	                			P & A <br> <%=EmpApprFlow[3]%>
+	                		</td>
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>	                		 
+	                		<%} %>
+	                		<%if(CeoName!=null ){ %>
+	                		<td class="trup" style="background: linear-gradient(to top, #4DB6AC 10%, transparent 115%);">
+	                			CEO <br> <%=EmpApprFlow[4]%>
+	                		</td> 
+	                		<%} %>
+	               		
+	               	</tr>			
 			         </table>			             
 			   </div>
        </div>
@@ -385,6 +398,12 @@ function EditMov(myfrm) {
 	}
 	return true;
 }
+
+<%-- <%if(tab!=null && tab.equals("closed")){%>
+
+$('#pills-imm-property-tab').click();
+
+<%}%> --%>
 
 </script> 
 </body>

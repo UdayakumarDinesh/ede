@@ -12,7 +12,7 @@
 <title>Personal Intimations</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
-<style type="text/css">
+<!-- <style type="text/css">
 
 .trup
 		{
@@ -36,6 +36,33 @@
 
 
 
+</style> -->
+<style type="text/css">
+/* .table thead th {
+    color: white;
+   
+    text-align: center;
+    padding-bottom: 0.1rem !important;
+    padding-top: 0.1rem !important;
+} */
+.trup
+		{
+			padding:5px 10px 0px 10px ;			
+			border-top-left-radius : 5px; 
+			border-top-right-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+		}
+		
+		.trdown
+		{
+			padding:0px 10px 5px 10px ;			
+			border-bottom-left-radius : 5px; 
+			border-bottom-right-radius: 5px;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
 </style>
 </head>
 
@@ -51,6 +78,7 @@
 	Object[] CeoName = (Object[])request.getAttribute("CeoName");
 	Object[] DGMEmpName = (Object[])request.getAttribute("DGMEmpName");
 	Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
+	Object[] EmpApprFlow = (Object[])request.getAttribute("EmpApprFlow");
 	
 	String CEO = (String)request.getAttribute("CEOEmpNos");
 	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
@@ -265,7 +293,7 @@
 			<div class="row"  >
 		 		<div class="col-md-12" style="text-align: center;"><b>Approval Flow</b></div>
 		 	</div>
-		 	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+		 	<%-- <div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
 	               		<%if( !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
@@ -295,7 +323,52 @@
 	                			CEO - <%=CeoName[1] %>
 	                		</td>
 	               		<%} %>
+	               	</tr> --%>	
+	               	
+	               	
+	               	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
+	              <table align="center"  >
+	               		<tr>
+	               		<%if( !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
+	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
+	                			User <br> <%=session.getAttribute("EmpName")%>
+	                		</td>
+	                		<td rowspan="2" >
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               			<%} %>
+	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
+	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
+	                			DGM <br> <%=EmpApprFlow[1]%>
+	                		</td>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		 <%} %>
+	                		<%-- <td class="trup"  style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);" >
+	                			F & A <br> <%=EmpApprFlow[2]%>
+	                		</td> 
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td> --%>
+	                		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
+	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
+	                			P & A <br> <%=EmpApprFlow[3]%>
+	                		</td>	                		 
+	                		<%} %>
+	                		<%if(CeoName!=null && CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
+	                		<td class="trup" style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
+	                			CEO <br> <%=EmpApprFlow[4]%>
+	                		</td> 
+	                		<%} %>
+	               		
 	               	</tr>			   
+		                	
+	                          	
+			           </table>			             
+			 	</div>		   
 		                	
 	               	<%-- <tr>
 	               	    <%if( !PandAs.contains(emp.getEmpNo()) && !CEO.equalsIgnoreCase(emp.getEmpNo())  ) {%>

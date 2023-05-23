@@ -40,7 +40,13 @@ public class NocDaoImpl implements NocDao {
 		
 		Query query=manager.createNativeQuery(EMPDATA);
 		query.setParameter("EmpId", EmpId);
-		return (Object[])query.getSingleResult();
+		List<Object[]> list =(List<Object[]>) query.getResultList();
+		
+		Object[] result=null;
+		if(list!=null &&list.size()>0) {
+			result =list.get(0);
+		}
+		return result;
 		
 	}
 	
@@ -90,7 +96,7 @@ public class NocDaoImpl implements NocDao {
 		}
 	}
 
-	private static final String NOCPASSPORTLIST="SELECT n.NocPassportId,n.NocPassportNo,n.PassportStatus,n.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_passport n,pis_approval_status c,employee e  WHERE n.isActive='1' AND n.NocstatusCode=c.PisStatuscode AND e.EmpNo=n.EmpNo AND n.EmpNo=:EmpNo ORDER BY n.NocPassportId DESC";
+	private static final String NOCPASSPORTLIST="SELECT n.NocPassportId,n.NocPassportNo,n.PassportStatus,n.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode,n.InitiatedDate FROM noc_passport n,pis_approval_status c,employee e  WHERE n.isActive='1' AND n.NocstatusCode=c.PisStatuscode AND e.EmpNo=n.EmpNo AND n.EmpNo=:EmpNo ORDER BY n.NocPassportId DESC";
 	@Override
 	public List<Object[]> getnocPassportList(String empNo) throws Exception {
 		
@@ -520,12 +526,12 @@ public class NocDaoImpl implements NocDao {
 	}
 
 	@Override
-	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans transaction) throws Exception {
+	public long NocProcAbroadTransactionAdd(NocProceedingAbroadTrans trans) throws Exception {
 		
 
-		manager.persist(transaction);
+		manager.persist(trans);
 		manager.flush();
-		return transaction.getNocProcAbroadTransId();
+		return trans.getNocProcAbroadTransId();
 		
 		
 	}
@@ -632,6 +638,63 @@ public class NocDaoImpl implements NocDao {
 		
 		
 	
+	}
+
+	private static final String GETCOUNT="SELECT  COUNT(*) FROM pis_passport WHERE empid=:empid";
+	@Override
+	public long GetPassportCount(String empid) throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(GETCOUNT);
+			query.setParameter("empid", empid);
+			BigInteger PassportId=(BigInteger)query.getSingleResult();
+			return PassportId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO GetPassportCount "+ e);
+			return 0;
+		}
+	}
+
+	private static final String NOCPASSPORTREMARKHISTORY="SELECT trans.NocPassportId,trans.Remarks,e.EmpName FROM noc_passport_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocPassportId=:passportid ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSPORTREMARKHISTORY);
+		query.setParameter("passportid", passportid);
+		return (List<Object[]>)query.getResultList();
+	}
+	private static final String NOCAPPROVEDLIST="CALL Noc_Approved_List(:EmpNo,:FromDate,:ToDate)";
+	@Override
+	public List<Object[]> getNocApprovedList(String empNo, String fromdate, String todate) throws Exception {
+		
+
+		Query query=manager.createNativeQuery(NOCAPPROVEDLIST);
+		query.setParameter("EmpNo", empNo);
+		query.setParameter("FromDate", fromdate);
+		query.setParameter("ToDate", todate);
+		return (List<Object[]>)query.getResultList();
+	}
+	
+	private static final String NAMEANDDESIG = "SELECT DISTINCT a.EmpNo,a.EmpName,b.Designation,d.PayLevel,c.BasicPay,c.Title FROM employee a,employee_desig b,employee_details c,pis_pay_level d WHERE a.DesigId=b.DesigId AND a.IsActive=1 AND a.EmpNo=c.EmpNo AND d.PayLevelId=c.PayLevelId AND a.EmpNo=:EmpNo LIMIT 1";
+	@Override
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception
+	{
+		try {
+			
+			Query query= manager.createNativeQuery(NAMEANDDESIG);
+			query.setParameter("EmpNo", EmpNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpNameDesig " + e);
+			e.printStackTrace();
+			return null;
+		}		
 	}
 }
 	

@@ -82,12 +82,17 @@ public class NocServiceImpl implements NocService {
 				.build();
 		
           dao.NocPassportTransactionAdd(transaction);
+          long count = dao.GetPassportCount(pport.getEmpId());
+          if(count==0 && !pport.getPassportNo().isEmpty()) {
+        	  
+        	  dao.AddPassport(pport);
+          }
           
-          dao.AddPassport(pport);
         
 		NocPassport noc =NocPassport.builder()
 				.NocPassportNo(NocPassportNo)
 				.EmpNo(dto.getEmpNo())
+				.PassportExist(dto.getPassportExist())
 				.RelationType(dto.getRelationType())
 				.RelationName(dto.getRelationName())
 				.RelationAddress(dto.getRelationAddress())
@@ -102,6 +107,7 @@ public class NocServiceImpl implements NocService {
 				.PassportStatus("N")
 				.NocStatusCode("INI")
 				.NocStatusCodeNext("INI")
+				.InitiatedDate(sdf1.format(new Date()))
 				.CreatedBy(UserId)
 				.CreatedDate(sdf1.format(new Date()))
 				.isActive(1)
@@ -128,7 +134,7 @@ public class NocServiceImpl implements NocService {
 		
 		NocPassport noc =dao.getNocPassportId(dto.getNocPassportId());
 		
-		
+		noc.setPassportExist(dto.getPassportExist());
 		noc.setRelationType(dto.getRelationType());
 		noc.setRelationName(dto.getRelationName());
 		noc.setRelationAddress(dto.getRelationAddress());
@@ -393,6 +399,24 @@ public class NocServiceImpl implements NocService {
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 	
 		//Notification
+			EMSNotification notification1 = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
+			{
+				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification1.setNotificationUrl("Passport.htm");
+				notification1.setNotificationMessage("Noc Passpaort Request Approved");
+				notification1.setNotificationBy(EmpNo);
+				
+				notification1.setNotificationDate(LocalDate.now().toString());
+				notification1.setIsActive(1);
+				notification1.setCreatedBy(userId);
+				notification1.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification1);		
+				
+			}
+			
+			
 		EMSNotification notification = new EMSNotification();
 		if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
 		{
@@ -401,6 +425,8 @@ public class NocServiceImpl implements NocService {
 			notification.setNotificationMessage("Noc Passpaort Request Approved");
 			notification.setNotificationBy(EmpNo);
 		}
+		
+		
 		else if(action.equalsIgnoreCase("A") )
 		{
 			if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
@@ -450,8 +476,6 @@ public class NocServiceImpl implements NocService {
 		return 0;
 	}
 }
-
-		
 
 	@Override
 	public NocPassport getNocPassportById(long passportid) throws Exception {
@@ -845,15 +869,15 @@ public class NocServiceImpl implements NocService {
 			dao.EditNocpa(noc);
 		}
 		
-		NocProceedingAbroadTrans transaction = NocProceedingAbroadTrans.builder()	
-				                           .NocProcAbroadTransId(noc.getNocProcId())
+		NocProceedingAbroadTrans trans = NocProceedingAbroadTrans.builder()	
+				                           .NocProcId(noc.getNocProcId())
 				                           .NocStatusCode(noc.getNocStatusCode())
 				                           .ActionBy(empNo)
 				                           .Remarks(remarks)
 				                           .ActionDate(sdtf.format(new Date()))
 				                           .build();
 		
-		 dao.NocProcAbroadTransactionAdd(transaction);
+		 dao.NocProcAbroadTransactionAdd(trans);
 						
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
@@ -925,5 +949,24 @@ public class NocServiceImpl implements NocService {
 	
 		return dao.getLabMasterDetails();
 	}
+
+	@Override
+	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
+		
+		return dao.getPassportRemarksHistory(passportid);
+	}
+
+	@Override
+	public List<Object[]> NocApprovedList(String empNo, String fromdate, String todate) throws Exception {
+	
+		return dao.getNocApprovedList(empNo,fromdate,todate);
+	}
+	
+	@Override
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
+		
+		return dao.getEmpNameDesig(EmpNo);
+	}
+
 }
 

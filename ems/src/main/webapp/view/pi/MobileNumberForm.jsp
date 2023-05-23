@@ -48,6 +48,7 @@ input:focus {
 String LabLogo = (String)request.getAttribute("LabLogo");
 Object[] MobFormData = (Object[])request.getAttribute("MobFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+List<Object[]> MobIntimationRemarks = (List<Object[]>)request.getAttribute("MobIntimationRemarks");
 
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
@@ -168,11 +169,34 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   		<%} %> 
 				   </div>
 				   	 <br>
+				   	 <div class="row">
+						<%if(MobIntimationRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(MobIntimationRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : MobIntimationRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
 				   <% if(MobFormData!=null && toUserStatus.contains(MobFormData[7].toString())){ %>
-				   		<div align="left">
+				   		<%-- <div align="left">
 				   			 <%if(MobFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=MobFormData[6] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -184,10 +208,10 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						<div align="left">
+						<%-- <div align="left">
 				   			 <%if(MobFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=MobFormData[6] %> <%} %>
 				   		
-				   		</div>
+				   		</div> --%>
 						<div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>

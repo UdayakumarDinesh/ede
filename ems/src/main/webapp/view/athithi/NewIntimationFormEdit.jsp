@@ -1,7 +1,8 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
 <%@page import="com.ibm.icu.text.SimpleDateFormat"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.List,com.vts.ems.athithi.model.Intimation"%>
+  <%@page import="com.vts.ems.utils.DateTimeFormatUtil,java.util.List,java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -133,8 +134,17 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
             </div>  --> 
 <%
 List<Object[]> compnyList =(List<Object[]>)request.getAttribute("compnyList"); 
+Intimation inti =(Intimation)request.getAttribute("Intimation"); 
 List<Object[]> officerList=(List<Object[]>)request.getAttribute("officer");
+List<Object[]> Visitors=(List<Object[]>)request.getAttribute("Visitors");
 List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
+
+String getPermi[]=(inti.getSpecialPermission().toString().split(","));
+List <String> getPermission=new ArrayList<>();
+for(int i=0;i<getPermi.length;i++){
+	getPermission.add(getPermi[i]);
+}
+
 %>        
 	<div class="card-body main-card">
    		<!-- <div class="container-fluid"> -->
@@ -147,22 +157,24 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 						</h5>
 					</div> -->
 					<div class="card-body">
-						<form action="newIntimationSubmit" method="post"  onSubmit="remove(); return confirm('Do you want to submit?'); " >
+						<form action="NewIntimationEditSubmit.htm" method="post"  onSubmit="remove(); return confirm('Do you want to submit?'); " >
 							<div class="form-row">
 								<div class="form-group col-md-1">
 									<label style="width:104%;">Company<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
 								<div class="col-md-4">
 								    <select class="form-control form-control CompanyID" id="CompanyID" style="width:100%;"  name="company" required>
-						         	  <option></option>
 								    <%for(Object[] data:compnyList){ %>
-								    <option value="<%=data[0]%>"><%=data[1]%></option>
+								    <%if(inti!=null){ %>
+								   <option value="<%=data[0]%>"   <%if(inti.getCompanyId()!=null && inti.getCompanyId().toString().equalsIgnoreCase(data[0].toString())){%> selected<%}%>><%=data[1]%></option>
+								   <%}%>
+								    <%-- <option value="<%=data[0] %>" <%if(inti!=null && inti.getCompanyId().equals(data[0])) %> ><%=data[1]%></option> --%>
 								    <%} %>
 				                    <option value="QQ">Add New Company</option> 
 								         
 								    </select>
 								</div>
-								   
+								
                          		<div class="form-group col-md-1">
 									<label >Visitors <span class="mandatory" style="color: red;">*</span> </label>
 								
@@ -175,7 +187,7 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 								    </select>
 								</div>
 								<div class="form-check" >
-									<input class="form-check-input" style="height: 26px; width: 26px;" type="checkbox" required="required" value="" id="ConfirmCheck"> 
+									<input class="form-check-input" style="height: 26px; width: 26px;" type="checkbox" required="required" value="" id="ConfirmCheck" <%if(inti!=null){ %>checked <%} %>> 
 					                 &nbsp;&nbsp; <label >Confirm<span class="mandatory"  style="color: red;">*</span> </label>
 								</div>
 								
@@ -270,12 +282,12 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 								<div class="col-md-4">
 								<div class="form-row">
 								<div class="col-md-4">
-								<input class="form-control" type="text" id="fdate" name="fdate" required="required" readonly="readonly">
+								<input class="form-control" type="text" id="fdate" value="<%if(inti!=null && inti.getFromDate()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(inti.getFromDate().toString())%> <%}%>" name="fdate" required="required" readonly="readonly">
 								 
 								</div>
 								<label> - </label>
 								<div class="col-md-4">
-								<input class="form-control" type="text" id="tdate" name="tdate" required="required"  readonly="readonly" >
+								<input class="form-control" type="text" id="tdate" value="<%if(inti!=null && inti.getToDate()!=null){%> <%=DateTimeFormatUtil.SqlToRegularDate(inti.getToDate().toString())%> <%}%>" name="tdate" required="required"  readonly="readonly" >
 								</div>
 								</div>
 								</div>
@@ -283,13 +295,13 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 									<label style="margin-left:-130%;">Duration<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
 						        <div class="col-md-1" style="margin-left:-10%;">
-								 <input class="form-control" type="number" id="duration" name="duration" placeholder="In hours" required="required" min="1" max="24" style="width: 118%">
+								 <input class="form-control" type="number" id="duration" name="duration" value="<%if(inti!=null && inti.getDuration()!=null) {%><%=inti.getDuration()%><%} %>" placeholder="In hours" required="required" min="1" max="24" style="width: 118%">
 								</div>
 								<div class="form-group col-md-2" style="margin-left: 1.3%;">
 									<label >Expected Time<span class="mandatory" style="color: red;">*</span> </label>
 								</div>
 						        <div class="col-lg-2" style="margin-left: -3.7%;">
-								 <input class="form-control" type="time" value="09:30" id="expectedTime" name="expectedTime" required="required">
+								 <input class="form-control" type="time" value="<%if(inti!=null && inti.getExpectedTime()!=null) {%><%=inti.getExpectedTime() %><%} %>" id="expectedTime" name="expectedTime" required="required">
 								</div>
 									
 							</div>
@@ -300,9 +312,10 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 						        <div class="col-md-5"  >
 								<select class="form-control col-md-5  CompanyID"  style="width: 100%;;"   name="officer" required>
 								  <option></option>
-								    <%for(Object[] data:officerList){ %>
-								    <option value="<%=data[0]%>"><%=data[1]%>,&nbsp;<%=data[2]%> </option>
-								    <%} %>
+								    <%for(Object[] data:officerList){ 
+		                              if(inti!=null){ %>
+								     <option value="<%=data[0]%>" <%if(inti.getOfficerEmpId()!=null && inti.getOfficerEmpId().toString().equalsIgnoreCase(data[0].toString())){%> selected<%}%> ><%=data[1]%>,&nbsp;<%=data[2]%> </option>
+								    <%} }%>
 								    </select>
 								    
 								</div>
@@ -313,8 +326,8 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 								</div>
 								<div class="col-md-2" style="margin-left: -4%;">
 								   <select name="foreigner" class="form-control input-sm select2" required>
-			                         <option value="N">No</option>
-			                         <option value="Y">Yes</option>
+			                         <option value="N" <%if(inti!=null && inti.getForeigner()!=null && "N".equalsIgnoreCase(inti.getForeigner())) {%> selected="selected" <%} %> >No</option>
+			                         <option value="Y" <%if(inti!=null && inti.getForeigner()!=null && "Y".equalsIgnoreCase(inti.getForeigner())) {%> selected="selected" <%} %> >Yes</option>
 			                       </select>
 								</div>
 								<%} %>
@@ -326,7 +339,7 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 									
 								</div>
 								<div class="col-md-5">
-								  <input class="form-control" name="purpose"  id="purposeId"  maxlength="255" placeholder="Enter max 255 characters" required>
+								  <input class="form-control" name="purpose"  id="purposeId" value="<%if(inti!=null && inti.getPurpose()!=null){ %><%=inti.getPurpose()%><%} %>" maxlength="255" placeholder="Enter max 255 characters" required>
 								</div>
 							</div>
 							<%if(empData!=null && DHs!=null && DHs.contains(empData[0].toString())) {%>
@@ -339,12 +352,12 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 								 <div class="col-md-3" style="margin-left:-1%;">			
 								<!--  <input class="form-control" name="spermission"  id="specialPermission"  maxlength="255" placeholder="Enter max 255 characters" > -->
 								  <select class="form-control col-lg-12 spermission" id="options" name="spermission" multiple required >
-								    <option value="Not Applicable" >Not Applicable</option>
-								    <option  value="Laptop">Laptop</option>
-								    <option value="Mobile">Mobile</option>
-								    <option value="Pendrive">Pendrive</option>
-								    <option value="CD/DVD">CD/DVD</option>
-								    <option value="Vehicle">Vehicle</option>
+								    <option value="Not Applicable"<%if(getPermission.contains("Not Applicable")) {%>selected<%} %> >Not Applicable</option>
+								    <option value="Laptop" <%if(getPermission.contains("Laptop")) {%>selected<%} %> >Laptop </option>
+								    <option value="Mobile" <%if(getPermission.contains("Mobile")) {%>selected<%} %> >Mobile</option>
+								    <option value="Pendrive" <%if(getPermission.contains("Pendrive")) {%>selected<%} %> >Pendrive</option>
+								    <option value="CD/DVD" <%if(getPermission.contains("CD/DVD")) {%>selected<%} %>>CD/DVD</option>
+								    <option value="Vehicle" <%if(getPermission.contains("Vehicle")) {%>selected<%} %>>Vehicle</option>
 								  </select> 								    
 								</div> 
 							 </div>
@@ -354,6 +367,7 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 									</div>
 							</div>
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<input type="hidden" name="intimationId" value="<%if(inti!=null){%><%=inti.getIntimationId()%><%}%>">
 						</form>
 					</div>
 				</div>
@@ -412,7 +426,7 @@ $(function() {
 $(document).ready(function(){
 	 $("#compyForm").hide();
 	 $("#empForm").hide();
-	 $("#otherDetailsId").hide();
+	/*  $("#otherDetailsId").hide(); */
 /* 	   $("#otherDetailsId").hide(); */
 	$(".CompanyID").select2({
 		placeholder: "---Choose---",	
@@ -567,10 +581,43 @@ function AddCompany() {
 	     $("#newCompanyCity").val("");
   	    $("#compyForm").hide();
 	}
+	
 </script>
 
-
 <script type="text/javascript">
+
+$( document ).ready(function() {
+	
+	var x='';
+	 var companyId=$("#CompanyID").val();
+	 $('#CompanyID').val(companyId);
+	 $('#CompanyID').change();
+	 var intimationId = <%=inti.getIntimationId()%>
+	 
+	 $.ajax({
+			type : "GET",
+			url : "GetVisitorsEdit.htm",
+			data : {
+				intimationId : intimationId
+			},
+			datatype : 'json',
+			success : function(result) {
+				var values = JSON.parse(result);              
+               var a=[];
+               for(var i=0;i<values.length;i++){
+            	 
+            	   a.push(values[i][3]) 
+               }
+               $('#EmppIDs').val(a).trigger('change');
+			}
+			});	
+	 $("#CompanyID").select2({disabled:'readonly'});
+	 $("#EmppIDs").select2({disabled:'readonly'});
+});
+
+
+
+
 $('#CompanyID').change(function() {
 	var x='';
 	 var companyId=$("#CompanyID").val();
@@ -596,6 +643,7 @@ $('#CompanyID').change(function() {
 			}
 			});	
 });
+
 </script>
 <script type="text/javascript">
 
@@ -762,7 +810,7 @@ $('#ConfirmCheck').change(function() {
     if(this.checked) {
  	$("#CompanyID").select2({disabled:'readonly'});
  	$("#EmppIDs").select2({disabled:'readonly'});
-    	  $("#otherDetailsId").show(); 
+      $("#otherDetailsId").show(); 
  
 
     }else{
@@ -805,7 +853,7 @@ $( "#fdate" ).daterangepicker({
     "singleDatePicker" : true,
     "linkedCalendars" : false,
     "showCustomRangeLabel" : true,
-    "minDate" :new Date(),  
+    /* "minDate" :new Date(),  */ 
     "cancelClass" : "btn-default",
     showDropdowns : true,
     locale : {
@@ -818,8 +866,8 @@ $( "#tdate" ).daterangepicker({
 	"singleDatePicker" : true,
     "linkedCalendars" : false,
     "showCustomRangeLabel" : true,
-    "minDate" :$("#fdate").val(),  
-    "startDate" : $("#fdate").val(),
+    /* "minDate" :$("#fdate").val(),  
+    "startDate" : $("#fdate").val(), */
     "cancelClass" : "btn-default",
     showDropdowns : true,
     	locale : {
@@ -933,6 +981,8 @@ $('select').on('change', function() {
 
 	  notApplicableOption.prop('disabled', false);
 	});
+	
+	
 </script>
 </body>
 </html>

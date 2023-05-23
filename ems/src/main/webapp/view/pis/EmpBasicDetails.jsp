@@ -80,9 +80,17 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 		<div class="row">
 			<div class="col-md-3">
 				<h5>Employee View </h5>
+				
 			</div>
-			<div class="col-md-9 ">
-				<ol class="breadcrumb ">
+			<div class="col-md-3">
+			<form action="OrganisationStructure.htm" method="get"> 
+			
+			   <button type="submit" style="margin-top:0px;margin-left:220px; "  class="btn btn-sm submit-btn" formtarget="target_blank">Organisation Structure</button> 
+			
+			</form>
+			</div>          
+			<div class="col-md-6 " >
+			  <ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
 					<%-- <%if("A".equalsIgnoreCase(LoginType)){ %>
 						<li class="breadcrumb-item "><a href="PisAdminDashboard.htm">Admin</a></li>
@@ -93,7 +101,8 @@ border: 8px solid rgba(255, 255, 255, 0.7);
 			</div>	
 		</div>
 	</div>	                 
-                    
+         
+        
  <div class=" page card dashboard-card">
 	
 	<div align="center"  style="margin-top: 15px;">

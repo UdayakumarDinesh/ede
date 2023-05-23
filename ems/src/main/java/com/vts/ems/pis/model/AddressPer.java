@@ -22,7 +22,8 @@ public class AddressPer implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long address_per_id;
-	private String empid;
+	private String empid;	
+	private String PerIntimationDate;	
     private String per_addr;
 	private String landline;
 	private String mobile;
