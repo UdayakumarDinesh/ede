@@ -90,7 +90,6 @@ body
 										<td> <b>Department : </b>&nbsp; <%=tourdetails[3]%></td>
 										<td><b> Phone No : </b> &nbsp; <%=tourdetails[6]%></td>
 										<td><b> Date : </b></td>
-										
 									</tr>
 								</table>
 								<br>
