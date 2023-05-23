@@ -45,6 +45,9 @@ input:focus {
 String LabLogo=(String) request.getAttribute("LabLogo");
 PisImmovableProperty imm= (PisImmovableProperty)request.getAttribute("ImmPropFormData");
 Object[] emp = (Object[])request.getAttribute("EmpData");
+
+String CEO = (String)request.getAttribute("CEOEmpNo");
+
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
 List<Object[]> ImmIntimationRemarks = (List<Object[]>)request.getAttribute("ImmIntimationRemarks");
 String isApproval = (String)request.getAttribute("isApproval");
@@ -53,7 +56,7 @@ SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 
-List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
+List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RCE");
 List<String> adminRemarks  = Arrays.asList("FWD","VPA","APR");
 int slno=0;
 %>
@@ -342,8 +345,9 @@ int slno=0;
 						      </button>
 					        <%} %>
 					
-					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
-						     
+					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ 
+						     if(imm!=null && ( imm.getPisStatusCode().toString().equalsIgnoreCase("FWD") ||
+						    	imm.getPisStatusCode().toString().equalsIgnoreCase("VDG") )&& !CEO.equalsIgnoreCase(emp[0].toString())  ){ %>
 						     <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -355,7 +359,31 @@ int slno=0;
 				   		    <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
 							 Return
 						    </button>
-					        <%} %>		     
+					        <%} %>	
+					        <% if(imm!=null && imm.getPisStatusCode().toString().equalsIgnoreCase("VPA") || CEO.equalsIgnoreCase(emp[0].toString())){ %>
+					        <div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					   </div>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							 Approve	
+						</button>
+					
+				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							 Return
+						</button>
+					<%} }%>
+                      <div class="row" style="margin-top: 5%;">
+                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-12"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> </div>
+                      </div>		     
 						</div>
 						<input type="hidden" name="immPropertyId" value="<%if(imm!=null){ %><%=imm.getImmPropertyId()%><%}%>">
 					</form>

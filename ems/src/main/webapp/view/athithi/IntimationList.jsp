@@ -147,7 +147,9 @@
 								<%} %>
 					                  </td>					                  
 					                  <td style="text-align: left;width: 13%;">	
-					                   <button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=obj[0]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>				                
+					                  <%if(toUserStatus.contains(obj[15].toString())) {%>
+					                   <button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=obj[0]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>	
+					                   <%} %>			                
 								        <button type="submit" class="btn btn-sm view-icon" formaction="VisitorPassPreview.htm" name="intimationId" value="<%=obj[0]%>" data-toggle="tooltip" data-placement="top" title="Form For Visitor Pass" style="font-weight: 600;" >
 								           <i class="fa-solid fa-eye"></i>
 								        </button>

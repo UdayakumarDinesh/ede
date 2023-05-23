@@ -26,5 +26,6 @@ public interface PropertyService {
     public List<Object[]> movPropTransactionApprovalData(String movPropertyId);
     public Long movablePropForward(String movPropertyId,String username, String action, String remarks, String apprEmpNo,String loginType ) throws Exception;
     public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception;
+    public List<Object[]> propertyApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception;
     
 }

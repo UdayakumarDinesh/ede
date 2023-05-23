@@ -112,7 +112,7 @@ public class IntimationServiceImpl implements IntimationService {
 		    	IntimationEmp newVisitor =new IntimationEmp();
 		    	newVisitor.setCompanyEmpId(Long.parseLong(visitor));
 		    	newVisitor.setInitmationId(newIntimationId);
-		    	newVisitor.setCreatedBy(intimation.getCreateBy());
+		    	newVisitor.setCreatedBy(inti.getCreatedBy());
 		    	newVisitor.setCreatedDate(sdf1.format(new  java.util.Date())); 
 		    	newVisitor.setIsActive(1);
 		    	dao.addVisitor(newVisitor);
@@ -172,7 +172,7 @@ public class IntimationServiceImpl implements IntimationService {
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					intimation.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno)) 
@@ -367,6 +367,45 @@ public class IntimationServiceImpl implements IntimationService {
 			return -1;
 		}
 		
+	}
+
+	@Override
+	public Long editNewIntimation(NewIntimation intimation) throws Exception {
+	     
+		Intimation inti = dao.getIntimationById(intimation.getIntimationId());
+		
+	        inti.setCompanyId( Long.parseLong(intimation.getCompnayId()));
+	        inti.setFromDate(DateTimeFormatUtil.dateConversionSql(intimation.getFdate()));
+	        inti.setToDate(DateTimeFormatUtil.dateConversionSql(intimation.getTdate()));
+	        inti.setDuration(intimation.getDuration());
+	        inti.setExpectedTime(intimation.getExpectedTime());
+	        inti.setPurpose(intimation.getPurpose());
+	        inti.setForeigner(intimation.getForeigner());
+	        inti.setSpecialPermission(intimation.getSpermission());
+	        inti.setOfficerEmpId(intimation.getOfficer());
+	        inti.setVpStatus(intimation.getVpStatus());
+	        inti.setPisStatusCode(intimation.getPisStatusCode());
+	        inti.setPisStatusCodeNext(intimation.getPisStatusCodeNext());
+	        inti.setModifiedBy(intimation.getCreateBy());
+	        inti.setModifiedDate(sdf1.format(new java.util.Date()));
+	        
+		    Long newIntimationId=dao.editNewIntimation(inti);
+     		
+		    dao.editVisitorsIsActive(intimation.getIntimationId().toString());
+		    
+		    String[] visitors= intimation.getVisitors();
+		    
+		    for(String visitor:visitors) {
+		    	IntimationEmp newVisitor =new IntimationEmp();
+		    	newVisitor.setCompanyEmpId(Long.parseLong(visitor));
+		    	newVisitor.setInitmationId(newIntimationId);
+		    	newVisitor.setCreatedBy(intimation.getCreateBy());
+		    	newVisitor.setCreatedDate(sdf1.format(new java.util.Date())); 
+		    	newVisitor.setIsActive(1);
+		    	dao.addVisitor(newVisitor);
+		    }
+		
+		return newIntimationId;
 	}
 	
 

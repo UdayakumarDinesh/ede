@@ -22,6 +22,7 @@ public class PisMovableProperty implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long MovPropertyId;
+	private String MovIntimationDate;
 	private String EmpNo;
 	private String Purpose;
 	private String TransState;

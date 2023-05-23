@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -171,6 +172,7 @@ public class PropertyController {
 	
 			PisImmovableProperty immovable = new PisImmovableProperty();
 			
+			immovable.setImmIntimationDate(sdf.format(new Date()));
 			immovable.setEmpNo(EmpNo);
 			immovable.setPurpose(req.getParameter("purpose"));
 			immovable.setTransState(transState);
@@ -256,15 +258,16 @@ public class PropertyController {
                        
      	    	 redir.addAttribute("result", "Immovable Property Add Successfull");	
      		} else {
-     			 redir.addAttribute("resultfail", "Immovable Property Add Unsuccessful");	
-     	    }		
+     			 redir.addAttribute("resultfail", "Immovable Property Add Unsuccessful");	    			
+     	    }	
+			redir.addAttribute("immPropertyId", result);
 			
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside ImmovablePropAdd.htm"+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
-		return "redirect:/AcquiringDisposing.htm";
+		return "redirect:/ImmovablePropPreview.htm";
 	}
 	@RequestMapping(value="ImmovablePropEdit.htm")
 	public String ImmovablePropEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception{
@@ -361,13 +364,13 @@ public class PropertyController {
 			} else {
 				redir.addAttribute("resultfail", "Immovable Property Edit Unsuccessful");	
 			}		
-			
+			redir.addAttribute("immPropertyId", result);
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside ImmovablePropEdit.htm"+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
 		}
-		return "redirect:/AcquiringDisposing.htm";
+		return "redirect:/ImmovablePropPreview.htm";
 	}
 	
 	@RequestMapping(value="ImmovablePropTransStatus.htm")
@@ -404,6 +407,7 @@ public class PropertyController {
 				req.setAttribute("isApproval", isApproval);
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
 			    req.setAttribute("ImmIntimationRemarks", service.immPropertyRemarksHistory(immPropertyId));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));
@@ -433,7 +437,8 @@ public class PropertyController {
 			
 			long count = service.immovablePropForward(immPropertyId, Username, action, remarks, EmpNo, LoginType);
 			
-			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
+			   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
 			{
 				if(count>0) {
 					redir.addAttribute("result", "Immovable Property Application Sent For Verification Successfully");
@@ -468,7 +473,30 @@ public class PropertyController {
 			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive","PropertyApprovals_htm");
 			
-			req.setAttribute("ApprovalList", service.propertyApprovalList(EmpNo));
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				
+				fromdate=today.withDayOfMonth(1).toString();
+				todate = today.toString();
+				
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("tab", req.getParameter("tab"));
+			
+			req.setAttribute("PendingList", service.propertyApprovalList(EmpNo));
+			req.setAttribute("ApprovedList", service.propertyApprovedList(EmpNo, fromdate, todate));
+			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			return "property/PropertyApprovals";
 		}catch (Exception e) {
 			logger.info(new Date()+"Inside PropertyApprovals.htm"+Username,e);
@@ -514,7 +542,7 @@ public class PropertyController {
 	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 	         
 	        res.setContentType("application/pdf");
-	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 	       
 	       
 	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
@@ -551,14 +579,26 @@ public class PropertyController {
 		logger.info(new Date()+"Inside MovablePropAddEdit.htm"+Username);
 		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
+			String action = req.getParameter("Action");
 			
+			req.setAttribute("States", pisservice.getStates());
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+			
+			if(action.equalsIgnoreCase("EDITMov")) {
+				String movPropertyId = req.getParameter("movpropertyid");
+				req.setAttribute("MovProperty", service.getMovablePropertyById(Long.parseLong(movPropertyId)));
+				return "property/MovablePropEdit";
+			}
+			else {
+				return "property/MovablePropAdd";
+			}
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.info(new Date()+"Inside MovablePropAddEdit.htm"+Username,e);
 			return "static/Error";
 		}
-		return null;
+		
 		
 	}
 	
@@ -685,7 +725,7 @@ public class PropertyController {
 	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 	         
 	        res.setContentType("application/pdf");
-	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 	       
 	       
 	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
