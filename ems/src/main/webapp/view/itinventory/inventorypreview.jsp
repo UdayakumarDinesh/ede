@@ -371,8 +371,7 @@ tr.noBorder td {
 						</td>											
 					</tr>
 					<tr>
-				
-						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+				     <td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
 						
 						     <%if(!inventoryqty[35].toString().equals("")){%><span style="font-weight:800;" ><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span><br><%} %> 
 							 <% if( !inventoryqty[36].toString().equals("") ) {%><span style="font-weight:800;"><%=inventoryqty[37] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><%} %>
