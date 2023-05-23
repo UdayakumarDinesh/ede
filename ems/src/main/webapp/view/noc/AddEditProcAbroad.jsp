@@ -28,7 +28,8 @@
 	String Empid=(String)request.getAttribute("EmpId");
 	
 	 NocProceedingAbroad ProcAbroad=(NocProceedingAbroad)request.getAttribute("ProcAbroad");
-	 
+	 Object[] empData=(Object[])request.getAttribute("EmpData");
+
 	
   %>
 
@@ -36,7 +37,8 @@
 		<div class="row">
 			<div class="col-md-4">
 			
-			  <h5>Proceeding Abroad</h5>
+			  <h5>Proceeding Abroad <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			 
 			</div>
 			<div class="col-md-8 ">

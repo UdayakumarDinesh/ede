@@ -125,7 +125,7 @@ body {
 									</td>
 									<td style="width: 2%;text-align:center;">
 									 
-									 <input type="hidden" name="inventoryid" value="<%=obj[0] %>">
+									 
 				                    
 									<button type="submit" class="btn btn-sm "  name="inventoryid" value="<%=obj[0] %>" formaction="InventoryDeclaredView.htm" formmethod="POST"  data-toggle="tooltip" title="" data-original-title="Inventory Details">
 									<i class="fa fa-eye " style="color: black;"></i>

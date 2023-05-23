@@ -93,6 +93,6 @@ public interface NocDao {
 
 	public List<Object[]> getNocApprovedList(String empNo, String fromdate, String todate)throws Exception;
 	
-	
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
 	
 }

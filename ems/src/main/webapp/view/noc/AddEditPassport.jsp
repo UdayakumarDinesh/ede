@@ -31,7 +31,7 @@ body{
     SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String Empid=(String)request.getAttribute("EmpId");
-
+	Object[] empData=(Object[])request.getAttribute("EmpData");
   
   %>
 
@@ -40,10 +40,12 @@ body{
 			<div class="col-md-4">
 			<% if(passport!=null){ %>
 			
-			  <h5>Passport Edit</h5>
+			  <h5>Passport Edit <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			 <%}
 			else { %>
-			 <h5>Passport Add</h5>
+			 <h5>Passport Add <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			 <%} %>
 			
 			</div>

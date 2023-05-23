@@ -210,7 +210,7 @@ public long inventoryDetailsConfigApprove(ITInventoryHistory Aprrove,ITInventory
 
 
        //change annual declaration form status every year 1st of jan to allow employee to submit declaration
-		@Scheduled(cron = "0 29 12 20 5 ?")
+		@Scheduled(cron = "0 34 15 23 5 ?")
 		public void UpdateAnnualDeclarationAllEmpAllow() throws Exception 
 		{
 			dao.UpdateAnnualDeclarationAllEmp("Y");

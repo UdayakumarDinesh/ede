@@ -54,6 +54,7 @@
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
+	Object[] empData=(Object[])request.getAttribute("EmpData");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
 	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
@@ -63,10 +64,11 @@
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-4">
-				<h5>NOC Proceeding Abroad</h5>
+			<div class="col-md-5">
+				<h5>NOC Proceeding Abroad <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
-			<div class="col-md-8 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i

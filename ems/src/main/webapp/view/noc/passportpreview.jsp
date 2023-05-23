@@ -76,7 +76,9 @@ padding: 1px;
      
      List<Object[]> RemarksHistory=(List<Object[]>)request.getAttribute("NOCPassportRemarkHistory");
      
-    
+     Object[] Ceoname=(Object[])request.getAttribute("CeoName");
+     
+     Object[] empData=(Object[])request.getAttribute("EmpData");
 	
 	%>
 
@@ -86,7 +88,8 @@ padding: 1px;
  <div class="card-header page-top "> 
 		<div class="row">
 			<div class="col-md-4">
-				<h5>Passport Preview</h5>
+				<h5>Passport Preview <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
 			<div class="col-md-8 ">
 				<ol class="breadcrumb ">
@@ -400,6 +403,9 @@ padding: 1px;
 	
 	
 	<br>
+	
+	 <% if(obj[25]!=null) {%><div   style="margin-left:500px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(obj[25].toString().substring(0, 10)) +" "+obj[25].toString().substring(11,19) %></span> </div> <%} %>
+	 <br>
 	<%--  <div align="left" style="margin-left:10px;font-weight:400;" > Dept.Incharge : <span class="text-blue"  ><%=obj[23] %></span></div>	 --%>
 	  	<% if(obj[24]!=null && toUserStatus.contains(obj[24].toString())) { %>
 	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
@@ -505,7 +511,7 @@ padding: 1px;
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 100%;">
 								       <tr>
-											<th><label> Are the entries given by the applicant in paras 1 to 6 in Part - I correct?
+											<th style="text-align:left;"><label> Are the entries given by the applicant in paras 1 to 6 in Part - I correct?
                                                   <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td>
 											<select class="form-control select2"  name="PassportEntries" id="Entries" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
@@ -519,14 +525,14 @@ padding: 1px;
 										
 																		
 										<tr class="trow">
-											<th><label> If not, mention variations<span class="mandatory"	style="color: red;">*</span></label></th>
+											<th style="text-align:left;"><label> If not, mention variations<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control" 
 												placeholder="" type="text" name="Variation" value="<%if(passport!=null && passport.getPassportEntriesDetails()!=null ){%><%=passport.getPassportEntriesDetails()%><%} %>"
 												  style="font-size:15px;"></td>
 										</tr>
 										
 										<tr>
-											<th><label> Whether the employee is under suspension?	 <span class="mandatory"	style="color: red;">*</span></label></th>
+											<th  style="text-align:left;"><label> Whether the employee is under suspension?	 <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td>
 											  <select class="form-control select2"  name="EmpSuspension" id="" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
@@ -537,7 +543,7 @@ padding: 1px;
 										</tr>	
 																		
 										<tr >
-											<th><label> Whether the employee is involved in any	Disciplinary / Criminal / Corruption / CourtCase
+											<th style="text-align:left;"><label> Whether the employee is involved in any	Disciplinary / Criminal / Corruption / CourtCase
 											<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td>
 											    <select class="form-control select2"  name="EmpInvolvment" id="Involved" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
@@ -552,7 +558,7 @@ padding: 1px;
 										
 																			
 										<tr class="trow1">
-											<th><label> If so, details of the case<span class="mandatory"	style="color: red;">*</span></label></th>
+											<th  style="text-align:left;"><label> If so, details of the case<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control" 
 												placeholder="" type="text" id="" name="CaseDetails" value="<%if(passport!=null && passport.getEmployeeCaseDetails()!=null ){%><%=passport.getEmployeeCaseDetails() %><%} %>"
 												  style="font-size: 15px;"></td>
@@ -561,7 +567,7 @@ padding: 1px;
 										
 										
 										<tr>
-											<th><label>Is the applicant under contractual obligation to serve STARC for any specific period? If so, specify the period.
+											<th  style="text-align:left;"><label>Is the applicant under contractual obligation to serve STARC for any specific period? If so, specify the period.
                                               <span class="mandatory" style="color: red;">*</span></label></th>
 											<td><select class="form-control select2"  name="obligation" id="oblig" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
@@ -575,16 +581,16 @@ padding: 1px;
 											 </tr>
 											
 											 <tr  class="trow3">
-											<th><label> From Date<span class="mandatory"	style="color: red;">*</span></label></th>
+											<th  style="text-align:left;"><label> From Date<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control input-sm mydate" 
 												placeholder="" type="text" id="fromdate" name="FromDate" value="<% if(passport!=null && passport.getFromDate()!=null ){%><%=rdf.format(sdf.parse(passport.getFromDate()))%><%} %>"
 												required="required"  style="font-size: 15px;"></td>
 										</tr >
 											 
 											 <tr class="trow4" >
-											<th><label> To Date<span class="mandatory"	style="color: red;">*</span></label></th>
+											<th  style="text-align:left;"> <label> To Date<span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><input class="form-control input-sm mydate" 
-												placeholder="" type="text" id="todate" name="ToDate" value="<% if(passport!=null && passport.getToDate()!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"
+												placeholder="" type="text" id="todate" name="ToDate"  value="<% if(passport!=null && passport.getToDate()!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"
 												required="required"  style="font-size: 15px;"></td>
 										</tr>
 										
@@ -656,7 +662,15 @@ padding: 1px;
 					 <%} %>
 					 
 				<%} %>
+				<br>
 				
+				 <% if(obj[24].toString().equalsIgnoreCase("APR")){ %>
+		 <div style="margin-top:0x;text-align:center;"> 
+		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br>
+						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[34].toString().substring(0, 10)) +" "+obj[34].toString().substring(11,19) %></span></span><br>
+		</div>	
+		<%} %> 
 				 <input type="hidden" name="passportid" value="<%if(obj[10]!=null){ %><%=obj[10] %><% }%>"> 						
 	
        </div>

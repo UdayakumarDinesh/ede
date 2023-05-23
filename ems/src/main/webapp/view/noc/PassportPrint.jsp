@@ -457,7 +457,7 @@ td{
 	 <%-- <%=rdf.format(sdf.parse(obj[25].toString())) %> --%>
 	 <br>
 	
-	
+	<h1 class="break"></h1>
 	
 	<% if(obj[27].toString().equalsIgnoreCase("APR")){ %>
 	
@@ -538,12 +538,13 @@ td{
 		
 		<br>
 		<br>
-		
+		<%if(obj[24].toString().equalsIgnoreCase("APR")){ %>
 		 <div style="margin-top:0x;text-align:center;"> 
 		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br><br>
 						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[34].toString().substring(0, 10)) +" "+obj[34].toString().substring(11,19) %></span></span><br>
 		</div>	
+		<%} %>
 		
 		<%} %>
 	  			
