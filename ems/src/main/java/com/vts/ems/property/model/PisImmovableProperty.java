@@ -23,6 +23,7 @@ private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long ImmPropertyId;
+	private String ImmIntimationDate;
 	private String EmpNo;
 	private String Purpose;
 	private String TransState;

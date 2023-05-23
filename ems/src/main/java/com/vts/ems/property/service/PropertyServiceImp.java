@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
 import com.vts.ems.pis.dao.PisDao;
+import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.property.dao.PropertyDao;
 import com.vts.ems.property.model.PisImmovableProperty;
@@ -129,11 +130,15 @@ public class PropertyServiceImp implements PropertyService{
 			
 			List<String> PandAs = pidao.GetPandAAdminEmpNos();
 			String CEO = pidao.GetCEOEmpNo();
+			List<String> DGMs = pidao.GetDGMEmpNos();
+			
+			DivisionMaster formEmpDivisionMaster = pidao.GetDivisionData(emp.getDivisionId());
 			
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					immovable.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno)) 
@@ -147,9 +152,13 @@ public class PropertyServiceImp implements PropertyService{
 					{
 						immovable.setPisStatusCodeNext("APR");
 					}
-					else
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 					{
 						immovable.setPisStatusCodeNext("VPA");
+					}
+					else
+					{
+						immovable.setPisStatusCodeNext("VDG");
 					}
 				}
 				
@@ -157,7 +166,11 @@ public class PropertyServiceImp implements PropertyService{
 				else
 				{
 					immovable.setPisStatusCode(pisStatusCodeNext);					
-					if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						immovable.setPisStatusCodeNext("VPA");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 					{
 						immovable.setPisStatusCodeNext("APR");
 					}
@@ -176,7 +189,11 @@ public class PropertyServiceImp implements PropertyService{
 			else if(action.equalsIgnoreCase("R"))
 			{
 				// Setting PisStatusCode
-				if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					immovable.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 				{
 					immovable.setPisStatusCode("RPA");
 				}
@@ -190,9 +207,12 @@ public class PropertyServiceImp implements PropertyService{
 				{ 
 					immovable.setPisStatusCodeNext("APR");					
 				}		
-				else
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 				{
 					immovable.setPisStatusCodeNext("VPA");
+				}else
+				{
+					immovable.setPisStatusCodeNext("VDG");
 				}
 				immovable.setRemarks(remarks);
 				dao.editImmovableProperty(immovable);
@@ -208,6 +228,8 @@ public class PropertyServiceImp implements PropertyService{
 					                                .build();
 			dao.addImmovablePropertyTransaction(transaction);
 			
+			String DGMEmpNo = pidao.GetEmpDGMEmpNo(formempno);
+			
 			//Notification
 			EMSNotification notification = new EMSNotification();
 			if(action.equalsIgnoreCase("A") && immovable.getImmStatus().equalsIgnoreCase("A"))
@@ -219,7 +241,11 @@ public class PropertyServiceImp implements PropertyService{
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
-				if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				if( immovable.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
 				}
@@ -440,5 +466,11 @@ public class PropertyServiceImp implements PropertyService{
 	public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception {
 		
 		return dao.immPropertyRemarksHistory(ImmPropertyId);
+	}
+
+	@Override
+	public List<Object[]> propertyApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception {
+		
+		return dao.propertyApprovedList(EmpNo, FromDate, ToDate);
 	}
 }

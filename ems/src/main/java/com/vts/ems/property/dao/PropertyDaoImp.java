@@ -261,4 +261,22 @@ public class PropertyDaoImp implements PropertyDao{
 		}
 		return list;
 	}
+
+	private static final String PROPERTYAPPROVEDLIST="CALL Property_Approved_List(:EmpNo,:FromDate,:ToDate);";
+	@Override
+	public List<Object[]> propertyApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception {
+		
+		try {			
+			Query query= manager.createNativeQuery(PROPERTYAPPROVEDLIST);
+			query.setParameter("EmpNo", EmpNo);
+			query.setParameter("FromDate", FromDate);
+			query.setParameter("ToDate", ToDate);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+				return list;
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO IntimationApprovedList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
 }

@@ -30,4 +30,6 @@ public interface IntimationDao {
 	public List<Object[]> visitorPassRemarksHistory(String IntimationId) throws Exception;
 	public Object[] visitorPassFormData(String IntimationId) throws Exception;
 	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception;
+	public int editVisitorsIsActive(String intimationId) throws Exception;
+	
 }

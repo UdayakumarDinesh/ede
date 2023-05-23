@@ -51,7 +51,7 @@
 	Employee emp=(Employee)request.getAttribute("Employee");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RCE");
 %>
 
 <div class="card-header page-top ">
@@ -112,7 +112,7 @@
                <div class="tab-pane fade show active" id="pills-mov-property" role="tabpanel" aria-labelledby="pills-mov-property-tab">
 		    <h5>Movable Property List</h5>
 			  <hr>
-				<form action="" method="POST" id="empForm">
+				<form action="MovablePropAddEdit.htm" method="POST" id="empForm">
 				  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				  <div class="table-responsive">
 				   	<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -184,8 +184,8 @@
 				   </div>				
 				    <div class="row text-center">
 						<div class="col-md-12">
-							<button type="button" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>		
-							<button type="button" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="EditMov(empForm)" >EDIT </button>
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDMov">ADD </button>		
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITMov" Onclick="EditMov(empForm)" >EDIT </button>
 					    </div>
 				   </div>
 				  
@@ -198,6 +198,7 @@
 		  <h5>Immovable Property List</h5>
 			  <hr>
 				<form action="ImmovablePropAddEdit.htm" method="POST" id="empForm">
+				<input type="hidden" name="tab" value="closed"/>
 				  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				  <div class="table-responsive">
 				   	<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable2"> 
@@ -397,6 +398,12 @@ function EditMov(myfrm) {
 	}
 	return true;
 }
+
+<%-- <%if(tab!=null && tab.equals("closed")){%>
+
+$('#pills-imm-property-tab').click();
+
+<%}%> --%>
 
 </script> 
 </body>

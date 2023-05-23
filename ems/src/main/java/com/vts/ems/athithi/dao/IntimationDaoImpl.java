@@ -252,7 +252,7 @@ public class IntimationDaoImpl implements IntimationDao{
 		}
 	}
 
-	private static final String VPVISITORSFORM = "SELECT vce.CompanyEmpName,vce.Designation,vce.MobileNo,vce.CompanyEmpId FROM vp_company_emp vce, vp_intimation_emp v,vp_intimation vp WHERE vce.CompanyEmpId=v.CompanyEmpId AND v.InitmationId=:InitmationId AND vp.IntimationId=v.InitmationId";
+	private static final String VPVISITORSFORM = "SELECT vce.CompanyEmpName,vce.Designation,vce.MobileNo,vce.CompanyEmpId FROM vp_company_emp vce, vp_intimation_emp v,vp_intimation vp WHERE vce.CompanyEmpId=v.CompanyEmpId AND v.InitmationId=:InitmationId AND vp.IntimationId=v.InitmationId AND v.IsActive=1";
 	@Override
 	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception {
 		
@@ -268,6 +268,20 @@ public class IntimationDaoImpl implements IntimationDao{
 			return new ArrayList<Object[]>();
 		}
 		
+	}
+	
+	private static final String UPDATEVISITORS = "UPDATE vp_intimation_emp SET IsActive =0 WHERE InitmationId=:intimationId";
+	@Override
+	public int editVisitorsIsActive(String intimationId) throws Exception {
+		
+		try {
+			Query query = entityManager.createNativeQuery(UPDATEVISITORS);
+			query.setParameter("intimationId", intimationId);
+			return query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	

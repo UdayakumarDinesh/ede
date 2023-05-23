@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 public class NewIntimation {
 	
+	private Long IntimationId;
 	private String IntimationByEmpNo;
 	private String createBy;
 	private String compnayId;

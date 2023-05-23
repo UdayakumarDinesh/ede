@@ -534,4 +534,69 @@ public class IntimationController {
 			return "static/Error";
 		}	
 	}
+	
+	@RequestMapping(value = "NewIntimationEditSubmit.htm",method =RequestMethod.POST)
+	public String newIntimationEditSubmit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside CONTROLLER NewIntimationEditSubmit.htm "+UserId);	
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		try {
+			
+			NewIntimation intimation =new NewIntimation();
+			intimation.setIntimationId(Long.parseLong(req.getParameter("intimationId")) );
+			intimation.setCompnayId(req.getParameter("company"));
+			intimation.setVisitors(req.getParameterValues("visitors"));
+			intimation.setDuration(req.getParameter("duration"));
+			intimation.setExpectedTime(req.getParameter("expectedTime"));
+			intimation.setFdate(req.getParameter("fdate"));
+			intimation.setTdate(req.getParameter("tdate"));
+	        intimation.setOfficer(req.getParameter("officer"));
+	        intimation.setPurpose(req.getParameter("purpose"));
+	        intimation.setForeigner(req.getParameter("foreigner"));
+//			intimation.setSpermission(req.getParameter("spermission"));	       
+	        String[] sp = req.getParameterValues("spermission");
+	        
+	        String sPermission ="";
+	        if(sp!=null && sp.length>0) {	        
+	        for(int i=0; i<sp.length; i++) {
+	        	
+	        	if(sp[i].equalsIgnoreCase("Not Applicable")) {
+	        		intimation.setVpStatus("A");
+		        	intimation.setPisStatusCode("APR");
+		        	intimation.setPisStatusCodeNext("APR");
+	        	}else {
+	        	    intimation.setVpStatus("N");
+	        	    intimation.setPisStatusCode("INI");
+	        	    intimation.setPisStatusCodeNext("INI");
+	        	}
+	        	sPermission += sp[i];
+	        	  
+	        	  if(i != sp.length-1) {
+	        		  sPermission += ",";
+	        	  } 
+	        }
+	        }else {
+	        	intimation.setVpStatus("A");
+        		intimation.setPisStatusCode("APR");
+        		intimation.setPisStatusCodeNext("APR");
+	        }
+	        intimation.setSpermission(sPermission);
+			Long result=service.editNewIntimation(intimation);
+			
+			if(result>0) {
+				redir.addAttribute("result", "Visitor Pass Edit Successfully");	
+    		} else {
+    			 redir.addAttribute("resultfail", "Visitor Pass Edit Unsuccessful");	
+    	    }
+			redir.addAttribute("intimationId", result);
+			
+			return "redirect:/VisitorPassPreview.htm";
+		}
+		catch (Exception e) {
+			e.printStackTrace(); 
+			logger.error(new Date() +"Inside CONTROLLER NewIntimationEditSubmit.htm "+UserId, e);
+			return "static/Error";
+		}	
+	}
 }

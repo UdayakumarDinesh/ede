@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.athithi.service.PassService;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Controller
 public class PassController {
@@ -281,24 +283,35 @@ public class PassController {
 		try {
 			ses.setAttribute("SidebarActive", "passReport_htm");
 			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
-	    	String fDate=req.getParameter("fdate");
-			String tDate=req.getParameter("tdate");
-		
-			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-			  Calendar cal = Calendar.getInstance();
-		 	  String to=dateFormat.format(cal.getTime()).toString();
-			 cal.add(Calendar.MONTH, -1); 
-		 	  String from =dateFormat.format(cal.getTime()).toString();
 			
-			if(fDate!=null) {
-				req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
-				req.setAttribute("fdate",fDate);
-				req.setAttribute("tdate",tDate);
-			}else{
-			   req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
-			   req.setAttribute("fdate",from);
-				req.setAttribute("tdate",to);
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{				
+//				fromdate=today.withDayOfMonth(1).toString();
+				fromdate = today.minusMonths(1).toString();
+				todate = today.toString();
+				
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
+
+//			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//			  Calendar cal = Calendar.getInstance();
+//		 	  String to=dateFormat.format(cal.getTime()).toString();
+//			 cal.add(Calendar.MONTH, -1); 
+//		 	  String from =dateFormat.format(cal.getTime()).toString();
+			
+				req.setAttribute("passReportList", service.getPassReport(LoginType,EmpNo,fromdate,todate));
+				req.setAttribute("fromdate",fromdate);
+				req.setAttribute("todate",todate);
+
+			
 			return "athithi/passReport";
 		}
 		catch (Exception e) {

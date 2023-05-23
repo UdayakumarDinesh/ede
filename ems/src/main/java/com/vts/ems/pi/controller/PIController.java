@@ -302,7 +302,7 @@ public class PIController {
 		       		} else {
 		       			 redir.addAttribute("resultfail", "Permanent Address Edit Unsuccessful");	
 		       	    }
-		       	    redir.addFlashAttribute("Employee", EmpId);
+		       	 redir.addAttribute("peraddressId", result);
 	    	   }
 	    	    
 		   } catch (Exception e) {
@@ -599,7 +599,7 @@ public class PIController {
 	        		} else {
 	        			 redir.addAttribute("resultfail", "Residential Address Edit Unsuccessful");	
 	        	    }
-	        	    redir.addFlashAttribute("Employee", EmpId);
+	        	    redir.addAttribute("resaddressId", result);
 			}
 				
 			} catch (Exception e) {
@@ -998,7 +998,7 @@ public class PIController {
 					e.printStackTrace();
 					return "static/Error";
 				}
-			   return "redirect:/PIHomeTownMobile.htm";
+			   return "redirect:/MobileNumberPreview.htm";
 		}
 		
 		@RequestMapping(value = "MobileNumberTransStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
@@ -1315,7 +1315,7 @@ public class PIController {
 						e.printStackTrace();
 						return "static/Error";
 					}
-				   return "redirect:/PIHomeTownMobile.htm";
+				   return "redirect:/HometownPreview.htm";
 		}
 		 
 		@RequestMapping(value = "HometownPreview.htm" , method={RequestMethod.POST,RequestMethod.GET})
