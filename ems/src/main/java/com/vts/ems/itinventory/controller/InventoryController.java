@@ -523,7 +523,7 @@ public class InventoryController {
 					Files.delete(pathOfFile2);
 
 				} catch (Exception e) {
-					logger.error(new Date() + " Getting Error From  InventoryFormDownload" + UserId, e);
+					logger.error(new Date() + " Getting Error From  InventoryFormPreview" + UserId, e);
 				}
 			
 		}

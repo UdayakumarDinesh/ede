@@ -90,6 +90,8 @@ public interface NocDao {
 	public long GetPassportCount(String empid)throws Exception;
 
 	public List<Object[]> getPassportRemarksHistory(String passportid)throws Exception;
+
+	public List<Object[]> getNocApprovedList(String empNo, String fromdate, String todate)throws Exception;
 	
 	
 	

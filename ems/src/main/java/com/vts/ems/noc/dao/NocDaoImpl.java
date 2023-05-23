@@ -96,7 +96,7 @@ public class NocDaoImpl implements NocDao {
 		}
 	}
 
-	private static final String NOCPASSPORTLIST="SELECT n.NocPassportId,n.NocPassportNo,n.PassportStatus,n.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_passport n,pis_approval_status c,employee e  WHERE n.isActive='1' AND n.NocstatusCode=c.PisStatuscode AND e.EmpNo=n.EmpNo AND n.EmpNo=:EmpNo ORDER BY n.NocPassportId DESC";
+	private static final String NOCPASSPORTLIST="SELECT n.NocPassportId,n.NocPassportNo,n.PassportStatus,n.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode,n.InitiatedDate FROM noc_passport n,pis_approval_status c,employee e  WHERE n.isActive='1' AND n.NocstatusCode=c.PisStatuscode AND e.EmpNo=n.EmpNo AND n.EmpNo=:EmpNo ORDER BY n.NocPassportId DESC";
 	@Override
 	public List<Object[]> getnocPassportList(String empNo) throws Exception {
 		
@@ -661,6 +661,17 @@ public class NocDaoImpl implements NocDao {
 		
 		Query query=manager.createNativeQuery(NOCPASSPORTREMARKHISTORY);
 		query.setParameter("passportid", passportid);
+		return (List<Object[]>)query.getResultList();
+	}
+	private static final String NOCAPPROVEDLIST="CALL Noc_Approved_List(:EmpNo,:FromDate,:ToDate)";
+	@Override
+	public List<Object[]> getNocApprovedList(String empNo, String fromdate, String todate) throws Exception {
+		
+
+		Query query=manager.createNativeQuery(NOCAPPROVEDLIST);
+		query.setParameter("EmpNo", empNo);
+		query.setParameter("FromDate", fromdate);
+		query.setParameter("ToDate", todate);
 		return (List<Object[]>)query.getResultList();
 	}
 	

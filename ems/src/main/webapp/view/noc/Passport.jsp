@@ -2,6 +2,7 @@
 <%@ page import="java.util.*"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
+<%@page import="java.text.SimpleDateFormat"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -13,6 +14,13 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 
 <style type="text/css">
+
+body{
+
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
 
 .trup
 		{
@@ -42,6 +50,11 @@
 
  <%	
 	
+ 
+
+	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+    SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+ 
     Object[] CeoName = (Object[])request.getAttribute("CeoName");
     Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
 	Object[] DGMEmpName = (Object[])request.getAttribute("DGMEmpName");
@@ -114,25 +127,21 @@
 						<thead>
 							<tr>
 								<th style="width: 6%">Select</th>
-								<th style="width: 10%">NOC Passport Number</th>
-							    <!-- <th style="width: 25%">NOC Date</th> -->
-								<th style="width: 11%">Status</th>
+								<th style="width: 15%">NOC Passport Number</th>
+							     <th style="width: 15%">Initiated Date</th> 
+								<th style="width: 20%">Status</th>
 								<th style="width: 8%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 						<% 
-						String Initiated="Initiated";
-						for(Object[] obj:PassportList){
+						   for(Object[] obj:PassportList){%>
 						
-						
-						%>
-							
-							<tr>
+						<tr>
 								<td style="text-align: center;"><%if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="NocPassportId" value="<%=obj[0]%>"><%}
 								else{%> <input type="radio" name="NocPassportId" value="<%=obj[0]%>" disabled> <%} %></td>
 								<td style="text-align: center;"><%=obj[1] %></td>
-								<!-- <td></td> -->
+								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[8].toString())) %></td> 
 								<td style="text-align: center;">
 								<%if(obj[6]!=null){%>
 								  
@@ -164,7 +173,7 @@
 								 <button type="submit" class="btn btn-sm " name="Passportid" value="<%=obj[0]%>"   formaction="PassportPreview.htm" formmethod="POST" data-toggle="tooltip" title="" data-original-title="View Details">
 								<i class="fa fa-eye " style="color: black;"></i>
 							    </button> 
-							    <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[0]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+							    <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[0]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
 								

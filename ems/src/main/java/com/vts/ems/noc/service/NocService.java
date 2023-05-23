@@ -66,6 +66,8 @@ public interface NocService {
 	public List<LabMaster> getLabMasterDetails()throws Exception;
 
 	public List<Object[]> getPassportRemarksHistory(String passportid)throws Exception;
+
+	public List<Object[]> NocApprovedList(String empNo, String fromdate, String todate)throws Exception;
 			
 
 	

@@ -3,8 +3,6 @@
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.noc.model.NocPassport"%> 
-
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -15,6 +13,14 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
 
 </head>
+<style>
+body{
+
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+</style>
 <body>
 
   <%
@@ -101,12 +107,12 @@
 			                
 			                 
 			                   
-			                  <% if(EmpPassport.length>4 ) { %>
+			                  <% if(EmpPassport!=null ) { %>
 			                    <input  class="form-control input-sm " type="text" name="PassportExist" readonly value="Renewal">
 			                    
 			                    <%}
 			                    else{%>
-			                    <select name="PassportExist" class="form-control select2"  id="passporttype"required="required">
+			                    <select name="PassportExist" class="form-control select2"  id="passporttype" required="required">
 			                        
 			                    	 <option value="New">New</option>
 			                    	   <option value="Renewal">Renewal</option>
@@ -223,7 +229,7 @@
 			         <div class="form-group" >
 			  
 			        <div class="row">
-			         <% if( EmpPassport.length>4 ) { %>
+			         <% if( EmpPassport!=null) { %>
 			         
 			         <div class="col-md-2">
 			                <label> Passport Type </label>
@@ -360,7 +366,7 @@
 			                    
 			            </div>
 			           
-			            <div class="col-md-2" style="margin-left:-25px;"  id="showtodate">
+			            <div class="col-md-2" style="margin-left:-76px;"  id="showtodate">
 			                <label>To Date <span class="mandatory"	style="color: red;">*</span></label>
 			              <!--  <div class=" input-group"> -->
 							    <input type="text" style="width:110px;" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"   id="todate" name="todate"  required="required"  > 

@@ -384,7 +384,7 @@ tr.noBorder td {
 			</div> 
 				<%} %> 
 				
-				<% if ((inventoryqty[33].toString().equals("F")) && !inventoryqty[35].toString().equals("") ) {%>
+				 <% if ((inventoryqty[33].toString().equals("F")) && !inventoryqty[35].toString().equals("") ) {%>
 				<div class="col-md-5" align="left" style="margin-left:1rem;margin-top:-1rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px">
 					<tr>
@@ -394,7 +394,7 @@ tr.noBorder td {
 					</tr>
 					<tr>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-						    <% if(!inventoryqty[36].toString().equals("")) {%><span style="font-weight:800;"><%=inventoryqty[37] %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
+						    <% if(inventoryqty[36]!=null) {%><span style="font-weight:800;"><%=inventoryqty[37] %></span> :&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[36] %></span><br><%} %>
 							<span style="font-weight:800;"><%=inventoryqty[1] %></span>:&emsp;<span style="border:none;" class="text-blue" ><%=inventoryqty[35] %></span>
 						</td>
 					</tr>
@@ -403,7 +403,7 @@ tr.noBorder td {
 			</div> 
 			
 			<%} %> 
-			 
+			  
 			 
 			<% if(inventoryqty[33].toString().equals("F")) {%>
 				 <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;"> 

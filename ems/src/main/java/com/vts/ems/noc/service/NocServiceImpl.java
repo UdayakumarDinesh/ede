@@ -83,7 +83,8 @@ public class NocServiceImpl implements NocService {
 		
           dao.NocPassportTransactionAdd(transaction);
           long count = dao.GetPassportCount(pport.getEmpId());
-          if(count==0) {
+          if(count==0 && !pport.getPassportNo().isEmpty()) {
+        	  
         	  dao.AddPassport(pport);
           }
           
@@ -106,6 +107,7 @@ public class NocServiceImpl implements NocService {
 				.PassportStatus("N")
 				.NocStatusCode("INI")
 				.NocStatusCodeNext("INI")
+				.InitiatedDate(sdf1.format(new Date()))
 				.CreatedBy(UserId)
 				.CreatedDate(sdf1.format(new Date()))
 				.isActive(1)
@@ -932,6 +934,12 @@ public class NocServiceImpl implements NocService {
 	public List<Object[]> getPassportRemarksHistory(String passportid) throws Exception {
 		
 		return dao.getPassportRemarksHistory(passportid);
+	}
+
+	@Override
+	public List<Object[]> NocApprovedList(String empNo, String fromdate, String todate) throws Exception {
+	
+		return dao.getNocApprovedList(empNo,fromdate,todate);
 	}
 }
 

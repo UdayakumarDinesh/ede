@@ -251,6 +251,7 @@ public class NocController {
 					     .ToDate(sdf.format(rdf.parse(req.getParameter("todate"))))
 				         .build();
 				
+				
 				long save=service.NocPassportAdd(dto,UserId,pport);
 				  
 				  if (save > 0) {
@@ -391,44 +392,46 @@ public class NocController {
 			req.setAttribute("CeoName", service.GetCeoName());		
 			req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
 		    req.setAttribute("lablogo",getLabLogoAsBase64());
-			String filename="NOCPassport-"+passportid.toString().trim().replace("/", "-");
-			String path=req.getServletContext().getRealPath("/view/temp");
-			req.setAttribute("path",path);
-	        
-	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+		    String path = req.getServletContext().getRealPath("/view/temp");
+		    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 			req.getRequestDispatcher("/view/noc/PassportPrint.jsp").forward(req, customResponse);
-			String html = customResponse.getOutput();        
-	        
-	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
-	         
-	        res.setContentType("application/pdf");
-	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
-	       
-	       
-	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
-	        File f=new File(path +File.separator+ filename+".pdf");
-	        FileInputStream fis = new FileInputStream(f);
-	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
-	        res.setHeader("Content-Length",String.valueOf(f.length()));
-	        byte[] buffer = new byte[1024];
-	        int len = 0;
-	        while ((len = fis.read(buffer)) >= 0) {
-	            os.write(buffer, 0, len);
-	        } 
-	        os.close();
-	        fis.close();
-	       
-	       
-	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
-	        Files.delete(pathOfFile);		
-	       	
+			String html = customResponse.getOutput();
+			byte[] data = html.getBytes();
+			InputStream fis1 = new ByteArrayInputStream(data);
+			PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/NocPassport.pdf"));
+			pdfDoc.setTagged();
+			Document document = new Document(pdfDoc, PageSize.LEGAL);
+			document.setMargins(50, 100, 150, 50);
+			ConverterProperties converterProperties = new ConverterProperties();
+			FontProvider dfp = new DefaultFontProvider(true, true, true);
+			converterProperties.setFontProvider(dfp);
+			HtmlConverter.convertToPdf(fis1, pdfDoc, converterProperties);
+			/*
+			 * document.close(); pdfDoc.close(); fis1.close();
+			 */
+			res.setContentType("application/pdf");
+			res.setHeader("Content-disposition", "inline;filename=NocPassport.pdf");
+			File f = new File(path + "/NocPassport.pdf");
+			FileInputStream fis = new FileInputStream(f);
+			DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			res.setHeader("Content-Length", String.valueOf(f.length()));
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) >= 0) {
+				os.write(buffer, 0, len);
+			}
+			os.close();
+			fis.close();
+			Path pathOfFile2 = Paths.get(path + "/NocPassport.pdf");
+			Files.delete(pathOfFile2);
+
+		    
 		}
-			   
-		
 		catch (Exception e) {
 			e.printStackTrace();  
 			logger.error(new Date() +" Inside PassportNOCPrint.htm "+UserId, e); 
 		}
+		
 
 	}
 	 @RequestMapping(value = "NOCPassportTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
@@ -506,15 +509,34 @@ public class NocController {
 		{
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 			String EmpNo = (String) ses.getAttribute("EmpNo");
-	    	
-			String Username = (String) ses.getAttribute("Username");
+	    	String Username = (String) ses.getAttribute("Username");
 			ses.setAttribute("formmoduleid", "34");			
 			ses.setAttribute("SidebarActive","NocApproval_htm");	
 			logger.info(new Date() +"Inside NocApproval.htm"+Username);		
 			try {				
 				
+				String fromdate = req.getParameter("fromdate");
+				String todate = req.getParameter("todate");
 				
+				LocalDate today=LocalDate.now();
+				
+				if(fromdate==null) 
+				{
+					
+					fromdate=today.withDayOfMonth(1).toString();
+					todate = today.toString();
+					
+				}else
+				{
+					fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+					todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+				}
+	
+				 req.setAttribute("fromdate", fromdate);
+				 req.setAttribute("todate", todate);
+				 req.setAttribute("tab", req.getParameter("tab"));
 				 req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
+				 req.setAttribute("ApprovedList", service.NocApprovedList(EmpNo,fromdate,todate));
 				
 				return "noc/NocApproval";
 			}catch (Exception e) {
