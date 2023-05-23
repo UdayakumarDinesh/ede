@@ -51,10 +51,12 @@
 <%
 Object[] empdata = (Object[])request.getAttribute("Empdata");
 
+Object[] fapadetails = (Object[])request.getAttribute("FAPAdetails");
 List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
 List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
 List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
 List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+
 
 String fromdate = (String)request.getAttribute("fromdate");
 String todate = (String)request.getAttribute("todate");
@@ -158,7 +160,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 	 </form>
 	</div>
 </div>
-	   
+	   <%if(fapadetails!=null && fapadetails[1]!=null && fapadetails[1].toString().equalsIgnoreCase(session.getAttribute("EmpNo").toString())){%>
 <div class="card" style="margin-top: 10px;">
       <div class="card-header" align="left">
         <h5>
@@ -227,7 +229,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
  </form>
 </div>
 </div>
-
+<%}%>
 <div class="card" style="margin-top: 10px;">
       <div class="card-header" align="left">
         <h5>

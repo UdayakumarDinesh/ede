@@ -48,7 +48,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 <div class="container-fluid">	
 <div class="card">
 	<div class="card-body">
-<form action="##" method="post" id="empForm">
+<form action="TourCancel.htm" method="post" id="empForm">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="table-responsive">
 				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 
@@ -61,6 +61,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 								      <th>Name</th>
 								      <th>Purpose</th>
 								      <th>Status</th>
+								      <th>Action</th>
 								  </tr>
 					  </thead>
 	                  <tbody>
@@ -88,7 +89,15 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
                                		  <td align="center"><%=applydate %><br/> for <%=noofdays%> Day(s)</td>
 									  <td align="center"><%=hlo[0]+"" %></td>
 									  <td><%=hlo[4]+"" %></td>
-									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>			  
+									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
+									  <td>   
+									  	<button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=hlo[7]%>"  data-toggle="tooltip" data-placement="top" title="View Form" >
+									 			<i class="fa-solid fa-eye"></i>
+									 	</button>
+									 	<button type="submit" class="btn btn-sm" name="Action" value="Download/<%=hlo[7]%>" formaction="DownloadTourCancel.htm" formmethod="get" formtarget="_blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+										</button> 
+									  </td>			  
 								</tr> 
                   <%}}%>
 	            </tbody>

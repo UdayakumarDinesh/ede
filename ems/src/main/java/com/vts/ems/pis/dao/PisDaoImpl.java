@@ -77,7 +77,7 @@ public class PisDaoImpl implements PisDao {
 	private static final String FAMILYLIST="SELECT a.family_details_id , a.member_name  , b.relation_name , a.dob  FROM pis_emp_family_details a , pis_emp_family_relation b  WHERE  a.relation_id = b.relation_id  AND  a.IsActive='1' AND a.empid=:empid ORDER BY b.SerialNo ASC  ";
 	private static final String DELETEUSERMANAGER="UPDATE login SET isactive=:isactive , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE loginid=:loginid";
 	private static final String LOGINLIST="SELECT logintype,logindesc FROM login_type";
-	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno FROM employee a ,employee_desig b WHERE b.desigid=a.desigid AND  empid=:empid";
+	private static final String EMPDATA="SELECT a.empname , b.designation,a.empid ,a.empno , c.paylevelid FROM employee a ,employee_desig b , employee_details c  WHERE  a.empno=c.empno AND b.desigid=a.desigid AND  empid=:empid";
 	private static final String FAMILYRELATION="SELECT relation_id,relation_name FROM pis_emp_family_relation WHERE IsActive='1' ORDER BY SerialNo ASC  ";
 	private static final String FAMILYSTATUS="SELECT family_status_id,family_status FROM pis_emp_family_status";
 	private static final String DELETEMEMBER="UPDATE  pis_emp_family_details SET isactive=:IsActive  , modifiedby =:modifiedby , modifieddate=:modifieddate  WHERE family_details_id=:familyid";

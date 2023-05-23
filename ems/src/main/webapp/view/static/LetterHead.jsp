@@ -11,23 +11,6 @@
 <style>
 
 
-
-
-table {
-
-	border-collapse: collapse;
-	width: 660px;
-}
-
-.tr, th, td {
-
-
-    height:50px;
-	border: 1px solid black;
-	
-}
-
-
 </style>
 </head>
 <body>
@@ -42,11 +25,11 @@ table {
 
 %>
 <div align="center">
-		<table style="margin-left:10px; margin-top:15px;width:660px;">
+		<table style="margin-left:10px; margin-top:15px;width:660px; border-collapse: collapse;width: 660px;">
 			<tr>
-				<td style="text-align:center;" width="100px"  ><div
-					style="font-size: 40px; font-style: italic;"><img style="width: 80px; height: 80px; margin-top: -50px;margin-left: 10px;" align="left"   <%if(lablogo!=null ){ %> src="data:image/*;base64,<%=lablogo%>" alt="Configuraton"<%}else	{ %> alt="File Not Found" <%} %>></div></td>
-				<td style="text-align:center;" width="800px" ><span style="font-weight:bold;font-size:14px; text-transform: uppercase;"><%=Labdetails.getLabName()%></span>
+				<td style="text-align:center; height:50px;border: 1px solid black;" width="100px"  ><div
+					style="font-size: 40px;  font-style: italic;"><img style="width: 80px; height: 80px; margin-top: -50px;margin-left: 10px;" align="left"   <%if(lablogo!=null ){ %> src="data:image/*;base64,<%=lablogo%>" alt="Configuraton"<%}else	{ %> alt="File Not Found" <%} %>></div></td>
+				<td style="text-align:center; height:50px;border: 1px solid black;" width="800px" ><span style="font-weight:bold;font-size:14px; text-transform: uppercase;"><%=Labdetails.getLabName()%></span>
 				 
 
 				 <!-- <div align="left">&nbsp;<span style="font-weight:bold;">(A Government of India Society)</span><br>&nbsp;Vijinapura Road,<br>&nbsp;Dooravani Nagar P.O.,<br>&nbsp;Bangalore-560016 <br>&nbsp;Karnataka,INDIA</div>  -->
